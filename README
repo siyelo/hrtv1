@@ -1,0 +1,23 @@
+What version of Rails should we use?
+
+Let @RwandaOnRails know and we'll centralize that somewhere / use
+the google group.
+
+Using Rails 3 would help give back to contributors by letting them learn
+and it has nice improvements. 
+
+Cons are some plugins that could be really useful for getting an alpha
+that's nice for low effort, e.g. active_scaffold, but might be less optimal
+long term. We just need to get something together quickly.
+
+I (@gregLnelson) think 2.3.5 is the way to go for plugin usage for quickly
+building alpha.
+
+Tracker is at http://www.pivotaltracker.com/projects/59773
+@p_elliott can add you if I'm not around. I'm flying to London early today.
+Thanks to Paul for being interested on a surely hoppin' Friday night.
+
+Is there a reason to not make everyone an owner? Would be nice if anyone
+could add anyone they knew that was interested in helping.
+
+Google group called rwanadaonrails.

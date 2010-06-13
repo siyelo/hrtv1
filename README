@@ -1,23 +1,18 @@
-What version of Rails should we use?
+Currently getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team.
 
-Let @RwandaOnRails know and we'll centralize that somewhere / use
-the google group.
-
-Using Rails 3 would help give back to contributors by letting them learn
-and it has nice improvements. 
-
-Cons are some plugins that could be really useful for getting an alpha
-that's nice for low effort, e.g. active_scaffold, but might be less optimal
-long term. We just need to get something together quickly.
-
-I (@gregLnelson) think 2.3.5 is the way to go for plugin usage for quickly
-building alpha.
-
-Tracker is at http://www.pivotaltracker.com/projects/59773
-@p_elliott can add you if I'm not around. I'm flying to London early today.
-Thanks to Paul for being interested on a surely hoppin' Friday night.
-
-Is there a reason to not make everyone an owner? Would be nice if anyone
-could add anyone they knew that was interested in helping.
+Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet.
 
 Google group called rwanadaonrails.
+
+Pivotal Tracker is at http://www.pivotaltracker.com/projects/59773
+Tracker should be public at this point.
+@p_elliott can add you if I'm not around. I'll be flying to Rwanda in 3 hours.
+Thanks to Paul for being interested on a surely hoppin' Friday night and tweeting for more info.
+
+Please fork and take a feature for the alpha. More info on collaborating with local team coming on Monday.
+
+Let me know if you're available on Tuesday to do some pairing/mentoring! Mega bonus points.
+
+We may switch to Rails 3 after we have some alpha working.
+
+Nothing is sacred, be vocal about ways to improve anything we are doing.

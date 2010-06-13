@@ -2,6 +2,8 @@ Currently getting an alpha / minimum viable product done. This should be fairly 
 
 Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet.
 
+I'm going to integrate file uploading from http://github.com/rwandaonrails/csv-uploader.
+
 Google group called rwanadaonrails.
 
 Pivotal Tracker is at http://www.pivotaltracker.com/projects/59773

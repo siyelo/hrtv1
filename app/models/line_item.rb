@@ -7,10 +7,10 @@ class LineItem < ActiveRecord::Base
 
   def to_label
     @s="Line Item: "
-    if description.nil? || description.empty?
-      @s+"<No Description>"
+    if amount.nil?
+      @s+"<No Amount>"
     else
-      @s+description.slice(0,15)
+      @s+amount.to_s
     end
   end
 end

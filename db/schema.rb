@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100616182242) do
+ActiveRecord::Schema.define(:version => 20100616185032) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -50,13 +50,10 @@ ActiveRecord::Schema.define(:version => 20100616182242) do
   end
 
   create_table "line_items", :force => true do |t|
-    t.text     "description"
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "amount"
-    t.integer  "hssp_strategic_objective_id"
-    t.integer  "mtefp_id"
   end
 
   create_table "locations", :force => true do |t|

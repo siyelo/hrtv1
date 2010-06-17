@@ -8,8 +8,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
-
-ActiveRecord::Schema.define(:version => 20100616111034) do
+ActiveRecord::Schema.define(:version => 20100616193257) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -26,6 +25,11 @@ ActiveRecord::Schema.define(:version => 20100616111034) do
   create_table "activities_indicators", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "indicator_id"
+  end
+
+  create_table "activities_projects", :id => false, :force => true do |t|
+    t.integer "project_id"
+    t.integer "activity_id"
   end
 
   create_table "codes", :force => true do |t|
@@ -74,9 +78,7 @@ ActiveRecord::Schema.define(:version => 20100616111034) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "projects_activities", :force => true do |t|
+    t.decimal  "expected_total"
   end
 
   create_table "sessions", :force => true do |t|

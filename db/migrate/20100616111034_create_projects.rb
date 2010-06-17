@@ -10,8 +10,8 @@ class CreateProjects < ActiveRecord::Migration
     end
 
     create_table :projects_activities do |t|
-      t.reference :project
-      t.reference :activity
+      t.references :project
+      t.references :activity
     end
   end
 

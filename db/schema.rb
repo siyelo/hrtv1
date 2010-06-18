@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100617200545) do
+ActiveRecord::Schema.define(:version => 20100618100625) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20100617200545) do
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "replacement_code_id"
+    t.string   "type"
   end
 
   create_table "funding_flows", :force => true do |t|

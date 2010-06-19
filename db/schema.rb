@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100616193257) do
+ActiveRecord::Schema.define(:version => 20100619160123) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(:version => 20100616193257) do
     t.integer  "replacement_code_id"
   end
 
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "indicators", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -64,6 +73,14 @@ ActiveRecord::Schema.define(:version => 20100616193257) do
   create_table "locations", :force => true do |t|
     t.string   "name"
     t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

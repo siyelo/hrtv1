@@ -18,6 +18,10 @@ class ActivitiesController < ApplicationController
     config.columns[:indicators].options = {:draggable_lists => true}
   end
   
+  def index
+
+  end
+
   def to_label
     @s="Activity: "
     if name.nil? || name.empty?

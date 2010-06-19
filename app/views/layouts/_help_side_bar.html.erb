@@ -1,0 +1,8 @@
+<div>
+  <ul class="help_side_bar">
+    <li><%= link_to "Terms", '#' %></li>
+      <%= render partial => 'model_helps/terms', :locals => {:record_type => record_type} %>
+    <li><%= link_to "Examples", '#' %></li>
+      <%= render partial => 'model_helps/examples', :locals => {:record_type => record_type} %>
+  </ul>
+</div>

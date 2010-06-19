@@ -14,6 +14,10 @@ class ProjectsController < ApplicationController
     config.columns[:expected_total].inplace_edit = true
   end
   
+  def index
+
+  end
+
   def to_label
     @s="Project: "
     if name.nil? || name.empty?

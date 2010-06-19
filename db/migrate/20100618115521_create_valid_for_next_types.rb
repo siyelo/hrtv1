@@ -1,6 +1,6 @@
 class CreateValidForNextTypes < ActiveRecord::Migration
   def self.up
-    create_table :valid_for_next_types do |t|
+    create_table :valid_for_next_types, :id => false do |t|
       t.integer :code_id_parent
       t.integer :code_id_child
 

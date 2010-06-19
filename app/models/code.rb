@@ -1,5 +1,4 @@
 class Code < ActiveRecord::Base
-  acts_as_nested_set
   
   attr_accessible :long_display, :short_display, :description, :start_date, :end_date
   
@@ -11,6 +10,9 @@ class Code < ActiveRecord::Base
   has_and_belongs_to_many :valid_parents_of_prev_type, :class_name => "Code",
     :foreign_key => "code_id_child", :association_foreign_key => "code_id_parent",
     :join_table => "valid_for_next_types"
+  
+  # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
+  acts_as_nested_set
 
   def to_label 
     short_display

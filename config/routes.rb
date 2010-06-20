@@ -4,6 +4,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :line_item, :active_scaffold => true 
   map.resources :project, :active_scaffold => true 
   map.resources :comments, :active_scaffold => true 
+  map.resources :field_helps, :active_scaffold => true 
+  map.resources :model_helps, :active_scaffold => true 
 
   
   # The priority is based upon order of creation: first created -> highest priority.

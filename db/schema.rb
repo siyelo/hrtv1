@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20100613160718) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "comments"
-    t.decimal  "expected_total"
+    t.integer  "expected_total", :limit => 10, :precision => 10, :scale => 0
     t.text     "newfield"
   end
 
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20100613160718) do
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "amount"
+    t.integer  "amount",                      :limit => 10, :precision => 10, :scale => 0
     t.integer  "hssp_strategic_objective_id"
     t.integer  "mtefp_id"
   end

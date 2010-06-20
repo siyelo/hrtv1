@@ -1,5 +1,6 @@
 class Code < ActiveRecord::Base
-  
+  acts_as_commentable
+
   attr_accessible :long_display, :short_display, :description, :start_date, :end_date
   
   # codes of next level allowed when this code has already been selected

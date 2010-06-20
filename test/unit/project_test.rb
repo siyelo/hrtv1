@@ -35,4 +35,12 @@ class ProjectTest < ActiveSupport::TestCase
     c=FundingFlow.find(c.id)
     assert c.project == nil
   end
+
+  test "has comments" do
+    p=Project.new
+    p.save
+    c=p.comments.create(:title => "a comment.", :comment => "This is a comment.")
+    assert p.comments.size == 1
+    assert Comment.count == 1
+  end
 end

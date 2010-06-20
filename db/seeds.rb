@@ -8,14 +8,27 @@
 
 require 'yaml'
 
-#model_help = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
-def populate_from_yaml klass
-  p=klass.new
-  p.attribute_names.each do |n|
-    ModelHelp.find_or_create_by_model_and_field klass.human_name, klass.human_attribute_name(n)
+model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
+def seed_model_help_from_yaml doc
+  doc.each do |h|
+    model_help_attribs = h.last
+    seed_model_and_field_help model_help_attribs
   end
 end
 
+def seed_model_and_field_help  attribs 
+  model_help=ModelHelp.find_or_create_by_model_name attribs["model_name"]
+  model_help.update_attributes attribs
+end
+
+def seed_field_help_from_yaml model_help, field_help_attribs
+  field_help_attribs.each do |a|
+    fh = model_help.find_or_create_by_attribute_name field_help_attribs[:attribute_name]
+    fh.update_attributes a
+  end
+end
+
+seed_model_help_from_yaml model_helps
 #[Project, Activity, LineItem].each { |k| create_help_for_model k }
 
 

@@ -5,4 +5,4 @@
 <%= render :active_scaffold => 'line_items',
   :constraints => { } %>
   
-<%= render 'layouts/help_side_bar' , :locals => {:record_type => LineItem}%>
+<%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => LineItem}%>

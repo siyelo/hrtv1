@@ -7,15 +7,30 @@
   <%= active_scaffold_includes %>
   </head>
   <body>
+    <div class=left_side_bar>
+      <%= yield :left_side_bar %>
+    </div>
     <div class="container">
       <div id="content" class="round">
         <% if flash[:notice] %>
           <div class="notice"><%= flash[:notice] %></div>
         <% end %>
+        
+        <div class="page_help"> 
+          <%= yield :page_help %>
+        </div>
 
         <%= yield %>
+
+        <div class="comments">
+          <%= yield :comments %>
+        </div>
+
       </div>
       <%= debug(params) if Rails.env.development? %>
+    </div>
+    <div class=right_side_bar>
+      <%= yield :right_side_bar %>
     </div>
   </body>
 </html>

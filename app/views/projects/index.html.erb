@@ -5,5 +5,5 @@
 <%= render :active_scaffold => 'projects',
   :constraints => { } %>
 
-<%= render 'layouts/help_side_bar' , :locals => {:record_type => Project}%>
+<%= render :partial =>'layouts/help_side_bar' , :locals => {:record_type => Project}%>
 

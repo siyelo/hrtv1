@@ -5,4 +5,4 @@
 <%= render :active_scaffold => 'activities',
   :constraints => { } %>
   
-<%= render 'layouts/help_side_bar' , :locals => {:record_type => Activity}%>
+<%= render :partial => 'layouts/help_side_bar' , :locals => {:record_type => Activity}%>

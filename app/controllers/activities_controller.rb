@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:name, :description,  :expected_total]
-  @@create_columns = [:name, :description,  :expected_total,  :indicators, :target ]
+  @@create_columns = [:name, :description,  :expected_total, :target ]
   
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
@@ -13,9 +13,10 @@ class ActivitiesController < ApplicationController
     config.columns[:description].form_ui = :textarea
     config.columns[:expected_total].inplace_edit = true
     config.columns[:target].label = "Target Population"
-    
-    config.columns[:indicators].form_ui = :select
-    config.columns[:indicators].options = {:draggable_lists => true}
+
+    # add in later version, not part of minimal viable product
+    #config.columns[:indicators].form_ui = :select
+    #config.columns[:indicators].options = {:draggable_lists => true}
   end
   
   def index

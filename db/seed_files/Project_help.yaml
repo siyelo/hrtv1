@@ -1,0 +1,35 @@
+---
+1:
+  attribute_name: name
+  short: short_descr
+  long: long_descr
+
+2:
+  attribute_name: description
+  short: short_descr
+  long: long_descr
+
+3:
+  attribute_name: start_date
+  short: short_descr
+  long: long_descr
+
+4:
+  attribute_name: end_date
+  short: short_descr
+  long: long_descr
+
+5:
+  attribute_name: created_at
+  short: short_descr
+  long: long_descr
+
+6:
+  attribute_name: updated_at
+  short: short_descr
+  long: long_descr
+
+7:
+  attribute_name: expected_total
+  short: short_descr
+  long: long_descr

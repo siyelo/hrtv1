@@ -1,6 +1,14 @@
-<% #todo put breadcrumbs here that while until get to this record type %>
-<% #todo put csv-file-uploading-here %>
+  <% content_for :breadcrumbs do %>
+    <% #todo put breadcrumbs here that while until get to this record type 
+    %> 
+    breadcrumbs
+  <% end %>
+<p>
+  <% #todo put csv-file-uploading-here 
+%>
+  csv uploading
+</p>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => { } %>
-<% #link_to "#/{record_underscored_name}"
+<% #link_to "#/{record_underscored_name}" %> link to next page
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

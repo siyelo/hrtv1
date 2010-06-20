@@ -1,8 +1,6 @@
-<p>Description for line items goes here</p>
-
-<p>File upload link goes here</p>
-
-<%= render :active_scaffold => 'line_items',
-  :constraints => { } %>
-  
-<%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => LineItem}%>
+<%= render :partial => 'shared/data_entry_for_model',
+  :locals => {
+    :record_type => LineItem,
+    :record_underscored_name => :line_items
+  }
+%>

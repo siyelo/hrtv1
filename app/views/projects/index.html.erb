@@ -1,9 +1,6 @@
-<p>Description for projects goes here</p>
-
-<p>File upload link goes here</p>
-
-<%= render :active_scaffold => 'projects',
-  :constraints => { } %>
-
-<%= render :partial =>'layouts/help_side_bar' , :locals => {:record_type => Project}%>
-
+<%= render :partial => 'shared/data_entry_for_model',
+  :locals => {
+    :record_type => Project,
+    :record_underscored_name => :projects
+  }
+%>

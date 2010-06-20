@@ -6,6 +6,10 @@ class ActivitiesController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
     config.nested.add_link("Line Items", [:lineItems])
+
+    config.nested.add_link("Comments", [:comments])
+    config.columns[:comments].association.reverse = :commentable
+
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
     config.columns[:name].inplace_edit = true

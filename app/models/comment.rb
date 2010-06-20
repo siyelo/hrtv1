@@ -11,6 +11,8 @@ class Comment < ActiveRecord::Base
   #acts_as_voteable
 
   # NOTE: Comments belong to a user
-  belongs_to :user
+  # TODO: add this back after add users, right now active scaffold complains
+  #       even adding users may not remove its complaints tho
+ # belongs_to :user
 
 end

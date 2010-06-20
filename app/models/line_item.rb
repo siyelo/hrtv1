@@ -1,4 +1,5 @@
 class LineItem < ActiveRecord::Base
+  acts_as_commentable
   belongs_to :activity
   
   # below should be STI's from codes table, include when done

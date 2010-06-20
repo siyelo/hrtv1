@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20100620120548) do
     t.datetime "updated_at"
     t.string   "comments"
     t.decimal  "expected_total"
+    t.text     "newfield"
   end
 
   create_table "activities_indicators", :id => false, :force => true do |t|
@@ -61,15 +62,6 @@ ActiveRecord::Schema.define(:version => 20100620120548) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
@@ -93,23 +85,18 @@ ActiveRecord::Schema.define(:version => 20100620120548) do
   end
 
   create_table "line_items", :force => true do |t|
+    t.text     "description"
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "amount"
+    t.integer  "hssp_strategic_objective_id"
+    t.integer  "mtefp_id"
   end
 
   create_table "locations", :force => true do |t|
     t.string   "name"
     t.string   "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

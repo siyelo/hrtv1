@@ -1,0 +1,45 @@
+---
+1:
+  model_name: Project
+  short: Short Description
+  long: Longer description
+2:  
+  model_name: Activity
+  short: Short Description
+  long: Longer description
+3:  
+  model_name: Organization
+  short: Short Description
+  long: Longer description
+4:  
+  model_name: FundingFlow
+  short: Short Description
+  long: Longer description
+5:  
+  model_name: Code
+  short: Short Description
+  long: Longer description
+6:  
+  model_name: Indicator
+  short: Short Description
+  long: Longer description
+7:  
+  model_name: LineItem
+  short: Short Description
+  long: Longer description
+8:
+  model_name: Nha
+  short: Short Description
+  long: Longer description
+9:
+  model_name: Mtef
+  short: Short Description
+  long: Longer description
+10:
+  model_name: ModelHelp
+  short: Short Description
+  long: Longer description
+11:
+  model_name: FieldHelp
+  short: Short Description
+  long: Longer description

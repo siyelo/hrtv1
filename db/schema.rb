@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100618115521) do
+ActiveRecord::Schema.define(:version => 20100620120548) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -47,6 +47,29 @@ ActiveRecord::Schema.define(:version => 20100618115521) do
     t.string   "type"
   end
 
+  create_table "comments", :force => true do |t|
+    t.string   "title",            :limit => 50, :default => ""
+    t.text     "comment",                        :default => ""
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
+  add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
@@ -79,6 +102,14 @@ ActiveRecord::Schema.define(:version => 20100618115521) do
   create_table "locations", :force => true do |t|
     t.string   "name"
     t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

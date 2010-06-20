@@ -1,4 +1,5 @@
 class FundingFlow < ActiveRecord::Base
+  acts_as_commentable
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies
 

@@ -1,10 +1,9 @@
+<% model_help = ModelHelp.find_by_model_name record_type.human_name %>
+
 <% content_for :left_side_bar do %>
-  <p>Terms</p>
-    <ul>
-      <li>Term y</li>
-      <li>Term y</li>
-    </ul>
-    <p>Examples</p>
+  <p>Help for <%= h model_help.model_name.pluralize %></p>
+  <%= render :partial => model_help.field_help %>
+  <p>Examples</p>
     <ul>
       <li>Example y</li>
       <li>Example y</li>
@@ -13,16 +12,15 @@
 <% end %>
 
 <% content_for :page_help do %>
-test_page
+  <%= h model_help.long %>
 <% end %>
 
 <% content_for :right_side_bar do %>
 <% end %>
 
 <% content_for :comments do %>
-    <ul>
-      <li>Comment y</li>
-      <li>Comment y</li>
-    </ul>
-  
+  <h4> Questions / Comments  <!-- TODO fix add link / make ajax form maybe -->
+    <%= link_to "add", "/model_helps/#{model_help.id}/comments", :popup => true %>
+  </h4>
+  <%= render :partial => model_help.comments %>
 <% end %>

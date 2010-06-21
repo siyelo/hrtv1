@@ -16,7 +16,11 @@ class Code < ActiveRecord::Base
   acts_as_nested_set
 
   def to_label 
-    short_display
+    to_s
+  end
+
+  def name
+    to_s
   end
 
   def to_s

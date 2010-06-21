@@ -39,3 +39,8 @@ end
 seed_model_help_from_yaml model_helps
 
 #TODO seed code values
+#
+%w[ Gisenyi Gitarama Cyangugu Ruhengeri].each do |district|
+  Location.find_or_create_by_short_display district
+end
+

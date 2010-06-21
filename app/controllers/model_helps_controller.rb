@@ -7,6 +7,8 @@ class ModelHelpsController < ApplicationController
     list.sorting = {:model_name => 'DESC'}
     config.nested.add_link("Field Help", [:field_help])
     
+    config.columns[:short].inplace_edit = true
+    config.columns[:long].inplace_edit = true
     config.create.columns = @@create_columns
     config.update.columns = [:short, :long]
   end

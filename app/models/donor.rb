@@ -1,0 +1,2 @@
+class Donor < Organization 
+end

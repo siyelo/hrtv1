@@ -43,4 +43,11 @@ class ProjectTest < ActiveSupport::TestCase
     assert p.comments.size == 1
     assert Comment.count == 1
   end
+  test "has locations" do
+    p=Project.new
+    p.save
+    c=p.locations.create( :name => "name" )
+    assert p.locations.size == 1
+    assert Location.count == 1
+  end
 end

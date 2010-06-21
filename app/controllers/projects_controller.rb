@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   @@shown_columns = [:name, :description,  :expected_total]
-  @@create_columns = [:name, :description,  :expected_total]
+  @@create_columns = [:name, :description,  :expected_total, :locations]
   
   active_scaffold :project do |config|
     config.columns =  @@shown_columns
@@ -16,6 +16,8 @@ class ProjectsController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea
     config.columns[:expected_total].inplace_edit = true
+    config.columns[:locations].form_ui = :select
+    config.columns[:locations].label = "Districts Worked In"
   end
   
   def index

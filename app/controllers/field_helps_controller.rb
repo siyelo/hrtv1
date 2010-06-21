@@ -8,5 +8,7 @@ class FieldHelpsController < ApplicationController
     
     config.create.columns = @@create_columns
     config.update.columns = [:short, :long]
+    config.columns[:short].inplace_edit = true
+    config.columns[:long].inplace_edit = true
   end
 end

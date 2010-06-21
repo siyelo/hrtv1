@@ -10,5 +10,5 @@
 </p>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => { } %>
-<% #link_to "#/{record_underscored_name}" %> link to next page
+<%= link_to "Next", next_workflow_path(record_type)  %>
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

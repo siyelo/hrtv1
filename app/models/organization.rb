@@ -7,4 +7,8 @@ class Organization < ActiveRecord::Base
 
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
+
+  def to_s
+    name
+  end
 end

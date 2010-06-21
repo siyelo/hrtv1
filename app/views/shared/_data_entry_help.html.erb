@@ -1,12 +1,12 @@
-<% model_help = ModelHelp.find_by_model_name record_type.human_name %>
+<% model_help = ModelHelp.find_by_model_name record_type.to_s %>
 
 <% content_for :left_side_bar do %>
   <p>Help for <%= h model_help.model_name.pluralize %></p>
   <%= render :partial => model_help.field_help %>
   <p>Examples</p>
     <ul>
-      <li>Example y</li>
-      <li>Example y</li>
+      <li><%= link_to 'HIV/AIDS Projects', '#' %></li>
+      <li><%= link_to 'Cross Cutting Projects', '#' %></li>
     </ul>
   </ul>
 <% end %>

@@ -1,0 +1,9 @@
+#top { width: 950px; margin: 0 auto; }
+#banner { float: left; margin-right: 10px; width: 590px; }
+#top_spacer { float: left; margin-right: 10px; width: 30px; }
+#login { float: right; margin-right: 10px; width: 310px; margin-right: 0; }
+#middle { width: 950px; margin: 0 auto; }
+#left_side_bar { float: left; margin-right: 10px; width: 230px; }
+#content { float: left; margin-right: 10px; width: 710px; margin-right: 0; }
+#bottom { width: 950px; margin: 0 auto; }
+#footer { float: center; margin-right: 10px; margin-right: 0; width: 190px; } 

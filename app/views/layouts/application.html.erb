@@ -5,36 +5,55 @@
   <title>Hardcoded Title in App Layout</title>
   <%= javascript_include_tag :defaults %>
   <%= active_scaffold_includes %>
+  <!-- Framework CSS -->
+  <!--<%= stylesheet_link_tag "screen", :media => "screen, projection" %> -->
+  <%= stylesheet_link_tag "simple_css", :media => "screen, projection" %> 
+
+  <%= stylesheet_link_tag "print", :media => "print" %>
+  <!--[if lt IE 8]>
+    <%= stylesheet_link_tag "ie", :media=>"screen, projection" %>
+  <![endif]-->
+
   </head>
   <body>
-    <div class=left_side_bar>
-      <%= yield :left_side_bar %>
-    </div>
-    <div class="container">
-      <div class="breadcrumbs">
-        <%= yield :breadcrumbs %>
+    <div class="container showgrid">
+      <div class="span-10 banner" id="banner">BANNER!</div>
+      <div class="span-4 prepend-10 last" id="login">
+        Login
       </div>
+      <div class="clear span-24 last" id="main">
+        <%= render :partial => 'layouts/top_menu' %>
+        <%= render :partial => 'layouts/left_side_bar' %>
 
-      <div id="content" class="round">
-        <% if flash[:notice] %>
-          <div class="notice"><%= flash[:notice] %></div>
-        <% end %>
-        
-        <div class="page_help"> 
-          <%= yield :page_help %>
-        </div>
+        <div class="span-18 last" id="page">
+          <div class="span-18 last" id="breadcrumb">
+            <%= yield :breadcrumbs %>
+          </div>
 
-        <%= yield %>
+          <div class="clear round span-18 last" id="content">
+            
+            <% if flash[:notice] %>
+              <div class="notice"><%= flash[:notice] %></div>
+            <% end %>
+            
+            <div class="page_help"> 
+              <%= yield :page_help %>
+            </div>
 
-        <div class="comments">
-          <%= yield :comments %>
-        </div>
+            <%= yield %>
 
-      </div>
-      <%= debug(params) if Rails.env.development? %>
-    </div>
-    <div class=right_side_bar>
-      <%= yield :right_side_bar %>
-    </div>
+            <div class="comments">
+              <%= yield :comments %>
+            </div>
+         
+          </div> <!-- content -->
+        </div> <!-- page -->
+      </div> <!-- main -->
+      <%= render :partial => 'layouts/footer' %>
+
+      <%= render :partial => 'layouts/right_side_bar' %>
+
+
+    </div> <!-- container -->
   </body>
 </html>

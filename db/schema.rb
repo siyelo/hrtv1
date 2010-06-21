@@ -83,15 +83,6 @@ ActiveRecord::Schema.define(:version => 20100621111312) do
     t.datetime "updated_at"
   end
 
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "indicators", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -126,7 +117,7 @@ ActiveRecord::Schema.define(:version => 20100621111312) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.string   "type"

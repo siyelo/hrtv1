@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
-  @@shown_columns = [:name, :description,  :expected_total]
-  @@create_columns = [:name, :description,  :expected_total, :target ]
+  @@shown_columns = [:projects, :name, :description,  :expected_total]
+  @@create_columns = [:projects, :name, :description,  :expected_total, :target ]
   
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
@@ -12,6 +12,8 @@ class ActivitiesController < ApplicationController
 
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
+    config.columns[:projects].inplace_edit = true
+    config.columns[:projects].form_ui = :select
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea

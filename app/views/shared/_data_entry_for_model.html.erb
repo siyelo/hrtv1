@@ -4,9 +4,13 @@
     breadcrumbs
   <% end %>
 <p>
-  <% #todo put csv-file-uploading-here 
+  <% #todo put csv-file-uploading-here , also switch to jquery for toggling
 %>
-  csv uploading
+<a href="#file_upload" onClick="$('file_upload').toggle();"; >csv uploading</a>
+<div id="file_upload">
+  <script> $('file_upload').hide() </script>
+  file upload goes here
+</div>
 </p>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => { } %>

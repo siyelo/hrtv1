@@ -22,10 +22,9 @@
         Login
       </div>
       <div class="clear span-24 last" id="main">
-        <div class="span-13 append-11 last" id="top_menu">About | Another Link | Another Link </div>
-        <div class="clear span-6 border" id="left_side_bar">
-          <%= yield :left_side_bar %>
-        </div>
+        <%= render :partial => 'layouts/top_menu' %>
+        <%= render :partial => 'layouts/left_side_bar' %>
+
         <div class="span-18 last" id="page">
           <div class="span-18 last" id="breadcrumb">
             <%= yield :breadcrumbs %>
@@ -50,12 +49,10 @@
           </div> <!-- content -->
         </div> <!-- page -->
       </div> <!-- main -->
-      <div class="clear span-6 prepend-9 append-9 last" id="footer">About | Contact | News</div>
-    
-      <%= debug(params) if Rails.env.development? %>
-      <div class="right_side_bar">
-        <%= yield :right_side_bar %>
-      </div>
+      <%= render :partial => 'layouts/footer' %>
+
+      <%= render :partial => 'layouts/right_side_bar' %>
+
 
     </div> <!-- container -->
   </body>

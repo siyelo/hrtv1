@@ -5,6 +5,8 @@ class ModelHelpsController < ApplicationController
   active_scaffold :model_help do |config|
     config.columns =  @@shown_columns
     list.sorting = {:model_name => 'DESC'}
+    config.nested.add_link("Comments", [:comments])
+    config.columns[:comments].association.reverse = :commentable
     config.nested.add_link("Field Help", [:field_help])
     
     config.columns[:short].inplace_edit = true

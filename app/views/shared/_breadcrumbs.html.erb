@@ -1,0 +1,21 @@
+<% 
+  model_link = [ 
+  ["NoType" , '/tutorial' ],
+  [Project , "/projects"],
+  [FundingFlow , "/funding_flows"],
+  [Activity , "/activities"],
+  [LineItem , "/line_items"] ]
+  
+  while model_link.size > 0 do 
+    e=model_link.shift
+    model, link = e.first, e.last
+%>
+    ><%= link_to model.to_s, link %> 
+<%
+  end
+%>
+
+<% while model_link.size > 0 do  
+   model = model_link.shift %>
+  > <%= model.to_s %>
+<% end %>

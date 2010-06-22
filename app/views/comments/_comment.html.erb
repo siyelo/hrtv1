@@ -1,4 +1,7 @@
 <div id="<%="comment#{comment.id}"%>"
-  <h5><%= h comment.title %>  <%= link_to "delete", "#" %></h5>
-  <p><%= h comment.comment %></p>
+  <p>
+  <b><%= h comment.title %> <!-- <%= link_to "delete", "#" %> -->
+  </b> <br>
+  <%= h comment.comment %>
+  </p>
 </div>

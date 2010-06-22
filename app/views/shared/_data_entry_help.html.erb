@@ -1,26 +1,36 @@
 <% model_help = ModelHelp.find_by_model_name record_type.to_s %>
 
-<% content_for :left_side_bar do %>
-  <p>Help for <%= h model_help.model_name.pluralize %></p>
-  <%= render :partial => model_help.field_help %>
-  <p>Examples</p>
-    <ul>
-      <li><%= link_to 'HIV/AIDS Projects', '#' %></li>
-      <li><%= link_to 'Cross Cutting Projects', '#' %></li>
-    </ul>
-  </ul>
-<% end %>
+<% if model_help %>
+  <% content_for :left_side_bar do %>
+    <h4 class="help_title">Help</h4>
+    <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
+      <div id="terms">
+        <script> $('terms').hide(); </script>
+        <%= render :partial => model_help.field_help %>
+      </div>
+      <p><%= link_to 'Examples', '#',  :onclick => "$('examples').toggle();"  %></p>
+      <div id="examples">
+        <script> $('examples').hide(); </script>
+        <%= link_to 'HIV/AIDS', '#' %>
+        <%= link_to 'Health Systems', '#' %>
+        <%= link_to 'Technical Assistance', '#' %>
+        <%= link_to '...', '#' %>
+      </div>
+      
+    
+  <% end %>
 
-<% content_for :page_help do %>
-  <%= h model_help.long %>
-<% end %>
+  <% content_for :page_help do %>
+    <p><%= h model_help.long %></p>
+  <% end %>
 
-<% content_for :right_side_bar do %>
-<% end %>
+  <% content_for :right_side_bar do %>
+  <% end %>
 
-<% content_for :comments do %>
-  <h4> Questions / Comments  <!-- TODO fix add link / make ajax form maybe -->
-    <%= link_to "add", "/model_helps/#{model_help.id}/comments", :popup => true %>
-  </h4>
-  <%= render :partial => model_help.comments %>
+  <% content_for :comments do %>
+    <h3> General Questions / Comments  <!-- TODO fix add link / make ajax form maybe -->
+      (<%= link_to "add", "/model_helps/#{model_help.id}/comments", :popup => true %>)
+    </h3>
+    <%= render :partial => model_help.comments %>
+  <% end %>
 <% end %>

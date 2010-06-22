@@ -1,18 +1,25 @@
   <% content_for :breadcrumbs do %>
     <% #todo put breadcrumbs here that while until get to this record type 
-    %> 
-    breadcrumbs
+  %> 
+  <%= link_to 'Tutorial', '#' %> > <b>Projects</b> > Funding Flows > Activities > Review and Submit
   <% end %>
 <p>
   <% #todo put csv-file-uploading-here , also switch to jquery for toggling
 %>
-<a href="#file_upload" onClick="$('file_upload').toggle();"; >csv uploading</a>
+<a href="#file_upload" onClick="$('file_upload').toggle();"; >Create new projects from a file</a>
 <div id="file_upload">
   <script> $('file_upload').hide() </script>
   file upload goes here
 </div>
 </p>
+<p>
+<a href="#file_export" onClick="$('file_export').toggle();"; >Export projects to a file</a>
+<div id="file_export">
+  <script> $('file_export').hide() </script>
+  file upload goes here
+</div>
+</p>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => { } %>
-<%= link_to "Next", next_workflow_path(record_type)  %>
+  <p class='right'><%= link_to "Next Step", next_workflow_path(record_type)  %> </p>
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

@@ -16,6 +16,7 @@ class ProjectsController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea
     config.columns[:expected_total].inplace_edit = true
+    config.columns[:expected_total].label = "Total Budgeted Amount"
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
   end

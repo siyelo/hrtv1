@@ -7,3 +7,4 @@ activesupport -v2.3.8
 mysql -v2.8.1
 rack -v1.1.0
 rails -v2.3.8
+sqlite3-ruby

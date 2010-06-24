@@ -4,8 +4,6 @@
 #login { float: right; margin-right: 10px; width: 270px; margin-right: 0; right:auto;}
 #main { width: 950px; margin: 0 auto;}
 #left_side_bar { float: left; margin-right: 10px; width: 160px; }
-#content { float: left; margin-right: 10px; width: 770px; margin-right: 0;  }
+#content { float: left; margin-right: 10px; width: 770px; margin-right: 0;  auto;}
 #bottom { width: 950px; margin: 0 auto; }
 #footer { float: center; margin-right: 10px; margin-right: 0; width: 940px; } 
-
-

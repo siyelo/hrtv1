@@ -9,7 +9,6 @@ class CreateInitialDomainModel < ActiveRecord::Migration
       t.datetime "updated_at"
       t.string   "comments"
       t.decimal  "expected_total"
-      t.text     "newfield"
     end
 
     create_table "activities_indicators", :id => false, :force => true do |t|
@@ -45,8 +44,6 @@ class CreateInitialDomainModel < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.decimal  "amount"
-      t.integer  "hssp_strategic_objective_id"
-      t.integer  "mtefp_id"
     end
 
     create_table "locations", :force => true do |t|

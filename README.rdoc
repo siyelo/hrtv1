@@ -7,9 +7,9 @@ Currently getting an alpha / minimum viable product done. This should be fairly 
 
 Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet.
 
-We may switch to Rails 3 after we have some alpha working.
+Greg is going to integrate file uploading from http://github.com/rwandaonrails/csv-uploader.
 
-I'm going to integrate file uploading from http://github.com/rwandaonrails/csv-uploader.
+We may switch to Rails 3 after we have some alpha working.
 
 === Our Philosophy
 
@@ -32,9 +32,27 @@ Let Greg know if you're available to do some pairing/mentoring! Mega bonus point
 More info on collaborating with local team can be got by emailing gregory_nelson@abtassoc.com.
 
 === Getting Started
+Please fork and clone the git repository.
+Then install rvm using the instructions below. We use rvm to standardize the Ruby and Gem environments across Developers on the project and help new devs get up and running quickly.
 
-Please fork, & run setup
+* install RVM if not already installed, see http://rvm.beginrescueend.com/rvm/install/ . Google / ask Greg if you have trouble.
+* cd resource_tracking
+* rvm install ree
+* rvm ree-1.8.7-2010.02
 
-  $ rake setup
+Now we'll import the rvm gemset from default.gems.
+* rvm gemset create ree-1.8.7-2010.02@resource_tracking
+* rvm gemset import resource_tracking
 
-Choose a feature for the alpha, developing on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html)
+Note: if you have an error with database gem you won't be using, you can ignore it.
+
+Now,
+# cp config/database.yml.sample config/database.yml
+# edit config/datbase.yml per your environment.  This file is not tracked by git.
+# create .rvmrc file so whenever we cd to RAILS_ROOT we are using the right Ruby version and gem set.
+* echo 'rvm ree-1.8.7-2010.02@resource_tracking' > .rvmrc
+
+* rake setup
+* script/server
+
+Now you can choose a feature for the alpha, developing on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html). Let Greg / the mailing list know if you have any questions. Thanks!

@@ -37,6 +37,7 @@ Then install rvm using the instructions below. We use rvm to standardize the Rub
 
 * install RVM if not already installed, see http://rvm.beginrescueend.com/rvm/install/ . Google / ask Greg if you have trouble.
 * cd resource_tracking
+* git checkout add_active_scaffold
 * rvm install ree
 * rvm ree-1.8.7-2010.02
 

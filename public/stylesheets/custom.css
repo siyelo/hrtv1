@@ -108,3 +108,17 @@ color: #069;
 .doc{ -moz-border-radius:10px;
 -webkit-border-radius: 10px;
 height:500px;}
+
+#notice {
+border: solid 1px #99cc99;
+background-color: #e2f9e3;
+color: #006600;
+padding: 5px;
+margin-bottom: 5px;
+}
+
+#notice.error {
+ border-color: #cc0000;
+ background-color: #eeaaaa;
+ color: #cc0000;
+}

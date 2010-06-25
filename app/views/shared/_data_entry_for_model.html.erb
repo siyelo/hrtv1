@@ -9,7 +9,7 @@
 <a href="#file_upload" onClick="$('file_upload').toggle();"; >Create new projects from a file</a>
 <div id="file_upload">
   <script> $('file_upload').hide() </script>
-  file upload goes here
+  <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
 </div>
 </p>
 <p>

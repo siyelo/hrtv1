@@ -4,9 +4,9 @@ actionpack -v2.3.8
 activerecord -v2.3.8
 activeresource -v2.3.8
 activesupport -v2.3.8
-mysql -v2.8.1
 rack -v1.1.0
 rails -v2.3.8
 sqlite3-ruby
 ruby-debug
 rails-footnotes
+fastercsv

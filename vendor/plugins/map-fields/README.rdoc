@@ -1,0 +1,107 @@
+= map-fields
+
+* http://github.com/internuity/map-fields
+
+== DESCRIPTION:
+
+A Rails plugin which provides a hook to preview and map the fields of an uploaded CSV file to a pre-defined schema
+
+== FEATURES/PROBLEMS:
+
+* Captures the post and provides an intermediate view where a user can map their data to the expected schema
+* Provides a default mapping view that can be customised
+* Allows the import to be part of a larger form (The form fields are remembered through the mapping)
+
+== SYNOPSIS:
+
+===Lists controller
+  class ListsController < AppliactionController
+    map_fields :create, ['Title', 'First name', 'Last name'], :file_field => :file, :params => [:list]
+
+    def index
+      @lists = List.find(:all)
+    end
+
+    def new
+      @list = List.new
+    end
+
+    def create
+      @list = List.new(params[:list])
+      if fields_mapped?
+        mapped_fields.each do |row|
+          @list.contact.create(:title => row[0], 
+                               :first_name => row[1], 
+                               :last_name => row[2])
+        end
+        flash[:notice] = 'Contact list created'
+        redirect_to :action => :index
+      else
+        render
+      end
+    rescue MapFields::InconsistentStateError
+      flash[:error] = 'Please try again'
+      redirect_to :action => :new
+    rescue MapFields::MissingFileContentsError
+      flash[:error] = 'Please upload a file'
+      redirect_to :action => :new
+    end
+  end
+
+===New view (new.html.erb)
+  <h1>Import a new List</h1>
+  <% form_for :list, :html => {:multipart => true} do |form| %>
+    <div class="field">
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="field">
+      <label for="file">File</label>
+      <%= file_field_tag 'file' %>
+    </div>
+    <div class="buttons">
+      <%= form.submit 'Import' %>
+    </div>
+  <% end %>
+
+===Create view (create.html.erb)
+  <h1>Import a new List</h1>
+  <p>Please map the details you're importing</p>
+  =render :partial => 'map_fields/map_fields'
+
+== REQUIREMENTS:
+
+* FasterCSV
+
+== INSTALL:
+
+sudo gem install map-fields
+
+or
+
+./script/plugin install git://github.com/internuity/map-fields.git
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2009
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

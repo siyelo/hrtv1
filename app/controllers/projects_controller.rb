@@ -1,6 +1,13 @@
 class ProjectsController < ApplicationController
   @@shown_columns = [:name, :description,  :expected_total]
   @@create_columns = [:name, :description,  :expected_total, :locations]
+  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, locations for instance won't work
+
+  # _create_from_file partial in the view
+  #  directory for that controller
+  map_fields :create_from_file,
+    @@columns_for_file_upload,
+    :file_field => :file
   
   active_scaffold :project do |config|
     config.columns =  @@shown_columns
@@ -23,6 +30,10 @@ class ProjectsController < ApplicationController
   
   def index
 
+  end
+
+  def create_from_file
+    super @@columns_for_file_upload
   end
 
   def to_label

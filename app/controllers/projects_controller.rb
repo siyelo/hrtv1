@@ -3,20 +3,18 @@ class ProjectsController < ApplicationController
   @@create_columns = [:name, :description,  :expected_total, :locations]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, locations for instance won't work
 
-  # _create_from_file partial in the view
-  #  directory for that controller
   map_fields :create_from_file,
     @@columns_for_file_upload,
     :file_field => :file
-  
+
   active_scaffold :project do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
     config.nested.add_link("Activities", [:activities])
-    
+
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
-    
+
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
     config.columns[:name].inplace_edit = true
@@ -27,7 +25,7 @@ class ProjectsController < ApplicationController
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
   end
-  
+
   def index
 
   end

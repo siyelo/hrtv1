@@ -1,7 +1,12 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:projects, :name, :description,  :expected_total]
   @@create_columns = [:projects, :name, :description,  :expected_total, :target ]
-  
+  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, projects for instance won't work
+
+  map_fields :create_from_file,
+    @@columns_for_file_upload,
+    :file_field => :file
+
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
@@ -24,9 +29,13 @@ class ActivitiesController < ApplicationController
     #config.columns[:indicators].form_ui = :select
     #config.columns[:indicators].options = {:draggable_lists => true}
   end
-  
+
   def index
 
+  end
+
+  def create_from_file
+    super @@columns_for_file_upload
   end
 
   def to_label

@@ -1,9 +1,16 @@
-
 = Resource Tracking : Rwanda On Rails
+
+== Background
+
+You could expect to live to be 58 if you were born in Rwanda today. Rwanda needs better software for health to save and improve the lives of its 11 million people.
+
+== Purpose
+
+We’re building an open source web app with Ruby on Rails to track all the donor programs in the country for health. To know where the money goes and what difference it made.  To increase transparency and accountability. To know more and make better decisions. And once it’s ready, it can spread all over Africa.
 
 == For Developers
 
-Currently getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team. UI work is going on in branch add_active_scaffold so we can easily do another UI less dependent on active scaffold, if that makes sense.
+Lets focus on getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team. UI work is going on in branch add_active_scaffold so we can easily do another UI less dependent on active scaffold, if that makes sense.
 
 Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet.
 
@@ -15,15 +22,14 @@ We may switch to Rails 3 after we have some alpha working.
 
 Nothing is sacred, be vocal about ways to improve anything we are doing.
 
-=== Google Group
+=== Join us
 
-Join the discussion at: http://groups.google.com/group/rwandaonrails
-
-=== Pivotal Tracker
-
-http://www.pivotaltracker.com/projects/59773
-
-Tracker should be public at this point. Click the "Join Project" button after visiting this website to get more than read access.
+* Homepage: http://rwandaonrails.com/
+* Wiki: ? (suggestions?)
+* Google Group: http://groups.google.com/group/rwandaonrails
+* Pivotal Tracker: http://www.pivotaltracker.com/projects/59773
+  * Its a public project, so click the "Join Project" to get r/w access.
+* Working With Rails: http://workingwithrails.com/project/12590
 
 === Pairing/Mentoring
 
@@ -32,7 +38,11 @@ Let Greg know if you're available to do some pairing/mentoring! Mega bonus point
 More info on collaborating with local Rwandan team can be got by emailing gregory_nelson@abtassoc.com.
 
 === Getting Started
-Please fork and clone the git repository.
+
+First, fork and clone the git repository (via GitHub).
+
+==== RVM
+
 Then install rvm using the instructions below. We use rvm to standardize the Ruby and Gem environments across Developers on the project and help new devs get up and running quickly.
 
 * install RVM if not already installed, see http://rvm.beginrescueend.com/rvm/install/ . Google / ask Greg if you have trouble.
@@ -47,13 +57,20 @@ Now we'll import the rvm gemset from default.gems.
 
 Note: if you have an error with database gem you won't be using, you can ignore it.
 
+==== Update your database.yml
 Now,
 # cp config/database.yml.sample config/database.yml
 # edit config/datbase.yml per your environment.  This file is not tracked by git.
 # create .rvmrc file so whenever we cd to RAILS_ROOT we are using the right Ruby version and gem set.
 * echo 'rvm ree-1.8.7-2010.02@resource_tracking' > .rvmrc
 
+==== Rake gems and create db
+
 * rake setup
 * script/server
 
-Now you can choose a feature for the alpha, developing on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html). Let Greg / the mailing list know if you have any questions. Thanks!
+==== Get coding!
+
+Now you can choose a feature for the alpha, developing on a local feature branch (as per: http://reinh.com/blog/2009/03/02/a-git-workflow-for-agile-teams.html).
+
+Let Greg / the mailing list know if you have any questions. Thanks!

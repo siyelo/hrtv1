@@ -1,19 +1,19 @@
   <% content_for :breadcrumbs do %>
     <% #todo put breadcrumbs here that while until get to this record type 
   %> 
-  <%= link_to 'Home', '#' %> > <b>Projects</b> > Funding Flows > Activities > Review and Submit
+  <%= link_to 'Home', 'ngo_dashboard' %> > <b>Projects</b> > Funding Flows > Activities > Review and Submit
   <% end %>
 <p>
   <% #todo put csv-file-uploading-here , also switch to jquery for toggling
 %>
-<a href="#file_upload" onClick="$('file_upload').toggle();"; >Create new projects from a file</a>
+<a href="#file_upload" onClick="$('file_upload').toggle();"; >Create new <%=record_type.human_name.pluralize%> from a file</a>
 <div id="file_upload">
   <script> $('file_upload').hide() </script>
   <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
 </div>
 </p>
 <p>
-<a href="#file_export" onClick="$('file_export').toggle();"; >Export projects to a file</a>
+<a href="#file_export" onClick="$('file_export').toggle();"; >Export <%=record_type.human_name.pluralize%> to a file</a>
 <div id="file_export">
   <script> $('file_export').hide() </script>
   file upload goes here
@@ -21,5 +21,6 @@
 </p>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => { } %>
-  <p class='right'><%= link_to "Next Step", next_workflow_path(record_type)  %> </p>
+  <p class='right'><%= link_to "Next Step", next_workflow_path(record_type)  %> </p><br>
+
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

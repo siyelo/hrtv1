@@ -1,7 +1,5 @@
-<div id="<%="comment#{comment.id}"%>"
-  <p>
-  <b><%= h comment.title %> <!-- <%= link_to "delete", "#" %> -->
-  </b> <br>
-  <%= h comment.comment %>
-  </p>
+<% divid="comment_#{comment.id}" %>
+<div id="<%= divid%>"
+  <%= render :partial => 'comments/comment_body_and_reply_link',
+    :locals => {:comment => comment, :divid => divid} %>
 </div>

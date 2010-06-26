@@ -9,10 +9,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :organization, :active_scaffold => true
   map.resources :funding_flow, :active_scaffold => true
 
+  map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
+
   # DRY up the static page controller
   map.root :controller => 'static_page' #a replacement for public/index.html
   map.static_page ':page', :controller => 'static_page', :action => 'show', :page => Regexp.new(StaticPageController::PAGES.join('|'))
-  
+  map.ngo_dashboard 'ngo_dashboard', :controller => 'static_page', :action => 'show', :page => 'ngo_dashboard'
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

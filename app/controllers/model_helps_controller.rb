@@ -14,5 +14,12 @@ class ModelHelpsController < ApplicationController
     config.create.columns = @@create_columns
     config.update.columns = [:short, :long]
   end
-  
+
+  def index
+
+  end
+
+  def to_label
+    "Help"
+  end  
 end

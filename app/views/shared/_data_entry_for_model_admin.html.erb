@@ -1,0 +1,6 @@
+<% content_for :breadcrumbs do %>
+  <%= link_to 'Back to Dashboard', 'govt_dashboard' %>
+<% end %>
+<%= render :active_scaffold => record_underscored_name,
+  :constraints => { } %>
+<%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

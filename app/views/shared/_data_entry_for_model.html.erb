@@ -1,4 +1,4 @@
-  <% content_for :breadcrumbs do %>
+<% content_for :breadcrumbs do %>
     <% #todo put breadcrumbs here that while until get to this record type 
   %> 
   <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
@@ -6,14 +6,14 @@
 <p>
   <% #todo put csv-file-uploading-here , also switch to jquery for toggling
 %>
-<a href="#file_upload" onClick="$('file_upload').toggle();"; >Create new <%=record_type.human_name.pluralize.downcase%> from a file</a> 
+<a href="#" onClick="$('file_upload').toggle();"; >Create new <%=record_type.human_name.pluralize.downcase%> from a file</a> 
 <div id="file_upload">
   <script> $('file_upload').hide() </script>
   <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
 </div>
 </p>
 <p>
-<a href="#file_export" onClick="$('file_export').toggle();"; >Export <%=record_type.human_name.pluralize.downcase%> to a file</a>
+<a href="#" onClick="$('file_export').toggle();"; >Export <%=record_type.human_name.pluralize.downcase%> to a file</a>
 <div id="file_export">
   <script> $('file_export').hide() </script>
   file export goes here

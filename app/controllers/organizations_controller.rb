@@ -9,4 +9,6 @@ class OrganizationsController < ApplicationController
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
   end
+
+  record_select :per_page => 20, :search_on => [:name], :order_by => 'name ASC', :full_text_search => true
 end

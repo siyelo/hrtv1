@@ -17,8 +17,8 @@ class FundingFlowsController < ApplicationController
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
     [:from, :to, :project].each do |c|
-      config.columns[c].inplace_edit = true
-      config.columns[c].form_ui = :select
+      config.columns[c].form_ui = :record_select
+      config.columns[c].inplace_edit = :ajax
     end
     config.columns[:committment_to].inplace_edit = true
     config.columns[:disbursement_to].inplace_edit = true

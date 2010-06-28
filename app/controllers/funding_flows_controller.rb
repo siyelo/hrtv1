@@ -1,7 +1,7 @@
 class FundingFlowsController < ApplicationController
   @@shown_columns = [:from, :to,  :project, :committment_to, :spending_to]
   @@create_columns = [:from, :to,  :project, :committment_to, :disbursement_to, :spending_to]
-  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, locations for instance won't work
+  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file,
     @@columns_for_file_upload,

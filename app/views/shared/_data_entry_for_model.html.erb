@@ -1,7 +1,7 @@
   <% content_for :breadcrumbs do %>
     <% #todo put breadcrumbs here that while until get to this record type 
   %> 
-  <%= link_to 'Home', 'ngo_dashboard' %> > <b>Projects</b> > Funding Flows > Activities > Review and Submit
+  <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
   <% end %>
 <p>
   <% #todo put csv-file-uploading-here , also switch to jquery for toggling
@@ -20,7 +20,7 @@
 </div>
 </p>
 <% constraints ||=  {} %>
-<% label ||=  {} %>
+<% label ||=  nil %>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => constraints, :label => label %>
   <p class='right'><%= link_to "Next Step", next_workflow_path()  %> </p><br>

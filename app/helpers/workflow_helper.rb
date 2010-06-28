@@ -1,9 +1,9 @@
 module WorkflowHelper
-  @@map = { "start" => "projects/index", "projects/index" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
-            "funding_flows/providers" => "activities/index" , "activities/index" => "show"}
+  @@map = { "start" => "projects/data_entry", "projects/data_entry" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
+            "funding_flows/providers" => "activities/data_entry" , "activities/data_entry" => "show"}
 
   def workflow_start
-    next_workflow_path "start"
+    "/"+@@map["start"]
   end
 
   def next_workflow_path

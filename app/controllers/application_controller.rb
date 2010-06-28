@@ -14,6 +14,23 @@ class ApplicationController < ActionController::Base
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
   end 
 
+  def data_entry
+    session[:last_data_entry_screen] = request.url
+    render :template => "#{controller_name}/index"
+  end
+
+  def redirect_to_index
+    #this is going to introduce bugs, couldn't think of
+    # better way to do it since AS needs the index method clean
+    # for search to work
+    # may be able to check params for search request and render list
+    # when that is asked for?
+    if session[:last_data_entry_screen]
+      redirect_to session[:last_data_entry_screen]
+    else 
+      redirect_to :action => :index
+    end
+  end
 
   #TODO add constraints option that works with key - value for ids
   # or pass in an object to build the new record off of?
@@ -32,16 +49,16 @@ class ApplicationController < ActionController::Base
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
       logger.debug(success_msg)
       flash[:notice] = success_msg
-      redirect_to :action => :index
+      redirect_to_index
     else
       #user chooses field mapping
       render :template => 'shared/create_from_file'
     end
     rescue MapFields::InconsistentStateError
       flash[:error] = 'Please try again'
-      redirect_to :action => :index
+      redirect_to_index
     rescue MapFields::MissingFileContentsError
       flash[:error] = 'Please upload a file'
-      redirect_to :action => :index
+      redirect_to_index
   end
 end

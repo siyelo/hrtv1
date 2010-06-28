@@ -10,8 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :funding_flow, :active_scaffold => true
 
   #ugly manual paths
-  map.funding_sources "funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
-  map.providers "providers", :controller => 'funding_flows', :action => 'providers'
+  map.funding_sources_data_entry "funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
+  map.providers_data_entry "providers", :controller => 'funding_flows', :action => 'providers'
 
   map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
 

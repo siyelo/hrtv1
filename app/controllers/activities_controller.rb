@@ -1,7 +1,7 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:projects, :name, :description,  :expected_total]
   @@create_columns = [:projects, :name, :description,  :expected_total, :target ]
-  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, projects for instance won't work
+  @@columns_for_file_upload = %w[name description expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -28,10 +28,6 @@ class ActivitiesController < ApplicationController
     # add in later version, not part of minimal viable product
     #config.columns[:indicators].form_ui = :select
     #config.columns[:indicators].options = {:draggable_lists => true}
-  end
-
-  def index
-
   end
 
   def create_from_file

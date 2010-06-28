@@ -29,18 +29,14 @@ class FundingFlowsController < ApplicationController
     config.columns[:spending_to].label = "Amount Spent"
   end
 
-  def index
-
-  end
-
   def funding_sources
-    @constraints = { :to => Organization.last } #current_user.organization
+    @constraints = { :to => Organization.last.id } #current_user.organization.id
     @label = "Funding Sources"
     index_w_constraints
   end
 
   def providers
-    @constraints = { :from => Organization.last } #current_user.organization
+    @constraints = { :from => Organization.last.id } #current_user.organization.id
     @label = "Providers"
     index_w_constraints
   end
@@ -52,7 +48,7 @@ class FundingFlowsController < ApplicationController
   protected
 
   def index_w_constraints
-    session[:funding_flows_constraints] = @constraints
-    render :template => 'funding_flows/index'
+    session[:last_data_entry_constraints] = @constraints
+    data_entry
   end
 end

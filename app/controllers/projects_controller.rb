@@ -26,10 +26,6 @@ class ProjectsController < ApplicationController
     config.columns[:locations].label = "Districts Worked In"
   end
 
-  def index
-
-  end
-
   def create_from_file
     super @@columns_for_file_upload
   end

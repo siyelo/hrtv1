@@ -2,6 +2,10 @@ class ProjectsController < ApplicationController
   @@shown_columns = [:name, :description,  :expected_total]
   @@create_columns = [:name, :description,  :expected_total]
   
+  def self.create_columns
+    @@create_columns
+  end
+  
   active_scaffold :project do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
@@ -30,4 +34,6 @@ class ProjectsController < ApplicationController
       @s+name
     end
   end
+
+  self.set_active_scaffold_column_descriptions
 end

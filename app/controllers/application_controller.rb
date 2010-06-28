@@ -12,12 +12,14 @@ class ApplicationController < ActionController::Base
   end 
 
   def self.set_active_scaffold_column_descriptions
+    #TODO cache descriptions in a class variable?
+    # would be premature optimization
     if respond_to? :active_scaffold_config # or should it error when called badly?
       config = active_scaffold_config
       unless config.nil?
         field_help = ModelHelp.find_by_model_name(config.model.to_s).field_help
         #TODO join with ruby array methods or something better
-        @@create_columns.each do |column|
+        self.create_columns.each do |column|
           h = field_help.find_by_attribute_name(column.to_s)
           config.columns[column].description = h.long unless h.nil?
         end

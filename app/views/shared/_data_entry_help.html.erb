@@ -3,7 +3,7 @@
 <% if model_help %>
   <% content_for :left_side_bar do %>
     <script>$('left_side_bar').show();</script>
-    <h4 class="help_title">Help</h4>
+    <span class="help_title">Help</span>
     <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
       <div id="terms">
         <script> $('terms').hide(); </script>

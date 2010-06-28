@@ -35,11 +35,13 @@ class FundingFlowsController < ApplicationController
 
   def funding_sources
     @constraints = { :to => Organization.last } #current_user.organization
+    @label = "Funding Sources"
     index_w_constraints
   end
 
   def providers
     @constraints = { :from => Organization.last } #current_user.organization
+    @label = "Providers"
     index_w_constraints
   end
 

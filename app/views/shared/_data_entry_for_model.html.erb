@@ -20,9 +20,9 @@
 </div>
 </p>
 <% constraints ||=  {} %>
+<% label ||=  {} %>
 <%= render :active_scaffold => record_underscored_name,
-  :constraints => constraints %>
-<!-- TODO fix params[:action] w appropriate call -->
+  :constraints => constraints, :label => label %>
   <p class='right'><%= link_to "Next Step", next_workflow_path()  %> </p><br>
 
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

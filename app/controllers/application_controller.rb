@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  
+
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password
 
@@ -14,7 +14,11 @@ class ApplicationController < ActionController::Base
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
   end 
 
-  
+
+  #TODO add constraints option that works with key - value for ids
+  # or pass in an object to build the new record off of?
+  # so that file uploads with constraints in the AS view work
+  # as user would expect
   def create_from_file attributes
     if fields_mapped?
       saved, errors = [], []

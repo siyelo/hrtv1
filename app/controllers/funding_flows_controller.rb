@@ -32,8 +32,25 @@ class FundingFlowsController < ApplicationController
   def index
 
   end
-  
+
+  def funding_sources
+    @constraints = { :to => Organization.last } #current_user.organization
+    index_w_constraints
+  end
+
+  def providers
+    @constraints = { :from => Organization.last } #current_user.organization
+    index_w_constraints
+  end
+
   def create_from_file
     super @@columns_for_file_upload
+  end
+
+  protected
+
+  def index_w_constraints
+    session[:funding_flows_constraints] = @constraints
+    render :template => 'funding_flows/index'
   end
 end

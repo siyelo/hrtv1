@@ -9,6 +9,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :organization, :active_scaffold => true
   map.resources :funding_flow, :active_scaffold => true
 
+  #ugly manual paths
+  map.funding_sources "funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
+  map.providers "providers", :controller => 'funding_flows', :action => 'providers'
+
   map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
 
   # DRY up the static page controller

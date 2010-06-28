@@ -98,6 +98,14 @@ a:visited {
 color: #069;
 }
 
+.link_like {
+color: #09c;
+}
+.link_like:hover {
+color: #069;
+text-decoration: underline;
+}
+
 #footer {
   text-align: center;
   margin-top: 10px;

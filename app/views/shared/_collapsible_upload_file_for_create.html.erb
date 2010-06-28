@@ -2,10 +2,11 @@
   file_upload_divid = "file_upload_#{record_type.to_s}"
 %>
 
-<%= link_to (
-  "Create new #{record_type.human_name.pluralize.downcase} from a file", 
-  "##{file_upload_divid}",
-  :onClick => "$('#{file_upload_divid}').toggle();")%>
+<% content_tag :span, :class => "link_like",  
+  :onClick => "$('#{file_upload_divid}').toggle();" do %>
+
+  <%= "Create new #{record_type.human_name.pluralize.downcase} from a file" %>
+<% end %>
 
 <% content_tag :div, :id => file_upload_divid do %>
   <%= content_tag :script, "$('#{file_upload_divid}').hide()" %>

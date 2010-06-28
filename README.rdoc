@@ -3,11 +3,9 @@
 
 == For Developers
 
-Currently getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team. UI work is going on in branch add_active_scaffold so we can easily do another UI less dependent on active scaffold, if that makes sense.
+Currently getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team. UI work has been using mostly active_scaffold, at this point, though that may change.
 
-Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet.
-
-Greg is going to integrate file uploading from http://github.com/rwandaonrails/csv-uploader.
+Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet. Email Greg and he will describe this feature to you.
 
 We may switch to Rails 3 after we have some alpha working.
 
@@ -32,12 +30,12 @@ Let Greg know if you're available to do some pairing/mentoring! Mega bonus point
 More info on collaborating with local Rwandan team can be got by emailing gregory_nelson@abtassoc.com.
 
 === Getting Started
-Please fork and clone the git repository. Then pull the add_active_scaffold branch as well.
-Then install rvm using the instructions below. We use rvm to standardize the Ruby and Gem environments across Developers on the project and help new devs get up and running quickly.
+Please fork and clone the git repository.
+Then install rvm using the instructions below. We use rvm to standardize the Ruby and Gem environments across developers and to help new devs get up and running quickly.
 
 * install RVM if not already installed, see http://rvm.beginrescueend.com/rvm/install/ . Google / ask Greg if you have trouble.
 * cd resource_tracking
-* git checkout add_active_scaffold
+* git checkout master
 * rvm install ree
 * rvm ree-1.8.7-2010.02
 
@@ -48,7 +46,7 @@ Now we'll import the rvm gemset from default.gems.
 Note: if you have an error with database gem you won't be using, you can ignore it.
 
 Now,
-# cp config/database.yml.sample config/database.yml
+* cp config/database.yml.sample config/database.yml
 # edit config/datbase.yml per your environment.  This file is not tracked by git.
 # create .rvmrc file so whenever we cd to RAILS_ROOT we are using the right Ruby version and gem set.
 * echo 'rvm ree-1.8.7-2010.02@resource_tracking' > .rvmrc

@@ -4,21 +4,15 @@
   <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
   <% end %>
 <p>
-  <% #todo put csv-file-uploading-here , also switch to jquery for toggling
-%>
-<a href="#" onClick="$('file_upload').toggle();"; >Create new <%=record_type.human_name.pluralize.downcase%> from a file</a> 
-<div id="file_upload">
-  <script> $('file_upload').hide() </script>
-  <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
-</div>
+<%= render :partial => 'shared/collapsible_upload_file_for_create', 
+  :locals => {:record_type => record_type } %>
 </p>
+
 <p>
-<a href="#" onClick="$('file_export').toggle();"; >Export <%=record_type.human_name.pluralize.downcase%> to a file</a>
-<div id="file_export">
-  <script> $('file_export').hide() </script>
-  file export goes here
-</div>
+<%= render :partial => 'shared/export_to_file',
+  :locals => {:record_type => record_type } %>
 </p>
+
 <% constraints ||=  {} %>
 <% label ||=  nil %>
 <%= render :active_scaffold => record_underscored_name,

@@ -45,6 +45,10 @@ class FundingFlowsController < ApplicationController
     super @@columns_for_file_upload
   end
 
+  def test
+    @organization=Organization.first
+  end
+
   protected
 
   def index_w_constraints

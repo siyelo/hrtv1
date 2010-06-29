@@ -7,6 +7,7 @@ class Organization < ActiveRecord::Base
 
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
+  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
 
   def to_s
     name

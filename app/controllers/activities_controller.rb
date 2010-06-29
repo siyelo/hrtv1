@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
-  @@shown_columns = [:projects, :name, :description,  :expected_total]
-  @@create_columns = [:projects, :name, :description,  :expected_total, :target ]
+  @@shown_columns = [:projects, :provider, :name, :description,  :expected_total]
+  @@create_columns = [:projects, :provider, :name, :description,  :expected_total, :target ]
   @@columns_for_file_upload = %w[name description expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
@@ -17,13 +17,16 @@ class ActivitiesController < ApplicationController
 
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
-    config.columns[:projects].inplace_edit = true
-    config.columns[:projects].form_ui = :select
+    config.columns[:projects].inplace_edit = :ajax
+    config.columns[:projects].form_ui = :record_select
+    config.columns[:provider].inplace_edit = :ajax
+    config.columns[:provider].form_ui = :record_select
+    config.columns[:provider].association.reverse = :provider_for
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea
     config.columns[:expected_total].inplace_edit = true
-    config.columns[:target].label = "Target Population"
+    config.columns[:target].label = "Other fields will go here"
 
     # add in later version, not part of minimal viable product
     #config.columns[:indicators].form_ui = :select

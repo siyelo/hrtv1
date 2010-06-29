@@ -1,35 +1,25 @@
 ---
 1:
   attribute_name: name
-  short: short_descr
+  short: what the project is commonly called
   long: long_descr
 
 2:
   attribute_name: description
-  short: short_descr
+  short: 2-3 sentences on what is done and why
   long: long_descr
 
 3:
   attribute_name: start_date
-  short: short_descr
+  short: date started
   long: long_descr
 
 4:
   attribute_name: end_date
-  short: short_descr
-  long: long_descr
-
-5:
-  attribute_name: created_at
-  short: short_descr
-  long: long_descr
-
-6:
-  attribute_name: updated_at
-  short: short_descr
+  short: projected end date
   long: long_descr
 
 7:
   attribute_name: expected_total
-  short: short_descr
+  short: funds spent that activities in the project should add up to
   long: long_descr

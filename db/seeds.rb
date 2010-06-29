@@ -39,3 +39,16 @@ end
 seed_model_help_from_yaml model_helps
 
 #TODO seed code values
+#
+%w[ Gisenyi Gitarama Cyangugu Ruhengeri].each do |district|
+  Location.find_or_create_by_short_display district
+end
+
+donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
+donors.each do |donor|
+  Donor.find_or_create_by_name donor
+end
+
+%w[ self ].each do |ngo|
+  Ngo.find_or_create_by_name ngo
+end

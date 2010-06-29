@@ -4,56 +4,63 @@
   <head>
   <title>Hardcoded Title in App Layout</title>
   <%= javascript_include_tag :defaults %>
+  <%= record_select_includes %>
   <%= active_scaffold_includes %>
   <!-- Framework CSS -->
   <!--<%= stylesheet_link_tag "screen", :media => "screen, projection" %> -->
   <%= stylesheet_link_tag "simple_css", :media => "screen, projection" %> 
-
-  <%= stylesheet_link_tag "print", :media => "print" %>
+  <%= stylesheet_link_tag "css/print", :media => "print" %>
   <!--[if lt IE 8]>
-    <%= stylesheet_link_tag "ie", :media=>"screen, projection" %>
+    <%= stylesheet_link_tag "css/ie", :media=>"screen, projection" %>
   <![endif]-->
+  <!-- End Framework CSS -->
+
+  <%= stylesheet_link_tag 'custom' %>
 
   </head>
   <body>
-    <div class="container showgrid">
-      <div class="span-10 banner" id="banner">BANNER!</div>
-      <div class="span-4 prepend-10 last" id="login">
-        Login
+    <div id="header">
+      <div class="round" id="banner">
+          <%=  image_tag("logo_s.png", :alt => "Rwanda Resource Tracking Database", :class => "round") %>
       </div>
-      <div class="clear span-24 last" id="main">
+      <div id="top_spacer"></div>
+      <div class="login round" id="login"  ><font size="4px">
+          <ul>
+            <li><%= link_to "logout", "#" %></li>
+            <li><%= link_to "About", "#" %></li>
+            <li><%= link_to "Contact", "#" %></li>
+          </ul> <!--| About | News | Contact -->
+      </font>
+      </div>
+    </div> <!-- top -->
+    <div class="clear span-24 doc last" id="main">
         <%= render :partial => 'layouts/top_menu' %>
         <%= render :partial => 'layouts/left_side_bar' %>
-
-        <div class="span-18 last" id="page">
-          <div class="span-18 last" id="breadcrumb">
+        <div id="content" class="span-18 last" >
+          <div class="breadcrumbs span-18 last" id="breadcrumbs" >
             <%= yield :breadcrumbs %>
           </div>
 
-          <div class="clear round span-18 last" id="content">
-            
-            <% if flash[:notice] %>
-              <div class="notice"><%= flash[:notice] %></div>
-            <% end %>
-            
-            <div class="page_help"> 
-              <%= yield :page_help %>
-            </div>
+          <% if flash[:notice] %>
+            <div id="notice"><%= flash[:notice] %></div>
+          <% end %>
 
-            <%= yield %>
+          <div class="page_help"> 
+            <%= yield :page_help %>
+          </div>
 
-            <div class="comments">
-              <%= yield :comments %>
-            </div>
-         
-          </div> <!-- content -->
-        </div> <!-- page -->
-      </div> <!-- main -->
+          <%= yield %>
+
+          <div class="comments">
+            <%= yield :comments %>
+          </div>
+
+        </div> <!-- content -->
+        <%= render :partial => 'layouts/right_side_bar' %>
+    </div> <!-- main -->
+
+    <div id="bottom">
       <%= render :partial => 'layouts/footer' %>
-
-      <%= render :partial => 'layouts/right_side_bar' %>
-
-
-    </div> <!-- container -->
+    </div> <!-- bottom -->
   </body>
 </html>

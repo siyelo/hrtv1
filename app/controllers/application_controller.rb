@@ -21,9 +21,13 @@ class ApplicationController < ActionController::Base
         #TODO join with ruby array methods or something better
         self.create_columns.each do |column|
           h = field_help.find_by_attribute_name(column.to_s)
-          config.columns[column].description = h.long unless h.nil?
+          set_active_scaffold_column_description column, h.long unless h.nil?
         end
       end
     end
+  end
+
+  def self.set_active_scaffold_column_description column, descr
+    active_scaffold_config.columns[column].description = descr
   end
 end

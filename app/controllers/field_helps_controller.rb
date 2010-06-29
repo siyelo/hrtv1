@@ -11,4 +11,7 @@ class FieldHelpsController < ApplicationController
     config.columns[:short].inplace_edit = true
     config.columns[:long].inplace_edit = true
   end
+
+  #add some callback on save that updates the description in 
+  #active scaffold config with set_active_scaffold_column_descriptions
 end

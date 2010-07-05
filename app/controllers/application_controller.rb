@@ -33,29 +33,37 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  #TODO add constraints option that works with key - value for ids
-  # or pass in an object to build the new record off of?
-  # so that file uploads with constraints in the AS view work
-  # as user would expect
+  #tried to get active_scaffold to not wipe out constraints from
+  #previous view, didn't seem to work
+  #stored it in session[:last_data_entry_screen] in controller
+  #that rendered the view instead
+  # skip_before_filter :register_constraints_with_action_columns,
+  #  :only => :create_from_file
   def create_from_file attributes
     if fields_mapped?
       saved, errors = [], []
       mapped_fields.each do |row|
         model_hash = {}
-        attributes.each { |item| # make recor hash from hash from map_fields
-          model_hash[item]=row[attributes.index(item)] } 
+        attributes.each do |item| # make record hash from hash from map_fields
+          val =row[attributes.index(item)]
+          model_hash[item] = val if val # map_fields has nil for unmapped fields
+        end
         a = new_from_hash_w_constraints model_hash
         a.save ? saved << a : errors << a
       end
+      #TODO make useful warning for ones that had any errors
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
       logger.debug(success_msg)
       flash[:notice] = success_msg
       redirect_to_index
     else
       #user chooses field mapping
-      
+
       # save so restore above after mapping
-      session[:last_data_entry_constraints] = active_scaffold_constraints
+      # session[:last_data_entry_constraints] = active_scaffold_constraints
+
+      #set in child controller
+      logger.debug("constraints:"+session[:last_data_entry_constraints].inspect) 
       render :template => 'shared/create_from_file'
     end
     rescue MapFields::InconsistentStateError
@@ -65,16 +73,48 @@ class ApplicationController < ActionController::Base
       flash[:error] = 'Please upload a file'
       redirect_to_index
   end
-  
+
   def new_from_hash_w_constraints model_hash
-    record = controller_model_class.new model_hash
-    # klass << self
-      # old_method = active_scaffold_constraints
-      # def active_scaffold_constraints
-      #   active_scaffold_constraints || session[:last_data_entry_constraints]
-      # end
-    # end
-    apply_constraints_to_record record # for active scaffold views
+
+      logger.debug(model_hash.inspect)
+      logger.debug(active_scaffold_constraints.inspect)
+      logger.debug(session[:last_data_entry_constraints].inspect)
+
+    # overwrite values with constrained values for this record
+    model_hash.merge! session[:last_data_entry_constraints]
+
+      logger.debug(model_hash.inspect)
+
+    klass = controller_model_class
+    couldnt_find_models = {}
+
+    model_hash.each do |k,v|
+      # TODO remove dirty hack
+      # model should be responsible for knowing what field to look for,
+      # right now we assume all have a name
+      association_class = klass.reflect_on_association(k.to_sym).try :klass
+      if association_class
+        as_id = v.try(:to_i)
+        attempted_find_method = :find_by_name
+        if as_id != 0 # to_i never raises error, is 0 if wasn't a number
+          attempted_find_method = :find
+          v = as_id
+        end
+        associated_object = association_class.send(attempted_find_method, v)
+
+        if associated_object
+          model_hash[k] = associated_object
+        else
+          couldnt_find_models[k]={:association => k,
+            :raw_value => model_hash.delete(k), :cleaned_value => v}
+        end
+
+      end
+    end
+    record = klass.new model_hash
+    def record.association_lookup_errors #use for error handling later
+      couldnt_find_models
+    end
     record
   end
 

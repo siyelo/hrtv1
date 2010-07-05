@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
   ActiveScaffold.set_defaults do |config| 
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
+    config.show.link = false
   end 
 
   def data_entry

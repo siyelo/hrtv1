@@ -138,6 +138,7 @@ module ActiveScaffold
     def apply_constraints_to_record(record, options = {})
       options[:allow_autosave] = false if options[:allow_autosave].nil?
 
+      logger.debug(active_scaffold_constraints)
       active_scaffold_constraints.each do |k, v|
         column = active_scaffold_config.columns[k]
         if column and column.association

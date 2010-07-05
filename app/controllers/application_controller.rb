@@ -20,7 +20,8 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_index
-    #this is going to introduce bugs, couldn't think of
+    # this is going to introduce bugs if multiple windows open
+    # couldn't think of
     # better way to do it since AS needs the index method clean
     # for search to work
     # may be able to check params for search request and render list
@@ -41,9 +42,9 @@ class ApplicationController < ActionController::Base
       saved, errors = [], []
       mapped_fields.each do |row|
         model_hash = {}
-        attributes.each { |item| # pull out values from hash from map_fields
+        attributes.each { |item| # make recor hash from hash from map_fields
           model_hash[item]=row[attributes.index(item)] } 
-        a = controller_model_class.new model_hash
+        a = new_from_hash_w_constraints model_hash
         a.save ? saved << a : errors << a
       end
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
@@ -52,6 +53,9 @@ class ApplicationController < ActionController::Base
       redirect_to_index
     else
       #user chooses field mapping
+      
+      # save so restore above after mapping
+      session[:last_data_entry_constraints] = active_scaffold_constraints
       render :template => 'shared/create_from_file'
     end
     rescue MapFields::InconsistentStateError
@@ -62,9 +66,19 @@ class ApplicationController < ActionController::Base
       redirect_to_index
   end
   
+  def new_from_hash_w_constraints model_hash
+    record = controller_model_class.new model_hash
+    # klass << self
+      # old_method = active_scaffold_constraints
+      # def active_scaffold_constraints
+      #   active_scaffold_constraints || session[:last_data_entry_constraints]
+      # end
+    # end
+    apply_constraints_to_record record # for active scaffold views
+    record
+  end
+
   def self.set_active_scaffold_column_descriptions
-    #TODO cache descriptions in a class variable?
-    # would be premature optimization
     if respond_to? :active_scaffold_config # or should it error when called badly?
       config = active_scaffold_config
       unless config.nil?

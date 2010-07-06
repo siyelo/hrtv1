@@ -18,4 +18,4 @@ ActionView::Base.send(:include, ActionView::Helpers::RecordSelectHelpers)
 #    next if file =~ /^\./
 #    FileUtils.cp File.join(local_dir, file), public_dir
 #  end
-end
+#end

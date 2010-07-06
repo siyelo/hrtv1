@@ -10,7 +10,13 @@ class ActivitiesController < ApplicationController
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
-    config.nested.add_link("Line Items", [:lineItems])
+
+    config.action_links.add ('Classify',
+      :action => "code",
+      :type => :member,
+      :label => "Classify")
+
+    config.nested.add_link("Splits", [:lineItems])
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
@@ -35,6 +41,11 @@ class ActivitiesController < ApplicationController
 
   def create_from_file
     super @@columns_for_file_upload
+  end
+
+  def code
+    logger.debug(params[:id]) #can get id of record
+    render :template => "activities/code", :layout => false
   end
 
   def to_label

@@ -24,9 +24,9 @@ class ActivitiesController < ApplicationController
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
     config.columns[:projects].inplace_edit = :ajax
-    config.columns[:projects].form_ui = :record_select
+    config.columns[:projects].form_ui = :select
     config.columns[:provider].inplace_edit = :ajax
-    config.columns[:provider].form_ui = :record_select
+    config.columns[:provider].form_ui = :select
     config.columns[:provider].association.reverse = :provider_for
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true

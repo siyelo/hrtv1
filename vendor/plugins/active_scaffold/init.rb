@@ -7,12 +7,13 @@ end
 
 require File.dirname(__FILE__) + '/environment'
 
+# Heroku read only file system so comment out
 ##
 ## Run the install assets script, too, just to make sure
 ## But at least rescue the action in production
 ##
-begin
-  require File.dirname(__FILE__) + '/install_assets'
-rescue
-  raise $! unless Rails.env == 'production'
-end
+#begin
+#  require File.dirname(__FILE__) + '/install_assets'
+#rescue
+#  raise $! unless Rails.env == 'production'
+#end

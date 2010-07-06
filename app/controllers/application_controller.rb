@@ -81,7 +81,9 @@ class ApplicationController < ActionController::Base
       logger.debug(session[:last_data_entry_constraints].inspect)
 
     # overwrite values with constrained values for this record
-    model_hash.merge! session[:last_data_entry_constraints]
+    if session[:last_data_entry_constraints]
+      model_hash.merge! session[:last_data_entry_constraints] 
+    end
 
       logger.debug(model_hash.inspect)
 

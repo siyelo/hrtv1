@@ -3,4 +3,5 @@
 log/*
 db/*.sqlite3
 *~
+.~*
 config/database.yml

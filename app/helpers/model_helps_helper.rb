@@ -1,0 +1,2 @@
+module ModelHelpsHelper
+end

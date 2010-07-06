@@ -1,0 +1,14 @@
+<h2>Admin Dashboard<h2>
+
+<h3><%= link_to "Data Requests to Review", "#"%></h3>
+
+<h3><%= link_to "Manage help and page comments", "model_helps" %> </h3>
+
+<h3><%= link_to "Manage users", "#" %> </h3>
+
+<h3>Reviewer Comments on Data Reports</h3>
+<%= render :partial => Comment.all %> <!-- TODO named scope on organization and not my comments -->
+
+<h3>Reporting Organization's Comments on Data Reports</h3>
+<%= render :partial => Comment.all %> <!-- TODO named scope on govt -->
+

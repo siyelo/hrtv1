@@ -1,0 +1,25 @@
+---
+1:
+  attribute_name: name
+  short: what the project is commonly called
+  long: long_descr
+
+2:
+  attribute_name: description
+  short: 2-3 sentences on what is done and why
+  long: long_descr
+
+3:
+  attribute_name: start_date
+  short: date started
+  long: long_descr
+
+4:
+  attribute_name: end_date
+  short: projected end date
+  long: long_descr
+
+7:
+  attribute_name: expected_total
+  short: funds spent that activities in the project should add up to
+  long: long_descr

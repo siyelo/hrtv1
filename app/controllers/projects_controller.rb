@@ -35,8 +35,6 @@ class ProjectsController < ApplicationController
     config.columns[:locations].label = "Districts Worked In"
   end
 
-  self.set_active_scaffold_column_descriptions
-
   def create_from_file
     super @@columns_for_file_upload
   end

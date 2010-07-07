@@ -1,10 +1,5 @@
-<%= render :partial => 'top_data_entry',
+<%= render :partial => 'shared/top_data_entry',
  :locals => { :record_type => record_type } %>
-
-<% constraints ||=  {} %>
-<% label ||=  nil %>
-<%= render :active_scaffold => record_underscored_name,
-  :constraints => constraints, :label => label %>
-
-<%= render :partial => 'bottom_data_entry',
+<%= grid %>
+<%= render :partial => 'shared/bottom_data_entry',
  :locals => { :record_type => record_type } %>

@@ -4,11 +4,5 @@
   <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
   <% end %>
 <p>
-<%= render :partial => 'shared/collapsible_upload_file_for_create', 
-  :locals => {:record_type => record_type } %>
-</p>
-
-<p>
-<%= render :partial => 'shared/export_to_file',
-  :locals => {:record_type => record_type } %>
-</p>
+<%= render :partial => 'shared/upload_and_export',
+  :locals => {:record_type => record_type} %>

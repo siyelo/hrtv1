@@ -9,7 +9,11 @@ module WorkflowHelper
   end
 
   def next_workflow_path
+    if next_workflow_path_wo_slash
     '/'+next_workflow_path_wo_slash
+    else
+      '/'
+    end
   end
 
   def next_workflow_path_wo_slash

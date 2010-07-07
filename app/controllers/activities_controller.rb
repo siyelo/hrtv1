@@ -11,7 +11,7 @@ class ActivitiesController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
 
-    config.action_links.add ('Classify',
+    config.action_links.add('Classify',
       :action => "code",
       :type => :member,
       :label => "Classify")

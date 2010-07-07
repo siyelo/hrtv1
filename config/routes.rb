@@ -29,6 +29,4 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'static_page' #a replacement for public/index.html
 
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
 end

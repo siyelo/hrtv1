@@ -7,10 +7,16 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
-    
+
     when /the home\s?page/
       '/'
-    
+
+    when /the ngo dashboard page/
+      static_page_path(:ngo_dashboard)
+
+    when /the projects listing page/
+      project_index_path
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

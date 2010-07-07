@@ -1,15 +1,19 @@
 module WorkflowHelper
   #TODO write integration test that just walks through these
   # following links and testing for the right active scaffold name heading
-  @@map = { "start" => "projects/data_entry", "projects/data_entry" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
-            "funding_flows/providers" => "activities/data_entry" , "activities/data_entry" => "show"}
+  @@map = { "start" => "projects/index", "projects/index" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
+            "funding_flows/providers" => "activities/index" , "activities/index" => "show"}
 
   def workflow_start
     "/"+@@map["start"]
   end
 
   def next_workflow_path
+    if next_workflow_path_wo_slash
     '/'+next_workflow_path_wo_slash
+    else
+      '/'
+    end
   end
 
   def next_workflow_path_wo_slash

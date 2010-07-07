@@ -1,7 +1,7 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:projects, :provider, :name, :description,  :expected_total]
   @@create_columns = [:projects, :provider, :name, :description,  :expected_total, :target ]
-  @@columns_for_file_upload = %w[name description expected_total] # TODO fix bug, projects for instance won't work
+  @@columns_for_file_upload = %w[name description provider expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -11,7 +11,7 @@ class ActivitiesController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
 
-    config.action_links.add ('Classify',
+    config.action_links.add('Classify',
       :action => "code",
       :type => :member,
       :label => "Classify")
@@ -48,12 +48,4 @@ class ActivitiesController < ApplicationController
     render :template => "activities/code", :layout => false
   end
 
-  def to_label
-    @s="Activity: "
-    if name.nil? || name.empty?
-      @s+"<No Name>"
-    else
-      @s+name
-    end
-  end
 end

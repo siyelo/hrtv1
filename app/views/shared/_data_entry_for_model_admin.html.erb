@@ -1,6 +1,7 @@
 <% content_for :breadcrumbs do %>
-  <%= link_to 'Back to Dashboard', 'govt_dashboard' %>
+  <%= link_to 'Back to Dashboard', 'admin_dashboard' %>
 <% end %>
-<%= render :active_scaffold => record_underscored_name,
-  :constraints => { } %>
+<%= render :partial => 'shared/upload_and_export',
+  :locals => {:record_type => record_type} %>
+<%= grid %>
 <%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

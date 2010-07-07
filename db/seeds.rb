@@ -7,6 +7,7 @@
 #   Major.create(:name => 'Daley', :city => cities.first)
 
 require 'yaml'
+require 'fastercsv'
 
 model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
 def seed_model_help_from_yaml doc
@@ -14,7 +15,7 @@ def seed_model_help_from_yaml doc
     model_help_attribs = h.last
     #TODO replace line below, may cause trouble during deployment
     #     can replace after add rescue below
-    `touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
+    #`touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
     seed_model_and_field_help model_help_attribs
   end
 end
@@ -40,6 +41,28 @@ seed_model_help_from_yaml model_helps
 
 #TODO seed code values
 #
+Code.delete_all
+FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
+  c=nil #Code.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Code.new 
+    c.id=row["id"]
+  end
+  #puts row.inspect
+  %w[parent_id type short_display long_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field]
+  end
+  unless c.short_display
+    c.short_display=row["class"]
+  end
+  if c.type="NhaNasa"
+    c.type="Nha"
+  end
+  #puts c.inspect
+  puts "error on #{row}" unless c.save
+  #puts c.inspect
+end
 %w[ Gisenyi Gitarama Cyangugu Ruhengeri].each do |district|
   Location.find_or_create_by_short_display district
 end

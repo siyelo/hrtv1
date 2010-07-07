@@ -1,0 +1,3 @@
+class Nsp < Code
+
+end

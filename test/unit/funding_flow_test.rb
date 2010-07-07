@@ -28,4 +28,12 @@ class FundingFlowTest < ActiveSupport::TestCase
     o=Organization.find(o.id)
     assert f.to == o
   end
+  test "can add errors array to this object w method" do
+    f=FundingFlow.new
+    errors=["ho dang", "ouchies"]
+    def f.my_errors
+      errors
+    end
+    assert errors = f.my_errors
+  end
 end

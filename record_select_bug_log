@@ -1,0 +1,140 @@
+==> production.log <==
+# Logfile created on Tue Jul 06 01:24:20 -0700 2010ActiveScaffold: extending RESTful routes for activity
+ActiveScaffold: extending RESTful routes for indicator
+ActiveScaffold: extending RESTful routes for line_item
+ActiveScaffold: extending RESTful routes for project
+ActiveScaffold: extending RESTful routes for comments
+ActiveScaffold: extending RESTful routes for field_helps
+ActiveScaffold: extending RESTful routes for model_helps
+ActiveScaffold: extending RESTful routes for organization
+ActiveScaffold: extending RESTful routes for funding_flow
+
+
+Processing ProjectsController#create_from_file (for 41.186.9.206 at 2010-07-06 01:24:27) [POST]
+  Parameters: {"commit"=>"Upload from File", "action"=>"create_from_file", "authenticity_token"=>"77zlk8J2q9/9HeS9ZfoBbwBBIMT/laTv6SRdxB50FbE=", "controller"=>"projects", "file"=>#<File:/home/slugs/229651_ae05b81_e4f5/mnt/tmp/RackMultipart20100706-16152-1b7ozsw-0>}
+Rendering template within layouts/application
+Rendering shared/create_from_file
+Completed in 16ms (View: 10, DB: 7) | 200 OK [http://resourcetracking.heroku.com/projects/create_from_file]
+
+
+Processing ProjectsController#create_from_file (for 41.186.9.206 at 2010-07-06 01:24:41) [POST]
+  Parameters: {"commit"=>"Import", "action"=>"create_from_file", "authenticity_token"=>"77zlk8J2q9/9HeS9ZfoBbwBBIMT/laTv6SRdxB50FbE=", "fields"=>{"1"=>"0", "2"=>"1", "3"=>"0", "4"=>"0", "5"=>"0"}, "controller"=>"projects", "ignore_first_row"=>"1"}
+Redirected to http://resourcetracking.heroku.com/projects/data_entry
+Completed in 17ms (DB: 9) | 302 Found [http://resourcetracking.heroku.com/projects/create_from_file]
+
+
+Processing ProjectsController#data_entry (for 41.186.9.206 at 2010-07-06 01:24:41) [GET]
+  Parameters: {"action"=>"data_entry", "controller"=>"projects"}
+Rendering template within layouts/application
+Rendering projects/index
+Start rendering component ({:controller=>"projects", :action=>"table", :params=>{:eid=>"e122bc4e2fc76e9df401e6a4885ec4b7"}}): 
+
+
+Processing ProjectsController#table (for 41.186.9.206 at 2010-07-06 01:24:41) [GET]
+  Parameters: {"eid"=>"e122bc4e2fc76e9df401e6a4885ec4b7", "action"=>"table", "id"=>nil, "controller"=>"projects"}
+Rendering list
+Completed in 203ms (View: 198, DB: 2) | 200 OK [http://resourcetracking.heroku.com/projects/data_entry]
+
+
+End of component rendering
+Start rendering component ({:controller=>"comments", :action=>"table", :params=>{:eid=>"cda1e7219bb49a02e710b0d17f47d1f8"}}): 
+
+
+Processing CommentsController#table (for 41.186.9.206 at 2010-07-06 01:24:42) [GET]
+  Parameters: {"eid"=>"cda1e7219bb49a02e710b0d17f47d1f8", "action"=>"table", "id"=>nil, "controller"=>"comments"}
+Rendering list
+Completed in 69ms (View: 64, DB: 4) | 200 OK [http://resourcetracking.heroku.com/projects/data_entry]
+
+
+End of component rendering
+Completed in 296ms (View: 293, DB: 3) | 200 OK [http://resourcetracking.heroku.com/projects/data_entry]
+
+
+Processing ProjectsController#destroy (for 41.186.9.206 at 2010-07-06 01:24:48) [DELETE]
+  Parameters: {"eid"=>"e122bc4e2fc76e9df401e6a4885ec4b7", "action"=>"destroy", "authenticity_token"=>"77zlk8J2q9/9HeS9ZfoBbwBBIMT/laTv6SRdxB50FbE=", "_method"=>"delete", "id"=>"1", "controller"=>"projects"}
+Rendering destroy
+Completed in 18ms (View: 3, DB: 9) | 200 OK [http://resourcetracking.heroku.com/projects/destroy/1?_method=delete&authenticity_token=77zlk8J2q9%2F9HeS9ZfoBbwBBIMT%2FlaTv6SRdxB50FbE%3D&eid=e122bc4e2fc76e9df401e6a4885ec4b7]
+
+
+Processing ProjectsController#destroy (for 41.186.9.206 at 2010-07-06 01:24:50) [DELETE]
+  Parameters: {"eid"=>"e122bc4e2fc76e9df401e6a4885ec4b7", "action"=>"destroy", "authenticity_token"=>"77zlk8J2q9/9HeS9ZfoBbwBBIMT/laTv6SRdxB50FbE=", "_method"=>"delete", "id"=>"2", "controller"=>"projects"}
+Rendering destroy
+Completed in 16ms (View: 2, DB: 9) | 200 OK [http://resourcetracking.heroku.com/projects/destroy/2?_method=delete&authenticity_token=77zlk8J2q9%2F9HeS9ZfoBbwBBIMT%2FlaTv6SRdxB50FbE%3D&eid=e122bc4e2fc76e9df401e6a4885ec4b7]
+
+
+Processing ProjectsController#destroy (for 41.186.9.206 at 2010-07-06 01:24:51) [DELETE]
+  Parameters: {"eid"=>"e122bc4e2fc76e9df401e6a4885ec4b7", "action"=>"destroy", "authenticity_token"=>"77zlk8J2q9/9HeS9ZfoBbwBBIMT/laTv6SRdxB50FbE=", "_method"=>"delete", "id"=>"3", "controller"=>"projects"}
+Rendering destroy
+Completed in 14ms (View: 2, DB: 8) | 200 OK [http://resourcetracking.heroku.com/projects/destroy/3?_method=delete&authenticity_token=77zlk8J2q9%2F9HeS9ZfoBbwBBIMT%2FlaTv6SRdxB50FbE%3D&eid=e122bc4e2fc76e9df401e6a4885ec4b7]
+
+
+Processing ProjectsController#index (for 41.186.9.206 at 2010-07-06 01:24:51) [GET]
+  Parameters: {"eid"=>"e122bc4e2fc76e9df401e6a4885ec4b7", "action"=>"index", "page"=>"1", "controller"=>"projects"}
+Rendering list
+Completed in 129ms (View: 122, DB: 12) | 200 OK [http://resourcetracking.heroku.com/projects?eid=e122bc4e2fc76e9df401e6a4885ec4b7&page=1]
+
+
+Processing FundingFlowsController#funding_sources (for 41.186.9.206 at 2010-07-06 01:24:53) [GET]
+  Parameters: {"action"=>"funding_sources", "controller"=>"funding_flows"}
+Rendering template within layouts/application
+Rendering funding_flows/index
+Start rendering component ({:controller=>"funding_flows", :action=>"table", :params=>{:eid=>"58f4bbb37c59d734d3480e094e7a5318"}}): 
+
+
+Processing FundingFlowsController#table (for 41.186.9.206 at 2010-07-06 01:24:53) [GET]
+  Parameters: {"eid"=>"58f4bbb37c59d734d3480e094e7a5318", "action"=>"table", "id"=>nil, "controller"=>"funding_flows"}
+Rendering list
+Completed in 73ms (View: 67, DB: 2) | 200 OK [http://resourcetracking.heroku.com/funding_flows/funding_sources]
+
+
+End of component rendering
+Start rendering component ({:controller=>"comments", :action=>"table", :params=>{:eid=>"811217670eb0f13c3a7f369951e320b1"}}): 
+
+
+Processing CommentsController#table (for 41.186.9.206 at 2010-07-06 01:24:53) [GET]
+  Parameters: {"eid"=>"811217670eb0f13c3a7f369951e320b1", "action"=>"table", "id"=>nil, "controller"=>"comments"}
+Rendering list
+Completed in 16ms (View: 11, DB: 30) | 200 OK [http://resourcetracking.heroku.com/funding_flows/funding_sources]
+
+
+End of component rendering
+Completed in 137ms (View: 131, DB: 4) | 200 OK [http://resourcetracking.heroku.com/funding_flows/funding_sources]
+
+
+Processing FundingFlowsController#new (for 41.186.9.206 at 2010-07-06 01:25:00) [GET]
+  Parameters: {"eid"=>"58f4bbb37c59d734d3480e094e7a5318", "action"=>"new", "_method"=>"get", "adapter"=>"_list_inline_adapter", "controller"=>"funding_flows"}
+Completed in 26ms (View: 2, DB: 0) | 200 OK [http://resourcetracking.heroku.com/funding_flows/new?_method=get&eid=58f4bbb37c59d734d3480e094e7a5318&adapter=_list_inline_adapter]
+
+
+Processing OrganizationsController#browse (for 41.186.9.206 at 2010-07-06 01:25:01) [GET]
+  Parameters: {"action"=>"browse", "controller"=>"organizations"}
+
+ActionView::MissingTemplate (Missing template _browse.erb in view path vendor/plugins/active_scaffold/frontends/default/views):
+  /home/heroku_rack/lib/static_assets.rb:9:in `call'
+  /home/heroku_rack/lib/last_access.rb:25:in `call'
+  /home/heroku_rack/lib/date_header.rb:14:in `call'
+  thin (1.2.6) lib/thin/connection.rb:76:in `pre_process'
+  thin (1.2.6) lib/thin/connection.rb:74:in `catch'
+  thin (1.2.6) lib/thin/connection.rb:74:in `pre_process'
+  thin (1.2.6) lib/thin/connection.rb:57:in `process'
+  thin (1.2.6) lib/thin/connection.rb:42:in `receive_data'
+  eventmachine (0.12.10) lib/eventmachine.rb:256:in `run_machine'
+  eventmachine (0.12.10) lib/eventmachine.rb:256:in `run'
+  thin (1.2.6) lib/thin/backends/base.rb:57:in `start'
+  thin (1.2.6) lib/thin/server.rb:156:in `start'
+  thin (1.2.6) lib/thin/controllers/controller.rb:80:in `start'
+  thin (1.2.6) lib/thin/runner.rb:177:in `send'
+  thin (1.2.6) lib/thin/runner.rb:177:in `run_command'
+  thin (1.2.6) lib/thin/runner.rb:143:in `run!'
+  thin (1.2.6) bin/thin:6
+  /usr/ruby1.8.7/bin/thin:19:in `load'
+  /usr/ruby1.8.7/bin/thin:19
+
+Rendering /disk1/home/slugs/229651_ae05b81_e4f5/mnt/public/500.html (500 Internal Server Error)
+
+==> dyno-1661740.log <==
+/disk1/home/slugs/229651_ae05b81_e4f5/mnt/app/controllers/activities_controller.rb:14: warning: don't put space before argument parentheses
+>> Thin web server (v1.2.6 codename Crazy Delicious)
+>> Maximum connections set to 1024
+>> Listening on 0.0.0.0:47672, CTRL+C to stop
+/disk1/home/slugs/229651_ae05b81_e4f5/mnt/app/views/shared/_upload_file_for_create.html.erb:6: warning: don't put space before argument parentheses

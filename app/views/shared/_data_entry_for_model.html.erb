@@ -1,22 +1,10 @@
-<% content_for :breadcrumbs do %>
-    <% #todo put breadcrumbs here that while until get to this record type 
-  %> 
-  <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
-  <% end %>
-<p>
-<%= render :partial => 'shared/collapsible_upload_file_for_create', 
-  :locals => {:record_type => record_type } %>
-</p>
-
-<p>
-<%= render :partial => 'shared/export_to_file',
-  :locals => {:record_type => record_type } %>
-</p>
+<%= render :partial => 'top_data_entry',
+ :locals => { :record_type => record_type } %>
 
 <% constraints ||=  {} %>
 <% label ||=  nil %>
 <%= render :active_scaffold => record_underscored_name,
   :constraints => constraints, :label => label %>
-  <p class='right'><%= link_to "Next Step", next_workflow_path()  %> </p><br>
 
-<%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>
+<%= render :partial => 'bottom_data_entry',
+ :locals => { :record_type => record_type } %>

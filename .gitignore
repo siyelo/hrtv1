@@ -1,6 +1,24 @@
 *.swp
 *.swo
-log/*
-db/*.sqlite3
 *~
+.DS_Store
+app/stylesheets/.sass-cache/*
+db/*.sqlite3
 config/database.yml
+log/*.log
+tmp/**/*
+
+# Cucumber/webrat tmp files
+webrat-*
+capybara*
+rerun.txt
+coverage/*
+
+# The .bundle folder should never be checked into the code repository as it holds machine-local configuration
+.bundle/
+
+# Various IDE files
+.idea
+.loadpath
+.project
+*.tmproj

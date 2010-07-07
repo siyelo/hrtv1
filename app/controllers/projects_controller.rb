@@ -1,4 +1,8 @@
 class ProjectsController < ApplicationController
+  include ActiveScaffoldHelper  #TODO refactor - these helpers may not be needed here
+
+  before_filter :set_active_scaffold_column_descriptions
+
   @@shown_columns = [:name, :description,  :expected_total]
   @@create_columns = [:name, :description,  :expected_total, :locations]
   def self.create_columns
@@ -44,5 +48,5 @@ class ProjectsController < ApplicationController
     end
   end
 
-  self.set_active_scaffold_column_descriptions
+
 end

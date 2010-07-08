@@ -1,4 +1,5 @@
 #config.gem 'rspec-rails',      :lib => false, :version => '>= 1.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
+config.gem "shoulda"
 
 
 config.cache_classes = true

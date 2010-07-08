@@ -3,7 +3,7 @@ module WorkflowHelper
   # following links and testing for the right active scaffold name heading
 
   #GR: using AASM will be more concise here. Also we cant use route helpers in this module
-  @@map = { "start" => "projects/index", "projects/index" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
+  @@map = { "start" => "projects", "projects" => "funding_flows/funding_sources", "funding_flows/funding_sources" => "funding_flows/providers",
             "funding_flows/providers" => "activities/index" , "activities/index" => "show"}
 
   def workflow_start

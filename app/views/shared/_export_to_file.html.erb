@@ -1,10 +1,11 @@
 <% #todo switch/check jquery for toggling
   file_export_divid = "file_export_#{record_type.to_s}"
+  human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase
 %>
 <% content_tag :span, :class => "link_like",  
   :onClick => "$('#{file_export_divid}').toggle();" do %>
 
-  Export <%=record_type.human_name.pluralize.downcase%> to a file
+  Export <%=human_plural_name_for_entity%> to a file
 <% end %>
 
 <% content_tag :div, :id => file_export_divid do %>

@@ -1,7 +1,20 @@
-<% content_for :breadcrumbs do %>
-  <%= link_to 'Back to Dashboard', 'admin_dashboard' %>
+<% if params[:action] == "table" #makes render component not show xtra stuff
+%>
+  <%= grid %>
+<% else %>
+
+<% human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase %>
+  <% content_for :breadcrumbs do %>
+    <%= link_to 'Back to Dashboard', 'admin_dashboard' %>
+  <% end %>
+  <br>
+  <%= render :partial => 'shared/upload_and_export',
+    :locals => {
+      :record_type => record_type, 
+      :human_plural_name_for_entity => human_plural_name_for_entity } %>
+
+  <%= grid %>
+
+  <%= render :partial => 'shared/data_entry_help',
+    :locals => { :record_type => record_type } %>
 <% end %>
-<%= render :partial => 'shared/upload_and_export',
-  :locals => {:record_type => record_type} %>
-<%= grid %>
-<%= render :partial => 'shared/data_entry_help' , :locals => {:record_type => record_type}%>

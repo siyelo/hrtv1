@@ -1,7 +1,4 @@
 class ProjectsController < ApplicationController
-  include ActiveScaffoldHelper  #TODO refactor - these helpers may not be needed here
-
-  before_filter :set_active_scaffold_column_descriptions
 
   @@shown_columns = [:name, :description,  :expected_total]
   @@create_columns = [:name, :description,  :expected_total, :locations]
@@ -38,4 +35,7 @@ class ProjectsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
+
+  self.set_active_scaffold_column_descriptions
+
 end

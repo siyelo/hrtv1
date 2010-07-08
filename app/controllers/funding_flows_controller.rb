@@ -29,30 +29,8 @@ class FundingFlowsController < ApplicationController
     config.columns[:spending_to].label = "Amount Spent"
   end
 
-  def funding_sources
-    @constraints = { :to => Organization.last.id } #current_user.organization.id
-    @label = "Funding Sources"
-    index_w_constraints
-  end
-
-  def providers
-    @constraints = { :from => Organization.last.id } #current_user.organization.id
-    @label = "Providers"
-    index_w_constraints
-  end
-
   def create_from_file
     super @@columns_for_file_upload
   end
 
-  def test
-    @organization=Organization.first
-  end
-
-  protected
-
-  def index_w_constraints
-    session[:last_data_entry_constraints] = @constraints
-    data_entry
-  end
 end

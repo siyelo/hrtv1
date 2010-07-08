@@ -10,11 +10,11 @@ class ActivitiesController < ApplicationController
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
-
-    config.action_links.add('Classify',
-      :action => "code",
-      :type => :member,
-      :label => "Classify")
+#TODO add route? this was just to show how to make an action link
+#    config.action_links.add('Classify',
+#      :action => "code",
+#      :type => :member,
+#      :label => "Classify")
 
     config.nested.add_link("Splits", [:lineItems])
 

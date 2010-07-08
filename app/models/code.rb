@@ -12,6 +12,7 @@ class Code < ActiveRecord::Base
     :foreign_key => "code_id_child", :association_foreign_key => "code_id_parent",
     :join_table => "valid_for_next_types"
   
+  has_many :code_assignments
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 

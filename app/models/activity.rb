@@ -5,5 +5,6 @@ class Activity < ActiveRecord::Base
   has_many :lineItems
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
 
+  has_many :code_assignments
   validates_presence_of :name
 end

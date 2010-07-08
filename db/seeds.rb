@@ -56,14 +56,24 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   unless c.short_display
     c.short_display=row["class"]
   end
-  if c.type="NhaNasa"
+  if c.type=="NhaNasa"
     c.type="Nha"
   end
   #puts c.inspect
   puts "error on #{row}" unless c.save
   #puts c.inspect
 end
-%w[ Gisenyi Gitarama Cyangugu Ruhengeri].each do |district|
+
+Code.all.each do |code|
+  other_type_children=code.children.collect {|c| c.class!=code.class}
+  code.valid_children_of_next_type = other_type_children
+  code.save
+  #todo add links to those of children so code to
+  #get the children when a super code is selected
+  #is easier / works at all
+end
+
+%w[ Muhanga Rusizi Musanze Rubavu].each do |district|
   Location.find_or_create_by_short_display district
 end
 

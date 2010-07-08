@@ -8,6 +8,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :model_helps, :active_scaffold => true 
   map.resources :organization, :collection => {:browse => :get}, :active_scaffold => true
   map.resources :funding_flow, :active_scaffold => true
+  map.resources :codes, :active_scaffold => true
+
 
   #ugly manual paths
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_flows', :action => 'funding_sources'

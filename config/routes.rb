@@ -1,11 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
-
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
   map.providers_data_entry "providers", :controller => 'providers', :action => 'index'
   %w[activities funding_flows projects providers funding_sources].each do |model|
     map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
   end
-
 
   map.resources :activities, :active_scaffold => true
   map.resources :indicators, :active_scaffold => true

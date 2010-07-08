@@ -32,13 +32,13 @@ class FundingFlowsController < ApplicationController
   def funding_sources
     @constraints = { :to => Organization.last.id } #current_user.organization.id
     @label = "Funding Sources"
-    index_w_constraints
+    redirect_to "/funding_flows/" #:controller=> "funding_flows", :action => :index
   end
 
   def providers
     @constraints = { :from => Organization.last.id } #current_user.organization.id
     @label = "Providers"
-    index_w_constraints
+    redirect_to "/funding_flows/" #:controller=> "funding_flows", :action => :index
   end
 
   def create_from_file

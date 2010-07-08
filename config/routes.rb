@@ -1,4 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
+  #ugly manual paths
+  map.funding_sources_data_entry "funding_flows/funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
+  map.providers_data_entry "funding_flows/providers", :controller => 'funding_flows', :action => 'providers'
+  %w[activities funding_flows projects].each do |model|
+    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
+  end
+
+
   map.resources :activity, :active_scaffold => true
   map.resources :indicator, :active_scaffold => true 
   map.resources :line_item, :active_scaffold => true 
@@ -7,13 +15,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :field_helps, :active_scaffold => true 
   map.resources :model_helps, :active_scaffold => true 
   map.resources :organization, :collection => {:browse => :get}, :active_scaffold => true
-  map.resources :funding_flow, :active_scaffold => true
+  map.resources :funding_flows, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
 
 
-  #ugly manual paths
-  map.funding_sources_data_entry "funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
-  map.providers_data_entry "providers", :controller => 'funding_flows', :action => 'providers'
 
   map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
 
@@ -60,6 +65,6 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+ # map.connect ':controller/:action/:id'
+ # map.connect ':controller/:action/:id.:format'
 end

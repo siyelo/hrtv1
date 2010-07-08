@@ -27,6 +27,6 @@ ActionController::Routing::Routes.draw do |map|
                   :action => 'show',
                   :page => Regexp.new(%w[about contact ngo_dashboard govt_dashboard admin_dashboard].join('|'))
 
-  map.root :controller => 'static_page' #a replacement for public/index.html
+  map.root :controller => 'static_page', :action => 'index' #a replacement for public/index.html
 
 end

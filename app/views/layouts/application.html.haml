@@ -24,24 +24,27 @@
           %li= link_to "logout", "#"
           %li= link_to "About", "#"
           %li= link_to "Contact", "#"
-        / | About | News | Contact
-    / top
+
     #main.clear.span-24.doc.last
       = render :partial => 'layouts/top_menu'
       = render :partial => 'layouts/left_side_bar'
       #content.span-18.last
+
         #breadcrumbs.breadcrumbs.span-18.last
           = yield :breadcrumbs
+
         - if flash[:notice]
-        #notice= flash[:notice]
+          #notice= flash[:notice]
+
         .page_help
           = yield :page_help
+
         = yield
+
         .comments
           = yield :comments
-      / content
+
       = render :partial => 'layouts/right_side_bar'
-    / main
+
     #bottom
       = render :partial => 'layouts/footer'
-    / bottom

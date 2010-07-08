@@ -1,0 +1,13 @@
+%h2 Donor/NGO Dashboard
+
+%h3 Data Requests to Fulfill
+
+= render :partial => 'data_requests/list'
+
+
+%h3 My Organization's Comments on My Data Reports
+= render :partial => Comment.all
+
+%h3 Government Comments on My Data Reports
+= render :partial => Comment.all
+

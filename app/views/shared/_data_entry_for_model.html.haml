@@ -1,0 +1,8 @@
+- if params[:action] == "table" ##if did in index, would break AS
+  = grid
+- else
+
+  = grid
+
+  = render :partial => 'shared/bottom_data_entry', |
+    :locals => { :record_type => record_type }     |

@@ -1,0 +1,31 @@
+- if @model_help
+  - content_for :help do
+    :javascript
+      $('left_side_bar').show();
+
+    %span.help_title Help
+    %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
+
+    #terms
+      :javascript
+        $('terms').hide();
+      = render :partial => model_help.field_help
+    %p= link_to 'Examples', '#',  :onclick => "$('examples').toggle();"
+
+    #examples
+      :javascript
+        $('examples').hide();       = link_to 'HIV/AIDS', '#'
+      = link_to 'Health Systems', '#'
+      = link_to 'Technical Assistance', '#'
+      = link_to '...', '#'
+      / TODO implement examples as example user owned items
+
+  - content_for :page_help do
+    %p= h model_help.long
+
+  -# content_for :right_side_bar do
+
+  - content_for :comments do
+    %h3 General Questions / Comments
+    = render :active_scaffold => "comments", :label => "&nbsp",                            |
+      :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} |

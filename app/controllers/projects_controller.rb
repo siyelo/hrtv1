@@ -1,5 +1,7 @@
 class ProjectsController < ApplicationController
 
+  before_filter :load_help
+
   @@shown_columns = [:name, :description,  :expected_total]
   @@create_columns = [:name, :description,  :expected_total, :locations]
   def self.create_columns
@@ -13,7 +15,7 @@ class ProjectsController < ApplicationController
     @@columns_for_file_upload,
     :file_field => :file
 
-  active_scaffold :project do |config|
+  active_scaffold :projects do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
     config.nested.add_link("Activities", [:activities])
@@ -37,5 +39,11 @@ class ProjectsController < ApplicationController
   end
 
   self.set_active_scaffold_column_descriptions
+
+  protected
+
+  def load_help
+    @model_help = ModelHelp.find_by_model_name "Projects"
+  end
 
 end

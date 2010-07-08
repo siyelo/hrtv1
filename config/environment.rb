@@ -6,6 +6,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
   config.gem "fastercsv"
+  config.gem "haml", :version => "= 3.0.12"
 
   config.time_zone = 'UTC'
 

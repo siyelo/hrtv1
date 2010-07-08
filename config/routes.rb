@@ -1,20 +1,20 @@
 ActionController::Routing::Routes.draw do |map|
   #ugly manual paths
-  map.funding_sources_data_entry "funding_flows/funding_sources", :controller => 'funding_flows', :action => 'funding_sources'
-  map.providers_data_entry "funding_flows/providers", :controller => 'funding_flows', :action => 'providers'
-  %w[activities funding_flows projects].each do |model|
+  map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
+  map.providers_data_entry "providers", :controller => 'providers', :action => 'index'
+  %w[activities funding_flows projects providers funding_sources].each do |model|
     map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
   end
 
 
-  map.resources :activity, :active_scaffold => true
-  map.resources :indicator, :active_scaffold => true 
-  map.resources :line_item, :active_scaffold => true 
-  map.resources :project, :active_scaffold => true 
+  map.resources :activities, :active_scaffold => true
+  map.resources :indicators, :active_scaffold => true 
+  map.resources :line_items, :active_scaffold => true 
+  map.resources :projects, :active_scaffold => true 
   map.resources :comments, :active_scaffold => true 
   map.resources :field_helps, :active_scaffold => true 
   map.resources :model_helps, :active_scaffold => true 
-  map.resources :organization, :collection => {:browse => :get}, :active_scaffold => true
+  map.resources :organizations, :collection => {:browse => :get}, :active_scaffold => true
   map.resources :funding_flows, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
 

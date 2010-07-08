@@ -1,0 +1,7 @@
+<% @grid = render :active_scaffold => "funding_flows", :constraints => @constraints, :label => @label %> 
+<%= render :partial => 'shared/data_entry_for_model',
+  :locals => {
+  :record_type => record_type,
+  :grid => @grid
+  }
+%>

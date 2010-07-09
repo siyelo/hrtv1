@@ -22,6 +22,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :code_assignments, :only => [:index]
   map.manage_code_assignments 'manage_code_assignments', :controller => 'code_assignments', :action => :manage
+  map.update_code_assignments 'update_code_assignments', :controller => 'code_assignments', :action => :update, :method => :put
 
   map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
 

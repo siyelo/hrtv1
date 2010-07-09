@@ -1,13 +1,18 @@
+- content_for :head do
+  = javascript_include_tag 'jquery.collapsibleCheckboxTree', :cache => true
+  = stylesheet_link_tag 'compiled/code_tree', :media => 'screen'
+
+  :javascript
+    jQuery(document).ready(function(){
+      jQuery('ul#activity_tree').collapsibleCheckboxTree();
+    });
+
 %h2 Activity Breakdown
 
-%ul#activities
-  - @activities.each do |activity|
+- form_for @activity.code_assignments, :url => update_code_assignments_path, :method => :post do |form|
+  %ul#activity_tree
     %li.activity
-      = activity.name
-      %ul{:class => activity.name}
-        - Code.root_nodes.each do |code|
-          %li
-            = "#{code.id} - #{code.short_display}"
-            %ul{:class => code.short_display}
-              - code.children.each do |child|
-                %li= "#{child.id} - #{child.short_display}"
+      = @activity.name
+      %ul{:id => @activity.id}
+        - Code.roots.each do |code|
+          = render :partial => 'code_row', :locals => {:code => code, :form => form}

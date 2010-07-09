@@ -1,5 +1,5 @@
 config.gem "ruby-debug"
-config.gem "rails-footnotes"
+#config.gem "rails-footnotes"
 
 config.cache_classes                                 = false
 config.whiny_nils                                    = true

@@ -1,17 +1,18 @@
 class LineItem < ActiveRecord::Base
   acts_as_commentable
   belongs_to :activity
+  belongs_to :activity_cost_category
   
   # below should be STI's from codes table, include when done
   # belongs_to :hssp_strategic_objective
   # belongs_to :mtefp
 
-  def to_label
-    @s="Line Item: "
-    if amount.nil?
-      @s+"<No Amount>"
+  def to_s
+    @s="Cost Breakdown: "
+    if activity_cost_category.nil?
+      @s+"<No Category>"
     else
-      @s+amount.to_s
+      @s+activity_cost_category.to_s
     end
   end
 end

@@ -25,6 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :model_helps, :active_scaffold => true 
   map.resources :funding_flows, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
+  map.resources :activity_cost_categories, :active_scaffold => true
 
 
   # DRY up the static page controller

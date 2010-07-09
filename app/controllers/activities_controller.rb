@@ -14,6 +14,7 @@ class ActivitiesController < ApplicationController
     config.action_links.add('Classify',
       :action => "code",
       :type => :member,
+      :popup => true,
       :label => "Classify")
 
     config.nested.add_link("Splits", [:lineItems])

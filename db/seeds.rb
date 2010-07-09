@@ -59,22 +59,37 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   if c.type=="NhaNasa"
     c.type="Nha"
   end
-  #puts c.inspect
+  puts c.id
   puts "error on #{row}" unless c.save
-  #puts c.inspect
+  puts c.id
 end
 
+puts 'Setting valid for next types'
+
 Code.all.each do |code|
-  other_type_children=code.children.collect {|c| c.class!=code.class}
+
+  puts code.id
+  other_type_children=code.children.find_all {|c|  c.class!=code.class}
   code.valid_children_of_next_type = other_type_children
   code.save
+  puts code.id
   #todo add links to those of children so code to
   #get the children when a super code is selected
   #is easier / works at all
 end
 
-%w[ Muhanga Rusizi Musanze Rubavu].each do |district|
-  Location.find_or_create_by_short_display district
+Location.delete_all
+FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
+  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Location.new 
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field]
+  end
+  puts "error on #{row}" unless c.save
 end
 
 donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
@@ -82,6 +97,6 @@ donors.each do |donor|
   Donor.find_or_create_by_name donor
 end
 
-%w[ self ].each do |ngo|
+%w[ self MSH FHI PSI].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end

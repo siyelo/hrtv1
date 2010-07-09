@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   # default routes are off
 
+  map.coding "activities/code", :controller => 'activities', :action => 'code'
   # ugly manual paths
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
   map.providers_data_entry "providers", :controller => 'providers', :action => 'index'

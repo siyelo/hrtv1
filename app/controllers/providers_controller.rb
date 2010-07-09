@@ -5,7 +5,7 @@ class ProvidersController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :from => Organization.last.id } #current_user.organization.id
+    @constraints = { :from => Organization.find_by_name("self") } #current_user.organization.id
     @label = "Providers"
   end
 

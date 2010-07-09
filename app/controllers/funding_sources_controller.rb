@@ -5,7 +5,7 @@ class FundingSourcesController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :to => Organization.last.id } #current_user.organization.id
+    @constraints = { :to => Organization.find_by_name("self") } #current_user.organization.id
     @label = "Funding Sources"
   end
 

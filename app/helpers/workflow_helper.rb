@@ -2,7 +2,7 @@ module WorkflowHelper
   #TODO write integration test that just walks through these
   # following links and testing for the right active scaffold name heading
   #TODO broken at the funding_flows steps now that removed routes
-  @@map = { "start" => "projects/index", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
+  @@map = { "start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
             "providers/index" => "activities" , "activities/index" => "show"}
 
   def workflow_start

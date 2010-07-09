@@ -1,0 +1,10 @@
+<% content_for :breadcrumbs do %>
+    <% #todo put breadcrumbs here that while until get to this record type 
+  %> 
+  <%= link_to 'Home', '/ngo_dashboard' %> > <b>Projects</b> > Funding Sources > Providers > Activities > Other Costs > Submit
+  <% end %>
+<p>
+<%= render :partial => 'shared/upload_and_export',
+  :locals => {
+    :record_type => record_type, 
+    :human_plural_name_for_entity => human_plural_name_for_entity } %>

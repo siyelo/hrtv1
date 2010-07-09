@@ -3,6 +3,7 @@ class ModelHelpsController < ApplicationController
   @@create_columns = @@shown_columns
 
   active_scaffold :model_help do |config|
+    config.label = "Help for Pages and Data Fields"
     config.columns =  @@shown_columns
     list.sorting = {:model_name => 'DESC'}
     config.nested.add_link("Comments", [:comments])
@@ -13,14 +14,6 @@ class ModelHelpsController < ApplicationController
     config.columns[:long].inplace_edit = true
     config.create.columns = @@create_columns
     config.update.columns = [:short, :long]
-  end
-
-  def index
-
-  end
-
-  def to_label
-    "Help"
   end
 
 end

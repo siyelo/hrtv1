@@ -1,8 +1,11 @@
-- if params[:action] == "table" ##if did in index, would break AS
+- if params[:action] == "table" ##makes render component not show xtra stuff
   = grid
 - else
-
+  - human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase
+  = render :partial => 'shared/top_data_entry',                     |
+    :locals => {                                                    |
+    :record_type => record_type,                                    |
+    :human_plural_name_for_entity => human_plural_name_for_entity } |
   = grid
-
   = render :partial => 'shared/bottom_data_entry', |
     :locals => { :record_type => record_type }     |

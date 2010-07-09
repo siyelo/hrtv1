@@ -26,11 +26,7 @@ class ApplicationController < ActionController::Base
     # for search to work
     # may be able to check params for search request and render list
     # when that is asked for?
-    if session[:last_data_entry_screen]
-      redirect_to session[:last_data_entry_screen]
-    else 
       redirect_to :action => :index
-    end
   end
 
   #tried to get active_scaffold to not wipe out constraints from
@@ -77,7 +73,7 @@ class ApplicationController < ActionController::Base
   def new_from_hash_w_constraints model_hash
 
       logger.debug(model_hash.inspect)
-      logger.debug(active_scaffold_constraints.inspect)
+      #logger.debug(active_scaffold_constraints.inspect)
       logger.debug(session[:last_data_entry_constraints].inspect)
 
     # overwrite values with constrained values for this record

@@ -1,7 +1,7 @@
 %li
-  - fields_for "code_assignments[attributes][]", code, :index => nil do |f|
-    = f.check_box :id
-    = "#{code.id} - #{code.short_display}"
+
+  = check_box_tag "activity[code_assignment_tree][]", code.id, @activity.codes.include?(code)
+  = "#{code.id} - #{code.short_display}"
 
   %ul{:id => code.id}
     - code.children.each do |child|

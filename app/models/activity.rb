@@ -10,4 +10,17 @@ class Activity < ActiveRecord::Base
 
   validates_presence_of :name
 
+  attr_accessor :code_assignment_tree
+  after_save :update_code_assignments
+
+  private
+
+  # trick to help clean up controller code
+  # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
+  def update_code_assignments
+    code_assignments.delete_all
+    selected_codes = code_assignment_tree.nil? ? [] : code_assignment_tree.collect{ |id| Code.find_by_id(id) }
+    selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code ) }
+  end
+
 end

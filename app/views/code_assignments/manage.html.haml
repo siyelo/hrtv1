@@ -1,0 +1,13 @@
+%h2 Activity Breakdown
+
+%ul#activities
+  - @activities.each do |activity|
+    %li.activity
+      = activity.name
+      %ul{:class => activity.name}
+        - Code.root_nodes.each do |code|
+          %li
+            = "#{code.id} - #{code.short_display}"
+            %ul{:class => code.short_display}
+              - code.children.each do |child|
+                %li= "#{child.id} - #{child.short_display}"

@@ -20,6 +20,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :providers, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
 
+  map.resources :code_assignments, :only => [:index]
+  map.manage_code_assignments 'manage_code_assignments', :controller => 'code_assignments', :action => :manage
 
   map.page_comments "page_comments/:id", :controller => 'comments', :action => 'index', :type => 'ModelHelp'
 

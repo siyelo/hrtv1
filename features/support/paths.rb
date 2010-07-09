@@ -17,6 +17,9 @@ module NavigationHelpers
     when /the projects listing page/
       projects_path
 
+    when /the activity breakdown page/
+      code_assignments_path
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

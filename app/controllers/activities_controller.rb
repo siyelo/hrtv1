@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:projects, :provider, :name, :description,  :expected_total]
-  @@create_columns = [:projects, :provider, :name, :description,  :expected_total, :target ]
+  @@create_columns = [:projects, :provider, :name, :description, :locations,  :expected_total, :target ]
   @@columns_for_file_upload = %w[name description provider expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
@@ -31,6 +31,8 @@ class ActivitiesController < ApplicationController
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea
+    config.columns[:locations].form_ui = :select
+    config.columns[:locations].label = "Districts Worked In"
     config.columns[:expected_total].inplace_edit = true
     config.columns[:target].label = "Other fields will go here"
 

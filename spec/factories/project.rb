@@ -1,8 +1,6 @@
+require File.join(File.dirname(__FILE__),'./blueprint.rb')
 require 'faker'
-require 'factory_girl/syntax/sham'
 
-Sham.project_name   { Faker::Name.first_name }
-Sham.description    { Faker::Lorem.paragraphs((1..3).to_a.rand).join("\n") }
 
 Factory.define :project, :class => Project do |f|
   f.name { Sham.project_name }

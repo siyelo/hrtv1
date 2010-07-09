@@ -4,20 +4,27 @@ ActionController::Routing::Routes.draw do |map|
   # ugly manual paths
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
   map.providers_data_entry "providers", :controller => 'providers', :action => 'index'
-  %w[activities funding_flows projects providers funding_sources].each do |model|
+  %w[activities funding_flows projects providers funding_sources model_helps comments].each do |model|
     map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
   end
+
+  map.resources :projects, 
+    :collection => {:browse => :get},
+    :member => {:select => :post}, :active_scaffold => true
+
+  map.resources :organizations, 
+    :collection => {:browse => :get},
+    :member => {:select => :post}, :active_scaffold => true
 
   map.resources :activities, :active_scaffold => true
   map.resources :indicators, :active_scaffold => true 
   map.resources :line_items, :active_scaffold => true 
-  map.resources :projects, :active_scaffold => true 
   map.resources :comments, :active_scaffold => true 
   map.resources :field_helps, :active_scaffold => true 
   map.resources :model_helps, :active_scaffold => true 
-  map.resources :organizations, :collection => {:browse => :get}, :active_scaffold => true
   map.resources :funding_flows, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
+
 
   # DRY up the static page controller
   map.root :controller => 'static_page' #a replacement for public/index.html

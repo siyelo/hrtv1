@@ -1,11 +1,13 @@
 
 - record_type = Project
+- human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase
 
 -# content_for :breadcrumbs do
 
 %p
   = render :partial => 'shared/upload_and_export', |
-    :locals => {:record_type => record_type }       |
+    :locals => {:record_type => record_type ,      |
+    :human_plural_name_for_entity => human_plural_name_for_entity } |
 
 - if params[:action] == "table" ## if did in index, would break AS
 

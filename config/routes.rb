@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :activity_cost_categories, :active_scaffold => true
 
   map.resources :code_assignments, :only => [:index]
-  map.manage_code_assignments 'manage_code_assignments', :controller => 'code_assignments', :action => :manage
+  map.manage_code_assignments 'manage_code_assignments/:activity_id', :controller => 'code_assignments', :action => :manage
   map.update_code_assignments 'update_code_assignments', :controller => 'code_assignments', :action => :update_assignments, :method => :post
 
   # DRY up the static page controller

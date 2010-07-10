@@ -64,19 +64,19 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   puts c.id
 end
 
-puts 'Setting valid for next types'
+#puts 'Setting valid for next types'
 
-Code.all.each do |code|
-
-  puts code.id
-  other_type_children=code.children.find_all {|c|  c.class!=code.class}
-  code.valid_children_of_next_type = other_type_children
-  code.save
-  puts code.id
-  #todo add links to those of children so code to
-  #get the children when a super code is selected
-  #is easier / works at all
-end
+#Code.all.each do |code|
+#
+#  puts code.id
+#  other_type_children=code.children.find_all {|c|  c.class!=code.class}
+#  code.valid_children_of_next_type = other_type_children
+#  code.save
+#  puts code.id
+#  #todo add links to those of children so code to
+#  #get the children when a super code is selected
+#  #is easier / works at all
+#end
 
 Location.delete_all
 FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|

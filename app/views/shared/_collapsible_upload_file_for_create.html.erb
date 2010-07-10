@@ -11,5 +11,6 @@
 
 <% content_tag :div, :id => file_upload_divid do %>
   <%= content_tag :script, "$('#{file_upload_divid}').hide()" %>
-  <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
+  <%= render :partial => 'shared/upload_file_for_create' , 
+    :locals => {:record_type => record_type, :human_plural_name_for_entity => human_plural_name_for_entity} %>
 <% end %>

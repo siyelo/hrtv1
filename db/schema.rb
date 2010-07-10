@@ -20,14 +20,6 @@ ActiveRecord::Schema.define(:version => 20100709140356) do
     t.string   "comments"
     t.decimal  "expected_total"
     t.integer  "provider_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
     t.text     "description"
   end
 
@@ -102,14 +94,6 @@ ActiveRecord::Schema.define(:version => 20100709140356) do
     t.decimal  "spending_to"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
     t.text     "raw_provider"
   end
 
@@ -164,14 +148,6 @@ ActiveRecord::Schema.define(:version => 20100709140356) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "expected_total"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
   end
 
   create_table "sessions", :force => true do |t|

@@ -6,12 +6,12 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def manage
-    @activities = Activity.all #TODO filter
 
-    @activities.each do |a|
-      Code.all.each do |code|
-        a.code_assignments.build( :code => code ) unless a.code_assignments.map(&:code_id).include?(code.id)
-      end
+    #@activities = Activity.find(params[:activity_id])
+    @activity = Activity.first
+
+    Code.all.each do |code|
+      @activity.code_assignments.build( :code => code ) unless @activity.code_assignments.map(&:code_id).include?(code.id)
     end
   end
 

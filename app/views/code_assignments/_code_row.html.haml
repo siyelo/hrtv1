@@ -1,0 +1,8 @@
+%li
+  - fields_for "code_assignments[attributes][]", code, :index => nil do |f|
+    = f.check_box :id
+    = "#{code.id} - #{code.short_display}"
+
+  %ul{:id => code.id}
+    - code.children.each do |child|
+      = render :partial => 'code_row', :locals => {:code => child}

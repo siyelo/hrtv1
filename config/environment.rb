@@ -15,7 +15,7 @@ Rails::Initializer.run do |config|
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
 
   # Specify gems that this application depends on and have them installed with rake gems:install
-  #config.gem "haml", :version => ">= 3.0.12"
+  config.gem "haml", :version => ">= 3.0.12"
   config.gem "fastercsv"
 
   # Only load the plugins named here, in the order given (default is alphabetical).

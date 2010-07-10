@@ -1,5 +1,5 @@
 class LineItemsController < ApplicationController
-  @@shown_columns = [:amount, :activity_cost_category]
+  @@shown_columns = [:activity, :amount, :activity_cost_category]
   @@create_columns = @@shown_columns
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
   
@@ -18,6 +18,7 @@ class LineItemsController < ApplicationController
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 
+    config.columns[:activity].association.reverse = :lineItems
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
   end

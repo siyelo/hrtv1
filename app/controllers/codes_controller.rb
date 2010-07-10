@@ -21,8 +21,8 @@ class CodesController < ApplicationController
     #config for associations
     config.columns[:children].association.reverse = :parent
     config.nested.add_link("Children", [:children])
-    config.columns[:proxy_for].association.reverse = :replacement_code
-    config.nested.add_link("Replacement For", [:proxy_for])
+    #config.columns[:proxy_for].association.reverse = :replacement_code
+    #config.nested.add_link("Replacement For", [:proxy_for])
 
     #column display and editing options
     config.columns[:replacement_code].form_ui = :select

@@ -18,6 +18,7 @@ class ActivitiesController < ApplicationController
       :label => "Classify")
 
     config.nested.add_link("Cost Details", [:lineItems])
+    config.columns[:lineItems].association.reverse = :activity
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable

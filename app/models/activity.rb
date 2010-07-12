@@ -9,8 +9,6 @@ class Activity < ActiveRecord::Base
   has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 
-  validates_presence_of :name
-
   attr_accessor :code_assignment_tree
   after_save :update_code_assignments
 

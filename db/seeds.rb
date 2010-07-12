@@ -108,6 +108,20 @@ FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) 
   end
 end
 
+OtherCostType.delete_all
+FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
+  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=OtherCostType.new
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field]
+  end
+  puts "error on #{row}" unless c.save
+end
+
 donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
 donors.each do |donor|
   Donor.find_or_create_by_name donor

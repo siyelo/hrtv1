@@ -6,7 +6,7 @@
 <% human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase %>
 
   <%= render :partial => 'shared/top_data_entry',
-    :locals => {
+    :locals => { 
       :record_type => record_type,
       :human_plural_name_for_entity => human_plural_name_for_entity } %>
 

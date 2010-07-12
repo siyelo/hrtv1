@@ -11,4 +11,4 @@ ruby-debug
 rails-footnotes
 fastercsv
 paginator
-haml -v3.0.12
+haml -v3.0.13

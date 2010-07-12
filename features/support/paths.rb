@@ -17,8 +17,12 @@ module NavigationHelpers
     when /the projects listing page/
       projects_path
 
-    when /the activity breakdown page/
-      code_assignments_path
+    when /the activities page/
+      activities_path
+
+    when /the activity classification page for "(.+)"/
+      a = Activity.find_by_name($1)
+      manage_code_assignments_path(a)
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

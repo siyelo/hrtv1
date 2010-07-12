@@ -1,10 +1,23 @@
 // Here is where you can define your constants for your application and to configure the blueprint framework.
 // Feel free to delete these if you want keep the defaults:
 
-$blueprint-grid-columns: 24
-$blueprint-container-size: 950px
-$blueprint-grid-margin: 10px
+// $blueprint-grid-columns: 24
+// $blueprint-container-size: 950px
+// $blueprint-grid-margin: 10px
 
 // Use this to calculate the width based on the total width.
 // Or you can set !blueprint_grid_width to a fixed value and unset !blueprint_container_size -- it will be calculated for you.
-$blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $blueprint-grid-columns - $blueprint-grid-margin
+// $blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $blueprint-grid-columns - $blueprint-grid-margin
+
+// Compass imports
+@import "compass/reset"
+@import "compass/utilities"
+@import "compass/css3"
+
+// Custom colors
+!dark-blue              = #20303f
+!mid-blue               = #425160
+!light-blue             = #c1ced9
+!lighter-blue           = #d0dde7
+!lightest-blue          = #e6edf3
+!orange                 = #cc873c

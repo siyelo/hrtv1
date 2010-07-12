@@ -7,7 +7,6 @@ class CodeAssignmentsController < ApplicationController
 
   def manage
     @activity = Activity.find(params[:activity_id])
-    #@activity = Activity.first
   end
 
 

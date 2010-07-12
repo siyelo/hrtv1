@@ -17,8 +17,7 @@
         <%= link_to 'Technical Assistance', '#' %>
         <%= link_to '...', '#' %> <!-- TODO implement examples as example user owned items-->
       </div>
-      
-    
+
   <% end %>
 
   <% content_for :page_help do %>
@@ -29,7 +28,7 @@
   <% end %>
 
   <% content_for :comments do %>
-    <h3> General Questions / Comments 
+    <h3> General Questions / Comments
     </h3>
     <%= render :active_scaffold => "comments", :label => "&nbsp",
       :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} %>

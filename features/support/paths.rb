@@ -15,7 +15,10 @@ module NavigationHelpers
       static_page_path(:ngo_dashboard)
 
     when /the projects listing page/
-      project_index_path
+      projects_path
+
+    when /the activity breakdown page/
+      code_assignments_path
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

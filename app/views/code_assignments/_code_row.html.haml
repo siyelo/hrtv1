@@ -1,7 +1,7 @@
 %li
 
   = check_box_tag "activity[code_assignment_tree][]", code.id, @activity.codes.include?(code)
-  = "#{code.id} - #{code.short_display}"
+  = "#{code.short_display}"
 
   %ul{:id => code.id}
     - code.children.each do |child|

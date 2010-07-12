@@ -13,7 +13,7 @@
 
   %ul#activity_tree
     %li.activity
-      = "#{@activity.name} - $#{@activity.expected_total}" #TODO currency symbol from data request
+      = "Activity: #{@activity.name} (Total: $#{@activity.expected_total})" #TODO currency symbol from data request
       %ul{:id => @activity.id}
         - Code.roots.each do |code|
           - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model

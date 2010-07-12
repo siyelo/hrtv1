@@ -19,10 +19,12 @@ class Activity < ActiveRecord::Base
   # trick to help clean up controller code
   # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
   def update_code_assignments
-    code_assignments.delete_all
-    code_assignment_amounts.delete_if { |key,val| val.empty?}
-    selected_codes = code_assignment_amounts.nil? ? [] : code_assignment_amounts.keys.collect{ |id| Code.find_by_id(id) }
-    selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code, :amount => code_assignment_amounts[code.id.to_s]) }
+    if code_assignment_amounts
+      code_assignments.delete_all
+      code_assignment_amounts.delete_if { |key,val| val.empty?}
+      selected_codes = code_assignment_amounts.nil? ? [] : code_assignment_amounts.keys.collect{ |id| Code.find_by_id(id) }
+      selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code, :amount => code_assignment_amounts[code.id.to_s]) }
+    end
   end
 
 end

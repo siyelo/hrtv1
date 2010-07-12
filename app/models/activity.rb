@@ -11,7 +11,7 @@ class Activity < ActiveRecord::Base
 
   validates_presence_of :name
 
-  attr_accessor :code_assignment_tree
+  attr_accessor :code_assignment_amounts
   after_save :update_code_assignments
 
   private
@@ -20,8 +20,9 @@ class Activity < ActiveRecord::Base
   # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
   def update_code_assignments
     code_assignments.delete_all
-    selected_codes = code_assignment_tree.nil? ? [] : code_assignment_tree.collect{ |id| Code.find_by_id(id) }
-    selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code ) }
+    code_assignment_amounts.delete_if { |key,val| val.empty?}
+    selected_codes = code_assignment_amounts.nil? ? [] : code_assignment_amounts.keys.collect{ |id| Code.find_by_id(id) }
+    selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code, :amount => code_assignment_amounts[code.id.to_s]) }
   end
 
 end

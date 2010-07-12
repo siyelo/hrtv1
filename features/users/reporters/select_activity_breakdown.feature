@@ -15,4 +15,4 @@ Scenario: See a checkbox and amount for each code
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 
   When I go to the activity classification page for "TB Drugs procurement"
-  Then I should see an amount field next to each checkbox
+  

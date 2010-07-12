@@ -1,7 +1,4 @@
 - content_for :head do
-  = javascript_include_tag 'jquery.collapsibleCheckboxTree', :cache => true
-  = stylesheet_link_tag 'compiled/code_tree', :media => 'screen'
-
   :javascript
     jQuery(document).ready(function(){
       jQuery('ul#activity_tree').collapsibleCheckboxTree({initialState : 'collapse'});

@@ -39,44 +39,31 @@ end
 
 seed_model_help_from_yaml model_helps
 
-#TODO seed code values
+# seed code values
 #
 Code.delete_all
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
-  c=nil #Code.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Code.new
-    c.id=row["id"]
-  end
-  #puts row.inspect
-  %w[parent_id type short_display long_display].each do |field|
-    #puts "#{field}: #{row[field]}"
+  c = Code.new
+  c.external_id = row["id"]
+  p = Code.find_by_external_id(row["parent_id"])
+  c.parent_id = p.id unless p.nil?
+
+  %w[type short_display long_display].each do |field|
     c.send "#{field}=", row[field]
   end
+
   unless c.short_display
     c.short_display=row["class"]
   end
+
   if c.type=="NhaNasa"
     c.type="Nha"
   end
-  puts c.id
+
+  puts "Adding code #{c.external_id}: "
   puts "error on #{row}" unless c.save
-  puts c.id
+  puts "  #{c.id}"
 end
-
-#puts 'Setting valid for next types'
-
-#Code.all.each do |code|
-#
-#  puts code.id
-#  other_type_children=code.children.find_all {|c|  c.class!=code.class}
-#  code.valid_children_of_next_type = other_type_children
-#  code.save
-#  puts code.id
-#  #todo add links to those of children so code to
-#  #get the children when a super code is selected
-#  #is easier / works at all
-#end
 
 Location.delete_all
 FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|

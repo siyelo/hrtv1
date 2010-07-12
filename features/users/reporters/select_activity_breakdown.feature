@@ -11,9 +11,8 @@ Scenario: See a breakdown for an activity
   Then I should see "TB Drugs procurement"
   And I should see "DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY"
 
-@run
 Scenario: See a checkbox and amount for each code
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 
   When I go to the activity classification page for "TB Drugs procurement"
-  Then the "DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY" checkbox within "#activity_tree" should not be checked
+  Then I should see an amount field next to each checkbox

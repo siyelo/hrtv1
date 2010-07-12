@@ -10,4 +10,4 @@ rest-client
 mime-types
 fastercsv
 paginator
-haml --version 3.0.12
+haml --version 3.0.13

@@ -3,7 +3,7 @@
 <% if model_help %>
   <% content_for :left_side_bar do %>
     <script>$('left_side_bar').show();</script>
-    <span class="help_title">Help</span>
+    <h2>Help</h2>
     <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
       <div id="terms">
         <script> $('terms').hide(); </script>
@@ -29,8 +29,7 @@
   <% end %>
 
   <% content_for :comments do %>
-    <h3> General Questions / Comments 
-    </h3>
+    <h3> General Questions / Comments </h3>
     <%= render :active_scaffold => "comments", :label => "&nbsp",
       :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} %>
   <% end %>

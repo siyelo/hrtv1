@@ -10,9 +10,8 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
 
-  def data_entry
-    session[:last_data_entry_screen] = request.url
-    render :template => "#{controller_name}/index"
+  ActiveScaffold.set_defaults do |config| 
+    config.ignore_columns.add [:created_at, :updated_at, :lock_version]
   end
 
   def redirect_to_index
@@ -33,9 +32,11 @@ class ApplicationController < ActionController::Base
       saved, errors = [], []
       mapped_fields.each do |row|
         model_hash = {}
-        attributes.each { |item| # pull out values from hash from map_fields
-          model_hash[item]=row[attributes.index(item)] }
-        a = controller_model_class.new model_hash
+        attributes.each do |item| # make record hash from hash from map_fields
+          val =row[attributes.index(item)]
+          model_hash[item] = val if val # map_fields has nil for unmapped fields
+        end
+        a = new_from_hash_w_constraints model_hash
         a.save ? saved << a : errors << a
       end
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
@@ -58,7 +59,7 @@ class ApplicationController < ActionController::Base
 
       logger.debug(model_hash.inspect)
       #logger.debug(active_scaffold_constraints.inspect)
-      logger.debug(session[:last_data_entry_constraints].inspect)
+      #logger.debug(session[:last_data_entry_constraints].inspect)
 
     # overwrite values with constrained values for this record
     if session[:last_data_entry_constraints]

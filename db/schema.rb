@@ -9,11 +9,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100628152528) do
+ActiveRecord::Schema.define(:version => 20100709140356) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
-    t.string   "description"
     t.string   "beneficiary"
     t.string   "target"
     t.datetime "created_at"
@@ -21,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20100628152528) do
     t.string   "comments"
     t.decimal  "expected_total"
     t.integer  "provider_id"
+    t.text     "description"
   end
 
   create_table "activities_indicators", :id => false, :force => true do |t|
@@ -28,9 +28,20 @@ ActiveRecord::Schema.define(:version => 20100628152528) do
     t.integer "indicator_id"
   end
 
+  create_table "activities_locations", :id => false, :force => true do |t|
+    t.integer "activity_id"
+    t.integer "location_id"
+  end
+
   create_table "activities_projects", :id => false, :force => true do |t|
     t.integer "project_id"
     t.integer "activity_id"
+  end
+
+  create_table "code_assignments", :force => true do |t|
+    t.integer "activity_id"
+    t.integer "code_id"
+    t.string  "code_type"
   end
 
   create_table "codes", :force => true do |t|
@@ -83,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20100628152528) do
     t.decimal  "spending_to"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "raw_provider"
   end
 
   create_table "indicators", :force => true do |t|
@@ -98,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20100628152528) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "amount"
+    t.integer  "activity_cost_category_id"
   end
 
   create_table "locations", :force => true do |t|

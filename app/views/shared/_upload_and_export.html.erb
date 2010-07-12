@@ -1,8 +1,10 @@
 <%= render :partial => 'shared/collapsible_upload_file_for_create', 
-  :locals => {:record_type => record_type } %>
+  :locals => {:record_type => record_type,
+  :human_plural_name_for_entity => human_plural_name_for_entity } %>
 </p>
 
 <p>
 <%= render :partial => 'shared/export_to_file',
-  :locals => {:record_type => record_type } %>
+  :locals => {:record_type => record_type,
+  :human_plural_name_for_entity => human_plural_name_for_entity } %>
 </p>

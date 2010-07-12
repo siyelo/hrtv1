@@ -1,7 +1,7 @@
 <% if true #TODO user has correct role to create
  %>
 
-  <p>Create one or more <%=record_type.human_name.downcase.pluralize%> from a file.</p>
+  <p>Create one or more <%=human_plural_name_for_entity%> from a file.</p>
 
   <% form_tag ({:action=> :create_from_file}, :multipart => true) do %>
     <p>

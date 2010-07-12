@@ -5,7 +5,7 @@ class FundingSourcesController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :to => Organization.last.id } #current_user.organization.id
+    @constraints = { :to => Organization.find_by_name("self").id } #current_user.organization.id
     @label = "Funding Sources"
   end
 
@@ -13,8 +13,12 @@ class FundingSourcesController < ApplicationController
     #TODO change application controller so that it's
     # create_from_file method accepts columns and optional
     # block of constraints, instead of using session
-    @constraints = { :from => Organization.last.id } #current_user.organization.id
+    @constraints = { :to => Organization.find_by_name("self").id } #current_user.organization.id
     session[:last_data_entry_constraints] = @constraints
     super @@columns_for_file_upload
+  end
+
+  def controller_model_class
+    FundingFlow
   end
 end

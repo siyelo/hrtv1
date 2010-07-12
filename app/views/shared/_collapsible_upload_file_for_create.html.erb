@@ -1,14 +1,16 @@
 <% #todo switch/check jquery for toggling
   file_upload_divid = "file_upload_#{record_type.to_s}"
+  human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase
 %>
 
 <% content_tag :span, :class => "link_like",  
   :onClick => "$('#{file_upload_divid}').toggle();" do %>
 
-  <%= "Create new #{record_type.human_name.pluralize.downcase} from a file" %>
+  <%= "Create new #{human_plural_name_for_entity} from a file" %>
 <% end %>
 
 <% content_tag :div, :id => file_upload_divid do %>
   <%= content_tag :script, "$('#{file_upload_divid}').hide()" %>
-  <%= render :partial => 'shared/upload_file_for_create' , :locals => {:record_type => record_type} %>
+  <%= render :partial => 'shared/upload_file_for_create' , 
+    :locals => {:record_type => record_type, :human_plural_name_for_entity => human_plural_name_for_entity} %>
 <% end %>

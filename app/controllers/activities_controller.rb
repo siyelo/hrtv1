@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
-  @@shown_columns = [:projects, :provider, :name, :description,  :expected_total]
-  @@create_columns = [:projects, :provider, :name, :description,  :expected_total, :target ]
+  @@shown_columns = [:projects, :provider, :name, :description  ]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :expected_total, :target]
   @@columns_for_file_upload = %w[name description provider expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
@@ -10,13 +10,15 @@ class ActivitiesController < ApplicationController
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
-#TODO add route? this was just to show how to make an action link
-#    config.action_links.add('Classify',
-#      :action => "code",
-#      :type => :member,
-#      :label => "Classify")
 
-    config.nested.add_link("Splits", [:lineItems])
+    config.action_links.add('Classify',
+      :action => "code",
+      :type => :member,
+      :popup => true,
+      :label => "Classify")
+
+    config.nested.add_link("Cost Details", [:lineItems])
+    config.columns[:lineItems].association.reverse = :activity
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
@@ -30,9 +32,11 @@ class ActivitiesController < ApplicationController
     config.columns[:provider].association.reverse = :provider_for
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
-    config.columns[:description].form_ui = :textarea
+    config.columns[:locations].form_ui = :select
+    config.columns[:locations].label = "Districts Worked In"
     config.columns[:expected_total].inplace_edit = true
-    config.columns[:target].label = "Other fields will go here"
+    config.columns[:expected_total].label = "Beneficiary"
+    config.columns[:target].label = "Other fields could go here"
 
     # add in later version, not part of minimal viable product
     #config.columns[:indicators].form_ui = :select
@@ -45,7 +49,8 @@ class ActivitiesController < ApplicationController
 
   def code
     logger.debug(params[:id]) #can get id of record
-    render :template => "activities/code", :layout => false
+    redirect_to manage_code_assignments_url(params[:id])
+    #render :template => "activities/code", :layout => false
   end
 
 end

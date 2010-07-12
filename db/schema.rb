@@ -21,6 +21,12 @@ ActiveRecord::Schema.define(:version => 20100709140356) do
     t.decimal  "expected_total"
     t.integer  "provider_id"
     t.text     "description"
+    t.integer  "other_cost_type_id"
+  end
+
+  create_table "activities_codes", :id => false, :force => true do |t|
+    t.integer "activity_id"
+    t.integer "code_id"
   end
 
   create_table "activities_indicators", :id => false, :force => true do |t|

@@ -3,6 +3,7 @@
     jQuery(document).ready(function(){
       jQuery('ul#activity_tree').collapsibleCheckboxTree({initialState : 'collapse'});
       jQuery('.tooltip').tipsy({gravity: 'w'});
+
     });
 
 %h2 Activity Classification
@@ -14,7 +15,7 @@
 
   %ul#activity_tree
     %li.activity
-      = "Activity: #{@activity.name} (Total: $#{@activity.expected_total})" #TODO currency symbol from data request
+      = "Activity: \"#{@activity.name}\" (Total: #{@activity.expected_total})" #TODO currency symbol from data request
       %ul{:id => @activity.id}
         - Code.roots.each do |code|
           - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model

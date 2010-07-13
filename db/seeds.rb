@@ -102,6 +102,7 @@ end
 
 # dummy other cost rows, in future craete with callbacks on user create
 def seed_other_cost_rows
+  OtherCost.delete_all
   OtherCostType.all.each do |t|
     t.other_costs.create if t.other_costs.empty?
   end

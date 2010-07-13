@@ -5,6 +5,27 @@ class OrganizationTest < ActiveSupport::TestCase
   test "the truth" do
     assert true
   end
+ 
+  test "providers for" do
+    o=Organization.new(:name => "test")
+    o.save
+    o.locations.create(:short_display => "testl")
+    o.save
+    loc = o.locations.first
+    assert loc != nil
+    providers = Organization.providers_for([loc])
+    assert providers.first == o
+    assert providers.size == 1
+    # test multiple
+    o2 = loc.organizations.create(:name => "test2")
+    providers = Organization.providers_for([loc])
+    assert providers.size ==2
+    assert providers.include? o
+    assert providers.include? o2
+
+  end
+
+  should have_and_belong_to_many :locations
   test "has many out_flows" do
     o=Organization.new
     o.save

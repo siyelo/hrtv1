@@ -9,6 +9,7 @@
 require 'yaml'
 require 'fastercsv'
 
+
 model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
 def seed_model_help_from_yaml doc
   doc.each do |h|
@@ -49,14 +50,18 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.id=row["id"]
   end
   #puts row.inspect
-  %w[parent_id type short_display long_display].each do |field|
+#  %w[parent_id short_display long_display].each do |field|
     #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field]
-  end
+#    c.send "#{field}=", row[field]
+#  end
+  c.parent_id = row["parent_id"]
+  c.long_display = row["description"]
+  c.short_display = row["short_display"] ? row["short_display"] : row["class"]
+  c.type = row["type"].capitalize #should never be nil
   unless c.short_display
     c.short_display=row["class"]
   end
-  if c.type=="NhaNasa"
+  if c.type=="NhaNasa" or c.type=="Nhanasa"
     c.type="Nha"
   end
   puts c.id
@@ -78,19 +83,6 @@ end
 #  #is easier / works at all
 #end
 
-Location.delete_all
-FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
-  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Location.new
-  end
-  #puts row.inspect
-  %w[short_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field]
-  end
-  puts "error on #{row}" unless c.save
-end
 
 ActivityCostCategory.delete_all
 FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|
@@ -122,6 +114,46 @@ FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
   puts "error on #{row}" unless c.save
 end
 
+Location.delete_all
+FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
+  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Location.new
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field].strip
+  end
+  puts "error on #{row}" unless c.save
+end
+
+Organization.delete_all
+FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => '	') do |row|
+  c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Organization.new
+  end
+ # puts row.inspect
+  unless row["District"].blank?
+    district = row["District"].downcase.capitalize.strip
+    district = Location.find_by_short_display(district)
+    if district.nil?
+      puts 'nil district'
+      puts row.inspect
+    end
+    c.locations << district
+  end
+  c.raw_type = row["Type"]
+  #puts row.inspect
+  %w[Name].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field].try(:strip)
+  end
+  puts "error on #{row}" unless c.save
+end
+
+# organization population will go here
 donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
 donors.each do |donor|
   Donor.find_or_create_by_name donor

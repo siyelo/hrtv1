@@ -25,7 +25,7 @@ Rails::Initializer.run do |config|
   config.gem "fastercsv"
   config.gem "haml",    :version => "= 3.0.13"
   config.gem "compass", :version => "= 0.10.2"
-
+  config.gem 'hoptoad_notifier'
   config.time_zone = 'UTC'
 
 end

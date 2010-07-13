@@ -139,6 +139,23 @@ body
         text-decoration: underline
         &:hover
           color= !mid-blue
+          
+      .next
+        +border-radius
+        background= !orange
+        color: white
+        margin-top: -25px
+        padding: 7px 15px
+        text-decoration: none
+        text-transform: uppercase
+        &:hover
+          background= !mid-blue
+          color: white
+          text-decoration: none
+          
+      // This is a temp fix for the AS actions
+      .actions a
+        padding-left: 19px
       
     #desc, #helper
       +border-radius
@@ -178,20 +195,9 @@ body
       letter-spacing: 0.05em
     h2, p
       padding: 10px
-      
 
-          
-    .next
-      margin-top: -10px
-      a
-        +border-radius
-        background= !orange
-        color= !lighter-blue
-        padding: 7px 15px
-        &:hover
-          background= !mid-blue
-          text-decoration: none
-      
+    
+    
   #footer
     clear: both
     color= !mid-blue

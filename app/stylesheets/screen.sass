@@ -16,7 +16,6 @@ body
   background= image_url("bg-white.jpg")
   font-family: Arial, Helvetica, serif
 
-
   a, p
     font-size: 0.85em
   a
@@ -126,6 +125,7 @@ body
           color= !mid-blue
           text-decoration: none
 
+
     #main
       float: left
       width: 70%
@@ -146,6 +146,7 @@ body
         background= !orange
         color: white
         cursor: pointer
+
         padding: 7px 15px
         text-decoration: none
         text-transform: uppercase
@@ -155,11 +156,19 @@ body
           text-decoration: none
 
       .next
-        margin-top: -25px
+        margin-top: -5px
 
       // This is a temp fix for the AS actions
       .actions a
         padding-left: 19px
+
+      .link_like
+        color: #09c
+        cursor: pointer
+
+        &:hover
+          color: #069
+          text-decoration: underline
 
     #desc, #helper
       +border-radius
@@ -199,8 +208,6 @@ body
       letter-spacing: 0.05em
     h2, p
       padding: 10px
-
-
 
   #footer
     clear: both

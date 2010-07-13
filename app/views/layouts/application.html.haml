@@ -1,7 +1,10 @@
 !!! Strict
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %title Hardcoded Title in App Layout
+    %title
+      - title = yield(:title) || APP_CONFIG[:site_description]
+      = APP_CONFIG[:site_name] + " : " + title
+
     = javascript_include_tag :defaults, 'jquery-1.4.2.min', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', :cache => true
     = record_select_includes
     = active_scaffold_includes
@@ -25,24 +28,20 @@
 
     #tabs
       %ul
-      
+
         %li{ :class => [controller.class == ProjectsController ? "active" : '']}
           = link_to 'Projects', projects_path
-         
-        %li{ :class => [controller.class == FundingFlowsController ? "active" : '']}
-          = link_to 'Funding Sources', funding_sources_data_entry_url
-       
+
+        %li{ :class => [controller.class == FundingSourcesController ? "active" : '']}
+          = link_to 'Funding Sources', funding_sources_data_entry_path
+
         %li{ :class => [controller.class == ProvidersController ? "active" : '']}
-          = link_to 'Providers', providers_data_entry_url
-       
+          = link_to 'Providers', providers_data_entry_path
         %li{ :class => [controller.class == ActivitiesController ? "active" : '']}
           = link_to 'Activities', activities_path
-       
-        %li{ :class => [controller.class == StaticPageController ? "active" : '']}
+
+        %li{ :class => [controller.class == OtherCostsController ? "active" : '']}
           = link_to 'Other Costs', other_costs_path
-       
-        %li{ :class => [controller.class == StaticPageController ? "active" : '']}
-          = link_to 'Submit', static_page_path(:ngo_dashboard)
 
       = image_tag "tagline.png"
 
@@ -61,6 +60,8 @@
           %p
             =yield :page_help
           // %a read more
+
+
           // This is the description generator
           // .page_help
           //   = yield :page_help
@@ -72,7 +73,6 @@
 
       #sidebar
 
-
         #helper
           :javascript
             $('sidebar').hide();
@@ -80,3 +80,4 @@
 
     #footer
       = render :partial => 'layouts/footer'
+

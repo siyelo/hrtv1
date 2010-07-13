@@ -9,7 +9,6 @@ class Activity < ActiveRecord::Base
   has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 
-
   attr_accessor :code_assignment_amounts
   after_save :update_code_assignments
 

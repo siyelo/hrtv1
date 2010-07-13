@@ -51,7 +51,6 @@ class ActivitiesController < ApplicationController
   def code
     logger.debug(params[:id]) #can get id of record
     redirect_to manage_code_assignments_url(params[:id])
-    #render :template => "activities/code", :layout => false
   end
 
   def conditions_for_collection

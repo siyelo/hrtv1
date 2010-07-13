@@ -25,3 +25,7 @@ coverage/*
 .loadpath
 .project
 *.tmproj
+
+# heroku vars files
+config/settings.secret.yml
+config/settings.loader*

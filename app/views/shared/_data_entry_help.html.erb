@@ -3,6 +3,7 @@
 <% if model_help %>
   <% content_for :side_bar do %>
     <script>$('sidebar').show();</script>
+
     <h2>Help</h2>
     <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
       <div id="terms">
@@ -18,8 +19,8 @@
         <script> $('examples').hide(); </script>
         <p>This section will have links to examples when this feature is complete.</p>
       </div>
-      
-    
+
+
   <% end %>
 
   <% content_for :page_help do %>

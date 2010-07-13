@@ -9,7 +9,6 @@
 require 'yaml'
 require 'fastercsv'
 
-
 model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
 def seed_model_help_from_yaml doc
   doc.each do |h|
@@ -42,25 +41,25 @@ seed_model_help_from_yaml model_helps
 
 # seed code values
 #
+puts "Loading codes.csv..."
 Code.delete_all
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
-  c=nil #Code.first( :conditions => {:external_id =>row[:id]}) implement later
-  if c.nil?
-    c=Code.new
-    c.external_id = row["id"]
-  end
-  p = Code.find_by_external_id(row["parent_id"])
-  c.parent_id = p.id unless p.nil?
+  c             = Code.new
+  c.external_id = row["id"]
+  p             = Code.find_by_external_id(row["parent_id"])
+  c.parent_id   = p.id unless p.nil?
+  c.type        = row["type"].capitalize #this should make STI stop complaining
+  c.description = row["long_display"]
 
-  c.long_display = row["description"]
-  c.short_display = row["short_display"]
-  c.type = row["type"].capitalize #should never be nil
+  %w[short_display long_display].each do |field|
+    c.send "#{field}=", row[field]
+  end
 
   unless c.short_display
     c.short_display=row["class"]
   end
 
-  if c.type=="NhaNasa" or c.type=="Nhanasa"
+  if c.type.downcase =="nhanasa"
     c.type="Nha"
   end
 
@@ -69,19 +68,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   puts "  #{c.id}"
 end
 
-#puts 'Setting valid for next types'
-
-#Code.all.each do |code|
-#
-#  puts code.id
-#  other_type_children=code.children.find_all {|c|  c.class!=code.class}
-#  code.valid_children_of_next_type = other_type_children
-#  code.save
-#  puts code.id
-#  #todo add links to those of children so code to
-#  #get the children when a super code is selected
-#  #is easier / works at all
-#end
+puts "...Loading codes.csv DONE"
 
 ActivityCostCategory.delete_all
 FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|
@@ -138,7 +125,7 @@ FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
 end
 
 Organization.delete_all
-FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => '	') do |row|
+FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => "\t") do |row|
   c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
   if c.nil?
     c=Organization.new

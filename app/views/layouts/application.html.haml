@@ -53,6 +53,8 @@
           #notice= flash[:notice]
 
         #desc
+          :javascript
+            $('desc').hide();
           %h2 Description
           %p
             =yield :page_help
@@ -71,10 +73,8 @@
 
         #helper
           :javascript
-            $('left_side_bar').hide();
-          = yield :left_side_bar
-
-      = render :partial => 'layouts/right_side_bar'
+            $('sidebar').hide();
+          = yield :side_bar
 
     #footer
       = render :partial => 'layouts/footer'

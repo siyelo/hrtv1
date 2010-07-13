@@ -47,3 +47,7 @@
   model_name: OtherCost
   short: Short Description
   long: The text on the other cost page
+13:
+  model_name: CodeAssignment
+  short: Short Description
+  long: The text on the other code assignment page

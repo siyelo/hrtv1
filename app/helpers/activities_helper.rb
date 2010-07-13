@@ -1,13 +1,12 @@
 module ActivitiesHelper
   def options_for_association_conditions(association)
-    vals=[]
     if association.name == :provider
-      unless @record.locations.empty?
+        ids=Set.new
+        Project.all.each do |p| #in future this should scope right with default
+          ids.merge p.valid_providers
+        end
         ["id in (?)", 
-          Organization.providers_for(@record.locations).collect {|o| o.id}]
-      else
-        super
-      end
+          ids]
     else
       super
     end

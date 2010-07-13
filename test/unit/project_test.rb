@@ -2,8 +2,17 @@ require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
   # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  test "has valid providers" do
+    assert Organization.new(:name => "self").save
+    p=Project.new; p.save
+    o=Organization.find_by_name("self")
+    to=Organization.new(:name => "valid_provider")
+    to.save
+    p.funding_flows.create(:from => o, :to=> to)
+    p.save
+    puts p.valid_providers.inspect
+    assert p.valid_providers.first == to.id
+    assert p.valid_providers.size == 1
   end
   
   # need to get shoulda working

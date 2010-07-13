@@ -54,7 +54,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   %w[short_display long_display].each do |field|
     c.send "#{field}=", row[field]
   end
-  c.long_display = c.description
+
   unless c.short_display
     c.short_display=row["class"]
   end
@@ -141,7 +141,7 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
     c.locations << district
   end
   c.raw_type = row["type"].try(:strip)
-  if c.raw_type == "Implementers"
+  if c.raw_type != "Donors"
     c.type = "Ngo"
   elsif c.raw_type == "Donors"
     c.type = "Donor"

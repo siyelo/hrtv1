@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.string   "comments"
     t.decimal  "expected_total"
     t.integer  "provider_id"
-    t.text     "description"
     t.integer  "other_cost_type_id"
+    t.text     "description"
     t.string   "type"
   end
 

@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   ActiveScaffold.set_defaults do |config| 
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
     config.list.empty_field_text = "------"
+    config.list.pagination = false
+    config.create.persistent = true
   end
 
   def redirect_to_index

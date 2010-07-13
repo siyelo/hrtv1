@@ -8,6 +8,7 @@ class FundingFlowsController < ApplicationController
     :file_field => :file
   
   active_scaffold :funding_flow do |config|
+    config.label = "Funding Flow"
     config.columns =  @@shown_columns
     list.sorting = {:from => 'DESC'}
     config.columns[:raw_provider].inplace_edit = true

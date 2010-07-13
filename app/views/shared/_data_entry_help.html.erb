@@ -29,8 +29,8 @@
   <% end %>
 
   <% content_for :comments do %>
-    <h3> General Questions / Comments </h3>
-    <%= render :active_scaffold => "comments", :label => "&nbsp",
+    <p> All users can see the comments in the table below. </p>
+    <%= render :active_scaffold => "comments", :label => "General Questions / Comments",
       :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} %>
   <% end %>
 <% end %>

@@ -15,7 +15,7 @@ def seed_model_help_from_yaml doc
     model_help_attribs = h.last
     #TODO replace line below, may cause trouble during deployment
     #     can replace after add rescue below
-    #`touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
+    `touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
     seed_model_and_field_help model_help_attribs
   end
 end

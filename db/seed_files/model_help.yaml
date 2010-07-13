@@ -59,6 +59,6 @@
   short: What health providers implement activities for your project?
   long: Enter in all providers of services - be them government agencies, health facilities, international partners, or research/academic institutions - who implement activities for your organization's projects from the list provided. If you don't see the organization in the list, you will be able to add that provider.
 15:
-  model_name: Funding_Sources
+  model_name: FundingSource
   short: Where your organization gets its funding
   long: Enter the sources from which your organization recieves funding for its projects

@@ -1,4 +1,4 @@
-"Classifications",,"id","parent_id","class","stratprog","stratobj","type","short_display","char count"," long_display","description"
+"Classifications",,"id","parent_id","class","stratprog","stratobj","type","short_display","char count","long_display","description"
 "1 01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","1","1","","01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","Planning and M&E","Health Promotion","mtef","Development Of Sector Institutional Capacity",44,,"Development and Strengthening of the health sector's institutional capacity"
 "1.1 01  HEALTH POLICIES","101","101","1","01  HEALTH POLICIES","Governance","Health Promotion","mtef","Health Policies",15,,"Designing, publishing, and disseminating policies, strategies laws, and regulations in the field of health"
 "1.1.1 Technical Assistance","10101","10101","101","Technical Assistance","Governance","Health Promotion","mtef","Technical Assistance",20,,
@@ -88,8 +88,8 @@ epilepsy and seizures)
 antifolate based)
 "
 "6.1.4 HC.1.3.10 Other OP care","60104","60104","601","HC.1.3.10 Other OP care",,"Infectious Diseases","nha","Other Outpatient Care",21,,"Other regimens including:
-- Quinoline compounds (e.g. quinine, Chloroquine, amodiaquine, mefloquine, primaquine) 
-- Antifolate drugs (e.g. sulfonamides, pyrimethamine (SP), proguanil, chlorproguanil) 
+- Quinoline compounds (e.g. quinine, Chloroquine, amodiaquine, mefloquine, primaquine)
+- Antifolate drugs (e.g. sulfonamides, pyrimethamine (SP), proguanil, chlorproguanil)
 - Artesunate suppositories "
 "6.1.5 HC.1.3.11 OP care that could not be disaggregated","60105","60105","601","HC.1.3.11 OP care that could not be disaggregated",,"Infectious Diseases","nha","OP care that could not be disaggregated",39,,"Outpatient (no overnight) care resulting from:
 • presumptive treatment for fever (drugs and consultation)
@@ -142,7 +142,7 @@ Includes: For NHA HIV/AIDS classifications, the following activities are include
 - In high HIV prevalence areas, activities provided to nurses, physicians, and other health care
  related personnel to cope with emotional stress due to provision of care to a large number of
 HIV/AIDS cases (WHO).
-Excludes: 
+Excludes:
 - Counseling for VCT helps to make a decision on whether or not to be
 tested and provides support when receiving the test result (WHO). Therefore, it is not considered psychosocial support."
 "6.2.2.4.1 AD.3 Non-health IEC- social stigma reduction","602020401","602020401","6020204","AD.3 Non-health IEC- social stigma reduction",,"Infectious Diseases","nha","Social Stigma Reduction",23,,
@@ -259,7 +259,7 @@ cancer."
 "6.16 16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH","6016","6016",6,"16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH",,"Health Promotion","mtef","Information, Education And Communication For Health",51,,
 "7 07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES","7","7","","07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES",,"Health Promotion","mtef","Development Of National Specialised Reference And Research Services",67,"Strengthening specialised services, Narional Referral Hospitals and Research Capabilities",
 "8 08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH","8","8","","08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH",,"Health Promotion","mtef","Reinforcement Of Family Planning And Reproductive Health",56,,
-"9 09  DISEASES PREVENTION","9","9","","09  DISEASES PREVENTION",,"Infectious Diseases","mtef","Diseases Prevention",19,,"Consolidating, expanding and improving services for the prevention and 
+"9 09  DISEASES PREVENTION","9","9","","09  DISEASES PREVENTION",,"Infectious Diseases","mtef","Diseases Prevention",19,,"Consolidating, expanding and improving services for the prevention and
 control of infectious diseases "
 "9.1 01  FIGHT AGAINST MALARIA","901","901","9","01  FIGHT AGAINST MALARIA",,"Infectious Diseases","mtef","Fight Against Malaria",21," ","Spending for the primary purpose of :
 Providing goods or implementing activities for malaria prevention and control
@@ -286,7 +286,7 @@ health workers
 - business training: training shopkeepers on the appropriate choice and dose of antimalarial drugs for
 children, and use of user-friendly packaging of drugs
 "
-"9.1.4 HC.6.3.2.3 IEC (malaria awareness)","90104","90104","901","HC.6.3.2.3 IEC (malaria awareness)",,"Infectious Diseases","nha","IEC (malaria awareness)",23,,"IEC for: 
+"9.1.4 HC.6.3.2.3 IEC (malaria awareness)","90104","90104","901","HC.6.3.2.3 IEC (malaria awareness)",,"Infectious Diseases","nha","IEC (malaria awareness)",23,,"IEC for:
 - promoting a “net culture”
 - raising public awareness about malaria
 - households to maintain basic sanitation measures particularly maintaining proper drainage for used water and reducing open areas with
@@ -423,8 +423,8 @@ promotion (education, recruitment, and retention of donors).
 "9.2.8.3.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080301","902080301","9020803","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","nhanasa","Blood Safety",12,,
 "9.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","903",903,"9","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,"Infectious Diseases","mtef","Fight Against Tuberculosis And Leprosis",39,,
 "9.4 04  FIGHT AGAINST ENDEMIC DISEASES","904","904","9","04  FIGHT AGAINST ENDEMIC DISEASES",,"Infectious Diseases","mtef","Fight Against Endemic Diseases",30,,
-"9.5 05  FIGHT AGAINST DISEASES OF CHILDREN","905","905","9","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","mtef","Fight Against Diseases Of Children",34,,"Spending during a specified period of time on goods, services and activities 
-delivered to the child or its caretaker after the birth of the child and 
+"9.5 05  FIGHT AGAINST DISEASES OF CHILDREN","905","905","9","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","mtef","Fight Against Diseases Of Children",34,,"Spending during a specified period of time on goods, services and activities
+delivered to the child or its caretaker after the birth of the child and
 whose primary purpose is to restore, improve and maintain the health of children
  of a country between zero and less than five years of age."
 "9.5.1 HC.6.1.3 CH Programs","90501","90501","905","HC.6.1.3 CH Programs",,"MCH / FP / RH / Nutrition","nha","Child Health Programs",21,,

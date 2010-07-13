@@ -3,16 +3,13 @@
   <%= grid %>
 <% else %>
 
-<% human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase %>
-  <% content_for :breadcrumbs do %>
-    <%= link_to 'Back to Dashboard', 'admin_dashboard' %>
-  <% end %>
-  <br>
+  <% human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase %>
+  <p>
   <%= render :partial => 'shared/upload_and_export',
     :locals => {
       :record_type => record_type, 
       :human_plural_name_for_entity => human_plural_name_for_entity } %>
-
+  </p>
   <%= grid %>
 
   <%= render :partial => 'shared/data_entry_help',

@@ -7,21 +7,23 @@
     <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
       <div id="terms">
         <script> $('terms').hide(); </script>
-        <%= render :partial => model_help.field_help %>
+        <% if model_help.field_help.size > 0 %>
+          <%= render :partial => model_help.field_help %>
+        <% else %>
+          <p> No help for these fields </p>
+        <% end %>
       </div>
       <p><%= link_to 'Examples', '#',  :onclick => "$('examples').toggle();"  %></p>
       <div id="examples">
         <script> $('examples').hide(); </script>
-        <%= link_to 'HIV/AIDS', '#' %>
-        <%= link_to 'Health Systems', '#' %>
-        <%= link_to 'Technical Assistance', '#' %>
-        <%= link_to '...', '#' %> <!-- TODO implement examples as example user owned items-->
+        <p>This section will have links to examples when this feature is complete.</p>
       </div>
       
     
   <% end %>
 
   <% content_for :page_help do %>
+    <script>$('desc').show();</script>
     <p><%= h model_help.long %></p>
   <% end %>
 

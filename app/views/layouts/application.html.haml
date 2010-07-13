@@ -55,6 +55,8 @@
           #notice= flash[:notice]
 
         #desc
+          :javascript
+            $('desc').hide();
           %h2 Description
           %p
             =yield :page_help

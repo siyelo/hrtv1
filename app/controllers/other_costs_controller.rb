@@ -5,7 +5,7 @@ class OtherCostsController < ApplicationController
   active_scaffold :other_costs do |config|
     config.label =  "Other Costs"
     config.columns =  @@shown_columns
-    list.sorting = {:description => 'DESC'}
+    list.sorting = {:other_cost_type => 'ASC'}
 
 
     config.nested.add_link("Comments", [:comments])

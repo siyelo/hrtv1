@@ -11,6 +11,7 @@ class FundingFlowsController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:from => 'DESC'}
     config.columns[:raw_provider].inplace_edit = true
+    config.columns[:raw_provider].label = "Organization Text"
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable

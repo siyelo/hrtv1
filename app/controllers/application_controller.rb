@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   # or pass in an object to build the new record off of?
   # so that file uploads with constraints in the AS view work
   # as user would expect
-  def create_from_file attributes
+  def create_from_file attributes, constraints={}
     if fields_mapped?
       saved, errors = [], []
       mapped_fields.each do |row|
@@ -45,6 +45,7 @@ class ApplicationController < ActionController::Base
       redirect_to_index
     else
       #user chooses field mapping
+      session[:last_data_entry_constraints] = @constraints
       render :template => 'shared/create_from_file'
     end
     rescue MapFields::InconsistentStateError

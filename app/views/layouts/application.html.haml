@@ -33,12 +33,11 @@
 
         %li{ :class => [controller.class == ProvidersController ? "active" : '']}
           = link_to 'Providers', providers_data_entry_path
-
         %li{ :class => [controller.class == ActivitiesController ? "active" : '']}
           = link_to 'Activities', activities_path
 
         %li{ :class => [controller.class == StaticPageController ? "active" : '']}
-          = link_to 'Other Costs', static_page_path(:ngo_dashboard)
+          = link_to 'Other Costs', other_costs_path
 
         %li{ :class => [controller.class == StaticPageController ? "active" : '']}
           = link_to 'Submit', static_page_path(:ngo_dashboard)

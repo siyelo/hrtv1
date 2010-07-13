@@ -70,7 +70,6 @@ end
 
 puts "...Loading codes.csv DONE"
 
-
 ActivityCostCategory.delete_all
 FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|
   c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later

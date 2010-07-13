@@ -1,28 +1,35 @@
+#activity_classification
+  padding: 10px
+
 body #content #main #activity_tree a
   font-size: 12px
   padding: 4px 7px
 
+#buttons
+  padding: 5px 0px
+
+
 #activity_tree
-  padding-top: 5px
+  font-size: 12px
+
 
   ul
     padding-left: 20px
+
     li
       font-size: 12px
 
       list-style: none
 
-    .hide
-      display: none
+  .hide
+    display: none
 
   span
     color: #999
     font-family: "Courier New", Courier, monospace
     cursor: default
-
-  span.expanded, #example span.collapsed
-    cursor: pointer
-
+    &.expanded, &.collapsed
+      cursor: pointer
 
 .tooltip
   -moz-border-radius: 5px 5px 5px 5px

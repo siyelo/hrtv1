@@ -6,6 +6,7 @@
   = "#{code.short_display}"
   = link_to "?", "#", :title => code.long_display, :class => "tooltip"
 
-  %ul{:id => code.external_id}
-    - code.children.each do |child|
-      = render :partial => 'code_row', :locals => {:code => child}
+  - unless code.children.empty?
+    %ul{:id => code.external_id}
+      - code.children.each do |child|
+        = render :partial => 'code_row', :locals => {:code => child}

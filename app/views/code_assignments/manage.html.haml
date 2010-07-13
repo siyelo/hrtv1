@@ -1,23 +1,22 @@
 - content_for :head do
   :javascript
     jQuery(document).ready(function(){
-      jQuery('ul#activity_tree').collapsibleCheckboxTree({initialState : 'collapse'});
+      jQuery('ul#activity_tree').collapsibleCheckboxTree();
       jQuery('.tooltip').tipsy({gravity: 'w'});
 
     });
 
 %h2 Activity Classification
 
-- form_for @activity, :url => update_code_assignments_path, :method => :post do |form|
+#activity_classification
+  - form_for @activity, :url => update_code_assignments_path, :method => :post do |form|
 
-  -# Take this out later
-  = hidden_field_tag :activity_id, @activity.id
+    -# Take this out later
+    = hidden_field_tag :activity_id, @activity.id
 
-  %ul#activity_tree
-    %li.activity
-      = "Activity: \"#{@activity.name}\" (Total: #{@activity.expected_total})" #TODO currency symbol from data request
-      %ul{:id => @activity.id}
-        - Code.roots.each do |code|
-          - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model
-            = render :partial => 'code_row', :locals => {:code => code, :form => form}
-  = submit_tag 'Save'
+    = "Activity: \"#{@activity.name}\" (Total: #{@activity.expected_total})" #TODO currency symbol from data request
+    %ul#activity_tree
+      - Code.roots.each do |code|
+        - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model
+          = render :partial => 'code_row', :locals => {:code => code, :form => form}
+    = submit_tag 'Save'

@@ -1,20 +1,22 @@
 ---
 1:
   model_name: Project
-  short: Short Description
-  long: Longer description
+  short: What health projects does your organization implement?
+  long: Describe the health projects your organization implements. A project is defined as a contractual agreement with a funding provider or oversight body to support health goals in Rwanda. A project can be implemented by multiple entities or take place in multiple districts - these will be specified on the following pages.
 2:  
   model_name: Activity
-  short: Short Description
-  long: Longer description
+  short: What health activities does your organization implement?
+  long: Describe the health activities for all of the projects you implement. An activity is defined as a defined functional task that is a subset of a project. Once you've entered in a description for an activity, classify the activity using the coding tree provided.  You can also provide cost details which give more information on where spending for activities has or will go.
+
 3:  
   model_name: Organization
-  short: Short Description
-  long: Longer description
+  short: Descriptive information about your organization
+  long: Enter in basic information about your organization.
 4:  
   model_name: FundingFlow
-  short: Short Description
-  long: Longer description
+  short: Where your organization gets its funding
+  long: Enter the sources from which your organization recieves funding for its projects
+
 5:  
   model_name: Code
   short: Short Description
@@ -45,9 +47,18 @@
   long: Longer description
 12:
   model_name: OtherCost
-  short: Short Description
-  long: The text on the other cost page
+  short: Other costs that your organization bears
+  long: This page is designed to help you identify where your organization classifies activities other than those that fit neatly into projects or activities that you have already categorized. Please select all areas where your organization can disaggregate funding, and specify how these expenditures are.
+
 13:
   model_name: CodeAssignment
   short: Short Description
   long: The text on the other code assignment page
+14:
+  model_name: Provider
+  short: What health providers implement activities for your project?
+  long: Enter in all providers of services - be them government agencies, health facilities, international partners, or research/academic institutions - who implement activities for your organization's projects from the list provided. If you don't see the organization in the list, you will be able to add that provider.
+15:
+  model_name: FundingSource
+  short: Where your organization gets its funding
+  long: Enter the sources from which your organization receives funding for its projects

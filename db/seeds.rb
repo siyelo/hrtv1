@@ -49,7 +49,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   p             = Code.find_by_external_id(row["parent_id"])
   c.parent_id   = p.id unless p.nil?
   c.type        = row["type"].capitalize #this should make STI stop complaining
-  c.description = row["long_display"]
+  c.description = row["description"]
 
   %w[short_display long_display].each do |field|
     c.send "#{field}=", row[field]
@@ -141,15 +141,19 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
     c.locations << district
   end
   c.raw_type = row["type"].try(:strip)
-  if c.raw_type == "Implementers"
+  if c.raw_type != "Donors"
     c.type = "Ngo"
   elsif c.raw_type == "Donors"
     c.type = "Donor"
   end
+
   #puts row.inspect
   %w[name].each do |field|
     #puts "#{field}: #{row[field]}"
     c.send "#{field}=", row[field].try(:strip)
+  end
+  unless %w[Donors Agencies Implementers].include? c.raw_type
+    c.name += " #{c.raw_type}"
   end
   puts "error on #{row}" unless c.save
 end

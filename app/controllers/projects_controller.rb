@@ -32,6 +32,7 @@ class ProjectsController < ApplicationController
     config.columns[:expected_total].label = "Total Budgeted Amount"
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
+
   end
 
   def create_from_file

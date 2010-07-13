@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100712205612) do
+ActiveRecord::Schema.define(:version => 20100713225118) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.integer  "other_cost_type_id"
     t.text     "description"
     t.string   "type"
+    t.string   "start_month"
+    t.string   "end_month"
+    t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
   end
 
   create_table "activities_indicators", :id => false, :force => true do |t|
@@ -90,15 +97,14 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
     t.integer  "project_id"
-    t.decimal  "committment_from"
-    t.decimal  "disbursement_from"
-    t.decimal  "spending_from"
-    t.decimal  "committment_to"
-    t.decimal  "disbursement_to"
-    t.decimal  "spending_to"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "raw_provider"
+    t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
   end
 
   create_table "indicators", :force => true do |t|
@@ -113,8 +119,9 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.integer  "activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "amount"
     t.integer  "activity_cost_category_id"
+    t.decimal  "budget"
+    t.decimal  "spend"
   end
 
   create_table "locations", :force => true do |t|

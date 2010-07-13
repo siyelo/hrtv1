@@ -11,7 +11,7 @@
         <% if model_help.field_help.size > 0 %>
           <%= render :partial => model_help.field_help %>
         <% else %>
-          <p> No help for these fields </p>
+          <p> No help for these fields has been entered yet.</p>
         <% end %>
       </div>
       <p><%= link_to 'Examples', '#',  :onclick => "$('examples').toggle();"  %></p>

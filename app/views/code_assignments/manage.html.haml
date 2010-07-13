@@ -6,7 +6,14 @@
 
     });
 
+%br
+
 %h2 Activity Classification
+
+#activity_description
+  - [:name, :expected_total, :description].each do |f|
+    %p
+      = "#{f.to_s.humanize.capitalize}: #{@activity.send(f)}" #TODO currency symbol from data request
 
 #activity_classification
   - form_for @activity, :url => update_code_assignments_path, :method => :post do |form|
@@ -14,11 +21,10 @@
     -# Take this out later
     = hidden_field_tag :activity_id, @activity.id
 
-    = "Activity: \"#{@activity.name}\" (Total: #{@activity.expected_total})" #TODO currency symbol from data request
     %ul#activity_tree
       - Code.roots.each do |code|
         - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model
           = render :partial => 'code_row', :locals => {:code => code, :form => form}
     = submit_tag 'Save'
-    
+
   = render :partial => 'shared/data_entry_help' , :locals => {:record_type => CodeAssignment}

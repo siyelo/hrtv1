@@ -1,6 +1,6 @@
 class OtherCostsController < ApplicationController
-  @@shown_columns = [:other_cost_type, :projects, :expected_total, :description ]
-  @@create_columns = [:projects,   :other_cost_type,  :expected_total, :description ]
+  @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]
+  @@create_columns = [:projects,   :other_cost_type,  :expected_total, :budget, :description ]
 
   active_scaffold :other_costs do |config|
     config.label =  "Other Costs"
@@ -18,7 +18,9 @@ class OtherCostsController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:description].label = "Description (optional)"
     config.columns[:expected_total].inplace_edit = true
-    config.columns[:expected_total].label = "Amount"
+    config.columns[:expected_total].label = "Total Expenditure RFY 09-10"
+    config.columns[:budget].inplace_edit = true
+    config.columns[:budget].label = "Budget RFY 10-11"
     config.columns[:other_cost_type].form_ui = :select
     config.columns[:other_cost_type].inplace_edit = true
     config.columns[:other_cost_type].label = "Type"

@@ -1,8 +1,8 @@
 <% model_help = ModelHelp.find_by_model_name record_type.to_s %>
 
 <% if model_help %>
-  <% content_for :left_side_bar do %>
-    <script>$('left_side_bar').show();</script>
+  <% content_for :side_bar do %>
+    <script>$('sidebar').show();</script>
     <h2>Help</h2>
     <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
       <div id="terms">
@@ -23,9 +23,6 @@
 
   <% content_for :page_help do %>
     <p><%= h model_help.long %></p>
-  <% end %>
-
-  <% content_for :right_side_bar do %>
   <% end %>
 
   <% content_for :comments do %>

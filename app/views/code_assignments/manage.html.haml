@@ -20,3 +20,5 @@
         - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model
           = render :partial => 'code_row', :locals => {:code => code, :form => form}
     = submit_tag 'Save'
+    
+  = render :partial => 'shared/data_entry_help' , :locals => {:record_type => CodeAssignment}

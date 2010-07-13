@@ -31,7 +31,7 @@
         %li{ :class => [controller.class == ProjectsController ? "active" : '']}
           = link_to 'Projects', projects_path
 
-        %li{ :class => [controller.class == FundingFlowsController ? "active" : '']}
+        %li{ :class => [controller.class == FundingSourcesController ? "active" : '']}
           = link_to 'Funding Sources', funding_sources_data_entry_path
 
         %li{ :class => [controller.class == ProvidersController ? "active" : '']}
@@ -39,7 +39,7 @@
         %li{ :class => [controller.class == ActivitiesController ? "active" : '']}
           = link_to 'Activities', activities_path
 
-        %li{ :class => [controller.class == StaticPageController ? "active" : '']}
+        %li{ :class => [controller.class == OtherCostsController ? "active" : '']}
           = link_to 'Other Costs', other_costs_path
 
         %li{ :class => [controller.class == StaticPageController ? "active" : '']}

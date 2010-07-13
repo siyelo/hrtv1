@@ -15,8 +15,8 @@
 body
   background= image_url("bg-white.jpg")
   font-family: Arial, Helvetica, serif
-  
-  
+
+
   a, p
     font-size: 0.85em
   a
@@ -26,33 +26,33 @@ body
       text-decoration: underline
   p
     color: #444
-    
+
   h2
     font-weight: bold
     text-transform: uppercase
-    
+
   .right
     float: right
-  
+
   #header, #tabs, #footer
     min-width: 800px
     padding: 0 10%
-  
+
   #header, #tabs
     background= image_url("bg-blue.jpg")
     //background= !mid-blue
     a
       color= !lighter-blue
       font-size: 0.8em
-    
+
   #header
     height: 90px
     padding: 0 10%
-    
+
     #logo
       float: left
       margin: 50px 0 0 -35px
-      
+
     #admin ul
       +border-radius
       +horizontal-list
@@ -61,7 +61,7 @@ body
       margin-top: 10px
       padding: 7px 12px
       text-transform: lowercase
-  
+
   #tabs
     ul
       display: block
@@ -95,7 +95,7 @@ body
     img
       float: right
       margin-top: -35px
-      
+
   #content
     +border-bottom-radius
     +box-shadow(#ddd, 0, 2px, 5px)
@@ -104,18 +104,18 @@ body
     min-width: 800px
     padding: 20px 10px 30px 10px
     overflow: hidden
-            
+
     #crumbs
       padding: 0 0 0 10px
       overflow: hidden
-      
+
       ul, a
         color: #999
         font-size: 0.7em
-        
+
       ul
         float: left
-        
+
       a
         +border-radius
         color= !mid-blue
@@ -125,11 +125,11 @@ body
           background= !light-blue
           color= !mid-blue
           text-decoration: none
-    
+
     #main
       float: left
       width: 70%
-      
+
       p
         line-height: 1.2em
       a
@@ -139,12 +139,13 @@ body
         text-decoration: underline
         &:hover
           color= !mid-blue
-          
-      .next
+
+      .next, input[type=submit]
         +border-radius
+        border: 1px
         background= !orange
         color: white
-        margin-top: -25px
+        cursor: pointer
         padding: 7px 15px
         text-decoration: none
         text-transform: uppercase
@@ -152,21 +153,24 @@ body
           background= !mid-blue
           color: white
           text-decoration: none
-          
+
+      .next
+        margin-top: -25px
+
       // This is a temp fix for the AS actions
       .actions a
         padding-left: 19px
-      
+
     #desc, #helper
       +border-radius
       border: #eee 1px solid
       padding-bottom: 15px
-      
+
     #sidebar
       float: right
       margin-left: 3%
       width: 27%
-      
+
       #helper
         a
           color= !orange
@@ -174,7 +178,7 @@ body
           text-transform: uppercase
         p
           padding: 10px 10px 0 10px
-        
+
         #terms, #examples
           a
             color= !mid-blue
@@ -182,11 +186,11 @@ body
             font-weight: bold
           p
             margin-bottom: 5px
-        
+
         #examples
           padding: 0 10px
           font-size: 0.9em
-      
+
     h2
       +border-top-radius
       background= !lightest-blue
@@ -196,8 +200,8 @@ body
     h2, p
       padding: 10px
 
-    
-    
+
+
   #footer
     clear: both
     color= !mid-blue

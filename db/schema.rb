@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100713221044) do
+ActiveRecord::Schema.define(:version => 20100713221908) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -92,15 +92,14 @@ ActiveRecord::Schema.define(:version => 20100713221044) do
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
     t.integer  "project_id"
-    t.decimal  "committment_from"
-    t.decimal  "disbursement_from"
-    t.decimal  "spending_from"
-    t.decimal  "committment_to"
-    t.decimal  "disbursement_to"
-    t.decimal  "spending_to"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "raw_provider"
+    t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
   end
 
   create_table "indicators", :force => true do |t|

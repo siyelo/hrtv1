@@ -1,6 +1,6 @@
 class FundingFlowsController < ApplicationController
-  @@shown_columns = [:from, :to, :raw_provider,  :project, :committment_to, :spending_to]
-  @@create_columns = [:from, :to, :project, :committment_to, :disbursement_to, :spending_to]
+  @@shown_columns = [:from, :to, :raw_provider,  :project, :budget, :spend_q1]
+  @@create_columns = [:from, :to, :raw_provider, :project, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file,
@@ -11,6 +11,8 @@ class FundingFlowsController < ApplicationController
     config.label = "Funding Flow"
     config.columns =  @@shown_columns
     list.sorting = {:from => 'DESC'}
+    config.columns[:raw_provider].form_ui = :textarea
+    config.columns[:raw_provider].options = {:cols => 50, :rows => 3}
     config.columns[:raw_provider].inplace_edit = true
     config.columns[:raw_provider].label = "Organization Text"
 
@@ -24,13 +26,15 @@ class FundingFlowsController < ApplicationController
       config.columns[c].form_ui=:select
       config.columns[c].inplace_edit = true
     end
-    config.columns[:committment_to].inplace_edit = true
-    config.columns[:disbursement_to].inplace_edit = true
-    config.columns[:spending_to].inplace_edit = true
-    [:committment_to, :disbursement_to]. each do |c|
-      config.columns[c].label = c.to_s.split("_").first.capitalize + " from donor"
+
+    config.columns[:budget].inplace_edit = true
+    config.columns[:budget].label = "Budget for RFY 10-11 (upcoming)"
+    %w[q1 q2 q3 q4].each do |quarter|
+      c="spend_"+quarter
+      c=c.to_sym
+      config.columns[c].inplace_edit = true
+      config.columns[c].label = "Expenditure in RFY 09-10 "+quarter.capitalize
     end
-    config.columns[:spending_to].label = "Amount Spent"
   end
 
   def create_from_file

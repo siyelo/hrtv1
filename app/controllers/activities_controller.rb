@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
   @@shown_columns = [:projects, :provider, :name, :description  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :expected_total, :target]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start_month, :end_month, :expected_total, :target]
   @@columns_for_file_upload = %w[name description provider expected_total] # TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,

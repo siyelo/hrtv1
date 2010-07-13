@@ -1,7 +1,6 @@
 #config.gem 'rspec-rails',      :lib => false, :version => '>= 1.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
 config.gem "shoulda"
 
-
 config.cache_classes = true
 config.whiny_nils = true
 config.action_controller.consider_all_requests_local = true

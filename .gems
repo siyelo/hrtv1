@@ -1,13 +1,4 @@
-actionmailer --version 2.3.8
-actionpack --version 2.3.8
-activerecord --version 2.3.8
-activeresource --version 2.3.8
-activesupport --version 2.3.8
-rack --version 1.1.0
 rails --version 2.3.8
-rake
-rest-client
-mime-types
 fastercsv
-paginator
-haml --version 3.0.12
+haml --version "= 3.0.13"
+compass --version "= 0.10.2"

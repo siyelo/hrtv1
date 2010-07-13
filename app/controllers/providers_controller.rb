@@ -14,8 +14,7 @@ class ProvidersController < ApplicationController
     # create_from_file method accepts columns and optional
     # block of constraints, instead of using session
     @constraints = { :from => Organization.find_by_name("self").id } #current_user.organization.id
-    session[:last_data_entry_constraints] = @constraints
-    super @@columns_for_file_upload
+    super @@columns_for_file_upload, @constraints
   end
 
   def controller_model_class

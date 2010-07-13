@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.integer "activity_id"
     t.integer "code_id"
     t.string  "code_type"
+    t.decimal "amount"
   end
 
   create_table "codes", :force => true do |t|
@@ -59,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20100712205612) do
     t.date     "end_date"
     t.integer  "replacement_code_id"
     t.string   "type"
+    t.string   "external_id"
   end
 
   create_table "comments", :force => true do |t|

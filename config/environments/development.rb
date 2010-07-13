@@ -1,6 +1,7 @@
 config.gem "ruby-debug"
 #config.gem "rails-footnotes"
 config.gem "shoulda"
+config.gem 'glennr-heroku_san', :lib => false
 
 config.cache_classes                                 = false
 config.whiny_nils                                    = true

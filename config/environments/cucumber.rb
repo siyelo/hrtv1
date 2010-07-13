@@ -21,9 +21,9 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-config.gem 'cucumber-rails',   :lib => false, :version => '=0.3.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/cucumber-rails'))
+config.gem 'cucumber-rails',   :lib => false, :version => '=0.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/cucumber-rails'))
 config.gem 'database_cleaner', :lib => false, :version => '=0.5.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/database_cleaner'))
-config.gem 'capybara',         :lib => false, :version => '=0.3.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/capybara'))
+config.gem 'capybara',         :lib => false, :version => '=0.3.9' unless File.directory?(File.join(Rails.root, 'vendor/plugins/capybara'))
 config.gem "factory_girl",     :lib => false, :version => '= 1.2.4'
 config.gem 'shoulda',          :lib => false
 config.gem 'faker',            :lib => false

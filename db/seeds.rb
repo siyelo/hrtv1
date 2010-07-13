@@ -40,33 +40,33 @@ end
 
 seed_model_help_from_yaml model_helps
 
-#TODO seed code values
+# seed code values
 #
 Code.delete_all
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
-  c=nil #Code.first( :conditions => {:id =>row[:id]}) implement update later
+  c=nil #Code.first( :conditions => {:external_id =>row[:id]}) implement later
   if c.nil?
     c=Code.new
-    c.id=row["id"]
+    c.external_id = row["id"]
   end
-  #puts row.inspect
-#  %w[parent_id short_display long_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-#    c.send "#{field}=", row[field]
-#  end
-  c.parent_id = row["parent_id"]
+  p = Code.find_by_external_id(row["parent_id"])
+  c.parent_id = p.id unless p.nil?
+
   c.long_display = row["description"]
-  c.short_display = row["short_display"] ? row["short_display"] : row["class"]
+  c.short_display = row["short_display"]
   c.type = row["type"].capitalize #should never be nil
+
   unless c.short_display
     c.short_display=row["class"]
   end
+
   if c.type=="NhaNasa" or c.type=="Nhanasa"
     c.type="Nha"
   end
-#  puts c.id
+
+  puts "Adding code #{c.external_id}: "
   puts "error on #{row}" unless c.save
-#  puts c.id
+  puts "  #{c.id}"
 end
 
 #puts 'Setting valid for next types'
@@ -82,7 +82,6 @@ end
 #  #get the children when a super code is selected
 #  #is easier / works at all
 #end
-
 
 ActivityCostCategory.delete_all
 FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|

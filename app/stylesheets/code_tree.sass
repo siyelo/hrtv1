@@ -1,16 +1,49 @@
+#activity_classification
+  padding: 10px
+  
+  form
+    input[type=submit]
+      margin-top: 10px
+
+body #content #main #activity_tree a
+  font-size: 12px
+  padding: 4px 7px
+
+#buttons
+  padding: 5px 0px
+
+
 #activity_tree
+  font-size: 12px
+
+
   ul
     padding-left: 20px
+
     li
+      font-size: 12px
+
       list-style: none
 
-    .hide
-      display: none
+  .hide
+    display: none
 
   span
     color: #999
     font-family: "Courier New", Courier, monospace
     cursor: default
+    &.expanded, &.collapsed
+      cursor: pointer
 
-  span.expanded, #example span.collapsed
-    cursor: pointer
+.tooltip
+  -moz-border-radius: 5px 5px 5px 5px
+  background: none repeat scroll 0 0 #DDDDDD
+  color: #fff
+  display: inline-block
+  font-size: 14px
+  font-weight: bold
+  margin-left: 2px
+  padding: 1px 5px
+  text-decoration: none
+  text-shadow: none
+

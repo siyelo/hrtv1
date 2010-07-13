@@ -1,6 +1,8 @@
 *.swp
 *.swo
 *~
+.~*
+*sqlite3-journal
 .DS_Store
 app/stylesheets/.sass-cache/*
 db/*.sqlite3

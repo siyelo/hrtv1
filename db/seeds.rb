@@ -117,7 +117,7 @@ end
 # dummy other cost rows, in future craete with callbacks on user create
 def seed_other_cost_rows
   OtherCostType.all.each do |t|
-    OtherCost.find_or_create_by_other_cost_id(t.id)
+    t.other_costs.create if t.other_costs.empty?
   end
 end
 

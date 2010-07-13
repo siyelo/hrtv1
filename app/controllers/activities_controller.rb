@@ -34,6 +34,7 @@ class ActivitiesController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
+    config.columns[:locations].options[:update_column] = [:provider]
     config.columns[:expected_total].inplace_edit = true
     config.columns[:expected_total].label = "Beneficiary"
     config.columns[:target].label = "Other fields could go here"

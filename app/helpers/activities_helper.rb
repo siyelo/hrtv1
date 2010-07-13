@@ -3,7 +3,7 @@ module ActivitiesHelper
     vals=[]
     if association.name == :provider
       unless @record.locations.empty?
-        ["organization_id in (?)", 
+        ["id in (?)", 
           Organization.providers_for(@record.locations).collect {|o| o.id}]
       else
         super

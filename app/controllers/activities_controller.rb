@@ -53,4 +53,8 @@ class ActivitiesController < ApplicationController
     #render :template => "activities/code", :layout => false
   end
 
+  def conditions_for_collection
+    ["activities.type = ?", "Activity"]
+  end
+
 end

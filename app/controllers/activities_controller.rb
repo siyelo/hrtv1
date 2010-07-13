@@ -54,7 +54,7 @@ class ActivitiesController < ApplicationController
   end
 
   def conditions_for_collection
-    ["activities.type = ?", "Activity"]
+    ["activities.type IS NULL "]
   end
 
 end

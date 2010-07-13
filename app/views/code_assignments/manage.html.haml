@@ -6,7 +6,12 @@
 
     });
 
+%br
+
 %h2 Activity Classification
+
+%p
+  = @activity.description
 
 #activity_classification
   - form_for @activity, :url => update_code_assignments_path, :method => :post do |form|

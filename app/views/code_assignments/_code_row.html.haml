@@ -3,7 +3,7 @@
   - assignment = @activity.code_assignments.find_by_code_id(code.id)
   - amount = assignment.nil? ? "" : assignment.amount
   = text_field_tag "activity[code_assignment_amounts][#{code.id}]", amount, :size => 8
-  = link_to "?", "#", :title => code.long_display, :class => "tooltip"
+  = link_to "?", "#", :title => code.long_display, :class => "tooltip" if code.long_display
   = "#{code.short_display}"
 
   - unless code.children.empty?

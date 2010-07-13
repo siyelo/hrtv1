@@ -41,6 +41,7 @@ seed_model_help_from_yaml model_helps
 
 # seed code values
 #
+puts "Loading codes.csv..."
 Code.delete_all
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   c = Code.new
@@ -48,7 +49,9 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   p = Code.find_by_external_id(row["parent_id"])
   c.parent_id = p.id unless p.nil?
 
-  %w[type short_display long_display].each do |field|
+  c.type = row["type"].capitalize #this should make STI stop complaining
+
+  %w[short_display long_display].each do |field|
     c.send "#{field}=", row[field]
   end
 
@@ -56,7 +59,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.short_display=row["class"]
   end
 
-  if c.type=="NhaNasa"
+  if c.type.downcase =="nhanasa"
     c.type="Nha"
   end
 
@@ -65,19 +68,8 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   puts "  #{c.id}"
 end
 
-Location.delete_all
-FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
-  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Location.new
-  end
-  #puts row.inspect
-  %w[short_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field]
-  end
-  puts "error on #{row}" unless c.save
-end
+puts "...Loading codes.csv DONE"
+
 
 ActivityCostCategory.delete_all
 FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|

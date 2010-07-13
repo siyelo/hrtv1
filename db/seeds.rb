@@ -44,12 +44,12 @@ seed_model_help_from_yaml model_helps
 puts "Loading codes.csv..."
 Code.delete_all
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
-  c = Code.new
+  c             = Code.new
   c.external_id = row["id"]
-  p = Code.find_by_external_id(row["parent_id"])
-  c.parent_id = p.id unless p.nil?
-
-  c.type = row["type"].capitalize #this should make STI stop complaining
+  p             = Code.find_by_external_id(row["parent_id"])
+  c.parent_id   = p.id unless p.nil?
+  c.type        = row["type"].capitalize #this should make STI stop complaining
+  c.description = row["long_display"]
 
   %w[short_display long_display].each do |field|
     c.send "#{field}=", row[field]
@@ -125,7 +125,7 @@ FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
 end
 
 Organization.delete_all
-FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => '  ') do |row|
+FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => "\t") do |row|
   c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
   if c.nil?
     c=Organization.new

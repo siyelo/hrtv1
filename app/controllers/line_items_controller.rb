@@ -1,5 +1,5 @@
 class LineItemsController < ApplicationController
-  @@shown_columns = [:activity, :amount, :activity_cost_category]
+  @@shown_columns = [:activity, :spend, :budget, :activity_cost_category]
   @@create_columns = @@shown_columns
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
   
@@ -10,11 +10,13 @@ class LineItemsController < ApplicationController
   active_scaffold :line_items do |config|
     config.label =  "Cost Breakdown"
     config.columns =  @@shown_columns
-    list.sorting = {:amount => 'DESC'}
+    list.sorting = {:budget => 'DESC'}
 
     config.columns[:activity_cost_category].label= "Cost Category"
     config.columns[:activity_cost_category].form_ui= :select
     config.columns[:activity_cost_category].inplace_edit= true
+    config.columns[:budget].label = "Budget for RFY 10-11"
+    config.columns[:spend].label = "Expenditure in RFY 09-10"
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 

@@ -1,0 +1,9 @@
+<% @grid = render :super %> 
+<%= 
+  render :partial => 'shared/data_entry_for_model',
+  :locals => {
+    :record_type => OtherCost,
+    :grid => @grid,
+    :human_plural_name_for_entity => "other costs"
+  }
+%>

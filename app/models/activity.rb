@@ -10,7 +10,6 @@ class Activity < ActiveRecord::Base
   has_many :codes, :through => :code_assignments
 
   validates_presence_of :name
-
   attr_accessor :code_assignment_amounts
   after_save :update_code_assignments
 

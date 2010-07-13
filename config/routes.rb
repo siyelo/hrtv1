@@ -24,9 +24,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :field_helps, :active_scaffold => true
   map.resources :model_helps, :active_scaffold => true
   map.resources :funding_flows, :active_scaffold => true
-  map.resources :providers, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
   map.resources :activity_cost_categories, :active_scaffold => true
+  map.resources :other_costs, :active_scaffold => true
+  map.resources :other_cost_types, :active_scaffold => true
 
   map.resources :code_assignments, :only => [:index]
   map.manage_code_assignments 'manage_code_assignments/:activity_id', :controller => 'code_assignments', :action => :manage

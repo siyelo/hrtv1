@@ -95,11 +95,73 @@ FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) 
   end
 end
 
-donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
-donors.each do |donor|
-  Donor.find_or_create_by_name donor
+OtherCostType.delete_all
+FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
+  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=OtherCostType.new
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field]
+  end
+  puts "error on #{row}" unless c.save
 end
 
-%w[ self MSH FHI PSI].each do |ngo|
+# dummy other cost rows, in future craete with callbacks on user create
+def seed_other_cost_rows
+  OtherCostType.all.each do |t|
+    t.other_costs.create if t.other_costs.empty?
+  end
+end
+
+seed_other_cost_rows
+
+Location.delete_all
+FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
+  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Location.new
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field].strip
+  end
+  puts "error on #{row}" unless c.save
+end
+
+Organization.delete_all
+FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => '  ') do |row|
+  c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Organization.new
+  end
+ # puts row.inspect
+  unless row["District"].blank?
+    district = row["District"].downcase.capitalize.strip
+    district = Location.find_by_short_display(district)
+    if district.nil?
+      puts 'nil district'
+      puts row.inspect
+    end
+    c.locations << district
+  end
+  c.raw_type = row["type"].try(:strip)
+  if c.raw_type == "Implementers"
+    c.type = "Ngo"
+  elsif c.raw_type == "Donors"
+    c.type = "Donor"
+  end
+  #puts row.inspect
+  %w[name].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field].try(:strip)
+  end
+  puts "error on #{row}" unless c.save
+end
+
+%w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end

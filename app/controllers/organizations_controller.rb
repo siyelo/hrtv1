@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
-  @@shown_columns = [:name, :type]
-  @@create_columns = [:name]
+  @@shown_columns = [:name, :type, :raw_type]
+  @@create_columns = [:name, :type, :raw_type]
   
   record_select :per_page => 20, :search_on => [:name], :order_by => 'name ASC', :full_text_search => true
   

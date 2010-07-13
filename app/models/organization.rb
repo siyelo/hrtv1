@@ -8,8 +8,19 @@ class Organization < ActiveRecord::Base
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
+  has_and_belongs_to_many :locations
 
   def to_s
     name
+  end
+
+  def self.providers_for locations
+    orgs=Organization.find_by_sql( ["
+      SELECT o.id
+      FROM organizations o, locations_organizations l
+      WHERE o.id=l.organization_id
+      AND l.location_id in (?)",
+      locations.collect {|l| l.id} ])
+
   end
 end

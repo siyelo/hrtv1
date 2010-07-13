@@ -22,7 +22,6 @@ class FundingFlowsController < ApplicationController
     [:from, :to ].each do |c|
       config.columns[c].form_ui=:record_select
       config.columns[c].inplace_edit = :ajax
-      config.columns[c].show_blank_record = true
     end
     config.columns[:committment_to].inplace_edit = true
     config.columns[:disbursement_to].inplace_edit = true

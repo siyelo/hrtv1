@@ -56,8 +56,9 @@
 
         #desc
           %h2 Description
-          %p The border-radius mixin is used to give a block element rounded corners. It automatically outputs the correct vendor specific syntax for each browser (e.g. -webkit-border-radius and -moz-border-radius).
-          %a read more
+          %p
+            =yield :page_help
+          // %a read more
           // This is the description generator
           // .page_help
           //   = yield :page_help

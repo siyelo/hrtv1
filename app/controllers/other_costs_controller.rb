@@ -13,7 +13,7 @@ class OtherCostsController < ApplicationController
 
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
-    config.columns[:projects].inplace_edit = :ajax
+    config.columns[:projects].inplace_edit = true
     config.columns[:projects].form_ui = :select
     config.columns[:description].inplace_edit = true
     config.columns[:description].label = "Description (optional)"

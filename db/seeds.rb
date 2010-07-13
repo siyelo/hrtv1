@@ -15,7 +15,7 @@ def seed_model_help_from_yaml doc
     model_help_attribs = h.last
     #TODO replace line below, may cause trouble during deployment
     #     can replace after add rescue below
-    `touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
+    #`touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
     seed_model_and_field_help model_help_attribs
   end
 end
@@ -49,12 +49,12 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   p             = Code.find_by_external_id(row["parent_id"])
   c.parent_id   = p.id unless p.nil?
   c.type        = row["type"].capitalize #this should make STI stop complaining
-  c.description = row["long_display"]
+  c.description = row["description"]
 
   %w[short_display long_display].each do |field|
     c.send "#{field}=", row[field]
   end
-
+  c.long_display = c.description
   unless c.short_display
     c.short_display=row["class"]
   end

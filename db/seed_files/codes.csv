@@ -1,256 +1,452 @@
-"Classifications",,"id","parent_id","class","stratprog","stratobj","type","short_display","char count","long_display","description"
-"1 01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","1","1","","01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","Planning and M&E","Health Promotion","Mtef","DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY",44,"Development and Strengthening of the health sector's institutional capacity",
-"1.1 01  HEALTH POLICIES","101","101","1","01  HEALTH POLICIES","Governance","Health Promotion","Mtef","HEALTH POLICIES",15,,
-"1.1.1 Technical Assistance","10101","10101","101","Technical Assistance","Governance","Health Promotion","Mtef",,0,,
-"1.1.2 Budget Support","10102","10102","101","Budget Support","Governance","Health Promotion","Mtef",,0,,
-"1.2 02  PLANNING","102","102","1","02  PLANNING","Planning and M&E","Health Promotion","Mtef","PLANNING",8,,
-"1.2.1 Technical Assistance","10201","10201","102","Technical Assistance","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.2.2 Budget Support","10202","10202","102","Budget Support","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.3 03  MANAGEMENT OF THE HEALTH SECTOR","103","103","1","03  MANAGEMENT OF THE HEALTH SECTOR","Governance","Health Promotion","Mtef","MANAGEMENT OF THE HEALTH SECTOR",31,,
-"1.3.1 Technical Assistance","10301","10301","103","Technical Assistance","Governance","Health Promotion","Mtef",,0,,
-"1.3.2 Budget Support","10302","10302","103","Budget Support","Governance","Health Promotion","Mtef",,0,,
-"1.4 04  INFORMATION TECHNOLOGY FOR HEALTH","104","104","1","04  INFORMATION TECHNOLOGY FOR HEALTH","Planning and M&E","Health Promotion","Mtef","INFORMATION TECHNOLOGY FOR HEALTH",33,,
-"1.4.1 Technical Assistance","10401","10401","104","Technical Assistance","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.4.2 Budget Support","10402","10402","104","Budget Support","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.5 05  MONITORING AND EVALUATION OF HEALTH ACTIVITIES","105","105","1","05  MONITORING AND EVALUATION OF HEALTH ACTIVITIES","Planning and M&E","Health Promotion","Mtef","MONITORING AND EVALUATION OF HEALTH ACTIVITIES",46,,
-"1.5.1 Technical Assistance","10501","10501","105","Technical Assistance","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.5.2 Budget Support","10502","10502","105","Budget Support","Planning and M&E","Health Promotion","Mtef",,0,,
-"1.6 07  NATIONAL CLINICAL RESEARCH CENTER OF RWANDA( NCCR)","106","106","1","07  NATIONAL CLINICAL RESEARCH CENTER OF RWANDA( NCCR)",,,,"NATIONAL CLINICAL RESEARCH CENTER OF RWANDA( NCCR)",50,,
-"1.7 08  SUPPORT TO HOUSING CREDIT","107","107","1","08  SUPPORT TO HOUSING CREDIT",,,,"SUPPORT TO HOUSING CREDIT",25,,
-"1.8 09  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE","108","108","1","09  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",,,,"FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",48,,
-"2 02  HUMAN RESOURCES FOR HEALTH","2","2","","02  HUMAN RESOURCES FOR HEALTH","Human Resources for Health","Health Promotion","Mtef","HUMAN RESOURCES FOR HEALTH",26,"Increasing the availability and quality of human resources for health",
-"2.1 01  REMUNERATION AND INCENTIVES","201","201","2","01  REMUNERATION AND INCENTIVES","Human Resources for Health","Health Promotion","Mtef","REMUNERATION AND INCENTIVES",27,,
-"2.1.1 Technical Assistance","20101","20101","201","Technical Assistance","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.1.2 Budget Support","20102","20102","201","Budget Support","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.2 02  NURSES AND MIDWIVES","202","202","2","02  NURSES AND MIDWIVES","Human Resources for Health","Health Promotion","Mtef","NURSES AND MIDWIVES",19,,
-"2.2.1 Technical Assistance","20201","20201","202","Technical Assistance","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.2.2 Budget Support","20202","20202","202","Budget Support","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.3 03  NURSING SCHOOLS","203","203","2","03  NURSING SCHOOLS","Human Resources for Health","Health Promotion","Mtef","NURSING SCHOOLS",15,,
-"2.3.1 Technical Assistance","20301","20301","203","Technical Assistance","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.3.2 Budget Support","20302","20302","203","Budget Support","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.4 04  PHARMACY","204","204","2","04  PHARMACY","Human Resources for Health","Health Promotion","Mtef","PHARMACY",8,,
-"2.4.1 Technical Assistance","20401","20401","204","Technical Assistance","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.4.2 Budget Support","20402","20402","204","Budget Support","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.5 05  ENLARGED VACCINATION PROGRAM","205","205","2","05  ENLARGED VACCINATION PROGRAM","Human Resources for Health","Health Promotion","Mtef","ENLARGED VACCINATION PROGRAM",28,,
-"2.5.1 Technical Assistance","20501","20501","205","Technical Assistance","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.5.2 Budget Support","20502","20502","205","Budget Support","Human Resources for Health","Health Promotion","Mtef",,0,,
-"2.6 06  FIGHT AGAINST BLINDNESS AND PHYSICAL HANDICAP","206","206","2","06  FIGHT AGAINST BLINDNESS AND PHYSICAL HANDICAP","Human Resources for Health","Health Promotion","Mtef","FIGHT AGAINST BLINDNESS AND PHYSICAL HANDICAP",45,,
-"2.7 07  MEDICAL INTERNSHIP AND SPECIALIZATION OF HEALTH PERSONNEL","207","207","2","07  MEDICAL INTERNSHIP AND SPECIALIZATION OF HEALTH PERSONNEL","Human Resources for Health","Health Promotion","Mtef","MEDICAL INTERNSHIP AND SPECIALIZATION OF HEALTH PERSONNEL",57,,
-"2.8 08  SUPPORT TO HOUSING CREDIT","208","208","2","08  SUPPORT TO HOUSING CREDIT","Human Resources for Health","Health Promotion","Mtef","SUPPORT TO HOUSING CREDIT",25,,
-"2.9 09  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE","209","209","2","09  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE","Human Resources for Health","Health Promotion","Mtef","FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",48,,
-"3 03  FINANCIAL ACCESSIBILITY TO HEALTH SERVICES","3","3","","03  FINANCIAL ACCESSIBILITY TO HEALTH SERVICES","Health Financing","Health Promotion","Mtef","FINANCIAL ACCESSIBILITY TO HEALTH SERVICES",42,"Ensuring finacial accessibility to health services for all and sustainable and equitable financing of the health sector",
-"3.1 01  ORGANISATION AND REGULATION OF MUTUELLES INSURANCE SYSTEM","301","301","3","01  ORGANISATION AND REGULATION OF MUTUELLES INSURANCE SYSTEM","Health Financing","Health Promotion","Mtef","ORGANISATION AND REGULATION OF MUTUELLES INSURANCE SYSTEM",57,,
-"3.1.1 Technical Assistance","30101","30101","301","Technical Assistance","Health Financing","Health Promotion","Mtef",,0,,
-"3.1.2 Budget Support","30102","30102","301","Budget Support","Health Financing","Health Promotion","Mtef",,0,,
-"3.2 02  SUBSIDISATION OF HEALTH SERVICES","302","302","3","02  SUBSIDISATION OF HEALTH SERVICES","Health Financing","Health Promotion","Mtef","SUBSIDISATION OF HEALTH SERVICES",32,,
-"3.2.1 Technical Assistance","30201","30201","302","Technical Assistance","Health Financing","Health Promotion","Mtef",,0,,
-"3.2.2 Budget Support","30202","30202","302","Budget Support","Health Financing","Health Promotion","Mtef",,0,,
-"3.3 03  HEALTH TRANSPORT","303","303","3","03  HEALTH TRANSPORT","Health Financing","Health Promotion","Mtef","HEALTH TRANSPORT",16,,
-"3.3.1 Technical Assistance","30301","30301","303","Technical Assistance","Health Financing","Health Promotion","Mtef",,0,,
-"3.3.2 Budget Support","30302","30302","303","Budget Support","Health Financing","Health Promotion","Mtef",,0,,
-"3.4 04  DEVELOPMENT OF TELE MEDICINE","304","304","3","04  DEVELOPMENT OF TELE MEDICINE","Health Financing","Health Promotion","Mtef","DEVELOPMENT OF TELE MEDICINE",28,,
-"3.4.1 Technical Assistance","30401","30401","304","Technical Assistance","Health Financing","Health Promotion","Mtef",,0,,
-"3.4.2 Budget Support","30402","30402","304","Budget Support","Health Financing","Health Promotion","Mtef",,0,,
-"4 04  GEOGRAPHIC ACCESSIBILITY TO HEALTH SERVICES","4","4","","04  GEOGRAPHIC ACCESSIBILITY TO HEALTH SERVICES","Infrastructure and Equipment","Health Promotion","Mtef","GEOGRAPHIC ACCESSIBILITY TO HEALTH SERVICES",43,"Ensuring geographic accessibility to health services for all",
-"4.1 01  HEALTH INFRASTRUCTURE","401","401","4","01  HEALTH INFRASTRUCTURE","Infrastructure and Equipment","Health Promotion","Mtef","HEALTH INFRASTRUCTURE",21,,
-"4.2 02  HEALTH EQUIPMENT","402","402","4","02  HEALTH EQUIPMENT","Infrastructure and Equipment","Health Promotion","Mtef","HEALTH EQUIPMENT",16,,
-"4.3 03  HEALTH TRANSPORT","403","403","4","03  HEALTH TRANSPORT","Infrastructure and Equipment","Health Promotion","Mtef","HEALTH TRANSPORT",16,,
-"4.4 04  DEVELOPMENT OF TELE MEDICINE","404","404","4","04  DEVELOPMENT OF TELE MEDICINE","Infrastructure and Equipment","Health Promotion","Mtef","DEVELOPMENT OF TELE MEDICINE",28,,
-"5 05  AVAILABILITY OF DRUGS AND CONSUMABLES","5","5","","05  AVAILABILITY OF DRUGS AND CONSUMABLES","Commodities, Supply and Logistics","Health Promotion","Mtef","AVAILABILITY OF DRUGS AND CONSUMABLES",37,"Ensuring the (universal) availability and rational use at all levels of quality, drugs, vaccines, and consumables",
-"5.1 01  REGULATION OF PHARMACEUTICAL SECTOR","501","501","5","01  REGULATION OF PHARMACEUTICAL SECTOR","Commodities, Supply and Logistics","Health Promotion","Mtef","REGULATION OF PHARMACEUTICAL SECTOR",35,,
-"5.1.1 Technical Assistance","50101","50101","501","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.1.2 Budget Support","50102","50102","501","Budget Support","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.2 02  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF EMERGENCIES","502","502","5","02  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF EMERGENCIES","Commodities, Supply and Logistics","Health Promotion","Mtef","SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF EMERGENCIES",56,,
-"5.2.1 Technical Assistance","50201","50201","502","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.2.2 Budget Support","50202","50202","502","Budget Support","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.3 03  PLANNING, MONITORING AND EVALUATION OF ESSENTIAL DRUG AND CONSUMABLE AVAILABILITY","503","503","5","03  PLANNING, MONITORING AND EVALUATION OF ESSENTIAL DRUG AND CONSUMABLE AVAILABILITY","Commodities, Supply and Logistics","Health Promotion","Mtef","PLANNING, MONITORING AND EVALUATION OF ESSENTIAL DRUG AND CONSUMABLE AVAILABILITY",81,,
-"5.3.1 Technical Assistance","50301","50301","503","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.3.2 Budget Support","50302","50302","503","Budget Support","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.4 04  RESEARCH AND PHARMACEUTICAL INFORMATION","504","504","5","04  RESEARCH AND PHARMACEUTICAL INFORMATION","Commodities, Supply and Logistics","Health Promotion","Mtef","RESEARCH AND PHARMACEUTICAL INFORMATION",39,,
-"5.4.1 Technical Assistance","50401","50401","504","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.4.2 Budget Support","50402","50402","504","Budget Support","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.5 05  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF COMMUNITY HEALTH","505","505","5","05  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF COMMUNITY HEALTH","Commodities, Supply and Logistics","Health Promotion","Mtef","SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF COMMUNITY HEALTH",61,,
-"5.5.1 Technical Assistance","50501","50501","505","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"5.5.2 Budget Support","50502","50502","505","Budget Support","Commodities, Supply and Logistics","Health Promotion","Mtef",,0,,
-"6 06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES","6","6","","06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES",,"Infectious Diseases","Mtef","QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES",58,,
-"6.1 01  FIGHT AGAINST MALARIA","601","601","6","01  FIGHT AGAINST MALARIA",,"Infectious Diseases","Mtef","FIGHT AGAINST MALARIA",21,,
-"6.1.1 HC.1.1 In patient curative care (incl. For severe malaria)","60101","60101","601","HC.1.1 In patient curative care (incl. For severe malaria)",,"Infectious Diseases","Nha","In patient curative care (incl. For severe malaria)",51,,
-"6.1.2 HC.1.3.8 Nets given as part of Outpatient care","60102","60102","601","HC.1.3.8 Nets given as part of Outpatient care",,"Infectious Diseases","Nha","Nets given as part of Outpatient care",37,,
-"6.1.3 HC.1.3.9 ACT as part of OP care","60103","60103","601","HC.1.3.9 ACT as part of OP care",,"Infectious Diseases","Nha","ACT as part of OP care",22,,
-"6.1.4 HC.1.3.10 Other OP care","60104","60104","601","HC.1.3.10 Other OP care",,"Infectious Diseases","Nha","Other OP care",13,,
-"6.1.5 HC.1.3.11 OP care that could not be disaggregated","60105","60105","601","HC.1.3.11 OP care that could not be disaggregated",,"Infectious Diseases","Nha","OP care that could not be disaggregated",39,,
-"6.1.6 HC.1.4 Services of curative home care","60106","60106","601","HC.1.4 Services of curative home care",,"Infectious Diseases","Nha","Services of curative home care",30,,
-"6.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE","602","602","6","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",,"Infectious Diseases","Mtef","FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",48,,
-"6.2.1 3. Persons infected and/or affected by HIV/AIDS have the same opportunities as the the general population  ","60201","60201","602","3. Persons infected and/or affected by HIV/AIDS have the same opportunities as the the general population  ",,"Infectious Diseases","Nsp","Improving opportunities for PABHA",33,,
-"6.2.1.1 3.1 People infected/affect by HIV (including child-headed households) have improved economic opportunities and social protection","6020101","6020101","60201","3.1 People infected/affect by HIV (including child-headed households) have improved economic opportunities and social protection",,"Infectious Diseases","Nsp","Improving economic opportunities for PABHA",42,,
-"6.2.1.1.1 3.1.1.1 Increased skills and education for infected and affected persons (including child household heads)","602010101","602010101","6020101","3.1.1.1 Increased skills and education for infected and affected persons (including child household heads)",,"Infectious Diseases","Nsp","Improving skills and education for PABHA",40,,
-"6.2.1.1.1.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010101","60201010101","602010101","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","NhaNasa","Income-Generating Activities for PABHA",38,,
-"6.2.1.1.2 3.1.1.2 Creation of employment opportunities for infected and affected persons (including child household heads)","602010102","602010102","6020101","3.1.1.2 Creation of employment opportunities for infected and affected persons (including child household heads)",,"Infectious Diseases","Nsp","Employment opportunities for PABHA",34,,
-"6.2.1.1.2.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010201","60201010201","602010102","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","NhaNasa","Income-Generating Activities for PABHA",38,,
-"6.2.1.1.3 3.1.1.3 People infected and/or affected by HIV (including child household heads) have access to credit (individually or collectively)","602010103","602010103","6020101","3.1.1.3 People infected and/or affected by HIV (including child household heads) have access to credit (individually or collectively)",,"Infectious Diseases","Nsp","Improving credit options for PABHA",34,,
-"6.2.1.1.3.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010301","60201010301","602010103","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","NhaNasa","Income-Generating Activities for PABHA",38,,
-"6.2.1.1.4 3.1.1.4 Households of persons infected/affected by HIV/AIDS have food security ","602010104","602010104","6020101","3.1.1.4 Households of persons infected/affected by HIV/AIDS have food security ",,"Infectious Diseases","Nsp","Food security for PABHA",23,,
-"6.2.1.1.4.1 AD.1.1.2   Monetary benefits to PLWHA,widows, and families  6.1 Monetary benefits","60201010401","60201010401","602010104","AD.1.1.2   Monetary benefits to PLWHA,widows, and families  6.1 Monetary benefits",,"Infectious Diseases","NhaNasa","Monetary benefits for PLWHA, widows, and families",49,,
-"6.2.1.1.4.2 AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6.3 Social services","60201010402","60201010402","602010104","AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6.3 Social services",,"Infectious Diseases","NhaNasa","Social support for PLWHA, widows, and families",46,,
-"6.2.2 3.3 Reduction of stigma and discrimination of PLHA and OVC in the community","60202","60202","602","3.3 Reduction of stigma and discrimination of PLHA and OVC in the community",,"Infectious Diseases","Nsp","Reduction of stigma and discrimination of PABHA",47,,
-"6.2.2.1 3.3.1.1. The rights of people infected and/or affected by HIV are assured in legal framework","6020201","6020201","60202","3.3.1.1. The rights of people infected and/or affected by HIV are assured in legal framework",,"Infectious Diseases","Nsp","Legal protection for PABHA",26,,
-"6.2.2.1.1 AD.2 Policy advocacy 7.1 Advocacy and strategic communication","602020101","602020101","6020201","AD.2 Policy advocacy 7.1 Advocacy and strategic communication",,"Infectious Diseases","NhaNasa","Policy Advocacy for PABHA",25,,
-"6.2.2.1.2 AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication","602020102","602020102","6020201","AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication",,"Infectious Diseases","NhaNasa","Legal Services, Empowerment and Organization for PABHA",54,,
-"6.2.2.2 3.3.1.2 PLHA and OVC have access to legal aid services","6020202","6020202","60202","3.3.1.2 PLHA and OVC have access to legal aid services",,"Infectious Diseases","NhaNasa","Access to legal services for PABHA",34,,
-"6.2.2.2.1 AD.4 Empowerment and organization (incl. Legal services)","602020201","602020201","6020202","AD.4 Empowerment and organization (incl. Legal services)",,"Infectious Diseases","NhaNasa","Legal Services, Empowerment and Organization for PABHA",54,,
-"6.2.2.3 3.3.1.3 Increased acceptance of persons infected/ affected in the community","6020203","6020203","60202","3.3.1.3 Increased acceptance of persons infected/ affected in the community",,"Infectious Diseases","Nsp","Increasing acceptance of PABHA in communities",45,,
-"6.2.2.3.1 AD.3 Non-health IEC- social stigma reduction","602020301","602020301","6020203","AD.3 Non-health IEC- social stigma reduction",,"Infectious Diseases","Nha","Increasing acceptance of PABHA in communities",45,,
-"6.2.2.4 3.3.1.4 Increased self-acceptance of people infected and/or affected by HIV","6020204","6020204","60202","3.3.1.4 Increased self-acceptance of people infected and/or affected by HIV",,"Infectious Diseases","Nsp","Increasing self-acceptance of PABHA",35,,
-"6.2.2.4.1 AD.3 Non-health IEC- social stigma reduction","602020401","602020401","6020204","AD.3 Non-health IEC- social stigma reduction",,"Infectious Diseases","Nha","Increasing self-acceptance of PABHA",35,,
-"6.2.3 3.2 Social and economic protection are ensured for orphans and vulnerable children","60203","60203","602","3.2 Social and economic protection are ensured for orphans and vulnerable children",,"Infectious Diseases","Nha","Social and Economic Protection for OVCs related to HIV",54,,
-"6.2.3.1 AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6. Social Protection and Social Services excluding OVC","6020301","6020301","60203","AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6. Social Protection and Social Services excluding OVC",,"Infectious Diseases","NhaNasa","Social and Economic Protection for OVCs related to HIV",54,,
-"6.2.3.2 3.2.1.1. Increased percentage of OVC have minimum package of services","6020302","6020302","60203","3.2.1.1. Increased percentage of OVC have minimum package of services",,"Infectious Diseases","Nsp","Proving OVCs with basic services",32,,
-"6.2.3.2.1 AD.1.2.3 School fees to OVC 3.1 Education to OVCS","602030201","602030201","6020302","AD.1.2.3 School fees to OVC 3.1 Education to OVCS",,"Infectious Diseases","NhaNasa","School Fees/Education for OVCs",30,,
-"6.2.3.2.2 AD.1.2.5 Social support to OVCs not disaggregated 3.2 Basic health care","602030202","602030202","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.2 Basic health care",,"Infectious Diseases","NhaNasa","Basic Health Care for OVCs",26,,
-"6.2.3.2.3 AD.1.2.5 Social support to OVCs not disaggregated 3.3 Family/home support","602030203","602030203","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.3 Family/home support",,"Infectious Diseases","NhaNasa","Family / Home Support for OVCs",30,,
-"6.2.3.2.4 AD.1.2.5 Social support to OVCs not disaggregated 3.4 Community support","602030204","602030204","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.4 Community support",,"Infectious Diseases","NhaNasa","Community Support for OVCs",26,,
-"6.2.3.2.5 AD.1.2.5 Social support to OVCs not disaggregated 3.5 Administrative costs","602030205","602030205","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.5 Administrative costs",,"Infectious Diseases","NhaNasa","Administrative Costs",20,,
-"6.2.3.2.6 AD.1.2.5 Social support to OVCs not disaggregated 3.9 Others / Not-elsewhere classified","602030206","602030206","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.9 Others / Not-elsewhere classified",,"Infectious Diseases","NhaNasa","Other Support for OVCs",22,,
-"6.2.4 2. Morbidity and mortality among people living with HIV reduced Move to Care?","60204","60204","602","2. Morbidity and mortality among people living with HIV reduced Move to Care?",,"Infectious Diseases","Nsp","Treament and Care for PLWHA",27,,
-"6.2.4.1 2.1. People living with HIV systematically receive OI prophylaxis, treatment and other coinfection treatment","6020401","6020401","60204","2.1. People living with HIV systematically receive OI prophylaxis, treatment and other coinfection treatment",,"Infectious Diseases","Nsp","OI Prophylaxis, ART, and other coinfection treatment",52,,
-"6.2.4.1.1 HC.1.1.4   IP care that cannot be disaggregated  2.12 Hospital care","602040101","602040101","6020401","HC.1.1.4   IP care that cannot be disaggregated  2.12 Hospital care",,"Infectious Diseases","NhaNasa",".1.4   IP care that cannot be disaggregated  2.12 Hospital care",63,,
-"6.2.4.1.2 HC.1.1.2   IP OI Treatment   2.13 Opportunistic infection (OI)  treatment","602040102","602040102","6020401","HC.1.1.2   IP OI Treatment   2.13 Opportunistic infection (OI)  treatment",,"Infectious Diseases","NhaNasa","Opportunistic Infection treatment",33,,
-"6.2.4.2 2.2 People living with HIV eligible for ART receive it","6020402","6020402","60204","2.2 People living with HIV eligible for ART receive it",,"Infectious Diseases","Nsp","Anti-Retroviral Therapy",23,,
-"6.2.4.2.1 HC.1.1.1   IP ARV curative care   2.4 Antiretroviral therapy","602040201","602040201","6020402","HC.1.1.1   IP ARV curative care   2.4 Antiretroviral therapy",,"Infectious Diseases","NhaNasa","ART",3,,
-"6.2.4.2.2 2.2.2.1 HIV+ Rwandans are identified in order to initiate treatment","602040202","602040202","6020402","2.2.2.1 HIV+ Rwandans are identified in order to initiate treatment",,"Infectious Diseases","Nsp","2.1 HIV+ Rwandans are identified in order to initiate treatment",63,,
-"6.2.4.2.3 2.2.1.2 Improved HIV exposed infant follow up according to national guidelines","602040203","602040203","6020402","2.2.1.2 Improved HIV exposed infant follow up according to national guidelines",,"Infectious Diseases","Nsp","Exposed infant Collowup",23,,
-"6.2.4.2.4 2.2.1.3 Coverage of facilities offering ART is increased","602040204","602040204","6020402","2.2.1.3 Coverage of facilities offering ART is increased",,"Infectious Diseases","Nsp","Improving Coverage of ART care",30,,
-"6.2.4.2.4.1 HC.6.3.1.8   ART programmes","60204020401","60204020401","602040204","HC.6.3.1.8   ART programmes",,"Infectious Diseases","Nha","ART Care",8,,
-"6.2.4.2.5 2.2.1.4 Quality standards for ART are maintained","602040205","602040205","6020402","2.2.1.4 Quality standards for ART are maintained",,"Infectious Diseases","Nsp","Improving Quality of ART Care",29,,
-"6.2.4.2.5.1 HC.6.3.1.8   ART programmes","60204020501","60204020501","602040205","HC.6.3.1.8   ART programmes",,"Infectious Diseases","Nha","ART Care",8,,
-"6.2.4.3 2.3 People living with HIV receive care and support according to needs","6020403","6020403","60204","2.3 People living with HIV receive care and support according to needs",,"Infectious Diseases","Nsp","People living with HIV receive care and support according to needs",66,,
-"6.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","603","603","6","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,"Infectious Diseases","Mtef","Programs ",9,,
-"6.4 04  FIGHT OTHER ENDEMIC DISEASES","604","604","6","04  FIGHT OTHER ENDEMIC DISEASES",,"Infectious Diseases","Mtef","FIGHT OTHER ENDEMIC DISEASES",28,,
-"6.5 05  FIGHT AGAINST DISEASES OF CHILDREN","605","605","6","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","Mtef","FIGHT AGAINST DISEASES OF CHILDREN",34,,
-"6.6 06  FIGHT AGAINST MALNUTRITION","606","606","6","06  FIGHT AGAINST MALNUTRITION",,"MCH / FP / RH / Nutrition","Mtef","FIGHT AGAINST MALNUTRITION",26,,
-"6.7 07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH","607","607","6","07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",,"Health Promotion","Mtef","PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",45,,
-"6.8 08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","608","608","6","08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,"NCD and Injuries","Mtef","FIGHT AGAINST THE NON COMMUNICABLE DISEASES",43,,
-"6.9 09  FAMILY PLANNING","609","609","6","09  FAMILY PLANNING",,"MCH / FP / RH / Nutrition","Mtef","FAMILY PLANNING",15,,
-"6.9.1 HC.1.3.3.15.1 FP consultation and issuance of ORAL CONTRACEPTIVES","60901","60901","609","HC.1.3.3.15.1 FP consultation and issuance of ORAL CONTRACEPTIVES",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.1 FP consultation and issuance of ORAL CONTRACEPTIVES",61,,
-"6.9.2 HC.1.3.3.15.2 FP consultation and issuance of CONDOMS","60902","60902","609","HC.1.3.3.15.2 FP consultation and issuance of CONDOMS",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.2 FP consultation and issuance of CONDOMS",49,,
-"6.9.3 HC.1.3.3.15.3 FP consultation and issuance of IUD","60903","60903","609","HC.1.3.3.15.3 FP consultation and issuance of IUD",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.3 FP consultation and issuance of IUD",45,,
-"6.9.4 HC.1.3.3.15.4 FP consultation and issuance of IMPLANTS","60904","60904","609","HC.1.3.3.15.4 FP consultation and issuance of IMPLANTS",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.4 FP consultation and issuance of IMPLANTS",50,,
-"6.9.5 HC.1.3.3.15.5 FP consultation and issuance of INJECTABLES","60905","60905","609","HC.1.3.3.15.5 FP consultation and issuance of INJECTABLES",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.5 FP consultation and issuance of INJECTABLES",53,,
-"6.9.6 HC.1.3.3.15.6 Other FP consultations","60906","60906","609","HC.1.3.3.15.6 Other FP consultations",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.6 Other FP consultations",32,,
-"6.9.7 HC.1.3.3.15.7 FP consultations not disaggregated.","60907","60907","609","HC.1.3.3.15.7 FP consultations not disaggregated.",,"MCH / FP / RH / Nutrition","Nha",".3.3.15.7 FP consultations not disaggregated.",45,,
-"6.9.8 HC.1.1.3 FP Methods - Tube ligature","60908","60908","609","HC.1.1.3 FP Methods - Tube ligature",,"MCH / FP / RH / Nutrition","Nha",".1.3 FP Methods - Tube ligature",31,,
-"6.10 10  REPRODUCTIVE HEALTH","6010","6010","6","10  REPRODUCTIVE HEALTH",,"MCH / FP / RH / Nutrition","Mtef","REPRODUCTIVE HEALTH",19,,
-"6.10.1 HC.1.1 Inpatient RH care","601001","601001","6010","HC.1.1 Inpatient RH care",,"MCH / FP / RH / Nutrition","Nha","Inpatient RH Care",17,,
-"6.10.2 HC.1.1.1 Deliveries","601002","601002","6010","HC.1.1.1 Deliveries",,"MCH / FP / RH / Nutrition","Nha","Deliveries",10,,
-"6.10.3 HC.1.1.2 Pathologies related to pregnancy","601003","601003","6010","HC.1.1.2 Pathologies related to pregnancy",,"MCH / FP / RH / Nutrition","Nha","Pathologies related to pregnancy",32,,
-"6.10.4 HC.1.3.3.13 Antenatal care","601004","601004","6010","HC.1.3.3.13 Antenatal care",,"MCH / FP / RH / Nutrition","Nha","Antenatal care",14,,
-"6.10.5 HC.1.3.3.14 Postnatal care","601005","601005","6010","HC.1.3.3.14 Postnatal care",,"MCH / FP / RH / Nutrition","Nha","Postnatal care",14,,
-"6.10.6 HC.1.3.3.16 General gynecological care","601006","601006","6010","HC.1.3.3.16 General gynecological care",,"MCH / FP / RH / Nutrition","Nha","General gynecological care",26,,
-"6.11 11  COMMUNITY HEALTH","6011","6011","6","11  COMMUNITY HEALTH",,"Health Promotion","Mtef","COMMUNITY HEALTH",16,,
-"6.12 12  QUALITY OF HEALTH SERVICES","6012","6012","6","12  QUALITY OF HEALTH SERVICES",,"Health Promotion","Mtef","QUALITY OF HEALTH SERVICES",26,,
-"6.13 13  PERFORMANCE BASED FINANCING HEALTH CENTER (PBF)","6013","6013","6","13  PERFORMANCE BASED FINANCING HEALTH CENTER (PBF)",,"Health Promotion","Mtef","PERFORMANCE BASED FINANCING HEALTH CENTER (PBF)",47,,
-"6.14 14  PERFORMANCE BASED FINANCING DISTRICT HOSPITAL (PBF)","6014","6014","6","14  PERFORMANCE BASED FINANCING DISTRICT HOSPITAL (PBF)",,"Health Promotion","Mtef","PERFORMANCE BASED FINANCING DISTRICT HOSPITAL (PBF)",51,,
-"6.15 15  PERFORMANCE BASED FINANCING REFERER HOSPITAL (PBF)","6015","6015","6","15  PERFORMANCE BASED FINANCING REFERER HOSPITAL (PBF)",,"Health Promotion","Mtef","PERFORMANCE BASED FINANCING REFERER HOSPITAL (PBF)",50,,
-"6.16 16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH","6016","6016","6","16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH",,"Health Promotion","Mtef","INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH",51,,
-"7 07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES","7","7","","07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES",,"Health Promotion","Mtef","DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES",67,"Strengthening specialised services, Narional Referral Hospitals and Research Capabilities",
-"8 08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH","8","8","","08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH",,"Health Promotion","Mtef","REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH",56,,
-"9 09  DISEASES PREVENTION","9","9","","09  DISEASES PREVENTION",,"Infectious Diseases","Mtef","DISEASES PREVENTION",19,"Consolidating, 
-expanding and improving 
-services for the 
-prevention and 
-control of infectious 
-diseases ",
-"9.1 01  FIGHT AGAINST MALARIA","901","901","9","01  FIGHT AGAINST MALARIA",,"Infectious Diseases","Mtef","FIGHT AGAINST MALARIA",21," ",
-"9.1.1 HC.5.2.5.1 Insecticide treated nets (ITNs)","90101","90101","901","HC.5.2.5.1 Insecticide treated nets (ITNs)",,"Infectious Diseases","Nha","Insecticide treated nets (ITNs)",31,,
-"9.1.2 HC.6.3.2.1 Larviciding, elimination of standing water","90102","90102","901","HC.6.3.2.1 Larviciding, elimination of standing water",,"Infectious Diseases","Nha","Larviciding, elimination of standing water",42,,
-"9.1.3 HC.6.3.2.2 Training within public health programmes for malaria","90103","90103","901","HC.6.3.2.2 Training within public health programmes for malaria",,"Infectious Diseases","Nha","Training within public health programmes for malaria",52,,
-"9.1.4 HC.6.3.2.3 IEC (malaria awareness)","90104","90104","901","HC.6.3.2.3 IEC (malaria awareness)",,"Infectious Diseases","Nha","IEC (malaria awareness)",23,,
-"9.1.5 HC.6.3.2.4 Surveillance and monitoring","90105","90105","901","HC.6.3.2.4 Surveillance and monitoring",,"Infectious Diseases","Nha","Surveillance and monitoring",27,,
-"9.1.6 HC.6.3.2.5 ITN Distribution","90106","90106","901","HC.6.3.2.5 ITN Distribution",,"Infectious Diseases","Nha","ITN Distribution",16,,
-"9.1.7 HC.6.3.2.6 Indoor Residual Spraying (IRS) Programs","90107","90107","901","HC.6.3.2.6 Indoor Residual Spraying (IRS) Programs",,"Infectious Diseases","Nha","Indoor Residual Spraying (IRS) Programs",39,,
-"9.1.8 HC.6.3.2.7 malaria programs that could not be disaggregated","90108","90108","901","HC.6.3.2.7 malaria programs that could not be disaggregated",,"Infectious Diseases","Nha","malaria programs that could not be disaggregated",48,,
-"9.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES","902","902","9","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES",,"Infectious Diseases","Mtef","FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES",57,,
-"9.2.1 1.1 Reduced Sexual Transmission of HIV","90201","90201","902","1.1 Reduced Sexual Transmission of HIV",,"Infectious Diseases","Nha","Prevention of Sexual HIV Transmission",37,,
-"9.2.1.1 1.1.1 Reduction of Risky Sexual Intercourse","9020101","9020101","90201","1.1.1 Reduction of Risky Sexual Intercourse",,"Infectious Diseases","Nha","Reduction of Risky Sexual Intercourse",37,,
-"9.2.1.1.1 1.1.1.1 General population reached by comprehensive prevention programs   ","902010101","902010101","9020101","1.1.1.1 General population reached by comprehensive prevention programs   ",,"Infectious Diseases","Nha","General population reached by comprehensive prevention programs   ",66,,
-"9.2.1.1.1.1 HC.6.3.1.1   VCT   1.3 Voluntary counseling and testing","90201010101","90201010101","902010101","HC.6.3.1.1   VCT   1.3 Voluntary counseling and testing",,"Infectious Diseases","NhaNasa","Voluntary Counseling and Testing",32,,
-"9.2.1.1.1.2 HC.6.3.1.4.1   Abstinence/ Be Faithful programmes","90201010102","90201010102","902010101","HC.6.3.1.4.1   Abstinence/ Be Faithful programmes",,"Infectious Diseases","Nha","Abstinence/ Be Faithful programmes",34,,
-"9.2.1.1.1.3 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010103","90201010103","902010101","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","Nha","Other IEC/BCC programmes",24,,
-"9.2.1.1.2 1.1.1.2 Women aged 15-24 are reached by comprehensive prevention programs","902010102","902010102","9020101","1.1.1.2 Women aged 15-24 are reached by comprehensive prevention programs",,"Infectious Diseases","Nsp","Prevention Programs for Young Women",35,,
-"9.2.1.1.2.1 HC.6.3.1.4.1   Abstinence/ Be Faithful programmes","90201010201","90201010201","902010102","HC.6.3.1.4.1   Abstinence/ Be Faithful programmes",,"Infectious Diseases","Nha","Abstinence/ Be Faithful programmes",34,,
-"9.2.1.1.2.2 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010202","90201010202","902010102","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","Nha","Other IEC/BCC programmes",24,,
-"9.2.1.1.3 1.1.1.3 - Female sex workers are reached by comprehensive prevention programs","902010103","902010103","9020101","1.1.1.3 - Female sex workers are reached by comprehensive prevention programs",,"Infectious Diseases","Nsp","Prevention Programs for Female Sex Workers",42,,
-"9.2.1.1.3.1  HC.6.3.1.4.2   Other IEC/BCC programmes   1.8 Programs for sex workers and their clients","90201010301","90201010301","902010103"," HC.6.3.1.4.2   Other IEC/BCC programmes   1.8 Programs for sex workers and their clients",,"Infectious Diseases","NhaNasa","Prevention Programs for Female Sex Workers",42,,
-"9.2.1.1.4 1.1.1.4 Other vulnerable and most at risk populations are reached with comprehensive prevention programmes  ","902010104","902010104","9020101","1.1.1.4 Other vulnerable and most at risk populations are reached with comprehensive prevention programmes  ",,"Infectious Diseases","Nsp","Other Vulnerable Population Programs",36,,
-"9.2.1.1.4.1 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010401","90201010401","902010104","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","Nha","Other IEC/BCC programmes",24,,
-"9.2.1.1.4.1.1 1.6 Youth out of school","9020101040101","9020101040101","90201010401","1.6 Youth out of school",,"Infectious Diseases","Nasa","Prevention Programs for Youth out of School",43,,
-"9.2.1.1.4.1.2 1.9 Programs for MSM","9020101040102","9020101040102","90201010401","1.9 Programs for MSM",,"Infectious Diseases","Nasa","Prevention Programs for MSM",27,,
-"9.2.1.1.4.1.3 1.10 Harm reduction programs for IDUs","9020101040103","9020101040103","90201010401","1.10 Harm reduction programs for IDUs",,"Infectious Diseases","Nasa","Prevention Programs for IDUs",28,,
-"9.2.1.1.4.1.4 1.11 Workplace activities","9020101040104","9020101040104","90201010401","1.11 Workplace activities",,"Infectious Diseases","Nasa","Workplace Prevention Programs",29,,
-"9.2.1.1.4.1.5 1.4 Programs for [other?] vulnerable and special populations","9020101040105","9020101040105","90201010401","1.4 Programs for [other?] vulnerable and special populations",,"Infectious Diseases","Nasa","Prevention Programs for Other Vulnerable Populations",52,,
-"9.2.1.1.5 1.1.1.5 People living with HIV including sero-discordant cohabitating couples are provided with positive prevention services ","902010105","902010105","9020101","1.1.1.5 People living with HIV including sero-discordant cohabitating couples are provided with positive prevention services ",,"Infectious Diseases","Nsp","1.5 People living with HIV including sero-discordant cohabitating couples are provided with positive prevention services ",121,,
-"9.2.1.1.5.1  HC.6.3.1.12   Other public health programs (including OI , psychosocial support) 1.7 Prevention programs for PLHA ","90201010501","90201010501","902010105"," HC.6.3.1.12   Other public health programs (including OI , psychosocial support) 1.7 Prevention programs for PLHA ",,"Infectious Diseases","NhaNasa","6.3.1.12   Other public health programs (including OI , psychosocial support) 1.7 Prevention programs for PLHA ",111,,
-"9.2.1.1.6 1.1.1.6 HIV infections resulting from sexual or gender-base violence are prevented  programs (including OI , psychosocial support)","902010106","902010106","9020101","1.1.1.6 HIV infections resulting from sexual or gender-base violence are prevented  programs (including OI , psychosocial support)",,"Infectious Diseases","Nsp","1.6 HIV infections resulting from sexual or gender-base violence are prevented  programs (including OI , psychosocial support)",126,,
-"9.2.1.1.6.1 HC.6.3.1.12   Other public health","90201010601","90201010601","902010106","HC.6.3.1.12   Other public health",,"Infectious Diseases","Nha",".3.1.12   Other public health",29,,
-"9.2.1.1.7 1.1.1.7 Male and female condoms are available and accessible for all populations programmes  ","902010107","902010107","9020101","1.1.1.7 Male and female condoms are available and accessible for all populations programmes  ",,"Infectious Diseases","Nsp","1.7 Male and female condoms are available and accessible for all populations programmes  ",89,,
-"9.2.1.1.7.1 HC.6.3.1.7   Condom distribution","90201010701","90201010701","902010107","HC.6.3.1.7   Condom distribution",,"Infectious Diseases","Nha",".3.1.7   Condom distribution",28,,
-"9.2.1.1.7.1.1 1.14 Female condom","9020101070101","9020101070101","90201010701","1.14 Female condom",,"Infectious Diseases","Nasa"," Female condom",14,,
-"9.2.1.1.7.1.2 1.13 Public and commercial sector condom provision","9020101070102","9020101070102","90201010701","1.13 Public and commercial sector condom provision",,"Infectious Diseases","Nasa"," Public and commercial sector condom provision",46,,
-"9.2.1.1.7.1.3 1.12 Condom social marketing","9020101070103","9020101070103","90201010701","1.12 Condom social marketing",,"Infectious Diseases","Nasa"," Condom social marketing",24,,
-"9.2.1.2 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.15 Microbicides","9020102","9020102","90201","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.15 Microbicides",,"Infectious Diseases","NhaNasa",".3.1.12   Other public health programs (including OI , psychosocial support)  1.15 Microbicides",95,,
-"9.2.1.3 1.1.2 Increased prevalence of male circumcision","9020103","9020103","90201","1.1.2 Increased prevalence of male circumcision",,"Infectious Diseases","Nsp","2 Increased prevalence of male circumcision",43,,
-"9.2.1.3.1 1.1.2.1 Newborn boys, adolescents and adults have increased access to circumcision ","902010301","902010301","9020103","1.1.2.1 Newborn boys, adolescents and adults have increased access to circumcision ",,"Infectious Diseases","Nsp","2.1 Newborn boys, adolescents and adults have increased access to circumcision ",79,,
-"9.2.1.3.1.1 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.21 Male Circumcision","90201030101","90201030101","902010301","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.21 Male Circumcision",,"Infectious Diseases","NhaNasa",".3.1.12   Other public health programs (including OI , psychosocial support)  1.21 Male Circumcision",100,,
-"9.2.1.4 1.1.3 Increased quality treatment of STIs","9020104","9020104","90201","1.1.3 Increased quality treatment of STIs",,"Infectious Diseases","Nsp","3 Increased quality treatment of STIs",37,,
-"9.2.1.4.1 1.1.3.1 Increased Awareness of STI symptoms and demand for STI treatment","902010401","902010401","9020104","1.1.3.1 Increased Awareness of STI symptoms and demand for STI treatment",,"Infectious Diseases","Nsp","3.1 Increased Awareness of STI symptoms and demand for STI treatment",68,,
-"9.2.1.4.1.1 HC.6.3.1.5   STI prevention programmes  1.16 Improving management of STIs","90201040101","90201040101","902010401","HC.6.3.1.5   STI prevention programmes  1.16 Improving management of STIs",,"Infectious Diseases","NhaNasa",".3.1.5   STI prevention programmes  1.16 Improving management of STIs",69,,
-"9.2.1.4.2 1.1.3.2 Increased availability and accessibility of high quality STI treatment   ","902010402","902010402","9020104","1.1.3.2 Increased availability and accessibility of high quality STI treatment   ",,"Infectious Diseases","Nsp","3.2 Increased availability and accessibility of high quality STI treatment   ",77,,
-"9.2.1.4.2.1 HC.6.3.1.5   STI prevention programmes  1.16 Improving management of STIs","90201040201","90201040201","902010402","HC.6.3.1.5   STI prevention programmes  1.16 Improving management of STIs",,"Infectious Diseases","NhaNasa",".3.1.5   STI prevention programmes  1.16 Improving management of STIs",69,,
-"9.2.2 HC.6.3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified","90202","90202","902","HC.6.3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified",,"Infectious Diseases","NhaNasa",".3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified",92,,
-"9.2.3 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.22 Universal precautions","90203","90203","902","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.22 Universal precautions",,"Infectious Diseases","NhaNasa",".3.1.12   Other public health programs (including OI , psychosocial support)  1.22 Universal precautions",104,,
-"9.2.4 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.19 Post-exposure prophylaxis","90204","90204","902","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.19 Post-exposure prophylaxis",,"Infectious Diseases","NhaNasa",".3.1.12   Other public health programs (including OI , psychosocial support)  1.19 Post-exposure prophylaxis",108,,
-"9.2.5 HC.6.3.1.9   Surveillance","90205","90205","902","HC.6.3.1.9   Surveillance",,"Infectious Diseases","Nha",".3.1.9   Surveillance",21,,
-"9.2.6 HC.6.3.1.11   Training for HIV/AIDS programmes","90206","90206","902","HC.6.3.1.11   Training for HIV/AIDS programmes",,"Infectious Diseases","Nha",".3.1.11   Training for HIV/AIDS programmes",42,,
-"9.2.7 1.2 Reduced mother to child transmission of HIV","90207","90207","902","1.2 Reduced mother to child transmission of HIV",,"Infectious Diseases","Nsp","Reduced mother to child transmission of HIV",43,,
-"9.2.7.1 1.2.1 Transmission of HIV during pregnancy, childbirth, and breastfeeding is reduced   ","9020701","9020701","90207","1.2.1 Transmission of HIV during pregnancy, childbirth, and breastfeeding is reduced   ",,"Infectious Diseases","Nsp","1 Transmission of HIV during pregnancy, childbirth, and breastfeeding is reduced   ",83,,
-"9.2.7.1.1 1.2.1.1 Increased availability and accessibility of PMTCT services","902070101","902070101","9020701","1.2.1.1 Increased availability and accessibility of PMTCT services",,"Infectious Diseases","Nsp","1.1 Increased availability and accessibility of PMTCT services",62,,
-"9.2.7.1.1.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207010101","90207010101","902070101","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","NhaNasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
-"9.2.7.1.2 1.2.1.2 All HIV positive pregnant women completed the full PMTCT program","902070102","902070102","9020701","1.2.1.2 All HIV positive pregnant women completed the full PMTCT program",,"Infectious Diseases","Nsp","1.2 All HIV positive pregnant women completed the full PMTCT program",68,,
-"9.2.7.1.2.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207010201","90207010201","902070102","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","NhaNasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
-"9.2.7.2 1.2.2. HIV positive women are empowered to take informed reproductive health decisions","9020702","9020702","90207","1.2.2. HIV positive women are empowered to take informed reproductive health decisions",,"Infectious Diseases","Nsp","2. HIV positive women are empowered to take informed reproductive health decisions",82,,
-"9.2.7.2.1 1.2.2.1 HIV positive women have access to family planning","902070201","902070201","9020702","1.2.2.1 HIV positive women have access to family planning",,"Infectious Diseases","Nsp","2.1 HIV positive women have access to family planning",53,,
-"9.2.7.2.1.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207020101","90207020101","902070201","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","NhaNasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
-"9.2.8 1.3 Maintenance of low levels of blood-borne transmission of HIV","90208","90208","902","1.3 Maintenance of low levels of blood-borne transmission of HIV",,"Infectious Diseases","Nsp","Maintenance of low levels of blood-borne transmission of HIV",60,,
-"9.2.8.1 1.3.1.1 Blood borne HIV transmission in clinical environments is reduced","9020801","9020801","90208","1.3.1.1 Blood borne HIV transmission in clinical environments is reduced",,"Infectious Diseases","Nsp","1.1 Blood borne HIV transmission in clinical environments is reduced",68,,
-"9.2.8.1.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080101","902080101","9020801","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","NhaNasa",".3.1.2.1   Blood Safety  1.18 Blood safety",42,,
-"9.2.8.1.2 HC.6.3.1.10   Injection Safety  1.20 Safe medical injections","902080102","902080102","9020801","HC.6.3.1.10   Injection Safety  1.20 Safe medical injections",,"Infectious Diseases","NhaNasa",".3.1.10   Injection Safety  1.20 Safe medical injections",56,,
-"9.2.8.2 1.3.1.2 All blood donated for transfusion is screened for HIV","9020802","9020802","90208","1.3.1.2 All blood donated for transfusion is screened for HIV",,"Infectious Diseases","Nsp","1.2 All blood donated for transfusion is screened for HIV",57,,
-"9.2.8.2.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080201","902080201","9020802","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","NhaNasa",".3.1.2.1   Blood Safety  1.18 Blood safety",42,,
-"9.2.8.3 1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced","9020803","9020803","90208","1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced",,"Infectious Diseases","Nsp","1.3 Blood-borne HIV transmission outside clinical environments is reduced",73,,
-"9.2.8.3.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080301","902080301","9020803","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","NhaNasa",".3.1.2.1   Blood Safety  1.18 Blood safety",42,,
-"9.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","903","903","9","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,"Infectious Diseases","Mtef","FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",39,,
-"9.4 04  FIGHT AGAINST ENDEMIC DISEASES","904","904","9","04  FIGHT AGAINST ENDEMIC DISEASES",,"Infectious Diseases","Mtef","FIGHT AGAINST ENDEMIC DISEASES",30,,
-"9.5 05  FIGHT AGAINST DISEASES OF CHILDREN","905","905","9","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","Mtef","FIGHT AGAINST DISEASES OF CHILDREN",34,,
-"9.5.1 HC.6.1.3 CH Programs","90501","90501","905","HC.6.1.3 CH Programs",,"MCH / FP / RH / Nutrition","Nha",".1.3 CH Programs",16,,
-"9.5.2 HC.6.1.3.1 HIV Programs for CH","90502","90502","905","HC.6.1.3.1 HIV Programs for CH",,"MCH / FP / RH / Nutrition","Nha",".1.3.1 HIV Programs for CH",26,,
-"9.5.3 HC.6.1.3.2 Malaria Programs for CH","90503","90503","905","HC.6.1.3.2 Malaria Programs for CH",,"MCH / FP / RH / Nutrition","Nha",".1.3.2 Malaria Programs for CH",30,,
-"9.5.4 HC.6.1.3.3 Immunization Programs for CH","90504","90504","905","HC.6.1.3.3 Immunization Programs for CH",,"MCH / FP / RH / Nutrition","Nha",".1.3.3 Immunization Programs for CH",35,,
-"9.5.5 HC.6.1.3.5 Other Programs for CH","90505","90505","905","HC.6.1.3.5 Other Programs for CH",,"MCH / FP / RH / Nutrition","Nha",".1.3.5 Other Programs for CH",28,,
-"9.6 06  FIGHT AGAINST MALNUTRITION","906","906","9","06  FIGHT AGAINST MALNUTRITION",,"MCH / FP / RH / Nutrition","Mtef","FIGHT AGAINST MALNUTRITION",26,,
-"9.6.1 HC.6.1.3.4 Nutrition Programs for CH","90601","90601","906","HC.6.1.3.4 Nutrition Programs for CH",,"MCH / FP / RH / Nutrition","Nha",".1.3.4 Nutrition Programs for CH",32,,
-"9.6.2 HCR.4.1 Other Nutrition Programs","90602","90602","906","HCR.4.1 Other Nutrition Programs",,"MCH / FP / RH / Nutrition","Nha","4.1 Other Nutrition Programs",28,,
-"9.7 07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH","907","907","9","07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",,"Health Promotion","Mtef","PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",45,,
-"9.8 08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","908","908","9","08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,"NCD and Injuries","Mtef","FIGHT AGAINST THE NON COMMUNICABLE DISEASES",43,,
-"10 10  DIAGNOSTIC AND TREATMENT OF DISEASES","10","10","","10  DIAGNOSTIC AND TREATMENT OF DISEASES",,,,,,,
-"10.1 01  FIGHT AGAINST MALARIA","1001","1001","10","01  FIGHT AGAINST MALARIA",,,,,,,
-"10.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES","1002","1002","10","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES",,,,,,,
-"10.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","1003","1003","10","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,,,,,,
-"10.4 05  FIGHT AGAINST DISEASES OF CHILDREN","1004","1004","10","05  FIGHT AGAINST DISEASES OF CHILDREN",,,,,,,
-"10.5 06  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","1005","1005","10","06  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,,,,,,
-"10.6 07  SPECIALIZED HEALTH SERVICES","1006","1006","10","07  SPECIALIZED HEALTH SERVICES",,,,,,,
-"10.7 08  SUPERVISION OF DISTRICT HOSPITAL","1007","1007","10","08  SUPERVISION OF DISTRICT HOSPITAL",,,,,,,
-"11 11  HIGH EDUCATION","11","11","","11  HIGH EDUCATION",,,"Mtef",,,,
-"11.1 54   RWANDA BIO-MEDICAL CENTER","1101","1101","11","54   RWANDA BIO-MEDICAL CENTER",,,"Mtef",,,,
-"11.1.1 01  MANAGEMENT SUPPORT","110101","110101","1101","01  MANAGEMENT SUPPORT",,,"Mtef",,,,
-"11.1.2 02  LABORATORY EQUIPMENT","110102","110102","1101","02  LABORATORY EQUIPMENT",,,"Mtef",,,,
-"11.1.3 03  CONSTRUCTION AND EQUIPMENTS","110103","110103","1101","03  CONSTRUCTION AND EQUIPMENTS",,,"Mtef",,,,
+"Classifications",,"id","parent_id","class","stratprog","stratobj","type","short_display","char count"," long_display"," description"
+"1 01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","1","1","","01  DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY","Planning and M&E","Health Promotion","mtef","Development Of Sector Institutional Capacity",44,,"Development and Strengthening of the health sector's institutional capacity"
+"1.1 01  HEALTH POLICIES","101","101","1","01  HEALTH POLICIES","Governance","Health Promotion","mtef","Health Policies",15,,"Designing, publishing, and disseminating policies, strategies laws, and regulations in the field of health"
+"1.1.1 Technical Assistance","10101","10101","101","Technical Assistance","Governance","Health Promotion","mtef","Technical Assistance",20,,
+"1.1.2 Budget Support","10102","10102","101","Budget Support","Governance","Health Promotion","mtef","Budget Support",14,,
+"1.2 02  PLANNING","102","102","1","02  PLANNING","Planning and M&E","Health Promotion","mtef","Planning",8,,"Ensuring all institutions have a strategic annual action plan, regularly prepare budgets.  Includes the support of professional organizations and institutions"
+"1.2.1 Technical Assistance","10201","10201","102","Technical Assistance","Planning and M&E","Health Promotion","mtef","Technical Assistance",20,,
+"1.2.2 Budget Support","10202","10202","102","Budget Support","Planning and M&E","Health Promotion","mtef","Budget Support",14,,
+"1.3 03  MANAGEMENT OF THE HEALTH SECTOR","103","103","1","03  MANAGEMENT OF THE HEALTH SECTOR","Governance","Health Promotion","mtef","Management Of The Health Sector",31,,"Management of the Health Sector is improved through developing and publishing management procedures, ensuring proper supervision and management of health sector staff, as well as budgets and activiites"
+"1.3.1 Technical Assistance","10301","10301","103","Technical Assistance","Governance","Health Promotion","mtef","Technical Assistance",20,,
+"1.3.2 Budget Support","10302","10302","103","Budget Support","Governance","Health Promotion","mtef","Budget Support",14,,
+"1.4 04  INFORMATION TECHNOLOGY FOR HEALTH","104","104","1","04  INFORMATION TECHNOLOGY FOR HEALTH","Planning and M&E","Health Promotion","mtef","Information Technology For Health",33,,"Developing and implementing policies, procedures, norms and standards in the  health sector for information communication technology (ICT)"
+"1.4.1 Technical Assistance","10401","10401","104","Technical Assistance","Planning and M&E","Health Promotion","mtef","Technical Assistance",20,,
+"1.4.2 Budget Support","10402","10402","104","Budget Support","Planning and M&E","Health Promotion","mtef","Budget Support",14,,
+"1.5 05  MONITORING AND EVALUATION OF HEALTH ACTIVITIES","105","105","1","05  MONITORING AND EVALUATION OF HEALTH ACTIVITIES","Planning and M&E","Health Promotion","mtef","Monitoring And Evaluation Of Health Activities",46,,"M&E relating to ensuring use of EDPRS, MTEF, PER, and National Strategic plans. Includes Development of Health Information Systems (HIS) and ensuring access to these systems at decentralized levels. Ensuring annual evaluation of development partner activities."
+"1.5.1 Technical Assistance","10501","10501","105","Technical Assistance","Planning and M&E","Health Promotion","mtef","Technical Assistance",20,,
+"1.5.2 Budget Support","10502","10502","105","Budget Support","Planning and M&E","Health Promotion","mtef","Budget Support",14,,
+"1.6 07  NATIONAL CLINICAL RESEARCH CENTER OF RWANDA( NCCR)","106","106","1","07  NATIONAL CLINICAL RESEARCH CENTER OF RWANDA( NCCR)",,,"code","National Clinical Research Center Of Rwanda( Nccr)",50,,"Supporting the operations of NCCR"
+"2 02  HUMAN RESOURCES FOR HEALTH","2","2","","02  HUMAN RESOURCES FOR HEALTH","Human Resources for Health","Health Promotion","mtef","Human Resources For Health",26,,"Increasing the availability and quality of human resources for health"
+"2.1 01  REMUNERATION AND INCENTIVES","201","201","2","01  REMUNERATION AND INCENTIVES","Human Resources for Health","Health Promotion","mtef","Remuneration And Incentives",27,,"Renumeration, allowances, and incentives for health sector staff. Also includes support for policies ensuring regularization of wages"
+"2.1.1 Technical Assistance","20101","20101","201","Technical Assistance","Human Resources for Health","Health Promotion","mtef","Technical Assistance",20,,
+"2.1.2 Budget Support","20102","20102","201","Budget Support","Human Resources for Health","Health Promotion","mtef","Budget Support",14,,
+"2.2 02  NURSES AND MIDWIVES","202","202","2","02  NURSES AND MIDWIVES","Human Resources for Health","Health Promotion","mtef","Nurses And Midwives",19,,"Renumeration, allowances, and incentives for nursing staff. Includes support for policies ensuring regularization of wages for nursing staff"
+"2.2.1 Technical Assistance","20201","20201","202","Technical Assistance","Human Resources for Health","Health Promotion","mtef","Technical Assistance",20,,
+"2.2.2 Budget Support","20202","20202","202","Budget Support","Human Resources for Health","Health Promotion","mtef","Budget Support",14,,
+"2.3 03  NURSING SCHOOLS","203","203","2","03  NURSING SCHOOLS","Human Resources for Health","Health Promotion","mtef","Nursing Schools",15,,"Reinforcement of capcity of schools of nursing science, including grants and support of the 5 ESI"
+"2.3.1 Technical Assistance","20301","20301","203","Technical Assistance","Human Resources for Health","Health Promotion","mtef","Technical Assistance",20,,
+"2.3.2 Budget Support","20302","20302","203","Budget Support","Human Resources for Health","Health Promotion","mtef","Budget Support",14,,
+"2.4 04  PHARMACY","204","204","2","04  PHARMACY","Human Resources for Health","Health Promotion","mtef","Pharmacy",8,,"Renumeration, allowances, and incentives for pharmacy staff. Includes support for policies ensuring regularization of wages for pharmacy staff"
+"2.4.1 Technical Assistance","20401","20401","204","Technical Assistance","Human Resources for Health","Health Promotion","mtef","Technical Assistance",20,,
+"2.4.2 Budget Support","20402","20402","204","Budget Support","Human Resources for Health","Health Promotion","mtef","Budget Support",14,,
+"2.5 05  ENLARGED VACCINATION PROGRAM","205","205","2","05  ENLARGED VACCINATION PROGRAM","Human Resources for Health","Health Promotion","mtef","Enlarged Vaccination Program",28,,"Renumeration, allowances, and incentives for PEV staff. Includes support for policies ensuring regularization of wages for PEV staff"
+"2.5.1 Technical Assistance","20501","20501","205","Technical Assistance","Human Resources for Health","Health Promotion","mtef","Technical Assistance",20,,
+"2.5.2 Budget Support","20502","20502","205","Budget Support","Human Resources for Health","Health Promotion","mtef","Budget Support",14,,
+"2.6 06  FIGHT AGAINST BLINDNESS AND PHYSICAL HANDICAP","206","206","2","06  FIGHT AGAINST BLINDNESS AND PHYSICAL HANDICAP","Human Resources for Health","Health Promotion","mtef","Fight Against Blindness And Physical Handicap",45,,"Renumeration, allowances, and incentives for Blindness task force staff. Includes support for policies ensuring regularization of wages for PEV staff, and ensuring timely payment of wages"
+"2.7 07  MEDICAL INTERNSHIP AND SPECIALIZATION OF HEALTH PERSONNEL","207","207","2","07  MEDICAL INTERNSHIP AND SPECIALIZATION OF HEALTH PERSONNEL","Human Resources for Health","Health Promotion","mtef","Medical Internship And Specialization Of Health Personnel",57,,"Renumeration and incentives for physicians in training courses and for post-graduates to augment the number and quality of trained health sector staff"
+"2.8 08  SUPPORT TO HOUSING CREDIT","208","208","2","08  SUPPORT TO HOUSING CREDIT","Human Resources for Health","Health Promotion","mtef","Support To Housing Credit",25,,"Support for physicians using the housing credit"
+"3 03  FINANCIAL ACCESSIBILITY TO HEALTH SERVICES","3","3","","03  FINANCIAL ACCESSIBILITY TO HEALTH SERVICES","Health Financing","Health Promotion","mtef","Financial Accessibility To Health Services",42,,"Ensuring financial accessibility to health services for all and sustainable and equitable financing of the health sector (including mutuelles and other support systems)"
+"3.1 01  ORGANISATION AND REGULATION OF MUTUELLES INSURANCE SYSTEM","301","301","3","01  ORGANISATION AND REGULATION OF MUTUELLES INSURANCE SYSTEM","Health Financing","Health Promotion","mtef","Organisation And Regulation Of Mutuelles Insurance System",57,,"Ensuring that mutuelles have a functional system for national mobility, strong management support, and that participants have access to quality care"
+"3.1.1 Technical Assistance","30101","30101","301","Technical Assistance","Health Financing","Health Promotion","mtef","Technical Assistance",20,,
+"3.1.2 Budget Support","30102","30102","301","Budget Support","Health Financing","Health Promotion","mtef","Budget Support",14,,
+"3.2 02  SUBSIDISATION OF HEALTH SERVICES","302","302","3","02  SUBSIDISATION OF HEALTH SERVICES","Health Financing","Health Promotion","mtef","Subsidisation Of Health Services",32,,"Ensuring that the poor are supported in adhering to mutuelles, and that the financial security system and access to hospital care is guaranteed through the national solidarity fund"
+"3.2.1 Technical Assistance","30201","30201","302","Technical Assistance","Health Financing","Health Promotion","mtef","Technical Assistance",20,,
+"3.2.2 Budget Support","30202","30202","302","Budget Support","Health Financing","Health Promotion","mtef","Budget Support",14,,
+"3.3 03  HEALTH TRANSPORT","303","303","3","03  HEALTH TRANSPORT","Health Financing","Health Promotion","mtef","Health Transport",16,,
+"3.3.1 Technical Assistance","30301","30301","303","Technical Assistance","Health Financing","Health Promotion","mtef","Technical Assistance",20,,
+"3.3.2 Budget Support","30302","30302","303","Budget Support","Health Financing","Health Promotion","mtef","Budget Support",14,,
+"3.4 04  DEVELOPMENT OF TELE MEDICINE","304","304","3","04  DEVELOPMENT OF TELE MEDICINE","Health Financing","Health Promotion","mtef","Development Of Tele Medicine",28,,
+"3.4.1 Technical Assistance","30401","30401","304","Technical Assistance","Health Financing","Health Promotion","mtef","Technical Assistance",20,,
+"3.4.2 Budget Support","30402","30402","304","Budget Support","Health Financing","Health Promotion","mtef","Budget Support",14,,
+"4 04  GEOGRAPHIC ACCESSIBILITY TO HEALTH SERVICES","4","4","","04  GEOGRAPHIC ACCESSIBILITY TO HEALTH SERVICES","Infrastructure and Equipment","Health Promotion","mtef","Geographic Accessibility To Health Services",43,,"Ensuring geographic accessibility to health services for all"
+"4.1 01  HEALTH INFRASTRUCTURE","401","401","4","01  HEALTH INFRASTRUCTURE","Infrastructure and Equipment","Health Promotion","mtef","Health Infrastructure",21,,"Rehabilitation, extension, and construction of health facilities"
+"4.2 02  HEALTH EQUIPMENT","402","402","4","02  HEALTH EQUIPMENT","Infrastructure and Equipment","Health Promotion","mtef","Health Equipment",16,,"Purchase and maintenance of specialised health equipment. Also includes supervision and training for staff involved in using equipment"
+"4.3 03  HEALTH TRANSPORT","403","403","4","03  HEALTH TRANSPORT","Infrastructure and Equipment","Health Promotion","mtef","Health Transport",16,,"Ensure proper functioning of ambulance service, maintenance of SAMU facilities and equipment"
+"4.4 04  DEVELOPMENT OF TELE MEDICINE","404","404","4","04  DEVELOPMENT OF TELE MEDICINE","Infrastructure and Equipment","Health Promotion","mtef","Development Of Tele Medicine",28,,"Implementing and developing systems for tele-medecine and distance learning"
+"5 05  AVAILABILITY OF DRUGS AND CONSUMABLES","5","5","","05  AVAILABILITY OF DRUGS AND CONSUMABLES","Commodities, Supply and Logistics","Health Promotion","mtef","Availability Of Drugs And Consumables",37,,"Ensuring the (universal) availability and rational use at all levels of quality, drugs, vaccines, and consumables"
+"5.1 01  REGULATION OF PHARMACEUTICAL SECTOR","501","501","5","01  REGULATION OF PHARMACEUTICAL SECTOR","Commodities, Supply and Logistics","Health Promotion","mtef","Regulation Of Pharmaceutical Sector",35,,"Establishing an independent task force pharmacy, sensitizing the populations to the harm of self-medication"
+"5.1.1 Technical Assistance","50101","50101","501","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","mtef","Technical Assistance",20,,
+"5.1.2 Budget Support","50102","50102","501","Budget Support","Commodities, Supply and Logistics","Health Promotion","mtef","Budget Support",14,,
+"5.2 02  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF EMERGENCIES","502","502","5","02  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF EMERGENCIES","Commodities, Supply and Logistics","Health Promotion","mtef","Supply Of Essential Drugs And Consumables Of Emergencies",56,,"Increasing the quality and quantity of essential medical supplies, including blood products"
+"5.2.1 Technical Assistance","50201","50201","502","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","mtef","Technical Assistance",20,,
+"5.2.2 Budget Support","50202","50202","502","Budget Support","Commodities, Supply and Logistics","Health Promotion","mtef","Budget Support",14,,
+"5.3 03  PLANNING, MONITORING AND EVALUATION OF ESSENTIAL DRUG AND CONSUMABLE AVAILABILITY","503","503","5","03  PLANNING, MONITORING AND EVALUATION OF ESSENTIAL DRUG AND CONSUMABLE AVAILABILITY","Commodities, Supply and Logistics","Health Promotion","mtef","Planning, Monitoring And Evaluation Of Essential Drug And Consumable Availability",81,,"Supervision and implementation of a system of pharmacovigilance.  Includes regular inspection of pharmacies and drugs."
+"5.3.1 Technical Assistance","50301","50301","503","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","mtef","Technical Assistance",20,,
+"5.3.2 Budget Support","50302","50302","503","Budget Support","Commodities, Supply and Logistics","Health Promotion","mtef","Budget Support",14,,
+"5.4 04  RESEARCH AND PHARMACEUTICAL INFORMATION","504","504","5","04  RESEARCH AND PHARMACEUTICAL INFORMATION","Commodities, Supply and Logistics","Health Promotion","mtef","Research And Pharmaceutical Information",39,,"Research into pharmaceuticals in use is conducted and information is made available to stakeholders"
+"5.4.1 Technical Assistance","50401","50401","504","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","mtef","Technical Assistance",20,,
+"5.4.2 Budget Support","50402","50402","504","Budget Support","Commodities, Supply and Logistics","Health Promotion","mtef","Budget Support",14,,
+"5.5 05  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF COMMUNITY HEALTH","505","505","5","05  SUPPLY OF ESSENTIAL DRUGS AND CONSUMABLES OF COMMUNITY HEALTH","Commodities, Supply and Logistics","Health Promotion","mtef","Supply Of Essential Drugs And Consumables Of Community Health",61,,"Drugs and other supplies are made available for use by the health community"
+"5.5.1 Technical Assistance","50501","50501","505","Technical Assistance","Commodities, Supply and Logistics","Health Promotion","mtef","Technical Assistance",20,,
+"5.5.2 Budget Support","50502","50502","505","Budget Support","Commodities, Supply and Logistics","Health Promotion","mtef","Budget Support",14,,
+"6 06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES","6","6","","06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES",,"Infectious Diseases","mtef","Quality And Demand For Services In The Control Of Diseases",58,,"All spending to control or treat diseases, excluding prevention. Includes research and training."
+"6.1 01  FIGHT AGAINST MALARIA","601","601","6","01  FIGHT AGAINST MALARIA",,"Infectious Diseases","mtef","Fight Against Malaria",21,,"Spending for the primary purpose of :
+Managing malaria cases (parasitologically confirmed, clinically diagnosed or unconfirmed acute febrile cases)
+Providing support to malaria treatment activities
+"
+"6.1.1 HC.1.1 In patient curative care (incl. For severe malaria)","60101","60101","601","HC.1.1 In patient curative care (incl. For severe malaria)",,"Infectious Diseases","nha","In patient curative care (incl. For severe malaria)",51,,"Inpatient (overnight) care resulting from:
+• presumptive treatment for fever (drugs and consultation)
+• clinical treatment for malaria (consultation, diagnostic test, and drugs)
+• treatment of conditions other than fever such as severe anemia accompanying malaria
+• case management of severe malaria – cerebral malaria
+• case management of malaria accompanied by other infections such as typhoid and /or salmonella
+• continuing treatment required by sequelae to cerebral malaria (e.g. neurological damage including
+epilepsy and seizures)
+"
+"6.1.2 HC.1.3.8 Nets given as part of Outpatient care","60102","60102","601","HC.1.3.8 Nets given as part of Outpatient care",,"Infectious Diseases","nha","Nets Given as Part of Outpatient Care",37,,"Excludes: Nets sold at pharmacies, distributed as part of prevention programmes (see: Prevention)"
+"6.1.3 HC.1.3.9 ACT as part of OP care","60103","60103","601","HC.1.3.9 ACT as part of OP care",,"Infectious Diseases","nha","ACT as Part of Outpatient Care",30,,"Regimens using ACT (e.g. artesunate, artemether, dihydroartemisinin, plus other drugs such as quinoline or
+antifolate based)
+"
+"6.1.4 HC.1.3.10 Other OP care","60104","60104","601","HC.1.3.10 Other OP care",,"Infectious Diseases","nha","Other Outpatient Care",21,,"Other regimens including:
+- Quinoline compounds (e.g. quinine, Chloroquine, amodiaquine, mefloquine, primaquine) 
+- Antifolate drugs (e.g. sulfonamides, pyrimethamine (SP), proguanil, chlorproguanil) 
+- Artesunate suppositories "
+"6.1.5 HC.1.3.11 OP care that could not be disaggregated","60105","60105","601","HC.1.3.11 OP care that could not be disaggregated",,"Infectious Diseases","nha","OP care that could not be disaggregated",39,,"Outpatient (no overnight) care resulting from:
+• presumptive treatment for fever (drugs and consultation)
+• clinical treatment for malaria (consultation, diagnostic test, and drugs)
+• treatment of conditions other than fever such as severe anemia accompanying malaria
+• case management of severe malaria – cerebral malaria
+• case management of malaria accompanied by other infections such as typhoid and /or salmonella
+• continuing treatment required by sequelae to cerebral malaria (e.g. neurological damage including
+epilepsy and seizures)
+"
+"6.1.6 HC.1.4 Services of curative home care","60106","60106","601","HC.1.4 Services of curative home care",,"Infectious Diseases","nha","Services of curative home care",30,,
+,,60107,601,"HCR. Capital Formation for Malaria",,"Infectious Diseases","nha","Capital Formation for Malaria",,,
+,,60108,601,"HCR.3  Research into malaria",,"Infectious Diseases","code","Research into Malaria",21,,"Research includes:
+• development of new tools to fight malaria (treatment and preventive)
+• studies on epidemiology and transmission
+• development of high-quality, cost-efficient interventions (including local adaptation of interventions)
+• studies on population health care-seeking behaviour and risk of malaria infection
+• operations research — use of ITNs; use of new therapies; sensitivity of vectors to insecticides
+• development of malaria-related training curriculum and materials
+• development of tools for forecasting and predicting malaria epidem
+"
+,,60109,601,"HCR. 5 Environmental Health for Malaria",,"Infectious Diseases","nha","Environment Health for Malaria",,,"Includes water and other projects with a secondary goal of vector elimination"
+"6.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE","602","602","6","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE",,"Infectious Diseases","mtef","Fight Against HIV/AIDS And Sexually Communicable Diseases",57,,
+"6.2.1 3. Persons infected and/or affected by HIV/AIDS have the same opportunities as the the general population  ","60201","60201","602","3. Persons infected and/or affected by HIV/AIDS have the same opportunities as the the general population  ",,"Infectious Diseases","nsp","Improving opportunities for PABHA",33,,
+"6.2.1.1 3.1 People infected/affect by HIV (including child-headed households) have improved economic opportunities and social protection","6020101","6020101","60201","3.1 People infected/affect by HIV (including child-headed households) have improved economic opportunities and social protection",,"Infectious Diseases","nsp","Improving economic opportunities for PABHA",42,,
+"6.2.1.1.1 3.1.1.1 Increased skills and education for infected and affected persons (including child household heads)","602010101","602010101","6020101","3.1.1.1 Increased skills and education for infected and affected persons (including child household heads)",,"Infectious Diseases","nsp","Improving skills and education for PABHA",40,,
+"6.2.1.1.1.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010101","60201010101","602010101","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","nhanasa","Income-Generating Activities for PABHA",38,,
+"6.2.1.1.2 3.1.1.2 Creation of employment opportunities for infected and affected persons (including child household heads)","602010102","602010102","6020101","3.1.1.2 Creation of employment opportunities for infected and affected persons (including child household heads)",,"Infectious Diseases","nsp","Employment opportunities for PABHA",34,,
+"6.2.1.1.2.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010201","60201010201","602010102","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","nhanasa","Income-Generating Activities for PABHA",38,,
+"6.2.1.1.3 3.1.1.3 People infected and/or affected by HIV (including child household heads) have access to credit (individually or collectively)","602010103","602010103","6020101","3.1.1.3 People infected and/or affected by HIV (including child household heads) have access to credit (individually or collectively)",,"Infectious Diseases","nsp","Improving credit options for PABHA",34,,
+"6.2.1.1.3.1 AD.1.3.1 Income-generating activities 6.4 Income generation","60201010301","60201010301","602010103","AD.1.3.1 Income-generating activities 6.4 Income generation",,"Infectious Diseases","nhanasa","Income-Generating Activities for PABHA",38,,
+"6.2.1.1.4 3.1.1.4 Households of persons infected/affected by HIV/AIDS have food security ","602010104","602010104","6020101","3.1.1.4 Households of persons infected/affected by HIV/AIDS have food security ",,"Infectious Diseases","nsp","Food security for PABHA",23,,
+"6.2.1.1.4.1 AD.1.1.2   Monetary benefits to PLWHA,widows, and families  6.1 Monetary benefits","60201010401","60201010401","602010104","AD.1.1.2   Monetary benefits to PLWHA,widows, and families  6.1 Monetary benefits",,"Infectious Diseases","nhanasa","Monetary benefits for PLWHA, widows, and families",49,,
+"6.2.1.1.4.2 AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6.3 Social services","60201010402","60201010402","602010104","AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6.3 Social services",,"Infectious Diseases","nhanasa","Social support for PLWHA, widows, and families",46,,
+"6.2.2 3.3 Reduction of stigma and discrimination of PLHA and OVC in the community","60202","60202","602","3.3 Reduction of stigma and discrimination of PLHA and OVC in the community",,"Infectious Diseases","nsp","Reduction of stigma and discrimination of PABHA",47,,
+"6.2.2.1 3.3.1.1. The rights of people infected and/or affected by HIV are assured in legal framework","6020201","6020201","60202","3.3.1.1. The rights of people infected and/or affected by HIV are assured in legal framework",,"Infectious Diseases","nsp","Legal protection for PABHA",26,,
+"6.2.2.1.1 AD.2 Policy advocacy 7.1 Advocacy and strategic communication","602020101","602020101","6020201","AD.2 Policy advocacy 7.1 Advocacy and strategic communication",,"Infectious Diseases","nhanasa","Policy Advocacy for PABHA",25,,
+"6.2.2.1.2 AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication","602020102","602020102","6020201","AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication",,"Infectious Diseases","nhanasa","Legal Services, Empowerment and Organization for PABHA",54,,
+"6.2.2.2 3.3.1.2 PLHA and OVC have access to legal aid services","6020202","6020202","60202","3.3.1.2 PLHA and OVC have access to legal aid services",,"Infectious Diseases","nhanasa","Access to legal services for PABHA",34,,
+"6.2.2.2.1 AD.4 Empowerment and organization (incl. Legal services)","602020201","602020201","6020202","AD.4 Empowerment and organization (incl. Legal services)",,"Infectious Diseases","nhanasa","Legal Services, Empowerment and Organization for PABHA",54,,
+"6.2.2.3 3.3.1.3 Increased acceptance of persons infected/ affected in the community","6020203","6020203","60202","3.3.1.3 Increased acceptance of persons infected/ affected in the community",,"Infectious Diseases","nsp","Increasing acceptance of PABHA in communities",45,,
+"6.2.2.3.1 AD.3 Non-health IEC- social stigma reduction","602020301","602020301","6020203","AD.3 Non-health IEC- social stigma reduction",,"Infectious Diseases","nha","Increasing acceptance of PABHA in communities",45,,
+"6.2.2.4 3.3.1.4 Increased self-acceptance of people infected and/or affected by HIV","6020204","6020204","60202","3.3.1.4 Increased self-acceptance of people infected and/or affected by HIV",,"Infectious Diseases","nsp","Increasing self-acceptance of PABHA (psychosocial support)",58,,"Psychosocial support includes all non-medical services provided to out patients to ensure the
+ongoing psychological and social problems of HIV-infected individuals, and their partners, families
+and caregivers.
+Includes: For NHA HIV/AIDS classifications, the following activities are included:
+- Mental health and supportive services available at facility level or community level
+- Follow-up counseling services to ensure psychosocial support and adherence to ARV
+ treatment
+- In high HIV prevalence areas, activities provided to nurses, physicians, and other health care
+ related personnel to cope with emotional stress due to provision of care to a large number of
+HIV/AIDS cases (WHO).
+Excludes: 
+- Counseling for VCT helps to make a decision on whether or not to be
+tested and provides support when receiving the test result (WHO). Therefore, it is not considered psychosocial support."
+"6.2.2.4.1 AD.3 Non-health IEC- social stigma reduction","602020401","602020401","6020204","AD.3 Non-health IEC- social stigma reduction",,"Infectious Diseases","nha","Social Stigma Reduction",23,,
+"6.2.3 3.2 Social and economic protection are ensured for orphans and vulnerable children","60203","60203","602","3.2 Social and economic protection are ensured for orphans and vulnerable children",,"Infectious Diseases","nha","Social and Economic Protection for OVCs related to HIV",54,,
+"6.2.3.1 AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6. Social Protection and Social Services excluding OVC","6020301","6020301","60203","AD.1.1.5   Social support to PLWHA, widows, and families not disaggregated.  6. Social Protection and Social Services excluding OVC",,"Infectious Diseases","nhanasa","Social and Economic Protection for OVCs related to HIV",54,,
+"6.2.3.2 3.2.1.1. Increased percentage of OVC have minimum package of services","6020302","6020302","60203","3.2.1.1. Increased percentage of OVC have minimum package of services",,"Infectious Diseases","nsp","Proving OVCs with basic services",32,,
+"6.2.3.2.1 AD.1.2.3 School fees to OVC 3.1 Education to OVCS","602030201","602030201","6020302","AD.1.2.3 School fees to OVC 3.1 Education to OVCS",,"Infectious Diseases","nhanasa","School Fees/Education for OVCs",30,,
+"6.2.3.2.2 AD.1.2.5 Social support to OVCs not disaggregated 3.2 Basic health care","602030202","602030202","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.2 Basic health care",,"Infectious Diseases","nhanasa","Basic Health Care for OVCs",26,,
+"6.2.3.2.3 AD.1.2.5 Social support to OVCs not disaggregated 3.3 Family/home support","602030203","602030203","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.3 Family/home support",,"Infectious Diseases","nhanasa","Family / Home Support for OVCs",30,,
+"6.2.3.2.4 AD.1.2.5 Social support to OVCs not disaggregated 3.4 Community support","602030204","602030204","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.4 Community support",,"Infectious Diseases","nhanasa","Community Support for OVCs",26,,
+"6.2.3.2.5 AD.1.2.5 Social support to OVCs not disaggregated 3.5 Administrative costs","602030205","602030205","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.5 Administrative costs",,"Infectious Diseases","nhanasa","Administrative Costs",20,,
+"6.2.3.2.6 AD.1.2.5 Social support to OVCs not disaggregated 3.9 Others / Not-elsewhere classified","602030206","602030206","6020302","AD.1.2.5 Social support to OVCs not disaggregated 3.9 Others / Not-elsewhere classified",,"Infectious Diseases","nhanasa","Other Support for OVCs",22,,
+"6.2.4 2. Morbidity and mortality among people living with HIV reduced Move to Care?","60204","60204","602","2. Morbidity and mortality among people living with HIV reduced Move to Care?",,"Infectious Diseases","nsp","Treatment and Care for PLWHA",28,,
+"6.2.4.1 2.1. People living with HIV systematically receive OI prophylaxis, treatment and other coinfection treatment","6020401","6020401","60204","2.1. People living with HIV systematically receive OI prophylaxis, treatment and other coinfection treatment",,"Infectious Diseases","nsp","OI Prophylaxis, ART, and other coinfection treatment",52,,
+"6.2.4.1.1 HC.1.1.4   IP care that cannot be disaggregated  2.12 Hospital care","602040101","602040101","6020401","HC.1.1.4   IP care that cannot be disaggregated  2.12 Hospital care",,"Infectious Diseases","nhanasa","In-patient OI care",18,,
+"6.2.4.1.2 HC.1.1.2   IP OI Treatment   2.13 Opportunistic infection (OI)  treatment","602040102","602040102","6020401","HC.1.1.2   IP OI Treatment   2.13 Opportunistic infection (OI)  treatment",,"Infectious Diseases","nhanasa","Opportunistic Infection treatment",33,,"OI treatment and monitoring includes all specialized medical and diagnostic services provided to
+outpatients to (1) treat an episode of OI or (2) deliver OI prophylaxis drugs. OIs are defined as
+illnesses caused by organisms, that usually do not cause disease in persons with healthy immune
+systems. Persons living with advanced HIV infection suffer OIs of the lungs, brain, eyes, and other
+organs.
+Includes: OIs common in persons diagnosed with AIDS include Pneumocystis carinii
+pneumonia; Kaposi’s sarcoma; cryptosporidiosis; histoplasmosis; other parasitic, viral and fungal
+infections; and some types of cancers.
+Excludes: Other HIV-related illnesses
+"
+"6.2.4.2 2.2 People living with HIV eligible for ART receive it","6020402","6020402","60204","2.2 People living with HIV eligible for ART receive it",,"Infectious Diseases","nsp","Anti-Retroviral Therapy",23,,
+"6.2.4.2.1 HC.1.1.1   IP ARV curative care   2.4 Antiretroviral therapy","602040201","602040201","6020402","HC.1.1.1   IP ARV curative care   2.4 Antiretroviral therapy",,"Infectious Diseases","nhanasa","Anti-Retroviral Therapy",23,,"Antiretroviral (ARV) treatment includes all specialized medical and diagnostics services
+provided to outpatients to properly manage and monitor treatment of drugs that aim at suppressing
+HIV replication and improve HIV-related symptoms (UNAIDS).
+Includes:
+- ARV drugs delivered for treatment purposes, such as highly antiretroviral therapy (HAART)
+ that requires the simultaneous use of three or four ARV drugs, or other regimen of ARVs in
+use in the country.
+- Laboratory tests necessary for treatment monitoring
+Excludes:
+- The use of ARV drugs to prevent HIV transmission such as prevention of mother-to-child
+ transmission (PMTCT) or post exposure prophylaxis (PEP)
+- HIV counseling and testing, follow-up counseling services to ensure psychosocial support
+ and adherence to treatment
+- Management of OIs and other HIV-related illnesses
+"
+"6.2.4.2.2 2.2.2.1 HIV+ Rwandans are identified in order to initiate treatment","602040202","602040202","6020402","2.2.2.1 HIV+ Rwandans are identified in order to initiate treatment",,"Infectious Diseases","nsp","2.1 HIV+ Rwandans are identified in order to initiate treatment",63,,
+"6.2.4.2.3 2.2.1.2 Improved HIV exposed infant follow up according to national guidelines","602040203","602040203","6020402","2.2.1.2 Improved HIV exposed infant follow up according to national guidelines",,"Infectious Diseases","nsp","Exposed infant Follow-up",24,,
+"6.2.4.2.4 2.2.1.3 Coverage of facilities offering ART is increased","602040204","602040204","6020402","2.2.1.3 Coverage of facilities offering ART is increased",,"Infectious Diseases","nsp","Improving Coverage of ART care",30,,
+"6.2.4.2.4.1 HC.6.3.1.8   ART programmes","60204020401","60204020401","602040204","HC.6.3.1.8   ART programmes",,"Infectious Diseases","nha","ART Care",8,,
+"6.2.4.2.5 2.2.1.4 Quality standards for ART are maintained","602040205","602040205","6020402","2.2.1.4 Quality standards for ART are maintained",,"Infectious Diseases","nsp","Improving Quality of ART Care",29,,
+"6.2.4.2.5.1 HC.6.3.1.8   ART programmes","60204020501","60204020501","602040205","HC.6.3.1.8   ART programmes",,"Infectious Diseases","nha","ART Care",8,,
+"6.2.4.3 2.3 People living with HIV receive care and support according to needs","6020403","6020403","60204","2.3 People living with HIV receive care and support according to needs",,"Infectious Diseases","nsp","People living with HIV receive care and support according to needs",66,,"Inpatient long-term nursing care is assistance on a continuing basis due to chronic impairments
+and a reduced degree of independence and activities of daily living. These services are provided in
+institutions or community facilities. Long-term care is typically a mix of medical and social services,
+but only health care services are captured by NHA.
+"
+,,60205,602,"HCR.2 Education & Training for HIV",,"Infectious Diseases","nha","Education and Training for HIV",,,
+,,60206,602,"HCR.3 Research & Development for HIV",,"Infectious Diseases","nha","Research and Development for HIV",,,
+"6.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","603","603","6","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,"Infectious Diseases","mtef","Programs ",9,,
+,,60301,603,"Objective 1: Pursue high quality DOTS expansion and enhancement ",,"Infectious Diseases","nsp","DOTS",,,
+,,6030101,60301,"SDA 1.1 Improving Diagnosis ",,"Infectious Diseases","nsp","Improving Diagnosis",,,
+,,6030102,60301,"SDA 1.2  Patient support ",,"Infectious Diseases","nsp","Support of Patients",,,
+,,6030103,60301,"SDA 1.3 Procurement and supply management  (drugs, reagents and consumables)  ",,"Infectious Diseases","code","Procurement and Supply Management",,,
+,,6030104,60301,"SDA 1.4.1 Monitoring and evaluation",,"Infectious Diseases","code","Monitoring And Evaluation Of Health Activities",,,
+,,6030105,60301,"SDA 1.4.2 Program management, logistics and supervision",,"Infectious Diseases","nsp","Program management, logistics and supervision",,,
+,,6030106,60301,"SDA 1.4.3 Human resource development (HRD)",,"Infectious Diseases","nsp","Human Resource Development",,,
+,,60302,603,"Objective 2: To Address TB/HIV, MDR-TB and Other Challenges ",,"Infectious Diseases","nsp","TB/HIV, MDR-TB and other Challenges",,,
+,,6030201,60302,"SDA 2.1 : Scaling up the implementation of TB/HIV Activities",,"Infectious Diseases","nsp","TB/HIV Activities",,,
+,,6030202,60302,"SDA 2.2: Strengthen case management and surveillance of MDR/XDR TB",,"Infectious Diseases","nsp","MDR/XDR TB Case Management and Surveillance",,,
+,,6030203,60302,"SDA 2.3.1: High Risk Groups",,"Infectious Diseases","nsp","Strengthen Screening in High-Risk Groups",,,
+,,6030204,60302,"SDA 2.3.2: Infection control",,"Infectious Diseases","nsp","Infection Control",,,
+,,6030205,60302,"SDA 2.3.3 Childhood Tuberculosis control interventions",,"Infectious Diseases","nsp","Childhood TB Control Inverventions",,,
+,,60303,603,"Objective 3: Health Systems Strengthening",,"Infectious Diseases","code","crosslink with tb PBF",,,
+,,6030301,60303,"SDA 3.1 health system strengthening (beyond tb)",,"Infectious Diseases","nsp","HSS related to TB",,,
+,,6030302,60303,"SDA 3.2 Practical approach to lung health (PAL)",,"Infectious Diseases","nsp","Practical Approach to Lung Health (PAL)",,,
+,,60304,603,"Objective 4: Engage all care providers (PPM)",,"Infectious Diseases","nsp","Engaging Care Providers",,,
+,,6030401,60304,"SDA 4.1:  To engage all care providers of private sector to deliver quality-assured TB care in conformity with ISTC",,"Infectious Diseases","nsp","Engaging Care Providers in conformity with ISTC",,,
+,,60305,603,"Objective 5: Empower People with TB and Communities ",,"Infectious Diseases","nsp","Empower People with TB and Communities",,,
+,,6030501,60305,"SDA 5.1: Advocacy, communication and patient charter",,"Infectious Diseases","nsp","Advocacy, Comminication, and Patient Charter",,,
+,,6030502,60302,"SDA: 5.2 Community care",,"Infectious Diseases","nsp","Community Care",,,
+,,60306,603,"Objective 6: To enable and promote research ",,"Infectious Diseases","nsp","Research into TB",,,
+,,6030601,60306,"SDA 6.1: Programme-based operational research",,"Infectious Diseases","nsp","Research into TB",,,
+"6.4 04  FIGHT OTHER ENDEMIC DISEASES","604","604","6","04  FIGHT OTHER ENDEMIC DISEASES",,"Infectious Diseases","mtef","Fight Other Endemic Diseases",28,,
+"6.5 05  FIGHT AGAINST DISEASES OF CHILDREN","605","605","6","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","mtef","Fight Against Diseases Of Children",34,,
+"6.7 07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH","607","607","6","07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",,"Health Promotion","mtef","Promotion Of Hygiene And Environmental Health",45,,
+"6.8 08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","608","608","6","08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,"NCD and Injuries","mtef","Fight Against The Non Communicable Diseases",43,,
+"6.9 09  FAMILY PLANNING","609","609","6","09  FAMILY PLANNING",,"MCH / FP / RH / Nutrition","mtef","Family Planning",15,,
+"6.9.1 HC.1.3.3.15.1 FP consultation and issuance of ORAL CONTRACEPTIVES","60901","60901","609","HC.1.3.3.15.1 FP consultation and issuance of ORAL CONTRACEPTIVES",,"MCH / FP / RH / Nutrition","nha","FP consultation and issuance of ORAL CONTRACEPTIVES",51,,
+"6.9.2 HC.1.3.3.15.2 FP consultation and issuance of CONDOMS","60902","60902","609","HC.1.3.3.15.2 FP consultation and issuance of CONDOMS",,"MCH / FP / RH / Nutrition","nha","FP consultation and issuance of CONDOMS",39,,"Condom distribution intended primarily for Family Planning, and not HIV prevention"
+"6.9.3 HC.1.3.3.15.3 FP consultation and issuance of IUD","60903","60903","609","HC.1.3.3.15.3 FP consultation and issuance of IUD",,"MCH / FP / RH / Nutrition","nha","FP consultation and issuance of IUD",35,,
+"6.9.4 HC.1.3.3.15.4 FP consultation and issuance of IMPLANTS","60904","60904","609","HC.1.3.3.15.4 FP consultation and issuance of IMPLANTS",,"MCH / FP / RH / Nutrition","nha","FP consultation and issuance of IMPLANTS",40,,
+"6.9.5 HC.1.3.3.15.5 FP consultation and issuance of INJECTABLES","60905","60905","609","HC.1.3.3.15.5 FP consultation and issuance of INJECTABLES",,"MCH / FP / RH / Nutrition","nha","FP consultation and issuance of INJECTABLES",43,,
+"6.9.6 HC.1.3.3.15.6 Other FP consultations","60906","60906","609","HC.1.3.3.15.6 Other FP consultations",,"MCH / FP / RH / Nutrition","nha","Other FP consultations",22,,
+"6.9.7 HC.1.3.3.15.7 FP consultations not disaggregated.","60907","60907","609","HC.1.3.3.15.7 FP consultations not disaggregated.",,"MCH / FP / RH / Nutrition","nha","FP consultations not disaggregated.",35,,
+"6.9.8 HC.1.1.3 FP Methods - Tube ligature","60908","60908","609","HC.1.1.3 FP Methods - Tube ligature",,"MCH / FP / RH / Nutrition","nha","FP Methods - Tube Ligature",26,,
+"6.10 10  REPRODUCTIVE HEALTH","6010","6010",6,"10  REPRODUCTIVE HEALTH",,"MCH / FP / RH / Nutrition","mtef","Reproductive Health",19,,"Comprises Reproductive Health medical and paramedical services delivered during an episode of curative care. A
+distinction is made between inpatient care, outpatient care, and home care. With inpatient curative care, patients
+stay overnight in the health facility. Curative inpatient or outpatient care includes, for example, the diagnosis
+and treatment of STIs, or the treatment of cancers of the reproductive system, such as cervical or prostate
+cancer."
+"6.10.1 HC.1.1 Inpatient RH care","601001","601001","6010","Reproductive Health Services",,"MCH / FP / RH / Nutrition","nha","Inpatient RH Care",17,,"Care provided in health facilities for reproductive health that results in an overnight stay"
+"6.10.2 HC.1.1.1 Deliveries",60100101,60100101,601001,"Deliveries",,"MCH / FP / RH / Nutrition","nha","Deliveries",10,,
+"6.10.3 HC.1.1.2 Pathologies related to pregnancy",60100102,60100102,"601001","Pathologies related to pregnancy",,"MCH / FP / RH / Nutrition","nha","Pathologies related to pregnancy",32,,
+"6.10.4 HC.1.3.3.13 Antenatal care","601004","601004","6010","Antenatal care",,"MCH / FP / RH / Nutrition","nha","Antenatal care",14,,
+"6.10.5 HC.1.3.3.14 Postnatal care","601005","601005","6010","Postnatal care",,"MCH / FP / RH / Nutrition","nha","Postnatal care",14,,"Postnatal care for reproductive health includes well-baby care < 28 days - after 28 days, include in Child Health"
+"6.10.6 HC.1.3.3.16 General gynecological care","601006","601006","6010","General gynecological care",,"MCH / FP / RH / Nutrition","nha","General gynecological care",26,,
+"Reproductive Health Programs",601007,601007,6010,"Reproductive Health Programs",,"MCH / FP / RH / Nutrition","nha","Reproductive Health Programs",28,,
+"HC 6.1.1 Antenatal care programs",60100701,60100701,601007,"Antenatal care programs",,"MCH / FP / RH / Nutrition","nha","Antenatal care programs",23,,
+"HC.6.1.2 Programs related to safe delivery",60100702,60100702,601007,"Programs related to safe delivery",,"MCH / FP / RH / Nutrition","nha","Programs related to safe delivery",33,,
+"HC.6.1.3 Emergency obstetric care programs",60100703,60100703,601007,"Emergency obstetric care programs",,"MCH / FP / RH / Nutrition","nha","Emergency obstetric care programs",33,,
+"HC.6.1.4 Other Maternal health programs",60100704,60100704,601007,"Other Maternal health programs",,"MCH / FP / RH / Nutrition","nha","Other Maternal health programs",30,,
+"HC.6.1.5 Maternal health programs that could not be disaggregated.",60100705,60100705,601007,"Maternal health programs that could not be disaggregated.",,"MCH / FP / RH / Nutrition","nha","Maternal health programs that could not be disaggregated.",57,,
+"6.11 11  COMMUNITY HEALTH","6011","6011",6,"11  COMMUNITY HEALTH",,"Health Promotion","mtef","Community Health",16,,
+"6.12 12  QUALITY OF HEALTH SERVICES","6012","6012",6,"12  QUALITY OF HEALTH SERVICES",,"Health Promotion","mtef","Quality Of Health Services",26,,
+"6.13 13  PERFORMANCE BASED FINANCING HEALTH CENTER (PBF)","6013","6013",6,"13  PERFORMANCE BASED FINANCING HEALTH CENTER (PBF)",,"Health Promotion","mtef","Performance Based Financing Health Center (Pbf)",47,,
+"6.14 14  PERFORMANCE BASED FINANCING DISTRICT HOSPITAL (PBF)","6014","6014",6,"14  PERFORMANCE BASED FINANCING DISTRICT HOSPITAL (PBF)",,"Health Promotion","mtef","Performance Based Financing District Hospital (Pbf)",51,,
+"6.15 15  PERFORMANCE BASED FINANCING REFERER HOSPITAL (PBF)","6015","6015",6,"15  PERFORMANCE BASED FINANCING REFERER HOSPITAL (PBF)",,"Health Promotion","mtef","Performance Based Financing Referer Hospital (Pbf)",50,,
+"6.16 16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH","6016","6016",6,"16  INFORMATION, EDUCATION AND COMMUNICATION FOR HEALTH",,"Health Promotion","mtef","Information, Education And Communication For Health",51,,
+"7 07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES","7","7","","07  DEVELOPMENT OF NATIONAL SPECIALISED REFERENCE AND RESEARCH SERVICES",,"Health Promotion","mtef","Development Of National Specialised Reference And Research Services",67,"Strengthening specialised services, Narional Referral Hospitals and Research Capabilities",
+"8 08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH","8","8","","08  REINFORCEMENT OF FAMILY PLANNING AND REPRODUCTIVE HEALTH",,"Health Promotion","mtef","Reinforcement Of Family Planning And Reproductive Health",56,,
+"9 09  DISEASES PREVENTION","9","9","","09  DISEASES PREVENTION",,"Infectious Diseases","mtef","Diseases Prevention",19,,"Consolidating, expanding and improving services for the prevention and 
+control of infectious diseases "
+"9.1 01  FIGHT AGAINST MALARIA","901","901","9","01  FIGHT AGAINST MALARIA",,"Infectious Diseases","mtef","Fight Against Malaria",21," ","Spending for the primary purpose of :
+Providing goods or implementing activities for malaria prevention and control
+Providing support to malaria prevention activities
+"
+"9.1.2 HC.6.3.2.1 Larviciding, elimination of standing water","90102","90102","901","HC.6.3.2.1 Larviciding, elimination of standing water",,"Infectious Diseases","nha","Larviciding, elimination of standing water",42,,"Includes:
+- dry-belting villages in rice-cultivation areas (i.e. restricting use of land surrounding human
+communities to the production of dry crops)
+- marsh alteration
+-application of insecticides for larviciding (oils, organophosphates, insect growth regulators, and
+microbial insecticides)
+- introduction of natural enemies such as larvivorous fish
+"
+"9.1.3 HC.6.3.2.2 Training within public health programmes for malaria","90103","90103","901","HC.6.3.2.2 Training within public health programmes for malaria",,"Infectious Diseases","nha","Training within public health programmes for malaria",52,,"Training includes:
+- curative care training: training of health personnel on early detection and diagnosis of malaria;
+training of lab technicians; training on management of simple cases and severe malaria
+- preventive training: training of hygiene technician and other personnel in vector control and in
+materials impregnation; training of community health workers on IEC techniques
+- surveillance training: training of health personnel on data management and disease surveillance;
+training capacity to monitor antimalarial drug efficacy
+- general training: training on management of malaria programme; build capacity for malaria research
+- community service delivery training: training of traditional birth attendants and community-based
+health workers
+- business training: training shopkeepers on the appropriate choice and dose of antimalarial drugs for
+children, and use of user-friendly packaging of drugs
+"
+"9.1.4 HC.6.3.2.3 IEC (malaria awareness)","90104","90104","901","HC.6.3.2.3 IEC (malaria awareness)",,"Infectious Diseases","nha","IEC (malaria awareness)",23,,"IEC for: 
+- promoting a “net culture”
+- raising public awareness about malaria
+- households to maintain basic sanitation measures particularly maintaining proper drainage for used water and reducing open areas with
+stagnant water
+"
+"9.1.5 HC.6.3.2.4 Surveillance and monitoring","90105","90105","901","HC.6.3.2.4 Surveillance and monitoring",,"Infectious Diseases","nha","Surveillance and monitoring",27,,"Surveillance and monitoring includes:
+• surveillance of incidence of malaria morbidity and mortality – especially for early warning and
+detection of malaria epidemics, and for monitoring impacts of malaria control activities
+• monitoring and evaluation of resistance to antimalarial drugs and resistance of vectors to insecticides
+• monitoring of service delivery and/or malaria activity implementation
+• participation of community in malaria surveillance and monitoring
+• surveillance of mosquitoes (e.g. by using insect collectors or remote sensing and climate modeling to
+map and monitor mosquito populations)
+"
+"9.1.6 HC.6.3.2.5 ITN Distribution","90106","90106","901","HC.6.3.2.5 ITN Distribution",,"Infectious Diseases","nha","ITN Distribution",16,,
+"9.1.7 HC.6.3.2.6 Indoor Residual Spraying (IRS) Programs","90107","90107","901","HC.6.3.2.6 Indoor Residual Spraying (IRS) Programs",,"Infectious Diseases","nha","Indoor Residual Spraying (IRS) Programs",39,,
+"9.1.8 HC.6.3.2.7 malaria programs that could not be disaggregated","90108","90108","901","HC.6.3.2.7 malaria programs that could not be disaggregated",,"Infectious Diseases","nha","malaria programs that could not be disaggregated",48,,
+"9.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES","902","902","9","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES",,"Infectious Diseases","mtef","Fight Against Hiv/Aids And Sexually Communicable Diseases",57,,
+"9.2.1 1.1 Reduced Sexual Transmission of HIV","90201","90201","902","1.1 Reduced Sexual Transmission of HIV",,"Infectious Diseases","nha","Prevention of Sexual HIV Transmission",37,,
+"9.2.1.1 1.1.1 Reduction of Risky Sexual Intercourse","9020101","9020101","90201","1.1.1 Reduction of Risky Sexual Intercourse",,"Infectious Diseases","nha","Reduction of Risky Sexual Intercourse",37,,
+"9.2.1.1.1 1.1.1.1 General population reached by comprehensive prevention programs   ","902010101","902010101","9020101","1.1.1.1 General population reached by comprehensive prevention programs   ",,"Infectious Diseases","nha","General population reached by comprehensive prevention programs   ",66,,
+"9.2.1.1.1.1 HC.6.3.1.1   VCT   1.3 Voluntary counseling and testing","90201010101","90201010101","902010101","HC.6.3.1.1   VCT   1.3 Voluntary counseling and testing",,"Infectious Diseases","nhanasa","Voluntary Counseling and Testing",32,,"VCT covers the provision of health services by which an individual undergoes counseling to
+enable him/her to make an informed choice about being tested for HIV (UNAIDS). Various models
+of VCT services are freestanding, integrated into other services, and outreach.
+Includes: The following activities are included:
+- Paramedical services and laboratory tests needed to analyze for the presence of antibodies or
+ antigens produced in response to HIV (WHO)
+- The provision of HIV/AIDS-related information, pretest-counseling, post-test counseling,
+ and referral to treatment services
+- For NHA HIV/AIDS function classifications, specific attention should be given not to
+ double-count VCT when integrated into other services.
+"
+"9.2.1.1.1.2 HC.6.3.1.4.1   Abstinence/ Be Faithful programmes","90201010102","90201010102","902010101","HC.6.3.1.4.1   Abstinence/ Be Faithful programmes",,"Infectious Diseases","nha","Abstinence/ Be Faithful programmes",34,,
+"9.2.1.1.1.3 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010103","90201010103","902010101","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","nha","Other IEC/BCC programmes",24,,"Information education programs covers health services of health education that enable families,groups, organizations, and communities to play an active role in achieving, protecting, and sustaining their own health (WHO). HIV/AIDS-related information and education programs could be communicated through many channels.
+Includes:
+- Interpersonal communication (community meetings, groups discussion)
+-Mass media communication: Radio, television or “one-way” communication support (brochures, poster and others)
+Excludes:
+- VCT counseling sessions
+- Psychological support
+
+"
+"9.2.1.1.2 1.1.1.2 Women aged 15-24 are reached by comprehensive prevention programs","902010102","902010102","9020101","1.1.1.2 Women aged 15-24 are reached by comprehensive prevention programs",,"Infectious Diseases","nsp","Prevention Programs for Young Women",35,,
+"9.2.1.1.2.1 HC.6.3.1.4.1   Abstinence/ Be Faithful programmes","90201010201","90201010201","902010102","HC.6.3.1.4.1   Abstinence/ Be Faithful programmes",,"Infectious Diseases","nha","Abstinence/ Be Faithful programmes",34,,
+"9.2.1.1.2.2 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010202","90201010202","902010102","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","nha","Other IEC/BCC programmes",24,,
+"9.2.1.1.3 1.1.1.3 - Female sex workers are reached by comprehensive prevention programs","902010103","902010103","9020101","1.1.1.3 - Female sex workers are reached by comprehensive prevention programs",,"Infectious Diseases","nsp","Prevention Programs for Female Sex Workers",42,,
+"9.2.1.1.3.1  HC.6.3.1.4.2   Other IEC/BCC programmes   1.8 Programs for sex workers and their clients","90201010301","90201010301","902010103"," HC.6.3.1.4.2   Other IEC/BCC programmes   1.8 Programs for sex workers and their clients",,"Infectious Diseases","nhanasa","Prevention Programs for Female Sex Workers",42,,
+"9.2.1.1.4 1.1.1.4 Other vulnerable and most at risk populations are reached with comprehensive prevention programmes  ","902010104","902010104","9020101","1.1.1.4 Other vulnerable and most at risk populations are reached with comprehensive prevention programmes  ",,"Infectious Diseases","nsp","Other Vulnerable Population Programs",36,,
+"9.2.1.1.4.1 HC.6.3.1.4.2   Other IEC/BCC programmes","90201010401","90201010401","902010104","HC.6.3.1.4.2   Other IEC/BCC programmes",,"Infectious Diseases","nha","Other IEC/BCC programmes",24,,
+"9.2.1.1.4.1.1 1.6 Youth out of school","9020101040101","9020101040101","90201010401","1.6 Youth out of school",,"Infectious Diseases","nasa","Prevention Programs for Youth out of School",43,,
+"9.2.1.1.4.1.2 1.9 Programs for MSM","9020101040102","9020101040102","90201010401","1.9 Programs for MSM",,"Infectious Diseases","nasa","Prevention Programs for MSM",27,,
+"9.2.1.1.4.1.3 1.10 Harm reduction programs for IDUs","9020101040103","9020101040103","90201010401","1.10 Harm reduction programs for IDUs",,"Infectious Diseases","nasa","Prevention Programs for IDUs",28,,"Regarding drug injections, HIV harm reduction programs cover a wide range of health care
+services that aim at preventing HIV transmission through sharing of non-sterile injection equipment
+and drug preparations (WHO).
+Includes:
+- Needle exchange program
+- Drug substitution treatment
+Excludes:
+- Information, education, and communication (IEC) on HIV transmission through injecting
+drug use"
+"9.2.1.1.4.1.4 1.11 Workplace activities","9020101040104","9020101040104","90201010401","1.11 Workplace activities",,"Infectious Diseases","nasa","Workplace Prevention Programs",29,,
+"9.2.1.1.4.1.5 1.4 Programs for [other?] vulnerable and special populations","9020101040105","9020101040105","90201010401","1.4 Programs for [other?] vulnerable and special populations",,"Infectious Diseases","nasa","Prevention Programs for Other Vulnerable Populations",52,,
+"9.2.1.1.5 1.1.1.5 People living with HIV including sero-discordant cohabitating couples are provided with positive prevention services ","902010105","902010105","9020101","1.1.1.5 People living with HIV including sero-discordant cohabitating couples are provided with positive prevention services ",,"Infectious Diseases","nsp","Prevention Among Positivies",27,,
+"9.2.1.1.5.1  HC.6.3.1.12   Other public health programs (including OI , psychosocial support) 1.7 Prevention programs for PLHA ","90201010501","90201010501","902010105"," HC.6.3.1.12   Other public health programs (including OI , psychosocial support) 1.7 Prevention programs for PLHA ",,"Infectious Diseases","nhanasa","Prevention Among Positivies",27,,
+"9.2.1.1.6 1.1.1.6 HIV infections resulting from sexual or gender-base violence are prevented  programs (including OI , psychosocial support)","902010106","902010106","9020101","1.1.1.6 HIV infections resulting from sexual or gender-base violence are prevented  programs (including OI , psychosocial support)",,"Infectious Diseases","nsp","Prevention Programs related to Sexual or GBV",44,,
+"9.2.1.1.6.1 HC.6.3.1.12   Other public health","90201010601","90201010601","902010106","HC.6.3.1.12   Other public health",,"Infectious Diseases","nha","Prevention Programs related to Sexual or GBV",44,,
+"9.2.1.1.7 1.1.1.7 Male and female condoms are available and accessible for all populations programmes  ","902010107","902010107","9020101","1.1.1.7 Male and female condoms are available and accessible for all populations programmes  ",,"Infectious Diseases","nsp","Condom Distribution Programs",28,,"Condom distribution program covers a range of activities to promote the adoption of policies and
+strategies aiming at increasing the acceptability, availability, and use of condoms (WHO).
+Includes: Activities that increase access to condoms, such as distribution or social marketing.
+Excludes: Education programs to promote condom use."
+"9.2.1.1.7.1 HC.6.3.1.7   Condom distribution","90201010701","90201010701","902010107","HC.6.3.1.7   Condom distribution",,"Infectious Diseases","nha","Condom Distribution Programs",28,,
+"9.2.1.1.7.1.1 1.14 Female condom","9020101070101","9020101070101","90201010701","1.14 Female condom",,"Infectious Diseases","nasa","Female Condom Distribution and Provision",40,,
+"9.2.1.1.7.1.2 1.13 Public and commercial sector condom provision","9020101070102","9020101070102","90201010701","1.13 Public and commercial sector condom provision",,"Infectious Diseases","nasa","Condom Provision in Public and Commercial Sector",48,,
+"9.2.1.1.7.1.3 1.12 Condom social marketing","9020101070103","9020101070103","90201010701","1.12 Condom social marketing",,"Infectious Diseases","nasa","Social Marketing of Condoms",27,,
+"9.2.1.2 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.15 Microbicides","9020102","9020102","90201","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.15 Microbicides",,"Infectious Diseases","nhanasa","Microbicides",12,,
+"9.2.1.3 1.1.2 Increased prevalence of male circumcision","9020103","9020103","90201","1.1.2 Increased prevalence of male circumcision",,"Infectious Diseases","nsp","Male Circumcision",17,,
+"9.2.1.3.1 1.1.2.1 Newborn boys, adolescents and adults have increased access to circumcision ","902010301","902010301","9020103","1.1.2.1 Newborn boys, adolescents and adults have increased access to circumcision ",,"Infectious Diseases","nsp","Male Circumcision",17,,
+"9.2.1.3.1.1 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.21 Male Circumcision","90201030101","90201030101","902010301","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.21 Male Circumcision",,"Infectious Diseases","nhanasa","Male Circumcision",17,,
+"9.2.1.4 1.1.3 Increased quality treatment of STIs 1.16 Improving management of STIs","9020104","9020104","90201","1.1.3 Increased quality treatment of STIs 1.16 Improving management of STIs",,"Infectious Diseases","nsp","STI Treatment",13,,"STI management includes all specialized medical and diagnostics services provided to
+outpatients during an episode of infection spread by the transfer of organisms from one person to
+another during sexual contact. As ulcerative STIs are known to be a co-factor in HIV transmission,
+STI management is a key area in the HIV/AIDS response (UNAIDS). Other than HIV, the most
+common STIs are syphilis; gonorrhoea; chlamydia trachomatis; human papilloma virus (HPV);
+genital herpes; chancroid; genital mycoplasmas; hepatitis B; trichomoniasis; enteric infections; and
+ectoparasitic diseases (UNAIDS).
+Includes: This item includes secondary prevention services only. Secondary prevention aims at
+detecting and treating infected people through screening programs and treatment of infected people.
+Excludes: For NHA classification purposes, this item does not include:
+- Primary prevention such as health education
+- HIV-related treatment
+"
+"9.2.1.4.1 1.1.3.1 Increased Awareness of STI symptoms and demand for STI treatment","902010401","902010401","9020104","1.1.3.1 Increased Awareness of STI symptoms and demand for STI treatment",,"Infectious Diseases","nsp","Increasing Awareness of STI symptoms and Demand for Treatment",61,,
+"9.2.1.4.1.1 HC.6.3.1.5   STI prevention programmes ","90201040101","90201040101","902010401","HC.6.3.1.5   STI prevention programmes ",,"Infectious Diseases","nhanasa","Improving Management of STIs",28,,"STI prevention is mainly (1) primary prevention that seeks to reduce the acquisition of infection
+and (2) secondary prevention that aims at detecting and treating cases. This item should focus on
+primary prevention only"
+"9.2.1.4.2 1.1.3.2 Increased availability and accessibility of high quality STI treatment   ","902010402","902010402","9020104","1.1.3.2 Increased availability and accessibility of high quality STI treatment   ",,"Infectious Diseases","nsp","Increasing Availability of high-quality STI treatment",53,,
+"9.2.1.4.2.1 HC.6.3.1.5   STI prevention programmes","90201040201","90201040201","902010402","HC.6.3.1.5   STI prevention programmes",,"Infectious Diseases","nhanasa","Improving Management of STIs",28,,
+"9.2.2 HC.6.3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified","90202","90202","902","HC.6.3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified",,"Infectious Diseases","nhanasa",".3.1.13   public health programmes not disaggregated  1.99 Others / Not-elsewhere classified",92,,
+"9.2.3 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.22 Universal precautions","90203","90203","902","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.22 Universal precautions",,"Infectious Diseases","nhanasa","Universal Precautions",21,,
+"9.2.4 HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.19 Post-exposure prophylaxis","90204","90204","902","HC.6.3.1.12   Other public health programs (including OI , psychosocial support)  1.19 Post-exposure prophylaxis",,"Infectious Diseases","nhanasa","Post-exposure Prophylaxis",25,,"Post exposure prophylaxis covers the provision of health care services to reduce the likelihood of
+HIV infection after potential exposure, either occupationally or through sexual intercourse (WHO).
+Includes:
+- Short course of ARV drugs
+- Paramedical exams necessary to test sources for HIV
+- Appropriate counseling
+"
+"9.2.5 HC.6.3.1.9   Surveillance","90205","90205","902","HC.6.3.1.9   Surveillance",,"Infectious Diseases","nha","Surveillance Programs",21,,
+"9.2.6 HC.6.3.1.11   Training for HIV/AIDS programmes","90206","90206","902","HC.6.3.1.11   Training for HIV/AIDS programmes",,"Infectious Diseases","nha","Training Programmes",19,,
+"9.2.7 1.2 Reduced mother to child transmission of HIV","90207","90207","902","1.2 Reduced mother to child transmission of HIV",,"Infectious Diseases","nsp","PMTCT Programs",14,,"PMTCT usually covers a range of health care services including but not limited to the prevention
+of HIV transmission from HIV-infected women to their infants through the provision of ARV drugs
+to HIV-infected pregnant women and their infants after birth.
+Excludes: For NHA HIV/AIDS functions classifications, activities integrated into PMTCT
+services such as VCT and STI management, are not captured under PMTCT services. Specific
+attention should be given not to double-count those activities under PMTCT."
+"9.2.7.1 1.2.1 Transmission of HIV during pregnancy, childbirth, and breastfeeding is reduced   ","9020701","9020701","90207","1.2.1 Transmission of HIV during pregnancy, childbirth, and breastfeeding is reduced   ",,"Infectious Diseases","nsp","PMTCT Programs",14,,
+"9.2.7.1.1 1.2.1.1 Increased availability and accessibility of PMTCT services","902070101","902070101","9020701","1.2.1.1 Increased availability and accessibility of PMTCT services",,"Infectious Diseases","nsp","1.1 Increased availability and accessibility of PMTCT services",62,,
+"9.2.7.1.1.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207010101","90207010101","902070101","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","nhanasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
+"9.2.7.1.2 1.2.1.2 All HIV positive pregnant women completed the full PMTCT program","902070102","902070102","9020701","1.2.1.2 All HIV positive pregnant women completed the full PMTCT program",,"Infectious Diseases","nsp","1.2 All HIV positive pregnant women completed the full PMTCT program",68,,
+"9.2.7.1.2.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207010201","90207010201","902070102","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","nhanasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
+"9.2.7.2 1.2.2. HIV positive women are empowered to take informed reproductive health decisions","9020702","9020702","90207","1.2.2. HIV positive women are empowered to take informed reproductive health decisions",,"Infectious Diseases","nsp","2. HIV positive women are empowered to take informed reproductive health decisions",82,,
+"9.2.7.2.1 1.2.2.1 HIV positive women have access to family planning","902070201","902070201","9020702","1.2.2.1 HIV positive women have access to family planning",,"Infectious Diseases","nsp","2.1 HIV positive women have access to family planning",53,,
+"9.2.7.2.1.1 HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission","90207020101","90207020101","902070201","HC.6.1.1   PMTCT  1.17 Prevention of mother-to-child transmission",,"Infectious Diseases","nhanasa",".1.1   PMTCT  1.17 Prevention of mother-to-child transmission",61,,
+"9.2.8 1.3 Maintenance of low levels of blood-borne transmission of HIV","90208","90208","902","1.3 Maintenance of low levels of blood-borne transmission of HIV",,"Infectious Diseases","nsp","Maintenance of low levels of blood-borne transmission of HIV",60,,
+"9.2.8.1 1.3.1.1 Blood borne HIV transmission in clinical environments is reduced","9020801","9020801","90208","1.3.1.1 Blood borne HIV transmission in clinical environments is reduced",,"Infectious Diseases","nsp","1.1 Blood borne HIV transmission in clinical environments is reduced",68,,
+"9.2.8.1.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080101","902080101","9020801","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","nhanasa","Blood Safety",12,,"Blood safety covers the public health services ensuring the provision of safe, adequate and
+quality blood and blood products for all patients requiring transfusion (WHO). Blood safety includes
+but is not limited to blood screening. It covers a wide range of health care services such as donor
+promotion (education, recruitment, and retention of donors).
+"
+"9.2.8.1.2 HC.6.3.1.10   Injection Safety  1.20 Safe medical injections","902080102","902080102","9020801","HC.6.3.1.10   Injection Safety  1.20 Safe medical injections",,"Infectious Diseases","nhanasa","Medical Injection Safety",24,,
+"9.2.8.2 1.3.1.2 All blood donated for transfusion is screened for HIV","9020802","9020802","90208","1.3.1.2 All blood donated for transfusion is screened for HIV",,"Infectious Diseases","nsp","1.2 All blood donated for transfusion is screened for HIV",57,,
+"9.2.8.2.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080201","902080201","9020802","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","nhanasa","Blood Safety",12,,
+"9.2.8.3 1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced","9020803","9020803","90208","1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced",,"Infectious Diseases","nsp","1.3 Blood-borne HIV transmission outside clinical environments is reduced",73,,
+"9.2.8.3.1 HC.6.3.1.2.1   Blood Safety  1.18 Blood safety","902080301","902080301","9020803","HC.6.3.1.2.1   Blood Safety  1.18 Blood safety",,"Infectious Diseases","nhanasa","Blood Safety",12,,
+"9.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","903",903,"9","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,"Infectious Diseases","mtef","Fight Against Tuberculosis And Leprosis",39,,
+"9.4 04  FIGHT AGAINST ENDEMIC DISEASES","904","904","9","04  FIGHT AGAINST ENDEMIC DISEASES",,"Infectious Diseases","mtef","Fight Against Endemic Diseases",30,,
+"9.5 05  FIGHT AGAINST DISEASES OF CHILDREN","905","905","9","05  FIGHT AGAINST DISEASES OF CHILDREN",,"MCH / FP / RH / Nutrition","mtef","Fight Against Diseases Of Children",34,,"Spending during a specified period of time on goods, services and activities 
+delivered to the child or its caretaker after the birth of the child and 
+whose primary purpose is to restore, improve and maintain the health of children
+ of a country between zero and less than five years of age."
+"9.5.1 HC.6.1.3 CH Programs","90501","90501","905","HC.6.1.3 CH Programs",,"MCH / FP / RH / Nutrition","nha","Child Health Programs",21,,
+"9.5.2 HC.6.1.3.1 HIV Programs for CH","90502","90502","905","HC.6.1.3.1 HIV Programs for CH",,"MCH / FP / RH / Nutrition","nha","HIV Programs for CH",19,,"Management of HIV/AIDS exposed children, HIV treatment for individuals < 5 years of age"
+"9.5.3 HC.6.1.3.2 Malaria Programs for CH","90503","90503","905","HC.6.1.3.2 Malaria Programs for CH",,"MCH / FP / RH / Nutrition","nha","Malaria Programs for CH",23,,
+"9.5.4 HC.6.1.3.3 Immunization Programs for CH","90504","90504","905","HC.6.1.3.3 Immunization Programs for CH",,"MCH / FP / RH / Nutrition","nha","Immunization Programs for CH",28,,
+"9.5.5 HC.6.1.3.5 Other Programs for CH","90505","90505","905","HC.6.1.3.5 Other Programs for CH",,"MCH / FP / RH / Nutrition","nha","Other Programs for CH",21,,
+"9.6 06  FIGHT AGAINST MALNUTRITION","906","906","9","06  FIGHT AGAINST MALNUTRITION",,"MCH / FP / RH / Nutrition","mtef","Fight Against Malnutrition",26,,
+"9.6.1 HC.6.1.3.4 Nutrition Programs for CH","90601","90601","906","HC.6.1.3.4 Nutrition Programs for CH",,"MCH / FP / RH / Nutrition","nha","Nutrition Programs for CH",25,,
+"9.6.2 HCR.4.1 Other Nutrition Programs","90602","90602","906","HCR.4.1 Other Nutrition Programs",,"MCH / FP / RH / Nutrition","nha","Other Nutrition Programs",24,,
+"9.7 07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH","907","907","9","07  PROMOTION OF HYGIENE AND ENVIRONMENTAL HEALTH",,"Health Promotion","mtef","Promotion Of Hygiene And Environmental Health",45,,
+"9.8 08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","908","908","9","08  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,"NCD and Injuries","mtef","Fight Against The Non Communicable Diseases",43,,
+"10 10  DIAGNOSTIC AND TREATMENT OF DISEASES","10","10","","10  DIAGNOSTIC AND TREATMENT OF DISEASES",,,"code",,,,
+"10.1 01  FIGHT AGAINST MALARIA","1001","1001","10","01  FIGHT AGAINST MALARIA",,,"code",,,,
+"10.2 02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES","1002","1002","10","02  FIGHT AGAINST HIV/AIDS AND SEXUALLY COMMUNICABLE DISEASES",,,"code",,,,
+"10.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS","1003","1003","10","03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS",,,"code",,,,
+"10.4 05  FIGHT AGAINST DISEASES OF CHILDREN","1004","1004","10","05  FIGHT AGAINST DISEASES OF CHILDREN",,,"code",,,,
+"10.5 06  FIGHT AGAINST THE NON COMMUNICABLE DISEASES","1005","1005","10","06  FIGHT AGAINST THE NON COMMUNICABLE DISEASES",,,"code",,,,
+"10.6 07  SPECIALIZED HEALTH SERVICES","1006","1006","10","07  SPECIALIZED HEALTH SERVICES",,,"code",,,,
+"10.7 08  SUPERVISION OF DISTRICT HOSPITAL","1007","1007","10","08  SUPERVISION OF DISTRICT HOSPITAL",,,"code",,,,
+"11 11  HIGH EDUCATION","11","11","","11  HIGH EDUCATION",,,"mtef",,,,
+"11.1 54   RWANDA BIO-MEDICAL CENTER","1101","1101","11","54   RWANDA BIO-MEDICAL CENTER",,,"mtef",,,,
+"11.1.1 01  MANAGEMENT SUPPORT","110101","110101","1101","01  MANAGEMENT SUPPORT",,,"mtef",,,,
+"11.1.2 02  LABORATORY EQUIPMENT","110102","110102","1101","02  LABORATORY EQUIPMENT",,,"mtef",,,,
+"11.1.3 03  CONSTRUCTION AND EQUIPMENTS","110103","110103","1101","03  CONSTRUCTION AND EQUIPMENTS",,,"mtef",,,,

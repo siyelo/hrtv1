@@ -64,9 +64,9 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   if c.type=="NhaNasa" or c.type=="Nhanasa"
     c.type="Nha"
   end
-  puts c.id
+#  puts c.id
   puts "error on #{row}" unless c.save
-  puts c.id
+#  puts c.id
 end
 
 #puts 'Setting valid for next types'
@@ -114,6 +114,15 @@ FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
   puts "error on #{row}" unless c.save
 end
 
+# dummy other cost rows, in future craete with callbacks on user create
+def seed_other_cost_rows
+  OtherCostType.all.each do |t|
+    OtherCost.find_or_create_by_other_cost_id(t.id)
+  end
+end
+
+seed_other_cost_rows
+
 Location.delete_all
 FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
   c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
@@ -144,21 +153,20 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
     end
     c.locations << district
   end
-  c.raw_type = row["Type"]
+  c.raw_type = row["type"].try(:strip)
+  if c.raw_type == "Implementers"
+    c.type = "Ngo"
+  elsif c.raw_type == "Donors"
+    c.type = "Donor"
+  end
   #puts row.inspect
-  %w[Name].each do |field|
+  %w[name].each do |field|
     #puts "#{field}: #{row[field]}"
     c.send "#{field}=", row[field].try(:strip)
   end
   puts "error on #{row}" unless c.save
 end
 
-# organization population will go here
-donors=%w[ USAID WHO CDC GTZ] +["Global Fund", "World Bank"]
-donors.each do |donor|
-  Donor.find_or_create_by_name donor
-end
-
-%w[ self MSH FHI PSI].each do |ngo|
+%w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end

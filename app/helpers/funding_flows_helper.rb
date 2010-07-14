@@ -7,7 +7,15 @@ module FundingFlowsHelper
     if association.name == :from
         ["type in (?) and name != ?", "Donor", "self" ]
     elsif association.name == :to
+      if @record.project
+        ids=Set.new
+        @record.project.locations.each do |l| #in future this should scope right with default
+          ids.merge l.organization_ids
+        end
+        ["id in (?)", ids]
+      else
         ["type in (?) and name != ?",  "Ngo", "self"]
+      end
     else
         super
     end

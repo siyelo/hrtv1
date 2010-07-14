@@ -38,7 +38,7 @@ class ActivitiesController < ApplicationController
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
     config.columns[:expected_total].inplace_edit = true
-    config.columns[:expected_total].label = "Expected Total Spend RFY 09-10"
+    config.columns[:expected_total].label = "Total Spend RFY 09-10"
     config.columns[:target].label = "Target"
     config.columns[:beneficiary].label = "Beneficiary"
 

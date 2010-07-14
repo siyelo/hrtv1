@@ -9,6 +9,10 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def to_label #so text doesn't spill over in nested scaffs
+    to_s[0,20]+'...'
+  end
+
   def valid_providers
     f=funding_flows.find(:all, :select => "organization_id_to", :conditions => ["organization_id_from = ?", 
                        Organization.find_by_name("self").id])

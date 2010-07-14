@@ -27,7 +27,7 @@ class FundingFlowsController < ApplicationController
       config.columns[c].form_ui=:select
       config.columns[c].inplace_edit = true
     end
-
+   # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later
     config.columns[:budget].inplace_edit = true
     config.columns[:budget].label = "Budget for RFY 10-11 (upcoming)"
     %w[q1 q2 q3 q4].each do |quarter|

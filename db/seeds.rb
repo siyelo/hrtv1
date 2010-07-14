@@ -146,10 +146,14 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
   elsif c.raw_type == "Donors"
     c.type = "Donor"
   end
+
   #puts row.inspect
   %w[name].each do |field|
     #puts "#{field}: #{row[field]}"
     c.send "#{field}=", row[field].try(:strip)
+  end
+  unless %w[Donors Agencies Implementers].include? c.raw_type
+    c.name += " #{c.raw_type}"
   end
   puts "error on #{row}" unless c.save
 end

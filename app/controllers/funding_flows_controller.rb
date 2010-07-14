@@ -11,7 +11,7 @@ class FundingFlowsController < ApplicationController
     config.label = "Funding Flow"
     config.columns =  @@shown_columns
     list.sorting = {:from => 'DESC'}
-    config.columns[:project].options[:update_column] = [:to]
+#    config.columns[:project].options[:update_column] = :to#LateUpdater.new(self)
     config.columns[:raw_provider].form_ui = :textarea
     config.columns[:raw_provider].options = {:cols => 50, :rows => 3}
     config.columns[:raw_provider].inplace_edit = true
@@ -19,13 +19,16 @@ class FundingFlowsController < ApplicationController
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
-
-    config.create.columns = @@create_columns
-    config.update.columns = config.create.columns
+    
     config.columns[:project].form_ui=:select
+    config.columns[:project].inplace_edit=false
+
     [:from, :to ].each do |c|
       config.columns[c].form_ui=:select
       config.columns[c].inplace_edit = true
+
+    config.create.columns = @@create_columns
+    config.update.columns = config.create.columns
     end
    # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later
     config.columns[:budget].inplace_edit = true
@@ -41,5 +44,5 @@ class FundingFlowsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
-
+  
 end

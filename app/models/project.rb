@@ -10,7 +10,11 @@ class Project < ActiveRecord::Base
   end
 
   def to_label #so text doesn't spill over in nested scaffs
-    to_s[0,20]+'...'
+    if to_s.length > 21
+      to_s[0,20]+'...'
+    else
+      to_s
+    end
   end
 
   def valid_providers

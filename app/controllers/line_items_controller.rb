@@ -16,7 +16,9 @@ class LineItemsController < ApplicationController
     config.columns[:activity_cost_category].form_ui= :select
     config.columns[:activity_cost_category].inplace_edit= true
     config.columns[:budget].label = "Budget for RFY 10-11"
+    config.columns[:budget].inplace_edit = true
     config.columns[:spend].label = "Expenditure in RFY 09-10"
+    config.columns[:spend].inplace_edit = true
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 

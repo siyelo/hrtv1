@@ -1,4 +1,5 @@
 class ProvidersController < ApplicationController
+
   @@columns_for_file_upload = %w[to raw_provider project ]
   map_fields :create_from_file,
     @@columns_for_file_upload,

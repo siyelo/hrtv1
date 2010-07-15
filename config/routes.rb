@@ -29,11 +29,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :other_costs, :active_scaffold => true
   map.resources :other_cost_types, :active_scaffold => true
 
+  map.resources :users, :active_scaffold => true
+
+  map.resource :user_session
+  map.login 'login', :controller => 'user_sessions', :action => 'new'
+  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
+
   map.resources :code_assignments, :only => [:index]
   map.manage_code_assignments 'manage_code_assignments/:activity_id', :controller => 'code_assignments', :action => :manage
   map.update_code_assignments 'update_code_assignments', :controller => 'code_assignments', :action => :update_assignments, :method => :post
-
-  # DRY up the static page controller
 
   map.static_page ':page',
                   :controller => 'static_page',
@@ -47,3 +51,4 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id.:format'
 
 end
+

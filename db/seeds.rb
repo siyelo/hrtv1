@@ -156,6 +156,7 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
     c.name += " #{c.raw_type}"
   end
   puts "error on #{row}" unless c.save
+
 end
 
 %w[ self ].each do |ngo|

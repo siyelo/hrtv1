@@ -1,4 +1,6 @@
 class FundingFlowsController < ApplicationController
+  load_and_authorize_resource
+
   @@shown_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1]
   @@create_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
@@ -6,7 +8,7 @@ class FundingFlowsController < ApplicationController
   map_fields :create_from_file,
     @@columns_for_file_upload,
     :file_field => :file
-  
+
   active_scaffold :funding_flow do |config|
     config.label = "Funding Flow"
     config.columns =  @@shown_columns
@@ -19,7 +21,7 @@ class FundingFlowsController < ApplicationController
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
-    
+
     config.columns[:project].form_ui=:select
     config.columns[:project].inplace_edit=false
 
@@ -44,5 +46,5 @@ class FundingFlowsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
-  
+
 end

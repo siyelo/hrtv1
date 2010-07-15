@@ -24,6 +24,9 @@ module NavigationHelpers
       a = Activity.find_by_name($1)
       manage_code_assignments_path(a)
 
+    when /the login page/
+      login_path
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

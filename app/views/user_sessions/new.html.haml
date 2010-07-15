@@ -1,0 +1,21 @@
+- title "Log in"
+
+
+- form_for @user_session, :url => user_session_path do |form|
+  %table#user.formList
+    %tbody
+      %tr
+        %td
+          = form.label :username, "Username or email"
+        %td
+          = form.text_field :username
+      %tr
+        %td
+          = form.label :password, "Password"
+        %td
+          = form.password_field :password
+      %tr
+        %td
+          \&nbsp;
+        %td
+          = form.submit "Submit"

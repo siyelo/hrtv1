@@ -20,5 +20,9 @@ Given /^the following projects$/ do |table|
   end
 end
 
+Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
+  @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
+end
+
 
 

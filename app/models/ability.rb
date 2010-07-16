@@ -9,6 +9,7 @@ class Ability
       can :manage, Project
       can :manage, FundingFlow
       can :manage, Organization
+      can :manage, Activity
     end
   end
 end

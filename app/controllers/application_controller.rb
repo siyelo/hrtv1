@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
     config.list.empty_field_text = "------"
     config.list.pagination = false
     #config.create.persistent = true #add back when make form appear below list
-
   end
 
   def redirect_to_index

@@ -110,6 +110,9 @@ class ApplicationController < ActionController::Base
     record
   end
 
+  #TODO now that we're loading model help in the controller, maybe ew
+  # pass in a help object here from the controller instead
+  # of doing the find here?
   def self.set_active_scaffold_column_descriptions
     #TODO cache descriptions in a class variable?
     # would be premature optimization

@@ -19,11 +19,6 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_index
-    #this is going to introduce bugs, couldn't think of
-    # better way to do it since AS needs the index method clean
-    # for search to work
-    # may be able to check params for search request and render list
-    # when that is asked for?
     redirect_to :action => :index
   end
 
@@ -40,7 +35,7 @@ class ApplicationController < ActionController::Base
           val =row[attributes.index(item)]
           model_hash[item] = val if val # map_fields has nil for unmapped fields
         end
-        a = new_from_hash_w_constraints model_hash
+        a = new_from_hash_w_constraints model_hash, session[:last_data_entry_constraints]
         a.save ? saved << a : errors << a
       end
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
@@ -60,34 +55,43 @@ class ApplicationController < ActionController::Base
       redirect_to_index
   end
 
-  def new_from_hash_w_constraints model_hash
+  def new_from_hash_w_constraints model_hash, constraints
 
       logger.debug(model_hash.inspect)
       #logger.debug(active_scaffold_constraints.inspect)
       #logger.debug(session[:last_data_entry_constraints].inspect)
 
     # overwrite values with constrained values for this record
-    if session[:last_data_entry_constraints]
-      model_hash.merge! session[:last_data_entry_constraints]
+    if constraints.try(:empty?)
+      model_hash.merge! constraints
     end
 
       logger.debug(model_hash.inspect)
 
     klass = controller_model_class
-    couldnt_find_models = {}
+    couldnt_find_models = {} # any fields that held id's
+    # where, when we looked in the database for them,
+    # no matching record was found
 
     model_hash.each do |k,v|
+
       # TODO remove dirty hack
+      # is this field an association or regular column?
       # model should be responsible for knowing what field to look for,
       # right now we assume all have a name
       association_class = klass.reflect_on_association(k.to_sym).try :klass
-      if association_class
-        as_id = v.try(:to_i)
+
+      if association_class # if column is an association column
+        value_as_id = v.try(:to_i) #is the value an id or a name?
         attempted_find_method = :find_by_name
-        if as_id != 0 # to_i never raises error, is 0 if wasn't a number
+        if value_as_id != 0 # if it is an id
           attempted_find_method = :find
-          v = as_id
+          v = value_as_id
         end
+
+        # TODO catch if we can't find the id
+        # thing is we don't, at the moment, have users read in files with id's
+        # only give in id's from constraints made in the controllers
         associated_object = association_class.send(attempted_find_method, v)
 
         if associated_object

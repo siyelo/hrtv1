@@ -1,8 +1,8 @@
 #create dummy users
 User.create!(:username => 'admin',
               :email => 'admin@ubuzima.org',
-              :password => 'admin1234',
-              :password_confirmation => 'admin1234',
+              :password => 'password',
+              :password_confirmation => 'password',
               :roles => ['admin'])
 
 #create dummy users

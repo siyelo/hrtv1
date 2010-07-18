@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
   before_filter :load_help
 
   @@shown_columns = [:name, :description,  :expected_total]

@@ -10,10 +10,11 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
 
-   rescue_from CanCan::AccessDenied do |exception|
-      flash[:error] = "Access denied!"
-      redirect_to root_url
-    end
+  rescue_from CanCan::AccessDenied do |exception|
+      #flash[:error] = "Access denied!"
+      render :text => "Access denied!"
+      #redirect_to root_url
+  end
 
   ActiveScaffold.set_defaults do |config|
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
@@ -142,24 +143,10 @@ class ApplicationController < ActionController::Base
     active_scaffold_config.columns[column].description = descr
   end
 
+  helper_method :current_user
   private
 
   #before_filter { |c| Authorization.current_user = c.current_user }
-
-  def current_user_session
-  return @current_user_session if defined?(@current_user_session)
-  @current_user_session = UserSession.find
-  end
-
-  def current_user
-  @current_user = current_user_session && current_user_session.record
-  end
-
-  helper :all
-  helper_method :current_user_session, :current_user
-  filter_parameter_logging :password, :password_confirmation
-
-  protected
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
@@ -167,9 +154,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    return @current_user if defined?(@current_user)
     @current_user = current_user_session && current_user_session.record
   end
+
+  protected
 
   def require_user
     unless current_user
@@ -189,6 +177,4 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-
 end
-

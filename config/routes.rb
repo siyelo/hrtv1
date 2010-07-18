@@ -1,11 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.coding "activities/code", :controller => 'activities', :action => 'code'
+  map.coding "activities/random", :controller => 'activities', :action => 'random'
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
   map.providers_data_entry "providers", :controller => 'providers', :action => 'index'
-  %w[activities funding_flows projects providers funding_sources model_helps comments].each do |model|
+  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs].each do |model|
     map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
   end
 
@@ -47,8 +48,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
   #TODO remove these
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #map.connect ':controller/:action/:id'
+  #map.connect ':controller/:action/:id.:format'
 
 end
 

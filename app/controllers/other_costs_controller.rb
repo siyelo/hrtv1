@@ -1,4 +1,5 @@
 class OtherCostsController < ApplicationController
+  load_and_authorize_resource
   @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]
   @@create_columns = [:projects,   :other_cost_type,  :expected_total, :budget, :description ]
 

@@ -57,6 +57,7 @@ Note: if you have an error with database gem you won't be using, you can ignore 
 # edit config/datbase.yml per your environment.  This file is not tracked by git.
 # create .rvmrc file so whenever we cd to RAILS_ROOT we are using the right Ruby version and gem set.
 * echo 'rvm ree-1.8.7-2010.02@resource_tracking' > .rvmrc
+* script/generate cucumber # don't overwrite files when it asks you
 * rake setup
 * script/server
 

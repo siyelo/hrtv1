@@ -23,12 +23,16 @@
         //= image_tag("logo.png", :alt => "Rwanda Resource Tracking Database") // add later w new logo
       #admin
         %ul
-          %li= link_to 'Dashboard', static_page_path(:ngo_dashboard)
-          %li= link_to "logout", "#"
+          - if current_user
+            %li= "Welcome #{current_user.username}"
+            %li= link_to 'Dashboard', static_page_path(:ngo_dashboard)
+            %li= link_to "My Profile", user_url(current_user)
+            %li= link_to "logout", logout_path
+          - else
+            %li= link_to "login", login_path
 
     #tabs
       %ul
-
         %li{ :class => [controller.class == ProjectsController ? "active" : '']}
           = link_to 'Projects', projects_path
 
@@ -50,8 +54,7 @@
 
       #main
 
-        - if flash[:notice]
-          #notice= flash[:notice]
+        = render :partial => 'layouts/flashes'
 
         #desc
           :javascript

@@ -1,4 +1,6 @@
 class StaticPageController < ApplicationController
+  before_filter :require_user
+
   def index
   end
 
@@ -6,3 +8,4 @@ class StaticPageController < ApplicationController
     render :action => params[:page]
   end
 end
+

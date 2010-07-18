@@ -104,6 +104,16 @@ On your dev environment, you'll need to install a few gems;
 
   $ RAILS_ENV=cucumber rake gems:install
 
+=== Running Tests
+
+==== Cucumber Features
+
+  $ cucumber features
+
+==== RSpec
+
+  $ spec spec
+
 ==== Contributing
 
 Write tests then write code. Have fun while improving your craft.

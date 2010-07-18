@@ -10,13 +10,14 @@ config_file_path = File.join(RAILS_ROOT, 'config', 'settings.secret.yml')
 config_file_path = File.join(RAILS_ROOT, 'config', 'settings.yml') if ['production', 'staging'].include?(RAILS_ENV)
 if File.exist?(config_file_path)
   config = YAML.load(ERB.new(File.read(config_file_path)).result)
-  APP_CONFIG = {}
   if config && config.has_key?(RAILS_ENV)
     APP_CONFIG = config.has_key?(RAILS_ENV) ? config[RAILS_ENV] : {}
   else
+    APP_CONFIG = {}
     puts "ERROR: config file #{config_file_path} is not valid"
   end
 else
+  APP_CONFIG = {}
   puts "ERROR: configuration file #{config_file_path} not found."
 end
 
@@ -26,6 +27,10 @@ Rails::Initializer.run do |config|
   config.gem "haml",    :version => "= 3.0.13"
   config.gem "compass", :version => "= 0.10.2"
   config.gem 'hoptoad_notifier'
+  config.gem "authlogic"
+  config.gem "cancan"
+
   config.time_zone = 'UTC'
 
 end
+

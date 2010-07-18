@@ -6,10 +6,10 @@ Feature: NGO/donor can enter activities for each project
 Scenario: See list of activities for my project
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 
+  Given I am signed in as a reporter 
   When I go to the projects listing page
   And I follow "Activities" within "div#as_projects-content"
   Then I should see "Activities for TB Treatment Project"
-  And I should see "TB Drugs procurement"
 
 @pending
 Scenario: Add an activity

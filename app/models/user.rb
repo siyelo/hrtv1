@@ -24,5 +24,11 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
+  def organization
+    Organization.find_by_name("self")
+  end
+  def self.organization
+    Organization.find_by_name("self")
+  end
 end
 

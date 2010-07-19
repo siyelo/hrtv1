@@ -1,5 +1,4 @@
 module WorkflowHelper
-  #TODO broken at the funding_flows steps now that removed routes
   @@map = { "start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
             "providers/index" => "activities" , "activities/index" => "other_costs", "other_costs/index" => "#"}
 
@@ -9,7 +8,7 @@ module WorkflowHelper
 
   def next_workflow_path
     if next_workflow_path_wo_slash
-    '/'+next_workflow_path_wo_slash
+      '/'+next_workflow_path_wo_slash
     else
       '/'
     end

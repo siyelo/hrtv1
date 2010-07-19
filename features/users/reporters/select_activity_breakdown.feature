@@ -3,9 +3,6 @@ Feature: NGO/donor can enter a code breakdown for each activity
   As a NGO/Donor
   I want to be able to break down activities into individual codes
 
-
-#bug - capybara not rendering the JS?
-
 Scenario: See a breakdown for an activity
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 

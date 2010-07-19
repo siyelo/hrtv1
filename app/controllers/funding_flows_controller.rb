@@ -1,5 +1,5 @@
 class FundingFlowsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   @@shown_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1]
   @@create_columns = [:project, :from, :to, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]

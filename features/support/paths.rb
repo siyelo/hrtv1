@@ -27,6 +27,9 @@ module NavigationHelpers
     when /the login page/
       login_path
 
+    when /the funding sources page/
+      funding_sources_data_entry_path
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

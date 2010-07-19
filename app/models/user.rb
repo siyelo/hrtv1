@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   acts_as_authentic
 
   has_many  :assignments
+  belongs_to :organization
 
   validates_presence_of  :username, :email
   validates_uniqueness_of :email, :case_sensitive => false
@@ -24,5 +25,9 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
+  # GR: why is this needed ?
+  def self.organization
+    Organization.find_by_name("self")
+  end
 end
 

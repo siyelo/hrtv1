@@ -29,10 +29,21 @@ module FundingFlowsHelper
   end
 
   def collect_orgs project
-    ids=Set.new
+    ids = Set.new
     project.locations.each do |l| #in future this should scope right with default
       ids.merge l.organization_ids
     end
     ids
+  end
+end
+
+#TODO where should this be declared, this isn't right place
+class ValueAtRuntime < Object
+  def initialize block
+    @block = block
+  end
+
+  def quoted_id
+    @block.call
   end
 end

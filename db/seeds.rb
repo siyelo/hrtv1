@@ -159,6 +159,10 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
 
 end
 
+#TODO remove - this was a hack to make it seem like we aliased
+# the reporting organization in select lists
+# and also was used in controllers to fake that we
+# had namespaced access / restricted some things from being shown
 %w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end

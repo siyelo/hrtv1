@@ -24,12 +24,33 @@ Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | 
   @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
 end
 
-Given /^I am signed in as a reporter$/ do
-  Given 'a reporter "Frank" with email "frank@f.com" and password "password"'
-  When 'I go to the login page'
-  When 'I fill in "Username or email" with "Frank"'
-  And 'I fill in "Password" with "password"'
-  And 'I press "Submit"'
+Given /^I am signed in as "([^"]*)"$/ do |name|
+  steps %Q{
+    When I go to the login page
+    When I fill in "Username or email" with "#{name}"
+    And  I fill in "Password" with "password"
+    And  I press "Submit"
+  }
 end
+
+Given /^I am signed in as a reporter$/ do
+  steps %Q{
+    Given a reporter "Frank" with email "frank@f.com" and password "password"
+    Given I am signed in as "Frank"
+  }
+end
+
+Given /^an organization with name "([^"]*)"$/ do |name|
+  @organization = Factory.create(:organization, :name => name)
+end
+
+Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
+  @organization = Factory.create(:organization, :name => org_name)
+  steps %Q{
+    Given a reporter "#{reporter}" with email "frank@f.com" and password "password"
+  }
+  @user.organization = @organization
+end
+
 
 

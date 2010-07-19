@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
   before_filter :load_help
 
   @@shown_columns = [:name, :description,  :expected_total]
@@ -40,13 +40,12 @@ class ProjectsController < ApplicationController
     super @@columns_for_file_upload
   end
 
-  self.set_active_scaffold_column_descriptions
-
   protected
 
 
   def load_help
     @model_help = ModelHelp.find_by_model_name "Projects"
+    ProjectsController.set_active_scaffold_column_descriptions
   end
 
 end

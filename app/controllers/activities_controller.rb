@@ -1,6 +1,5 @@
 class ActivitiesController < ApplicationController
-
-  load_and_authorize_resource
+  authorize_resource
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
   @@create_columns = [:projects, :locations, :provider, :name, :description,  :start_month, :end_month, :beneficiary, :target, :expected_total, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
@@ -30,10 +29,10 @@ class ActivitiesController < ApplicationController
     config.update.columns = config.create.columns
     config.columns[:projects].inplace_edit = :ajax
     config.columns[:projects].form_ui = :select
-    config.columns[:projects].options[:update_column] = [:provider] #not working
+    #config.columns[:projects].options[:update_column] = [:provider] #not working
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
-    config.columns[:locations].options[:update_column] = [:provider] #not working
+    #config.columns[:locations].options[:update_column] = [:provider] #not working
     config.columns[:provider].inplace_edit = :ajax
     config.columns[:provider].form_ui = :select
     config.columns[:provider].association.reverse = :provider_for
@@ -71,5 +70,8 @@ class ActivitiesController < ApplicationController
     ["activities.type IS NULL "]
   end
 
+  def random
+
+  end
 end
 

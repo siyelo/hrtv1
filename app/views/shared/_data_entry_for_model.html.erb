@@ -1,7 +1,8 @@
-<% if params[:action] == "table" #makes render component not show xtra stuff
+<% if params[:action] == "table" #makes render component not show xtra stuff when its nested
 %>
   <%= grid %>
-<% else %>
+<% else  # otherwise, we are on the index action (technically, not rendering a nested scaffold)
+%>
 
 <% human_plural_name_for_entity ||= record_type.human_name.pluralize.downcase %>
 

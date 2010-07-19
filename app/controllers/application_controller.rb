@@ -61,6 +61,7 @@ class ApplicationController < ActionController::Base
       redirect_to_index
   end
 
+  #TODO move into ActiveRecord:Base
   def new_from_hash_w_constraints model_hash, constraints
 
       logger.debug(model_hash.inspect)

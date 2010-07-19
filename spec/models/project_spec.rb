@@ -43,7 +43,7 @@ describe Project do
       end    
     end
   
-    describe "getting who we gave money to (provider? provided?)" do
+    describe "getting who we gave money to (the 'providers' we gave to)" do
       it "should return a sole organization" do
         flow         = Factory(:funding_flow, :from => @our_org, :to => @other_org)
         @project.funding_flows << flow

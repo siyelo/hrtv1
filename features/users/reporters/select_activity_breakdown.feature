@@ -13,7 +13,6 @@ Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
   And I should see "TB Drugs procurement"
-  Then show me the page
   Then I should see "Development Of Sector Institutional Capacity"
 
 Scenario: See a checkbox and amount for each code

@@ -32,7 +32,7 @@ config.gem 'faker',            :lib => false
 # dont forget to make a ~/.autotest file with
 #   require "autotest/growl"
 #   require "autotest/fsevent"
-config.gem "ZenTest",          :lib => false
-config.gem "autotest-rails",   :lib => false
-config.gem "autotest-fsevent", :lib => false
-config.gem "autotest-growl",   :lib => false
+#config.gem "ZenTest",          :lib => false
+#config.gem "autotest-rails",   :lib => false
+#config.gem "autotest-fsevent", :lib => false
+#config.gem "autotest-growl",   :lib => false

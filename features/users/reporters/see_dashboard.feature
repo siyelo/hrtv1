@@ -5,4 +5,6 @@ Feature: NGO can see dashboard
 
 Scenario: "See data requests"
   Given I am on the ngo dashboard page
+  Given I am signed in as a reporter
   Then I should see "Data Requests to Fulfill"
+

@@ -29,7 +29,7 @@ Scenario: Login as a reporter with email address
   When I fill in "Username or email" with "frank@f.com"
   And I fill in "Password" with "password"
   And I press "Submit"
-  Then show me the page
+  #Then show me the page
   Then I should be on the ngo dashboard page
   And I should see "Welcome Frank"
 

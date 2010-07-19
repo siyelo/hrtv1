@@ -1,4 +1,5 @@
 class FundingFlow < ActiveRecord::Base
+  require 'lib/funding_flow_model_helper'
   acts_as_commentable
 
   before_save :authorize_and_set_owner

@@ -3,6 +3,30 @@ Feature: NGO/donor can see incoming funding flows for their projects
   As a NGO/Donor
   I want to be able to track incoming funding flows
 
+@run
+Scenario: Reporter can see current incoming flows (Funding Sources) for their organization
+  Given the following organizations 
+    | name             |
+    | WHO              |
+    | UNAIDS           |
+    | Gates Foundation |
+  Given the following reporters 
+     | name         | organization |
+     | who_user     | WHO          |
+  Given the following projects 
+     | name                 |
+     | TB Treatment Project |
+     | Some other Project   |
+  Given the following funding flows 
+     | to     | project              | from             | budget  |
+     | WHO    | TB Treatment Project | UNAIDS           | 1000.00 |
+     | UNAIDS | Some other Project   | Gates Foundation | 2000.00 |
+  Given I am signed in as "who_user"
+  When I go to the funding sources page
+  Then I should see "TB Treatment Project"
+  And I should not see "Some other Project"
+
+
 Scenario: Create incoming funding flow
   Given an organization with name "UNDP"
   Given a reporter "Frank" in organization "UNDP"
@@ -17,8 +41,8 @@ Scenario: Create incoming funding flow
   And I should see "TB Treatment Project"
   And I should see "UNAIDS"
   And I should see "1000.00"
-
-
+  
+  
 Scenario: BUG: Redirected back to Funding Sources index after creation
   Given an organization with name "UNDP"
   Given a reporter "Frank" in organization "UNDP"

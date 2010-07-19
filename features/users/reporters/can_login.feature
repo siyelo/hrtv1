@@ -22,7 +22,7 @@ Scenario: Login as a reporter with a username
   And I should see "Welcome Frank"
   And I should see "Dashboard"
   And I should see "My Profile"
-  
+ 
 # Scenario: Login as a reporter with email address
 #   Given a reporter "Frank" with email "frank@f.com" and password "password"
 #   When I go to the login page
@@ -33,4 +33,20 @@ Scenario: Login as a reporter with a username
 #   Then I should be on the ngo dashboard page
 #   And I should see "Welcome Frank"
 # 
-#   
+
+@allow-rescue
+Scenario Outline: Visit protected page, get redirected to login screen
+  When I go to the <page> page
+  Then I should see "You must be signed in to do that"
+  And I should be on the login page 
+  Examples:
+    | page            |
+    | projects        |
+    | funding sources |
+    | providers       |
+    | activities      |
+    | other costs     |
+
+#Active-Scaffold-specific routes
+#Scenario Outline: Request protected action, get redirected to login screen
+  

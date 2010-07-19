@@ -17,6 +17,9 @@ module NavigationHelpers
     when /the projects listing page/
       projects_path
 
+    when /the projects page/
+      projects_path
+
     when /the activities page/
       activities_path
 
@@ -29,6 +32,12 @@ module NavigationHelpers
 
     when /the funding sources page/
       funding_sources_data_entry_path
+
+    when /the providers page/
+      providers_data_entry_path
+
+    when /the other costs page/
+      other_costs_path
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

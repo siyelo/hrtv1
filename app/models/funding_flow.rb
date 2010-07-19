@@ -3,7 +3,7 @@ class FundingFlow < ActiveRecord::Base
 
   before_save :authorize_and_set_owner
 
-  default_scope :conditions => ["organization_id_owner = ?", ValueAtRuntime.new(Proc.new { User.organization.id }) ]
+  #default_scope :conditions => ["organization_id_owner = ?", ValueAtRuntime.new(Proc.new { User.organization.id }) ]
 
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies

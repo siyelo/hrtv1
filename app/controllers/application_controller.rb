@@ -11,8 +11,11 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   rescue_from CanCan::AccessDenied do |exception|
-      #flash[:error] = "Access denied!"
       render :text => "Access denied!"
+      # TODO render a template / action without the layout with login link & help msg
+
+      # redirect caused infinite loop, could be that home page had security on it
+      #flash[:error] = "Access denied!"
       #redirect_to root_url
   end
 
@@ -28,10 +31,6 @@ class ApplicationController < ActionController::Base
     redirect_to :action => :index
   end
 
-  #TODO add constraints option that works with key - value for ids
-  # or pass in an object to build the new record off of?
-  # so that file uploads with constraints in the AS view work
-  # as user would expect
   def create_from_file attributes, constraints={}
     if fields_mapped?
       saved, errors = [], []

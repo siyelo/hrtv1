@@ -20,6 +20,7 @@ class FundingFlow < ActiveRecord::Base
   end
 
   protected
+
   def authorize_and_set_owner
     # TODO authorize and throw exception if no create/update for you! no soup for you!
 

@@ -1,15 +1,26 @@
 class Project < ActiveRecord::Base
   acts_as_commentable
+
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
-
   has_many :funding_flows, :dependent => :nullify
 
+  has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
+  has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
+
+  validates_presence_of :name
+  validates_numericality_of :expected_total
+
+  attr_accessible :name, :description, :expected_total
+
   def to_s
-    name
+    result = ''
+    result = name unless name.nil?
+    result
   end
 
-  def to_label #so text doesn't spill over in nested scaffs
+  # TODO... GR: this is view code - must be moved out of the model
+  def to_label #so text doesn't spill over in nested scaffs.
     if to_s.length > 21
       to_s[0,20]+'...'
     else
@@ -18,11 +29,6 @@ class Project < ActiveRecord::Base
   end
 
   def valid_providers
-    f=funding_flows.find(:all, :select => "organization_id_to",
-      :conditions =>
-      ["organization_id_from = ?", Organization.find_by_name("self").id])
-
-    r=f.collect {|f| f.organization_id_to}
-    r
+    self.providers
   end
 end

@@ -69,7 +69,7 @@ class ActivitiesController < ApplicationController
   def conditions_for_collection
     ["activities.type IS NULL "]
   end
-  
+
   def random
 
   end

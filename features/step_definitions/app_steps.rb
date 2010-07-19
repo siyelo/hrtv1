@@ -42,5 +42,3 @@ Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
   @user.organization = @organization
 end
 
-
-

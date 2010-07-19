@@ -13,7 +13,7 @@ public/stylesheets/compiled/*
 
 # Cucumber/webrat tmp files
 webrat-*
-capybara*
+capybara*.html
 rerun.txt
 coverage/*
 

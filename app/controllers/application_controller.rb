@@ -27,6 +27,8 @@ class ApplicationController < ActionController::Base
     #config.create.persistent = true #add back when make form appear below list
   end
 
+  before_filter :load_help
+
   def redirect_to_index
     redirect_to :action => :index
   end
@@ -120,13 +122,12 @@ class ApplicationController < ActionController::Base
   #TODO now that we're loading model help in the controller, maybe ew
   # pass in a help object here from the controller instead
   # of doing the find here?
-  def self.set_active_scaffold_column_descriptions
+  def self.set_active_scaffold_column_descriptions help
     #TODO cache descriptions in a class variable?
     # would be premature optimization
     if respond_to? :active_scaffold_config # or should it error when called badly?
       config = active_scaffold_config
       unless config.nil?
-        help = ModelHelp.find_by_model_name(config.model.to_s)
         help = help.field_help if help
         if help
           #TODO join with ruby array methods or something better
@@ -175,6 +176,19 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
+  end
+
+  # sets AS field help that shows up in create form and on columns
+  # @model_help used in views/shared/_data_entry_help
+  def load_help
+    logger.debug(self.controller_model_class)
+    @model_help = help_model
+    self.class.set_active_scaffold_column_descriptions @model_help
+  end
+
+  # can override this in subclass for different help
+  def help_model
+    ModelHelp.find_by_model_name self.controller_model_class.to_s
   end
 
 end

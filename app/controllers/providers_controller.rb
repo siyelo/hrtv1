@@ -20,4 +20,8 @@ class ProvidersController < ApplicationController
   def controller_model_class
     FundingFlow
   end
+
+  def help_model
+    ModelHelp.find_by_model_name "Provider"
+  end
 end

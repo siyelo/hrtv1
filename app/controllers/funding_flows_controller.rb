@@ -3,6 +3,9 @@ class FundingFlowsController < ApplicationController
 
   @@shown_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1]
   @@create_columns = [:project, :from, :to, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+  def self.create_columns
+    @@create_columns
+  end
   @@update_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 

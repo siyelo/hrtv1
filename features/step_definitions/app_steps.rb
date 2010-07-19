@@ -32,4 +32,15 @@ Given /^I am signed in as a reporter$/ do
   And 'I press "Submit"'
 end
 
+Given /^an organization with name "([^"]*)"$/ do |name|
+  @organization = Factory.create(:organization, :name => name)
+end
+
+Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
+  @organization = Factory.create(:organization, :name => org_name)
+  Given 'a reporter "#{reporter}" with email "frank@f.com" and password "password"'
+  @user.organization = @organization
+end
+
+
 

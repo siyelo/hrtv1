@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   def organization
     Organization.find_by_name("self")
   end
+
   def self.organization
     Organization.find_by_name("self")
   end

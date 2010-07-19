@@ -70,16 +70,21 @@ Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
 end
 
 
-Given /^the following funding sources$/ do |table|
+Given /^the following funding flows$/ do |table|
   table.hashes.each do |hash|
-    org      = Organization.find_by_name(hash.delete("organization"))
+    to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
 
-    Factory.create(:funding_source, { :organization_id => org.id,  
+    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
                                       :project_id => project.id, 
                                       :organization_id_from => from_org.id
                                       }.merge(hash) )
   end
+end
+
+
+Then /^debug$/ do
+  debugger # express the regexp above with the code you wish you had
 end
 

@@ -31,6 +31,9 @@ Scenario: BUG: Redirected back to Funding Sources index after creation
   And I press "Create"
   Then I should be on the funding sources page
 
+
+#BUG This test seems valid, but currently failing - expect its to do with incorrect scoping
+
 @run
 Scenario: Other organization creates a Funding Source, we see it under our Providers list
   Given the following organizations 
@@ -42,13 +45,15 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
      | undp_user    | UNDP         |
      | un_aids_user | UNAIDS       |
   Given the following projects 
-     | organization | name                 |
-     | UNDP         | TB Treatment Project |
-  Given the following funding sources 
-     | organization | project              | from   | budget  |
-     | UNDP         | TB Treatment Project | UNAIDS | 1000.00 |
+     | name                 |
+     | TB Treatment Project |
+  Given the following funding flows 
+     | to   | project              | from   | budget  |
+     | UNDP | TB Treatment Project | UNAIDS | 1000.00 |
   Given I am signed in as "un_aids_user"
   When I go to the providers page
-  And I should see "TB Treatment Project"
+  Then show me the page
+  Then debug
+  Then I should see "TB Treatment Project"
   And I should see "UNDP"
   And I should see "1000.00"

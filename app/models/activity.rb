@@ -13,7 +13,6 @@ class Activity < ActiveRecord::Base
   after_save :update_code_assignments
 
   # delegate :providers, :to => :projects
-
   def valid_providers
     #TODO use delegates_to
     projects.valid_providers

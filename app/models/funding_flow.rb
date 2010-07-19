@@ -4,7 +4,7 @@ class FundingFlow < ActiveRecord::Base
 
   before_save :authorize_and_set_owner
 
-  default_scope :conditions => ["organization_id_owner = ?", ValueAtRuntime.new(Proc.new { User.organization.id}) ]
+  #default_scope :conditions => ["organization_id_owner = ?", ValueAtRuntime.new(Proc.new { User.organization.id }) ]
 
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies
@@ -19,7 +19,6 @@ class FundingFlow < ActiveRecord::Base
     "Flow: #{from.to_s} to #{to.to_s} for #{project.to_s}"
   end
 
-
   protected
   def authorize_and_set_owner
     # TODO authorize and throw exception if no create/update for you! no soup for you!
@@ -29,4 +28,5 @@ class FundingFlow < ActiveRecord::Base
     #TODO current_user.organization
     self.owner = User.organization unless false #TODO current_user.admin?
   end
+
 end

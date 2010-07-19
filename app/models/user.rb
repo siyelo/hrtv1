@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
+  # GR: why is this needed ?
   def self.organization
     Organization.find_by_name("self")
   end

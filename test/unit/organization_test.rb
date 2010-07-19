@@ -5,7 +5,8 @@ class OrganizationTest < ActiveSupport::TestCase
   test "the truth" do
     assert true
   end
- 
+
+  should have_many :users
   test "providers for" do
     o=Organization.new(:name => "test")
     o.save

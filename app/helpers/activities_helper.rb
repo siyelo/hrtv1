@@ -4,9 +4,9 @@ module ActivitiesHelper
       #right now for some reason projects is trying to pick up the
       #options for the association for activities
       if association.name == :provider
-          ids=Set.new
+          ids = Set.new
           Project.all.each do |p| #in future this should scope right with default
-            ids.merge p.valid_providers
+            ids.merge p.providers
           end
           ["id in (?)", ids]
       elsif association.name == :locations

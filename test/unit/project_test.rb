@@ -3,13 +3,7 @@ require 'test_helper'
 class ProjectTest < ActiveSupport::TestCase
 
   test "has valid providers" do
-    assert Organization.new(:name => "self").save
-    p = Project.create!(:name => "proj1", :expected_total => 10.0)
-    o = Organization.find_by_name("self")
-    to = Organization.create!(:name => "valid_provider")
-    p.funding_flows.create!(:from => o, :to => to)
-    assert p.valid_providers.first.id == to.id
-    assert p.valid_providers.size == 1
+    # moved to project_spec.rb
   end
 
   # need to get shoulda working

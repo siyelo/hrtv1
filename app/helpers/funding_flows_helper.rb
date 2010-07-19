@@ -29,7 +29,7 @@ module FundingFlowsHelper
   end
 
   def collect_orgs project
-    ids=Set.new
+    ids = Set.new
     project.locations.each do |l| #in future this should scope right with default
       ids.merge l.organization_ids
     end

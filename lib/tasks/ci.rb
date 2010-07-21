@@ -5,7 +5,6 @@
 # to configure your CI Joe server, add this
 #   $ git config --add cijoe.runner "ruby lib/tasks/ci.rb"
 #
-EXIT_OK = 0
 EXIT_NOK = 1
 
 # copy in any yamls not in the repo
@@ -14,13 +13,13 @@ system "cp config/settings.secret.example.yml config/settings.secret.yml"
 
 #run db creation and seeding
 seeded = system "rake setup --trace"
-unless seeded == EXIT_OK
+unless seeded == true
   puts "rake setup --trace returned #{seeded}"
   exit EXIT_NOK
 end
 
 # cijoe build
 built = system "rake -s test"
-exit EXIT_NOK unless built == EXIT_OK
+exit EXIT_NOK unless built == true
 
 return result

@@ -2,6 +2,9 @@ class OtherCostsController < ApplicationController
   authorize_resource
   @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]
   @@create_columns = [:projects,   :other_cost_type,  :expected_total, :budget, :description ]
+  def self.create_columns
+    @@create_columns
+  end
 
   active_scaffold :other_costs do |config|
     config.label =  "Other Costs"

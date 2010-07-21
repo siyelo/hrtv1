@@ -1,4 +1,5 @@
-<% model_help = ModelHelp.find_by_model_name record_type.to_s %>
+<% model_help = @model_help #from before_filter :load_help in app controller
+ %>
 
 <% if model_help %>
   <% content_for :side_bar do %>

@@ -6,6 +6,9 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
+puts "Loading seeds..."
+
+
 require 'yaml'
 require 'fastercsv'
 
@@ -63,9 +66,9 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.type="Nha"
   end
 
-  puts "Adding code #{c.external_id}: "
-  puts "error on #{row}" unless c.save
-  puts "  #{c.id}"
+  print "."
+  puts "error on #{row}" unless c.save!
+  #puts "  #{c.id}"
 end
 
 puts "...Loading codes.csv DONE"
@@ -166,3 +169,5 @@ end
 %w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end
+
+puts "...seeding DONE"

@@ -11,7 +11,7 @@ system "cp config/database.yml.sample config/database.yml"
 system "cp config/settings.secret.example.yml config/settings.secret.yml"
 
 #run db creation and seeding
-system "rake -s setup"
+system "rake -s setup --trace"
 
 # cijoe build
 system "rake -s test"

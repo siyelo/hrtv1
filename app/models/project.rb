@@ -5,6 +5,8 @@ class Project < ActiveRecord::Base
 
   has_many :funding_flows, :dependent => :nullify
 
+  has_one :data_element, :as => :data_elementable
+
   def to_s
     name
   end

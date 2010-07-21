@@ -2,8 +2,10 @@ module WorkflowHelper
   @@map = { "start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
             "providers/index" => "activities" , "activities/index" => "other_costs", "other_costs/index" => "#"}
 
-  def workflow_start
+  def workflow_start response_id
+    session[:data_response] = response_id
     "/"+@@map["start"]
+    
   end
 
   def next_workflow_path

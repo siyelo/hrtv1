@@ -17,4 +17,9 @@ module ApplicationHelper
     content_for(:title) { page_title }
   end
 
+  def unfulfill_responses 
+    #<todo> need to add relate to users, currently,it goes through all responses
+    DataResponse.unfulfilled
+  end
+
 end

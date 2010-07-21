@@ -15,6 +15,8 @@ class FundingFlow < ActiveRecord::Base
 
   belongs_to :project
 
+  has_one :data_element, :as =>:data_elementable 
+
   def to_s
     "Flow: #{from.to_s} to #{to.to_s} for #{project.to_s}"
   end

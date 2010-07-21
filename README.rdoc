@@ -129,6 +129,12 @@ And don't forget to seed your Cuke DB
 
   $ spec spec
 
+==== CI
+
+You can set up a local cijoe server with;
+
+  $ git config --add cijoe.runner "ruby lib/tasks/ci.rb"
+
 ==== Contributing
 
 Write tests then write code. Have fun while improving your craft.

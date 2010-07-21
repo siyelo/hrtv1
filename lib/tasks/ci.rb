@@ -13,8 +13,11 @@ system "cp config/database.yml.sample config/database.yml"
 system "cp config/settings.secret.example.yml config/settings.secret.yml"
 
 #run db creation and seeding
-seeded = system "rake -s setup"
-exit EXIT_NOK unless seeded == EXIT_OK
+seeded = system "rake setup --trace"
+unless seeded == EXIT_OK
+  puts "rake setup --trace returned #{seeded}"
+  exit EXIT_NOK
+end
 
 # cijoe build
 built = system "rake -s test"

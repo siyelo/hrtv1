@@ -3,7 +3,7 @@ Feature: NGO/donor can see incoming funding flows for their projects
   As a NGO/Donor
   I want to be able to track incoming funding flows
 
-@run
+@wip
 Scenario: Reporter can see current incoming flows (Funding Sources) for their organization
   Given the following organizations 
     | name             |
@@ -40,10 +40,10 @@ Scenario: Create incoming funding flow
   And I press "Create"
   And I should see "TB Treatment Project"
   And I should see "UNAIDS"
-  And I should see "1000.00"
-  
-  
-Scenario: BUG: Redirected back to Funding Sources index after creation
+  And I should see "1,000.00"
+
+@wip
+Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
   Given an organization with name "UNDP"
   Given a reporter "Frank" in organization "UNDP"
   Given a project with name "TB Treatment Project"

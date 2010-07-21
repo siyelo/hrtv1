@@ -3,7 +3,7 @@
 
   <p>Create one or more <%=human_plural_name_for_entity%> from a file.</p>
 
-  <% form_tag ({:action=> :create_from_file}, :multipart => true) do %>
+  <% form_tag({:action=> :create_from_file}, :multipart => true) do %>
     <p>
     <%= label_tag :file, "File" %>
     <%= file_field_tag :file %>

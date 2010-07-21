@@ -9,6 +9,7 @@ Scenario: List current outgoing flows
 
 Scenario: Create outgoing flow
 
+@wip
 Scenario: Other organization creates a Funding Source, we see it under our Providers list
   Given the following organizations 
     | name   |
@@ -26,8 +27,6 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
      | UNDP | TB Treatment Project | UNAIDS | 1000.00 |
   Given I am signed in as "un_aids_user"
   When I go to the providers page
-  Then show me the page
-  Then debug
   Then I should see "TB Treatment Project"
   And I should see "UNDP"
   And I should see "1000.00"

@@ -11,15 +11,12 @@ EXIT_NOK = 1
 system "cp config/database.yml.sample config/database.yml"
 system "cp config/settings.secret.example.yml config/settings.secret.yml"
 
-#run db creation and seeding
-seeded = system "rake setup --trace"
-unless seeded == true
-  puts "rake setup --trace returned #{seeded}"
-  exit EXIT_NOK
-end
+# run db creation and seeding
+setup_and_seeded = system "RAILS_ENV=cucumber rake setup --trace"
+exit EXIT_NOK unless setup_and_seeded
 
 # cijoe build
-built = system "rake -s test"
-exit EXIT_NOK unless built == true
+built = system "RAILS_ENV=cucumber rake -s test"
+exit EXIT_NOK unless built
 
 return result

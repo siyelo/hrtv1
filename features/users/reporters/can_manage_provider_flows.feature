@@ -9,7 +9,6 @@ Scenario: List current outgoing flows
 
 Scenario: Create outgoing flow
 
-@wip
 Scenario: Other organization creates a Funding Source, we see it under our Providers list
   Given the following organizations 
     | name   |

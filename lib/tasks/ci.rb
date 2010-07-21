@@ -14,4 +14,4 @@ system "cp config/settings.secret.example.yml config/settings.secret.yml"
 system "rake -s setup"
 
 # cijoe build
-system "rake -s test:units"
+system "rake -s test"

@@ -13,6 +13,8 @@ class Project < ActiveRecord::Base
 
   attr_accessible :name, :description, :expected_total
 
+  after_create :create_helpful_records_for_workflow
+
   def to_s
     result = ''
     result = name unless name.nil?
@@ -38,4 +40,13 @@ class Project < ActiveRecord::Base
     r=f.collect {|f| f.organization_id_to}
     r
   end
+
+  def create_helpful_records_for_workflow 
+    my_org = User.current_user.organization
+    #TODO pass in the amount attributes and use them on records below
+    #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
+    funding_flows.create! :to => my_org
+    funding_flows.create! :from => my_org, :to => my_org
+  end
+
 end

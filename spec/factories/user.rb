@@ -6,4 +6,5 @@ Factory.define :reporter, :class => User do |f|
   f.password { 'password' }
   f.password_confirmation { 'password' }
   f.roles { ['reporter'] }
+  #f.organization_id { Factory(:organization) }
 end

@@ -48,11 +48,13 @@ class ActivitiesController < ApplicationController
     config.columns[:beneficiary].label = "Beneficiary"
 
     config.columns[:budget].inplace_edit = true
-    config.columns[:budget].label = "Budget for GOR FY 10-11 (upcoming)"
+    config.columns[:budget].label = "Budget for GOR FY 10-11"
+    config.columns[:budget].options = quarterly_amount_field_options
     %w[q1 q2 q3 q4].each do |quarter|
       c="spend_"+quarter
       c=c.to_sym
       config.columns[c].inplace_edit = true
+      config.columns[c].options = quarterly_amount_field_options
       config.columns[c].label = "Expenditure in GOR FY 09-10 "+quarter.capitalize
     end
     # add in later version, not part of minimal viable product

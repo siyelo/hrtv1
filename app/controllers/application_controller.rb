@@ -181,9 +181,8 @@ class ApplicationController < ActionController::Base
   # sets AS field help that shows up in create form and on columns
   # @model_help used in views/shared/_data_entry_help
   def load_help
-    logger.debug(self.controller_model_class)
     @model_help = help_model
-    self.class.set_active_scaffold_column_descriptions @model_help
+    my_AS_controller.set_active_scaffold_column_descriptions @model_help
   end
 
   # can override this in subclass for different help
@@ -191,4 +190,16 @@ class ApplicationController < ActionController::Base
     ModelHelp.find_by_model_name self.controller_model_class.to_s
   end
 
+  # TODO make able to override this later to push help
+  # into the scaffold, right now will have these
+  # overwritten when the scaffold controller loads it's help
+  def my_AS_controller
+    self.class
+  end
+
+  # methods to help with setting config.columns, etc
+  # TODO move into a module
+  def self.quarterly_amount_field_options
+    {:size => 15 }
+  end
 end

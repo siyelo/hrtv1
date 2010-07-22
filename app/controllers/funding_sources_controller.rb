@@ -24,4 +24,5 @@ class FundingSourcesController < ApplicationController
   def help_model
     ModelHelp.find_by_model_name "FundingSource"
   end
+
 end

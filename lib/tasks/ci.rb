@@ -5,8 +5,8 @@
 # to configure your CI Joe server, add this
 #   $ git config --add cijoe.runner "ruby lib/tasks/ci.rb"
 #
-EXIT_OK = 0
-EXIT_NOK = 1
+EXIT_OK   = 0
+EXIT_NOK  = 1
 
 # copy in any yamls not in the repo
 system "cp config/database.yml.sample config/database.yml"

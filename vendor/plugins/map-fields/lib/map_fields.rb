@@ -1,4 +1,8 @@
-require 'fastercsv'
+begin
+  require 'fastercsv'
+rescue LoadError
+  STDERR.puts "Run `rake gems:install` to install fastercsv for the map_fields plugin"
+end
 
 module MapFields
   VERSION = '1.0.0'
@@ -12,7 +16,7 @@ module MapFields
       :file_field => 'file',
       :params => []
     }
-    options = default_options.merge( 
+    options = default_options.merge(
                 self.class.read_inheritable_attribute(:map_fields_options)
               )
 
@@ -48,7 +52,7 @@ module MapFields
         if expected_fields.respond_to?(:call)
           expected_fields = expected_fields.call(params)
         end
-        @mapped_fields = MappedFields.new(session[:map_fields][:file], 
+        @mapped_fields = MappedFields.new(session[:map_fields][:file],
                                           expected_fields,
                                           params[:fields],
                                           params[:ignore_first_row])
@@ -85,13 +89,13 @@ module MapFields
   end
 
   def map_field_parameters(&block)
-    
+
   end
 
   def map_fields_cleanup
     if @mapped_fields
       if session[:map_fields][:file]
-        File.delete(session[:map_fields][:file]) 
+        File.delete(session[:map_fields][:file])
       end
       session[:map_fields] = nil
       @mapped_fields = nil
@@ -120,7 +124,7 @@ module MapFields
       mapping.each do |k,v|
         unless v.to_i == 0
           #Numeric mapping
-          @mapping[v.to_i - 1] = k.to_i - 1 
+          @mapping[v.to_i - 1] = k.to_i - 1
           #Text mapping
           @mapping[fields[v.to_i-1]] = k.to_i - 1
           #Symbol mapping

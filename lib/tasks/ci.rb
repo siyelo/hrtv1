@@ -13,7 +13,7 @@ system "cp config/database.yml.sample config/database.yml"
 system "cp config/settings.secret.example.yml config/settings.secret.yml"
 
 # run db creation and seeding
-setup_and_seeded = system "export RAILS_ENV=cucumber && rake setup --trace"
+setup_and_seeded = system "export RAILS_ENV=cucumber && rake setup_quick --trace"
 unless setup_and_seeded
   puts "environment setup failed"
   exit EXIT_NOK

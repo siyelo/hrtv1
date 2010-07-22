@@ -145,6 +145,10 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :current_user
+
+  before_filter do |c_instance|
+    User.current_user = c_instance.send(:current_user)
+  end
   private
 
   #before_filter { |c| Authorization.current_user = c.current_user }

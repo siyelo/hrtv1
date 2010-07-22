@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   acts_as_authentic
 
+  cattr_accessor :current_user
+
   has_many  :assignments
   belongs_to :organization
 

@@ -8,7 +8,8 @@
 
 %br
 
-%h2 Activity Classification
+%h2
+  = "Activity Classification" #TODO add record type in front nicely
 
 #activity_description
   - [:name, :expected_total, :description].each do |f|
@@ -22,9 +23,8 @@
     = hidden_field_tag :activity_id, @activity.id
 
     %ul#activity_tree
-      - Code.roots.each do |code|
-        - if [Mtef, Nha, Nasa, Nsp].index(code.class) #TODO move out to model
-          = render :partial => 'code_row', :locals => {:code => code, :form => form}
+      - @activity.valid_roots_for_code_assignment.each  do |code|
+        = render :partial => 'code_row', :locals => {:code => code, :form => form}
     = submit_tag 'Save'
 
   = render :partial => 'shared/data_entry_help' , :locals => {:record_type => CodeAssignment}

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100719093542) do
+ActiveRecord::Schema.define(:version => 20100722084401) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -109,13 +109,13 @@ ActiveRecord::Schema.define(:version => 20100719093542) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "raw_provider"
     t.decimal  "budget"
     t.decimal  "spend_q1"
     t.decimal  "spend_q2"
     t.decimal  "spend_q3"
     t.decimal  "spend_q4"
     t.integer  "organization_id_owner"
+    t.text     "organization_text"
   end
 
   create_table "indicators", :force => true do |t|

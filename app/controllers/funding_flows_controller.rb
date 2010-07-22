@@ -1,12 +1,12 @@
 class FundingFlowsController < ApplicationController
   authorize_resource
 
-  @@shown_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1]
+  @@shown_columns = [:project, :from, :to, :organization_text, :budget, :spend_q1]
   @@create_columns = [:project, :from, :to, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   def self.create_columns
     @@create_columns
   end
-  @@update_columns = [:project, :from, :to, :raw_provider, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+  @@update_columns = [:project, :from, :to, :organization_text, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file,
@@ -18,10 +18,10 @@ class FundingFlowsController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:from => 'DESC'}
 #    config.columns[:project].options[:update_column] = :to#LateUpdater.new(self)
-    config.columns[:raw_provider].form_ui = :textarea
-    config.columns[:raw_provider].options = {:cols => 50, :rows => 3}
-    config.columns[:raw_provider].inplace_edit = true
-    config.columns[:raw_provider].label = "Organization Text from File Import"
+    config.columns[:organization_text].form_ui = :textarea
+    config.columns[:organization_text].options = {:cols => 50, :rows => 3}
+    config.columns[:organization_text].inplace_edit = true
+    config.columns[:organization_text].label = "Organization Text from File Import"
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable

@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
       redirect_to_index
     else
       #user chooses field mapping
-      session[:last_data_entry_constraints] = @constraints
+      session[:last_data_entry_constraints] = constraints
 
       render :template => 'shared/create_from_file'
     end
@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
       #logger.debug(session[:last_data_entry_constraints].inspect)
 
     # overwrite values with constrained values for this record
-    if constraints.try(:empty?)
+    unless constraints.nil? || constraints.empty?
       model_hash.merge! constraints
     end
 

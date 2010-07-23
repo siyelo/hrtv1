@@ -1,0 +1,109 @@
+Something like this, need to work on the code for saving to make sure it doesn't infinite loop
+
+LookingGlass < AR:Base # in a sense, the master object that represents that there is a single object, just with many views
+  has_many :perspectives, polymorphic, join => :reflections
+end
+
+Perspective < AR:Base # join table for looking_glass and the many reflections of the same object
+  belongs_to :looking_glass
+  belongs_to :organization # this is the perspective held by this organization
+  belongs_to :reflection, poymorphic # has reflectable_id, and reflection_type that holds, say "FundingFlow"
+end
+
+FundingFlow < AR:Base
+  include acts_as_mirrored
+ 
+end
+
+module acts_as_mirrored
+  has_one :perspective
+  has_one :looking_glass, through => perspective
+  has_one :organization, :through => :perspective
+  has_many :mirror_versions, through => looking_glass, :source => :perspectives, :class => self,
+    :conditions => lambda { ["reflectable_id != ", self.id ] }
+ 
+  named_scope :perspective_for lambda |org| do ["perspective.organization_id = ? ", org.id] end # need to join in the perspective w this scope
+ 
+  @@in_process_of_saving = [ ]
+
+  include CreateMirrorsCode
+ 
+  # maybe change the order here below?
+  before_save :create_mirrors
+  after_save :ensure_correct_perspective
+
+  def mirror_version_for organization
+    return self if organization == self.organization
+    mirror_versions.find(:conditions => ["perspective.organization_id = ? ", org.id], :joins => :perspective).first
+    rescue #missing record error
+      return nil
+    end
+  end
+ 
+  def mirror_version_for organization?
+    mirror_version_for_organization == nil ? false : true
+  end
+ 
+  def ensure_correct_perspective record
+    # stops infinite loop, lets not test this case though as
+    # we can make the code in the create mirrored versions
+    # look up attributes for the other perspective and error if they don't exist
+    # as they should have been created earlier in the workflow
+  
+      for each attribute that is an association in record
+        unless mirror_version_for? organization
+          attribute.klass.create_mirror attribute
+        end
+        attribute=attribute.mirror_version_for organization
+      
+  end
+ 
+end
+
+module CreateMirrorsCode
+  # here we put all the rules for creating mirrored records so that its easier to see in one place
+  # than strewing it throughout all the classes
+  @@includes_implementation_for = [FundingFlow,Project, etc ]
+
+  if self not in includes_implementation_for
+    raise Error, "You need to make an implementation of create_mirrors for this object first"
+  end
+
+  def create_mirrors r
+    raise Error, "invalid record" unless r.valid? or #using save(false)
+   
+   unless @@in_process_of_saving.include? self
+    @@in_process_of_saving << self
+    user_was_admin = current_user.role? :admin
+    current_user.roles << "admin" # elevate priviledges since its really the system doing this
+   
+    case self.class
+      FundingFlow
+        if :from != current_org
+         && no_mirror_version_of record, :for => :from
+           r.mirror_versions.create r.attributes_hash
+        elsif :to != current_org
+         && no_mirror_version_of record, :for => :to
+           r.mirror_versions.create r.attributes_hash
+        end
+       end # FundingFlow
+      
+      end #case
+    
+     User.current_user.roles.delete(:admin) unless user_was_admin
+     @@in_process_of_saving.delete self
+    end
+  end
+
+  def current_org
+    User.current_user.organization
+  end
+
+  def current_user
+    User.current_user
+  end
+ 
+  def no_mirror_version_of record, options = {}
+    ! record.mirror_version_for?(options[:for])
+  end
+end

@@ -1,5 +1,9 @@
+require 'lib/ActAsDataElement'
+
 class Activity < ActiveRecord::Base
   acts_as_commentable
+  include ActAsDataElement
+  configure_act_as_data_element
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100718193707) do
+ActiveRecord::Schema.define(:version => 20100720084323) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -93,6 +93,35 @@ ActiveRecord::Schema.define(:version => 20100718193707) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "data_elements", :force => true do |t|
+    t.integer "data_response_id"
+    t.integer "data_elementable_id"
+    t.string  "data_elementable_type"
+  end
+
+  add_index "data_elements", ["data_elementable_id"], :name => "index_data_elements_on_data_elementable_id"
+  add_index "data_elements", ["data_elementable_type"], :name => "index_data_elements_on_data_elementable_type"
+  add_index "data_elements", ["data_response_id"], :name => "index_data_elements_on_data_response_id"
+
+  create_table "data_requests", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "title"
+    t.boolean  "complete",        :default => false
+    t.boolean  "pending_review",  :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_responses", :force => true do |t|
+    t.integer  "data_element_id"
+    t.integer  "data_request_id"
+    t.boolean  "complete",        :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
 
   create_table "field_helps", :force => true do |t|
     t.string   "attribute_name"

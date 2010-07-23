@@ -1,0 +1,623 @@
+(in /home/yanwingwong/rails_projects/resource_tracking)
+-- create_table("abilities", {:force=>true})
+   -> 0.0605s
+-- create_table("activities", {:force=>true})
+   -> 0.0066s
+-- create_table("activities_indicators", {:force=>true, :id=>false})
+   -> 0.0039s
+-- create_table("activities_locations", {:force=>true, :id=>false})
+   -> 0.0038s
+-- create_table("activities_projects", {:force=>true, :id=>false})
+   -> 0.0040s
+-- create_table("assignments", {:force=>true})
+   -> 0.0047s
+-- create_table("code_assignments", {:force=>true})
+   -> 0.0049s
+-- create_table("codes", {:force=>true})
+   -> 0.0813s
+-- create_table("comments", {:force=>true})
+   -> 0.0060s
+-- add_index("comments", ["commentable_id"], {:name=>"index_comments_on_commentable_id"})
+   -> 0.0019s
+-- add_index("comments", ["commentable_type"], {:name=>"index_comments_on_commentable_type"})
+   -> 0.0021s
+-- add_index("comments", ["user_id"], {:name=>"index_comments_on_user_id"})
+   -> 0.0023s
+-- create_table("data_elements", {:force=>true})
+   -> 0.0041s
+-- create_table("data_requests", {:force=>true})
+   -> 0.0043s
+-- create_table("data_responses", {:force=>true})
+   -> 0.0044s
+-- create_table("field_helps", {:force=>true})
+   -> 0.0052s
+-- create_table("funding_flows", {:force=>true})
+   -> 0.0060s
+-- create_table("indicators", {:force=>true})
+   -> 0.0047s
+-- create_table("line_items", {:force=>true})
+   -> 0.0046s
+-- create_table("locations", {:force=>true})
+   -> 0.0045s
+-- create_table("locations_organizations", {:force=>true, :id=>false})
+   -> 0.0044s
+-- create_table("locations_projects", {:force=>true, :id=>false})
+   -> 0.0040s
+-- create_table("model_helps", {:force=>true})
+   -> 0.0050s
+-- create_table("organizations", {:force=>true})
+   -> 0.0080s
+-- create_table("projects", {:force=>true})
+   -> 0.0050s
+-- create_table("sessions", {:force=>true})
+   -> 0.0048s
+-- add_index("sessions", ["session_id"], {:name=>"index_sessions_on_session_id"})
+   -> 0.0018s
+-- add_index("sessions", ["updated_at"], {:name=>"index_sessions_on_updated_at"})
+   -> 0.0020s
+-- create_table("users", {:force=>true})
+   -> 0.0053s
+-- initialize_schema_migrations_table()
+   -> 0.0006s
+-- assume_migrated_upto_version(20100719144959, "db/migrate")
+   -> 0.0018s
+Loading codes.csv...
+Adding code 1: 
+  1
+Adding code 101: 
+  2
+Adding code 10101: 
+  3
+Adding code 10102: 
+  4
+Adding code 102: 
+  5
+Adding code 10201: 
+  6
+Adding code 10202: 
+  7
+Adding code 103: 
+  8
+Adding code 10301: 
+  9
+Adding code 10302: 
+  10
+Adding code 104: 
+  11
+Adding code 10401: 
+  12
+Adding code 10402: 
+  13
+Adding code 105: 
+  14
+Adding code 10501: 
+  15
+Adding code 10502: 
+  16
+Adding code 106: 
+  17
+Adding code 2: 
+  18
+Adding code 201: 
+  19
+Adding code 20101: 
+  20
+Adding code 20102: 
+  21
+Adding code 202: 
+  22
+Adding code 20201: 
+  23
+Adding code 20202: 
+  24
+Adding code 203: 
+  25
+Adding code 20301: 
+  26
+Adding code 20302: 
+  27
+Adding code 204: 
+  28
+Adding code 20401: 
+  29
+Adding code 20402: 
+  30
+Adding code 205: 
+  31
+Adding code 20501: 
+  32
+Adding code 20502: 
+  33
+Adding code 206: 
+  34
+Adding code 207: 
+  35
+Adding code 208: 
+  36
+Adding code 3: 
+  37
+Adding code 301: 
+  38
+Adding code 30101: 
+  39
+Adding code 30102: 
+  40
+Adding code 302: 
+  41
+Adding code 30201: 
+  42
+Adding code 30202: 
+  43
+Adding code 303: 
+  44
+Adding code 30301: 
+  45
+Adding code 30302: 
+  46
+Adding code 304: 
+  47
+Adding code 30401: 
+  48
+Adding code 30402: 
+  49
+Adding code 4: 
+  50
+Adding code 401: 
+  51
+Adding code 402: 
+  52
+Adding code 403: 
+  53
+Adding code 404: 
+  54
+Adding code 5: 
+  55
+Adding code 501: 
+  56
+Adding code 50101: 
+  57
+Adding code 50102: 
+  58
+Adding code 502: 
+  59
+Adding code 50201: 
+  60
+Adding code 50202: 
+  61
+Adding code 503: 
+  62
+Adding code 50301: 
+  63
+Adding code 50302: 
+  64
+Adding code 504: 
+  65
+Adding code 50401: 
+  66
+Adding code 50402: 
+  67
+Adding code 505: 
+  68
+Adding code 50501: 
+  69
+Adding code 50502: 
+  70
+Adding code 6: 
+  71
+Adding code 601: 
+  72
+Adding code 60101: 
+  73
+Adding code 60102: 
+  74
+Adding code 60103: 
+  75
+Adding code 60104: 
+  76
+Adding code 60105: 
+  77
+Adding code 60106: 
+  78
+Adding code 60107: 
+  79
+Adding code 60108: 
+  80
+Adding code 60109: 
+  81
+Adding code 602: 
+  82
+Adding code 60201: 
+  83
+Adding code 6020101: 
+  84
+Adding code 602010101: 
+  85
+Adding code 60201010101: 
+  86
+Adding code 602010102: 
+  87
+Adding code 60201010201: 
+  88
+Adding code 602010103: 
+  89
+Adding code 60201010301: 
+  90
+Adding code 602010104: 
+  91
+Adding code 60201010401: 
+  92
+Adding code 60201010402: 
+  93
+Adding code 60202: 
+  94
+Adding code 6020201: 
+  95
+Adding code 602020101: 
+  96
+Adding code 602020102: 
+  97
+Adding code 6020202: 
+  98
+Adding code 602020201: 
+  99
+Adding code 6020203: 
+  100
+Adding code 602020301: 
+  101
+Adding code 6020204: 
+  102
+Adding code 602020401: 
+  103
+Adding code 60203: 
+  104
+Adding code 6020301: 
+  105
+Adding code 6020302: 
+  106
+Adding code 602030201: 
+  107
+Adding code 602030202: 
+  108
+Adding code 602030203: 
+  109
+Adding code 602030204: 
+  110
+Adding code 602030205: 
+  111
+Adding code 602030206: 
+  112
+Adding code 60204: 
+  113
+Adding code 6020401: 
+  114
+Adding code 602040101: 
+  115
+Adding code 602040102: 
+  116
+Adding code 6020402: 
+  117
+Adding code 602040201: 
+  118
+Adding code 602040202: 
+  119
+Adding code 602040203: 
+  120
+Adding code 602040204: 
+  121
+Adding code 60204020401: 
+  122
+Adding code 602040205: 
+  123
+Adding code 60204020501: 
+  124
+Adding code 6020403: 
+  125
+Adding code 60205: 
+  126
+Adding code 60206: 
+  127
+Adding code 603: 
+  128
+Adding code 60301: 
+  129
+Adding code 6030101: 
+  130
+Adding code 6030102: 
+  131
+Adding code 6030103: 
+  132
+Adding code 6030104: 
+  133
+Adding code 6030105: 
+  134
+Adding code 6030106: 
+  135
+Adding code 60302: 
+  136
+Adding code 6030201: 
+  137
+Adding code 6030202: 
+  138
+Adding code 6030203: 
+  139
+Adding code 6030204: 
+  140
+Adding code 6030205: 
+  141
+Adding code 60303: 
+  142
+Adding code 6030301: 
+  143
+Adding code 6030302: 
+  144
+Adding code 60304: 
+  145
+Adding code 6030401: 
+  146
+Adding code 60305: 
+  147
+Adding code 6030501: 
+  148
+Adding code 6030502: 
+  149
+Adding code 60306: 
+  150
+Adding code 6030601: 
+  151
+Adding code 604: 
+  152
+Adding code 605: 
+  153
+Adding code 607: 
+  154
+Adding code 608: 
+  155
+Adding code 609: 
+  156
+Adding code 60901: 
+  157
+Adding code 60902: 
+  158
+Adding code 60903: 
+  159
+Adding code 60904: 
+  160
+Adding code 60905: 
+  161
+Adding code 60906: 
+  162
+Adding code 60907: 
+  163
+Adding code 60908: 
+  164
+Adding code 6010: 
+  165
+Adding code 601001: 
+  166
+Adding code 60100101: 
+  167
+Adding code 60100102: 
+  168
+Adding code 601004: 
+  169
+Adding code 601005: 
+  170
+Adding code 601006: 
+  171
+Adding code 601007: 
+  172
+Adding code 60100701: 
+  173
+Adding code 60100702: 
+  174
+Adding code 60100703: 
+  175
+Adding code 60100704: 
+  176
+Adding code 60100705: 
+  177
+Adding code 6011: 
+  178
+Adding code 6012: 
+  179
+Adding code 6013: 
+  180
+Adding code 6014: 
+  181
+Adding code 6015: 
+  182
+Adding code 6016: 
+  183
+Adding code 7: 
+  184
+Adding code 8: 
+  185
+Adding code 9: 
+  186
+Adding code 901: 
+  187
+Adding code 90102: 
+  188
+Adding code 90103: 
+  189
+Adding code 90104: 
+  190
+Adding code 90105: 
+  191
+Adding code 90106: 
+  192
+Adding code 90107: 
+  193
+Adding code 90108: 
+  194
+Adding code 902: 
+  195
+Adding code 90201: 
+  196
+Adding code 9020101: 
+  197
+Adding code 902010101: 
+  198
+Adding code 90201010101: 
+  199
+Adding code 90201010102: 
+  200
+Adding code 90201010103: 
+  201
+Adding code 902010102: 
+  202
+Adding code 90201010201: 
+  203
+Adding code 90201010202: 
+  204
+Adding code 902010103: 
+  205
+Adding code 90201010301: 
+  206
+Adding code 902010104: 
+  207
+Adding code 90201010401: 
+  208
+Adding code 9020101040101: 
+  209
+Adding code 9020101040102: 
+  210
+Adding code 9020101040103: 
+  211
+Adding code 9020101040104: 
+  212
+Adding code 9020101040105: 
+  213
+Adding code 902010105: 
+  214
+Adding code 90201010501: 
+  215
+Adding code 902010106: 
+  216
+Adding code 90201010601: 
+  217
+Adding code 902010107: 
+  218
+Adding code 90201010701: 
+  219
+Adding code 9020101070101: 
+  220
+Adding code 9020101070102: 
+  221
+Adding code 9020101070103: 
+  222
+Adding code 9020102: 
+  223
+Adding code 9020103: 
+  224
+Adding code 902010301: 
+  225
+Adding code 90201030101: 
+  226
+Adding code 9020104: 
+  227
+Adding code 902010401: 
+  228
+Adding code 90201040101: 
+  229
+Adding code 902010402: 
+  230
+Adding code 90201040201: 
+  231
+Adding code 90202: 
+  232
+Adding code 90203: 
+  233
+Adding code 90204: 
+  234
+Adding code 90205: 
+  235
+Adding code 90206: 
+  236
+Adding code 90207: 
+  237
+Adding code 9020701: 
+  238
+Adding code 902070101: 
+  239
+Adding code 90207010101: 
+  240
+Adding code 902070102: 
+  241
+Adding code 90207010201: 
+  242
+Adding code 9020702: 
+  243
+Adding code 902070201: 
+  244
+Adding code 90207020101: 
+  245
+Adding code 90208: 
+  246
+Adding code 9020801: 
+  247
+Adding code 902080101: 
+  248
+Adding code 902080102: 
+  249
+Adding code 9020802: 
+  250
+Adding code 902080201: 
+  251
+Adding code 9020803: 
+  252
+Adding code 902080301: 
+  253
+Adding code 903: 
+  254
+Adding code 904: 
+  255
+Adding code 905: 
+  256
+Adding code 90501: 
+  257
+Adding code 90502: 
+  258
+Adding code 90503: 
+  259
+Adding code 90504: 
+  260
+Adding code 90505: 
+  261
+Adding code 906: 
+  262
+Adding code 90601: 
+  263
+Adding code 90602: 
+  264
+Adding code 907: 
+  265
+Adding code 908: 
+  266
+Adding code 10: 
+  267
+Adding code 1001: 
+  268
+Adding code 1002: 
+  269
+Adding code 1003: 
+  270
+Adding code 1004: 
+  271
+Adding code 1005: 
+  272
+Adding code 1006: 
+  273
+Adding code 1007: 
+  274
+Adding code 11: 
+  275
+Adding code 1101: 
+  276
+Adding code 110101: 
+  277
+Adding code 110102: 
+  278
+Adding code 110103: 
+  279
+...Loading codes.csv DONE

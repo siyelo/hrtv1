@@ -10,6 +10,15 @@ class DataResponse < ActiveRecord::Base
     DataResponse.find(:all, :conditions => ["complete = ?", false])
   end
 
+  def add_or_update_element element_object  #assumes raw object that has not been attached to an element
+    
+
+    if element_object.data_element.nil? 
+       data_elements.push(DataElement.create(:data_elementable => element_object))
+       save
+    end
+  end
+
 
   protected
   def all_responses_completed

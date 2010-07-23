@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
+  #around_filter :access_session_variable 
+  #allows access to session variable from model
+
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password, :password_confirmation
 
@@ -178,5 +181,27 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
+
+
+  #def access_session_variable
+  #  klasses = [ActiveRecord::Base, ActiveRecord::Base.class]
+  #  methods = ["session", "cookies", "params", "request"]
+
+  #  methods.each do |method|
+  #    instance_variable = instance_variable_get(:"@_#{method}")
+  #    klasses.each do |klass|
+  #      klass.send(:define_method, method, proc { instance_variable })
+  #    end
+  #  end
+
+  #  yield
+
+  #  methods.each do |method|
+  #    klasses.each do |klass|
+  #      klass.send :remove_method, method
+  #    end
+  #  end
+  #end
+
 
 end

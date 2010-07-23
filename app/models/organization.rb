@@ -1,5 +1,7 @@
+
 class Organization < ActiveRecord::Base
   attr_accessible :name
+
 
   acts_as_commentable
   has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from"
@@ -12,10 +14,6 @@ class Organization < ActiveRecord::Base
   has_many :funding_flows #TODO should be named like owned_funding_flows
 
   has_and_belongs_to_many :locations
-
-
-
-  has_many :data_requests
 
   def to_s
     name

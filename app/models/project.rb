@@ -1,11 +1,17 @@
+require 'lib/ActAsDataElement'
+
 class Project < ActiveRecord::Base
   acts_as_commentable
+
+  include ActAsDataElement
+  configure_act_as_data_element
+  
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
 
   has_many :funding_flows, :dependent => :nullify
 
-  has_one :data_element, :as => :data_elementable
+
 
   def to_s
     name

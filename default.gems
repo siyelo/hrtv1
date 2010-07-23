@@ -1,14 +1,62 @@
 # default.gems generated gem export file. Note that any env variable settings will be missing. Append these after using a ';' field separator
+abstract -v1.0.0
 actionmailer -v2.3.8
 actionpack -v2.3.8
 activerecord -v2.3.8
 activeresource -v2.3.8
 activesupport -v2.3.8
-rack -v1.1.0
-rails -v2.3.8
-sqlite3-ruby
-ruby-debug
-rails-footnotes
-fastercsv
-paginator
+authlogic -v2.1.5
+awesome_print -v0.2.1
+builder -v2.1.2
+cancan -v1.1.1
+capybara -v0.3.9
+choice -v0.1.4
+columnize -v0.3.1
+compass -v0.10.2
+configuration -v1.1.0
+cucumber -v0.8.3
+cucumber-rails -v0.3.2
+culerity -v0.2.10
+database_cleaner -v0.5.0
+diff-lcs -v1.1.2
+erubis -v2.6.6
+factory_girl -v1.2.4
+faker -v0.3.1
+fastercsv -v1.5.3
+ffi -v0.6.3
+gherkin -v2.0.2
+github -v0.4.3
+glennr-heroku_san -v0.1.1
 haml -v3.0.13
+highline -v1.5.2
+hoe -v2.6.1
+hoptoad_notifier -v2.3.2
+hpricot -v0.8.2
+json -v1.4.3
+json_pure -v1.4.3
+linecache -v0.43
+mime-types -v1.16
+nokogiri -v1.4.2
+open_gem -v1.4.2
+paginator -v1.1.1
+rack -v1.1.0
+rack-test -v0.5.4
+rails -v2.3.8
+rails-footnotes -v3.6.7
+rake -v0.8.7
+rest-client -v1.4.2
+rspec -v1.3.0
+rspec-rails -v1.3.2
+ruby-debug -v0.10.3
+ruby-debug-base -v0.10.3
+ruby_parser -v2.0.4
+rubyforge -v2.0.4
+selenium-webdriver -v0.0.24
+sexp_processor -v3.0.4
+shoulda -v2.11.1
+sinatra -v1.0
+sqlite3-ruby -v1.3.1
+sys-uname -v0.8.4
+text-format -v1.0.0
+text-hyphen -v1.0.0
+trollop -v1.16.2

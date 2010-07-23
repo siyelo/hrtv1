@@ -131,9 +131,15 @@ And don't forget to seed your Cuke DB
 
 ==== CI
 
-You can set up a local cijoe server with;
+===== Hudson
 
-  $ git config --add cijoe.runner "ruby lib/tasks/ci.rb"
+  bash -l -c "rvm use ree-1.8.7-2010.02 && rvm gemset create ubuzima-glennr && rvm gemset import ubuzima-glennr && ruby $WORKSPACE/lib/tasks/ci.rb"
+
+===== CIJoe
+
+  You can set up a local cijoe server with;
+
+  $ git config --add cijoe.runner "<the Hudson bash command above>"
 
 ==== Contributing
 

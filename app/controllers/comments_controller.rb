@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+
   @@shown_columns = [:title, :comment, :commentable, :created_at]
   @@create_columns = [:title, :comment]
 

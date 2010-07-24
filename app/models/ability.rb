@@ -10,6 +10,9 @@ class Ability
       can :manage, FundingFlow
       can :manage, Organization
       can :manage, Activity
+      can :manage, Comment
+      can :manage, CodeAssignment
+      can :read, Code
     end
   end
 end

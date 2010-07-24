@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
+  authorize_resource
 
   @@shown_columns = [:username, :email,   :password, :password_confirmation, :roles]
-  @@create_columns = [:username, :email,  :password, :password_confirmation]
+  @@create_columns = [:username, :email,  :password, :password_confirmation] #TODO allow roles editing, assign to only 1
 
   def self.create_columns
     @@create_columns

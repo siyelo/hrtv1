@@ -24,7 +24,7 @@
       #admin
         %ul
           - if current_user
-            %li= "Welcome #{current_user.username}"
+            %li= "#{current_user.username}"
             %li= user_dashboard_link
             %li= link_to "Change Password", user_url(current_user)
             %li= link_to "logout", logout_path

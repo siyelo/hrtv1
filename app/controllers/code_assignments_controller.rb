@@ -1,16 +1,17 @@
 class CodeAssignmentsController < ApplicationController
+  authorize_resource
 
   def index
     #@projects = Projects.find_by_user(current_user)
     @activities = Activity.all
   end
 
-  def manage
+  def manage #TODO authorize
     @activity = Activity.find(params[:activity_id])
   end
 
 
-  def update_assignments
+  def update_assignments #TODO authorize
     params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
     @activity = Activity.find(params[:activity_id])

@@ -11,7 +11,10 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   rescue_from CanCan::AccessDenied do |exception|
-      render :text => "Access denied!"
+      render :text => "Sorry, you do not have permission for this action.
+      Please use the contact link at
+      the bottom of the homepage to contact an administrator, if you
+      think this message is being shown in error."
       # TODO render a template / action without the layout with login link & help msg
 
       # redirect caused infinite loop, could be that home page had security on it

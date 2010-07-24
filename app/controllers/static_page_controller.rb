@@ -11,6 +11,7 @@ class StaticPageController < ApplicationController
   end
 
   def show
+    #TODO add authorization for the various dashboards
     render :action => params[:page]
   end
 end

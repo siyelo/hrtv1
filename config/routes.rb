@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.coding "activities/code", :controller => 'activities', :action => 'code'
+  map.activity_coding "activities/code", :controller => 'activities', :action => 'code'
+  map.other_cost_coding "other_costs/code", :controller => 'other_costs', :action => 'code'
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'

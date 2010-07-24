@@ -1,16 +1,30 @@
 class OtherCostsController < ApplicationController
   authorize_resource
+
   @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]
-  @@create_columns = [:projects,   :other_cost_type,  :expected_total, :budget, :description ]
+  @@create_columns = [:projects, :other_cost_type, :expected_total, :budget, :description]
   def self.create_columns
     @@create_columns
   end
+  @@columns_for_file_upload = %w[budget description] # TODO fix bug, projects for instance won't work
+
+  map_fields :create_from_file,
+    @@columns_for_file_upload,
+    :file_field => :file
 
   active_scaffold :other_costs do |config|
     config.label =  "Other Costs"
     config.columns =  @@shown_columns
     list.sorting = {:other_cost_type => 'ASC'}
 
+    config.action_links.add('Detail Cost Areas',
+      :action => "code",
+      :type => :member,
+      :popup => true,
+      :label => "Detail Cost Areas")
+
+    config.nested.add_link("Categorize Costs", [:lineItems])
+    config.columns[:lineItems].association.reverse = :activity
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
@@ -28,10 +42,15 @@ class OtherCostsController < ApplicationController
     config.columns[:other_cost_type].form_ui = :select
     config.columns[:other_cost_type].inplace_edit = true
     config.columns[:other_cost_type].label = "Type"
+  end
 
-    # add in later version, not part of minimal viable product
-    #config.columns[:indicators].form_ui = :select
-    #config.columns[:indicators].options = {:draggable_lists => true}
+  def create_from_file
+    super @@columns_for_file_upload
+  end
+
+  def code
+    logger.debug(params[:id]) #can get id of record
+    redirect_to manage_code_assignments_url(params[:id])
   end
 
 end

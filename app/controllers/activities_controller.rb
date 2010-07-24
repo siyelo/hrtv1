@@ -22,7 +22,7 @@ class ActivitiesController < ApplicationController
       :popup => true,
       :label => "Classify")
 
-    config.nested.add_link("Cost Details", [:lineItems])
+    config.nested.add_link("Cost Categorization", [:lineItems])
     config.columns[:lineItems].association.reverse = :activity
 
     config.nested.add_link("Comments", [:comments])
@@ -74,6 +74,13 @@ class ActivitiesController < ApplicationController
 
   def conditions_for_collection
     ["activities.type IS NULL "]
+  end
+
+  def active_scaffold_block
+    #TODO figure out how to return block for the AS config
+    # so I can subclass then yield this block & block
+    # that changes things for activity so don't have to
+    # have duplicate code w some modifications
   end
 
 end

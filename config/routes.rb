@@ -39,10 +39,12 @@ ActionController::Routing::Routes.draw do |map|
   map.manage_code_assignments 'manage_code_assignments/:activity_id', :controller => 'code_assignments', :action => :manage
   map.update_code_assignments 'update_code_assignments', :controller => 'code_assignments', :action => :update_assignments, :method => :post
 
+  map.news "news", :controller => 'static_page', :action => "news"
+  map.about "about", :controller => 'static_page', :action => "about"
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact reporter_dashboard admin_dashboard].join('|'))
+                  :page => Regexp.new(%w[about contact reporter_dashboard admin_dashboard about news].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 

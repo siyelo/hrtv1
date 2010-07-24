@@ -25,8 +25,8 @@
         %ul
           - if current_user
             %li= "Welcome #{current_user.username}"
-            %li= link_to 'Dashboard', static_page_path(:ngo_dashboard)
-            %li= link_to "My Profile", user_url(current_user)
+            %li= user_dashboard_link
+            %li= link_to "Change Password", user_url(current_user)
             %li= link_to "logout", logout_path
           - else
             %li= link_to "login", login_path

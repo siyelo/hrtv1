@@ -1,5 +1,7 @@
 - title "Log in"
 
+:javascript
+  $('tabs').hide();
 
 - form_for @user_session, :url => user_session_path do |form|
   %table#user.formList

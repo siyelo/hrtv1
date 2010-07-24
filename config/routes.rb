@@ -1,7 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.coding "activities/code", :controller => 'activities', :action => 'code'
-  map.coding "activities/random", :controller => 'activities', :action => 'random'
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
@@ -43,7 +42,7 @@ ActionController::Routing::Routes.draw do |map|
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact ngo_dashboard govt_dashboard admin_dashboard].join('|'))
+                  :page => Regexp.new(%w[about contact reporter_dashboard admin_dashboard].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 

@@ -1,0 +1,18 @@
+module Templateable
+  # to use this module, add an integer :template_id to the record
+
+  belongs_to :template,  :class => self
+  has_may :template_for, :foreign_key => :template_id, :class => self
+
+  #TODO add link to controller at item level to push updates down
+  #TODO make instance methods
+  def push_updates_to_templated
+    updated_attributes = {} #TODO what attributes were updated?
+    template_for.each do |child|
+      child.update_attributes updated_attributes
+      #TODO handle referenced objects appropriately e.g. copy or reference
+    end
+  end
+
+
+end

@@ -1,0 +1,16 @@
+
+  active_scaffold :activities do |config|
+    config.action_links.add('Make A Copy',
+      :action => "create_from_template",
+      :type => :list, #TODO check syntax from the wiki
+      :popup => :nested, #TODO how to show form in place
+      :label => "Make A Copy")
+
+  end
+  
+  def create_from_template
+    @parent_record = controller_model_class.new
+    attribs = @parent_record.attributes
+    attribs.delete! :template_id
+    @record = @parent_record.template_for.new @record.attributes
+  end

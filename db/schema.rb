@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100722084401) do
+ActiveRecord::Schema.define(:version => 20100725194009) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -28,13 +28,13 @@ ActiveRecord::Schema.define(:version => 20100722084401) do
     t.integer  "other_cost_type_id"
     t.text     "description"
     t.string   "type"
-    t.string   "start_month"
-    t.string   "end_month"
     t.decimal  "budget"
     t.decimal  "spend_q1"
     t.decimal  "spend_q2"
     t.decimal  "spend_q3"
     t.decimal  "spend_q4"
+    t.date     "start"
+    t.date     "end"
   end
 
   create_table "activities_indicators", :id => false, :force => true do |t|

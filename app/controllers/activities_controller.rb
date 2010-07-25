@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   authorize_resource
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start_month, :end_month, :beneficiary, :target, :expected_total, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :target, :expected_total, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end
@@ -51,6 +51,9 @@ class ActivitiesController < ApplicationController
     config.columns[:budget].label = "Budget for GOR FY 10-11"
     config.columns[:budget].options = quarterly_amount_field_options
 
+    [:start, :end].each do |c|
+      config.columns[c].label = "#{c.to_s.capitalize} Date"
+    end
     %w[q1 q2 q3 q4].each do |quarter|
       c="spend_"+quarter
       c=c.to_sym

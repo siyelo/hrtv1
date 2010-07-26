@@ -2,10 +2,14 @@
 class Organization < ActiveRecord::Base
   attr_accessible :name
 
-
   acts_as_commentable
 
   has_many :users # people in this organization
+
+  has_many :data_requests_made, :class_name => "DataRequest",
+    :foreign_key => :organization_id_requester
+
+  has_many :data_responses, :foreign_key => :organization_id_responder
 
   has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from"
   has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to"

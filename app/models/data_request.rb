@@ -1,9 +1,11 @@
 class DataRequest < ActiveRecord::Base
-  
+
   before_save :check_response_created
-  belongs_to :organization
+  belongs_to :requesting_organization, :class_name => "Organization",
+    :foreign_key => :organization_id_requester
+
   has_many :data_responses
-	
+
   def self.find_unfulfill_request organization_id
     DataRequest.find(:all, :conditions=>["organization_id = ? AND complete = ?", organization_id, false])
   end

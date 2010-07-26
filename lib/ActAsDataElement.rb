@@ -17,7 +17,7 @@ module ActAsDataElement
     include ApplicationHelper
     def save_to_response 
       #<TODO> find session with the response_id
-      dr = DataResponse.find(1)
+      dr = User.current_user.current_data_response
       dr.add_or_update_element self
       dr.save
     end

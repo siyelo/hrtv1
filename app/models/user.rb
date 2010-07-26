@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
 
   has_many  :assignments
   belongs_to :organization
-
-  @current_data_response
+  belongs_to :current_data_response, :class_name => "DataResponse",
+    :foreign_key => :data_response_id_current
 
   validates_presence_of  :username, :email
   validates_uniqueness_of :email, :case_sensitive => false
@@ -33,6 +33,18 @@ class User < ActiveRecord::Base
   # GN: was stubbing User.current_user.organization
   def self.organization
     current_user.organization
+  end
+
+  def self.stub_current_user
+    o=Organization.new(:name=>"org")
+    o.save(false)
+    u = User.new(:username=> "admin", :roles => [:admin],
+      :organization => o)
+    u.save(false)
+    User.current_user = u
+    d=DataResponse.new
+    d.save(false)
+    u.current_data_response = d
   end
 end
 

@@ -1,6 +1,9 @@
 class OrganizationsController < ApplicationController
   @@shown_columns = [:name, :type, :raw_type]
   @@create_columns = [:name, :type, :raw_type]
+  def self.create_columns
+    @@create_columns
+  end
   
   #record_select :per_page => 20, :search_on => [:name], :order_by => 'name ASC', :full_text_search => true
   
@@ -12,7 +15,7 @@ class OrganizationsController < ApplicationController
 
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
-    config.subform.columns = [:name, :raw_type]
+    config.subform.columns = [:name, :type]
     config.columns[:type].form_ui = :select
     config.columns[:type].options = {:options => [
       ["Donor","Donor"],

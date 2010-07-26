@@ -36,7 +36,7 @@ class ActivitiesController < ApplicationController
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
     #config.columns[:locations].options[:update_column] = [:provider] #not working
-    #config.columns[:provider].form_ui = :select
+    config.columns[:provider].form_ui = :select
     config.columns[:provider].association.reverse = :provider_for
     config.columns[:name].inplace_edit = true
     config.columns[:name].label = "Name (Optional)"

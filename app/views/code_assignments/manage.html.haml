@@ -12,9 +12,11 @@
   = "Activity Classification" #TODO add record type in front nicely
 
 #activity_description
-  - [:name, :expected_total, :description].each do |f|
+  - [:name, :description, :budget, :spend].each do |f|
     %p
-      = "#{f.to_s.humanize.capitalize}: #{@activity.send(f)}" #TODO currency symbol from data request
+      /= label_string(@activity.class, f)+": #{@activity.send(f)}" #why doesn't this work?
+      = "#{f.to_s.humanize.capitalize}: #{@activity.send(f)}" #TODO add currency symbol
+
 
 #activity_classification
   - form_for @activity, :url => update_code_assignments_path, :method => :post do |form|

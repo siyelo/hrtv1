@@ -1,7 +1,7 @@
 class FundingFlowsController < ApplicationController
   authorize_resource
 
-  @@shown_columns = [:project, :from, :to, :organization_text, :budget, :spend_q1]
+  @@shown_columns = [:project, :from, :to, :budget, :spend_q1]
   @@create_columns = [:project, :from, :to, :budget, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   def self.create_columns
     @@create_columns
@@ -29,9 +29,12 @@ class FundingFlowsController < ApplicationController
     config.columns[:project].inplace_edit=false
 
     [:from, :to ].each do |c|
-      config.columns[c].form_ui=:select
+      config.columns[c].form_ui=:select #TODO comment out when GN gets subform working
       config.columns[c].inplace_edit = true
     end
+    config.columns[:from].association.reverse = :out_flows
+    config.columns[:to].association.reverse = :in_flows
+
     config.create.columns = @@create_columns
     config.update.columns = @@update_columns
    # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit

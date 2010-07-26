@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   rescue_from CanCan::AccessDenied do |exception|
-      render :text => "Sorry, you do not have permission for this action.
-      Please use the contact link at
+      render :text => "Sorry, you do not have permission for this action or you have been logged out.
+      You may login at #{root_url} or use the contact link at
       the bottom of the homepage to contact an administrator, if you
       think this message is being shown in error."
       # TODO render a template / action without the layout with login link & help msg
@@ -147,11 +147,24 @@ class ApplicationController < ActionController::Base
     active_scaffold_config.columns[column].description = descr
   end
 
+  def self.label_for column
+    if respond_to? :active_scaffold_config
+      active_scaffold_config.columns[column].label
+    end
+  end
+
+  def self.description_for column
+    if respond_to? :active_scaffold_config
+      active_scaffold_config.columns[column].description
+    end
+  end
+
   helper_method :current_user
 
   before_filter do |c_instance|
     User.current_user = c_instance.send(:current_user)
   end
+
   private
 
   #before_filter { |c| Authorization.current_user = c.current_user }

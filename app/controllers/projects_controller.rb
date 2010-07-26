@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
   authorize_resource
 
-  @@shown_columns = [:name, :description,  :expected_total]
-  @@create_columns = [:name, :description,  :expected_total, :locations]
+  @@shown_columns = [:name, :description,  :budget, :spend]
+  @@create_columns = [:name, :description,  :budget, :spend, :entire_budget, :start_date, :end_date, :locations]
   def self.create_columns
     @@create_columns
   end
@@ -26,12 +26,15 @@ class ProjectsController < ApplicationController
     config.update.columns = config.create.columns
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
-    config.columns[:description].form_ui = :textarea
-    config.columns[:expected_total].inplace_edit = true
-    config.columns[:expected_total].label = "Total Budgeted Amount"
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
-
+    config.columns[:entire_budget].label = "Total Project Budget"
+    config.columns[:budget].label = "Budget for GOR FY 10-11"
+    config.columns[:spend].label = "Total Spend GOR FY 09-10"
+    [:spend, :budget, :entire_budget].each do |c|
+      config.columns[c].options = quarterly_amount_field_options
+      config.columns[c].inplace_edit = true
+    end
   end
 
 

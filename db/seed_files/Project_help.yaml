@@ -20,6 +20,6 @@
   long: long_descr
 
 7:
-  attribute_name: expected_total
+  attribute_name: spend
   short: funds spent that activities in the project should add up to
   long: long_descr

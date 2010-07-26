@@ -12,7 +12,8 @@ class Organization < ActiveRecord::Base
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
 
-  has_many :funding_flows #TODO should be named like owned_funding_flows
+  #has_many :funding_flows #TODO should be named like owned_funding_flows
+  # for some reason the association above was giving AS problems... when i trie dto implement the subforms
 
   has_and_belongs_to_many :locations
 

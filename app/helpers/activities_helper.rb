@@ -1,4 +1,11 @@
 module ActivitiesHelper
+  def label_string model_class, column
+    if model_class == Activity
+      ActivitiesController.label_for column
+    elsif model_class == OtherCost
+      OtherCostsController.label_for column
+    end
+  end
   def options_for_association_conditions(association)
     if params[:controller] == "activities" #this might intro a bug
       #right now for some reason projects is trying to pick up the

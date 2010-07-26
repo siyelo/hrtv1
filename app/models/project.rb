@@ -9,9 +9,9 @@ class Project < ActiveRecord::Base
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
   validates_presence_of :name
-  validates_numericality_of :expected_total # TODO let null save
 
-  attr_accessible :name, :description, :expected_total
+  attr_accessible :name, :description, :spend, :budget, :entire_budget,
+    :start_date, :end_date
 
   after_create :create_helpful_records_for_workflow
 

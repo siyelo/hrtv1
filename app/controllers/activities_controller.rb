@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   authorize_resource
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :target, :expected_total, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :target, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end
@@ -36,20 +36,20 @@ class ActivitiesController < ApplicationController
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
     #config.columns[:locations].options[:update_column] = [:provider] #not working
-    config.columns[:provider].inplace_edit = :ajax
-    config.columns[:provider].form_ui = :select
+    #config.columns[:provider].form_ui = :select
     config.columns[:provider].association.reverse = :provider_for
     config.columns[:name].inplace_edit = true
     config.columns[:name].label = "Name (Optional)"
     config.columns[:description].inplace_edit = true
-    config.columns[:expected_total].inplace_edit = true
-    config.columns[:expected_total].label = "Total Spend GOR FY 09-10"
     config.columns[:target].label = "Target"
     config.columns[:beneficiary].label = "Beneficiary"
 
-    config.columns[:budget].inplace_edit = true
     config.columns[:budget].label = "Budget for GOR FY 10-11"
-    config.columns[:budget].options = quarterly_amount_field_options
+    config.columns[:spend].label = "Total Spend GOR FY 09-10"
+    [:spend, :budget].each do |c|
+      config.columns[c].options = quarterly_amount_field_options
+      config.columns[c].inplace_edit = true
+    end
 
     [:start, :end].each do |c|
       config.columns[c].label = "#{c.to_s.capitalize} Date"

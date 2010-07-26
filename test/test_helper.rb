@@ -37,6 +37,6 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   def setup
     Organization.create(:name => "self")
-    User.stub_current_user
+    User.stub_current_user_and_data_response
   end
 end

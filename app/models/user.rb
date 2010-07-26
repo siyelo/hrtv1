@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
     current_user.organization
   end
 
-  def self.stub_current_user
+  def self.stub_current_user_and_data_response
     o=Organization.new(:name=>"org")
     o.save(false)
     u = User.new(:username=> "admin", :roles => [:admin],

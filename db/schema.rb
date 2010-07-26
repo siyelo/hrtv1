@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100726140058) do
+ActiveRecord::Schema.define(:version => 20100726142930) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(:version => 20100726140058) do
     t.integer  "organization_id_owner"
     t.text     "organization_text"
     t.integer  "self_provider_flag",    :default => 0
+    t.decimal  "spend"
   end
 
   create_table "indicators", :force => true do |t|

@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
     config.columns[:entire_budget].label = "Total Project Budget"
-    config.columns[:budget].label = "Budget for GOR FY 10-11"
+    config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     [:spend, :budget, :entire_budget].each do |c|
       config.columns[c].options = quarterly_amount_field_options

@@ -27,6 +27,18 @@ describe Project do
     end
   end
   
+  context "commentable" do
+    describe "commenting on a project" do
+      it "should assign to a project" do
+        project     = Factory(:project)
+        comment     = Factory(:comment)
+        project.comments << comment
+        project.comments.should have(1).item
+        project.comments.first.should == comment
+      end
+    end
+  end
+  
   context "funding sources and outflows" do
     before(:each) do
       @our_org      = Factory(:organization)

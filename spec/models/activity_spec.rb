@@ -20,6 +20,16 @@ describe Activity do
     end
   end
   
+  describe "commenting on an activity" do
+    it "should assign to an activity" do
+      activity     = Factory(:activity)
+      comment     = Factory(:comment)
+      activity.comments << comment
+      activity.comments.should have(1).item
+      activity.comments.first.should == comment
+    end
+  end
+  
   describe "can show who we provided money to (providers)" do
     context "on a single project" do
       it "should have at least 1 provider" do  

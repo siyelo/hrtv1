@@ -30,3 +30,8 @@ def login( user = Factory.build(:reporter) )
   activate_authlogic
   UserSession.create user
 end
+
+shared_examples_for "a protected endpoint" do
+  it { should redirect_to(login_path) }
+  it { should set_the_flash.to("You must be signed in to do that") }
+end

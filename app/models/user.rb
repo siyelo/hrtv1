@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   acts_as_authentic
 
   cattr_accessor :current_user
+  attr_readonly :roles_mask #only assign role on create
 
   has_many  :assignments
   belongs_to :organization

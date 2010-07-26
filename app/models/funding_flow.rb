@@ -4,11 +4,11 @@ class FundingFlow < ActiveRecord::Base
 
   before_save :authorize_and_set_owner
 
-  named_scope :available_to, lambda do |user|
+  named_scope :available_to, lambda { |user|
     {:conditions => ["organization_id_owner = ? or 1=?",
       user.organization.id,
       user.role?(:admin) ? 1 : 0 ]}
-  end
+  }
 
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies

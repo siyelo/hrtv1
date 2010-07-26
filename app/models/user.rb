@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   has_many  :assignments
   belongs_to :organization
+  has_many :data_responses, :through => :organization
+
   belongs_to :current_data_response, :class_name => "DataResponse",
     :foreign_key => :data_response_id_current
 

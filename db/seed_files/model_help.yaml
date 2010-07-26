@@ -62,3 +62,7 @@
   model_name: FundingSource
   short: Where your organization gets its funding
   long: Enter the sources from which your organization receives funding for its projects
+16:
+  model_name: DataResponse
+  short: Holds information used throughout data entry
+  long: Enter information here that will be used throughout data entry, such as currency and your fiscal year. This is used to make the data entry experience easier and to customize the process for your organization.

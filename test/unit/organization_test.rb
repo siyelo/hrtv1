@@ -1,11 +1,8 @@
 require 'test_helper'
 
 class OrganizationTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
-  end
 
+  should have_many :data_responses
   should have_many :users
   test "providers for" do
     o=Organization.new(:name => "test")

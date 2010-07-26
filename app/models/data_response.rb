@@ -13,6 +13,10 @@ class DataResponse < ActiveRecord::Base
     ValueAtRuntime.new(Proc.new{User.current_user.organization.id}),
     ValueAtRuntime.new(Proc.new{User.current_user.role?(:admin) ? 1 : 0})]
 
+  def self.remove_security
+    with_exclusive_scope {find(:all)}
+  end
+
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
 
   before_save :is_complete

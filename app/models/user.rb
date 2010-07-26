@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
 
   named_scope :with_role, lambda { |role| {:conditions => "roles_mask & #{2**ROLES.index(role.to_s)} > 0 "} }
 
+  def self.remove_security
+    with_exclusive_scope {find(:all)}
+  end
+
   ROLES = %w[admin reporter]
 
   def roles=(roles)
@@ -39,15 +43,23 @@ class User < ActiveRecord::Base
   end
 
   def self.stub_current_user_and_data_response
-    o=Organization.new(:name=>"org")
+    o=Organization.new(:name=>"org_for_internal_stub382342")
     o.save(false)
-    u = User.new(:username=> "admin_internal_stub", :roles => [:admin],
+    u = User.new(:username=> "admin_internal_stub2309420", :roles => [:admin],
       :organization => o)
     u.save(false)
     User.current_user = u
-    d=DataResponse.new
+    d=DataResponse.new :responding_organization => o
     d.save(false)
     u.current_data_response = d
+    u.save(false)
+  end
+  def self.unstub_current_user_and_data_response
+    u=User.find_by_username("admin_internal_stub2309420")
+    DataResponse.delete u.current_data_response.id
+    Organization.delete(Organization.find_by_name("org_for_internal_stub382342").id)
+    User.delete(User.find_by_username("admin_internal_stub2309420").id)
+    User.current_user = nil
   end
 end
 

@@ -23,6 +23,9 @@ class Organization < ActiveRecord::Base
 
   has_and_belongs_to_many :locations
 
+  def self.remove_security
+    with_exclusive_scope {find(:all)}
+  end
 #  after_save :create_data_responses
 #
 #  def create_data_responses

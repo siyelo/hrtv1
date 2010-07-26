@@ -47,8 +47,7 @@ ActionController::Routing::Routes.draw do |map|
                   :action => 'show',
                   :page => Regexp.new(%w[about contact reporter_dashboard admin_dashboard about news].join('|'))
 
-  #map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
-  map.root :controller => 'unauthenticated_static_page', :action => 'index'
+  map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
   #TODO remove these
   #map.connect ':controller/:action/:id'

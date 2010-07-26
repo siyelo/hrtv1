@@ -7,7 +7,7 @@ class DataRequest < ActiveRecord::Base
   has_many :data_responses
 
   def self.find_unfulfill_request organization_id
-    DataRequest.find(:all, :conditions=>["organization_id = ? AND complete = ?", organization_id, false])
+    DataRequest.find(:all, :conditions=>["organization_id_requestor = ? AND complete = ?", organization_id, false])
   end
   def self.find_all_unfulfill_request
     DataRequest.find(:all, :conditions=>["complete = ?", false])

@@ -23,6 +23,7 @@ Scenario: Login as a reporter with a username
   And I should see "Dashboard"
   And I should see "My Profile"
   
+<<<<<<< HEAD
 # Scenario: Login as a reporter with email address
 #   Given a reporter "Frank" with email "frank@f.com" and password "password"
 #   When I go to the login page
@@ -34,3 +35,16 @@ Scenario: Login as a reporter with a username
 #   And I should see "Welcome Frank"
 # 
 #   
+=======
+Scenario: Login as a reporter with email address
+  Given a reporter "Frank" with email "frank@f.com" and password "password"
+  When I go to the login page
+  When I fill in "Username or email" with "frank@f.com"
+  And I fill in "Password" with "password"
+  And I press "Submit"
+  #Then show me the page
+  Then I should be on the ngo dashboard page
+  And I should see "Welcome Frank"
+
+  
+>>>>>>> 8759c7302f088bab26a59ee7174b861470f2ece6

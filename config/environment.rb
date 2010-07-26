@@ -21,6 +21,7 @@ else
   puts "ERROR: configuration file #{config_file_path} not found."
 end
 
+
 Rails::Initializer.run do |config|
 
   config.gem "fastercsv"

@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
+  #around_filter :access_session_variable 
+  #allows access to session variable from model
+
   # Scrub sensitive parameters from your log
   filter_parameter_logging :password, :password_confirmation
 
@@ -178,6 +181,8 @@ class ApplicationController < ActionController::Base
     @current_user = current_user_session && current_user_session.record
   end
 
+
+
   protected
 
   def require_user
@@ -198,6 +203,7 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+<<<<<<< HEAD
   # sets AS field help that shows up in create form and on columns
   # @model_help used in views/shared/_data_entry_help
   def load_help
@@ -222,4 +228,28 @@ class ApplicationController < ActionController::Base
   def self.quarterly_amount_field_options
     {:size => 15 }
   end
+=======
+
+  #def access_session_variable
+  #  klasses = [ActiveRecord::Base, ActiveRecord::Base.class]
+  #  methods = ["session", "cookies", "params", "request"]
+
+  #  methods.each do |method|
+  #    instance_variable = instance_variable_get(:"@_#{method}")
+  #    klasses.each do |klass|
+  #      klass.send(:define_method, method, proc { instance_variable })
+  #    end
+  #  end
+
+  #  yield
+
+  #  methods.each do |method|
+  #    klasses.each do |klass|
+  #      klass.send :remove_method, method
+  #    end
+  #  end
+  #end
+
+
+>>>>>>> 8759c7302f088bab26a59ee7174b861470f2ece6
 end

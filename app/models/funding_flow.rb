@@ -1,6 +1,13 @@
+
+require 'lib/funding_flow_model_helper'
+require 'lib/ActAsDataElement'
+
 class FundingFlow < ActiveRecord::Base
-  require 'lib/funding_flow_model_helper'
+  
   acts_as_commentable
+
+  include ActAsDataElement
+  configure_act_as_data_element
 
   before_save :authorize_and_set_owner
 

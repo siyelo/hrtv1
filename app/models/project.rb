@@ -1,10 +1,19 @@
+require 'lib/ActAsDataElement'
+
 class Project < ActiveRecord::Base
   acts_as_commentable
 
+<<<<<<< HEAD
+=======
+  include ActAsDataElement
+  configure_act_as_data_element
+  
+>>>>>>> 8759c7302f088bab26a59ee7174b861470f2ece6
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
   has_many :funding_flows, :dependent => :nullify
 
+<<<<<<< HEAD
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
@@ -14,6 +23,9 @@ class Project < ActiveRecord::Base
     :start_date, :end_date
 
   after_create :create_helpful_records_for_workflow
+=======
+
+>>>>>>> 8759c7302f088bab26a59ee7174b861470f2ece6
 
   def to_s
     result = ''

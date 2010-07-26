@@ -1,5 +1,7 @@
+
 class Organization < ActiveRecord::Base
   attr_accessible :name
+
 
   acts_as_commentable
 

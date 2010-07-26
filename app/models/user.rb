@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   has_many  :assignments
   belongs_to :organization
 
+  @current_data_response
+
   validates_presence_of  :username, :email
   validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create

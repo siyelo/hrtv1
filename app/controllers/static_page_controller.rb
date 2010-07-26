@@ -3,6 +3,7 @@ class StaticPageController < ApplicationController
 
   before_filter :require_user, :except => [:index, :news, :about]
 
+  
   def index
   end
   def news

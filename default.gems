@@ -12,3 +12,5 @@ rails-footnotes
 fastercsv
 paginator
 haml -v3.0.13
+authlogic
+cancan

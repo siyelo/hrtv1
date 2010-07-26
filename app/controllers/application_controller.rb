@@ -203,7 +203,6 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-<<<<<<< HEAD
   # sets AS field help that shows up in create form and on columns
   # @model_help used in views/shared/_data_entry_help
   def load_help
@@ -228,7 +227,6 @@ class ApplicationController < ActionController::Base
   def self.quarterly_amount_field_options
     {:size => 15 }
   end
-=======
 
   #def access_session_variable
   #  klasses = [ActiveRecord::Base, ActiveRecord::Base.class]
@@ -251,5 +249,4 @@ class ApplicationController < ActionController::Base
   #end
 
 
->>>>>>> 8759c7302f088bab26a59ee7174b861470f2ece6
 end

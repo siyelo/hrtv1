@@ -23,6 +23,16 @@ class Organization < ActiveRecord::Base
 
   has_and_belongs_to_many :locations
 
+#  after_save :create_data_responses
+#
+#  def create_data_responses
+#    if data_responses.empty?
+#      DataRequest.all.each do |d|
+#        d.data_responses.build :responding_organization => self
+#      end
+#    end
+#  end
+
   def to_s
     name
   end

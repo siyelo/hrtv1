@@ -4,6 +4,15 @@ class OrganizationTest < ActiveSupport::TestCase
 
   should have_many :data_responses
   should have_many :users
+#  test "creates data responses on save" do
+#    d=DataRequest.create!
+#    o=Organization.create! :name => "test"
+#    found = false
+#    d.data_responses.each do |r|
+#      found = true if r.responding_organization == o
+#    end
+#    assert found
+#  end
   test "providers for" do
     o=Organization.new(:name => "test")
     o.save

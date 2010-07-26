@@ -16,7 +16,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
 
   before_save :is_complete
-  after_save :all_responses_completed
+ #after_save :all_responses_completed # TODO implement /fix, inf loops right now
 
   def add_or_update_element element_object
     # assumes raw object that has not been attached to an element

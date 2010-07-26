@@ -1,4 +1,5 @@
 class UserSessionsController < ApplicationController
+  skip_before_filter :load_help
   include UsersHelper
   def new
     @user_session = UserSession.new

@@ -1,3 +1,4 @@
+require 'lib/value_at_runtime'
 class DataResponse < ActiveRecord::Base
   
   before_save :is_complete

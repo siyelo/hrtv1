@@ -1,5 +1,3 @@
-
-#TODO where should this be declared, this isn't right place
 class ValueAtRuntime < Object
   def initialize block
     @block = block

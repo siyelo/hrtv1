@@ -1,5 +1,4 @@
-
-require 'lib/funding_flow_model_helper'
+require 'lib/value_at_runtime'
 require 'lib/ActAsDataElement'
 
 class FundingFlow < ActiveRecord::Base

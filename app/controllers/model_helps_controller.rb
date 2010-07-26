@@ -1,6 +1,14 @@
 class ModelHelpsController < ApplicationController
   @@shown_columns = [:model_name,  :long]
   @@create_columns = @@shown_columns
+  def self.create_columns
+    @@create_columns
+  end
+  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
+
+  map_fields :create_from_file,
+    @@columns_for_file_upload,
+    :file_field => :file
 
   active_scaffold :model_help do |config|
     config.label = "Help for Pages and Data Fields"

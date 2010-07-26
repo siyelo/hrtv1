@@ -13,3 +13,10 @@ User.create! (:username => 'reporter',
               :password_confirmation => 'password',
               :organization => Organization.create!(:name => "internal_for_dev2"),
               :roles => ['reporter'])
+
+User.create! (:username => 'reporter2',
+              :email => 'reporter2@ubuzima.org',
+              :password => 'password',
+              :password_confirmation => 'password',
+              :organization => Organization.create!(:name => "internal_for_dev3"),
+              :roles => ['reporter'])

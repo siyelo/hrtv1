@@ -1,8 +1,13 @@
 class FieldHelpsController < ApplicationController
   @@shown_columns = [:model_help, :attribute_name, :short,  :long]
   @@create_columns = @@shown_columns
+  def self.create_columns
+    @@create_columns
+  end
+  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
   
   active_scaffold :field_help do |config|
+    config.label = "Help for Fields"
     config.columns =  @@shown_columns
     list.sorting = {:attribute_name => 'DESC'}
     

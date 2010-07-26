@@ -54,4 +54,10 @@ class FundingFlowsController < ApplicationController
     super @@columns_for_file_upload
   end
 
+  # limits active scaffolds showing records
+  # TODO deauthorize other paths to the data
+  def beginning_of_chain
+    super.available_to current_user
+  end
+
 end

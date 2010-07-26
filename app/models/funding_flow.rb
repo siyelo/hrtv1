@@ -4,7 +4,11 @@ class FundingFlow < ActiveRecord::Base
 
   before_save :authorize_and_set_owner
 
-  #default_scope :conditions => ["organization_id_owner = ?", ValueAtRuntime.new(Proc.new { User.organization.id }) ]
+  named_scope :available_to, lambda do |user|
+    {:conditions => ["organization_id_owner = ? or 1=?",
+      user.organization.id,
+      user.role?(:admin) ? 1 : 0 ]}
+  end
 
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies
@@ -27,7 +31,7 @@ class FundingFlow < ActiveRecord::Base
     # don't remove the self reference below! or it breaks
 
     #TODO current_user.organization
-    self.owner = User.organization unless false #TODO current_user.admin?
+    self.owner = User.current_user.organization unless false #TODO current_user.admin?
   end
 
 end

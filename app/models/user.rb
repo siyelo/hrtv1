@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   # GR: why is this needed ?
   # GN: was stubbing User.current_user.organization
   def self.organization
-    Organization.find_by_name("self")
+    current_user.organization
   end
 end
 

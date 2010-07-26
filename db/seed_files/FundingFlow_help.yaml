@@ -44,5 +44,5 @@
 
 13:
   attribute_name: organization_text
-  short: Stores the text of the name of an organization. When creating from a file, put the organization's name into this column and manually map it to the organization in the database by clicking edit on the newly created funding source records, then selecting the correct value using the "from" or "to" select box.
-  long: Stores the text of the name of an organization. When creating from a file, put the organization's name into this column and manually map it to the organization in the database by clicking edit on the newly created funding source records, then selecting the correct value using the "from" or "to" select box.
+  short: Stores the text of the name of an organization. When creating from a file, put the organization's name into this column and map it to this field in the database by clicking edit on the newly created records, then following insturctions on the form.
+  long: Stores the text of the name of an organization. When creating from a file, put the organization's name into this column and map it to this field in the database by clicking edit on the newly created records, then selecting the correct value using the "from" or "to" select box.

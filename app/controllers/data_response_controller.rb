@@ -1,2 +1,0 @@
-class DataResponseController < ApplicationController
-end

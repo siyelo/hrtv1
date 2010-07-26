@@ -2,3 +2,5 @@ rails --version 2.3.8
 fastercsv
 haml --version "= 3.0.13"
 compass --version "= 0.10.2"
+cancan
+authlogic

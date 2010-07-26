@@ -56,8 +56,8 @@ class FundingFlowsController < ApplicationController
 
   # limits active scaffolds showing records
   # TODO deauthorize other paths to the data
-  def beginning_of_chain
-    super.available_to current_user
-  end
+#  def beginning_of_chain
+#    super.available_to current_user
+#  end
 
 end

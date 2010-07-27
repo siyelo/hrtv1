@@ -2,6 +2,7 @@ require 'test_helper'
 
 class OrganizationTest < ActiveSupport::TestCase
 
+  should have_and_belong_to_many :activities
   should have_many :data_responses
   should have_many :users
 #  test "creates data responses on save" do

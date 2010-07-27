@@ -5,6 +5,7 @@ class Organization < ActiveRecord::Base
   acts_as_commentable
 
   has_many :users # people in this organization
+  has_and_belongs_to_many :activities # activities that target / aid this org
 
   has_many :data_requests_made, :class_name => "DataRequest",
     :foreign_key => :organization_id_requester

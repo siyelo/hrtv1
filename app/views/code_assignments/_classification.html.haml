@@ -1,0 +1,37 @@
+- content_for :head do
+  :javascript
+    jQuery(document).ready(function(){
+      jQuery('ul#activity_tree').collapsibleCheckboxTree();
+      jQuery('.tooltip').tipsy({gravity: 'e'});
+
+    });
+
+
+.nav2
+  %h2= "Activity Classification"
+  %ul
+    %li{:class => @coding_type == :budget ? 'selected': '' }
+      = link_to "Budget", budget_activity_coding_path(@activity.id)
+    %li{:class => @coding_type == :expenditure ? 'selected': '' }
+      = link_to "Expenditure", expenditure_activity_coding_path(@activity.id)
+
+%table#activity_description
+  %tr
+    %td Name
+    %td= @activity.name
+    -#= link_to "#{@activity.name}", activity_path(@activity)
+  %tr
+    %td Expected Total:
+    %td= @activity.expected_total
+  %tr
+    %td Description:
+    %td= @activity.description
+
+#activity_classification
+  - form_for @activity, :url => update_path, :method => :post do |form|
+    %ul#activity_tree
+      - @codes.each do |code|
+        = render 'code_row', { :code => code, :form => form }
+    = submit_tag 'Save'
+
+  = render 'shared/data_entry_help', :record_type => CodeAssignment

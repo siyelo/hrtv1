@@ -39,6 +39,14 @@ module NavigationHelpers
     when /the other costs page/
       other_costs_path
 
+    when /the coding budget page for "(.+)"/
+      activity = Activity.find_by_name($1)
+      budget_activity_coding_path(activity)
+
+    when /the coding expenditure page for "(.+)"/
+      activity = Activity.find_by_name($1)
+      expenditure_activity_coding_path(activity)
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

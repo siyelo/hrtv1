@@ -187,4 +187,11 @@ class ApplicationController < ActionController::Base
     ModelHelp.find_by_model_name self.controller_model_class.to_s
   end
 
+  # methods to help with setting config.columns, etc
+  # TODO move into a module
+  def self.quarterly_amount_field_options
+    {:size => 15 }
+  end
+
+
 end

@@ -1,14 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.coding "activities/code", :controller => 'activities', :action => 'code'
-  map.coding "activities/random", :controller => 'activities', :action => 'random'
+  #map.other_cost_coding "other_costs/code", :controller => 'other_costs', :action =>
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
   map.funding_sources_data_entry "funding_sources", :controller => 'funding_sources', :action => 'index'
   map.providers_data_entry "providers", :controller => 'providers', :action => 'index'
-  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs].each do |model|
-    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
-  end
 
   map.resources :projects,
     :collection => {:browse => :get},
@@ -18,7 +14,19 @@ ActionController::Routing::Routes.draw do |map|
     :collection => {:browse => :get},
     :member => {:select => :post}, :active_scaffold => true
 
-  map.resources :activities, :active_scaffold => true
+  map.resources :activities, :active_scaffold => true do |activity|
+    activity.resource :coding,  :controller => :code_assignments,
+                                :only => [:index], #no restful routes k thx
+                                :member => {  :budget => :get,
+                                              :expenditure => :get }
+    activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
+    activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
+  end
+
+  # AS redirect helpers
+  map.popup_coding 'popup_coding', :controller => :activities, :action => :popup_coding
+  map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
+
   map.resources :indicators, :active_scaffold => true
   map.resources :line_items, :active_scaffold => true
   map.resources :comments, :active_scaffold => true
@@ -36,9 +44,9 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
-  map.resources :code_assignments, :only => [:index]
-  map.manage_code_assignments 'manage_code_assignments/:activity_id', :controller => 'code_assignments', :action => :manage
-  map.update_code_assignments 'update_code_assignments', :controller => 'code_assignments', :action => :update_assignments, :method => :post
+  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs].each do |model|
+    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
+  end
 
   map.static_page ':page',
                   :controller => 'static_page',
@@ -47,9 +55,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
-  #TODO remove these
-  #map.connect ':controller/:action/:id'
-  #map.connect ':controller/:action/:id.:format'
 
 end
 

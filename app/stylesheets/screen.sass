@@ -13,18 +13,24 @@
 //@import partials/form
 //@import partials/two_col
 
+@import partials/coding_page
+
+//@import active_scaffold_overrides
+
 body
   background= image_url("bg-white.jpg")
   font-family: Arial, Helvetica, serif
 
   a, p
     font-size: 0.85em
+
   a
     color= !mid-blue
     text-decoration: none
     &:hover
       text-decoration: underline
-  p
+
+  p, ul, dl
     color: #444
 
   h2
@@ -163,6 +169,12 @@ body
       .actions a
         padding-left: 19px
 
+      // fix the tiny AS links.
+      table
+        .actions
+          a
+            font-size: 1em
+
       .link_like
         color: #09c
         cursor: pointer
@@ -175,6 +187,7 @@ body
       +border-radius
       border: #eee 1px solid
       padding-bottom: 15px
+      margin-bottom: 10px
 
     #sidebar
       float: right
@@ -201,14 +214,18 @@ body
           padding: 0 10px
           font-size: 0.9em
 
+    // google apps style of sub-tabs
+
+
+    h2, p
+      padding: 10px
+
     h2
       +border-top-radius
       background= !lightest-blue
       color= !mid-blue
       font-size: 0.8em
       letter-spacing: 0.05em
-    h2, p
-      padding: 10px
 
   #footer
     clear: both

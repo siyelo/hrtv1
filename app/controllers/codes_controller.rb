@@ -1,5 +1,7 @@
 class CodesController < ApplicationController
 
+  authorize_resource
+
   def to_label
     short_display
   end
@@ -9,6 +11,9 @@ class CodesController < ApplicationController
 
   @@shown_columns = [:short_display, :type, :start_date, :end_date ]
   @@create_columns = [:short_display, :type, :long_display, :start_date, :end_date]
+  def self.create_columns
+    @@create_columns
+  end
 
   active_scaffold :code do |config|
     config.columns = @@shown_columns

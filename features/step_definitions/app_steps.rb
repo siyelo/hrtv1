@@ -85,3 +85,11 @@ Then /^debug$/ do
   debugger # express the regexp above with the code you wish you had
 end
 
+
+Then /^I should see the "([^"]*)" tab is active$/ do |text|
+  steps %Q{
+    Then I should see "#{text}" within "li.selected"
+  }
+end
+
+

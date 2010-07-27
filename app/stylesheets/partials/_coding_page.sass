@@ -1,0 +1,98 @@
+#content
+  #main
+    .nav2
+      +border-top-radius
+      //border-bottom= !lighter-blue " 1px solid "
+      background= !lightest-blue
+      color= !mid-blue
+      padding-left: 15px
+      //padding-bottom: 2px
+      display: block
+
+      ul
+        +horizontal-list
+        padding-top: 4px
+
+        li
+          display: inline
+          float: left
+          padding: 5px 12px 2px
+          //position: relative
+          //top: 3px
+          white-space: nowrap
+
+          //override
+          &:first-child, &:last-child
+            padding: 5px 12px 2px
+
+        a
+          padding-left: 0px
+
+        .selected
+          background: none repeat scroll 0 0 #FFFFFF
+          border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
+          border-style: solid solid none
+          border-bottom: none
+          border-width: 1px 1px 0
+          font-weight: bold
+
+    table#activity_description
+      padding: 10px
+
+      td
+        padding: 2px 8px
+        font-size: 0.85em
+
+        a
+          font-size: 1.15em
+
+#activity_classification
+  padding: 10px
+
+  form
+    input[type=submit]
+      margin-top: 10px
+
+body #content #main #activity_tree a
+  font-size: 12px
+  padding: 4px 7px
+
+#buttons
+  padding: 5px 0px
+
+
+#activity_tree
+  font-size: 12px
+
+
+  ul
+    padding-left: 20px
+
+    li
+      font-size: 12px
+
+      list-style: none
+
+  .hide
+    display: none
+
+  span
+    color: #999
+    font-family: "Courier New", Courier, monospace
+    cursor: default
+    &.expanded, &.collapsed
+      cursor: pointer
+
+.tooltip
+  -moz-border-radius: 5px 5px 5px 5px
+  background: none repeat scroll 0 0 #DDDDDD
+  color: #fff
+  display: inline-block
+  font-size: 14px
+  font-weight: bold
+  margin-left: 2px
+  padding: 1px 5px
+  text-decoration: none
+  text-shadow: none
+
+

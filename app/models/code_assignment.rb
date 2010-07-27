@@ -7,7 +7,7 @@ class CodeAssignment < ActiveRecord::Base
           ta=nil
         end
       end
-        
+
       if ta
         record.activity.lineItems.create(
         :spend => record.amount,
@@ -19,6 +19,5 @@ class CodeAssignment < ActiveRecord::Base
   belongs_to :code
 
   validates_presence_of :activity, :code
-  validates_uniqueness_of :code_id, :scope => :activity_id
 
 end

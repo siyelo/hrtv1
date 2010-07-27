@@ -1,7 +1,7 @@
 <% if true #TODO user has correct role to create
  %>
 
-  <p>Create one or more <%=human_plural_name_for_entity%> from a file.</p>
+ <p>Create one or more <%=human_plural_name_for_entity%> from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.</p>
 
   <% form_tag ({:action=> :create_from_file}, :multipart => true) do %>
     <p>

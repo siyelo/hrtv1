@@ -2,11 +2,15 @@ class ActivitiesController < ApplicationController
   authorize_resource
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :organizations, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end
-  @@columns_for_file_upload = %w[name description provider expected_total] # TODO fix bug, projects for instance won't work
+  @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@columns_for_file_upload = %w[name description
+    text_for_targets text_for_beneficiaries text_for_provider
+    spend spend_q1 spend_q2 spend_q3 spend_q4 budget]
+# TODO fix bug, projects for instance won't work
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -14,6 +18,8 @@ class ActivitiesController < ApplicationController
 
   active_scaffold :activity do |config|
     config.columns =  @@shown_columns
+    config.create.columns = @@create_columns
+    config.update.columns = @@update_columns
     list.sorting = {:name => 'DESC'}
 
     config.action_links.add('Classify',
@@ -34,8 +40,6 @@ class ActivitiesController < ApplicationController
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 
-    config.create.columns = @@create_columns
-    config.update.columns = config.create.columns
     config.columns[:projects].inplace_edit = :ajax
     config.columns[:projects].form_ui = :select
     #config.columns[:projects].options[:update_column] = [:provider] #not working
@@ -47,7 +51,8 @@ class ActivitiesController < ApplicationController
     config.columns[:name].inplace_edit = true
     config.columns[:name].label = "Name (Optional)"
     config.columns[:description].inplace_edit = true
-    config.columns[:beneficiary].label = "Beneficiary"
+    config.columns[:beneficiaries].form_ui = :select
+#    config.columns[:beneficiaries].label = "Beneficiary"
 
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
@@ -65,6 +70,10 @@ class ActivitiesController < ApplicationController
       config.columns[c].inplace_edit = true
       config.columns[c].options = quarterly_amount_field_options
       config.columns[c].label = "Expenditure in GOR FY 09-10 "+quarter.capitalize
+    end
+    [:text_for_beneficiaries, :text_for_targets, :text_for_provider].each do |c|
+      config.columns[c].form_ui = :textarea
+      config.columns[c].options = {:cols => 50, :rows => 3}
     end
     # add in later version, not part of minimal viable product
     #config.columns[:indicators].form_ui = :select

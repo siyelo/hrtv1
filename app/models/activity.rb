@@ -11,6 +11,7 @@ class Activity < ActiveRecord::Base
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
 
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
+  has_and_belongs_to_many :beneficiaries # organizations targeted by this activity / aided
 
   has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
   has_many :codes, :through => :code_assignments

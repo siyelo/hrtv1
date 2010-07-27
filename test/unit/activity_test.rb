@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ActivityTest < ActiveSupport::TestCase
+  should have_and_belong_to_many :organizations
   test "has locations" do
     p=Activity.new
     p.save(false)

@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   authorize_resource
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :target, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiary, :organizations, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end
@@ -25,6 +25,12 @@ class ActivitiesController < ApplicationController
     config.nested.add_link("Cost Categorization", [:lineItems])
     config.columns[:lineItems].association.reverse = :activity
 
+    config.nested.add_link("Targets", [:organizations])
+    config.columns[:organizations].association.reverse = :activities
+    # we want to use this below but its frazzed
+    # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms
+    # config.columns[:organizations].label = "Targets"
+
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 
@@ -41,7 +47,6 @@ class ActivitiesController < ApplicationController
     config.columns[:name].inplace_edit = true
     config.columns[:name].label = "Name (Optional)"
     config.columns[:description].inplace_edit = true
-    config.columns[:target].label = "Target"
     config.columns[:beneficiary].label = "Beneficiary"
 
     config.columns[:spend].label = "Total Spend GOR FY 09-10"

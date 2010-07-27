@@ -37,10 +37,11 @@ class Project < ActiveRecord::Base
 
   # this is an AS helper, and currently only seems to be used by activity scaffold.
   # todo - test this - then refactor
+  # GN: looks like this isn't being used at all for now
   def valid_providers
     f=funding_flows.find(:all, :select => "organization_id_to",
       :conditions =>
-      ["organization_id_from = ?", Organization.find_by_name("self").id])
+      ["organization_id_from = ?", current_user.organization.id])
 
     r=f.collect {|f| f.organization_id_to}
     r

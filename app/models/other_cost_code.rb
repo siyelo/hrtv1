@@ -1,0 +1,2 @@
+class OtherCostCode < Code
+end

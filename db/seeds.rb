@@ -15,7 +15,7 @@ def seed_model_help_from_yaml doc
     model_help_attribs = h.last
     #TODO replace line below, may cause trouble during deployment
     #     can replace after add rescue below
-    #`touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
+    `touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
     seed_model_and_field_help model_help_attribs
   end
 end
@@ -38,6 +38,10 @@ def seed_field_help_from_yaml model_help
 end
 
 seed_model_help_from_yaml model_helps
+
+#seed data as if we were an admin
+User.stub_current_user_and_data_response
+
 
 # seed code values
 #
@@ -156,13 +160,29 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
     c.name += " #{c.raw_type}"
   end
   puts "error on #{row}" unless c.save
+  #TODO delete this line for production
 
 end
 
 #TODO remove - this was a hack to make it seem like we aliased
-# the reporting organization in select lists
+# the reporting organization in select lists, during development
 # and also was used in controllers to fake that we
 # had namespaced access / restricted some things from being shown
 %w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end
+
+# seed data request
+data_request = DataRequest.create!(:requesting_organization => Organization.create(:name=>"Government of Rwanda"), #TODO make GOR
+  :title => "Examples for Workplan and Expenditures - due August X")
+
+Organization.all.each do |org|
+  data_request.data_responses.create :responding_organization => org
+end
+
+#TODO really frustrating bug here
+# I have unit tests for this method and for some reason it doesnt
+# find the data response I had made and attach to this user
+# tries to delete and gets null
+# for now, not worrying about cleaning up
+#User.unstub_current_user_and_data_response 

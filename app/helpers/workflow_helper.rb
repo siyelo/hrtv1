@@ -1,13 +1,12 @@
 module WorkflowHelper
-  # "data_responses/update" => "projects"
-  @@map = { "start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
+  @@map = { "data_responses/start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
             "providers/index" => "activities" , "activities/index" => "other_costs", "other_costs/index" => "#"}
 
-  #TODO point to a controller that then sets this in current user
-  def workflow_start response_id
-    session[:data_response] = response_id
-    "/"+@@map["start"]
-  end
+  # deprecated, replaced by clicking on data response first
+  #def workflow_start response_id
+  #  session[:data_response] = response_id
+  #  "/"+@@map["start"]
+  #end
 
   def next_workflow_path
     if next_workflow_path_wo_slash

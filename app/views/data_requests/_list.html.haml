@@ -1,2 +1,4 @@
--# this eventually will be a Data Request list extract - for now only one Data Request
-= link_to 'Workplan and Expenditures - due August 25', projects_path
+-# this eventually will be a Data Request list extract 
+-# for now only one Data Request, this loop will only run once
+- current_user.data_responses.each do |response|
+  = link_to response.title, data_response_start_url(response.id)

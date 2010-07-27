@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.data_response_start "data_responses/:id", :controller => 'data_responses', :action => 'start'
+
   map.activity_coding "activities/code", :controller => 'activities', :action => 'code'
   map.other_cost_coding "other_costs/code", :controller => 'other_costs', :action => 'code'
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model

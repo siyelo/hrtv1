@@ -53,10 +53,11 @@ class User < ActiveRecord::Base
     d.save(false)
     u.current_data_response = d
     u.save(false)
+    User.current_user = u
   end
   def self.unstub_current_user_and_data_response
     u=User.find_by_username("admin_internal_stub2309420")
-    DataResponse.delete u.current_data_response.id
+    u.current_data_response.delete
     Organization.delete(Organization.find_by_name("org_for_internal_stub382342").id)
     User.delete(User.find_by_username("admin_internal_stub2309420").id)
     User.current_user = nil

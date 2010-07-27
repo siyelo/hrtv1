@@ -17,8 +17,11 @@ class OtherCostsController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:other_cost_type => 'ASC'}
 
+    #http://wiki.github.com/activescaffold/active_scaffold/api-action-link
     config.action_links.add('Detail Cost Areas',
       :action => "code",
+      :controller => "other_costs",
+      :parameters => "",
       :type => :member,
       :popup => true,
       :label => "Detail Cost Areas")

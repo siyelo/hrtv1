@@ -44,15 +44,15 @@ class User < ActiveRecord::Base
 
   def self.stub_current_user_and_data_response
     o=Organization.new(:name=>"org_for_internal_stub382342")
-    o.save!(false)
+    o.save(false)
     u = User.new(:username=> "admin_internal_stub2309420", :roles => [:admin],
       :organization => o)
-    u.save!(false)
+    u.save(false)
     User.current_user = u
     d=DataResponse.new :responding_organization => o
-    d.save!(false)
+    d.save(false)
     u.current_data_response = d
-    u.save!(false)
+    u.save(false)
     User.current_user = u
   end
   def self.unstub_current_user_and_data_response

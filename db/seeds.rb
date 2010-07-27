@@ -175,13 +175,6 @@ puts "create self"
   Ngo.find_or_create_by_name ngo
 end
 
-# seed data request
-#data_request = DataRequest.create!(:requesting_organization => Organization.create(:name=>"Government of Rwanda"), #TODO make GOR
-#  :title => "Examples for Workplan and Expenditures - due August X")
-
-#Organization.all.each do |org|
-#  data_request.data_responses.create :responding_organization => org
-#end
 
 #TODO really frustrating bug here
 # I have unit tests for this method and for some reason it doesnt

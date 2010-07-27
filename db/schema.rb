@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100726204342) do
+ActiveRecord::Schema.define(:version => 20100727083420) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(:version => 20100726204342) do
     t.string   "target"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "comments"
     t.integer  "provider_id"
     t.integer  "other_cost_type_id"
     t.text     "description"

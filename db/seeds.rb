@@ -114,6 +114,7 @@ end
 
 seed_other_cost_rows
 
+puts "loading locations"
 Location.delete_all
 FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
   c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
@@ -128,6 +129,7 @@ FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
   puts "error on #{row}" unless c.save
 end
 
+puts "loading orgs"
 Organization.delete_all
 FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => "\t") do |row|
   c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
@@ -168,17 +170,18 @@ end
 # the reporting organization in select lists, during development
 # and also was used in controllers to fake that we
 # had namespaced access / restricted some things from being shown
+puts "create self"
 %w[ self ].each do |ngo|
   Ngo.find_or_create_by_name ngo
 end
 
 # seed data request
-data_request = DataRequest.create!(:requesting_organization => Organization.create(:name=>"Government of Rwanda"), #TODO make GOR
-  :title => "Examples for Workplan and Expenditures - due August X")
+#data_request = DataRequest.create!(:requesting_organization => Organization.create(:name=>"Government of Rwanda"), #TODO make GOR
+#  :title => "Examples for Workplan and Expenditures - due August X")
 
-Organization.all.each do |org|
-  data_request.data_responses.create :responding_organization => org
-end
+#Organization.all.each do |org|
+#  data_request.data_responses.create :responding_organization => org
+#end
 
 #TODO really frustrating bug here
 # I have unit tests for this method and for some reason it doesnt

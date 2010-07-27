@@ -13,7 +13,7 @@ class DataRequest < ActiveRecord::Base
     DataRequest.find(:all, :conditions=>["complete = ?", false])
   end
 
-  before_save :check_response_created
+  after_save :check_response_created
 
   def add_data_element data
     data_element << data
@@ -23,7 +23,7 @@ class DataRequest < ActiveRecord::Base
   def check_response_created
     if data_responses.empty?
       Organization.all.each do |org|
-        data_responses.build :responding_organization => org
+        data_responses.create :responding_organization => org
       end
     end
   end

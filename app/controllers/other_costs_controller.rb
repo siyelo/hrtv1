@@ -1,8 +1,8 @@
 class OtherCostsController < ApplicationController
   authorize_resource
 
-  @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]
-  @@create_columns = [:projects, :other_cost_type, :expected_total, :budget, :description]
+  @@shown_columns = [:other_cost_type, :projects, :budget, :spend]
+  @@create_columns = [:projects, :other_cost_type, :budget, :spend, :description]
   def self.create_columns
     @@create_columns
   end
@@ -35,10 +35,9 @@ class OtherCostsController < ApplicationController
     config.columns[:projects].form_ui = :select
     config.columns[:description].inplace_edit = true
     config.columns[:description].label = "Description (optional)"
-    config.columns[:expected_total].inplace_edit = true
-    config.columns[:expected_total].label = "Total Expenditure RFY 09-10"
     config.columns[:budget].inplace_edit = true
-    config.columns[:budget].label = "Budget RFY 10-11"
+    config.columns[:budget].label = "Total Budget GOR FY 10-11"
+    config.columns[:spend].label = "Total Spend GOR FY 09-10"
     config.columns[:other_cost_type].form_ui = :select
     config.columns[:other_cost_type].inplace_edit = true
     config.columns[:other_cost_type].label = "Type"

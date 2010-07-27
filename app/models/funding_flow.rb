@@ -33,6 +33,10 @@ class FundingFlow < ActiveRecord::Base
     "Flow: #{from.to_s} to #{to.to_s} for #{project.to_s}"
   end
 
+  # had to add this in to solve some odd AS bug...
+  def to_label
+    to_s
+  end
   protected
 
   def authorize_and_set_owner

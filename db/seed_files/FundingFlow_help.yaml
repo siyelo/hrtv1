@@ -20,8 +20,8 @@
 
 6:
   attribute_name: spend
-  short: Spending, test that this doesn't bomb AS when field doesn't exist yet
-  long: Spending, test that this doesn't bomb AS when field doesn't exist yet
+  short: The total of expenditures from the previous fiscal year
+  long: The total of expenditures from the previous fiscal year
 
 7:
   attribute_name: spend_q1

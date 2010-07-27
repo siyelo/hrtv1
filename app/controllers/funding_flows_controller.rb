@@ -16,6 +16,8 @@ class FundingFlowsController < ApplicationController
   active_scaffold :funding_flow do |config|
     config.label = "Funding Flow"
     config.columns =  @@shown_columns
+    config.create.columns = @@create_columns
+    config.update.columns = @@update_columns
     list.sorting = {:from => 'DESC'}
 #    config.columns[:project].options[:update_column] = :to#LateUpdater.new(self)
     config.columns[:organization_text].form_ui = :textarea
@@ -32,11 +34,9 @@ class FundingFlowsController < ApplicationController
       config.columns[c].form_ui=:select #TODO comment out when GN gets subform working
       config.columns[c].inplace_edit = true
     end
-    config.columns[:from].association.reverse = :out_flows
-    config.columns[:to].association.reverse = :in_flows
+#    config.columns[:from].association.reverse = :out_flows
+#    config.columns[:to].association.reverse = :in_flows
 
-    config.create.columns = @@create_columns
-    config.update.columns = @@update_columns
    # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"

@@ -2,8 +2,8 @@ class OtherCostsController < ApplicationController
 
   authorize_resource
 
-  @@shown_columns = [:other_cost_type, :projects, :budget, :spend]
-  @@create_columns = [:projects, :other_cost_type, :budget, :spend, :description]
+  @@shown_columns = [ :projects, :budget, :spend]
+  @@create_columns = [:projects,  :budget, :spend, :description]
   def self.create_columns
     @@create_columns
   end
@@ -16,7 +16,7 @@ class OtherCostsController < ApplicationController
   active_scaffold :other_costs do |config|
     config.label =  "Other Costs"
     config.columns =  @@shown_columns
-    list.sorting = {:other_cost_type => 'ASC'}
+    list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
 
     config.action_links.add('Detail Cost Areas',
       :action => "popup_coding",
@@ -38,10 +38,8 @@ class OtherCostsController < ApplicationController
     config.columns[:description].label = "Description (optional)"
     config.columns[:budget].inplace_edit = true
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
+    config.columns[:spend].inplace_edit = true
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
-    config.columns[:other_cost_type].form_ui = :select
-    config.columns[:other_cost_type].inplace_edit = true
-    config.columns[:other_cost_type].label = "Type"
   end
 
   def create_from_file

@@ -107,14 +107,14 @@ describe "Requesting Coding endpoints as reporter" do
        Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
        post :update_budget, :activity_id => @activity.id, 
                             :activity => { :code_assignment_tree => ["1"], 
-                                           :code_assignment_amounts => { "1" => "10" }}
+                                           :budget_amounts => { "1" => "10" }}
      end
      
      context "on successful request" do
        before :each do
          post :update_budget, :activity_id => @activity.id, 
                               :activity => { :code_assignment_tree => ["1"], 
-                                             :code_assignment_amounts => { "1" => "10"}}
+                                             :budget_amounts => { "1" => "10"}}
        end
    
        it { should redirect_to(budget_activity_coding_path(@activity)) }
@@ -125,15 +125,15 @@ describe "Requesting Coding endpoints as reporter" do
      it "should find the activity" do
        Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
        post :update_expenditure, :activity_id => @activity.id, 
-                            :activity => { :code_assignment_tree => ["1"], 
-                                           :code_assignment_amounts => { "1" => "10" }}
+                                 :activity => { :code_assignment_tree => ["1"], 
+                                                :expenditure_amounts => { "1" => "10" }}
      end
      
      context "on successful request" do
        before :each do
-         post :update_expenditure, :activity_id => @activity.id, 
-                              :activity => { :code_assignment_tree => ["1"], 
-                                             :code_assignment_amounts => { "1" => "10"}}
+         post :update_expenditure,  :activity_id => @activity.id, 
+                                    :activity => { :code_assignment_tree => ["1"], 
+                                                   :expenditure_amounts => { "1" => "10"}}
        end
    
        it { should redirect_to(expenditure_activity_coding_path(@activity)) }

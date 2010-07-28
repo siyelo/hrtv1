@@ -36,7 +36,7 @@ class Activity < ActiveRecord::Base
       budget_codings.delete_all
       budget_amounts.delete_if { |key,val| val.empty?}
       selected_codes = budget_amounts.nil? ? [] : budget_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| BudgetCoding.create!( :activity => self, :code => code, :amount => currency_to_number(budget_amounts[code.id.to_s])) }
+      selected_codes.each { |code| BudgetCoding.create!( :activity => self, :code => code, :amount => currency_to_number(budget_amounts[code.id.to_s])) unless code.nil? }
     end
   end
 
@@ -45,7 +45,7 @@ class Activity < ActiveRecord::Base
       expenditure_codings.delete_all
       expenditure_amounts.delete_if { |key,val| val.empty?}
       selected_codes = expenditure_amounts.nil? ? [] : expenditure_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self, :code => code, :amount => currency_to_number(expenditure_amounts[code.id.to_s])) }
+      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self, :code => code, :amount => currency_to_number(expenditure_amounts[code.id.to_s])) unless code.nil? }
     end
   end
 

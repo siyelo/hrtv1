@@ -20,6 +20,9 @@ require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links wi
 require 'factory_girl'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'/../../spec/factories','**','*.rb'))].each {|f| require f}
 
+#allow us to catch all errors - mainly for CanCan auth errors
+ActionController::Base.allow_rescue = true
+
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
 # prefer to use XPath just remove this line and adjust any selectors in your
@@ -56,7 +59,7 @@ Cucumber::Rails::World.use_transactional_fixtures = true
 if defined?(ActiveRecord::Base)
   begin
     require 'database_cleaner'
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :truncation, { :except => %w[codes] }
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
 end

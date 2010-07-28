@@ -1,13 +1,11 @@
-@import partials/base
-
 .active-scaffold th a
   font-size: 0.75em
   padding: 7px 10px
 
-.active-scaffold-header 
+.active-scaffold-header
   background= !dark-blue
   +border-top-radius
-  
+
   .actions a
     background-image: none
     color= !orange
@@ -17,15 +15,15 @@
     letter-spacing: 0.05em
     padding: 12px 10px
     text-transform: uppercase
-    
+
 .active-scaffold th.desc a
   background-color= !dark-blue
 
-  
+
 .active-scaffold th a
   background-color= !mid-blue
   border-left: 1px solid !dark-blue
-  
+
 .active-scaffold th.desc a, .active-scaffold th a
   &:hover
     background: #111

@@ -37,6 +37,14 @@ class ProjectTest < ActiveSupport::TestCase
     assert from_me_to_me != nil
   end
 
+  test "has many funding flows nullify on delete" do
+    p=Project.create!(:name => "proj1")
+    c=p.funding_flows.create
+    p.destroy
+    c=FundingFlow.find(c.id)
+    assert c.project == nil
+  end
+
   test "has comments" do
     p=Project.create!(:name => "proj1", :expected_total => 10.0)
     c=p.comments.create(:title => "a comment.", :comment => "This is a comment.")

@@ -6,6 +6,9 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
+puts "Loading seeds..."
+
+
 require 'yaml'
 require 'fastercsv'
 
@@ -67,9 +70,9 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.type="Nha"
   end
 
-  puts "Adding code #{c.external_id}: "
-  puts "error on #{row}" unless c.save
-  puts "  #{c.id}"
+  print "."
+  puts "error on #{row}" unless c.save!
+  #puts "  #{c.id}"
 end
 
 puts "...Loading codes.csv DONE"
@@ -181,7 +184,7 @@ FasterCSV.foreach("db/seed_files/beneficiaries.csv", :headers=>true) do |row|
   puts "error on #{row}" unless c.save
 end
 
-#TODO remove - this was a hack to make it seem like we aliased
+# this was a hack to make it seem like we aliased
 # the reporting organization in select lists, during development
 # and also was used in controllers to fake that we
 # had namespaced access / restricted some things from being shown
@@ -190,10 +193,5 @@ end
 #  Ngo.find_or_create_by_name ngo
 #end
 
-
-#TODO really frustrating bug here
-# I have unit tests for this method and for some reason it doesnt
-# find the data response I had made and attach to this user
-# tries to delete and gets null
-# for now, not worrying about cleaning up
 User.unstub_current_user_and_data_response 
+puts "...seeding DONE"

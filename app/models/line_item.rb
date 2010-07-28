@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: line_items
+#
+#  id                        :integer         not null, primary key
+#  activity_id               :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  activity_cost_category_id :integer
+#  budget                    :decimal(, )
+#  spend                     :decimal(, )
+#
+
 class LineItem < ActiveRecord::Base
   acts_as_commentable
   belongs_to :activity

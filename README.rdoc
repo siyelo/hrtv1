@@ -129,6 +129,18 @@ And don't forget to seed your Cuke DB
 
   $ spec spec
 
+==== CI
+
+===== Hudson
+
+  bash -l -c "rvm use ree-1.8.7-2010.02 && rvm gemset create ubuzima-glennr && rvm gemset import ubuzima-glennr && ruby $WORKSPACE/lib/tasks/ci.rb"
+
+===== CIJoe
+
+  You can set up a local cijoe server with;
+
+  $ git config --add cijoe.runner "<the Hudson bash command above>"
+
 ==== Contributing
 
 Write tests then write code. Have fun while improving your craft.

@@ -1,11 +1,25 @@
 require 'lib/ActAsDataElement'
 
+# == Schema Information
+#
+# Table name: projects
+#
+#  id             :integer         not null, primary key
+#  name           :string(255)
+#  description    :text
+#  start_date     :date
+#  end_date       :date
+#  created_at     :datetime
+#  updated_at     :datetime
+#  expected_total :decimal(, )
+#
+
 class Project < ActiveRecord::Base
   acts_as_commentable
 
   include ActAsDataElement
   configure_act_as_data_element
-  
+
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
   has_many :funding_flows, :dependent => :nullify
@@ -38,6 +52,7 @@ class Project < ActiveRecord::Base
   # this is an AS helper, and currently only seems to be used by activity scaffold.
   # todo - test this - then refactor
   # GN: looks like this isn't being used at all for now
+  # let's take it out soon when we have more test coverage
   def valid_providers
     f=funding_flows.find(:all, :select => "organization_id_to",
       :conditions =>

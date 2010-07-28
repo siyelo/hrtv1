@@ -18,7 +18,8 @@ class ApplicationController < ActionController::Base
       You may login at #{root_url} or use the contact link at
       the bottom of the homepage to contact an administrator, if you
       think this message is being shown in error."
-      # TODO render a template / action without the layout with login link & help msg
+      # TODO try the below to see if inf loop bug is still there
+      # render a template / action without the layout with login link & help msg
 
       # redirect caused infinite loop, could be that home page had security on it
       #flash[:error] = "Access denied!"
@@ -181,8 +182,6 @@ class ApplicationController < ActionController::Base
     @current_user = current_user_session && current_user_session.record
   end
 
-
-
   protected
 
   def require_user
@@ -227,26 +226,6 @@ class ApplicationController < ActionController::Base
   def self.quarterly_amount_field_options
     {:size => 15 }
   end
-
-  #def access_session_variable
-  #  klasses = [ActiveRecord::Base, ActiveRecord::Base.class]
-  #  methods = ["session", "cookies", "params", "request"]
-
-  #  methods.each do |method|
-  #    instance_variable = instance_variable_get(:"@_#{method}")
-  #    klasses.each do |klass|
-  #      klass.send(:define_method, method, proc { instance_variable })
-  #    end
-  #  end
-
-  #  yield
-
-  #  methods.each do |method|
-  #    klasses.each do |klass|
-  #      klass.send :remove_method, method
-  #    end
-  #  end
-  #end
 
 
 end

@@ -1,5 +1,29 @@
 require 'lib/ActAsDataElement'
 
+# == Schema Information
+#
+# Table name: activities
+#
+#  id                 :integer         not null, primary key
+#  name               :string(255)
+#  beneficiary        :string(255)
+#  target             :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  comments           :string(255)
+#  expected_total     :decimal(, )
+#  provider_id        :integer
+#  other_cost_type_id :integer
+#  description        :text
+#  type               :string(255)
+#  start_month        :string(255)
+#  end_month          :string(255)
+#  budget             :decimal(, )
+#  spend_q1           :decimal(, )
+#  spend_q2           :decimal(, )
+#  spend_q3           :decimal(, )
+#  spend_q4           :decimal(, )
+#
 class Activity < ActiveRecord::Base
   acts_as_commentable
   include ActAsDataElement
@@ -13,11 +37,18 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
 
-  has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
-  has_many :codes, :through => :code_assignments
+  # TODO double check these go away from glenn's changes
+#  has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
+#  has_many :codes, :through => :code_assignments
+  has_many :budget_codings, :foreign_key => :activity_id, :dependent => :destroy
+  has_many :budget_codes, :through => :budget_codings, :source => :code
+  has_many :expenditure_codings, :foreign_key => :activity_id, :dependent => :destroy
+  has_many :expenditure_codes, :through => :expenditure_codings, :source => :code
 
-  attr_accessor :code_assignment_amounts
-  after_save :update_code_assignments
+  attr_accessor :budget_amounts
+  attr_accessor :expenditure_amounts
+  after_save :update_budget_codings
+  after_save :update_expenditure_codings
 
   # delegate :providers, :to => :projects
   def valid_providers
@@ -34,13 +65,41 @@ class Activity < ActiveRecord::Base
 
   # trick to help clean up controller code
   # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
-  def update_code_assignments
-    if code_assignment_amounts
-      code_assignments.delete_all
-      code_assignment_amounts.delete_if { |key,val| val.empty?}
-      selected_codes = code_assignment_amounts.nil? ? [] : code_assignment_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| self.code_assignments << CodeAssignment.new( :activity => self, :code => code, :amount => code_assignment_amounts[code.id.to_s]) }
+  def update_budget_codings
+    if budget_amounts
+      budget_codings.delete_all
+      budget_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
+      budget_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
+      selected_codes = budget_amounts.nil? ? [] : budget_amounts.keys.collect{ |id| Code.find_by_id(id) }
+      selected_codes.each { |code| BudgetCoding.create!( :activity => self,
+                                      :code => code,
+                                      :amount => currency_to_number(budget_amounts[code.id.to_s]["a"]),
+                                      :percentage => budget_amounts[code.id.to_s]["p"] ) unless code.nil? }
     end
   end
 
+  def update_expenditure_codings
+    if expenditure_amounts
+      expenditure_codings.delete_all
+      expenditure_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
+      expenditure_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
+      selected_codes = expenditure_amounts.nil? ? [] : expenditure_amounts.keys.collect{ |id| Code.find_by_id(id) }
+      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self,
+                                      :code => code,
+                                      :amount => currency_to_number(expenditure_amounts[code.id.to_s]["a"]),
+                                      :percentage => expenditure_amounts[code.id.to_s]["p"] ) unless code.nil? }
+    end
+  end
+
+
+  # assumes a format like "17,798,123.00"
+  def currency_to_number(number_string, options ={})
+    options.symbolize_keys!
+    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :raise => true) rescue {}
+    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
+    defaults  = defaults.merge(currency)
+    delimiter = options[:delimiter] || defaults[:delimiter]
+
+    number_string.gsub(delimiter,'')
+  end
 end

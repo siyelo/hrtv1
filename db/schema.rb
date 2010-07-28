@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100728135014) do
+ActiveRecord::Schema.define(:version => 20100728162821) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(:version => 20100728135014) do
     t.integer "code_id"
     t.string  "code_type"
     t.decimal "amount"
+    t.string  "type"
+    t.decimal "percentage"
   end
 
   create_table "codes", :force => true do |t|

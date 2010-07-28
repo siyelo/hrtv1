@@ -1,4 +1,5 @@
 class OtherCostsController < ApplicationController
+
   authorize_resource
 
   @@shown_columns = [:other_cost_type, :projects, :budget, :spend]
@@ -17,10 +18,8 @@ class OtherCostsController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:other_cost_type => 'ASC'}
 
-    #http://wiki.github.com/activescaffold/active_scaffold/api-action-link
     config.action_links.add('Detail Cost Areas',
-      :action => "code",
-      :controller => "other_costs",
+      :action => "popup_coding",
       :type => :member,
       :popup => true,
       :label => "Detail Cost Areas")
@@ -49,9 +48,8 @@ class OtherCostsController < ApplicationController
     super @@columns_for_file_upload
   end
 
-  def code
-    logger.debug(params[:id]) #can get id of record
-    redirect_to manage_code_assignments_url(params[:id])
+  def popup_coding
+    redirect_to budget_activity_coding_url(params[:id])
   end
 
 end

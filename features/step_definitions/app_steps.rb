@@ -69,6 +69,29 @@ Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
   @user.organization = @organization
 end
 
+Given /^the following funding flows$/ do |table|
+  table.hashes.each do |hash|
+    to_org   = Organization.find_by_name(hash.delete("to"))
+    project  = Project.find_by_name(hash.delete("project"))
+    from_org = Organization.find_by_name(hash.delete("from"))
+
+    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
+                                      :project_id => project.id, 
+                                      :organization_id_from => from_org.id
+                                      }.merge(hash) )
+  end
+end
+
+Then /^debug$/ do
+  debugger # express the regexp above with the code you wish you had
+end
+
+
+Then /^I should see the "([^"]*)" tab is active$/ do |text|
+  steps %Q{
+    Then I should see "#{text}" within "li.selected"
+  }
+end
 
 Given /^the following funding flows$/ do |table|
   table.hashes.each do |hash|

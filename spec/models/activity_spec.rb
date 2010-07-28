@@ -20,19 +20,37 @@ describe Activity do
     end
   end
   
-  describe "can show who we provided money to (providers)" do
-    it "should return a providers via projects API" do  
-      our_org      = Factory(:organization)
-      other_org    = Factory(:organization)
-      project      = Factory(:project)
-      flow         = Factory(:funding_flow, :from => other_org, :to => our_org, :project => project)
+  describe "commenting on an activity" do
+    it "should assign to an activity" do
       activity     = Factory(:activity)
-      project.activities << activity
-      debugger
-      activity.valid_providers.should have(1).item
-      activity.valid_providers.first.should == @other_org
-    end    
+      comment     = Factory(:comment)
+      activity.comments << comment
+      activity.comments.should have(1).item
+      activity.comments.first.should == comment
+    end
   end
-
+  
+  describe "can show who we provided money to (providers)" do
+    context "on a single project" do
+      it "should have at least 1 provider" do  
+        our_org      = Factory(:organization)
+        other_org    = Factory(:organization)
+        project      = Factory(:project)
+        flow         = Factory(:funding_flow, :from => our_org, 
+                                              :to => other_org, 
+                                              :project => project)
+        activity     = Factory(:activity, { :projects => [project], 
+                                            :provider => other_org })
+        activity.provider.should == other_org # duh
+        activity.projects.should have(1).project         
+      end
+    end
+    
+    context "across multiple projects" do
+      it "should allow assignment to multiple projects" do
+        pending
+      end
+    end
+  end
   
 end

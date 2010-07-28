@@ -31,6 +31,18 @@ describe Project do
       end
     end
     
+    context "commentable" do
+      describe "commenting on a project" do
+        it "should assign to a project" do
+          project     = Factory(:project)
+          comment     = Factory(:comment)
+          project.comments << comment
+          project.comments.should have(1).item
+          project.comments.first.should == comment
+        end
+      end
+    end
+    
     context "funding sources and outflows" do
       before(:each) do
         @our_org      = Factory(:organization)
@@ -53,15 +65,13 @@ describe Project do
           @project.funding_flows << flow
           # GR: 'providers' doesnt make a lot of sense from this perspective - our domain model a bit off?
           @project.providers.should have(1).item
-          @project.providers.first.should == @other_org
+          @project.providers.first.should == @other_org            
         end
-
+      
         it "should return a sole organization we sent money to via the flows API" do
           flow         = Factory(:funding_flow, :from => @our_org, :to => @other_org, :project => @project)
           @project.providers.first.should == @other_org
         end
       end
     end
- end
-
 end

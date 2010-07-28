@@ -1,5 +1,7 @@
 class CommentsController < ApplicationController
+
   authorize_resource
+
   @@shown_columns = [:title, :comment, :commentable, :created_at]
   @@create_columns = [:title, :comment]
 

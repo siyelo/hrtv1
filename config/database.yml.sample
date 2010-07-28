@@ -15,8 +15,19 @@ test:
   pool: 5
   timeout: 5000
 
+# note - yes this is a duplication of the test db - but with just
+#   cucumber:
+#      <<: *test
+# then the build wont work for some reason.
+cucumber:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+
 production:
   adapter: sqlite3
   database: db/production.sqlite3
   pool: 5
   timeout: 5000
+

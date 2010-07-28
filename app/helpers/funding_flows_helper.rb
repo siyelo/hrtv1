@@ -36,8 +36,4 @@ module FundingFlowsHelper
     ids
   end
 
-
-
 end
-
-

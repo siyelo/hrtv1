@@ -13,6 +13,8 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))]
 
 require 'shoulda'
 
+require 'authlogic/test_case'
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
@@ -21,4 +23,15 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
+end
+
+
+def login( user = Factory.build(:reporter) )
+  activate_authlogic
+  UserSession.create user
+end
+
+shared_examples_for "a protected endpoint" do
+  it { should redirect_to(login_path) }
+  it { should set_the_flash.to("You must be signed in to do that") }
 end

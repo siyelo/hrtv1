@@ -14,18 +14,18 @@ if File.exist?(config_file_path)
     APP_CONFIG = config.has_key?(RAILS_ENV) ? config[RAILS_ENV] : {}
   else
     APP_CONFIG = {}
-    puts "ERROR: config file #{config_file_path} is not valid"
+    puts "WARN: config file #{config_file_path} is not valid"
   end
 else
   APP_CONFIG = {}
-  puts "ERROR: configuration file #{config_file_path} not found."
+  puts "WARN: configuration file #{config_file_path} not found."
 end
 
 
 Rails::Initializer.run do |config|
 
   config.gem "fastercsv"
-  config.gem "haml",    :version => "= 3.0.13"
+  config.gem "haml",    :version => ">= 3.0.12"
   config.gem "compass", :version => "= 0.10.2"
   config.gem 'hoptoad_notifier'
   config.gem "authlogic"

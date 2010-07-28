@@ -1,5 +1,6 @@
 class ProvidersController < ApplicationController
-  #TODO authorize
+  authorize_resource :resource => FundingFlow
+
   @@columns_for_file_upload = %w[to organization_text project budget spend_q1 spend_q2 spend_q3 spend_q4]
   map_fields :create_from_file,
     @@columns_for_file_upload,

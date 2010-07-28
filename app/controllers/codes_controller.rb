@@ -1,6 +1,8 @@
 class CodesController < ApplicationController
   authorize_resource
 
+  authorize_resource
+
   def to_label
     short_display
   end

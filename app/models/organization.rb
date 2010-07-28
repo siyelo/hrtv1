@@ -1,4 +1,16 @@
 
+# == Schema Information
+#
+# Table name: organizations
+#
+#  id         :integer         not null, primary key
+#  name       :string(255)
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  raw_type   :string(255)
+#
+
 class Organization < ActiveRecord::Base
   attr_accessible :name
 
@@ -27,6 +39,9 @@ class Organization < ActiveRecord::Base
   def self.remove_security
     with_exclusive_scope {find(:all)}
   end
+  # this was buggy and really doesn't represent what we want
+  # a person should create a data request for a list of orgs
+  # right now, only 1 data request we create manually thats why there's no ui
 #  after_save :create_data_responses
 #
 #  def create_data_responses

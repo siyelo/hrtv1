@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id             :integer         not null, primary key
+#  name           :string(255)
+#  description    :text
+#  start_date     :date
+#  end_date       :date
+#  created_at     :datetime
+#  updated_at     :datetime
+#  expected_total :decimal(, )
+#
+
 class Project < ActiveRecord::Base
   acts_as_commentable
 

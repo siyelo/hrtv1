@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100727184625) do
+ActiveRecord::Schema.define(:version => 20100728135014) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(:version => 20100727184625) do
     t.integer  "roles_mask"
     t.integer  "organization_id"
     t.integer  "data_response_id_current"
+    t.text     "text_for_organization"
   end
 
 end

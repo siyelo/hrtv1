@@ -51,6 +51,7 @@ class ActivitiesController < ApplicationController
     config.columns[:name].inplace_edit            = true
     config.columns[:name].label                   = "Name (Optional)"
     config.columns[:description].inplace_edit     = true
+    config.columns[:description].options     = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui = :select
 
     config.columns[:spend].label = "Total Spend GOR FY 09-10"

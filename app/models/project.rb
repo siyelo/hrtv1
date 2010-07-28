@@ -68,6 +68,7 @@ class Project < ActiveRecord::Base
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
     funding_flows.create! :to => my_org
     funding_flows.create! :from => my_org, :to => my_org, :self_provider_flag => 1
+    activities << OtherCost.new
   end
 
 end

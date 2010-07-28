@@ -108,14 +108,14 @@ FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
 end
 
 # dummy other cost rows, in future craete with callbacks on user create
-def seed_other_cost_rows
-  OtherCost.delete_all
-  OtherCostType.all.each do |t|
-    t.other_costs.create if t.other_costs.empty?
-  end
-end
+#def seed_other_cost_rows
+#  OtherCost.delete_all
+#  OtherCostType.all.each do |t|
+#    t.other_costs.create if t.other_costs.empty?
+#  end
+#end
 
-seed_other_cost_rows
+#seed_other_cost_rows
 
 puts "loading locations"
 Location.delete_all

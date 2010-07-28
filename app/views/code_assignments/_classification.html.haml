@@ -21,8 +21,11 @@
     %td= @activity.name
     -#= link_to "#{@activity.name}", activity_path(@activity)
   %tr
-    %td Expected Total:
-    %td= @activity.expected_total
+    %td Budget:
+    %td= @activity.budget
+  %tr
+    %td Expenditures:
+    %td= @activity.spend
   %tr
     %td Description:
     %td= @activity.description

@@ -1,16 +1,20 @@
+- updater_field = (@coding_type == :budget ? 'budget_amounts' : 'expenditure_amounts')
+-# TODO - make this nasty SQL lookup faster with the help of the controller action
+- assignment = @current_assignments.find_by_code_id(code.id)
+- amount     = assignment.nil? ? "" : assignment.amount
+- percentage = assignment.nil? ? "" : assignment.percentage
 
 %li
-  - updater_field = (@coding_type == :budget ? 'budget_amounts' : 'expenditure_amounts')
-
   = check_box_tag "activity[code_assignment_tree][]", code.id, @current_codes.include?(code)
-
-  -# TODO - make this lookup faster with the help of the controller action
-  - assignment = @current_assignments.find_by_code_id(code.id)
-  - amount = assignment.nil? ? "" : assignment.amount
-
-  = text_field_tag "activity[#{updater_field}][#{code.id}]", number_to_currency(amount, :unit => ""), :size => 8
+  = text_field_tag "activity[#{updater_field}][#{code.id}][a]", number_to_currency(amount, :unit => ""), :size => 8
+  or
+  = text_field_tag "activity[#{updater_field}][#{code.id}][p]", percentage, :size => 2
+  -# need to get this working so capybara can identify the % field
+  -#= label_tag "activity[#{updater_field}][#{code.id}][p]", "% for #{code.short_display}"
+  = '%'
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
-  = label_tag "activity[#{updater_field}][#{code.id}]", "#{code.short_display}"
+  -# label tag helper - good for automated testing
+  = label_tag "activity[#{updater_field}][#{code.id}][a]", "#{code.short_display}"
 
   - unless code.children.empty?
     %ul{:id => code.external_id}

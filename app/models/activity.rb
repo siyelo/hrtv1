@@ -59,18 +59,26 @@ class Activity < ActiveRecord::Base
   def update_budget_codings
     if budget_amounts
       budget_codings.delete_all
-      budget_amounts.delete_if { |key,val| val.empty?}
+      budget_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
+      budget_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
       selected_codes = budget_amounts.nil? ? [] : budget_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| BudgetCoding.create!( :activity => self, :code => code, :amount => currency_to_number(budget_amounts[code.id.to_s])) unless code.nil? }
+      selected_codes.each { |code| BudgetCoding.create!( :activity => self,
+                                      :code => code,
+                                      :amount => currency_to_number(budget_amounts[code.id.to_s]["a"]),
+                                      :percentage => budget_amounts[code.id.to_s]["p"] ) unless code.nil? }
     end
   end
 
   def update_expenditure_codings
     if expenditure_amounts
       expenditure_codings.delete_all
-      expenditure_amounts.delete_if { |key,val| val.empty?}
+      expenditure_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
+      expenditure_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
       selected_codes = expenditure_amounts.nil? ? [] : expenditure_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self, :code => code, :amount => currency_to_number(expenditure_amounts[code.id.to_s])) unless code.nil? }
+      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self,
+                                      :code => code,
+                                      :amount => currency_to_number(expenditure_amounts[code.id.to_s]["a"]),
+                                      :percentage => expenditure_amounts[code.id.to_s]["p"] ) unless code.nil? }
     end
   end
 

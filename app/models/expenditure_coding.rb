@@ -8,6 +8,7 @@
 #  code_type   :string(255)
 #  amount      :decimal(, )
 #  type        :string(255)
+#  percentage  :decimal(, )
 #
 
 class ExpenditureCoding < CodeAssignment

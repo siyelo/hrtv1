@@ -41,7 +41,6 @@ Scenario: See both budget and expenditure for an activity coding
   Then I should be on the coding expenditure page for "TB Drugs procurement"
   And I should see the "Expenditure" tab is active
 
-@run
 Scenario: enter expenditure for an activity
   Given I am on the coding expenditure page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
@@ -50,7 +49,6 @@ Scenario: enter expenditure for an activity
   And I should be on the coding expenditure page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-@run
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed. 
   Given I am on the coding budget page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
@@ -60,3 +58,13 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
   And I press "Save"
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
+
+@wip
+Scenario: enter percentage for an activity budget coding
+  Given I am on the coding budget page for "TB Drugs procurement"
+  When I fill in "% for Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "100"
+  And I press "Save"
+  Then I should see "Activity budget was successfully updated."
+  And I should be on the coding budget page for "TB Drugs procurement"
+  And the "% for Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "100"
+  

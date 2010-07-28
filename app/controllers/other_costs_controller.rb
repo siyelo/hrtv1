@@ -21,7 +21,6 @@ class OtherCostsController < ApplicationController
     config.action_links.add('Detail Cost Areas',
       :action => "code",
       :controller => "other_costs",
-      :parameters => "",
       :type => :member,
       :popup => true,
       :label => "Detail Cost Areas")

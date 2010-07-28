@@ -166,14 +166,29 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep =>
 
 end
 
+puts "loading beneficiaries"
+Beneficiary.delete_all
+FasterCSV.foreach("db/seed_files/beneficiaries.csv", :headers=>true) do |row|
+  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
+  if c.nil?
+    c=Beneficiary.new
+  end
+  #puts row.inspect
+  %w[short_display].each do |field|
+    #puts "#{field}: #{row[field]}"
+    c.send "#{field}=", row[field]
+  end
+  puts "error on #{row}" unless c.save
+end
+
 #TODO remove - this was a hack to make it seem like we aliased
 # the reporting organization in select lists, during development
 # and also was used in controllers to fake that we
 # had namespaced access / restricted some things from being shown
-puts "create self"
-%w[ self ].each do |ngo|
-  Ngo.find_or_create_by_name ngo
-end
+#puts "create self"
+#%w[ self ].each do |ngo|
+#  Ngo.find_or_create_by_name ngo
+#end
 
 
 #TODO really frustrating bug here

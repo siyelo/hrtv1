@@ -22,6 +22,7 @@ class ActivitiesController < ApplicationController
     config.update.columns = @@update_columns
     list.sorting = {:name => 'DESC'}
 
+    #TODO better name / standarize on verb noun or just noun
     config.action_links.add('Classify',
       :action => "code",
       :type => :member,
@@ -31,7 +32,7 @@ class ActivitiesController < ApplicationController
     config.nested.add_link("Cost Categorization", [:lineItems])
     config.columns[:lineItems].association.reverse = :activity
 
-    config.nested.add_link("Targets", [:organizations])
+    config.nested.add_link("Organizations Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     # we want to use this below but its frazzed
     # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms

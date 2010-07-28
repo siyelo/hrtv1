@@ -196,4 +196,4 @@ end
 # find the data response I had made and attach to this user
 # tries to delete and gets null
 # for now, not worrying about cleaning up
-#User.unstub_current_user_and_data_response 
+User.unstub_current_user_and_data_response 

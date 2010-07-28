@@ -32,5 +32,6 @@ class UserTest < ActiveSupport::TestCase
     assert User.count == 1
     assert DataResponse.count == 1
     assert Organization.count == 1
+    assert User.current_user.role?(:admin)
   end
 end

@@ -1,5 +1,5 @@
-User.stub_current_user_and_data_response
 User.delete_all
+User.stub_current_user_and_data_response
 #create dummy users
 User.create! (:username => 'admin',
               :email => 'admin@ubuzima.org',
@@ -22,3 +22,4 @@ User.create! (:username => 'reporter2',
               :password_confirmation => 'password',
               :organization => Organization.create!(:name => "internal_for_dev3"),
               :roles => ['reporter'])
+User.unstub_current_user_and_data_response

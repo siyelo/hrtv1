@@ -1,6 +1,6 @@
 require 'lib/value_at_runtime'
 class DataResponse < ActiveRecord::Base
-  has_many :data_elements
+  has_many :data_elements, :dependent=>:destroy
   has_many :users_currently_completing, :class_name => "User",
     :foreign_key => :data_response_id_current
 
@@ -29,6 +29,12 @@ class DataResponse < ActiveRecord::Base
     if element_object.data_element.nil? 
        data_elements.push(DataElement.create(:data_elementable => element_object))
        save
+    end
+  end
+
+  def delete_element element_object
+    unless element_object.data_element.nil?
+      data_elements.delete(element_object.data_element)
     end
   end
 

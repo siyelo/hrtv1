@@ -25,10 +25,15 @@
     = yield(:head)
 
   %body
-    - unless controller.controller_name == "static_page" &&  controller.action_name == "index"
-      = render :partial => 'layouts/inner_pages'
-    - else
+    - if controller.controller_name == "static_page" &&  controller.action_name == "index"
       = render :partial => 'layouts/landing_page'
+    - else
+      = render :partial => 'layouts/inner_pages'
+    = yield(:header)
+    = yield(:tabs)
+    = yield(:main)
+
+
 
     #footer
       = render :partial => 'layouts/footer'

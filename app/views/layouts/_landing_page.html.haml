@@ -1,0 +1,34 @@
+
+
+#home
+  #header
+    .background
+      .inner
+        #logo
+        = render :partial => '/layouts/login_nav'
+        %span.quote Saving and improving lives through better health
+  #main
+    .about
+      .slider
+        #s3slider
+          %ul#s3sliderContent
+            %li.s3sliderImage
+              %img{ :src => "images/test_slider/1.jpg" }
+              %span.top
+                %strong Your title
+                Your text comes here
+            %li.s3sliderImage
+              %img{ :src => "images/test_slider/2.jpg" }
+              %span.bottom
+                %strong Your title
+                Your text comes here
+            %div.clear.s3sliderImage
+      .text
+        %h3 Ubuzima helps us track our health programs.
+        %p To know where our money goes and more importantly what difference it made. To increase transparency and accountability. To know more and make better decisions.
+        %p This database was funded by USAID through HS20/20
+
+    .sign_in_form
+      %h3 Sign In
+      = render :partial => '/shared/login_form'
+

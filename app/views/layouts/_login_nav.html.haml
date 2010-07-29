@@ -1,0 +1,11 @@
+#admin
+  - if current_user
+    %ul
+      %li= "#{current_user.username}"
+      %li= user_dashboard_link
+      %li= link_to "Change Password", user_url(current_user)
+      %li= link_to "logout", logout_path
+  - else
+    %span.sign_in
+      Have an account?
+      = link_to "Sign in", login_path

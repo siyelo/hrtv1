@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
       flash[:error] = 'Please upload a file'
       redirect_to_index
     rescue FasterCSV::MalformedCSVError
-      flash[:error] = 'The file you uploaded was incorrectly formatted. You may not have saved it as a UTF-8 formatted CSV file or some fields may have contained returns or enters without being surrounded by quotes. Please change your file and try again or use the contact link at the bottom of the page to get help.'
+      flash[:error] = 'Sorry, we had trouble reading the file you uploaded. You may not have saved it as a UTF-8 formatted CSV file or some fields may have contained returns or enters without being surrounded by quotes. Please change your file and try again or use the contact link at the bottom of the page to get help.'
       #TODO email the file and have someone get back to helping them
       redirect_to_index
   end

@@ -25,4 +25,7 @@ class ModelHelpsController < ApplicationController
     config.update.columns = [ :long]
   end
 
+  def create_from_file
+    super @@columns_for_file_upload
+  end
 end

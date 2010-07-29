@@ -103,42 +103,58 @@ describe "Requesting Coding endpoints as reporter" do
   end
   
   context "Requesting activities/:id/update_coding_budget using POST" do
-     it "should find the activity" do
-       Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
-       post :update_budget, :activity_id => @activity.id, 
-                            :activity => { :code_assignment_tree => ["1"], 
-                                           :budget_amounts => { "1" => "10" }}
-     end
-     
-     context "on successful request" do
-       before :each do
-         post :update_budget, :activity_id => @activity.id, 
-                              :activity => { :code_assignment_tree => ["1"], 
-                                             :budget_amounts => { "1" => "10"}}
-       end
+    it "should find the activity" do
+      Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
+      do_post(:update_budget, :budget_amounts)
+    end
+    
+    context "update amount on successful request" do
+      before :each do
+        do_post(:update_budget, :budget_amounts)
+      end
+    
+      it { should redirect_to(budget_activity_coding_path(@activity)) }
+      it { should set_the_flash.to("Activity budget was successfully updated.") }
+    end
+    
+    context "update percentage on successful request" do
+      before :each do
+        do_post(:update_budget, :budget_amounts, "", "10")   
+      end
+    
+      it { should redirect_to(budget_activity_coding_path(@activity)) }
+      it { should set_the_flash.to("Activity budget was successfully updated.") }
+    end
+  end 
    
-       it { should redirect_to(budget_activity_coding_path(@activity)) }
-     end
-   end 
-   
-   context "Requesting activities/:id/update_coding_expenditure using POST" do
-     it "should find the activity" do
-       Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
-       post :update_expenditure, :activity_id => @activity.id, 
-                                 :activity => { :code_assignment_tree => ["1"], 
-                                                :expenditure_amounts => { "1" => "10" }}
-     end
-     
-     context "on successful request" do
-       before :each do
-         post :update_expenditure,  :activity_id => @activity.id, 
-                                    :activity => { :code_assignment_tree => ["1"], 
-                                                   :expenditure_amounts => { "1" => "10"}}
-       end
-   
-       it { should redirect_to(expenditure_activity_coding_path(@activity)) }
-     end
-   end
+  context "Requesting activities/:id/update_coding_expenditure using POST" do
+    it "should find the activity" do
+      Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
+      do_post(:update_expenditure, :expenditure_amounts)
+    end
+    
+    context "update amount on successful request" do
+      before :each do
+        do_post(:update_expenditure, :expenditure_amounts)   
+      end
   
+      it { should redirect_to(expenditure_activity_coding_path(@activity)) }
+      it { should set_the_flash.to("Activity expenditure was successfully updated.") }
+    end
+    
+    context "update percentage on successful request" do
+      before :each do
+        do_post(:update_expenditure, :expenditure_amounts, "", "10")   
+      end
   
+      it { should redirect_to(expenditure_activity_coding_path(@activity)) }
+      it { should set_the_flash.to("Activity expenditure was successfully updated.") }
+    end
+  end
+  
+  def do_post(method, param, amount = "10", percentage = "")
+    post method, :activity_id => @activity.id, 
+                 :activity => { :code_assignment_tree => ["1"], 
+                                param => { "1" => { "a" => amount, "p" => percentage } } }
+  end
 end

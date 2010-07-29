@@ -59,12 +59,18 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And I press "Save"
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-@wip
-Scenario: enter percentage for an activity budget coding
+@slow
+Scenario Outline: enter percentage for an activity budget coding
   Given I am on the coding budget page for "TB Drugs procurement"
-  When I fill in "% for Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "100"
+  When I fill in the percentage for "Human Resources For Health" with "<amount>"
   And I press "Save"
   Then I should see "Activity budget was successfully updated."
   And I should be on the coding budget page for "TB Drugs procurement"
-  And the "% for Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "100"
+  And the percentage for "Human Resources For Health" field should contain "<amount>"
+  Examples:
+    | amount |
+    | 100    |
+    | 25     |
+    | 50.1   |
+
   

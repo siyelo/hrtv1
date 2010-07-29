@@ -9,9 +9,7 @@
   = text_field_tag "activity[#{updater_field}][#{code.id}][a]", number_to_currency(amount, :unit => ""), :size => 8
   or
   = text_field_tag "activity[#{updater_field}][#{code.id}][p]", percentage, :size => 2
-  -# need to get this working so capybara can identify the % field
-  -#= label_tag "activity[#{updater_field}][#{code.id}][p]", "% for #{code.short_display}"
-  = '%'
+  = label_tag "activity[#{updater_field}][#{code.id}][p]", "%"
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
   -# label tag helper - good for automated testing
   = label_tag "activity[#{updater_field}][#{code.id}][a]", "#{code.short_display}"

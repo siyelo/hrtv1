@@ -92,4 +92,11 @@ Then /^I should see the "([^"]*)" tab is active$/ do |text|
   }
 end
 
+# a bit brittle
+When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
+   steps %Q{ When I fill in "activity_budget_amounts_1_p" with "#{amount}"}
+end
 
+Then /^the percentage for "Human Resources For Health" field should contain "([^"]*)"$/ do |amount|
+  steps %Q{ Then the "activity_budget_amounts_1_p" field should contain "#{amount}"}
+end

@@ -9,6 +9,7 @@ module ActAsDataElement
       include InstanceMethods
       has_one :data_element, :as => :data_elementable
       after_save :save_to_response
+      before_destroy :delete_to_response
     end
 
   end
@@ -19,6 +20,11 @@ module ActAsDataElement
       #<TODO> find session with the response_id
       dr = User.current_user.current_data_response
       dr.add_or_update_element self
+      dr.save
+    end
+    def delete_to_response
+      dr = User.current_user.current_data_response
+      dr.delete_element self
       dr.save
     end
   end

@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
   end
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, >1 location won't work
 
-  record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
+ # record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
 
   map_fields :create_from_file,
     @@columns_for_file_upload,

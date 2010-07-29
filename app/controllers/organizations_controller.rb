@@ -5,6 +5,10 @@ class OrganizationsController < ApplicationController
     @@create_columns
   end
   
+  @@columns_for_file_upload = @@create_columns.map {|c| c.to_s}
+  map_fields :create_from_file,
+    @@columns_for_file_upload,
+    :file_field => :file
   #record_select :per_page => 20, :search_on => [:name], :order_by => 'name ASC', :full_text_search => true
   
   active_scaffold :organization do |config|
@@ -23,4 +27,7 @@ class OrganizationsController < ApplicationController
       ["Other", "Organization"] ]}
   end
 
+  def create_from_file
+    super @@columns_for_file_upload
+  end
 end

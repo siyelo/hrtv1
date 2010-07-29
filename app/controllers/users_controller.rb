@@ -41,6 +41,7 @@ class UsersController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
+
   def to_label
     @s="User: "
     if username.nil? || username.empty?

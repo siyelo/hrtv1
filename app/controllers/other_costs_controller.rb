@@ -2,6 +2,8 @@ class OtherCostsController < ApplicationController
 
   authorize_resource
 
+  before_filter :check_user_has_data_response
+
   @@shown_columns = [ :projects, :budget, :spend]
   @@create_columns = [:projects,  :budget, :spend, :description]
   def self.create_columns

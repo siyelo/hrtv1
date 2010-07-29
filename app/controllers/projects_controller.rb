@@ -1,6 +1,8 @@
 class ProjectsController < ApplicationController
   authorize_resource
 
+  before_filter :check_user_has_data_response
+
   @@shown_columns = [:name, :description,  :budget, :spend]
   @@create_columns = [:name, :description,  :budget, :spend, :entire_budget, :start_date, :end_date, :locations]
   def self.create_columns

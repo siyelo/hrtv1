@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password, :password_confirmation
 
   include ApplicationHelper
+  include UsersHelper
 
   rescue_from CanCan::AccessDenied do |exception|
       render :text => "Sorry, you do not have permission for this action or you have been logged out.
@@ -229,6 +230,14 @@ class ApplicationController < ActionController::Base
   # TODO move into a module
   def self.quarterly_amount_field_options
     {:size => 15 }
+  end
+
+  def check_user_has_data_response
+    unless User.current_user.current_data_response
+      flash[:warning] = 'Please start responding to a data request before going to that page. Click on one of the links underneath "Data Requests to Fulflill" to continue.'
+      #TODO email the file and have someone get back to helping them
+      redirect_to user_dashboard_path(User.current_user)
+    end
   end
 
 

@@ -1,7 +1,7 @@
 class StaticPageController < ApplicationController
   skip_before_filter :load_help
 
-  before_filter :require_user, :except => [:index, :news, :about]
+  before_filter :require_user, :except => [:index, :news, :contact, :about]
 
 
   def index
@@ -12,6 +12,9 @@ class StaticPageController < ApplicationController
   end
 
   def about
+  end
+
+  def contact
   end
 
   def show

@@ -4,8 +4,7 @@
     %title
       - title = yield(:title) || " : Resource Tracking Database "
       = "Resource Tracking Database" + " : " + title
-
-    = javascript_include_tag :defaults, 'jquery-1.4.2.min', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', :cache => true
+    = javascript_include_tag :defaults, 'jquery-1.4.2.min', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 's3Slider', :cache => true
     = record_select_includes
     = active_scaffold_includes
     = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
@@ -13,71 +12,28 @@
     /[if lt IE 8]
       = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
     = stylesheet_link_tag 'custom', 'tipsy'
+
+    -# move to partial...
+    = stylesheet_link_tag 's3slider.css', :media => 'screen'
+    :javascript
+      jQuery(document).ready(function(){
+        jQuery('#s3slider').s3Slider({
+          timeOut: 4000
+        });
+      });
+
     = yield(:head)
 
   %body
-    #header
-      #logo
-        //= image_tag("logo.png", :alt => "Rwanda Resource Tracking Database") // add later w new logo
-      #admin
-        %ul
-          - if current_user
-            %li= "#{current_user.username}"
-            %li= user_dashboard_link
-            %li= link_to "Change Password", user_url(current_user)
-            %li= link_to "logout", logout_path
-          - else
-            %li= link_to "login", login_path
-
-    #tabs
-      %ul
-        %li{ :class => [controller.class == ProjectsController ? "active" : '']}
-          = link_to 'Projects', projects_path
-
-        %li{ :class => [controller.class == FundingSourcesController ? "active" : '']}
-          = link_to 'Funding Sources', funding_sources_data_entry_path
-
-        %li{ :class => [controller.class == ProvidersController ? "active" : '']}
-          = link_to 'Providers', providers_data_entry_path
-        %li{ :class => [controller.class == ActivitiesController ? "active" : '']}
-          = link_to 'Activities', activities_path
-
-        %li{ :class => [controller.class == OtherCostsController ? "active" : '']}
-          = link_to 'Other Costs', other_costs_path
-
-      = image_tag "tagline.png"
-
-    #content
-      = render :partial => 'layouts/top_menu'
-
-      #main
-
-        = render :partial => 'layouts/flashes'
-
-        #desc
-          :javascript
-            $('desc').hide();
-          %h2 Description
-          %p
-            =yield :page_help
-          // %a read more
+    - if controller.controller_name == "static_page" &&  controller.action_name == "index"
+      = render :partial => 'layouts/landing_page'
+    - else
+      = render :partial => 'layouts/inner_pages'
+    = yield(:header)
+    = yield(:tabs)
+    = yield(:main)
 
 
-          // This is the description generator
-          // .page_help
-          //   = yield :page_help
-
-        = yield
-
-        .comments
-          = yield :comments
-
-      #sidebar
-
-        #helper
-          :javascript
-            $('sidebar').hide();
-          = yield :side_bar
 
     #footer
       = render :partial => 'layouts/footer'

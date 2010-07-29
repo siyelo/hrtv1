@@ -1,0 +1,49 @@
+#header
+  .background
+    .inner
+      #logo
+      = render :partial => '/layouts/login_nav'
+      %span.quote Saving and improving lives through better health
+
+#tabs
+  %ul
+    %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
+      = link_to 'Projects', projects_path
+
+    %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
+      = link_to 'Funding Sources', funding_sources_data_entry_path
+
+    %li{ :class => [controller.class.to_s == "ProvidersController" ? "active" : '']}
+      = link_to 'Providers', providers_data_entry_path
+    %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
+      = link_to 'Activities', activities_path
+
+    %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
+      = link_to 'Other Costs', other_costs_path
+
+  = image_tag "tagline.png"
+
+#content
+  = render :partial => 'layouts/top_menu'
+  #main
+    = render :partial => 'layouts/flashes'
+    #desc
+      :javascript
+        $('desc').hide();
+      %h2 Description
+      %p
+        =yield :page_help
+      // %a read more
+      // This is the description generator
+      // .page_help
+      //   = yield :page_help
+    = yield
+    .comments
+      = yield :comments
+
+  #sidebar
+
+    #helper
+      :javascript
+        $('sidebar').hide();
+      = yield :side_bar

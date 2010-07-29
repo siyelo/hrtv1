@@ -3,11 +3,14 @@ class StaticPageController < ApplicationController
 
   before_filter :require_user, :except => [:index, :news, :about]
 
-  
+
   def index
+    @user_session = UserSession.new
   end
+
   def news
   end
+
   def about
   end
 

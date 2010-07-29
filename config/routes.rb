@@ -56,6 +56,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.news "news", :controller => 'static_page', :action => "news"
   map.about "about", :controller => 'static_page', :action => "about"
+  map.contact "contact", :controller => 'static_page', :action => "contact"
+
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',

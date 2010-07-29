@@ -1,10 +1,12 @@
 body
+  #home
+    #header
+      border-bottom= " 3px solid "  !light-blue
 
   #header
     min-width: 960px
     padding: 0 10%
     height: 110px
-    border-bottom= " 3px solid "  !light-blue
 
     .background
       background= image_url("bg-blue.jpg")
@@ -21,13 +23,12 @@ body
         #logo
           background= image_url("Ubuzima.png") "no-repeat left"
           height: 50px
-          +column(17)
+          +column(7)
           margin: 15px 0px 0px
-
 
         #admin
           padding-top: 15px
-          +column(7,true)
+          +column(17,true)
 
           span.sign_in
             font-size: 11px

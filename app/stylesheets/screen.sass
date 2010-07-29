@@ -53,14 +53,25 @@ body
       font-size: 0.8em
 
   #header
-
-    #admin ul
-      +border-radius
-      +horizontal-list
-      background: #596a7b
-      float: right
-      margin-top: 10px
-      padding: 7px 12px
+    #admin
+      +column(17, true)
+      .welcome
+        +prepend(5)
+        +column(4)
+        span
+          padding-top: 10px
+          font-size: 11px
+          color= !light-blue
+          float: right
+      .links
+        +column(8, true)
+        ul
+          float: right
+          +border-radius
+          +horizontal-list
+          background: #596a7b
+          float: right
+          padding: 7px 12px
 
   #tabs
     ul

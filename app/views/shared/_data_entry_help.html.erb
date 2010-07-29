@@ -1,37 +1,5 @@
-<% model_help = @model_help #from before_filter :load_help in app controller
- %>
+<% unless @model_help.nil? %>
+  <%= render :partial => '/shared/sidebar' %>
 
-<% if model_help %>
-  <% content_for :side_bar do %>
-    <script>$('sidebar').show();</script>
-
-    <h2>Help</h2>
-    <p><%= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"  %></p>
-      <div id="terms">
-        <script> $('terms').hide(); </script>
-        <% if model_help.field_help.size > 0 %>
-          <%= render :partial => model_help.field_help %>
-        <% else %>
-          <p> No help for these fields has been entered yet.</p>
-        <% end %>
-      </div>
-      <p><%= link_to 'Examples', '#',  :onclick => "$('examples').toggle();"  %></p>
-      <div id="examples">
-        <script> $('examples').hide(); </script>
-        <p>This section will have links to examples when this feature is complete.</p>
-      </div>
-
-
-  <% end %>
-
-  <% content_for :page_help do %>
-    <script>$('desc').show();</script>
-    <p><%= h model_help.long %></p>
-  <% end %>
-
-  <% content_for :comments do %>
-    <p> All users can see the comments in the table below. </p>
-    <%= render :active_scaffold => "comments", :label => "General Questions / Comments",
-      :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} %>
-  <% end %>
+  <%= render :partial => '/shared/comments' %>
 <% end %>

@@ -29,6 +29,9 @@ class Code < ActiveRecord::Base
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 
+  named_scope :activity_codes, :conditions => ["type in (?)", Activity::VALID_ROOT_TYPES], :order => quoted_left_column_name
+  named_scope :other_cost_codes, :conditions => ["type in (?)", OtherCost::VALID_ROOT_TYPES], :order => quoted_left_column_name
+
   def name
     to_s
   end

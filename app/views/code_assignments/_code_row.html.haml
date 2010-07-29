@@ -1,20 +1,19 @@
 - updater_field = (@coding_type == :budget ? 'budget_amounts' : 'expenditure_amounts')
 -# TODO - make this nasty SQL lookup faster with the help of the controller action
-- assignment = @current_assignments.find_by_code_id(code.id)
+- assignment = @current_assignments[code.id] if @current_assignments.has_key?(code.id)
 - amount     = assignment.nil? ? "" : assignment.amount
 - percentage = assignment.nil? ? "" : assignment.percentage
 
 %li
-  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_codes.include?(code)
+  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
   = text_field_tag "activity[#{updater_field}][#{code.id}][a]", number_to_currency(amount, :unit => ""), :size => 8
   or
-  = text_field_tag "activity[#{updater_field}][#{code.id}][p]", percentage, :size => 2
+  = text_field_tag "activity[#{updater_field}][#{code.id}][p]", h(number_to_percentage(percentage)), :size => 3
   = label_tag "activity[#{updater_field}][#{code.id}][p]", "%"
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
-  -# label tag helper - good for automated testing
   = label_tag "activity[#{updater_field}][#{code.id}][a]", "#{code.short_display}"
 
-  - unless code.children.empty?
+  - unless code.leaf?
     %ul{:id => code.external_id}
       - code.children.each do |child|
-        = render 'code_row', :code => child
+        = render '/code_assignments/code_row', :code => child

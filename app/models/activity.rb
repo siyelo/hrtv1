@@ -24,6 +24,8 @@
 #
 
 class Activity < ActiveRecord::Base
+  VALID_ROOT_TYPES = %w[Mtef Nha Nasa Nsp]
+
   acts_as_commentable
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators
@@ -47,10 +49,6 @@ class Activity < ActiveRecord::Base
     projects.valid_providers
   end
 
-  def valid_roots_for_code_assignment
-    @@valid_root_types = [Mtef, Nha, Nasa, Nsp]
-    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
-  end
 
   private
 

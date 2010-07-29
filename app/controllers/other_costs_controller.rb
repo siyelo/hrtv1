@@ -1,4 +1,4 @@
-class OtherCostsController < ApplicationController
+class OtherCostsController < ActiveScaffoldController
   authorize_resource
 
   @@shown_columns = [:other_cost_type, :projects, :expected_total, :budget]

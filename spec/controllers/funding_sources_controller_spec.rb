@@ -1,6 +1,16 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require "cancan/matchers"
 
+describe "Routing shortcuts for Funding Sources (/funding_sources) should map" do
+  controller_name :funding_sources
+  
+  it "funding_sources_data_entry to /funding_sources" do
+    funding_sources_data_entry_path.should == '/funding_sources'
+  end
+  
+end
+
+
 describe FundingSourcesController do
   context "as visitor" do
     context "get index" do

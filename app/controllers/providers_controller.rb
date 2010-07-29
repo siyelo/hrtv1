@@ -1,4 +1,4 @@
-class ProvidersController < ApplicationController
+class ProvidersController < ActiveScaffoldController
   authorize_resource :resource => FundingFlow
 
   @@columns_for_file_upload = %w[to raw_provider project budget spend_q1 spend_q2 spend_q3 spend_q4]

@@ -1,11 +1,11 @@
-class LineItemsController < ApplicationController
+class LineItemsController < ActiveScaffoldController
   @@shown_columns = [:activity, :spend, :budget, :activity_cost_category]
   @@create_columns = @@shown_columns
   def self.create_columns
     @@create_columns
   end
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
-  
+
   map_fields :create_from_file,
     @@columns_for_file_upload,
     :file_field => :file

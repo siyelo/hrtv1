@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ActiveScaffoldController
 
   @@shown_columns = [:username, :email,   :password, :password_confirmation, :roles]
   @@create_columns = [:username, :email,  :password, :password_confirmation]

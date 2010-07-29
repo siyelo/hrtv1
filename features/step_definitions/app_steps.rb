@@ -92,11 +92,24 @@ Then /^I should see the "([^"]*)" tab is active$/ do |text|
   }
 end
 
+# use this when you need to match the EXACT value of a field (vs the "should contain" matcher) 
+Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |field, selector, value|
+  with_scope(selector) do
+    field = find_field(field)
+    field_value = (field.tag_name == 'textarea') ? field.text : field.value
+    if field_value.respond_to? :should
+      field_value.should == value
+    else
+      assert_equal(value, field_value)
+    end
+  end
+end
+
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
    steps %Q{ When I fill in "activity_budget_amounts_1_p" with "#{amount}"}
 end
 
-Then /^the percentage for "Human Resources For Health" field should contain "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_budget_amounts_1_p" field should contain "#{amount}"}
+Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
+  steps %Q{ Then the "activity_budget_amounts_1_p" field should equal "#{amount}"}
 end

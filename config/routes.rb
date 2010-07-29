@@ -15,12 +15,13 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:select => :post}, :active_scaffold => true
 
   map.resources :activities, :active_scaffold => true do |activity|
-    activity.resource :coding,  :controller => :code_assignments,
-                                :only => [:index], #no restful routes k thx
-                                :member => {  :budget => :get,
-                                              :expenditure => :get }
-    activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
-    activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
+
+    activity.resource  :budget, :path_prefix => '/activities/:activity_id/classification',
+                                :controller => :budget_classification,
+                                :only => [ :show, :update ]
+    activity.resource  :expenditure,  :path_prefix => '/activities/:activity_id/classification',
+                                      :controller => :expenditure_classification,
+                                      :only => [ :show, :update ]
   end
 
   # AS redirect helpers

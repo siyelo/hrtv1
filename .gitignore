@@ -8,7 +8,7 @@ app/stylesheets/.sass-cache/*
 db/*.sqlite3
 config/database.yml
 log/*.log
-tmp/**/*
+tmp/*
 public/stylesheets/compiled/*
 
 # Cucumber/webrat tmp files

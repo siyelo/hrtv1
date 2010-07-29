@@ -1,4 +1,4 @@
-class ProjectsController < ApplicationController
+class ProjectsController < ActiveScaffoldController
   authorize_resource
 
   @@shown_columns = [:name, :description,  :expected_total]

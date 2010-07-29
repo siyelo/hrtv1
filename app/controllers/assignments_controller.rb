@@ -1,4 +1,4 @@
-class AssignmentsController < ApplicationController
+class AssignmentsController < ActiveScaffoldController
   active_scaffold
 end
 

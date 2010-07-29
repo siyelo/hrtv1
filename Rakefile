@@ -14,3 +14,9 @@ begin
 rescue LoadError
   STDERR.puts "Run `rake gems:install` to install heroku_san gem"
 end
+
+begin
+  require 'metric_fu'
+rescue LoadError
+  STDERR.puts "Run `rvm gemset import` or `rake gems:install` to install metric fu"
+end

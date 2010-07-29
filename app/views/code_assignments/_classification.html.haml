@@ -6,14 +6,13 @@
 
     });
 
-
 .nav2
   %h2= "Activity Classification"
   %ul
     %li{:class => @coding_type == :budget ? 'selected': '' }
-      = link_to "Budget", budget_activity_coding_path(@activity.id)
+      = link_to "Budget", activity_budget_path(@activity.id)
     %li{:class => @coding_type == :expenditure ? 'selected': '' }
-      = link_to "Expenditure", expenditure_activity_coding_path(@activity.id)
+      = link_to "Expenditure", activity_expenditure_path(@activity.id)
 
 %table#activity_description
   %tr
@@ -28,10 +27,12 @@
     %td= @activity.description
 
 #activity_classification
-  - form_for @activity, :url => update_path, :method => :post do |form|
+  - form_for @activity, :url => path, :method => :post do |form|
     %ul#activity_tree
       - @codes.each do |code|
-        = render 'code_row', { :code => code, :form => form }
+        = render '/code_assignments/code_row', { :code => code, :form => form }
     = submit_tag 'Save'
 
-  = render 'shared/data_entry_help', :record_type => CodeAssignment
+= render '/shared/sidebar'
+
+= render '/shared/comments'

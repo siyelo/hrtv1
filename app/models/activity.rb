@@ -28,6 +28,14 @@ class Activity < ActiveRecord::Base
   acts_as_commentable
   include ActAsDataElement
   configure_act_as_data_element
+
+  before_save :authorize_and_set_owner
+  #TODO add current data response but since only 1 atm, dont need
+  default_scope :conditions => ["activities.organization_id_owner = ? or 1=?",
+    ValueAtRuntime.new(Proc.new{User.current_user.organization.id}),
+    ValueAtRuntime.new(Proc.new{User.current_user.role?(:admin) ? 1 : 0})]
+  belongs_to :owner, :class_name => "Organization", :foreign_key => "organization_id_owner"
+
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations
@@ -101,5 +109,17 @@ class Activity < ActiveRecord::Base
     delimiter = options[:delimiter] || defaults[:delimiter]
 
     number_string.gsub(delimiter,'')
+  end
+
+  protected
+
+  def authorize_and_set_owner
+    current_user = User.current_user
+    # TODO authorize and throw exception if no create/update for you! no soup for you!
+
+    # don't remove the self reference below, otherwise it breaks
+    unless current_user.role?(:admin) && self.owner != nil
+      self.owner = User.current_user.organization 
+    end
   end
 end

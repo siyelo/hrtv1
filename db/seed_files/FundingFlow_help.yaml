@@ -21,7 +21,7 @@
 6:
   attribute_name: spend
   short: The total of expenditures from the previous fiscal year
-  long: The total of expenditures from the previous fiscal year
+  long: The total of expenditures from the previous Rwandan fiscal year. Enter directly or give the quarterly break out according to your own fiscal year.
 
 7:
   attribute_name: spend_q1

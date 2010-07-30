@@ -161,9 +161,10 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true ) do |row|
     #puts "#{field}: #{row[field]}"
     c.send "#{field}=", row[field].try(:strip)
   end
-  unless %w[Donors Agencies Implementers].include? c.raw_type
-    c.name += " #{c.raw_type}"
-  end
+# jeremy started including these in the seed file in name already
+  #  unless %w[Donors Agencies Implementers].include? c.raw_type
+ #   c.name += " #{c.raw_type}"
+ # end
   puts "error on #{row}" unless c.save
   #TODO delete this line for production
 

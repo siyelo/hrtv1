@@ -26,13 +26,13 @@ class FundingFlow < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
-  before_save :authorize_and_set_owner
-
 #  named_scope :available_to, lambda { |user|
 #    {:conditions => ["organization_id_owner = ? or 1=?",
 #      user.organization.id,
 #      user.role?(:admin) ? 1 : 0 ]}
 #  }
+  before_save :authorize_and_set_owner
+  #TODO add current data response but since only 1 atm, dont need
   default_scope :conditions => ["organization_id_owner = ? or 1=?",
     ValueAtRuntime.new(Proc.new{User.current_user.organization.id}),
     ValueAtRuntime.new(Proc.new{User.current_user.role?(:admin) ? 1 : 0})]
@@ -48,7 +48,9 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :project
 
   def to_s
-    "Flow: #{from.to_s} to #{to.to_s} for #{project.to_s}"
+    "Flow"#: #{from.to_s} to #{to.to_s} for #{project.to_s}"
+    # TODO replace when fix text flying over action links
+    # in nested scaffolds
   end
 
   # had to add this in to solve some odd AS bug...

@@ -2,7 +2,7 @@
   - if current_user
     .welcome
       %span
-        = "Welcome #{current_user.username}"
+        /= "Welcome #{current_user.username}"
     .links
       %ul
         %li= user_dashboard_link

@@ -134,7 +134,7 @@ end
 
 puts "loading orgs"
 Organization.delete_all
-FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true, :col_sep => "\t") do |row|
+FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true ) do |row|
   c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
   if c.nil?
     c=Organization.new

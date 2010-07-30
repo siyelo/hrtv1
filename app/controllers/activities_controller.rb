@@ -34,7 +34,7 @@ class ActivitiesController < ApplicationController
     config.nested.add_link("Cost Categorization", [:lineItems])
     config.columns[:lineItems].association.reverse = :activity
 
-    config.nested.add_link("Organizations Assisted", [:organizations])
+    config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     # we want to use this below but its frazzed
     # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms
@@ -50,6 +50,7 @@ class ActivitiesController < ApplicationController
 #    config.columns[:provider].inplace_edit        = :ajax#TODO get working
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].association.reverse = :provider_for
+    config.columns[:provider].label               = "Implementer"
     config.columns[:name].inplace_edit            = true
     config.columns[:name].label                   = "Name (Optional)"
     config.columns[:description].inplace_edit     = true

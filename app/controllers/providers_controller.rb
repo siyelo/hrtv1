@@ -10,7 +10,7 @@ class ProvidersController < ApplicationController
 
   def index
     @constraints = { :from => User.current_user.organization.id } #current_user.organization.id
-    @label = "Providers"
+    @label = "Implementers"
   end
 
   def create_from_file

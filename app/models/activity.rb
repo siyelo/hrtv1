@@ -69,6 +69,10 @@ class Activity < ActiveRecord::Base
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
   end
 
+  def valid_cost_category_codes
+    @@valid_root_types = [CostCategory]
+    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
+  end
   private
 
   # trick to help clean up controller code

@@ -6,7 +6,7 @@
     .links
       %ul
         %li= user_dashboard_link
-        %li= link_to "Change Password", user_url(current_user)
+       / %li= link_to "Change Password", user_url(current_user)
         %li= link_to "Sign out", logout_path
   - else
     %span.sign_in

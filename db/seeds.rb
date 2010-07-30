@@ -77,35 +77,36 @@ end
 
 puts "...Loading codes.csv DONE"
 
-ActivityCostCategory.delete_all
-FasterCSV.foreach("db/seed_files/activity_cost_categories.csv", :headers=>true) do |row|
-  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
-  unless row["include"].blank?
-    if c.nil?
-      c=ActivityCostCategory.new
-    end
-    #puts row.inspect
-    %w[short_display].each do |field|
-      #puts "#{field}: #{row[field]}"
-      c.send "#{field}=", row[field]
-    end
-    puts "error on #{row}" unless c.save
-  end
+puts "Loading cost_categories.csv..."
+CostCategory.delete_all
+FasterCSV.foreach("db/seed_files/cost_categories.csv", :headers=>true) do |row|
+
+  c             = CostCategory.new
+  c.external_id = row["id"]
+  p             = CostCategory.find_by_external_id(row["parent_id"])
+  c.parent_id   = p.id unless p.nil?
+  c.description = row["description"]
+
+  c.short_display=row["short_display"]
+
+  print "."
+  puts "error on #{row}" unless c.save!
+  #puts "  #{c.id}"
 end
 
-OtherCostType.delete_all
-FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
-  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=OtherCostType.new
-  end
-  #puts row.inspect
-  %w[short_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field]
-  end
-  puts "error on #{row}" unless c.save
-end
+#OtherCostType.delete_all
+#FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
+#  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
+#  if c.nil?
+#    c=OtherCostType.new
+#  end
+#  #puts row.inspect
+#  %w[short_display].each do |field|
+#    #puts "#{field}: #{row[field]}"
+#    c.send "#{field}=", row[field]
+#  end
+##  puts "error on #{row}" unless c.save
+#end
 
 # dummy other cost rows, in future craete with callbacks on user create
 #def seed_other_cost_rows

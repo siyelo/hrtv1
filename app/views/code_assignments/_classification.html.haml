@@ -12,8 +12,12 @@
   %ul
     %li{:class => @coding_type == :budget ? 'selected': '' }
       = link_to "Budget", budget_activity_coding_path(@activity.id)
+    %li{:class => @coding_type == :budget_cost_categories ? 'selected': '' }
+      = link_to "Budget Cost Categorization", budget_cost_categories_activity_coding_path(@activity.id)
     %li{:class => @coding_type == :expenditure ? 'selected': '' }
       = link_to "Expenditure", expenditure_activity_coding_path(@activity.id)
+    %li{:class => @coding_type == :expenditure_cost_categories ? 'selected': '' }
+      = link_to "Expenditure Cost Categorization", expenditure_cost_categories_activity_coding_path(@activity.id)
 
 %table#activity_description
   %tr

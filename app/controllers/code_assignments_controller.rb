@@ -8,11 +8,27 @@ class CodeAssignmentsController < ApplicationController
     @coding_type = :budget
   end
 
+  def budget_cost_categories
+    self.load_codes
+    @current_codes = @activity.budget_codes
+    @current_assignments = @activity.budget_codings
+    @coding_type = :budget_cost_categories
+    @codes = @activity.valid_cost_category_codes
+  end
+
   def expenditure
     self.load_codes
     @current_codes = @activity.expenditure_codes
     @current_assignments = @activity.expenditure_codings
     @coding_type = :expenditure
+  end
+
+  def expenditure_cost_categories
+    self.load_codes
+    @current_codes = @activity.expenditure_codes
+    @current_assignments = @activity.expenditure_codings
+    @coding_type = :expenditure_cost_categories
+    @codes = @activity.valid_cost_category_codes
   end
 
   def update_budget
@@ -25,6 +41,15 @@ class CodeAssignmentsController < ApplicationController
     self.update_assignments("expenditure", expenditure_activity_coding_path(@activity))
   end
 
+  def update_budget_cost_categories
+    @activity = Activity.find(params[:activity_id])
+    self.update_assignments("budget", budget_cost_categories_activity_coding_path(@activity))
+  end
+
+  def update_expenditure_cost_categories
+    @activity = Activity.find(params[:activity_id])
+    self.update_assignments("expenditure", expenditure_cost_categories_activity_coding_path(@activity))
+  end
   protected
 
   def load_codes
@@ -43,7 +68,7 @@ class CodeAssignmentsController < ApplicationController
         format.html { redirect_to(path) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "manage" }
+        format.html { render :action => "manage" } #TODO fix path here
         format.xml  { render :xml => @activity.errors, :status => :unprocessable_entity }
       end
     end

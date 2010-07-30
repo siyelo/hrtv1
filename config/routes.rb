@@ -22,9 +22,13 @@ ActionController::Routing::Routes.draw do |map|
     activity.resource :coding,  :controller => :code_assignments,
                                 :only => [:index], #no restful routes k thx
                                 :member => {  :budget => :get,
-                                              :expenditure => :get }
+                                     :budget_cost_categories => :get,
+                                              :expenditure => :get,
+                                     :expenditure_cost_categories => :get}
     activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
     activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
+    activity.update_coding_budget_cost_categories 'update_coding_budget_cost_categories', :controller => :code_assignments, :action => :update_budget_cost_categories
+    activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
   end
 
   # AS redirect helpers

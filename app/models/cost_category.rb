@@ -1,2 +1,2 @@
-class CostCategory < ActiveRecord::Base
+class CostCategory < Code
 end

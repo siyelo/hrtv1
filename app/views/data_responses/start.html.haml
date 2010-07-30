@@ -1,0 +1,23 @@
+= title ("Data Response Details")
+- form_for @data_response, :url => data_response_edit_url(@data_response.id), :method => :post do |form|
+  %table
+    %tbody
+      %tr
+        %td
+          = form.label :currency, "Currency"
+        %td
+          = form.text_field :currency
+      %tr
+        %td
+          = form.label :fiscal_year_start_date, "Start Date of Your Fiscal Year 2009"
+        %td
+          = form.date_select :fiscal_year_start_date
+      %tr
+        %td
+          = form.label :fiscal_year_end_date, "End Date of Your Fiscal Year 2009"
+        %td
+          = form.date_select :fiscal_year_end_date
+  = submit_tag 'Save'
+
+= render :partial => 'shared/bottom_data_entry',
+  :locals => { :record_type => DataResponse }

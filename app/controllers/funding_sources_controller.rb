@@ -4,7 +4,7 @@ class FundingSourcesController < ApplicationController
 
   before_filter :check_user_has_data_response
 
-  @@columns_for_file_upload = %w[ from raw_provider project budget
+  @@columns_for_file_upload = %w[ from organization_text project budget spend
                                   spend_q1 spend_q2 spend_q3 spend_q4 ]
   map_fields :create_from_file,
     @@columns_for_file_upload,

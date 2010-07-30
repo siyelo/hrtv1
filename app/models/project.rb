@@ -28,7 +28,7 @@ class Project < ActiveRecord::Base
 
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
-  has_many :funding_flows, :dependent => :nullify
+  has_many :funding_flows #, :dependent => :nullify
 
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to

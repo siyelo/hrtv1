@@ -26,9 +26,6 @@ class OtherCostsController < ApplicationController
       :popup => true,
       :label => "Detail Cost Areas")
 
-    config.nested.add_link("Categorize Costs", [:lineItems])
-    config.columns[:lineItems].association.reverse = :activity
-
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 

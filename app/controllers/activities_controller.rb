@@ -31,9 +31,6 @@ class ActivitiesController < ApplicationController
       :popup => true,
       :label => "Classify")
 
-    config.nested.add_link("Cost Codes", [:lineItems])
-    config.columns[:lineItems].association.reverse = :activity
-
     config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     # we want to use this below but its frazzed

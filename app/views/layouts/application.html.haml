@@ -14,13 +14,14 @@
     = stylesheet_link_tag 'custom', 'tipsy'
 
     -# move to partial...
-    = stylesheet_link_tag 's3slider.css', :media => 'screen'
-    :javascript
-      jQuery(document).ready(function(){
-        jQuery('#s3slider').s3Slider({
-          timeOut: 4000
+    - if controller.controller_name == "static_page" &&  controller.action_name == "index"
+      = stylesheet_link_tag 's3slider.css', :media => 'screen'
+      :javascript
+        jQuery(document).ready(function(){
+          jQuery('#s3slider').s3Slider({
+            timeOut: 4000
+          });
         });
-      });
 
     = yield(:head)
 

@@ -53,10 +53,10 @@ class Activity < ActiveRecord::Base
   has_many :expenditure_codings, :foreign_key => :activity_id, :dependent => :destroy
   has_many :expenditure_codes, :through => :expenditure_codings, :source => :code
 
-  attr_accessor :budget_amounts
-  attr_accessor :budget_cost_categories
-  attr_accessor :expenditure_amounts
-  attr_accessor :expenditure_cost_categories
+  attr_accessor :budget_codes_updates
+  attr_accessor :budget_cost_categories_updates
+  attr_accessor :expenditure_codes_updates
+  attr_accessor :expenditure_cost_categories_updates
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 
@@ -71,7 +71,7 @@ class Activity < ActiveRecord::Base
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
   end
 
-  def valid_types_for_code_assignment
+  def self.valid_types_for_code_assignment
     [Mtef, Nha, Nasa, Nsp]
   end
 
@@ -79,7 +79,7 @@ class Activity < ActiveRecord::Base
     @@valid_root_types = [CostCategory]
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
   end
-  def valid_types_for_cost_catgory_codes
+  def self.valid_types_for_cost_catgory_codes
     [CostCategory]
   end
   private
@@ -87,20 +87,13 @@ class Activity < ActiveRecord::Base
   # trick to help clean up controller code
   # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
   def update_budget_codings
-    if budget_amounts
-      budget_codings.delete_all
-      budget_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
-      budget_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
-      selected_codes = budget_amounts.nil? ? [] : budget_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| BudgetCoding.create!( :activity => self,
-                                      :code => code,
-                                      :amount => currency_to_number(budget_amounts[code.id.to_s]["a"]),
-                                      :percentage => budget_amounts[code.id.to_s]["p"] ) unless code.nil? }
-    end
+    update_coding_attribute_proxy budget_codes_updates, :budget_codes
+    update_coding_attribute_proxy budget_cost_categories_updates, :budget_cost_categories
   end
 
   def update_expenditure_codings
-    update_coding_attribute_proxy expenditure_amounts, :expenditure
+    update_coding_attribute_proxy expenditure_codes_updates, :expenditure_codes
+    update_coding_attribute_proxy expenditure_cost_categories_updates, :expenditure_cost_categories
   end
 
 
@@ -127,20 +120,58 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def update_coding_attribute_proxy code_assignments, type
+  def update_coding_attribute_proxy code_assignments, coding_type
     if code_assignments
-      code_assignments.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
-      code_assignments.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
+      code_assignments.delete_if { |key,val| val["amount"].nil? || val["percentage"].nil? }
+      code_assignments.delete_if { |key,val| val["amount"].empty? && val["percentage"].empty? }
       selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
 
-      if type == :expenditure # delete the codes for this type
-        expenditure_codings.delete_all #['type in ()', valid_types_for_code_assignment]
-      end
+      # TODO change to if its not in selected and has type
+      # so we can write useful destry and create callbacks
+      clear_old_codings coding_type
 
-      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self,
+      # TODO update all the codings, create the ones that are actually new
+      create_klass = create_class_for_coding_type coding_type
+      selected_codes.each { |code|  create_klass.create!( :activity => self,
                                       :code => code,
-                                      :amount => currency_to_number(code_assignments[code.id.to_s]["a"]),
-                                      :percentage => code_assignments[code.id.to_s]["p"] ) unless code.nil? }
+                                      :amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
+                                      :percentage => code_assignments[code.id.to_s]["percentage"] ) unless code.nil? }
+    end
+  end
+
+  # TODO drive these with hashes instead of if's
+  def clear_old_codings coding_type
+    coding_to_delete = nil
+    if [:budget_codes, :budget_cost_categories].include? coding_type
+      coding_to_delete = budget_codings
+    elsif [:expenditure_codes, :expenditure_cost_categories].include? coding_type
+      coding_to_delete = expenditure_codings
+    end
+    delete_all_codings_by_type coding_to_delete, coding_type
+    logger.debug "deleted old codings"
+  end
+
+  def delete_all_codings_by_type codings, coding_type
+    types_to_delete = nil
+    if [:budget_codes, :expenditure_codes].include? coding_type
+      types_to_delete = Activity.valid_types_for_code_assignment
+    elsif [:budget_cost_categories, :expenditure_cost_categories].include? coding_type
+      types_to_delete = Activity.valid_types_for_cost_catgory_codes
+    end
+    codings.each do |coding|
+      coding.delete if types_to_delete.include? coding.code.class
+    end
+  end
+
+  def create_class_for_coding_type coding_type
+    if coding_type == :budget_codes
+      BudgetCoding
+    elsif coding_type == :budget_cost_categories
+      BudgetCoding
+    elsif coding_type == :expenditure_codes
+      ExpenditureCoding
+    elsif coding_type == :expenditure_cost_categories
+      ExpenditureCoding
     end
   end
 end

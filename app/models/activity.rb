@@ -54,7 +54,9 @@ class Activity < ActiveRecord::Base
   has_many :expenditure_codes, :through => :expenditure_codings, :source => :code
 
   attr_accessor :budget_amounts
+  attr_accessor :budget_cost_categories
   attr_accessor :expenditure_amounts
+  attr_accessor :expenditure_cost_categories
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 
@@ -69,9 +71,16 @@ class Activity < ActiveRecord::Base
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
   end
 
+  def valid_types_for_code_assignment
+    [Mtef, Nha, Nasa, Nsp]
+  end
+
   def valid_cost_category_codes
     @@valid_root_types = [CostCategory]
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
+  end
+  def valid_types_for_cost_catgory_codes
+    [CostCategory]
   end
   private
 
@@ -91,16 +100,7 @@ class Activity < ActiveRecord::Base
   end
 
   def update_expenditure_codings
-    if expenditure_amounts
-      expenditure_codings.delete_all
-      expenditure_amounts.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
-      expenditure_amounts.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
-      selected_codes = expenditure_amounts.nil? ? [] : expenditure_amounts.keys.collect{ |id| Code.find_by_id(id) }
-      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self,
-                                      :code => code,
-                                      :amount => currency_to_number(expenditure_amounts[code.id.to_s]["a"]),
-                                      :percentage => expenditure_amounts[code.id.to_s]["p"] ) unless code.nil? }
-    end
+    update_coding_attribute_proxy expenditure_amounts, :expenditure
   end
 
 
@@ -124,6 +124,23 @@ class Activity < ActiveRecord::Base
     # don't remove the self reference below, otherwise it breaks
     unless current_user.role?(:admin) && self.owner != nil
       self.owner = User.current_user.organization 
+    end
+  end
+
+  def update_coding_attribute_proxy code_assignments, type
+    if code_assignments
+      code_assignments.delete_if { |key,val| val["a"].nil? || val["p"].nil? }
+      code_assignments.delete_if { |key,val| val["a"].empty? && val["p"].empty? }
+      selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
+
+      if type == :expenditure # delete the codes for this type
+        expenditure_codings.delete_all #['type in ()', valid_types_for_code_assignment]
+      end
+
+      selected_codes.each { |code| ExpenditureCoding.create!( :activity => self,
+                                      :code => code,
+                                      :amount => currency_to_number(code_assignments[code.id.to_s]["a"]),
+                                      :percentage => code_assignments[code.id.to_s]["p"] ) unless code.nil? }
     end
   end
 end

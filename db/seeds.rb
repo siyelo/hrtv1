@@ -8,7 +8,6 @@
 
 puts "Loading seeds..."
 
-
 require 'yaml'
 require 'fastercsv'
 
@@ -150,43 +149,10 @@ FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
   puts "error on #{row}" unless c.save
 end
 
-puts "loading orgs"
-Organization.delete_all
-FasterCSV.foreach("db/seed_files/organizations.csv", :headers=>true ) do |row|
-  c=nil #Organization.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Organization.new
-  end
- # puts row.inspect
-  unless row["District"].blank?
-    district = row["District"].downcase.capitalize.strip
-    district = Location.find_by_short_display(district)
-    if district.nil?
-      puts 'nil district'
-      puts row.inspect
-    end
-    c.locations << district
-  end
-  c.raw_type = row["type"].try(:strip)
-  if c.raw_type != "Donors"
-    c.type = "Ngo"
-  elsif c.raw_type == "Donors"
-    c.type = "Donor"
-  end
 
-  #puts row.inspect
-  %w[name].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field].try(:strip)
-  end
-# jeremy started including these in the seed file in name already
-  #  unless %w[Donors Agencies Implementers].include? c.raw_type
- #   c.name += " #{c.raw_type}"
- # end
-  puts "error on #{row}" unless c.save
-  #TODO delete this line for production
-
-end
+### Orgs
+#
+load 'db/seed_files/organizations.rb'
 
 puts "loading beneficiaries"
 Beneficiary.delete_all
@@ -212,5 +178,5 @@ end
 #  Ngo.find_or_create_by_name ngo
 #end
 
-User.unstub_current_user_and_data_response 
+User.unstub_current_user_and_data_response
 puts "...seeding DONE"

@@ -5,7 +5,7 @@ class CodeAssignmentsController < ApplicationController
     self.load_codes
     @current_codes = @activity.budget_codes
     @current_assignments = @activity.budget_codings
-    @coding_type = :budget
+    @coding_type = :budget_codes
   end
 
   def budget_cost_categories
@@ -20,7 +20,7 @@ class CodeAssignmentsController < ApplicationController
     self.load_codes
     @current_codes = @activity.expenditure_codes
     @current_assignments = @activity.expenditure_codings
-    @coding_type = :expenditure
+    @coding_type = :expenditure_codes
   end
 
   def expenditure_cost_categories

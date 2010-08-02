@@ -9,14 +9,7 @@ class ProjectTest < ActiveSupport::TestCase
   # need to get shoulda working
   # will make these more elegant
   # oh, i miss the internet
-  test "has many activities" do
-    p=Project.create!(:name => "proj1")
-    assert p.activities == []
-    p.activities.create :name => "wow"
-    assert p.activities.size == 1
-    assert Activity.count == 1
-  end
-
+  should have_and_belong_to_many :activities
   should have_many :funding_flows
 
   test "creates workflow records after save" do

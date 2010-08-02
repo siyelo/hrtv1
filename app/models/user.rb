@@ -53,12 +53,6 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
-  # GR: why is this needed ?
-  # GN: was stubbing User.current_user.organization
-  def self.organization
-    current_user.organization
-  end
-
   def self.stub_current_user_and_data_response
     o=Organization.new(:name=>"org_for_internal_stub382342")
     o.save(false)

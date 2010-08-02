@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Project do
- context "a user is logged in" do
+  context "a user is logged in" do
     before(:each) do
       @current_user      = Factory(:user)
     end
@@ -74,4 +74,5 @@ describe Project do
         end
       end
     end
+  end
 end

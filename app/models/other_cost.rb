@@ -36,6 +36,10 @@ class OtherCost < Activity
     #TODO add code so that non-root notes can start the top of the tree
   end
 
+  def self.valid_types_for_code_assignment
+    [OtherCostCode]
+  end
+
   #include ActAsDataElement
 
   #configure_act_as_data_element

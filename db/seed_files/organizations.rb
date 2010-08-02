@@ -1,5 +1,3 @@
-require 'ruby-debug'
-
 puts "\nLoading organizations"
 
 puts "  Removing existing orgs"

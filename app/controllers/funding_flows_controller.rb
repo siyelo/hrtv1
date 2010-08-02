@@ -41,7 +41,7 @@ class FundingFlowsController < ApplicationController
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     [:budget, :spend].each do |c|
-      config.columns[c].options = quarterly_amount_field_options
+      quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true
     end
     config.columns[:budget].inplace_edit = true
@@ -49,7 +49,7 @@ class FundingFlowsController < ApplicationController
       c="spend_"+quarter
       c=c.to_sym
       config.columns[c].inplace_edit = true
-      config.columns[c].options = quarterly_amount_field_options
+      quarterly_amount_field_options config.columns[c]
       config.columns[c].label = "Expenditure in your FY 09-10 "+quarter.capitalize
     end
   end

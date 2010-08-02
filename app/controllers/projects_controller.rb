@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     [:spend, :budget, :entire_budget].each do |c|
-      config.columns[c].options = quarterly_amount_field_options
+      quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true
     end
   end

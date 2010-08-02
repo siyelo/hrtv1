@@ -228,8 +228,11 @@ class ApplicationController < ActionController::Base
 
   # methods to help with setting config.columns, etc
   # TODO move into a module
-  def self.quarterly_amount_field_options
-    {:size => 15 }
+  def self.quarterly_amount_field_options as_column
+    as_column.options[:size] = 15
+
+    # sadly this appears to not work
+    as_column.options[:i18n_options] = {:precision => 0} 
   end
 
   def check_user_has_data_response

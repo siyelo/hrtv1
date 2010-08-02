@@ -1,666 +1,695 @@
-"name","type","District"
-"CAMERWA - Central d'achat des medicaments du Rwanda / Central Drug Purchasing Agency for Rwanda","Agencies",
-"ACM - Atelier Central de Maintenance  / Central Maintenance Workshop  ","Agencies",
-"KHI - Kigali Health Institute  ","Agencies",
-"LABOPHAR - Laboratoire Pharmaceutique du Rwanda / Pharmaceutical Laboratory of Rwanda ","Agencies",
-"CNLS - Commission National de Lutte contre le VIH-SIDA / National AIDS Commission ","Agencies",
-"CNTS - Centre National de Transfusion Sanguine / National Blood Transfusion Centre ","Agencies",
-"LNR - Laboratoire National de Reference / National Reference Laboratory ","Agencies",
-"NUR - National University of Rwanda ","Agencies",
-"CCPS - Centre de Consultation Psychosociale / Psychosocial Consultation Centre  ","Agencies",
-"HCC - Health Communication Centre ","Agencies",
-"RITA - Rwanda Information Technology Agency ","Agencies",
-"RAMA - La Rwandaise dï¾’Assurance Maladie / Rwanda Medical Insurance Agency  ","Agencies",
-"SPH - School of Public Health / Ecole de Sante Publique ","Agencies",
-"TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics ","Agencies",
-"University Teaching and Referral Hospitals /CHUK, CHUB, KFH, Kanombe, Ndera, and Police Hospitals ","Agencies",
-"BUFMAR ","Implementers",
-"BTC/CTB ","Implementers",
-"Caho ","Implementers",
-"Care ","Implementers",
-"Caritas ","Implementers",
-"Catholic Blinden Mission ","Implementers",
-"Cchips ","Implementers",
-"Centers for Disease Control, Atlanta USA (CDC) ","Implementers",
-"Champ ","Implementers",
-"Compassion Int'l ","Implementers",
-"Concern ","Implementers",
-"Catholic Federation ","Implementers",
-"Clinton Foundation ","Implementers",
-"Protestant Federation ","Implementers",
-"Catholic Relief Services (CRS) ","Implementers",
-"Diane Fossey Gorilla Fund ","Implementers",
-"Drew Cares ","Implementers",
-"EGPAF ","Implementers",
-"EIP ","Implementers",
-"Family Health International (FHI) ","Implementers",
-"Geneva global ","Implementers",
-"German cooperation (GTZ, KfW, DED, CIM, InWent) ","Implementers",
-"HDP (ex Memisa Cordaid) ","Implementers",
-"Handicap International ","Implementers",
-"Health Unlimited ","Implementers",
-"Icap ","Implementers",
-"Imbuto Foundation/PACFA ","Implementers",
-"Interchurch ","Implementers",
-"Intrahealth Capacity ","Implementers",
-"Intrahealth HIV clinic ","Implementers",
-"Intrahealth Twubakane ","Implementers",
-"Johanitter Unfall Hilfe ","Implementers",
-"Krankenhaus Rwanda ","Implementers",
-"Manos Unidas ","Implementers",
-"Medicus Mundi ","Implementers",
-"Millennium Villages ","Implementers",
-"Management Sciences for Health (MSH) ","Implementers",
-"Oxfam ","Implementers",
-"Partners in Health (PIH) ","Implementers",
-"Population Services International (PSI) ","Implementers",
-"Red Cross Rwanda ","Implementers",
-"Rick Warren/Saddleback Church ","Implementers",
-"Save the Children UK ","Implementers",
-"Wageningen University Netherlands ","Implementers",
-"World Relief ","Implementers",
-"World Vision ","Implementers",
-"African Development Bank (AfDB) ","Donors",
-"Belgian Government  ","Donors",
-"Chinese Mission ","Donors",
-"Clinton Foundation ","Donors",
-"GAVI ","Donors",
-"German Government ","Donors",
-"Global Fund for AIDS, TB and Malaria  ","Donors",
-"Lux development ","Donors",
-"Swiss development cooperation (SDC) ","Donors",
-"UK Department for International Development (DFID) ","Donors",
-"UNAIDS","Donors",
-"UNDP","Donors",
-"UNFPA","Donors",
-"UNICEF","Donors",
-"US Government/USAID","Donors",
-"US Government/PEPFAR","Donors",
-"US Government/PMI","Donors",
-"US Government/RH","Donors",
-"US Government/CDC","Donors",
-"US Government/DoD","Donors",
-"US Government/Peace Corps","Donors",
-"WHO ","Donors",
-"World Bank  ","Donors",
-"World Food Programme ","Donors",
-"Biryogo Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"Butamwa Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"CHK/CHUK National Hospital | Nyarugenge","National Hospital","NYARUGENGE"
-"Cor-Unum Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"Gitega Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"Kabusunzu Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"Muhima Dispensary | Nyarugenge","Dispensary","NYARUGENGE"
-"Muhima HD District Hospital | Nyarugenge","District Hospital","NYARUGENGE"
-"Mwendo Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"PCK/Gitega Prison Clinic | Nyarugenge","Prison Clinic","NYARUGENGE"
-"Rugarama Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"TRAC Clinic Health Center | Nyarugenge","Health Center","NYARUGENGE"
-"AVEGA Kigali Health Center | Gasabo","Health Center","GASABO"
-"CARAES Ndera National Hospital | Gasabo","National Hospital","GASABO"
-"Bumbogo Health Center | Gasabo","Health Center","GASABO"
-"Jali Health Center | Gasabo","Health Center","GASABO"
-"Kabuye Health Center | Gasabo","Health Center","GASABO"
-"Kacyiru Health Center | Gasabo","Health Center","GASABO"
-"Kacyiru Police Hospital Military Hospital | Gasabo","Military Hospital","GASABO"
-"Kagugu Health Center | Gasabo","Health Center","GASABO"
-"Kayanga Health Center | Gasabo","Health Center","GASABO"
-"Kibagabaga HD District Hospital | Gasabo","District Hospital","GASABO"
-"Kimironko Health Center | Gasabo","Health Center","GASABO"
-"King Faisal Hospital National Hospital | Gasabo","National Hospital","GASABO"
-"Kinyinya Health Center | Gasabo","Health Center","GASABO"
-"Nyacyonga Health Center | Gasabo","Health Center","GASABO"
-"Prison Kimironko Prison Clinic | Gasabo","Prison Clinic","GASABO"
-"Rubungo Health Center | Gasabo","Health Center","GASABO"
-"Bethsaida  Health Center | Kicukiro","Health Center","KICUKIRO"
-"Busanza Health Center | Kicukiro","Health Center","KICUKIRO"
-"Gahanga Health Center | Kicukiro","Health Center","KICUKIRO"
-"Gikondo Health Center | Kicukiro","Health Center","KICUKIRO"
-"Kabuga Health Center | Kicukiro","Health Center","KICUKIRO"
-"Kanombe HM Military Hospital | Kicukiro","Military Hospital","KICUKIRO"
-"Kicukiro Health Center | Kicukiro","Health Center","KICUKIRO"
-"Masaka Health Center | Kicukiro","Health Center","KICUKIRO"
-"Busoro Health Center | Nyanza","Health Center","NYANZA"
-"Cyaratsi Health Center | Nyanza","Health Center","NYANZA"
-"Gatagara Health Center | Nyanza","Health Center","NYANZA"
-"Hanika (Nyanza) Health Center | Nyanza","Health Center","NYANZA"
-"Kibilizi Health Center | Nyanza","Health Center","NYANZA"
-"Kirambi Health Center | Nyanza","Health Center","NYANZA"
-"Mucubira Health Center | Nyanza","Health Center","NYANZA"
-"Mweya Health Center | Nyanza","Health Center","NYANZA"
-"Ntyazo Health Center | Nyanza","Health Center","NYANZA"
-"Nyamiyaga Health Center | Nyanza","Health Center","NYANZA"
-"Nyamure Health Center | Nyanza","Health Center","NYANZA"
-"Nyanza Health Center | Nyanza","Health Center","NYANZA"
-"Nyanza HD District Hospital | Nyanza","District Hospital","NYANZA"
-"Prison Mpanga Prison Clinic | Nyanza","Prison Clinic","NYANZA"
-"Prison Nyanza Prison Clinic | Nyanza","Prison Clinic","NYANZA"
-"Ruyenzi Health Center | Nyanza","Health Center","NYANZA"
-"Gakoma Health Center | Gisagara","Health Center","GISAGARA"
-"Gakoma HD District Hospital | Gisagara","District Hospital","GISAGARA"
-"Gikonko Health Center | Gisagara","Health Center","GISAGARA"
-"Gikore Health Center | Gisagara","Health Center","GISAGARA"
-"Gisagara Health Center | Gisagara","Health Center","GISAGARA"
-"Kansi Health Center | Gisagara","Health Center","GISAGARA"
-"Kibayi Health Center | Gisagara","Health Center","GISAGARA"
-"Kibilizi Health Center | Gisagara","Health Center","GISAGARA"
-"Kibilizi HD District Hospital | Gisagara","District Hospital","GISAGARA"
-"Kigembe Health Center | Gisagara","Health Center","GISAGARA"
-"Kirarambogo Health Center | Gisagara","Health Center","GISAGARA"
-"Mugombwa Health Center | Gisagara","Health Center","GISAGARA"
-"Musha Health Center | Gisagara","Health Center","GISAGARA"
-"Save Health Center | Gisagara","Health Center","GISAGARA"
-"Coko Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Cyahinda Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Kabilizi Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Kibeho Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Maraba (NYARUGURU) Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Muganza Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Munini (NYARUGURU) Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Munini HD District Hospital | Nyaruguru","District Hospital","NYARUGURU"
-"Nyabimata Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Nyamyumba Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Nyantanga Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Ruheru Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Runyombyi Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Ruramba Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Busoro-Gishamvu Health Center | Huye","Health Center","HUYE"
-"BUTARE CHU National Hospital | Huye","National Hospital","HUYE"
-"CUSP Butare Health Center | Huye","Health Center","HUYE"
-"Huye Police Health Center | Huye","Health Center","HUYE"
-"Kabutare HD District Hospital | Huye","District Hospital","HUYE"
-"Karama Health Center | Huye","Health Center","HUYE"
-"Kinyamakara Health Center | Huye","Health Center","HUYE"
-"Matyazo Health Center | Huye","Health Center","HUYE"
-"Mbazi Health Center | Huye","Health Center","HUYE"
-"Prison Karubanda Prison Clinic | Huye","Prison Clinic","HUYE"
-"Rango Health Center | Huye","Health Center","HUYE"
-"Rubona Health Center | Huye","Health Center","HUYE"
-"Ruhashya-Rwaniro Health Center | Huye","Health Center","HUYE"
-"Rusatira-Kinazi Health Center | Huye","Health Center","HUYE"
-"Rwaniro Health Center | Huye","Health Center","HUYE"
-"Simbi Health Center | Huye","Health Center","HUYE"
-"Sovu Health Center | Huye","Health Center","HUYE"
-"Cyanika (NYAMAGABE) Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Jenda Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Kaduha Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Kaduha HD District Hospital | Nyamagabe","District Hospital","NYAMAGABE"
-"Kigeme Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Kigeme HD District Hospital | Nyamagabe","District Hospital","NYAMAGABE"
-"Kitabi Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Mbuga Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Musebeya Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Mushubi Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Ngara Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Nyamagabe Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Nyarusiza Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Nyarwungo Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Rugege Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Byimana Health Center | Ruhango","Health Center","RUHANGO"
-"Gishweru Health Center | Ruhango","Health Center","RUHANGO"
-"Gitwe Health Center | Ruhango","Health Center","RUHANGO"
-"Gitwe HD District Hospital | Ruhango","District Hospital","RUHANGO"
-"Karambi Health Center | Ruhango","Health Center","RUHANGO"
-"Kigoma Health Center | Ruhango","Health Center","RUHANGO"
-"Kinazi Health Center | Ruhango","Health Center","RUHANGO"
-"Kizibere Health Center | Ruhango","Health Center","RUHANGO"
-"Mbuye Health Center | Ruhango","Health Center","RUHANGO"
-"Mukoma Health Center | Ruhango","Health Center","RUHANGO"
-"Muremure Health Center | Ruhango","Health Center","RUHANGO"
-"Muyunzwe Health Center | Ruhango","Health Center","RUHANGO"
-"Nyarurama Health Center | Ruhango","Health Center","RUHANGO"
-"Ruhango Health Center | Ruhango","Health Center","RUHANGO"
-"Birehe Health Center | Muhanga","Health Center","MUHANGA"
-"Buramba Health Center | Muhanga","Health Center","MUHANGA"
-"Gasovu Health Center | Muhanga","Health Center","MUHANGA"
-"Gitarama Health Center | Muhanga","Health Center","MUHANGA"
-"Gitega Health Center | Muhanga","Health Center","MUHANGA"
-"Kabgayi Health Center | Muhanga","Health Center","MUHANGA"
-"Kabgayi HD District Hospital | Muhanga","District Hospital","MUHANGA"
-"Kivumu Health Center | Muhanga","Health Center","MUHANGA"
-"Mushishiro Health Center | Muhanga","Health Center","MUHANGA"
-"Nyabikenke Health Center | Muhanga","Health Center","MUHANGA"
-"Nyabinoni Health Center | Muhanga","Health Center","MUHANGA"
-"Nyarusange (MUHANGA) Health Center | Muhanga","Health Center","MUHANGA"
-"Prison Gitarama Prison Clinic | Muhanga","Prison Clinic","MUHANGA"
-"Rutobwe Dispensary | Muhanga","Dispensary","MUHANGA"
-"Shyogwe Health Center | Muhanga","Health Center","MUHANGA"
-"Cyeru Health Center | Kamonyi","Health Center","KAMONYI"
-"Gihara Health Center | Kamonyi","Health Center","KAMONYI"
-"Kabuga Health Center | Kamonyi","Health Center","KAMONYI"
-"Kamonyi Health Center | Kamonyi","Health Center","KAMONYI"
-"Karangara Health Center | Kamonyi","Health Center","KAMONYI"
-"Kayenzi Health Center | Kamonyi","Health Center","KAMONYI"
-"Kigese Health Center | Kamonyi","Health Center","KAMONYI"
-"Mugina Health Center | Kamonyi","Health Center","KAMONYI"
-"Musambira Health Center | Kamonyi","Health Center","KAMONYI"
-"Nyagihamba Health Center | Kamonyi","Health Center","KAMONYI"
-"Remera Rukoma Health Center | Kamonyi","Health Center","KAMONYI"
-"Remera Rukoma HD District Hospital | Kamonyi","District Hospital","KAMONYI"
-"Biguhu Health Center | Karongi","Health Center","KARONGI"
-"Birambo Health Center | Karongi","Health Center","KARONGI"
-"Bubazi Health Center | Karongi","Health Center","KARONGI"
-"Gatare Health Center | Karongi","Health Center","KARONGI"
-"Gisovu Health Center | Karongi","Health Center","KARONGI"
-"Karongi (Gisunzu) Police Health Center | Karongi","Health Center","KARONGI"
-"Karora Health Center | Karongi","Health Center","KARONGI"
-"Kibuye Dispensary | Karongi","Dispensary","KARONGI"
-"Kibuye HD District Hospital | Karongi","District Hospital","KARONGI"
-"Kirambo Health Center | Karongi","Health Center","KARONGI"
-"Kirinda Dispensary | Karongi","Dispensary","KARONGI"
-"Kirinda HD District Hospital | Karongi","District Hospital","KARONGI"
-"Mpembe Health Center | Karongi","Health Center","KARONGI"
-"Mubuga Health Center | Karongi","Health Center","KARONGI"
-"Mugonero Dispensary | Karongi","Dispensary","KARONGI"
-"Mugonero HD District Hospital | Karongi","District Hospital","KARONGI"
-"Mukungu Health Center | Karongi","Health Center","KARONGI"
-"Munzanga Health Center | Karongi","Health Center","KARONGI"
-"Musango Health Center | Karongi","Health Center","KARONGI"
-"Mwendo Health Center | Karongi","Health Center","KARONGI"
-"Rubengera Health Center | Karongi","Health Center","KARONGI"
-"Rufungo Health Center | Karongi","Health Center","KARONGI"
-"Rugabano Health Center | Karongi","Health Center","KARONGI"
-"Biruyi Health Center | Rutsiro","Health Center","RUTSIRO"
-"Bitenga  Health Center | Rutsiro","Health Center","RUTSIRO"
-"Crete Congo Nil Health Center | Rutsiro","Health Center","RUTSIRO"
-"Cyimbili Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kabona Health Center | Rutsiro","Health Center","RUTSIRO"
-"Karumbi Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kayove Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kibingo (Rutsiro) Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kinihira Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kinunu Health Center | Rutsiro","Health Center","RUTSIRO"
-"Kivumu Health Center | Rutsiro","Health Center","RUTSIRO"
-"Mukura Health Center | Rutsiro","Health Center","RUTSIRO"
-"Murunda Health Center | Rutsiro","Health Center","RUTSIRO"
-"Murunda HD District Hospital | Rutsiro","District Hospital","RUTSIRO"
-"Musasa Health Center | Rutsiro","Health Center","RUTSIRO"
-"Mushubati Health Center | Rutsiro","Health Center","RUTSIRO"
-"Nyabirasi Health Center | Rutsiro","Health Center","RUTSIRO"
-"Rutsiro Dispensary | Rutsiro","Dispensary","RUTSIRO"
-"Busasamana Health Center | Rubavu","Health Center","RUBAVU"
-"Byahi Health Center | Rubavu","Health Center","RUBAVU"
-"Gacuba II Health Center | Rubavu","Health Center","RUBAVU"
-"Gisenyi Health Center | Rubavu","Health Center","RUBAVU"
-"Gisenyi HD District Hospital | Rubavu","District Hospital","RUBAVU"
-"Karambo Health Center | Rubavu","Health Center","RUBAVU"
-"Kigufi Health Center | Rubavu","Health Center","RUBAVU"
-"Mudende Health Center | Rubavu","Health Center","RUBAVU"
-"Murara Health Center | Rubavu","Health Center","RUBAVU"
-"Nyundo Health Center | Rubavu","Health Center","RUBAVU"
-"Prison Gisenyi Prison Clinic | Rubavu","Prison Clinic","RUBAVU"
-"Arusha Health Center | Nyabihu","Health Center","NYABIHU"
-"Bigogwe Health Center | Nyabihu","Health Center","NYABIHU"
-"Birembo Health Center | Nyabihu","Health Center","NYABIHU"
-"Gakamba Health Center | Nyabihu","Health Center","NYABIHU"
-"Jomba Health Center | Nyabihu","Health Center","NYABIHU"
-"Kabari Health Center | Nyabihu","Health Center","NYABIHU"
-"Kabatwa Health Center | Nyabihu","Health Center","NYABIHU"
-"Kareba Health Center | Nyabihu","Health Center","NYABIHU"
-"Kora Health Center | Nyabihu","Health Center","NYABIHU"
-"Mwiyanike Health Center | Nyabihu","Health Center","NYABIHU"
-"Nyakigezi Health Center | Nyabihu","Health Center","NYABIHU"
-"Nyakiliba Health Center | Nyabihu","Health Center","NYABIHU"
-"Rambura Health Center | Nyabihu","Health Center","NYABIHU"
-"Rurembo Health Center | Nyabihu","Health Center","NYABIHU"
-"Rwankeri Health Center | Nyabihu","Health Center","NYABIHU"
-"Shyira Health Center | Nyabihu","Health Center","NYABIHU"
-"Shyira HD District Hospital | Nyabihu","District Hospital","NYABIHU"
-"Gashubi Health Center | Ngororero","Health Center","NGORORERO"
-"Kabaya Health Center | Ngororero","Health Center","NGORORERO"
-"Kabaya HD District Hospital | Ngororero","District Hospital","NGORORERO"
-"Muhororo Health Center | Ngororero","Health Center","NGORORERO"
-"Muhororo HD District Hospital | Ngororero","District Hospital","NGORORERO"
-"Muramba Health Center | Ngororero","Health Center","NGORORERO"
-"Ntaganzwa Health Center | Ngororero","Health Center","NGORORERO"
-"Ntobwe  Health Center | Ngororero","Health Center","NGORORERO"
-"Nyange A Health Center | Ngororero","Health Center","NGORORERO"
-"Nyange B Health Center | Ngororero","Health Center","NGORORERO"
-"Ramba Health Center | Ngororero","Health Center","NGORORERO"
-"Rubaya Health Center | Ngororero","Health Center","NGORORERO"
-"Rubona Health Center | Ngororero","Health Center","NGORORERO"
-"Rususa Health Center | Ngororero","Health Center","NGORORERO"
-"Bugarama Health Center | Rusizi","Health Center","RUSIZI"
-"Bweyeye Health Center | Rusizi","Health Center","RUSIZI"
-"Cimerwa Health Center | Rusizi","Health Center","RUSIZI"
-"Gihundwe Health Center | Rusizi","Health Center","RUSIZI"
-"Gihundwe HD District Hospital | Rusizi","District Hospital","RUSIZI"
-"Islamic  Health Center | Rusizi","Health Center","RUSIZI"
-"Mashesha Health Center | Rusizi","Health Center","RUSIZI"
-"Mibilizi Health Center | Rusizi","Health Center","RUSIZI"
-"Mibilizi HD District Hospital | Rusizi","District Hospital","RUSIZI"
-"Mushaka Health Center | Rusizi","Health Center","RUSIZI"
-"Nkanka Health Center | Rusizi","Health Center","RUSIZI"
-"Nkombo Health Center | Rusizi","Health Center","RUSIZI"
-"Nkungu Health Center | Rusizi","Health Center","RUSIZI"
-"Nyabitimbo Health Center | Rusizi","Health Center","RUSIZI"
-"Rusizi Health Center | Rusizi","Health Center","RUSIZI"
-"Bushenge Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Bushenge HD District Hospital | Nyamasheke","District Hospital","NYAMASHEKE"
-"Gatare Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Gisakura Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Hanika (NYAMASHEKE) Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Kamonyi Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Karambi Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Karengera Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Kibingo Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Kibogora Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Kibogora HD District Hospital | Nyamasheke","District Hospital","NYAMASHEKE"
-"Mugera Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Mukoma Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Muyange Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Mwezi Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Nyamasheke Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Rangiro Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Ruheru Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Yove Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Buyoga Health Center | Rulindo","Health Center","RULINDO"
-"Kajevuba Health Center | Rulindo","Health Center","RULINDO"
-"Kinihira Health Center | Rulindo","Health Center","RULINDO"
-"Kiyanza Health Center | Rulindo","Health Center","RULINDO"
-"Masoro Health Center | Rulindo","Health Center","RULINDO"
-"Murambi Health Center | Rulindo","Health Center","RULINDO"
-"Muyanza Health Center | Rulindo","Health Center","RULINDO"
-"Remera-Mbogo Health Center | Rulindo","Health Center","RULINDO"
-"Rukozo Health Center | Rulindo","Health Center","RULINDO"
-"Rulindo Health Center | Rulindo","Health Center","RULINDO"
-"Rutonde Health Center | Rulindo","Health Center","RULINDO"
-"Rutongo HD District Hospital | Rulindo","District Hospital","RULINDO"
-"Rwahi Health Center | Rulindo","Health Center","RULINDO"
-"Shyorongi Health Center | Rulindo","Health Center","RULINDO"
-"Tare Health Center | Rulindo","Health Center","RULINDO"
-"Tumba Health Center | Rulindo","Health Center","RULINDO"
-"Busengo Health Center | Gakenke","Health Center","GAKENKE"
-"Bushoka Health Center | Gakenke","Health Center","GAKENKE"
-"Coko (Ruli) Health Center | Gakenke","Health Center","GAKENKE"
-"Cyabingo Health Center | Gakenke","Health Center","GAKENKE"
-"Gatonde Health Center | Gakenke","Health Center","GAKENKE"
-"Janja Health Center | Gakenke","Health Center","GAKENKE"
-"Karambo Health Center | Gakenke","Health Center","GAKENKE"
-"Mataba Health Center | Gakenke","Health Center","GAKENKE"
-"Muhondo Health Center | Gakenke","Health Center","GAKENKE"
-"Nemba Dispensary | Gakenke","Dispensary","GAKENKE"
-"Nemba HD District Hospital | Gakenke","District Hospital","GAKENKE"
-"Nyange (Ruli) Health Center | Gakenke","Health Center","GAKENKE"
-"Nyundo Health Center | Gakenke","Health Center","GAKENKE"
-"Rukura Health Center | Gakenke","Health Center","GAKENKE"
-"Ruli Health Center | Gakenke","Health Center","GAKENKE"
-"Ruli HD District Hospital | Gakenke","District Hospital","GAKENKE"
-"Rushashi Health Center | Gakenke","Health Center","GAKENKE"
-"Rusoro Health Center | Gakenke","Health Center","GAKENKE"
-"Rutake Health Center | Gakenke","Health Center","GAKENKE"
-"Rutenderi Health Center | Gakenke","Health Center","GAKENKE"
-"Rwankuba Health Center | Gakenke","Health Center","GAKENKE"
-"Bisate Health Center | Musanze","Health Center","MUSANZE"
-"Busogo Health Center | Musanze","Health Center","MUSANZE"
-"Gasiza Health Center | Musanze","Health Center","MUSANZE"
-"Kabere Dispensary | Musanze","Dispensary","MUSANZE"
-"Karwasa Health Center | Musanze","Health Center","MUSANZE"
-"Kinigi Health Center | Musanze","Health Center","MUSANZE"
-"Murandi Health Center | Musanze","Health Center","MUSANZE"
-"Nyakinama Health Center | Musanze","Health Center","MUSANZE"
-"Ruhengeri Dispensary | Musanze","Dispensary","MUSANZE"
-"Ruhengeri HD District Hospital | Musanze","District Hospital","MUSANZE"
-"Rwaza Health Center | Musanze","Health Center","MUSANZE"
-"Shingiro Health Center | Musanze","Health Center","MUSANZE"
-"Bungwe Health Center | Burera","Health Center","BURERA"
-"Butaro Health Center | Burera","Health Center","BURERA"
-"Butaro HD District Hospital | Burera","District Hospital","BURERA"
-"Gitare Health Center | Burera","Health Center","BURERA"
-"Kinoni Health Center | Burera","Health Center","BURERA"
-"Kinyababa Health Center | Burera","Health Center","BURERA"
-"Kirambo Health Center | Burera","Health Center","BURERA"
-"Kivuye Health Center | Burera","Health Center","BURERA"
-"Mucaca Health Center | Burera","Health Center","BURERA"
-"Ntaruka Health Center | Burera","Health Center","BURERA"
-"Nyamugali Health Center | Burera","Health Center","BURERA"
-"Ruhunde Health Center | Burera","Health Center","BURERA"
-"Rusasa Health Center | Burera","Health Center","BURERA"
-"Bushara Health Center | Gicumbi","Health Center","GICUMBI"
-"Bwisige Health Center | Gicumbi","Health Center","GICUMBI"
-"Byumba Health Center | Gicumbi","Health Center","GICUMBI"
-"Byumba HD District Hospital | Gicumbi","District Hospital","GICUMBI"
-"Gisiza Health Center | Gicumbi","Health Center","GICUMBI"
-"Giti Health Center | Gicumbi","Health Center","GICUMBI"
-"Kigogo Health Center | Gicumbi","Health Center","GICUMBI"
-"Manyagiro Health Center | Gicumbi","Health Center","GICUMBI"
-"Miyove Health Center | Gicumbi","Health Center","GICUMBI"
-"Muhondo Health Center | Gicumbi","Health Center","GICUMBI"
-"Muko Health Center | Gicumbi","Health Center","GICUMBI"
-"Mukono Health Center | Gicumbi","Health Center","GICUMBI"
-"Mulindi Health Center | Gicumbi","Health Center","GICUMBI"
-"Munyinya Health Center | Gicumbi","Health Center","GICUMBI"
-"Musenyi Health Center | Gicumbi","Health Center","GICUMBI"
-"Rubaya Health Center | Gicumbi","Health Center","GICUMBI"
-"Ruhenda Health Center | Gicumbi","Health Center","GICUMBI"
-"Rushaki Health Center | Gicumbi","Health Center","GICUMBI"
-"Rutare (Gicumbi) Health Center | Gicumbi","Health Center","GICUMBI"
-"Rwesero Health Center | Gicumbi","Health Center","GICUMBI"
-"Tanda Health Center | Gicumbi","Health Center","GICUMBI"
-"Gishari/ Police Dispensary | Rwamagana","Dispensary","RWAMAGANA"
-"Karenge Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Munyaga Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Musha Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Muyumbu Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Nyagasambu Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Nyakaliro Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Nzige Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Rubona Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Ruhunda Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Rwamagana Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Rwamagana HD District Hospital | Rwamagana","District Hospital","RWAMAGANA"
-"Bugaragara Health Center | Nyagatare","Health Center","NYAGATARE"
-"Cyabayaga Health Center | Nyagatare","Health Center","NYAGATARE"
-"Cyondo Health Center | Nyagatare","Health Center","NYAGATARE"
-"Kabuga Health Center | Nyagatare","Health Center","NYAGATARE"
-"Kagitumba Health Center | Nyagatare","Health Center","NYAGATARE"
-"Karangazi Health Center | Nyagatare","Health Center","NYAGATARE"
-"Katabagemu Health Center | Nyagatare","Health Center","NYAGATARE"
-"Matimba Health Center | Nyagatare","Health Center","NYAGATARE"
-"Mimuri Health Center | Nyagatare","Health Center","NYAGATARE"
-"Muhambo Health Center | Nyagatare","Health Center","NYAGATARE"
-"Ntoma Health Center | Nyagatare","Health Center","NYAGATARE"
-"Nyabwishongwezi Health Center | Nyagatare","Health Center","NYAGATARE"
-"Nyagahita Health Center | Nyagatare","Health Center","NYAGATARE"
-"Nyagatare Health Center | Nyagatare","Health Center","NYAGATARE"
-"Nyagatare HD District Hospital | Nyagatare","District Hospital","NYAGATARE"
-"Nyarurema Health Center | Nyagatare","Health Center","NYAGATARE"
-"Rukomo Health Center | Nyagatare","Health Center","NYAGATARE"
-"Rurenge Health Center | Nyagatare","Health Center","NYAGATARE"
-"Rwempasha Health Center | Nyagatare","Health Center","NYAGATARE"
-"Tabagwe Health Center | Nyagatare","Health Center","NYAGATARE"
-"Bugarura Health Center | Gatsibo","Health Center","GATSIBO"
-"Gakenke Health Center | Gatsibo","Health Center","GATSIBO"
-"Gasange Health Center | Gatsibo","Health Center","GATSIBO"
-"Gituza Health Center | Gatsibo","Health Center","GATSIBO"
-"Humure Health Center | Gatsibo","Health Center","GATSIBO"
-"Kabarore Health Center | Gatsibo","Health Center","GATSIBO"
-"Kageyo Health Center | Gatsibo","Health Center","GATSIBO"
-"Kibondo Health Center | Gatsibo","Health Center","GATSIBO"
-"Kiziguro Health Center | Gatsibo","Health Center","GATSIBO"
-"Kiziguro HD District Hospital | Gatsibo","District Hospital","GATSIBO"
-"Muhura Health Center | Gatsibo","Health Center","GATSIBO"
-"Ngarama Health Center | Gatsibo","Health Center","GATSIBO"
-"Ngarama HD District Hospital | Gatsibo","District Hospital","GATSIBO"
-"Nyagahanga Health Center | Gatsibo","Health Center","GATSIBO"
-"Nyagihanga Health Center | Gatsibo","Health Center","GATSIBO"
-"Rugarama Health Center | Gatsibo","Health Center","GATSIBO"
-"Rwembogo Health Center | Gatsibo","Health Center","GATSIBO"
-"Rwimitereri Health Center | Gatsibo","Health Center","GATSIBO"
-"Cyarubare Health Center | Kayonza","Health Center","KAYONZA"
-"Gahini Health Center | Kayonza","Health Center","KAYONZA"
-"Gahini HD District Hospital | Kayonza","District Hospital","KAYONZA"
-"Kabarondo Health Center | Kayonza","Health Center","KAYONZA"
-"Karama Health Center | Kayonza","Health Center","KAYONZA"
-"Mukarange Health Center | Kayonza","Health Center","KAYONZA"
-"Ndego Health Center | Kayonza","Health Center","KAYONZA"
-"Nyakabungo Health Center | Kayonza","Health Center","KAYONZA"
-"Nyamirama Health Center | Kayonza","Health Center","KAYONZA"
-"Rukara Health Center | Kayonza","Health Center","KAYONZA"
-"Ruramira Health Center | Kayonza","Health Center","KAYONZA"
-"Rutare Health Center | Kayonza","Health Center","KAYONZA"
-"Rwinkwavu Health Center | Kayonza","Health Center","KAYONZA"
-"Rwinkwavu HD District Hospital | Kayonza","District Hospital","KAYONZA"
-"Ryamanyoni Health Center | Kayonza","Health Center","KAYONZA"
-"Bukora Health Center | Kirehe","Health Center","KIREHE"
-"Gahara Health Center | Kirehe","Health Center","KIREHE"
-"Gashongora Health Center | Kirehe","Health Center","KIREHE"
-"Kabuye (Kirehe) Dispensary | Kirehe","Dispensary","KIREHE"
-"Kirehe Health Center | Kirehe","Health Center","KIREHE"
-"Kirehe HD District Hospital | Kirehe","District Hospital","KIREHE"
-"Mulindi Health Center | Kirehe","Health Center","KIREHE"
-"Musaza Health Center | Kirehe","Health Center","KIREHE"
-"Mushikiri Dispensary | Kirehe","Dispensary","KIREHE"
-"Nasho Health Center | Kirehe","Health Center","KIREHE"
-"Ntaruka Health Center | Kirehe","Health Center","KIREHE"
-"Nyabitare Health Center | Kirehe","Health Center","KIREHE"
-"Nyarubuye (KIREHE) Health Center | Kirehe","Health Center","KIREHE"
-"Rusumo Health Center | Kirehe","Health Center","KIREHE"
-"Gituku Health Center | Ngoma","Health Center","NGOMA"
-"Jarama Health Center | Ngoma","Health Center","NGOMA"
-"Kibungo Health Center | Ngoma","Health Center","NGOMA"
-"Kibungo HD District Hospital | Ngoma","District Hospital","NGOMA"
-"Kirwa Health Center | Ngoma","Health Center","NGOMA"
-"Mutenderi Health Center | Ngoma","Health Center","NGOMA"
-"Nyange Health Center | Ngoma","Health Center","NGOMA"
-"Remera Health Center | Ngoma","Health Center","NGOMA"
-"Rukira Health Center | Ngoma","Health Center","NGOMA"
-"Rukoma Sake Health Center | Ngoma","Health Center","NGOMA"
-"Rukumberi Health Center | Ngoma","Health Center","NGOMA"
-"Sangaza Health Center | Ngoma","Health Center","NGOMA"
-"Zaza Health Center | Ngoma","Health Center","NGOMA"
-"Gakurazo Health Center | Bugesera","Health Center","BUGESERA"
-"Gashora Health Center | Bugesera","Health Center","BUGESERA"
-"Gihinga Health Center | Bugesera","Health Center","BUGESERA"
-"Kamabuye Health Center | Bugesera","Health Center","BUGESERA"
-"Mareba Health Center | Bugesera","Health Center","BUGESERA"
-"Mayange (BUGESERA) Health Center | Bugesera","Health Center","BUGESERA"
-"Mwogo Health Center | Bugesera","Health Center","BUGESERA"
-"Nyamata Health Center | Bugesera","Health Center","BUGESERA"
-"Nyamata HD District Hospital | Bugesera","District Hospital","BUGESERA"
-"Nzangwa Health Center | Bugesera","Health Center","BUGESERA"
-"Prison Rilima (via CS) Prison Clinic | Bugesera","Prison Clinic","BUGESERA"
-"Rilima Health Center | Bugesera","Health Center","BUGESERA"
-"Ruhuha Health Center | Bugesera","Health Center","BUGESERA"
-"Camp Gihembe Health Center | Gicumbi","Health Center","GICUMBI"
-"Kiziba Camp Health Center | Karongi","Health Center","KARONGI"
-"Camp Nyabiheke Health Center | Gatsibo","Health Center","GATSIBO"
-"CMedicoSocial Dispensary | Nyarugenge","Dispensary","NYARUGENGE"
-"Croix du Sud Clinic/Cabinet Medical | Nyarugenge","Clinic/Cabinet Medical","NYARUGENGE"
-"Prison Gasaka Prison Clinic | Nyamagabe","Prison Clinic","NYAMAGABE"
-"Gashonyi Dispensary | Ngororero","Dispensary","NGORORERO"
-"Gasiza Dispensary | Ngororero","Dispensary","NGORORERO"
-"Hindiro Dispensary | Ngororero","Dispensary","NGORORERO"
-"Mabuye Dispensary | Ngororero","Dispensary","NGORORERO"
-"Rugari Dispensary | Ngororero","Dispensary","NGORORERO"
-"Kamubuga Health Post | Gakenke","Health Post","GAKENKE"
-"Prison Gikongoro Prison Clinic | Nyamagabe","Prison Clinic","NYAMAGABE"
-"Prison Rwandex Prison Clinic | Huye","Prison Clinic","HUYE"
-"Bugarama Health Post | Nyamagabe","Health Post","NYAMAGABE"
-"Buhabwa Health Post | Kayonza","Health Post","KAYONZA"
-"Gahengeri Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Kageyo (Kayonza) Health Post | Kayonza","Health Post","KAYONZA"
-"Ruhinga Health Post | Gakenke","Health Post","GAKENKE"
-"Rwerere Health Center | Burera","Health Center","BURERA"
-"Gihogwe Health Center | Gasabo","Health Center","GASABO"
-"Kisaro Health Center | Rulindo","Health Center","RULINDO"
-"Marembo Health Center | Rulindo","Health Center","RULINDO"
-"Mushongi Health Center | Rulindo","Health Center","RULINDO"
-"KIDOMO Health Post | Gakenke","Health Post","GAKENKE"
-"MUGUNGA Health Post | Gakenke","Health Post","GAKENKE"
-"SERERI Health Post | Gakenke","Health Post","GAKENKE"
-"AMIZERO Dispensary | Kamonyi","Dispensary","KAMONYI"
-"ANUPHIL Dispensary | Kamonyi","Dispensary","KAMONYI"
-"KAMONYI Dispensary | Kamonyi","Dispensary","KAMONYI"
-"GACURABWENGE Dispensary | Kamonyi","Dispensary","KAMONYI"
-"IWACU Dispensary | Kamonyi","Dispensary","KAMONYI"
-"INSHUTI NZIZA  Dispensary | Kamonyi","Dispensary","KAMONYI"
-"UBUZIMA BWIZA Dispensary | Kamonyi","Dispensary","KAMONYI"
-"KAYONZA Dispensary | Kayonza","Dispensary","KAYONZA"
-"KABARONDO (PRIVE) Dispensary | Kayonza","Dispensary","KAYONZA"
-"SEVER Dispensary | Kayonza","Dispensary","KAYONZA"
-"UBUMWE Dispensary | Kayonza","Dispensary","KAYONZA"
-"INFIRMERIE ACADEMY  Dispensary | Musanze","Dispensary","MUSANZE"
-"PRISON RUHENGERI Dispensary | Musanze","Dispensary","MUSANZE"
-"SHEMA Dispensary | Nyabihu","Dispensary","NYABIHU"
-"KIBUMBWE Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"MAHEMBE Health Post | Nyamasheke","Health Post","NYAMASHEKE"
-"AVEGA RWAMAGANA Clinic/Cabinet Medical | Rwamagana","Clinic/Cabinet Medical","RWAMAGANA"
-"DUFASHANYE Dispensary | Rwamagana","Dispensary","RWAMAGANA"
-"LA CONFIANCE Dispensary | Rwamagana","Dispensary","RWAMAGANA"
-"PRISON Nsinda Prison Clinic | Rwamagana","Prison Clinic","RWAMAGANA"
-"Nduba Health Center | Gasabo","Health Center","GASABO"
-"Gikomero Health Center | Gasabo","Health Center","GASABO"
-"Nyarugunga Health Center | Kicukiro","Health Center","KICUKIRO"
-"Gitoki Health Center | Gatsibo","Health Center","GATSIBO"
-"MUGANO Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Kavumu Health Center | Nyamagabe","Health Center","NYAMAGABE"
-"Ngange Health Center | Nyamasheke","Health Center","NYAMASHEKE"
-"Prison Cyangugu Prison Clinic | Rusizi","Prison Clinic","RUSIZI"
-"Murambi Health Center | Rwamagana","Health Center","RWAMAGANA"
-"Gahunga Health Center | Burera","Health Center","BURERA"
-"Ngoma Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Kivu Health Center | Nyaruguru","Health Center","NYARUGURU"
-"Nyarusange (NYANZA) Health Center | Nyanza","Health Center","NYANZA"
-"Kageyo (Kayonza) Health Center | Kayonza","Health Center","KAYONZA"
-"Prison Nyagatare Prison Clinic | Nyagatare","Prison Clinic","NYAGATARE"
-"Prison Kibungo Prison Clinic | Ngoma","Prison Clinic","NGOMA"
-"Prison Butare Prison Clinic | Huye","Prison Clinic","HUYE"
-"Gahombo Health Center | Nyanza","Health Center","NYANZA"
-"Hanika (NYANZA) Health Center | Nyanza","Health Center","NYANZA"
-"GASHAKI Health Center | Musanze","Health Center","MUSANZE"
-"Juru Health Center | Bugesera","Health Center","BUGESERA"
-"NGERUKA Health Center | Bugesera","Health Center","BUGESERA"
-"Cyanika (BURERA) Health Center | Burera","Health Center","BURERA"
-"Gatsibo Health Center | Gatsibo","Health Center","GATSIBO"
-"Mayange (GATSIBO) Health Post | Gatsibo","Health Post","GATSIBO"
-"Mbogo Health Post | Gatsibo","Health Post","GATSIBO"
-"Munini (GATSIBO) Health Post | Gatsibo","Health Post","GATSIBO"
-"Nyabiheke Health Center | Gatsibo","Health Center","GATSIBO"
-"Nyabisindu Health Post | Gatsibo","Health Post","GATSIBO"
-"Gishubi Health Center | Gisagara","Health Center","GISAGARA"
-"Muzenga Communal FOSA | Gisagara","Communal FOSA","GISAGARA"
-"BUKOMEYE (MUKURA) Communal FOSA | Huye","Communal FOSA","HUYE"
-"GITOVU (KINAZI) Communal FOSA | Huye","Communal FOSA","HUYE"
-"Maraba (HUYE) Health Center | Huye","Health Center","HUYE"
-"Bisesero Health Center | Karongi","Health Center","KARONGI"
-"Kabarondo Dispensaire Prive Dispensary | Kayonza","Dispensary","KAYONZA"
-"Kabare Health Post | Kayonza","Health Post","KAYONZA"
-"Kabura Health Post | Kayonza","Health Post","KAYONZA"
-"Gasakuza Health Post | Musanze","Health Post","MUSANZE"
-"Kimonyi Dispensary Dispensary | Musanze","Dispensary","MUSANZE"
-"Muhoza Health Center | Musanze","Health Center","MUSANZE"
-"Nyarubuye (MUSANZE) Health Post | Musanze","Health Post","MUSANZE"
-"Gatseta Health Post | Ngoma","Health Post","NGOMA"
-"Muhurire Health Post | Ngoma","Health Post","NGOMA"
-"Nyagasozi Health Post | Ngoma","Health Post","NGOMA"
-"Bugesera","District",
-"Burera","District",
-"Gakenke","District",
-"Gasabo","District",
-"Gatsibo","District",
-"Gicumbi","District",
-"Gisagara","District",
-"Huye","District",
-"Kamonyi","District",
-"Karongi","District",
-"Kayonza","District",
-"Kicukiro","District",
-"Kirehe","District",
-"Muhanga","District",
-"Musanze","District",
-"Ngoma","District",
-"Ngororero","District",
-"Nyabihu","District",
-"Nyagatare","District",
-"Nyamagabe","District",
-"Nyamasheke","District",
-"Nyanza","District",
-"Nyarugenge","District",
-"Nyaruguru","District",
-"Rubavu","District",
-"Ruhango","District",
-"Rulindo","District",
-"Rusizi","District",
-"Rutsiro","District",
-"Rwamagana","District",
+Name,Type,District
+CAMERWA - Central d'achat des médicaments du Rwanda / Central Drug Purchasing Agency for Rwanda,Agencies,
+ACM - Atelier Central de Maintenance  / Central Maintenance Workshop  ,Agencies,
+KHI - Kigali Health Institute  ,Agencies,
+LABOPHAR - Laboratoire Pharmaceutique du Rwanda / Pharmaceutical Laboratory of Rwanda ,Agencies,
+CNLS - Commission National de Lutte contre le VIH-SIDA / National AIDS Commission ,Agencies,
+CNTS - Centre National de Transfusion Sanguine / National Blood Transfusion Centre ,Agencies,
+LNR - Laboratoire National de Reference / National Reference Laboratory ,Agencies,
+NUR - National University of Rwanda ,Agencies,
+CCPS - Centre de Consultation Psychosociale / Psychosocial Consultation Centre  ,Agencies,
+HCC - Health Communication Centre ,Agencies,
+RITA - Rwanda Information Technology Agency ,Agencies,
+RAMA - La Rwandaise d’Assurance Maladie / Rwanda Medical Insurance Agency  ,Agencies,
+SPH - School of Public Health / Ecole de Santé Publique ,Agencies,
+"TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics ",Agencies,
+"University Teaching and Referral Hospitals /CHUK, CHUB, KFH, Kanombe, Ndera, and Police Hospitals ",Agencies,
+African Development Bank (AfDB) ,Donors
+Belgian Government  ,Donors
+Chinese Mission ,Donors
+Clinton Foundation ,Donors
+GAVI ,Donors
+German Government ,Donors
+"Global Fund for AIDS, TB and Malaria  ",Donors
+Lux development ,Donors
+Swiss development cooperation (SDC) ,Donors
+UK Department for International Development (DFID) ,Donors
+UNAIDS ,Donors
+UNDP ,Donors
+UNFPA ,Donors
+UNICEF ,Donors
+US Government/USAID ,Donors
+US Government/PMI,Donors
+US Government/RH,Donors,
+US Government/CDC,Donors,
+US Government/DoD,Donors,
+US Government/Peace Corps,Donors,
+WHO ,Donors,
+World Bank  ,Donors,
+World Food Programme ,Donors,
+Biryogo Health Center | Nyarugenge,Health Center,NYARUGENGE
+Butamwa Health Center | Nyarugenge,Health Center,NYARUGENGE
+CHK/CHUK National Hospital | Nyarugenge,National Hospital,NYARUGENGE
+Cor-Unum Health Center | Nyarugenge,Health Center,NYARUGENGE
+Gitega Health Center | Nyarugenge,Health Center,NYARUGENGE
+Kabusunzu Health Center | Nyarugenge,Health Center,NYARUGENGE
+Muhima Dispensary | Nyarugenge,Dispensary,NYARUGENGE
+Muhima HD District Hospital | Nyarugenge,District Hospital,NYARUGENGE
+Mwendo Health Center | Nyarugenge,Health Center,NYARUGENGE
+PCK/Gitega Prison Clinic | Nyarugenge,Prison Clinic,NYARUGENGE
+Rugarama Health Center | Nyarugenge,Health Center,NYARUGENGE
+TRAC Clinic Health Center | Nyarugenge,Health Center,NYARUGENGE
+AVEGA Kigali Health Center | Gasabo,Health Center,GASABO
+CARAES Ndera National Hospital | Gasabo,National Hospital,GASABO
+Bumbogo Health Center | Gasabo,Health Center,GASABO
+Jali Health Center | Gasabo,Health Center,GASABO
+Kabuye Health Center | Gasabo,Health Center,GASABO
+Kacyiru Health Center | Gasabo,Health Center,GASABO
+Kacyiru Police Hospital Military Hospital | Gasabo,Military Hospital,GASABO
+Kagugu Health Center | Gasabo,Health Center,GASABO
+Kayanga Health Center | Gasabo,Health Center,GASABO
+Kibagabaga HD District Hospital | Gasabo,District Hospital,GASABO
+Kimironko Health Center | Gasabo,Health Center,GASABO
+King Faisal Hospital National Hospital | Gasabo,National Hospital,GASABO
+Kinyinya Health Center | Gasabo,Health Center,GASABO
+Nyacyonga Health Center | Gasabo,Health Center,GASABO
+Prison Kimironko Prison Clinic | Gasabo,Prison Clinic,GASABO
+Rubungo Health Center | Gasabo,Health Center,GASABO
+Bethsaida  Health Center | Kicukiro,Health Center,KICUKIRO
+Busanza Health Center | Kicukiro,Health Center,KICUKIRO
+Gahanga Health Center | Kicukiro,Health Center,KICUKIRO
+Gikondo Health Center | Kicukiro,Health Center,KICUKIRO
+Kabuga Health Center | Kicukiro,Health Center,KICUKIRO
+Kanombe HM Military Hospital | Kicukiro,Military Hospital,KICUKIRO
+Kicukiro Health Center | Kicukiro,Health Center,KICUKIRO
+Masaka Health Center | Kicukiro,Health Center,KICUKIRO
+Busoro Health Center | Nyanza,Health Center,NYANZA
+Cyaratsi Health Center | Nyanza,Health Center,NYANZA
+Gatagara Health Center | Nyanza,Health Center,NYANZA
+Hanika (Nyanza) Health Center | Nyanza,Health Center,NYANZA
+Kibilizi Health Center | Nyanza,Health Center,NYANZA
+Kirambi Health Center | Nyanza,Health Center,NYANZA
+Mucubira Health Center | Nyanza,Health Center,NYANZA
+Mweya Health Center | Nyanza,Health Center,NYANZA
+Ntyazo Health Center | Nyanza,Health Center,NYANZA
+Nyamiyaga Health Center | Nyanza,Health Center,NYANZA
+Nyamure Health Center | Nyanza,Health Center,NYANZA
+Nyanza Health Center | Nyanza,Health Center,NYANZA
+Nyanza HD District Hospital | Nyanza,District Hospital,NYANZA
+Prison Mpanga Prison Clinic | Nyanza,Prison Clinic,NYANZA
+Prison Nyanza Prison Clinic | Nyanza,Prison Clinic,NYANZA
+Ruyenzi Health Center | Nyanza,Health Center,NYANZA
+Gakoma Health Center | Gisagara,Health Center,GISAGARA
+Gakoma HD District Hospital | Gisagara,District Hospital,GISAGARA
+Gikonko Health Center | Gisagara,Health Center,GISAGARA
+Gikore Health Center | Gisagara,Health Center,GISAGARA
+Gisagara Health Center | Gisagara,Health Center,GISAGARA
+Kansi Health Center | Gisagara,Health Center,GISAGARA
+Kibayi Health Center | Gisagara,Health Center,GISAGARA
+Kibilizi Health Center | Gisagara,Health Center,GISAGARA
+Kibilizi HD District Hospital | Gisagara,District Hospital,GISAGARA
+Kigembe Health Center | Gisagara,Health Center,GISAGARA
+Kirarambogo Health Center | Gisagara,Health Center,GISAGARA
+Mugombwa Health Center | Gisagara,Health Center,GISAGARA
+Musha Health Center | Gisagara,Health Center,GISAGARA
+Save Health Center | Gisagara,Health Center,GISAGARA
+Coko Health Center | Nyaruguru,Health Center,NYARUGURU
+Cyahinda Health Center | Nyaruguru,Health Center,NYARUGURU
+Kabilizi Health Center | Nyaruguru,Health Center,NYARUGURU
+Kibeho Health Center | Nyaruguru,Health Center,NYARUGURU
+Maraba (NYARUGURU) Health Center | Nyaruguru,Health Center,NYARUGURU
+Muganza Health Center | Nyaruguru,Health Center,NYARUGURU
+Munini (NYARUGURU) Health Center | Nyaruguru,Health Center,NYARUGURU
+Munini HD District Hospital | Nyaruguru,District Hospital,NYARUGURU
+Nyabimata Health Center | Nyaruguru,Health Center,NYARUGURU
+Nyamyumba Health Center | Nyaruguru,Health Center,NYARUGURU
+Nyantanga Health Center | Nyaruguru,Health Center,NYARUGURU
+Ruheru Health Center | Nyaruguru,Health Center,NYARUGURU
+Runyombyi Health Center | Nyaruguru,Health Center,NYARUGURU
+Ruramba Health Center | Nyaruguru,Health Center,NYARUGURU
+Busoro-Gishamvu Health Center | Huye,Health Center,HUYE
+BUTARE CHU National Hospital | Huye,National Hospital,HUYE
+CUSP Butare Health Center | Huye,Health Center,HUYE
+Huye Police Health Center | Huye,Health Center,HUYE
+Kabutare HD District Hospital | Huye,District Hospital,HUYE
+Karama Health Center | Huye,Health Center,HUYE
+Kinyamakara Health Center | Huye,Health Center,HUYE
+Matyazo Health Center | Huye,Health Center,HUYE
+Mbazi Health Center | Huye,Health Center,HUYE
+Prison Karubanda Prison Clinic | Huye,Prison Clinic,HUYE
+Rango Health Center | Huye,Health Center,HUYE
+Rubona Health Center | Huye,Health Center,HUYE
+Ruhashya-Rwaniro Health Center | Huye,Health Center,HUYE
+Rusatira-Kinazi Health Center | Huye,Health Center,HUYE
+Rwaniro Health Center | Huye,Health Center,HUYE
+Simbi Health Center | Huye,Health Center,HUYE
+Sovu Health Center | Huye,Health Center,HUYE
+Cyanika (NYAMAGABE) Health Center | Nyamagabe,Health Center,NYAMAGABE
+Jenda Health Center | Nyamagabe,Health Center,NYAMAGABE
+Kaduha Health Center | Nyamagabe,Health Center,NYAMAGABE
+Kaduha HD District Hospital | Nyamagabe,District Hospital,NYAMAGABE
+Kigeme Health Center | Nyamagabe,Health Center,NYAMAGABE
+Kigeme HD District Hospital | Nyamagabe,District Hospital,NYAMAGABE
+Kitabi Health Center | Nyamagabe,Health Center,NYAMAGABE
+Mbuga Health Center | Nyamagabe,Health Center,NYAMAGABE
+Musebeya Health Center | Nyamagabe,Health Center,NYAMAGABE
+Mushubi Health Center | Nyamagabe,Health Center,NYAMAGABE
+Ngara Health Center | Nyamagabe,Health Center,NYAMAGABE
+Nyamagabe Health Center | Nyamagabe,Health Center,NYAMAGABE
+Nyarusiza Health Center | Nyamagabe,Health Center,NYAMAGABE
+Nyarwungo Health Center | Nyamagabe,Health Center,NYAMAGABE
+Rugege Health Center | Nyamagabe,Health Center,NYAMAGABE
+Byimana Health Center | Ruhango,Health Center,RUHANGO
+Gishweru Health Center | Ruhango,Health Center,RUHANGO
+Gitwe Health Center | Ruhango,Health Center,RUHANGO
+Gitwe HD District Hospital | Ruhango,District Hospital,RUHANGO
+Karambi Health Center | Ruhango,Health Center,RUHANGO
+Kigoma Health Center | Ruhango,Health Center,RUHANGO
+Kinazi Health Center | Ruhango,Health Center,RUHANGO
+Kizibere Health Center | Ruhango,Health Center,RUHANGO
+Mbuye Health Center | Ruhango,Health Center,RUHANGO
+Mukoma Health Center | Ruhango,Health Center,RUHANGO
+Muremure Health Center | Ruhango,Health Center,RUHANGO
+Muyunzwe Health Center | Ruhango,Health Center,RUHANGO
+Nyarurama Health Center | Ruhango,Health Center,RUHANGO
+Ruhango Health Center | Ruhango,Health Center,RUHANGO
+Birehe Health Center | Muhanga,Health Center,MUHANGA
+Buramba Health Center | Muhanga,Health Center,MUHANGA
+Gasovu Health Center | Muhanga,Health Center,MUHANGA
+Gitarama Health Center | Muhanga,Health Center,MUHANGA
+Gitega Health Center | Muhanga,Health Center,MUHANGA
+Kabgayi Health Center | Muhanga,Health Center,MUHANGA
+Kabgayi HD District Hospital | Muhanga,District Hospital,MUHANGA
+Kivumu Health Center | Muhanga,Health Center,MUHANGA
+Mushishiro Health Center | Muhanga,Health Center,MUHANGA
+Nyabikenke Health Center | Muhanga,Health Center,MUHANGA
+Nyabinoni Health Center | Muhanga,Health Center,MUHANGA
+Nyarusange (MUHANGA) Health Center | Muhanga,Health Center,MUHANGA
+Prison Gitarama Prison Clinic | Muhanga,Prison Clinic,MUHANGA
+Rutobwe Dispensary | Muhanga,Dispensary,MUHANGA
+Shyogwe Health Center | Muhanga,Health Center,MUHANGA
+Cyeru Health Center | Kamonyi,Health Center,KAMONYI
+Gihara Health Center | Kamonyi,Health Center,KAMONYI
+Kabuga Health Center | Kamonyi,Health Center,KAMONYI
+Kamonyi Health Center | Kamonyi,Health Center,KAMONYI
+Karangara Health Center | Kamonyi,Health Center,KAMONYI
+Kayenzi Health Center | Kamonyi,Health Center,KAMONYI
+Kigese Health Center | Kamonyi,Health Center,KAMONYI
+Mugina Health Center | Kamonyi,Health Center,KAMONYI
+Musambira Health Center | Kamonyi,Health Center,KAMONYI
+Nyagihamba Health Center | Kamonyi,Health Center,KAMONYI
+Remera Rukoma Health Center | Kamonyi,Health Center,KAMONYI
+Remera Rukoma HD District Hospital | Kamonyi,District Hospital,KAMONYI
+Biguhu Health Center | Karongi,Health Center,KARONGI
+Birambo Health Center | Karongi,Health Center,KARONGI
+Bubazi Health Center | Karongi,Health Center,KARONGI
+Gatare Health Center | Karongi,Health Center,KARONGI
+Gisovu Health Center | Karongi,Health Center,KARONGI
+Karongi (Gisunzu) Police Health Center | Karongi,Health Center,KARONGI
+Karora Health Center | Karongi,Health Center,KARONGI
+Kibuye Dispensary | Karongi,Dispensary,KARONGI
+Kibuye HD District Hospital | Karongi,District Hospital,KARONGI
+Kirambo Health Center | Karongi,Health Center,KARONGI
+Kirinda Dispensary | Karongi,Dispensary,KARONGI
+Kirinda HD District Hospital | Karongi,District Hospital,KARONGI
+Mpembe Health Center | Karongi,Health Center,KARONGI
+Mubuga Health Center | Karongi,Health Center,KARONGI
+Mugonero Dispensary | Karongi,Dispensary,KARONGI
+Mugonero HD District Hospital | Karongi,District Hospital,KARONGI
+Mukungu Health Center | Karongi,Health Center,KARONGI
+Munzanga Health Center | Karongi,Health Center,KARONGI
+Musango Health Center | Karongi,Health Center,KARONGI
+Mwendo Health Center | Karongi,Health Center,KARONGI
+Rubengera Health Center | Karongi,Health Center,KARONGI
+Rufungo Health Center | Karongi,Health Center,KARONGI
+Rugabano Health Center | Karongi,Health Center,KARONGI
+Biruyi Health Center | Rutsiro,Health Center,RUTSIRO
+Bitenga  Health Center | Rutsiro,Health Center,RUTSIRO
+Crete Congo Nil Health Center | Rutsiro,Health Center,RUTSIRO
+Cyimbili Health Center | Rutsiro,Health Center,RUTSIRO
+Kabona Health Center | Rutsiro,Health Center,RUTSIRO
+Karumbi Health Center | Rutsiro,Health Center,RUTSIRO
+Kayove Health Center | Rutsiro,Health Center,RUTSIRO
+Kibingo (Rutsiro) Health Center | Rutsiro,Health Center,RUTSIRO
+Kinihira Health Center | Rutsiro,Health Center,RUTSIRO
+Kinunu Health Center | Rutsiro,Health Center,RUTSIRO
+Kivumu Health Center | Rutsiro,Health Center,RUTSIRO
+Mukura Health Center | Rutsiro,Health Center,RUTSIRO
+Murunda Health Center | Rutsiro,Health Center,RUTSIRO
+Murunda HD District Hospital | Rutsiro,District Hospital,RUTSIRO
+Musasa Health Center | Rutsiro,Health Center,RUTSIRO
+Mushubati Health Center | Rutsiro,Health Center,RUTSIRO
+Nyabirasi Health Center | Rutsiro,Health Center,RUTSIRO
+Rutsiro Dispensary | Rutsiro,Dispensary,RUTSIRO
+Busasamana Health Center | Rubavu,Health Center,RUBAVU
+Byahi Health Center | Rubavu,Health Center,RUBAVU
+Gacuba II Health Center | Rubavu,Health Center,RUBAVU
+Gisenyi Health Center | Rubavu,Health Center,RUBAVU
+Gisenyi HD District Hospital | Rubavu,District Hospital,RUBAVU
+Karambo Health Center | Rubavu,Health Center,RUBAVU
+Kigufi Health Center | Rubavu,Health Center,RUBAVU
+Mudende Health Center | Rubavu,Health Center,RUBAVU
+Murara Health Center | Rubavu,Health Center,RUBAVU
+Nyundo Health Center | Rubavu,Health Center,RUBAVU
+Prison Gisenyi Prison Clinic | Rubavu,Prison Clinic,RUBAVU
+Arusha Health Center | Nyabihu,Health Center,NYABIHU
+Bigogwe Health Center | Nyabihu,Health Center,NYABIHU
+Birembo Health Center | Nyabihu,Health Center,NYABIHU
+Gakamba Health Center | Nyabihu,Health Center,NYABIHU
+Jomba Health Center | Nyabihu,Health Center,NYABIHU
+Kabari Health Center | Nyabihu,Health Center,NYABIHU
+Kabatwa Health Center | Nyabihu,Health Center,NYABIHU
+Kareba Health Center | Nyabihu,Health Center,NYABIHU
+Kora Health Center | Nyabihu,Health Center,NYABIHU
+Mwiyanike Health Center | Nyabihu,Health Center,NYABIHU
+Nyakigezi Health Center | Nyabihu,Health Center,NYABIHU
+Nyakiliba Health Center | Nyabihu,Health Center,NYABIHU
+Rambura Health Center | Nyabihu,Health Center,NYABIHU
+Rurembo Health Center | Nyabihu,Health Center,NYABIHU
+Rwankeri Health Center | Nyabihu,Health Center,NYABIHU
+Shyira Health Center | Nyabihu,Health Center,NYABIHU
+Shyira HD District Hospital | Nyabihu,District Hospital,NYABIHU
+Gashubi Health Center | Ngororero,Health Center,NGORORERO
+Kabaya Health Center | Ngororero,Health Center,NGORORERO
+Kabaya HD District Hospital | Ngororero,District Hospital,NGORORERO
+Muhororo Health Center | Ngororero,Health Center,NGORORERO
+Muhororo HD District Hospital | Ngororero,District Hospital,NGORORERO
+Muramba Health Center | Ngororero,Health Center,NGORORERO
+Ntaganzwa Health Center | Ngororero,Health Center,NGORORERO
+Ntobwe  Health Center | Ngororero,Health Center,NGORORERO
+Nyange A Health Center | Ngororero,Health Center,NGORORERO
+Nyange B Health Center | Ngororero,Health Center,NGORORERO
+Ramba Health Center | Ngororero,Health Center,NGORORERO
+Rubaya Health Center | Ngororero,Health Center,NGORORERO
+Rubona Health Center | Ngororero,Health Center,NGORORERO
+Rususa Health Center | Ngororero,Health Center,NGORORERO
+Bugarama Health Center | Rusizi,Health Center,RUSIZI
+Bweyeye Health Center | Rusizi,Health Center,RUSIZI
+Cimerwa Health Center | Rusizi,Health Center,RUSIZI
+Gihundwe Health Center | Rusizi,Health Center,RUSIZI
+Gihundwe HD District Hospital | Rusizi,District Hospital,RUSIZI
+Islamic  Health Center | Rusizi,Health Center,RUSIZI
+Mashesha Health Center | Rusizi,Health Center,RUSIZI
+Mibilizi Health Center | Rusizi,Health Center,RUSIZI
+Mibilizi HD District Hospital | Rusizi,District Hospital,RUSIZI
+Mushaka Health Center | Rusizi,Health Center,RUSIZI
+Nkanka Health Center | Rusizi,Health Center,RUSIZI
+Nkombo Health Center | Rusizi,Health Center,RUSIZI
+Nkungu Health Center | Rusizi,Health Center,RUSIZI
+Nyabitimbo Health Center | Rusizi,Health Center,RUSIZI
+Rusizi Health Center | Rusizi,Health Center,RUSIZI
+Bushenge Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Bushenge HD District Hospital | Nyamasheke,District Hospital,NYAMASHEKE
+Gatare Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Gisakura Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Hanika (NYAMASHEKE) Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Kamonyi Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Karambi Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Karengera Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Kibingo Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Kibogora Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Kibogora HD District Hospital | Nyamasheke,District Hospital,NYAMASHEKE
+Mugera Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Mukoma Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Muyange Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Mwezi Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Nyamasheke Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Rangiro Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Ruheru Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Yove Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Buyoga Health Center | Rulindo,Health Center,RULINDO
+Kajevuba Health Center | Rulindo,Health Center,RULINDO
+Kinihira Health Center | Rulindo,Health Center,RULINDO
+Kiyanza Health Center | Rulindo,Health Center,RULINDO
+Masoro Health Center | Rulindo,Health Center,RULINDO
+Murambi Health Center | Rulindo,Health Center,RULINDO
+Muyanza Health Center | Rulindo,Health Center,RULINDO
+Remera-Mbogo Health Center | Rulindo,Health Center,RULINDO
+Rukozo Health Center | Rulindo,Health Center,RULINDO
+Rulindo Health Center | Rulindo,Health Center,RULINDO
+Rutonde Health Center | Rulindo,Health Center,RULINDO
+Rutongo HD District Hospital | Rulindo,District Hospital,RULINDO
+Rwahi Health Center | Rulindo,Health Center,RULINDO
+Shyorongi Health Center | Rulindo,Health Center,RULINDO
+Tare Health Center | Rulindo,Health Center,RULINDO
+Tumba Health Center | Rulindo,Health Center,RULINDO
+Busengo Health Center | Gakenke,Health Center,GAKENKE
+Bushoka Health Center | Gakenke,Health Center,GAKENKE
+Coko (Ruli) Health Center | Gakenke,Health Center,GAKENKE
+Cyabingo Health Center | Gakenke,Health Center,GAKENKE
+Gatonde Health Center | Gakenke,Health Center,GAKENKE
+Janja Health Center | Gakenke,Health Center,GAKENKE
+Karambo Health Center | Gakenke,Health Center,GAKENKE
+Mataba Health Center | Gakenke,Health Center,GAKENKE
+Muhondo Health Center | Gakenke,Health Center,GAKENKE
+Nemba Dispensary | Gakenke,Dispensary,GAKENKE
+Nemba HD District Hospital | Gakenke,District Hospital,GAKENKE
+Nyange (Ruli) Health Center | Gakenke,Health Center,GAKENKE
+Nyundo Health Center | Gakenke,Health Center,GAKENKE
+Rukura Health Center | Gakenke,Health Center,GAKENKE
+Ruli Health Center | Gakenke,Health Center,GAKENKE
+Ruli HD District Hospital | Gakenke,District Hospital,GAKENKE
+Rushashi Health Center | Gakenke,Health Center,GAKENKE
+Rusoro Health Center | Gakenke,Health Center,GAKENKE
+Rutake Health Center | Gakenke,Health Center,GAKENKE
+Rutenderi Health Center | Gakenke,Health Center,GAKENKE
+Rwankuba Health Center | Gakenke,Health Center,GAKENKE
+Bisate Health Center | Musanze,Health Center,MUSANZE
+Busogo Health Center | Musanze,Health Center,MUSANZE
+Gasiza Health Center | Musanze,Health Center,MUSANZE
+Kabere Dispensary | Musanze,Dispensary,MUSANZE
+Karwasa Health Center | Musanze,Health Center,MUSANZE
+Kinigi Health Center | Musanze,Health Center,MUSANZE
+Murandi Health Center | Musanze,Health Center,MUSANZE
+Nyakinama Health Center | Musanze,Health Center,MUSANZE
+Ruhengeri Dispensary | Musanze,Dispensary,MUSANZE
+Ruhengeri HD District Hospital | Musanze,District Hospital,MUSANZE
+Rwaza Health Center | Musanze,Health Center,MUSANZE
+Shingiro Health Center | Musanze,Health Center,MUSANZE
+Bungwe Health Center | Burera,Health Center,BURERA
+Butaro Health Center | Burera,Health Center,BURERA
+Butaro HD District Hospital | Burera,District Hospital,BURERA
+Gitare Health Center | Burera,Health Center,BURERA
+Kinoni Health Center | Burera,Health Center,BURERA
+Kinyababa Health Center | Burera,Health Center,BURERA
+Kirambo Health Center | Burera,Health Center,BURERA
+Kivuye Health Center | Burera,Health Center,BURERA
+Mucaca Health Center | Burera,Health Center,BURERA
+Ntaruka Health Center | Burera,Health Center,BURERA
+Nyamugali Health Center | Burera,Health Center,BURERA
+Ruhunde Health Center | Burera,Health Center,BURERA
+Rusasa Health Center | Burera,Health Center,BURERA
+Bushara Health Center | Gicumbi,Health Center,GICUMBI
+Bwisige Health Center | Gicumbi,Health Center,GICUMBI
+Byumba Health Center | Gicumbi,Health Center,GICUMBI
+Byumba HD District Hospital | Gicumbi,District Hospital,GICUMBI
+Gisiza Health Center | Gicumbi,Health Center,GICUMBI
+Giti Health Center | Gicumbi,Health Center,GICUMBI
+Kigogo Health Center | Gicumbi,Health Center,GICUMBI
+Manyagiro Health Center | Gicumbi,Health Center,GICUMBI
+Miyove Health Center | Gicumbi,Health Center,GICUMBI
+Muhondo Health Center | Gicumbi,Health Center,GICUMBI
+Muko Health Center | Gicumbi,Health Center,GICUMBI
+Mukono Health Center | Gicumbi,Health Center,GICUMBI
+Mulindi Health Center | Gicumbi,Health Center,GICUMBI
+Munyinya Health Center | Gicumbi,Health Center,GICUMBI
+Musenyi Health Center | Gicumbi,Health Center,GICUMBI
+Rubaya Health Center | Gicumbi,Health Center,GICUMBI
+Ruhenda Health Center | Gicumbi,Health Center,GICUMBI
+Rushaki Health Center | Gicumbi,Health Center,GICUMBI
+Rutare (Gicumbi) Health Center | Gicumbi,Health Center,GICUMBI
+Rwesero Health Center | Gicumbi,Health Center,GICUMBI
+Tanda Health Center | Gicumbi,Health Center,GICUMBI
+Gishari/ Police Dispensary | Rwamagana,Dispensary,RWAMAGANA
+Karenge Health Center | Rwamagana,Health Center,RWAMAGANA
+Munyaga Health Center | Rwamagana,Health Center,RWAMAGANA
+Musha Health Center | Rwamagana,Health Center,RWAMAGANA
+Muyumbu Health Center | Rwamagana,Health Center,RWAMAGANA
+Nyagasambu Health Center | Rwamagana,Health Center,RWAMAGANA
+Nyakaliro Health Center | Rwamagana,Health Center,RWAMAGANA
+Nzige Health Center | Rwamagana,Health Center,RWAMAGANA
+Rubona Health Center | Rwamagana,Health Center,RWAMAGANA
+Ruhunda Health Center | Rwamagana,Health Center,RWAMAGANA
+Rwamagana Health Center | Rwamagana,Health Center,RWAMAGANA
+Rwamagana HD District Hospital | Rwamagana,District Hospital,RWAMAGANA
+Bugaragara Health Center | Nyagatare,Health Center,NYAGATARE
+Cyabayaga Health Center | Nyagatare,Health Center,NYAGATARE
+Cyondo Health Center | Nyagatare,Health Center,NYAGATARE
+Kabuga Health Center | Nyagatare,Health Center,NYAGATARE
+Kagitumba Health Center | Nyagatare,Health Center,NYAGATARE
+Karangazi Health Center | Nyagatare,Health Center,NYAGATARE
+Katabagemu Health Center | Nyagatare,Health Center,NYAGATARE
+Matimba Health Center | Nyagatare,Health Center,NYAGATARE
+Mimuri Health Center | Nyagatare,Health Center,NYAGATARE
+Muhambo Health Center | Nyagatare,Health Center,NYAGATARE
+Ntoma Health Center | Nyagatare,Health Center,NYAGATARE
+Nyabwishongwezi Health Center | Nyagatare,Health Center,NYAGATARE
+Nyagahita Health Center | Nyagatare,Health Center,NYAGATARE
+Nyagatare Health Center | Nyagatare,Health Center,NYAGATARE
+Nyagatare HD District Hospital | Nyagatare,District Hospital,NYAGATARE
+Nyarurema Health Center | Nyagatare,Health Center,NYAGATARE
+Rukomo Health Center | Nyagatare,Health Center,NYAGATARE
+Rurenge Health Center | Nyagatare,Health Center,NYAGATARE
+Rwempasha Health Center | Nyagatare,Health Center,NYAGATARE
+Tabagwe Health Center | Nyagatare,Health Center,NYAGATARE
+Bugarura Health Center | Gatsibo,Health Center,GATSIBO
+Gakenke Health Center | Gatsibo,Health Center,GATSIBO
+Gasange Health Center | Gatsibo,Health Center,GATSIBO
+Gituza Health Center | Gatsibo,Health Center,GATSIBO
+Humure Health Center | Gatsibo,Health Center,GATSIBO
+Kabarore Health Center | Gatsibo,Health Center,GATSIBO
+Kageyo Health Center | Gatsibo,Health Center,GATSIBO
+Kibondo Health Center | Gatsibo,Health Center,GATSIBO
+Kiziguro Health Center | Gatsibo,Health Center,GATSIBO
+Kiziguro HD District Hospital | Gatsibo,District Hospital,GATSIBO
+Muhura Health Center | Gatsibo,Health Center,GATSIBO
+Ngarama Health Center | Gatsibo,Health Center,GATSIBO
+Ngarama HD District Hospital | Gatsibo,District Hospital,GATSIBO
+Nyagahanga Health Center | Gatsibo,Health Center,GATSIBO
+Nyagihanga Health Center | Gatsibo,Health Center,GATSIBO
+Rugarama Health Center | Gatsibo,Health Center,GATSIBO
+Rwembogo Health Center | Gatsibo,Health Center,GATSIBO
+Rwimitereri Health Center | Gatsibo,Health Center,GATSIBO
+Cyarubare Health Center | Kayonza,Health Center,KAYONZA
+Gahini Health Center | Kayonza,Health Center,KAYONZA
+Gahini HD District Hospital | Kayonza,District Hospital,KAYONZA
+Kabarondo Health Center | Kayonza,Health Center,KAYONZA
+Karama Health Center | Kayonza,Health Center,KAYONZA
+Mukarange Health Center | Kayonza,Health Center,KAYONZA
+Ndego Health Center | Kayonza,Health Center,KAYONZA
+Nyakabungo Health Center | Kayonza,Health Center,KAYONZA
+Nyamirama Health Center | Kayonza,Health Center,KAYONZA
+Rukara Health Center | Kayonza,Health Center,KAYONZA
+Ruramira Health Center | Kayonza,Health Center,KAYONZA
+Rutare Health Center | Kayonza,Health Center,KAYONZA
+Rwinkwavu Health Center | Kayonza,Health Center,KAYONZA
+Rwinkwavu HD District Hospital | Kayonza,District Hospital,KAYONZA
+Ryamanyoni Health Center | Kayonza,Health Center,KAYONZA
+Bukora Health Center | Kirehe,Health Center,KIREHE
+Gahara Health Center | Kirehe,Health Center,KIREHE
+Gashongora Health Center | Kirehe,Health Center,KIREHE
+Kabuye (Kirehe) Dispensary | Kirehe,Dispensary,KIREHE
+Kirehe Health Center | Kirehe,Health Center,KIREHE
+Kirehe HD District Hospital | Kirehe,District Hospital,KIREHE
+Mulindi Health Center | Kirehe,Health Center,KIREHE
+Musaza Health Center | Kirehe,Health Center,KIREHE
+Mushikiri Dispensary | Kirehe,Dispensary,KIREHE
+Nasho Health Center | Kirehe,Health Center,KIREHE
+Ntaruka Health Center | Kirehe,Health Center,KIREHE
+Nyabitare Health Center | Kirehe,Health Center,KIREHE
+Nyarubuye (KIREHE) Health Center | Kirehe,Health Center,KIREHE
+Rusumo Health Center | Kirehe,Health Center,KIREHE
+Gituku Health Center | Ngoma,Health Center,NGOMA
+Jarama Health Center | Ngoma,Health Center,NGOMA
+Kibungo Health Center | Ngoma,Health Center,NGOMA
+Kibungo HD District Hospital | Ngoma,District Hospital,NGOMA
+Kirwa Health Center | Ngoma,Health Center,NGOMA
+Mutenderi Health Center | Ngoma,Health Center,NGOMA
+Nyange Health Center | Ngoma,Health Center,NGOMA
+Remera Health Center | Ngoma,Health Center,NGOMA
+Rukira Health Center | Ngoma,Health Center,NGOMA
+Rukoma Sake Health Center | Ngoma,Health Center,NGOMA
+Rukumberi Health Center | Ngoma,Health Center,NGOMA
+Sangaza Health Center | Ngoma,Health Center,NGOMA
+Zaza Health Center | Ngoma,Health Center,NGOMA
+Gakurazo Health Center | Bugesera,Health Center,BUGESERA
+Gashora Health Center | Bugesera,Health Center,BUGESERA
+Gihinga Health Center | Bugesera,Health Center,BUGESERA
+Kamabuye Health Center | Bugesera,Health Center,BUGESERA
+Mareba Health Center | Bugesera,Health Center,BUGESERA
+Mayange (BUGESERA) Health Center | Bugesera,Health Center,BUGESERA
+Mwogo Health Center | Bugesera,Health Center,BUGESERA
+Nyamata Health Center | Bugesera,Health Center,BUGESERA
+Nyamata HD District Hospital | Bugesera,District Hospital,BUGESERA
+Nzangwa Health Center | Bugesera,Health Center,BUGESERA
+Prison Rilima (via CS) Prison Clinic | Bugesera,Prison Clinic,BUGESERA
+Rilima Health Center | Bugesera,Health Center,BUGESERA
+Ruhuha Health Center | Bugesera,Health Center,BUGESERA
+Camp Gihembe Health Center | Gicumbi,Health Center,GICUMBI
+Kiziba Camp Health Center | Karongi,Health Center,KARONGI
+Camp Nyabiheke Health Center | Gatsibo,Health Center,GATSIBO
+CMedicoSocial Dispensary | Nyarugenge,Dispensary,NYARUGENGE
+Croix du Sud Clinic/Cabinet Medical | Nyarugenge,Clinic/Cabinet Medical,NYARUGENGE
+Prison Gasaka Prison Clinic | Nyamagabe,Prison Clinic,NYAMAGABE
+Gashonyi Dispensary | Ngororero,Dispensary,NGORORERO
+Gasiza Dispensary | Ngororero,Dispensary,NGORORERO
+Hindiro Dispensary | Ngororero,Dispensary,NGORORERO
+Mabuye Dispensary | Ngororero,Dispensary,NGORORERO
+Rugari Dispensary | Ngororero,Dispensary,NGORORERO
+Kamubuga Health Post | Gakenke,Health Post,GAKENKE
+Prison Gikongoro Prison Clinic | Nyamagabe,Prison Clinic,NYAMAGABE
+Prison Rwandex Prison Clinic | Huye,Prison Clinic,HUYE
+Bugarama Health Post | Nyamagabe,Health Post,NYAMAGABE
+Buhabwa Health Post | Kayonza,Health Post,KAYONZA
+Gahengeri Health Center | Rwamagana,Health Center,RWAMAGANA
+Kageyo (Kayonza) Health Post | Kayonza,Health Post,KAYONZA
+Ruhinga Health Post | Gakenke,Health Post,GAKENKE
+Rwerere Health Center | Burera,Health Center,BURERA
+Gihogwe Health Center | Gasabo,Health Center,GASABO
+Kisaro Health Center | Rulindo,Health Center,RULINDO
+Marembo Health Center | Rulindo,Health Center,RULINDO
+Mushongi Health Center | Rulindo,Health Center,RULINDO
+KIDOMO Health Post | Gakenke,Health Post,GAKENKE
+MUGUNGA Health Post | Gakenke,Health Post,GAKENKE
+SERERI Health Post | Gakenke,Health Post,GAKENKE
+AMIZERO Dispensary | Kamonyi,Dispensary,KAMONYI
+ANUPHIL Dispensary | Kamonyi,Dispensary,KAMONYI
+KAMONYI Dispensary | Kamonyi,Dispensary,KAMONYI
+GACURABWENGE Dispensary | Kamonyi,Dispensary,KAMONYI
+IWACU Dispensary | Kamonyi,Dispensary,KAMONYI
+INSHUTI NZIZA  Dispensary | Kamonyi,Dispensary,KAMONYI
+UBUZIMA BWIZA Dispensary | Kamonyi,Dispensary,KAMONYI
+KAYONZA Dispensary | Kayonza,Dispensary,KAYONZA
+KABARONDO (PRIVE) Dispensary | Kayonza,Dispensary,KAYONZA
+SEVER Dispensary | Kayonza,Dispensary,KAYONZA
+UBUMWE Dispensary | Kayonza,Dispensary,KAYONZA
+INFIRMERIE ACADEMY  Dispensary | Musanze,Dispensary,MUSANZE
+PRISON RUHENGERI Dispensary | Musanze,Dispensary,MUSANZE
+SHEMA Dispensary | Nyabihu,Dispensary,NYABIHU
+KIBUMBWE Health Center | Nyamagabe,Health Center,NYAMAGABE
+MAHEMBE Health Post | Nyamasheke,Health Post,NYAMASHEKE
+AVEGA RWAMAGANA Clinic/Cabinet Medical | Rwamagana,Clinic/Cabinet Medical,RWAMAGANA
+DUFASHANYE Dispensary | Rwamagana,Dispensary,RWAMAGANA
+LA CONFIANCE Dispensary | Rwamagana,Dispensary,RWAMAGANA
+PRISON Nsinda Prison Clinic | Rwamagana,Prison Clinic,RWAMAGANA
+Nduba Health Center | Gasabo,Health Center,GASABO
+Gikomero Health Center | Gasabo,Health Center,GASABO
+Nyarugunga Health Center | Kicukiro,Health Center,KICUKIRO
+Gitoki Health Center | Gatsibo,Health Center,GATSIBO
+MUGANO Health Center | Nyamagabe,Health Center,NYAMAGABE
+Kavumu Health Center | Nyamagabe,Health Center,NYAMAGABE
+Ngange Health Center | Nyamasheke,Health Center,NYAMASHEKE
+Prison Cyangugu Prison Clinic | Rusizi,Prison Clinic,RUSIZI
+Murambi Health Center | Rwamagana,Health Center,RWAMAGANA
+Gahunga Health Center | Burera,Health Center,BURERA
+Ngoma Health Center | Nyaruguru,Health Center,NYARUGURU
+Kivu Health Center | Nyaruguru,Health Center,NYARUGURU
+Nyarusange (NYANZA) Health Center | Nyanza,Health Center,NYANZA
+Kageyo (Kayonza) Health Center | Kayonza,Health Center,KAYONZA
+Prison Nyagatare Prison Clinic | Nyagatare,Prison Clinic,NYAGATARE
+Prison Kibungo Prison Clinic | Ngoma,Prison Clinic,NGOMA
+Prison Butare Prison Clinic | Huye,Prison Clinic,HUYE
+Gahombo Health Center | Nyanza,Health Center,NYANZA
+Hanika (NYANZA) Health Center | Nyanza,Health Center,NYANZA
+GASHAKI Health Center | Musanze,Health Center,MUSANZE
+Juru Health Center | Bugesera,Health Center,BUGESERA
+NGERUKA Health Center | Bugesera,Health Center,BUGESERA
+Cyanika (BURERA) Health Center | Burera,Health Center,BURERA
+Gatsibo Health Center | Gatsibo,Health Center,GATSIBO
+Mayange (GATSIBO) Health Post | Gatsibo,Health Post,GATSIBO
+Mbogo Health Post | Gatsibo,Health Post,GATSIBO
+Munini (GATSIBO) Health Post | Gatsibo,Health Post,GATSIBO
+Nyabiheke Health Center | Gatsibo,Health Center,GATSIBO
+Nyabisindu Health Post | Gatsibo,Health Post,GATSIBO
+Gishubi Health Center | Gisagara,Health Center,GISAGARA
+Muzenga Communal FOSA | Gisagara,Communal FOSA,GISAGARA
+BUKOMEYE (MUKURA) Communal FOSA | Huye,Communal FOSA,HUYE
+GITOVU (KINAZI) Communal FOSA | Huye,Communal FOSA,HUYE
+Maraba (HUYE) Health Center | Huye,Health Center,HUYE
+Bisesero Health Center | Karongi,Health Center,KARONGI
+Kabarondo Dispensaire Prive Dispensary | Kayonza,Dispensary,KAYONZA
+Kabare Health Post | Kayonza,Health Post,KAYONZA
+Kabura Health Post | Kayonza,Health Post,KAYONZA
+Gasakuza Health Post | Musanze,Health Post,MUSANZE
+Kimonyi Dispensary Dispensary | Musanze,Dispensary,MUSANZE
+Muhoza Health Center | Musanze,Health Center,MUSANZE
+Nyarubuye (MUSANZE) Health Post | Musanze,Health Post,MUSANZE
+Gatseta Health Post | Ngoma,Health Post,NGOMA
+Muhurire Health Post | Ngoma,Health Post,NGOMA
+Nyagasozi Health Post | Ngoma,Health Post,NGOMA
+Bugesera,District,
+Burera,District,
+Gakenke,District,
+Gasabo,District
+Gatsibo,District
+Gicumbi,District
+Gisagara,District
+Huye,District
+Kamonyi,District
+Karongi,District
+Kayonza,District
+Kicukiro,District
+Kirehe,District
+Muhanga,District
+Musanze,District
+Ngoma,District
+Ngororero,District
+Nyabihu,District
+Nyagatare,District
+Nyamagabe,District
+Nyamasheke,District
+Nyanza,District
+Nyarugenge,District
+Nyaruguru,District
+Rubavu,District
+Ruhango,District
+Rulindo,District
+Rusizi,District
+Rutsiro,District
+Rwamagana,District
+Abt Associates,Implementers
+Access Project,Implementers
+AFRICARE,Implementers
+AIDS Healthcare Foundation,Implementers
+American Refugee Committee,Implementers
+American Society for Clinical Pathology,Implementers
+APHL,Implementers
+ASM,Implementers
+Avocat sans Frontiers,Implementers
+AVSI,Implementers
+BUFMAR ,Implementers
+BTC/CTB ,Implementers
+Care ,Implementers
+CCHIPs,Implementers
+Catholic Blinden Mission ,Implementers
+CHF,Implementers
+Compassion Int'l ,Implementers
+Concern ,Implementers
+Catholic Federation ,Implementers
+Clinton Health Access Initiative (CHAI),Implementers
+Protestant Federation ,Implementers
+Catholic Relief Services (CRS) ,Implementers
+Diane Fossey Gorilla Fund ,Implementers
+Drew Cares ,Implementers
+Educational Development Center,Implementers
+EGPAF ,Implementers
+Engender Health,Implementers
+EIP ,Implementers
+Family Health International (FHI) ,Implementers
+Futures Group,Implementers
+Global Health Fellows Program,Implementers
+Geneva global ,Implementers
+"German cooperation (GTZ, KfW, DED, CIM, InWent) ",Implementers
+HDP (ex Memisa Cordaid) ,Implementers
+Handicap International ,Implementers
+Health Unlimited ,Implementers
+ICAP,Implementers
+ICF MACRO,Implementers
+IHV,Implementers
+Imbuto Foundation/PACFA ,Implementers
+International Rescue Committee (IRC),Implementers
+Interchurch ,Implementers
+Intrahealth,Implementers
+Johanitter Unfall Hilfe ,Implementers
+JHPIEGO,Implementers
+JSI,Implementers
+Krankenhaus Rwanda ,Implementers
+Land O' Lakes,Implementers
+Manos Unidas ,Implementers
+Medicus Mundi ,Implementers
+Millennium Villages Project,Implementers
+Management Sciences for Health (MSH) ,Implementers
+NYS AIDS Institute/HRI,Implementers
+Partners in Health (PIH) ,Implementers
+ProFemme Twese Hamwe,Implementers
+Projet San Francisco,Implementers
+Population Services International (PSI) ,Implementers
+Red Cross Rwanda ,Implementers
+Rick Warren/Saddleback Church ,Implementers
+RTI,Implementers
+Save the Children UK ,Implementers
+SCMS,Implementers
+Swiss Development Cooperation,Implementers
+Social & Scientific Systems Inc./MEMS Project,Implementers
+SPREAD,Implementers
+Tulane University,Implementers
+UK FRIENDS,Implementers
+University of Colorado,Implementers
+USP Drug Quality Institute,Implementers
+Wageningen University Netherlands ,Implementers
+World Relief ,Implementers
+World Vision ,Implementers
+FXB International,Implementers
+University of Western Ontario,Implementers
+Vision for a Nation,Implementers
+Voxiva,Implementers

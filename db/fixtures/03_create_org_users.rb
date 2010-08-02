@@ -19,12 +19,14 @@ FasterCSV.foreach("db/seed_files/users.csv", :headers => true ) do |row|
 
   User.stub_current_user_and_data_response
   #create dummy users
-  User.create!(:username => user_email,
+
+  saved = User.create(:username => user_email,
                :email => user_email,
                :password => 'password',
                :password_confirmation => 'password',
                :organization => org,
                :roles => ['reporter'])
+  print "  WARN: reporter \"#{user_email}\" not created" unless saved
 
   User.unstub_current_user_and_data_response
 

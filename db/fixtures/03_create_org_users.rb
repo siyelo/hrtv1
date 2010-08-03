@@ -1,5 +1,9 @@
 # Creation of users
 
+User.stub_current_user_and_data_response
+load 'db/seed_files/organizations.rb'
+User.unstub_current_user_and_data_response
+
 puts "\nLoading users"
 puts "  Loading users.csv"
 

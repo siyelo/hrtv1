@@ -13,18 +13,19 @@ FasterCSV.foreach("db/seed_files/organizations.csv", :headers => true ) do |row|
   i = i + 1
   org = Organization.new
 
-  unless row[2].blank?
-    district = row[2].downcase.capitalize.strip
-    district = Location.find_by_short_display(district)
-    puts "WARN: District \"#{district}\" not found (row: \##{i})" if district.nil?
-    org.locations << district
-  end
-
   org.raw_type = row[1].try(:strip)
   if org.raw_type != "Donors"
     org.type = "Ngo"
   elsif org.raw_type == "Donors"
     org.type = "Donor"
+  end
+
+  unless row[2].blank?
+    district = row[2].downcase.capitalize.strip
+    district = Location.find_by_short_display(district)
+    puts "WARN: District \"#{district}\" not found (row: \##{i})" if district.nil?
+    org.locations << district
+    org.type = nil
   end
 
   org.name = row[0].try(:strip)

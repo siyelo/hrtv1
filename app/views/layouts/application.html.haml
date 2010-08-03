@@ -25,17 +25,26 @@
 
     = yield(:head)
 
-  %body
-    - if controller.controller_name == "static_page" &&  controller.action_name == "index"
+  - if controller.controller_name == "static_page" &&  controller.action_name == "index"
+    %body#landing
       = render :partial => 'layouts/landing_page'
-    - else
+      #header
+        .background
+          .inner
+            #logo
+            = render :partial => '/layouts/login_nav'
+            %span.quote Improving lives through better health policy
+            = image_tag("tagline.png")
+      = yield(:tabs)
+      = yield(:main)
+
+  - else
+    %body
       = render :partial => 'layouts/inner_pages'
-    = yield(:header)
-    = yield(:tabs)
-    = yield(:main)
+      = yield(:header)
+      = yield(:tabs)
+      = yield(:main)
 
-
-
-    #footer
-      = render :partial => 'layouts/footer'
+  #footer
+    = render :partial => 'layouts/footer'
 

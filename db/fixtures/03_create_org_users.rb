@@ -16,6 +16,7 @@ FasterCSV.foreach("db/seed_files/users.csv", :headers => true ) do |row|
 
   existing_user = User.find_by_email(user_email)
   puts "  WARN: User \"#{user_email}\" already exists (row: \# #{i})" if existing_user
+  existing_user.delete if existing_user# otherwise will ahve users referencing non existent data responses potentially
 
   User.stub_current_user_and_data_response
   #create dummy users

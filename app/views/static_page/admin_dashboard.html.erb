@@ -1,6 +1,8 @@
 <h2>Admin Dashboard</h2>
 <h3>&nbsp</h3>
-<h3><%= link_to "Review data requests", "#"%></h3>
+<% if false %>
+  <h3><%= link_to "Review data requests", "#"%></h3>
+<% end %>
 <br>
 
 <h3><%= link_to "Manage help and page comments", "model_helps" %> </h3>
@@ -12,5 +14,8 @@
 <h3><%= link_to "Manage comments", "comments" %> </h3>
 
 <br>
-<h3>Comments on Data</h3>
-<%= render :partial => Comment.all %> <!-- TODO named scope on organization and not my comments -->
+<% if false %>
+  <h3>Comments on Data</h3>
+  <%= render :partial => Comment.all %> <!-- TODO named scope on organization and not my comments -->
+<% end %>
+

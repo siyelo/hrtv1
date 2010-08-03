@@ -4,7 +4,7 @@ class DataRequest < ActiveRecord::Base
   belongs_to :requesting_organization, :class_name => "Organization",
     :foreign_key => :organization_id_requester
 
-  has_many :data_responses
+  has_many :data_responses, :dependent => :destroy
 
   def self.find_unfulfill_request organization_id
     DataRequest.find(:all, :conditions=>["organization_id_requester = ? AND complete = ?", organization_id, false])

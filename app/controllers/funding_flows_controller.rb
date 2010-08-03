@@ -2,11 +2,11 @@ class FundingFlowsController < ApplicationController
   authorize_resource
 
   @@shown_columns = [:project, :from, :to, :budget, :spend]
-  @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+  @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   def self.create_columns
     @@create_columns
   end
-  @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+  @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend, :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file,
@@ -52,6 +52,9 @@ class FundingFlowsController < ApplicationController
       quarterly_amount_field_options config.columns[c]
       config.columns[c].label = "Expenditure in your FY 09-10 "+quarter.capitalize
     end
+    config.columns[:spend_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:spend_q4_prev]
+    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
   end
 
   def create_from_file

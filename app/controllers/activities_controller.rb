@@ -4,14 +4,14 @@ class ActivitiesController < ApplicationController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end
-  @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   @@columns_for_file_upload = %w[name description
     text_for_targets text_for_beneficiaries text_for_provider
-    spend spend_q1 spend_q2 spend_q3 spend_q4 budget]
+    spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -70,8 +70,11 @@ class ActivitiesController < ApplicationController
       c = c.to_sym
       config.columns[c].inplace_edit = true
       quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Expenditure in GOR FY 09-10 "+quarter.capitalize
+      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
     end
+    config.columns[:spend_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:spend_q4_prev]
+    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
     [:text_for_beneficiaries, :text_for_targets, :text_for_provider].each do |c|
       config.columns[c].form_ui = :textarea
       config.columns[c].options = {:cols => 50, :rows => 3}

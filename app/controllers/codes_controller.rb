@@ -31,7 +31,7 @@ class CodesController < ApplicationController
     #column display and editing options
     #config.columns[:replacement_code].form_ui = :select
     #config.columns[:replacement_code].inplace_edit = true
-    config.columns[:descriptions].inplace_edit = true
+    config.columns[:description].inplace_edit = true
     #config.columns[:start_date].inplace_edit = true
     #config.columns[:end_date].inplace_edit = true
   end

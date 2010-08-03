@@ -15,6 +15,7 @@ class StaticPageController < ApplicationController
   end
 
   def contact
+    redirect_to :controller => :help_requests, :action => :new
   end
 
   def show

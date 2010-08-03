@@ -1,13 +1,14 @@
-- title "Contact / Help"
+- title "Help / Contact Us"
 
 :javascript
   $('tabs').hide();
-
+%h2 Help / Contact Us
 .sign_in_form
   - form_for @help_request, :url => help_requests_path do |form|
     %fieldset.user_form
       %p
         = form.label :email, "Email"
+      %p
         = form.text_field :email
       %p
         = form.label :message, "Message"

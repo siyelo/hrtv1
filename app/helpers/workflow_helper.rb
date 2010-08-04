@@ -1,6 +1,6 @@
 module WorkflowHelper
   @@map = { "data_responses/start" => "projects", "projects/index" => "funding_sources", "funding_sources/index" => "providers",
-            "providers/index" => "activities" , "activities/index" => "other_costs", "other_costs/index" => "#"}
+            "providers/index" => "activities" , "activities/index" => "other_costs", "other_costs/index" => "submit"}
 
   # deprecated, replaced by clicking on data response first
   #def workflow_start response_id

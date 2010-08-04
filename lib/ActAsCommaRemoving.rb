@@ -4,7 +4,9 @@ module ActAsCommaRemoving
   end
 
   module ClassMethods
-    
+
+    @@decimal_fields = []
+
     def remove_commas_before_validation_for decimal_fields
       self.cattr_accessor :decimal_fields_internal
       include InstanceMethods

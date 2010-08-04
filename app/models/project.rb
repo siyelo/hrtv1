@@ -11,9 +11,6 @@ class Project < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
-  include ActAsCommaRemoving
-  remove_commas_before_validation_for [:spend, :budget, :entire_budget]
-
   before_save :authorize_and_set_owner
   default_scope :conditions => ["projects.organization_id_owner = ? or 1=?",
     ValueAtRuntime.new(Proc.new{User.current_user.organization.id}),
@@ -33,6 +30,18 @@ class Project < ActiveRecord::Base
     :start_date, :end_date
 
   after_create :create_helpful_records_for_workflow
+
+  def spend=(amount)
+    super(strip_non_decimal(amount))
+  end
+
+  def budget=(amount)
+    super(strip_non_decimal(amount))
+  end
+
+  def entire_budget=(amount)
+    super(strip_non_decimal(amount))
+  end
 
   def to_s
     result = ''
@@ -62,7 +71,7 @@ class Project < ActiveRecord::Base
     r
   end
 
-  def create_helpful_records_for_workflow 
+  def create_helpful_records_for_workflow
     my_org = User.current_user.organization
     #TODO pass in the amount attributes and use them on records below
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
@@ -73,13 +82,17 @@ class Project < ActiveRecord::Base
 
   protected
 
+  def strip_non_decimal(number)
+    number.gsub(/[^\d\.]/, '')
+  end
+
   def authorize_and_set_owner
     current_user = User.current_user
     # TODO authorize and throw exception if no create/update for you! no soup for you!
 
     # don't remove the self reference below, otherwise it breaks
     unless current_user.role?(:admin) && self.owner != nil
-      self.owner = User.current_user.organization 
+      self.owner = User.current_user.organization
     end
   end
 end

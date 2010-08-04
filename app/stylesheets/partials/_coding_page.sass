@@ -37,11 +37,17 @@
           font-weight: bold
 
     table#activity_description
+      margin-top: 15px
       padding: 10px
 
       td
-        padding: 2px 8px
+        color= !mid-blue
+        padding: 4px 8px
         font-size: 0.85em
+        &.title
+          color: #aaa
+          font-size: 0.7em
+          text-transform: uppercase
 
         a
           font-size: 1.15em
@@ -52,26 +58,55 @@
   form
     input[type=submit]
       margin-top: 10px
+      
+#activity_description
+  
+  
 
 body #content #main #activity_tree a
   font-size: 12px
   padding: 4px 7px
 
 #buttons
+  margin-bottom: 5px
   padding: 5px 0px
+  button
+    
+    border: none
+    background= !lightest-blue
+    cursor: pointer
+    margin-right: 5px
+    padding: 3px 5px
+    +border-radius(5px)
+    &:hover
+      background= !mid-blue
+      color: white
 
 
-#activity_tree
+ul#activity_tree
+  border-bottom= !lighter-blue " 1px solid "
   font-size: 12px
 
-
-  ul
-    padding-left: 20px
-
-    li
-      font-size: 12px
-
-      list-style: none
+  li
+    border-top= !lighter-blue " 1px solid "
+    font-size: 12px
+    list-style: none
+    padding: 10px 0
+    &:hover
+      background: #f9f9f9
+    span
+      font-size: 1.4em
+      font-weight: bold
+      &.expanded
+        color: red
+      &.collapsed
+        color: green
+    ul
+      margin-left: 30px
+      li
+        margin-top: 10px
+        padding-bottom: 0
+        border-top= !lightest-blue " 1px dashed "
 
   .hide
     display: none

@@ -1,24 +1,30 @@
-require 'lib/ActAsDataElement'
-
 # == Schema Information
 #
 # Table name: projects
 #
-#  id             :integer         not null, primary key
-#  name           :string(255)
-#  description    :text
-#  start_date     :date
-#  end_date       :date
-#  created_at     :datetime
-#  updated_at     :datetime
-#  expected_total :decimal(, )
+#  id                    :integer         not null, primary key
+#  name                  :string(255)
+#  description           :text
+#  start_date            :date
+#  end_date              :date
+#  created_at            :datetime
+#  updated_at            :datetime
+#  budget                :decimal(, )
+#  spend                 :decimal(, )
+#  entire_budget         :decimal(, )
+#  organization_id_owner :integer
 #
+
+require 'lib/ActAsDataElement'
+require 'lib/acts_as_stripper' #TODO move
 
 class Project < ActiveRecord::Base
   acts_as_commentable
 
   include ActAsDataElement
   configure_act_as_data_element
+
+  acts_as_stripper
 
   before_save :authorize_and_set_owner
   default_scope :conditions => ["projects.organization_id_owner = ? or 1=?",
@@ -39,6 +45,18 @@ class Project < ActiveRecord::Base
     :start_date, :end_date, :currency
 
   after_create :create_helpful_records_for_workflow
+
+  def spend=(amount)
+    super(strip_non_decimal(amount))
+  end
+
+  def budget=(amount)
+    super(strip_non_decimal(amount))
+  end
+
+  def entire_budget=(amount)
+    super(strip_non_decimal(amount))
+  end
 
   def to_s
     result = ''
@@ -68,7 +86,7 @@ class Project < ActiveRecord::Base
     r
   end
 
-  def create_helpful_records_for_workflow 
+  def create_helpful_records_for_workflow
     my_org = User.current_user.organization
     #TODO pass in the amount attributes and use them on records below
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
@@ -85,7 +103,7 @@ class Project < ActiveRecord::Base
 
     # don't remove the self reference below, otherwise it breaks
     unless current_user.role?(:admin) && self.owner != nil
-      self.owner = User.current_user.organization 
+      self.owner = User.current_user.organization
     end
   end
 end

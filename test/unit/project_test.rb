@@ -12,6 +12,15 @@ class ProjectTest < ActiveSupport::TestCase
   should have_and_belong_to_many :activities
   should have_many :funding_flows
 
+  test "removes commas from decimal fields" do
+    [:spend, :budget, :entire_budget].each do |f|
+      p=Project.new
+      p.send(f.to_s+"=", "10,783,000.32")
+      p.save
+      assert p.send(f) == 10783000.32
+    end
+
+  end
   test "creates workflow records after save" do
     p=Project.create!(:name => "proj1")
     assert p.funding_flows.size == 2

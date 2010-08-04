@@ -1,17 +1,8 @@
 require 'lib/ActAsDataElement'
+require 'lib/ActAsCommaRemoving'
 
 # == Schema Information
-#
-# Table name: projects
-#
-#  id             :integer         not null, primary key
-#  name           :string(255)
-#  description    :text
-#  start_date     :date
-#  end_date       :date
-#  created_at     :datetime
-#  updated_at     :datetime
-#  expected_total :decimal(, )
+# OUT OF DATE
 #
 
 class Project < ActiveRecord::Base
@@ -19,6 +10,9 @@ class Project < ActiveRecord::Base
 
   include ActAsDataElement
   configure_act_as_data_element
+
+  include ActAsCommaRemoving
+  remove_commas_before_validation_for [:spend, :budget, :entire_budget]
 
   before_save :authorize_and_set_owner
   default_scope :conditions => ["projects.organization_id_owner = ? or 1=?",

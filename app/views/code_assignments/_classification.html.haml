@@ -21,17 +21,17 @@
 
 %table#activity_description
   %tr
-    %td Name:
+    %td.title Name:
     %td= @activity.name
     -#= link_to "#{@activity.name}", activity_path(@activity)
   %tr
-    %td Total Budget for FY 10-11:
+    %td.title Total Budget for FY 10-11:
     %td= @activity.budget
   %tr
-    %td Total Expenditures for FY 09-10:
+    %td.title Total Expenditures for FY 09-10:
     %td= @activity.spend
   %tr
-    %td Description:
+    %td.title Description:
     %td= @activity.description
 
 #activity_classification

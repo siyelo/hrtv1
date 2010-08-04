@@ -1,33 +1,45 @@
-.active-scaffold th a
-  font-size: 0.75em
-  padding: 7px 10px
+body
+  #content
 
-.active-scaffold-header
-  background= !dark-blue
-  +border-top-radius
+    thead tr th
+      background= !mid-blue
+      border-left: 1px solid !dark-blue
+        
+    .active-scaffold th a
+      font-size: 0.75em
+      padding: 7px 10px
 
-  .actions a
-    background-image: none
-    color= !orange
-  h2
-    color= !orange
-    font-size: 0.8em
-    letter-spacing: 0.05em
-    padding: 12px 10px
-    text-transform: uppercase
+    .active-scaffold-header
+      background= !dark-blue
+      +border-top-radius
 
-.active-scaffold th.desc a
-  background-color= !dark-blue
+      .actions a
+        background-image: none
+        color= !dark-blue
+      h2
+        color= !dark-blue
+        font-size: 0.8em
+        letter-spacing: 0.05em
+        padding: 12px 10px
+        text-transform: uppercase
+
+    .active-scaffold th.desc a
+      background-color= !dark-blue
 
 
-.active-scaffold th a
-  background-color= !mid-blue
-  border-left: 1px solid !dark-blue
+    .active-scaffold th a
+      background-color= !mid-blue
 
-.active-scaffold th.desc a, .active-scaffold th a
-  &:hover
-    background: #111
-    color= !light-blue
 
-.active-scaffold-records
-  padding-left: 10px
+    .active-scaffold th.desc a, .active-scaffold th a
+      &:hover
+        background: #111
+        color= !light-blue
+
+    .active-scaffold-records
+      padding-left: 10px
+      
+    .form-element
+      .description
+        color= !mid-blue
+        font-size: 0.7em

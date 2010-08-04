@@ -16,13 +16,15 @@
 #
 
 require 'lib/ActAsDataElement'
-require 'lib/ActAsCommaRemoving'
+require 'lib/acts_as_stripper' #TODO move
 
 class Project < ActiveRecord::Base
   acts_as_commentable
 
   include ActAsDataElement
   configure_act_as_data_element
+
+  acts_as_stripper
 
   before_save :authorize_and_set_owner
   default_scope :conditions => ["projects.organization_id_owner = ? or 1=?",
@@ -94,10 +96,6 @@ class Project < ActiveRecord::Base
   end
 
   protected
-
-  def strip_non_decimal(number)
-    number.gsub(/[^\d\.]/, '')
-  end
 
   def authorize_and_set_owner
     current_user = User.current_user

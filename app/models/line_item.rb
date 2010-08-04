@@ -3,6 +3,7 @@
 # Table name: line_items
 #
 #  id                        :integer         not null, primary key
+#  description               :text
 #  activity_id               :integer
 #  created_at                :datetime
 #  updated_at                :datetime

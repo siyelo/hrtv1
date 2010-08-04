@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: data_requests
+#
+#  id                        :integer         not null, primary key
+#  organization_id_requester :integer
+#  title                     :string(255)
+#  complete                  :boolean         default(FALSE)
+#  pending_review            :boolean         default(FALSE)
+#  created_at                :datetime
+#  updated_at                :datetime
+#
+
 class DataRequest < ActiveRecord::Base
   attr_accessible :organization_id_requester, :title, :complete, :pending_review
 

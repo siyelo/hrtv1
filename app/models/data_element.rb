@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: data_elements
+#
+#  id                    :integer         not null, primary key
+#  data_response_id      :integer
+#  data_elementable_id   :integer
+#  data_elementable_type :string(255)
+#
+
 class DataElement < ActiveRecord::Base
   
   belongs_to :data_response

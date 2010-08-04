@@ -8,13 +8,16 @@
 #  project_id            :integer
 #  created_at            :datetime
 #  updated_at            :datetime
-#  raw_provider          :text
 #  budget                :decimal(, )
 #  spend_q1              :decimal(, )
 #  spend_q2              :decimal(, )
 #  spend_q3              :decimal(, )
 #  spend_q4              :decimal(, )
 #  organization_id_owner :integer
+#  organization_text     :text
+#  self_provider_flag    :integer         default(0)
+#  spend                 :decimal(, )
+#  spend_q4_prev         :decimal(, )
 #
 
 class FundingFlow < ActiveRecord::Base

@@ -2,14 +2,17 @@
 #
 # Table name: projects
 #
-#  id             :integer         not null, primary key
-#  name           :string(255)
-#  description    :text
-#  start_date     :date
-#  end_date       :date
-#  created_at     :datetime
-#  updated_at     :datetime
-#  expected_total :decimal(, )
+#  id                    :integer         not null, primary key
+#  name                  :string(255)
+#  description           :text
+#  start_date            :date
+#  end_date              :date
+#  created_at            :datetime
+#  updated_at            :datetime
+#  budget                :decimal(, )
+#  spend                 :decimal(, )
+#  entire_budget         :decimal(, )
+#  organization_id_owner :integer
 #
 
 class Project < ActiveRecord::Base

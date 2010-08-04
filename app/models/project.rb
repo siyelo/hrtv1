@@ -36,7 +36,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :name
 
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-    :start_date, :end_date
+    :start_date, :end_date, :currency
 
   after_create :create_helpful_records_for_workflow
 

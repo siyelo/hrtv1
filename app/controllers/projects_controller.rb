@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [:name, :description,  :budget, :spend]
-  @@create_columns = [:name, :description, :entire_budget, :budget, :spend,  :start_date, :end_date, :locations]
+  @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend,  :start_date, :end_date, :locations]
   def self.create_columns
     @@create_columns
   end
@@ -30,6 +30,7 @@ class ProjectsController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
+    config.columns[:currency].label = "Currency (if different)"
     config.columns[:entire_budget].label = "Total Project Budget"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"

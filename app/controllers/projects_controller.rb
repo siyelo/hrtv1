@@ -5,10 +5,11 @@ class ProjectsController < ApplicationController
 
   @@shown_columns = [:name, :description,  :budget, :spend]
   @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend,  :start_date, :end_date, :locations]
+  @@upload_columns = [:name, :description, :currency, :entire_budget, :budget, :spend,  :start_date, :end_date ]
   def self.create_columns
     @@create_columns
   end
-  @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO fix bug, >1 location won't work
+  @@columns_for_file_upload = @@upload_columns.map {|c| c.to_s} # TODO fix bug, >1 location won't work
 
  # record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
 

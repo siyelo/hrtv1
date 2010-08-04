@@ -1,4 +1,7 @@
 User.stub_current_user_and_data_response
+
+load 'db/seed_files/organizations.rb'
+
 #create dummy users
 saved = User.create(:username => 'admin',
                     :email => 'admin@ubuzima.org',

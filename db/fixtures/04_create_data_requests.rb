@@ -4,4 +4,5 @@ DataRequest.create!(:requesting_organization => Organization.create(:name=>"Gove
   :title => "Click here to enter FY2010 Workplan and FY2009 Expenditures - due date TBD")
 admin=User.find_by_username "admin"
 admin.current_data_response = DataRequest.first.data_responses.first #since UI has no way to set this currently
+admin.save(false)
 User.unstub_current_user_and_data_response

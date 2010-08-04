@@ -61,7 +61,20 @@
             var $pc_float = parseFloat($percentage)
             if ($pc_float > 100.0 || $pc_float < 0) {
               alert("Percentage should be between 0 and 100");
-            }
+            } else {
+               // check that this value doesnt tip our total percentage over 100 parent amount
+               var sumPercentage = 0;
+               sibling_percents  = ($(this).parent("li").parent("ul")).find("> li > input[type='text'][id$=_percentage]");
+               sibling_percents.each(function(index) {
+                 val = parseFloat( $.trim( $(this).val() ) )
+                 if ( !isNaN(val) )
+                   sumPercentage += val;
+               });
+
+               if( sumPercentage > 100 ){
+                 alert( "Warning: child percentages (" + sumPercentage + "%) exceed 100%");
+               }
+             }
           }
         }
       });
@@ -78,28 +91,20 @@
               alert("Amount should be greater than zero");
             } else {
               // check that this value doesnt tip our total sum over our parent amount
-
               // get amounts on siblings
               var sumTotal      = 0;
               parent            = $("input[type='text'][id$=amount]:first", $(this).parent("li").parent("ul").parent("li"));
               parent_amount     = $.trim( parent.val() );
               sibling_amounts   = ($(this).parent("li").parent("ul")).find("> li > input[type='text'][id$=_amount]");
-              sibling_percents  = ($(this).parent("li").parent("ul")).find("> li > input[type='text'][id$=_percentage]");
-
               sibling_amounts.each(function(index) {
                   val = parseFloat( $.trim( $(this).val() ) )
                   if ( !isNaN(val) )
                     sumTotal += val;
               });
-              console.debug("parent amount is %d", parent_amount);
-              console.debug("sum amounts is %d", sumTotal);
-
               if( parent_amount > 0 && (sumTotal > parent_amount) ){
-                alert("Warning: child amounts (" . sumTotal . ") exceed parent amount (" . parent_amount . ")");
+                alert( "Warning: child amounts (" + sumTotal + ") exceed parent amount (" + parent_amount + ")" );
               }
-
             }
-
           }
         }
       });

@@ -1,4 +1,4 @@
-puts "loading locations (districts)"
+puts "\nloading locations (districts)"
 Location.delete_all
 FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
   c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later

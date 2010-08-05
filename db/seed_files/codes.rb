@@ -22,7 +22,11 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.external_id   = row[id_col]
     p               = Code.find_by_external_id(row[parent_id_col])
     c.parent_id     = p.id unless p.nil?
-    c.type          = row[type_col].capitalize #this should make STI stop complaining
+    unless row[type_col]
+      c.type = "Code" #Assume default
+    else
+      c.type          = row[type_col].capitalize #this should make STI stop complaining
+    end
     c.description   = row[description_col]
     c.short_display = row[short_display_col]
     c.short_display = row[class_col] unless c.short_display
@@ -33,7 +37,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.save!
   rescue
     puts "Error reading input csv. line: #{i}. id: #{row[id_col]}. Error: #{$!}"
-    #exit 1;
+    exit 1;
   end
 end
 puts "...Loading codes.csv DONE"

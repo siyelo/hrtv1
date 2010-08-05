@@ -1,4 +1,4 @@
-puts "Loading cost_categories.csv..."
+puts "\n  Loading cost_categories.csv..."
 CostCategory.delete_all
 FasterCSV.foreach("db/seed_files/cost_categories.csv", :headers=>true) do |row|
 

@@ -1,5 +1,5 @@
 
-puts "  Loading model helps..."
+puts "\n  Loading model helps..."
 require 'yaml'
 
 model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }

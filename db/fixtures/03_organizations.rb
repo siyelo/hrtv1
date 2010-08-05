@@ -9,7 +9,7 @@ puts "  Loading organizations.csv"
 # <Name>, <Raw Type>, <District>
 
 i = 1
-FasterCSV.foreach("db/seed_files/organizations.csv", :headers => true ) do |row|
+FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |row|
   i = i + 1
   org = Organization.new
 

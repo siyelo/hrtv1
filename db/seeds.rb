@@ -1,182 +1,26 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
-# Examples:
-#
-#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
-#   Major.create(:name => 'Daley', :city => cities.first)
 
-puts "Loading seeds..."
-
-require 'yaml'
 require 'fastercsv'
 
-model_helps = open ('db/seed_files/model_help.yaml') { |f| YAML.load(f) }
-def seed_model_help_from_yaml doc
-  doc.each do |h|
-    model_help_attribs = h.last
-    #TODO replace line below, may cause trouble during deployment
-    #     can replace after add rescue below
-    `touch db/seed_files/#{model_help_attribs["model_name"]}_help.yaml`
-    seed_model_and_field_help model_help_attribs
-  end
-end
+puts "\n\nLoading seeds..."
 
-def seed_model_and_field_help  attribs
-  model_help=ModelHelp.find_or_create_by_model_name attribs["model_name"]
-  model_help.update_attributes attribs
-  seed_field_help_from_yaml model_help
-end
-
-def seed_field_help_from_yaml model_help
-  field_helps = open ("db/seed_files/#{model_help.model_name}_help.yaml") { |f| YAML.load(f) }
-  if field_helps
-    field_help_attribs = field_helps.map { |h| h.last }
-    field_help_attribs.each do |a|
-      fh = model_help.field_help.find_or_create_by_attribute_name a["attribute_name"]
-      fh.update_attributes a
-    end #TODO add rescue if fields file is not there
-  end
-end
-
-seed_model_help_from_yaml model_helps
+load 'db/seed_files/model_help.rb'
 
 #seed data as if we were an admin
 User.stub_current_user_and_data_response
 
+load 'db/seed_files/codes.rb'
 
-# seed code values
-#
-puts "Loading codes.csv..."
-Code.delete_all
-FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
-  c             = Code.new
-  c.external_id = row["id"]
-  p             = Code.find_by_external_id(row["parent_id"])
-  c.parent_id   = p.id unless p.nil?
-  c.type        = row["type"].capitalize #this should make STI stop complaining
-  c.description = row["description"]
+load 'db/seed_files/cost_categories.rb'
 
-  %w[short_display long_display].each do |field|
-    c.send "#{field}=", row[field]
-  end
+load 'db/seed_files/other_cost_codes.rb'
 
-  unless c.short_display
-    c.short_display=row["class"]
-  end
+load 'db/seed_files/districts.rb'
 
-  if c.type.downcase =="nhanasa"
-    c.type="Nha"
-  end
-
-  print "."
-  puts "error on #{row}" unless c.save!
-  #puts "  #{c.id}"
-end
-
-puts "...Loading codes.csv DONE"
-
-puts "Loading cost_categories.csv..."
-CostCategory.delete_all
-FasterCSV.foreach("db/seed_files/cost_categories.csv", :headers=>true) do |row|
-
-  c             = CostCategory.new
-  c.external_id = row["id"]
-  p             = CostCategory.find_by_external_id(row["parent_id"])
-  c.parent_id   = p.id unless p.nil?
-  c.description = row["description"]
-
-  c.short_display=row["short_display"]
-
-  print "."
-  puts "error on #{row}" unless c.save!
-  #puts "  #{c.id}"
-end
-
-puts "Loading other_cost_codes.csv..."
-OtherCostCode.delete_all
-FasterCSV.foreach("db/seed_files/other_cost_codes.csv", :headers=>true) do |row|
-
-  c             = OtherCostCode.new
-  c.external_id = row["id"]
-  p             = OtherCostCode.find_by_external_id(row["parent_id"])
-  c.parent_id   = p.id unless p.nil?
-  c.description = row["description"]
-
-  c.short_display=row["short_display"]
-
-  print "."
-  puts "error on #{row}" unless c.save!
-  #puts "  #{c.id}"
-end
-
-#OtherCostType.delete_all
-#FasterCSV.foreach("db/seed_files/other_cost_types.csv", :headers=>true) do |row|
-#  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
-#  if c.nil?
-#    c=OtherCostType.new
-#  end
-#  #puts row.inspect
-#  %w[short_display].each do |field|
-#    #puts "#{field}: #{row[field]}"
-#    c.send "#{field}=", row[field]
-#  end
-##  puts "error on #{row}" unless c.save
-#end
-
-# dummy other cost rows, in future craete with callbacks on user create
-#def seed_other_cost_rows
-#  OtherCost.delete_all
-#  OtherCostType.all.each do |t|
-#    t.other_costs.create if t.other_costs.empty?
-#  end
-#end
-
-#seed_other_cost_rows
-
-puts "loading locations"
-Location.delete_all
-FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
-  c=nil #Location.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Location.new
-  end
-  #puts row.inspect
-  %w[short_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field].strip
-  end
-  puts "error on #{row}" unless c.save
-end
-
-
-### Orgs
-#
-load 'db/seed_files/organizations.rb'
-
-puts "loading beneficiaries"
-Beneficiary.delete_all
-FasterCSV.foreach("db/seed_files/beneficiaries.csv", :headers=>true) do |row|
-  c=nil #ActivityCostCategory.first( :conditions => {:id =>row[:id]}) implement update later
-  if c.nil?
-    c=Beneficiary.new
-  end
-  #puts row.inspect
-  %w[short_display].each do |field|
-    #puts "#{field}: #{row[field]}"
-    c.send "#{field}=", row[field]
-  end
-  puts "error on #{row}" unless c.save
-end
-
-# this was a hack to make it seem like we aliased
-# the reporting organization in select lists, during development
-# and also was used in controllers to fake that we
-# had namespaced access / restricted some things from being shown
-#puts "create self"
-#%w[ self ].each do |ngo|
-#  Ngo.find_or_create_by_name ngo
-#end
+load 'db/seed_files/beneficiaries.rb'
 
 User.unstub_current_user_and_data_response
-puts "...seeding DONE"
+
+puts "...seeding DONE\n\n"

@@ -37,6 +37,13 @@ class ProjectTest < ActiveSupport::TestCase
     end
     assert to_me != nil
     assert from_me_to_me != nil
+    # todo make this test better by having values for these attribs
+    # tested it manually and it works
+    shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+    shared_attributes.each do |att|
+      assert to_me.send(att) == p.send(att)
+      assert from_me_to_me.send(att) == p.send(att)
+    end
   end
 
   test "has many funding flows nullify on delete" do

@@ -4,8 +4,8 @@ class ProjectsController < ApplicationController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [:name, :description,  :budget, :spend]
-  @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend,  :start_date, :end_date, :locations]
-  @@upload_columns = [:name, :description, :currency, :entire_budget, :budget, :spend,  :start_date, :end_date ]
+  @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
+  @@upload_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
   def self.create_columns
     @@create_columns
   end
@@ -39,6 +39,17 @@ class ProjectsController < ApplicationController
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true
     end
+    # copy / paste from activities
+    %w[q1 q2 q3 q4].each do |quarter|
+      c = "spend_"+quarter
+      c = c.to_sym
+      config.columns[c].inplace_edit = true
+      quarterly_amount_field_options config.columns[c]
+      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
+    end
+    config.columns[:spend_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:spend_q4_prev]
+    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
   end
 
 

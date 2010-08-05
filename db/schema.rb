@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100804182517) do
+ActiveRecord::Schema.define(:version => 20100805231043) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -240,6 +240,11 @@ ActiveRecord::Schema.define(:version => 20100804182517) do
     t.decimal  "entire_budget"
     t.integer  "organization_id_owner"
     t.string   "currency"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
+    t.decimal  "spend_q4_prev"
   end
 
   create_table "sessions", :force => true do |t|

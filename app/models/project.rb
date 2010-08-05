@@ -90,8 +90,14 @@ class Project < ActiveRecord::Base
     my_org = User.current_user.organization
     #TODO pass in the amount attributes and use them on records below
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
-    funding_flows.create! :to => my_org
-    funding_flows.create! :from => my_org, :to => my_org, :self_provider_flag => 1
+    shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+    f1=funding_flows.create! :to => my_org
+    f2=funding_flows.create! :from => my_org, :to => my_org, :self_provider_flag => 1
+    shared_attributes.each do |att|
+      f1.send(att.to_s+"=", self.send(att))
+      f2.send(att.to_s+"=", self.send(att))
+    end
+    f1.save;f2.save;
     activities << OtherCost.new
   end
 

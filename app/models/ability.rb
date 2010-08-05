@@ -13,7 +13,7 @@ class Ability
       can :manage, OtherCost
       can :manage, Comment
       can :manage, CodeAssignment
-      can :update, User, :user_id => user.id
+      can :update, User, :id => user.id
       can :read, Code
     end
   end

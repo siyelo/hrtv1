@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  authorize_resource
+  load_and_authorize_resource
   include UsersHelper
 
   before_filter :translate_roles_for_create, :only => [:create, :update]

@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   @@shown_columns = [:username, :email, :organization,   :password, :password_confirmation, :roles]
   @@create_columns = [:username, :email,  :organization, :password, :password_confirmation, :roles]
-  @@update_columns = [:username, :email, :text_for_organization, :organization,  :password, :password_confirmation]
+  @@update_columns = [:username, :email, :password, :password_confirmation]
   @@columns_for_file_upload = @@update_columns.map {|c| c.to_s}
 
   def self.create_columns

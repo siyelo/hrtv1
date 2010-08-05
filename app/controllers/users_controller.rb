@@ -30,6 +30,9 @@ class UsersController < ApplicationController
     config.columns[:roles].options = {:options => [
       ["Admin",[:admin]],
       ["Reporter",[:reporter]]]}
+    [:password_confirmation, :password].each do |f|
+      config.columns[f].form_ui = :password
+    end
   end
 
 #  right now can can stopping us from getting to this method

@@ -32,12 +32,22 @@ class FundingFlowsController < ApplicationController
 
     [:from, :to ].each do |c|
       config.columns[c].form_ui=:select #TODO comment out when GN gets subform working
-      config.columns[c].inplace_edit = true
+      #GR: these two options together allow a leave-blank and create-new style of creating entities in AS
+      config.columns[c].options             = { :prompt => '--- Select Organization ---', :include_blank => '+ Add a new Organization...' }
+      config.columns[c].inplace_edit        = false
     end
 #    config.columns[:from].association.reverse = :out_flows
 #    config.columns[:to].association.reverse = :in_flows
 
    # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit
+    [config.update.columns, config.create.columns].each do |columns|
+      columns.add_subgroup "Budget" do |budget_group|
+        budget_group.add :budget
+      end
+      columns.add_subgroup "Expenditures" do |funds_group|
+        funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+    end
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     [:budget, :spend].each do |c|

@@ -32,6 +32,14 @@ class ProjectsController < ApplicationController
     config.columns[:locations].form_ui = :select
     config.columns[:locations].label = "Districts Worked In"
     config.columns[:currency].label = "Currency (if different)"
+    [config.update.columns, config.create.columns].each do |columns|
+      columns.add_subgroup "Budget" do |budget_group|
+        budget_group.add :entire_budget, :budget
+      end
+      columns.add_subgroup "Expenditures" do |funds_group|
+        funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+    end
     config.columns[:entire_budget].label = "Total Project Budget"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     config.columns[:spend].label = "Total Spend GOR FY 09-10"

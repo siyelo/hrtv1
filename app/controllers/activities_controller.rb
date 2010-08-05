@@ -53,6 +53,14 @@ class ActivitiesController < ApplicationController
     config.columns[:description].inplace_edit     = true
     config.columns[:description].options     = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui = :select
+    [config.update.columns, config.create.columns].each do |columns|
+      columns.add_subgroup "Budget" do |budget_group|
+        budget_group.add :budget
+      end
+      columns.add_subgroup "Expenditures" do |funds_group|
+        funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+    end
 
     config.columns[:spend].label = "Total Spend GOR FY 09-10"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"

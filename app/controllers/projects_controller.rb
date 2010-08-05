@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
     config.columns[:comments].association.reverse = :commentable
 
     config.create.columns = @@create_columns
-    config.update.columns = config.create.columns
+    config.update.columns = @@create_columns
     config.columns[:name].inplace_edit = true
     config.columns[:description].inplace_edit = true
     config.columns[:locations].form_ui = :select

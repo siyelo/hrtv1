@@ -1,7 +1,6 @@
 # Creation of users
 
 puts "\nLoading users"
-puts "  Loading users.csv"
 
 ### Expected format
 # <Org Name>, <User Email>

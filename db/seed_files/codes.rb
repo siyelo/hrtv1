@@ -33,7 +33,8 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.long_display  = row[long_display_col]
     c.type          = "Nha" if c.type.downcase == "nhanasa"
 
-    print "."
+    #print "."
+    puts "on code #{c.external_id}"
     c.save!
   rescue
     puts "Error reading input csv. line: #{i}. id: #{row[id_col]}. Error: #{$!}"

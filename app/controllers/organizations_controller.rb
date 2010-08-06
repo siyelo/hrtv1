@@ -30,4 +30,11 @@ class OrganizationsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
+  protected
+  
+  #to get the edit link to not show up
+  def update_authorized?
+    authorize! :update, Organization
+  end
+
 end

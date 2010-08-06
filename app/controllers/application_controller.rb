@@ -26,7 +26,16 @@ class ApplicationController < ActionController::Base
       #flash[:error] = "Access denied!"
       #redirect_to root_url
   end
+  
+  # right now this only thrown when user tries to update an organization
+  rescue_from ActiveScaffold::ActionNotAllowed do |exception|
+    render :text => 'Please click "edit" link at the end of the row
+      to change from that organization to a different one.'
 
+      # redirect caused infinite loop, could be that home page had security on it
+      #flash[:error] = "Access denied!"
+      #redirect_to root_url
+  end
   ActiveScaffold.set_defaults do |config|
     config.ignore_columns.add [:created_at, :updated_at, :lock_version]
     config.actions.exclude :show

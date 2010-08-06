@@ -2,6 +2,9 @@
   .background
     .inner
       #logo
+        %h2 
+          Ubuzima
+          %span Mu Rwanda
       = render :partial => '/layouts/login_nav'
 
 #tabs
@@ -24,8 +27,9 @@
 
 #content
   = render :partial => 'layouts/top_menu'
+  = render :partial => 'layouts/flashes'
   #main
-    = render :partial => 'layouts/flashes'
+
     #desc
       :javascript
         $('desc').hide();

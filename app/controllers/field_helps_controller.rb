@@ -10,9 +10,8 @@ class FieldHelpsController < ApplicationController
     config.label = "Help for Fields"
     config.columns =  @@shown_columns
     list.sorting = {:attribute_name => 'DESC'}
-    
     config.create.columns = @@create_columns
-    config.update.columns = [:short, :long]
+    config.update.columns = [:attribute_name, :short, :long]
     config.columns[:short].inplace_edit = true
     config.columns[:short].label = "Help Sidebar Text"
     config.columns[:long].inplace_edit = true

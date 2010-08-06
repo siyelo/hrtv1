@@ -21,6 +21,9 @@ class User < ActiveRecord::Base
 
   cattr_accessor :current_user
   attr_readonly :roles_mask #only assign role on create
+  attr_readonly :organization_id #only assign organization on create
+
+  before_save :authorize
 
   has_many  :assignments
   belongs_to :organization
@@ -55,6 +58,10 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
+  def to_s
+    username
+  end
+
   def self.stub_current_user_and_data_response
     o=Organization.new(:name=>"org_for_internal_stub382342")
     o.save(false)
@@ -75,6 +82,13 @@ class User < ActiveRecord::Base
     o.try(:delete)
     u.try(:delete)
     User.current_user = nil
+  end
+  def authorize
+    # can't stub user with this...
+    # routes should stop access / saving
+#    unless User.current_user.id == self.id || User.current_user.try(:role?,:admin)
+#      raise CanCan::AccessDenied
+#    end
   end
 end
 

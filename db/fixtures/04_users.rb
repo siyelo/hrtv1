@@ -1,13 +1,12 @@
 # Creation of users
 
 puts "\nLoading users"
-puts "  Loading users.csv"
 
 ### Expected format
 # <Org Name>, <User Email>
 
 i = 1
-FasterCSV.foreach("db/seed_files/users.csv", :headers => true ) do |row|
+FasterCSV.foreach("db/fixtures/files/users.csv", :headers => true ) do |row|
   i = i + 1
   org_name   = row[0].try(:strip)
   user_email = row[1].try(:strip)

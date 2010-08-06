@@ -1,3 +1,4 @@
+%h3 Sign in
 - form_for @user_session, :url => user_session_path do |form|
   %fieldset.user_form
     %p
@@ -12,4 +13,4 @@
       = form.label :remember_me
 
     .buttons
-      = form.submit "Login"
+      = form.submit "Sign in"

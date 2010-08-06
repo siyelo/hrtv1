@@ -131,6 +131,10 @@ body
         text-decoration: underline
         &:hover
           color= !mid-blue
+      h3
+        color= !mid-blue
+        font-size: 0.9em
+        padding: 10px 0 0 10px
 
       .next, input[type=submit]
         +border-radius
@@ -138,7 +142,7 @@ body
         background= !orange
         color: white
         cursor: pointer
-
+        margin-right: -10px
         padding: 7px 15px
         text-decoration: none
         text-transform: uppercase
@@ -155,12 +159,16 @@ body
         margin: 5px
         a
           margin-left: 10px
-          padding: 2px
+          padding: 3px 5px
           color= !mid-blue
           &:hover
-            background: white
+            color= !lightest-blue
+            background= !mid-blue
+            +border-radius
         .disabled
-          color: black
+          background= !mid-blue
+          color= !lightest-blue
+          +border-radius
 
       // fix the tiny AS links.
       table
@@ -219,13 +227,27 @@ body
       color= !mid-blue
       font-size: 0.8em
       letter-spacing: 0.05em
+      
+  #content #map_fields_form
+    .map_fields
+      padding-left: 10px
+      margin-bottom: 20px
+    tr th
+      background: none
+      border: none
+      padding-right: 20px
+    td
+      font-size: 0.8em
+      padding: 2px 0
 
   #footer
     clear: both
     color= !mid-blue
     font-size: 0.8em
     margin: 0 10px 20px 10px
-    
+    text-transform: uppercase
+    a
+      padding: 5px
   #guide
     h2
       +border-radius

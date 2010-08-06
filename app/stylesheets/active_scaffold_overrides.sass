@@ -1,6 +1,19 @@
 body
   #content
-
+    #main table a:hover
+      color= !light-blue
+      
+    .edit_data_response
+      +border-radius
+      border: 1px solid !lightest-blue
+      font-size: 0.8em
+      padding: 10px
+      table
+        select, input
+          margin: 5px 10px
+          padding-right: 20px
+      input
+        margin: 10px 0 0
     thead tr th
       background= !mid-blue
       border-left: 1px solid !dark-blue
@@ -17,6 +30,7 @@ body
         background-image: none
         color= !dark-blue
       h2
+        border-bottom: 1px solid !dark-blue
         color= !dark-blue
         font-size: 0.8em
         letter-spacing: 0.05em
@@ -26,18 +40,35 @@ body
     .active-scaffold th.desc a
       background-color= !dark-blue
 
-
     .active-scaffold th a
       background-color= !mid-blue
 
-
     .active-scaffold th.desc a, .active-scaffold th a
       &:hover
-        background: #111
+        background= !dark-blue
         color= !light-blue
 
     .active-scaffold-records
       padding-left: 10px
+    
+    .active-scaffold .view
+      background= !lightest-blue
+      border: none
+      margin: 0 auto
+      padding: 30px
+      width: 600px
+      +border-radius
+      
+    .active-scaffold tr.record
+      background= !lightest-blue
+      +border-bottom-radius
+      
+    .active-scaffold .empty-message, .active-scaffold .filtered-message
+      background= !lightest-blue
+      +border-bottom-radius
+      
+    .comments .messages
+      +border-radius
       
     .form-element
       .description

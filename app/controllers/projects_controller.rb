@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_filter :check_user_has_data_response
 
   #fixes create
-  before_filter :add_data_response_through_params, :only => [:create, :update]
+  before_filter :add_data_response_to_params, :only => [:create, :update]
 
   @@shown_columns = [:name, :description,  :budget, :spend]
   @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
@@ -72,8 +72,10 @@ class ProjectsController < ApplicationController
     super.available_to current_user
   end
 
-  def populate_current_user_in_params
+  def add_data_response_to_params
     if params[:record]
+      #set data_response unless you are an admin
+      #this way admins can edit data to fix it without overwriting anything
       params[:record][:data_response]=current_user.current_data_response unless current_user.role?(:admin)
     end
   end

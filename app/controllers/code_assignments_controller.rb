@@ -59,7 +59,7 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update_assignments(coding_type, path)
-    #authorize! :update, @activity
+    #authorize! :update, @activity #GN: why is this missing
     params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
     respond_to do |format|

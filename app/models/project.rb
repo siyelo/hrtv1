@@ -16,6 +16,7 @@
 #
 
 require 'lib/acts_as_stripper' #TODO move
+require 'lib/ActAsDataElement'
 
 class Project < ActiveRecord::Base
   acts_as_commentable

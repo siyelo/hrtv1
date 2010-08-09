@@ -5,6 +5,13 @@ class ProjectsController < ApplicationController
 
   #fixes create
   before_filter :add_data_response_to_params, :only => [:create, :update]
+  def add_data_response_to_params
+    if params[:record]
+      #set data_response unless you are an admin
+      #this way admins can edit data to fix it without overwriting anything
+      params[:record][:data_response]=current_user.current_data_response unless current_user.role?(:admin)
+    end
+  end
 
   @@shown_columns = [:name, :description,  :budget, :spend]
   @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
@@ -70,14 +77,6 @@ class ProjectsController < ApplicationController
 
   def beginning_of_chain
     super.available_to current_user
-  end
-
-  def add_data_response_to_params
-    if params[:record]
-      #set data_response unless you are an admin
-      #this way admins can edit data to fix it without overwriting anything
-      params[:record][:data_response]=current_user.current_data_response unless current_user.role?(:admin)
-    end
   end
 
 end

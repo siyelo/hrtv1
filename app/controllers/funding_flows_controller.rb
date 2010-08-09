@@ -1,6 +1,15 @@
 class FundingFlowsController < ApplicationController
   authorize_resource
 
+  #fixes create
+  before_filter :add_data_response_to_params, :only => [:create, :update]
+  def add_data_response_to_params
+    if params[:record]
+      #set data_response unless you are an admin
+      #this way admins can edit data to fix it without overwriting anything
+      params[:record][:data_response]=current_user.current_data_response unless current_user.role?(:admin)
+    end
+  end
   @@shown_columns = [:project, :from, :to, :budget, :spend]
   @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   def self.create_columns
@@ -71,10 +80,8 @@ class FundingFlowsController < ApplicationController
     super @@columns_for_file_upload
   end
 
-  # limits active scaffolds showing records
-  # TODO deauthorize other paths to the data
-#  def beginning_of_chain
-#    super.available_to current_user
-#  end
+  def beginning_of_chain
+    super.available_to current_user
+  end
 
 end

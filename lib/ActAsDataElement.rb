@@ -7,25 +7,17 @@ module ActAsDataElement
     #include ApplicationHelper
     def configure_act_as_data_element
       include InstanceMethods
-      has_one :data_element, :as => :data_elementable
-      after_save :save_to_response
-      before_destroy :delete_to_response
+      belongs_to :data_response
+      named_scope :available_to, lambda { |current_user|
+        if current_user.role?(:admin)
+          {}
+        else
+          {:conditions=>{:data_response_id => current_user.current_data_response.id}}
+        end
+      }
     end
-
   end
 
   module InstanceMethods
-    include ApplicationHelper
-    def save_to_response 
-      #<TODO> find session with the response_id
-      dr = User.current_user.current_data_response
-      dr.add_or_update_element self
-      dr.save
-    end
-    def delete_to_response
-      dr = User.current_user.current_data_response
-      dr.delete_element self
-      dr.save
-    end
   end
 end

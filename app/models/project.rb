@@ -24,16 +24,6 @@ class Project < ActiveRecord::Base
   configure_act_as_data_element
 
   acts_as_stripper
-
-  named_scope :available_to, lambda { |current_user|
-    if current_user.role?(:admin)
-      {}
-    else
-      {:conditions=>{:data_response_id => current_user.current_data_response.id}}
-  }
-
-  belongs_to :data_response
-
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
   has_many :funding_flows #, :dependent => :nullify

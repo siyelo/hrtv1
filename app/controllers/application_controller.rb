@@ -41,6 +41,8 @@ class ApplicationController < ActionController::Base
     config.actions.exclude :show
     config.list.empty_field_text = "------"
     config.list.pagination = false
+      # use for temporary security solution for comments
+      config.security.current_user_method = :current_user
     #config.create.persistent = true #add back when make form appear below list
   end
 
@@ -137,6 +139,9 @@ class ApplicationController < ActionController::Base
     def record.association_lookup_errors #use for error handling later
       couldnt_find_models
     end
+    if record.respond_to?(:data_response=)
+      record.data_response = current_user.current_data_response
+    end
     record
   end
 
@@ -179,13 +184,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
-  before_filter do |c_instance|
-    User.current_user = c_instance.send(:current_user)
-  end
-
   private
-
-  #before_filter { |c| Authorization.current_user = c.current_user }
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
@@ -245,10 +244,10 @@ class ApplicationController < ActionController::Base
   end
 
   def check_user_has_data_response
-    unless User.current_user.current_data_response
+    unless current_user.current_data_response || current_user.role?(:admin)
       flash[:warning] = "Please first click on one of the links underneath \"Data Requests to Fulflill\" to continue. We will remember which data request you were responding to the next time you login, so you won't see this message again."
       #TODO email the file and have someone get back to helping them
-      redirect_to user_dashboard_path(User.current_user)
+      redirect_to user_dashboard_path(current_user)
     end
   end
 

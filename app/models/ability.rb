@@ -16,6 +16,8 @@ class Ability
       can :create, Organization
       can :update, User, :id => user.id
       can :read, Code
+      can :read, ModelHelp
+      can :read, FieldHelp
     end
   end
 end

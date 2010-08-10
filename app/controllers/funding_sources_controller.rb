@@ -11,7 +11,11 @@ class FundingSourcesController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :to => User.current_user.organization.id , :self_provider_flag => 0}
+    unless current_user.role?(:admin)
+      @constraints = { :to => current_user.organization.id , :self_provider_flag => 0}
+    else
+      @constraints = {:self_provider_flag => 0}
+    end
     @label = "Funding Sources"
   end
 
@@ -19,7 +23,7 @@ class FundingSourcesController < ApplicationController
     #TODO change application controller so that it's
     # create_from_file method accepts columns and optional
     # block of constraints, instead of using session
-    @constraints = { :to => User.current_user.organization.id }
+    @constraints = { :to => current_user.organization.id }
     super @@columns_for_file_upload, @constraints
   end
 

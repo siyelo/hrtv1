@@ -65,4 +65,12 @@ class ProjectsController < ApplicationController
     super @@columns_for_file_upload
   end
 
+  def beginning_of_chain
+    super.available_to current_user
+  end
+
+  #fixes create
+  def before_create_save record
+    record.data_response = current_user.current_data_response
+  end
 end

@@ -34,17 +34,11 @@ class Activity < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
-  before_save :authorize_and_set_owner
-  #TODO add current data response but since only 1 atm, dont need
-  default_scope :conditions => ["activities.organization_id_owner = ? or 1=?",
-    ValueAtRuntime.new(Proc.new{User.current_user.organization.id}),
-    ValueAtRuntime.new(Proc.new{User.current_user.role?(:admin) ? 1 : 0})]
-  belongs_to :owner, :class_name => "Organization", :foreign_key => "organization_id_owner"
+  attr_accessible :projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget
 
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations
-  has_many :lineItems
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
 
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
@@ -62,6 +56,8 @@ class Activity < ActiveRecord::Base
   attr_accessor :budget_cost_categories_updates
   attr_accessor :expenditure_codes_updates
   attr_accessor :expenditure_cost_categories_updates
+  attr_accessible :budget_cost_categories_updates, :budget_codes_updates,
+    :expenditure_codes_updates, :expenditure_cost_categories_updates
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 
@@ -114,16 +110,6 @@ class Activity < ActiveRecord::Base
   end
 
   protected
-
-  def authorize_and_set_owner
-    current_user = User.current_user
-    # TODO authorize and throw exception if no create/update for you! no soup for you!
-
-    # don't remove the self reference below, otherwise it breaks
-    unless current_user.role?(:admin) && self.owner != nil
-      self.owner = User.current_user.organization
-    end
-  end
 
   def update_coding_attribute_proxy code_assignments, coding_type
     if code_assignments

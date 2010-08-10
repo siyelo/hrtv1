@@ -1,5 +1,6 @@
 Something like this, need to work on the code for saving to make sure it doesn't infinite loop
 
+need to replace all User.current_user w something else as that's gone now
 LookingGlass < AR:Base # in a sense, the master object that represents that there is a single object, just with many views
   has_many :perspectives, polymorphic, join => :reflections
 end

@@ -11,7 +11,7 @@ module FundingFlowsHelper
       if @record.project
         ids.merge collect_orgs(@record.project)
       else
-        Project.all.each do |p| #in future this should scope right with default
+        Project.available_to(current_user).each do |p| #in future this should scope right with default
           ids.merge collect_orgs(p)
         end
       end

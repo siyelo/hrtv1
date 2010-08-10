@@ -17,6 +17,31 @@
           = form.label :fiscal_year_end_date, "End Date of Your Fiscal Year 2009"
         %td
           = form.date_select :fiscal_year_end_date
+      %tr
+        %td
+          = form.label :contact_name, "Point of Contact Name"
+        %td
+          = form.text_field :contact_name
+      %tr
+        %td
+          = form.label :contact_position, "Point of Contact Position"
+        %td
+          = form.text_field :contact_position
+      %tr
+        %td
+          = form.label :contact_phone_number, "Point of Contact Phone Number"
+        %td
+          = form.text_field :contact_phone_number
+      %tr
+        %td
+          = form.label :contact_main_office_phone_number, "Point of Contact Office Phone Number"
+        %td
+          = form.text_field :contact_main_office_phone_number
+      %tr
+        %td
+          = form.label :contact_office_location, "Point of Contact Office Location"
+        %td
+          = form.text_field :contact_office_location
   = submit_tag 'Save'
 
 = render :partial => 'shared/bottom_data_entry',

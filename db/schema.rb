@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100809193107) do
+ActiveRecord::Schema.define(:version => 20100810053257) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -132,13 +132,18 @@ ActiveRecord::Schema.define(:version => 20100809193107) do
   create_table "data_responses", :force => true do |t|
     t.integer  "data_element_id"
     t.integer  "data_request_id"
-    t.boolean  "complete",                  :default => false
+    t.boolean  "complete",                         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id_responder"
     t.string   "currency"
     t.date     "fiscal_year_start_date"
     t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

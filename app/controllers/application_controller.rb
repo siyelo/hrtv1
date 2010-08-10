@@ -137,6 +137,9 @@ class ApplicationController < ActionController::Base
     def record.association_lookup_errors #use for error handling later
       couldnt_find_models
     end
+    if record.respond_to?(:data_response=)
+      record.data_response = current_user.current_data_response
+    end
     record
   end
 

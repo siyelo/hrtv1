@@ -57,6 +57,13 @@ class OtherCostsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
+  def beginning_of_chain
+    super.available_to current_user
+  end
+  #fixes create
+  def before_create_save record
+    record.data_response = current_user.current_data_response
+  end
 
   def popup_coding
     redirect_to budget_activity_coding_url(params[:id])

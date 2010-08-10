@@ -11,7 +11,11 @@ class FundingSourcesController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :to => current_user.organization.id , :self_provider_flag => 0}
+    unless current_user.role?(:admin)
+      @constraints = { :to => current_user.organization.id , :self_provider_flag => 0}
+    else
+      @constraints = {:self_provider_flag => 0}
+    end
     @label = "Funding Sources"
   end
 

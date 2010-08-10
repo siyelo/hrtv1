@@ -21,6 +21,7 @@ class OrganizationsController < ApplicationController
     config.create.columns = @@create_columns
     config.update.columns = config.create.columns
     config.subform.columns = [:name, :type]
+    config.columns[:name].description = "Before creating a new organization, ensure this organization doesn't already exist by checking the drop down list in the create or add existing form."
     config.columns[:type].form_ui = :select
     config.columns[:type].options = {:options => [
       ["Donor","Donor"],
@@ -38,4 +39,12 @@ class OrganizationsController < ApplicationController
     authorize! :update, Organization
   end
 
+  # put this in as temporary bug fix
+  # if you click institutions assisted on activity screen
+  # and delete an activity there, it actually delete's the real
+  # organization! until we work around it
+  # this makes the delete link not show up there
+  def delete_authorized?
+    authorize! :delete, Organization
+  end
 end

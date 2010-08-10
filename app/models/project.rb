@@ -92,6 +92,6 @@ class Project < ActiveRecord::Base
       f2.send(att.to_s+"=", self.send(att))
     end
     f1.save;f2.save;
-    activities << OtherCost.new
+    #activities << OtherCost.new #TODO fix and let this work
   end
 end

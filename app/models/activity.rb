@@ -34,6 +34,8 @@ class Activity < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
+  attr_accessible :projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget
+
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations
@@ -54,6 +56,8 @@ class Activity < ActiveRecord::Base
   attr_accessor :budget_cost_categories_updates
   attr_accessor :expenditure_codes_updates
   attr_accessor :expenditure_cost_categories_updates
+  attr_accessible :budget_cost_categories_updates, :budget_codes_updates,
+    :expenditure_codes_updates, :expenditure_cost_categories_updates
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 

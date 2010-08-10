@@ -41,6 +41,8 @@ class ApplicationController < ActionController::Base
     config.actions.exclude :show
     config.list.empty_field_text = "------"
     config.list.pagination = false
+      # use for temporary security solution for comments
+      config.security.current_user_method = :current_user
     #config.create.persistent = true #add back when make form appear below list
   end
 

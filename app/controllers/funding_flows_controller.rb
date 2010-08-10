@@ -1,15 +1,6 @@
 class FundingFlowsController < ApplicationController
   authorize_resource
 
-  #fixes create
-  before_filter :add_data_response_to_params, :only => [:create, :update]
-  def add_data_response_to_params
-    if params[:record]
-      #set data_response unless you are an admin
-      #this way admins can edit data to fix it without overwriting anything
-      params[:record][:data_response]=current_user.current_data_response unless current_user.role?(:admin)
-    end
-  end
   @@shown_columns = [:project, :from, :to, :budget, :spend]
   @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   def self.create_columns
@@ -84,4 +75,8 @@ class FundingFlowsController < ApplicationController
     super.available_to current_user
   end
 
+  #fixes create
+  def before_create_save record
+    record.data_response = current_user.current_data_response
+  end
 end

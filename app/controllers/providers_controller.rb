@@ -9,7 +9,11 @@ class ProvidersController < ApplicationController
     :file_field => :file
 
   def index
-    @constraints = { :from => current_user.organization.id } #current_user.organization.id
+    unless current_user.role?(:admin)
+      @constraints = { :from => current_user.organization.id}
+    else
+      @constraints = {}
+    end
     @label = "Implementers"
   end
 

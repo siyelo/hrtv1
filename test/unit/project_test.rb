@@ -6,6 +6,19 @@ class ProjectTest < ActiveSupport::TestCase
     # moved to project_spec.rb
   end
 
+  test "can't see projects not in my data response" do
+    o2=Organization.new(:name=>"second's")
+    o2.save(false)
+    u2=User.new(:organization => o2)
+    u2.save(false)
+    set_data_response_for_user u2, DataRequest.first
+    p=Project.new(:name =>"p", :data_response => @user.current_data_response)
+    p.save
+#    puts p.inspect
+    assert Project.available_to(@user).first == p
+#    puts Project.available_to(u2).inspect
+    assert Project.available_to(u2).count == 0
+  end
   # need to get shoulda working
   # will make these more elegant
   # oh, i miss the internet
@@ -22,13 +35,15 @@ class ProjectTest < ActiveSupport::TestCase
 
   end
   test "creates workflow records after save" do
-    p=Project.create!(:name => "proj1")
+   # puts "@user's data response:"+@user.current_data_response.inspect
+    p=Project.create!(:name => "proj1", :data_response => @user.current_data_response)
     assert p.funding_flows.size == 2
     to_me = nil
     from_me_to_me = nil
     p.funding_flows.each do |f|
-      if f.to == User.current_user.organization
-        if f.from == User.current_user.organization && f.self_provider_flag == 1
+      puts "Funding flow for newly created project:"+f.inspect
+      if f.to == p.owner
+        if f.from == p.owner && f.self_provider_flag == 1
           from_me_to_me = f
         else
           to_me = f
@@ -39,7 +54,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert from_me_to_me != nil
     # todo make this test better by having values for these attribs
     # tested it manually and it works
-    shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+    shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response]
     shared_attributes.each do |att|
       assert to_me.send(att) == p.send(att)
       assert from_me_to_me.send(att) == p.send(att)

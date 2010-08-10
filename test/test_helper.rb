@@ -36,7 +36,15 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   def setup
-    Organization.create(:name => "self")
-    User.stub_current_user_and_data_response
+    org=Organization.create(:name => "self")
+    @user=User.new(:organization => org)
+    @user.save(false)
+    data_request=DataRequest.create
+    set_data_response_for_user(@user, data_request)
+  end
+  def set_data_response_for_user user, data_request
+    data_response=data_request.data_responses.create(:responding_organization => user.organization)
+    user.current_data_response=data_response
+    user.save(false)
   end
 end

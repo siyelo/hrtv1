@@ -20,7 +20,6 @@
 #  spend_q4_prev         :decimal(, )
 #
 
-require 'lib/value_at_runtime'
 require 'lib/ActAsDataElement'
 
 # == Schema Information
@@ -47,6 +46,10 @@ class FundingFlow < ActiveRecord::Base
 
   include ActAsDataElement
   configure_act_as_data_element
+
+  attr_accessible :budget, :organization_text, :project,
+    :from, :to, :self_provider_flag,
+    :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
 
   # donor enters/creates this
   # ngo enters/confirms with their amounts so can see any inconsistencies

@@ -32,28 +32,28 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update_budget
-    @activity = Activity.accessible_to(current_user).find(params[:activity_id])
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
     self.update_assignments("budget", budget_activity_coding_path(@activity))
   end
 
   def update_expenditure
-    @activity = Activity.accessible_to(current_user).find(params[:activity_id])
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
     self.update_assignments("expenditure", expenditure_activity_coding_path(@activity))
   end
 
   def update_budget_cost_categories
-    @activity = Activity.accessible_to(current_user).find(params[:activity_id])
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
     self.update_assignments("budget", budget_cost_categories_activity_coding_path(@activity))
   end
 
   def update_expenditure_cost_categories
-    @activity = Activity.accessible_to(current_user).find(params[:activity_id])
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
     self.update_assignments("expenditure", expenditure_cost_categories_activity_coding_path(@activity))
   end
   protected
 
   def load_codes
-    @activity = Activity.accessible_to(current_user).find(params[:activity_id])
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :read, @activity
     @codes = @activity.valid_roots_for_code_assignment
   end

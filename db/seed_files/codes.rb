@@ -9,10 +9,10 @@ Code.delete_all
 id_col            = 2
 parent_id_col     = 3
 class_col         = 4
-type_col          = 9
-short_display_col = 10
-long_display_col  = 12
-description_col   = 13
+type_col          = 8
+short_display_col = 9
+long_display_col  = 11
+description_col   = 12
 
 i = 0
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|

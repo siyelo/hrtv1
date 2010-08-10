@@ -1,16 +1,17 @@
 class OrganizationsController < ApplicationController
+  authorize_resource
   @@shown_columns = [:name, :type, :raw_type]
   @@create_columns = [:name, :type, :raw_type]
   def self.create_columns
     @@create_columns
   end
-  
+
   @@columns_for_file_upload = @@create_columns.map {|c| c.to_s}
   map_fields :create_from_file,
     @@columns_for_file_upload,
     :file_field => :file
   #record_select :per_page => 20, :search_on => [:name], :order_by => 'name ASC', :full_text_search => true
-  
+
   active_scaffold :organization do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
@@ -31,7 +32,7 @@ class OrganizationsController < ApplicationController
     super @@columns_for_file_upload
   end
   protected
-  
+
   #to get the edit link to not show up
   def update_authorized?
     authorize! :update, Organization

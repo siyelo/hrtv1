@@ -1,4 +1,5 @@
 class ModelHelpsController < ApplicationController
+  authorize_resource
   @@shown_columns = [:model_name,  :long]
   @@create_columns = @@shown_columns
   def self.create_columns

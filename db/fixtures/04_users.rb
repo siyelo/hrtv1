@@ -38,12 +38,15 @@ FasterCSV.foreach("db/fixtures/files/users.csv", :headers => true ) do |row|
                :organization => org,
                :roles => ['reporter'])
   print "  WARN: reporter \"#{user_email}\" not created" unless saved
+  print "."
 
   User.unstub_current_user_and_data_response
 
 end
 
-puts "INFO: auto-created passwords for:"
-pp auto_created_passwords
+unless auto_created_passwords.empty?
+  puts "INFO: auto-created passwords for:"
+  auto_created_passwords.each { |p| puts p }
+end
 
 puts "...Loading users DONE\n"

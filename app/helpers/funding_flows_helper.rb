@@ -5,23 +5,23 @@ module FundingFlowsHelper
     # or we could require the other org make the funding flow
     # and then have callback create the record for the other org
     if association.name == :from
-        ["type in (?) or id = ?", "Donor", User.current_user.organization.id ]
+        ["type in (?) or id = ?", "Donor", current_user.organization.id ]
     elsif association.name == :to
       ids=Set.new
       if @record.project
         ids.merge collect_orgs(@record.project)
       else
-        Project.all.each do |p| #in future this should scope right with default
+        Project.available_to(current_user).each do |p| #in future this should scope right with default
           ids.merge collect_orgs(p)
         end
       end
 
       unless ids.size == 0
-        s=User.current_user.organization.id
+        s=current_user.organization.id
         ids << s if s
         ["id in (?) or type in (?)", ids, "Ngo"]
       else
-        ["type in (?) or id = ? or type in (?)", "Ngo", User.current_user.organization.id, "Donor" ]
+        ["type in (?) or id = ? or type in (?)", "Ngo", current_user.organization.id, "Donor" ]
       end
     else
         super

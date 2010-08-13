@@ -38,15 +38,15 @@ ActionController::Routing::Routes.draw do |map|
   map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
 
   map.resources :indicators, :active_scaffold => true
-  map.resources :line_items, :active_scaffold => true
+  #map.resources :line_items, :active_scaffold => true
   map.resources :comments, :active_scaffold => true
   map.resources :field_helps, :active_scaffold => true
   map.resources :model_helps, :active_scaffold => true
   map.resources :funding_flows, :active_scaffold => true
   map.resources :codes, :active_scaffold => true
-  map.resources :activity_cost_categories, :active_scaffold => true
+  #map.resources :activity_cost_categories, :active_scaffold => true
   map.resources :other_costs, :active_scaffold => true
-  map.resources :other_cost_types, :active_scaffold => true
+  #map.resources :other_cost_types, :active_scaffold => true
 
   map.resources :users, :active_scaffold => true
   map.resource :user_session

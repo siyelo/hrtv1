@@ -19,7 +19,6 @@
 class User < ActiveRecord::Base
   acts_as_authentic
 
-  cattr_accessor :current_user
   attr_readonly :roles_mask #only assign role on create
   attr_readonly :organization_id #only assign organization on create
 
@@ -63,25 +62,27 @@ class User < ActiveRecord::Base
   end
 
   def self.stub_current_user_and_data_response
-    o=Organization.new(:name=>"org_for_internal_stub382342")
-    o.save(false)
-    u = User.new(:username=> "admin_internal_stub2309420", :roles => ["admin"],
-      :organization => o)
-    u.save(false)
-    User.current_user = u
-    d=DataResponse.new :responding_organization => o
-    d.save(false)
-    u.current_data_response = d
-    u.save(false)
-    User.current_user = u
+   #TODO delete when not referenced
+#    o=Organization.new(:name=>"org_for_internal_stub382342")
+#    o.save(false)
+#    u = User.new(:username=> "admin_internal_stub2309420", :roles => ["admin"],
+#      :organization => o)
+#    u.save(false)
+##    User.current_user = u
+#    d=DataResponse.new :responding_organization => o
+#    d.save(false)
+#    u.current_data_response = d
+#    u.save(false)
+#    User.current_user = u
   end
   def self.unstub_current_user_and_data_response
-    u=User.find_by_username("admin_internal_stub2309420")
-    u.try(:current_data_response).try(:delete)
-    o = Organization.find_by_name("org_for_internal_stub382342")
-    o.try(:delete)
-    u.try(:delete)
-    User.current_user = nil
+   #TODO delete when not referenced
+#    u=User.find_by_username("admin_internal_stub2309420")
+#    u.try(:current_data_response).try(:delete)
+#    o = Organization.find_by_name("org_for_internal_stub382342")
+#    o.try(:delete)
+#    u.try(:delete)
+#    User.current_user = nil
   end
   def authorize
     # can't stub user with this...

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100804182517) do
+ActiveRecord::Schema.define(:version => 20100810053257) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(:version => 20100804182517) do
     t.text     "text_for_provider"
     t.text     "text_for_targets"
     t.text     "text_for_beneficiaries"
-    t.integer  "organization_id_owner"
     t.decimal  "spend_q4_prev"
+    t.integer  "data_response_id"
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
@@ -132,13 +132,18 @@ ActiveRecord::Schema.define(:version => 20100804182517) do
   create_table "data_responses", :force => true do |t|
     t.integer  "data_element_id"
     t.integer  "data_request_id"
-    t.boolean  "complete",                  :default => false
+    t.boolean  "complete",                         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id_responder"
     t.string   "currency"
     t.date     "fiscal_year_start_date"
     t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -163,11 +168,11 @@ ActiveRecord::Schema.define(:version => 20100804182517) do
     t.decimal  "spend_q2"
     t.decimal  "spend_q3"
     t.decimal  "spend_q4"
-    t.integer  "organization_id_owner"
     t.text     "organization_text"
-    t.integer  "self_provider_flag",    :default => 0
+    t.integer  "self_provider_flag",   :default => 0
     t.decimal  "spend"
     t.decimal  "spend_q4_prev"
+    t.integer  "data_response_id"
   end
 
   create_table "help_requests", :force => true do |t|
@@ -238,8 +243,13 @@ ActiveRecord::Schema.define(:version => 20100804182517) do
     t.decimal  "budget"
     t.decimal  "spend"
     t.decimal  "entire_budget"
-    t.integer  "organization_id_owner"
     t.string   "currency"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
+    t.decimal  "spend_q4_prev"
+    t.integer  "data_response_id"
   end
 
   create_table "sessions", :force => true do |t|

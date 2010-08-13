@@ -11,8 +11,8 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
-    when /the ngo dashboard page/
-      static_page_path(:ngo_dashboard)
+    when /the reporter dashboard page/
+      static_page_path(:reporter_dashboard)
 
     when /the projects listing page/
       projects_path
@@ -46,6 +46,9 @@ module NavigationHelpers
     when /the coding expenditure page for "(.+)"/
       activity = Activity.find_by_name($1)
       expenditure_activity_coding_path(activity)
+
+    when /the user guide page/
+      static_page_path(:user_guide)
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

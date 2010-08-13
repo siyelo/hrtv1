@@ -1,0 +1,17 @@
+#sub-nav
+  %ul
+    %li{ :class => [controller.class.to_s == "DataResponseController" ? "active" : '']}
+      = link_to 'Configure', data_response_start_path(current_user.current_data_response)
+    %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
+      = link_to 'Projects', projects_path
+
+    %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
+      = link_to 'Funding Sources', funding_sources_data_entry_path
+
+    %li{ :class => [controller.class.to_s == "ProvidersController" ? "active" : '']}
+      = link_to 'Implementers', providers_data_entry_path
+    %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
+      = link_to 'Activities', activities_path
+
+    %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
+      = link_to 'Other Costs', other_costs_path

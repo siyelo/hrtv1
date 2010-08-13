@@ -1,3 +1,6 @@
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
 = title ("Data Response Details")
 - form_for @data_response, :url => data_response_edit_url(@data_response.id), :method => :post do |form|
   %table

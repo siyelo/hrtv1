@@ -3,6 +3,21 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
+@run
+Scenario: Login via home page
+  When I go to the home page
+  And I follow "Sign in"
+  Then I should be on the login page
+
+@run
+Scenario: See login form
+  When I go to the login page
+  Then I should see the visitors header
+  Then I should see "Sign in" within "body#login"
+  And I should see "Username or Email" within "body#login"
+  And I should see "Password" within "body#login"
+  Then I should see the common footer
+  
 Scenario: Login with invalid data - see flash message not AR errors
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -23,16 +38,7 @@ Scenario: Login as a reporter with a username
   And I should see "Dashboard"
   And I should see "My Profile"
 
-# Scenario: Login as a reporter with email address
-#   Given a reporter "Frank" with email "frank@f.com" and password "password"
-#   When I go to the login page
-#   When I fill in "Username or email" with "frank@f.com"
-#   And I fill in "Password" with "password"
-#   And I press "Submit"
-#   Then show me the page
-#   Then I should be on the ngo dashboard page
-#   And I should see "Welcome Frank"
-# 
+@wip
 Scenario: Login as a reporter with email address
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -42,8 +48,6 @@ Scenario: Login as a reporter with email address
   #Then show me the page
   Then I should be on the ngo dashboard page
   And I should see "Welcome Frank"
-
-  
 
 @allow-rescue
 Scenario Outline: Visit protected page, get redirected to login screen

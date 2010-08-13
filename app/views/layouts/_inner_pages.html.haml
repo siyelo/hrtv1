@@ -1,31 +1,10 @@
 %body
-  #header
-    .background
-      .inner
-        #logo
-          = image_tag("ubuzima.png")
-        = render :partial => '/layouts/login_nav'
+  = render "layouts/header_sml"
 
-  #tabs
-    %ul
-      %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
-        = link_to 'Projects', projects_path
-
-      %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
-        = link_to 'Funding Sources', funding_sources_data_entry_path
-
-      %li{ :class => [controller.class.to_s == "ProvidersController" ? "active" : '']}
-        = link_to 'Implementers', providers_data_entry_path
-      %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
-        = link_to 'Activities', activities_path
-
-      %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
-        = link_to 'Other Costs', other_costs_path
-
-    = image_tag "tagline.png"
+  = render :partial => 'layouts/main_nav'
 
   #content
-    = render :partial => 'layouts/top_menu'
+    = yield :sub_nav
     = render :partial => 'layouts/flashes'
     #main
 

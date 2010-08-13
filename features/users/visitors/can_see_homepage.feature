@@ -3,8 +3,8 @@ Feature: Visitor can see homepage
   As a visitor
   I want to be able to see a landing page
 
+@run
 Scenario: See heading and login
   When I go to the home page
-  Then I should see "Have an account?"
-  And I should see "Sign in"
-  And I should see "Contact Us"
+  Then I should see the visitors header
+  Then I should see the common footer

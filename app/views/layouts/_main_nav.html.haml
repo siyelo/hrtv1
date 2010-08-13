@@ -1,0 +1,13 @@
+#main-nav
+  %ul
+    %li
+      - if current_user.role? :admin
+        %li= link_to "Dashboard", static_page_path(:admin_dashboard)
+      - elsif current_user.role? :reporter
+        %li= link_to "Dashboard", static_page_path(:reporter_dashboard)
+    %li
+      = link_to 'Request', data_response_start_path(current_user.current_data_response)
+    %li
+      = link_to 'Reports', projects_path
+    %li{ :class => [controller.class.to_s == "StaticPageController" && controller.action_name == 'show' && params[:page] == 'user_guide' ? "active" : '']}
+      = link_to 'Help', static_page_path(:user_guide)

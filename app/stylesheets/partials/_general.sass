@@ -10,7 +10,7 @@ body
     text-decoration: none
     &:hover
       text-decoration: underline
-  
+
   p, ul, dl
     color: #444
 
@@ -21,11 +21,11 @@ body
   .right
     float: right
 
-  #header, #tabs, #footer
+  #header, #main-nav, #sub-nav, #footer
     min-width: 800px
     padding: 0 50px
 
-  #header, #tabs
+  #header, #main-nav
     background= image_url("bg-blue.jpg")
     //background= !mid-blue
     a
@@ -53,7 +53,7 @@ body
           float: right
           padding: 7px 12px
 
-  #tabs
+  #main-nav
     ul
       display: block
       overflow: hidden
@@ -86,6 +86,9 @@ body
     img
       float: right
       margin-top: -35px
+  #sub-nav
+    ul
+      +horizontal-list
 
   #content
     +border-bottom-radius
@@ -227,7 +230,7 @@ body
       color= !mid-blue
       font-size: 0.8em
       letter-spacing: 0.05em
-      
+
   #content #map_fields_form
     .map_fields
       padding-left: 10px

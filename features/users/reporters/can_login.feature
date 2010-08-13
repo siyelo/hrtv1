@@ -3,16 +3,20 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
+@run
 Scenario: Login via home page
   When I go to the home page
   And I follow "Sign in"
   Then I should be on the login page
 
+@run
 Scenario: See login form
   When I go to the login page
-  Then I should see "Sign in"
-  And I should see "Username or Email"
-  And I should see "Password"
+  Then I should see the visitors header
+  Then I should see "Sign in" within "body#login"
+  And I should see "Username or Email" within "body#login"
+  And I should see "Password" within "body#login"
+  Then I should see the common footer
   
 Scenario: Login with invalid data - see flash message not AR errors
   Given a reporter "Frank" with email "frank@f.com" and password "password"

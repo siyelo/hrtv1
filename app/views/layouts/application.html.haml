@@ -4,8 +4,10 @@
     = render :partial => 'layouts/title'
     = yield(:head)
 
-  - if controller.controller_name == "static_page" &&  controller.action_name == "index"
+  - if controller.controller_name == "static_page" && controller.action_name == "index"
     = render :partial => 'layouts/landing_page'
+  - elsif controller.controller_name == "user_sessions"
+    = render :partial => 'layouts/user_session'
   - else
     = render :partial => 'layouts/inner_pages'
 

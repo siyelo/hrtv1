@@ -1,10 +1,5 @@
 - title "User Guide"
 
-- if current_user.role? :admin
-  = link_to "Continue to My Dashboard", static_page_path(:admin_dashboard)
-- elsif current_user.role? :reporter
-  = link_to "Continue to My Dashboard", static_page_path(:reporter_dashboard)
-
 #guide
   %h2 Using the Resource Tracking Tool:
 

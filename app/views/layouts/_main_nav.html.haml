@@ -1,13 +1,25 @@
 #main-nav
+  - dashboard_active = help_active = reports_active = false
+  - if controller.class.to_s == "StaticPageController" && controller.action_name == 'show'
+    - dashboard_active = true if params[:page] == 'reporter_dashboard'
+    - help_active      = true if params[:page] == 'user_guide'
+    - reports_active   = true if params[:page] == 'reports'
+
+  -# will break if more tabs are added!
+  - workplan_active = !dashboard_active && !help_active && !reports_active
+
   %ul
-    %li
-      - if current_user.role? :admin
-        %li= link_to "Dashboard", static_page_path(:admin_dashboard)
-      - elsif current_user.role? :reporter
-        %li= link_to "Dashboard", static_page_path(:reporter_dashboard)
-    %li
-      = link_to 'Request', data_response_start_path(current_user.current_data_response)
-    %li
-      = link_to 'Reports', projects_path
-    %li{ :class => [controller.class.to_s == "StaticPageController" && controller.action_name == 'show' && params[:page] == 'user_guide' ? "active" : '']}
+    - if current_user.role? :admin
+      %li{ :class =>dashboard_active ? "active" : ''}= link_to "Dashboard", static_page_path(:admin_dashboard)
+    - elsif current_user.role? :reporter
+      %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", static_page_path(:reporter_dashboard)
+    %li{ :class => workplan_active ? "active" : ''}
+      -# this might break if no response selected
+      - if current_user && current_user.current_data_response
+        = link_to 'Workplan', data_response_start_path(current_user.current_data_response)
+      - else
+        = Workplan
+    %li{ :class => reports_active ? "active" : ''}
+      = link_to 'Reports', static_page_path(:reports)
+    %li{ :class => help_active ? "active" : ''}
       = link_to 'Help', static_page_path(:user_guide)

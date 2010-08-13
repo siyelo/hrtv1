@@ -17,6 +17,9 @@ capybara*.html
 rerun.txt
 coverage/*
 
+#partial heroku db:pulls
+pull*.dat
+
 # The .bundle folder should never be checked into the code repository as it holds machine-local configuration
 .bundle/
 

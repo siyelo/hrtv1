@@ -13,8 +13,11 @@ class Ability
       can :manage, OtherCost
       can :manage, Comment
       can :manage, CodeAssignment
+      can :create, Organization
       can :update, User, :id => user.id
       can :read, Code
+      can :read, ModelHelp
+      can :read, FieldHelp
     end
   end
 end

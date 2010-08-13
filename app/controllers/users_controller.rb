@@ -68,6 +68,6 @@ class UsersController < ApplicationController
   # change their password
   rescue_from CanCan::AccessDenied do |exception|
       flash[:notice] = "Successfully updated your profile"
-      redirect_to user_dashboard_path(User.current_user)
+      redirect_to user_dashboard_path(current_user)
   end
 end

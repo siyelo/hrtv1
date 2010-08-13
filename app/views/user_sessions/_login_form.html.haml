@@ -1,8 +1,7 @@
-%h3 Sign in
 - form_for @user_session, :url => user_session_path do |form|
   %fieldset.user_form
     %p
-      = form.label :username, "Username or email"
+      = form.label :username, "Username or Email"
       = form.text_field :username
     %p
       = form.label :password, "Password"

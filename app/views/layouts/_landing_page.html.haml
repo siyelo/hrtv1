@@ -1,31 +1,11 @@
-- content_for :header do
-  = render :partial => '/layouts/header_for_visitors'
-
-  /#home
-  / = render :partial => '/layouts/header_for_visitors'
-
--content_for :main do
-  #home
-    #main
-      #content
-        .slider
-          #s3slider
-            %ul#s3sliderContent
-              %li.s3sliderImage
-                %img{ :src => "images/slider/1.png" }
-                %span.top
-                  Resources going where they're most needed
-              %li.s3sliderImage
-                %img{ :src => "images/slider/2.jpg" }
-                %span.top
-                  To improve and save lives
-              %div.clear.s3sliderImage
-        .text
-          %h3 Better Information. Better Decisions.
-          %p This database helps us know where money and other resources are going to improve health in Rwanda, so that everyone knows what resources are tackling what problems. Because it's only together, seeing a full picture, that we can make the best decisions.
-          %p This database was created under the stewardship of the Resource Tracking Steering Committee, which is chaired by the Rwandan Ministry of Health. The database was implemented by Health Systems 20/20, a global project funded by USAID, with helpful input from many other institutions.
-
-      /.sign_in_form
-      /%h3 Sign In
-      /= render :partial => '/shared/login_form'
-
+%body#landing
+  #header
+    .background
+      .inner
+        #logo
+          = image_tag("ubuzima.png")
+        = render :partial => '/layouts/login_nav'
+        %span.quote Improving lives through better health policy
+        = image_tag("tagline.png")
+  = yield(:tabs)
+  = yield(:main)

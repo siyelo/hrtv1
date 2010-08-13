@@ -123,7 +123,7 @@ Then /^I should see the visitors header$/ do
   }
 end
 
-Then /^I should see the reporters header$/ do
+Then /^I should see the reporters admin nav$/ do
   steps %Q{
     Then I should see "frank@f.com" within "div#header"
     Then I should see "My Profile" within "div#header"
@@ -140,14 +140,23 @@ Then /^I should see the common footer$/ do
   }
 end
 
+Then /^I should see the main nav tabs$/ do
+  steps %Q{
+    Then I should see "Dashboard" within "div#main-nav"
+    Then I should see "Workplan" within "div#main-nav"
+    Then I should see "Reports" within "div#main-nav"
+    Then I should see "Help" within "div#main-nav"
+  }
+end
+
 Then /^I should see the data response tabs$/ do
   steps %Q{
-    Then I should see "Projects" within "div#sub-nav"
+    Then I should see "Projects" within "li"
   }
 end
 
 Then /^I should not see the data response tabs$/ do
   steps %Q{
-    Then I should not see "Projects" within "div#sub-nav"
+    Then I should not see "Projects" within "li"
   }
 end

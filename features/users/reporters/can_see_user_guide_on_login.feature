@@ -11,10 +11,11 @@ Scenario: Login and see user guide
   And I fill in "Password" with "password"
   And I press "Sign in"
   Then I should be on the user guide page
-  Then I should see the reporters header
+  Then I should see the reporters admin nav
+  And I should see the main nav tabs
   And I should see "Using the Resource Tracking Tool"
-  And I should see "Continue to My Dashboard"
-  Then I should see the common footer
+  And I should see the common footer
+  When I follow "Dashboard"
   
 @run
 Scenario: Bug: should not see Projects/Implementers/etc tabs
@@ -24,4 +25,5 @@ Scenario: Bug: should not see Projects/Implementers/etc tabs
   And I fill in "Password" with "password"
   And I press "Sign in"
   Then I should be on the user guide page
-  Then I should not see the data response tabs
+  And I should see the main nav tabs
+  And I should not see the data response tabs

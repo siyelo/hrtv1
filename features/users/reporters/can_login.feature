@@ -17,26 +17,26 @@ Scenario: See login form
   And I should see "Username or Email" within "body#login"
   And I should see "Password" within "body#login"
   Then I should see the common footer
-  
+
+@wip
 Scenario: Login with invalid data - see flash message not AR errors
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
-  And I fill in "Username or email" with "not a real user"
+  And I fill in "Username or Email" with "not a real user"
   And I fill in "Password" with ""
-  And I press "Submit"
+  And I press "Sign in"
   Then I should see "Wrong Username/email and password combination"
   And I should not see "There were problems with the following fields:"
 
+@run
 Scenario: Login as a reporter with a username
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
-  When I fill in "Username or email" with "Frank"
+  When I fill in "Username or Email" with "Frank"
   And I fill in "Password" with "password"
-  And I press "Submit"
-  Then I should be on the ngo dashboard page
-  And I should see "Welcome Frank"
-  And I should see "Dashboard"
-  And I should see "My Profile"
+  And I press "Sign in"
+  And I should see the reporters admin nav
+  And I should see the main nav tabs
 
 @wip
 Scenario: Login as a reporter with email address
@@ -44,9 +44,9 @@ Scenario: Login as a reporter with email address
   When I go to the login page
   When I fill in "Username or email" with "frank@f.com"
   And I fill in "Password" with "password"
-  And I press "Submit"
+  And I press "Sign in"
   #Then show me the page
-  Then I should be on the ngo dashboard page
+  Then I should be on the reporter dashboard page
   And I should see "Welcome Frank"
 
 @allow-rescue

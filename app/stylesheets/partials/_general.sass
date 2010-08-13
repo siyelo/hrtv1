@@ -87,8 +87,11 @@ body
       float: right
       margin-top: -35px
   #sub-nav
+    height: 30px
     ul
       +horizontal-list
+    #page_tips_nav
+      float: right
 
   #content
     +border-bottom-radius
@@ -189,6 +192,10 @@ body
 
     #desc
       display: none
+
+      a#page_tips_close_link
+        float: right
+
 
     #desc, #helper
       +border-radius

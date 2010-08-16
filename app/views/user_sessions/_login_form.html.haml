@@ -1,5 +1,5 @@
 - form_for @user_session, :url => user_session_path do |form|
-  %fieldset.user_form
+  %fieldset
     %p
       = form.label :username, "Username or Email"
       = form.text_field :username
@@ -7,9 +7,9 @@
       = form.label :password, "Password"
       = form.password_field :password
 
-    %p.checkbox
+    %p
       = form.check_box :remember_me
       = form.label :remember_me
-
-    .buttons
+    
+    %p
       = form.submit "Sign in"

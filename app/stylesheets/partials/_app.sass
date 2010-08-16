@@ -1,25 +1,4 @@
-body
-  background= image_url("bg-white.jpg")
-  font-family: Arial, Helvetica, serif
-
-  a, p
-    font-size: 0.85em
-
-  a
-    color= !mid-blue
-    text-decoration: none
-    &:hover
-      text-decoration: underline
-
-  p, ul, dl
-    color: #444
-
-  h2
-    font-weight: bold
-    text-transform: uppercase
-
-  .right
-    float: right
+body#app
 
   #header, #main-nav, #sub-nav, #footer
     min-width: 800px
@@ -27,24 +6,22 @@ body
 
   #header, #main-nav
     background= image_url("bg-blue.jpg")
-    //background= !mid-blue
     a
       color= !lighter-blue
       font-size: 0.8em
 
   #header
     #admin
-      +column(17, true)
+
       .welcome
-        +prepend(5)
-        +column(4)
+
         span
           padding-top: 10px
           font-size: 11px
           color= !light-blue
           float: right
       .links
-        +column(8, true)
+
         ul
           float: right
           +border-radius
@@ -243,14 +220,6 @@ body
       font-size: 0.8em
       padding: 2px 0
 
-  #footer
-    clear: both
-    color= !mid-blue
-    font-size: 0.8em
-    margin: 0 10px 20px 10px
-    text-transform: uppercase
-    a
-      padding: 5px
   #guide
     h2
       +border-radius

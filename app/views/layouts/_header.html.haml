@@ -1,8 +1,14 @@
 #header
-  .background
-    .inner
-      #logo
-        = image_tag("ubuzima.png")
-      = render :partial => '/layouts/login_nav'
-      %span.quote Improving lives through better health policy
-      = image_tag("tagline.png")
+  .wrapper
+    #logo
+      %h1
+        UBU
+        %span ZIMA
+        %span.mu Mu Rwanda
+      %p Improving lives through better health policy
+      
+    = render :partial => '/layouts/login_nav'
+    
+    #tagline
+      %h2 Resource Tracking Database
+      %h6 Health Resource Tracking and Planning

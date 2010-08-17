@@ -1,4 +1,4 @@
-class FundingSourcesController < ApplicationController
+class FundingSourcesController < ActiveScaffoldController
 
   authorize_resource :class => FundingFlow
 

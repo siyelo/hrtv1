@@ -1,12 +1,9 @@
-class CodeAssignmentsController < ApplicationController
-  authorize_resource
+# GR - this is deprecated in favour of the Budget/Expend Classification controllers
+# These Budg/Exp "Cost Category" "classifications" need to be refactored as such
 
-  def budget
-    self.load_codes
-    @current_codes = @activity.budget_codes
-    @current_assignments = @activity.budget_codings
-    @coding_type = :budget_codes
-  end
+class CodeAssignmentsController < ApplicationController
+
+  authorize_resource
 
   def budget_cost_categories
     self.load_codes
@@ -16,12 +13,6 @@ class CodeAssignmentsController < ApplicationController
     @codes = @activity.valid_cost_category_codes
   end
 
-  def expenditure
-    self.load_codes
-    @current_codes = @activity.expenditure_codes
-    @current_assignments = @activity.expenditure_codings
-    @coding_type = :expenditure_codes
-  end
 
   def expenditure_cost_categories
     self.load_codes
@@ -29,16 +20,6 @@ class CodeAssignmentsController < ApplicationController
     @current_assignments = @activity.expenditure_codings
     @coding_type = :expenditure_cost_categories
     @codes = @activity.valid_cost_category_codes
-  end
-
-  def update_budget
-    @activity = Activity.available_to(current_user).find(params[:activity_id])
-    self.update_assignments("budget", budget_activity_coding_path(@activity))
-  end
-
-  def update_expenditure
-    @activity = Activity.available_to(current_user).find(params[:activity_id])
-    self.update_assignments("expenditure", expenditure_activity_coding_path(@activity))
   end
 
   def update_budget_cost_categories
@@ -50,6 +31,7 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     self.update_assignments("expenditure", expenditure_cost_categories_activity_coding_path(@activity))
   end
+
   protected
 
   def load_codes
@@ -59,7 +41,8 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update_assignments(coding_type, path)
-    #authorize! :update, @activity #GN: why is this missing
+    authorize! :update, @activity
+
     params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
     respond_to do |format|

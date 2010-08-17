@@ -1,7 +1,7 @@
-class IndicatorsController < ApplicationController
+class IndicatorsController < ActiveScaffoldController
   @@shown_columns = [:name, :description]
   @@create_columns = [:name, :description]
-  
+
   active_scaffold :indicator do |config|
     config.columns =  @@shown_columns
     list.sorting = {:name => 'DESC'}
@@ -11,7 +11,7 @@ class IndicatorsController < ApplicationController
     config.columns[:description].inplace_edit = true
     config.columns[:description].form_ui = :textarea
   end
-  
+
   def to_label
     @s="Indicator: "
     if name.nil? || name.empty?

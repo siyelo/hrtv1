@@ -1,4 +1,4 @@
-class ActivitiesController < ApplicationController
+class ActivitiesController < ActiveScaffoldController
   authorize_resource
 
   before_filter :check_user_has_data_response
@@ -98,7 +98,7 @@ class ActivitiesController < ApplicationController
 
   #AS helper method
   def popup_coding
-    redirect_to budget_activity_coding_url(params[:id])
+    redirect_to activity_budget_url(params[:id])
   end
 
   def conditions_for_collection

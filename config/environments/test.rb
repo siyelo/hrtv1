@@ -12,3 +12,6 @@ config.action_view.cache_template_loading            = true
 config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method                 = :test
 
+if ENV.include?('I_LOVE_METRICS')
+  config.gem "metric_fu",         :version => '1.5.1', :lib => 'metric_fu'
+end

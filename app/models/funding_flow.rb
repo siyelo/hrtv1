@@ -2,22 +2,22 @@
 #
 # Table name: funding_flows
 #
-#  id                    :integer         not null, primary key
-#  organization_id_from  :integer
-#  organization_id_to    :integer
-#  project_id            :integer
-#  created_at            :datetime
-#  updated_at            :datetime
-#  budget                :decimal(, )
-#  spend_q1              :decimal(, )
-#  spend_q2              :decimal(, )
-#  spend_q3              :decimal(, )
-#  spend_q4              :decimal(, )
-#  organization_id_owner :integer
-#  organization_text     :text
-#  self_provider_flag    :integer         default(0)
-#  spend                 :decimal(, )
-#  spend_q4_prev         :decimal(, )
+#  id                   :integer         primary key
+#  organization_id_from :integer
+#  organization_id_to   :integer
+#  project_id           :integer
+#  created_at           :timestamp
+#  updated_at           :timestamp
+#  budget               :decimal(, )
+#  spend_q1             :decimal(, )
+#  spend_q2             :decimal(, )
+#  spend_q3             :decimal(, )
+#  spend_q4             :decimal(, )
+#  organization_text    :text
+#  self_provider_flag   :integer         default(0)
+#  spend                :decimal(, )
+#  spend_q4_prev        :decimal(, )
+#  data_response_id     :integer
 #
 
 require 'lib/ActAsDataElement'

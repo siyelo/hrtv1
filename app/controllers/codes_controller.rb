@@ -1,4 +1,5 @@
-class CodesController < ApplicationController
+class CodesController < ActiveScaffoldController
+
   authorize_resource
 
   def to_label
@@ -15,25 +16,14 @@ class CodesController < ApplicationController
   end
 
   active_scaffold :code do |config|
-    config.columns = @@shown_columns
-    config.create.columns = @@create_columns
-    config.update.columns = @@create_columns
-
-    #show deprecated codes at end
-    #list.sorting = {:replacement_code => 'ASC'}
-
-    #config for associations
+    config.columns                                = @@shown_columns
+    config.create.columns                         = @@create_columns
+    config.update.columns                         = @@create_columns
     config.columns[:children].association.reverse = :parent
     config.nested.add_link("Children", [:children])
-    #config.columns[:proxy_for].association.reverse = :replacement_code
-    #config.nested.add_link("Replacement For", [:proxy_for])
-
-    #column display and editing options
-    #config.columns[:replacement_code].form_ui = :select
-    #config.columns[:replacement_code].inplace_edit = true
-    config.columns[:description].inplace_edit = true
-    #config.columns[:start_date].inplace_edit = true
-    #config.columns[:end_date].inplace_edit = true
+    config.columns[:start_date].inplace_edit      = true
+    config.columns[:end_date].inplace_edit        = true
+    config.columns[:description].inplace_edit     = true
   end
 
   # what displays as name when association is expanded for this

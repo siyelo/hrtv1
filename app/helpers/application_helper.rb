@@ -1,14 +1,5 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  # Does not check that this is a valid class
-  def controller_model_class
-    c=controller_name.to_s.pluralize.singularize.camelize.constantize
-    if c.respond_to? :new
-      c # looks like we've got a real class
-    else
-      nil # TODO throw error?
-    end
-  end
 
   # Usage: simply invoke title() at the top of each view
   # E.g.
@@ -17,13 +8,16 @@ module ApplicationHelper
     content_for(:title) { page_title }
   end
 
-  def unfulfilled_responses
-    DataResponse.unfulfilled
+  # GR: I'd like to move this to its respective controller helper
+  # - but it seems the AS plugin code has been modified to use this method?
+  #
+  # Converts a (string) number to a percentage, preserving the decimals (if they exist)
+  #  99 => 99
+  #  50.1 => 50.1
+  def number_to_percentage(n)
+    n = n.to_f
+    return "" if n <= 0.0
+    sprintf("%2.f", n)
   end
-
-  def current_response
-    (session[:data_response].nil?)? session[:data_response] = DataResponse.create.id : session[:data_response]
-  end
-
 
 end

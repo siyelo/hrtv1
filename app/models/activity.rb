@@ -2,12 +2,12 @@
 #
 # Table name: activities
 #
-#  id                     :integer         not null, primary key
+#  id                     :integer         primary key
 #  name                   :string(255)
 #  beneficiary            :string(255)
 #  target                 :string(255)
-#  created_at             :datetime
-#  updated_at             :datetime
+#  created_at             :timestamp
+#  updated_at             :timestamp
 #  provider_id            :integer
 #  other_cost_type_id     :integer
 #  description            :text
@@ -23,13 +23,15 @@
 #  text_for_provider      :text
 #  text_for_targets       :text
 #  text_for_beneficiaries :text
-#  organization_id_owner  :integer
 #  spend_q4_prev          :decimal(, )
+#  data_response_id       :integer
 #
 
 require 'lib/ActAsDataElement'
 
 class Activity < ActiveRecord::Base
+  VALID_ROOT_TYPES = %w[Mtef Nha Nasa Nsp]
+
   acts_as_commentable
   include ActAsDataElement
   configure_act_as_data_element
@@ -67,10 +69,6 @@ class Activity < ActiveRecord::Base
     projects.valid_providers
   end
 
-  def valid_roots_for_code_assignment
-    @@valid_root_types = [Mtef, Nha, Nasa, Nsp]
-    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
-  end
 
   def self.valid_types_for_code_assignment
     [Mtef, Nha, Nasa, Nsp]

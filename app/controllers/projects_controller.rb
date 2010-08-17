@@ -1,4 +1,4 @@
-class ProjectsController < ApplicationController
+class ProjectsController < ActiveScaffoldController
   authorize_resource
 
   before_filter :check_user_has_data_response

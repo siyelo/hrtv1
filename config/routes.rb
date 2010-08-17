@@ -64,10 +64,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
-
-  map.news "news", :controller => 'static_page', :action => "news"
-  map.about "about", :controller => 'static_page', :action => "about"
-  map.contact "contact", :controller => 'static_page', :action => "contact"
+  map.reporter_dashboard "reporter_dashboard", :controller => 'static_page', :action => "reporter_dashboard"
 
   map.static_page ':page',
                   :controller => 'static_page',

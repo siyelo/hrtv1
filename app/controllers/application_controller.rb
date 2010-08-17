@@ -9,14 +9,7 @@ class ApplicationController < AuthlogicController
   include ApplicationHelper
 
   rescue_from CanCan::AccessDenied do |exception|
-      render :text => "Sorry, you do not have permission for this action or you have been logged out.
-      You may login at #{root_url} or use the contact link at
-      the bottom of the homepage to contact an administrator, if you
-      think this message is being shown in error."
-      # TODO try the below to see if inf loop bug is still there
-      # render a template / action without the layout with login link & help msg
-      # redirect caused infinite loop, could be that home page had security on it
-      #flash[:error] = "Access denied!"
-      #redirect_to root_url
+    flash[:error] = "You must be signed in to do that"
+    redirect_to login_url
   end
 end

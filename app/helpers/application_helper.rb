@@ -20,4 +20,16 @@ module ApplicationHelper
     sprintf("%2.f", n)
   end
 
+  def user_dashboard_path current_user
+    path = nil
+    if current_user
+      if current_user.role? :admin
+        path = static_page_path(:admin_dashboard)
+      elsif current_user.role? :reporter
+        path = reporter_dashboard_path
+      end
+    end
+    path
+  end
+
 end

@@ -19,7 +19,7 @@ Scenario: Single project is listed
   
 Scenario: All Projects are listed
   Given the following projects
-    | name | description       | expected_total    |
+    | name | description       | budget    |
     | P1   | p1 descr          | 20000 |
     | P2   | p2 descr          | 30000 | 
   Given I am signed in as a reporter    

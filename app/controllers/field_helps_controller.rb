@@ -1,8 +1,10 @@
 class FieldHelpsController < ActiveScaffoldController
   authorize_resource
 
-  @@shown_columns = [:model_help, :attribute_name, :short,  :long]
+  @@shown_columns           = [:model_help, :attribute_name, :short,  :long]
+  @@create_columns          = @@shown_columns
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s}
+
 
   active_scaffold :field_help do |config|
     config.label                        = "Help for Fields"

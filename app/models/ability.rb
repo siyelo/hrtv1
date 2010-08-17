@@ -18,6 +18,9 @@ class Ability
       can :read, Code
       can :read, ModelHelp
       can :read, FieldHelp
+      can :create, HelpRequest
+    else #guest user
+      can :create, HelpRequest
     end
   end
 end

@@ -1,71 +1,82 @@
 body#app
 
-  #header, #main-nav, #sub-nav, #footer
+  .wrapper
     min-width: 800px
     padding: 0 50px
+    
+  /* overriding the shared logo style*/
+  #logo
+    font-size: 0.6em
+    padding: 10px 0
+  /* end */
 
-  #header, #main-nav
+  #main-nav
     background= image_url("bg-blue.jpg")
+    
     a
       color= !lighter-blue
       font-size: 0.8em
 
-  #header
-    #admin
-
-      .welcome
-
-        span
-          padding-top: 10px
-          font-size: 11px
-          color= !light-blue
-          float: right
-      .links
-
-        ul
-          float: right
-          +border-radius
-          +horizontal-list
-          background: #596a7b
-          float: right
-          padding: 7px 12px
-
-  #main-nav
     ul
       display: block
       overflow: hidden
       li
         display: block
+        &:first-child a
+          +border-top-left-radius
+        &:last-child a
+          +border-top-right-radius
         a
-          background: #eee
-          +border-top-radius
-          border-right: 1px #ddd solid
-          border-bottom: 1px #ddd solid
-          color= !mid-blue
+          background: !light-blue
+          color: !mid-blue
           display: inline
           float: left
-          margin-top: 3px
-          padding: 10px 30px 10px 10px
+          font-size: 0.75em
+          font-weight: bold
+          padding: 8px 20px 7px
+          text-decoration: none
+          text-transform: uppercase
           &:hover
-            background= !lightest-blue
-            text-decoration: none
+            background: !lightest-blue
+            color: !mid-blue
+          
       li.active
         a
-          +border-top-radius
           background: white
-          border-bottom: white 1px solid
-          font-weight: bold
-          margin: 0
-          padding: 13px 30px 10px 10px
-          text-transform: uppercase
+          
+
           color= !dark-blue
-          letter-spacing: 0.12em
+          letter-spacing: 0.05em
+          
     img
       float: right
       margin-top: -35px
+      
+  /* adding properties to the shared admin style */
+  #admin ul li
+    &:first-child a
+      +border-bottom-left-radius
+    &:last-child a
+      +border-bottom-right-radius
+  /* end */
+    
   #sub-nav
+    +box-shadow(#f0f0f0, 0, 2px, 7px)
+    margin: 15px -10px
     ul
       +horizontal-list
+      padding: 0 10px 10px 10px
+      a
+        +border-radius
+        background: !lightest-blue
+        color: !mid-blue
+        display: inline-block
+        font-size: 0.8em
+        padding: 7px 10px
+        text-decoration: none
+        &:hover, &:focus
+          background: !mid-blue
+          color: white
 
   #content
     +border-bottom-radius
@@ -73,7 +84,7 @@ body#app
     background: white
     margin: 0 50px 20px 50px
     min-width: 800px
-    padding: 30px 10px
+    padding: 0 10px 30px 10px
     overflow: auto
 
     #crumbs

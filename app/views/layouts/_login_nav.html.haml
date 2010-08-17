@@ -1,13 +1,10 @@
 #admin
+
   - if current_user
-    .welcome
-      %span
-        = "#{current_user.email}"
-    .links
-      %ul
-        %li= link_to "My Profile", edit_user_url(current_user.id)
-        %li= link_to "Sign out", logout_path
+    %ul
+      %li= link_to "My Profile", edit_user_url(current_user.id)
+      %li= link_to "Sign out [#{current_user.email}]", logout_path
+      
   - else
-    %span.sign_in
-      Have an account?
-      = link_to "Sign in", login_path
+    %ul
+      %li= link_to "Have an account? Sign in!", login_path

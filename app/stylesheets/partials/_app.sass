@@ -9,7 +9,8 @@ body#app
     font-size: 0.6em
     padding: 10px 0
   /* end */
-
+  
+  /* app main nav styles */
   #main-nav
     background= image_url("bg-blue.jpg")
     
@@ -43,14 +44,13 @@ body#app
       li.active
         a
           background: white
-          
-
           color= !dark-blue
           letter-spacing: 0.05em
           
     img
       float: right
       margin-top: -35px
+  /* end */
       
   /* adding properties to the shared admin style */
   #admin ul li
@@ -59,13 +59,14 @@ body#app
     &:last-child a
       +border-bottom-right-radius
   /* end */
-    
+  
+  /* sub-nav styles */
   #sub-nav
     +box-shadow(#f0f0f0, 0, 2px, 7px)
-    margin: 15px -10px
+    margin: 15px 0 0 0
     ul
       +horizontal-list
-      padding: 0 10px 10px 10px
+      padding: 0 15px 15px 15px
       a
         +border-radius
         background: !lightest-blue
@@ -77,15 +78,11 @@ body#app
         &:hover, &:focus
           background: !mid-blue
           color: white
+  /* end */
 
-  #content
-    +border-bottom-radius
-    +box-shadow(#ddd, 0, 2px, 5px)
-    background: white
-    margin: 0 50px 20px 50px
-    min-width: 800px
-    padding: 0 10px 30px 10px
-    overflow: auto
+  #content .wrapper
+    margin: 0 50px 15px 50px
+    padding: 0 0 20px 0
 
     #crumbs
       padding: 0 0 0 10px
@@ -108,12 +105,13 @@ body#app
           color= !mid-blue
           text-decoration: none
 
-
     #main
       float: left
+      padding: 20px 0 0 15px
       width: 70%
 
       p
+        font-size: 0.8em
         line-height: 1.2em
       a
         color= !orange
@@ -183,8 +181,8 @@ body#app
 
     #sidebar
       float: right
-      margin-left: 3%
-      width: 27%
+      padding: 20px 15px 0 0
+      width: 25%
 
       #helper
         a

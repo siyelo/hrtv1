@@ -8,11 +8,16 @@ body
     font-family: Calibri, sans-serif
     font-weight: bold
     text-transform: uppercase
+    
+  /* universal float right class */
+  .right
+    float: right
   
   /* shared content>wrapper styles */
   #content .wrapper
     +border-bottom-radius
     +box-shadow(#eee, 0, 2px, 5px)
+    +clearfix
     background: white
     
   /* shared header styles */

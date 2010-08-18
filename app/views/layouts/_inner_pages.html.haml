@@ -4,33 +4,32 @@
   = render :partial => 'layouts/main_nav'
 
   #content
-    = yield :sub_nav
-    = render :partial => 'layouts/flashes'
-    #main
+    .wrapper
+      = yield :sub_nav
+      = render :partial => 'layouts/flashes'
+      #main
 
-      #desc
-        :javascript
-          $('desc').hide();
-        %h2 Description
-        - # the JS is included in sub-navigation
-        = link_to "Close", "#", :id => "page_tips_close_link"
-        %p
-          =yield :page_help
-        // %a read more
-        // This is the description generator
-        // .page_help
-        //   = yield :page_help
-      = yield
-      .comments
-        = yield :comments
+        #desc
+          :javascript
+            $('desc').hide();
+          %h2 Description
+          %p
+            =yield :page_help
+          // %a read more
+          // This is the description generator
+          // .page_help
+          //   = yield :page_help
+        = yield
+        .comments
+          = yield :comments
 
-    #sidebar
+      #sidebar
 
-      #helper
-        :javascript
-          $('sidebar').hide();
-        = yield :side_bar
+        #helper
+          :javascript
+            $('sidebar').hide();
+          = yield :side_bar
 
-= yield(:header)
-= yield(:tabs)
-= yield(:main)
+  = yield(:header)
+  = yield(:tabs)
+  = yield(:main)

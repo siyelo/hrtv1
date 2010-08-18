@@ -25,6 +25,7 @@ FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |
     district = row[2].downcase.capitalize.strip
     district = Location.find_by_short_display(district)
     puts "WARN: District \"#{district}\" not found (row: \##{i})" if district.nil?
+    org.locations.delete_all
     org.locations << district
     org.type = nil
   end

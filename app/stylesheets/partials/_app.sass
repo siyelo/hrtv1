@@ -67,17 +67,20 @@ body#app
     ul
       +horizontal-list
       padding: 0 15px 15px 15px
-      a
-        +border-radius
-        background: !lightest-blue
-        color: !mid-blue
-        display: inline-block
-        font-size: 0.8em
-        padding: 7px 10px
-        text-decoration: none
-        &:hover, &:focus
-          background: !mid-blue
-          color: white
+    a
+      +border-radius
+      background: !lightest-blue
+      color: !mid-blue
+      display: inline-block
+      font-size: 0.8em
+      padding: 7px 10px
+      text-decoration: none
+      &:hover, &:focus
+        background: !mid-blue
+        color: white
+    #page_tips_nav
+      float: right
+      margin: -40px 10px 0 0
   /* end */
 
   #content .wrapper
@@ -113,6 +116,8 @@ body#app
       p
         font-size: 0.8em
         line-height: 1.2em
+        +clearfix
+        
       a
         color= !orange
         font-size: 0.8em
@@ -173,11 +178,19 @@ body#app
           color: #069
           text-decoration: underline
 
-    #desc, #helper
+
+    .comments
+      border-top: 1px dashed #ddd
+      margin-top: 10px
+      
+    #desc, #helper, #c-help
       +border-radius
       border: #eee 1px solid
       padding-bottom: 15px
       margin-bottom: 10px
+
+    #c-help
+      margin: 20px 0
 
     #sidebar
       float: right

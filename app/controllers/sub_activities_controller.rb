@@ -58,8 +58,11 @@ class SubActivitiesController < ApplicationController
   end
 
   def create_from_file
+    # TODO somehow get constraints so we have right parent id
+    @constraints = { :activity => "?" }
     super @@columns_for_file_upload
   end
+
   def beginning_of_chain
     super.available_to current_user
   end

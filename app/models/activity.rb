@@ -47,6 +47,7 @@ class Activity < ActiveRecord::Base
   # TODO double check these go away from glenn's changes
 #  has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
 #  has_many :codes, :through => :code_assignments
+  has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
   has_many :budget_codings, :foreign_key => :activity_id, :dependent => :destroy
   has_many :budget_codes, :through => :budget_codings, :source => :code
   has_many :expenditure_codings, :foreign_key => :activity_id, :dependent => :destroy

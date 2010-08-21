@@ -12,8 +12,14 @@ module ActivitiesHelper
       #options for the association for activities
       if association.name == :provider
           ids = Set.new
-          Project.all.each do |p| #in future this should scope right with default
+          Project.available_to(current_user).all.each do |p|
             ids.merge p.providers
+          end
+          ["id in (?)", ids]
+      elsif association.name == :projects
+          ids = Set.new
+          Project.available_to(current_user).all.each do |p|
+            ids.merge [p.id]
           end
           ["id in (?)", ids]
       elsif association.name == :locations
@@ -25,7 +31,7 @@ module ActivitiesHelper
             ["id in (?)", ids]
           else
             ids=Set.new
-            Project.all.each do |p| #in future this should scope right with default
+            Project.available_to(current_user).all.each do |p| #in future this should scope right with default
               ids.merge p.location_ids
             end
             ["id in (?)", ids]

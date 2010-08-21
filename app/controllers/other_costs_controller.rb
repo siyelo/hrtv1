@@ -31,7 +31,7 @@ class OtherCostsController < ApplicationController
     config.columns[:comments].association.reverse = :commentable
 
     config.create.columns = @@create_columns
-    config.update.columns = config.create.columns
+    config.update.columns = @@create_columns
     config.columns[:projects].inplace_edit = true
     config.columns[:projects].form_ui = :select
     config.columns[:description].inplace_edit = true

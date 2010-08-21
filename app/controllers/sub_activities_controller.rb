@@ -4,8 +4,8 @@ class SubActivitiesController < ApplicationController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [ :provider, :budget, :spend]
-  @@create_columns = [:provider,  :budget, :spend, :description]
+  @@shown_columns = [ :provider, :budget, :budget_percentage, :spend, :spend_percentage]
+  @@create_columns = [:provider,  :budget, :budget_percentage, :spend, :spend_percentage, :description]
   def self.create_columns
     @@create_columns
   end
@@ -29,12 +29,16 @@ class SubActivitiesController < ApplicationController
     config.columns[:provider].label               = "Implementer"
     config.columns[:description].inplace_edit = true
     config.columns[:description].label = "Description (optional)"
-    config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label = "Total Spend GOR FY 09-10"
-    #    [:spend, :budget].each do |c|
-    #      quarterly_amount_field_options config.columns[c]
-    #      config.columns[c].inplace_edit = true
-    #    end
+    config.columns[:budget].label = "Budget GOR FY 10-11"
+    config.columns[:spend].label = "Spend GOR FY 09-10"
+    [:spend, :budget].each do |c|
+      quarterly_amount_field_options config.columns[c]
+      config.columns[c].inplace_edit = true
+      c=c.to_s
+      quarterly_amount_field_options config.columns[c+"_percentage"]
+      config.columns[c+"_percentage"].inplace_edit = true
+      config.columns[c+"_percentage"].label = "% of Activity's #{c.capitalize}"
+    end
     #    %w[q1 q2 q3 q4].each do |quarter|
     #      c = "spend_"+quarter
     #      c = c.to_sym

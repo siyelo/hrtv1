@@ -5,7 +5,7 @@ class SubActivitiesController < ApplicationController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :provider, :budget, :budget_percentage, :spend, :spend_percentage]
-  @@create_columns = [:provider,  :budget, :budget_percentage, :spend, :spend_percentage, :description]
+  @@create_columns = [:provider,  :budget, :budget_percentage, :spend, :spend_percentage]
   def self.create_columns
     @@create_columns
   end
@@ -24,11 +24,9 @@ class SubActivitiesController < ApplicationController
     config.columns[:comments].association.reverse = :commentable
 
     config.create.columns = @@create_columns
-    config.update.columns = config.create.columns
+    config.update.columns = @@create_columns
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].label               = "Implementer"
-    config.columns[:description].inplace_edit = true
-    config.columns[:description].label = "Description (optional)"
     config.columns[:budget].label = "Budget GOR FY 10-11"
     config.columns[:spend].label = "Spend GOR FY 09-10"
     [:spend, :budget].each do |c|
@@ -37,7 +35,15 @@ class SubActivitiesController < ApplicationController
       c=c.to_s
       quarterly_amount_field_options config.columns[c+"_percentage"]
       config.columns[c+"_percentage"].inplace_edit = true
-      config.columns[c+"_percentage"].label = "% of Activity's #{c.capitalize}"
+      config.columns[c+"_percentage"].label = "% of Main Activity's #{c.capitalize}"
+    end
+    [config.update.columns, config.create.columns].each do |columns|
+      columns.add_subgroup "Budget" do |budget_group|
+        budget_group.add :budget, :budget_percentage
+      end
+      columns.add_subgroup "Expenditures" do |funds_group|
+        funds_group.add :spend, :spend_percentage
+      end
     end
     #    %w[q1 q2 q3 q4].each do |quarter|
     #      c = "spend_"+quarter

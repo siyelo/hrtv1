@@ -1,5 +1,7 @@
-body
+body#app
+
   #content
+  
     #main table a:hover
       color= !light-blue
       
@@ -8,12 +10,15 @@ body
       border: 1px solid !lightest-blue
       font-size: 0.8em
       padding: 10px
+      
       table
         select, input
           margin: 5px 10px
           padding-right: 20px
+          
       input
         margin: 10px 0 0
+        
     thead tr th
       background= !mid-blue
       border-left: 1px solid !dark-blue
@@ -29,6 +34,7 @@ body
       .actions a
         background-image: none
         color= !dark-blue
+        
       h2
         border-bottom: 1px solid !dark-blue
         color= !dark-blue
@@ -52,12 +58,61 @@ body
       padding-left: 10px
     
     .active-scaffold .view
-      background= !lightest-blue
-      border: none
+      background: #f9f9f9
+      border: 1px solid !light-blue
       margin: 0 auto
       padding: 30px
-      width: 600px
-      +border-radius
+      
+      h4, h5
+        color: !mid-blue
+        padding: 0
+        text-transform: uppercase
+        
+      .cancel
+        margin-left: 10px
+        &:hover
+          background: none
+      
+      input[type=text], select
+        +border-radius
+        border= !light-blue " 1px solid "
+        color: !dark-blue
+        font-weight: normal
+        letter-spacing: 0.05em
+        padding: 5px 0 6px 0
+        width: 400px
+      
+      ol.form
+        width: 100%
+        padding: 0
+        margin: 0
+        
+        dl
+          border-bottom: 1px #e3e3e3 dashed
+          margin-bottom: 10px
+          padding: 10px 0 20px
+          +clearfix
+        dt
+          width: 30%
+          
+        dd
+          width: 70%
+      
+        p.description
+          color: #aaa
+          font-size: 0.3em
+          padding: 7px 0 0
+          margin: 0
+        
+        h5
+          margin-top: 10px
+          
+        label
+          font-size: 0.7em
+            
+        select
+          font-size: 0.8em
+          padding: 5px
       
     .active-scaffold tr.record
       background= !lightest-blue
@@ -74,3 +129,15 @@ body
       .description
         color= !mid-blue
         font-size: 0.7em
+        
+    .name-column
+      font-weight: bold
+      text-transform: uppercase
+      
+    #as_projects-content thead .sorted
+      background: !dark-blue
+    #as_projects-content thead th
+      &:hover
+        background: !dark-blue
+      &:hover a
+        background: !dark-blue

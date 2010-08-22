@@ -38,9 +38,9 @@ end
 Given /^I am signed in as "([^"]*)"$/ do |name|
   steps %Q{
     When I go to the login page
-    When I fill in "Username or email" with "#{name}"
+    When I fill in "Username or Email" with "#{name}"
     And  I fill in "Password" with "password"
-    And  I press "Submit"
+    And  I press "Sign in"
   }
 end
 
@@ -55,11 +55,17 @@ Given /^an organization with name "([^"]*)"$/ do |name|
   @organization = Factory.create(:organization, :name => name)
 end
 
+Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
+  org  = Organization.find_by_name(requestor)
+  @data_request = Factory.create(:data_request, :title => title, :requesting_organization => org)
+end
+
 Given /^the following organizations$/ do |table|
   table.hashes.each do |hash|
     Factory.create(:organization, hash)
   end
 end
+
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
   @organization = Factory.create(:organization, :name => org_name)
@@ -86,7 +92,6 @@ Then /^debug$/ do
   debugger # express the regexp above with the code you wish you had
 end
 
-
 Then /^I should see the "([^"]*)" tab is active$/ do |text|
   steps %Q{
     Then I should see "#{text}" within "li.selected"
@@ -106,8 +111,52 @@ Given /^the following funding flows$/ do |table|
   end
 end
 
-
 Then /^debug$/ do
   debugger # express the regexp above with the code you wish you had
 end
 
+Then /^I should see the visitors header$/ do
+  steps %Q{
+    Then I should see "Improving lives through better health policy" within "div#header"
+    Then I should see "Have an account?" within "div#header"
+    And I should see "Sign in" within "div#header"
+  }
+end
+
+Then /^I should see the reporters admin nav$/ do
+  steps %Q{
+    Then I should see "frank@f.com" within "div#header"
+    Then I should see "My Profile" within "div#header"
+    Then I should see "Sign out" within "div#header"
+  }
+end
+
+Then /^I should see the common footer$/ do
+  steps %Q{
+    Then I should see "About" within "div#footer"
+    Then I should see "Help" within "div#footer"
+    Then I should see "Contact Us" within "div#footer"
+    Then I should see "News" within "div#footer"
+  }
+end
+
+Then /^I should see the main nav tabs$/ do
+  steps %Q{
+    Then I should see "Dashboard" within "div#main-nav"
+    Then I should see "Workplan" within "div#main-nav"
+    Then I should see "Reports" within "div#main-nav"
+    Then I should see "Help" within "div#main-nav"
+  }
+end
+
+Then /^I should see the data response tabs$/ do
+  steps %Q{
+    Then I should see "Projects" within "li"
+  }
+end
+
+Then /^I should not see the data response tabs$/ do
+  steps %Q{
+    Then I should not see "Projects" within "li"
+  }
+end

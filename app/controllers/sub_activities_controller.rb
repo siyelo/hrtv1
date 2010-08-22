@@ -1,6 +1,6 @@
 class SubActivitiesController < ApplicationController
 
-  authorize_resource :resource => Activity #check this is correct
+  authorize_resource :class => Activity #check this is correct
 
   before_filter :check_user_has_data_response
 

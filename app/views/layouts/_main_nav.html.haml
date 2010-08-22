@@ -19,7 +19,7 @@
         - if current_user && current_user.current_data_response
           = link_to 'Workplan', data_response_start_path(current_user.current_data_response)
         - else
-          = 'Workplan'
+          = link_to 'Workplan', ''
       %li{ :class => reports_active ? "active" : ''}
         = link_to 'Reports', static_page_path(:reports)
       %li{ :class => help_active ? "active" : ''}

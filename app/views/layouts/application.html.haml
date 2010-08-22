@@ -40,7 +40,7 @@
       = yield(:main)
 
   - else
-    %body
+    %body{:id => controller.controller_name + "_" + controller.action_name}
       = render :partial => 'layouts/inner_pages'
       = yield(:header)
       = yield(:tabs)

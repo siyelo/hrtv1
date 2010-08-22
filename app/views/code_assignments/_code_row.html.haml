@@ -5,10 +5,10 @@
 - percentage = assignment.nil? ? "" : assignment.percentage
 / TODO change the a and p here to amount and percent for readability
 %li
-  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_codes.include?(code)
-  = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", number_to_currency(amount, :unit => ""), :size => 8
+  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_codes.include?(code), :id => ''
+  = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", number_to_currency(amount, :unit => ""), :size => 8, :id => ''
   or
-  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", percentage, :size => 2
+  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", percentage, :size => 2, :id => ''
   -# need to get this working so capybara can identify the % field
   -#= label_tag "activity[#{updater_field}][#{code.id}][p]", "% for #{code.short_display}"
   = '%'
@@ -17,6 +17,6 @@
   = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
 
   - unless code.children.empty?
-    %ul{:id => code.external_id}
+    %ul
       - code.children.each do |child|
         = render 'code_row', :code => child

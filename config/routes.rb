@@ -6,6 +6,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
+  # routes for CSV uploading for various models
+  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs organizations users sub_activities].each do |model|
+    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
+    map.create_from_file_form model+"/create_from_file_form", :controller => model, :action => "create_from_file_form"
+  end
+
   map.funding_sources_data_entry "funding_sources",
     :controller => 'funding_sources', :action => 'index'
 
@@ -53,10 +59,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :user_session
 
   map.resources :help_requests, :active_scaffold => true
-  # routes for CSV uploading for various models
-  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs organizations users].each do |model|
-    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
-  end
 
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'

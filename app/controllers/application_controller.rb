@@ -52,6 +52,18 @@ class ApplicationController < ActionController::Base
     redirect_to :action => :index
   end
 
+  def create_from_file_form human_record_name
+    # layout => false currently being ignored
+    # probably something to do with magic from AS
+    # to make it render in line, as I tried doing before
+    #   now we specifiy in the controller popup => true
+    #   so it acts nicely
+    #   TODO display upload in line, then in upload_form view
+    #   have it pop open a new window for the next steps
+    @human_record_name = human_record_name || ""
+    render 'shared/upload_form'#, :layout => false 
+  end
+
   def create_from_file attributes, constraints={}
     if fields_mapped?
       saved, errors = [], []
@@ -242,6 +254,10 @@ class ApplicationController < ActionController::Base
     # sadly this appears to not work
     as_column.options[:i18n_options] = {:precision => 0} 
   end
+
+#  def self.text_field_for_import_options as_column
+#    as_column.options[:size] = 50
+#  end
 
   def check_user_has_data_response
     unless current_user.current_data_response || current_user.role?(:admin)

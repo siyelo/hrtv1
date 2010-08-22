@@ -20,6 +20,15 @@ class SubActivitiesController < ApplicationController
     config.columns =  @@shown_columns
     list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
 
+    config.action_links.add('Upload',
+      :action => "create_from_file_form",
+#      :controller => "sub_activities",
+      :type => :collection,
+      :popup => true,
+      :inline => true,
+      :position => :top,
+      :label => "Upload")
+
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
 
@@ -57,8 +66,13 @@ class SubActivitiesController < ApplicationController
     #    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
   end
 
+  def create_from_file_form
+    super "sub-activities"
+  end
+
   def create_from_file
     # TODO somehow get constraints so we have right parent id
+    # store in session?
     @constraints = { :activity => "?" }
     super @@columns_for_file_upload
   end

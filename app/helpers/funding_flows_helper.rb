@@ -23,6 +23,12 @@ module FundingFlowsHelper
       else
         ["type in (?) or id = ? or type in (?)", "Ngo", current_user.organization.id, "Donor" ]
       end
+    elsif association.name == :project
+        ids = Set.new
+        Project.available_to(current_user).all.each do |p|
+          ids.merge [p.id]
+        end
+        ["id in (?)", ids]
     else
         super
     end

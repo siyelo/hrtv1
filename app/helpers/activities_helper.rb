@@ -7,7 +7,17 @@ module ActivitiesHelper
     end
   end
   def options_for_association_conditions(association)
-    if params[:controller] == "activities" #this might intro a bug
+    if params[:controller] == "other_costs"
+      if association.name == :projects
+          ids = Set.new
+          Project.available_to(current_user).all.each do |p|
+            ids.merge [p.id]
+          end
+          ["id in (?)", ids]
+      else 
+        super
+      end
+    elsif params[:controller] == "activities" #this might intro a bug
       #right now for some reason projects is trying to pick up the
       #options for the association for activities
       if association.name == :provider

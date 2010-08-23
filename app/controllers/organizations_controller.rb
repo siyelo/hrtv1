@@ -1,7 +1,7 @@
 class OrganizationsController < ApplicationController
   authorize_resource
-  @@shown_columns = [:name, :type, :raw_type]
-  @@create_columns = [:name, :type, :raw_type]
+  @@shown_columns = [:name, :type]
+  @@create_columns = [:name, :type]
   def self.create_columns
     @@create_columns
   end

@@ -14,6 +14,7 @@
   $.fn.collapsibleCheckboxTree = function(options) {
 
     var defaults = {
+      tab : '',
       checkParents : true, // When checking a box, all parents are checked
       checkChildren : false, // When checking a box, all children are checked
       uncheckChildren : true, // When unchecking a box, all children are unchecked
@@ -21,13 +22,14 @@
     };
 
     var options = $.extend(defaults, options);
+    defaults.tab += "_"; // make ids readable
 
     this.each(function() {
 
       var $root = this;
 
       // Add button
-      $(this).before('<div id="buttons"><button id="expand">Expand All</button><button id="collapse">Collapse All</button><button id="default">Default View</button></div>');
+      $(this).before('<div id="buttons"><button id="' + defaults.tab + 'expand">Expand All</button><button id="' + defaults.tab + 'collapse">Collapse All</button><button id="' + defaults.tab + 'default">Default View</button></div>');
 
       // Hide all except top level
       $("ul", $(this)).addClass('hide');
@@ -112,7 +114,7 @@
       // Button functions
 
       // Expand all
-      $("#expand").click(function () {
+      $("#" + defaults.tab + "expand").click(function () {
         // Show all children
         $("ul", $root).removeClass('hide');
         // and update the html
@@ -120,7 +122,7 @@
         return false;
       });
       // Collapse all
-      $("#collapse").click(function () {
+      $("#" + defaults.tab + "collapse").click(function () {
         // Hide all children
         $("ul", $root).addClass('hide');
         // and update the html
@@ -128,7 +130,7 @@
         return false;
       });
       // Wrap around checked boxes
-      $("#default").click(function () {
+      $("#" + defaults.tab + "default").click(function () {
         // Hide all except top level
         $("ul", $root).addClass('hide');
         // Show checked and immediate children of checked
@@ -141,10 +143,10 @@
 
       switch(defaults.initialState) {
         case 'expand':
-          $("#expand").trigger('click');
+          $("#" + defaults.tab + "expand").trigger('click');
           break;
         case 'collapse':
-          $("#collapse").trigger('click');
+          $("#" + defaults.tab + "collapse").trigger('click');
           break;
       }
 

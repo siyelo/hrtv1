@@ -3,6 +3,7 @@ class ActivitiesController < ApplicationController
 
   before_filter :check_user_has_data_response
 
+  include ActivitiesHelper
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
   @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns

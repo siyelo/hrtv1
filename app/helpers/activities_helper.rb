@@ -7,9 +7,11 @@ module ActivitiesHelper
     end
   end
   def options_for_association_conditions(association)
+      logger.debug("in 1")
     if params[:controller] == "activities" #this might intro a bug
       #right now for some reason projects is trying to pick up the
       #options for the association for activities
+      logger.debug("in 2")
       if association.name == :provider
           ids = Set.new
           Project.available_to(current_user).all.each do |p|

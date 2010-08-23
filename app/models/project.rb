@@ -81,7 +81,7 @@ class Project < ActiveRecord::Base
 
   def create_helpful_records_for_workflow
     my_org = owner
-    puts "this is my org:"+my_org.inspect
+    #puts "this is my org:"+my_org.inspect
     #TODO pass in the amount attributes and use them on records below
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
     shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response]

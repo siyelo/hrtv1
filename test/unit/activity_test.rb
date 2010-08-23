@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ActivityTest < ActiveSupport::TestCase
+  should have_many :sub_activities
   should have_and_belong_to_many :organizations
   should have_and_belong_to_many :beneficiaries
   test "has locations" do

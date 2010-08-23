@@ -33,6 +33,7 @@ class ActivitiesController < ApplicationController
 
     config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
+    config.nested.add_link("Sub Implementers", [:sub_activities])
     # we want to use this below but its frazzed
     # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms
     # config.columns[:organizations].label = "Targets"

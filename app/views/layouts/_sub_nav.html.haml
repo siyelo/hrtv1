@@ -1,0 +1,38 @@
+- content_for :head do
+  :javascript
+    jQuery(document).ready(function(){
+      jQuery('#page_tips_open_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+      });
+
+      jQuery('#page_tips_close_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+           jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+      });
+
+    });
+
+#sub-nav
+  %ul
+    %li{ :class => [controller.class.to_s == "DataResponseController" ? "active" : '']}
+      = link_to 'Configure', data_response_start_path(current_user.current_data_response)
+
+    %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
+      = link_to 'Projects', projects_path
+
+    %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
+      = link_to 'Funding Sources', funding_sources_data_entry_path
+
+    %li{ :class => [controller.class.to_s == "ProvidersController" ? "active" : '']}
+      = link_to 'Implementers', providers_data_entry_path
+
+    %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
+      = link_to 'Activities', activities_path
+
+    %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
+      = link_to 'Other Costs', other_costs_path
+
+  #page_tips_nav
+    = link_to "Hide Page Tips", "#", :id => "page_tips_open_link"

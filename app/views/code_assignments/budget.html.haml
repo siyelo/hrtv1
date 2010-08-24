@@ -1,6 +1,9 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
 .nav2
   %h2= "Activity Classification"
   %ul

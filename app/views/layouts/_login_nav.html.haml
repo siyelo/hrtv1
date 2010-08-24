@@ -3,8 +3,10 @@
   - if current_user
     %ul
       %li= link_to "My Profile", edit_user_url(current_user.id)
-      %li= link_to "Sign out [#{current_user.email}]", logout_path
-      
+      %li= link_to "Sign out", logout_path
+    %span= "#{current_user.email} [#{current_user.organization.name}]"
+
   - else
     %ul
-      %li= link_to "Have an account? Sign in!", login_path
+      %li= link_to "Sign in", login_path
+    %span Have an account?

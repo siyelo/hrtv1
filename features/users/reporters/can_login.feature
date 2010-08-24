@@ -3,13 +3,11 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
-@run
 Scenario: Login via home page
   When I go to the home page
   And I follow "Sign in"
   Then I should be on the login page
 
-@run
 Scenario: See login form
   When I go to the login page
   Then I should see the visitors header
@@ -28,7 +26,6 @@ Scenario: Login with invalid data - see flash message not AR errors
   Then I should see "Wrong Username/email and password combination"
   And I should not see "There were problems with the following fields:"
 
-@run
 Scenario: Login as a reporter with a username
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page

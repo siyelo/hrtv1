@@ -46,10 +46,11 @@ end
 
 Given /^I am signed in as a reporter$/ do
   steps %Q{
-    Given a reporter "Frank" with email "frank@f.com" and password "password"
+    Given a reporter "Frank" in organization "Test Org"
     Given I am signed in as "Frank"
   }
 end
+
 
 Given /^an organization with name "([^"]*)"$/ do |name|
   @organization = Factory.create(:organization, :name => name)
@@ -66,13 +67,11 @@ Given /^the following organizations$/ do |table|
   end
 end
 
-
-Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |reporter, org_name|
+Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory.create(:organization, :name => org_name)
-  steps %Q{
-    Given a reporter "#{reporter}" with email "frank@f.com" and password "password"
-  }
-  @user.organization = @organization
+  @user = Factory.create(:reporter, :username => name, :email => 'frank@f.com', 
+                          :password => 'password', :password_confirmation => 'password',
+                          :organization => @organization)
 end
 
 Given /^the following funding flows$/ do |table|

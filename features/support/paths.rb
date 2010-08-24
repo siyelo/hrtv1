@@ -12,7 +12,7 @@ module NavigationHelpers
       '/'
 
     when /the reporter dashboard page/
-      static_page_path(:reporter_dashboard)
+      reporter_dashboard_path
 
     when /the projects listing page/
       projects_path

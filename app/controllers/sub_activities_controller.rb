@@ -1,4 +1,4 @@
-class SubActivitiesController < ApplicationController
+class SubActivitiesController < ActiveScaffoldController
 
   authorize_resource :resource => Activity #check this is correct
 

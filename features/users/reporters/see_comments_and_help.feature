@@ -3,7 +3,6 @@ Feature: Reporter can see comments & help for a data response
   As a reporter
   I want to be able to see Comments/Questions and Help on the relevant pages
 
-@run
 Scenario Outline: See comments/help
   Given I am signed in as a reporter
   When I go to the <page> page
@@ -18,7 +17,6 @@ Scenario Outline: See comments/help
     | activities |
     | other costs |
 
-@run
 Scenario Outline: See comments/help for an activity breakdown(/classification)
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 

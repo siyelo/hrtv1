@@ -3,7 +3,6 @@ Feature: NGO can see dashboard
   As a NGO
   I want to be able to see a dashboard for relevant activities
 
-@run
 Scenario: "See data requests"
   Given I am signed in as a reporter 
   When I go to the reporter dashboard page
@@ -23,8 +22,15 @@ Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   And I follow "Some request"
   Then I should see the data response tabs
 
-@run
 Scenario: Bug: should not see Projects/Implementers/etc tabs until a Data Req is selected
   Given I am signed in as a reporter 
   When I go to the reporter dashboard page
   Then I should not see the data response tabs
+
+@run
+Scenario: Bug: Workplan tab appears active even on Dashboard
+  Given I am signed in as a reporter 
+  When I go to the reporter dashboard page
+  Then I should see "Dashboard" within "#main-nav li.active"
+  And I should not see "Workplan" within "#main-nav li.active"
+

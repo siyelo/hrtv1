@@ -3,7 +3,6 @@ Feature: Reporter can see user guide upon login
   As a reporter
   I want to be able to see user guide after logging in
 
-@run
 Scenario: Login and see user guide
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -17,7 +16,6 @@ Scenario: Login and see user guide
   And I should see the common footer
   When I follow "Dashboard"
   
-@run
 Scenario: Bug: should not see Projects/Implementers/etc tabs
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page

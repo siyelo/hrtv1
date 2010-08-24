@@ -41,7 +41,6 @@ Scenario: See both budget and expenditure for an activity classification
   Then I should be on the expenditure classification page for "TB Drugs procurement"
   And I should see the "Expenditure" tab is active
 
-@run
 Scenario: enter expenditure for an activity
   Given I am on the expenditure classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"

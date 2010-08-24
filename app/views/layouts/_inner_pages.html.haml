@@ -1,6 +1,6 @@
-%body#app
-  = render "layouts/header_app"
+%body{:id => controller.controller_name + "_" + controller.action_name, :class => "app"}
 
+  = render "layouts/header_app"
   = render :partial => 'layouts/main_nav'
 
   #content

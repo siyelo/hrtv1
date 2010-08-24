@@ -1,19 +1,19 @@
-body#app
+body.app
 
   .wrapper
     min-width: 800px
     padding: 0 50px
-    
+
   /* overriding the shared logo style*/
   #logo
     font-size: 0.6em
     padding: 10px 0
   /* end */
-  
+
   /* app main nav styles */
   #main-nav
     background= image_url("bg-blue.jpg")
-    
+
     a
       color= !lighter-blue
       font-size: 0.8em
@@ -40,18 +40,18 @@ body#app
           &:hover
             background: !lightest-blue
             color: !mid-blue
-          
+
       li.active
         a
           background: white
           color= !dark-blue
           letter-spacing: 0.05em
-          
+
     img
       float: right
       margin-top: -35px
   /* end */
-      
+
   /* adding properties to the shared admin style */
   #admin ul li
     &:first-child a
@@ -59,7 +59,7 @@ body#app
     &:last-child a
       +border-bottom-right-radius
   /* end */
-  
+
   /* sub-nav styles */
   #sub-nav
     +box-shadow(#f0f0f0, 0, 2px, 7px)

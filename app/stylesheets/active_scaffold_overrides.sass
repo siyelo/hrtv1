@@ -1,8 +1,8 @@
 body#app
 
-  #content
+  #content .wrapper
   
-    #main table a:hover
+    #main table thead a:hover
       color= !light-blue
       
     .edit_data_response
@@ -73,12 +73,13 @@ body#app
         &:hover
           background: none
       
-      input[type=text], select
+      input[type=text], select, textarea
         +border-radius
         border= !light-blue " 1px solid "
         color: !dark-blue
         font-weight: normal
         letter-spacing: 0.05em
+        margin-bottom: 5px
         padding: 5px 0 6px 0
         width: 400px
       

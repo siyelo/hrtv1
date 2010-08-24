@@ -28,7 +28,7 @@
     %li{ :class => [controller.class.to_s == "ProvidersController" ? "active" : '']}
       = link_to 'Implementers', providers_data_entry_path
 
-    %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
+    %li{ :class => [ ["ActivitiesController", "CodeAssignmentsController"].include?(controller.class.to_s) ? "active" : '']}
       = link_to 'Activities', activities_path
 
     %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}

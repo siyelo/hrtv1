@@ -1,8 +1,6 @@
 class CodeAssignmentsController < ApplicationController
   authorize_resource
 
-  before_filter :load_help
-
   def budget
     load_codes
     @current_codes = @activity.budget_codes

@@ -1,15 +1,15 @@
 - unless @model_help.nil?
   = render :partial => '/shared/sidebar'
 
-- content_for :comments do
-  #c-help
-    %h2 Commenting tips
-    %p
-      The comment section below is for asking general questions about this page.
-      Ask questions or make comments on the data you have entered
-      using the "Comments" link at the end of each row in the grid above.
-      If you think the answer to your question will help many others, use the grid below this text.
-      All users can see the comments in the table below.
+  - content_for :comments do
+    #c-help
+      %h2 Commenting tips
+      %p
+        The comment section below is for asking general questions about this page.
+        Ask questions or make comments on the data you have entered
+        using the "Comments" link at the end of each row in the grid above.
+        If you think the answer to your question will help many others, use the grid below this text.
+        All users can see the comments in the table below.
 
-  = render :active_scaffold => "comments", :label => "General Questions / Comments",
-    :constraints => {:commentable_id => @model_help.id, :commentable_type => "ModelHelp"}
+    = render :active_scaffold => "comments", :label => "General Questions / Comments",
+      :constraints => {:commentable_id => @model_help.id, :commentable_type => "ModelHelp"}

@@ -70,6 +70,10 @@ class Activity < ActiveRecord::Base
     projects.valid_providers
   end
 
+  def valid_roots_for_code_assignment
+    @@valid_root_types = [Mtef, Nha, Nasa, Nsp]
+    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
+  end
 
   def self.valid_types_for_code_assignment
     [Mtef, Nha, Nasa, Nsp]

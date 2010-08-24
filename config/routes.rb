@@ -80,7 +80,7 @@ ActionController::Routing::Routes.draw do |map|
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide].join('|'))
+                  :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide reports].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 

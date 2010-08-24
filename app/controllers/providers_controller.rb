@@ -1,5 +1,5 @@
 class ProvidersController < ActiveScaffoldController
-  authorize_resource :class => FundingFlow
+  authorize_resource :resource => FundingFlow
 
   before_filter :check_user_has_data_response
 

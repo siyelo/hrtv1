@@ -1,0 +1,17 @@
+- content_for :side_bar do
+  :javascript
+    $('sidebar').show()
+  %h2 Help
+  %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
+  #terms
+    :javascript
+      $('terms').hide();
+    - if @model_help.field_help.size > 0
+      = render :partial => @model_help.field_help
+    - else
+      %p No help for these fields has been entered yet.
+
+- content_for :page_help do
+  :javascript
+    $('desc').show();
+  %p= h @model_help.long

@@ -100,7 +100,7 @@ class ActivitiesController < ActiveScaffoldController
 
   #AS helper method
   def popup_coding
-    redirect_to activity_budget_url(params[:id])
+    redirect_to budget_activity_coding_url(params[:id])
   end
 
   def conditions_for_collection

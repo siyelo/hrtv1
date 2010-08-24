@@ -43,7 +43,7 @@ var code_assignments_budget = {
       jQuery(".nav2 ul li").removeClass('selected');
       jQuery(this).addClass('selected');
       jQuery("#activity_classification > div").hide();
-      jQuery('#activity_classification .' + jQuery(this).attr("id")).show('selected');
+      jQuery('#activity_classification > div.' + jQuery(this).attr("id")).show();
     });
 
   }

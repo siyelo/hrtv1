@@ -1,5 +1,15 @@
-body.app
 
+=normal_link()
+  color= !orange
+  background: none
+  font-size: 0.8em
+  padding-left: 10px
+  text-decoration: underline
+  &:hover
+    color= !mid-blue
+    background: none
+
+body.app
   .wrapper
     min-width: 800px
     padding: 0 50px
@@ -81,6 +91,10 @@ body.app
     #page_tips_nav
       float: right
       margin: -40px 10px 0 0
+      display: none
+      a
+        +normal_link
+
   /* end */
 
   #content .wrapper
@@ -117,7 +131,7 @@ body.app
         font-size: 0.8em
         line-height: 1.2em
         +clearfix
-        
+
       a
         color= !orange
         font-size: 0.8em
@@ -182,12 +196,16 @@ body.app
     .comments
       border-top: 1px dashed #ddd
       margin-top: 10px
-      
+
     #desc, #helper, #c-help
       +border-radius
       border: #eee 1px solid
       padding-bottom: 15px
       margin-bottom: 10px
+
+    #desc
+      span.close
+        float: right
 
     #c-help
       margin: 20px 0

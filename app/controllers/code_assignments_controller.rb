@@ -1,6 +1,8 @@
 class CodeAssignmentsController < ApplicationController
   authorize_resource
 
+  before_filter :load_help
+
   def budget
     load_codes
     @current_codes = @activity.budget_codes
@@ -71,5 +73,11 @@ class CodeAssignmentsController < ApplicationController
     else
       render :action => "manage" #TODO fix path here
     end
+  end
+
+  protected
+
+  def load_help
+    @model_help = ModelHelp.find_by_model_name 'CodeAssignment'
   end
 end

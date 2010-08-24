@@ -1,7 +1,7 @@
 puts "\nLoading organizations"
 
-puts "  Removing existing orgs"
-Organization.delete_all
+#puts "  Removing existing orgs"
+#Organization.delete_all
 
 puts "  Loading organizations.csv"
 
@@ -11,7 +11,8 @@ puts "  Loading organizations.csv"
 i = 1
 FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |row|
   i = i + 1
-  org = Organization.new
+  name = row[0].try(:strip)
+  org = Organization.find_or_create_by_name name
 
   org.raw_type = row[1].try(:strip)
   if org.raw_type != "Donors"
@@ -24,11 +25,11 @@ FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |
     district = row[2].downcase.capitalize.strip
     district = Location.find_by_short_display(district)
     puts "WARN: District \"#{district}\" not found (row: \##{i})" if district.nil?
+    org.locations.delete_all
     org.locations << district
     org.type = nil
   end
 
-  org.name = row[0].try(:strip)
   puts "Creating org #{org.name}, #{org.type}, #{org.locations}\n"
   #print "."
   puts "error on #{row}" unless org.save

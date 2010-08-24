@@ -2,33 +2,33 @@
 body
   background= image_url("bg-white.jpg")
   font-family: Arial, Helvetica, serif
-  
+
   /* shared heading styles */
   h1, h2, h3, h4, h5, h6
     font-family: Calibri, sans-serif
     font-weight: bold
     text-transform: uppercase
-    
+
   /* universal float right class */
   .right
     float: right
-  
+
   /* shared content>wrapper styles */
   #content .wrapper
     +border-bottom-radius
     +box-shadow(#eee, 0, 2px, 5px)
     +clearfix
     background: white
-    
+
   /* shared header styles */
   #header, #header_app
     background= image_url("bg-blue.jpg")
     color: !lightest-blue
     +clearfix
-  
+
     #logo
       float: left
-      padding: 40px 0
+      padding: 10px 0
       width: 350px
       +text-shadow(#222, 0, 0, 15px)
       img
@@ -36,19 +36,19 @@ body
         height: 22px
         margin-right: 3px
         width: 20px
-        
+
       h1
         color: orange
         font-family: Calibri, sans-serif
         font-size: 2.4em
         padding: 0
         margin: 0
-        
+
         span
           margin-left: -6px
           padding: 0
           color: !lightest-blue
-          
+
         span.mu
           color: !light-blue
           font-size: 0.6em
@@ -59,20 +59,20 @@ body
         font-size: 0.6em
         letter-spacing: 0.06em
         text-transform: uppercase
-      
+
     #admin
       float: right
       width: 600px
-    
+
       ul
         +border-radius
         +box-shadow(#444, 0, 0, 15px)
         +horizontal-list
         float: right
-      
+
         li
           padding: 0
-        
+
           a
             background: !light-blue
             color: !dark-blue
@@ -82,30 +82,30 @@ body
             padding: 10px
             text-decoration: none
             text-transform: uppercase
-      
+
             &:hover, &:focus
               background: !lightest-blue
-              color: !dark-blue  
-    
+              color: !dark-blue
+
     #tagline
       float: right
       padding-top: 60px
       text-align: right
       width: 300px
       +text-shadow(#444, 0, 0, 15px)
-    
+
       h2
         color: !light-blue
         font-size: 1.2em
-    
+
       h6
         color: orange
         font-family: Arial, Helvetica Neu, sans-serif
         font-size: 0.6em
         font-weight: normal
         letter-spacing: 0.1em
-    
-  /* shared footer styles */  
+
+  /* shared footer styles */
   #footer
     margin-bottom: 15px
     text-align: center

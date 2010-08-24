@@ -4,14 +4,14 @@ class CodeAssignmentsController < ApplicationController
   def budget
     load_codes
     @current_codes = @activity.budget_codes
-    @current_assignments = @activity.budget_codings
+    @current_assignments = @activity.budget_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :budget_codes
   end
 
   def budget_cost_categories
     load_codes
     @current_codes = @activity.budget_codes
-    @current_assignments = @activity.budget_codings
+    @current_assignments = @activity.budget_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :budget_cost_categories
     @codes = @activity.valid_cost_category_codes
     render :layout => false
@@ -20,7 +20,7 @@ class CodeAssignmentsController < ApplicationController
   def expenditure
     load_codes
     @current_codes = @activity.expenditure_codes
-    @current_assignments = @activity.expenditure_codings
+    @current_assignments = @activity.expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :expenditure_codes
     render :layout => false
   end
@@ -28,7 +28,7 @@ class CodeAssignmentsController < ApplicationController
   def expenditure_cost_categories
     load_codes
     @current_codes = @activity.expenditure_codes
-    @current_assignments = @activity.expenditure_codings
+    @current_assignments = @activity.expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :expenditure_cost_categories
     @codes = @activity.valid_cost_category_codes
     render :layout => false

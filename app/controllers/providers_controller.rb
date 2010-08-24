@@ -1,12 +1,11 @@
-class ProvidersController < ApplicationController
+class ProvidersController < ActiveScaffoldController
   authorize_resource :class => FundingFlow
 
   before_filter :check_user_has_data_response
 
   @@columns_for_file_upload = %w[to organization_text project budget spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4]
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+
+  map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
 
   def index
     unless current_user.role?(:admin)

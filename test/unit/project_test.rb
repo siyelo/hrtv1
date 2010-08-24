@@ -70,13 +70,13 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "has comments" do
-    p=Project.create!(:name => "proj1", :expected_total => 10.0)
+    p=Project.create!(:name => "proj1", :budget => 10.0)
     c=p.comments.create(:title => "a comment.", :comment => "This is a comment.")
     assert p.comments.size == 1
     assert Comment.count == 1
   end
   test "has locations" do
-    p=Project.create!(:name => "proj1", :expected_total => 10.0)
+    p=Project.create!(:name => "proj1", :budget => 10.0)
     c=p.locations.create( :name => "name" )
     assert p.locations.size == 1
     assert Location.count == 1

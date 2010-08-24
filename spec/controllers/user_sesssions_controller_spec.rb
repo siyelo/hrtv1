@@ -13,7 +13,7 @@ describe UserSessionsController do
     end
     
     it { should respond_with(:success) }
-    it { should set_the_flash.to("Wrong Username/email and password combination") }
+    it { should set_the_flash.to("Wrong Username/email and password combination. If you think this message is being shown in error after multiple tries, use the form on the contact page (link below) to get help.") }
     it { should render_template(:new) }
   end
   

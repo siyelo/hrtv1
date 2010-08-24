@@ -1,7 +1,7 @@
-class LocationsController < ApplicationController
+class LocationsController < ActiveScaffoldController
   @@shown_columns = [:short_display]
   @@create_columns = [:short_display]
-  
+
   active_scaffold :location do |config|
     config.columns =  @@shown_columns
     list.sorting = {:short_display => 'DESC'}

@@ -1,4 +1,8 @@
+# GR - this is deprecated in favour of the Budget/Expend Classification controllers
+# These Budg/Exp "Cost Category" "classifications" need to be refactored as such
+
 class CodeAssignmentsController < ApplicationController
+
   authorize_resource
 
   def budget
@@ -24,6 +28,7 @@ class CodeAssignmentsController < ApplicationController
     @coding_type = :expenditure_codes
     render :layout => false
   end
+
 
   def expenditure_cost_categories
     load_codes
@@ -53,6 +58,7 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     update_assignments("expenditure")
   end
+
   protected
 
   def load_codes
@@ -61,8 +67,9 @@ class CodeAssignmentsController < ApplicationController
     @codes = @activity.valid_roots_for_code_assignment
   end
 
-  def update_assignments(coding_type)
-    #authorize! :update, @activity #GN: why is this missing
+  def update_assignments(coding_type, path)
+    authorize! :update, @activity
+
     params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
     if @activity.update_attributes(params[:activity])

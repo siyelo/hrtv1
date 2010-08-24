@@ -1,7 +1,7 @@
-class ActivityCostCategoriesController < ApplicationController
+class ActivityCostCategoriesController < ActiveScaffoldController
   @@shown_columns = [:short_display]
   @@create_columns = [:short_display]
-  
+
   active_scaffold :activity_cost_category do |config|
     config.columns =  @@shown_columns
     list.sorting = {:short_display => 'DESC'}

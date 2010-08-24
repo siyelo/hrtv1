@@ -6,22 +6,17 @@
   %ul
     %li{:id => 'tab1', :class => 'selected'}
       = link_to "Budget", "#"
-      =# link_to "Budget", budget_activity_coding_path(@activity.id)
     %li{:id => 'tab2'}
       = link_to "Budget Cost Categorization", "#"
-      =# link_to "Budget Cost Categorization", budget_cost_categories_activity_coding_path(@activity.id)
     %li{:id => 'tab3'}
       = link_to "Expenditure", "#"
-      =# link_to "Expenditure", expenditure_activity_coding_path(@activity.id)
     %li{:id => 'tab4'}
       = link_to "Expenditure Cost Categorization", "#"
-      =# link_to "Expenditure Cost Categorization", expenditure_cost_categories_activity_coding_path(@activity.id)
 
 %table#activity_description
   %tr
     %td.title Name:
     %td= @activity.name
-    -#= link_to "#{@activity.name}", activity_path(@activity)
   %tr
     %td.title Total Budget for FY 10-11:
     %td= @activity.budget

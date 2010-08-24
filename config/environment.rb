@@ -35,3 +35,4 @@ Rails::Initializer.run do |config|
 
 end
 
+require 'array_extensions'

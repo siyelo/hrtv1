@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ActiveScaffoldController
   load_and_authorize_resource
   include UsersHelper
 

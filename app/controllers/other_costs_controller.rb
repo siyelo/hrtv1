@@ -1,5 +1,4 @@
-class OtherCostsController < ApplicationController
-
+class OtherCostsController < ActiveScaffoldController
   authorize_resource
 
   before_filter :check_user_has_data_response
@@ -17,27 +16,25 @@ class OtherCostsController < ApplicationController
     :file_field => :file
 
   active_scaffold :other_costs do |config|
-    config.label =  "Other Costs"
-    config.columns =  @@shown_columns
-    list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
-
     config.action_links.add('Detail Cost Areas',
       :action => "popup_coding",
       :type => :member,
       :popup => true,
       :label => "Detail Cost Areas")
-
     config.nested.add_link("Comments", [:comments])
+    config.label                                  = "Other Costs"
+    config.columns                                = @@shown_columns
+    list.sorting                                  = {:budget => 'DESC'} #adding this didn't break in place editing
     config.columns[:comments].association.reverse = :commentable
+    config.create.columns                         = @@create_columns
+    config.update.columns                         = @@create_columns
+    config.columns[:projects].inplace_edit        = true
+    config.columns[:projects].form_ui             = :select
+    config.columns[:description].inplace_edit     = true
+    config.columns[:description].label            = "Description (optional)"
+    config.columns[:budget].label                 = "Total Budget GOR FY 10-11"
+    config.columns[:spend].label                  = "Total Spend GOR FY 09-10"
 
-    config.create.columns = @@create_columns
-    config.update.columns = @@create_columns
-    config.columns[:projects].inplace_edit = true
-    config.columns[:projects].form_ui = :select
-    config.columns[:description].inplace_edit = true
-    config.columns[:description].label = "Description (optional)"
-    config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label = "Total Spend GOR FY 09-10"
     [:spend, :budget].each do |c|
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true
@@ -57,9 +54,11 @@ class OtherCostsController < ApplicationController
   def create_from_file
     super @@columns_for_file_upload
   end
+
   def beginning_of_chain
     super.available_to current_user
   end
+
   #fixes create
   def before_create_save record
     record.data_response = current_user.current_data_response

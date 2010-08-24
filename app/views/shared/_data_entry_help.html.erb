@@ -1,5 +1,5 @@
-<% model_help = @model_help #from before_filter :load_help in app controller
- %>
+<% unless @model_help.nil? %>
+  <%= render :partial => '/shared/sidebar' %>
 
 <% if model_help %>
   <% content_for :side_bar do %>
@@ -47,4 +47,5 @@
     <%= render :active_scaffold => "comments", :label => "General Questions / Comments",
       :constraints => {:commentable_id => model_help.id, :commentable_type => "ModelHelp"} %>
   <% end %>
+
 <% end %>

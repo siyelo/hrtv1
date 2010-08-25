@@ -4,10 +4,11 @@
   background: none
   font-size: 0.8em
   padding-left: 10px
-  text-decoration: underline
+  text-decoration: none
   &:hover
-    color= !mid-blue
     background: none
+    color= !mid-blue
+    text-decoration: underline
 
 body.app
   .wrapper
@@ -15,7 +16,7 @@ body.app
     padding: 0 50px
 
   /* overriding the shared logo style*/
-  #logo
+  #header_app #logo
     font-size: 0.6em
     padding: 10px 0
   /* end */
@@ -61,7 +62,12 @@ body.app
       float: right
       margin-top: -35px
   /* end */
-
+  
+  /* adding properties to the shared flashes styles */
+  #flashes
+    margin-bottom: -5px
+  /* end */
+  
   /* adding properties to the shared admin style */
   #admin ul li
     &:first-child a
@@ -94,8 +100,8 @@ body.app
         color: white
   #page_tips_nav
     float: right
-    margin: -40px 10px 0 0
     display: none
+    padding: 10px
     a
       +normal_link
 
@@ -137,12 +143,7 @@ body.app
         +clearfix
 
       a
-        color= !orange
-        font-size: 0.8em
-        padding-left: 10px
-        text-decoration: underline
-        &:hover
-          color= !mid-blue
+        +normal_link
       h3
         color= !mid-blue
         font-size: 0.9em
@@ -191,6 +192,7 @@ body.app
       .link_like
         color: #09c
         cursor: pointer
+        float: left
 
         &:hover
           color: #069
@@ -210,7 +212,10 @@ body.app
     #desc
       span.close
         float: right
-
+        
+      .close
+        margin: -25px 10px 0 0
+        
     #c-help
       margin: 20px 0
 
@@ -249,7 +254,7 @@ body.app
       +border-top-radius
       background= !lightest-blue
       color= !mid-blue
-      font-size: 0.8em
+      font-size: 0.9em
       letter-spacing: 0.05em
 
   #content #map_fields_form

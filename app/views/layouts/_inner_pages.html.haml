@@ -25,18 +25,10 @@
       = yield :sub_nav
       = render :partial => 'layouts/flashes'
       #main
-
         #desc
-          :javascript
-            $('desc').hide();
-          %h2 Description
-          - # the JS is included in sub-navigation
-          %span.close= link_to "Close", "#", :id => "page_tips_close_link"
-          
-          %p
-            =yield :page_help
-        #page_tips_nav
-          = link_to "Show Page Tips", "#", :id => "page_tips_open_link"
+
+          = yield :page_help
+
         = yield
         .comments
           = yield :comments
@@ -44,8 +36,6 @@
       #sidebar
 
         #helper
-          :javascript
-            $('sidebar').hide();
           = yield :side_bar
 
   = yield(:header)

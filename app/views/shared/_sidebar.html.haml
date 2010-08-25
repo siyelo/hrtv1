@@ -1,6 +1,27 @@
-- content_for :side_bar do
+- content_for :head do
   :javascript
-    $('sidebar').show()
+    jQuery(document).ready(function(){
+      jQuery('#page_tips_open_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+      });
+
+      jQuery('#page_tips_close_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+           jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+      });
+
+    });
+
+- content_for :page_help do
+  %h2 Description
+  %span.close= link_to "Close", "#", :id => "page_tips_close_link"
+  #page_tips_nav
+    = link_to "Show Page Tips", "#", :id => "page_tips_open_link"
+  %p= h @model_help.long
+
+- content_for :side_bar do
   %h2 Help
   %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
   #terms
@@ -10,8 +31,3 @@
       = render :partial => @model_help.field_help
     - else
       %p No help for these fields has been entered yet.
-
-- content_for :page_help do
-  :javascript
-    $('desc').show();
-  %p= h @model_help.long

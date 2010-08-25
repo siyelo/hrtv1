@@ -1,3 +1,20 @@
+- content_for :head do
+  :javascript
+    jQuery(document).ready(function(){
+      jQuery('#page_tips_open_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+      });
+
+      jQuery('#page_tips_close_link').click(function(){
+           jQuery('#desc').toggle();
+           jQuery('#page_tips_nav').toggle();
+           jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+      });
+
+    });
+
+
 %body{:id => controller.controller_name + "_" + controller.action_name, :class => "app"}
 
   = render "layouts/header_app"
@@ -13,31 +30,17 @@
           :javascript
             $('desc').hide();
           %h2 Description
-          - content_for :head do
-            :javascript
-              jQuery(document).ready(function(){
-                jQuery('#page_tips_open_link').click(function(){
-                     jQuery('#desc').toggle();
-                     jQuery('#page_tips_nav').toggle();
-                });
-
-                jQuery('#page_tips_close_link').click(function(){
-                     jQuery('#desc').toggle();
-                     jQuery('#page_tips_nav').toggle();
-                     jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
-                });
-
-              });
-          
+          - # the JS is included in sub-navigation
           %span.close= link_to "Close", "#", :id => "page_tips_close_link"
-          #page_tips_nav
-            = link_to "Show Page Tips", "#", :id => "page_tips_open_link"
+          
           %p
             =yield :page_help
+        #page_tips_nav
+          = link_to "Show Page Tips", "#", :id => "page_tips_open_link"
         = yield
         .comments
           = yield :comments
-
+        
       #sidebar
 
         #helper

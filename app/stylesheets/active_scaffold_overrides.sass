@@ -28,7 +28,6 @@ body.app
       padding: 7px 10px
 
     .active-scaffold-header
-      background= !dark-blue
       +border-top-radius
 
       .actions a
@@ -135,8 +134,23 @@ body.app
       font-weight: bold
       text-transform: uppercase
 
-    #as_projects-content thead .sorted
-      background: !dark-blue
+    #as_projects-content 
+      thead .sorted
+        background: !dark-blue
+      
+      tr.inline-adapter
+        .view
+          background: white
+          padding: 0
+          .actions
+            font-size: 0.7em
+            padding-top: 2px
+
+          h2
+            background: white
+            border: none
+        a.inline-adapter-close
+          margin-top: 10px
     #as_projects-content thead th
       &:hover
         background: !dark-blue

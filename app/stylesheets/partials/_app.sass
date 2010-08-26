@@ -20,6 +20,9 @@ body.app
     font-size: 0.6em
     padding: 10px 0
     width: 300px
+    h1 
+      span
+        margin-left: 0px
   /* end */
 
   /* app main nav styles */
@@ -132,6 +135,7 @@ body.app
           background= !light-blue
           color= !mid-blue
           text-decoration: none
+      
 
     #main
       float: left
@@ -144,7 +148,14 @@ body.app
         +clearfix
 
       a
-        +normal_link
+        color= !orange
+        font-size: 0.8em
+        padding-left: 10px
+        text-decoration: none
+        &:hover
+          color= !mid-blue
+          text-decoration: underline
+
       h3
         color= !mid-blue
         font-size: 0.9em
@@ -203,6 +214,9 @@ body.app
     .comments
       border-top: 1px dashed #ddd
       margin-top: 10px
+      
+    a.comments
+      border: none
 
     #desc, #helper, #c-help
       +border-radius

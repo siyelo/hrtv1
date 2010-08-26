@@ -19,15 +19,15 @@ class SubActivitiesController < ActiveScaffoldController
     config.label =  "Sub Implementers"
     config.columns =  @@shown_columns
     list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
-
-    config.action_links.add('Upload',
-      :action => "create_from_file_form",
+    #  TODO add back in when implemented in functioning manner
+#    config.action_links.add('Upload',
+#      :action => "create_from_file_form",
 #      :controller => "sub_activities",
-      :type => :collection,
-      :popup => true,
-      :inline => true,
-      :position => :top,
-      :label => "Upload")
+#      :type => :collection,
+#      :popup => true,
+#      :inline => true,
+#      :position => :top,
+#      :label => "Upload")
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
@@ -67,7 +67,8 @@ class SubActivitiesController < ActiveScaffoldController
   end
 
   def create_from_file_form
-    super "sub-activities"
+    #TODO pass in parent id, active scaffold gives us this in params for free
+    super "sub-activities" 
   end
 
   def create_from_file

@@ -37,6 +37,20 @@ class ActiveScaffoldController < ApplicationController
     ModelHelp.find_by_model_name self.controller_model_class.to_s
   end
 
+  def create_from_file_form human_record_name
+    # layout => false currently being ignored
+    # probably something to do with magic from AS
+    # to make it render in line, as I tried doing before
+    #   now we specifiy in the controller popup => true
+    #   so it acts nicely
+    #   TODO display upload in line, then in upload_form view
+    #   have it pop open a new window for the next steps
+    #   TODO allow attributes to be passed in to create params hash through constraints
+    #     using session
+    @human_record_name = human_record_name || ""
+    render 'shared/upload_form'#, :layout => false 
+  end
+
   def create_from_file attributes, constraints={}
     if fields_mapped?
       saved, errors = [], []
@@ -55,7 +69,7 @@ class ActiveScaffoldController < ApplicationController
       redirect_to :action => :index
     else
       #user chooses field mapping
-      session[:last_data_entry_constraints] = @constraints
+      session[:last_data_entry_constraints] = @constraints #TODO switch to += / make session variable a set
       render :template => 'shared/create_from_file'
     end
     rescue MapFields::InconsistentStateError

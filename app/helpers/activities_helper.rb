@@ -14,12 +14,13 @@ module ActivitiesHelper
             ids.merge [p.id]
           end
           ["id in (?)", ids]
-      else 
+      else
         super
       end
     elsif params[:controller] == "activities" #this might intro a bug
       #right now for some reason projects is trying to pick up the
       #options for the association for activities
+      logger.debug("in 2")
       if association.name == :provider
           ids = Set.new
           Project.available_to(current_user).all.each do |p|

@@ -11,10 +11,8 @@ describe Project do
       
       it { should be_valid }
       it { should validate_presence_of(:name) }
-  #    it { should validate_presence_of(:description) }
-  #    it { should validate_presence_of(:expected_total) }
-      it { should allow_value(123.45).for(:expected_total) }
-      it { should_not allow_value("blah").for(:expected_total) }
+      it { should allow_value(123.45).for(:budget) }
+      it { should_not allow_value("blah").for(:budget) }
     end
     
     describe "assigning funding flows" do

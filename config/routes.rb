@@ -27,15 +27,27 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:select => :post}, :active_scaffold => true
 
   map.resources :activities, :active_scaffold => true do |activity|
+
+    activity.resource :budget, :path_prefix => '/activities/:activity_id/classification',
+                                :controller => :budget_classification,
+                                :only => [ :show, :update ]
+    activity.resource :expenditure, :path_prefix => '/activities/:activity_id/classification',
+                                      :controller => :expenditure_classification,
+                                      :only => [ :show, :update ]
+     #TODO : refactor as above
     activity.resource :coding,  :controller => :code_assignments,
                                 :only => [:index], #no restful routes k thx
-                                :member => {  :budget => :get,
-                                     :budget_cost_categories => :get,
-                                              :expenditure => :get,
-                                     :expenditure_cost_categories => :get}
-  map.resources :sub_activities, :active_scaffold => true
+                                :member => {  :budget                      => :get,
+                                              :budget_cost_categories      => :get,
+                                              :expenditure                 => :get,
+                                              :expenditure_cost_categories => :get
+                                            }
+
+    map.resources :sub_activities, :active_scaffold => true
+
     activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
     activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
+
     activity.update_coding_budget_cost_categories 'update_coding_budget_cost_categories', :controller => :code_assignments, :action => :update_budget_cost_categories
     activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
   end
@@ -63,15 +75,12 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
-
-  map.news "news", :controller => 'static_page', :action => "news"
-  map.about "about", :controller => 'static_page', :action => "about"
-  map.contact "contact", :controller => 'static_page', :action => "contact"
+  map.reporter_dashboard "reporter_dashboard", :controller => 'static_page', :action => "reporter_dashboard"
 
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact reporter_dashboard admin_dashboard about news submit user_guide].join('|'))
+                  :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide reports].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 

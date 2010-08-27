@@ -17,6 +17,10 @@ class StaticPageController < ApplicationController
   def contact
     redirect_to :controller => :help_requests, :action => :new
   end
+  
+  def reporter_dashboard
+    @unfulfilled_responses = DataResponse.unfulfilled
+  end
 
   def show
     #TODO add authorization for the various dashboards

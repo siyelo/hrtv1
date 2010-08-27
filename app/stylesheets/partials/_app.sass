@@ -1,100 +1,120 @@
-body
-  background= image_url("bg-white.jpg")
-  font-family: Arial, Helvetica, serif
 
-  a, p
-    font-size: 0.85em
-
-  a
+=normal_link()
+  color= !orange
+  background: none
+  font-size: 0.8em
+  padding-left: 10px
+  text-decoration: none
+  &:hover
+    background: none
     color= !mid-blue
-    text-decoration: none
-    &:hover
-      text-decoration: underline
-  
-  p, ul, dl
-    color: #444
+    text-decoration: underline
 
-  h2
-    font-weight: bold
-    text-transform: uppercase
-
-  .right
-    float: right
-
-  #header, #tabs, #footer
+body.app
+  .wrapper
     min-width: 800px
     padding: 0 50px
 
-  #header, #tabs
+  /* overriding the shared logo style*/
+  #header_app #logo
+    font-size: 0.6em
+    padding: 10px 0
+    width: 300px
+    h1 
+      padding-top: 4px
+      span
+        margin-left: -5px
+  /* end */
+
+  /* app main nav styles */
+  #main-nav
     background= image_url("bg-blue.jpg")
-    //background= !mid-blue
+
     a
       color= !lighter-blue
       font-size: 0.8em
 
-  #header
-    #admin
-      +column(17, true)
-      .welcome
-        +prepend(5)
-        +column(4)
-        span
-          padding-top: 10px
-          font-size: 11px
-          color= !light-blue
-          float: right
-      .links
-        +column(8, true)
-        ul
-          float: right
-          +border-radius
-          +horizontal-list
-          background: #596a7b
-          float: right
-          padding: 7px 12px
-
-  #tabs
     ul
       display: block
       overflow: hidden
       li
         display: block
+        &:first-child a
+          +border-top-left-radius
+        &:last-child a
+          +border-top-right-radius
         a
-          background: #eee
-          +border-top-radius
-          border-right: 1px #ddd solid
-          border-bottom: 1px #ddd solid
-          color= !mid-blue
+          background: !light-blue
+          color: !mid-blue
           display: inline
           float: left
-          margin-top: 3px
-          padding: 10px 30px 10px 10px
+          font-size: 0.75em
+          font-weight: bold
+          padding: 8px 20px 7px
+          text-decoration: none
+          text-transform: uppercase
           &:hover
-            background= !lightest-blue
-            text-decoration: none
+            background: !lightest-blue
+            color: !mid-blue
+
       li.active
         a
-          +border-top-radius
           background: white
-          border-bottom: white 1px solid
-          font-weight: bold
-          margin: 0
-          padding: 13px 30px 10px 10px
-          text-transform: uppercase
           color= !dark-blue
-          letter-spacing: 0.12em
+          letter-spacing: 0.05em
+
     img
       float: right
       margin-top: -35px
+  /* end */
+  
+  /* adding properties to the shared flashes styles */
+  #flashes
+    margin-bottom: -5px
+  /* end */
+  
+  /* adding properties to the shared admin style */
+  #admin ul li
+    &:first-child a
+      +border-bottom-left-radius
+    &:last-child a
+      +border-bottom-right-radius
+  /* end */
 
-  #content
-    +border-bottom-radius
-    +box-shadow(#ddd, 0, 2px, 5px)
-    background: white
-    margin: 0 50px 20px 50px
-    min-width: 800px
-    padding: 30px 10px
-    overflow: auto
+  /* sub-nav styles */
+  #sub-nav
+    +box-shadow(#f0f0f0, 0, 2px, 7px)
+    margin: 15px 0 0 0
+    ul
+      +horizontal-list
+      padding: 0 15px 15px 15px
+    .active
+      a
+        background: !orange
+        color: white
+    a
+      +border-radius
+      background: !lightest-blue
+      color: !mid-blue
+      display: inline-block
+      font-size: 0.8em
+      padding: 7px 10px
+      text-decoration: none
+      &:hover, &:focus
+        background: !mid-blue
+        color: white
+  #page_tips_nav
+    float: right
+    display: none
+    padding: 10px
+    a
+      +normal_link
+
+  /* end */
+
+  #content .wrapper
+    margin: 0 50px 15px 50px
+    padding: 0 0 20px 0
 
     #crumbs
       padding: 0 0 0 10px
@@ -116,21 +136,27 @@ body
           background= !light-blue
           color= !mid-blue
           text-decoration: none
-
+      
 
     #main
       float: left
+      padding: 20px 0 0 15px
       width: 70%
 
       p
+        font-size: 0.8em
         line-height: 1.2em
+        +clearfix
+
       a
         color= !orange
         font-size: 0.8em
         padding-left: 10px
-        text-decoration: underline
+        text-decoration: none
         &:hover
           color= !mid-blue
+          text-decoration: underline
+
       h3
         color= !mid-blue
         font-size: 0.9em
@@ -179,21 +205,40 @@ body
       .link_like
         color: #09c
         cursor: pointer
+        float: left
 
         &:hover
           color: #069
           text-decoration: underline
 
-    #desc, #helper
+
+    .comments
+      border-top: 1px dashed #ddd
+      margin-top: 10px
+      
+    a.comments
+      border: none
+
+    #desc, #helper, #c-help
       +border-radius
       border: #eee 1px solid
       padding-bottom: 15px
       margin-bottom: 10px
 
+    #desc
+      span.close
+        float: right
+        
+      .close
+        margin: -25px 10px 0 0
+        
+    #c-help
+      margin: 20px 0
+
     #sidebar
       float: right
-      margin-left: 3%
-      width: 27%
+      padding: 20px 15px 0 0
+      width: 25%
 
       #helper
         a
@@ -225,9 +270,9 @@ body
       +border-top-radius
       background= !lightest-blue
       color= !mid-blue
-      font-size: 0.8em
+      font-size: 0.9em
       letter-spacing: 0.05em
-      
+
   #content #map_fields_form
     .map_fields
       padding-left: 10px
@@ -240,14 +285,6 @@ body
       font-size: 0.8em
       padding: 2px 0
 
-  #footer
-    clear: both
-    color= !mid-blue
-    font-size: 0.8em
-    margin: 0 10px 20px 10px
-    text-transform: uppercase
-    a
-      padding: 5px
   #guide
     h2
       +border-radius

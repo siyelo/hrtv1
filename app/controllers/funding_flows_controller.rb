@@ -1,4 +1,4 @@
-class FundingFlowsController < ApplicationController
+class FundingFlowsController < ActiveScaffoldController
   authorize_resource
 
   @@shown_columns = [:project, :from, :to, :budget, :spend]

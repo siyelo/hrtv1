@@ -43,16 +43,16 @@ var code_assignments_budget = {
       jQuery(".nav2 ul li").removeClass('selected');
       jQuery(this).addClass('selected');
       jQuery("#activity_classification > div").hide();
-      jQuery('#activity_classification .' + jQuery(this).attr("id")).show('selected');
+      jQuery('#activity_classification > div.' + jQuery(this).attr("id")).show();
     });
 
   }
 };
 
 jQuery(function () {
-  var body_id = jQuery('body').attr("id");
-  if (body_id) {
-    controller_action = body_id;
+  var id = jQuery('body').attr("id");
+  if (id) {
+    controller_action = id;
     if (typeof window[controller_action] !== 'undefined') {
       window[controller_action]['run']();
     }

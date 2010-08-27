@@ -4,14 +4,14 @@ class CodeAssignmentsController < ApplicationController
   def budget
     load_codes
     @current_codes = @activity.budget_codes
-    @current_assignments = @activity.budget_codings
+    @current_assignments = @activity.budget_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :budget_codes
   end
 
   def budget_cost_categories
     load_codes
     @current_codes = @activity.budget_codes
-    @current_assignments = @activity.budget_codings
+    @current_assignments = @activity.budget_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :budget_cost_categories
     @codes = @activity.valid_cost_category_codes
     render :layout => false
@@ -20,7 +20,7 @@ class CodeAssignmentsController < ApplicationController
   def expenditure
     load_codes
     @current_codes = @activity.expenditure_codes
-    @current_assignments = @activity.expenditure_codings
+    @current_assignments = @activity.expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :expenditure_codes
     render :layout => false
   end
@@ -28,7 +28,7 @@ class CodeAssignmentsController < ApplicationController
   def expenditure_cost_categories
     load_codes
     @current_codes = @activity.expenditure_codes
-    @current_assignments = @activity.expenditure_codings
+    @current_assignments = @activity.expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
     @coding_type = :expenditure_cost_categories
     @codes = @activity.valid_cost_category_codes
     render :layout => false
@@ -62,7 +62,7 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update_assignments(coding_type)
-    #authorize! :update, @activity #GN: why is this missing
+    authorize! :update, @activity
     params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
     if @activity.update_attributes(params[:activity])
@@ -71,5 +71,11 @@ class CodeAssignmentsController < ApplicationController
     else
       render :action => "manage" #TODO fix path here
     end
+  end
+
+  protected
+
+  def load_help
+    @model_help = ModelHelp.find_by_model_name 'CodeAssignment'
   end
 end

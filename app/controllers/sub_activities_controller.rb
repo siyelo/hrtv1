@@ -1,6 +1,6 @@
-class SubActivitiesController < ApplicationController
+class SubActivitiesController < ActiveScaffoldController
 
-  authorize_resource :class => Activity #check this is correct
+  authorize_resource :class => Activity
 
   before_filter :check_user_has_data_response
 

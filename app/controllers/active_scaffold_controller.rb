@@ -25,17 +25,6 @@ class ActiveScaffoldController < ApplicationController
     end
   end
 
-  # sets AS field help that shows up in create form and on columns
-  # @model_help used in views/shared/_data_entry_help
-  def load_help
-    @model_help = help_model
-    self.class.set_active_scaffold_column_descriptions @model_help
-  end
-
-  # can override this in subclass for different help
-  def help_model
-    ModelHelp.find_by_model_name self.controller_model_class.to_s
-  end
 
   def create_from_file_form human_record_name
     # layout => false currently being ignored
@@ -141,6 +130,17 @@ class ActiveScaffoldController < ApplicationController
   end
 
 
+  # sets AS field help that shows up in create form and on columns
+  # @model_help used in views/shared/_data_entry_help
+  def load_help
+    @model_help = help_model
+    self.class.set_active_scaffold_column_descriptions @model_help
+  end
+
+  # can override this in subclass for different help
+  def help_model
+    ModelHelp.find_by_model_name self.controller_model_class.to_s
+  end
   #TODO now that we're loading model help in the controller, maybe we
   # pass in a help object here from the controller instead
   # of doing the find here?

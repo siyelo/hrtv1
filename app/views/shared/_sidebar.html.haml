@@ -23,6 +23,8 @@
     %p= h @model_help.long
 
 - content_for :side_bar do
+  :javascript
+    $('sidebar').show()
   %h2 Help
   %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
   #terms

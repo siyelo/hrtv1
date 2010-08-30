@@ -5,11 +5,11 @@ class SubActivitiesController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :provider, :budget, :budget_percentage, :spend, :spend_percentage]
-  @@create_columns = [:provider,  :budget, :budget_percentage, :spend, :spend_percentage]
+  @@create_columns = [:text_for_provider, :provider,  :budget, :budget_percentage, :spend, :spend_percentage]
   def self.create_columns
     @@create_columns
   end
-  @@columns_for_file_upload = %w[provider budget budget_percentage spend spend_percentage]
+  @@columns_for_file_upload = %w[text_for_provider budget budget_percentage spend spend_percentage]
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -36,6 +36,8 @@ class SubActivitiesController < ActiveScaffoldController
     config.columns[:provider].label               = "Implementer"
     config.columns[:budget].label = "Budget GOR FY 10-11"
     config.columns[:spend].label = "Spend GOR FY 09-10"
+    config.columns[:text_for_provider].form_ui             = :textarea
+    quarterly_amount_field_options config.columns[:text_for_provider]
     [:spend, :budget].each do |c|
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true

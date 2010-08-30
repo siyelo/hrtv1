@@ -3,6 +3,6 @@
 
 class SubActivity < Activity
   belongs_to :activity
-  attr_accessible :activity_id
+  attr_accessible :activity_id, :spend_percentage, :budget_percentage
 
 end

@@ -3,5 +3,6 @@
 
 class SubActivity < Activity
   belongs_to :activity
+  attr_accessible :activity_id
 
 end

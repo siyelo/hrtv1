@@ -9,7 +9,7 @@ class SubActivitiesController < ActiveScaffoldController
   def self.create_columns
     @@create_columns
   end
-  @@columns_for_file_upload = %w[provider budget spend]
+  @@columns_for_file_upload = %w[provider budget budget_percentage spend spend_percentage]
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -65,16 +65,27 @@ class SubActivitiesController < ActiveScaffoldController
   end
 
   def create_from_file_form
-    #TODO pass in parent id, active scaffold gives us this in params for free
-    #session[:create_from_file_sub_activity_parent_id]=params[
+    #TODO pass in parent id from value on form
+    # now we are using session in a way that could have bug
+    session[:create_from_file_sub_activity_parent_id] = nil
+    session[:create_from_file_sub_activity_parent_id] ||= session["as:#{params["eid"]}"][:constraints][:activity]
+    logger.debug session[:create_from_file_sub_activity_parent_id]
     super "sub-activities" 
   end
 
   def create_from_file
     # TODO somehow get constraints so we have right parent id
     # store in session?
-    @constraints = { :activity_id => "?" }
-    super @@columns_for_file_upload
+    if session[:create_from_file_sub_activity_parent_id]
+      @constraints = { :activity_id => session[:create_from_file_sub_activity_parent_id] }
+      super @@columns_for_file_upload, @constraints
+    else
+      super @@columns_for_file_upload
+    end
+  end
+  
+  def index
+    redirect_to "/activities"
   end
 
   def beginning_of_chain

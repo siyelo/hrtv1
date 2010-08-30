@@ -1,4 +1,5 @@
 class DataResponsesController < ApplicationController
+  before_filter :load_help
   def start
     @data_response = DataResponse.available_to(current_user).find params[:id]
     current_user.current_data_response = @data_response
@@ -16,5 +17,11 @@ class DataResponsesController < ApplicationController
       render :action => :start
     end
 
+  end
+
+  protected
+
+  def load_help
+    @model_help = ModelHelp.find_by_model_name 'DataResponse'
   end
 end

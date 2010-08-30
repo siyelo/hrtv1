@@ -9,7 +9,7 @@ class SubActivitiesController < ActiveScaffoldController
   def self.create_columns
     @@create_columns
   end
-  @@columns_for_file_upload = %w[text_for_provider budget budget_percentage spend spend_percentage]
+  @@columns_for_file_upload = %w[text_for_provider budget budget_percentage spend spend_percentage ]
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -48,10 +48,10 @@ class SubActivitiesController < ActiveScaffoldController
       config.columns[c+"_percentage"].label = "% of Main Activity's #{c.capitalize}"
     end
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Budget" do |budget_group|
+      columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :budget, :budget_percentage
       end
-      columns.add_subgroup "Expenditures" do |funds_group|
+      columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_percentage
       end
     end

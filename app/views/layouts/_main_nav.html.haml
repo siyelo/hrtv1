@@ -2,7 +2,7 @@
   .wrapper
     - dashboard_active = help_active = reports_active = false
     - if controller.class.to_s == "StaticPageController"
-      - dashboard_active = true if controller.action_name == 'reporter_dashboard'
+      - dashboard_active = true if controller.action_name == 'reporter_dashboard' || params[:page] == 'admin_dashboard'
       - help_active      = true if params[:page] == 'user_guide'
       - reports_active   = true if params[:page] == 'reports'
 

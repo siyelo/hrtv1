@@ -20,7 +20,8 @@ class OrganizationsController < ActiveScaffoldController
     config.columns[:type].options                  = {:options => [
                                                       ["Donor","Donor"],
                                                       ["NGO","Ngo"],
-                                                      ["Other", "Organization"] ]}
+                                                     ["Other", "Organization"] ]}
+     config.nested.shallow_delete = true # in nested scaffolds delete just removes the association
   end
 
   def create_from_file
@@ -43,8 +44,8 @@ class OrganizationsController < ActiveScaffoldController
   # and delete an activity there, it actually delete's the real
   # organization! until we work around it
   # this makes the delete link not show up there
-  def delete_authorized?
-    authorize! :delete, Organization
-  end
+#  def delete_authorized?
+#    authorize! :delete, Organization
+#  end
 
 end

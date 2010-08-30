@@ -49,7 +49,7 @@ class FundingFlowsController < ActiveScaffoldController
       end
     end
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label = "Total Spend GOR FY 09-10"
+    config.columns[:spend].label = "Total Spent GOR FY 09-10"
     [:budget, :spend].each do |c|
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true

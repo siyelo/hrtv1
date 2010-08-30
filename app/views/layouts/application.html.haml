@@ -8,6 +8,10 @@
     = render :partial => 'layouts/landing_page'
   - elsif controller.controller_name == "user_sessions"
     = render :partial => 'layouts/user_session'
+  - elsif controller.controller_name == "static_page" && %w[news about contact].include?(controller.action_name)
+    = render :partial => 'layouts/user_session'
+  - elsif controller.controller_name == "help_requests" && %w[create new].include?(controller.action_name)
+    = render :partial => 'layouts/user_session'
   - else
     = render :partial => 'layouts/inner_pages'
 

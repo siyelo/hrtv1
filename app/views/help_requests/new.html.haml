@@ -2,8 +2,8 @@
 
 :javascript
   $('tabs').hide();
-%h2 Help / Contact Us
 .sign_in_form
+  %h3 Help / Contact Us
   - form_for @help_request, :url => help_requests_path do |form|
     %fieldset.user_form
       %p

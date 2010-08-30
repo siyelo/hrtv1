@@ -44,8 +44,8 @@ class OrganizationsController < ActiveScaffoldController
   # and delete an activity there, it actually delete's the real
   # organization! until we work around it
   # this makes the delete link not show up there
-  def delete_authorized?
-    authorize! :delete, Organization
-  end
+#  def delete_authorized?
+#    authorize! :delete, Organization
+#  end
 
 end

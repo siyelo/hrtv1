@@ -2,11 +2,11 @@
 #
 # Table name: help_requests
 #
-#  id         :integer         primary key
+#  id         :integer         not null, primary key
 #  email      :string(255)
 #  message    :text
-#  created_at :timestamp
-#  updated_at :timestamp
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 class HelpRequest < ActiveRecord::Base

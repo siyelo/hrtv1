@@ -2,12 +2,12 @@
 #
 # Table name: data_responses
 #
-#  id                               :integer         primary key
+#  id                               :integer         not null, primary key
 #  data_element_id                  :integer
 #  data_request_id                  :integer
 #  complete                         :boolean         default(FALSE)
-#  created_at                       :timestamp
-#  updated_at                       :timestamp
+#  created_at                       :datetime
+#  updated_at                       :datetime
 #  organization_id_responder        :integer
 #  currency                         :string(255)
 #  fiscal_year_start_date           :date

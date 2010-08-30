@@ -2,12 +2,12 @@
 #
 # Table name: indicators
 #
-#  id          :integer         primary key
+#  id          :integer         not null, primary key
 #  name        :string(255)
 #  description :text
 #  source      :string(255)
-#  created_at  :timestamp
-#  updated_at  :timestamp
+#  created_at  :datetime
+#  updated_at  :datetime
 #
 
 class Indicator < ActiveRecord::Base

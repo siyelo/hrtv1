@@ -27,7 +27,6 @@ Scenario: Bug: should not see Projects/Implementers/etc tabs until a Data Req is
   When I go to the reporter dashboard page
   Then I should not see the data response tabs
 
-@run
 Scenario: Bug: Workplan tab appears active even on Dashboard
   Given I am signed in as a reporter 
   When I go to the reporter dashboard page

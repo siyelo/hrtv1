@@ -37,7 +37,7 @@ class ActiveScaffoldController < ApplicationController
     #   TODO allow attributes to be passed in to create params hash through constraints
     #     using session
     @human_record_name = human_record_name || ""
-    render 'shared/upload_form'#, :layout => false 
+    render 'shared/upload_form'#, :layout => false
   end
 
   def create_from_file attributes, constraints={}
@@ -189,7 +189,7 @@ class ActiveScaffoldController < ApplicationController
 
   def check_user_has_data_response
     unless current_user.current_data_response || current_user.role?(:admin)
-      flash[:warning] = "Please first click on one of the links underneath \"Data Requests to Fulflill\" to continue. We will remember which data request you were responding to the next time you login, so you won't see this message again."
+      flash[:warning] = "Please first click on one of the links underneath \"Data Requests to Fulfill\" to continue. We will remember which data request you were responding to the next time you login, so you won't see this message again."
       #TODO email the file and have someone get back to helping them
       redirect_to user_dashboard_path(current_user)
     end

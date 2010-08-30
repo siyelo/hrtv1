@@ -6,6 +6,10 @@ Given /^a project with name "(.+)"$/ do |name|
   @project = Factory.create(:project, :name => name)
 end
 
+# kill meeeee
+Given /^a project with name "(.+)" and an existing response$/ do |name|
+  @project = Factory.create(:project, :name => name, :data_response => @data_response)
+end
 
 Given /^an activity with name "([^\"]*)"$/ do |name|
   @activity = Factory.create(:activity, :name => name)
@@ -13,6 +17,10 @@ end
 
 Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
   @activity = Factory.create(:activity, :name => name, :projects => [Project.find_by_name(project)])
+end
+
+Given /^an activity with name "([^\"]*)" in project "([^\"]*)" and an existing response$/ do |name, project|
+  @activity = Factory.create(:activity, :name => name, :data_response => @data_response, :projects => [Project.find_by_name(project)])
 end
 
 Given /^the following projects$/ do |table|
@@ -110,23 +118,18 @@ Given /^the following funding flows$/ do |table|
   end
 end
 
-Then /^debug$/ do
-  debugger # express the regexp above with the code you wish you had
-end
-
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Improving lives through better health policy" within "div#header"
-    Then I should see "Have an account?" within "div#header"
-    And I should see "Sign in" within "div#header"
+    Then I should see "Have an account?" within "div#header_app_app"
+    And I should see "Sign in" within "div#header_app_app"
   }
 end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#header"
-    Then I should see "My Profile" within "div#header"
-    Then I should see "Sign out" within "div#header"
+    Then I should see "frank@f.com" within "div#header_app"
+    Then I should see "My Profile" within "div#header_app"
+    Then I should see "Sign out" within "div#header_app"
   }
 end
 
@@ -142,7 +145,7 @@ end
 Then /^I should see the main nav tabs$/ do
   steps %Q{
     Then I should see "Dashboard" within "div#main-nav"
-    Then I should see "Workplan" within "div#main-nav"
+    Then I should see "My Data" within "div#main-nav"
     Then I should see "Reports" within "div#main-nav"
     Then I should see "Help" within "div#main-nav"
   }
@@ -175,10 +178,25 @@ end
 
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-   steps %Q{ When I fill in "activity_budget_amounts_1_p" with "#{amount}"}
+   steps %Q{ When I fill in "activity_budget_codes_updates_1_percentage" with "#{amount}"}
 end
 
 Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_budget_amounts_1_p" field should equal "#{amount}"}
+  steps %Q{ Then the "activity_budget_codes_updates_1_percentage" field should equal "#{amount}"}
 end
 
+
+# band aid fix
+Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|  
+  @data_response = DataResponse.new :data_request => DataRequest.find_by_title(request),
+                                    :responding_organization => Organization.find_by_name(org)
+  @data_response.save!
+end
+
+# refactor meeeee
+Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name|
+  @user = User.find_by_username name
+  @data_response = DataResponse.last
+  @user.current_data_response = @data_response
+  @user.save!
+end

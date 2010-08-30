@@ -2,7 +2,7 @@
 #
 # Table name: code_assignments
 #
-#  id          :integer         primary key
+#  id          :integer         not null, primary key
 #  activity_id :integer
 #  code_id     :integer
 #  code_type   :string(255)

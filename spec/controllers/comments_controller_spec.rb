@@ -252,18 +252,30 @@ describe "Requesting Comment endpoints as a reporter" do
       params = { :title => 'title', :comment => 'comment' }
       @comment = Factory.create(:comment, params )
       @comment.stub!(:save).and_return(true)
+      
+    end
+    it "should update the comment if it belongs to me" do 
+        pending 
+        put :update, :id => @comment.id, :record => params
+    end
+    it "should not update the comment if it does not belong to me " do 
+      pending 
       put :update, :id => @comment.id, :record => params
     end
-    it "should update the comment if it belongs to me" do pending end
-    it "should not update the comment if it does not belong to me " do pending end
   end
 
   context "Requesting /comments/1 using DELETE" do
     before do
       @comment = Factory.create(:comment)
+      
+    end
+    it "should delete the comment if it belongs to me" do 
+      pending
       delete :destroy, :id => @comment.id
     end
-    it "should delete the comment if it belongs to me" do pending end
-    it "should not delete the comment if it does not belong to me " do pending end
+    it "should not delete the comment if it does not belong to me " do 
+      pending 
+      delete :destroy, :id => @comment.id
+    end
   end
 end

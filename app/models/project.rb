@@ -2,13 +2,13 @@
 #
 # Table name: projects
 #
-#  id               :integer         primary key
+#  id               :integer         not null, primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
+#  created_at       :datetime
+#  updated_at       :datetime
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
@@ -39,9 +39,12 @@ class Project < ActiveRecord::Base
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
   validates_presence_of :name
+  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
+  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
+  validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
 
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-    :start_date, :end_date, :currency
+                  :start_date, :end_date, :currency
 
   after_create :create_helpful_records_for_workflow
 

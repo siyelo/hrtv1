@@ -2,11 +2,11 @@
 #
 # Table name: line_items
 #
-#  id                        :integer         primary key
+#  id                        :integer         not null, primary key
 #  description               :text
 #  activity_id               :integer
-#  created_at                :timestamp
-#  updated_at                :timestamp
+#  created_at                :datetime
+#  updated_at                :datetime
 #  activity_cost_category_id :integer
 #  budget                    :decimal(, )
 #  spend                     :decimal(, )

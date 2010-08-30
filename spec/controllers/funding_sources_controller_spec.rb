@@ -30,15 +30,10 @@ describe FundingSourcesController do
       before :each do
         get :index
       end
-      it { should render_template(:index) }
-      it { should_not set_the_flash }
+      # pending http://www.pivotaltracker.com/story/show/4944177
+      #it { should render_template(:index) }
+      #it { should_not set_the_flash }
     end
-    
-    # GR: this is too brittle with ActiveScaffold...
-    #it "should only show funding sources for the reporter's organization" do
-    #  FundingFlow.should_receive(:find).and_return(@my_source)
-    #  get :index
-    #end
     
   end
 end

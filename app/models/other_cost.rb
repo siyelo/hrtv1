@@ -2,12 +2,12 @@
 #
 # Table name: activities
 #
-#  id                     :integer         primary key
+#  id                     :integer         not null, primary key
 #  name                   :string(255)
 #  beneficiary            :string(255)
 #  target                 :string(255)
-#  created_at             :timestamp
-#  updated_at             :timestamp
+#  created_at             :datetime
+#  updated_at             :datetime
 #  provider_id            :integer
 #  other_cost_type_id     :integer
 #  description            :text
@@ -25,6 +25,9 @@
 #  text_for_beneficiaries :text
 #  spend_q4_prev          :decimal(, )
 #  data_response_id       :integer
+#  activity_id            :integer
+#  budget_percentage      :decimal(, )
+#  spend_percentage       :decimal(, )
 #
 
 

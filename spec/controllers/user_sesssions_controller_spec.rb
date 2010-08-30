@@ -24,7 +24,7 @@ describe UserSessionsController do
     end
 
     it { should set_the_flash.to("Successfully logged in.") }
-    it { should redirect_to(static_page_url(:ngo_dashboard)) }
+    it { should redirect_to(static_page_url(:user_guide)) }
   end
   
 end

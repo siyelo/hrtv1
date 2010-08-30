@@ -4,16 +4,30 @@ Feature: NGO/donor can enter a code breakdown for each activity
   I want to be able to break down activities into individual codes
 
 Background:
-  Given a project with name "TB Treatment Project"
-  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 
-  Given I am signed in as a reporter 
+  Given the following organizations 
+    | name             |
+    | WHO              |
+    | UNAIDS           |
+  Given the following reporters 
+     | name         | organization |
+     | who_user     | WHO          |
+  Given a data request with title "Req1" from "UNAIDS"
+  Given a data response to "Req1" by "WHO"
+  Given a project with name "TB Treatment Project" and an existing response
+  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response
+  Given a refactor_me_please current_data_response for user "who_user"
+  Given I am signed in as "who_user"
 
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
-  And I should see "TB Drugs procurement"
-  #Then I should see "DEVELOPMENT OF SECTOR INSTITUTIONAL CAPACITY"
-
+  Then I should see "TB Drugs procurement"
+  And I should see "Budget"
+  And I should see "Budget Cost Categorization"
+  And I should see "Expenditure"
+  And I should see "Expenditure Cost Categorization"
+  And I should see "Providing Technical Assistance"
+  
 # http://www.pivotaltracker.com/story/show/4355865
 
 Scenario: See both budget for an activity classification
@@ -31,22 +45,16 @@ Scenario: enter budget for an activity
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-Scenario: See both budget and expenditure for an activity classification
-  When I go to the activities page
-  And I follow "Classify"
-  Then I should be on the budget classification page for "TB Drugs procurement"
-  And I should see "Budget"
-  And I should see "Expenditure"
-  When I follow "Expenditure"
-  Then I should be on the expenditure classification page for "TB Drugs procurement"
-  And I should see the "Expenditure" tab is active
-
+# no coverage since jquery tabs added
+@wip
 Scenario: enter expenditure for an activity
-  Given I am on the expenditure classification page for "TB Drugs procurement"
+  Given I am on the budget classification page for "TB Drugs procurement"
+  And I follow "Expenditure"
+  Then show me the page
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
+  Then show me the page
   Then I should see "Activity expenditure was successfully updated."
-  And I should be on the expenditure classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed. 
@@ -59,7 +67,8 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And I press "Save"
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-@slow
+#@slow
+@run
 Scenario Outline: enter percentage for an activity budget classification
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in the percentage for "Human Resources For Health" with "<amount>"

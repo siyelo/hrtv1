@@ -17,9 +17,9 @@
       %li{ :class => workplan_active ? "active" : ''}
         -# this might break if no response selected
         - if current_user && current_user.current_data_response
-          = link_to 'Workplan', data_response_start_path(current_user.current_data_response)
+          = link_to 'My Data', data_response_start_path(current_user.current_data_response)
         - else
-          = link_to 'Workplan', ''
+          = link_to 'My Data', ''
       %li{ :class => reports_active ? "active" : ''}
         = link_to 'Reports', static_page_path(:reports)
       %li{ :class => help_active ? "active" : ''}

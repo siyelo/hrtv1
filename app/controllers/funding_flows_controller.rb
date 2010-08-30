@@ -41,10 +41,10 @@ class FundingFlowsController < ActiveScaffoldController
 
    # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Budget" do |budget_group|
+      columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :budget
       end
-      columns.add_subgroup "Expenditures" do |funds_group|
+      columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
       end
     end

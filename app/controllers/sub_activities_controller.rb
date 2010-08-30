@@ -19,15 +19,13 @@ class SubActivitiesController < ActiveScaffoldController
     config.label =  "Sub Implementers"
     config.columns =  @@shown_columns
     list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
-    #  TODO add back in when implemented in functioning manner
-#    config.action_links.add('Upload',
-#      :action => "create_from_file_form",
-#      :controller => "sub_activities",
-#      :type => :collection,
-#      :popup => true,
-#      :inline => true,
-#      :position => :top,
-#      :label => "Upload")
+   #  TODO add back in when implemented in functioning manner
+    config.action_links.add('Upload',
+      :action => "create_from_file_form",
+      :controller => "sub_activities",
+      :type => :collection,
+      :popup => true,
+      :label => "Upload")
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
@@ -68,13 +66,14 @@ class SubActivitiesController < ActiveScaffoldController
 
   def create_from_file_form
     #TODO pass in parent id, active scaffold gives us this in params for free
+    #session[:create_from_file_sub_activity_parent_id]=params[
     super "sub-activities" 
   end
 
   def create_from_file
     # TODO somehow get constraints so we have right parent id
     # store in session?
-    @constraints = { :activity => "?" }
+    @constraints = { :activity_id => "?" }
     super @@columns_for_file_upload
   end
 

@@ -20,7 +20,8 @@ class OrganizationsController < ActiveScaffoldController
     config.columns[:type].options                  = {:options => [
                                                       ["Donor","Donor"],
                                                       ["NGO","Ngo"],
-                                                      ["Other", "Organization"] ]}
+                                                     ["Other", "Organization"] ]}
+     config.nested.shallow_delete = true # in nested scaffolds delete just removes the association
   end
 
   def create_from_file

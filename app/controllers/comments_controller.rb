@@ -14,6 +14,8 @@ class CommentsController < ActiveScaffoldController
     config.create.persistent           = false
     config.columns                     = @@shown_columns
     config.columns[:commentable].label = "Comment On"
+    config.columns[:comment].form_ui = :textarea
+    config.columns[:comment].inplace_edit = true
     list.sorting                       = {:created_at => 'DESC'}
   end
 

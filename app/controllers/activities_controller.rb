@@ -5,7 +5,7 @@ class ActivitiesController < ActiveScaffoldController
 
   include ActivitiesHelper
   @@shown_columns = [:projects, :provider, :description,  :budget  ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
   end

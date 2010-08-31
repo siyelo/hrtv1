@@ -16,19 +16,7 @@
     %li{:id => 'tab4'}
       = link_to "Expenditure Cost Categorization", "#"
 
-%table#activity_description
-  %tr
-    %td.title Name:
-    %td= @activity.name
-  %tr
-    %td.title Total Budget for FY 10-11:
-    %td= @activity.budget
-  %tr
-    %td.title Total Expenditures for FY 09-10:
-    %td= @activity.spend
-  %tr
-    %td.title Description:
-    %td= @activity.description
+= render :partial => 'code_assignments/activity_description'
 
 #activity_classification
   = render 'tab', { :update_path => activity_update_coding_budget_path(@activity.id), :activity => @activity, :codes => @codes, :tab => 'tab1' }

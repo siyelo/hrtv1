@@ -35,7 +35,7 @@ class SubActivitiesController < ActiveScaffoldController
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].label               = "Implementer"
     config.columns[:budget].label = "Budget GOR FY 10-11"
-    config.columns[:spend].label = "Spend GOR FY 09-10"
+    config.columns[:spend].label = "Spent GOR FY 09-10"
     config.columns[:text_for_provider].form_ui             = :textarea
     config.columns[:text_for_provider].label               = "Text for Implementer"
     quarterly_amount_field_options config.columns[:text_for_provider]
@@ -45,7 +45,11 @@ class SubActivitiesController < ActiveScaffoldController
       c=c.to_s
       quarterly_amount_field_options config.columns[c+"_percentage"]
       config.columns[c+"_percentage"].inplace_edit = true
-      config.columns[c+"_percentage"].label = "% of Main Activity's #{c.capitalize}"
+      if c==:spend
+        config.columns[c+"_percentage"].label = "% of Main Activity's Spending"
+      else
+        config.columns[c+"_percentage"].label = "% of Main Activity's Budget"
+      end
     end
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|

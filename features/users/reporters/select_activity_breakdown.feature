@@ -67,8 +67,7 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And I press "Save"
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-#@slow
-@run
+@slow
 Scenario Outline: enter percentage for an activity budget classification
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in the percentage for "Human Resources For Health" with "<amount>"

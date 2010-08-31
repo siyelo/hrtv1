@@ -2,13 +2,21 @@ Given /^a project$/ do
   @project = Factory.create(:project)
 end
 
-Given /^a project with name "(.+)"$/ do |name|
+Given /^a project with name "([^\"]*)"$/ do |name|
   @project = Factory.create(:project, :name => name)
 end
 
 # kill meeeee
-Given /^a project with name "(.+)" and an existing response$/ do |name|
+Given /^a project with name "([^\"]*)" and an existing response$/ do |name|
   @project = Factory.create(:project, :name => name, :data_response => @data_response)
+end
+
+# kill meeeee
+Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing response$/ do |name, district|
+  @project = Factory.create(:project, 
+                            :name => name, 
+                            :locations => [ Location.find_by_short_display district],
+                            :data_response => @data_response)
 end
 
 Given /^an activity with name "([^\"]*)"$/ do |name|
@@ -199,4 +207,8 @@ Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name
   @data_response = DataResponse.last
   @user.current_data_response = @data_response
   @user.save!
+end
+
+Then /^wait a few moments$/ do
+  sleep 4
 end

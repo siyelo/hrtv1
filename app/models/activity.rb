@@ -86,9 +86,19 @@ class Activity < ActiveRecord::Base
     @@valid_root_types = [CostCategory]
     Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
   end
+
   def self.valid_types_for_cost_catgory_codes
     [CostCategory]
   end
+
+  def districts
+    self.projects.collect do |proj|
+      proj.locations
+    end.flatten.uniq
+  end
+
+
+
   private
 
   # trick to help clean up controller code

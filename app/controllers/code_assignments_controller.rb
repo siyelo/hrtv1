@@ -18,6 +18,12 @@ class CodeAssignmentsController < ApplicationController
     render :layout => false
   end
 
+  def budget_districts
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
+    authorize! :read, @activity
+    @districts = @activity.districts
+  end
+
   def expenditure
     load_codes
     @current_codes = @activity.expenditure_codes

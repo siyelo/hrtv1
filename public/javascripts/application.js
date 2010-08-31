@@ -19,22 +19,28 @@ var code_assignments_budget = {
     jQuery('.tooltip').tipsy({gravity: 'e'});
     addCollabsibleButtons('tab1');
 
+    // load budget districts
+    jQuery.get('/activities/' + _activity_id + '/coding/budget_districts', function (response) {
+      jQuery("#activity_classification").append(response);
+      addCollabsibleButtons('tab2');
+    });
+
     // load budget cost categorization
     jQuery.get('/activities/' + _activity_id + '/coding/budget_cost_categories', function (response) {
       jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab2');
+      addCollabsibleButtons('tab3');
     });
 
     // load expenditure
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure', function (response) {
       jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab3');
+      addCollabsibleButtons('tab4');
     });
 
     // load expenditure cost categories
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure_cost_categories', function (response) {
       jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab4');
+      addCollabsibleButtons('tab5');
     });
 
     // bind click events for tabs

@@ -38,6 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     activity.resource :coding,  :controller => :code_assignments,
                                 :only => [:index], #no restful routes k thx
                                 :member => {  :budget                      => :get,
+                                              :budget_districts            => :get,
                                               :budget_cost_categories      => :get,
                                               :expenditure                 => :get,
                                               :expenditure_cost_categories => :get
@@ -50,6 +51,8 @@ ActionController::Routing::Routes.draw do |map|
 
     activity.update_coding_budget_cost_categories 'update_coding_budget_cost_categories', :controller => :code_assignments, :action => :update_budget_cost_categories
     activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
+
+    activity.update_coding_budget_districts 'update_coding_budget_districts', :controller => :code_assignments, :action => :update_budget_districts
   end
 
   # AS redirect helpers

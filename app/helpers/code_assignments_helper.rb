@@ -10,6 +10,10 @@ module CodeAssignmentsHelper
       'budget_cost_categories_updates'
     elsif coding_type == :expenditure_cost_categories
       'expenditure_cost_categories_updates'
+    elsif coding_type == :budget_district_codes
+      'budget_district_codes_updates'
+    elsif coding_type == :expenditure_district_codes
+      'expenditure_district_codes_updates'
     end
   end
 end

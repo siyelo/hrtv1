@@ -19,9 +19,12 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def budget_districts
-    @activity = Activity.available_to(current_user).find(params[:activity_id])
-    authorize! :read, @activity
-    @districts = @activity.districts
+    load_codes
+    @current_codes = @activity.budget_codes
+    @current_assignments = @activity.budget_codings.map_to_hash{ |b| {b.code_id => b} }
+    @coding_type = :budget_district_codes
+    @codes = @activity.locations
+    render :layout => false
   end
 
   def expenditure
@@ -60,6 +63,17 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     update_assignments("expenditure")
   end
+
+  def update_budget_districts
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
+    update_assignments("budget")
+  end
+
+  def update_expenditure_districts
+    @activity = Activity.available_to(current_user).find(params[:activity_id])
+    update_assignments("expenditure")
+  end
+
   protected
 
   def load_codes

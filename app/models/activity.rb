@@ -60,10 +60,12 @@ class Activity < ActiveRecord::Base
 
   attr_accessor :budget_codes_updates
   attr_accessor :budget_cost_categories_updates
+  attr_accessor :budget_district_codes_updates
   attr_accessor :expenditure_codes_updates
   attr_accessor :expenditure_cost_categories_updates
+  attr_accessor :expenditure_district_codes_updates
   attr_accessible :budget_cost_categories_updates, :budget_codes_updates,
-    :expenditure_codes_updates, :expenditure_cost_categories_updates
+    :expenditure_codes_updates, :expenditure_cost_categories_updates, :budget_district_codes_updates, :expenditure_district_codes_updates
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 
@@ -91,6 +93,14 @@ class Activity < ActiveRecord::Base
     [CostCategory]
   end
 
+  def valid_district_codes
+    locations
+  end
+
+  def self.valid_types_for_district_codes
+    [Location]
+  end
+
   def districts
     self.projects.collect do |proj|
       proj.locations
@@ -106,11 +116,13 @@ class Activity < ActiveRecord::Base
   def update_budget_codings
     update_coding_attribute_proxy budget_codes_updates, :budget_codes
     update_coding_attribute_proxy budget_cost_categories_updates, :budget_cost_categories
+    update_coding_attribute_proxy budget_district_codes_updates, :budget_district_codes
   end
 
   def update_expenditure_codings
     update_coding_attribute_proxy expenditure_codes_updates, :expenditure_codes
     update_coding_attribute_proxy expenditure_cost_categories_updates, :expenditure_cost_categories
+    update_coding_attribute_proxy expenditure_district_codes_updates, :expenditure_district_codes
   end
 
 
@@ -149,9 +161,9 @@ class Activity < ActiveRecord::Base
   # TODO drive these with hashes instead of if's
   def clear_old_codings coding_type
     coding_to_delete = nil
-    if [:budget_codes, :budget_cost_categories].include? coding_type
+    if [:budget_codes, :budget_cost_categories, :budget_district_codes].include? coding_type
       coding_to_delete = budget_codings
-    elsif [:expenditure_codes, :expenditure_cost_categories].include? coding_type
+    elsif [:expenditure_codes, :expenditure_cost_categories, :expenditure_district_codes].include? coding_type
       coding_to_delete = expenditure_codings
     end
     delete_all_codings_by_type coding_to_delete, coding_type
@@ -164,6 +176,8 @@ class Activity < ActiveRecord::Base
       types_to_delete = Activity.valid_types_for_code_assignment
     elsif [:budget_cost_categories, :expenditure_cost_categories].include? coding_type
       types_to_delete = Activity.valid_types_for_cost_catgory_codes
+    elsif [:budget_district_codes, :expenditure_district_codes].include? coding_type
+      types_to_delete = Activity.valid_types_for_district_codes
     end
     codings.each do |coding|
       coding.delete if types_to_delete.include? coding.code.class
@@ -178,6 +192,10 @@ class Activity < ActiveRecord::Base
     elsif coding_type == :expenditure_codes
       ExpenditureCoding
     elsif coding_type == :expenditure_cost_categories
+      ExpenditureCoding
+    elsif coding_type == :budget_district_codes
+      BudgetCoding
+    elsif coding_type == :expenditure_district_codes
       ExpenditureCoding
     end
   end

@@ -44,6 +44,15 @@ class CodeAssignmentsController < ApplicationController
     render :layout => false
   end
 
+  def expenditure_districts
+    load_codes
+    @current_codes = @activity.expenditure_codes
+    @current_assignments = @activity.expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
+    @coding_type = :expenditure_district_codes
+    @codes = @activity.locations
+    render :layout => false
+  end
+
   def update_budget
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     update_assignments("budget")

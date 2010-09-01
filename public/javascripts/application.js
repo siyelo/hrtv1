@@ -37,10 +37,15 @@ var code_assignments_budget = {
       addCollabsibleButtons('tab4');
     });
 
+    // load expenditure districts
+    jQuery.get('/activities/' + _activity_id + '/coding/expenditure_districts', function (response) {
+      jQuery("#activity_classification").append(response);
+      addCollabsibleButtons('tab5');
+    });
     // load expenditure cost categories
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure_cost_categories', function (response) {
       jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab5');
+      addCollabsibleButtons('tab6');
     });
 
     // bind click events for tabs

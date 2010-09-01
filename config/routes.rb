@@ -41,6 +41,7 @@ ActionController::Routing::Routes.draw do |map|
                                               :budget_districts            => :get,
                                               :budget_cost_categories      => :get,
                                               :expenditure                 => :get,
+                                              :expenditure_districts            => :get,
                                               :expenditure_cost_categories => :get
                                             }
 
@@ -53,6 +54,7 @@ ActionController::Routing::Routes.draw do |map|
     activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
 
     activity.update_coding_budget_districts 'update_coding_budget_districts', :controller => :code_assignments, :action => :update_budget_districts
+    activity.update_coding_expenditure_districts 'update_coding_expenditure_districts', :controller => :code_assignments, :action => :update_expenditure_districts
   end
 
   # AS redirect helpers

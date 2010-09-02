@@ -31,20 +31,21 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10.csv", :headers => true
   #create dummy users
   print "  Creating #{user_email}, #{username}, #{user_password}\n"
 
-  user = User.create(:username => username,
+  if org
+    user = User.create(:username => username,
                :email => user_email,
                :full_name => full_name,
                :password => user_password,
                :password_confirmation => user_password,
                :organization => org,
                :roles => ['activity_manager'])
+   dr                          = org.data_responses.first if org.data_responses
+   user.current_data_response = dr
+   user.save!
+  end
 
-  print "  WARN: reporter \"#{user_email}\" not created!!!" unless user
+  print "  WARN: reporter \"#{user_email}\" not created!!!" unless user && org
   print "."
-
-  dr                          = org.data_responses.first if org && org.data_responses
-  user.current_data_response = dr
-  user.save!
 
 end
 

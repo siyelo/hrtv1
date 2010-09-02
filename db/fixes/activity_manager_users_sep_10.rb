@@ -42,7 +42,7 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10.csv", :headers => true
   print "  WARN: reporter \"#{user_email}\" not created!!!" unless user
   print "."
 
-  dr                          = org.data_responses.first
+  dr                          = org.data_responses.first if org && org.data_responses
   user.current_data_response = dr
   user.save!
 

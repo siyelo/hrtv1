@@ -26,7 +26,9 @@ ActionController::Routing::Routes.draw do |map|
     :collection => {:browse => :get},
     :member => {:select => :post}, :active_scaffold => true
 
-  map.resources :activities, :active_scaffold => true do |activity|
+  map.resources :activities,
+                :member => { :approve => :post },
+                :active_scaffold => true        do |activity|
 
     activity.resource :budget, :path_prefix => '/activities/:activity_id/classification',
                                 :controller => :budget_classification,

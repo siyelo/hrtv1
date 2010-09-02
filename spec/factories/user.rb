@@ -12,3 +12,7 @@ end
 Factory.define :reporter,  :parent => :user do |f|
   f.roles { ['reporter'] }
 end
+
+Factory.define :activity_manager,  :parent => :user do |f|
+  f.roles { ['activity_manager'] }
+end

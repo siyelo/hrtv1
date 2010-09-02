@@ -60,6 +60,8 @@ var code_assignments_budget = {
   }
 };
 
+
+
 jQuery(function () {
   var id = jQuery('body').attr("id");
   if (id) {

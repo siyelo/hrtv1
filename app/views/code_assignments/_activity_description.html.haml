@@ -1,3 +1,13 @@
+- content_for :head do
+  :javascript
+    jQuery(document).ready(function(){
+      jQuery('#approve_activity').bind('click', function() {
+        jQuery.post( "/activities/#{@activity.id}/approve",
+                     { checked : jQuery('#approve_activity').is(':checked') }
+                   );
+      })
+    });
+
 %table#activity_description
   %tr
     %td.title Name:
@@ -11,3 +21,8 @@
   %tr
     %td.title Description:
     %td= @activity.description
+  - if can? :approve, @activity
+    %tr
+      %td.title
+        = label_tag "Approved?"
+        = check_box_tag 'approve_activity', true, @activity.approved

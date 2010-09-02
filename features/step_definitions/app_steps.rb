@@ -41,6 +41,10 @@ Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | 
   @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
 end
 
+Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
+  @user = Factory.create(:activity_manager, :username => name, :email => email, :password => password, :password_confirmation => password)
+end
+
 Given /^the following reporters$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
@@ -48,6 +52,16 @@ Given /^the following reporters$/ do |table|
     Factory.create(:reporter, { :username => username,
                                 :organization_id => org.id
                                 }.merge(hash) )
+  end
+end
+
+Given /^the following activity managers$/ do |table|
+  table.hashes.each do |hash|
+    org  = Organization.find_by_name(hash.delete("organization"))
+    username  = hash.delete("name")
+    Factory.create(:activity_manager, { :username => username,
+                                        :organization_id => org.id
+                                      }.merge(hash) )
   end
 end
 
@@ -63,6 +77,13 @@ end
 Given /^I am signed in as a reporter$/ do
   steps %Q{
     Given a reporter "Frank" in organization "Test Org"
+    Given I am signed in as "Frank"
+  }
+end
+
+Given /^I am signed in as an activity manager$/ do
+  steps %Q{
+    Given an activity manager "Frank" in organization "Test Org"
     Given I am signed in as "Frank"
   }
 end
@@ -86,6 +107,13 @@ end
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory.create(:organization, :name => org_name)
   @user = Factory.create(:reporter, :username => name, :email => 'frank@f.com', 
+                          :password => 'password', :password_confirmation => 'password',
+                          :organization => @organization)
+end
+
+Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+  @organization = Factory.create(:organization, :name => org_name)
+  @user = Factory.create(:activity_manager, :username => name, :email => 'frank@f.com', 
                           :password => 'password', :password_confirmation => 'password',
                           :organization => @organization)
 end
@@ -210,5 +238,5 @@ Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name
 end
 
 Then /^wait a few moments$/ do
-  sleep 4
+  sleep 20
 end

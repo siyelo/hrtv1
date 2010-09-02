@@ -9,7 +9,7 @@ class ApplicationController < AuthlogicController
   include ApplicationHelper
 
   rescue_from CanCan::AccessDenied do |exception|
-    flash[:error] = "You must be signed in to do that"
+    flash[:error] = "You are not authorized to do that"
     redirect_to login_url
   end
 end

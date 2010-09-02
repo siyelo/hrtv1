@@ -4,7 +4,11 @@
     %ul
       %li= link_to "My Profile", edit_user_url(current_user.id)
       %li= link_to "Sign out", logout_path
-    %span= "#{current_user.email} [#{current_user.organization.name}]"
+    %span
+      - if current_user.organization
+        = "#{current_user.email} [#{current_user.organization.name}]"
+      - else
+        = "#{current_user.email} [No organization specified]"
 
   - else
     %ul

@@ -10,8 +10,6 @@
 
 (function($) {
 
-
-
   $.fn.validateClassificationTree = function(options) {
 
     var defaults = {

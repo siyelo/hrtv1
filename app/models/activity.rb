@@ -39,7 +39,12 @@ class Activity < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
-  attr_accessible :projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :text_for_beneficiaries, :beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget
+  attr_accessible :projects, :locations, :text_for_provider,
+                  :provider, :name, :description,  :start, :end,
+                  :text_for_beneficiaries, :beneficiaries,
+                  :text_for_targets, :spend, :spend_q4_prev,
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                  :budget, :approved
 
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :indicators

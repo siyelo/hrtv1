@@ -35,6 +35,10 @@ describe "Routing shortcuts for Activities (activities/1) should map" do
     new_activity_path.should == '/activities/new'
   end
   
+  it "approve_activity_path(9) to /activities/9/approve" do
+    approve_activity_path(9).should == '/activities/9/approve'
+  end
+  
 end
 
 
@@ -56,6 +60,14 @@ describe "Requesting Activity endpoints as visitor" do
       before do 
         @activity = Factory.create(:activity)
         get :show, :id => @activity.id
+      end
+      it_should_behave_like "a protected endpoint"
+    end
+    
+    context "Requesting /activities/1/approve using POST" do
+      before do 
+        @activity = Factory.create(:activity)
+        post :approve, :id => @activity.id
       end
       it_should_behave_like "a protected endpoint"
     end
@@ -223,8 +235,15 @@ describe "Requesting Activity endpoints as a reporter" do
     end
   end
   
+  context "Requesting /activities/1/approve using POST" do
+    before do 
+      @activity = Factory.create(:activity)
+      post :approve, :id => @activity.id
+    end
+    it_should_behave_like "a protected endpoint"
+  end
+  
   context "Requesting /activities/new using GET" do
-    #before do get :new end
     it "should create a new activity for my user" do pending end
   end 
 

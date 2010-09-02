@@ -46,18 +46,6 @@ Scenario: Login as a reporter with email address
   Then I should be on the reporter dashboard page
   And I should see "Welcome Frank"
 
-@allow-rescue
-Scenario Outline: Visit protected page, get redirected to login screen
-  When I go to the <page> page
-  Then I should see "You must be signed in to do that"
-  And I should be on the login page 
-  Examples:
-    | page            |
-    | projects        |
-    | funding sources |
-    | providers       |
-    | activities      |
-    | other costs     |
 
 #Active-Scaffold-specific routes
 #Scenario Outline: Request protected action, get redirected to login screen

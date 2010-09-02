@@ -14,7 +14,7 @@ Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
      | UNAIDS           |
      | WHO              |
    Given the following reporters 
-      | name         | organization |
+      | name           | organization |
       | some_user     | UNAIDS       |
   Given a data request with title "Some request" from "WHO"
   And I am signed in as "some_user" 
@@ -26,6 +26,7 @@ Scenario: Bug: should not see Projects/Implementers/etc tabs until a Data Req is
   Given I am signed in as a reporter 
   When I go to the reporter dashboard page
   Then I should not see the data response tabs
+
 
 Scenario: Bug: Workplan tab appears active even on Dashboard
   Given I am signed in as a reporter 

@@ -19,8 +19,8 @@
 class User < ActiveRecord::Base
   acts_as_authentic
 
-  attr_readonly :roles_mask #only assign role on create
-  attr_readonly :organization_id #only assign organization on create
+  attr_accessible :full_name, :email, :username, :password,
+                  :password_confirmation, :organization_id, :organization, :roles
 
   before_save :authorize
 
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     :foreign_key => :data_response_id_current
 
   validates_presence_of  :username, :email, :organization
-  validates_uniqueness_of :email, :case_sensitive => false
+  validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
 
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
     with_exclusive_scope {find(:all)}
   end
 
-  ROLES = %w[admin reporter]
+  ROLES = %w[admin reporter activity_manager]
 
   def roles=(roles)
     roles = roles.collect {|r| r.to_s} # allows symbols to be passed in

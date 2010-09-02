@@ -33,5 +33,5 @@ end
 
 shared_examples_for "a protected endpoint" do
   it { should redirect_to(login_path) }
-  it { should set_the_flash.to("You must be signed in to do that") }
+  it { should set_the_flash.to("You are not authorized to do that") }
 end

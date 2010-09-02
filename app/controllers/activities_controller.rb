@@ -4,7 +4,7 @@ class ActivitiesController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   include ActivitiesHelper
-  @@shown_columns = [:projects, :provider, :description,  :budget  ]
+  @@shown_columns = [:projects, :provider, :description,  :budget, :approved ]
   @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns
@@ -19,10 +19,10 @@ class ActivitiesController < ActiveScaffoldController
     :file_field => :file
 
   active_scaffold :activity do |config|
-    config.columns =  @@shown_columns
+    config.columns        = @@shown_columns
     config.create.columns = @@create_columns
     config.update.columns = @@update_columns
-    list.sorting = {:name => 'DESC'}
+    list.sorting          = {:name => 'DESC'}
 
     #TODO better name / standarize on verb noun or just noun
     config.action_links.add('Classify',
@@ -53,8 +53,10 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:name].inplace_edit            = true
     config.columns[:name].label                   = "Name (Optional)"
     config.columns[:description].inplace_edit     = true
-    config.columns[:description].options     = {:cols => 60, :rows => 8}
-    config.columns[:beneficiaries].form_ui = :select
+    config.columns[:description].options          = {:cols => 60, :rows => 8}
+    config.columns[:beneficiaries].form_ui        = :select
+    config.columns[:approved].label               = "Approved?"
+
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :budget
@@ -122,4 +124,12 @@ class ActivitiesController < ActiveScaffoldController
   def before_create_save record
     record.data_response = current_user.current_data_response
   end
+
+  def approve
+    @activity = Activity.available_to(current_user).find(params[:id])
+    authorize! :approve, @activity
+    @activity.update_attributes({ :approved => params[:checked] })
+    render :nothing => true
+  end
+
 end

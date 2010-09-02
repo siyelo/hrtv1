@@ -16,7 +16,7 @@ describe FundingSourcesController do
     context "get index" do
       before :each do get :index end
       it { should redirect_to(login_path) }
-      it { should set_the_flash.to("You must be signed in to do that") }
+      it { should set_the_flash.to("You are not authorized to do that") }
     end
   end
 

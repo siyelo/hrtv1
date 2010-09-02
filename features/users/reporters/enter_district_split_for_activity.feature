@@ -16,7 +16,7 @@ Background:
   Given a refactor_me_please current_data_response for user "who_user"
   Given I am signed in as "who_user"
 
-@run
+
 Scenario: See a breakdown for an activity
   Given a project with name "TB Treatment Project" in district "Karongi" and an existing response
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response

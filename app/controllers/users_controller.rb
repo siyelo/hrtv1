@@ -27,9 +27,8 @@ class UsersController < ActiveScaffoldController
     config.columns[:text_for_organization].form_ui = :textarea
     config.columns[:text_for_organization].options = {:cols => 50, :rows => 3}
     config.columns[:roles].form_ui = :select
-    config.columns[:roles].options = {:options => [
-      ["Admin",[:admin]],
-      ["Reporter",[:reporter]]]}
+    config.columns[:roles].options = { :options => User::ROLES.map { |r| ["#{r.to_s.humanize.titleize}", [r.to_sym]] }
+                                     }
     [:password_confirmation, :password].each do |f|
       config.columns[f].form_ui = :password
     end

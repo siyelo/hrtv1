@@ -4,7 +4,7 @@ class ActivitiesController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   include ActivitiesHelper
-  @@shown_columns = [:projects, :provider, :description,  :budget, :approved ]
+  @@shown_columns = [:organization, :projects, :provider, :description,  :budget, :spend, :approved ]
   @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   def self.create_columns
     @@create_columns

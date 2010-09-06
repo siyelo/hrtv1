@@ -11,4 +11,3 @@ saved = User.create(:username => 'admin',
 print "  WARN: Admin not created" unless saved
 
 User.unstub_current_user_and_data_response
-

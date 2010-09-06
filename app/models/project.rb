@@ -48,6 +48,10 @@ class Project < ActiveRecord::Base
 
   after_create :create_helpful_records_for_workflow
 
+  def organization
+    self.data_response.responding_organization
+  end
+
   def spend=(amount)
     super(strip_non_decimal(amount))
   end

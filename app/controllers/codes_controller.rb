@@ -24,6 +24,8 @@ class CodesController < ActiveScaffoldController
     config.columns[:start_date].inplace_edit      = true
     config.columns[:end_date].inplace_edit        = true
     config.columns[:description].inplace_edit     = true
+    config.columns[:type].form_ui                 = :select
+    config.columns[:type].options                 = {:options => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType']}
   end
 
   # what displays as name when association is expanded for this

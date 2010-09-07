@@ -1,17 +1,26 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByDistrict
+class Reports::ActivitiesByBudgetCoding
 
   def initialize
-    locations     = Location.find(:all, :select => 'short_display').map(&:short_display).sort
+
+    codes = []
+    code_ids = []
+    Code.roots.reject { |r| ! [Mtef, Nha, Nasa, Nsp].include? r.class }.each do |c|
+      codes << c.self_and_descendants.map { |e| e.short_display + " (" + e.external_id + ")" }
+      code_ids << c.self_and_descendants.map(&:id)
+    end
+    codes.flatten!
+    code_ids.flatten!
+
     beneficiaries = Beneficiary.find(:all, :select => 'short_display').map(&:short_display).sort
 
     @csv_string = FasterCSV.generate do |csv|
-      csv << build_header(beneficiaries, locations)
+      csv << build_header(beneficiaries, codes)
 
       #print data
       Activity.all.each do |a|
-        row = build_row(a, beneficiaries, locations)
+        row = build_row(a, beneficiaries, code_ids)
         #print out a row for each project
         if a.projects.empty?
           row << " "
@@ -43,7 +52,7 @@ class Reports::ActivitiesByDistrict
     str
   end
 
-  def build_header(beneficiaries, locations)
+  def build_header(beneficiaries, codes)
     #print header
     header = []
     header << [ "org.name", "org.type", "activity.name", "activity.description" ]
@@ -51,17 +60,17 @@ class Reports::ActivitiesByDistrict
       header << "#{ben}"
     end
     header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "activity.start", "activity.end", "activity.provider"]
-    locations.each do |loc|
-      header << "#{loc}"
+    codes.each do |code|
+      header << "#{code}"
     end
     header << "project"
     header.flatten
   end
 
-  def build_row(activity, beneficiaries, locations)
+  def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_locs   = activity.locations.map(&:short_display)
+    act_codes  = activity.budget_codes.map(&:id)
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
@@ -70,8 +79,8 @@ class Reports::ActivitiesByDistrict
     end
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
-    locations.each do |loc|
-      row << (act_locs.include?(loc) ? "yes" : " " )
+    code_ids.each do |code_id|
+      row << (act_codes.include?(code_id) ? "yes" : " " )
     end
     row.flatten
   end

@@ -89,6 +89,9 @@ ActionController::Routing::Routes.draw do |map|
     map.send(p.to_sym, p, :controller => 'static_page', :action => p)
   end
 
+  #reports
+  map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'
+
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',

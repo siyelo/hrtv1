@@ -33,6 +33,9 @@ Rails::Initializer.run do |config|
 
   config.time_zone = 'UTC'
 
+  #tell rails to load files from all subfolders in app/models/
+  config.load_paths += Dir["#{RAILS_ROOT}/app/models/*"].find_all { |f| File.stat(f).directory? }
+
 end
 
 require 'array_extensions'

@@ -2,6 +2,8 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    user ||= User.new(:roles => []) #guest
+
     if user.role? :admin
       can :manage, :all
     elsif user.role?(:activity_manager)

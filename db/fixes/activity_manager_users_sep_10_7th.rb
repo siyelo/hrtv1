@@ -22,6 +22,7 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => 
   end
   org           = Organization.find_by_name(org_name)
 
+  print "Creating #{user_email}, #{username}, #{user_password}, #{org_name}\n"
   puts "  WARN: Cannot find organization \"#{org_name}\" in the database (row: \# #{i})" unless org
 
   existing_user = User.find_by_email(user_email)
@@ -29,7 +30,6 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => 
   existing_user.delete if existing_user# otherwise will ahve users referencing non existent data responses potentially
 
   #create dummy users
-  print "  Creating #{user_email}, #{username}, #{user_password}\n"
 
   if org
     user = User.create(:username => username,
@@ -44,7 +44,6 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => 
   end
 
   print "  WARN: reporter \"#{user_email}\" not created!!!" unless user && org
-  print "."
 
 end
 

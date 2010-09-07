@@ -19,19 +19,18 @@ class ProjectsController < ActiveScaffoldController
 
   active_scaffold :projects do |config|
     config.columns =  @@shown_columns
-    list.sorting = {:name => 'DESC'}
-    config.nested.add_link("Activities", [:activities])
+    list.sorting = {:organization => 'DESC', :name => 'DESC'}
 
+    config.nested.add_link("Activities", [:activities])
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
-
-    config.create.columns = @@create_columns
-    config.update.columns = @@create_columns
-    config.columns[:name].inplace_edit = true
-    config.columns[:description].inplace_edit = true
-    config.columns[:locations].form_ui = :select
-    config.columns[:locations].label = "Districts Worked In"
-    config.columns[:currency].label = "Currency (if different)"
+    config.create.columns                         = @@create_columns
+    config.update.columns                         = @@create_columns
+    config.columns[:name].inplace_edit            = true
+    config.columns[:description].inplace_edit     = true
+    config.columns[:locations].form_ui            = :select
+    config.columns[:locations].label              = "Districts Worked In"
+    config.columns[:currency].label               = "Currency (if different)"
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :entire_budget, :budget
@@ -41,8 +40,9 @@ class ProjectsController < ActiveScaffoldController
       end
     end
     config.columns[:entire_budget].label = "Total Project Budget"
-    config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label = "Total Spent GOR FY 09-10"
+    config.columns[:budget].label        = "Total Budget GOR FY 10-11"
+    config.columns[:spend].label         = "Total Spent GOR FY 09-10"
+
     [:spend, :budget, :entire_budget].each do |c|
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true

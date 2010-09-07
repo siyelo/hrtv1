@@ -80,7 +80,16 @@ class Reports::ActivitiesByBudgetCoding
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     code_ids.each do |code_id|
-      row << (act_codes.include?(code_id) ? "yes" : " " )
+      if act_codes.include?(code_id)
+        ca = CodeAssignment.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        unless ca.amount.nil?
+          row << ca.amount
+        else
+          row << "#{ca.percentage}%"
+        end
+      else
+        row << " "
+      end
     end
     row.flatten
   end

@@ -37,6 +37,7 @@ Scenario: See both budget for an activity classification
   And I should see "Budget"
   And I should see the "Budget" tab is active
 
+@d2
 Scenario: enter budget for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
@@ -46,16 +47,18 @@ Scenario: enter budget for an activity
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
 # no coverage since jquery tabs added
-@wip
+@javascript
+@slow
 Scenario: enter expenditure for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   And I follow "Expenditure"
-  Then show me the page
-  When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
-  And I press "Save"
-  Then show me the page
+  When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab4"
+  And I press "Save" within ".tab4"
   Then I should see "Activity expenditure was successfully updated."
-  And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
+  And I follow "Expenditure"
+  #Then wait a few moments
+  And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
+  And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
 
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed. 
   Given I am on the budget classification page for "TB Drugs procurement"

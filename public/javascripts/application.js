@@ -15,37 +15,43 @@ var code_assignments_budget = {
       jQuery('.' + tab + ' ul.activity_tree').validateClassificationTree();
     };
 
+    /*
+     * Appends tab content 
+     * @param {String} tab
+     * @param {String} response
+     *
+     */
+    var appendTab = function (tab, response) {
+      jQuery("#activity_classification ." + tab).html(response);
+      addCollabsibleButtons(tab);
+    };
+
     // collapsible checkboxes for tab1
     jQuery('.tooltip').tipsy({gravity: 'e'});
     addCollabsibleButtons('tab1');
 
     // load budget districts
     jQuery.get('/activities/' + _activity_id + '/coding/budget_districts', function (response) {
-      jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab2');
+      appendTab('tab2', response);
     });
 
     // load budget cost categorization
     jQuery.get('/activities/' + _activity_id + '/coding/budget_cost_categories', function (response) {
-      jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab3');
+      appendTab('tab3', response);
     });
 
     // load expenditure
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure', function (response) {
-      jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab4');
+      appendTab('tab4', response);
     });
 
     // load expenditure districts
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure_districts', function (response) {
-      jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab5');
+      appendTab('tab5', response);
     });
     // load expenditure cost categories
     jQuery.get('/activities/' + _activity_id + '/coding/expenditure_cost_categories', function (response) {
-      jQuery("#activity_classification").append(response);
-      addCollabsibleButtons('tab6');
+      appendTab('tab6', response);
     });
 
     // bind click events for tabs
@@ -59,8 +65,6 @@ var code_assignments_budget = {
 
   }
 };
-
-
 
 jQuery(function () {
   var id = jQuery('body').attr("id");

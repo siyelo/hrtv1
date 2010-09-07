@@ -23,4 +23,10 @@
 = render :partial => 'code_assignments/activity_description'
 
 #activity_classification
-  = render 'tab', { :update_path => activity_update_coding_budget_path(@activity.id), :activity => @activity, :codes => @codes, :tab => 'tab1' }
+  %div.tab1
+    = render 'tab', { :update_path => activity_update_coding_budget_path(@activity.id), :activity => @activity, :codes => @codes, :tab => 'tab1' }
+  %div.tab2
+  %div.tab3
+  %div.tab4
+  %div.tab5
+  %div.tab6

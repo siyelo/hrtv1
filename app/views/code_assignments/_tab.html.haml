@@ -1,8 +1,7 @@
-%div{:class => tab}
-  - form_for activity, :url => update_path, :method => :post, :html => {:id => ''} do |form|
-    %ul.activity_tree
-      - codes.each do |code|
-        = render 'code_row', { :code => code, :form => form, :tab => tab }
-    = submit_tag 'Save'
+- form_for activity, :url => update_path, :method => :post, :html => {:id => ''} do |form|
+  %ul.activity_tree
+    - codes.each do |code|
+      = render 'code_row', { :code => code, :form => form, :tab => tab }
+  = submit_tag 'Save'
 
-  = render 'shared/data_entry_help', :record_type => CodeAssignment
+= render 'shared/data_entry_help', :record_type => CodeAssignment

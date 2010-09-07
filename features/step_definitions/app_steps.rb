@@ -55,6 +55,12 @@ Given /^the following reporters$/ do |table|
   end
 end
 
+Given /^the root codes$/ do |table|
+  table.hashes.each do |hash|
+    f = Factory.create(:root_code, hash.merge(:type => 'Nha'))
+  end
+end
+
 Given /^the following activity managers$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
@@ -64,6 +70,8 @@ Given /^the following activity managers$/ do |table|
                                       }.merge(hash) )
   end
 end
+
+
 
 Given /^I am signed in as "([^"]*)"$/ do |name|
   steps %Q{
@@ -239,4 +247,8 @@ end
 
 Then /^wait a few moments$/ do
   sleep 20
+end
+
+When /^I wait until "([^"]*)" is visible$/ do |selector|
+  page.has_css?("#{selector}", :visible => true)
 end

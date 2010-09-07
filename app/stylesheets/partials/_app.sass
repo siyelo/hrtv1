@@ -12,13 +12,18 @@
 
 body.app
   .wrapper
-    min-width: 800px
+    min-width: 900px
     padding: 0 50px
+    position: relative
+    
+  #header_app
+    height: 40px
 
   /* overriding the shared logo style*/
   #header_app #logo
     font-size: 0.6em
     padding: 10px 0
+    position: absolute
     width: 300px
     h1 
       padding-top: 4px
@@ -98,7 +103,7 @@ body.app
       color: !mid-blue
       display: inline-block
       font-size: 0.8em
-      padding: 7px 10px
+      padding: 7px 10px 6px 10px
       text-decoration: none
       &:hover, &:focus
         background: !mid-blue
@@ -140,6 +145,7 @@ body.app
 
     #main
       float: left
+      min-width: 600px
       padding: 20px 0 0 15px
       width: 70%
 
@@ -169,7 +175,7 @@ body.app
         color: white
         cursor: pointer
         margin-right: -10px
-        padding: 7px 15px
+        padding: 9px 15px 7px 15px
         text-decoration: none
         text-transform: uppercase
         &:hover
@@ -181,20 +187,7 @@ body.app
         margin-top: -5px
 
       // This is a temp fix for the AS actions
-      .actions
-        margin: 5px
-        a
-          margin-left: 10px
-          padding: 3px 5px
-          color= !mid-blue
-          &:hover
-            color= !lightest-blue
-            background= !mid-blue
-            +border-radius
-        .disabled
-          background= !mid-blue
-          color= !lightest-blue
-          +border-radius
+      
 
       // fix the tiny AS links.
       table
@@ -237,6 +230,7 @@ body.app
 
     #sidebar
       float: right
+      min-width: 200px
       padding: 20px 15px 0 0
       width: 25%
 
@@ -270,7 +264,7 @@ body.app
       +border-top-radius
       background= !lightest-blue
       color= !mid-blue
-      font-size: 0.9em
+      font-size: 0.8em
       letter-spacing: 0.05em
 
   #content #map_fields_form

@@ -57,7 +57,7 @@ class Reports::ActivitiesByDistrictSubActivities
     beneficiaries.each do |ben|
       header << "#{ben}"
     end
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "activity.start", "currency", "activity.end", "activity.provider"]
+    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start", "activity.end", "activity.provider"]
     locations.each do |loc|
       header << "#{loc}"
     end

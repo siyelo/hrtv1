@@ -21,16 +21,13 @@
           &:first-child, &:last-child
             padding: 5px 12px 2px
 
-        a
-          padding-left: 0px
-
-        .selected
-          background: none repeat scroll 0 0 #FFFFFF
-          border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
-          border-style: solid solid none
-          border-bottom: none
-          border-width: 1px 1px 0
-          font-weight: bold
+          &.selected
+            background: none repeat scroll 0 0 #FFFFFF
+            border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
+            border-style: solid solid none
+            border-bottom: none
+            border-width: 1px 1px 0
+            font-weight: bold
 
     table#activity_description
       margin-top: 15px
@@ -109,6 +106,7 @@ ul.activity_tree
       &.incomplete
         color: orange
 
+
   .hide
     display: none
 
@@ -130,3 +128,5 @@ ul.activity_tree
   padding: 1px 5px
   text-decoration: none
   text-shadow: none
+
+

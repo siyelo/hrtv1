@@ -25,6 +25,17 @@ describe UserSessionsController do
 
     it { should set_the_flash.to("Successfully logged in.") }
     it { should redirect_to(static_page_url(:user_guide)) }
+
+    it "redirects the user to root path when requesting the login form" do
+      get :new
+      response.should redirect_to root_path
+    end
   end
-  
+
+  context "not logged in" do
+    it "redirects the user to root path when requesting logout" do
+      delete :destroy
+      response.should redirect_to new_user_session_path
+    end
+  end
 end

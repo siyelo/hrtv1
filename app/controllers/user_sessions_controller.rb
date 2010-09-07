@@ -1,4 +1,6 @@
 class UserSessionsController < ApplicationController
+  before_filter :require_no_user, :only => [:new]
+  before_filter :require_user, :only => [:destroy]
   skip_before_filter :load_help
   include UsersHelper
   def new

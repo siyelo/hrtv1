@@ -1,4 +1,4 @@
-require 'fastercsv'
+"#{activity.spend}", "#{activity.data_response.currency}", require 'fastercsv'
 
 class Reports::ActivitiesByDistrictSubActivities
 
@@ -76,7 +76,7 @@ class Reports::ActivitiesByDistrictSubActivities
     beneficiaries.each do |ben|
       row << (act_benefs.include?(ben) ? "yes" : " " )
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}","#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     locations.each do |loc|
       row << (act_locs.include?(loc) ? "yes" : " " )

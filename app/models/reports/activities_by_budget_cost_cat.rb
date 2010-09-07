@@ -1,12 +1,12 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCoding
+class Reports::ActivitiesByBudgetCostCat
 
   def initialize
 
     codes = []
     code_ids = []
-    Code.roots.reject { |r| ! [Mtef, Nha, Nasa, Nsp].include? r.class }.each do |c|
+    Code.roots.reject { |r| ! [CostCategory].include? r.class }.each do |c|
       codes << c.self_and_descendants.map { |e| e.short_display + " (" + (e.external_id.nil? ? 'n/a': e.external_id) + ")" }
       code_ids << c.self_and_descendants.map(&:id)
     end

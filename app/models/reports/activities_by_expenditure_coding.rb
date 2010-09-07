@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCoding
+class Reports::ActivitiesByExpenditureCoding
 
   def initialize
 
@@ -17,7 +17,7 @@ class Reports::ActivitiesByBudgetCoding
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, codes)
-
+"#{activity.spend}", "#{activity.data_response.currency}",
       #print data
       Activity.all.each do |a|
         row = build_row(a, beneficiaries, code_ids)
@@ -70,14 +70,14 @@ class Reports::ActivitiesByBudgetCoding
   def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_codes.map(&:id)
+    act_codes  = activity.expenditure_codes.map(&:id)
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
     beneficiaries.each do |ben|
       row << (act_benefs.include?(ben) ? "yes" : " " )
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}","#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     code_ids.each do |code_id|
       if act_codes.include?(code_id)

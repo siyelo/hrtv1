@@ -1,12 +1,12 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCoding
+class Reports::ActivitiesByExpenditureCostCat
 
   def initialize
 
     codes = []
     code_ids = []
-    Code.roots.reject { |r| ! [Mtef, Nha, Nasa, Nsp].include? r.class }.each do |c|
+    Code.roots.reject { |r| ! [CostCategory].include? r.class }.each do |c|
       codes << c.self_and_descendants.map { |e| e.short_display + " (" + (e.external_id.nil? ? 'n/a': e.external_id) + ")" }
       code_ids << c.self_and_descendants.map(&:id)
     end
@@ -70,7 +70,7 @@ class Reports::ActivitiesByBudgetCoding
   def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_codes.map(&:id)
+    act_codes  = activity.expenditure_codes.map(&:id)
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]

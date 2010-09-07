@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByDistrict
+class Reports::ActivitiesByDistrictSubActivities
 
   def initialize
     locations     = Location.find(:all, :select => 'short_display').map(&:short_display).sort
@@ -12,15 +12,21 @@ class Reports::ActivitiesByDistrict
       #print data
       Activity.all.each do |a|
         row = build_row(a, beneficiaries, locations)
-        #print out a row for each project
-        if a.projects.empty?
-          row << " "
-          csv << row.flatten
-        else
-          a.projects.each do |proj|
-            proj_row = row.dup
-            proj_row << "#{h proj.name}"
-            csv << proj_row.flatten
+
+        a.sub_activities.each do |sub_act|
+          sub_row = row.dup
+          sub_row << [ sub_act.budget_percentage, sub_act.spend_percentage ]
+
+          #print out a row for each project
+          if a.projects.empty?
+            sub_row << " "
+            csv << sub_row.flatten
+          else
+            a.projects.each do |proj|
+              proj_row = sub_row.dup
+              proj_row << "#{h proj.name}"
+              csv << proj_row.flatten
+            end
           end
         end
       end
@@ -54,6 +60,7 @@ class Reports::ActivitiesByDistrict
     locations.each do |loc|
       header << "#{loc}"
     end
+    header << [ "sub_activity.budget_percentage", "sub_activity.spend_percentage" ]
     header << "project"
     header.flatten
   end
@@ -74,6 +81,7 @@ class Reports::ActivitiesByDistrict
       row << (act_locs.include?(loc) ? "yes" : " " )
     end
     row.flatten
+
   end
 
 end

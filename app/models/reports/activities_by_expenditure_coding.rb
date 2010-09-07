@@ -17,7 +17,6 @@ class Reports::ActivitiesByExpenditureCoding
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, codes)
-"#{activity.spend}", "#{activity.data_response.currency}",
       #print data
       Activity.all.each do |a|
         row = build_row(a, beneficiaries, code_ids)

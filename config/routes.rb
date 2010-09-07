@@ -91,6 +91,7 @@ ActionController::Routing::Routes.draw do |map|
 
   #reports
   map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'
+  map.activities_by_district_sub_activities 'activities_by_district_sub_activities', :controller => 'reports', :action => 'activities_by_district_sub_activities'
 
   map.static_page ':page',
                   :controller => 'static_page',

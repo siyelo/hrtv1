@@ -15,7 +15,8 @@ class Reports::ActivitiesByDistrictSubActivities
 
         a.sub_activities.each do |sub_act|
           sub_row = row.dup
-          sub_row << [ sub_act.budget_percentage, sub_act.spend_percentage ]
+          sub_row << (sub_act.provider.nil? ? " " : "#{h sub_act.provider.name}" )
+          sub_row << [ sub_act.budget, sub_act.budget_percentage, sub_act.spend, sub_act.spend_percentage ]
 
           #print out a row for each project
           if a.projects.empty?
@@ -60,7 +61,7 @@ class Reports::ActivitiesByDistrictSubActivities
     locations.each do |loc|
       header << "#{loc}"
     end
-    header << [ "sub_activity.budget_percentage", "sub_activity.spend_percentage" ]
+    header << [ "sub_activity.provider", "sub_activity.budget", "sub_activity.budget_percentage", "sub_activity.spend", "sub_activity.spend_percentage" ]
     header << "project"
     header.flatten
   end

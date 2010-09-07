@@ -89,6 +89,14 @@ ActionController::Routing::Routes.draw do |map|
     map.send(p.to_sym, p, :controller => 'static_page', :action => p)
   end
 
+  #reports
+  map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'
+  map.activities_by_district_sub_activities 'activities_by_district_sub_activities', :controller => 'reports', :action => 'activities_by_district_sub_activities'
+  map.activities_by_budget_coding 'activities_by_budget_coding', :controller => 'reports', :action => 'activities_by_budget_coding'
+  map.activities_by_budget_cost_cat 'activities_by_budget_cost_cat', :controller => 'reports', :action => 'activities_by_budget_cost_cat'
+  map.activities_by_expenditure_coding 'activities_by_expenditure_coding', :controller => 'reports', :action => 'activities_by_expenditure_coding'
+  map.activities_by_expenditure_cost_cat 'activities_by_expenditure_cost_cat', :controller => 'reports', :action => 'activities_by_expenditure_cost_cat'
+
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',

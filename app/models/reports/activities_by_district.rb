@@ -14,12 +14,12 @@ class Reports::ActivitiesByDistrict
         row = build_row(a, beneficiaries, locations)
         #print out a row for each project
         if a.projects.empty?
-          row << " "
+          row.unshift(" ")
           csv << row.flatten
         else
           a.projects.each do |proj|
             proj_row = row.dup
-            proj_row << "#{h proj.name}"
+            proj_row.unshift("#{h proj.name}")
             csv << proj_row.flatten
           end
         end
@@ -46,7 +46,7 @@ class Reports::ActivitiesByDistrict
   def build_header(beneficiaries, locations)
     #print header
     header = []
-    header << [ "org.name", "org.type", "activity.name", "activity.description" ]
+    header << [ "project", "org.name", "org.type", "activity.name", "activity.description" ]
     beneficiaries.each do |ben|
       header << "#{ben}"
     end
@@ -54,7 +54,6 @@ class Reports::ActivitiesByDistrict
     locations.each do |loc|
       header << "#{loc}"
     end
-    header << "project"
     header.flatten
   end
 

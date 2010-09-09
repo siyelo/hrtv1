@@ -7,7 +7,7 @@
   = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
   = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", number_to_currency(amount, :unit => ""), :size => 8
   or
-  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(number_to_percentage(percentage)), :size => 3
+  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
   = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
 
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description

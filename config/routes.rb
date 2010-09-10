@@ -96,6 +96,7 @@ ActionController::Routing::Routes.draw do |map|
   map.activities_by_budget_cost_cat 'activities_by_budget_cost_cat', :controller => 'reports', :action => 'activities_by_budget_cost_cat'
   map.activities_by_expenditure_coding 'activities_by_expenditure_coding', :controller => 'reports', :action => 'activities_by_expenditure_coding'
   map.activities_by_expenditure_cost_cat 'activities_by_expenditure_cost_cat', :controller => 'reports', :action => 'activities_by_expenditure_cost_cat'
+  map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
 
   map.static_page ':page',
                   :controller => 'static_page',

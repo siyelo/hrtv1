@@ -50,5 +50,13 @@ class ReportsController < ApplicationController
               :disposition => "attachment; filename=activities_by_expenditure_cost_cat.csv"
   end
 
+  def users_by_organization
+    rep = Reports::UsersByOrganization.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=users_by_organization.csv"
+  end
+
 end
 

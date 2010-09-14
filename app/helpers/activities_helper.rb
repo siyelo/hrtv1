@@ -52,4 +52,13 @@ module ActivitiesHelper
       end
     end
   end
+
+  # Active Scaffold fields override
+  def start_form_column(column, options)
+    text_field :record, :start, options.merge({:class => "date_picker"})
+  end
+
+  def end_form_column(column, options)
+    text_field :record, :end, options.merge({:class => "date_picker"})
+  end
 end

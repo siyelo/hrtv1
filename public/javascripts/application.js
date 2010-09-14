@@ -89,4 +89,15 @@ jQuery(function () {
     jQuery('#page_tips_nav').toggle();
     jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
   });
+
+
+  // Date picker
+  jQuery('.date_picker').live('click', function () {
+    jQuery(this).datepicker('destroy').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: '2000:2025',
+      dateFormat: 'yy-mm-dd'
+    }).focus();
+  });
 })

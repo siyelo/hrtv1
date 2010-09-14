@@ -14,12 +14,12 @@
         %td
           = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
         %td
-          = form.date_select :fiscal_year_start_date
+          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
       %tr
         %td
           = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
         %td
-          = form.date_select :fiscal_year_end_date
+          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
       %tr
         %td
           = ""

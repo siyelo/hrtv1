@@ -19,6 +19,14 @@ Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing re
                             :data_response => @data_response)
 end
 
+Given /^an implementer "([^"]*)" for project "([^"]*)"  and an existing response$/ do |org, project|
+  @project ||= Project.find_by_name(project)
+  organization = Organization.find_by_name(org)
+  @implementer = Factory.create( :implementer, 
+                                 :project => @project,  
+                                 :organization_id_from => organization.id )
+end
+
 Given /^an activity with name "([^\"]*)"$/ do |name|
   @activity = Factory.create(:activity, :name => name)
 end
@@ -33,7 +41,9 @@ end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:project, hash)
+    org  = Organization.find_by_name(hash.delete("organization"))
+    Factory.create(:project,  { :organization_id => org.id
+                              }.merge(hash) )
   end
 end
 

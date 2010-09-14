@@ -84,7 +84,6 @@ Scenario Outline: enter percentage for an activity budget classification
     | 50.1   | 50             |
     | 95.6   | 96             |
 
-@run
 Scenario: Cannot approve an Activity
   When I go to the activities page
   And I follow "Classify"

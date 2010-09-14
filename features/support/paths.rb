@@ -29,7 +29,7 @@ module NavigationHelpers
     when /the funding sources page/
       funding_sources_data_entry_path
 
-    when /the providers page/
+    when /the implementers page/
       providers_data_entry_path
 
     when /the other costs page/

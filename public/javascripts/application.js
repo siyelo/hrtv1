@@ -63,6 +63,8 @@ var code_assignments_budget = {
       jQuery('#activity_classification > div.' + jQuery(this).attr("id")).show();
     });
 
+    // remove flash notice
+    jQuery("#notice").fadeOut(3000);
   }
 };
 
@@ -74,4 +76,17 @@ jQuery(function () {
       window[controller_action]['run']();
     }
   }
+
+  jQuery('#page_tips_open_link').click(function (e) {
+    e.preventDefault();
+    jQuery('#desc').toggle();
+    jQuery('#page_tips_nav').toggle();
+  });
+
+  jQuery('#page_tips_close_link').click(function (e) {
+    e.preventDefault();
+    jQuery('#desc').toggle();
+    jQuery('#page_tips_nav').toggle();
+    jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+  });
 })

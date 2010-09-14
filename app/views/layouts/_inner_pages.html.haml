@@ -1,20 +1,3 @@
-- content_for :head do
-  :javascript
-    jQuery(document).ready(function(){
-      jQuery('#page_tips_open_link').click(function(){
-           jQuery('#desc').toggle();
-           jQuery('#page_tips_nav').toggle();
-      });
-
-      jQuery('#page_tips_close_link').click(function(){
-           jQuery('#desc').toggle();
-           jQuery('#page_tips_nav').toggle();
-           jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
-      });
-
-    });
-
-
 %body{:id => controller.controller_name + "_" + controller.action_name, :class => "app"}
 
   = render "layouts/header_app"

@@ -72,11 +72,7 @@ class Project < ActiveRecord::Base
 
   # TODO... GR: this is view code - must be moved out of the model
   def to_label #so text doesn't spill over in nested scaffs.
-    if to_s.length > 21
-      to_s[0,20]+'...'
-    else
       to_s
-    end
   end
 
   # this is an AS helper, and currently only seems to be used by activity scaffold.

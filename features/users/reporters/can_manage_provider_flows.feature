@@ -52,5 +52,4 @@ Scenario: Creates an implementer funding flow
   When I follow "My Data"
   And I follow "Implementers"
   Then I should be on the implementers page
-  Then show me the page
   And I should see "TB Treatment Project with more than 20 chars"

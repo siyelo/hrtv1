@@ -23,20 +23,39 @@ body.app
             +border-radius
             
         .disabled
-          background= !mid-blue
-          color= !lightest-blue
+          background: !mid-blue
+          color: !lightest-blue
           +border-radius
           
       table thead a:hover
-        color= !light-blue
+        color: !light-blue
         
       th a
+        background-color: !mid-blue
         font-size: 0.75em
         padding: 7px 10px
         
-      .record 
+      th p
+        background: none
+        
+      .record
+        a
+          color: !mid-blue
+          font-size: 0.9em
+          font-weight: normal
+          letter-spacing: -0.05em
+          margin: 0
+          padding: 2px
+          &:hover
+            background: white
+            color: !dark-blue
+        .project-column, #as_other_costs-projects-column, .name-column
+          min-width: 30%
+          a
+            font-weight: bold
+            text-transform: uppercase
         .actions
-          min-width: 50%
+          min-width: 30%
           table
             float: left
             padding-left: 5px
@@ -45,17 +64,7 @@ body.app
               position: relative
               &.indicator-container
                 float: right
-              a
-                color: !mid-blue
-                font-size: 0.9em
-                font-weight: normal
-                letter-spacing: -0.05em
-                margin: 0
-                padding: 2px
-                &:hover
-                  background: white
-                  color: !dark-blue
-
+              
     .edit_data_response
       +border-radius
       border: 1px solid !lightest-blue
@@ -90,15 +99,11 @@ body.app
         text-transform: uppercase
 
     .active-scaffold th.desc a
-      background-color= !dark-blue
-
-    .active-scaffold th a
-      background-color= !mid-blue
+      background: none
 
     .active-scaffold th.desc a, .active-scaffold th a
       &:hover
-        background= !dark-blue
-        color= !light-blue
+        color: !lighter-blue
 
     .active-scaffold-records
       padding-left: 10px
@@ -143,7 +148,7 @@ body.app
 
         p.description
           color: #aaa
-          font-size: 0.3em
+          font-size: 0.7em
           padding: 7px 0 0
           margin: 0
 
@@ -152,6 +157,7 @@ body.app
 
         label
           font-size: 0.7em
+          padding-left: 20px
 
         select
           font-size: 0.8em
@@ -188,9 +194,11 @@ body.app
           background: !dark-blue
       
     tr.inline-adapter
+
       .view
         background: white
-        padding: 0
+        padding: 20px 10px
+        position: relative
         .actions
           font-size: 0.7em
           padding-top: 2px
@@ -199,8 +207,8 @@ body.app
           background: white
           border: none
           
-      a.inline-adapter-close
-        margin-top: 10px
-
-        
-    
+        a.inline-adapter-close
+          position: absolute
+          right: 20px
+          top: 20px
+          vertical-align: center

@@ -1,6 +1,5 @@
 class UsersController < ActiveScaffoldController
   load_and_authorize_resource
-  include UsersHelper
 
   before_filter :translate_roles_for_create, :only => [:create, :update]
 
@@ -19,7 +18,6 @@ class UsersController < ActiveScaffoldController
 
   active_scaffold :user do |config|
     config.columns =  @@shown_columns
-    list.sorting = {:username => 'DESC'}
     config.create.columns = @@create_columns
     config.update.columns = @@update_columns
     list.sorting = { :username => 'DESC' }
@@ -27,11 +25,8 @@ class UsersController < ActiveScaffoldController
     config.columns[:text_for_organization].form_ui = :textarea
     config.columns[:text_for_organization].options = {:cols => 50, :rows => 3}
     config.columns[:roles].form_ui = :select
-    config.columns[:roles].options = { :options => User::ROLES.map { |r| ["#{r.to_s.humanize.titleize}", [r.to_sym]] }
-                                     }
-    [:password_confirmation, :password].each do |f|
-      config.columns[f].form_ui = :password
-    end
+    config.columns[:roles].options = { :options => User::ROLES.map { |r| ["#{r.to_s.humanize.titleize}", [r.to_sym]] } }
+    [:password_confirmation, :password].each { |f| config.columns[f].form_ui = :password }
   end
 
 #  right now can can stopping us from getting to this method

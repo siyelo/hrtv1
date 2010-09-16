@@ -94,8 +94,7 @@ class Activity < ActiveRecord::Base
   end
 
   def valid_cost_category_codes
-    @@valid_root_types = [CostCategory]
-    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
+    CostCategory.roots
   end
 
   def self.valid_types_for_cost_catgory_codes

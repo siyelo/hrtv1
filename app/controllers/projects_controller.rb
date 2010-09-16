@@ -5,7 +5,7 @@ class ProjectsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
-  @@create_columns  = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
+  @@create_columns = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
   @@upload_columns  = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
   def self.create_columns
     @@create_columns

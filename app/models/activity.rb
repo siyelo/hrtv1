@@ -115,7 +115,34 @@ class Activity < ActiveRecord::Base
     end.flatten.uniq
   end
 
+  def get_codes(coding_type)
+    case coding_type
+    when 'budget_codes'
+      valid_roots_for_code_assignment
+    when 'budget_district_codes'
+      locations
+    when 'budget_cost_categories'
+      valid_cost_category_codes
+    when 'expenditure_codes'
+      valid_roots_for_code_assignment
+    when 'expenditure_district_codes'
+      locations
+    when 'expenditure_cost_categories'
+      valid_cost_category_codes
+    end
+  end
 
+  def get_current_assignments(coding_type)
+    # coding_type = 'budget_cost_categories' => 'budget'
+    # coding_type = 'expenditure_cost_categories' => 'expenditure'
+    short_coding_type = coding_type.to_s.split('_').first
+
+    if short_coding_type == 'budget'
+      budget_codings.map_to_hash{ |b| {b.code_id => b} }
+    elsif short_coding_type == 'expenditure'
+      expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
+    end
+  end
 
   private
 

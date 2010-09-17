@@ -36,27 +36,10 @@ ActionController::Routing::Routes.draw do |map|
     activity.resource :expenditure, :path_prefix => '/activities/:activity_id/classification',
                                       :controller => :expenditure_classification,
                                       :only => [ :show, :update ]
-     #TODO : refactor as above
-    activity.resource :coding,  :controller => :code_assignments,
-                                :only => [:index], #no restful routes k thx
-                                :member => {  :budget                      => :get,
-                                              :budget_districts            => :get,
-                                              :budget_cost_categories      => :get,
-                                              :expenditure                 => :get,
-                                              :expenditure_districts            => :get,
-                                              :expenditure_cost_categories => :get
-                                            }
+
+    activity.resource :coding, :controller => :code_assignments, :only => [:show, :update]
 
     map.resources :sub_activities, :active_scaffold => true
-
-    activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
-    activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
-
-    activity.update_coding_budget_cost_categories 'update_coding_budget_cost_categories', :controller => :code_assignments, :action => :update_budget_cost_categories
-    activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
-
-    activity.update_coding_budget_districts 'update_coding_budget_districts', :controller => :code_assignments, :action => :update_budget_districts
-    activity.update_coding_expenditure_districts 'update_coding_expenditure_districts', :controller => :code_assignments, :action => :update_expenditure_districts
   end
 
   # AS redirect helpers

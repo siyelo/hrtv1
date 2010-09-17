@@ -1,4 +1,4 @@
-- form_for activity, :url => update_path, :method => :post, :html => {:id => ''} do |form|
+- form_for activity, :url => activity_coding_path(activity, :coding_type => coding_type), :method => :put, :html => {:id => ''} do |form|
   %ul.activity_tree
     - codes.each do |code|
       = render 'code_row', { :code => code, :form => form, :tab => tab }

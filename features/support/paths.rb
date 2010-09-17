@@ -37,11 +37,11 @@ module NavigationHelpers
 
     when /the budget classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      budget_activity_coding_path(activity)
+      activity_coding_path(activity)
 
     when /the activity classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      budget_activity_coding_path(activity)
+      activity_coding_path(activity)
 
     when /the user guide page/
       static_page_path(:user_guide)

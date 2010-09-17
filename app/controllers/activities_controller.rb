@@ -5,7 +5,7 @@ class ActivitiesController < ActiveScaffoldController
 
   include ActivitiesHelper
 
-  @@shown_columns           = [:organization, :projects, :provider, :description,  :budget, :spend, :approved ]
+  @@shown_columns           = [:organization, :projects, :provider, :description,  :budget, :spend, :approved, :classified ]
   @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
@@ -56,6 +56,7 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:description].options          = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui        = :select
     config.columns[:approved].label               = "Approved?"
+    config.columns[:classified].label               = "Clasified?"
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|

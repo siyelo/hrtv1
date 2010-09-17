@@ -7,7 +7,7 @@ class CodeAssignmentsController < ApplicationController
 
     @coding_type = params[:coding_type] || 'budget_codes'
     @codes = @activity.get_codes(@coding_type)
-    @current_assignments = @activity.get_current_assignments(@coding_type)
+    @current_assignments = @activity.get_current_assignments(@coding_type, @activity.get_all_code_ids(@coding_type)).map_to_hash{ |b| {b.code_id => b} }
 
     if params[:tab].present?
       # ajax requests for all tabs except the first one

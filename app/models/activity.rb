@@ -39,30 +39,13 @@ class Activity < ActiveRecord::Base
   include ActAsDataElement
   configure_act_as_data_element
 
+  # Attributes
   attr_accessible :projects, :locations, :text_for_provider,
                   :provider, :name, :description,  :start, :end,
                   :text_for_beneficiaries, :beneficiaries,
                   :text_for_targets, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved
-
-  has_and_belongs_to_many :projects
-  has_and_belongs_to_many :indicators
-  has_and_belongs_to_many :locations
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
-
-  has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
-  has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-
-  # TODO double check these go away from glenn's changes
-#  has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
-#  has_many :codes, :through => :code_assignments
-  has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
-  has_many :budget_codings, :foreign_key => :activity_id, :dependent => :destroy
-  has_many :budget_codes, :through => :budget_codings, :source => :code
-  has_many :expenditure_codings, :foreign_key => :activity_id, :dependent => :destroy
-  has_many :expenditure_codes, :through => :expenditure_codings, :source => :code
-
   attr_accessor :budget_codes_updates
   attr_accessor :budget_cost_categories_updates
   attr_accessor :budget_district_codes_updates
@@ -71,6 +54,24 @@ class Activity < ActiveRecord::Base
   attr_accessor :expenditure_district_codes_updates
   attr_accessible :budget_cost_categories_updates, :budget_codes_updates,
     :expenditure_codes_updates, :expenditure_cost_categories_updates, :budget_district_codes_updates, :expenditure_district_codes_updates
+
+  # Associations
+  has_and_belongs_to_many :projects
+  has_and_belongs_to_many :indicators
+  has_and_belongs_to_many :locations
+  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
+  has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
+  has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
+  # TODO double check these go away from glenn's changes
+  #  has_many :code_assignments, :foreign_key => :activity_id, :dependent => :destroy
+  #  has_many :codes, :through => :code_assignments
+  has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
+  has_many :budget_codings, :foreign_key => :activity_id, :dependent => :destroy
+  has_many :budget_codes, :through => :budget_codings, :source => :code
+  has_many :expenditure_codings, :foreign_key => :activity_id, :dependent => :destroy
+  has_many :expenditure_codes, :through => :expenditure_codings, :source => :code
+
+  # Callbacks
   after_save :update_budget_codings
   after_save :update_expenditure_codings
 
@@ -84,92 +85,76 @@ class Activity < ActiveRecord::Base
     self.data_response.responding_organization
   end
 
-  def valid_roots_for_code_assignment
-    @@valid_root_types = [Mtef, Nha, Nasa, Nsp]
-    Code.roots.reject { |r| ! @@valid_root_types.include? r.class }
-  end
-
-  def self.valid_types_for_code_assignment
-    [Mtef, Nha, Nasa, Nsp]
-  end
-
-  def valid_cost_category_codes
-    CostCategory.roots
-  end
-
-  def self.valid_types_for_cost_catgory_codes
-    [CostCategory]
-  end
-
-  def valid_district_codes
-    locations
-  end
-
-  def self.valid_types_for_district_codes
-    [Location]
-  end
-
   def districts
     self.projects.collect do |proj|
       proj.locations
     end.flatten.uniq
   end
 
+  def classified
+    total_root_codes('budget_codes', budget) == budget &&
+    total_root_codes('budget_district_codes', budget) == budget &&
+    total_root_codes('budget_cost_categories', budget) == budget &&
+    total_root_codes('expenditure_codes', spend) == spend &&
+    total_root_codes('expenditure_district_codes', spend) == spend &&
+    total_root_codes('expenditure_cost_categories', spend) == spend
+  end
+
   def get_codes(coding_type)
     case coding_type
-    when 'budget_codes'
-      valid_roots_for_code_assignment
-    when 'budget_district_codes'
+    when 'budget_codes', 'expenditure_codes'
+      Code.valid_activity_codes.roots
+    when 'budget_district_codes', 'expenditure_district_codes'
       locations
-    when 'budget_cost_categories'
-      valid_cost_category_codes
-    when 'expenditure_codes'
-      valid_roots_for_code_assignment
-    when 'expenditure_district_codes'
-      locations
-    when 'expenditure_cost_categories'
-      valid_cost_category_codes
+    when 'budget_cost_categories', 'expenditure_cost_categories'
+      CostCategory.roots
     end
   end
 
-  def get_current_assignments(coding_type)
-    # coding_type = 'budget_cost_categories' => 'budget'
-    # coding_type = 'expenditure_cost_categories' => 'expenditure'
-    short_coding_type = coding_type.to_s.split('_').first
-
-    if short_coding_type == 'budget'
-      budget_codings.map_to_hash{ |b| {b.code_id => b} }
-    elsif short_coding_type == 'expenditure'
-      expenditure_codings.map_to_hash{ |b| {b.code_id => b} }
+  def get_all_code_ids(coding_type)
+    case coding_type
+    when 'budget_codes', 'expenditure_codes'
+      Code.valid_activity_codes.map(&:id)
+    when 'budget_district_codes', 'expenditure_district_codes'
+      locations.map(&:id)
+    when 'budget_cost_categories', 'expenditure_cost_categories'
+      CostCategory.all.map(&:id)
     end
   end
 
-  private
-
-  # trick to help clean up controller code
-  # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
-  def update_budget_codings
-    update_coding_attribute_proxy budget_codes_updates, :budget_codes
-    update_coding_attribute_proxy budget_cost_categories_updates, :budget_cost_categories
-    update_coding_attribute_proxy budget_district_codes_updates, :budget_district_codes
+  def get_root_code_ids(coding_type)
+    case coding_type
+    when 'budget_codes', 'expenditure_codes'
+      Code.valid_activity_codes.roots.map(&:id)
+    when 'budget_district_codes', 'expenditure_district_codes'
+      locations.map(&:id)
+    when 'budget_cost_categories', 'expenditure_cost_categories'
+      CostCategory.roots.map(&:id)
+    end
   end
 
-  def update_expenditure_codings
-    update_coding_attribute_proxy expenditure_codes_updates, :expenditure_codes
-    update_coding_attribute_proxy expenditure_cost_categories_updates, :expenditure_cost_categories
-    update_coding_attribute_proxy expenditure_district_codes_updates, :expenditure_district_codes
+  def get_current_assignments(coding_type, code_ids)
+    case coding_type
+    when 'budget_codes', 'budget_district_codes', 'budget_cost_categories'
+      budget_codings.with_code_ids(code_ids).all
+    when 'expenditure_codes', 'expenditure_district_codes', 'expenditure_cost_categories'
+      expenditure_codings.with_code_ids(code_ids).all
+    end
   end
 
+  def total_root_codes(coding_type, max)
+    code_assignments = get_current_assignments(coding_type, get_root_code_ids(coding_type))
+    total = 0
 
-  # assumes a format like "17,798,123.00"
-  def currency_to_number(number_string, options ={})
-    options.symbolize_keys!
-    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :raise => true) rescue {}
-    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
-    defaults  = defaults.merge(currency)
-    delimiter = options[:delimiter] || defaults[:delimiter]
+    code_assignments.each do |ca|
+      if ca.amount.present? && ca.amount > 0
+        total += ca.amount
+      else
+        total += ca.percentage * max / 100
+      end
+    end
 
-    number_string.gsub(delimiter,'')
+    total
   end
 
   protected
@@ -210,7 +195,7 @@ class Activity < ActiveRecord::Base
     if [:budget_codes, :expenditure_codes].include? coding_type
       types_to_delete = Activity.valid_types_for_code_assignment
     elsif [:budget_cost_categories, :expenditure_cost_categories].include? coding_type
-      types_to_delete = Activity.valid_types_for_cost_catgory_codes
+      types_to_delete = Activity.valid_types_for_cost_category_codes
     elsif [:budget_district_codes, :expenditure_district_codes].include? coding_type
       types_to_delete = Activity.valid_types_for_district_codes
     end
@@ -234,4 +219,44 @@ class Activity < ActiveRecord::Base
       ExpenditureCoding
     end
   end
+
+  private
+  def self.valid_types_for_code_assignment
+    [Mtef, Nha, Nasa, Nsp]
+  end
+
+  def self.valid_types_for_district_codes
+    [Location]
+  end
+
+  def self.valid_types_for_cost_category_codes
+    [CostCategory]
+  end
+
+  # trick to help clean up controller code
+  # http://ramblings.gibberishcode.net/archives/rails-has-and-belongs-to-many-habtm-demystified/17
+  def update_budget_codings
+    update_coding_attribute_proxy budget_codes_updates, :budget_codes
+    update_coding_attribute_proxy budget_cost_categories_updates, :budget_cost_categories
+    update_coding_attribute_proxy budget_district_codes_updates, :budget_district_codes
+  end
+
+  def update_expenditure_codings
+    update_coding_attribute_proxy expenditure_codes_updates, :expenditure_codes
+    update_coding_attribute_proxy expenditure_cost_categories_updates, :expenditure_cost_categories
+    update_coding_attribute_proxy expenditure_district_codes_updates, :expenditure_district_codes
+  end
+
+
+  # assumes a format like "17,798,123.00"
+  def currency_to_number(number_string, options ={})
+    options.symbolize_keys!
+    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :raise => true) rescue {}
+    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
+    defaults  = defaults.merge(currency)
+    delimiter = options[:delimiter] || defaults[:delimiter]
+
+    number_string.gsub(delimiter,'')
+  end
+
 end

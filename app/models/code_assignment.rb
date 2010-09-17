@@ -12,11 +12,17 @@
 #
 
 class CodeAssignment < ActiveRecord::Base
+
+  # Associations
   belongs_to :activity
   belongs_to :code
 
+  # Validations
   validates_presence_of :activity, :code
 
+  # Attributes
   attr_accessible :activity, :code, :amount, :percentage
 
+  # Named scopes
+  named_scope :with_code_ids, lambda {|code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
 end

@@ -19,6 +19,12 @@ class DataResponsesController < ApplicationController
 
   end
 
+  def submit
+    @data_response = DataResponse.available_to(current_user).find params[:id]
+    @data_response.submitted = true
+    @data_response.save
+  end
+
   protected
 
   def load_help

@@ -4,11 +4,9 @@ class ActivitiesController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   include ActivitiesHelper
+
   @@shown_columns = [:organization, :projects, :provider, :description,  :budget, :spend, :approved ]
   @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  def self.create_columns
-    @@create_columns
-  end
   @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
   @@columns_for_file_upload = %w[name description
     text_for_targets text_for_beneficiaries text_for_provider
@@ -23,30 +21,15 @@ class ActivitiesController < ActiveScaffoldController
     config.create.columns = @@create_columns
     config.update.columns = @@update_columns
     list.sorting          = {:name => 'DESC'}
-
-    #TODO better name / standarize on verb noun or just noun
-    config.action_links.add('Classify',
-      :action => "popup_coding",
-      :parameters =>{:controller=>'activities'},
-      :type => :member,
-      :popup => true,
-      :label => "Classify")
-
     config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     config.nested.add_link("Sub Implementers", [:sub_activities])
-    # we want to use this below but its frazzed
-    # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms
-    # config.columns[:organizations].label = "Targets"
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
-#    config.columns[:projects].inplace_edit        = :ajax#TODO get working
     config.columns[:projects].form_ui             = :select
     config.columns[:locations].form_ui            = :select
     config.columns[:locations].label              = "Districts Worked In"
-#    config.columns[:projects].options[:update_column] = [:provider] #TODO fix AS not doing this correctly with multi check boxes
-#    config.columns[:provider].inplace_edit        = :ajax#TODO get working
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].association.reverse = :provider_for
     config.columns[:provider].label               = "Implementer"
@@ -91,18 +74,14 @@ class ActivitiesController < ActiveScaffoldController
       config.columns[c].form_ui = :textarea
       config.columns[c].options = {:cols => 50, :rows => 3}
     end
-    # add in later version, not part of minimal viable product
-    #config.columns[:indicators].form_ui = :select
-    #config.columns[:indicators].options = {:draggable_lists => true}
+  end
+
+  def self.create_columns
+    @@create_columns
   end
 
   def create_from_file
     super @@columns_for_file_upload
-  end
-
-  #AS helper method
-  def popup_coding
-    redirect_to budget_activity_coding_url(params[:id])
   end
 
   def conditions_for_collection

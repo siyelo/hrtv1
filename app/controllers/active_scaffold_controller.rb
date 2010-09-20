@@ -153,9 +153,11 @@ class ActiveScaffoldController < ApplicationController
         help = help.field_help if help
         if help
           #TODO join with ruby array methods or something better
-          self.create_columns.each do |column|
-            h = help.find_by_attribute_name(column.to_s)
-            set_active_scaffold_column_description column, h.long unless h.nil?
+          if self.respond_to? :create_columns
+            self.create_columns.each do |column|
+              h = help.find_by_attribute_name(column.to_s)
+              set_active_scaffold_column_description column, h.long unless h.nil?
+            end
           end
         end
       end

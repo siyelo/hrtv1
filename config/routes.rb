@@ -23,8 +23,9 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:select => :post}, :active_scaffold => true
 
   map.resources :organizations,
-    :collection => {:browse => :get},
-    :member => {:select => :post}, :active_scaffold => true
+      :collection => {:browse => :get},
+      :member => {:select => :post}, :active_scaffold => true
+
 
   map.resources :activities,
                 :member => { :approve => :post },
@@ -43,11 +44,15 @@ ActionController::Routing::Routes.draw do |map|
                                               :budget_districts            => :get,
                                               :budget_cost_categories      => :get,
                                               :expenditure                 => :get,
-                                              :expenditure_districts            => :get,
+                                              :expenditure_districts       => :get,
                                               :expenditure_cost_categories => :get
                                             }
 
+
     map.resources :sub_activities, :active_scaffold => true
+
+    map.resources :budgets, :active_scaffold => true
+    map.resources :expenditures, :active_scaffold => true
 
     activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
     activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
@@ -60,7 +65,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # AS redirect helpers
-  map.popup_coding 'popup_coding', :controller => :activities, :action => :popup_coding
+  map.popup_classification 'popup_classification', :controller => :classifications, :action => :popup_classification
   map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
 
   map.resources :indicators, :active_scaffold => true

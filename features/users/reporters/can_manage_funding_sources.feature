@@ -26,20 +26,18 @@ Scenario: Reporter can see current incoming flows (Funding Sources) for their or
   Then I should see "TB Treatment Project"
   And I should not see "Some other Project"
 
-
 Scenario: Create incoming funding flow
-  Given an organization with name "UNDP"
-  Given a reporter "Frank" in organization "UNDP"
+  Given a basic org + reporter profile, with data response, signed in
   Given a project with name "TB Treatment Project"
-  Given I am signed in as "Frank"
   When I go to the funding sources page
   And I follow "Create New"
   And I select "TB Treatment Project" from "Project"
-  And I select "UNAIDS" from "From"
-  And I fill in "Budget for GOR FY 10-11 (upcoming)" with "1000.00"
+  And I select "UNDP" from "From"
+  And I fill in "Total Budget GOR FY 10-11" with "1000.00"
   And I press "Create"
   And I should see "TB Treatment Project"
-  And I should see "UNAIDS"
+  And I should see "UNDP"
+  Then show me the page
   And I should see "1,000.00"
 
 @wip

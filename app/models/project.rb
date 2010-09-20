@@ -23,11 +23,13 @@
 
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
+require 'validators'
 
 class Project < ActiveRecord::Base
   acts_as_commentable
 
   include ActAsDataElement
+  include ActsAsDateChecker
   configure_act_as_data_element
 
   acts_as_stripper
@@ -38,10 +40,15 @@ class Project < ActiveRecord::Base
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
+  # Validations
   validates_presence_of :name
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
+  validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
                   :start_date, :end_date, :currency
@@ -103,4 +110,11 @@ class Project < ActiveRecord::Base
     f1.save;f2.save;
     #activities << OtherCost.new #TODO fix and let this work
   end
+
+  private
+
+  def validate_budgets
+    errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
+  end
+
 end

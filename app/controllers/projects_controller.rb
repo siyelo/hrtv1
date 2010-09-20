@@ -20,7 +20,7 @@ class ProjectsController < ActiveScaffoldController
 
   active_scaffold :projects do |config|
     config.columns =  @@shown_columns
-    list.sorting = {:organization => 'DESC', :name => 'DESC'}
+    list.sorting = { :organization => 'DESC', :name => 'DESC' }
 
     config.nested.add_link("Activities", [:activities])
     config.nested.add_link("Comments", [:comments])

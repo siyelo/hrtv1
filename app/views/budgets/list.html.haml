@@ -1,0 +1,10 @@
+- title "Budgets"
+
+- record_type = Activity
+
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
+= render :super
+
+= render 'shared/bottom_data_entry', :record_type => record_type

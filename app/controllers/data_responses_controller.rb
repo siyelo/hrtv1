@@ -13,7 +13,6 @@ class DataResponsesController < ApplicationController
       flash[:notice] = "Successfully updated."
       redirect_to data_response_start_url(@data_response.id)
     else
-      flash[:error] = "Something went wrong, if this happens repeatedly, contact an administrator."
       render :action => :start
     end
 

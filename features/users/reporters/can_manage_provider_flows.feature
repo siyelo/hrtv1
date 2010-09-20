@@ -31,8 +31,6 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
   And I should see "UNDP"
   And I should see "1000.00"
   
-
-@run
 Scenario: Creates an implementer funding flow
   Given the following organizations 
     | name   |

@@ -4,3 +4,4 @@ haml --version ">= 3.0.12"
 compass --version "= 0.10.2"
 cancan --version "= 1.3.3"
 authlogic
+validates_date_time --version "= 1.0.0"

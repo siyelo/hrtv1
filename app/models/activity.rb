@@ -115,7 +115,29 @@ class Activity < ActiveRecord::Base
     end.flatten.uniq
   end
 
+  def budget_completed?
+    !budget_codings.empty?
+  end
 
+  def budget_by_district_completed?
+    !budget_codings.empty?
+  end
+
+  def budget_by_cost_category_completed?
+    !budget_codings.empty?
+  end
+
+  def expenditure_completed?
+    !expenditure_codings.empty?
+  end
+
+  def expenditure_by_district_completed?
+    !expenditure_codings.empty?
+  end
+
+  def expenditure_by_cost_category_completed?
+    !expenditure_codings.empty?
+  end
 
   private
 

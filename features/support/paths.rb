@@ -46,6 +46,10 @@ module NavigationHelpers
     when /the user guide page/
       static_page_path(:user_guide)
 
+    when /the data response page for "(.+)"/
+      req = DataRequest.find_by_title($1)
+      data_response_start_path( DataResponse.find_by_data_request_id req.id)
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

@@ -182,11 +182,11 @@ class Activity < ActiveRecord::Base
   def delete_all_codings_by_type codings, coding_type
     types_to_delete = nil
     if [:budget_codes, :expenditure_codes].include? coding_type
-      types_to_delete = Activity.valid_types_for_code_assignment
+      types_to_delete = self.class.valid_types_for_code_assignment
     elsif [:budget_cost_categories, :expenditure_cost_categories].include? coding_type
-      types_to_delete = Activity.valid_types_for_cost_catgory_codes
+      types_to_delete = self.class.valid_types_for_cost_catgory_codes
     elsif [:budget_district_codes, :expenditure_district_codes].include? coding_type
-      types_to_delete = Activity.valid_types_for_district_codes
+      types_to_delete = self.class.valid_types_for_district_codes
     end
     codings.each do |coding|
       coding.delete if types_to_delete.include? coding.code.class

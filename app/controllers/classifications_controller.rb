@@ -5,7 +5,7 @@ class ClassificationsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :organization, :name, :budget?, :budget_by_district?, :budget_by_cost_category?,
-                      :expenditures?, :expenditures_by_district?, :expenditures_by_cost_category?, :approved]
+                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved]
 
   active_scaffold :activity do |config|
     config.actions        = [ :list ]
@@ -21,15 +21,20 @@ class ClassificationsController < ActiveScaffoldController
       :popup      => true,
       :label      => "Classify")
 
-    config.columns[:name].inplace_edit                      = true
-    config.columns[:name].label                             = "Activity Name"
-    config.columns[:approved].label                         = "Approved?"
-    config.columns[:budget?].list_ui                        = :checkbox
-    config.columns[:budget_by_cost_category?].list_ui       = :checkbox
-    config.columns[:budget_by_district?].list_ui            = :checkbox
-    config.columns[:expenditures?].list_ui                  = :checkbox
-    config.columns[:expenditures_by_cost_category?].list_ui = :checkbox
-    config.columns[:expenditures_by_district?].list_ui      = :checkbox
+    config.columns[:name].inplace_edit                = true
+    config.columns[:name].label                       = "Activity Name"
+    config.columns[:approved].label                   = "Approved?"
+    config.columns[:budget?].list_ui                  = :checkbox
+    config.columns[:budget_by_cost_category?].list_ui = :checkbox
+    config.columns[:budget_by_district?].list_ui      = :checkbox
+    config.columns[:spend?].list_ui                   = :checkbox
+    config.columns[:spend_by_cost_category?].list_ui  = :checkbox
+    config.columns[:spend_by_district?].list_ui       = :checkbox
+    config.columns[:budget_by_cost_category?].label   = "... by Cost Category"
+    config.columns[:budget_by_district?].label        = "... by District"
+    config.columns[:spend_by_cost_category?].label    = "... by Cost Category"
+    config.columns[:spend_by_district?].label         = "... by District"
+
   end
 
   def beginning_of_chain

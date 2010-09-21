@@ -94,15 +94,15 @@ class Activity < ActiveRecord::Base
     CodingBudgetCostCategorization.classified(self)
   end
 
-  def expenditures?
+  def spend?
     CodingExpenditure.classified(self)
   end
 
-  def expenditures_by_district?
+  def spend_by_district?
     CodingExpenditureDistrict.classified(self)
   end
 
-  def expenditures_by_cost_category?
+  def spend_by_cost_category?
      CodingExpenditureCostCategorization.classified(self)
   end
 

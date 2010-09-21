@@ -38,7 +38,7 @@ class ClassificationsController < ActiveScaffoldController
 
   #fixes the Help 'helper' guessing the name of this class...
   def controller_model_class
-    Activity
+    CodeAssignment
   end
 
   #AS helper method

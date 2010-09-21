@@ -61,6 +61,7 @@ class CodeAssignment < ActiveRecord::Base
 
   def self.codings_sum(available_codes, activity, max)
     total = 0
+    max = 0 if max.nil?
 
     available_codes.each do |ac|
       ca = self.with_activity(activity).with_code_id(ac.id).first

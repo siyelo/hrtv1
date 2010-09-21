@@ -21,9 +21,15 @@ class ClassificationsController < ActiveScaffoldController
       :popup      => true,
       :label      => "Classify")
 
-    config.columns[:name].inplace_edit            = true
-    config.columns[:name].label                   = "Activity Name"
-    config.columns[:approved].label               = "Approved?"
+    config.columns[:name].inplace_edit                      = true
+    config.columns[:name].label                             = "Activity Name"
+    config.columns[:approved].label                         = "Approved?"
+    config.columns[:budget?].list_ui                        = :checkbox
+    config.columns[:budget_by_cost_category?].list_ui       = :checkbox
+    config.columns[:budget_by_district?].list_ui            = :checkbox
+    config.columns[:expenditures?].list_ui                  = :checkbox
+    config.columns[:expenditures_by_cost_category?].list_ui = :checkbox
+    config.columns[:expenditures_by_district?].list_ui      = :checkbox
   end
 
   def beginning_of_chain

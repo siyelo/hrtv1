@@ -17,10 +17,10 @@
     %td= @activity.name
   %tr
     %td.title Total Budget for FY 10-11:
-    %td= @activity.budget
+    %td= @activity.budget.blank? ? "(budget not yet specified)" : @activity.budget
   %tr
     %td.title Total Expenditures for FY 09-10:
-    %td= @activity.spend
+    %td= @activity.spend.blank? ? "(spend not yet specified)" : @activity.spend
   - if can? :approve, @activity
     %tr
       %td.title

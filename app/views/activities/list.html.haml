@@ -13,4 +13,6 @@
 
   = render :super
 
-  = render 'shared/bottom_data_entry', :record_type => record_type
+  %p= link_to "Next Step", classifications_path, :class => "next right"
+
+  = render 'shared/data_entry_help', :record_type => record_type

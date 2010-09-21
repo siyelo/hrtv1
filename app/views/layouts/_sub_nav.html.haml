@@ -16,11 +16,8 @@
     %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
       = link_to 'Activities', activities_path
 
-    %li{ :class => [ ["BudgetsController", "CodeAssignmentsController"].include?(controller.class.to_s) ? "active" : '']}
-      = link_to 'Budgets', budgets_path
-
-    %li{ :class => [ ["ExpendituresController", "CodeAssignmentsController"].include?(controller.class.to_s) ? "active" : '']}
-      = link_to 'Expenditures', expenditures_path
+    %li{ :class => [ ["ClassificationsController", "CodeAssignmentsController"].include?(controller.class.to_s) ? "active" : '']}
+      = link_to 'Classifications', classifications_path
 
     %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
       = link_to 'Other Costs', other_costs_path

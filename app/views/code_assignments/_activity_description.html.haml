@@ -10,6 +10,9 @@
 
 %table#activity_description
   %tr
+    %td.title Organization:
+    %td= @activity.organization.name
+  %tr
     %td.title Name:
     %td= @activity.name
   %tr
@@ -18,9 +21,6 @@
   %tr
     %td.title Total Expenditures for FY 09-10:
     %td= @activity.spend
-  %tr
-    %td.title Description:
-    %td= @activity.description
   - if can? :approve, @activity
     %tr
       %td.title

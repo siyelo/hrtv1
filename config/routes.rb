@@ -29,22 +29,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :activities,
                 :member => { :approve => :post },
-                :active_scaffold => true        do |activity|
+                :active_scaffold => true          do |activity|
 
-    activity.resource :budget, :path_prefix => '/activities/:activity_id/classification',
-                                :controller => :budget_classification,
-                                :only => [ :show, :update ]
-    activity.resource :expenditure, :path_prefix => '/activities/:activity_id/classification',
-                                    :controller => :expenditure_classification,
-                                    :only => [ :show, :update ]
-
+    map.resources :classifications, :active_scaffold => true
     activity.resource :coding, :controller => :code_assignments, :only => [:show, :update]
-
     map.resources :sub_activities, :active_scaffold => true
-
-    map.resources :budgets, :active_scaffold => true
-    map.resources :expenditures, :active_scaffold => true
-
   end
 
   # AS redirect helpers

@@ -82,27 +82,27 @@ class Activity < ActiveRecord::Base
     CodingExpenditureDistrict.classified(self)
   end
 
-  def budget_completed?
+  def budget?
     CodingBudget.classified(self)
   end
 
-  def budget_by_district_completed?
+  def budget_by_district?
     CodingBudgetDistrict.classified(self)
   end
 
-  def budget_by_cost_category_completed?
+  def budget_by_cost_category?
     CodingBudgetCostCategorization.classified(self)
   end
 
-  def expenditure_completed?
+  def expenditures?
     CodingExpenditure.classified(self)
   end
 
-  def expenditure_by_district_completed?
+  def expenditures_by_district?
     CodingExpenditureDistrict.classified(self)
   end
 
-  def expenditure_by_cost_category_completed?
+  def expenditures_by_cost_category?
      CodingExpenditureCostCategorization.classified(self)
   end
 

@@ -5,9 +5,11 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :read, @activity
 
-    @coding_type = params[:coding_type] || 'budget_codes'
-    @codes = @activity.get_codes(@coding_type)
-    @current_assignments = @activity.get_current_assignments(@coding_type, @activity.get_all_code_ids(@coding_type)).map_to_hash{ |b| {b.code_id => b} }
+    @coding_type = params[:coding_type] || 'CodingBudget'
+    coding_class = @coding_type.constantize
+
+    @codes = coding_class.available_codes(@activity)
+    @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
 
     if params[:tab].present?
       # ajax requests for all tabs except the first one
@@ -22,11 +24,10 @@ class CodeAssignmentsController < ApplicationController
   def update
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :update, @activity
-    params[:activity].delete(:code_assignment_tree) #until we figure out how to remove the checkbox inputs
 
-    if @activity.update_attributes(params[:activity])
-      flash[:notice] = "Activity #{params[:coding_type].to_s.split('_').first} was successfully updated."
-    end
+    coding_class = params[:coding_type].constantize
+    coding_class.update_codings(params[:activity][:updates], @activity)
+    flash[:notice] = "Activity coding was successfully updated."
 
     redirect_to activity_coding_path(@activity)
   end

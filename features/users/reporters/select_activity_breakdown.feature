@@ -42,7 +42,7 @@ Scenario: enter budget for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
-  Then I should see "Activity budget was successfully updated."
+  Then I should see "Activity coding was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
@@ -54,7 +54,7 @@ Scenario: enter expenditure for an activity
   And I follow "Expenditure"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
-  Then I should see "Activity expenditure was successfully updated."
+  Then I should see "Activity coding was successfully updated."
   And I follow "Expenditure"
   #Then wait a few moments
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
@@ -65,7 +65,7 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
-  Then I should see "Activity budget was successfully updated."
+  Then I should see "Activity coding was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
   And I press "Save"
@@ -77,7 +77,7 @@ Scenario Outline: enter percentage for an activity budget classification
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in the percentage for "Human Resources For Health" with "<amount>"
   And I press "Save"
-  Then I should see "Activity budget was successfully updated."
+  Then I should see "Activity coding was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the percentage for "Human Resources For Health" field should equal "<amount2>"
   Examples:

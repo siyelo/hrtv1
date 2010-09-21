@@ -232,11 +232,11 @@ end
 
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-  steps %Q{ When I fill in "activity_budget_codes_updates_1_percentage" with "#{amount}"}
+   steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
 end
 
 Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_budget_codes_updates_1_percentage" field should equal "#{amount}"}
+  steps %Q{ Then the "activity_updates_1_percentage" field should equal "#{amount}"}
 end
 
 

@@ -1,4 +1,4 @@
-- updater_field = activity_model_attribute_to_update @coding_type
+- updater_field = 'updates' # @coding_type + '_updates'
 - assignment = @current_assignments[code.id] if @current_assignments.has_key?(code.id)
 - amount     = assignment.nil? ? "" : assignment.amount
 - percentage = assignment.nil? ? "" : assignment.percentage

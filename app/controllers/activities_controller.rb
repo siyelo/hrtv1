@@ -5,16 +5,16 @@ class ActivitiesController < ActiveScaffoldController
 
   include ActivitiesHelper
 
-  @@shown_columns = [:organization, :projects, :provider, :description,  :budget, :spend, :approved ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  @@columns_for_file_upload = %w[name description
-    text_for_targets text_for_beneficiaries text_for_provider
-    spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
+  @@shown_columns           = [:organization, :projects, :provider, :description,  :budget, :spend, :approved, :classified ]
+  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
+  @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
 
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+  def self.create_columns
+    @@create_columns
+  end
+
+  map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
 
   active_scaffold :activity do |config|
     config.columns        = @@shown_columns
@@ -39,6 +39,7 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:description].options          = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui        = :select
     config.columns[:approved].label               = "Approved?"
+    config.columns[:classified].label               = "Clasified?"
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
@@ -80,19 +81,13 @@ class ActivitiesController < ActiveScaffoldController
     @@create_columns
   end
 
-  def create_from_file
-    super @@columns_for_file_upload
+  #AS helper method
+  def popup_coding
+    redirect_to activity_coding_url(params[:id])
   end
 
   def conditions_for_collection
     ["activities.type IS NULL "]
-  end
-
-  def active_scaffold_block
-    #TODO figure out how to return block for the AS config
-    # so I can subclass then yield this block & block
-    # that changes things for activity so don't have to
-    # have duplicate code w some modifications
   end
 
   def beginning_of_chain

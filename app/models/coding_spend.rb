@@ -1,4 +1,4 @@
-class CodingExpenditure < CodeAssignment
+class CodingSpend < CodeAssignment
 
   def self.classified(activity)
     available_codes = available_codes(activity)

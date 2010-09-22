@@ -77,9 +77,9 @@ class Activity < ActiveRecord::Base
     CodingBudget.classified(self) &&
     CodingBudgetCostCategorization.classified(self) &&
     CodingBudgetDistrict.classified(self) &&
-    CodingExpenditure.classified(self) &&
-    CodingExpenditureCostCategorization.classified(self) &&
-    CodingExpenditureDistrict.classified(self)
+    CodingSpend.classified(self) &&
+    CodingSpendCostCategorization.classified(self) &&
+    CodingSpendDistrict.classified(self)
   end
 
   def budget?
@@ -95,15 +95,15 @@ class Activity < ActiveRecord::Base
   end
 
   def spend?
-    CodingExpenditure.classified(self)
+    CodingSpend.classified(self)
   end
 
   def spend_by_district?
-    CodingExpenditureDistrict.classified(self)
+    CodingSpendDistrict.classified(self)
   end
 
   def spend_by_cost_category?
-     CodingExpenditureCostCategorization.classified(self)
+     CodingSpendCostCategorization.classified(self)
   end
 
 

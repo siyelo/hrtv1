@@ -28,6 +28,7 @@ pull*.dat
 .loadpath
 .project
 *.tmproj
+.sass-cache
 
 # heroku vars files
 config/settings.secret.yml

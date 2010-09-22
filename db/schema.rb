@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100920220921) do
+ActiveRecord::Schema.define(:version => 20100922074210) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"

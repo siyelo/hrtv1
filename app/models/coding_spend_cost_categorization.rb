@@ -1,4 +1,4 @@
-class CodingExpenditureDistrict < CodeAssignment
+class CodingSpendCostCategorization < CodeAssignment
 
   def self.classified(activity)
     available_codes = available_codes(activity)
@@ -6,6 +6,6 @@ class CodingExpenditureDistrict < CodeAssignment
   end
 
   def self.available_codes(activity = nil)
-    activity.locations
+    CostCategory.roots
   end
 end

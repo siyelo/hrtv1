@@ -23,6 +23,9 @@ module NavigationHelpers
     when /the activities page/
       activities_path
 
+    when /the classifications page/
+      classifications_path
+
     when /the login page/
       login_path
 

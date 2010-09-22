@@ -20,18 +20,20 @@ Background:
 
 @green
 Scenario: See a breakdown for an activity
-  When I go to the activities page
+  When I go to the classifications page
   And I follow "Classify"
   Then I should see "TB Drugs procurement"
   And I should see "Budget"
+  And I should see "Budget by District"
   And I should see "Budget Cost Categorization"
-  And I should see "Expenditure"
-  And I should see "Expenditure Cost Categorization"
+  And I should see "Spend"
+  And I should see "Spend by District"
+  And I should see "Spend Cost Categorization"
   And I should see "Providing Technical Assistance"
   
 @green
 Scenario: See both budget for an activity classification
-  When I go to the activities page
+  When I go to the classifications page
   And I follow "Classify"
   Then I should be on the budget classification page for "TB Drugs procurement"
   And I should see "Budget"
@@ -42,7 +44,7 @@ Scenario: enter budget for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
-  Then I should see "Activity coding was successfully updated."
+  Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
@@ -51,11 +53,11 @@ Scenario: enter budget for an activity
 @green
 Scenario: enter expenditure for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
-  And I follow "Expenditure"
+  And I follow "Spend"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
-  Then I should see "Activity coding was successfully updated."
-  And I follow "Expenditure"
+  Then I should see "Activity classification was successfully updated."
+  And I follow "Spend"
   #Then wait a few moments
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
@@ -65,7 +67,7 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
-  Then I should see "Activity coding was successfully updated."
+  Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
   And I press "Save"
@@ -77,7 +79,7 @@ Scenario Outline: enter percentage for an activity budget classification
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in the percentage for "Human Resources For Health" with "<amount>"
   And I press "Save"
-  Then I should see "Activity coding was successfully updated."
+  Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the percentage for "Human Resources For Health" field should equal "<amount2>"
   Examples:
@@ -88,6 +90,6 @@ Scenario Outline: enter percentage for an activity budget classification
 
 @green
 Scenario: Cannot approve an Activity
-  When I go to the activities page
+  When I go to the classifications page
   And I follow "Classify"
   Then I should not see "Approved?"

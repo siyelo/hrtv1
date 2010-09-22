@@ -41,16 +41,16 @@ var code_assignments_show = {
     });
 
     // load expenditure
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingExpenditure&tab=tab4', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpend&tab=tab4', function (response) {
       appendTab('tab4', response);
     });
 
     // load expenditure districts
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingExpenditureDistrict&tab=tab5', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendDistrict&tab=tab5', function (response) {
       appendTab('tab5', response);
     });
     // load expenditure cost categories
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingExpenditureCostCategorization&tab=tab6', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendCostCategorization&tab=tab6', function (response) {
       appendTab('tab6', response);
     });
 

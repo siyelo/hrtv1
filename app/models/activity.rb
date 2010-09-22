@@ -70,6 +70,10 @@ class Activity < ActiveRecord::Base
     self.data_response.responding_organization
   end
 
+  def organization_name
+    organization.name
+  end
+
   def districts
     self.projects.collect do |proj|
       proj.locations

@@ -27,6 +27,7 @@ class ActivitiesController < ActiveScaffoldController
 
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
+    config.columns[:organization].sort_by :method => "organization_name"
     config.columns[:projects].form_ui             = :select
     config.columns[:locations].form_ui            = :select
     config.columns[:locations].label              = "Districts Worked In"

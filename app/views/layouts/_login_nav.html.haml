@@ -6,7 +6,7 @@
       %li= link_to "Sign out", logout_path
     %span
       - if current_user.organization
-        = "#{current_user.email} [#{current_user.organization.name}]"
+        = "#{current_user.email} [#{truncate(current_user.organization.name, :length => 35)}]"
       - else
         = "#{current_user.email} [No organization specified]"
 

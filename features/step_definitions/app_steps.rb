@@ -174,8 +174,8 @@ end
 
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#header_app_app"
-    And I should see "Sign in" within "div#header_app_app"
+    Then I should see "Have an account?" within "div#header_app"
+    And I should see "Sign in" within "div#header_app"
   }
 end
 

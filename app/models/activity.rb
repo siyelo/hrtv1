@@ -57,6 +57,9 @@ class Activity < ActiveRecord::Base
   has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
   has_many :code_assignments
 
+  # Validations
+  validate :approved_activity_cannot_be_changed
+
   # delegate :providers, :to => :projects
   def valid_providers
     #TODO use delegates_to
@@ -106,5 +109,9 @@ class Activity < ActiveRecord::Base
      CodingSpendCostCategorization.classified(self)
   end
 
+  private
+  def approved_activity_cannot_be_changed
+    errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
+  end
 
 end

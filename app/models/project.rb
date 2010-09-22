@@ -59,6 +59,10 @@ class Project < ActiveRecord::Base
     self.data_response.responding_organization
   end
 
+  def organization_name
+    organization.name
+  end
+
   def spend=(amount)
     super(strip_non_decimal(amount))
   end

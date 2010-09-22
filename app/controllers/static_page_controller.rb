@@ -22,6 +22,10 @@ class StaticPageController < ApplicationController
     @unfulfilled_responses = DataResponse.unfulfilled
   end
 
+  def submit
+    @uncoded_activities = current_user.current_data_response.activities.reject{ |a| a.classified }
+  end
+
   def show
     #TODO add authorization for the various dashboards
     render :action => params[:page]

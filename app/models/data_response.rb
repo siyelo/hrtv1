@@ -30,6 +30,7 @@ class DataResponse < ActiveRecord::Base
   has_many    :users_currently_completing,
               :class_name => "User",
               :foreign_key => :data_response_id_current
+  has_many    :activities
   belongs_to  :responding_organization,
               :class_name => "Organization",
               :foreign_key => "organization_id_responder"

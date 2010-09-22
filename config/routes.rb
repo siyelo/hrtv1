@@ -59,7 +59,7 @@ ActionController::Routing::Routes.draw do |map|
   map.reporter_dashboard "reporter_dashboard", :controller => 'static_page', :action => "reporter_dashboard"
 
   # do not remove, these routes make the pages accessible without security checks
-  %w[about news contact].each do |p|
+  %w[about news contact submit].each do |p|
     map.send(p.to_sym, p, :controller => 'static_page', :action => p)
   end
 

@@ -3,12 +3,6 @@
 
 == For Developers
 
-Currently getting an alpha / minimum viable product done. This should be fairly easy, it's mostly CRUD. After that, we can better focus on working with the local development team. UI work has been using mostly active_scaffold, at this point, though that may change.
-
-Most helpful feature to work on would be a tree interface for selecting codes for a project/activity/line item, along with fields to enter amounts or %'s for that code. No work has been done on that as of yet. Email Greg and he will describe this feature to you.
-
-We may switch to Rails 3 after we have some alpha working.
-
 === Our Philosophy
 
 Nothing is sacred, be vocal about ways to improve anything we are doing.

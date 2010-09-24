@@ -81,6 +81,7 @@ class Activity < ActiveRecord::Base
   end
 
   def classified
+    #TODO override in othercosts and subactivities
     CodingBudget.classified(self) &&
     CodingBudgetCostCategorization.classified(self) &&
     CodingBudgetDistrict.classified(self) &&

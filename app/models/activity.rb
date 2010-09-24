@@ -113,6 +113,12 @@ class Activity < ActiveRecord::Base
      CodingSpendCostCategorization.classified(self)
   end
 
+  def update_classified_amount_cache type
+       amount = type.codings_sum type.available_codes(self), self, 0
+       self.send "#{type}_amount=",  amount
+       self.save
+  end
+
   private
   def approved_activity_cannot_be_changed
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]

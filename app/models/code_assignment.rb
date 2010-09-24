@@ -10,7 +10,6 @@
 #  type        :string(255)
 #  percentage  :decimal(, )
 #
-
 class CodeAssignment < ActiveRecord::Base
 
   # Associations
@@ -45,6 +44,7 @@ class CodeAssignment < ActiveRecord::Base
           :percentage => code_assignments[code.id.to_s]["percentage"]
         ) if code
       end
+      activity.update_classified_amount_cache self
     end
   end
 

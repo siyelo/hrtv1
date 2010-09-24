@@ -37,6 +37,12 @@ class ClassificationsController < ActiveScaffoldController
 
   end
 
+  #so other costs dont show up here, need
+  # extend this refactoring for activities to them
+  def conditions_for_collection
+    ["activities.type IS NULL "]
+  end
+
   def beginning_of_chain
     super.available_to current_user
   end

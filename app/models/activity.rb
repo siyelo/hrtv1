@@ -82,14 +82,10 @@ class Activity < ActiveRecord::Base
 
   def classified
     #TODO override in othercosts and subactivities
-    CodingBudget.classified(self) &&
-    CodingBudgetCostCategorization.classified(self) &&
-    CodingBudgetDistrict.classified(self) &&
-    CodingSpend.classified(self) &&
-    CodingSpendCostCategorization.classified(self) &&
-    CodingSpendDistrict.classified(self)
+    budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
   end
 
+  # TODO: use the cached values to check if the activity is classified!
   def budget?
     CodingBudget.classified(self)
   end
@@ -111,13 +107,13 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_by_cost_category?
-     CodingSpendCostCategorization.classified(self)
+    CodingSpendCostCategorization.classified(self)
   end
 
   def update_classified_amount_cache type
-       amount = type.codings_sum type.available_codes(self), self, 0
-       self.send "#{type}_amount=",  amount
-       self.save
+    amount = type.codings_sum(type.available_codes(self), self, 0)
+    self.send("#{type}_amount=",  amount)
+    self.save
   end
 
   private

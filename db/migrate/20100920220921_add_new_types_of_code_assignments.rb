@@ -30,7 +30,11 @@ class Activity < ActiveRecord::Base
   def get_all_code_ids(coding_type)
     case coding_type
     when 'budget_codes', 'expenditure_codes'
-      Code.valid_activity_codes.map(&:id)
+      if self.class.to_s == "OtherCost"
+        OtherCostCode.all.map(&:id)
+      else
+        Code.valid_activity_codes.map(&:id)
+      end
     when 'budget_district_codes', 'expenditure_district_codes'
       locations.map(&:id)
     when 'budget_cost_categories', 'expenditure_cost_categories'
@@ -45,6 +49,7 @@ class AddNewTypesOfCodeAssignments < ActiveRecord::Migration
     puts "Migrating assignments \n"
 
     Activity.all.each do |activity|
+      puts "Migrating... activity #{activity.id}"
       rename_codings(activity, 'budget_codes', 'CodingBudget')
       rename_codings(activity, 'budget_district_codes', 'CodingBudgetDistrict')
       rename_codings(activity, 'budget_cost_categories', 'CodingBudgetCostCategorization')
@@ -59,7 +64,6 @@ class AddNewTypesOfCodeAssignments < ActiveRecord::Migration
 
   private
   def self.rename_codings(activity, coding_type, new_coding_type)
-    puts "Migrating... coding #{coding_type} :: activity #{activity.id}"
     code_assignments = activity.get_current_assignments(coding_type, activity.get_all_code_ids(coding_type))
     code_assignments.each do |ca|
       ca.type = new_coding_type

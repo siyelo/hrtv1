@@ -5,6 +5,10 @@ class CodingSpend < CodeAssignment
   end
 
   def self.available_codes(activity = nil)
-    Code.valid_activity_codes.roots
+    if activity.class.to_s == "OtherCost"
+      OtherCostCode.roots
+    else
+      Code.valid_activity_codes.roots
+    end
   end
 end

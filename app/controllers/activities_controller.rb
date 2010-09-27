@@ -44,6 +44,7 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:description].inplace_edit     = true
     config.columns[:description].options          = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui        = :select
+    config.columns[:activities].allow_add_existing = false
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|

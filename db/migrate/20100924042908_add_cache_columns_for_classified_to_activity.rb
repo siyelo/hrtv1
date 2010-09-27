@@ -1,4 +1,7 @@
 class AddCacheColumnsForClassifiedToActivity < ActiveRecord::Migration
+
+  load File.join(Rails.root, 'app', 'models', 'activity.rb') # load activity model
+
   def self.up
     add_column :activities, "#{CodingBudget}_amount", :decimal
     add_column :activities, "#{CodingBudgetCostCategorization}_amount", :decimal
@@ -8,8 +11,9 @@ class AddCacheColumnsForClassifiedToActivity < ActiveRecord::Migration
     add_column :activities, "#{CodingSpendDistrict}_amount", :decimal
 
     Activity.all.each do |activity|
+      puts "Migrating... activity #{activity.id}"
       [CodingBudget,CodingBudgetCostCategorization,CodingBudgetDistrict,CodingSpend,CodingSpendCostCategorization,CodingSpendDistrict].each do |type|
-        activity.update_classified_amount_cache type
+        activity.update_classified_amount_cache(type)
       end
     end
   end

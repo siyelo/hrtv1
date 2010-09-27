@@ -60,6 +60,9 @@ class Activity < ActiveRecord::Base
   # Validations
   validate :approved_activity_cannot_be_changed
 
+  # Callbacks
+  before_update :update_all_classified_amount_caches
+
   # delegate :providers, :to => :projects
   def valid_providers
     #TODO use delegates_to
@@ -110,10 +113,23 @@ class Activity < ActiveRecord::Base
     CodingSpendCostCategorization.classified(self)
   end
 
-  def update_classified_amount_cache type
-    amount = type.codings_sum(type.available_codes(self), self, 0)
-    self.send("#{type}_amount=",  amount)
+  def update_classified_amount_cache(type)
+    set_classified_amount_cache(type)
     self.save
+  end
+
+  # Updates classified amount caches if budget or spend have been changed
+  def update_all_classified_amount_caches
+    if budget_changed?
+      [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+        set_classified_amount_cache(type)
+      end
+    end
+    if spend_changed?
+      [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
+        set_classified_amount_cache(type)
+      end
+    end
   end
 
   private
@@ -121,4 +137,17 @@ class Activity < ActiveRecord::Base
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
   end
 
+  def max_codings(type)
+    case type.to_s
+    when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+      max = budget
+    when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+      max = spend
+    end
+  end
+
+  def set_classified_amount_cache(type)
+    amount = type.codings_sum(type.available_codes(self), self, max_codings(type))
+    self.send("#{type}_amount=",  amount)
+  end
 end

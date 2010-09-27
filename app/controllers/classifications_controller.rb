@@ -30,10 +30,12 @@ class ClassificationsController < ActiveScaffoldController
     config.columns[:spend?].list_ui                   = :checkbox
     config.columns[:spend_by_cost_category?].list_ui  = :checkbox
     config.columns[:spend_by_district?].list_ui       = :checkbox
-    config.columns[:budget_by_cost_category?].label   = "... by Cost Category"
-    config.columns[:budget_by_district?].label        = "... by District"
-    config.columns[:spend_by_cost_category?].label    = "... by Cost Category"
-    config.columns[:spend_by_district?].label         = "... by District"
+    config.columns[:budget?].label                    = "Budget by Coding"
+    config.columns[:budget_by_district?].label        = "Budget by District"
+    config.columns[:budget_by_cost_category?].label   = "Budget by Cost Category"
+    config.columns[:spend?].label                     = "Expenditure by Coding"
+    config.columns[:spend_by_district?].label         = "Expenditure by District"
+    config.columns[:spend_by_cost_category?].label    = "Expenditure by Cost Category"
 
   end
 

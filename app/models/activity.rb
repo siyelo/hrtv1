@@ -113,6 +113,7 @@ class Activity < ActiveRecord::Base
     CodingSpendCostCategorization.classified(self)
   end
 
+  # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
     self.save

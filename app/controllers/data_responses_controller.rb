@@ -18,6 +18,15 @@ class DataResponsesController < ApplicationController
 
   end
 
+  def submit
+    @data_response              = DataResponse.available_to(current_user).find params[:id]
+    @data_response.submitted    = true
+    @data_response.submitted_at = Time.now
+    @data_response.save
+    flash[:notice]              = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
+    redirect_to data_response_start_url(@data_response.id)
+  end
+
   protected
 
   def load_help

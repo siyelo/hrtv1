@@ -1,19 +1,15 @@
 %h2 Submit
 %p This page will contain a full summary of the data you have entered so you can submit it for review. In the meantime, you can review your data manually using the tabs located on top of the page.
 
-%h3 Uncoded activities
-- if @uncoded_activities.empty?
-  %p There is no uncoded activities
-- else
-  %table
-    %thead
-      %tr
-        %th Name
-        %td Description
-        %td Manage
-    %tbody
-      - @uncoded_activities.each do |activity|
-        %tr
-          %th= activity.name
-          %th= activity.description
-          %th= link_to 'Classify', activity_coding_path(activity)
+= render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
+= render 'uncoded_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
+
+- unless @warnings.empty?
+  #flashes
+    = display_warnings(@warnings)
+
+%p
+  - if @uncoded_activities.empty? && @uncoded_other_costs.empty?
+    = link_to "Submit", data_response_submit_path(current_user.current_data_response.id), :class => "next right"
+  - else
+    You cannot submit unless you have coded your activities and other costs.

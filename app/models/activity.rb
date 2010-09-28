@@ -63,6 +63,10 @@ class Activity < ActiveRecord::Base
   # Callbacks
   before_update :update_all_classified_amount_caches
 
+  # Named scopes
+  named_scope :roots,     {:conditions => "activities.type IS NULL" }
+  named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }
+
   # delegate :providers, :to => :projects
   def valid_providers
     #TODO use delegates_to

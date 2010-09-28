@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.data_response_submit "data_responses/:id/submit", :controller => 'data_responses', :action => 'submit'
+
   map.data_response_start "data_responses/:id", :controller => 'data_responses', :action => 'start'
 
   map.data_response_edit "data_responses/:id/edit", :controller => 'data_responses', :action => 'edit'

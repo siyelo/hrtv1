@@ -1,0 +1,16 @@
+%h3= "Uncoded #{type.capitalize}"
+- if activities.empty?
+  %p= "All #{type} have been coded."
+- else
+  %table
+    %thead
+      %tr
+        %th Name
+        %td Description
+        %td Manage
+    %tbody
+      - activities.each do |activity|
+        %tr
+          %th= activity.name
+          %th= activity.description
+          %th= link_to 'Classify', activity_coding_path(activity)

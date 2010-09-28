@@ -23,7 +23,13 @@ class StaticPageController < ApplicationController
   end
 
   def submit
-    @uncoded_activities = current_user.current_data_response.activities.reject{ |a| a.classified }
+    root_activities         = current_user.current_data_response.activities.roots
+    other_cost_activities = current_user.current_data_response.activities.with_type("OtherCost")
+    @uncoded_activities     = root_activities.reject{ |a| a.classified }
+    @uncoded_other_costs    = other_cost_activities.reject{ |a| a.classified }
+    @warnings               = []
+    @warnings               << :other_costs_missing if other_cost_activities.empty?
+    @warnings               << :activities_missing  if root_activities.empty?
   end
 
   def show

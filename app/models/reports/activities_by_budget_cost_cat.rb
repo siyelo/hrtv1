@@ -1,6 +1,7 @@
 require 'fastercsv'
 
 class Reports::ActivitiesByBudgetCostCat
+  include Reports::Helpers
 
   def initialize
 
@@ -41,16 +42,6 @@ class Reports::ActivitiesByBudgetCostCat
   end
 
   protected
-
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
 
   def build_header(beneficiaries, codes)
     #print header

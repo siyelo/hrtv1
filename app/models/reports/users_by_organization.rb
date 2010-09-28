@@ -1,6 +1,7 @@
 require 'fastercsv'
 
 class Reports::UsersByOrganization
+  include Reports::Helpers
 
   def initialize(user = nil)
     @csv_string = FasterCSV.generate do |csv|
@@ -24,16 +25,6 @@ class Reports::UsersByOrganization
   end
 
   protected
-
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
 
   def build_header
     [ "user.id", "user.username", "user.email", "user.full_name", "organization.name", "organization.type" ]

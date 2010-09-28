@@ -23,7 +23,7 @@ class ProjectsController < ActiveScaffoldController
     list.sorting = { :organization => 'DESC', :name => 'DESC' }
     config.columns[:organization].sort_by :method => "organization_name"
 
-    config.nested.add_link("Activities", [:activities])
+    #config.nested.add_link("Activities", [:activities])
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
     config.create.columns                         = @@create_columns

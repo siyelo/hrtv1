@@ -1,5 +1,5 @@
 %h2 Submit
-%p This page will contain a full summary of the data you have entered so you can submit it for review. In the meantime, you can review your data manually using the tabs located on top of the page.
+%p.borderful This page will contain a full summary of the data you have entered so you can submit it for review. In the meantime, you can review your data manually using the tabs located on top of the page.
 
 = render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
 = render 'uncoded_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
@@ -8,7 +8,7 @@
   #flashes
     = display_warnings(@warnings)
 
-%p
+%p.borderful
   - if @uncoded_activities.empty? && @uncoded_other_costs.empty?
     = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next right"
   - else

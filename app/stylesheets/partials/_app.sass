@@ -229,6 +229,39 @@ body.app
         
     #c-help
       margin: 20px 0
+      
+    /* default layout for a simple table */
+    .simple_table
+    
+      h3
+        margin-bottom: 5px
+
+      table
+        background: #eee
+        color: !mid-blue
+        font-size: 0.8em
+        margin: 0 0 20px 10px
+        width: 99%
+
+        a
+          font-size: 1em
+
+        th, td
+          border-right: 1px solid white
+          padding: 7px
+
+        tbody 
+          th, td
+            border-bottom: 1px solid white
+
+          tr:hover
+            background: #f9f9f9
+          
+        thead
+          background: !mid-blue
+          border-bottom: 1px solid white
+          color: white
+    /* end */
 
     #sidebar
       float: right
@@ -308,39 +341,10 @@ body.app
       margin-left: 10px
       
 /* adding styles for the Submit page */
-body#static_page_submit #content .wrapper #main
+body#data_responses_review #content .wrapper #main
 
-  h3
-    padding-bottom: 5px
-    padding-left: 0
+  
 
-  p
-    border: 1px solid !lightest-blue
-    color: !mid-blue
-    margin-bottom: 20px
 
-  table
-    background: #eee
-    color: !mid-blue
-    font-size: 0.8em
-    margin: 0 0 20px 0
-    width: 100%
+
     
-    a
-      font-size: 1em
-    
-    th, td
-      border-right: 1px solid white
-      padding: 7px
-      
-    tbody 
-      th, td
-        border-bottom: 1px solid white
-        
-      tr:hover
-        background: #f9f9f9
-
-    thead
-      background: !mid-blue
-      border-bottom: 1px solid white
-      color: white

@@ -10,6 +10,6 @@
 
 %p
   - if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-    = link_to "Submit", data_response_submit_path(current_user.current_data_response.id), :class => "next right"
+    = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next right"
   - else
     You cannot submit unless you have coded your activities and other costs.

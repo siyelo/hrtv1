@@ -87,6 +87,10 @@ class Activity < ActiveRecord::Base
     end.flatten.uniq
   end
 
+  def spend
+    read_attribute(:spend) ? read_attribute(:spend) : total_quarterly_spending_w_shift
+  end
+
   def classified
     #TODO override in othercosts and subactivities
     budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
@@ -154,5 +158,22 @@ class Activity < ActiveRecord::Base
   def set_classified_amount_cache(type)
     amount = type.codings_sum(type.available_codes(self), self, max_codings(type))
     self.send("#{type}_amount=",  amount)
+  end
+
+  def total_quarterly_spending_w_shift
+    if data_response
+      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7
+        total = 0
+        [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
+          total += self.send(s) if self.send(s)
+        end
+
+        return total if total != 0
+      else
+        nil #"Fiscal Year shift not yet defined for this data responses' start date"
+      end
+    else
+      nil
+    end
   end
 end

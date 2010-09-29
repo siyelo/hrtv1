@@ -5,7 +5,7 @@ class ClassificationsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :organization, :description, :budget?, :budget_by_district?, :budget_by_cost_category?,
-                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved]
+                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved, :use_budget_codings_for_spend]
 
   active_scaffold :activity do |config|
     config.actions        = [ :list ]
@@ -21,21 +21,22 @@ class ClassificationsController < ActiveScaffoldController
       :popup      => true,
       :label      => "Classify")
 
-    config.columns[:description].inplace_edit         = true
-    config.columns[:description].label                = "Activity Description"
-    config.columns[:approved].label                   = "Approved?"
-    config.columns[:budget?].list_ui                  = :checkbox
-    config.columns[:budget_by_cost_category?].list_ui = :checkbox
-    config.columns[:budget_by_district?].list_ui      = :checkbox
-    config.columns[:spend?].list_ui                   = :checkbox
-    config.columns[:spend_by_cost_category?].list_ui  = :checkbox
-    config.columns[:spend_by_district?].list_ui       = :checkbox
-    config.columns[:budget?].label                    = "Budget by Coding"
-    config.columns[:budget_by_district?].label        = "Budget by District"
-    config.columns[:budget_by_cost_category?].label   = "Budget by Cost Category"
-    config.columns[:spend?].label                     = "Expenditure by Coding"
-    config.columns[:spend_by_district?].label         = "Expenditure by District"
-    config.columns[:spend_by_cost_category?].label    = "Expenditure by Cost Category"
+    config.columns[:description].inplace_edit           = true
+    config.columns[:description].label                  = "Activity Description"
+    config.columns[:approved].label                     = "Approved?"
+    config.columns[:use_budget_codings_for_spend].label = "Use budget codings for Expenditure?"
+    config.columns[:budget?].list_ui                    = :checkbox
+    config.columns[:budget_by_cost_category?].list_ui   = :checkbox
+    config.columns[:budget_by_district?].list_ui        = :checkbox
+    config.columns[:spend?].list_ui                     = :checkbox
+    config.columns[:spend_by_cost_category?].list_ui    = :checkbox
+    config.columns[:spend_by_district?].list_ui         = :checkbox
+    config.columns[:budget?].label                      = "Budget by Coding"
+    config.columns[:budget_by_district?].label          = "Budget by District"
+    config.columns[:budget_by_cost_category?].label     = "Budget by Cost Category"
+    config.columns[:spend?].label                       = "Expenditure by Coding"
+    config.columns[:spend_by_district?].label           = "Expenditure by District"
+    config.columns[:spend_by_cost_category?].label      = "Expenditure by Cost Category"
 
   end
 

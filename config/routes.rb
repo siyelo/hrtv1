@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
 
 
   map.resources :activities,
-                :member => { :approve => :post },
+                :member => { :approve => :put, :use_budget_codings_for_spend => :put },
                 :active_scaffold => true          do |activity|
 
     map.resources :classifications, :active_scaffold => true

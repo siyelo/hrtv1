@@ -1,13 +1,3 @@
-- content_for :head do
-  :javascript
-    jQuery(document).ready(function(){
-      jQuery('#approve_activity').bind('click', function() {
-        jQuery.post( "/activities/#{@activity.id}/approve",
-                     { checked : jQuery('#approve_activity').is(':checked') }
-                   );
-      })
-    });
-
 %table#activity_description
   %tr
     %td.title Organization:
@@ -26,3 +16,7 @@
       %td.title
         = label_tag "Approved?"
         = check_box_tag 'approve_activity', true, @activity.approved
+  %tr
+    %td.title
+      = label_tag "Use budget codings for Expenditure?"
+      = check_box_tag 'use_budget_codings_for_spend', true, @activity.use_budget_codings_for_spend

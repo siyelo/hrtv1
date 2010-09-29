@@ -45,7 +45,7 @@ class Activity < ActiveRecord::Base
                   :text_for_beneficiaries, :beneficiaries,
                   :text_for_targets, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :approved
+                  :budget, :approved, :use_budget_codings_for_spend
 
   # Associations
   has_and_belongs_to_many :projects
@@ -110,15 +110,27 @@ class Activity < ActiveRecord::Base
   end
 
   def spend?
-    CodingSpend.classified(self)
+    if self.use_budget_codings_for_spend?
+      budget?
+    else
+      CodingSpend.classified(self)
+    end
   end
 
   def spend_by_district?
-    CodingSpendDistrict.classified(self)
+    if self.use_budget_codings_for_spend?
+      budget_by_district?
+    else
+      CodingSpendDistrict.classified(self)
+    end
   end
 
   def spend_by_cost_category?
-    CodingSpendCostCategorization.classified(self)
+    if self.use_budget_codings_for_spend?
+      budget_by_cost_category?
+    else
+      CodingSpendCostCategorization.classified(self)
+    end
   end
 
   # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb

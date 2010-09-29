@@ -65,6 +65,18 @@ var code_assignments_show = {
 
     // remove flash notice
     jQuery("#notice").fadeOut(3000);
+
+    jQuery("#use_budget_codings_for_spend").click(function () {
+      jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
+
+    jQuery("#approve_activity").click(function () {
+      jQuery.post( "/activities/" + _activity_id + "/approve",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
   }
 };
 

@@ -111,4 +111,11 @@ class ActivitiesController < ActiveScaffoldController
     render :nothing => true
   end
 
+  def use_budget_codings_for_spend
+    @activity = Activity.available_to(current_user).find(params[:id])
+    authorize! :update, @activity
+    @activity.update_attributes({ :use_budget_codings_for_spend => params[:checked] })
+    render :nothing => true
+  end
+
 end

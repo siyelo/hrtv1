@@ -7,8 +7,7 @@
 #  beneficiary            :string(255)
 #  target                 :string(255)
 #  created_at             :datetime
-#  updated_at             :datetime
-#  provider_id            :integer
+#  updated_at             :datetime #  provider_id            :integer
 #  other_cost_type_id     :integer
 #  description            :text
 #  type                   :string(255)
@@ -131,6 +130,14 @@ class Activity < ActiveRecord::Base
     else
       CodingSpendCostCategorization.classified(self)
     end
+  end
+
+  def budget_classified?
+    budget? && budget_by_district? && budget_by_cost_category?
+  end
+
+  def spend_classified?
+    spend? && spend_by_district? && spend_by_cost_category?
   end
 
   # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb

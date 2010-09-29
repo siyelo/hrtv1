@@ -39,7 +39,9 @@ class DataResponsesController < ApplicationController
     root_activities         = @data_response.activities.roots
     other_cost_activities   = @data_response.activities.with_type("OtherCost")
     @uncoded_activities     = root_activities.reject{ |a| a.classified }
+    @budget_activities      = root_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
     @uncoded_other_costs    = other_cost_activities.reject{ |a| a.classified }
+    @budget_other_costs     = other_cost_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
     @warnings               = []
     @warnings               << :other_costs_missing if other_cost_activities.empty?
     @warnings               << :activities_missing  if root_activities.empty?

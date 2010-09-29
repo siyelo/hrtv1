@@ -80,6 +80,17 @@ var code_assignments_show = {
   }
 };
 
+var data_responses_review = {
+  run: function () {
+    jQuery(".use_budget_codings_for_spend").click(function () {
+      activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+      jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
+  }
+}
+
 jQuery(function () {
   var id = jQuery('body').attr("id");
   if (id) {

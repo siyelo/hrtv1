@@ -1,17 +1,19 @@
 class DataResponsesController < ApplicationController
-  before_filter :load_help
   before_filter :require_user
   before_filter :require_admin, :only => [:index]
 
   def index
+    @model_help = ModelHelp.find_by_model_name 'DataResponseIndex'
     @data_responses = DataResponse.submitted.all
   end
 
   def show
+    @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
   end
 
   def start
+    @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
     current_user.current_data_response = @data_response
     current_user.save
@@ -19,6 +21,7 @@ class DataResponsesController < ApplicationController
   end
 
   def update
+    @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
     @data_response.update_attributes params[:data_response]
     if @data_response.save
@@ -31,6 +34,7 @@ class DataResponsesController < ApplicationController
   end
 
   def review
+    @model_help = ModelHelp.find_by_model_name 'DataResponseReview'
     @data_response = DataResponse.available_to(current_user).find params[:id]
     root_activities         = @data_response.activities.roots
     other_cost_activities   = @data_response.activities.with_type("OtherCost")
@@ -42,17 +46,12 @@ class DataResponsesController < ApplicationController
   end
 
   def submit
+    @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
     @data_response.submitted = true
     @data_response.submitted_at = Time.now
     @data_response.save
     flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
     redirect_to data_response_url(@data_response)
-  end
-
-  protected
-
-  def load_help
-    @model_help = ModelHelp.find_by_model_name 'DataResponse'
   end
 end

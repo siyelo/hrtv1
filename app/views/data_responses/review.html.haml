@@ -1,9 +1,6 @@
 - content_for :sub_nav do
   = render :partial => 'layouts/sub_nav'
 
-%h2 Submit
-%p.borderful This page will contain a full summary of the data you have entered so you can submit it for review. In the meantime, you can review your data manually using the tabs located on top of the page.
-
 = render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
 = render 'uncoded_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
 

@@ -1,8 +1,4 @@
-class CodingBudgetCostCategorization < CodeAssignment
-
-  def self.classified(activity)
-    activity.budget == activity.send("#{self}_amount")
-  end
+class CodingBudgetCostCategorization < BudgetCodeAssignment
 
   def self.available_codes(activity = nil)
     CostCategory.roots

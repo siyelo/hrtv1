@@ -1,10 +1,10 @@
-class CodingSpendDistrict < CodeAssignment
+class CodingSpendDistrict < SpendCodeAssignment
 
   def self.classified(activity)
     if available_codes(activity).empty?
       true
     else
-      activity.spend == activity.send("#{self}_amount")
+      super(activity)
     end
   end
 

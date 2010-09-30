@@ -1,8 +1,4 @@
-class CodingBudget < CodeAssignment
-
-  def self.classified(activity)
-    activity.budget == activity.send("#{self}_amount")
-  end
+class CodingBudget < BudgetCodeAssignment
 
   def self.available_codes(activity = nil)
     if activity.class.to_s == "OtherCost"

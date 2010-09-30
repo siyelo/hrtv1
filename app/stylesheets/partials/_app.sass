@@ -184,6 +184,12 @@ body.app
           background= !mid-blue
           color: white
           text-decoration: none
+        &.big
+          clear: both
+          float: none
+          margin: 10px 0 10px 10px
+          padding: 13px 20px 10px 20px
+          overflow: hidden
 
       .next
         margin-top: -5px
@@ -209,7 +215,10 @@ body.app
 
     .comments
       border-top: 1px dashed #ddd
-      margin-top: 10px
+      display: block
+      margin-top: 20px
+      width: 100%
+      +clearfix
       
     a.comments
       border: none
@@ -232,6 +241,7 @@ body.app
       
     /* default layout for a simple table */
     .simple_table
+      +clearfix
     
       h3
         margin-bottom: 5px
@@ -339,12 +349,3 @@ body.app
     ul li
       list-style-type: disc
       margin-left: 10px
-      
-/* adding styles for the Submit page */
-body#data_responses_review #content .wrapper #main
-
-  
-
-
-
-    

@@ -7,13 +7,15 @@
 = render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
 
 - unless @warnings.empty?
-  #flashes
-    = display_warnings(@warnings)
+  #flashes.wide
+    #notice
+      = display_warnings(@warnings)
 
-%p.borderful
-  - if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-    = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next right"
-  - else
-    You cannot submit unless you have coded your activities and other costs.
+
+//- if @uncoded_activities.empty? && @uncoded_other_costs.empty?
+= link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+//- else
+//  %p.borderful
+//    You cannot submit unless you have coded your activities and other costs.
 
 = render 'shared/data_entry_help'

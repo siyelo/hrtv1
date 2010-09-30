@@ -11,11 +11,10 @@
     #notice
       = display_warnings(@warnings)
 
-
-//- if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-= link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
-//- else
-//  %p.borderful
-//    You cannot submit unless you have coded your activities and other costs.
+- if @uncoded_activities.empty? && @uncoded_other_costs.empty?
+  = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+- else
+  %p.borderful
+    You cannot submit unless you have coded your activities and other costs.
 
 = render 'shared/data_entry_help'

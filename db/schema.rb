@@ -43,13 +43,13 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
     t.decimal   "budget_percentage"
     t.decimal   "spend_percentage"
     t.boolean   "approved"
-    t.boolean   "use_budget_codings_for_spend",          :default => false
     t.decimal   "CodingBudget_amount",                   :default => 0.0
     t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
     t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
     t.decimal   "CodingSpend_amount",                    :default => 0.0
     t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
     t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
+    t.boolean   "use_budget_codings_for_spend",          :default => false
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|

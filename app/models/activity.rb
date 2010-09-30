@@ -109,7 +109,7 @@ class Activity < ActiveRecord::Base
   end
 
   def spend?
-    if self.use_budget_codings_for_spend?
+    if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
       budget?
     else
       CodingSpend.classified(self)

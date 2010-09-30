@@ -10,7 +10,7 @@
   :javascript
     $('sidebar').show()
   %h2 Help
-  %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
+  %p.title= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
   #terms
     :javascript
       $('terms').hide();

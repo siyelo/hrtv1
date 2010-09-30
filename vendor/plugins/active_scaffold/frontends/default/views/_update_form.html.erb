@@ -36,7 +36,7 @@ end
 
   <div id="<%= element_messages_id(:action => :update) %>" class="messages-container">
 <% if request.xhr? -%>
-    <%= error_messages_for :record, :object_name => @record.class.human_name.downcase %>
+    <%= error_messages_for :record, :object_name => @record.class.human_name.downcase, :header_message  => nil, :message => "Oops, we couldn't save your changes." %>
 <% else -%>
     <%= render :partial => 'form_messages' %>
 <% end -%>

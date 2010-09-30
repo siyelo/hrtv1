@@ -2,7 +2,7 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
-var code_assignments_budget = {
+var code_assignments_show = {
   run: function () {
 
     /*
@@ -31,26 +31,26 @@ var code_assignments_budget = {
     addCollabsibleButtons('tab1');
 
     // load budget districts
-    jQuery.get('/activities/' + _activity_id + '/coding/budget_districts', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingBudgetDistrict&tab=tab2', function (response) {
       appendTab('tab2', response);
     });
 
     // load budget cost categorization
-    jQuery.get('/activities/' + _activity_id + '/coding/budget_cost_categories', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingBudgetCostCategorization&tab=tab3', function (response) {
       appendTab('tab3', response);
     });
 
     // load expenditure
-    jQuery.get('/activities/' + _activity_id + '/coding/expenditure', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpend&tab=tab4', function (response) {
       appendTab('tab4', response);
     });
 
     // load expenditure districts
-    jQuery.get('/activities/' + _activity_id + '/coding/expenditure_districts', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendDistrict&tab=tab5', function (response) {
       appendTab('tab5', response);
     });
     // load expenditure cost categories
-    jQuery.get('/activities/' + _activity_id + '/coding/expenditure_cost_categories', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendCostCategorization&tab=tab6', function (response) {
       appendTab('tab6', response);
     });
 
@@ -65,8 +65,31 @@ var code_assignments_budget = {
 
     // remove flash notice
     jQuery("#notice").fadeOut(3000);
+
+    jQuery("#use_budget_codings_for_spend").click(function () {
+      jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
+
+    jQuery("#approve_activity").click(function () {
+      jQuery.post( "/activities/" + _activity_id + "/approve",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
   }
 };
+
+var data_responses_review = {
+  run: function () {
+    jQuery(".use_budget_codings_for_spend").click(function () {
+      activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+      jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend",
+       { checked: jQuery(this).is(':checked'), "_method": "put" }
+      );
+    })
+  }
+}
 
 jQuery(function () {
   var id = jQuery('body').attr("id");
@@ -88,5 +111,16 @@ jQuery(function () {
     jQuery('#desc').toggle();
     jQuery('#page_tips_nav').toggle();
     jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+  });
+
+
+  // Date picker
+  jQuery('.date_picker').live('click', function () {
+    jQuery(this).datepicker('destroy').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: '2000:2025',
+      dateFormat: 'yy-mm-dd'
+    }).focus();
   });
 })

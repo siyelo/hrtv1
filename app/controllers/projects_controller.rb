@@ -1,11 +1,12 @@
 class ProjectsController < ActiveScaffoldController
+
   authorize_resource
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [:organization, :name, :description,  :budget, :spend]
-  @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
-  @@upload_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
+  @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
+  @@create_columns  = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
+  @@upload_columns  = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
   def self.create_columns
     @@create_columns
   end
@@ -19,9 +20,10 @@ class ProjectsController < ActiveScaffoldController
 
   active_scaffold :projects do |config|
     config.columns =  @@shown_columns
-    list.sorting = {:organization => 'DESC', :name => 'DESC'}
+    list.sorting = { :organization => 'DESC', :name => 'DESC' }
+    config.columns[:organization].sort_by :method => "organization_name"
 
-    config.nested.add_link("Activities", [:activities])
+    #config.nested.add_link("Activities", [:activities])
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
     config.create.columns                         = @@create_columns
@@ -41,7 +43,7 @@ class ProjectsController < ActiveScaffoldController
     end
     config.columns[:entire_budget].label = "Total Project Budget"
     config.columns[:budget].label        = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label         = "Total Spent GOR FY 09-10"
+    config.columns[:spend].label         = "Total Spend GOR FY 09-10"
 
     [:spend, :budget, :entire_budget].each do |c|
       quarterly_amount_field_options config.columns[c]
@@ -53,11 +55,11 @@ class ProjectsController < ActiveScaffoldController
       c = c.to_sym
       config.columns[c].inplace_edit = true
       quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
+      config.columns[c].label = "Spend in Your FY 09-10 "+quarter.capitalize
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
+    config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
   end
 
 

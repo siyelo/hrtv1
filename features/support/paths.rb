@@ -23,13 +23,16 @@ module NavigationHelpers
     when /the activities page/
       activities_path
 
+    when /the classifications page/
+      classifications_path
+
     when /the login page/
       login_path
 
     when /the funding sources page/
       funding_sources_data_entry_path
 
-    when /the providers page/
+    when /the implementers page/
       providers_data_entry_path
 
     when /the other costs page/
@@ -37,14 +40,18 @@ module NavigationHelpers
 
     when /the budget classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      budget_activity_coding_path(activity)
+      activity_coding_path(activity)
 
     when /the activity classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      budget_activity_coding_path(activity)
+      activity_coding_path(activity)
 
     when /the user guide page/
       static_page_path(:user_guide)
+
+    when /the data response page for "(.+)"/
+      req = DataRequest.find_by_title($1)
+      start_data_response_path( DataResponse.find_by_data_request_id req.id)
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

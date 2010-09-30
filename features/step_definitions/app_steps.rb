@@ -19,6 +19,14 @@ Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing re
                             :data_response => @data_response)
 end
 
+Given /^an implementer "([^"]*)" for project "([^"]*)"  and an existing response$/ do |org, project|
+  @project ||= Project.find_by_name(project)
+  organization = Organization.find_by_name(org)
+  @implementer = Factory.create( :implementer, 
+                                :project => @project,  
+                                :organization_id_from => organization.id )
+end
+
 Given /^an activity with name "([^\"]*)"$/ do |name|
   @activity = Factory.create(:activity, :name => name)
 end
@@ -33,16 +41,18 @@ end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:project, hash)
+    org  = Organization.find_by_name(hash.delete("organization"))
+    Factory.create(:project,  { :organization_id => org.id
+    }.merge(hash) )
   end
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-  @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-  @user = Factory.create(:activity_manager, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory.create(:activity_manager, :username => name, :email => email, :password => password, :password_confirmation => password)
 end
 
 Given /^the following reporters$/ do |table|
@@ -50,8 +60,8 @@ Given /^the following reporters$/ do |table|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
     Factory.create(:reporter, { :username => username,
-                                :organization_id => org.id
-                                }.merge(hash) )
+                   :organization_id => org.id
+    }.merge(hash) )
   end
 end
 
@@ -66,8 +76,8 @@ Given /^the following activity managers$/ do |table|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
     Factory.create(:activity_manager, { :username => username,
-                                        :organization_id => org.id
-                                      }.merge(hash) )
+                   :organization_id => org.id
+    }.merge(hash) )
   end
 end
 
@@ -115,15 +125,15 @@ end
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory.create(:organization, :name => org_name)
   @user = Factory.create(:reporter, :username => name, :email => 'frank@f.com', 
-                          :password => 'password', :password_confirmation => 'password',
-                          :organization => @organization)
+                         :password => 'password', :password_confirmation => 'password',
+                         :organization => @organization)
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory.create(:organization, :name => org_name)
   @user = Factory.create(:activity_manager, :username => name, :email => 'frank@f.com', 
-                          :password => 'password', :password_confirmation => 'password',
-                          :organization => @organization)
+                         :password => 'password', :password_confirmation => 'password',
+                         :organization => @organization)
 end
 
 Given /^the following funding flows$/ do |table|
@@ -133,9 +143,9 @@ Given /^the following funding flows$/ do |table|
     from_org = Organization.find_by_name(hash.delete("from"))
 
     Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                                      :project_id => project.id, 
-                                      :organization_id_from => from_org.id
-                                      }.merge(hash) )
+                   :project_id => project.id, 
+                   :organization_id_from => from_org.id
+    }.merge(hash) )
   end
 end
 
@@ -156,16 +166,16 @@ Given /^the following funding flows$/ do |table|
     from_org = Organization.find_by_name(hash.delete("from"))
 
     Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                                      :project_id => project.id, 
-                                      :organization_id_from => from_org.id
-                                      }.merge(hash) )
+                   :project_id => project.id, 
+                   :organization_id_from => from_org.id
+    }.merge(hash) )
   end
 end
 
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#header_app_app"
-    And I should see "Sign in" within "div#header_app_app"
+    Then I should see "Have an account?" within "div#header_app"
+    And I should see "Sign in" within "div#header_app"
   }
 end
 
@@ -222,19 +232,18 @@ end
 
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-   steps %Q{ When I fill in "activity_budget_codes_updates_1_percentage" with "#{amount}"}
+   steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
 end
 
 Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_budget_codes_updates_1_percentage" field should equal "#{amount}"}
+  steps %Q{ Then the "activity_updates_1_percentage" field should equal "#{amount}"}
 end
 
 
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|  
-  @data_response = DataResponse.new :data_request => DataRequest.find_by_title(request),
-                                    :responding_organization => Organization.find_by_name(org)
-  @data_response.save!
+  @data_response = Factory.create(:data_response, :data_request => DataRequest.find_by_title(request),
+                                  :responding_organization => Organization.find_by_name(org))
 end
 
 # refactor meeeee
@@ -251,4 +260,18 @@ end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
+end
+
+Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+  steps %Q{ Given the following organizations 
+              | name   |
+              | UNDP   |
+            Given the following reporters 
+               | name         | organization |
+               | undp_user    | UNDP         |
+            Given a data request with title "Req1" from "UNAIDS"
+            Given a data response to "Req1" by "UNDP"
+            Given a refactor_me_please current_data_response for user "undp_user"
+            Given I am signed in as "undp_user"
+          }
 end

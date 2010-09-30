@@ -1,4 +1,4 @@
 -# this eventually will be a Data Request list extract 
 -# for now only one Data Request, this loop will only run once
 - current_user.data_responses.each do |response|
-  = link_to response.data_request.title, data_response_start_url(response.id)
+  = link_to response.data_request.title, start_data_response_path(response), :method => :put

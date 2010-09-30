@@ -35,7 +35,7 @@ class SubActivitiesController < ActiveScaffoldController
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].label               = "Implementer"
     config.columns[:budget].label = "Budget GOR FY 10-11"
-    config.columns[:spend].label = "Spent GOR FY 09-10"
+    config.columns[:spend].label = "Spend GOR FY 09-10"
     config.columns[:text_for_provider].form_ui             = :textarea
     config.columns[:text_for_provider].label               = "Text for Implementer"
     quarterly_amount_field_options config.columns[:text_for_provider]
@@ -59,16 +59,6 @@ class SubActivitiesController < ActiveScaffoldController
         funds_group.add :spend, :spend_percentage
       end
     end
-    #    %w[q1 q2 q3 q4].each do |quarter|
-    #      c = "spend_"+quarter
-    #      c = c.to_sym
-    #      config.columns[c].inplace_edit = true
-    #      quarterly_amount_field_options config.columns[c]
-    #      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
-    #    end
-    #    config.columns[:spend_q4_prev].inplace_edit = true
-    #    quarterly_amount_field_options config.columns[:spend_q4_prev]
-    #    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
   end
 
   def create_from_file_form
@@ -77,7 +67,7 @@ class SubActivitiesController < ActiveScaffoldController
     session[:create_from_file_sub_activity_parent_id] = nil
     session[:create_from_file_sub_activity_parent_id] ||= session["as:#{params["eid"]}"][:constraints][:activity]
     logger.debug session[:create_from_file_sub_activity_parent_id]
-    super "sub-activities" 
+    super "sub-activities"
   end
 
   def create_from_file
@@ -90,7 +80,7 @@ class SubActivitiesController < ActiveScaffoldController
       super @@columns_for_file_upload
     end
   end
-  
+
   def index
     redirect_to "/activities"
   end

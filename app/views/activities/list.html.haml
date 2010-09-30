@@ -1,0 +1,18 @@
+- title "Activities"
+- record_type = Activity
+- human_plural_name_for_entity ||= "activities"
+
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
+- if params[:action] == "table" #makes render component not show xtra stuff when its nested
+  = render :super
+
+- else  # otherwise, we are on the index action (technically, not rendering a nested scaffold)
+  = render 'shared/top_data_entry', :record_type => record_type, :human_plural_name_for_entity => human_plural_name_for_entity
+
+  = render :super
+
+  %p= link_to "Next Step", classifications_path, :class => "next right"
+
+  = render 'shared/data_entry_help', :record_type => record_type

@@ -31,6 +31,7 @@ class Code < ActiveRecord::Base
 
   named_scope :activity_codes, :conditions => ["type in (?)", Activity::VALID_ROOT_TYPES], :order => quoted_left_column_name
   named_scope :other_cost_codes, :conditions => ["type in (?)", OtherCost::VALID_ROOT_TYPES], :order => quoted_left_column_name
+  named_scope :valid_activity_codes, :conditions => ["type in (?)", Activity::VALID_ROOT_TYPES]
 
   def name
     to_s

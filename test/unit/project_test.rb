@@ -12,7 +12,7 @@ class ProjectTest < ActiveSupport::TestCase
     u2=User.new(:organization => o2)
     u2.save(false)
     set_data_response_for_user u2, DataRequest.first
-    p=Project.new(:name =>"p", :data_response => @user.current_data_response)
+    p=Project.new(:name =>"p", :data_response => @user.current_data_response, :start_date => Date.yesterday, :end_date => Date.today)
     p.save
 #    puts p.inspect
     assert Project.available_to(@user).first == p
@@ -36,7 +36,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
   test "creates workflow records after save" do
    # puts "@user's data response:"+@user.current_data_response.inspect
-    p=Project.create!(:name => "proj1", :data_response => @user.current_data_response)
+    p=Project.create!(:name => "proj1", :data_response => @user.current_data_response, :start_date => Date.yesterday, :end_date => Date.today)
     assert p.funding_flows.size == 2
     to_me = nil
     from_me_to_me = nil
@@ -62,7 +62,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "has many funding flows nullify on delete" do
-    p=Project.create!(:name => "proj1")
+    p=Project.create!(:name => "proj1", :start_date => Date.yesterday, :end_date => Date.today)
     c=p.funding_flows.create
     p.destroy
     c=FundingFlow.find(c.id)
@@ -70,13 +70,13 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test "has comments" do
-    p=Project.create!(:name => "proj1", :budget => 10.0)
+    p=Project.create!(:name => "proj1", :budget => 10.0, :start_date => Date.yesterday, :end_date => Date.today)
     c=p.comments.create(:title => "a comment.", :comment => "This is a comment.")
     assert p.comments.size == 1
     assert Comment.count == 1
   end
   test "has locations" do
-    p=Project.create!(:name => "proj1", :budget => 10.0)
+    p=Project.create!(:name => "proj1", :budget => 10.0, :start_date => Date.yesterday, :end_date => Date.today)
     c=p.locations.create( :name => "name" )
     assert p.locations.size == 1
     assert Location.count == 1

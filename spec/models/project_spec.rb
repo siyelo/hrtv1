@@ -14,11 +14,14 @@ describe Project do
       it { should allow_value(123.45).for(:budget) }
       it { should allow_value(123.45).for(:spend) }
       it { should allow_value(123.45).for(:entire_budget) }
-      # these dont work since the setter methods automatically hose 
-      # non-decimals
-      #it { should_not allow_value("blah").for(:budget) }
-      #it { should_not allow_value("blah").for(:spend) }
-      #it { should_not allow_value("blah").for(:entire_budget) }
+      it { should allow_value('2010-12-01').for(:start_date) }
+      it { should allow_value('2010-12-01').for(:end_date) }
+      it { should_not allow_value('').for(:start_date) }
+      it { should_not allow_value('').for(:end_date) }
+      it { should_not allow_value('2010-13-01').for(:start_date) }
+      it { should_not allow_value('2010-12-41').for(:start_date) }
+      it { should_not allow_value('2010-13-01').for(:end_date) }
+      it { should_not allow_value('2010-12-41').for(:end_date) }
     end
     
     describe "assigning funding flows" do
@@ -81,4 +84,59 @@ describe Project do
       end
     end
   end
+  
+  describe "multi-field validations" do
+    it "accepts start date < end date" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 01),
+                    :end_date =>   DateTime.new(2010, 01, 02) )
+      dr.should be_valid
+    end
+
+    it "does not accept start date > end date" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 02),
+                    :end_date =>   DateTime.new(2010, 01, 01) )
+      dr.should_not be_valid
+    end
+
+    it "does not accept start date = end date" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 01),
+                    :end_date =>   DateTime.new(2010, 01, 01) )
+      dr.should_not be_valid
+    end
+    
+    it "accepts Total Budget >= Total Budget GOR" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 01),
+                    :end_date =>   DateTime.new(2010, 01, 02),
+                    :entire_budget => 900,
+                    :budget =>        800
+                    )
+      dr.should be_valid
+    end
+    
+    it "accepts Total Budget = Total Budget GOR" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 01),
+                    :end_date =>   DateTime.new(2010, 01, 02),
+                    :entire_budget => 900,
+                    :budget =>        900
+                    )
+      dr.should be_valid
+    end
+    
+    it "does not accept Total Budget < Total Budget GOR" do
+      dr = Factory.build(:project, 
+                    :start_date => DateTime.new(2010, 01, 01),
+                    :end_date =>   DateTime.new(2010, 01, 02),
+                    :entire_budget => 900,
+                    :budget =>        1000
+                    )
+      dr.should_not be_valid
+    end
+    
+  end
+  
 end

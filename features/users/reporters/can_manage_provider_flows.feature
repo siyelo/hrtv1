@@ -30,3 +30,24 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
   Then I should see "TB Treatment Project"
   And I should see "UNDP"
   And I should see "1000.00"
+  
+Scenario: Creates an implementer funding flow
+  Given the following organizations 
+    | name   |
+    | UNDP   |
+    | UNAIDS |
+    | WHO    |
+  Given the following reporters 
+     | name         | organization |
+     | undp_user    | UNDP         |
+     | un_aids_user | UNAIDS       |
+  Given a data request with title "Req1" from "UNAIDS"
+  Given a data response to "Req1" by "UNDP"
+  Given a project with name "TB Treatment Project with more than 20 chars" and an existing response
+  Given an implementer "WHO" for project "TB Treatment Project with more than 20 chars"  and an existing response
+  Given a refactor_me_please current_data_response for user "undp_user"
+  Given I am signed in as "undp_user"
+  When I follow "My Data"
+  And I follow "Implementers"
+  Then I should be on the implementers page
+  And I should see "TB Treatment Project with more than 20 chars"

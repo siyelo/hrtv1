@@ -31,5 +31,4 @@ module ApplicationHelper
     end
     path
   end
-
 end

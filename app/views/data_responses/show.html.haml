@@ -2,7 +2,8 @@
   = render :partial => 'layouts/sub_nav'
 
 = title ("Data Response Details")
-- form_for @data_response, :url => data_response_edit_url(@data_response.id), :method => :post do |form|
+= error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+- form_for @data_response do |form|
   %table
     %tbody
       %tr
@@ -14,12 +15,12 @@
         %td
           = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
         %td
-          = form.date_select :fiscal_year_start_date
+          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
       %tr
         %td
           = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
         %td
-          = form.date_select :fiscal_year_end_date
+          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
       %tr
         %td
           = ""

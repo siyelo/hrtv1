@@ -38,7 +38,7 @@ class OrganizationTest < ActiveSupport::TestCase
     o=Organization.new
     o.save
     assert o.out_flows == []
-    f=o.out_flows.create
+    f=o.out_flows.create()
     assert FundingFlow.count == 1
     o.save
     o=Organization.find(o.id)
@@ -59,7 +59,7 @@ class OrganizationTest < ActiveSupport::TestCase
   test "has many projects donated to" do
     o=Organization.create!
     assert o.donor_for == []
-    f=o.donor_for.create!(:name => "proj1")
+    f=o.donor_for.create!(:name => "proj1", :start_date => Date.yesterday, :end_date => Date.today)
     assert Project.count == 1
     o.save!
     o = Organization.find(o.id)
@@ -69,7 +69,7 @@ class OrganizationTest < ActiveSupport::TestCase
   test "has many projects it implements" do
     o = Organization.create!
     assert o.implementor_for == []
-    f = o.implementor_for.create!(:name => "proj1")
+    f = o.implementor_for.create!(:name => "proj1", :start_date => Date.yesterday, :end_date => Date.today)
     assert Project.count == 1
     o.save!
     o = Organization.find(o.id)

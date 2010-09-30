@@ -22,6 +22,10 @@ class StaticPageController < ApplicationController
     @unfulfilled_responses = DataResponse.unfulfilled
   end
 
+  def submit
+    redirect_to review_data_response_url(current_user.current_data_response)
+  end
+
   def show
     #TODO add authorization for the various dashboards
     render :action => params[:page]

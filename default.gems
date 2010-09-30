@@ -60,3 +60,4 @@ sys-uname -v0.8.4
 text-format -v1.0.0
 text-hyphen -v1.0.0
 trollop -v1.16.2
+validates_date_time -v1.0.0

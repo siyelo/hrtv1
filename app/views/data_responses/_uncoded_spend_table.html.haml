@@ -1,0 +1,25 @@
+.simple_table
+  %h3= "Uncoded #{type.capitalize}"
+  - if activities.empty?
+    %p= "All #{type} have been coded."
+  - else
+    %table
+      %thead
+        %tr
+          %th Name
+          %td Description
+          %td Expenditure by Coding
+          %td Expenditure by District
+          %td Expenditure by Cost Category
+          %td Use Budget codings for Expenditure
+          %td Manage
+      %tbody
+        - activities.each do |activity|
+          %tr
+            %th= activity.name
+            %th= activity.description
+            %th= check_box_tag "", "", activity.spend?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.spend_by_district?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.spend_by_cost_category?, {:disabled => "disabled"}
+            %th= check_box_tag "activity_#{activity.id}", true, activity.use_budget_codings_for_spend, {:class => "use_budget_codings_for_spend"}
+            %th= link_to 'Classify', activity_coding_path(activity), :target => "_blank"

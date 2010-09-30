@@ -43,7 +43,7 @@ class ActiveSupport::TestCase
     set_data_response_for_user(@user, data_request)
   end
   def set_data_response_for_user user, data_request
-    data_response=data_request.data_responses.create(:responding_organization => user.organization)
+    data_response=data_request.data_responses.create(:responding_organization => user.organization, :fiscal_year_start_date => Date.yesterday, :fiscal_year_end_date => Date.today, :currency => "USD")
     user.current_data_response=data_response
     user.save(false)
   end

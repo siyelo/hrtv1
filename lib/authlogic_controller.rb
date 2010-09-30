@@ -28,6 +28,15 @@ class AuthlogicController < ActionController::Base
     end
   end
 
+  def require_admin
+    unless current_user.role?(:admin)
+      store_location
+      flash[:notice] = "You must be admin to access that page"
+      redirect_to reporter_dashboard_url
+      return false
+    end
+  end
+
   def require_no_user
     if current_user
       flash[:error] = "You must be logged out to access requested page"

@@ -1,16 +1,17 @@
 require 'fastercsv'
 
 class Reports::ActivitiesByDistrictSubActivities
+  include Reports::Helpers
 
   def initialize
-    locations     = Location.find(:all, :select => 'short_display').map(&:short_display).sort
+    locations     = Location.find(:all, :select => 'id, short_display', :order => "short_display ASC")#.map(&:short_display).sort
     beneficiaries = Beneficiary.find(:all, :select => 'short_display').map(&:short_display).sort
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, locations)
 
       #print data
-      Activity.all.each do |a|
+      Activity.find(:all, :include => :code_assignments).each do |a|
         row = build_row(a, beneficiaries, locations)
 
         a.sub_activities.each do |sub_act|
@@ -40,16 +41,6 @@ class Reports::ActivitiesByDistrictSubActivities
 
   protected
 
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
-
   def build_header(beneficiaries, locations)
     #print header
     header = []
@@ -58,9 +49,7 @@ class Reports::ActivitiesByDistrictSubActivities
       header << "#{ben}"
     end
     header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start", "activity.end", "activity.provider"]
-    locations.each do |loc|
-      header << "#{loc}"
-    end
+    locations.each { |loc| header << "#{loc.short_display}" }
     header << [ "sub_activity.provider", "sub_activity.budget", "sub_activity.budget_percentage", "sub_activity.spend", "sub_activity.spend_percentage" ]
     header.flatten
   end
@@ -77,12 +66,19 @@ class Reports::ActivitiesByDistrictSubActivities
     end
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
-    locations.each do |loc|
-      row << (act_locs.include?(loc) ? "yes" : " " )
+
+    if ["District of Nyaruguru", "Masaka Health Center | Kicukiro"].include?(activity.provider.try(:name))
+      locations.each { |loc| row << '100%' }
+    else
+      locations.each do |loc|
+        if act_locs.include?(loc.short_display)
+          row << get_amount(activity, loc)
+        else
+          row << " "
+        end
+      end
     end
+
     row.flatten
-
   end
-
 end
-

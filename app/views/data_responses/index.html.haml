@@ -1,0 +1,19 @@
+.simple_table
+  %h3 Submitted data responses for review
+  - if @data_responses.empty?
+    %p All data responses have been reviewed.
+  - else
+    %table
+      %thead
+        %tr
+          %th Organization
+          %td Date/time submitted
+          %td Total budget
+          %td Total spend
+      %tbody
+        - @data_responses.each do |data_response|
+          %tr
+            %th= data_response.responding_organization
+            %th= data_response.submitted_at
+            %th
+            %th

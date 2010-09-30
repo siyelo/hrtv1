@@ -1,13 +1,20 @@
 require 'fastercsv'
 
 class Reports::UsersByOrganization
+  include Reports::Helpers
 
-  def initialize
+  def initialize(user = nil)
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
 
+      if user
+        users = User.find(:all, :conditions => ["users.organization_id = ?", user.organization_id])
+      else
+        users = User.find(:all, :include => :organization)
+      end
+
       #print data
-      User.find(:all, :include => :organization).each do |u|
+      users.each do |u|
         csv << build_row(u)
       end
     end
@@ -19,22 +26,12 @@ class Reports::UsersByOrganization
 
   protected
 
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
-
   def build_header
-    [ "user.username", "user.email", "user.full_name", "organization.name", "organization.type" ]
+    [ "user.id", "user.username", "user.email", "user.full_name", "organization.name", "organization.type" ]
   end
 
   def build_row(user)
-    [ "#{h user.username}", "#{h user.email}", "#{h user.full_name}", "#{h user.organization.try(:name)}", "#{user.organization.try(:type)}" ]
+    [ "#{user.id}", "#{h user.username}", "#{h user.email}", "#{h user.full_name}", "#{h user.organization.try(:name)}", "#{user.organization.try(:type)}" ]
   end
 end
 

@@ -165,7 +165,7 @@ class Activity < ActiveRecord::Base
   end
 
 #  def self.add_coding_accessor type, method_name
-#    def method_namevalid_providers
+#    def method_name
 #      self.code_assignments.with_type(type) 
 #    end
 #  end

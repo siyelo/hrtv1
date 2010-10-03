@@ -40,6 +40,9 @@ class Activity < ActiveRecord::Base
 
   # Attributes
   attr_accessible :projects, :locations, :text_for_provider,
+    def method_namevalid_providers
+      self.code_assignments.with_type(type) 
+    end
                   :provider, :name, :description,  :start, :end,
                   :text_for_beneficiaries, :beneficiaries,
                   :text_for_targets, :spend, :spend_q4_prev,
@@ -98,6 +101,10 @@ class Activity < ActiveRecord::Base
   # TODO: use the cached values to check if the activity is classified!
   def budget?
     CodingBudget.classified(self)
+  end
+
+  def budget_codes
+    code_assignments.with_type(CodingBudget) 
   end
 
   def budget_by_district?
@@ -159,6 +166,12 @@ class Activity < ActiveRecord::Base
       end
     end
   end
+
+#  def self.add_coding_accessor type, method_name
+#    def method_namevalid_providers
+#      self.code_assignments.with_type(type) 
+#    end
+#  end
 
   private
   def approved_activity_cannot_be_changed

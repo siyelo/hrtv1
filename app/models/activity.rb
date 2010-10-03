@@ -40,9 +40,6 @@ class Activity < ActiveRecord::Base
 
   # Attributes
   attr_accessible :projects, :locations, :text_for_provider,
-    def method_namevalid_providers
-      self.code_assignments.with_type(type) 
-    end
                   :provider, :name, :description,  :start, :end,
                   :text_for_beneficiaries, :beneficiaries,
                   :text_for_targets, :spend, :spend_q4_prev,

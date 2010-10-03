@@ -100,7 +100,7 @@ class Activity < ActiveRecord::Base
     CodingBudget.classified(self)
   end
 
-  def budget_codes
+  def budget_coding
     code_assignments.with_type(CodingBudget) 
   end
 
@@ -191,7 +191,7 @@ class Activity < ActiveRecord::Base
 
   def total_quarterly_spending_w_shift
     if data_response
-      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7
+      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7 # 7 is July
         total = 0
         [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
           total += self.send(s) if self.send(s)

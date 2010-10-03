@@ -108,8 +108,16 @@ class Activity < ActiveRecord::Base
     CodingBudgetDistrict.classified(self)
   end
 
+  def budget_district_coding
+    code_assignments.with_type(CodingBudgetDistrict.to_s) 
+  end
+
   def budget_by_cost_category?
     CodingBudgetCostCategorization.classified(self)
+  end
+  
+  def budget_cost_category_coding
+    code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
   end
 
   def spend?

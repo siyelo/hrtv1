@@ -41,4 +41,7 @@ class Code < ActiveRecord::Base
     short_display
   end
 
+  def to_s_with_external_id
+    to_s + " (" + (external_id.nil? ? 'n/a': external_id) + ")" 
+  end
 end

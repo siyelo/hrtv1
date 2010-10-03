@@ -101,7 +101,7 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_coding
-    code_assignments.with_type(CodingBudget) 
+    code_assignments.with_type(CodingBudget.to_s) 
   end
 
   def budget_by_district?
@@ -175,7 +175,7 @@ class Activity < ActiveRecord::Base
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
   end
 
-  def max_codings(type)
+  def max_for_coding(type)
     case type.to_s
     when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
       max = budget
@@ -185,7 +185,7 @@ class Activity < ActiveRecord::Base
   end
 
   def set_classified_amount_cache(type)
-    amount = type.codings_sum(type.available_codes(self), self, max_codings(type))
+    amount = type.codings_sum(type.available_codes(self), self, max_for_coding(type))
     self.send("#{type}_amount=",  amount)
   end
 

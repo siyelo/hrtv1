@@ -21,6 +21,11 @@ class CodeAssignment < ActiveRecord::Base
   # Attributes
   attr_accessible :activity, :code, :amount, :percentage
 
+  def amount
+    amount unless amount.nil?
+    cached_amount
+  end
+
   # Named scopes
   named_scope :with_code_ids, lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
   named_scope :with_activity, lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
@@ -62,18 +67,28 @@ class CodeAssignment < ActiveRecord::Base
   def self.codings_sum(available_codes, activity, max)
     total = 0
     max = 0 if max.nil?
+    my_cached_amount = 0
 
     available_codes.each do |ac|
       ca = self.with_activity(activity).with_code_id(ac.id).first
-      if ca && ca.amount.present? && ca.amount > 0
-        total += ca.amount
-      elsif ca && ca.percentage.present? && ca.percentage > 0
-        total += ca.percentage * max / 100
+      if ca
+        if ca.amount.present? && ca.amount > 0
+          my_cached_amount = ca.amount
+        elsif ca.percentage.present? && ca.percentage > 0
+          my_cached_amount = ca.percentage * max / 100
+        end
+        ca.update_attributes :cached_amount => my_cached_amount
       elsif !ac.leaf?
-        total += self.codings_sum(ac.children, activity, max)
+        my_cached_amount += self.codings_sum(ac.children, activity, max)
+        self.create!(
+          :activity => self,
+          :code => ac,
+          :cached_amount => my_cached_amount
+        )
       end
     end
 
+    total += my_cached_amount
     total
   end
 end

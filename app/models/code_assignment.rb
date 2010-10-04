@@ -21,7 +21,7 @@ class CodeAssignment < ActiveRecord::Base
   # Attributes
   attr_accessible :activity, :code, :amount, :percentage, :cached_amount
 
-  def amount
+  def calculated_amount
     if read_attribute(:amount).nil?
       cached_amount
     else

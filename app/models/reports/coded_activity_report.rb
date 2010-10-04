@@ -25,7 +25,6 @@ class Reports::CodedActivityReport < ActivityReport
 
   def build_rows(activity)
     base_row=super(activity)
-    base_rows = [base_row]
     rows = []
     act_codes = activity.send(get_codes_array_method).map(&code_id_method)
     

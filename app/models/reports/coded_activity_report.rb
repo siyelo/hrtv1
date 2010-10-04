@@ -46,7 +46,7 @@ class Reports::CodedActivityReport < ActivityReport
           row << " "
         end
       end
-      rows = r.collect {|a_base_row| (a_base_row+r).flatten}
+      rows += r.collect {|a_base_row| (a_base_row+r).flatten}
     end
     rows
   end

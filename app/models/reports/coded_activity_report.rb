@@ -23,32 +23,21 @@ class Reports::CodedActivityReport < ActivityReport
     header.flatten
   end
 
-  # override this ify you need special behavior
-  def add_rows_to_csv rows, csv
-    if rows.first.class == Array
-      rows.each {|r| add_rows_to_csv r, csv}
-    else
-      csv << rows
-    end
-  end
-
   def build_rows(activity)
     base_row=super(activity)
     base_rows = [base_row]
     rows = []
     act_codes = activity.send(get_codes_array_method).map(&code_id_method)
     
-    base_rows.each do |r|
-      row = []
-      code_ids.each do |code_id|
-        if act_codes.include?(code_id)
-          column_value = value_for_code_column activity, code_id
-        else
-          row << " "
-        end
+    row = []
+    code_ids.each do |code_id|
+      if act_codes.include?(code_id)
+        column_value = value_for_code_column activity, code_id
+      else
+        row << " "
       end
-      rows += r.collect {|a_base_row| (a_base_row+r).flatten}
     end
+    rows = (base_row + row).flatten
     rows
   end
 

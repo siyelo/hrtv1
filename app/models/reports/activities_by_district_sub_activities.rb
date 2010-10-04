@@ -67,6 +67,8 @@ class Reports::ActivitiesByDistrictSubActivities
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
 
+    # TODO for sub_implementers, need to create code assignment for them when the
+    # sub_implementer.provider only works in one district (like a clinic)
     locations.each do |loc|
       if act_locs.include?(loc.short_display)
         row << get_amount(activity, loc)

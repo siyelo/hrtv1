@@ -22,8 +22,11 @@ class CodeAssignment < ActiveRecord::Base
   attr_accessible :activity, :code, :amount, :percentage
 
   def amount
-    amount unless amount.nil?
-    cached_amount
+    if read_attribute(:amount).nil?
+      cached_amount
+    else
+      read_attribute(:amount) 
+    end
   end
 
   # Named scopes
@@ -81,10 +84,10 @@ class CodeAssignment < ActiveRecord::Base
       elsif !ac.leaf?
         my_cached_amount += self.codings_sum(ac.children, activity, max)
         self.create!(
-          :activity => self,
+          :activity => activity,
           :code => ac,
           :cached_amount => my_cached_amount
-        )
+        ) if my_cached_amount > 0
       end
     end
 

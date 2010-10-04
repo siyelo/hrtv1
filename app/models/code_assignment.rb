@@ -19,11 +19,14 @@ class CodeAssignment < ActiveRecord::Base
   validates_presence_of :activity, :code
 
   # Attributes
-  attr_accessible :activity, :code, :amount, :percentage
+  attr_accessible :activity, :code, :amount, :percentage, :cached_amount
 
-  def amount
-    amount unless amount.nil?
-    cached_amount
+  def calculated_amount
+    if read_attribute(:amount).nil?
+      cached_amount
+    else
+      read_attribute(:amount) 
+    end
   end
 
   # Named scopes
@@ -70,7 +73,9 @@ class CodeAssignment < ActiveRecord::Base
     my_cached_amount = 0
 
     available_codes.each do |ac|
-      ca = self.with_activity(activity).with_code_id(ac.id).first
+      code_assignments = self.with_activity(activity).with_code_id(ac.id)
+      raise "Duplicate code assignments".to_yaml if code_assignments.length > 1
+      ca = code_assignments.first
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
@@ -78,17 +83,18 @@ class CodeAssignment < ActiveRecord::Base
           my_cached_amount = ca.percentage * max / 100
         end
         ca.update_attributes :cached_amount => my_cached_amount
+        total += my_cached_amount
       elsif !ac.leaf?
-        my_cached_amount += self.codings_sum(ac.children, activity, max)
+        my_cached_amount = self.codings_sum(ac.children, activity, max)
         self.create!(
-          :activity => self,
+          :activity => activity,
           :code => ac,
           :cached_amount => my_cached_amount
-        )
+        ) if my_cached_amount > 0
+        total += my_cached_amount
       end
     end
 
-    total += my_cached_amount
     total
   end
 end

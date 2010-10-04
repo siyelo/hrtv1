@@ -34,7 +34,7 @@ class Reports::CodedActivityReport < ActivityReport
 
   def build_rows(activity)
     rows=super(activity)
-    act_codes  = activity.send(get_codes_array_method).map(&code_id_method)
+    act_codes = activity.send(get_codes_array_method).map(&code_id_method)
     
     rows.each do |r|
       row = []

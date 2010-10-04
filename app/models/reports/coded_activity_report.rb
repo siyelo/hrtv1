@@ -33,18 +33,20 @@ class Reports::CodedActivityReport < ActivityReport
   end
 
   def build_rows(activity)
-    rows=super(activity)
+    base_rows=super(activity)
+    rows = []
     act_codes = activity.send(get_codes_array_method).map(&code_id_method)
     
-    rows.each do |r|
+    base_rows.each do |r|
       row = []
-    end
-    code_ids.each do |code_id|
-      if act_codes.include?(code_id)
-        column_value = value_for_code_column activity, code_id
-      else
-        row << " "
+      code_ids.each do |code_id|
+        if act_codes.include?(code_id)
+          column_value = value_for_code_column activity, code_id
+        else
+          row << " "
+        end
       end
+      rows = r.collect {|a_base_row| (a_base_row+r).flatten}
     end
     rows
   end

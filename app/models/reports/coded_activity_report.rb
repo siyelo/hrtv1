@@ -28,7 +28,7 @@ class Reports::CodedActivityReport < Reports::ActivityReport
   end
 
   # override for more complex behavior
-  def get_codes_array_method activity
+  def get_codes_from_activity activity
     activity.send(get_codes_array_method)
   end
 

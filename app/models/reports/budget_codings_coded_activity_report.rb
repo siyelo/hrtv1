@@ -8,12 +8,12 @@ class Reports::BudgetCodingsCodedActivityReport < Reports::CodedActivityReport
 
   protected
 
-  def get_codes_array_method activity
+  def get_codes_from_activity activity
     activity.send(get_codes_array_method).with_type("CodingBudget")
   end
 
   def value_for_code_column activity, code_id
-    code_assignment = get_codes_array_method(activity).with_code_id(code_id)
+    code_assignment = get_codes_from_activity(activity).with_code_id(code_id)
     raise "Duplicate code assignment".to_yaml if code_assignment.length > 1
     code_assignment.first.calculated_amount
   end

@@ -59,15 +59,11 @@ class Reports::ActivitiesByDistrict
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{ activity.provider.name}" )
 
-    if ["District of Nyaruguru", "Masaka Health Center | Kicukiro"].include?(activity.provider.try(:name))
-      locations.each { |loc| row << '100%' }
-    else
-      locations.each do |loc|
-        if act_locs.include?(loc.short_display)
-          row << get_amount(activity, loc)
-        else
-          row << " "
-        end
+    locations.each do |loc|
+      if act_locs.include?(loc.short_display)
+        row << get_amount(activity, loc)
+      else
+        row << " "
       end
     end
 

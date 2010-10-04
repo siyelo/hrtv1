@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class BeneficiaryCodedActivityReport < Reports::CodedActivityReport
+class Reports::BeneficiaryCodedActivityReport < Reports::CodedActivityReport
 
   def initialize # codes= nil, get_codes_array_method = nil, code_id_method = nil
     super( Beneficiary.all, :beneficiaries, :id)

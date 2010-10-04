@@ -1,14 +1,18 @@
 require 'fastercsv'
 
-class Reports::CodedActivityReport < ActivityReport
+class Reports::CodedActivityReport < Reports::ActivityReport
 
-  attr_accessible :codes, :code_ids, :get_codes_array_method, :code_id_method, :code_class
+  attr_accessor :codes, :code_ids, :get_codes_array_method, :code_id_method, :code_class
 
   def initialize codes= nil, get_codes_array_method = nil, code_id_method = nil
     #add to cols only when you are doing a row join, not column join
     #dont do chaining yet, just one set of codes
     # TODO add beneficiaries as first instance of codes
-    code_ids = codes.map(&:id)
+   
+    @codes = codes
+    @get_codes_array_method = get_codes_array_method
+    @code_id_method = code_id_method
+    @code_ids = codes.map(&:id)
   end
 
   protected
@@ -34,9 +38,10 @@ class Reports::CodedActivityReport < ActivityReport
     act_codes = activity.send(get_codes_array_method).map(&code_id_method)
     
     row = []
-    code_ids.each do |code_id|
+    @code_ids.each do |code_id|
       if act_codes.include?(code_id)
         column_value = value_for_code_column activity, code_id
+        row << column_value
       else
         row << " "
       end

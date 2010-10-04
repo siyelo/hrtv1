@@ -26,9 +26,9 @@ Scenario: See a breakdown for an activity
   And I should see "Budget"
   And I should see "Budget by District"
   And I should see "Budget Cost Categorization"
-  And I should see "Spend"
-  And I should see "Spend by District"
-  And I should see "Spend Cost Categorization"
+  And I should see "Expenditure"
+  And I should see "Expenditure by District"
+  And I should see "Expenditure Cost Categorization"
   And I should see "Providing Technical Assistance"
   
 @green
@@ -53,11 +53,11 @@ Scenario: enter budget for an activity
 @green
 Scenario: enter expenditure for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
-  And I follow "Spend"
+  And I follow "Expenditure"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
   Then I should see "Activity classification was successfully updated."
-  And I follow "Spend"
+  And I follow "Expenditure"
   #Then wait a few moments
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"

@@ -3,7 +3,7 @@
 # Expected Columns
 # Classifications   id  parent_id class stratprog stratobj  stratobj2 similar_group_id  type  short_display char count  long_display  description
 puts "Loading codes.csv..."
-Code.delete_all
+# Code.delete_all
 # if we do lookups by col id, not name, then FasterCSV
 # is more forgiving with (non)/quoted csv's
 id_col            = 2
@@ -18,8 +18,8 @@ i = 0
 FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   begin
     i = i + 1
-    c               = Code.new
-    c.external_id   = row[id_col]
+    c               = Code.find_or_initialize_by_external_id(row[id_col])
+    puts "found existing code at #{c.id}" unless c.id.nil?
     p               = Code.find_by_external_id(row[parent_id_col])
     c.parent_id     = p.id unless p.nil?
     unless row[type_col]

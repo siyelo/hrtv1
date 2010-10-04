@@ -21,7 +21,7 @@ class Reports::ActivityReport
   def csv
     unless @csv_string
       @csv_string = FasterCSV.generate do |csv|
-        csv << build_header(beneficiaries, codes)
+        csv << build_header()
         #print data
         Activity.all.each do |a|
           rows = build_rows(a)

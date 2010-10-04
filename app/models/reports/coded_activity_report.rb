@@ -23,6 +23,11 @@ class Reports::CodedActivityReport < ActivityReport
     header.flatten
   end
 
+  # override for more complex behavior
+  def get_codes_array_method activity
+    activity.send(get_codes_array_method)
+  end
+
   def build_rows(activity)
     base_row=super(activity)
     rows = []

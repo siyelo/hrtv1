@@ -8,6 +8,10 @@ class BudgetCodingsCodedActivityReport < Reports::CodedActivityReport
 
   protected
 
+  def get_codes_array_method activity
+    activity.send(get_codes_array_method).blah_blah
+  end
+
   def value_for_code_column activity, code_id
     code_assignment = activity.send(get_codes_array_method).reject {|coding| coding.send(code_id_method) == code_id}
     code_assignment.calculated_amount

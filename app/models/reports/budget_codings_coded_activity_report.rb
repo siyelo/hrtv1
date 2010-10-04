@@ -3,7 +3,9 @@ require 'fastercsv'
 class Reports::BudgetCodingsCodedActivityReport < Reports::CodedActivityReport
 
   def initialize # codes= nil, get_codes_array_method = nil, code_id_method = nil
-    super( Code.roots.activity_codes, :code_assignments, :code_id)
+    codes = []
+    Code.roots.activity_codes.each { |c| codes << c.self_and_descendants }
+    super( codes.flatten, :code_assignments, :code_id)
   end
 
   protected

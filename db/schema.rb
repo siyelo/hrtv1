@@ -43,13 +43,13 @@ ActiveRecord::Schema.define(:version => 20101003154027) do
     t.decimal   "budget_percentage"
     t.decimal   "spend_percentage"
     t.boolean   "approved"
-    t.boolean   "use_budget_codings_for_spend",          :default => false
     t.decimal   "CodingBudget_amount",                   :default => 0.0
     t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
     t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
     t.decimal   "CodingSpend_amount",                    :default => 0.0
     t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
     t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
+    t.boolean   "use_budget_codings_for_spend",          :default => false
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
@@ -157,7 +157,7 @@ ActiveRecord::Schema.define(:version => 20101003154027) do
     t.string    "contact_main_office_phone_number"
     t.string    "contact_office_location"
     t.boolean   "submitted"
-    t.datetime  "submitted_at"
+    t.timestamp "submitted_at"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

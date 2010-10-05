@@ -72,6 +72,14 @@ class Activity < ActiveRecord::Base
     projects.valid_providers
   end
 
+  def currency
+    tentative_currency = data_response.try(:currency)
+    unless projects.empty?
+      tentative_currency ||= projects.first.currency
+    end
+    tentative_currency
+  end
+
   def organization
     self.data_response.responding_organization
   end

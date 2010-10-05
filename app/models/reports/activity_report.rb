@@ -49,7 +49,7 @@ class Reports::ActivityReport
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     row.flatten
     if activity.projects.empty?

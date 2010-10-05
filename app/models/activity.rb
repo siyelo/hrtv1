@@ -62,6 +62,9 @@ class Activity < ActiveRecord::Base
   # Callbacks
   before_update :update_all_classified_amount_caches
 
+  # TODO handle the saving of codes or the getting of codes correctly
+  # when use_budget_codings_for_spend is true
+
   # Named scopes
   named_scope :roots,     {:conditions => "activities.type IS NULL" }
   named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }

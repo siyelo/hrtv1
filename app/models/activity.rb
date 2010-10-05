@@ -111,6 +111,7 @@ class Activity < ActiveRecord::Base
     CodingBudget.classified(self)
   end
 
+  #TODO TODO make methods like this for the spend_coding etc
   def budget_coding
     code_assignments.with_type(CodingBudget.to_s) 
   end

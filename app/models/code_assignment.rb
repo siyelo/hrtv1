@@ -82,8 +82,11 @@ class CodeAssignment < ActiveRecord::Base
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
         end
-        ca.update_attributes :cached_amount => my_cached_amount
-        total += my_cached_amount
+        #ca.update_attributes :cached_amount => my_cached_amount
+        ca.cached_amount = my_cached_amount
+        ca.save!
+        total += my_cached_amount 
+        self.codings_sum(ac.children, activity, max)
       elsif !ac.leaf?
         my_cached_amount = self.codings_sum(ac.children, activity, max)
         self.create!(

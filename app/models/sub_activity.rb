@@ -104,16 +104,13 @@ class SubActivity < Activity
       @code_assignments_cache = []
       # change amounts to reflect this subactivity
       budget_district_coding = get_district_coding :budget
-      budget_coding = activity.code_assignments.with_type("CodingBudget")
-      budget_coding = get_assignments_w_adjusted_amounts :budget, budget_coding
-      budget_coding_categories = activity.code_assignments.with_type("CodingBudgetCostCategorization")
-      budget_coding_categories = get_assignments_w_adjusted_amounts :budget, budget_coding_categories
+      budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
+      budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
       
       spend_district_coding = get_district_coding :spend
-      spend_coding = activity.code_assignments.with_type("CodingSpend")
-      spend_coding = get_assignments_w_adjusted_amounts :spend, spend_coding
-      spend_coding_categories = activity.code_assignments.with_type("CodingSpendCostCategorization")
-      spend_coding_categories = get_assignments_w_adjusted_amounts :spend, spend_coding_categories
+      spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
+      spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
+
       [budget_district_coding, budget_coding, budget_coding_categories,
        spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
         @code_assignments_cache << cas

@@ -160,7 +160,7 @@ class Activity < ActiveRecord::Base
       assignments = []
       locations.each do |l|
         ca = CodeAssignment.new
-        ca.activity = self
+        ca.activity_id = self.id
         ca.code_id = l.id
         ca.cached_amount = budget / locations.size
         ca.amount = budget / locations.size

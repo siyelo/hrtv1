@@ -71,6 +71,31 @@ class SubActivity < Activity
     end
   end
 
+
+  def budget_coding
+    code_assignments.select {|ca| ca.type == "CodingBudget"} 
+  end
+
+  def budget_district_coding
+    code_assignments.select {|ca| ca.type == "CodingBudgetDistrict"}
+  end
+
+  def budget_cost_category_coding
+    code_assignments.select {|ca| ca.type == "CodingBudgetCostCategorization"}
+  end
+
+  def spend_coding
+    code_assignments.select {|ca| ca.type == "CodingSpend"}
+  end
+
+  def spend_district_coding
+    code_assignments.select {|ca| ca.type == "CodingSpendDistrict"}
+  end
+
+  def spend_cost_category_coding
+    code_assignments.select {|ca| ca.type == "CodingSpendCostCategorization"}
+  end
+
   def code_assignments
     # store in a cached variable as well
     if @code_assignments_cache

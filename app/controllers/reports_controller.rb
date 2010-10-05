@@ -92,7 +92,7 @@ class ReportsController < ApplicationController
   end
   
   def activities_by_budget_coding_new
-    rep = Reports::BudgetCodingsCodedActivityReport.new
+    rep = Reports::ActivitiesByBudgetCodingNew.new
 
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',

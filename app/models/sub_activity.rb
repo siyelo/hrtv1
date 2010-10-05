@@ -72,8 +72,46 @@ class SubActivity < Activity
   end
 
   def code_assignments
-    # TODO implement dynamically changing calculated amounts
     # store in a cached variable as well
+    if @code_assignments_cache
+      @code_assignments_cache
+    else
+      @code_assignments_cache = []
+      # change amounts to reflect this subactivity
+      budget_district_coding = get_district_coding :budget
+      budget_coding = activity.code_assignments.with_type("CodingBudget")
+      budget_coding = get_assignments_w_adjusted_amounts :budget, budget_coding
+      budget_coding_categories = activity.code_assignments.with_type("CodingBudgetCostCategorization")
+      budget_coding_categories = get_assignments_w_adjusted_amounts :budget, budget_coding_categories
+      
+      spend_district_coding = get_district_coding :spend
+      spend_coding = activity.code_assignments.with_type("CodingSpend")
+      spend_coding = get_assignments_w_adjusted_amounts :spend, spend_coding
+      spend_coding_categories = activity.code_assignments.with_type("CodingSpendCostCategorization")
+      spend_coding_categories = get_assignments_w_adjusted_amounts :spend, spend_coding_categories
+      [budget_district_coding, budget_coding, budget_coding_categories,
+       spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
+        @code_assignments_cache << cas
+       end
+       @code_assignments_cache = @code_assignments_cache.flatten
+    end
+  end
 
+  def get_district_coding type
+    # if the provider is a clinic or hospital it has only one location
+    # so put all the money towards that location
+    coding_type = "Coding#{type.to_s.capitalize}District"
+    if locations.size == 1
+      [CodeAssignment.new :cached_amount => self.send(type),
+         :code_id => locations.first.id, :type => coding_type,
+         :activity_id => id]
+    else
+      cas = activity.code_assignments.with_type(coding_type)
+      get_assignments_w_adjusted_amounts type, cas
+    end
+  end
+
+  def get_assignments_w_adjusted_amounts amount_method, assignments
+      assignments.collect {|ca| ca.cached_amount = self.send(amount_method); ca}
   end
 end

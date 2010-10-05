@@ -33,7 +33,7 @@ class Reports::ActivityReport
     #print header
     header = []
     header << [ "project", "org.name", "org.type", "activity.id", "activity.name", "activity.description" ]
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider"]
+    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider", "activity.provider.FOSAID"]
     header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]
     header.flatten
   end
@@ -64,6 +64,7 @@ class Reports::ActivityReport
       row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
       row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
       row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
+      row << (activity.provider.nil? ? " " : "#{h activity.provider.fosaid}" )
       if activity.class == SubActivity
         row << "yes"
         row << activity.activity.budget

@@ -14,9 +14,10 @@ class Reports::ActivityReport
         csv << build_header()
         #print data
         Activity.all.each do |a|
-          rows = build_rows(a)
-          add_rows_to_csv rows, csv
-          #print out a row for each project
+          if a.class == Activity
+            rows = build_rows(a)
+            add_rows_to_csv rows, csv
+          end
         end
       end
     end
@@ -30,6 +31,7 @@ class Reports::ActivityReport
     header = []
     header << [ "project", "org.name", "org.type", "activity.name", "activity.description" ]
     header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider"]
+    header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]
     header.flatten
   end
 
@@ -46,25 +48,42 @@ class Reports::ActivityReport
   def build_rows(activity)
     rows=[]
     org        = activity.data_response.responding_organization
-  #TODO handle sub activities correctly
-    row = []
-    row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
-    row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
-    row.flatten
-    if activity.projects.empty?
-      row.unshift(" ")
-      rows = [ row.flatten ]
-    else
-      activity.projects.each do |proj|
-        proj_row = row.dup
-        proj_row.unshift("#{h proj.name}")
-        rows << proj_row.flatten
-        break
+    #TODO handle sub activities correctly
+    if activity.sub_activities.size > 0
+      activity.sub_activities.each do |sa|
+        sa_rows = []
+        sa_rows = build_rows sa
+        rows << sa_rows unless sa_rows.empty?
       end
+      rows
+    else
+      row = []
+      row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
+      row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
+      row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
+      if activity.class == SubActivity
+        row << "yes"
+        row << activity.activity.budget
+        row << activity.activity.spend
+      else
+        row << ""
+        row << ""
+        row << ""
+      end
+      row.flatten
+      if activity.projects.empty?
+        row.unshift(" ")
+        rows = [ row.flatten ]
+      else
+        activity.projects.each do |proj|
+          proj_row = row.dup
+          proj_row.unshift("#{h proj.name}")
+          rows << proj_row.flatten
+          break
+        end
+      end
+      rows
     end
-    rows
   end
 
 end
-

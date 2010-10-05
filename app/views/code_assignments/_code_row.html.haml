@@ -2,6 +2,7 @@
 - assignment = @current_assignments[code.id] if @current_assignments.has_key?(code.id)
 - amount     = assignment.nil? ? "" : assignment.amount
 - percentage = assignment.nil? ? "" : assignment.percentage
+- cached_amount = assignment.nil? ? "" : assignment.cached_amount
 
 %li
   = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
@@ -9,6 +10,8 @@
   or
   = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
   = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
+
+  = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", number_to_currency(cached_amount, :unit => ""), :size => 8, :disabled => true
 
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
   = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"

@@ -115,6 +115,39 @@ class Activity < ActiveRecord::Base
     code_assignments.with_type(CodingBudget.to_s) 
   end
 
+  STRAT_PROG_TO_CODES_FOR_TOTALING = {
+    "Quality Assurance" => [ 6,7,8,9,11],
+    "Commodities, Supply and Logistics" => [5],
+    "Infrastructure and Equipment" => [4],
+    "Health Financing" => [3],
+    "Human Resources for Health" => [2],
+    "Governance" => [101,103],
+    "Planning and M&E" => [102,104,105,106]
+  }
+
+  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+    "Across all 3 objectives" => [1,201,202,203,204,206,207,208,3,4,5,7,11],
+    "b. Prevention and control of diseases" => [205,9],
+    "c. Treatment of diseases" => [601,602,603,604,607,608,6011,6012,6013,6014,6015,6016],
+    "a. FP/MCH/RH/Nutrition services" => [605,609,6010, 8]
+  }
+  def budget_stratprog
+    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+  end
+  
+  def spend_stratprog
+    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+  end
+
+  def budget_stratobj
+    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+  end
+  
+  def spend_stratobj
+    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+  end
+
+
   def budget_by_district?
     CodingBudgetDistrict.classified(self)
   end
@@ -188,6 +221,22 @@ class Activity < ActiveRecord::Base
 #      self.code_assignments.with_type(type) 
 #    end
 #  end
+
+  def assigns_for_strategic_codes assigns, strat_hash
+    assignments = []
+    #first find the top level code w strat program
+    strat_hash.each do |prog, code_ids|
+      logger.debug code_ids.to_s
+      assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
+      amount = 0 
+      assigns_in_codes.each do |ca|
+        amount += ca.calculated_amount
+      end
+      assignments << CodeAssignment.new(:activity_id => id, :code_id => prog,
+        :cached_amount => amount, :amount => amount)
+    end
+    assignments
+  end
 
   private
   def approved_activity_cannot_be_changed

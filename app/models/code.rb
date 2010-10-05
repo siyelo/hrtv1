@@ -32,6 +32,24 @@ class Code < ActiveRecord::Base
   named_scope :activity_codes, :conditions => ["type in (?)", Activity::VALID_ROOT_TYPES], :order => quoted_left_column_name
   named_scope :other_cost_codes, :conditions => ["type in (?)", OtherCost::VALID_ROOT_TYPES], :order => quoted_left_column_name
   named_scope :valid_activity_codes, :conditions => ["type in (?)", Activity::VALID_ROOT_TYPES]
+  
+  
+  STRAT_PROG_TO_CODES_FOR_TOTALING = {
+    "Quality Assurance" => [ 6,7,8,9,11],
+    "Commodities, Supply and Logistics" => [5],
+    "Infrastructure and Equipment" => [4],
+    "Health Financing" => [3],
+    "Human Resources for Health" => [2],
+    "Governance" => [101,103],
+    "Planning and M&E" => [102,104,105,106]
+  }
+
+  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+    "Across all 3 objectives" => [1,201,202,203,204,206,207,208,3,4,5,7,11],
+    "b. Prevention and control of diseases" => [205,9],
+    "c. Treatment of diseases" => [601,602,603,604,607,608,6011,6012,6013,6014,6015,6016],
+    "a. FP/MCH/RH/Nutrition services" => [605,609,6010, 8]
+  }
 
   def name
     to_s

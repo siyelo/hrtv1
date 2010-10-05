@@ -128,9 +128,12 @@ class SubActivity < Activity
     # so put all the money towards that location
     coding_type = "Coding#{type.to_s.capitalize}District"
     if locations.size == 1
-      [CodeAssignment.new :cached_amount => self.send(type),
-         :code_id => locations.first.id, :type => coding_type,
-         :activity_id => id]
+      ca=CodeAssignment.new
+      ca.cached_amount = self.send(type)
+      ca.code_id = locations.first.id
+      ca.type = coding_type
+      ca.activity_id = id
+      [ca]
     else
       cas = activity.code_assignments.with_type(coding_type)
       get_assignments_w_adjusted_amounts type, cas
@@ -138,6 +141,10 @@ class SubActivity < Activity
   end
 
   def get_assignments_w_adjusted_amounts amount_method, assignments
-      assignments.collect {|ca| ca.cached_amount = self.send(amount_method); ca}
+    if self.send(amount_method).nil?
+      []
+    else
+      assignments.collect {|ca| ca.cached_amount = self.send(amount_method) * ca.calculated_amount / activity.send(amount_method); ca}
+    end
   end
 end

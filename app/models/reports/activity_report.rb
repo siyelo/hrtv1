@@ -60,6 +60,7 @@ class Reports::ActivityReport
         proj_row = row.dup
         proj_row.unshift("#{h proj.name}")
         rows << proj_row.flatten
+        break
       end
     end
     rows

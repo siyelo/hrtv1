@@ -22,7 +22,11 @@ class Reports::CodedActivityReport < Reports::ActivityReport
     header = []
     header << super()
     codes.each do |code|
-      header << "#{code}"
+      if code.respond_to? :to_s_with_external_id
+        header << "#{code.to_s_with_external_id}" 
+      else
+        header << "#{code}"
+      end
     end
     header.flatten
   end

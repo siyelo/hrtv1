@@ -117,34 +117,34 @@ class Activity < ActiveRecord::Base
   end
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => [ 6,7,8,9,11],
-    "Commodities, Supply and Logistics" => [5],
-    "Infrastructure and Equipment" => [4],
-    "Health Financing" => [3],
-    "Human Resources for Health" => [2],
-    "Governance" => [101,103],
-    "Planning and M&E" => [102,104,105,106]
+    "Quality Assurance" => [ "6","7","8","9","11"],
+    "Commodities, Supply and Logistics" => ["5"],
+    "Infrastructure and Equipment" => ["4"],
+    "Health Financing" => ["3"],
+    "Human Resources for Health" => ["2"],
+    "Governance" => ["101","103"],
+    "Planning and M&E" => ["102","104","105","106"]
   }
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => [1,201,202,203,204,206,207,208,3,4,5,7,11],
-    "b. Prevention and control of diseases" => [205,9],
-    "c. Treatment of diseases" => [601,602,603,604,607,608,6011,6012,6013,6014,6015,6016],
-    "a. FP/MCH/RH/Nutrition services" => [605,609,6010, 8]
+    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
+    "b. Prevention and control of diseases" => ['205','9'],
+    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
+    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
-  def budget_stratprog
+  def budget_stratprog_coding
     assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
   end
   
-  def spend_stratprog
+  def spend_stratprog_coding
     assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
   end
 
-  def budget_stratobj
+  def budget_stratobj_coding
     assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
   end
   
-  def spend_stratobj
+  def spend_stratobj_coding
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
   end
 
@@ -227,14 +227,17 @@ class Activity < ActiveRecord::Base
     assignments = []
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
-      logger.debug code_ids.to_s
       assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
       amount = 0 
       assigns_in_codes.each do |ca|
         amount += ca.calculated_amount
       end
-      assignments << CodeAssignment.new(:activity_id => id, :code_id => prog,
-        :cached_amount => amount, :amount => amount)
+      ca = CodeAssignment.new
+      ca.activity = self
+      ca.code_id = Code.find_by_short_display(prog).id
+      ca.cached_amount = amount
+      ca.amount = amount
+      assignments << ca
     end
     assignments
   end

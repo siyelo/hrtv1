@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101005134044) do
+ActiveRecord::Schema.define(:version => 20101005211222) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -43,13 +43,13 @@ ActiveRecord::Schema.define(:version => 20101005134044) do
     t.decimal   "budget_percentage"
     t.decimal   "spend_percentage"
     t.boolean   "approved"
-    t.boolean   "use_budget_codings_for_spend",          :default => false
     t.decimal   "CodingBudget_amount",                   :default => 0.0
     t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
     t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
     t.decimal   "CodingSpend_amount",                    :default => 0.0
     t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
     t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
+    t.boolean   "use_budget_codings_for_spend",          :default => false
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(:version => 20101005134044) do
     t.string    "contact_main_office_phone_number"
     t.string    "contact_office_location"
     t.boolean   "submitted"
-    t.datetime  "submitted_at"
+    t.timestamp "submitted_at"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(:version => 20101005134044) do
     t.timestamp "created_at"
     t.timestamp "updated_at"
     t.string    "raw_type"
+    t.string    "fosaid"
   end
 
   create_table "projects", :force => true do |t|

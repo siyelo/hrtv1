@@ -248,7 +248,7 @@ class Activity < ActiveRecord::Base
         amount += ca.calculated_amount
       end
       ca = CodeAssignment.new
-      ca.activity = self
+      ca.activity_id = self.id
       ca.code_id = Code.find_by_short_display(prog).id
       ca.cached_amount = amount
       ca.amount = amount

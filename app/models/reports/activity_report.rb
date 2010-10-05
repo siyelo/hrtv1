@@ -46,7 +46,7 @@ class Reports::ActivityReport
   def build_rows(activity)
     rows=[]
     org        = activity.data_response.responding_organization
-
+  #TODO handle sub activities correctly
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
     row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]

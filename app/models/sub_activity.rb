@@ -36,5 +36,40 @@
 class SubActivity < Activity
   belongs_to :activity
   attr_accessible :activity_id, :spend_percentage, :budget_percentage
+  
+  [:projects, :name, :description,  :start, :end,
+   :text_for_beneficiaries, :beneficiaries, :text_for_targets, 
+   :approved].each do |method|
+    delegate method, :to => :activity
+  end
 
+  def locations
+    unless provider.locations.empty?
+      provider.locations
+    else
+      activity.locations
+    end
+  end
+ 
+  def budget
+    if read_attribute(:budget)
+     read_attribute(:budget)
+    else
+     activity.budget * budget_percentage / 100
+    end
+  end
+
+  def spend
+    if read_attribute(:spend)
+     read_attribute(:spend)
+    else
+     activity.spend * spend_percentage / 100
+    end
+  end
+
+  def code_assignments
+    # TODO implement dynamically changing calculated amounts
+    # store in a cached variable as well
+
+  end
 end

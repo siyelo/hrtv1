@@ -154,7 +154,22 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_district_coding
-    code_assignments.with_type(CodingBudgetDistrict.to_s) 
+    val = code_assignments.with_type(CodingBudgetDistrict.to_s)
+    if val.empty? && budget
+      #create even split across locations
+      assignments = []
+      locations.each do |l|
+        ca = CodeAssignment.new
+        ca.activity = self
+        ca.code_id = l.id
+        ca.cached_amount = budget / locations.size
+        ca.amount = budget / locations.size
+        assignments << ca
+      end
+      assignments
+    else
+      []
+    end
   end
 
   def budget_by_cost_category?

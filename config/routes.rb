@@ -68,6 +68,7 @@ ActionController::Routing::Routes.draw do |map|
   map.activities_by_expenditure_coding 'activities_by_expenditure_coding', :controller => 'reports', :action => 'activities_by_expenditure_coding'
   map.activities_by_expenditure_cost_cat 'activities_by_expenditure_cost_cat', :controller => 'reports', :action => 'activities_by_expenditure_cost_cat'
   map.activity_report 'activity_report', :controller => 'reports', :action => 'activity_report'
+  map.activities_by_district_new 'activities_by_district_new', :controller => 'reports', :action => 'activities_by_district_new'
   map.activities_by_budget_coding_new 'activities_by_budget_coding_new', :controller => 'reports', :action => 'activities_by_budget_coding_new'
   map.activities_by_district_row_report 'activities_by_district_row_report', :controller => 'reports', :action => 'activities_by_district_row_report'
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'

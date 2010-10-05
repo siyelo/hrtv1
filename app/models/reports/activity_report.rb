@@ -6,16 +6,6 @@ class Reports::ActivityReport
   attr_accessor :query, :cols, :conditions, :joins
 
   def initialize options = {}
-#    cols = [ "project.name", "org.name", "org.type", "activity.name", "activity.description", 
-#          "activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target",
-#          "activity.budget", "activity.spend", "currency","activity.start", "activity.end", 
-#          "activity.provider"]
-#    cols = (cols + options[:cols]).flatten if options[:cols]
-
-    #add to cols only when you are doing a row join, not column join
-    #dont do chaining yet, just one set of codes
-    # TODO add beneficiaries as first instance of codes
-
   end
 
   def csv
@@ -46,6 +36,8 @@ class Reports::ActivityReport
   def add_rows_to_csv rows, csv
     if rows.first.class == Array
       rows.each {|r| add_rows_to_csv r, csv}
+    elsif rows.empty?
+      #do nothing
     else
       csv << rows
     end

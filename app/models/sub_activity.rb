@@ -44,8 +44,12 @@ class SubActivity < Activity
   end
 
   def locations
-    unless provider.locations.empty?
-      provider.locations
+    if provider
+      unless provider.locations.empty?
+        provider.locations
+      else
+        activity.locations
+      end
     else
       activity.locations
     end

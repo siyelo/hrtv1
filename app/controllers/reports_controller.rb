@@ -88,7 +88,7 @@ class ReportsController < ApplicationController
 
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=budget_codings_coded_activity_report.csv"
+              :disposition => "attachment; filename=budget_by_districts_new.csv"
   end
   
   def activities_by_budget_coding_new

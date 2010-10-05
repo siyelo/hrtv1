@@ -116,39 +116,6 @@ class Activity < ActiveRecord::Base
     code_assignments.with_type(CodingBudget.to_s) 
   end
 
-  STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => [ "6","7","8","9","11"],
-    "Commodities, Supply and Logistics" => ["5"],
-    "Infrastructure and Equipment" => ["4"],
-    "Health Financing" => ["3"],
-    "Human Resources for Health" => ["2"],
-    "Governance" => ["101","103"],
-    "Planning and M&E" => ["102","104","105","106"]
-  }
-
-  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
-    "b. Prevention and control of diseases" => ['205','9'],
-    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
-    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
-  }
-  def budget_stratprog_coding
-    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
-  end
-  
-  def spend_stratprog_coding
-    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
-  end
-
-  def budget_stratobj_coding
-    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
-  end
-  
-  def spend_stratobj_coding
-    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
-  end
-
-
   def budget_by_district?
     CodingBudgetDistrict.classified(self)
   end
@@ -175,7 +142,7 @@ class Activity < ActiveRecord::Base
   def budget_by_cost_category?
     CodingBudgetCostCategorization.classified(self)
   end
-  
+
   def budget_cost_category_coding
     code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
   end
@@ -188,11 +155,34 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def spend_coding
+    code_assignments.with_type(CodingSpend.to_s) 
+  end
+
   def spend_by_district?
     if self.use_budget_codings_for_spend?
       budget_by_district?
     else
       CodingSpendDistrict.classified(self)
+    end
+  end
+
+  def spend_district_coding
+    val = code_assignments.with_type(CodingSpendDistrict.to_s)
+    if val.empty? && spend
+      #create even split across locations
+      assignments = []
+      locations.each do |l|
+        ca = CodeAssignment.new
+        ca.activity_id = self.id
+        ca.code_id = l.id
+        ca.cached_amount = spend / locations.size
+        ca.amount = spend / locations.size
+        assignments << ca
+      end
+      assignments
+    else
+      []
     end
   end
 
@@ -202,6 +192,10 @@ class Activity < ActiveRecord::Base
     else
       CodingSpendCostCategorization.classified(self)
     end
+  end
+
+  def spend_cost_category_coding
+    code_assignments.with_type(CodingSpendCostCategorization.to_s) 
   end
 
   def budget_classified?
@@ -237,6 +231,38 @@ class Activity < ActiveRecord::Base
 #      self.code_assignments.with_type(type) 
 #    end
 #  end
+
+  STRAT_PROG_TO_CODES_FOR_TOTALING = {
+    "Quality Assurance" => [ "6","7","8","9","11"],
+    "Commodities, Supply and Logistics" => ["5"],
+    "Infrastructure and Equipment" => ["4"],
+    "Health Financing" => ["3"],
+    "Human Resources for Health" => ["2"],
+    "Governance" => ["101","103"],
+    "Planning and M&E" => ["102","104","105","106"]
+  }
+
+  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
+    "b. Prevention and control of diseases" => ['205','9'],
+    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
+    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
+  }
+  def budget_stratprog_coding
+    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+  end
+  
+  def spend_stratprog_coding
+    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+  end
+
+  def budget_stratobj_coding
+    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+  end
+  
+  def spend_stratobj_coding
+    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+  end
 
   def assigns_for_strategic_codes assigns, strat_hash
     assignments = []

@@ -30,7 +30,7 @@ class Reports::RowEachCodedActivityReport < Reports::CodedActivityReport
       @code_ids.each do |code_id|
 	row = []
         if act_codes.include?(code_id)
-          row << display_value_for_code code_id 
+          row << display_value_for_code(code_id)
           column_value = value_for_code_column activity, code_id
           row << column_value
           rows << (base_row + row).flatten

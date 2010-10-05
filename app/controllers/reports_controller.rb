@@ -83,5 +83,12 @@ class ReportsController < ApplicationController
               :disposition => "attachment; filename=budget_codings_coded_activity_report.csv"
   end
 
+  def activities_by_district_row_report
+    rep = Reports::DistrictCodingsBudgetReport.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=budget_codings_coded_activity_report.csv"
+  end
 end
 

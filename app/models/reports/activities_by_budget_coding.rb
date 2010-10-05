@@ -20,17 +20,19 @@ class Reports::ActivitiesByBudgetCoding
       csv << build_header(beneficiaries, codes)
 
       #print data
-      Activity.all.each do |a|
-        row = build_row(a, beneficiaries, code_ids)
-        #print out a row for each project
-        if a.projects.empty?
-          row.unshift(" ")
-          csv << row.flatten
-        else
-          a.projects.each do |proj|
-            proj_row = row.dup
-            proj_row.unshift("#{h proj.name}")
-            csv << proj_row.flatten
+      Activity.find(:all, :conditions => "activity_id IS NULL").each do |a|
+        if [OtherCost, Activity].include?(a.class)
+          row = build_row(a, beneficiaries, code_ids)
+          #print out a row for each project
+          if a.projects.empty?
+            row.unshift(" ")
+            csv << row.flatten
+          else
+            a.projects.each do |proj|
+              proj_row = row.dup
+              proj_row.unshift("#{h proj.name}")
+              csv << proj_row.flatten
+            end
           end
         end
       end

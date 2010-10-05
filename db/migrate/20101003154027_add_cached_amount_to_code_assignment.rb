@@ -3,8 +3,10 @@ class AddCachedAmountToCodeAssignment < ActiveRecord::Migration
     add_column :code_assignments, :cached_amount, :decimal
     #TODO loop through all activities after making sure it works
     Activity.all.each do |a|
-      [CodingBudget,CodingBudgetCostCategorization,CodingBudgetDistrict,CodingSpend,CodingSpendCostCategorization,CodingSpendDistrict].each do |type|
-        a.update_classified_amount_cache(type)
+      if [OtherCost, Activity].include?(a.class)
+        [CodingBudget,CodingBudgetCostCategorization,CodingBudgetDistrict,CodingSpend,CodingSpendCostCategorization,CodingSpendDistrict].each do |type|
+          a.update_classified_amount_cache(type)
+        end
       end
     end
   end

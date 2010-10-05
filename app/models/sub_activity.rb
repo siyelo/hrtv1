@@ -127,7 +127,7 @@ class SubActivity < Activity
     # if the provider is a clinic or hospital it has only one location
     # so put all the money towards that location
     coding_type = "Coding#{type.to_s.capitalize}District"
-    if locations.size == 1
+    if locations.size == 1 && self.send(type) && self.send(type)>0
       ca=CodeAssignment.new
       ca.cached_amount = self.send(type)
       ca.code_id = locations.first.id
@@ -141,7 +141,7 @@ class SubActivity < Activity
   end
 
   def get_assignments_w_adjusted_amounts amount_method, assignments
-    if self.send(amount_method).nil?
+    if self.send(amount_method).nil? or self.send(amount_method) <= 0
       []
     else
       assignments.collect {|ca| ca.cached_amount = self.send(amount_method) * ca.calculated_amount / activity.send(amount_method); ca}

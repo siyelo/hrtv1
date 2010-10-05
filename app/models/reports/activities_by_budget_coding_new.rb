@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::BudgetCodingsCodedActivityReport < Reports::CodedActivityReport
+class Reports::ActivitiesByBudgetCodingNew < Reports::CodedActivityReport
 
   def initialize # codes= nil, get_codes_array_method = nil, code_id_method = nil
     codes = []

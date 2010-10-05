@@ -1,14 +1,16 @@
 # seed code values
 #
 # Expected Columns
-# Classifications   id  parent_id class stratprog stratobj  stratobj2 similar_group_id  type  short_display char count  long_display  description
+
 puts "Loading codes.csv..."
 # Code.delete_all
 # if we do lookups by col id, not name, then FasterCSV
 # is more forgiving with (non)/quoted csv's
 id_col            = 2
 parent_id_col     = 3
-class_col         = 4
+class_col         = 4 # should go to official_description
+stratprog_col     = 5 # should go to official_description
+stratobj_col      = 6 # should go to official_description
 type_col          = 8
 short_display_col = 9
 long_display_col  = 11
@@ -31,6 +33,9 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.short_display = row[short_display_col]
     c.short_display = row[class_col] unless c.short_display
     c.long_display  = row[long_display_col]
+    c.official_name = row[class_col]
+    c.hssp2_stratprog_val = row[stratprog_col]
+    c.hssp2_stratobj_val = row[stratobj_col]
     c.type          = "Nha" if c.type.downcase == "nhanasa"
 
     #print "."

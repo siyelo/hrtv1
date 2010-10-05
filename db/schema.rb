@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101003154027) do
+ActiveRecord::Schema.define(:version => 20101005134044) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -106,6 +106,9 @@ ActiveRecord::Schema.define(:version => 20101003154027) do
     t.integer   "replacement_code_id"
     t.string    "type"
     t.string    "external_id"
+    t.string    "hssp2_stratprog_val"
+    t.string    "hssp2_stratobj_val"
+    t.string    "official_name"
   end
 
   create_table "comments", :force => true do |t|

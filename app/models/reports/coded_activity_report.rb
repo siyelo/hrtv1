@@ -39,10 +39,9 @@ class Reports::CodedActivityReport < Reports::ActivityReport
   def build_rows(activity)
     base_rows = super(activity)
     rows = []
-
+#    debugger if activity.class == SubActivity
     base_rows.each do |base_row|
       act_codes = get_codes_from_activity(activity).map(&code_id_method)
-      
       row = []
       @code_ids.each do |code_id|
         if act_codes.include?(code_id)

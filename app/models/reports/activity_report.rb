@@ -14,7 +14,10 @@ class Reports::ActivityReport
         csv << build_header()
         #print data
         Activity.all.each do |a|
-          if a.class == Activity
+          if a.class == Activity && a.sub_activities.empty?
+            rows = build_rows(a)
+            add_rows_to_csv rows, csv
+          elsif a.class == SubActivity
             rows = build_rows(a)
             add_rows_to_csv rows, csv
           end
@@ -49,14 +52,14 @@ class Reports::ActivityReport
     rows=[]
     org        = activity.data_response.responding_organization
     #TODO handle sub activities correctly
-    if activity.sub_activities.size > 0
-      activity.sub_activities.each do |sa|
-        sa_rows = []
-        sa_rows = build_rows sa
-        rows << sa_rows unless sa_rows.empty?
-      end
-      rows
-    else
+#    if activity.sub_activities.size > 0
+#      activity.sub_activities.each do |sa|
+#        sa_rows = []
+#        sa_rows = build_rows sa
+#        rows << sa_rows unless sa_rows.empty?
+#      end
+#      rows
+#    else
       row = []
       row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
       row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
@@ -83,7 +86,7 @@ class Reports::ActivityReport
         end
       end
       rows
-    end
+#    end
   end
 
 end

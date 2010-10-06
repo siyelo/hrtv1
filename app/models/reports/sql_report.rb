@@ -1,16 +1,17 @@
 require 'fastercsv'
 
 class Reports::SqlReport
-  attr_accessor :select_list, :where_body, :code_select_array
-  def initialize select_list, where_body, code_select_array
+  attr_accessor :select_list, :method_names, :where_body, :code_select_array
+  def initialize select_list, method_names, where_body, code_select_array
     @select_list = select_list
+    @method_names = method_names
     @where_body = where_body
     @code_select_array = code_select_array
   end
 
   def csv
     unless @csv_string
-      executed_query_results = Code.find_by_sql query
+      executed_query_results = Organization.find_by_sql query
       @csv_string = FasterCSV.generate do |csv|
         csv << build_header
         executed_query_results.each {|r| csv << build_row(r)}
@@ -40,15 +41,14 @@ class Reports::SqlReport
   end
 
   def build_row row
-    row = []
-    debugger
-    select_list.each do |method|
-      row << row.send(method)
+    output_row = []
+    method_names.each do |method|
+      output_row << row.send(method)
     end
     code_select_array.each do |method|
-      row << row.send(result_name)
+      output_row << row.send(method[2])
     end
-    row.flatten
+    output_row.flatten
   end
 
   def code_total_for type, code_id, result_name, header_name

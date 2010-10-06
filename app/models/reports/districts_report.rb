@@ -6,12 +6,11 @@ class Reports::DistrictsReport < Reports::SqlReport
   
   @@where_body = "
     FROM organizations
-    INNER JOIN activities on activities.provider_id = organizations.id
     WHERE organizations.fosaid is not null "
   @@code_select_array = nil
   
   def initialize
-    super(@@select_list, @@where_body, code_select_array)
+    super(@@select_list, [:name, :fosaid], @@where_body, code_select_array)
   end
  
   def code_select_array

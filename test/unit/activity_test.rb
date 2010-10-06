@@ -24,5 +24,7 @@ class ActivityTest < ActiveSupport::TestCase
     assert p.approved
     p.spend = 2000
     assert !p.valid?
+
   end
+
 end

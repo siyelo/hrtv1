@@ -1,20 +1,15 @@
-- content_for :sub_nav do
-  = render :partial => 'layouts/sub_nav'
+%h2 Submit
+%p.borderful This page will contain a full summary of the data you have entered so you can submit it for review. In the meantime, you can review your data manually using the tabs located on top of the page.
 
 = render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
-= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
-= render 'uncoded_other_cost_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
-= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
+= render 'uncoded_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
 
 - unless @warnings.empty?
-  #flashes.wide
-    #notice
-      = display_warnings(@warnings)
+  #flashes
+    = display_warnings(@warnings)
 
-- if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-  = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
-- else
-  %p.borderful
+%p.borderful
+  - if @uncoded_activities.empty? && @uncoded_other_costs.empty?
+    = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next right"
+  - else
     You cannot submit unless you have coded your activities and other costs.
-
-= render 'shared/data_entry_help'

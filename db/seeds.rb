@@ -6,7 +6,7 @@ require 'fastercsv'
 
 puts "\n\nLoading seeds..."
 
-#load 'db/seed_files/model_help.rb' #don't load model help now that we're in prod
+load 'db/seed_files/model_help.rb' #don't load model help now that we're in prod
 
 load 'db/seed_files/codes.rb'
 

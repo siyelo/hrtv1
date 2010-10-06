@@ -18,6 +18,7 @@ Background:
   Given a refactor_me_please current_data_response for user "who_manager"
   Given I am signed in as "who_manager"
 
+@green
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
@@ -29,24 +30,24 @@ Scenario: See a breakdown for an activity
   And I should see "Providing Technical Assistance"
 
 
-# note you cant drive this via the normal 'Classify' popup link in Capybara - it wont follow the new browser window 
-
-@slow
+# note you cant drive this via the normal 'Classify' popup link in Capybara 
+# - it wont follow the new browser window 
+# The "wait a few moments" between checking the box and going to the next page is to avoid 
+# the ERROR Errno::EINVAL: Invalid argument -> webrick/httpresponse.rb:324:in `write'
+# - I think capy just needs time to finish the ajax post request...
 @javascript
+@green
 Scenario: Approve an Activity
   When I go to the activity classification page for "TB Drugs procurement"
   Then I should see "Activity Classification"
   And I should see "Approved?"
   When I check "approve_activity"
+  Then wait a few moments
   And I go to the activity classification page for "TB Drugs procurement"
   Then the "approve_activity" checkbox should be checked
 
+@green
 Scenario: List approved activities
-  When I go to the activities page
+  When I go to the classifications page
   Then I should see "Approved?"
-
-Scenario: See unapproved activities highlighted 
-  Log in as Activity Manager 
-  Go to Activities 
-  see unapproved activities highlighted (e.g. red)
 

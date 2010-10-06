@@ -22,7 +22,7 @@
 
 require 'lib/ActAsDataElement'
 class FundingFlow < ActiveRecord::Base
-  
+
   acts_as_commentable
 
   include ActAsDataElement

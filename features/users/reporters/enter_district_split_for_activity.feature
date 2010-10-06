@@ -26,8 +26,6 @@ Scenario: See a breakdown for an activity
   And I should see "Budget by District"
   Then wait a few moments
   When I follow "Budget by District"
-  Then show me the page
   Then wait a few moments
-  Then show me the page
   Then I should see "Bugesera"
   And I should see "Karongi"

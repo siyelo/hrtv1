@@ -3,7 +3,6 @@ class StaticPageController < ApplicationController
 
   before_filter :require_user, :except => [:index, :news, :contact, :about]
 
-
   def index
     @user_session = UserSession.new
   end
@@ -17,9 +16,11 @@ class StaticPageController < ApplicationController
   def contact
     redirect_to :controller => :help_requests, :action => :new
   end
-  
+
   def reporter_dashboard
-    @unfulfilled_responses = DataResponse.unfulfilled
+    @data_requests_unfulfilled = DataRequest.unfulfilled(current_user.organization)
+    @data_requests_fulfilling = DataRequest.fulfilling(current_user.organization)
+    @data_responses = current_user.data_responses
   end
 
   def submit

@@ -6,5 +6,4 @@ describe Comment do
     it { should be_valid }
     it { pending; should validate_presence_of(:user) }
   end
-  
 end

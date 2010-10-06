@@ -43,7 +43,7 @@ Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
     Factory.create(:project,  { :organization_id => org.id
-    }.merge(hash) )
+                              }.merge(hash) )
   end
 end
 
@@ -174,16 +174,16 @@ end
 
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#header_app"
-    And I should see "Sign in" within "div#header_app"
+    Then I should see "Have an account?" within "div#admin"
+    And I should see "Sign in" within "div#admin"
   }
 end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#header_app"
-    Then I should see "My Profile" within "div#header_app"
-    Then I should see "Sign out" within "div#header_app"
+    Then I should see "frank@f.com" within "div#admin"
+    Then I should see "My Profile" within "div#admin"
+    Then I should see "Sign out" within "div#admin"
   }
 end
 
@@ -232,7 +232,7 @@ end
 
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-   steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
+  steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
 end
 
 Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
@@ -255,7 +255,7 @@ Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name
 end
 
 Then /^wait a few moments$/ do
-  sleep 20
+  sleep 3
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
@@ -263,17 +263,18 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
 end
 
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
-  steps %Q{ Given the following organizations 
-              | name   |
-              | UNDP   |
-            Given the following reporters 
-               | name         | organization |
-               | undp_user    | UNDP         |
-            Given a data request with title "Req1" from "UNAIDS"
-            Given a data response to "Req1" by "UNDP"
-            Given a refactor_me_please current_data_response for user "undp_user"
-            Given I am signed in as "undp_user"
-          }
+  steps %Q{ 
+    Given the following organizations 
+      | name   |
+      | UNDP   |
+    Given the following reporters 
+       | name         | organization |
+       | undp_user    | UNDP         |
+    Given a data request with title "Req1" from "UNAIDS"
+    Given a data response to "Req1" by "UNDP"
+    Given a refactor_me_please current_data_response for user "undp_user"
+    Given I am signed in as "undp_user"
+  }
 end
 
 Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|

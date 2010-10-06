@@ -47,7 +47,3 @@ Scenario: Login as a reporter with email address
   And I press "Sign in"
   Then I should see the reporters admin nav
   And I should see "frank@f.com"
-
-
-#Active-Scaffold-specific routes
-#Scenario Outline: Request protected action, get redirected to login screen

@@ -27,20 +27,29 @@ class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
 
   # Associations
+
+  has_many :activities, :dependent=>:destroy
+  has_many :funding_flows, :dependent=>:destroy
+  has_many :projects, :dependent=>:destroy
+
   has_many    :users_currently_completing,
               :class_name => "User",
               :foreign_key => :data_response_id_current
-  has_many    :activities
+
   belongs_to  :responding_organization,
               :class_name => "Organization",
               :foreign_key => "organization_id_responder"
+
   belongs_to  :data_request
 
   # Validations
-  validates_date :fiscal_year_start_date
-  validates_date :fiscal_year_end_date
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date."
-  validates_presence_of :currency
+  validates_presence_of :data_request_id
+  validates_presence_of :organization_id_responder
+
+  validates_date :fiscal_year_start_date, :on => :update
+  validates_date :fiscal_year_end_date, :on => :update
+  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date.", :on => :update
+  validates_presence_of :currency, :on => :update
 
   # Named scopes
   named_scope :available_to, lambda { |current_user|
@@ -50,6 +59,7 @@ class DataResponse < ActiveRecord::Base
       {:conditions=>{:organization_id_responder => current_user.organization.id}}
     end
   }
+
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 

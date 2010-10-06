@@ -14,6 +14,13 @@ class ActiveScaffoldController < ApplicationController
 
   protected
 
+  @@classify_popup_link_options =
+    { :action     => "popup_classification",
+      :parameters => { :controller => 'classifications' },
+      :type       => :member,
+      :popup      => true,
+      :label      => "Classify" }
+
   def set_defaults
     ActiveScaffold.set_defaults do |config|
       config.ignore_columns.add [:created_at, :updated_at, :lock_version]

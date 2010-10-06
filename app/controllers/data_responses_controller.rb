@@ -1,4 +1,5 @@
 class DataResponsesController < ApplicationController
+
   before_filter :require_user
   before_filter :require_admin, :only => [:index]
 
@@ -10,6 +11,19 @@ class DataResponsesController < ApplicationController
   def show
     @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
+  end
+
+  # POST /data_responses
+  def create
+    respond_to do |format|
+      @data_response = DataResponse.new(params[:data_response])
+      if @data_response.save
+        format.html { redirect_to( :action => 'start', :id => @data_response.id ) }
+      else
+        flash[:error] = "Couldn't create your response"
+        format.html { redirect_to reporter_dashboard_url() }
+      end
+    end
   end
 
   def start
@@ -30,7 +44,6 @@ class DataResponsesController < ApplicationController
     else
       render :action => :show
     end
-
   end
 
   def review

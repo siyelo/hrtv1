@@ -1,13 +1,5 @@
-puts "\nLoading organizations"
-
-#puts "  Removing existing orgs"
-#Organization.delete_all
-
-puts "  Loading organizations.csv"
-
 # Expected format
 # <Name>, <Raw Type>, <District>
-
 i = 1
 FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |row|
   i = i + 1
@@ -39,4 +31,4 @@ FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |
   puts "error on #{row}" unless org.save
 
 end
-puts "...Loading organizations DONE\n"
+

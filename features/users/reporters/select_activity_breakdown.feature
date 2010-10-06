@@ -23,12 +23,12 @@ Scenario: See a breakdown for an activity
   When I go to the classifications page
   And I follow "Classify"
   Then I should see "TB Drugs procurement"
-  And I should see "Budget by Coding"
-  And I should see "Budget by District"
-  And I should see "Budget Cost Categorization"
-  And I should see "Expenditure by Coding"
-  And I should see "Expenditure by District"
-  And I should see "Expenditure Cost Categorization"
+  And I should see "Coding" within "#tab1"
+  And I should see "District" within "#tab2"
+  And I should see "Categorization" within "#tab3"
+  And I should see "Coding" within "#tab4"
+  And I should see "District" within "#tab5"
+  And I should see "Cost Categorization" within "#tab6"
   And I should see "Providing Technical Assistance"
   
 @green
@@ -36,8 +36,8 @@ Scenario: See both budget for an activity classification
   When I go to the classifications page
   And I follow "Classify"
   Then I should be on the budget classification page for "TB Drugs procurement"
-  And I should see "Budget"
-  And I should see the "Budget" tab is active
+  And I should see "Coding"
+  And I should see the "Coding" tab is active
 
 @green
 Scenario: enter budget for an activity
@@ -53,12 +53,11 @@ Scenario: enter budget for an activity
 @green
 Scenario: enter expenditure for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
-  And I follow "Expenditure by Coding"
+  And I follow "Coding" within "#tab4"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
   Then I should see "Activity classification was successfully updated."
-  And I follow "Expenditure by Coding"
-  #Then wait a few moments
+  And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
 
@@ -106,16 +105,16 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab1" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
-  And I follow "Expenditure by Coding"
+  And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
-  When I follow "Budget by Coding"
+  When I follow "Coding" within "#tab1"
   And I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "7654321.00" within ".tab1"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab1" should contain "7,654,321.00"
-  And I follow "Expenditure by Coding"
+  And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "7,654,321.00"
 
@@ -125,16 +124,16 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
 Scenario: Use budget by district for expenditure by district
   Given location "Burera" for activity "TB Drugs procurement"
   And I am on the budget classification page for "TB Drugs procurement"
-  And I follow "Budget by District"
+  And I follow "District" within "#tab2"
   And I fill in "Burera" with "1234567.00" within ".tab2"
   When I press "Save" within ".tab2"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
-  When I follow "Budget by District"
+  When I follow "District" within "#tab2"
   Then the "Burera" field within ".tab2" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
-  And I follow "Expenditure by District"
+  And I follow "District" within "#tab5"
   And I wait until "Burera" is visible
   Then the "Burera" field within ".tab5" should contain "1,234,567.00"
 
@@ -143,15 +142,15 @@ Scenario: Use budget by district for expenditure by district
 @green
 Scenario: Use budget by cost categorization for expenditure by cost categorization
   And I am on the budget classification page for "TB Drugs procurement"
-  And I follow "Budget Cost Categorization"
+  And I follow "Cost Categorization" within "#tab3"
   And I fill in "Drugs, Commodities & Consumables" with "1234567.00" within ".tab3"
   When I press "Save" within ".tab3"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
-  When I follow "Budget Cost Categorization"
+  When I follow "Cost Categorization" within "#tab3"
   Then the "Drugs, Commodities & Consumables" field within ".tab3" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
-  And I follow "Expenditure Cost Categorization"
+  And I follow "Cost Categorization" within "#tab6"
   And I wait until "Drugs, Commodities \& Consumables" is visible
   Then the "Drugs, Commodities & Consumables" field within ".tab6" should contain "1,234,567.00"

@@ -62,6 +62,22 @@ class Reports::SqlReport
        AND code_assignments.code_id = #{code_id} ) as #{result_name}"
   end
 
+  def code_total_for_district type, code_id, result_name, header_name
+    "( select sum(code_assignments.cached_amount*currencies.toRWF*ca.cached_amount/
+   (CASE when ca.type = 'CodingBudgetDistrict'
+   THEN activities.budget ELSE activities.spend END))
+       FROM code_assignments
+       INNER JOIN activities on activities.id = code_assignments.activity_id
+       INNER JOIN data_responses on data_responses.id = activities.data_response_id
+       INNER JOIN currencies on currencies.symbol = data_responses.currency
+       WHERE activities.id = ca.activity_id
+       AND code_assignments.type = '#{type}'
+       AND 
+         CASE WHEN ((ca.type = 'CodingBudgetDistrict' AND code_assignments.type LIKE '%Budget%') OR (ca.type = 'CodingSpendDistrict' AND code_assignments.type LIKE '%Spend%'))
+          THEN 1=1
+          ELSE 1=0 END  
+       AND code_assignments.code_id = #{code_id} ) as #{result_name}"
+  end
 #
 # select f.name, t.name, t.fosaid,  sum(child.budget*currencies.toRWF), sum(child.spend*currencies.toRWF)
 #from organizations f

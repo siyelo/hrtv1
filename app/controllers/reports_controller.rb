@@ -106,5 +106,11 @@ class ReportsController < ApplicationController
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_budget_coding_new.csv"
   end
-end
+  def activities_by_budget_stratprog
+    rep = Reports::ActivitiesByHssp2.new
 
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_budget_stratprog.csv"
+  end
+end

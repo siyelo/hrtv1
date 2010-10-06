@@ -109,4 +109,21 @@ class CodeAssignment < ActiveRecord::Base
 
     total
   end
+
+  def self.copy_coding_from_budget_to_spend assignments, new_klass, save = true
+    new_assignments = []
+    #make new code assignments
+    #shift values to correct amount
+    #save them
+    assignments.each do |ca|
+      activity = assignments.first.activity
+      new_ca = new_klass.new
+      new_ca.code_id = ca.code_id
+      new_ca.cached_amount = activity.spend * ca.calculated_amount / activity.budget
+      new_ca.activity = activity
+      new_ca.save
+      new_assignments << new_ca
+    end
+    new_assignments
+  end
 end

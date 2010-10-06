@@ -31,7 +31,14 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     unless row[type_col]
       c.type = "Code" #Assume default
     else
-      c.type          = row[type_col].capitalize #this should make STI stop complaining
+      unless row[type_col].include? "HsspS" #this should make STI stop complaining
+        puts row[type_col]
+        t = row[type_col].capitalize
+      else
+        puts row[type_col]
+        t = row[type_col]
+      end
+      c.type          = t
     end
     c.description   = row[description_col]
     c.short_display = row[short_display_col]

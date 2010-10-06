@@ -100,6 +100,9 @@ class SubActivity < Activity
     code_assignments.select {|ca| ca.type == "CodingSpendCostCategorization"}
   end
 
+  # use to populate the tables with correct values
+  # then comment out and allow correct rows to work their magic
+  # then use SQL to create reports for now
   def code_assignments
     # store in a cached variable as well
     if @code_assignments_cache
@@ -144,7 +147,16 @@ class SubActivity < Activity
     if self.send(amount_method).nil? or self.send(amount_method) <= 0
       []
     else
-      assignments.collect {|ca| ca.cached_amount = self.send(amount_method) * ca.calculated_amount / activity.send(amount_method); ca}
+      new_assignments = []
+      assignments.each do |ca|
+        new_ca = CodeAssignment.new
+        new_ca.type = ca.type
+        new_ca.code_id = ca.code_id
+        new_ca.cached_amount = self.send(amount_method) * ca.calculated_amount / activity.send(amount_method)
+        new_ca.activity_id = self.id
+        new_assignments << new_ca
+      end
+      new_assignments
     end
   end
 end

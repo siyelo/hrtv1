@@ -71,6 +71,7 @@ ActionController::Routing::Routes.draw do |map|
   map.activities_by_district_new 'activities_by_district_new', :controller => 'reports', :action => 'activities_by_district_new'
   map.activities_by_budget_coding_new 'activities_by_budget_coding_new', :controller => 'reports', :action => 'activities_by_budget_coding_new'
   map.activities_by_district_row_report 'activities_by_district_row_report', :controller => 'reports', :action => 'activities_by_district_row_report'
+  map.activities_by_budget_stratprog 'activities_by_budget_stratprog', :controller => 'reports', :action => 'activities_by_budget_stratprog'
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
   map.users_in_my_organization 'users_in_my_organization', :controller => 'reports', :action => 'users_in_my_organization'
 

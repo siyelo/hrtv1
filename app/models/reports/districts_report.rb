@@ -22,10 +22,10 @@ class Reports::DistrictsReport < Reports::SqlReport
    #   hssp_strat_prog_codes = []
    #   hssp_strat_obj_codes = []
    #   nsp_codes = [ ]
-      mtef_codes = Mtef.roots.collect {|r| r.children}.flatten
-      hssp_strat_prog_codes = HsspStratProg.all
+      mtef_codes = [] # %w[6 8 9].collect{|e| Mtef.find_by_external_id e}.flatten
+      hssp_strat_prog_codes = [] # HsspStratProg.all
       hssp_strat_obj_codes = HsspStratObj.all
-      nsp_codes = Nsp.all
+      nsp_codes = [] #Nsp.all
 
       [ mtef_codes, nsp_codes ].each do |codes|
           #type, code_id, result_name, header_name

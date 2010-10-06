@@ -37,7 +37,7 @@ class Reports::SqlReport
   end
 
   def build_header
-    (select_list + code_select_array.collect{|c| c[3]}).flatten.join ","
+    (select_list + code_select_array.collect{|c| c[3]}).flatten
   end
 
   def build_row row
@@ -61,4 +61,31 @@ class Reports::SqlReport
        AND code_assignments.type = '#{type}'
        AND code_assignments.code_id = #{code_id} ) as #{result_name}"
   end
+
+#
+# select f.name, t.name, t.fosaid,  sum(child.budget*currencies.toRWF), sum(child.spend*currencies.toRWF)
+#from organizations f
+#inner join activities parent on parent.provider_id = f.id
+#inner join activities child on child.activity_id = parent.id
+#inner join organizations t on t.id = child.provider_id
+#inner join data_responses d on d.id = parent.data_response_id
+#inner join currencies on currencies.symbol = d.currency
+#group by f.name, t.name
+#order by t.fosaid 
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 end

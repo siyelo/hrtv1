@@ -18,14 +18,14 @@ class Reports::DistrictsReport < Reports::SqlReport
       @@code_select_array = []
 
       #all external ids below
-      mtef_codes = Mtef.roots
-      hssp_strat_prog_codes = []
-      hssp_strat_obj_codes = []
-      nsp_codes = [ ]
-    #  mtef_codes = Mtef.roots.collect {|r| r.children}.flatten
-    #  hssp_strat_prog_codes = HsspStratProg.all
-    #  hssp_strat_obj_codes = HsspStratObj.all
-    #  nsp_codes = Nsp.all
+   #   mtef_codes = Mtef.roots
+   #   hssp_strat_prog_codes = []
+   #   hssp_strat_obj_codes = []
+   #   nsp_codes = [ ]
+      mtef_codes = Mtef.roots.collect {|r| r.children}.flatten
+      hssp_strat_prog_codes = HsspStratProg.all
+      hssp_strat_obj_codes = HsspStratObj.all
+      nsp_codes = Nsp.all
 
       [ mtef_codes, nsp_codes ].each do |codes|
           #type, code_id, result_name, header_name

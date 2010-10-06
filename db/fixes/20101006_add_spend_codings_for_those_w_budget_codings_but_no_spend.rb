@@ -9,11 +9,12 @@ Activity.all.each do |a|
     to_move_to_if_missing.each do |from, to|
       coding = from.with_activity(a)
       to_coding = to.with_activity(a)
-      if to_coding.empty? && a.spend && a.spend > 0
+      if to_coding.empty? && a.spend && a.spend > 0 && !a.budget.nil? && a.budget > 0
         CodeAssignment.copy_coding_from_budget_to_spend coding, to
       end
     end
   end
+end
 
 # now save sub activity codings, which will take their parent's
 # expenditure codings made from the above, if they have a spend
@@ -27,6 +28,7 @@ Activity.all.each do |a|
           puts "error on activity #{a.id} for #{ca.code_id} #{ca.class}" unless ca.save
         end
       end
+  end
 end
 
 # now, save the hssp2 code_assignments

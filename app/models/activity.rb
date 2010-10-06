@@ -61,6 +61,7 @@ class Activity < ActiveRecord::Base
 
   # Callbacks
   before_update :update_all_classified_amount_caches
+  before_update :copy_budget_codings_to_spend, :if => Proc.new {|m| m.use_budget_codings_for_spend_changed? && m.use_budget_codings_for_spend }
 
   # TODO handle the saving of codes or the getting of codes correctly
   # when use_budget_codings_for_spend is true
@@ -166,27 +167,27 @@ class Activity < ActiveRecord::Base
   end
 
   def spend?
-    if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
-      budget?
-    else
+    #if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
+      #budget?
+    #else
       CodingSpend.classified(self)
-    end
+    #end
   end
 
   def spend_by_district?
-    if self.use_budget_codings_for_spend?
-      budget_by_district?
-    else
+    #if self.use_budget_codings_for_spend?
+      #budget_by_district?
+    #else
       CodingSpendDistrict.classified(self)
-    end
+    #end
   end
 
   def spend_by_cost_category?
-    if self.use_budget_codings_for_spend?
-      budget_by_cost_category?
-    else
+    #if self.use_budget_codings_for_spend?
+      #budget_by_cost_category?
+    #else
       CodingSpendCostCategorization.classified(self)
-    end
+    #end
   end
 
   def budget_classified?
@@ -237,6 +238,23 @@ class Activity < ActiveRecord::Base
         :cached_amount => amount, :amount => amount)
     end
     assignments
+  end
+
+  # This method copies code assignments when user has chosen to use 
+  # budget codings for expenditure: Following code assignments are copied:
+  # CodingBudget -> CodingSpend
+  # CodingBudgetDistrict -> CodingSpendDistrict
+  # CodingBudgetCostCategorization -> CodingSpendCostCategorization
+  def copy_budget_codings_to_spend(types = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'])
+    types.each do |budget_type|
+      spend_type = budget_type.gsub(/Budget/, "Spend")
+      code_assignments.with_type(spend_type).delete_all # remove old 'Spend' code assignment
+      code_assignments.with_type(budget_type).each do |ca|
+        spend_ca = ca.clone
+        spend_ca.type = spend_type
+        spend_ca.save!
+      end
+    end
   end
 
   private

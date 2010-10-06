@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101005211222) do
+ActiveRecord::Schema.define(:version => 20101006015813) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -124,6 +124,12 @@ ActiveRecord::Schema.define(:version => 20101005211222) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "currencies", :force => true do |t|
+    t.decimal "toRWF"
+    t.string  "symbol"
+    t.string  "name"
+  end
 
   create_table "data_elements", :force => true do |t|
     t.integer "data_response_id"

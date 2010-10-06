@@ -1,1 +1,1 @@
-puts Reports::DistrictsReport.new.csv
+puts Reports::DistrictsReport.new.send(:query)

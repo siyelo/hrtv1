@@ -249,22 +249,22 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
   def budget_stratprog_coding
-    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget
   end
   
   def spend_stratprog_coding
-    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING
+    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
   def budget_stratobj_coding
-    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspBudget
   end
   
   def spend_stratobj_coding
-    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING
+    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
-  def assigns_for_strategic_codes assigns, strat_hash
+  def assigns_for_strategic_codes assigns, strat_hash, new_klass
     assignments = []
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
@@ -273,7 +273,7 @@ class Activity < ActiveRecord::Base
       assigns_in_codes.each do |ca|
         amount += ca.calculated_amount
       end
-      ca = CodeAssignment.new
+      ca = new_klass.new
       ca.activity_id = self.id
       ca.code_id = Code.find_by_short_display(prog).id
       ca.cached_amount = amount

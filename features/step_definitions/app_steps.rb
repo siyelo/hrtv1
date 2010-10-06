@@ -275,3 +275,9 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
             Given I am signed in as "undp_user"
           }
 end
+
+Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
+  activity = Activity.find_by_name(activity_name)
+  location = Location.find_by_short_display(location_name)
+  activity.locations << location
+end

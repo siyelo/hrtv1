@@ -52,7 +52,16 @@ class CodeAssignment < ActiveRecord::Base
           :percentage => code_assignments[code.id.to_s]["percentage"]
         ) if code
       end
-      activity.update_classified_amount_cache self
+
+      if activity.use_budget_codings_for_spend
+        budget_type = self.to_s
+        activity.copy_budget_codings_to_spend([budget_type]) # copy the same budget codings to spend
+        spend_type = budget_type.gsub(/Budget/, "Spend") # get appropriate spend type
+        activity.update_classified_amount_cache(self) # update cache for budget
+        activity.update_classified_amount_cache(spend_type.constantize) # update cache for spend
+      else
+        activity.update_classified_amount_cache(self)
+      end
     end
   end
 

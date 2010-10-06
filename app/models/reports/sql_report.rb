@@ -52,13 +52,17 @@ class Reports::SqlReport
   end
 
   def code_total_for type, code_id, result_name, header_name
+    #TODO add a flag to activities to exclude them if they
+    # are parent activities
     "( select sum(code_assignments.cached_amount*currencies.toRWF)
        FROM code_assignments
        INNER JOIN activities on activities.id = code_assignments.activity_id
        INNER JOIN data_responses on data_responses.id = activities.data_response_id
        INNER JOIN currencies on currencies.symbol = data_responses.currency
+       LEFT JOIN activities a2 on activities.id=a2.activity_id
        WHERE activities.provider_id = organizations.id
        AND code_assignments.type = '#{type}'
-       AND code_assignments.code_id = #{code_id} ) as #{result_name}"
+       AND code_assignments.code_id = #{code_id} ) as #{result_name}
+       AND a2.activity_id is null" #left join attempts the todo slowly
   end
 end

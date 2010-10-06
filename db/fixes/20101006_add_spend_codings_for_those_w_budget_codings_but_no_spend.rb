@@ -19,6 +19,7 @@ end
 # now save sub activity codings, which will take their parent's
 # expenditure codings made from the above, if they have a spend
 # and budget ones as well
+
 Activity.all.each do |a|
     to_move_to_if_missing.each do |from, to| #reuse since it has all the coding classes in it
       coding = from.with_activity(a)
@@ -36,6 +37,7 @@ end
 Activity.all.each do |a|
   [:budget_stratprog_coding,:spend_stratprog_coding,
     :budget_stratobj_coding,:spend_stratobj_coding].each do |coding|
+    coding = a.send(coding)
     coding.each do |ca|
       puts "error on activity #{a.id} for #{ca.code_id} #{ca.class}" unless ca.save
     end

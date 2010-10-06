@@ -1,9 +1,10 @@
 #header_app
   .wrapper
-    #logo
-      = image_tag('coat_of_arms.png')
-      %h1
-        UBU
-        %span ZIMA
+    %a{:href => '/'}
+      #logo
+        = image_tag('coat_of_arms.png')
+        %h1
+          UBU
+          %span ZIMA
 
     = render :partial => '/layouts/login_nav'

@@ -23,10 +23,12 @@ Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
   Then I should see "TB Drugs procurement"
-  And I should see "Budget"
-  And I should see "Budget Cost Categorization"
-  And I should see "Expenditure"
-  And I should see "Expenditure Cost Categorization"
+  And I should see "Coding" within "#tab1"
+  And I should see "District" within "#tab2"
+  And I should see "Categorization" within "#tab3"
+  And I should see "Coding" within "#tab4"
+  And I should see "District" within "#tab5"
+  And I should see "Cost Categorization" within "#tab6"
   And I should see "Providing Technical Assistance"
 
 

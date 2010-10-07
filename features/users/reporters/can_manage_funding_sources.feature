@@ -38,7 +38,6 @@ Scenario: Create incoming funding flow
   And I press "Create"
   And I should see "TB Treatment Project"
   And I should see "UNDP"
-  Then show me the page
   And I should see "1,000.00"
 
 @wip

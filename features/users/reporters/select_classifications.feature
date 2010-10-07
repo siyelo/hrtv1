@@ -19,7 +19,6 @@ Background:
   Given I am signed in as "who_user"
 
 @green
-@d
 Scenario: See a classification page for activities
   When I go to the classifications page
   Then I should see "WHO"

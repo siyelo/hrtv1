@@ -10,7 +10,7 @@ Scenario: Browse to data response edit page
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
-@d
+@green
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -28,16 +28,10 @@ Scenario Outline: Edit data response, see feedback messages
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
 
-@broken
-Scenario: Comments should show on DResponse page (no JS)
+@green
+Scenario: Comments should show on DResponse page
   Given a basic org + reporter profile, with data response, signed in
-  When I go to the data response page for "Req1"
-  Then I should see "General Questions / Comments"
-
-@broken
-@javascript
-Scenario: Comments should show on DResponse page (with JS)
-  Given a basic org + reporter profile, with data response, signed in
+  And a model help for "DataResponse"
   When I go to the data response page for "Req1"
   Then I should see "General Questions / Comments"
 

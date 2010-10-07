@@ -60,5 +60,4 @@
           = form.text_field :contact_office_location
   = submit_tag 'Save'
 
-= render :partial => 'shared/bottom_data_entry',
-  :locals => { :record_type => DataResponse }
+= render 'shared/bottom_data_entry', :record_type => DataResponse

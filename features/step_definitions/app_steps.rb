@@ -277,6 +277,10 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   }
 end
 
+Given /^a model help for "([^"]*)"$/ do |arg1|
+  Factory.create(:model_help, :model_name => "DataResponse")
+end
+
 Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
   activity = Activity.find_by_name(activity_name)
   location = Location.find_by_short_display(location_name)

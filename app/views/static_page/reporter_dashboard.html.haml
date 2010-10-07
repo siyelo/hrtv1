@@ -2,10 +2,10 @@
 %br
 %h3 Data Requests
 
-- @data_requests_fulfilling.each do |req|
+- @data_responses.each do |response|
   %p
-    = req.title
-    = link_to "Edit", start_data_response_url(DataResponse.find_by_data_request_id(req.id))
+    = response.data_request.title
+    = link_to "Edit", start_data_response_url(response)
 
 - @data_requests_unfulfilled.each do |req|
   - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|

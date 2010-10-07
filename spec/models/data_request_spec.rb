@@ -5,6 +5,8 @@ describe DataRequest do
   describe "creating a data request record" do
     subject { Factory(:data_request) }
     it { should be_valid }
+    it { should validate_presence_of :requesting_organization }
+    it { should validate_presence_of :title }
     it { should have_many :data_responses }
     it { should belong_to :requesting_organization }
 

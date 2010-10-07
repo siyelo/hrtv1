@@ -19,10 +19,9 @@ class DataRequest < ActiveRecord::Base
 
   has_many :data_responses, :dependent => :destroy
 
-  named_scope :fulfilling, lambda {|organization|
-    return {} unless organization
-    { :joins=>"INNER JOIN data_responses ON data_responses.data_request_id=data_requests.id", :conditions=>["data_responses.organization_id_responder=?", organization.id] }
-  }
+  validates_presence_of :requesting_organization
+  validates_presence_of :title
+
   named_scope :unfulfilled, lambda {|organization|
     return {} unless organization
     { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id_responder = ? )", organization.id] }

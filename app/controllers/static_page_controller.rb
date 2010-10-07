@@ -19,7 +19,6 @@ class StaticPageController < ApplicationController
 
   def reporter_dashboard
     @data_requests_unfulfilled = DataRequest.unfulfilled(current_user.organization)
-    @data_requests_fulfilling = DataRequest.fulfilling(current_user.organization)
     @data_responses = current_user.data_responses
   end
 

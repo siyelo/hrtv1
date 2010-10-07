@@ -5,7 +5,7 @@ class DataResponsesController < ApplicationController
 
   def index
     @model_help = ModelHelp.find_by_model_name 'DataResponseIndex'
-    @data_responses = DataResponse.submitted.all
+    @data_responses = DataResponse.available_to(current_user).submitted.all
   end
 
   def show
@@ -29,6 +29,7 @@ class DataResponsesController < ApplicationController
   def start
     @model_help = ModelHelp.find_by_model_name 'DataResponse'
     @data_response = DataResponse.available_to(current_user).find params[:id]
+
     current_user.current_data_response = @data_response
     current_user.save
     render :action => 'show'

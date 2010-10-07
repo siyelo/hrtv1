@@ -261,7 +261,7 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
     Given the following organizations 
       | name   |
       | UNDP   |
-      | GoR |
+      | GoR    |
     Given the following reporters 
        | name         | organization |
        | undp_user    | UNDP         |

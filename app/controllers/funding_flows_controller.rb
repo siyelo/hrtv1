@@ -77,4 +77,8 @@ class FundingFlowsController < ActiveScaffoldController
   def before_create_save record
     record.data_response = current_user.current_data_response
   end
+
+  def create_respond_to_html
+    redirect_to funding_sources_data_entry_url
+  end
 end

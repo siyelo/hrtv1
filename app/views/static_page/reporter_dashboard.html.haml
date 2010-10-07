@@ -3,7 +3,7 @@
 %h3 Data Requests
 
 - @data_responses.each do |response|
-  %p
+  %p.current_request
     = response.data_request.title
     = link_to "Edit", start_data_response_url(response)
 
@@ -11,7 +11,7 @@
   - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
     = form.hidden_field(:organization_id_responder)
     = form.hidden_field(:data_request_id)
-    %p
+    %p.unfulfilled_request
       = req.title
       = form.submit "Respond"
 

@@ -3,14 +3,12 @@ Feature: NGO/donor can enter activities for each project
   As a NGO/Donor
   I want to be able to break down projects into activities
 
-@wip
+@green
 Scenario: See list of activities for my project
-  Given a project with name "TB Treatment Project"
-  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 
-  Given I am signed in as a reporter 
-  When I go to the projects listing page
-  And I follow "Activities" within "div#as_projects-content"
-  Then I should see "Activities for TB Treatment Project"
+  Given a basic org + reporter profile, with data response, signed in
+  When I go to the activities page
+  Then I should see "Activities" within "h2"
+  And I should see "Create new activities from a file"
 
 @pending
 Scenario: Add an activity

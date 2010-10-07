@@ -15,8 +15,9 @@ Background:
   Given a data response to "Req1" by "WHO"
   Given a project with name "TB Treatment Project" and an existing response
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response
-  Given a refactor_me_please current_data_response for user "who_manager"
   Given I am signed in as "who_manager"
+  When I follow "Dashboard"
+  And I follow "Edit"
 
 @green
 Scenario: See a breakdown for an activity
@@ -52,4 +53,3 @@ Scenario: Approve an Activity
 Scenario: List approved activities
   When I go to the classifications page
   Then I should see "Approved?"
-

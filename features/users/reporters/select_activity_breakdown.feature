@@ -15,12 +15,13 @@ Background:
   Given a data response to "Req1" by "WHO"
   Given a project with name "TB Treatment Project" and an existing response
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response
-  Given a refactor_me_please current_data_response for user "who_user"
   Given I am signed in as "who_user"
+  When I follow "Dashboard"
+  And I follow "Edit"
 
 @green
 Scenario: See a breakdown for an activity
-  When I go to the classifications page
+  When I go to the activities page
   And I follow "Classify"
   Then I should see "TB Drugs procurement"
   And I should see "Coding" within "#tab1"
@@ -33,7 +34,7 @@ Scenario: See a breakdown for an activity
   
 @green
 Scenario: See both budget for an activity classification
-  When I go to the classifications page
+  When I go to the activities page
   And I follow "Classify"
   Then I should be on the budget classification page for "TB Drugs procurement"
   And I should see "Coding"
@@ -88,7 +89,7 @@ Scenario Outline: enter percentage for an activity budget classification
 
 @green
 Scenario: Cannot approve an Activity
-  When I go to the classifications page
+  When I go to the activities page
   And I follow "Classify"
   Then I should not see "Approved?"
 
@@ -124,13 +125,11 @@ Scenario: Use budget by district for expenditure by district
   And I follow "District" within "#tab2"
   And I fill in "Burera" with "1234567.00" within ".tab2"
   When I press "Save" within ".tab2"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "District" within "#tab2"
   Then the "Burera" field within ".tab2" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
-  Then wait a few moments
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "District" within "#tab5"
   And I wait until "Burera" is visible
@@ -143,13 +142,11 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I follow "Cost Categorization" within "#tab3"
   And I fill in "Drugs, Commodities & Consumables" with "1234567.00" within ".tab3"
   When I press "Save" within ".tab3"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "Cost Categorization" within "#tab3"
   Then the "Drugs, Commodities & Consumables" field within ".tab3" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
-  Then wait a few moments
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Cost Categorization" within "#tab6"
   And I wait until "Drugs, Commodities \& Consumables" is visible

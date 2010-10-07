@@ -32,6 +32,7 @@ Scenario: Create incoming funding flow
   Given a project with name "TB Treatment Project"
   When I go to the funding sources page
   And I follow "Create New"
+  Then show me the page
   And I select "TB Treatment Project" from "Project"
   And I select "UNDP" from "From"
   And I fill in "Total Budget GOR FY 10-11" with "1000.00"

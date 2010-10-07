@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
   # Validations
-  validates_presence_of :name
+  validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}

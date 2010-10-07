@@ -10,6 +10,7 @@ describe Project do
     it { should have_many :comments }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }

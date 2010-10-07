@@ -13,13 +13,12 @@ Background:
      | who_manager     | WHO          |
   Given a data request with title "Req1" from "UNAIDS"
   Given a data response to "Req1" by "WHO"
-  Given a project with name "TB Treatment Project" and an existing response
-  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response
+  Given a project with name "TB Treatment Project" for request "Req1" and organization "WHO"
+  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "WHO"
   Given I am signed in as "who_manager"
   When I follow "Dashboard"
   And I follow "Edit"
 
-@green
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
@@ -39,7 +38,6 @@ Scenario: See a breakdown for an activity
 # the ERROR Errno::EINVAL: Invalid argument -> webrick/httpresponse.rb:324:in `write'
 # - I think capy just needs time to finish the ajax post request...
 @javascript
-@green
 Scenario: Approve an Activity
   When I go to the activity classification page for "TB Drugs procurement"
   Then I should see "Activity Classification"
@@ -49,7 +47,6 @@ Scenario: Approve an Activity
   And I go to the activity classification page for "TB Drugs procurement"
   Then the "approve_activity" checkbox should be checked
 
-@green
 Scenario: List approved activities
   When I go to the classifications page
   Then I should see "Approved?"

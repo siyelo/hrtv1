@@ -3,7 +3,6 @@ Feature: NGO/donor can see activity breakdowns for each project
   As a NGO/Donor
   I want to be able to break down activities 
 
-@green
 Scenario: See list of activities for my project
   Given a basic org + reporter profile, with data response, signed in
   Given a project with name "TB Treatment Project"

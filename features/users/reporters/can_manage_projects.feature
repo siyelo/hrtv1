@@ -2,7 +2,6 @@ Feature: In order to reduce costs
   As a reporter
   I want to be able to manage my projects
 
-@green
 Scenario: Browse to project edit page
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"
@@ -10,7 +9,6 @@ Scenario: Browse to project edit page
   Then I should be on the projects page for "Req1"
   And I should see "Projects" within "div#main"
 
-@green
 Scenario Outline: Edit project dates, see feedback messages for start and end dates
   Given a basic org + reporter profile, with data response, signed in
   When I go to the projects page for "Req1"
@@ -28,7 +26,6 @@ Scenario Outline: Edit project dates, see feedback messages for start and end da
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date is an invalid date         |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
-@green
 Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget GOR
   Given a basic org + reporter profile, with data response, signed in
   When I go to the projects page for "Req1"

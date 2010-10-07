@@ -9,24 +9,28 @@ Scenario: Reporter can see current incoming flows (Funding Sources) for their or
     | name             |
     | WHO              |
     | UNAIDS           |
+    | GoR              |
     | Gates Foundation |
   Given the following reporters 
      | name         | organization |
      | who_user     | WHO          |
+  Given a data request with title "Req1" from "GoR"
+  Given a data response to "Req1" by "WHO"  
   Given the following projects 
-     | name                 |
-     | TB Treatment Project |
-     | Some other Project   |
+     | name                 | request | organization |
+     | TB Treatment Project | Req1    | WHO          |
+     | Some other Project   | Req1    | WHO          |
   Given the following funding flows 
      | to     | project              | from             | budget  |
      | WHO    | TB Treatment Project | UNAIDS           | 1000.00 |
-     | UNAIDS | Some other Project   | Gates Foundation | 2000.00 |
+     | GoR    | Some other Project   | Gates Foundation | 2000.00 |
   Given I am signed in as "who_user"
+  When I follow "Dashboard"
+  And I follow "Edit"
   When I go to the funding sources page
   Then I should see "TB Treatment Project"
   And I should not see "Some other Project"
 
-@green
 Scenario: Create incoming funding flow
   Given a basic org + reporter profile, with data response, signed in
   Given a project with name "TB Treatment Project"
@@ -41,7 +45,6 @@ Scenario: Create incoming funding flow
   And I should see "UNDP"
   And I should see "1,000.00"
 
-@green
 Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
   Given a basic org + reporter profile, with data response, signed in
   Given a project with name "TB Treatment Project"

@@ -2,7 +2,6 @@ Feature: In order to reduce costs
   As a reporter
   I want to be able to manage my data response settings
 
-@green
 Scenario: Browse to data response edit page
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"
@@ -10,7 +9,6 @@ Scenario: Browse to data response edit page
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
-@green
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -28,14 +26,12 @@ Scenario Outline: Edit data response, see feedback messages
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
 
-@green
 Scenario: Comments should show on DResponse page
   Given a basic org + reporter profile, with data response, signed in
   And a model help for "DataResponse"
   When I go to the data response page for "Req1"
   Then I should see "General Questions / Comments"
 
-@green
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -46,7 +42,6 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
 
 
 @javascript
-@green
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -55,7 +50,6 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   And I press "Save"
   And I should not see "ActionController::InvalidAuthenticityToken"
 
-@green
 Scenario: See data response form
   Given the following organizations 
     | name   |
@@ -74,7 +68,6 @@ Scenario: See data response form
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
-@green
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -91,7 +84,6 @@ Scenario Outline: Edit data response, see feedback messages
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is an invalid date |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
-@green
 Scenario: User can start a data response
   Given the following organizations 
     | name   |

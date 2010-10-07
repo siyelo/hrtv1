@@ -13,13 +13,12 @@ Background:
      | who_user     | WHO          |
   Given a data request with title "Req1" from "UNAIDS"
   Given a data response to "Req1" by "WHO"
-  Given a project with name "TB Treatment Project" and an existing response
-  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" and an existing response
+  Given a project with name "TB Treatment Project" for request "Req1" and organization "WHO"
+  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "WHO"
   Given I am signed in as "who_user"
   When I follow "Dashboard"
   And I follow "Edit"
 
-@green
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
@@ -32,7 +31,6 @@ Scenario: See a breakdown for an activity
   And I should see "Cost Categorization" within "#tab6"
   And I should see "Providing Technical Assistance"
   
-@green
 Scenario: See both budget for an activity classification
   When I go to the activities page
   And I follow "Classify"
@@ -40,7 +38,6 @@ Scenario: See both budget for an activity classification
   And I should see "Coding"
   And I should see the "Coding" tab is active
 
-@green
 Scenario: enter budget for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
@@ -50,7 +47,6 @@ Scenario: enter budget for an activity
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
 @javascript
-@green
 Scenario: enter expenditure for an activity
   Given I am on the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
@@ -61,7 +57,6 @@ Scenario: enter expenditure for an activity
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
 
-@green
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed. 
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
@@ -72,7 +67,6 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And I press "Save"
   Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
 
-@green
 Scenario Outline: enter percentage for an activity budget classification
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in the percentage for "Human Resources For Health" with "<amount>"
@@ -86,15 +80,12 @@ Scenario Outline: enter percentage for an activity budget classification
     | 50.1   | 50.1    |
     | 95.6   | 95.6    |
 
-
-@green
 Scenario: Cannot approve an Activity
   When I go to the activities page
   And I follow "Classify"
   Then I should not see "Approved?"
 
 @javascript
-@green
 Scenario: Use budget by coding for expenditure by coding (and change existing budget coding to see if the spend coding also changes)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab1"
@@ -118,7 +109,6 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "7,654,321.00"
 
 @javascript
-@green
 Scenario: Use budget by district for expenditure by district
   Given location "Burera" for activity "TB Drugs procurement"
   And I am on the budget classification page for "TB Drugs procurement"
@@ -136,7 +126,6 @@ Scenario: Use budget by district for expenditure by district
   Then the "Burera" field within ".tab5" should contain "1,234,567.00"
 
 @javascript
-@green
 Scenario: Use budget by cost categorization for expenditure by cost categorization
   And I am on the budget classification page for "TB Drugs procurement"
   And I follow "Cost Categorization" within "#tab3"

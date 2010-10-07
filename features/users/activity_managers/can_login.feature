@@ -3,7 +3,6 @@ Feature: Activity Manager can login
   As an Activity Manager
   I want to be able to login
 
-@green
 Scenario: Login as an activity manager with a username
   Given an activity manager "Frank" with email "frank@f.com" and password "password"
   When I go to the login page

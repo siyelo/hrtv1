@@ -3,7 +3,6 @@ Feature: NGO/donor can enter activities for each project
   As a NGO/Donor
   I want to be able to break down projects into activities
 
-@green
 Scenario: See list of activities for my project
   Given a basic org + reporter profile, with data response, signed in
   When I go to the activities page

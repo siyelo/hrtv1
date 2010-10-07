@@ -1,3 +1,9 @@
+def get_data_response(data_request_name, organization_name)
+  data_request = DataRequest.find_by_title(data_request_name)
+  organization = Organization.find_by_name(organization_name)
+  DataResponse.find(:first, :conditions => ["data_request_id = ? AND organization_id_responder = ?", data_request.id, organization.id])
+end
+
 Given /^a project$/ do
   @project = Factory.create(:project)
 end
@@ -6,25 +12,16 @@ Given /^a project with name "([^\"]*)"$/ do |name|
   @project = Factory.create(:project, :name => name)
 end
 
-# kill meeeee
-Given /^a project with name "([^\"]*)" and an existing response$/ do |name|
-  @project = Factory.create(:project, :name => name, :data_response => @data_response)
-end
-
-# kill meeeee
-Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing response$/ do |name, district|
+Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
   @project = Factory.create(:project, 
-                            :name => name, 
-                            :locations => [ Location.find_by_short_display district],
-                            :data_response => @data_response)
+                            :name => project_name, 
+                            :data_response => get_data_response(data_request_name, organization_name))
 end
 
-Given /^an implementer "([^"]*)" for project "([^"]*)"  and an existing response$/ do |org, project|
-  @project ||= Project.find_by_name(project)
-  organization = Organization.find_by_name(org)
-  @implementer = Factory.create( :implementer, 
-                                :project => @project,  
-                                :organization_id_from => organization.id )
+Given /^an implementer "([^"]*)" for project "([^"]*)"$/ do |implementer_name, project_name|
+  @implementer = Factory.create(:implementer, 
+                                :project => Project.find_by_name(project_name),  
+                                :organization_id_from => Organization.find_by_name(implementer_name))
 end
 
 Given /^an activity with name "([^\"]*)"$/ do |name|
@@ -32,20 +29,22 @@ Given /^an activity with name "([^\"]*)"$/ do |name|
 end
 
 Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :projects => [Project.find_by_name(project)])
+  @activity = Factory.create(:activity, 
+                             :name => name, 
+                             :projects => [Project.find_by_name(project)])
 end
 
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)" and an existing response$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :data_response => @data_response, :projects => [Project.find_by_name(project)])
+Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
+  @activity = Factory.create(:activity, 
+                             :name => activity_name, 
+                             :data_response => get_data_response(data_request_name, organization_name), 
+                             :projects => [Project.find_by_name(project_name)])
 end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:project,  { :data_response_id => @data_response.id 
-                              }.merge(hash) )
+    Factory.create(:project,  { :data_response => get_data_response(hash.delete("request"), hash.delete("organization")) }.merge(hash) )
   end
-
-    #project.data_response.responding_organization
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
@@ -142,7 +141,7 @@ Given /^the following funding flows$/ do |table|
     to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
-
+    
     Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
                    :project_id => project.id, 
                    :organization_id_from => from_org.id
@@ -158,19 +157,6 @@ Then /^I should see the "([^"]*)" tab is active$/ do |text|
   steps %Q{
     Then I should see "#{text}" within "li.selected"
   }
-end
-
-Given /^the following funding flows$/ do |table|
-  table.hashes.each do |hash|
-    to_org   = Organization.find_by_name(hash.delete("to"))
-    project  = Project.find_by_name(hash.delete("project"))
-    from_org = Organization.find_by_name(hash.delete("from"))
-
-    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                   :project_id => project.id, 
-                   :organization_id_from => from_org.id
-    }.merge(hash) )
-  end
 end
 
 Then /^I should see the visitors header$/ do

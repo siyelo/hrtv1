@@ -41,8 +41,7 @@ end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    org  = Factory.create(:organization)
-    Factory.create(:project,  { :organization_id => org.id
+    Factory.create(:project,  { :data_response_id => @data_response.id 
                               }.merge(hash) )
   end
 
@@ -283,12 +282,16 @@ Given /^model help for "([^"]*)" page$/ do |page|
                       "Project"
                     when 'funding sources'
                       "FundingSource"
-                    when 'providers'
+                    when 'implementers'
                       "Provider"
                     when 'activities'
                       "Activity"
+                    when 'classifications'
+                      "CodeAssignment"
                     when 'other costs'
                       "OtherCost"
+                    when 'review'
+                      "DataResponseReview"
                     end
   steps %Q{ 
     Given a model help for "#{model_help_name}"

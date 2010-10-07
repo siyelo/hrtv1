@@ -60,6 +60,7 @@ Scenario: See data response form
   Given the following organizations 
     | name   |
     | UNDP   |
+    | UNAIDS |
   Given the following reporters 
      | name         | organization |
      | undp_user    | UNDP         |
@@ -95,6 +96,7 @@ Scenario: User can start a data response
   Given the following organizations 
     | name   |
     | UNDP   |
+    | UNAIDS |
   Given the following reporters 
      | name         | organization |
      | undp_user    | UNDP         |

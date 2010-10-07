@@ -2,6 +2,7 @@ Feature: In order to reduce costs
   As a reporter
   I want to be able to manage my data response settings
 
+@green
 Scenario: Browse to data response edit page
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"
@@ -9,6 +10,7 @@ Scenario: Browse to data response edit page
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
+@d
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"

@@ -41,10 +41,12 @@ end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
+    org  = Factory.create(:organization)
     Factory.create(:project,  { :organization_id => org.id
                               }.merge(hash) )
   end
+
+    #project.data_response.responding_organization
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
@@ -246,14 +248,6 @@ Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
                                   :responding_organization => Organization.find_by_name(org))
 end
 
-# refactor meeeee
-Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name|
-  @user = User.find_by_username name
-  @data_response = DataResponse.last
-  @user.current_data_response = @data_response
-  @user.save!
-end
-
 Then /^wait a few moments$/ do
   sleep 3
 end
@@ -273,13 +267,32 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
        | undp_user    | UNDP         |
     Given a data request with title "Req1" from "GoR"
     Given a data response to "Req1" by "UNDP"
-    Given a refactor_me_please current_data_response for user "undp_user"
     Given I am signed in as "undp_user"
+    When I follow "Dashboard"
+    And I follow "Edit"
   }
 end
 
-Given /^a model help for "([^"]*)"$/ do |arg1|
-  Factory.create(:model_help, :model_name => "DataResponse")
+Given /^a model help for "([^"]*)"$/ do |model_name|
+  Factory.create(:model_help, :model_name => model_name)
+end
+
+Given /^model help for "([^"]*)" page$/ do |page|
+  model_help_name = case page
+                    when 'projects'
+                      "Project"
+                    when 'funding sources'
+                      "FundingSource"
+                    when 'providers'
+                      "Provider"
+                    when 'activities'
+                      "Activity"
+                    when 'other costs'
+                      "OtherCost"
+                    end
+  steps %Q{ 
+    Given a model help for "#{model_help_name}"
+  }
 end
 
 Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|

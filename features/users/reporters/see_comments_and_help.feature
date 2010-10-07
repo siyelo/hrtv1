@@ -3,8 +3,10 @@ Feature: Reporter can see comments & help for a data response
   As a reporter
   I want to be able to see Comments/Questions and Help on the relevant pages
 
+@wip
 Scenario Outline: See comments/help
   Given I am signed in as a reporter
+  Given model help for "<page>" page
   When I go to the <page> page
   Then I should see "General Questions / Comments"
   And I should see "Help"
@@ -17,6 +19,7 @@ Scenario Outline: See comments/help
     | activities |
     | other costs |
 
+@wip
 Scenario Outline: See comments/help for an activity breakdown(/classification)
   Given a project with name "TB Treatment Project"
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project" 

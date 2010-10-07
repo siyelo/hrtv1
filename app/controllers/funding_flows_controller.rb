@@ -4,9 +4,7 @@ class FundingFlowsController < ActiveScaffoldController
   @@shown_columns = [:project, :from, :to, :budget, :spend]
   @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1,
                       :spend_q2, :spend_q3, :spend_q4]
-  def self.create_columns
-    @@create_columns
-  end
+
   @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend,
                       :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
@@ -35,10 +33,7 @@ class FundingFlowsController < ActiveScaffoldController
       config.columns[c].options             = { :prompt => '--- Select Organization ---', :include_blank => '+ Add a new Organization...' }
       config.columns[c].inplace_edit        = false
     end
-#    config.columns[:from].association.reverse = :out_flows
-#    config.columns[:to].association.reverse = :in_flows
 
-   # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :budget
@@ -66,6 +61,10 @@ class FundingFlowsController < ActiveScaffoldController
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
   end
 
+  def self.create_columns
+    @@create_columns
+  end
+
   def create_from_file
     super @@columns_for_file_upload
   end
@@ -74,7 +73,7 @@ class FundingFlowsController < ActiveScaffoldController
     super.available_to current_user
   end
 
-  #fixes create
+  #fixes create()
   def before_create_save record
     record.data_response = current_user.current_data_response
   end

@@ -6,8 +6,14 @@ describe Activity do
     subject { Factory(:activity) }
     
     it { should be_valid }
-    #it { should validate_presence_of(:name) }
-    #TODO
+    it { should have_many :sub_activities }
+    it { should have_many :code_assignments }
+    it { should have_and_belong_to_many :organizations }
+    it { should have_and_belong_to_many :beneficiaries }
+    it { should have_and_belong_to_many :locations }
+    it { should have_and_belong_to_many :indicators }
+    it { should have_and_belong_to_many :projects }
+    it { should belong_to :provider }
   end
   
   describe "assigning an activity to a project" do
@@ -51,6 +57,15 @@ describe Activity do
         pending
       end
     end
+  end
+  
+  it "cannot be edited once approved" do
+    a = Factory(:activity)
+    a.approved.should == nil
+    a.approved = true
+    a.save!
+    a.spend = 2000
+    a.save.should == false
   end
   
 end

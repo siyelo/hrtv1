@@ -36,9 +36,10 @@
 class SubActivity < Activity
   belongs_to :activity
   attr_accessible :activity_id, :spend_percentage, :budget_percentage
-  
+
+  #TODO: refactor
   [:projects, :name, :description,  :start, :end,
-   :text_for_beneficiaries, :beneficiaries, :text_for_targets, 
+   :text_for_beneficiaries, :beneficiaries, :text_for_targets,
    :approved].each do |method|
     delegate method, :to => :activity
   end
@@ -54,7 +55,7 @@ class SubActivity < Activity
       activity.locations
     end
   end
- 
+
   def budget
     if read_attribute(:budget)
      read_attribute(:budget)
@@ -77,7 +78,7 @@ class SubActivity < Activity
 
 
   def budget_coding
-    code_assignments.select {|ca| ca.type == "CodingBudget"} 
+    code_assignments.select {|ca| ca.type == "CodingBudget"}
   end
 
   def budget_district_coding
@@ -113,7 +114,7 @@ class SubActivity < Activity
       budget_district_coding = get_district_coding :budget
       budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
       budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
-      
+
       spend_district_coding = get_district_coding :spend
       spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
       spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")

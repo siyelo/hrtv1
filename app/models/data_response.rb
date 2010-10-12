@@ -31,6 +31,7 @@ class DataResponse < ActiveRecord::Base
   has_many :activities, :dependent=>:destroy
   has_many :funding_flows, :dependent=>:destroy
   has_many :projects, :dependent=>:destroy
+  @@data_associations = %w[activities funding_flows projects]
 
   has_many    :users_currently_completing,
               :class_name => "User",
@@ -63,8 +64,71 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
+  def self.in_process
+    self.find(:all,:conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0}
+  end
+
   def self.remove_security
     with_exclusive_scope {find(:all)}
+  end
+
+  def self.options_hash_for_empty
+    h = {}
+    h[:joins] = @@data_associations.collect do |assoc|
+      "LEFT JOIN #{assoc} ON data_responses.id = #{assoc}.data_response_id"
+    end
+    h[:conditions] = @@data_associations.collect do |assoc|
+      "#{assoc}.data_response_id IS NULL"
+    end.join(" AND ")
+    h
+  end
+
+  #named_scope :empty, options_hash_for_empty
+  def self.empty
+    drs = self.find(:all, options_hash_for_empty)
+    drs.select do |dr|
+      (%w[Agencies Donors Implementer Implementers] + ["International NGO"]).include?(dr.responding_organization.raw_type)
+    end
+  end
+
+
+  # Law of Demeter methods
+#  %w[projects activities funding_flows].each do |assoc|
+#    %w[spend budget].each do |total_method|
+#      method_name = "#{assoc}_total_#{total_method}"
+#      def method_name
+#        send(assoc).sum {|m| m.send(total_method)}
+#      end
+#    end
+#  end
+  def activity_count
+    activities.only_simple.count
+  end
+
+  def sub_activity_count
+    activities.with_type("SubActivity").count
+  end
+
+  def unclassified_activities_count
+    activities.only_simple.unclassified.count
+  end
+
+  def total_activity_spend
+    total_activity_method :spend
+  end
+
+  def total_activity_budget
+    total_activity_method :budget
+  end
+
+  def total_activity_method method
+    activities.only_simple.inject(0) do |sum, a|
+      unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
+        sum + a.send(method)
+      else
+        sum
+      end
+    end
   end
 
 end

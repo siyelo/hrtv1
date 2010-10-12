@@ -46,20 +46,24 @@ class SubActivity < Activity
 
   def locations
     if provider
-      unless provider.locations.empty?
+      if !provider.locations.empty?
         provider.locations
-      else
+      elsif activity
         activity.locations
+      else
+        []
       end
-    else
+    elsif activity
       activity.locations
+    else
+      []
     end
   end
 
   def budget
     if read_attribute(:budget)
      read_attribute(:budget)
-    elsif budget_percentage
+    elsif budget_percentage && activity
      activity.budget.try(:*, budget_percentage / 100)
     else
      nil
@@ -69,7 +73,7 @@ class SubActivity < Activity
   def spend
     if read_attribute(:spend)
      read_attribute(:spend)
-    elsif spend_percentage
+    elsif spend_percentage && activity
      activity.spend.try(:*, spend_percentage / 100)
     else
      nil

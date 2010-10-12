@@ -1,7 +1,52 @@
 .simple_table
-  %h3 Submitted data responses for review
-  - if @data_responses.empty?
-    %p All data responses have been reviewed.
+  %h3="Empty Data Responses (#{@empty_data_responses.size})"
+  - if @empty_data_responses.empty?
+    %p All data responses have been started.
+  - else
+    %table
+      %thead
+        %tr
+          %th Organization
+      %tbody
+        - @empty_data_responses.each do |data_response|
+          %tr
+            %th= data_response.responding_organization
+.simple_table
+  %h3="In Process Data Responses (#{@in_progress_data_responses.size})"
+  - if @in_progress_data_responses.empty?
+    %p No data responses are in progress.
+  - else
+    %table
+      %thead
+        %tr
+          %th Organization
+          %td Projects
+          %td Spend Total
+          %td Budget Total
+          %td Activities
+          %td Sub Activities
+          %td Spend Total
+          %td Budget Total
+          %td Unclassified Activities
+          %td
+      %tbody
+        - @in_progress_data_responses.each do |data_response|
+          %tr
+            %th= data_response.responding_organization
+            %th= data_response.projects.count
+            %th= data_response.projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend}
+            %th= data_response.projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
+            %th= data_response.activity_count
+            %th= data_response.sub_activity_count
+            %th= data_response.total_activity_spend
+            %th= data_response.total_activity_budget
+            %th= data_response.unclassified_activities_count
+            %th
+.simple_table
+  %h3="Submitted data responses for review (#{@submitted_data_responses.size})"
+
+  - if @submitted_data_responses.empty?
+    %p No submitted data responses are waiting for review.
   - else
     %table
       %thead
@@ -11,7 +56,7 @@
           %td Total budget
           %td Total spend
       %tbody
-        - @data_responses.each do |data_response|
+        - @submitted_data_responses.each do |data_response|
           %tr
             %th= data_response.responding_organization
             %th= data_response.submitted_at

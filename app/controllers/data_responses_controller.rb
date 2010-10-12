@@ -4,8 +4,11 @@ class DataResponsesController < ApplicationController
   before_filter :require_admin, :only => [:index]
 
   def index
+    # TODO add exempted category, link to exempt next to each empty response
     @model_help = ModelHelp.find_by_model_name 'DataResponseIndex'
-    @data_responses = DataResponse.available_to(current_user).submitted.all
+    @submitted_data_responses = DataResponse.available_to(current_user).submitted.all
+    @in_progress_data_responses = DataResponse.available_to(current_user).in_process
+    @empty_data_responses = DataResponse.available_to(current_user).empty
   end
 
   def show

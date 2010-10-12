@@ -69,6 +69,11 @@ class Activity < ActiveRecord::Base
   # Named scopes
   named_scope :roots,     {:conditions => "activities.type IS NULL" }
   named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }
+  named_scope :only_simple, :conditions => ["type is null or type in (?)", ["OtherCost"]]
+
+  def self.unclassified
+    self.find(:all).select {|a| !a.classified}
+  end
 
   # delegate :providers, :to => :projects
   def valid_providers
@@ -121,6 +126,9 @@ class Activity < ActiveRecord::Base
     CodingBudgetDistrict.classified(self)
   end
 
+  # methods like this are used for reports
+  # so the logic for how to return when there is no data
+  # is put in the model, thus being shared
   def budget_district_coding
     val = code_assignments.with_type(CodingBudgetDistrict.to_s)
     if val.empty? && budget
@@ -136,7 +144,7 @@ class Activity < ActiveRecord::Base
       end
       assignments
     else
-      []
+      val
     end
   end
 
@@ -148,6 +156,7 @@ class Activity < ActiveRecord::Base
     code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
   end
 
+  # these comment outs introduce a bug, why are they here?
   def spend?
     #if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
       #budget?
@@ -183,7 +192,7 @@ class Activity < ActiveRecord::Base
       end
       assignments
     else
-      []
+      val
     end
   end
 

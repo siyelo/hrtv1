@@ -156,7 +156,8 @@ class Activity < ActiveRecord::Base
     code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
   end
 
-  # these comment outs introduce a bug, why are they here?
+  # these comment outs should be okay now that there
+  # is the before_save
   def spend?
     #if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
       #budget?

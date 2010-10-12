@@ -1,22 +1,16 @@
 require 'fastercsv'
 
-class Reports::DistrictsReport < Reports::SqlReport
+class Reports::FacilitiesReport < Reports::SqlReport
   @@select_list =
-    [ 'codes.short_display' ,'ca.type,' 'sum(ca.cached_amount * CASE when currencies.toRWF IS NULL THEN 580 ELSE currencies.toRWF END) as cached_amount_total' ]
+    %w[ organizations.name organizations.fosaid ]
   
   @@where_body = "
-    FROM code_assignments ca
-    INNER JOIN codes on ca.code_id = codes.id
-    INNER JOIN activities on activities.id = ca.activity_id
-    INNER JOIN data_responses on data_responses.id = activities.data_response_id
-    LEFT JOIN currencies on currencies.symbol = data_responses.currency
-    WHERE (ca.type = 'CodingBudgetDistrict' OR ca.type = 'CodingSpendDistrict')
-    AND codes.type = 'Location'
-    GROUP BY codes.short_display, ca.type"
+    FROM organizations
+    WHERE organizations.fosaid is not null "
   @@code_select_array = nil
   
   def initialize
-    super(@@select_list, [:short_display, :type, :cached_amount_total], @@where_body, code_select_array)
+    super(@@select_list, [:name, :fosaid], @@where_body, code_select_array)
   end
  
   def code_select_array
@@ -54,16 +48,4 @@ class Reports::DistrictsReport < Reports::SqlReport
     end
   end
 
-  def query
-    list = @select_list + code_select_array.collect do |a|
-      code_total_for_district a[0], a[1], a[2], a[3]
-    end
-
-    list = list.join ","
-
-    @query = " SELECT
-    #{list}
-    #{@where_body} "
-
-  end
 end

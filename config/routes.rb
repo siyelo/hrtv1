@@ -1,7 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.resources :data_responses,
-     :only => [ :show, :create, :edit, :update, :index ],
      :member => {:review => :get, :submit => :put, :start => :get}
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model

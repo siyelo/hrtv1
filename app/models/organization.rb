@@ -40,4 +40,8 @@ class Organization < ActiveRecord::Base
     name
   end
 
+  def user_email_list_limit_3
+    users[0,2].collect{|u| u.email}.join ","
+  end
+
 end

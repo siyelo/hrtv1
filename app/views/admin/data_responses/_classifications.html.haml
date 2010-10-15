@@ -1,12 +1,12 @@
 .classifications
   = render '/code_assignments/tab_nav'
 
-
 #activity_classification
   .tab1
     %ul
       - @code_roots.each do |code|
-        %li= code.short_display if activity. ? .include?(code)
+        = render 'code_row', :code => code
+
   .tab2
     %ul
       - activity.locations.each do |location|

@@ -7,6 +7,10 @@ var data_responses_show = {
     jQuery('.project.entry_header').click(function () {
       jQuery(this).next('.project.entry_main').toggle();
     });
+
+    jQuery('.activity.entry_header').click(function () {
+      jQuery(this).next('.activity.entry_main').toggle();
+    });
   }
 }
 

@@ -7,7 +7,7 @@
       %tr
         %th Project
         %th Activities
-        %th Total Spend
+        %th Spend
         %th Total Budget
 
     %tbody
@@ -16,57 +16,71 @@
           %td
             %ul
               %li= project.name
-              %li.descr= project.description.first(200)
-              %li.funders= project.funding_sources.map(&:name).join(', ')
+              %li.descr= project.description.to_s.first(300)
+              %li.funders= "Funders: #{project.funding_sources.map(&:name).join(', ')}"
           %td= project.activities.count
-          %td= project.spend
-          %td= project.budget
+          %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+          %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
         %tr.project.entry_main
           %td{:colspan => 100}
             %dl
-              %dt P Descr:
-              %dd= project.description
               %dt Districts:
               %dd= project.locations
-              %dt Currency:
-              %dd= project.currency
               %dt Start:
               %dd= project.start_date
               %dt End:
               %dd= project.end_date
+              %dt Total Budget:
+              %dd= project.entire_budget
+              %dt Budget (current FY):
+              %dd= project.budget
+              %dt Spend Q4 (Previous FY):
+              %dd= project.spend_q4_prev
+              %dt Spend (current FY):
+              %dd= project.spend
+              %dt Spend Q1:
+              %dd= project.spend_q1
+              %dt Spend Q2:
+              %dd= project.spend_q2
+              %dt Spend Q3:
+              %dd= project.spend_q3
+              %dt Spend Q4:
+              %dd= project.spend_q4
 
             %table.activities
               %thead
                 %tr
                   %th Activity
                   %th Sub-Implementers
-                  %th Org's Assisted
-                  %th Comments
                   %th Spend
                   %th Budget
               %tbody
                 - project.activities.each do |activity|
                   %tr.activity.entry_header
-                    %td= activity.name
+                    %td
+                      %ul
+                        %li.name= activity.name
+                        %li.descr= activity.description.to_s.first(300)
+                        %li.implementer= "Implementer: #{activity.implementer.name}"
                     %td= activity.sub_activities.count
-                    %td
-                    %td
-                    %td= activity.spend
-                    %td= activity.budget
+                    %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+                    %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
                   %tr.activity.entry_main
                     %td{:colspan => 100}
                       %dl
-                        %dt A Descr:
-                        %dd= activity.description
                         %dt Districts:
                         %dd= activity.locations
-                        %dt Currency:
-                        %dd= activity.currency
                         %dt Start:
                         %dd= activity.start
                         %dt End:
                         %dd= activity.end
+                        %dt Beneficiaries:
+                        %dd= activity.beneficiaries.map(&:short_display).join(', ')
+                        %dt Org's Assisted
+                        %dd= activity.organizations.map(&:name).join(', ')
+                        %dt Comments
+                        %dd
                       %table.classifications
                         %thead
                           %tr

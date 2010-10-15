@@ -57,7 +57,6 @@ class Activity < ActiveRecord::Base
 
   # Associations
   has_and_belongs_to_many :projects
-  has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
@@ -88,6 +87,11 @@ class Activity < ActiveRecord::Base
   def valid_providers
     #TODO use delegates_to
     projects.valid_providers
+  end
+
+  #convenience
+  def implementer
+    provider
   end
 
   def currency
@@ -128,7 +132,7 @@ class Activity < ActiveRecord::Base
 
   #TODO TODO make methods like this for the spend_coding etc
   def budget_coding
-    code_assignments.with_type(CodingBudget.to_s) 
+    code_assignments.with_type(CodingBudget.to_s)
   end
 
   def budget_by_district?
@@ -162,7 +166,7 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_cost_category_coding
-    code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
+    code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
 
   # these comment outs should be okay now that there
@@ -176,7 +180,7 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_coding
-    code_assignments.with_type(CodingSpend.to_s) 
+    code_assignments.with_type(CodingSpend.to_s)
   end
 
   def spend_by_district?
@@ -215,7 +219,7 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_cost_category_coding
-    code_assignments.with_type(CodingSpendCostCategorization.to_s) 
+    code_assignments.with_type(CodingSpendCostCategorization.to_s)
   end
 
   def budget_classified?
@@ -248,7 +252,7 @@ class Activity < ActiveRecord::Base
 
 #  def self.add_coding_accessor type, method_name
 #    def method_name
-#      self.code_assignments.with_type(type) 
+#      self.code_assignments.with_type(type)
 #    end
 #  end
 
@@ -271,7 +275,7 @@ class Activity < ActiveRecord::Base
   def budget_stratprog_coding
     assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget
   end
-  
+
   def spend_stratprog_coding
     assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspSpend
   end
@@ -279,7 +283,7 @@ class Activity < ActiveRecord::Base
   def budget_stratobj_coding
     assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspBudget
   end
-  
+
   def spend_stratobj_coding
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
@@ -289,7 +293,7 @@ class Activity < ActiveRecord::Base
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
       assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
-      amount = 0 
+      amount = 0
       assigns_in_codes.each do |ca|
         amount += ca.calculated_amount
       end
@@ -303,7 +307,7 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies code assignments when user has chosen to use 
+  # This method copies code assignments when user has chosen to use
   # budget codings for expenditure: Following code assignments are copied:
   # CodingBudget -> CodingSpend
   # CodingBudgetDistrict -> CodingSpendDistrict

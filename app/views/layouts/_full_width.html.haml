@@ -1,0 +1,15 @@
+%body{:id => controller.controller_name + "_" + controller.action_name, :class => "app"}
+
+  = render "layouts/header_app"
+  = render :partial => 'layouts/main_nav'
+
+  #content
+    .wrapper
+      = yield :sub_nav
+      = render :partial => 'layouts/flashes'
+      .full-width
+        = yield
+        
+  = yield(:header)
+  = yield(:tabs)
+  = yield(:main)

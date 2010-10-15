@@ -7,18 +7,18 @@
       %thead
         %tr
           %th Organization
-          %td User Emails
-          %td Point of Contact Phone Number
-          %td
+          %th User Emails
+          %th Point of Contact Phone Number
+          %th
       %tbody
         - @empty_data_responses.each do |data_response|
           %tr
-            %th= data_response.responding_organization
+            %td= data_response.responding_organization
             %td= data_response.responding_organization.user_email_list_limit_3
             %td= data_response.contact_phone_number
             %td
               = link_to "Show", [:admin, data_response]
-              = link_to "Delete Response", data_response, :confirm => "Are you sure?", :method => :delete
+              = link_to "Delete Response", [:admin, data_response], :confirm => "Are you sure?", :method => :delete
 .simple_table
   %h3="In Process Data Responses (#{@in_progress_data_responses.size})"
   - if @in_progress_data_responses.empty?
@@ -28,28 +28,29 @@
       %thead
         %tr
           %th Organization
-          %td Projects
-          %td Spend Total
-          %td Budget Total
-          %td Activities
-          %td Sub Activities
-          %td Spend Total
-          %td Budget Total
-          %td Unclassified Activities
-          %td
+          %th Projects
+          %th Spend Total
+          %th Budget Total
+          %th Activities
+          %th Sub Activities
+          %th Spend Total
+          %th Budget Total
+          %th Unclassified Activities
+          %th
       %tbody
         - @in_progress_data_responses.each do |data_response|
           %tr
-            %th= data_response.responding_organization
-            %th= data_response.projects.count
-            %th= data_response.projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend}
-            %th= data_response.projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
-            %th= data_response.activity_count
-            %th= data_response.sub_activity_count
-            %th= data_response.total_activity_spend
-            %th= data_response.total_activity_budget
-            %th= data_response.unclassified_activities_count
-            %th
+            %td= data_response.responding_organization
+            %td= data_response.projects.count
+            %td= data_response.projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend}
+            %td= data_response.projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
+            %td= data_response.activity_count
+            %td= data_response.sub_activity_count
+            %td= data_response.total_activity_spend
+            %td= data_response.total_activity_budget
+            %td= data_response.unclassified_activities_count
+            %td
+              = link_to "Show", [:admin, data_response]
 .simple_table
   %h3="Submitted data responses for review (#{@submitted_data_responses.size})"
 
@@ -60,13 +61,15 @@
       %thead
         %tr
           %th Organization
-          %td Date/time submitted
-          %td Total budget
-          %td Total spend
+          %th Date/time submitted
+          %th Total budget
+          %th Total spend
+          %th
       %tbody
         - @submitted_data_responses.each do |data_response|
           %tr
-            %th= data_response.responding_organization
-            %th= data_response.submitted_at
-            %th
-            %th
+            %td= data_response.responding_organization
+            %td= data_response.submitted_at
+            %td
+            %td
+            %td= link_to "Show", [:admin, data_response]

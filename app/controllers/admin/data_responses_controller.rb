@@ -9,6 +9,7 @@ class Admin::DataResponsesController < ApplicationController
 
   def show
     @data_response = DataResponse.find(params[:id])
+    @projects = @data_response.projects.find(:all, :order => "name ASC")
   end
 
   def destroy

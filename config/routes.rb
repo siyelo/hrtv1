@@ -1,7 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :data_responses,
-     :member => {:review => :get, :submit => :put, :start => :get}
+  map.resources :data_responses, :member => {:review => :get, :submit => :put, :start => :get}
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 
@@ -82,5 +81,9 @@ ActionController::Routing::Routes.draw do |map|
                   :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide reports].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
+
+  map.namespace :admin do |admin|
+    admin.resources :data_responses
+  end
 
 end

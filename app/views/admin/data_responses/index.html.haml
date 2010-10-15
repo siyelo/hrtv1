@@ -16,7 +16,7 @@
             %th= data_response.responding_organization
             %td= data_response.responding_organization.user_email_list_limit_3
             %td= data_response.contact_phone_number
-            %td= link_to "Delete Response", data_response, :confirm => "Are you sure?", :method => :delete
+            %td= link_to "Delete Response", [:admin, data_response], :confirm => "Are you sure?", :method => :delete
 .simple_table
   %h3="In Process Data Responses (#{@in_progress_data_responses.size})"
   - if @in_progress_data_responses.empty?

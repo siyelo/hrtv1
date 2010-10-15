@@ -2,17 +2,28 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
+var collapse_expand = function (element, type) {
+  var next_element = element.next('.' + type + '.entry_main');
+  var next_element_visible = next_element.is(':visible');
+  jQuery('.' + type + '.entry_main').hide();
+  if (next_element_visible) {
+    next_element.hide();
+  } else {
+    next_element.show();
+  }
+};
+
 var data_responses_show = {
   run: function () {
     jQuery('.project.entry_header').click(function () {
-      jQuery(this).next('.project.entry_main').toggle();
+      collapse_expand(jQuery(this), 'project');
     });
 
     jQuery('.activity.entry_header').click(function () {
-      jQuery(this).next('.activity.entry_main').toggle();
+      collapse_expand(jQuery(this), 'activity');
     });
   }
-}
+};
 
 var code_assignments_show = {
   run: function () {

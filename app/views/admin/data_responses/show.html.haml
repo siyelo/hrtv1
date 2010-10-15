@@ -27,18 +27,17 @@
         %tr.project.entry_main
           %td{:colspan => 100}
             %dl
-              %dt Descr
+              %dt Descr:
               %dd= project.description
-              %dt Districts
+              %dt Districts:
               %dd= project.locations
-              %dt Currency
+              %dt Currency:
               %dd= project.currency
-              %dt Start
+              %dt Start:
               %dd= project.start_date
-              %dt End
+              %dt End:
               %dd= project.end_date
 
-            %h3 Activities
             %table.activities
               %thead
                 %tr
@@ -56,6 +55,18 @@
                   %td= activity.sub_activities.count
                   %td
                   %td
-
+                %tr.activity.entry_main
+                  %td{:colspan => 100}
+                    %dl
+                      %dt Descr:
+                      %dd= activity.description
+                      %dt Districts:
+                      %dd= activity.locations
+                      %dt Currency:
+                      %dd= activity.currency
+                      %dt Start:
+                      %dd= activity.start
+                      %dt End:
+                      %dd= activity.end
 
 

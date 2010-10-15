@@ -38,3 +38,24 @@
               %dt End
               %dd= project.end_date
 
+            %h3 Activities
+            %table.activities
+              %thead
+                %tr
+                  %th Activity
+                  %th Spend
+                  %th Budget
+                  %th Sub-Implementers
+                  %th Org's Assisted
+                  %th Comments
+              - project.activities.each do |activity|
+                %tr.activity.entry_header
+                  %td= activity.name
+                  %td= activity.spend
+                  %td= activity.budget
+                  %td= activity.sub_activities.count
+                  %td
+                  %td
+
+
+

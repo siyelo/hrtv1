@@ -6,24 +6,22 @@
     %thead
       %tr
         %th Project
+        %th Activities
         %th Total Spend
         %th Total Budget
-        %th Activities
-        %th Sub-Implementers
-        %th Activity Spend
-        %th Activity Budget
-        %th Unclassified Activities
+
     %tbody
       - @projects.each do |project|
         %tr.project.entry_header
-          %td= project.name
+          %td
+            %ul
+              %li= project.name
+              %li.descr= project.description.first(200)
+              %li.funders= project.funding_sources.map(&:name).join(', ')
+          %td= project.activities.count
           %td= project.spend
           %td= project.budget
-          %td= project.activities.count
-          %td
-          %td
-          %td
-          %td
+
         %tr.project.entry_main
           %td{:colspan => 100}
             %dl
@@ -42,20 +40,20 @@
               %thead
                 %tr
                   %th Activity
-                  %th Spend
-                  %th Budget
                   %th Sub-Implementers
                   %th Org's Assisted
                   %th Comments
+                  %th Spend
+                  %th Budget
               %tbody
                 - project.activities.each do |activity|
                   %tr.activity.entry_header
                     %td= activity.name
-                    %td= activity.spend
-                    %td= activity.budget
                     %td= activity.sub_activities.count
                     %td
                     %td
+                    %td= activity.spend
+                    %td= activity.budget
                   %tr.activity.entry_main
                     %td{:colspan => 100}
                       %dl
@@ -88,7 +86,7 @@
                             %td Expenditure by Coding
                             %td
                               = activity.spend?
-                          %tr
+                              %tr
                             %td Expenditure by District
                             %td= activity.spend_by_district?
                           %tr

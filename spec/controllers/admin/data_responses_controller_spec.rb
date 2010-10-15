@@ -29,7 +29,7 @@ describe Admin::DataResponsesController do
     end
     context "Requesting /admin/data_responses/1 using GET" do
       it "should find the data_responses" do
-        DataResponse.should_receive(:find).with(1).and_return(@data_response)
+        DataResponse.should_receive(:find).with('1').and_return(@data_response)
         get :show, :id => 1
       end
     end

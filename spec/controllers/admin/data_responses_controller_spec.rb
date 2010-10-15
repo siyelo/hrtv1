@@ -23,8 +23,8 @@ describe Admin::DataResponsesController do
     context "Requesting /admin/data_responses using GET" do
       it "should find the data_responses" do
         pending
-        DataResponse.should_receive(:find).with(:all).and_return(@data_response)
-        get :index
+        #DataResponse.should_receive(:find).with(:all).and_return(@data_response)
+        #get :index
       end
     end
     context "Requesting /admin/data_responses/1 using GET" do
@@ -33,7 +33,6 @@ describe Admin::DataResponsesController do
         get :show, :id => 1
       end
     end
-    
   end
   
 end

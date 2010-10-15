@@ -95,6 +95,9 @@ class DataResponse < ActiveRecord::Base
     activities.empty? && projects.empty? && funding_flows.empty?
   end
 
+  def organization
+    responding_organization #for convenience
+  end
 
   # Law of Demeter methods
 #  %w[projects activities funding_flows].each do |assoc|

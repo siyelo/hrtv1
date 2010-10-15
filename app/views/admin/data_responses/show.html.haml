@@ -1,0 +1,24 @@
+%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
+
+%table.projects
+  %thead
+    %tr
+      %th Project
+      %th Total Spend
+      %th Total Budget
+      %th Activities
+      %th Sub-Implementers
+      %th Activity Spend
+      %th Activity Budget
+      %th Unclassified Activities
+  %tbody
+    - @projects.each do |project|
+      %tr
+        %td= project.name
+        %td= project.spend
+        %td= project.budget
+        %td= project.activities.count
+        %td
+        %td
+        %td
+        %td

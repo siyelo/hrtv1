@@ -1,0 +1,33 @@
+%ul
+  %li
+    Districts:
+    = activity.locations
+  %li
+    Start:
+    = activity.start
+  %li
+    End:
+    = activity.end
+  %li
+    Text for Provider:
+    = activity.text_for_provider
+  %li
+    Beneficiaries:
+    = activity.beneficiaries.map(&:short_display).join(', ')
+  %li
+    Text for Beneficiaries:
+    = activity.text_for_beneficiaries
+  %li
+    Org's Assisted:
+  %li
+    = activity.organizations.map(&:name).join(', ')
+  %li
+    Sub-Activities:
+    %ul
+      - activity.sub_activities.each do |a|
+        %li= "#{a.provider.name}, #{a.budget}, #{a.budget_percentage}, #{a.spend_percentage}, #{a.spend}"
+  %li
+    Comments:
+    %ul
+      - activity.comments.each do |c|
+        %li= "#{c.title}, #{c.comment}"

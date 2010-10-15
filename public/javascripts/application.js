@@ -2,6 +2,14 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
+var data_responses_show = {
+  run: function () {
+    jQuery('.project.entry_header').click(function () {
+      jQuery(this).next('.project.entry_main').toggle();
+    });
+  }
+}
+
 var code_assignments_show = {
   run: function () {
 

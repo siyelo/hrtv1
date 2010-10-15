@@ -15,7 +15,7 @@
         %th Unclassified Activities
     %tbody
       - @projects.each do |project|
-        %tr
+        %tr.project.entry_header
           %td= project.name
           %td= project.spend
           %td= project.budget
@@ -24,3 +24,17 @@
           %td
           %td
           %td
+        %tr.project.entry_main
+          %td{:colspan => 100}
+            %dl
+              %dt Descr
+              %dd= project.description
+              %dt Districts
+              %dd= project.locations
+              %dt Currency
+              %dd= project.currency
+              %dt Start
+              %dd= project.start_date
+              %dt End
+              %dd= project.end_date
+

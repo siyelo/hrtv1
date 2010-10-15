@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101012170458) do
+ActiveRecord::Schema.define(:version => 20101015124529) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -55,11 +55,6 @@ ActiveRecord::Schema.define(:version => 20101012170458) do
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "beneficiary_id"
-  end
-
-  create_table "activities_indicators", :id => false, :force => true do |t|
-    t.integer "activity_id"
-    t.integer "indicator_id"
   end
 
   create_table "activities_locations", :id => false, :force => true do |t|
@@ -205,14 +200,6 @@ ActiveRecord::Schema.define(:version => 20101012170458) do
     t.timestamp "updated_at"
   end
 
-  create_table "indicators", :force => true do |t|
-    t.string    "name"
-    t.text      "description"
-    t.string    "source"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
   create_table "line_items", :force => true do |t|
     t.text      "description"
     t.integer   "activity_id"
@@ -224,10 +211,9 @@ ActiveRecord::Schema.define(:version => 20101012170458) do
   end
 
   create_table "locations", :force => true do |t|
-    t.string    "name"
-    t.string    "type"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "locations_organizations", :id => false, :force => true do |t|

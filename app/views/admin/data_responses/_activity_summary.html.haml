@@ -1,7 +1,7 @@
 %ul
   %li
     Districts:
-    = activity.locations
+    = activity.locations.map(&:name).join(', ')
   %li
     Start:
     = activity.start

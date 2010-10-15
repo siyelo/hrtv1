@@ -3,11 +3,13 @@
 
 #activity_classification
   .tab1
+    %h4 Budget Coding
     %ul
       - @code_roots.each do |code|
-        = render 'code_row', :code => code
+        = render 'code_row', :code => code, :activity => activity
 
   .tab2
+    %h4 Budget Districts
     %ul
       - activity.locations.each do |location|
         %li= location.name

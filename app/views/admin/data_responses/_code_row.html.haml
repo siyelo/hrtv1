@@ -6,4 +6,4 @@
     - unless code.leaf?
       %ul
         - code.children.each do |child|
-          = render 'code_row', :code => child
+          = render 'code_row', :code => child, :activity => activity

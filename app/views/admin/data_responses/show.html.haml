@@ -27,7 +27,7 @@
         %tr.project.entry_main
           %td{:colspan => 100}
             %dl
-              %dt Descr:
+              %dt P Descr:
               %dd= project.description
               %dt Districts:
               %dd= project.locations
@@ -47,26 +47,48 @@
                   %th Sub-Implementers
                   %th Org's Assisted
                   %th Comments
-              - project.activities.each do |activity|
-                %tr.activity.entry_header
-                  %td= activity.name
-                  %td= activity.spend
-                  %td= activity.budget
-                  %td= activity.sub_activities.count
-                  %td
-                  %td
-                %tr.activity.entry_main
-                  %td{:colspan => 100}
-                    %dl
-                      %dt Descr:
-                      %dd= activity.description
-                      %dt Districts:
-                      %dd= activity.locations
-                      %dt Currency:
-                      %dd= activity.currency
-                      %dt Start:
-                      %dd= activity.start
-                      %dt End:
-                      %dd= activity.end
-
-
+              %tbody
+                - project.activities.each do |activity|
+                  %tr.activity.entry_header
+                    %td= activity.name
+                    %td= activity.spend
+                    %td= activity.budget
+                    %td= activity.sub_activities.count
+                    %td
+                    %td
+                  %tr.activity.entry_main
+                    %td{:colspan => 100}
+                      %dl
+                        %dt A Descr:
+                        %dd= activity.description
+                        %dt Districts:
+                        %dd= activity.locations
+                        %dt Currency:
+                        %dd= activity.currency
+                        %dt Start:
+                        %dd= activity.start
+                        %dt End:
+                        %dd= activity.end
+                    %table.classifications
+                      %thead
+                        %tr
+                          %th Classification
+                          %th Completed?
+                      %tbody
+                        %tr.classification.entry_header
+                          %td Budget by Coding
+                          %td
+                        %tr
+                          %td Budget by District
+                          %td
+                        %tr
+                          %td Budget by Cost Category
+                          %td
+                        %tr
+                          %td Expenditure by Coding
+                          %td
+                        %tr
+                          %td Expenditure by District
+                          %td
+                        %tr
+                          %td Expenditure by Cost Category

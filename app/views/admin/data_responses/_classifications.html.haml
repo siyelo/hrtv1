@@ -1,25 +1,17 @@
-%table.classifications
-  %thead
-    %tr
-      %th Classifications
-      %th Completed?
-  %tbody
-    %tr.classification.entry_header
-      %td Budget by Coding
-      %td= activity.budget?
-    %tr
-      %td Budget by District
-      %td= activity.budget_by_district?
-    %tr
-      %td Budget by Cost Category
-      %td= activity.budget_by_cost_category?
-    %tr
-      %td Expenditure by Coding
-      %td
-        = activity.spend?
-        %tr
-      %td Expenditure by District
-      %td= activity.spend_by_district?
-    %tr
-      %td Expenditure by Cost Category
-      %td= activity.spend_by_cost_category?
+.classifications
+  = render '/code_assignments/tab_nav'
+
+
+#activity_classification
+  .tab1
+    %ul
+      - @code_roots.each do |code|
+        %li= code.short_display if activity. ? .include?(code)
+  .tab2
+    %ul
+      - activity.locations.each do |location|
+        %li= location.name
+  .tab3
+  .tab4
+  .tab5
+  .tab6

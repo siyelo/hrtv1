@@ -7,7 +7,7 @@ class Reports::ActivitiesByBudgetCoding
 
     codes = []
     code_ids = []
-    Code.roots.activity_codes.each do |c|
+    Code.for_activities.roots.ordered.each do |c|
       codes << c.self_and_descendants.map { |e| e.to_s_with_external_id }
       code_ids << c.self_and_descendants.map(&:id)
     end

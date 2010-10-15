@@ -41,7 +41,6 @@
 require 'lib/ActAsDataElement'
 
 class Activity < ActiveRecord::Base
-  VALID_ROOT_TYPES = %w[Mtef Nha Nasa Nsp]
 
   acts_as_commentable
   include ActAsDataElement
@@ -63,6 +62,7 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
   has_many :code_assignments
+  has_many :codes, :through => :code_assignments
 
   # Validations
   validate :approved_activity_cannot_be_changed

@@ -2,31 +2,40 @@
 #
 # Table name: activities
 #
-#  id                     :integer         not null, primary key
-#  name                   :string(255)
-#  beneficiary            :string(255)
-#  target                 :string(255)
-#  created_at             :datetime
-#  updated_at             :datetime #  provider_id            :integer
-#  other_cost_type_id     :integer
-#  description            :text
-#  type                   :string(255)
-#  budget                 :decimal(, )
-#  spend_q1               :decimal(, )
-#  spend_q2               :decimal(, )
-#  spend_q3               :decimal(, )
-#  spend_q4               :decimal(, )
-#  start                  :date
-#  end                    :date
-#  spend                  :decimal(, )
-#  text_for_provider      :text
-#  text_for_targets       :text
-#  text_for_beneficiaries :text
-#  spend_q4_prev          :decimal(, )
-#  data_response_id       :integer
-#  activity_id            :integer
-#  budget_percentage      :decimal(, )
-#  spend_percentage       :decimal(, )
+#  id                                    :integer         primary key
+#  name                                  :string(255)
+#  beneficiary                           :string(255)
+#  target                                :string(255)
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer
+#  other_cost_type_id                    :integer
+#  description                           :text
+#  type                                  :string(255)
+#  budget                                :decimal(, )
+#  spend_q1                              :decimal(, )
+#  spend_q2                              :decimal(, )
+#  spend_q3                              :decimal(, )
+#  spend_q4                              :decimal(, )
+#  start                                 :date
+#  end                                   :date
+#  spend                                 :decimal(, )
+#  text_for_provider                     :text
+#  text_for_targets                      :text
+#  text_for_beneficiaries                :text
+#  spend_q4_prev                         :decimal(, )
+#  data_response_id                      :integer
+#  activity_id                           :integer
+#  budget_percentage                     :decimal(, )
+#  spend_percentage                      :decimal(, )
+#  approved                              :boolean
+#  CodingBudget_amount                   :decimal(, )     default(0.0)
+#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
+#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
+#  CodingSpend_amount                    :decimal(, )     default(0.0)
+#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
+#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
+#  use_budget_codings_for_spend          :boolean         default(FALSE)
 #
 
 require 'lib/ActAsDataElement'

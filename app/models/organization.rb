@@ -2,12 +2,13 @@
 #
 # Table name: organizations
 #
-#  id         :integer         not null, primary key
+#  id         :integer         primary key
 #  name       :string(255)
 #  type       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  created_at :timestamp
+#  updated_at :timestamp
 #  raw_type   :string(255)
+#  fosaid     :string(255)
 #
 
 class Organization < ActiveRecord::Base

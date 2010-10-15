@@ -86,7 +86,8 @@
                             %td= activity.budget_by_cost_category?
                           %tr
                             %td Expenditure by Coding
-                            %td= activity.spend?
+                            %td
+                              = activity.spend?
                           %tr
                             %td Expenditure by District
                             %td= activity.spend_by_district?

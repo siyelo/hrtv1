@@ -2,13 +2,13 @@
 #
 # Table name: data_requests
 #
-#  id                        :integer         not null, primary key
+#  id                        :integer         primary key
 #  organization_id_requester :integer
 #  title                     :string(255)
 #  complete                  :boolean         default(FALSE)
 #  pending_review            :boolean         default(FALSE)
-#  created_at                :datetime
-#  updated_at                :datetime
+#  created_at                :timestamp
+#  updated_at                :timestamp
 #
 
 class DataRequest < ActiveRecord::Base

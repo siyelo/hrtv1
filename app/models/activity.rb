@@ -84,6 +84,21 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget_district
   has_many :coding_spend_district
 
+  # Note: once we re-enable these, we need to clean up the accessor methods below that can use these
+  # associations instead of the roundabout named_scopes and class methods
+  #has_many :budget_code_assignments
+  #has_many :budget_codes, :through => :code_assignments
+  #has_many :budget_location_assignments
+  #has_many :budget_locations, :through => :code_assignments
+  #has_many :budget_cost_category_assignments
+  #has_many :budget_cost_categories, :through => :code_assignments
+  #has_many :spend_code_assignments
+  #has_many :spend_codes, :through => :code_assignments
+  #has_many :spend_location_assignments
+  #has_many :spend_locations, :through => :code_assignments
+  #has_many :spend_cost_category_assignments
+  #has_many :spend_cost_categories, :through => :code_assignments
+
   # Validations
   validate :approved_activity_cannot_be_changed
 
@@ -156,14 +171,11 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_by_district?
+    # how about just using "!budget_locations.empty?" ?
+    # or
+    #   return true if !budget_locations.empty? && (activity.budget == nil)
+    #   activity.budget == CodingBudgetDistrict_amount
     CodingBudgetDistrict.classified(self)
-  end
-
-  # methods like this are used for reports
-  # so the logic for how to return when there is no data
-  # is put in the model, thus being shared
-  def budget_district_coding
-    district_coding(code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
   end
 
   def budget_by_cost_category?
@@ -177,11 +189,7 @@ class Activity < ActiveRecord::Base
   # these comment outs should be okay now that there
   # is the before_save
   def spend?
-    #if self.use_budget_codings_for_spend? && self.budget && self.budget!=0
-      #budget?
-    #else
-      CodingSpend.classified(self)
-    #end
+    CodingSpend.classified(self)
   end
 
   def spend_coding
@@ -190,10 +198,6 @@ class Activity < ActiveRecord::Base
 
   def spend_by_district?
     CodingSpendDistrict.classified(self)
-  end
-
-  def spend_district_coding
-    district_coding(code_assignments.with_type(CodingSpendDistrict.to_s), spend)
   end
 
   def spend_by_cost_category?
@@ -232,7 +236,16 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  # methods like this are used for reports
+  # so the logic for how to return when there is no data
+  # is put in the model, thus being shared
+  def budget_district_coding
+    district_coding(code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
+  end
 
+  def spend_district_coding
+    district_coding(code_assignments.with_type(CodingSpendDistrict.to_s), spend)
+  end
 
   def budget_stratprog_coding
     assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget

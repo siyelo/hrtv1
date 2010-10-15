@@ -38,7 +38,6 @@
 #  use_budget_codings_for_spend          :boolean         default(FALSE)
 #
 
-
 #require 'lib/ActAsDataElement' #super class already has it mixed in
 
 class SubActivity < Activity

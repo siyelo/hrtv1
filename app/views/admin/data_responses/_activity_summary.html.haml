@@ -25,7 +25,7 @@
     Sub-Activities:
     %ul
       - activity.sub_activities.each do |a|
-        %li= "#{a.provider.name}, #{a.budget}, #{a.budget_percentage}, #{a.spend_percentage}, #{a.spend}"
+        %li= "#{a.implementer.try(:name)}, #{a.budget}, #{a.budget_percentage}, #{a.spend_percentage}, #{a.spend}"
   %li
     Comments:
     %ul

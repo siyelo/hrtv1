@@ -13,7 +13,7 @@
           %ul
             %li.name= activity.name
             %li.descr= activity.description.to_s.first(300)
-            %li.implementer= "Implementer: #{activity.implementer.name}"
+            %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
         %td= activity.approved
         %td= activity.sub_activities.count
         %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")

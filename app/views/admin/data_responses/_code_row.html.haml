@@ -1,9 +1,8 @@
-- current_assignments = CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-- if current_assignments.has_key?(code.id)
+- if assignments.has_key?(code.id)
   %li
     = code.short_display
-    = current_assignments[code.id].cached_amount
+    = assignments[code.id].cached_amount
     - unless code.leaf?
       %ul
         - code.children.each do |child|
-          = render 'code_row', :code => child, :activity => activity
+          = render 'code_row', :code => child, :activity => activity, :assignments => assignments

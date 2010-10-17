@@ -1,5 +1,47 @@
-.project, .activity
-  &.entry_header
-    cursor: pointer
-  &.entry_main
-    display: none
+body.app
+  .project, .activity
+    &.entry_header
+      cursor: pointer
+    &.entry_main
+      display: none
+    
+  .full-width
+    h2
+      background: none
+
+  /* default layout for a simple table */
+  .simple_table
+    +clearfix
+
+    h3
+      color: $mid-blue
+      font-size: 0.9em
+      padding: 20px 10px 10px
+      text-transform: none
+
+    table
+      background: #eee
+      color: !mid-blue
+      font-size: 0.8em
+      margin: 0 10px 20px 10px
+      width: 98.5%
+      a
+        font-size: 1em
+
+      th, td
+        border-right: 1px solid white
+        padding: 7px
+
+      tbody
+        th, td
+          border-bottom: 1px solid white
+
+        tr:hover
+          background: #f9f9f9
+
+      thead
+        background: !mid-blue
+        border-bottom: 1px solid white
+        color: white
+        font-size: 0.9em
+  /* end */

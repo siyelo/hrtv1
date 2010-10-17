@@ -8,9 +8,12 @@ body.app
   .full-width
     h2
       background: none
-
+      margin: 10px 10px 0
+      text-transform: none
+      
   /* default layout for a simple table */
   .simple_table
+    padding: 0 10px 10px 10px
     +clearfix
 
     h3
@@ -23,8 +26,7 @@ body.app
       background: #eee
       color: !mid-blue
       font-size: 0.8em
-      margin: 0 10px 20px 10px
-      width: 98.5%
+      width: 100%
       a
         font-size: 1em
 
@@ -44,4 +46,39 @@ body.app
         border-bottom: 1px solid white
         color: white
         font-size: 0.9em
-  /* end */
+        /* end */
+  
+    .third
+      float: left
+      margin-right: 3%
+      margin-bottom: 20px
+      width: 30%
+    .half
+      float: left
+      margin-right: 5%
+      margin-bottom: 20px
+      width: 45%
+    .entry
+      border: 3px solid $mid-blue
+    #activity_classification
+      padding: 0
+    li
+      padding-top: 5px
+      &:first-child
+        font-weight: bold
+      &.funders
+        font-size: 0.8em
+      
+    .s_border
+      background: white
+      padding: 10px
+      &:hover
+        background: white
+      > td
+        border: 3px solid $light-blue
+        padding: 5px
+      
+    .activities
+      font-size: 1em
+      thead tr:hover
+        background: $mid-blue

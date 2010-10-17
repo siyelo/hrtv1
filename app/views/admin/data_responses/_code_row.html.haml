@@ -1,0 +1,8 @@
+- if assignments.has_key?(code.id)
+  %li
+    = code.short_display
+    = assignments[code.id].cached_amount
+    - unless code.leaf?
+      %ul
+        - code.children.each do |child|
+          = render 'code_row', :code => child, :activity => activity, :assignments => assignments

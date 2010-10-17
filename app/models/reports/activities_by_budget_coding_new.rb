@@ -4,7 +4,7 @@ class Reports::ActivitiesByBudgetCodingNew < Reports::CodedActivityReport
 
   def initialize # codes= nil, get_codes_array_method = nil, code_id_method = nil
     codes = []
-    Code.roots.activity_codes.each { |c| codes << c.self_and_descendants }
+    Code.for_activities.roots.ordered.each { |c| codes << c.self_and_descendants }
     super( codes.flatten, :budget_coding, :code_id)
   end
 

@@ -10,6 +10,8 @@ class Admin::DataResponsesController < ApplicationController
   def show
     @data_response = DataResponse.find(params[:id])
     @projects = @data_response.projects.find(:all, :order => "name ASC")
+    @code_roots = Code.for_activities.roots
+    @cost_cat_roots = CostCategory.roots
   end
 
   def destroy

@@ -12,42 +12,31 @@
 #  cached_amount :decimal(, )
 #
 
-# == Schema Information
-#
-# Table name: code_assignments
-#
-#  id          :integer         not null, primary key
-#  activity_id :integer
-#  code_id     :integer
-#  code_type   :string(255)
-#  amount      :decimal(, )
-#  type        :string(255)
-#  percentage  :decimal(, )
-#
 class CodeAssignment < ActiveRecord::Base
 
-  # Associations
+  ### Associations
   belongs_to :activity
   belongs_to :code
-# Validations
+  ### Validations
   validates_presence_of :activity, :code
-
-  # Attributes
+  ### Attributes
   attr_accessible :activity, :code, :amount, :percentage, :cached_amount
+
+  ### Named scopes
+  named_scope :with_code_ids, lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
+  named_scope :with_activity, lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
+  named_scope :with_type,     lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
+  named_scope :with_code_id,  lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
+
+  ### methods
 
   def calculated_amount
     if read_attribute(:amount).nil?
       cached_amount
     else
-      read_attribute(:amount) 
+      read_attribute(:amount)
     end
   end
-
-  # Named scopes
-  named_scope :with_code_ids, lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
-  named_scope :with_activity, lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
-  named_scope :with_type,     lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
-  named_scope :with_code_id,  lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
 
   def self.update_codings(code_assignments, activity)
     if code_assignments
@@ -108,7 +97,7 @@ class CodeAssignment < ActiveRecord::Base
         #ca.update_attributes :cached_amount => my_cached_amount
         ca.cached_amount = my_cached_amount
         ca.save!
-        total += my_cached_amount 
+        total += my_cached_amount
         self.codings_sum(ac.children, activity, max)
       elsif !ac.leaf?
         my_cached_amount = self.codings_sum(ac.children, activity, max)

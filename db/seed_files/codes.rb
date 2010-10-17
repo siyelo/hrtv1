@@ -23,8 +23,8 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c               = Code.find_or_initialize_by_external_id(row[id_col])
     puts "found existing code at #{c.id}" unless c.id.nil?
     unless row[parent_id_col].blank?
-	    p               = Code.find_by_external_id(row[parent_id_col])
-	    c.parent_id     = p.id unless p.nil?
+      p               = Code.find_by_external_id(row[parent_id_col])
+      c.parent_id     = p.id unless p.nil?
     else
             c.parent = nil
     end

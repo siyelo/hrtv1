@@ -41,7 +41,22 @@
 require 'lib/ActAsDataElement'
 
 class Activity < ActiveRecord::Base
-  VALID_ROOT_TYPES = %w[Mtef Nha Nasa Nsp]
+  STRAT_PROG_TO_CODES_FOR_TOTALING = {
+    "Quality Assurance" => [ "6","7","8","9","11"],
+    "Commodities, Supply and Logistics" => ["5"],
+    "Infrastructure and Equipment" => ["4"],
+    "Health Financing" => ["3"],
+    "Human Resources for Health" => ["2"],
+    "Governance" => ["101","103"],
+    "Planning and M&E" => ["102","104","105","106"]
+  }
+
+  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
+    "b. Prevention and control of diseases" => ['205','9'],
+    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
+    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
+  }
 
   acts_as_commentable
   include ActAsDataElement
@@ -57,13 +72,17 @@ class Activity < ActiveRecord::Base
 
   # Associations
   has_and_belongs_to_many :projects
-  has_and_belongs_to_many :indicators
   has_and_belongs_to_many :locations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id
   has_many :code_assignments
+  has_many :codes, :through => :code_assignments
+
+  # handy associations - use instead of named_scopes
+  has_many :coding_budget_district
+  has_many :coding_spend_district
 
   # Validations
   validate :approved_activity_cannot_be_changed
@@ -88,6 +107,11 @@ class Activity < ActiveRecord::Base
   def valid_providers
     #TODO use delegates_to
     projects.valid_providers
+  end
+
+  #convenience
+  def implementer
+    provider
   end
 
   def currency
@@ -128,7 +152,7 @@ class Activity < ActiveRecord::Base
 
   #TODO TODO make methods like this for the spend_coding etc
   def budget_coding
-    code_assignments.with_type(CodingBudget.to_s) 
+    code_assignments.with_type(CodingBudget.to_s)
   end
 
   def budget_by_district?
@@ -139,22 +163,7 @@ class Activity < ActiveRecord::Base
   # so the logic for how to return when there is no data
   # is put in the model, thus being shared
   def budget_district_coding
-    val = code_assignments.with_type(CodingBudgetDistrict.to_s)
-    if val.empty? && budget
-      #create even split across locations
-      assignments = []
-      locations.each do |l|
-        ca = CodeAssignment.new
-        ca.activity_id = self.id
-        ca.code_id = l.id
-        ca.cached_amount = budget / locations.size
-        ca.amount = budget / locations.size
-        assignments << ca
-      end
-      assignments
-    else
-      val
-    end
+    district_coding(code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
   end
 
   def budget_by_cost_category?
@@ -162,7 +171,7 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_cost_category_coding
-    code_assignments.with_type(CodingBudgetCostCategorization.to_s) 
+    code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
 
   # these comment outs should be okay now that there
@@ -176,46 +185,23 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_coding
-    code_assignments.with_type(CodingSpend.to_s) 
+    code_assignments.with_type(CodingSpend.to_s)
   end
 
   def spend_by_district?
-    #if self.use_budget_codings_for_spend?
-      #budget_by_district?
-    #else
-      CodingSpendDistrict.classified(self)
-    #end
+    CodingSpendDistrict.classified(self)
   end
 
   def spend_district_coding
-    val = code_assignments.with_type(CodingSpendDistrict.to_s)
-    if val.empty? && spend
-      #create even split across locations
-      assignments = []
-      locations.each do |l|
-        ca = CodeAssignment.new
-        ca.activity_id = self.id
-        ca.code_id = l.id
-        ca.cached_amount = spend / locations.size
-        ca.amount = spend / locations.size
-        assignments << ca
-      end
-      assignments
-    else
-      val
-    end
+    district_coding(code_assignments.with_type(CodingSpendDistrict.to_s), spend)
   end
 
   def spend_by_cost_category?
-    #if self.use_budget_codings_for_spend?
-      #budget_by_cost_category?
-    #else
-      CodingSpendCostCategorization.classified(self)
-    #end
+    CodingSpendCostCategorization.classified(self)
   end
 
   def spend_cost_category_coding
-    code_assignments.with_type(CodingSpendCostCategorization.to_s) 
+    code_assignments.with_type(CodingSpendCostCategorization.to_s)
   end
 
   def budget_classified?
@@ -246,32 +232,12 @@ class Activity < ActiveRecord::Base
     end
   end
 
-#  def self.add_coding_accessor type, method_name
-#    def method_name
-#      self.code_assignments.with_type(type) 
-#    end
-#  end
 
-  STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => [ "6","7","8","9","11"],
-    "Commodities, Supply and Logistics" => ["5"],
-    "Infrastructure and Equipment" => ["4"],
-    "Health Financing" => ["3"],
-    "Human Resources for Health" => ["2"],
-    "Governance" => ["101","103"],
-    "Planning and M&E" => ["102","104","105","106"]
-  }
 
-  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
-    "b. Prevention and control of diseases" => ['205','9'],
-    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
-    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
-  }
   def budget_stratprog_coding
     assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget
   end
-  
+
   def spend_stratprog_coding
     assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspSpend
   end
@@ -279,7 +245,7 @@ class Activity < ActiveRecord::Base
   def budget_stratobj_coding
     assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspBudget
   end
-  
+
   def spend_stratobj_coding
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
@@ -289,7 +255,7 @@ class Activity < ActiveRecord::Base
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
       assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
-      amount = 0 
+      amount = 0
       assigns_in_codes.each do |ca|
         amount += ca.calculated_amount
       end
@@ -303,7 +269,7 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies code assignments when user has chosen to use 
+  # This method copies code assignments when user has chosen to use
   # budget codings for expenditure: Following code assignments are copied:
   # CodingBudget -> CodingSpend
   # CodingBudgetDistrict -> CodingSpendDistrict
@@ -321,6 +287,7 @@ class Activity < ActiveRecord::Base
   end
 
   private
+
   def approved_activity_cannot_be_changed
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
   end
@@ -353,6 +320,24 @@ class Activity < ActiveRecord::Base
       end
     else
       nil
+    end
+  end
+
+  def district_coding(assignments, amount)
+    if assignments.empty? && amount
+      #create even split across locations
+      even_split = []
+      locations.each do |l|
+        ca = CodeAssignment.new
+        ca.activity_id = self.id
+        ca.code_id = l.id
+        ca.cached_amount = amount / locations.size
+        ca.amount = amount / locations.size
+        even_split << ca
+      end
+      even_split
+    else
+      assignments
     end
   end
 end

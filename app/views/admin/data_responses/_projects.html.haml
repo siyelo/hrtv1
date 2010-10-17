@@ -1,0 +1,24 @@
+%table.projects
+  %thead
+    %tr
+      %th Projects
+      %th Activities
+      %th Spend
+      %th Total Budget
+  %tbody
+    - projects.each do |project|
+      %tr.project.entry_header
+        %td
+          %ul
+            %li= project.name
+            %li.descr= project.description.to_s.first(300)
+            %li.funders= "Funders: #{project.funding_sources.map(&:name).join(', ')}"
+        %td= project.activities.count
+        %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+
+      %tr.project.entry_main
+        %td{:colspan => 100}
+          = render 'project_summary', :project => project
+
+          = render 'activities', :project => project

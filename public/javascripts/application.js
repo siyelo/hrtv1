@@ -22,6 +22,18 @@ var data_responses_show = {
     jQuery('.activity.entry_header').click(function () {
       collapse_expand(jQuery(this), 'activity');
     });
+
+    // bind click events for tabs
+    jQuery(".classifications ul li").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".classifications ul li").removeClass('selected');
+        element.addClass('selected');
+        jQuery("#activity_classification > div").hide();
+        jQuery('#activity_classification > div.' + element.attr("id")).show();
+      }
+    });
   }
 };
 
@@ -80,10 +92,13 @@ var code_assignments_show = {
     // bind click events for tabs
     jQuery(".nav2 ul li").click(function (e) {
       e.preventDefault();
-      jQuery(".nav2 ul li").removeClass('selected');
-      jQuery(this).addClass('selected');
-      jQuery("#activity_classification > div").hide();
-      jQuery('#activity_classification > div.' + jQuery(this).attr("id")).show();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".nav2 ul li").removeClass('selected');
+        element.addClass('selected');
+        jQuery("#activity_classification > div").hide();
+        jQuery('#activity_classification > div.' + element.attr("id")).show();
+      }
     });
 
     // remove flash notice

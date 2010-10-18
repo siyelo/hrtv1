@@ -89,7 +89,7 @@ class DataResponse < ActiveRecord::Base
   def self.empty
     drs = self.find(:all, options_hash_for_empty)
     drs.select do |dr|
-      (%w[Agencies Donors Implementer Implementers] + ["International NGO"]).include?(dr.responding_organization.raw_type)
+      (["Agencies", "Donors", "Implementer", "Implementers", "International NGO"]).include?(dr.responding_organization.raw_type)
     end
   end
 

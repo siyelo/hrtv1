@@ -39,6 +39,7 @@
 #
 
 require 'lib/ActAsDataElement'
+require 'lib/SpendBudgetInRWF'
 
 class Activity < ActiveRecord::Base
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
@@ -60,6 +61,7 @@ class Activity < ActiveRecord::Base
 
   acts_as_commentable
   include ActAsDataElement
+  include SpendBudgetInRWF
   configure_act_as_data_element
 
   # Attributes

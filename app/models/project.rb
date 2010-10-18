@@ -23,6 +23,7 @@
 
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
+require 'lib/SpendBudgetInRWF'
 require 'validators'
 
 class Project < ActiveRecord::Base
@@ -30,6 +31,7 @@ class Project < ActiveRecord::Base
 
   include ActAsDataElement
   include ActsAsDateChecker
+  include SpendBudgetInRWF
   configure_act_as_data_element
 
   acts_as_stripper

@@ -19,7 +19,7 @@
         %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
       %tr.activity.entry_main
-        %td{:colspan => 100}
+        %td.s_border{:colspan => 100}
           = render 'activity_summary', :activity => activity
 
           = render 'classifications', :activity => activity

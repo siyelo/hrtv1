@@ -21,10 +21,12 @@ module Reporter::DashboardHelper
     case type
       when "FundingFlow"
         if commentable.try(:to) == user.organization
-          type = "FundingSource"
+          type = "Funding Source"
         else
           type = "Implementer"
         end
+      when "OtherCost"
+        type = "Other Cost"
     end
     type
   end

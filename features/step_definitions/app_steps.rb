@@ -47,6 +47,13 @@ Given /^the following projects$/ do |table|
   end
 end
 
+Given /^the following comments$/ do |table|
+  table.hashes.each do |hash|
+    p = Project.find_by_name(hash.delete("project")).comments.create(hash)
+    p.save!
+  end
+end
+
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
 end

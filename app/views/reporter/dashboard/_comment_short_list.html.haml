@@ -6,7 +6,7 @@
     Comment:
     %span.title= "\"#{comment.title.first(30)}\""
     on
-    = commentable_name(type, model, current_user)
+    = "#{commentable_name(type, model, current_user)}:"
     - begin
       = link_to model.try(:name).first(40), commentable_path(type, model, current_user)
     - rescue

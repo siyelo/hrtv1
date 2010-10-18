@@ -16,8 +16,10 @@ Scenario: See comment excerpts on dashboard
     | TB Treatment Project | title1  | the first comment |
   When I follow "Dashboard"
   Then I should see "Activity Feed"
+  And I should see "Comment: "
   And I should see "title1"
-  And I should see "on TB Treatment Project"
+  And I should see "on Project: "
+  And I should see "TB Treatment Project"
   
 Scenario: See full comment listing
   - full listing

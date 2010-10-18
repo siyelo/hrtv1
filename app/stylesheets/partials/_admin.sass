@@ -15,6 +15,11 @@ body.app
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
+    
+    a
+      color: $orange
+      &:hover, &:focus, &:active
+        color: $mid-blue
 
     h3
       color: $mid-blue
@@ -53,32 +58,60 @@ body.app
       margin-right: 3%
       margin-bottom: 20px
       width: 30%
+    .two-thirds
+      float: left
+      margin-bottom: 20px
+      width: 67%
     .half
       float: left
       margin-right: 5%
       margin-bottom: 20px
       width: 45%
-    .entry
-      border: 3px solid $mid-blue
+    .name
+      font-weight: bold
     #activity_classification
       padding: 0
+      h4
+        margin-bottom: 5px
+    .classifications ul
+      +horizontal-list
+      border-bottom: 1px solid $light-blue
+      color: $light-blue - #333
+      line-height: 1.5em
+      a
+        text-decoration: none
+    .selected a
+      border-bottom: 4px solid $light-blue
+      color: $mid-blue
+      display: inline-block
+      font-weight: bold
+      
     li
       padding-top: 5px
-      &:first-child
-        font-weight: bold
       &.funders
         font-size: 0.8em
-      
+    .active
+      background: $light-blue
+      color: $dark-blue
+      &:hover
+        background: $light-blue
     .s_border
       background: white
+      border: 3px solid $lighter-blue
       padding: 10px
       &:hover
         background: white
       > td
         border: 3px solid $light-blue
         padding: 5px
-      
-    .activities
-      font-size: 1em
-      thead tr:hover
-        background: $mid-blue
+    .t_right
+      float: right
+      margin-right: 0
+      text-align: right
+    .activities 
+      thead
+        font-size: 1.1em
+        tr:hover
+          background: $mid-blue
+      tbody
+        font-size: 1.2em

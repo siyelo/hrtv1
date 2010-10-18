@@ -71,6 +71,30 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def spend
+    read_attribute(:spend) ? read_attribute(:spend) : total_quarterly_spending_w_shift
+  end
+ 
+  def total_quarterly_spending_w_shift
+    if data_response
+      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7 # 7 is July
+        total = 0
+        [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
+          total += self.send(s) if self.send(s)
+        end
+
+        return total if total != 0
+      else
+        nil #"Fiscal Year shift not yet defined for this data responses' start date"
+      end
+    else
+      nil
+    end
+  end
+
+  # if these are needed to fix saving, then they are missing
+  # in activity
+  # if not, then they are superfluous
   def spend=(amount)
     super(strip_non_decimal(amount))
   end

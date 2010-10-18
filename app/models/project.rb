@@ -63,6 +63,14 @@ class Project < ActiveRecord::Base
     organization.name
   end
 
+  def currency
+    if read_attribute(:currency).try(:empty?)
+      data_response.currency
+    else
+      read_attribute(:currency)
+    end
+  end
+
   def spend=(amount)
     super(strip_non_decimal(amount))
   end

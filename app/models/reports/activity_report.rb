@@ -62,7 +62,7 @@ class Reports::ActivityReport
 #    else
       row = []
       row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
-      row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
+      row << ["#{h activity.text_for_beneficiaries}",  "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
       row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
       row << (activity.provider.nil? ? " " : "#{h activity.provider.fosaid}" )
       if activity.class == SubActivity

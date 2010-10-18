@@ -1,13 +1,14 @@
-%ul
+%ul.half
   %li
     Districts:
-    = project.locations
+    = project.locations.map(&:name).join(', ')
   %li
     Start:
     = project.start_date
   %li
     End:
     = project.end_date
+%ul.half
   %li
     Total Budget:
     = project.entire_budget

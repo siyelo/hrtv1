@@ -33,7 +33,7 @@ class Activity < ActiveRecord::Base
       if self.class.to_s == "OtherCost"
         OtherCostCode.all.map(&:id)
       else
-        Code.valid_activity_codes.map(&:id)
+        Code.for_activities.map(&:id)
       end
     when 'budget_district_codes', 'expenditure_district_codes'
       locations.map(&:id)

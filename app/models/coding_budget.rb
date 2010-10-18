@@ -18,7 +18,7 @@ class CodingBudget < BudgetCodeAssignment
     if activity.class.to_s == "OtherCost"
       OtherCostCode.roots
     else
-      Code.valid_activity_codes.roots
+      Code.for_activities.roots
     end
   end
 end

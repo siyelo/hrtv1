@@ -26,7 +26,7 @@ class Admin::DataResponsesController < ApplicationController
       else
         flash[:error] = "Can't delete a data response that contains data"
       end
-      format.html { redirect_to data_responses_url }
+      format.html { redirect_to admin_data_responses_url }
     end
   end
 end

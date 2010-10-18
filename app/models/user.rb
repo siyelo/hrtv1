@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
 
   # Associations
   has_many  :assignments
+  has_many  :comments
   belongs_to :organization
   has_many :data_responses, :through => :organization
   belongs_to :current_data_response, :class_name => "DataResponse",

@@ -52,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
   map.namespace :reporter do |reporter|
-    reporter.resource :dashboard #TODO test!
+    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :show
   end
 
   #reports

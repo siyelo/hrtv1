@@ -35,6 +35,8 @@ class Project < ActiveRecord::Base
   configure_act_as_data_element
 
   acts_as_stripper
+
+  ### Associations
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
   has_many :funding_flows #, :dependent => :nullify
@@ -42,7 +44,7 @@ class Project < ActiveRecord::Base
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
-  # Validations
+  ### Validations
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -57,6 +59,7 @@ class Project < ActiveRecord::Base
 
   after_create :create_helpful_records_for_workflow
 
+  ### public methods
   def organization
     self.data_response.responding_organization
   end
@@ -76,7 +79,7 @@ class Project < ActiveRecord::Base
   def spend
     read_attribute(:spend) ? read_attribute(:spend) : total_quarterly_spending_w_shift
   end
- 
+
   def total_quarterly_spending_w_shift
     if data_response
       if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7 # 7 is July

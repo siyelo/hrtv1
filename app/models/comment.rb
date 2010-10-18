@@ -13,34 +13,23 @@
 #
 
 class Comment < ActiveRecord::Base
-
   include ActsAsCommentable::Comment
 
   belongs_to :commentable, :polymorphic => true
 
   default_scope :order => 'created_at ASC'
 
-  #finish eventually for real security
-#  named_scope :available_to, lambda { |current_user|
-#    if current_user.role?(:admin)
-#      {}
-#    else
-#      {:conditions=>["commentable_type in (?) OR commentable_id in (?)",
-##          ["ModelHelp", "FieldHelp"],
-#
-#        ]
-#      }
-#    end
-#  }
-  
-  # NOTE: install the acts_as_votable plugin if you
-  # want user to vote on the quality of comments.
-  #acts_as_voteable
+  ### named scopes
+  named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "
+  named_scope :on_projects_for, lambda { |organization|
+      { :joins => "JOIN projects p ON p.id = comments.commentable_id ",
+        :conditions => ["p.data_response_id IN (?)", organization.data_responses.map(&:id).join(',') ]
+      }
+    }
 
-  # NOTE: Comments belong to a user
-  # TODO: add this back after add users, right now active scaffold complains
-  #       even adding users may not remove its complaints tho
- # belongs_to :user
+
+
+  ### public methods
   def authorized_for_read?
     if current_user
       if current_user.role?(:admin)

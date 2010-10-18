@@ -51,7 +51,9 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
-  map.reporter_dashboard "reporter_dashboard", :controller => 'static_page', :action => "reporter_dashboard"
+  map.namespace :reporter do |reporter|
+    reporter.resource :dashboard #TODO test!
+  end
 
   #reports
   map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'

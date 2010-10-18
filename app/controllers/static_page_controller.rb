@@ -17,11 +17,6 @@ class StaticPageController < ApplicationController
     redirect_to :controller => :help_requests, :action => :new
   end
 
-  def reporter_dashboard
-    @data_requests_unfulfilled = DataRequest.unfulfilled(current_user.organization)
-    @data_responses = current_user.data_responses
-  end
-
   def submit
     redirect_to review_data_response_url(current_user.current_data_response)
   end

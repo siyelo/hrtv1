@@ -106,6 +106,18 @@ Given /^I am signed in as an activity manager$/ do
   }
 end
 
+Given /^I am signed in as an admin$/ do
+  steps %Q{
+    Given an admin "Frank" in organization "Test Org"
+    Given I am signed in as "Frank"
+  }
+end
+
+Given /^the following admin$/ do |table|
+  # table is a Cucumber::Ast::Table
+  pending # express the regexp above with the code you wish you had
+end
+
 
 Given /^an organization with name "([^"]*)"$/ do |name|
   @organization = Factory.create(:organization, :name => name)
@@ -132,6 +144,13 @@ end
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory.create(:organization, :name => org_name)
   @user = Factory.create(:activity_manager, :username => name, :email => 'frank@f.com', 
+                         :password => 'password', :password_confirmation => 'password',
+                         :organization => @organization)
+end
+
+Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+  @organization = Factory.create(:organization, :name => org_name)
+  @user = Factory.create(:admin, :username => name, :email => 'frank@f.com', 
                          :password => 'password', :password_confirmation => 'password',
                          :organization => @organization)
 end
@@ -288,4 +307,8 @@ Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_
   activity = Activity.find_by_name(activity_name)
   location = Location.find_by_short_display(location_name)
   activity.locations << location
+end
+
+When /^I will confirm a js popup$/ do
+  page.evaluate_script('window.confirm = function() { return true; }')
 end

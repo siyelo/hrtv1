@@ -15,18 +15,19 @@ class Admin::DataResponsesController < ApplicationController
   end
 
   def destroy
+    @data_response = DataResponse.find(params[:id])
+    @data_response.destroy if @data_response.empty?
+      
     respond_to do |format|
-      @data_response = DataResponse.find(params[:id])
-      if @data_response.empty? #TODO move into model
-        if @data_response.destroy
-          flash[:notice] = "Successfully deleted data response for #{@data_response.responding_organization}."
-        else
-          flash[:error] = "Error deleting data response"
-        end
-      else
-        flash[:error] = "Can't delete a data response that contains data"
+      format.html do
+        flash[:notice] = "Data response was successfully deleted."
+        redirect_to admin_data_responses_url
       end
-      format.html { redirect_to admin_data_responses_url }
+      format.js   { render :nothing => true }
     end
+  end
+
+  def delete
+    @data_response = DataResponse.find(params[:id])
   end
 end

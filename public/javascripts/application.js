@@ -6,9 +6,11 @@ var collapse_expand = function (element, type) {
   var next_element = element.next('.' + type + '.entry_main');
   var next_element_visible = next_element.is(':visible');
   jQuery('.' + type + '.entry_main').hide();
+  jQuery('.' + type + '.entry_header').removeClass('active');
   if (next_element_visible) {
     next_element.hide();
   } else {
+    element.addClass('active');
     next_element.show();
   }
 };

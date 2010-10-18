@@ -45,5 +45,4 @@ class OtherCost < Activity
     #TODO
   end
 
-  
 end

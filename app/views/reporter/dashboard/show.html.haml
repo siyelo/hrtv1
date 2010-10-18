@@ -17,10 +17,4 @@
 
 %h3 Activity Feed
 
-%ul
-- @project_comments.each do |comment|
-  %li
-    %span.title= comment.title
-    on project:
-    = link_to comment.commentable.name, projects_path
-    %span.time= "#{time_ago_in_words(comment.created_at)} ago"
+= render 'comment_short_list'

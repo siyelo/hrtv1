@@ -26,6 +26,28 @@ class Comment < ActiveRecord::Base
         :conditions => ["p.data_response_id IN (?)", organization.data_responses.map(&:id).join(',') ]
       }
     }
+  named_scope :on_funding_sources_for, lambda { |organization|
+      { :joins => "JOIN funding_flows f ON f.id = comments.commentable_id ",
+        :conditions => ["f.organization_id_to = ? AND f.data_response_id IN (?)", organization.id, organization.data_responses.map(&:id).join(',') ]
+      }
+    }
+  named_scope :on_implementers_for, lambda { |organization|
+      { :joins => "JOIN funding_flows f ON f.id = comments.commentable_id ",
+        :conditions => ["f.organization_id_from = ? AND f.data_response_id IN (?)", organization.id, organization.data_responses.map(&:id).join(',') ]
+      }
+    }
+  # Note, this assumes STI - which may (and should be removed)
+  named_scope :on_activities_for, lambda { |organization|
+      { :joins => "JOIN activities a ON a.id = comments.commentable_id ",
+        :conditions => ["a.type is null AND a.data_response_id IN (?)", organization.data_responses.map(&:id).join(',') ]
+      }
+    }
+  # Note, this assumes STI - which may (and should be removed)
+  named_scope :on_other_costs_for, lambda { |organization|
+      { :joins => "JOIN activities a ON a.id = comments.commentable_id ",
+        :conditions => ["a.type = 'OtherCost' AND a.data_response_id IN (?)", organization.data_responses.map(&:id).join(',') ]
+      }
+    }
 
 
 

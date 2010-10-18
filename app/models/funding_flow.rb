@@ -51,4 +51,8 @@ class FundingFlow < ActiveRecord::Base
   def to_label
     to_s
   end
+
+  def name
+    from.name
+  end
 end

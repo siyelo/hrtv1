@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'funding_sources', :action => 'index'
 
   map.providers_data_entry "providers",
-    :controller => 'providers', :action => 'index'
+      :controller => 'providers', :action => 'index'
 
   map.resources :projects,
     :collection => {:browse => :get},

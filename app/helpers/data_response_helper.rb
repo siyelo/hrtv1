@@ -6,4 +6,8 @@ module DataResponseHelper
       "We noticed you did not enter any #{link_to('activities', activities_path)}. Have you entered all of your expenditure and budget information?"
     end
   end
+
+  def n2c value
+    number_to_currency value, :separator => ".", :unit => "", :delimiter => ","
+  end
 end

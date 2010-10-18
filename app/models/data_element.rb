@@ -2,7 +2,7 @@
 #
 # Table name: data_elements
 #
-#  id                    :integer         not null, primary key
+#  id                    :integer         primary key
 #  data_response_id      :integer
 #  data_elementable_id   :integer
 #  data_elementable_type :string(255)

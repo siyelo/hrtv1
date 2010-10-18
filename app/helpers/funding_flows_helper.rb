@@ -42,4 +42,12 @@ module FundingFlowsHelper
     ids
   end
 
+  def spend_column record
+    number_to_currency(record.spend, :unit => '', :separator => ".", :delimiter => ",")
+  end
+
+  def budget_column record
+    number_to_currency(record.budget, :unit => '', :separator => ".", :delimiter => ",")
+  end
+
 end

@@ -1,3 +1,9 @@
+def get_data_response(data_request_name, organization_name)
+  data_request = DataRequest.find_by_title(data_request_name)
+  organization = Organization.find_by_name(organization_name)
+  DataResponse.find(:first, :conditions => ["data_request_id = ? AND organization_id_responder = ?", data_request.id, organization.id])
+end
+
 Given /^a project$/ do
   @project = Factory.create(:project)
 end
@@ -6,25 +12,16 @@ Given /^a project with name "([^\"]*)"$/ do |name|
   @project = Factory.create(:project, :name => name)
 end
 
-# kill meeeee
-Given /^a project with name "([^\"]*)" and an existing response$/ do |name|
-  @project = Factory.create(:project, :name => name, :data_response => @data_response)
-end
-
-# kill meeeee
-Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing response$/ do |name, district|
+Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
   @project = Factory.create(:project, 
-                            :name => name, 
-                            :locations => [ Location.find_by_short_display district],
-                            :data_response => @data_response)
+                            :name => project_name, 
+                            :data_response => get_data_response(data_request_name, organization_name))
 end
 
-Given /^an implementer "([^"]*)" for project "([^"]*)"  and an existing response$/ do |org, project|
-  @project ||= Project.find_by_name(project)
-  organization = Organization.find_by_name(org)
-  @implementer = Factory.create( :implementer, 
-                                :project => @project,  
-                                :organization_id_from => organization.id )
+Given /^an implementer "([^"]*)" for project "([^"]*)"$/ do |implementer_name, project_name|
+  @implementer = Factory.create(:implementer, 
+                                :project => Project.find_by_name(project_name),  
+                                :organization_id_from => Organization.find_by_name(implementer_name))
 end
 
 Given /^an activity with name "([^\"]*)"$/ do |name|
@@ -32,18 +29,21 @@ Given /^an activity with name "([^\"]*)"$/ do |name|
 end
 
 Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :projects => [Project.find_by_name(project)])
+  @activity = Factory.create(:activity, 
+                             :name => name, 
+                             :projects => [Project.find_by_name(project)])
 end
 
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)" and an existing response$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :data_response => @data_response, :projects => [Project.find_by_name(project)])
+Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
+  @activity = Factory.create(:activity, 
+                             :name => activity_name, 
+                             :data_response => get_data_response(data_request_name, organization_name), 
+                             :projects => [Project.find_by_name(project_name)])
 end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
-    Factory.create(:project,  { :organization_id => org.id
-    }.merge(hash) )
+    Factory.create(:project,  { :data_response => get_data_response(hash.delete("request"), hash.delete("organization")) }.merge(hash) )
   end
 end
 
@@ -141,7 +141,7 @@ Given /^the following funding flows$/ do |table|
     to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
-
+    
     Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
                    :project_id => project.id, 
                    :organization_id_from => from_org.id
@@ -159,31 +159,18 @@ Then /^I should see the "([^"]*)" tab is active$/ do |text|
   }
 end
 
-Given /^the following funding flows$/ do |table|
-  table.hashes.each do |hash|
-    to_org   = Organization.find_by_name(hash.delete("to"))
-    project  = Project.find_by_name(hash.delete("project"))
-    from_org = Organization.find_by_name(hash.delete("from"))
-
-    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                   :project_id => project.id, 
-                   :organization_id_from => from_org.id
-    }.merge(hash) )
-  end
-end
-
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#header_app"
-    And I should see "Sign in" within "div#header_app"
+    Then I should see "Have an account?" within "div#admin"
+    And I should see "Sign in" within "div#admin"
   }
 end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#header_app"
-    Then I should see "My Profile" within "div#header_app"
-    Then I should see "Sign out" within "div#header_app"
+    Then I should see "frank@f.com" within "div#admin"
+    Then I should see "My Profile" within "div#admin"
+    Then I should see "Sign out" within "div#admin"
   }
 end
 
@@ -232,7 +219,7 @@ end
 
 # a bit brittle
 When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-   steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
+  steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
 end
 
 Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
@@ -246,16 +233,8 @@ Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
                                   :responding_organization => Organization.find_by_name(org))
 end
 
-# refactor meeeee
-Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name|
-  @user = User.find_by_username name
-  @data_response = DataResponse.last
-  @user.current_data_response = @data_response
-  @user.save!
-end
-
 Then /^wait a few moments$/ do
-  sleep 20
+  sleep 3
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
@@ -263,15 +242,50 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
 end
 
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
-  steps %Q{ Given the following organizations 
-              | name   |
-              | UNDP   |
-            Given the following reporters 
-               | name         | organization |
-               | undp_user    | UNDP         |
-            Given a data request with title "Req1" from "UNAIDS"
-            Given a data response to "Req1" by "UNDP"
-            Given a refactor_me_please current_data_response for user "undp_user"
-            Given I am signed in as "undp_user"
-          }
+  steps %Q{ 
+    Given the following organizations 
+      | name   |
+      | UNDP   |
+      | GoR    |
+    Given the following reporters 
+       | name         | organization |
+       | undp_user    | UNDP         |
+    Given a data request with title "Req1" from "GoR"
+    Given a data response to "Req1" by "UNDP"
+    Given I am signed in as "undp_user"
+    When I follow "Dashboard"
+    And I follow "Edit"
+  }
+end
+
+Given /^a model help for "([^"]*)"$/ do |model_name|
+  Factory.create(:model_help, :model_name => model_name)
+end
+
+Given /^model help for "([^"]*)" page$/ do |page|
+  model_help_name = case page
+                    when 'projects'
+                      "Project"
+                    when 'funding sources'
+                      "FundingSource"
+                    when 'implementers'
+                      "Provider"
+                    when 'activities'
+                      "Activity"
+                    when 'classifications'
+                      "CodeAssignment"
+                    when 'other costs'
+                      "OtherCost"
+                    when 'review'
+                      "DataResponseReview"
+                    end
+  steps %Q{ 
+    Given a model help for "#{model_help_name}"
+  }
+end
+
+Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
+  activity = Activity.find_by_name(activity_name)
+  location = Location.find_by_short_display(location_name)
+  activity.locations << location
 end

@@ -6,7 +6,7 @@ Feature: Activity Manager can see dashboard
 Scenario: "See data requests"
   Given I am signed in as an activity manager
   When I go to the reporter dashboard page
-  Then I should see "Data Requests to Fulfill"
+  Then I should see "Data Requests"
 
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given the following organizations 
@@ -19,5 +19,5 @@ Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given a data request with title "Some request" from "WHO"
   And I am signed in as "some_user" 
   When I go to the reporter dashboard page
-  And I follow "Some request"
+  And I press "Respond"
   Then I should see the data response tabs

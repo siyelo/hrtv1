@@ -16,3 +16,7 @@ end
 Factory.define :activity_manager,  :parent => :user do |f|
   f.roles { ['activity_manager'] }
 end
+
+Factory.define :admin,  :parent => :user do |f|
+  f.roles { ['admin'] }
+end

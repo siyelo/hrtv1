@@ -1,13 +1,10 @@
-User.stub_current_user_and_data_response
-
 #create dummy users
-saved = User.create(:username => 'admin',
-                    :email => 'admin@ubuzima.org',
-                    :password => ENV['ADMIN_PASS'] || 'password',
-                    :password_confirmation => ENV['ADMIN_PASS'] || 'password',
-                    :organization => Organization.create!(:name => "internal_for_dev"),
-                    :roles => ['admin'])
+user = User.find_or_create_by_username('admin',
+                :email => 'admin@ubuzima.org',
+                :password => ENV['ADMIN_PASS'] || 'password',
+                :password_confirmation => ENV['ADMIN_PASS'] || 'password',
+                :organization => Organization.find_or_create_by_name("internal_for_dev"),
+                :roles => ['admin'])
 
-print "  WARN: Admin not created" unless saved
+print "  WARN: Admin not created" unless user
 
-User.unstub_current_user_and_data_response

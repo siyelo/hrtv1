@@ -1,5 +1,6 @@
 *.swp
 *.swo
+*.sw*
 *~
 .~*
 *sqlite3-journal

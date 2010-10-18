@@ -7,8 +7,8 @@ class Reports::ActivitiesByBudgetCoding
 
     codes = []
     code_ids = []
-    Code.roots.reject { |r| ! [Mtef, Nha, Nasa, Nsp].include? r.class }.each do |c|
-      codes << c.self_and_descendants.map { |e| e.short_display + " (" + (e.external_id.nil? ? 'n/a': e.external_id) + ")" }
+    Code.for_activities.roots.ordered.each do |c|
+      codes << c.self_and_descendants.map { |e| e.to_s_with_external_id }
       code_ids << c.self_and_descendants.map(&:id)
     end
     codes.flatten!
@@ -20,17 +20,19 @@ class Reports::ActivitiesByBudgetCoding
       csv << build_header(beneficiaries, codes)
 
       #print data
-      Activity.all.each do |a|
-        row = build_row(a, beneficiaries, code_ids)
-        #print out a row for each project
-        if a.projects.empty?
-          row.unshift(" ")
-          csv << row.flatten
-        else
-          a.projects.each do |proj|
-            proj_row = row.dup
-            proj_row.unshift("#{h proj.name}")
-            csv << proj_row.flatten
+      Activity.find(:all, :conditions => "activity_id IS NULL").each do |a|
+        if [OtherCost, Activity].include?(a.class)
+          row = build_row(a, beneficiaries, code_ids)
+          #print out a row for each project
+          if a.projects.empty?
+            row.unshift(" ")
+            csv << row.flatten
+          else
+            a.projects.each do |proj|
+              proj_row = row.dup
+              proj_row.unshift("#{h proj.name}")
+              csv << proj_row.flatten
+            end
           end
         end
       end
@@ -60,7 +62,7 @@ class Reports::ActivitiesByBudgetCoding
   def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_codes.map(&:id)
+    act_codes  = activity.budget_coding.map(&:code_id)
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]

@@ -26,9 +26,10 @@ class CodeAssignmentsController < ApplicationController
     authorize! :update, @activity
 
     coding_class = params[:coding_type].constantize
-    coding_class.update_codings(params[:activity][:updates], @activity)
-    @activity.update_classified_amount_cache(coding_class) # Update classified amount values
-    flash[:notice] = "Activity classification was successfully updated."
+    if params[:activity].present? && params[:activity][:updates].present?
+      coding_class.update_codings(params[:activity][:updates], @activity)
+      flash[:notice] = "Activity classification was successfully updated."
+    end
 
     redirect_to activity_coding_path(@activity)
   end

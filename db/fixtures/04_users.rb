@@ -1,6 +1,6 @@
 # Creation of users
 
-puts "\nLoading users"
+print "\nLoading users from csv"
 
 ### Expected format
 # <Org Name>, <User Email>
@@ -27,10 +27,7 @@ FasterCSV.foreach("db/fixtures/files/users.csv", :headers => true ) do |row|
   existing_user = User.find_by_email(user_email)
   puts "  WARN: User \"#{user_email}\" already exists (row: \# #{i})" if existing_user
   existing_user.delete if existing_user# otherwise will ahve users referencing non existent data responses potentially
-
-  User.stub_current_user_and_data_response
   #create dummy users
-
   saved = User.create(:username => user_email,
                :email => user_email,
                :password => user_password,
@@ -40,8 +37,6 @@ FasterCSV.foreach("db/fixtures/files/users.csv", :headers => true ) do |row|
   print "  WARN: reporter \"#{user_email}\" not created" unless saved
   print "."
 
-  User.unstub_current_user_and_data_response
-
 end
 
 unless auto_created_passwords.empty?
@@ -49,4 +44,4 @@ unless auto_created_passwords.empty?
   auto_created_passwords.each { |p| puts p }
 end
 
-puts "...Loading users DONE\n"
+print "...Loading users DONE\n"

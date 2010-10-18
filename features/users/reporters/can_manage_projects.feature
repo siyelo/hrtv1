@@ -44,4 +44,3 @@ Scenario Outline: Edit project dates, see feedback messages for Total budget and
     | 900            | 800        | Created Some Project                 | Created Some Project                                                 |
     | 900            | 900        | Created Some Project                 | Created Some Project                                                 |
     | 900            | 1000       | Oops, we couldn't save your changes. | Total Budget must be less than or equal to Total Budget GOR FY 10-11 |
-

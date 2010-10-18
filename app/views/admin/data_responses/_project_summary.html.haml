@@ -1,0 +1,35 @@
+%ul.half
+  %li
+    Districts:
+    = project.locations.map(&:name).join(', ')
+  %li
+    Start:
+    = project.start_date
+  %li
+    End:
+    = project.end_date
+%ul.half
+  %li
+    Total Budget:
+    = project.entire_budget
+  %li
+    Budget (current FY):
+    = project.budget
+  %li
+    Spend Q4 (Previous FY):
+    = project.spend_q4_prev
+  %li
+    Spend (current FY):
+    = project.spend
+  %li
+    Spend Q1:
+    = project.spend_q1
+  %li
+    Spend Q2:
+    = project.spend_q2
+  %li
+    Spend Q3:
+    = project.spend_q3
+  %li
+    Spend Q4:
+    = project.spend_q4

@@ -1,0 +1,25 @@
+%table.activities
+  %thead
+    %tr
+      %th Activities
+      %th Approved?
+      %th Sub-Implementers
+      %th Spend
+      %th Budget
+  %tbody
+    - project.activities.each do |activity|
+      %tr.activity.entry_header
+        %td
+          %ul
+            %li.name= activity.name
+            %li.descr= activity.description.to_s.first(300)
+            %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
+        %td= activity.approved
+        %td= activity.sub_activities.count
+        %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr.activity.entry_main
+        %td.s_border{:colspan => 100}
+          = render 'activity_summary', :activity => activity
+
+          = render 'classifications', :activity => activity

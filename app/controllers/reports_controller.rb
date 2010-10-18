@@ -75,5 +75,42 @@ class ReportsController < ApplicationController
               :disposition => "attachment; filename=users_by_organization.csv"
   end
 
-end
+  def activity_report
+    rep = Reports::ActivityReport.new
 
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activity_report.csv"
+  end
+
+  def activities_by_district_row_report
+    rep = Reports::DistrictCodingsBudgetReport.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_district_row_report.csv"
+  end
+  
+  def activities_by_district_new
+    rep = Reports::ActivitiesByDistrictNew.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_districts_new.csv"
+  end
+  
+  def activities_by_budget_coding_new
+    rep = Reports::ActivitiesByBudgetCodingNew.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_budget_coding_new.csv"
+  end
+  def activities_by_budget_stratprog
+    rep = Reports::ActivitiesByHssp2.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_budget_stratprog.csv"
+  end
+end

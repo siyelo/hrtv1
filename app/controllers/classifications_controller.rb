@@ -7,19 +7,14 @@ class ClassificationsController < ActiveScaffoldController
   @@shown_columns = [ :organization, :description, :budget?, :budget_by_district?, :budget_by_cost_category?,
                       :spend?, :spend_by_district?, :spend_by_cost_category?, :approved, :use_budget_codings_for_spend]
 
+
   active_scaffold :activity do |config|
     config.actions        = [ :list ]
     config.label          = 'Activity Classifications'
     config.columns        = @@shown_columns
     config.list.sorting   = { :description => 'DESC' }
 
-    #TODO better name / standarize on verb noun or just noun
-    config.action_links.add('Classify',
-      :action     => "popup_classification",
-      :parameters => { :controller=>'classifications' },
-      :type       => :member,
-      :popup      => true,
-      :label      => "Classify")
+    config.action_links.add('Classify', @@classify_popup_link_options)
 
     config.columns[:description].inplace_edit           = true
     config.columns[:description].label                  = "Activity Description"
@@ -37,7 +32,6 @@ class ClassificationsController < ActiveScaffoldController
     config.columns[:spend?].label                       = "Expenditure by Coding"
     config.columns[:spend_by_district?].label           = "Expenditure by District"
     config.columns[:spend_by_cost_category?].label      = "Expenditure by Cost Category"
-
   end
 
   #so other costs dont show up here, need

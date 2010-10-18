@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100929152841) do
+ActiveRecord::Schema.define(:version => 20101015132404) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -18,12 +18,9 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
-    t.string   "beneficiary"
-    t.string   "target"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "provider_id"
-    t.integer  "other_cost_type_id"
     t.text     "description"
     t.string   "type"
     t.decimal  "budget"
@@ -57,11 +54,6 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
     t.integer "beneficiary_id"
   end
 
-  create_table "activities_indicators", :id => false, :force => true do |t|
-    t.integer "activity_id"
-    t.integer "indicator_id"
-  end
-
   create_table "activities_locations", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "location_id"
@@ -89,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
     t.decimal "amount"
     t.string  "type"
     t.decimal "percentage"
+    t.decimal "cached_amount"
   end
 
   create_table "codes", :force => true do |t|
@@ -105,6 +98,9 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
     t.integer   "replacement_code_id"
     t.string    "type"
     t.string    "external_id"
+    t.string    "hssp2_stratprog_val"
+    t.string    "hssp2_stratobj_val"
+    t.string    "official_name"
   end
 
   create_table "comments", :force => true do |t|
@@ -120,6 +116,12 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "currencies", :force => true do |t|
+    t.decimal "toRWF"
+    t.string  "symbol"
+    t.string  "name"
+  end
 
   create_table "data_elements", :force => true do |t|
     t.integer "data_response_id"
@@ -141,22 +143,22 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
   end
 
   create_table "data_responses", :force => true do |t|
-    t.integer  "data_element_id"
-    t.integer  "data_request_id"
-    t.boolean  "complete",                         :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "organization_id_responder"
-    t.string   "currency"
-    t.date     "fiscal_year_start_date"
-    t.date     "fiscal_year_end_date"
-    t.string   "contact_name"
-    t.string   "contact_position"
-    t.string   "contact_phone_number"
-    t.string   "contact_main_office_phone_number"
-    t.string   "contact_office_location"
-    t.boolean  "submitted"
-    t.datetime "submitted_at"
+    t.integer   "data_element_id"
+    t.integer   "data_request_id"
+    t.boolean   "complete",                         :default => false
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "organization_id_responder"
+    t.string    "currency"
+    t.date      "fiscal_year_start_date"
+    t.date      "fiscal_year_end_date"
+    t.string    "contact_name"
+    t.string    "contact_position"
+    t.string    "contact_phone_number"
+    t.string    "contact_main_office_phone_number"
+    t.string    "contact_office_location"
+    t.boolean   "submitted"
+    t.timestamp "submitted_at"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -191,14 +193,6 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
   create_table "help_requests", :force => true do |t|
     t.string    "email"
     t.text      "message"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "indicators", :force => true do |t|
-    t.string    "name"
-    t.text      "description"
-    t.string    "source"
     t.timestamp "created_at"
     t.timestamp "updated_at"
   end
@@ -244,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20100929152841) do
     t.timestamp "created_at"
     t.timestamp "updated_at"
     t.string    "raw_type"
+    t.string    "fosaid"
   end
 
   create_table "projects", :force => true do |t|

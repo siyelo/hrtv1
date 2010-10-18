@@ -21,12 +21,9 @@ class ActivitiesController < ActiveScaffoldController
     config.create.columns = @@create_columns
     config.update.columns = @@update_columns
     list.sorting          = {:name => 'DESC'}
-    config.action_links.add('Classify',
-      :action     => "popup_classification",
-      :parameters => { :controller=>'classifications' },
-      :type       => :member,
-      :popup      => true,
-      :label      => "Classify")
+
+    config.action_links.add('Classify', @@classify_popup_link_options)
+
     config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     config.nested.add_link("Sub Implementers", [:sub_activities])
@@ -45,6 +42,7 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:description].options          = {:cols => 60, :rows => 8}
     config.columns[:beneficiaries].form_ui        = :select
     #config.actions.exclude :nested # causes problem on page /activities when logged in as admin
+
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
@@ -80,11 +78,6 @@ class ActivitiesController < ActiveScaffoldController
       config.columns[c].form_ui = :textarea
       config.columns[c].options = {:cols => 50, :rows => 3}
     end
-  end
-
-  #AS helper method
-  def popup_coding
-    redirect_to activity_coding_url(params[:id])
   end
 
   def self.create_columns

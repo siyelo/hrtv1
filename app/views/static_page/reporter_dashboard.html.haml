@@ -1,10 +1,17 @@
 %h2 Donor/NGO Dashboard
 %br
-%h3 Data Requests to Fulfill
-%br
-= render :partial => 'data_requests/list'
-%br
-%br
-/ comment out for production, don't look unfinished!
-/%h3 Comments on My Data - will complete this feature later
-/= render :partial => Comment.all
+%h3 Data Requests
+
+- @data_responses.each do |response|
+  %p.current_request
+    = response.data_request.title
+    = link_to "Edit", start_data_response_url(response)
+
+- @data_requests_unfulfilled.each do |req|
+  - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
+    = form.hidden_field(:organization_id_responder)
+    = form.hidden_field(:data_request_id)
+    %p.unfulfilled_request
+      = req.title
+      = form.submit "Respond"
+

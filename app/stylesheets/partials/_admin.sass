@@ -1,0 +1,84 @@
+body.app
+  .project, .activity
+    &.entry_header
+      cursor: pointer
+    &.entry_main
+      display: none
+    
+  .full-width
+    h2
+      background: none
+      margin: 10px 10px 0
+      text-transform: none
+      
+  /* default layout for a simple table */
+  .simple_table
+    padding: 0 10px 10px 10px
+    +clearfix
+
+    h3
+      color: $mid-blue
+      font-size: 0.9em
+      padding: 20px 10px 10px
+      text-transform: none
+
+    table
+      background: #eee
+      color: !mid-blue
+      font-size: 0.8em
+      width: 100%
+      a
+        font-size: 1em
+
+      th, td
+        border-right: 1px solid white
+        padding: 7px
+
+      tbody
+        th, td
+          border-bottom: 1px solid white
+
+        tr:hover
+          background: #f9f9f9
+
+      thead
+        background: !mid-blue
+        border-bottom: 1px solid white
+        color: white
+        font-size: 0.9em
+        /* end */
+  
+    .third
+      float: left
+      margin-right: 3%
+      margin-bottom: 20px
+      width: 30%
+    .half
+      float: left
+      margin-right: 5%
+      margin-bottom: 20px
+      width: 45%
+    .entry
+      border: 3px solid $mid-blue
+    #activity_classification
+      padding: 0
+    li
+      padding-top: 5px
+      &:first-child
+        font-weight: bold
+      &.funders
+        font-size: 0.8em
+      
+    .s_border
+      background: white
+      padding: 10px
+      &:hover
+        background: white
+      > td
+        border: 3px solid $light-blue
+        padding: 5px
+      
+    .activities
+      font-size: 1em
+      thead tr:hover
+        background: $mid-blue

@@ -2,7 +2,7 @@ Feature: Visitors cannot see protected pages
   In order to protect information
   As a visitor
   I should not be able to see certain pages  
-  
+
 @allow-rescue
 Scenario Outline: Visit protected page, get redirected to login screen
   When I go to the <page> page
@@ -12,6 +12,7 @@ Scenario Outline: Visit protected page, get redirected to login screen
     | page            |
     | projects        |
     | funding sources |
-    | providers       |
+    | implementers    |
     | activities      |
+    | classifications |
     | other costs     |

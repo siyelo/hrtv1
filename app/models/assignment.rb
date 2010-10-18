@@ -2,7 +2,7 @@
 #
 # Table name: assignments
 #
-#  id      :integer         not null, primary key
+#  id      :integer         primary key
 #  user_id :integer
 #  role_id :integer
 #

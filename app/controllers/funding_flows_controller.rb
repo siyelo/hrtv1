@@ -2,33 +2,30 @@ class FundingFlowsController < ActiveScaffoldController
   authorize_resource
 
   @@shown_columns = [:project, :from, :to, :budget, :spend]
-  @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4]
-  def self.create_columns
-    @@create_columns
-  end
-  @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend, :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+  @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1,
+                      :spend_q2, :spend_q3, :spend_q4]
+
+  @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend,
+                      :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+  map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
 
   active_scaffold :funding_flow do |config|
-    config.label = "Funding Flow"
-    config.columns =  @@shown_columns
-    config.create.columns = @@create_columns
-    config.update.columns = @@update_columns
-    list.sorting = {:from => 'DESC'}
-#    config.columns[:project].options[:update_column] = :to#LateUpdater.new(self)
-    config.columns[:organization_text].form_ui = :textarea
-    config.columns[:organization_text].options = {:cols => 50, :rows => 3}
+    config.label                                    = "Funding Flow"
+    config.columns                                  = @@shown_columns
+    config.create.columns                           = @@create_columns
+    config.update.columns                           = @@update_columns
+    list.sorting                                    = {:from => 'DESC'}
+    config.columns[:organization_text].form_ui      = :textarea
+    config.columns[:organization_text].options      = {:cols => 50, :rows => 3}
     config.columns[:organization_text].inplace_edit = true
-    config.columns[:organization_text].label = "Free form text for organization name from file import"
+    config.columns[:organization_text].label        = "Free form text for organization name from file import"
+    config.columns[:comments].association.reverse   = :commentable
+    config.columns[:project].form_ui                = :select
+    config.columns[:project].inplace_edit           = false
 
     config.nested.add_link("Comments", [:comments])
-    config.columns[:comments].association.reverse = :commentable
-    config.columns[:project].form_ui=:select
-    config.columns[:project].inplace_edit=false
 
     [:from, :to ].each do |c|
       config.columns[c].form_ui=:select #TODO comment out when GN gets subform working
@@ -36,10 +33,7 @@ class FundingFlowsController < ActiveScaffoldController
       config.columns[c].options             = { :prompt => '--- Select Organization ---', :include_blank => '+ Add a new Organization...' }
       config.columns[c].inplace_edit        = false
     end
-#    config.columns[:from].association.reverse = :out_flows
-#    config.columns[:to].association.reverse = :in_flows
 
-   # config.columns[:to].options = {:selected => 1260} #TODO add default provider self later, this way creates bug on edit
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
         budget_group.add :budget
@@ -67,6 +61,10 @@ class FundingFlowsController < ActiveScaffoldController
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
   end
 
+  def self.create_columns
+    @@create_columns
+  end
+
   def create_from_file
     super @@columns_for_file_upload
   end
@@ -75,8 +73,12 @@ class FundingFlowsController < ActiveScaffoldController
     super.available_to current_user
   end
 
-  #fixes create
+  #fixes create()
   def before_create_save record
     record.data_response = current_user.current_data_response
+  end
+
+  def create_respond_to_html
+    redirect_to funding_sources_data_entry_url
   end
 end

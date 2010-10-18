@@ -3,13 +3,11 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
-@green
 Scenario: Login via home page
   When I go to the home page
   And I follow "Sign in"
   Then I should be on the login page
 
-@green
 Scenario: See login form
   When I go to the login page
   Then I should see the visitors header
@@ -18,7 +16,6 @@ Scenario: See login form
   And I should see "Password" within "body#login"
   Then I should see the common footer
 
-@green
 Scenario: Login with invalid data - see flash message not AR errors
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -28,7 +25,6 @@ Scenario: Login with invalid data - see flash message not AR errors
   Then I should see "Wrong Username/email and password combination"
   And I should not see "There were problems with the following fields:"
 
-@green
 Scenario: Login as a reporter with a username
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -38,7 +34,6 @@ Scenario: Login as a reporter with a username
   And I should see the reporters admin nav
   And I should see the main nav tabs
 
-@green
 Scenario: Login as a reporter with email address
   Given a reporter "Frank" with email "frank@f.com" and password "password"
   When I go to the login page
@@ -47,7 +42,3 @@ Scenario: Login as a reporter with email address
   And I press "Sign in"
   Then I should see the reporters admin nav
   And I should see "frank@f.com"
-
-
-#Active-Scaffold-specific routes
-#Scenario Outline: Request protected action, get redirected to login screen

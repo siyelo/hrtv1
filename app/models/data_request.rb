@@ -2,13 +2,13 @@
 #
 # Table name: data_requests
 #
-#  id                        :integer         not null, primary key
+#  id                        :integer         primary key
 #  organization_id_requester :integer
 #  title                     :string(255)
 #  complete                  :boolean         default(FALSE)
 #  pending_review            :boolean         default(FALSE)
-#  created_at                :datetime
-#  updated_at                :datetime
+#  created_at                :timestamp
+#  updated_at                :timestamp
 #
 
 class DataRequest < ActiveRecord::Base
@@ -19,26 +19,24 @@ class DataRequest < ActiveRecord::Base
 
   has_many :data_responses, :dependent => :destroy
 
+  validates_presence_of :requesting_organization
+  validates_presence_of :title
+
+  named_scope :unfulfilled, lambda {|organization|
+    return {} unless organization
+    { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id_responder = ? )", organization.id] }
+  }
+
   def self.find_unfulfill_request organization_id
     DataRequest.find(:all, :conditions=>["organization_id_requester = ? AND complete = ?", organization_id, false])
   end
+
   def self.find_all_unfulfill_request
     DataRequest.find(:all, :conditions=>["complete = ?", false])
   end
 
-  after_save :check_response_created
-
   def add_data_element data
     data_element << data
-  end
-
-  protected
-  def check_response_created
-    if data_responses.empty?
-      Organization.all.each do |org|
-        data_responses.create :responding_organization => org
-      end
-    end
   end
 
 end

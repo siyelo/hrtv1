@@ -2,13 +2,13 @@
 #
 # Table name: projects
 #
-#  id               :integer         not null, primary key
+#  id               :integer         primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :timestamp
+#  updated_at       :timestamp
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
 
   # Validations
-  validates_presence_of :name
+  validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
@@ -105,8 +105,8 @@ class Project < ActiveRecord::Base
     #TODO pass in the amount attributes and use them on records below
     #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
     shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response]
-    f1=funding_flows.create({:to => my_org})
-    f2=funding_flows.create({:from => my_org, :to => my_org, :self_provider_flag => 1})
+    f1 = funding_flows.create({:to => my_org})
+    f2 = funding_flows.create({:from => my_org, :to => my_org, :self_provider_flag => 1})
     shared_attributes.each do |att|
       f1.send(att.to_s+"=", self.send(att))
       f2.send(att.to_s+"=", self.send(att))

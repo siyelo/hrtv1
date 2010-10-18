@@ -2,12 +2,12 @@
 #
 # Table name: funding_flows
 #
-#  id                   :integer         not null, primary key
+#  id                   :integer         primary key
 #  organization_id_from :integer
 #  organization_id_to   :integer
 #  project_id           :integer
-#  created_at           :datetime
-#  updated_at           :datetime
+#  created_at           :timestamp
+#  updated_at           :timestamp
 #  budget               :decimal(, )
 #  spend_q1             :decimal(, )
 #  spend_q2             :decimal(, )
@@ -22,7 +22,7 @@
 
 require 'lib/ActAsDataElement'
 class FundingFlow < ActiveRecord::Base
-  
+
   acts_as_commentable
 
   include ActAsDataElement

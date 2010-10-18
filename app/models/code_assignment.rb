@@ -2,30 +2,41 @@
 #
 # Table name: code_assignments
 #
-#  id          :integer         not null, primary key
-#  activity_id :integer
-#  code_id     :integer
-#  code_type   :string(255)
-#  amount      :decimal(, )
-#  type        :string(255)
-#  percentage  :decimal(, )
+#  id            :integer         primary key
+#  activity_id   :integer
+#  code_id       :integer
+#  code_type     :string(255)
+#  amount        :decimal(, )
+#  type          :string(255)
+#  percentage    :decimal(, )
+#  cached_amount :decimal(, )
 #
+
 class CodeAssignment < ActiveRecord::Base
 
-  # Associations
+  ### Associations
   belongs_to :activity
   belongs_to :code
-# Validations
+  ### Validations
   validates_presence_of :activity, :code
+  ### Attributes
+  attr_accessible :activity, :code, :amount, :percentage, :cached_amount
 
-  # Attributes
-  attr_accessible :activity, :code, :amount, :percentage
-
-  # Named scopes
+  ### Named scopes
   named_scope :with_code_ids, lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
   named_scope :with_activity, lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
   named_scope :with_type,     lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
   named_scope :with_code_id,  lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
+
+  ### methods
+
+  def calculated_amount
+    if read_attribute(:amount).nil?
+      cached_amount
+    else
+      read_attribute(:amount)
+    end
+  end
 
   def self.update_codings(code_assignments, activity)
     if code_assignments
@@ -44,7 +55,16 @@ class CodeAssignment < ActiveRecord::Base
           :percentage => code_assignments[code.id.to_s]["percentage"]
         ) if code
       end
-      activity.update_classified_amount_cache self
+
+      if activity.use_budget_codings_for_spend
+        budget_type = self.to_s
+        activity.copy_budget_codings_to_spend([budget_type]) # copy the same budget codings to spend
+        spend_type = budget_type.gsub(/Budget/, "Spend") # get appropriate spend type
+        activity.update_classified_amount_cache(self) # update cache for budget
+        activity.update_classified_amount_cache(spend_type.constantize) # update cache for spend
+      else
+        activity.update_classified_amount_cache(self)
+      end
     end
   end
 
@@ -62,18 +82,51 @@ class CodeAssignment < ActiveRecord::Base
   def self.codings_sum(available_codes, activity, max)
     total = 0
     max = 0 if max.nil?
+    my_cached_amount = 0
 
     available_codes.each do |ac|
-      ca = self.with_activity(activity).with_code_id(ac.id).first
-      if ca && ca.amount.present? && ca.amount > 0
-        total += ca.amount
-      elsif ca && ca.percentage.present? && ca.percentage > 0
-        total += ca.percentage * max / 100
+      code_assignments = self.with_activity(activity).with_code_id(ac.id)
+      raise "Duplicate code assignments".to_yaml if code_assignments.length > 1
+      ca = code_assignments.first
+      if ca
+        if ca.amount.present? && ca.amount > 0
+          my_cached_amount = ca.amount
+        elsif ca.percentage.present? && ca.percentage > 0
+          my_cached_amount = ca.percentage * max / 100
+        end
+        #ca.update_attributes :cached_amount => my_cached_amount
+        ca.cached_amount = my_cached_amount
+        ca.save!
+        total += my_cached_amount
+        self.codings_sum(ac.children, activity, max)
       elsif !ac.leaf?
-        total += self.codings_sum(ac.children, activity, max)
+        my_cached_amount = self.codings_sum(ac.children, activity, max)
+        self.create!(
+          :activity => activity,
+          :code => ac,
+          :cached_amount => my_cached_amount
+        ) if my_cached_amount > 0
+        total += my_cached_amount
       end
     end
 
     total
+  end
+
+  def self.copy_coding_from_budget_to_spend assignments, new_klass, save = true
+    new_assignments = []
+    #make new code assignments
+    #shift values to correct amount
+    #save them
+    assignments.each do |ca|
+      activity = assignments.first.activity
+      new_ca = new_klass.new
+      new_ca.code_id = ca.code_id
+      new_ca.cached_amount = activity.spend * ca.calculated_amount / activity.budget
+      new_ca.activity = activity
+      new_ca.save
+      new_assignments << new_ca
+    end
+    new_assignments
   end
 end

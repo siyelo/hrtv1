@@ -82,7 +82,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
   map.namespace :admin do |admin|
-    admin.resources :data_responses
+    admin.resources :data_responses, :member => {:delete => :get}
   end
 
 end

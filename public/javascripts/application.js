@@ -15,7 +15,45 @@ var collapse_expand = function (element, type) {
   }
 };
 
-var data_responses_show = {
+var get_row_id = function (element) {
+  return element.parents('tr').attr('id');
+};
+
+var get_resource_name = function (element) {
+  return element.parents('#resources').attr('class');
+};
+
+var get_resource_id = function (element) {
+  return Number(get_row_id(element).match(/\d+/)[0]);
+};
+
+var remove_row = function (row_id) {
+  jQuery("#" + row_id).remove();
+};
+
+var destroy_resource = function (element) {
+  var row_id = get_row_id(element);
+  var resource_id = get_resource_id(element)
+  var resource_name = get_resource_name(element);
+  jQuery.post(resource_name + '/' + resource_id + '.js', {'_method': 'delete'}, function (data) {
+    remove_row(row_id);
+  });
+};
+
+var admin_data_responses_index = {
+  run: function () {
+    // destroy
+    jQuery(".destroy_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (confirm('Are you sure?')) {
+        destroy_resource(element);
+      }
+    });
+  }
+};
+
+var admin_data_responses_show = {
   run: function () {
     jQuery('.project.entry_header').click(function () {
       collapse_expand(jQuery(this), 'project');

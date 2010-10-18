@@ -20,6 +20,12 @@ module ApplicationHelper
     sprintf("%2.f", n)
   end
 
+  def get_controller_id(controller)
+    parts = controller.controller_path.split('/')
+    parts << controller.action_name
+    parts.join('_')
+  end
+
   def user_dashboard_path current_user
     path = nil
     if current_user

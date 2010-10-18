@@ -1,5 +1,7 @@
-%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
+/%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
+%h2= "Response from #{@data_response.organization.name}"
 
+%p= "Point of Contact: #{@data_response.contact_name} @ #{@data_response.contact_phone_number} or #{@data_response.contact_main_office_phone_number}"
 .simple_table
   = render 'projects', :projects => @projects
 

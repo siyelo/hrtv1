@@ -11,25 +11,30 @@
 %ul.half
   %li
     Total Budget:
-    = project.entire_budget
+    = number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
   %li
-    Budget (current FY):
-    = project.budget
+    Total Budget (current FY):
+    = number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+  %li
+    Total Spend (past FY):
+    = number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
   %li
     Spend Q4 (Previous FY):
-    = project.spend_q4_prev
-  %li
-    Spend (current FY):
-    = project.spend
+    =  number_to_currency(project.spend_q4_prev , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+
   %li
     Spend Q1:
-    = project.spend_q1
+    =  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+
   %li
     Spend Q2:
-    = project.spend_q2
+    =  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+
   %li
     Spend Q3:
-    = project.spend_q3
+    =  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+
   %li
     Spend Q4:
-    = project.spend_q4
+    =  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+

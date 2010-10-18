@@ -160,6 +160,10 @@ class Activity < ActiveRecord::Base
     budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
   end
 
+  def classified?
+    classified
+  end
+
   # TODO: use the cached values to check if the activity is classified!
   def budget?
     CodingBudget.classified(self)

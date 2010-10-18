@@ -4,7 +4,7 @@
       %th Projects
       %th Activities
       %th Spend
-      %th Total Budget
+      %th Budget
   %tbody
     - projects.each do |project|
       %tr.project.entry_header
@@ -15,7 +15,7 @@
             %li.funders= "Funders: #{project.funding_sources.map(&:name).join(', ')}"
         %td= project.activities.count
         %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
       %tr.project.entry_main.s_border
         %td{:colspan => 100}

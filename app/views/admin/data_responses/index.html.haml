@@ -51,12 +51,12 @@
               %td= data_response.sub_activity_count
               %td= data_response.total_activity_spend
               %td= data_response.total_activity_budget
-              %td= data_response.unclassified_activities_count
+              %td= "#{data_response.unclassified_activities_count} / #{data_response.activity_count}"
               %td
                 = link_to "Show", [:admin, data_response]
+
   .simple_table
     %h3="Submitted data responses for review (#{@submitted_data_responses.size})"
-
     - if @submitted_data_responses.empty?
       %p No submitted data responses are waiting for review.
     - else

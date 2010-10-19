@@ -8,4 +8,12 @@ module ProjectsHelper
   def end_date_form_column(column, options)
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
+
+  def options_for_association_count association
+    if association.name == :comments
+      0
+    else
+      super
+    end
+  end
 end

@@ -6,7 +6,7 @@ class FundingFlowsController < ActiveScaffoldController
                       :spend_q2, :spend_q3, :spend_q4]
 
   @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend,
-                      :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4]
+                      :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :comments]
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file

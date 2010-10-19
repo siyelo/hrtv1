@@ -8,6 +8,13 @@
   %li
     %span End:
     = project.end_date
+  %li
+    %span Comments:
+    %ul
+      - project.comments.each do |c|
+        %li= "#{c.title}, #{c.comment}"
+  %li
+    %span= link_to "Edit", edit_project_url(project.id)
 %ul.half.t_right
   %li
     %b Total Budget:

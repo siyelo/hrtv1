@@ -33,9 +33,10 @@ module Reporter::DashboardHelper
   end
 
   def model_name(model)
-    model.try(:name)
+    no_title = "(no title)"
+    model.try(:name) || no_title
   rescue
-    "(no title)"
+    no_title
   end
 
 end

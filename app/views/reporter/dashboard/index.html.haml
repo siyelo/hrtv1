@@ -1,21 +1,22 @@
 %h2 Donor/NGO Dashboard
+%ul
+  %li
+    %h3 Data Requests
 
-%h3 Data Requests
+    - @data_responses.each do |response|
+      %p.current_request
+        = response.data_request.title
+        = link_to "Edit", start_data_response_url(response)
+  %li
+    - @data_requests_unfulfilled.each do |req|
+      - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
+        = form.hidden_field(:organization_id_responder)
+        = form.hidden_field(:data_request_id)
+        %p.unfulfilled_request
+          = req.title
+          = form.submit "Respond"
 
-- @data_responses.each do |response|
-  %p.current_request
-    = response.data_request.title
-    = link_to "Edit", start_data_response_url(response)
+%h2 Recent Comments
 
-- @data_requests_unfulfilled.each do |req|
-  - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
-    = form.hidden_field(:organization_id_responder)
-    = form.hidden_field(:data_request_id)
-    %p.unfulfilled_request
-      = req.title
-      = form.submit "Respond"
+= render 'reporter/dashboard/comment_short_list', :comments => @comments
 
-%h3 Recent Comments
-
-= render 'shared/comment_short_list', :comments => @comments
-.read_more= link_to "all comments", comments_path

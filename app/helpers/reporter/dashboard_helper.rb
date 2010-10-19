@@ -32,4 +32,11 @@ module Reporter::DashboardHelper
     type
   end
 
+  def model_name(model)
+    no_title = "(no title)"
+    model.try(:name) || no_title
+  rescue
+    no_title
+  end
+
 end

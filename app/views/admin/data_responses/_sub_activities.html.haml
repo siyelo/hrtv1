@@ -1,0 +1,21 @@
+- unless activity.sub_activities.empty?
+  %table.sub_activities
+    %thead
+      %tr
+        %th Implementer
+        %th Classified
+        %th Budget
+        %th Budget percentage
+        %th Spend
+        %th Spend percentage
+    %tbody
+      - activity.sub_activities.each do |sub_activity|
+        %tr.sub_activity.entry_header
+          %td=  sub_activity.implementer.try(:name)
+          %td= sub_activity.classified? ? "Yes" : "No"
+          %td= number_to_currency(sub_activity.budget, :unit => sub_activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+          %td= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
+          %td= number_to_currency(sub_activity.spend, :unit => sub_activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+          %td= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
+        %tr.sub_activity.entry_main
+          %td.s_border{:colspan => 100}= sub_activity.text_for_provider

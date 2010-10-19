@@ -39,18 +39,6 @@ Scenario: Access comments page from dashboard and edit them
   And I should see "the third comment"
 
 @reporter_comments
-Scenario: See full comment detail on the listing page
-  Given a basic org + reporter profile, with data response, signed in
-  Given the following projects 
-    | name                 | request | organization |
-    | TB Treatment Project | Req1    | UNDP         |
-  Given the following comments 
-    | project              | title   | comment |
-    | TB Treatment Project | title1  | some very very very very very very long comment |
-  When I go to the comments page
-  Then I should see "some very very very very very very long comment"
-
-@reporter_comments
 Scenario: Reporter can see only comments from his organization
   Given the following organizations 
     | name   |

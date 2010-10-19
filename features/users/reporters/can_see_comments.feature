@@ -28,5 +28,6 @@ Scenario: See full comment listing
 Scenario: See comment detail
   - reporter/comments/1/
 
-Scenario: add comment?
-Scenario: edit comment?
+#  - click to respond to a comment 
+Scenario: respond to comment
+

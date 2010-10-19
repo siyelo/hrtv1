@@ -27,14 +27,12 @@ module ApplicationHelper
   end
 
   def user_dashboard_path current_user
-    path = nil
     if current_user
       if current_user.role? :admin
-        path = static_page_path(:admin_dashboard)
+        admin_dashboard_path
       elsif current_user.role? :reporter
-        path = reporter_dashboard_path
+        reporter_dashboard_path
       end
     end
-    path
   end
 end

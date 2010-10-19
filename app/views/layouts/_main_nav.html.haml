@@ -1,8 +1,8 @@
 #main-nav
   .wrapper
-    - dashboard_active = help_active = reports_active = false
+    - help_active = reports_active = false
+    - dashboard_active = true if controller.controller_name == 'dashboard'
     - if controller.class.to_s == "StaticPageController"
-      - dashboard_active = true if controller.action_name == 'reporter_dashboard' || params[:page] == 'admin_dashboard'
       - help_active      = true if params[:page] == 'user_guide'
       - reports_active   = true if params[:page] == 'reports'
 
@@ -11,7 +11,7 @@
 
     %ul
       - if current_user.role? :admin
-        %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", static_page_path(:admin_dashboard)
+        %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", admin_dashboard_path
       - elsif current_user.role?(:reporter) || current_user.role?(:activity_manager)
         %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", reporter_dashboard_path
       %li{ :class => workplan_active ? "active" : ''}

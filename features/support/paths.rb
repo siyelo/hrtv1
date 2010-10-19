@@ -26,6 +26,9 @@ module NavigationHelpers
     when /the classifications page/
       classifications_path
 
+    when /the comments page/
+      comments_path
+
     when /the login page/
       login_path
 

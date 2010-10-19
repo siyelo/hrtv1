@@ -51,10 +51,6 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'user_sessions', :action => 'new'
   map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
-  map.namespace :reporter do |reporter|
-    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :show
-  end
-
   #reports
   map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'
   map.activities_by_district_sub_activities 'activities_by_district_sub_activities', :controller => 'reports', :action => 'activities_by_district_sub_activities'
@@ -79,12 +75,16 @@ ActionController::Routing::Routes.draw do |map|
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide reports].join('|'))
+                  :page => Regexp.new(%w[about contact about news submit user_guide reports].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
   map.namespace :admin do |admin|
     admin.resources :data_responses, :member => {:delete => :get}
+    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 
+  map.namespace :reporter do |reporter|
+    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+  end
 end

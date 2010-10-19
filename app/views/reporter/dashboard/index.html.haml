@@ -17,5 +17,5 @@
 
 %h3 Recent Comments
 
-= render 'comment_short_list'
-.read_more= link_to "all comments", comments_path()
+= render 'shared/comment_short_list', :comments => @comments
+.read_more= link_to "all comments", comments_path

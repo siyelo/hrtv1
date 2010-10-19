@@ -284,6 +284,26 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   }
 end
 
+Given /^organizations, reporters, data request, data responses, projects, comments$/ do
+  steps %Q{ 
+    Given the following organizations 
+      | name   |
+      | UNDP   |
+      | USAID  |
+      | GoR    |
+    Given the following reporters 
+       | name         | organization |
+       | undp_user    | UNDP         |
+    Given a data request with title "Req1" from "GoR"
+    Given a data response to "Req1" by "UNDP"
+    Given a data response to "Req1" by "USAID"
+    Given the following projects 
+      | name                 | request | organization |
+      | TB Treatment Project | Req1    | UNDP         |
+      | Other Project        | Req1    | USAID        |
+  }
+end
+
 Given /^a model help for "([^"]*)"$/ do |model_name|
   Factory.create(:model_help, :model_name => model_name)
 end

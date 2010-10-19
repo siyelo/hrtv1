@@ -3,7 +3,6 @@
   - model = comment.commentable
   - type = comment.commentable_type
   %li
-    Comment:
     %span.title= "\"#{comment.title.first(30)}\""
     on
     = "#{commentable_name(type, model, current_user)}:"

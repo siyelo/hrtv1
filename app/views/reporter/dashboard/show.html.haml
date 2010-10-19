@@ -15,6 +15,7 @@
       = req.title
       = form.submit "Respond"
 
-%h3 Activity Feed
+%h3 Recent Comments
 
 = render 'comment_short_list'
+.read_more= link_to "all comments", comments_path()

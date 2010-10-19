@@ -1,6 +1,7 @@
 class CommentsController < ActiveScaffoldController
 
   authorize_resource
+  before_filter :require_admin, :only => [:index]
 
 # TODO use the named cscopes from cancan in beginning of cahin
   #  to do proper scoping here by type and data_response of commentable

@@ -18,7 +18,8 @@ Scenario: See comment excerpts on dashboard
   And I should see "title1"
   And I should see "on Project: "
   And I should see "TB Treatment Project"
-  
+  #And I should see an edit link to "TB Treatment Project"
+
 @run
 Scenario: See full comment listing
   Given a basic org + reporter profile, with data response, signed in
@@ -32,10 +33,26 @@ Scenario: See full comment listing
   When I follow "Dashboard"
   And I follow "all comments"
   Then I should be on the comment listing page
-  
-Scenario: See full comment detail
+  #And I should see an edit link to "TB Treatment Project"
+  #...
 
-Scenario: respond to comment
+Scenario: See full comment detail on the listing page
+  Given a basic org + reporter profile, with data response, signed in
+  Given the following projects 
+    | name                 | request | organization |
+   | TB Treatment Project | Req1    | UNDP          | 
+  Given the following comments 
+    | project              | title   | comment |
+    | TB Treatment Project | title1  | some very very very very very very long comment |
+  When I follow "Dashboard"
+  And I follow "all comments"
+  Then I should see "some very very very very very very long comment"
+#...
+
+# maybe later ?
+#Scenario: See full comment detail when you click on the comment on the listing page
+
+Scenario: Respond to comment
 
 
 

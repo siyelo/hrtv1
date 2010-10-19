@@ -40,12 +40,12 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal  "budget_percentage"
     t.decimal  "spend_percentage"
     t.boolean  "approved"
-    t.decimal  "CodingBudget_amount",                   :default => 0.0
-    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal  "CodingSpend_amount",                    :default => 0.0
-    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
+    t.decimal  "CodingBudget_amount"
+    t.decimal  "CodingBudgetCostCategorization_amount"
+    t.decimal  "CodingBudgetDistrict_amount"
+    t.decimal  "CodingSpend_amount"
+    t.decimal  "CodingSpendCostCategorization_amount"
+    t.decimal  "CodingSpendDistrict_amount"
     t.boolean  "use_budget_codings_for_spend",          :default => false
   end
 
@@ -143,22 +143,22 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
   end
 
   create_table "data_responses", :force => true do |t|
-    t.integer   "data_element_id"
-    t.integer   "data_request_id"
-    t.boolean   "complete",                         :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "organization_id_responder"
-    t.string    "currency"
-    t.date      "fiscal_year_start_date"
-    t.date      "fiscal_year_end_date"
-    t.string    "contact_name"
-    t.string    "contact_position"
-    t.string    "contact_phone_number"
-    t.string    "contact_main_office_phone_number"
-    t.string    "contact_office_location"
-    t.boolean   "submitted"
-    t.timestamp "submitted_at"
+    t.integer  "data_element_id"
+    t.integer  "data_request_id"
+    t.boolean  "complete",                         :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "organization_id_responder"
+    t.string   "currency"
+    t.date     "fiscal_year_start_date"
+    t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
+    t.boolean  "submitted"
+    t.datetime "submitted_at"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

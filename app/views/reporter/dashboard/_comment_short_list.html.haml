@@ -1,10 +1,11 @@
-%ul
-- comments.each do |comment|
-  - model = comment.commentable
-  - type = comment.commentable_type
-  %li
-    %h5.title
-      = "\"#{truncate(comment.title, :length => 30)}\" on #{commentable_name(type, model, current_user)}:"
-      %span= link_to truncate(model_name(model), :length => 40), commentable_path(type, model, current_user)
-    %p.main= truncate(comment.comment, :length => 100)
-    %p.time= "#{time_ago_in_words(comment.created_at)} ago" if comment.created_at
+%ul.dashboard_comments
+  - comments.each do |comment|
+    - model = comment.commentable
+    - type = comment.commentable_type
+    %li
+      %h5.title
+        = "\"#{truncate(comment.title, :length => 30)}\" on #{commentable_name(type, model, current_user)}:"
+        %span= link_to truncate(model_name(model), :length => 40), commentable_path(type, model, current_user)
+      %p.main= truncate(comment.comment, :length => 300)
+      %p.time= "#{time_ago_in_words(comment.created_at)} ago" if comment.created_at
+  .read_more= link_to "all comments", comments_path

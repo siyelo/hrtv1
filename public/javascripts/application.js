@@ -63,6 +63,10 @@ var admin_data_responses_show = {
       collapse_expand(jQuery(this), 'activity');
     });
 
+    jQuery('.sub_activity.entry_header').click(function () {
+      collapse_expand(jQuery(this), 'sub_activity');
+    });
+
     // bind click events for tabs
     jQuery(".classifications ul li").click(function (e) {
       e.preventDefault();

@@ -23,9 +23,7 @@
     = activity.organizations.map(&:name).join(', ')
   %li
     %span Sub-Activities:
-    %ul#sub-activity
-      - activity.sub_activities.each do |a|
-        %li= "#{a.implementer.try(:name)}, #{a.budget}, #{a.budget_percentage}, #{a.spend_percentage}, #{a.spend}"
+    = render 'sub_activities', :activity => activity
   %li
     %span Comments:
     %ul

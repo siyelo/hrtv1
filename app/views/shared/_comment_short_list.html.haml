@@ -10,4 +10,4 @@
       = link_to model.try(:name).first(40), commentable_path(type, model, current_user)
     - rescue
       = link_to "(no title)", commentable_path(type, model, current_user)
-    %span.time= "#{time_ago_in_words(comment.created_at)} ago"
+    %span.time= "#{time_ago_in_words(comment.created_at)} ago" if comment.created_at

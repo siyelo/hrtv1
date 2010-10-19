@@ -19,6 +19,11 @@ class CommentsController < ActiveScaffoldController
     list.sorting                       = {:created_at => 'DESC'}
   end
 
+  #fixes create
+  def before_create record
+    record.user = current_user
+  end
+
   def joins_for_collection
     if current_user.role?(:reporter) || current_user.role?(:activity_manager)
       "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id 

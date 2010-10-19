@@ -9,6 +9,7 @@ module ProjectsHelper
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
 
+  # this disallows adding existing comments
   def options_for_association_count association
     if association.name == :comments
       0

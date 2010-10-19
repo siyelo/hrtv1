@@ -39,16 +39,6 @@ Scenario: Access comments page from dashboard and edit them
   And I should see "comment3"
 
 @admin_comments
-Scenario: See full comment detail on the listing page
-  Given organizations, reporters, data request, data responses, projects, comments
-  Given the following comments 
-    | project              | title   | comment |
-    | TB Treatment Project | title1  | some very very very very very very long comment |
-  Given I am signed in as an admin
-  When I go to the comments page
-  Then I should see "some very very very very very very long comment"
-
-@admin_comments
 Scenario: Admin can see all comments
   Given organizations, reporters, data request, data responses, projects, comments
   Given the following comments 

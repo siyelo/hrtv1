@@ -48,7 +48,7 @@ class SubActivity < Activity
   [:projects, :name, :description,  :start, :end,
    :text_for_beneficiaries, :beneficiaries, :text_for_targets,
    :approved].each do |method|
-    delegate method, :to => :activity
+    delegate method, :to => :activity, :allow_nil => true
   end
 
   def locations

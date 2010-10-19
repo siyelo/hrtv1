@@ -67,7 +67,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
   def self.in_process
-    self.find(:all,:conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0}
+    self.find(:all,:conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 
   def self.remove_security

@@ -31,3 +31,5 @@
     %ul
       - activity.comments.each do |c|
         %li= "#{c.title}, #{c.comment}"
+  %li
+    %span= "#{link_to "Edit", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"

@@ -6,6 +6,7 @@ class ProjectsController < ActiveScaffoldController
 
   @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
   @@create_columns  = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
+  @@update_columns  = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency, :comments]
   @@upload_columns  = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
   def self.create_columns
     @@create_columns
@@ -25,9 +26,9 @@ class ProjectsController < ActiveScaffoldController
 
     #config.nested.add_link("Activities", [:activities])
     config.nested.add_link("Comments", [:comments])
-    config.columns[:comments].association.reverse = :commentable
     config.create.columns                         = @@create_columns
-    config.update.columns                         = @@create_columns
+    config.update.columns                         = @@update_columns
+    config.columns[:comments].association.reverse = :commentable
     config.columns[:name].inplace_edit            = true
     config.columns[:description].inplace_edit     = true
     config.columns[:locations].form_ui            = :select

@@ -3,17 +3,18 @@ module Reporter::DashboardHelper
   def commentable_path(type, commentable, user)
     case type
       when "Project"
-        projects_path
+        edit_project_path commentable.id
       when "FundingFlow"
-        if commentable.try(:to) == user.organization
-          funding_sources_data_entry_path
-        else
-          providers_data_entry_path
-        end
+        #if commentable.try(:to) == user.organization
+          #funding_sources_data_entry_path
+          edit_funding_flow_path commentable.id
+        #else
+        #  providers_data_entry_path
+        #end
       when "Activity"
-        activities_path
+        edit_activity_path commentable.id
       when "OtherCost"
-        other_costs_path
+        edit_other_cost_path commentable.id
     end
   end
 

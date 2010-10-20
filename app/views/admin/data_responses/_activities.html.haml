@@ -12,12 +12,19 @@
       %tr.activity.entry_header
         %td
           %ul
-            %li.name= activity.name
+            %li.name
+              = activity.name
+              - if activity.type == "OtherCost"
+                (Other Cost)
             %li.descr= activity.description.to_s.first(300)
-            %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
+            - unless activity.type == "OtherCost"
+              %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
         %td= activity.classified? ? "Yes" : "No"
         %td= activity.approved
-        %td= activity.sub_activities.count
+        - unless activity.type == "OtherCost"
+          %td= activity.sub_activities.count
+        - else
+          %td N/A
         %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
       %tr.activity.entry_main

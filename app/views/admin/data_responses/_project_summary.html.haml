@@ -1,7 +1,9 @@
 %ul.half
   %li
     %span Districts:
-    = project.locations.map(&:name).join(', ')
+    %ul
+      - project.locations.map(&:name).each do |loc|
+        %li= "#{loc},"
   %li
     %span Start:
     = project.start_date

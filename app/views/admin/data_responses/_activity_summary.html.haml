@@ -1,7 +1,9 @@
 %ul.third
   %li
     %span Districts:
-    = activity.locations.map(&:name).join(', ')
+    %ul
+      - activity.locations.map(&:name).each do |loc|
+        %li= "#{loc},"
   %li
     %span Start:
     = activity.start

@@ -123,6 +123,7 @@ class CodeAssignment < ActiveRecord::Base
       new_ca = new_klass.new
       new_ca.code_id = ca.code_id
       new_ca.cached_amount = activity.spend * ca.calculated_amount / activity.budget
+      new_ca.percentage = ca.percentage if ca.percentage
       new_ca.activity = activity
       new_ca.save
       new_assignments << new_ca

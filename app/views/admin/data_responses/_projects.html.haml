@@ -11,8 +11,11 @@
         %td
           %ul
             %li.name= project.name
-            %li.descr= project.description.to_s.first(300)
-            %li.funders= "Funders: #{project.funding_sources.map(&:name).join(', ')}"
+            %li.descr= project.description.to_s
+            %li.funders
+              = "Funders: "
+              - FundingFlow.sources_for(project).each do |source|
+                = "#{source.from.try(:name)} (#{source.budget}),"
         %td= project.activities.count
         %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
@@ -20,5 +23,12 @@
       %tr.project.entry_main.s_border
         %td{:colspan => 100}
           = render 'project_summary', :project => project
-
+          %table.activities
+            %thead
+              %tr
+                %th Comments
+            %tbody
+              %ul
+                - project.comments.each do |c|
+                  %li= "#{c.title}, #{c.comment}"
           = render 'activities', :project => project

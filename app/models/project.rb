@@ -68,6 +68,11 @@ class Project < ActiveRecord::Base
     organization.name
   end
 
+  # returns the funding_sources
+  def funders
+    funding_sources.reject{ |org| org.id == self.organization.id }
+  end
+
   def currency
     if read_attribute(:currency).try(:empty?)
       data_response.currency

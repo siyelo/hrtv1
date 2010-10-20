@@ -197,14 +197,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def hssp_strat_prog_coding
-
-  end
-
-  def hssp_strat_obj_coding
-
-  end
-
   private
 
   def validate_budgets

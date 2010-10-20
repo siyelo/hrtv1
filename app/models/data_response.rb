@@ -148,8 +148,8 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activity_coding codings_type = nil, code_type = nil
-    conditions = ["projects.id in (:project_id) "]
-    condition_values = {:project_id => projects.collect{|p| p.id}}
+    conditions = []
+    condition_values = {}
     unless codings_type.nil?
       conditions << ["code_assignments.type = :codings_type"]
       condition_values[:codings_type] = codings_type
@@ -159,7 +159,7 @@ class DataResponse < ActiveRecord::Base
       condition_values[:code_type] = code_type
     end
     conditions = [conditions.join(" AND "), condition_values]
-    Project.find(:all,
+    DataResponse.find(:all,
 					:select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
 					:joins => {:activities => {:code_assignments => :code}},
 					:conditions => conditions,

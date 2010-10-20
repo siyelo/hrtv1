@@ -5,9 +5,6 @@ body.app
     &.entry_main
       display: none
 
-  table.projects thead
-    cursor: pointer
-
   .hidden
     display: none
 
@@ -16,12 +13,22 @@ body.app
       background: none
       margin: 10px 10px 0
       text-transform: none
-    h3
+    h3, .like_a_h3
       color: $mid-blue
       font-size: 0.9em
       padding: 20px 10px 10px
       text-transform: none
+
+  a
+    color: $orange
+    &:hover, &:focus, &:active
+      color: $mid-blue
+
   .dashboard_form
+    float: left
+    margin-right: 2%
+    margin-bottom: 20px
+    width: 31%
     font-size: 11px
     padding: 0 10px 20px 10px
     +clearfix
@@ -46,16 +53,16 @@ body.app
     td
       display: inline
 
+  #response_charts_nav, #response_charts
+    font-size: 0.8em
+    padding-bottom: 15px
+    float: left
+    width: 67%
 
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-
-    a
-      color: $orange
-      &:hover, &:focus, &:active
-        color: $mid-blue
 
     h3
       color: $mid-blue
@@ -114,6 +121,7 @@ body.app
       margin-right: 0
       margin-bottom: 20px
       width: 50%
+
     .name
       font-weight: bold
     .implementer

@@ -8,22 +8,3 @@
       %tr
         %td= c.title
         %td= c.comment
-  %tbody
-    %tr#add_comment_row{ :style=>"display:none;" }
-      - form_for(Comment.new(:commentable => project), :url => new_comment_path) do |form|
-        %td
-          .title
-            Title
-            = form.text_field :title
-          .buttons
-            = form.submit "Add Comment"
-            = link_to "cancel", "#", :id => "cancel_comment_link"
-        %td
-          .comment
-            Comment
-            = form.text_area :comment, :rows => 2
-
-  %tfoot.comment_footer
-    %tr
-      %td
-        = link_to "+ New Comment", "#", :id => "add_comment_link"

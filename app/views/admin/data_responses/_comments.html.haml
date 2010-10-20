@@ -1,7 +1,7 @@
 %table.comments
   %thead
     %tr
-      %th{:colspan => 100} Comments
+      %th{:colspan => 100}= "Comments (#{project.comments.count})"
   %tbody
     - project.comments.each do |c|
       %tr

@@ -86,7 +86,7 @@ class CodeAssignment < ActiveRecord::Base
 
     available_codes.each do |ac|
       code_assignments = self.with_activity(activity).with_code_id(ac.id)
-      raise "Duplicate code assignments".to_yaml if code_assignments.length > 1
+      #raise "Duplicate code assignments".to_yaml if code_assignments.length > 1
       ca = code_assignments.first
       if ca
         if ca.amount.present? && ca.amount > 0
@@ -101,11 +101,11 @@ class CodeAssignment < ActiveRecord::Base
         self.codings_sum(ac.children, activity, max)
       elsif !ac.leaf?
         my_cached_amount = self.codings_sum(ac.children, activity, max)
-        self.create!(
-          :activity => activity,
-          :code => ac,
-          :cached_amount => my_cached_amount
-        ) if my_cached_amount > 0
+        if (code_assignment = self.with_code_id(ac.id).with_activity(activity.id).first)
+          code_assignment.update_attributes(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
+        else
+          self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
+        end
         total += my_cached_amount
       end
     end

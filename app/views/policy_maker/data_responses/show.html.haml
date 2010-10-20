@@ -1,0 +1,102 @@
+- javascript "/ampie/swfobject.js"
+
+:javascript
+  _projects = #{@projects.map(&:id).to_json};
+
+/%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
+%h2= "Response from #{@data_response.organization.name}"
+
+%h3 Executive Summary
+
+.simple_table
+  %table
+    %thead
+      %th Projects
+      %th Spend Total
+      %th Budget Total
+      %th Activities
+      %th Sub Activities
+      %th Spend Total
+      %th Budget Total
+      %th Unclassified Activities
+    %tbody
+      %tr
+        %td= @data_response.projects.count
+        %td= n2c @data_response.total_project_spend
+        %td= n2c @data_response.total_project_budget
+        %td= @data_response.activity_count
+        %td= @data_response.sub_activity_count
+        %td= n2c @data_response.total_activity_spend
+        %td= n2c @data_response.total_activity_budget
+        %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
+
+- form_for @data_response do |form|
+  %table.dashboard_form
+    %tbody
+      %tr
+        %td{:colspan => 2}= "Point of Contact: #{@data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name} (ph: #{@data_response.contact_phone_number}) or (office:  #{@data_response.contact_main_office_phone_number})"
+      %tr
+        %td
+          = form.label :currency, "Currency"
+        %td
+          = form.text_field :currency
+      %tr
+        %td
+          = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
+        %td
+          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
+      %tr
+        %td
+          = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
+        %td
+          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
+      %tr
+        %td{ :colspan => 2 }
+          = submit_tag 'Update Response'
+
+#response_charts_nav.two-thirds
+
+  %ul.compact_tab
+    %li{:id => 'tab1', :class => 'selected'}
+      = link_to "Total Funding", "#"
+    %li{:id => 'tab2'}
+      = link_to "Funding for Budget", "#"
+    %li{:id => 'tab3'}
+      = link_to "Spend by Project", "#"
+    %li{:id => 'tab4'}
+      = link_to "Funders", "#"
+    %li{:id => 'tab5'}
+      = link_to "MTEF", "#"
+    %li{:id => 'tab6'}
+      = link_to "HSSPII", "#"
+    %li{:id => 'tab7'}
+      = link_to "Districts", "#"
+
+#response_charts.two-thirds
+  .tab1
+    %h4 Total Funding
+    .chart{:id => "response_total_funding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab2
+    .chart{:id => "response_spend_by_project"}
+      %strong You need to upgrade your Flash Player
+
+  .tab3
+    .chart{:id => "response_funders"}
+      %strong You need to upgrade your Flash Player
+
+  .tab4
+    .chart{:id => "response_mtef_budget"}
+      %strong You need to upgrade your Flash Player
+
+  .tab5
+    .chart{:id => "response_mtef_spend"}
+      %strong You need to upgrade your Flash Player
+
+
+= link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
+
+.simple_table
+  = render '/admin/data_responses/projects', :projects => @projects
+

@@ -16,6 +16,8 @@
     = render :partial => 'layouts/user_session'
   - elsif controller.class.to_s == "Admin::DataResponsesController"
     = render :partial => 'layouts/full_width'
+  - elsif controller.class.to_s == "PolicyMaker::DataResponsesController"
+    = render :partial => 'layouts/full_width'
   - else
     = render :partial => 'layouts/inner_pages'
 

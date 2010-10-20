@@ -84,6 +84,10 @@ ActionController::Routing::Routes.draw do |map|
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 
+  map.namespace :policy_maker do |policy_maker|
+    policy_maker.resources :data_responses
+  end
+
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end

@@ -29,9 +29,9 @@ class DataResponse < ActiveRecord::Base
 
   # Associations
 
-  has_many :activities, :dependent=>:destroy
-  has_many :funding_flows, :dependent=>:destroy
-  has_many :projects, :dependent=>:destroy
+  has_many :activities, :dependent => :destroy
+  has_many :funding_flows, :dependent => :destroy
+  has_many :projects, :dependent => :destroy
   @@data_associations = %w[activities funding_flows projects]
 
   has_many    :users_currently_completing,
@@ -160,11 +160,11 @@ class DataResponse < ActiveRecord::Base
     end
     conditions = [conditions.join(" AND "), condition_values]
     Project.find(:all,
-					:select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
-					:joins => {:activities => {:code_assignments => :code}},
-					:conditions => conditions,
-					:group => "codes.short_display",
-					:order => 'value DESC')
+          :select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+          :joins => {:activities => {:code_assignments => :code}},
+          :conditions => conditions,
+          :group => "codes.short_display",
+          :order => 'value DESC')
 
   end
 end

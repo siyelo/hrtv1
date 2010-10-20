@@ -41,7 +41,7 @@
       %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
 
-.charts
+.charts.half
   .chart{:id => "project_#{project.id}_nsp_budget"}
     %strong You need to upgrade your Flash Player
 

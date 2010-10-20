@@ -45,6 +45,14 @@ body.app
       display: block
     td
       display: inline
+      
+  .charts
+    float: left
+    +clearfix
+    .chart
+      float: left
+      +clearfix
+      width: 50%
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
@@ -109,9 +117,9 @@ body.app
       width: 67%
     .half
       float: left
-      margin-right: 2%
+      margin-right: 0
       margin-bottom: 20px
-      width: 48%
+      width: 50%
     .name
       font-weight: bold
     .implementer

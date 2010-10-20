@@ -24,6 +24,7 @@
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
+#require 'lib/ReportHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base

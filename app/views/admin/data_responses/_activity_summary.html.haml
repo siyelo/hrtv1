@@ -1,35 +1,24 @@
-%ul.third
-  %li
-    %span Districts:
-    %ul.dashboard_districts
-      - activity.locations.map(&:name).each do |loc|
-        %li= "#{loc},"
-  %li
-    %span Start:
-    = activity.start
-  %li
-    %span End:
-    = activity.end
-  %li
-    %span Text for Provider:
-    = activity.text_for_provider
-  %li
-    %span Beneficiaries:
-    = activity.beneficiaries.map(&:short_display).join(', ')
-  %li
-    %span Text for Beneficiaries:
-    = activity.text_for_beneficiaries
-  %li
-    %span Org's Assisted:
-  %li
-    = activity.organizations.map(&:name).join(', ')
-  %li
-    %span Sub-Activities:
-    = render 'sub_activities', :activity => activity
-  %li
-    %span Comments:
-    %ul
-      - activity.comments.each do |c|
-        %li= "#{c.title}, #{c.comment}"
-  %li
-    %span= "#{link_to "Edit", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"
+.actions= "#{link_to "Edit Activity", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"
+%table.third.budget_summary
+  %tbody
+    %tr
+      %td Dates
+      %td= "#{activity.start_date} to #{activity.end_date}"
+    %tr
+      %td Text for Provider:
+      %td= activity.text_for_provider
+    %tr
+      %td Beneficiaries:
+      %td= activity.beneficiaries.map(&:short_display).join(', ')
+    %tr
+      %td Text for Beneficiaries:
+      %td= activity.text_for_beneficiaries
+    %tr
+      %td Org's Assisted:
+      %td= activity.organizations.map(&:name).join(', ')
+    %tr
+      %td Districts:
+      %td
+        %ul.dashboard_districts
+          - activity.locations.map(&:name).each do |loc|
+            %li= "#{loc},"

@@ -132,6 +132,14 @@ class Activity < ActiveRecord::Base
     provider
   end
 
+  def start_date
+    self.start
+  end
+
+  def end_date
+    self.end
+  end
+
   def currency
     tentative_currency = data_response.try(:currency)
     unless projects.empty?

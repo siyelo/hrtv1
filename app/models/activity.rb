@@ -40,6 +40,7 @@
 
 require 'lib/ActAsDataElement'
 require 'lib/SpendBudgetInRWF'
+require 'lib/BudgetSpendHelpers'
 
 class Activity < ActiveRecord::Base
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
@@ -71,6 +72,8 @@ class Activity < ActiveRecord::Base
                   :text_for_targets, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved, :use_budget_codings_for_spend
+
+  include BudgetSpendHelpers
 
   # Associations
   has_and_belongs_to_many :projects
@@ -151,10 +154,6 @@ class Activity < ActiveRecord::Base
     self.projects.collect do |proj|
       proj.locations
     end.flatten.uniq
-  end
-
-  def spend
-    read_attribute(:spend) ? read_attribute(:spend) : total_quarterly_spending_w_shift
   end
 
   def classified
@@ -323,23 +322,6 @@ class Activity < ActiveRecord::Base
   def set_classified_amount_cache(type)
     amount = type.codings_sum(type.available_codes(self), self, max_for_coding(type))
     self.send("#{type}_amount=",  amount)
-  end
-
-  def total_quarterly_spending_w_shift
-    if data_response
-      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7 # 7 is July
-        total = 0
-        [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
-          total += self.send(s) if self.send(s)
-        end
-
-        return total if total != 0
-      else
-        nil #"Fiscal Year shift not yet defined for this data responses' start date"
-      end
-    else
-      nil
-    end
   end
 
   def district_coding(assignments, amount)

@@ -28,10 +28,7 @@
               %tr
                 %th Comments
             %tbody
-              - project.activities.each do |activity|
-                %tr.entry_header
-                  %td
-                    %ul
-                      - project.comments.each do |c|
-                        %li= "#{c.title}, #{c.comment}"
+              %ul
+                - project.comments.each do |c|
+                  %li= "#{c.title}, #{c.comment}"
           = render 'activities', :project => project

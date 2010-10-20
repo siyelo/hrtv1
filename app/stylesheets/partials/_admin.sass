@@ -16,7 +16,35 @@ body.app
       background: none
       margin: 10px 10px 0
       text-transform: none
-      
+    h3
+      color: $mid-blue
+      font-size: 0.9em
+      padding: 20px 10px 10px
+      text-transform: none
+  .dashboard_form
+    font-size: 11px
+    padding: 0 10px 20px 10px
+    +clearfix
+    input, textarea
+      border: 1px solid $light-blue
+      margin-bottom: 10px
+      padding: 7px
+      +border-radius
+    input[type="submit"]
+      background: orange
+      border: none
+      color: white
+      cursor: pointer
+      font-weight: bold
+      padding: 7px 15px
+      text-transform: uppercase
+      &:hover
+        background: $mid-blue
+    label
+      color: $mid-blue
+      display: block
+    td
+      display: inline
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px

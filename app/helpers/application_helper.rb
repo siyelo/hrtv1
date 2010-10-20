@@ -1,9 +1,29 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  # Sets titles on pages
+  # Adds title on page
   def title(page_title)
     content_for(:title) { page_title }
+  end
+
+  # Adds javascripts to head
+  def javascript(*files)
+    content_for(:head) { javascript_include_tag(*files) }
+  end
+  
+  # Adds stylesheets to head
+  def stylesheet(*files)
+    content_for(:head) { stylesheet_link_tag(*files) }
+  end
+  
+  # Adds keywords to page
+  def keywords(page_keywords)
+    content_for(:keywords) { page_keywords }
+  end
+  
+  # Adds description to page
+  def description(page_description)
+    content_for(:description) { page_description }
   end
 
   # Creates unique id for HTML document body used for unobtrusive javascript selectors

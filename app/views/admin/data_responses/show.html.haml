@@ -1,5 +1,3 @@
-- javascript "http://geocommons.com/javascripts/f1.api.js"
-
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
 
@@ -23,8 +21,6 @@
         %td
           = form.text_field :fiscal_year_end_date, :class => 'date_picker'
   = submit_tag 'Save'
-
-#map_box
 
 .simple_table
   = render 'projects', :projects => @projects

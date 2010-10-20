@@ -87,4 +87,6 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
+
+  map.charts 'charts/:action', :controller => 'charts'
 end

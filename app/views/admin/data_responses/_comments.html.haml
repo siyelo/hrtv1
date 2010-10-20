@@ -1,3 +1,13 @@
+- form_for(Comment.new(:commentable => project), :url => new_comment_path) do |form|
+  %p
+    = form.label :title
+    = form.text_field :title
+  %p
+    = form.label :comment
+    = form.text_area :comment
+  %p
+    = form.submit "Add Comment"
+
 %table.comments
   %thead
     %tr

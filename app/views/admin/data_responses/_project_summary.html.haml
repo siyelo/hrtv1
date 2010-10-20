@@ -1,16 +1,8 @@
-%ul.fourth
-  %li
-    %span Dates:
-    = "#{project.start_date} to #{project.end_date}"
-
-  %li
-    %span Districts:
-    %ul.dashboard_districts
-      - project.locations.map(&:name).each do |loc|
-        %li= "#{loc},"
-
-%table.fourth.budget_summary
+%table.third.budget_summary
   %tbody
+    %tr
+      %td Dates
+      %td= "#{project.start_date} to #{project.end_date}"
     %tr
       %td Total Budget:
       %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
@@ -40,16 +32,41 @@
       %td Spend Q4:
       %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
+    %tr
+      %td Districts:
+      %td
+        %ul.dashboard_districts
+          - project.locations.map(&:name).each do |loc|
+            %li= "#{loc},"
 
-.charts.half
-  .chart{:id => "project_#{project.id}_nsp_budget"}
-    %strong You need to upgrade your Flash Player
 
-  .chart{:id => "project_#{project.id}_nsp_spend"}
-    %strong You need to upgrade your Flash Player
+.project_charts_nav.two-thirds
 
-  .chart{:id => "project_#{project.id}_mtef_budget"}
-    %strong You need to upgrade your Flash Player
+  %ul.compact_tab
+    %li NSP
+    %li{:id => 'tab1', :class => 'selected'}
+      = link_to "Budget", "#"
+    %li{:id => 'tab2'}
+      = link_to "Spend", "#"
+    %li MTEF
+    %li{:id => 'tab3'}
+      = link_to "Budget", "#"
+    %li{:id => 'tab4'}
+      = link_to "Spend", "#"
 
-  .chart{:id => "project_#{project.id}_mtef_spend"}
-    %strong You need to upgrade your Flash Player
+.project_charts.two-thirds
+  .tab1
+    .chart{:id => "project_#{project.id}_nsp_budget"}
+      %strong You need to upgrade your Flash Player
+
+  .tab2
+    .chart{:id => "project_#{project.id}_nsp_spend"}
+      %strong You need to upgrade your Flash Player
+
+  .tab3
+    .chart{:id => "project_#{project.id}_mtef_budget"}
+      %strong You need to upgrade your Flash Player
+
+  .tab4
+    .chart{:id => "project_#{project.id}_mtef_spend"}
+      %strong You need to upgrade your Flash Player

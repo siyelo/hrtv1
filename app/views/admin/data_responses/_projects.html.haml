@@ -12,7 +12,10 @@
           %ul
             %li.name= project.name
             %li.descr= project.description.to_s.first(300)
-            %li.funders= "Funders: #{project.funding_sources.map(&:name).join(', ')}"
+            %li.funders
+              = "Funders: "
+              - FundingFlow.sources_for(project).each do |source|
+                = "#{source.from.try(:name)} (#{source.budget}),"
         %td= project.activities.count
         %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")

@@ -157,6 +157,27 @@ class Project < ActiveRecord::Base
     #activities << OtherCost.new #TODO fix and let this work
   end
 
+  def activity_coding codings_type = nil, code_type = nil
+    conditions = ["projects.id = :project_id "]
+    condition_values = {:project_id => id}
+    unless codings_type.nil?
+      conditions << ["code_assignments.type = :codings_type"]
+      condition_values[:codings_type] = codings_type
+    end
+    unless code_type.nil?
+      conditions << ["code_assignments.type = :code_type"]
+      condition_values[:code_type] = codings_type
+    end
+    conditions = [conditions.join(" AND "), condition_values]
+    Project.find(:all,
+					:select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+					:joins => {:activities => {:code_assignments => :code}},
+					:conditions => conditions,
+					:group => "codes.short_display",
+					:order => 'value DESC')
+
+  end
+
   private
 
   def validate_budgets

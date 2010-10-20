@@ -1,13 +1,9 @@
 class ChartsController < ApplicationController
 
   def project_pie
-    @assignments = Project.find(:all,
-                                :select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
-                                :joins => {:activities => {:code_assignments => :code}},
-                                :conditions => ["projects.id = :project_id AND code_assignments.type = :codings_type AND codes.type = :code_type",
-                                  {:project_id => params[:project_id], :codings_type => params[:codings_type], :code_type => params[:code_type]}],
-                                :group => "codes.short_display",
-                                :order => 'value DESC')
+    @project = Project.available_to(current_user).find params[:project_id]
+#    if params[:codings_type].try("include?", "Strat"
+    @assignments = @project.activity_coding params[:codings_type], params[:code_type]
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end

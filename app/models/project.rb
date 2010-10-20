@@ -165,8 +165,8 @@ class Project < ActiveRecord::Base
       condition_values[:codings_type] = codings_type
     end
     unless code_type.nil?
-      conditions << ["code_assignments.type = :code_type"]
-      condition_values[:code_type] = codings_type
+      conditions << ["codes.type = :code_type"]
+      condition_values[:code_type] = code_type
     end
     conditions = [conditions.join(" AND "), condition_values]
     Project.find(:all,

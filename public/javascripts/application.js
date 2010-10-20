@@ -98,9 +98,15 @@ var admin_data_responses_show = {
     });
 
     // collapsiable project header
-    jQuery(".projects > thead").click(function () {
-      jQuery(".projects > tbody").toggle();
+    jQuery("#details").click(function (e) {
+      e.preventDefault();
+      jQuery(".projects").toggle();
     });
+
+    //
+    // Data Response summary charts
+    //
+    createPieChart("", "response_total_funding", "/charts/response_total_funding");
 
     //
     // project charts
@@ -124,8 +130,6 @@ var admin_data_responses_show = {
       createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
       createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
     });
-
-
 
 
   }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings> 
+  <data_type>csv</data_type>                                  <!-- [xml] (xml / csv) -->
+  <csv_separator>,</csv_separator>                             <!-- [;] (string) csv file data separator (you need it only if you are using csv file for your data) -->     
+                                                                  
+  <pie>
+    <inner_radius>40</inner_radius>
+    <height>20</height>
+    <angle>30</angle>
+    <gradient>radial</gradient>
+    <gradient_ratio>-50,0,0,-50</gradient_ratio>
+  </pie>
+  
+  <animation>
+    <start_time>2</start_time>                                <!-- [0] (Number) fly-in time in seconds. Leave 0 to appear instantly -->
+    <start_effect>strong</start_effect>                       <!-- [bounce] (bounce, regular, strong) -->
+    <start_radius></start_radius>                             <!-- [500%] (Number / Number%) if left empty, will use pie.radius * 5 -->
+    <start_alpha>0</start_alpha>                              <!-- [0] (Number) -->
+    <sequenced>true</sequenced>                               <!-- [false] (true / false) Whether the slices should appear all together or one after another -->                    
+    <pull_out_on_click>false</pull_out_on_click>              <!-- [true] (true / false) whether to pull out slices when user clicks on them (or on legend entry) -->
+    <pull_out_time>1.5</pull_out_time>                        <!-- [0] (number) pull-out time (then user clicks on the slice) -->
+    <pull_out_effect>Bounce</pull_out_effect>                 <!-- [bounce] (bounce, regular, strong) -->
+  </animation>
+  
+  <data_labels>
+    <radius></radius>                                         <!-- [20%] (Number / Number%) distance of the labels from the pie. Use negative value to place labels on the pie -->
+    <show>
+       <![CDATA[{title}: {percents}%]]>                       <!-- [] ({value} {title} {percents} {description}) You can format any data label: {value} - will be replaced with value and so on. You can add your own text or html code too. -->
+    </show>
+  </data_labels>
+
+  <balloon>                                                   <!-- BALLOON -->
+    <alpha>80</alpha>                                         <!-- [80] (0 - 100) -->
+    <show>
+       <![CDATA[{title}: {value} mln. ({percents}%) <br>{description}]]>        <!-- [{title}: {percents}% ({value}) <br>{description}] ({value} {title} {percents} {description}) You can format any data label: {value} - will be replaced with value and so on. You can add your own text or html code too. -->
+    </show>
+    <max_width>300</max_width>                                <!-- [220] (Number) The maximum width of a balloon -->
+    <corner_radius>5</corner_radius>                          <!-- [0] (Number) Corner radius of a balloon. If you set it > 0, the balloon will not display arrow -->
+    <border_width>3</border_width>                            <!-- [0] (Number) -->
+    <border_alpha>50</border_alpha>                           <!-- [balloon.alpha] (Number) -->
+    <border_color>#000000</border_color>                      <!-- [balloon.color] (hex color code) -->    
+  </balloon>
+    
+  <legend>                                                    <!-- LEGEND -->
+    <enabled>false</enabled>                                  <!-- [true] (true / false) -->
+    <values>                                                  <!-- VALUES -->          
+      <text><![CDATA[]]></text>                               <!-- [{percents}%] ({value} {percents}) -->
+     </values>    
+  </legend>  
+  
+  <export_as_image>                                           <!-- export_as_image feature works only on a web server -->
+    <file>../ampie/export.php</file>                          <!-- [] (filename) if you set filename here, context menu (then user right clicks on flash movie) "Export as image" will appear. This will allow user to export chart as an image. Collected image data will be posted to this file name (use ampie/export.php or ampie/export.aspx) -->
+    <x></x>                                                   <!-- [0] (Number / Number% / !Number) x position of "Collecting data" text -->
+    <y></y>                                                   <!-- [] (Number / Number% / !Number) y position of "Collecting data" text. If not set, will be aligned to the bottom of flash movie -->
+  </export_as_image>
+  
+  <error_messages>                                            <!-- "error_messages" settings will be applied for all error messages except the one which is showed if settings file wasn't found -->
+    <!--<enabled>0</enabled>                                  [> [true] (true / false) <]-->
+  </error_messages>    
+
+  <labels>                                                    <!-- LABELS -->
+    <label lid="0">
+      <x>0</x>                                                <!-- [0] (Number / Number% / !Number) -->
+      <y>2</y>                                               <!-- [0] (Number / Number% / !Number) -->
+      <rotate>false</rotate>                                  <!-- [false] (true / false) -->
+      <width></width>                                         <!-- [] (Number / Number%) if empty, will stretch from left to right untill label fits -->
+      <align>center</align>                                   <!-- [left] (left / center / right) -->  
+      <text_color></text_color>                               <!-- [text_color] (hex color code) button text color -->
+      <text_size>12</text_size>                               <!-- [text_size](Number) button text size -->
+      <text>                                                  <!-- [] (text) html tags may be used (supports <b>, <i>, <u>, <font>, <a href="">, <br/>. Enter text between []: <![CDATA[your <b>bold</b> and <i>italic</i> text]]>-->
+      </text>        
+    </label>
+  </labels>
+</settings>

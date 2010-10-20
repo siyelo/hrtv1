@@ -43,6 +43,12 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
 
+  named_scope :sources_for, lambda { |project|
+      { :joins => "JOIN projects p ON p.id = funding_flows.project_id ",
+        :conditions => ["self_provider_flag = 0 AND organization_id_from is not NULL AND organization_id_to = ? AND p.id = ?", project.organization.id, project.id ]
+      }
+    }
+
   def to_s
     "Flow"#: #{from.to_s} to #{to.to_s} for #{project.to_s}"
     # TODO replace when fix text flying over action links

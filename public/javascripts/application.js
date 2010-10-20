@@ -78,6 +78,21 @@ var admin_data_responses_show = {
         jQuery('#activity_classification > div.' + element.attr("id")).show();
       }
     });
+
+    var map = new F1.Maker.Map({
+      map_id: 31454, 
+      dom_id: "map_box", 
+      onload: function() {
+        document.getElementById('results').innerHTML += "Map loaded<br/>" 
+      },
+      uiZoom: false,
+      uiLayers: false,
+      uiStyles: false,
+      uiLegend: false,
+      extent: "-80, 35, -75, 40",
+      zoomLevel: 5,
+      mapProvider: "Rwanda Resource Tracking Database" 
+    });
   }
 };
 

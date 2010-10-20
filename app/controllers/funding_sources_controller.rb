@@ -12,7 +12,7 @@ class FundingSourcesController < ActiveScaffoldController
 
   def index
     unless current_user.role?(:admin)
-      @constraints = { :to => current_user.organization.id , :self_provider_flag => 0}
+      @constraints = { :to => current_user.organization.id , :self_provider_flag => 0 }
     else
       @constraints = {:self_provider_flag => 0}
     end

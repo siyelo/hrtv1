@@ -29,7 +29,7 @@
         %td= n2c @data_response.total_activity_spend
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
-%h3= "Point of Contact: #{@data_response.contact_name} @ #{@data_response.contact_phone_number} or #{@data_response.contact_main_office_phone_number}"
+%h3= "Point of Contact: #{@data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name} (ph: #{@data_response.contact_phone_number}) or (office:  #{@data_response.contact_main_office_phone_number})"
 .dashboard_form
   - form_for @data_response do |form|
     %table
@@ -49,7 +49,7 @@
             = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
           %td
             = form.text_field :fiscal_year_end_date, :class => 'date_picker'
-    = submit_tag 'Save'
+    = submit_tag 'Update Response'
 
 
 .simple_table

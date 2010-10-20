@@ -10,7 +10,7 @@ body.app
 
   .hidden
     display: none
-    
+
   .full-width
     h2
       background: none
@@ -45,7 +45,7 @@ body.app
       display: block
     td
       display: inline
-      
+
   .charts
     float: left
     +clearfix
@@ -57,7 +57,7 @@ body.app
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-    
+
     a
       color: $orange
       &:hover, &:focus, &:active
@@ -94,7 +94,7 @@ body.app
         color: white
         font-size: 0.9em
         /* end */
-  
+
     .third
       float: left
       margin-right: 2%
@@ -137,20 +137,9 @@ body.app
         border: 1px solid $light-blue
         margin: -1px 0 0
         padding: 7px 5px 5px
-      
-    .classifications ul
-      +horizontal-list
-      border-bottom: 1px solid $light-blue
-      color: $light-blue - #333
-      line-height: 1.5em
-      a
-        text-decoration: none
-    .selected a
-      border-bottom: 4px solid $light-blue
-      color: $mid-blue
-      display: inline-block
-      font-weight: bold
-      
+
+
+
     li
       padding-top: 5px
       &.funders
@@ -194,3 +183,17 @@ body.app
       tr td:first-child
         font-weight: bold
         text-align: right
+
+  ul.compact_tab
+    +horizontal-list
+    border-bottom: 1px solid $light-blue
+    color: $light-blue - #333
+    line-height: 1.5em
+    a
+      text-decoration: none
+
+    .selected a
+      border-bottom: 4px solid $light-blue
+      color: $mid-blue
+      display: inline-block
+      font-weight: bold

@@ -140,8 +140,6 @@ body.app
         margin: -1px 0 0
         padding: 7px 5px 5px
 
-
-
     li
       padding-top: 5px
       &.funders
@@ -164,7 +162,9 @@ body.app
       float: right
       margin-right: 0
       text-align: right
+
     .activities, .dashboard_comments
+      margin-top: 10px
       thead
         font-size: 1.1em
         tr:hover
@@ -179,12 +179,17 @@ body.app
         float: left
         margin: 0
         width: 90px
+
     .budget_summary
       background: none
       font-size: 1em
       tr td:first-child
         font-weight: bold
         text-align: right
+
+    //hack
+    .activity .budget_summary
+      font-size: 11px
 
   ul.compact_tab
     +horizontal-list

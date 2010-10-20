@@ -5,8 +5,7 @@
 #  id                               :integer         primary key
 #  data_element_id                  :integer
 #  data_request_id                  :integer
-#  complete                         :boolean         default(FALSE)
-#  created_at                       :timestamp
+#  complete                         :boolean         default(FALSE) #  created_at                       :timestamp
 #  updated_at                       :timestamp
 #  organization_id_responder        :integer
 #  currency                         :string(255)
@@ -148,4 +147,24 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  def activity_coding codings_type = nil, code_type = nil
+    conditions = ["projects.id in (:project_id) "]
+    condition_values = {:project_id => projects.collect{|p| p.id}}
+    unless codings_type.nil?
+      conditions << ["code_assignments.type = :codings_type"]
+      condition_values[:codings_type] = codings_type
+    end
+    unless code_type.nil?
+      conditions << ["codes.type = :code_type"]
+      condition_values[:code_type] = code_type
+    end
+    conditions = [conditions.join(" AND "), condition_values]
+    Project.find(:all,
+					:select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+					:joins => {:activities => {:code_assignments => :code}},
+					:conditions => conditions,
+					:group => "codes.short_display",
+					:order => 'value DESC')
+
+  end
 end

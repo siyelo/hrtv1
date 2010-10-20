@@ -23,12 +23,7 @@
       %tr.project.entry_main.s_border
         %td{:colspan => 100}
           = render 'project_summary', :project => project
-          %table.activities
-            %thead
-              %tr
-                %th Comments
-            %tbody
-              %ul
-                - project.comments.each do |c|
-                  %li= "#{c.title}, #{c.comment}"
+
+          = render 'comments', :project => project
+
           = render 'activities', :project => project

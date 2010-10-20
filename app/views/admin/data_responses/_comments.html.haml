@@ -1,0 +1,9 @@
+%table.comments
+  %thead
+    %tr
+      %th{:colspan => 100} Comments
+  %tbody
+    - project.comments.each do |c|
+      %tr
+        %td= c.title
+        %td= c.comment

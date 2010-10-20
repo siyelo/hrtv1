@@ -237,4 +237,15 @@ jQuery(function () {
       dateFormat: 'yy-mm-dd'
     }).focus();
   });
+
+  // add comments on review page
+  jQuery('#add_comment_link').click(function (e) {
+    e.preventDefault();
+    jQuery('#add_comment_row').show();
+  });
+  jQuery('#cancel_comment_link').click(function (e) {
+    e.preventDefault();
+    jQuery('#add_comment_row').hide();
+  });
+
 })

@@ -32,7 +32,7 @@
   <balloon>                                                   <!-- BALLOON -->
     <alpha>80</alpha>                                         <!-- [80] (0 - 100) -->
     <show>
-       <![CDATA[{title}: {value} mln. ({percents}%) <br>{description}]]>        <!-- [{title}: {percents}% ({value}) <br>{description}] ({value} {title} {percents} {description}) You can format any data label: {value} - will be replaced with value and so on. You can add your own text or html code too. -->
+       <![CDATA[{description}: {value} ({percents}%)]]>        <!-- [{title}: {percents}% ({value}) <br>{description}] ({value} {title} {percents} {description}) You can format any data label: {value} - will be replaced with value and so on. You can add your own text or html code too. -->
     </show>
     <max_width>300</max_width>                                <!-- [220] (Number) The maximum width of a balloon -->
     <corner_radius>5</corner_radius>                          <!-- [0] (Number) Corner radius of a balloon. If you set it > 0, the balloon will not display arrow -->

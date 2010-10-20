@@ -78,6 +78,11 @@ var admin_data_responses_show = {
         jQuery('#activity_classification > div.' + element.attr("id")).show();
       }
     });
+
+    // collapsiable project header
+    jQuery(".projects > thead").click(function () {
+      jQuery(".projects > tbody").toggle();
+    });
   }
 };
 

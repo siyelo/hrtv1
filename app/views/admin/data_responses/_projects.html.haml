@@ -11,7 +11,7 @@
         %td
           %ul
             %li.name= project.name
-            %li.descr= project.description.to_s.first(300)
+            %li.descr= project.description.to_s
             %li.funders
               = "Funders: "
               - FundingFlow.sources_for(project).each do |source|

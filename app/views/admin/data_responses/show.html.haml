@@ -24,27 +24,27 @@
         %td= n2c @data_response.total_activity_spend
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
-
-%p= "Point of Contact: #{@data_response.contact_name} @ #{@data_response.contact_phone_number} or #{@data_response.contact_main_office_phone_number}"
-- form_for @data_response do |form|
-  %table
-    %tbody
-      %tr
-        %td
-          = form.label :currency, "Currency"
-        %td
-          = form.text_field :currency
-      %tr
-        %td
-          = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
-      %tr
-        %td
-          = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
-  = submit_tag 'Save'
+%h3= "Point of Contact: #{@data_response.contact_name} @ #{@data_response.contact_phone_number} or #{@data_response.contact_main_office_phone_number}"
+.dashboard_form
+  - form_for @data_response do |form|
+    %table
+      %tbody
+        %tr
+          %td
+            = form.label :currency, "Currency"
+          %td
+            = form.text_field :currency
+        %tr
+          %td
+            = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
+          %td
+            = form.text_field :fiscal_year_start_date, :class => 'date_picker'
+        %tr
+          %td
+            = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
+          %td
+            = form.text_field :fiscal_year_end_date, :class => 'date_picker'
+    = submit_tag 'Save'
 
 
 .simple_table

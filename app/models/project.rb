@@ -23,7 +23,7 @@
 
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
-require 'lib/SpendBudgetInRWF'
+require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
@@ -31,7 +31,6 @@ class Project < ActiveRecord::Base
 
   include ActAsDataElement
   include ActsAsDateChecker
-  include SpendBudgetInRWF
   configure_act_as_data_element
 
   acts_as_stripper
@@ -57,6 +56,7 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
                   :start_date, :end_date, :currency
 
+  include BudgetSpendHelpers
   after_create :create_helpful_records_for_workflow
 
   ### public methods

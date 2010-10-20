@@ -39,7 +39,6 @@
 #
 
 require 'lib/ActAsDataElement'
-require 'lib/SpendBudgetInRWF'
 require 'lib/BudgetSpendHelpers'
 
 class Activity < ActiveRecord::Base
@@ -62,7 +61,6 @@ class Activity < ActiveRecord::Base
 
   acts_as_commentable
   include ActAsDataElement
-  include SpendBudgetInRWF
   configure_act_as_data_element
 
   # Attributes

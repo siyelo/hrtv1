@@ -21,6 +21,7 @@
 #
 
 require 'lib/ActAsDataElement'
+require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
 
   acts_as_commentable
@@ -33,6 +34,7 @@ class FundingFlow < ActiveRecord::Base
     :from, :to, :self_provider_flag,
     :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
 
+  include BudgetSpendHelpers
   # Validations
   validates_presence_of :project_id
 

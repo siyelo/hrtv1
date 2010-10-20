@@ -1,15 +1,15 @@
-%ul.half
+%ul.fourth
   %li
     %span Dates:
     = "#{project.start_date} to #{project.end_date}"
 
   %li
     %span Districts:
-    %ul
+    %ul.dashboard_districts
       - project.locations.map(&:name).each do |loc|
         %li= "#{loc},"
 
-%table.budget_summary
+%table.fourth.budget_summary
   %tbody
     %tr
       %td Total Budget:

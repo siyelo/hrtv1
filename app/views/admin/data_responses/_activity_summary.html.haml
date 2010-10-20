@@ -1,7 +1,7 @@
 %ul.third
   %li
     %span Districts:
-    %ul
+    %ul.dashboard_districts
       - activity.locations.map(&:name).each do |loc|
         %li= "#{loc},"
   %li

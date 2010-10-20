@@ -55,24 +55,29 @@ body.app
   
     .third
       float: left
-      margin-right: 3%
+      margin-right: 2%
       margin-bottom: 20px
-      width: 30%
-    .third, .half
+      width: 31%
+    .fourth
+      float: left
+      margin-right: 2%
+      width: 23%
+    .third, .half, .fourth
       li
         margin-bottom: 10px
       span
         display: block
         font-weight: bold
+        margin-bottom: 5px
     .two-thirds
       float: left
       margin-bottom: 20px
       width: 67%
     .half
       float: left
-      margin-right: 5%
+      margin-right: 2%
       margin-bottom: 20px
-      width: 45%
+      width: 48%
     .name
       font-weight: bold
     .implementer
@@ -121,15 +126,29 @@ body.app
         background: white
       > td
         border: 3px solid $light-blue
-        padding: 5px
+        padding: 20px 10px
     .t_right
       float: right
       margin-right: 0
       text-align: right
-    .activities 
+    .activities, .dashboard_comments
       thead
         font-size: 1.1em
         tr:hover
           background: $mid-blue
       tbody
         font-size: 1.2em
+    .dashboard_districts
+      margin-bottom: 20px
+      +clearfix
+      li
+        display: inline
+        float: left
+        margin: 0
+        width: 90px
+    .budget_summary
+      background: none
+      font-size: 1em
+      tr td:first-child
+        font-weight: bold
+        text-align: right

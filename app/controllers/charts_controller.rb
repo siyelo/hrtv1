@@ -6,7 +6,8 @@ class ChartsController < ApplicationController
                                 :joins => {:activities => {:code_assignments => :code}},
                                 :conditions => ["projects.id = :project_id AND code_assignments.type = :codings_type AND codes.type = :code_type",
                                   {:project_id => params[:project_id], :codings_type => params[:codings_type], :code_type => params[:code_type]}],
-                                :group => "codes.short_display")
+                                :group => "codes.short_display",
+                                :order => 'value DESC')
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end

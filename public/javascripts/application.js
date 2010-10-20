@@ -102,13 +102,31 @@ var admin_data_responses_show = {
       jQuery(".projects > tbody").toggle();
     });
 
-    // charts
+    //
+    // project charts
+    //
+
+    // bind click events for project chart tabs
+    jQuery(".project_charts_nav ul.compact_tab li").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".project_charts_nav ul.compact_tab li").removeClass('selected');
+        element.addClass('selected');
+        jQuery(".project_charts > div").hide();
+        jQuery('.project_charts > div.' + element.attr("id")).show();
+      }
+    });
+
     jQuery.each(_projects, function (i, projectId) {
       createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
       createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
       createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
       createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
     });
+
+
+
 
   }
 };

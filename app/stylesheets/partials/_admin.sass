@@ -2,8 +2,12 @@ body.app
   .project, .activity, .sub_activity
     &.entry_header
       cursor: pointer
+      line-height: 1.2em
     &.entry_main
       display: none
+      .actions
+        font-size: 12px
+        margin-bottom: 5px
 
   .hidden
     display: none
@@ -59,13 +63,6 @@ body.app
     float: left
     width: 67%
 
-  .summary
-    background: none
-    font-size: 11px
-    tr td:first-child
-      font-weight: bold
-      text-align: right
-
   .third
     float: left
     margin-right: 2%
@@ -77,7 +74,17 @@ body.app
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-
+    
+    .summary
+      font-size: 11px
+      tr td:first-child
+        font-weight: bold
+        text-align: right
+        width: 45%
+        
+    .activities .summary td
+      font-size: 11px
+      
     h3
       color: $mid-blue
       font-size: 0.9em
@@ -192,7 +199,7 @@ body.app
         display: inline
         float: left
         margin: 0
-        width: 90px
+        width: 80px
 
   ul.compact_tab
     +horizontal-list

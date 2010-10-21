@@ -2,6 +2,8 @@ class ReportsController < ApplicationController
 
   #authorize_resource :class => Reports
 
+  TYPE_MAP = {'budget' => 'CodingBudget', 'spend' => 'CodingSpend'}
+
   def activities_by_district
     authorize! :read, :activities_by_district
     rep = Reports::ActivitiesByDistrict.new
@@ -120,7 +122,7 @@ class ReportsController < ApplicationController
     else
       @data_response = current_user.data_responses.find(params[:id])
     end
-    rep = Reports::ActivitiesByNsp.new(@data_response.activities)
+    rep = Reports::ActivitiesByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_nsp.csv"

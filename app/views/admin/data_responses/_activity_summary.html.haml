@@ -1,10 +1,13 @@
+- other_costs = false unless other_costs
+
 - unless @policy_maker
   .actions= "#{link_to "Edit Activity", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"
 %table.third.summary
   %tbody
-    %tr
-      %td Dates
-      %td= "#{activity.start_date} to #{activity.end_date}"
+    - unless other_costs
+      %tr
+        %td Dates
+        %td= "#{activity.start_date} to #{activity.end_date}"
     - unless @policy_maker
       %tr
         %td Text for Provider:
@@ -15,12 +18,13 @@
     %tr
       %td Text for Beneficiaries:
       %td= activity.text_for_beneficiaries
-    %tr
-      %td Org's Assisted:
-      %td= activity.organizations.map(&:name).join(', ')
-    %tr
-      %td Districts:
-      %td
-        %ul.dashboard_districts
-          - activity.locations.map(&:name).each do |loc|
-            %li= "#{loc},"
+    - unless other_costs
+      %tr
+        %td Org's Assisted:
+        %td= activity.organizations.map(&:name).join(', ')
+      %tr
+        %td Districts:
+        %td
+          %ul.dashboard_districts
+            - activity.locations.map(&:name).each do |loc|
+              %li= "#{loc},"

@@ -30,9 +30,9 @@
         %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
       %tr.activity.entry_main
         %td.s_border{:colspan => 100}
-          = render '/admin/data_responses/activity_summary', :activity => activity
+          = render '/admin/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
 
-          = render '/admin/data_responses/classifications', :activity => activity
+          = render '/admin/data_responses/classifications', :activity => activity, :other_costs => other_costs
 
           = render '/admin/data_responses/sub_activities', :activity => activity
 

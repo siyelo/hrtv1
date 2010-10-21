@@ -1,5 +1,7 @@
+- other_costs = false unless other_costs
+
 .classifications.two-thirds
-  = render '/code_assignments/tab_nav'
+  = render '/code_assignments/tab_nav', :other_costs => other_costs
 
 #activity_classification.two-thirds
   .tab1
@@ -9,13 +11,14 @@
       - @code_roots.each do |code|
         = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
-  .tab2
-    %h4 Budget Districts
-    %ul
-      - activity.coding_budget_district.each do |assignment|
-        %li
-          = assignment.code.name
-          = assignment.cached_amount
+  - unless other_costs
+    .tab2
+      %h4 Budget Districts
+      %ul
+        - activity.coding_budget_district.each do |assignment|
+          %li
+            = assignment.code.name
+            = assignment.cached_amount
   .tab3
     %h4 Budget Cost Cat
     %ul
@@ -29,13 +32,14 @@
       - @code_roots.each do |code|
         = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
-  .tab5
-    %h4 Expenditure Districts
-    %ul
-      - activity.coding_spend_district.each do |assignment|
-        %li
-          = assignment.code.name
-          = assignment.cached_amount
+  - unless other_costs
+    .tab5
+      %h4 Expenditure Districts
+      %ul
+        - activity.coding_spend_district.each do |assignment|
+          %li
+            = assignment.code.name
+            = assignment.cached_amount
   .tab6
     %h4 Expenditure Cost Cat
     %ul

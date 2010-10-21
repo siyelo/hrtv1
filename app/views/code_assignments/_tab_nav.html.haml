@@ -1,15 +1,19 @@
+- other_costs = false unless other_costs
+
 %ul.compact_tab
   %li Budget:
   %li{:id => 'tab1', :class => 'selected'}
     = link_to "Coding", "#"
-  %li{:id => 'tab2'}
-    = link_to "District", "#"
+  - unless other_costs
+    %li{:id => 'tab2'}
+      = link_to "District", "#"
   %li{:id => 'tab3'}
     = link_to "Cost Categorization", "#"
   %li Expenditure:
   %li{:id => 'tab4'}
     = link_to "Coding", "#"
-  %li{:id => 'tab5'}
-    = link_to "District", "#"
+  - unless other_costs
+    %li{:id => 'tab5'}
+      = link_to "District", "#"
   %li{:id => 'tab6'}
     = link_to "Cost Categorization", "#"

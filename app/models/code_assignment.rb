@@ -23,11 +23,11 @@ class CodeAssignment < ActiveRecord::Base
   attr_accessible :activity, :code, :amount, :percentage, :cached_amount
 
   ### Named scopes
-  named_scope :with_code_ids, lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
-  named_scope :with_activity, lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
-  named_scope :with_type,     lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
-  named_scope :with_code_id,  lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
-
+  named_scope :with_code_ids,   lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
+  named_scope :with_activity,   lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
+  named_scope :with_activities, lambda { |activity_ids|{:conditions => ["activity_id in (?)", activity_ids]} }
+  named_scope :with_type,       lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
+  named_scope :with_code_id,    lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
   ### methods
 
   def calculated_amount

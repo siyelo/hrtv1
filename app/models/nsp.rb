@@ -25,7 +25,7 @@ class Nsp < Code
   NSP_TYPE = 'Nsp'
 
   named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",
-              :conditions => { "codes.type = ? AND parents.type != ?", [NSP_TYPE, NSP_TYPE] }
+              :conditions => [ "codes.type = ? AND parents.type != ?", NSP_TYPE, NSP_TYPE]
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors
@@ -40,20 +40,38 @@ class Nsp < Code
        puts "\n\n#{nsp_root.external_id}: #{nsp_root.short_display.first(20) + '...'}\n"
       # each_with_level() is faster than level()
       Nsp.each_with_level(nsp_root.self_and_descendants) do |o, level|
-        puts "  #{level}, #{o.external_id}, #{o.short_display.first(20) + '...'}\n"
+        puts "  #{level}, #{o.external_id}, #{o.short_display.first(20) + '...'} " #, #{o.code_assignments } " #.with_activities(1443)}\n"
       end
     end
   end
 
-  def self.nsp_leaves_with_level
-    # As above, from the bottom-up
+  # DataResponse.find(6533).activities
+  def self.nsp_leaves_with_level(activities)
+    csv = []
     Nsp.leaves.each do |nsp_node|
-      puts "\n\n#{nsp_node.external_id}: #{nsp_node.short_display.first(20) + '...'}\n"
-      # each_with_level() is faster than level()
-      Nsp.each_with_level(nsp_node.self_and_nsp_ancestors) do |o, level|
-        puts "  #{level}, #{o.external_id}, #{o.short_display.first(20) + '...'}\n"
+
+      Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
+
+        #TODO - make sure always prepending the right nr of columns
+        parent_nodes = []
+        Nsp.each_with_level(code.self_and_nsp_ancestors) do |parent, level| # each_with_level() is faster than level()
+          parent_nodes << "#{parent.external_id}"
+        end
+
+        code.code_assignments.with_activities(activities).each do |assignment|
+          row = []
+          row << "#{code.level}"
+          row << "#{code.external_id}"
+          row << "#{code.short_display.first(20) + '...'}"
+          row << "#{assignment.type}"
+          row << "#{assignment.amount}"
+          row << "#{assignment.cached_amount}"
+          row << "#{assignment.activity_id}"
+          csv << (parent_nodes + row).join(", ") + "\n"
+        end
       end
     end
+    csv
   end
 
 end

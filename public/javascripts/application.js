@@ -55,8 +55,8 @@ var admin_data_responses_index = {
 
 
 var createPieChart = function (title, domId, urlEndpoint) {
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "100%", "300", "8", "#FFFFFF");
-  so.addVariable("path", "");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "400", "300", "8", "#FFFFFF");
+  so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
   so.addVariable("additional_chart_settings", encodeURIComponent(

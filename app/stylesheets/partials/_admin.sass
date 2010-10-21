@@ -59,6 +59,20 @@ body.app
     float: left
     width: 67%
 
+  .summary
+    background: none
+    font-size: 11px
+    tr td:first-child
+      font-weight: bold
+      text-align: right
+
+  .third
+    float: left
+    margin-right: 2%
+    margin-bottom: 20px
+    width: 31%
+
+
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
@@ -179,17 +193,6 @@ body.app
         float: left
         margin: 0
         width: 90px
-
-    .budget_summary
-      background: none
-      font-size: 1em
-      tr td:first-child
-        font-weight: bold
-        text-align: right
-
-    //hack
-    .activity .budget_summary
-      font-size: 11px
 
   ul.compact_tab
     +horizontal-list

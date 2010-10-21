@@ -1,12 +1,14 @@
-.actions= "#{link_to "Edit Activity", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"
-%table.third.budget_summary
+- unless @policy_maker
+  .actions= "#{link_to "Edit Activity", edit_activity_url(activity.id)} #{popup_classify_link_for activity}"
+%table.third.summary
   %tbody
     %tr
       %td Dates
       %td= "#{activity.start_date} to #{activity.end_date}"
-    %tr
-      %td Text for Provider:
-      %td= activity.text_for_provider
+    - unless @policy_maker
+      %tr
+        %td Text for Provider:
+        %td= activity.text_for_provider
     %tr
       %td Beneficiaries:
       %td= activity.beneficiaries.map(&:short_display).join(', ')

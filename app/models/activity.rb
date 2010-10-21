@@ -113,10 +113,12 @@ class Activity < ActiveRecord::Base
   # when use_budget_codings_for_spend is true
 
   # Named scopes
-  named_scope :roots,     {:conditions => "activities.type IS NULL" }
-  named_scope :greatest_first,     {:order => "activities.budget DESC" }
-  named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }
-  named_scope :only_simple, :conditions => ["type is null or type in (?)", ["OtherCost"]]
+  named_scope :roots,             {:conditions => "activities.type IS NULL" }
+  named_scope :greatest_first,    {:order => "activities.budget DESC" }
+  named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
+  named_scope :only_simple,       { :conditions => ["type is null or type in (?)", ["OtherCost"]] }
+  named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
+  named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified}

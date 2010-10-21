@@ -79,3 +79,6 @@
 .simple_table
   = render 'projects', :projects => @projects
 
+  %h4 Activities not linked with a Project
+  = render 'activities', :activities => @activities_without_projects
+

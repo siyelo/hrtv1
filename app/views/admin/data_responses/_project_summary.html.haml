@@ -1,6 +1,7 @@
-.actions= link_to "Edit Project", edit_project_url(project.id)
+- unless @policy_maker
+  .actions= link_to "Edit Project", edit_project_url(project.id)
 
-%table.third.budget_summary
+%table.third.summary
   %tbody
     %tr
       %td Dates
@@ -17,22 +18,22 @@
     %tr
       %td Spend Q4 (FY 08-09):
       %td=  number_to_currency(project.spend_q4_prev , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    - unless @policy_maker
+      %tr
+        %td Spend Q1:
+        %td=  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-    %tr
-      %td Spend Q1:
-      %td=  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q2:
+        %td=  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-    %tr
-      %td Spend Q2:
-      %td=  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q3:
+        %td=  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-    %tr
-      %td Spend Q3:
-      %td=  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-
-    %tr
-      %td Spend Q4:
-      %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q4:
+        %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
     %tr
       %td Districts:

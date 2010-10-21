@@ -31,9 +31,9 @@ class DataResponse < ActiveRecord::Base
 
   # Associations
 
-  has_many :activities, :dependent=>:destroy
-  has_many :funding_flows, :dependent=>:destroy
-  has_many :projects, :dependent=>:destroy
+  has_many :activities, :dependent => :destroy
+  has_many :funding_flows, :dependent => :destroy
+  has_many :projects, :dependent => :destroy
   @@data_associations = %w[activities funding_flows projects]
 
   has_many    :users_currently_completing,
@@ -148,5 +148,4 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
-
 end

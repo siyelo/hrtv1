@@ -1,38 +1,39 @@
+- other_costs = false unless other_costs
+
 %table.activities
   %thead
     %tr
-      %th= "Activities (#{project.activities.count})"
+      %th
+        = other_costs ? "Other Costs" : "Activities"
+        = "(#{activities.count})"
       %th Classified?
       %th Approved?
-      %th Sub-Implementers
+      - unless other_costs
+        %th Sub-Implementers
       %th Spend
       %th Budget
   %tbody
-    - project.activities.each do |activity|
+    - activities.each do |activity|
       %tr.activity.entry_header
         %td
           %ul
             %li.name
               = activity.name
-              - if activity.type == "OtherCost"
-                (Other Cost)
             %li.descr= activity.description.to_s.first(300)
             - unless activity.type == "OtherCost"
               %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
         %td= activity.classified? ? "Yes" : "No"
         %td= activity.approved
-        - unless activity.type == "OtherCost"
+        - unless other_costs
           %td= activity.sub_activities.count
-        - else
-          %td N/A
         %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
       %tr.activity.entry_main
         %td.s_border{:colspan => 100}
-          = render 'activity_summary', :activity => activity
+          = render '/admin/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
 
-          = render 'classifications', :activity => activity
+          = render '/admin/data_responses/classifications', :activity => activity, :other_costs => other_costs
 
-          = render 'sub_activities', :activity => activity
+          = render '/admin/data_responses/sub_activities', :activity => activity
 
-          = render 'comments', :project => activity
+          = render '/admin/data_responses/comments', :project => activity

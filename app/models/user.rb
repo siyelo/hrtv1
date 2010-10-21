@@ -65,6 +65,10 @@ class User < ActiveRecord::Base
     roles.include? role.to_s
   end
 
+  def admin?
+    role?('admin')
+  end
+
   def to_s
     username
   end

@@ -31,29 +31,7 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-= render 'exec_summary_left'
-
-- form_for @data_response do |form|
-  %table.dashboard_form
-    %tbody
-      %tr
-        %td
-          = form.label :currency, "Currency"
-        %td
-          = form.text_field :currency
-      %tr
-        %td
-          = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
-      %tr
-        %td
-          = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
-      %tr
-        %td{ :colspan => 2 }
-          = submit_tag 'Update Response'
+= render 'form'
 
 #response_charts_nav.two-thirds
 

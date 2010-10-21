@@ -55,20 +55,18 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     #end
   #end
 
-  def print_code(csv, code, spaces=0)
-    if code.leaf?
-      code.code_assignments.each do |ca|
-        empty = []
-        (3-spaces).times{|i| empty << ''}
-        spaces.times{|i| empty << code.parent.short_display}
-        csv << empty.concat([code.id, code.short_display, ca.activity.try(:id), ca.activity.try(:budget), ca.activity.try(:spend)])
-      end
-    else
-      spaces += 1
-      code.children.each do |child|
-        print_code(csv, child, spaces) 
-      end
+  def print_code(csv, code)
+    code.code_assignments.each do |ca|
+      csv << [code.id, code.short_display, ca.activity.try(:id), ca.activity.try(:name), ca.activity.try(:budget), ca.activity.try(:spend)]
     end
   end
+
+  #def get_name(code)
+    #if code.parent.type == 'Nsp'
+      #[code.parent.name]
+    #else
+      #get_name(code.parent)
+    #end
+  #end
 
 end

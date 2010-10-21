@@ -78,3 +78,6 @@
 .simple_table
   = render '/admin/data_responses/projects', :projects => @projects
 
+%h4 Activities not linked with a Project
+.simple_table
+  = render '/admin/data_responses/activities', :activities => @activities_without_projects

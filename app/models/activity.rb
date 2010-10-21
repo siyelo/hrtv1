@@ -192,7 +192,11 @@ class Activity < ActiveRecord::Base
   # these comment outs should be okay now that there
   # is the before_save
   def spend?
-    CodingSpend.classified(self)
+    if use_budget_codings_for_spend && budget? && !budget.nil?
+      true
+    else
+      CodingSpend.classified(self)
+    end
   end
 
   def spend_coding
@@ -200,11 +204,19 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_by_district?
-    CodingSpendDistrict.classified(self)
+    unless use_budget_codings_for_spend && budget_by_district? && !budget.nil?
+      CodingSpendDistrict.classified(self)
+    else
+      true
+    end
   end
 
   def spend_by_cost_category?
-    CodingSpendCostCategorization.classified(self)
+    unless use_budget_codings_for_spend && budget_by_cost_category? && !budget.nil?
+      CodingSpendCostCategorization.classified(self)
+    else
+      true
+    end
   end
 
   def spend_cost_category_coding

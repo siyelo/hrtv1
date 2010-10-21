@@ -115,9 +115,12 @@ class ReportsController < ApplicationController
   end
 
   def activities_by_nsp
-    #TODO - security
-    activities = DataResponse.find(params[:data_response_id]).activities
-    rep = Reports::ActivitiesByNsp.new(activities)
+    if current_user.admin?
+      @data_response = DataResponse.find(params[:id])
+    else
+      @data_response = current_user.data_responses.find(params[:id])
+    end
+    rep = Reports::ActivitiesByNsp.new(@data_response.activities)
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_nsp.csv"

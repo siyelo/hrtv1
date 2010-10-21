@@ -6,9 +6,9 @@ class ActivitiesController < ActiveScaffoldController
   include ActivitiesHelper
 
   @@shown_columns           = [:organization, :projects, :provider, :description, :name, :budget, :spend ]
-  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :comments]
-  @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
+  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
+  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
+  @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
 
   def self.create_columns
     @@create_columns
@@ -46,7 +46,8 @@ class ActivitiesController < ActiveScaffoldController
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :budget
+        budget_group.add :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
+
       end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
@@ -64,16 +65,21 @@ class ActivitiesController < ActiveScaffoldController
       config.columns[c].label = "#{c.to_s.capitalize} Date"
     end
 
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Spend in Your FY 09-10 "+ quarter.capitalize
+    %w[spend budget].each do |m|
+      %w[q1 q2 q3 q4].each do |quarter|
+        c = m+"_"+quarter
+        c = c.to_sym
+        config.columns[c].inplace_edit = true
+        quarterly_amount_field_options config.columns[c]
+        config.columns[c].label = "#{m.capitalize} in Your FY 09-10 "+quarter.capitalize
+      end
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:budget_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:budget_q4_prev]
+    config.columns[:budget_q4_prev].label = "Budget in your FY 08-09 Q4"
     [:text_for_beneficiaries, :text_for_targets, :text_for_provider].each do |c|
       config.columns[c].form_ui = :textarea
       config.columns[c].options = {:cols => 50, :rows => 3}

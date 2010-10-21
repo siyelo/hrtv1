@@ -55,6 +55,16 @@
       = link_to "Budget", "#"
     %li{:id => 'tab4'}
       = link_to "Spend", "#"
+    %li HSSPII Budget
+    %li{:id => 'tab5'}
+      = link_to "Program", "#"
+    %li{:id => 'tab6'}
+      = link_to "Objective", "#"
+    %li HSSPII Spend
+    %li{:id => 'tab7'}
+      = link_to "Program", "#"
+    %li{:id => 'tab8'}
+      = link_to "Objective", "#"
 
 .project_charts.two-thirds
   .tab1
@@ -71,4 +81,20 @@
 
   .tab4
     .chart{:id => "project_#{project.id}_nsp_spend"}
+      %strong You need to upgrade your Flash Player
+
+  .tab5
+    .chart{:id => "project_#{project.id}_budget_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab6
+    .chart{:id => "project_#{project.id}_budget_stratobj_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab7
+    .chart{:id => "project_#{project.id}_spend_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab8
+    .chart{:id => "project_#{project.id}_spend_stratobj_coding"}
       %strong You need to upgrade your Flash Player

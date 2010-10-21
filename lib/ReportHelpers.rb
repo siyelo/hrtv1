@@ -19,7 +19,7 @@ module ReportHelpers
   					:select => "codes.id as code_id, codes.parent_id as parent_id, codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
   					:joins => {:activities => {:code_assignments => :code}},
   					:conditions => conditions,
-  					:group => "codes.short_display",
+  					:group => "codes.short_display, codes.id, codes.parent_id",
   					:order => 'value DESC')
       codes_to_exclude = (name_value.collect{|n| n.parent_id} - [nil]).uniq.sort
       c=[]

@@ -1,3 +1,13 @@
+class ModelHelp < ActiveRecord::Base
+  acts_as_commentable
+  has_many :field_help
+
+  # for active scaffold labels & drop downs
+  def name
+    model_name
+  end
+end
+
 # == Schema Information
 #
 # Table name: model_helps
@@ -10,12 +20,3 @@
 #  updated_at :timestamp
 #
 
-class ModelHelp < ActiveRecord::Base
-  acts_as_commentable
-  has_many :field_help
-
-  # for active scaffold labels & drop downs
-  def name
-    model_name
-  end
-end

@@ -4,6 +4,8 @@
   <csv_separator>,</csv_separator>                             <!-- [;] (string) csv file data separator (you need it only if you are using csv file for your data) -->
 
   <pie>
+    <x>200</x>
+    <y>100</y>
     <inner_radius>40</inner_radius>
     <height>20</height>
     <angle>30</angle>
@@ -24,9 +26,9 @@
 
   <data_labels>
     <radius></radius>                                         <!-- [20%] (Number / Number%) distance of the labels from the pie. Use negative value to place labels on the pie -->
-    <show>
+    <!--<show>
        <![CDATA[{title}: {percents}%]]>                       <!-- [] ({value} {title} {percents} {description}) You can format any data label: {value} - will be replaced with value and so on. You can add your own text or html code too. -->
-    </show>
+    <!--</show>-->
   </data_labels>
 
   <balloon>                                                   <!-- BALLOON -->
@@ -41,10 +43,16 @@
     <border_color>#000000</border_color>                      <!-- [balloon.color] (hex color code) -->
   </balloon>
 
-  <legend>                                                    <!-- LEGEND -->
-    <enabled>false</enabled>                                  <!-- [true] (true / false) -->
-    <values>                                                  <!-- VALUES -->
-      <text><![CDATA[]]></text>                               <!-- [{percents}%] ({value} {percents}) -->
+  <legend>
+    <enabled></enabled>
+    <max_columns>1</max_columns>
+    <x>300</x>
+    <y>50</y>-->
+    <width>200</width>
+    <values>
+      <enabled>true</enabled>
+      <width>50</width>
+      <text><![CDATA[{percents}%]]></text>
      </values>
   </legend>
 

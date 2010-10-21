@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: line_items
-#
-#  id                        :integer         primary key
-#  description               :text
-#  activity_id               :integer
-#  created_at                :timestamp
-#  updated_at                :timestamp
-#  activity_cost_category_id :integer
-#  budget                    :decimal(, )
-#  spend                     :decimal(, )
-#
-
 class LineItem < ActiveRecord::Base
   acts_as_commentable
   belongs_to :activity
@@ -30,3 +16,18 @@ class LineItem < ActiveRecord::Base
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: line_items
+#
+#  id                        :integer         primary key
+#  description               :text
+#  activity_id               :integer
+#  created_at                :timestamp
+#  updated_at                :timestamp
+#  activity_cost_category_id :integer
+#  budget                    :decimal(, )
+#  spend                     :decimal(, )
+#
+

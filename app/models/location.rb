@@ -1,3 +1,9 @@
+class Location < Code
+  has_and_belongs_to_many :projects
+  has_and_belongs_to_many :activities
+  has_and_belongs_to_many :organizations
+end
+
 # == Schema Information
 #
 # Table name: codes
@@ -21,8 +27,3 @@
 #  official_name       :string(255)
 #
 
-class Location < Code
-  has_and_belongs_to_many :projects
-  has_and_belongs_to_many :activities
-  has_and_belongs_to_many :organizations
-end

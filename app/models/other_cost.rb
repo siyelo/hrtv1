@@ -1,15 +1,21 @@
+class OtherCost < Activity
+  before_save :set_district_if_implement_is_in_one_district
+
+  def set_district_if_implement_is_in_one_district
+    #TODO
+  end
+
+end
+
 # == Schema Information
 #
 # Table name: activities
 #
 #  id                                    :integer         primary key
 #  name                                  :string(255)
-#  beneficiary                           :string(255)
-#  target                                :string(255)
 #  created_at                            :timestamp
 #  updated_at                            :timestamp
 #  provider_id                           :integer
-#  other_cost_type_id                    :integer
 #  description                           :text
 #  type                                  :string(255)
 #  budget                                :decimal(, )
@@ -36,13 +42,10 @@
 #  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
 #  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
 #  use_budget_codings_for_spend          :boolean         default(FALSE)
+#  budget_q1                             :decimal(, )
+#  budget_q2                             :decimal(, )
+#  budget_q3                             :decimal(, )
+#  budget_q4                             :decimal(, )
+#  budget_q4_prev                        :decimal(, )
 #
 
-class OtherCost < Activity
-  before_save :set_district_if_implement_is_in_one_district
-
-  def set_district_if_implement_is_in_one_district
-    #TODO
-  end
-
-end

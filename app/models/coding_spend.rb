@@ -1,3 +1,14 @@
+class CodingSpend < SpendCodeAssignment
+
+  def self.available_codes(activity = nil)
+    if activity.class.to_s == "OtherCost"
+      OtherCostCode.roots
+    else
+      Code.for_activities.roots
+    end
+  end
+end
+
 # == Schema Information
 #
 # Table name: code_assignments
@@ -12,13 +23,3 @@
 #  cached_amount :decimal(, )
 #
 
-class CodingSpend < SpendCodeAssignment
-
-  def self.available_codes(activity = nil)
-    if activity.class.to_s == "OtherCost"
-      OtherCostCode.roots
-    else
-      Code.for_activities.roots
-    end
-  end
-end

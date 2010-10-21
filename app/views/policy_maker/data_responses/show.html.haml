@@ -30,17 +30,7 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-%table.third.summary
-  %tbody
-    %tr
-      %td Point of Contact
-      %td= @data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name
-    %tr
-      %td Phone
-      %td= @data_response.contact_phone_number
-    %tr
-      %td Office Phone
-      %td= @data_response.contact_main_office_phone_number
+= render '/admin/data_responses/exec_summary_left'
 
 #response_charts_nav.two-thirds
 
@@ -82,9 +72,12 @@
     .chart{:id => "response_mtef_spend"}
       %strong You need to upgrade your Flash Player
 
+.full
+  = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 
-= link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
+  .simple_table
+    = render '/admin/data_responses/projects', :projects => @projects
 
-.simple_table
-  = render '/admin/data_responses/projects', :projects => @projects
-
+  %h3 Activities not linked with a Project
+  .simple_table
+    = render '/admin/data_responses/activities', :activities => @activities_without_projects

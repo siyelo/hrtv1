@@ -30,17 +30,7 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-%table.third.summary
-  %tbody
-    %tr
-      %td Point of Contact
-      %td= @data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name
-    %tr
-      %td Phone
-      %td= @data_response.contact_phone_number
-    %tr
-      %td Office Phone
-      %td= @data_response.contact_main_office_phone_number
+= render '/admin/data_responses/exec_summary_left'
 
 #response_charts_nav.two-thirds
 

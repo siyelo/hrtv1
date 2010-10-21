@@ -30,11 +30,11 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
+= render 'exec_summary_left'
+
 - form_for @data_response do |form|
-  %table.dashboard_form
+  %table.dashboard_form.third
     %tbody
-      %tr
-        %td{:colspan => 2}= "Point of Contact: #{@data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name} (ph: #{@data_response.contact_phone_number}) or (office:  #{@data_response.contact_main_office_phone_number})"
       %tr
         %td
           = form.label :currency, "Currency"

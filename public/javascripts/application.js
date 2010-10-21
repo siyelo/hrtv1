@@ -168,7 +168,7 @@ var policy_maker_data_responses_show = {
     // collapsiable project header
     jQuery("#details").click(function (e) {
       e.preventDefault();
-      jQuery(".projects").toggle();
+      jQuery(".projects tbody").toggle();
     });
 
     //

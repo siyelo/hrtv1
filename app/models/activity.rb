@@ -297,7 +297,7 @@ class Activity < ActiveRecord::Base
       code_assignments.with_type(budget_type).each do |ca|
         spend_ca = ca.clone
         spend_ca.type = spend_type
-        spend_ca.cached_amount = spend * ca.calculated_amount / budget
+        spend_ca.cached_amount = spend * ca.calculated_amount / budget if spend && budget && ca.calculated_amount
         spend_ca.percentage = ca.percentage if ca.percentage
         spend_ca.save!
       end

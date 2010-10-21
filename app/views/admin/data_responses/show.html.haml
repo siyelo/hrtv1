@@ -3,7 +3,6 @@
 :javascript
   _projects = #{@projects.map(&:id).to_json};
 
-
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
 
@@ -73,12 +72,12 @@
     .chart{:id => "response_mtef_spend"}
       %strong You need to upgrade your Flash Player
 
+.full
+  = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 
-= link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
+  .simple_table
+    = render 'projects', :projects => @projects
 
-.simple_table
-  = render 'projects', :projects => @projects
-
-%h3 Activities not linked with a Project
-.simple_table
-  = render 'activities', :activities => @activities_without_projects
+  %h3 Activities not linked with a Project
+  .simple_table
+    = render 'activities', :activities => @activities_without_projects

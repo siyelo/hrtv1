@@ -2,6 +2,7 @@ body.app
   .project, .activity, .sub_activity
     &.entry_header
       cursor: pointer
+      font-size: 12px
       line-height: 1.2em
     &.entry_main
       display: none
@@ -22,6 +23,23 @@ body.app
       font-size: 0.9em
       padding: 20px 10px 10px
       text-transform: none
+    h4
+      font-size: 12px
+      
+    > .summary
+      margin: 0 10px 10px
+      tr
+        td
+          background: #eee
+          border-right: 1px solid white
+          border-bottom: 1px solid white
+          color: $mid-blue
+          width: 50%
+          padding: 7px
+          font-size: 12px
+          &:first-child
+            text-align: right
+            font-weight: bold
 
   a
     color: $orange
@@ -32,7 +50,6 @@ body.app
 
   .dashboard_form
     float: left
-    margin-right: 2%
     margin-bottom: 20px
     width: 31%
     font-size: 11px
@@ -73,16 +90,16 @@ body.app
     +clearfix
     
     .summary
-      font-size: 11px
+      font-size: 12px
       tr td:first-child
         font-weight: bold
         text-align: right
         width: 45%
         
     .activities .summary td
-      font-size: 11px
+      font-size: 12px
       thead tr th
-        font-size: 11px
+        font-size: 12px
       
     h3
       color: $mid-blue
@@ -93,7 +110,6 @@ body.app
     table
       background: #eee
       color: !mid-blue
-      font-size: 0.8em
       width: 100%
       a
         font-size: 1em
@@ -104,6 +120,7 @@ body.app
         padding: 7px
 
       tbody
+        font-size: 12px
         th, td
           border-bottom: 1px solid white
 
@@ -114,7 +131,7 @@ body.app
         background: !mid-blue
         border-bottom: 1px solid white
         color: white
-        font-size: 0.9em
+        font-size: 12px
         /* end */
 
 
@@ -163,7 +180,6 @@ body.app
     .activities, .dashboard_comments
 
       thead
-        font-size: 11px
         tr:hover
           background: $mid-blue
       tbody
@@ -182,6 +198,7 @@ body.app
     border-bottom: 1px solid $light-blue
     color: $light-blue - #333
     line-height: 1.5em
+    font-size: 12px
     a
       text-decoration: none
 
@@ -193,13 +210,15 @@ body.app
       
 .full-width, .simple_table
   .full
-    margin-bottom: 20px
     width: 100%
+    +clearfix
   .third
     float: left
-    margin-right: 2%
+    margin-right: 1%
     margin-bottom: 20px
     width: 31%
+    .third
+      margin: 0
   .fourth
     float: left
     margin-right: 2%

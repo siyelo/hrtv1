@@ -21,16 +21,20 @@ class ChartsController < ApplicationController
   # title, value, ?, ?, ?, description
   def get_csv_string(records)
     other = 0
+    logger.debug "records: #{records.to_s}"
     csv_string = FasterCSV.generate do |csv|
       records.each_with_index do |record, index|
         if index < 10
+	  logger.debug "wrote #{record.code_id}"
           csv << [first_n_words(h(record.name), 3), record.value.to_f, nil, nil, nil, h(record.name) ]
         else
+	  logger.debug "wrote #{record.code_id} as other"
           other += record.value.to_f
         end
       end
       csv << ['Other', other, nil, nil, nil, 'Other']
     end
+    logger.debug csv_string
     csv_string
   end
 

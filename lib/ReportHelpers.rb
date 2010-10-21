@@ -15,12 +15,30 @@ module ReportHelpers
         condition_values[:code_type] = code_type
       end
       conditions = [conditions.join(" AND "), condition_values]
-      self.class.find(:all,
-  					:select => "codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+      name_value = self.class.find(:all,
+  					:select => "codes.id as code_id, codes.parent_id as parent_id, codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
   					:joins => {:activities => {:code_assignments => :code}},
   					:conditions => conditions,
   					:group => "codes.short_display",
   					:order => 'value DESC')
+      codes_to_exclude = (name_value.collect{|n| n.parent_id} - [nil]).uniq.sort
+      c=[]
+      logger.debug("excluding #{codes_to_exclude.join ','}")
+      name_value.each do |n|
+        logger.debug("on code #{n.code_id}")
+	if codes_to_exclude.include? n.code_id 
+          logger.debug("added code #{n.code_id}")
+          c << n.code_id
+        end
+      end
+      c.each do |n|
+        logger.debug("name_value #{name_value.to_s}")
+        name_value.delete_if {|nm| nm.code_id == n}
+        logger.debug("deleted code #{n}")
+        logger.debug("name_value #{name_value.to_s}")
+      end
+      logger.debug("finished name_value code #{name_value.to_s}")
+      name_value
     else
       self.send(codings_type)
     end

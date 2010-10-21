@@ -128,7 +128,7 @@ var admin_data_responses_show = {
       createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
       createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
       createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
-      createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
+      createPieChart("HSSPII Strat Prog Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=spend_stratprog_coding&code_type=Nsp&project_id=" + projectId);
     });
 
 

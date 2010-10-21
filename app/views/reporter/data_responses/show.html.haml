@@ -30,7 +30,7 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-= render 'exec_summary_left'
+= render '/admin/data_responses/exec_summary_left'
 
 - form_for @data_response do |form|
   %table.dashboard_form
@@ -98,5 +98,5 @@
 = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 
 .simple_table
-  = render 'projects', :projects => @projects
+  = render '/admin/data_responses/projects', :projects => @projects
 

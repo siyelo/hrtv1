@@ -85,11 +85,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :policy_maker do |policy_maker|
-    policy_maker.resources :data_responses
+    policy_maker.resources :data_responses, :only => [:show]
   end
 
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.resources :data_responses, :only => [:show]
   end
 
   map.charts 'charts/:action', :controller => 'charts'

@@ -24,6 +24,11 @@
 class Nsp < Code
   NSP_TYPE = 'Nsp'
 
+  #
+  # nested_set overrides
+  #
+
+  # NSP 'roots' are embedded in other hierarchies, so we override the default awesome_nested_set :roots
   named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",
               :conditions => [ "codes.type = ? AND parents.type != ?", NSP_TYPE, NSP_TYPE]
 
@@ -39,55 +44,29 @@ class Nsp < Code
     without_self self_and_nsp_ancestors
   end
 
-  def self.nsp_roots_with_level
-    # NSP 'roots' are embedded in other hierarchies, so we override the default awesome_nested_set :roots
+  def self.roots_with_level
+    a = []
     Nsp.roots.each do |nsp_root|
-       puts "\n\n#{nsp_root.external_id}: #{nsp_root.short_display.first(20) + '...'}\n"
-      # each_with_level() is faster than level()
-      Nsp.each_with_level(nsp_root.self_and_descendants) do |o, level|
-        puts "  #{level}, #{o.external_id}, #{o.short_display.first(20) + '...'} " #, #{o.code_assignments } " #.with_activities(1443)}\n"
+      Nsp.each_with_level(nsp_root.self_and_descendants) do |code, level|       # each_with_level() is faster than level()
+        a << [level, code.id]
       end
     end
+    a
   end
 
-  def self.nsp_leaves_with_level
-    # NSP 'roots' are embedded in other hierarchies, so we override the default awesome_nested_set :roots
+  def self.deepest_nesting
+    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+  end
+
+  def self.leaves_with_level
+    a = []
     Nsp.leaves.each do |nsp|
-       puts "\n\n#{nsp.external_id}: #{nsp.short_display.first(20) + '...'}\n"
-      # each_with_level() is faster than level()
       Nsp.each_with_level(nsp.self_and_nsp_ancestors.reverse) do |code, level|
-        puts "  #{level}, #{code.external_id}, #{code.short_display.first(20) + '...'} " #, #{o.code_assignments } " #.with_activities(1443)}\n"
+        a << [level, code.id]
       end
     end
+    a
   end
-
-  # DataResponse.find(6533).activities
-  def self.activity_report(activities)
-    csv = []
-    Nsp.leaves.each do |nsp_node|
-      Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
-        #TODO - make sure always prepending the right nr of columns
-        parent_nodes = []
-        Nsp.each_with_level(code.nsp_ancestors) do |parent, level| # each_with_level() is faster than level()
-          parent_nodes << "#{parent.external_id}"
-        end
-
-        code.code_assignments.with_activities(activities).each do |assignment|
-          row = []
-          row << "#{code.external_id}"
-          row << "#{code.level}"
-          row << "#{code.short_display.first(20) + '...'}"
-          row << "#{assignment.type}"
-          row << "#{assignment.amount}"
-          row << "#{assignment.cached_amount}"
-          row << "#{assignment.activity_id}"
-          csv << (parent_nodes + row).join(", ") + "\n"
-        end
-      end
-    end
-    csv
-  end
-
 end
 
 

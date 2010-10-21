@@ -5,9 +5,12 @@ class ProjectsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
-  @@create_columns  = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
-  @@update_columns  = [:name, :description, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency, :comments]
-  @@upload_columns  = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
+  @@create_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
+    :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
+  @@update_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
+    :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency, :comments]
+  @@upload_columns  = [:name, :description, :currency, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
+    :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
   def self.create_columns
     @@create_columns
   end
@@ -36,7 +39,7 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:currency].label               = "Currency (if different)"
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :entire_budget, :budget
+        budget_group.add :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
       end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
@@ -51,16 +54,21 @@ class ProjectsController < ActiveScaffoldController
       config.columns[c].inplace_edit = true
     end
     # copy / paste from activities
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Spend in Your FY 09-10 "+quarter.capitalize
+    %w[spend budget].each do |m|
+      %w[q1 q2 q3 q4].each do |quarter|
+        c = m+"_"+quarter
+        c = c.to_sym
+        config.columns[c].inplace_edit = true
+        quarterly_amount_field_options config.columns[c]
+        config.columns[c].label = "#{m.capitalize} in Your FY 09-10 "+quarter.capitalize
+      end
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:budget_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:budget_q4_prev]
+    config.columns[:budget_q4_prev].label = "Budget in your FY 08-09 Q4"
   end
 
 

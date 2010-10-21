@@ -27,6 +27,8 @@ body.app
     color: $orange
     &:hover, &:focus, &:active
       color: $mid-blue
+  .projects
+    width: 100%
 
   .dashboard_form
     float: left
@@ -63,11 +65,6 @@ body.app
     float: left
     width: 67%
 
-  .third
-    float: left
-    margin-right: 2%
-    margin-bottom: 20px
-    width: 31%
 
 
   /* default layout for a simple table */
@@ -84,6 +81,8 @@ body.app
         
     .activities .summary td
       font-size: 11px
+      thead tr th
+        font-size: 11px
       
     h3
       color: $mid-blue
@@ -98,7 +97,8 @@ body.app
       width: 100%
       a
         font-size: 1em
-
+      .third
+        width: 31%
       th, td
         border-right: 1px solid white
         padding: 7px
@@ -117,31 +117,7 @@ body.app
         font-size: 0.9em
         /* end */
 
-    .third
-      float: left
-      margin-right: 2%
-      margin-bottom: 20px
-      width: 31%
-    .fourth
-      float: left
-      margin-right: 2%
-      width: 23%
-    .third, .half, .fourth
-      li
-        margin-bottom: 10px
-      span
-        display: block
-        font-weight: bold
-        margin-bottom: 5px
-    .two-thirds
-      float: left
-      margin-bottom: 20px
-      width: 67%
-    .half
-      float: left
-      margin-right: 0
-      margin-bottom: 20px
-      width: 50%
+
 
     .name
       font-weight: bold
@@ -185,9 +161,9 @@ body.app
       text-align: right
 
     .activities, .dashboard_comments
-      margin-top: 10px
+
       thead
-        font-size: 1.1em
+        font-size: 11px
         tr:hover
           background: $mid-blue
       tbody
@@ -214,3 +190,33 @@ body.app
       color: $mid-blue
       display: inline-block
       font-weight: bold
+      
+.full-width, .simple_table
+  .full
+    margin-bottom: 20px
+    width: 100%
+  .third
+    float: left
+    margin-right: 2%
+    margin-bottom: 20px
+    width: 31%
+  .fourth
+    float: left
+    margin-right: 2%
+    width: 23%
+  .third, .half, .fourth
+    li
+      margin-bottom: 10px
+    span
+      display: block
+      font-weight: bold
+      margin-bottom: 5px
+  .two-thirds
+    float: left
+    margin-bottom: 20px
+    width: 67%
+  .half
+    float: left
+    margin-right: 0
+    margin-bottom: 20px
+    width: 50%

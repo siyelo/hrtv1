@@ -3,7 +3,7 @@ module ReportHelpers
   @@virtual_coding_types = [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding]
   def activity_coding codings_type = nil, code_type = nil
-    unless @@virtual_coding_types.include? codings_type
+    unless @@virtual_coding_types.include? codings_type.to_sym
       conditions = ["#{self.class.table_name}.id = :my_id "]
       condition_values = {:my_id => id}
       unless codings_type.nil?
@@ -39,11 +39,11 @@ module ReportHelpers
   
   [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding].each do |m|
-    def m
+    define_method m do #def m
       name_value= []
-      assignments = activities.collect{|a| a.send(m)}
+      assignments = activities.collect{|a| a.send(m)}.flatten
       assignments.group_by {|a| a.code}.each do |code, array|
-        row = [code.short_display, array.inject {|sum, v| sum + v.cached_amount}]
+        row = [code.short_display, array.inject(0) {|sum, v| sum + v.cached_amount}]
         def row.value
           self[1]
         end

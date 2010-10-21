@@ -3,6 +3,7 @@
 :javascript
   _projects = #{@projects.map(&:id).to_json};
 
+
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
 

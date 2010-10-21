@@ -3,6 +3,9 @@
 :javascript
   _projects = #{@projects.map(&:id).to_json};
 
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
 

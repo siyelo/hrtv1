@@ -1,3 +1,8 @@
+class Beneficiary < Code
+  has_and_belongs_to_many :activities # organizations targeted by this activity / aided
+
+end
+
 # == Schema Information
 #
 # Table name: codes
@@ -21,7 +26,3 @@
 #  official_name       :string(255)
 #
 
-class Beneficiary < Code
-  has_and_belongs_to_many :activities # organizations targeted by this activity / aided
-
-end

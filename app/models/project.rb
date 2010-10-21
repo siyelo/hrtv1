@@ -1,26 +1,3 @@
-# == Schema Information
-#
-# Table name: projects
-#
-#  id               :integer         primary key
-#  name             :string(255)
-#  description      :text
-#  start_date       :date
-#  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
-#  budget           :decimal(, )
-#  spend            :decimal(, )
-#  entire_budget    :decimal(, )
-#  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
-#
-
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
@@ -146,3 +123,32 @@ class Project < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: projects
+#
+#  id               :integer         primary key
+#  name             :string(255)
+#  description      :text
+#  start_date       :date
+#  end_date         :date
+#  created_at       :timestamp
+#  updated_at       :timestamp
+#  budget           :decimal(, )
+#  spend            :decimal(, )
+#  entire_budget    :decimal(, )
+#  currency         :string(255)
+#  spend_q1         :decimal(, )
+#  spend_q2         :decimal(, )
+#  spend_q3         :decimal(, )
+#  spend_q4         :decimal(, )
+#  spend_q4_prev    :decimal(, )
+#  data_response_id :integer
+#  budget_q1        :decimal(, )
+#  budget_q2        :decimal(, )
+#  budget_q3        :decimal(, )
+#  budget_q4        :decimal(, )
+#  budget_q4_prev   :decimal(, )
+#
+

@@ -1,3 +1,7 @@
+
+class OtherCostType < Code
+end
+
 # == Schema Information
 #
 # Table name: codes
@@ -21,6 +25,3 @@
 #  official_name       :string(255)
 #
 
-
-class OtherCostType < Code
-end

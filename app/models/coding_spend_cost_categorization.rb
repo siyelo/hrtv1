@@ -1,3 +1,10 @@
+class CodingSpendCostCategorization < SpendCodeAssignment
+
+  def self.available_codes(activity = nil)
+    CostCategory.roots
+  end
+end
+
 # == Schema Information
 #
 # Table name: code_assignments
@@ -12,9 +19,3 @@
 #  cached_amount :decimal(, )
 #
 
-class CodingSpendCostCategorization < SpendCodeAssignment
-
-  def self.available_codes(activity = nil)
-    CostCategory.roots
-  end
-end

@@ -5,8 +5,7 @@
 #  id                               :integer         primary key
 #  data_element_id                  :integer
 #  data_request_id                  :integer
-#  complete                         :boolean         default(FALSE)
-#  created_at                       :timestamp
+#  complete                         :boolean         default(FALSE) #  created_at                       :timestamp
 #  updated_at                       :timestamp
 #  organization_id_responder        :integer
 #  currency                         :string(255)
@@ -22,17 +21,19 @@
 #
 
 require 'lib/ActAsDataElement'
+require 'lib/ReportHelpers'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base
 
   include ActsAsDateChecker
+  include ReportHelpers
 
   # Associations
 
-  has_many :activities, :dependent=>:destroy
-  has_many :funding_flows, :dependent=>:destroy
-  has_many :projects, :dependent=>:destroy
+  has_many :activities, :dependent => :destroy
+  has_many :funding_flows, :dependent => :destroy
+  has_many :projects, :dependent => :destroy
   @@data_associations = %w[activities funding_flows projects]
 
   has_many    :users_currently_completing,
@@ -147,5 +148,4 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
-
 end

@@ -4,22 +4,79 @@ body.app
       cursor: pointer
     &.entry_main
       display: none
-    
+
+  .hidden
+    display: none
+
   .full-width
     h2
       background: none
       margin: 10px 10px 0
       text-transform: none
-      
+    h3, .like_a_h3
+      color: $mid-blue
+      font-size: 0.9em
+      padding: 20px 10px 10px
+      text-transform: none
+
+  a
+    color: $orange
+    &:hover, &:focus, &:active
+      color: $mid-blue
+
+  .dashboard_form
+    float: left
+    margin-right: 2%
+    margin-bottom: 20px
+    width: 31%
+    font-size: 11px
+    padding: 0 10px 20px 10px
+    +clearfix
+    input, textarea
+      border: 1px solid $light-blue
+      margin-bottom: 10px
+      padding: 7px
+      +border-radius
+    input[type="submit"]
+      background: orange
+      border: none
+      color: white
+      cursor: pointer
+      font-weight: bold
+      padding: 7px 15px
+      text-transform: uppercase
+      &:hover
+        background: $mid-blue
+    label
+      color: $mid-blue
+      display: block
+    td
+      display: inline
+
+  #response_charts_nav, #response_charts
+    font-size: 0.8em
+    padding-bottom: 15px
+    float: left
+    width: 67%
+
+  .summary
+    background: none
+    font-size: 11px
+    tr td:first-child
+      font-weight: bold
+      text-align: right
+
+  .third
+    float: left
+    margin-right: 2%
+    margin-bottom: 20px
+    width: 31%
+
+
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-    
-    a
-      color: $orange
-      &:hover, &:focus, &:active
-        color: $mid-blue
 
     h3
       color: $mid-blue
@@ -52,27 +109,33 @@ body.app
         color: white
         font-size: 0.9em
         /* end */
-  
+
     .third
       float: left
-      margin-right: 3%
+      margin-right: 2%
       margin-bottom: 20px
-      width: 30%
-    .third, .half
+      width: 31%
+    .fourth
+      float: left
+      margin-right: 2%
+      width: 23%
+    .third, .half, .fourth
       li
         margin-bottom: 10px
       span
         display: block
         font-weight: bold
+        margin-bottom: 5px
     .two-thirds
       float: left
       margin-bottom: 20px
       width: 67%
     .half
       float: left
-      margin-right: 5%
+      margin-right: 0
       margin-bottom: 20px
-      width: 45%
+      width: 50%
+
     .name
       font-weight: bold
     .implementer
@@ -90,20 +153,7 @@ body.app
         border: 1px solid $light-blue
         margin: -1px 0 0
         padding: 7px 5px 5px
-      
-    .classifications ul
-      +horizontal-list
-      border-bottom: 1px solid $light-blue
-      color: $light-blue - #333
-      line-height: 1.5em
-      a
-        text-decoration: none
-    .selected a
-      border-bottom: 4px solid $light-blue
-      color: $mid-blue
-      display: inline-block
-      font-weight: bold
-      
+
     li
       padding-top: 5px
       &.funders
@@ -121,15 +171,39 @@ body.app
         background: white
       > td
         border: 3px solid $light-blue
-        padding: 5px
+        padding: 20px 10px
     .t_right
       float: right
       margin-right: 0
       text-align: right
-    .activities 
+
+    .activities, .dashboard_comments
+      margin-top: 10px
       thead
         font-size: 1.1em
         tr:hover
           background: $mid-blue
       tbody
         font-size: 1.2em
+    .dashboard_districts
+      margin-bottom: 20px
+      +clearfix
+      li
+        display: inline
+        float: left
+        margin: 0
+        width: 90px
+
+  ul.compact_tab
+    +horizontal-list
+    border-bottom: 1px solid $light-blue
+    color: $light-blue - #333
+    line-height: 1.5em
+    a
+      text-decoration: none
+
+    .selected a
+      border-bottom: 4px solid $light-blue
+      color: $mid-blue
+      display: inline-block
+      font-weight: bold

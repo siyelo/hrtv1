@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101015132404) do
+ActiveRecord::Schema.define(:version => 20101020123839) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -17,36 +17,41 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
   end
 
   create_table "activities", :force => true do |t|
-    t.string    "name"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "provider_id"
-    t.text      "description"
-    t.string    "type"
-    t.decimal   "budget"
-    t.decimal   "spend_q1"
-    t.decimal   "spend_q2"
-    t.decimal   "spend_q3"
-    t.decimal   "spend_q4"
-    t.date      "start"
-    t.date      "end"
-    t.decimal   "spend"
-    t.text      "text_for_provider"
-    t.text      "text_for_targets"
-    t.text      "text_for_beneficiaries"
-    t.decimal   "spend_q4_prev"
-    t.integer   "data_response_id"
-    t.integer   "activity_id"
-    t.decimal   "budget_percentage"
-    t.decimal   "spend_percentage"
-    t.boolean   "approved"
-    t.decimal   "CodingBudget_amount",                   :default => 0.0
-    t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal   "CodingSpend_amount",                    :default => 0.0
-    t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
-    t.boolean   "use_budget_codings_for_spend",          :default => false
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "provider_id"
+    t.text     "description"
+    t.string   "type"
+    t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
+    t.date     "start"
+    t.date     "end"
+    t.decimal  "spend"
+    t.text     "text_for_provider"
+    t.text     "text_for_targets"
+    t.text     "text_for_beneficiaries"
+    t.decimal  "spend_q4_prev"
+    t.integer  "data_response_id"
+    t.integer  "activity_id"
+    t.decimal  "budget_percentage"
+    t.decimal  "spend_percentage"
+    t.boolean  "approved"
+    t.decimal  "CodingBudget_amount"
+    t.decimal  "CodingBudgetCostCategorization_amount"
+    t.decimal  "CodingBudgetDistrict_amount"
+    t.decimal  "CodingSpend_amount"
+    t.decimal  "CodingSpendCostCategorization_amount"
+    t.decimal  "CodingSpendDistrict_amount"
+    t.boolean  "use_budget_codings_for_spend",          :default => false
+    t.decimal  "budget_q1"
+    t.decimal  "budget_q2"
+    t.decimal  "budget_q3"
+    t.decimal  "budget_q4"
+    t.decimal  "budget_q4_prev"
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
@@ -193,6 +198,11 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal   "spend"
     t.decimal   "spend_q4_prev"
     t.integer   "data_response_id"
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
   end
 
   create_table "help_requests", :force => true do |t|
@@ -271,6 +281,11 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal   "spend_q4"
     t.decimal   "spend_q4_prev"
     t.integer   "data_response_id"
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
   end
 
   create_table "sessions", :force => true do |t|

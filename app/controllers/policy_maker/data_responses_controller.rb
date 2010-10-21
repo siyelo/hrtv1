@@ -1,4 +1,4 @@
-class Admin::DataResponsesController < ApplicationController
+class PolicyMaker::DataResponsesController < ApplicationController
   before_filter :require_admin
   skip_before_filter :load_help
 
@@ -13,22 +13,7 @@ class Admin::DataResponsesController < ApplicationController
     @projects = @data_response.projects.find(:all, :order => "name ASC")
     @code_roots = Code.for_activities.roots
     @cost_cat_roots = CostCategory.roots
+    @policy_maker = true #view helper
   end
 
-  def destroy
-    @data_response = DataResponse.find(params[:id])
-    @data_response.destroy if @data_response.empty?
-
-    respond_to do |format|
-      format.html do
-        flash[:notice] = "Data response was successfully deleted."
-        redirect_to admin_data_responses_url
-      end
-      format.js   { render :nothing => true }
-    end
-  end
-
-  def delete
-    @data_response = DataResponse.find(params[:id])
-  end
 end

@@ -1,42 +1,101 @@
-%ul.half
-  %li
-    %span Districts:
-    %ul
-      - project.locations.map(&:name).each do |loc|
-        %li= "#{loc},"
-  %li
-    %span Start:
-    = project.start_date
-  %li
-    %span End:
-    = project.end_date
+- unless @policy_maker
+  .actions= link_to "Edit Project", edit_project_url(project.id)
 
-%ul.half.t_right
-  %li
-    %b Total Budget:
-    = number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-  %li
-    %b Total Budget (current FY):
-    = number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-  %li
-    %b Total Spend (past FY):
-    = number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-  %li
-    %b Spend Q4 (FY 08-09):
-    =  number_to_currency(project.spend_q4_prev , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+%table.third.summary
+  %tbody
+    %tr
+      %td Dates
+      %td= "#{project.start_date} to #{project.end_date}"
+    %tr
+      %td Total Budget:
+      %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    %tr
+      %td Total Budget (current FY):
+      %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    %tr
+      %td Total Spend (past FY):
+      %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    %tr
+      %td Spend Q4 (FY 08-09):
+      %td=  number_to_currency(project.spend_q4_prev , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    - unless @policy_maker
+      %tr
+        %td Spend Q1:
+        %td=  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-  %li
-    %b Spend Q1:
-    =  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q2:
+        %td=  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-  %li
-    %b Spend Q2:
-    =  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q3:
+        %td=  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-  %li
-    %b Spend Q3:
-    =  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %tr
+        %td Spend Q4:
+        %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
 
-  %li
-    %b Spend Q4:
-    =  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    %tr
+      %td Districts:
+      %td
+        %ul.dashboard_districts
+          - project.locations.map(&:name).each do |loc|
+            %li= "#{loc},"
+
+
+.project_charts_nav.two-thirds
+
+  %ul.compact_tab
+    %li MTEF
+    %li{:id => 'tab1', :class => 'selected'}
+      = link_to "Budget", "#"
+    %li{:id => 'tab2'}
+      = link_to "Spend", "#"
+    %li NSP
+    %li{:id => 'tab3'}
+      = link_to "Budget", "#"
+    %li{:id => 'tab4'}
+      = link_to "Spend", "#"
+    %li HSSPII Budget
+    %li{:id => 'tab5'}
+      = link_to "Program", "#"
+    %li{:id => 'tab6'}
+      = link_to "Objective", "#"
+    %li HSSPII Spend
+    %li{:id => 'tab7'}
+      = link_to "Program", "#"
+    %li{:id => 'tab8'}
+      = link_to "Objective", "#"
+
+.project_charts.two-thirds
+  .tab1
+    .chart{:id => "project_#{project.id}_mtef_budget"}
+      %strong You need to upgrade your Flash Player
+
+  .tab2
+    .chart{:id => "project_#{project.id}_mtef_spend"}
+      %strong You need to upgrade your Flash Player
+
+  .tab3
+    .chart{:id => "project_#{project.id}_nsp_budget"}
+      %strong You need to upgrade your Flash Player
+
+  .tab4
+    .chart{:id => "project_#{project.id}_nsp_spend"}
+      %strong You need to upgrade your Flash Player
+
+  .tab5
+    .chart{:id => "project_#{project.id}_budget_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab6
+    .chart{:id => "project_#{project.id}_budget_stratobj_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab7
+    .chart{:id => "project_#{project.id}_spend_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab8
+    .chart{:id => "project_#{project.id}_spend_stratobj_coding"}
+      %strong You need to upgrade your Flash Player

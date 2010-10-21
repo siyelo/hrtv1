@@ -1,7 +1,7 @@
 %table.projects
   %thead
     %tr
-      %th Projects
+      %th= "Projects (#{projects.count})"
       %th Activities
       %th Spend
       %th Budget
@@ -22,8 +22,7 @@
 
       %tr.project.entry_main.s_border
         %td{:colspan => 100}
-          = render 'project_summary', :project => project
-
-          = render 'comments', :project => project
-
-          = render 'activities', :project => project
+          = render '/admin/data_responses/project_summary', :project => project
+          = render '/admin/data_responses/comments', :project => project
+          = render '/admin/data_responses/activities', :activities => project.activities.roots.greatest_first
+          = render '/admin/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

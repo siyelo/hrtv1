@@ -1,5 +1,7 @@
+- other_costs = false unless other_costs
+
 .classifications.two-thirds
-  = render '/code_assignments/tab_nav'
+  = render '/code_assignments/tab_nav', :other_costs => other_costs
 
 #activity_classification.two-thirds
   .tab1
@@ -7,38 +9,40 @@
     %ul
       - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @code_roots.each do |code|
-        = render 'code_row', :code => code, :activity => activity, :assignments => budget_assignments
+        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
-  .tab2
-    %h4 Budget Districts
-    %ul
-      - activity.coding_budget_district.each do |assignment|
-        %li
-          = assignment.code.name
-          = assignment.cached_amount
+  - unless other_costs
+    .tab2
+      %h4 Budget Districts
+      %ul
+        - activity.coding_budget_district.each do |assignment|
+          %li
+            = assignment.code.name
+            = assignment.cached_amount
   .tab3
     %h4 Budget Cost Cat
     %ul
       - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @cost_cat_roots.each do |code|
-        = render 'code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
   .tab4
     %h4 Expenditure Coding
     %ul
       - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @code_roots.each do |code|
-        = render 'code_row', :code => code, :activity => activity, :assignments => budget_assignments
+        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
-  .tab5
-    %h4 Expenditure Districts
-    %ul
-      - activity.coding_spend_district.each do |assignment|
-        %li
-          = assignment.code.name
-          = assignment.cached_amount
+  - unless other_costs
+    .tab5
+      %h4 Expenditure Districts
+      %ul
+        - activity.coding_spend_district.each do |assignment|
+          %li
+            = assignment.code.name
+            = assignment.cached_amount
   .tab6
     %h4 Expenditure Cost Cat
     %ul
       - cost_cat_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @cost_cat_roots.each do |code|
-        = render 'code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments

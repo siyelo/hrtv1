@@ -114,6 +114,7 @@ class Activity < ActiveRecord::Base
 
   # Named scopes
   named_scope :roots,     {:conditions => "activities.type IS NULL" }
+  named_scope :greatest_first,     {:order => "activities.budget DESC" }
   named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }
   named_scope :only_simple, :conditions => ["type is null or type in (?)", ["OtherCost"]]
 
@@ -130,6 +131,14 @@ class Activity < ActiveRecord::Base
   #convenience
   def implementer
     provider
+  end
+
+  def start_date
+    self.start
+  end
+
+  def end_date
+    self.end
   end
 
   def currency

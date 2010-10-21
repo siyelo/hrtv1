@@ -53,6 +53,24 @@ var admin_data_responses_index = {
   }
 };
 
+
+var createPieChart = function (title, domId, urlEndpoint) {
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "100%", "300", "8", "#FFFFFF");
+  so.addVariable("path", "");
+  so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
+  so.addVariable("data_file", encodeURIComponent(urlEndpoint));
+  so.addVariable("additional_chart_settings", encodeURIComponent(
+    '<settings>' +
+      '<labels>' +
+        '<label lid="0">' +
+          '<text>' + title + '</title>' +
+        '</label>' +
+      '</labels>' +
+    '</settings>')
+  );
+  so.write(domId);
+};
+
 var admin_data_responses_show = {
   run: function () {
     jQuery('.project.entry_header').click(function () {
@@ -78,6 +96,109 @@ var admin_data_responses_show = {
         jQuery('#activity_classification > div.' + element.attr("id")).show();
       }
     });
+
+    // collapsiable project header
+    jQuery("#details").click(function (e) {
+      e.preventDefault();
+      jQuery(".projects").toggle();
+    });
+
+    //
+    // Data Response summary charts
+    //
+    createPieChart("", "response_total_funding", "/charts/response_total_funding");
+
+    //
+    // project charts
+    //
+
+    // bind click events for project chart tabs
+    jQuery(".project_charts_nav ul.compact_tab li").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".project_charts_nav ul.compact_tab li").removeClass('selected');
+        element.addClass('selected');
+        jQuery(".project_charts > div").hide();
+        jQuery('.project_charts > div.' + element.attr("id")).show();
+      }
+    });
+
+    jQuery.each(_projects, function (i, projectId) {
+      createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
+      createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
+      createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
+      createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
+      createPieChart("HSSPII Strat Program Budget", "project_" + projectId + "_budget_stratprog_coding", "/charts/project_pie?codings_type=budget_stratprog_coding&code_type=Nsp&project_id=" + projectId);
+      createPieChart("HSSPII Strat Objective Budget", "project_" + projectId + "_budget_stratobj_coding", "/charts/project_pie?codings_type=budget_stratobj_coding&code_type=Nsp&project_id=" + projectId);
+      createPieChart("HSSPII Strategic Program Expenditure", "project_" + projectId + "_spend_stratprog_coding", "/charts/project_pie?codings_type=spend_stratprog_coding&code_type=Nsp&project_id=" + projectId);
+      createPieChart("HSSPII Strategic Objective Expenditure", "project_" + projectId + "_spend_stratobj_coding", "/charts/project_pie?codings_type=spend_stratobj_coding&code_type=Nsp&project_id=" + projectId);
+    });
+
+  }
+};
+
+// TODO: Refactor!
+var policy_maker_data_responses_show = {
+  run: function () {
+    jQuery('.project.entry_header').click(function () {
+      collapse_expand(jQuery(this), 'project');
+    });
+
+    jQuery('.activity.entry_header').click(function () {
+      collapse_expand(jQuery(this), 'activity');
+    });
+
+    jQuery('.sub_activity.entry_header').click(function () {
+      collapse_expand(jQuery(this), 'sub_activity');
+    });
+
+    // bind click events for tabs
+    jQuery(".classifications ul li").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".classifications ul li").removeClass('selected');
+        element.addClass('selected');
+        jQuery("#activity_classification > div").hide();
+        jQuery('#activity_classification > div.' + element.attr("id")).show();
+      }
+    });
+
+    // collapsiable project header
+    jQuery("#details").click(function (e) {
+      e.preventDefault();
+      jQuery(".projects").toggle();
+    });
+
+    //
+    // Data Response summary charts
+    //
+    createPieChart("", "response_total_funding", "/charts/response_total_funding");
+
+    //
+    // project charts
+    //
+
+    // bind click events for project chart tabs
+    jQuery(".project_charts_nav ul.compact_tab li").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (element.attr("id")) {
+        jQuery(".project_charts_nav ul.compact_tab li").removeClass('selected');
+        element.addClass('selected');
+        jQuery(".project_charts > div").hide();
+        jQuery('.project_charts > div.' + element.attr("id")).show();
+      }
+    });
+
+    jQuery.each(_projects, function (i, projectId) {
+      createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
+      createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
+      createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
+      createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
+    });
+
   }
 };
 
@@ -95,7 +216,7 @@ var code_assignments_show = {
     };
 
     /*
-     * Appends tab content 
+     * Appends tab content
      * @param {String} tab
      * @param {String} response
      *
@@ -205,4 +326,5 @@ jQuery(function () {
       dateFormat: 'yy-mm-dd'
     }).focus();
   });
+
 })

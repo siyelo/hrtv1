@@ -24,6 +24,7 @@
 require 'lib/acts_as_stripper' #TODO move
 require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
+require 'lib/ReportHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
@@ -31,6 +32,7 @@ class Project < ActiveRecord::Base
 
   include ActAsDataElement
   include ActsAsDateChecker
+  include ReportHelpers
   configure_act_as_data_element
 
   acts_as_stripper
@@ -78,27 +80,6 @@ class Project < ActiveRecord::Base
       data_response.currency
     else
       read_attribute(:currency)
-    end
-  end
-
-  def spend
-    read_attribute(:spend) ? read_attribute(:spend) : total_quarterly_spending_w_shift
-  end
-
-  def total_quarterly_spending_w_shift
-    if data_response
-      if data_response.fiscal_year_start_date && data_response.fiscal_year_start_date.month == 7 # 7 is July
-        total = 0
-        [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
-          total += self.send(s) if self.send(s)
-        end
-
-        return total if total != 0
-      else
-        nil #"Fiscal Year shift not yet defined for this data responses' start date"
-      end
-    else
-      nil
     end
   end
 
@@ -156,6 +137,7 @@ class Project < ActiveRecord::Base
     f1.save;f2.save;
     #activities << OtherCost.new #TODO fix and let this work
   end
+
 
   private
 

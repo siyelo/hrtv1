@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101015132404) do
+ActiveRecord::Schema.define(:version => 20101020123839) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -47,6 +47,11 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal  "CodingSpendCostCategorization_amount"
     t.decimal  "CodingSpendDistrict_amount"
     t.boolean  "use_budget_codings_for_spend",          :default => false
+    t.decimal  "budget_q1"
+    t.decimal  "budget_q2"
+    t.decimal  "budget_q3"
+    t.decimal  "budget_q4"
+    t.decimal  "budget_q4_prev"
   end
 
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
@@ -188,6 +193,11 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal   "spend"
     t.decimal   "spend_q4_prev"
     t.integer   "data_response_id"
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
   end
 
   create_table "help_requests", :force => true do |t|
@@ -258,6 +268,11 @@ ActiveRecord::Schema.define(:version => 20101015132404) do
     t.decimal   "spend_q4"
     t.decimal   "spend_q4_prev"
     t.integer   "data_response_id"
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
   end
 
   create_table "sessions", :force => true do |t|

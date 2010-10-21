@@ -72,12 +72,12 @@
     .chart{:id => "response_mtef_spend"}
       %strong You need to upgrade your Flash Player
 
+.full
+  = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 
-= link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
+  .simple_table
+    = render '/admin/data_responses/projects', :projects => @projects
 
-.simple_table
-  = render '/admin/data_responses/projects', :projects => @projects
-
-%h3 Activities not linked with a Project
-.simple_table
-  = render '/admin/data_responses/activities', :activities => @activities_without_projects
+  %h3 Activities not linked with a Project
+  .simple_table
+    = render '/admin/data_responses/activities', :activities => @activities_without_projects

@@ -114,6 +114,7 @@ class Activity < ActiveRecord::Base
 
   # Named scopes
   named_scope :roots,     {:conditions => "activities.type IS NULL" }
+  named_scope :greatest_first,     {:order => "activities.budget DESC" }
   named_scope :with_type, lambda { |type| {:conditions => ["activities.type = ?", type]} }
   named_scope :only_simple, :conditions => ["type is null or type in (?)", ["OtherCost"]]
 

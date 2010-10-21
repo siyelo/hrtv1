@@ -159,23 +159,7 @@ describe Project do
       dr.should_not be_valid
     end
   end
-  
-  # this test belongs in cuke or controller specs. 
-  describe "can't see projects not in my data response" do
-    it 'should not allow others to see my projects' do
-      pending
-      #data_request  = Factory.create(:data_request)      
-      #org   = Factory.create(:organization)
-      #data_response = Factory.create(:data_response, 
-#                                      :data_request => data_request,
-#                                      :responding_organization => org)
-      #user  = Factory.create(:user, :organization => org, :data_response_id_current => data_response)
-      #user2 = Factory.create(:user)
-      #proj  = Factory.create(:project, :data_response => data_response)
-      #Project.available_to(user).first.should == proj
-      #Project.available_to(user2).count == 0
-    end 
-  end
+
   
   describe "on delete"
    it "nullifies funding flows on delete" do
@@ -185,5 +169,6 @@ describe Project do
     c.reload
     c.project.should == nil
   end
+  
   
 end

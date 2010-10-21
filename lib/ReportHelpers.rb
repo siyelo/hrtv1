@@ -2,6 +2,7 @@ module ReportHelpers
 
   @@virtual_coding_types = [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding]
+
   def activity_coding codings_type = nil, code_type = nil
     unless @@virtual_coding_types.include? codings_type.to_sym
       conditions = ["#{self.class.table_name}.id = :my_id "]
@@ -16,15 +17,15 @@ module ReportHelpers
       end
       conditions = [conditions.join(" AND "), condition_values]
       name_value = self.class.find(:all,
-  					:select => "codes.id as code_id, codes.parent_id as parent_id, codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
-  					:joins => {:activities => {:code_assignments => :code}},
-  					:conditions => conditions,
-  					:group => "codes.short_display, codes.id, codes.parent_id",
-  					:order => 'value DESC')
+            :select => "codes.id as code_id, codes.parent_id as parent_id, codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+            :joins => {:activities => {:code_assignments => :code}},
+            :conditions => conditions,
+            :group => "codes.short_display, codes.id, codes.parent_id",
+            :order => 'value DESC')
       codes_to_exclude = (name_value.collect{|n| n.parent_id} - [nil]).uniq.sort
       c=[]
       name_value.each do |n|
-	if codes_to_exclude.include? n.code_id 
+  if codes_to_exclude.include? n.code_id
           c << n.code_id
         end
       end
@@ -36,7 +37,7 @@ module ReportHelpers
       self.send(codings_type)
     end
   end
-  
+
   [:budget_stratprog_coding, :spend_stratprog_coding,
    :budget_stratobj_coding, :spend_stratobj_coding].each do |m|
     define_method m do #def m

@@ -11,7 +11,6 @@ describe Activity do
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_and_belong_to_many :locations }
-    it { should have_and_belong_to_many :indicators }
     it { should have_and_belong_to_many :projects }
     it { should belong_to :provider }
   end
@@ -68,4 +67,11 @@ describe Activity do
     a.save.should == false
   end
   
+  describe "finding total spend for strategic objective codes" do
+    it "return nothing if no codes assigned to HSSP spend" do  
+      activity     = Factory(:activity)
+      activity.spend_stratobj_coding.should == []
+    end
+  end
+    
 end

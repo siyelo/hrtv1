@@ -23,4 +23,9 @@
 
 class Nsp < Code
 
+  named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id", 
+              :conditions => "codes.type = 'Nsp' AND parents.type != 'Nsp'"
+  named_scope :children, :joins => "INNER JOIN codes children ON codes.id = children.parent_id",
+              :conditions => "codes.type = 'Nsp' AND children.type != 'Nsp'"
+
 end

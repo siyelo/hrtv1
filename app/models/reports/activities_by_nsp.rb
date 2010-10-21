@@ -21,7 +21,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
   def initialize
     @csv_string = FasterCSV.generate do |csv|
-      Nsp.children.find(:all, 
+      Nsp.leaves.find(:all, 
                      :include => [
                        {:code_assignments => {:activity => :data_response}}, 
                        {:parent => [{:code_assignments => {:activity => :data_response}}, 
@@ -56,17 +56,29 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   #end
 
   def print_code(csv, code)
-    code.code_assignments.each do |ca|
-      csv << [code.id, code.short_display, ca.activity.try(:id), ca.activity.try(:name), ca.activity.try(:budget), ca.activity.try(:spend)]
+    if code.code_assignments.empty?
+      print_code(csv, code.parent) if code.parent && code.parent.type == 'Nsp'
+    else
+      code.code_assignments.each do |ca|
+        csv << get_name(code).concat([ca.activity.try(:id), ca.activity.try(:name), ca.activity.try(:budget), ca.activity.try(:spend)])
+      end
     end
   end
 
-  #def get_name(code)
-    #if code.parent.type == 'Nsp'
-      #[code.parent.name]
-    #else
-      #get_name(code.parent)
-    #end
-  #end
+  def get_name(code)
+    arr = []
+
+    4.times do
+      if code.type == 'Nsp'
+        arr << code.short_display
+      else
+        arr << ''
+      end
+
+      code = code.parent
+    end
+
+    arr
+  end
 
 end

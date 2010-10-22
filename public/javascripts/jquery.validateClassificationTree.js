@@ -62,6 +62,8 @@
             } else {
                // check that this value doesnt tip our total percentage over 100 parent amount
                var sumPercentage = 0;
+               parent            = $("input[type='text'][id$=percentage]:first", $(this).parent("li").parent("ul").parent("li"));
+               parent_percentage = $.trim( parent.val() );
                sibling_percents  = ($(this).parent("li").parent("ul")).find("> li > input[type='text'][id$=_percentage]");
                sibling_percents.each(function(index) {
                  val = parseFloat( $.trim( $(this).val() ) )
@@ -71,7 +73,9 @@
 
                if( sumPercentage > 100 ){
                  alert( "Warning: child percentages (" + sumPercentage + "%) exceed 100%");
-               }
+               } else if ( parent_percentage > 0 && (sumPercentage > parent_percentage) ){
+                alert( "Warning: child percentages (" + sumPercentage + ") exceed parent amount (" + parent_percentage + ")" );
+              }
              }
           }
         }
@@ -99,6 +103,7 @@
                   if ( !isNaN(val) )
                     sumTotal += val;
               });
+
               if( parent_amount > 0 && (sumTotal > parent_amount) ){
                 alert( "Warning: child amounts (" + sumTotal + ") exceed parent amount (" + parent_amount + ")" );
               }

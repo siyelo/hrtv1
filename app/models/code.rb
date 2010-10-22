@@ -11,6 +11,19 @@ class Code < ActiveRecord::Base
   def leaf_assigns_for_activities(type, activities = self.activities)
     CodeAssignments.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0"])
   end
+  
+  def sum_of_assignments_for_activities (activities = self.activities)
+  
+  end
+
+  def parents_with_sums(type,activities)
+    hierarchy = []
+    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
+      hierarchy << "#{e.short_display}"
+    end
+    hierarchy
+  end
+
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 

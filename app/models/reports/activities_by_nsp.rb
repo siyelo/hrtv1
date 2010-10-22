@@ -6,11 +6,10 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   def initialize(activities, report_type)
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
-      Nsp.leaves.each do |nsp_node|
-        Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
-#          csv << "In NSP #{code.short_display} #{code.external_id} #{code.id}"
-          row(csv, code, activities, report_type)
-        end
+      @activities = activities
+      @report_type = report_type
+      Nsp.roots.each do |nsp_root|
+        add_rows csv, nsp_root
       end
     end
   end
@@ -19,14 +18,24 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     @csv_string
   end
 
+  def add_rows csv, code
+#    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
+#    csv << code.external_id.to_s
+    kids = code.children.with_type("Nsp")
+    kids.each do |c|
+      add_rows csv, c
+    end
+    row(csv, code, @activities, @report_type)
+  end
+
   def row(csv, code, activities, report_type)
-    #TODO exclude spend
     hierarchy = code_hierarchy(code)
     code.leaf_assigns_for_activities(report_type,activities).each do |assignment|
       if assignment.cached_amount
         row = []
         row << assignment.percentage
         row << assignment.cached_amount
+        row << assignment.activity.id
         row << assignment.activity.name
         row << assignment.activity.description
         row << "#{assignment.activity.start_date} - #{assignment.activity.end_date}"
@@ -50,6 +59,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     end
     row << "Percentage"
     row << "Amount"
+    row << "ID"
     row << "Activity Name"
     row << "Activity Description"
     row << "Dates"

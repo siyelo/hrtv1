@@ -8,8 +8,10 @@ class Code < ActiveRecord::Base
   has_many :code_assignments, :foreign_key => :code_id
   has_many :activities, :through => :code_assignments
 
+  named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
+
   def leaf_assigns_for_activities(type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", self.class.leaves.map(&:id)])
+    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
   
   def sum_of_assignments_for_activities (activities = self.activities)

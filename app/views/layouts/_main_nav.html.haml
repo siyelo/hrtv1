@@ -1,7 +1,10 @@
 #main-nav
   .wrapper
     - help_active = reports_active = false
-    - dashboard_active = true if controller.controller_name == 'dashboard'
+    - if controller.controller_name == 'dashboard'
+      -dashboard_active = true if controller.action_name == 'index'
+      -reports_active   = true if controller.action_name == 'reports'
+
     - if controller.class.to_s == "StaticPageController"
       - help_active      = true if params[:page] == 'user_guide'
       - reports_active   = true if params[:page] == 'reports'
@@ -21,6 +24,6 @@
         - else
           = link_to 'My Data', ''
       %li{ :class => reports_active ? "active" : ''}
-        = link_to 'Reports', static_page_path(:reports)
+        = link_to 'Reports', reporter_reports_path
       %li{ :class => help_active ? "active" : ''}
         = link_to 'Help', static_page_path(:user_guide)

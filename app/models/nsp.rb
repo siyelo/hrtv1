@@ -23,6 +23,12 @@ class Nsp < Code
                  ) ",
               :order => quoted_left_column_name
 
+#  def self.leaves
+#    my_leaves = super()
+#    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
+#    (my_leaves + leaves_with_other_type_kids).uniq
+#  end
+
   # Returns the array of all parents and self
   def self_and_nsp_ancestors
     nested_set_scope.scoped :conditions => [

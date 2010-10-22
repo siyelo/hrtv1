@@ -33,6 +33,8 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     code.leaf_assigns_for_activities(report_type,activities).each do |assignment|
       if assignment.cached_amount
         row = []
+        row = hierarchy
+        (Nsp.deepest_nesting - hierarchy.size).times{ row << nil } #append empty columns if nested higher
         row << assignment.percentage
         row << assignment.cached_amount
         row << assignment.activity.id
@@ -45,8 +47,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         row << assignment.activity.spend_q4 ? 'x' : nil
         row << assignment.activity.districts.join(' | ')
         row << assignment.activity.provider.try(:name) if assignment.activity.provider
-        (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << "" } #append empty columns if nested higher
-        csv << (hierarchy + row)
+        csv <<  row
       end
     end
   end

@@ -1,23 +1,40 @@
 class Nsp < Code
   NSP_TYPE = 'Nsp'
 
-  #
-  # nested_set overrides
-  #
-
   # NSP 'roots' are embedded in other hierarchies, so we override the default awesome_nested_set :roots
-  named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",
-              :conditions => [ "codes.type = ? AND parents.type != ?", NSP_TYPE, NSP_TYPE]
+  named_scope :roots,
+              :joins => "INNER JOIN codes AS parents
+                         ON codes.parent_id = parents.id",
+              :conditions => [ "codes.type = ? AND parents.type != ?",
+                              NSP_TYPE, NSP_TYPE]
 
-  def self.leaves
-    my_leaves = super()
-    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
-    (my_leaves + leaves_with_other_type_kids).uniq
-  end
+  # the default scope assumes a depth-first ordering of nodes,
+  # but it seems possible that a given type has children where right-left != 1
+  # so we check the type of our children to be sure we're not a leaf...
+  named_scope :leaves,
+              :conditions =>
+                "(rgt - lft = 1)  OR
+                 (rgt - lft > 1  AND
+                   ( codes.type <> (SELECT left.type FROM codes AS left
+                                     WHERE left.parent_id = codes.id) OR
+                     codes.type <> (SELECT right.type FROM codes AS right
+                                     WHERE right.parent_id = codes.id)
+                   )
+                 ) ",
+              :order => quoted_left_column_name
+
+#  def self.leaves
+#    my_leaves = super()
+#    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
+#    (my_leaves + leaves_with_other_type_kids).uniq
+#  end
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors
-    self_and_ancestors.select{|a| a.type == self.type}
+    nested_set_scope.scoped :conditions => [
+      "type = ? AND codes.lft <= ? AND codes.rgt >= ?", NSP_TYPE, left, right
+    ]
+    #self_and_ancestors.select{|a| a.type == self.type} #old
   end
 
   # Returns an array of all parents
@@ -48,39 +65,6 @@ class Nsp < Code
       end
     end
     a
-  end
-
-  # Temporary: (re)move
-  # leaf_assigns_for_activities in parent class
-  def self.another_way_to_do_activity_report(type, activities)
-    csv = []
-    #right_number_of_columns = max(Nsp.leaves.level)
-    Nsp.leaves.each do |nsp_node|
-      Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
-        #TODO - make sure always prepending the right nr of columns
-        # see right_number_of_columns above
-        parent_nodes = []
-        Nsp.each_with_level(code.nsp_ancestors) do |parent, level| # each_with_level() is faster than level()
-          parent_nodes << "#{parent.external_id}"
-        end
-
-        code.leaf_assigns_for_activities(type, activities) do |assignment|
-          row = []
-          row << "#{code.external_id}"
-          row << "#{code.level}"
-          row << "#{code.short_display.first(20) + '...'}"
-          row << "#{assignment.type}"
-          row << "#{assignment.amount}"
-          row << "#{assignment.cached_amount}"
-          row << "#{assignment.sum_of_children}"
-          row << "#{assignment.activity_id}"
-          csv << (parent_nodes + row).join(", ") + "\n"
-        end
-        #now put a row with the total in those code in the activity description column, counting all the rows regardless of if they are leafs or not
-        # eg select sum(cached_amount) from code_assignments where activity_id in (activities) and code_id=code.code_id
-      end
-    end
-    csv
   end
 end
 

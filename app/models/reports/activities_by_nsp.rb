@@ -67,7 +67,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   def code_hierarchy(code)
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << "#{e.short_display}"
+      hierarchy << "#{e.short_display} #{e.external_id}"
     end
     hierarchy
   end

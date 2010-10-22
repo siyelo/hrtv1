@@ -20,6 +20,7 @@ class ProjectsController < ActiveScaffoldController
     :file_field => :file
 
   active_scaffold :projects do |config|
+    config.list.pagination = false
     config.columns =  @@shown_columns
     list.sorting = { :organization => 'DESC', :name => 'DESC' }
     config.columns[:organization].sort_by :method => "organization_name"

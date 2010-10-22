@@ -6,6 +6,9 @@
     %td.title Name:
     %td= @activity.name
   %tr
+    %td.title Description:
+    %td= @activity.description
+  %tr
     %td.title Total Budget for FY 10-11:
     %td= @activity.budget.blank? ? "(budget not yet specified)" : @activity.budget
   %tr

@@ -12,6 +12,7 @@ class FundingFlowsController < ActiveScaffoldController
   map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
 
   active_scaffold :funding_flow do |config|
+    config.list.pagination = false
     config.label                                    = "Funding Flow"
     config.columns                                  = @@shown_columns
     config.create.columns                           = @@create_columns

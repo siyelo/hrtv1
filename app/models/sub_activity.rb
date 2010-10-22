@@ -80,21 +80,23 @@ class SubActivity < Activity
     if @code_assignments_cache
       @code_assignments_cache
     else
-      @code_assignments_cache = []
-      # change amounts to reflect this subactivity
-      budget_district_coding = get_district_coding :budget
-      budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
-      budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
-
-      spend_district_coding = get_district_coding :spend
-      spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
-      spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
-
-      [budget_district_coding, budget_coding, budget_coding_categories,
-       spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
-        @code_assignments_cache << cas
-       end
-       @code_assignments_cache = @code_assignments_cache.flatten
+      unless activity.nil?
+        @code_assignments_cache = []
+        # change amounts to reflect this subactivity
+        budget_district_coding = get_district_coding :budget
+        budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
+        budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
+  
+        spend_district_coding = get_district_coding :spend
+        spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
+        spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
+  
+        [budget_district_coding, budget_coding, budget_coding_categories,
+         spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
+          @code_assignments_cache << cas
+         end
+         @code_assignments_cache = @code_assignments_cache.flatten
+      end
     end
   end
 
@@ -110,8 +112,12 @@ class SubActivity < Activity
       ca.activity_id = id
       [ca]
     else
-      cas = activity.code_assignments.with_type(coding_type)
-      get_assignments_w_adjusted_amounts type, cas
+      unless activity.nil?
+        cas = activity.code_assignments.with_type(coding_type)
+        get_assignments_w_adjusted_amounts type, cas
+      else
+        []
+      end
     end
   end
 

@@ -7,10 +7,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       Nsp.leaves.each do |nsp_node|
-        unless nsp_node.code_assignments.with_type(report_type).with_activities(activities).empty? # check this leaf has a code assignment
-          Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
-            row(csv, code, activities, report_type)
-          end
+        Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
+          csv << "In NSP #{code.short_display}"
+          row(csv, code, activities, report_type)
         end
       end
     end
@@ -37,7 +36,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         row << assignment.activity.spend_q4 ? 'x' : nil
         row << assignment.activity.districts.join(' | ')
         row << assignment.activity.provider.try(:name) if assignment.activity.provider
-        (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
+        (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << "" } #append empty columns if nested higher
         csv << (hierarchy + row)
       end
     end

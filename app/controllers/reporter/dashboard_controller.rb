@@ -7,5 +7,9 @@ class Reporter::DashboardController < ApplicationController
     @data_responses            = current_user.data_responses
     @comments                  = Comment.on_all(current_user.organization, 5)
   end
+  
+  def reports
+    @data_responses            = current_user.data_responses
+  end
 end
 

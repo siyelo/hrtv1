@@ -17,9 +17,7 @@ class Nsp < Code
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors
-    nested_set_scope.scoped :conditions => [
-      "type = ? AND #{self.class.quoted_table_name}.#{quoted_left_column_name} <= ? AND #{self.class.quoted_table_name}.#{quoted_right_column_name} >= ?", NSP_TYPE, left, right
-    ]
+    self_and_ancestors.select{|a| a.type == self.type}
   end
 
   # Returns an array of all parents

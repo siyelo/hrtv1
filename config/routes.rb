@@ -94,6 +94,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.reports 'reports', :controller => 'dashboard', :action => :reports
     reporter.resources :data_responses, :only => [:show]
   end
 

@@ -90,18 +90,18 @@ class CodeAssignment < ActiveRecord::Base
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
+          sum_of_children = self.codings_sum(ac.children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
-          self.codings_sum(ac.children, activity, max)
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
+          sum_of_children = self.codings_sum(ac.children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
-          self.codings_sum(ac.children, activity, max)
         else
-          my_cached_amount = self.codings_sum(ac.children, activity, max)
+          sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
         end
       else
-        my_cached_amount = self.codings_sum(ac.children, activity, max)
+        sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
         self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
       end
 

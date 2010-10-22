@@ -31,6 +31,9 @@ class Code < ActiveRecord::Base
   has_many :code_assignments, :foreign_key => :code_id
   has_many :activities, :through => :code_assignments
 
+  def leaf_assigns_for_activities(type, activities = self.activities)
+    CodeAssignments.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0"])
+  end
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 

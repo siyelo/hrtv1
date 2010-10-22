@@ -26,6 +26,10 @@ class Nsp < Code
 
   named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",
               :conditions => [ "codes.type = ? AND parents.type != ?", NSP_TYPE, NSP_TYPE]
+#  def self.leaves
+    # NSP 'leaves' are sometimes also embedded at the top of other hierarchies, so we override the default awesome_nested_set :leaves
+    # e.g. 
+#  end
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors
@@ -52,6 +56,7 @@ class Nsp < Code
 
   def self.nsp_leaves_with_level
     # NSP 'roots' are embedded in other hierarchies, so we override the default awesome_nested_set :roots
+    # NSP 'leaves' are sometimes also embedded in other hierarchies, so we override the default awesome_nested_set :leaves
     Nsp.leaves.each do |nsp|
        puts "\n\n#{nsp.external_id}: #{nsp.short_display.first(20) + '...'}\n"
       # each_with_level() is faster than level()
@@ -71,7 +76,8 @@ class Nsp < Code
         Nsp.each_with_level(code.nsp_ancestors) do |parent, level| # each_with_level() is faster than level()
           parent_nodes << "#{parent.external_id}"
         end
-
+         
+        # this just needs to be replaced with code.leaf_assigns_for_activities(activities)
         code.code_assignments.with_activities(activities).each do |assignment|
           row = []
           row << "#{code.external_id}"
@@ -88,6 +94,35 @@ class Nsp < Code
     csv
   end
 
+  # leaf_assigns_for_activities in parent class
+  def self.another_way_to_do_activity_report(type, activities)
+    csv = []
+    #right_number_of_columns = max(Nsp.leaves.level)
+    Nsp.leaves.each do |nsp_node|
+      Nsp.each_with_level(nsp_node.self_and_nsp_ancestors.reverse) do |code, level| # each_with_level() is faster than level()
+        #TODO - make sure always prepending the right nr of columns
+        # see right_number_of_columns above
+        parent_nodes = []
+        Nsp.each_with_level(code.nsp_ancestors) do |parent, level| # each_with_level() is faster than level()
+          parent_nodes << "#{parent.external_id}"
+        end
+
+        code.leaf_assigns_for_activities(type, activities) do |assignment|
+          row = []
+          row << "#{code.external_id}"
+          row << "#{code.level}"
+          row << "#{code.short_display.first(20) + '...'}"
+          row << "#{assignment.type}"
+          row << "#{assignment.amount}"
+          row << "#{assignment.cached_amount}"
+          row << "#{assignment.sum_of_children}"
+          row << "#{assignment.activity_id}"
+          csv << (parent_nodes + row).join(", ") + "\n"
+        end
+      end
+    end
+    csv
+  end
 end
 
 

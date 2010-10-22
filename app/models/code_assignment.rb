@@ -30,6 +30,10 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_code_id,    lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
   ### methods
 
+  def self.leaf_assigns_for_activities(activities)
+    self.with_type(self.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0"])
+  end
+
   def calculated_amount
     if read_attribute(:amount).nil?
       cached_amount

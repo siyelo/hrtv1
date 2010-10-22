@@ -9,7 +9,7 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   def leaf_assigns_for_activities(type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0"])
+    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", self.class.leaves.map(&:id)])
   end
   
   def sum_of_assignments_for_activities (activities = self.activities)

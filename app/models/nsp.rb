@@ -119,6 +119,8 @@ class Nsp < Code
           row << "#{assignment.activity_id}"
           csv << (parent_nodes + row).join(", ") + "\n"
         end
+        #now put a row with the total in those code in the activity description column, counting all the rows regardless of if they are leafs or not
+        # eg select sum(cached_amount) from code_assignments where activity_id in (activities) and code_id=code.code_id
       end
     end
     csv

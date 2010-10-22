@@ -85,29 +85,27 @@ class CodeAssignment < ActiveRecord::Base
     my_cached_amount = 0
 
     available_codes.each do |ac|
-      code_assignments = self.with_activity(activity).with_code_id(ac.id)
-      #raise "Duplicate code assignments".to_yaml if code_assignments.length > 1
-      ca = code_assignments.first
+      ca = self.with_activity(activity).with_code_id(ac.id).first
+
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
+          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
+          self.codings_sum(ac.children, activity, max)
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
-        end
-        #ca.update_attributes :cached_amount => my_cached_amount
-        ca.cached_amount = my_cached_amount
-        ca.save!
-        total += my_cached_amount
-        self.codings_sum(ac.children, activity, max)
-      elsif !ac.leaf?
-        my_cached_amount = self.codings_sum(ac.children, activity, max)
-        if (code_assignment = self.with_code_id(ac.id).with_activity(activity.id).first)
-          code_assignment.update_attributes(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
+          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
+          self.codings_sum(ac.children, activity, max)
         else
-          self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
+          my_cached_amount = self.codings_sum(ac.children, activity, max)
+          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
         end
-        total += my_cached_amount
+      else
+        my_cached_amount = self.codings_sum(ac.children, activity, max)
+        self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
       end
+
+      total += my_cached_amount
     end
 
     total

@@ -1,9 +1,6 @@
-#
 # Cleans up the app controller
-#
 # Intended as a superclass of  ApplicationController
 #   i.e.  ApplicationController < AuthlogicController
-#
 class AuthlogicController < ActionController::Base
   helper_method :current_user_session, :current_user
 

@@ -1,6 +1,7 @@
 class ReportsController < ApplicationController
 
   #authorize_resource :class => Reports
+  before_filter :require_user
 
   TYPE_MAP = {'budget' => 'CodingBudget', 'spend' => 'CodingSpend'}
 

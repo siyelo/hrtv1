@@ -9,6 +9,7 @@ class Nsp < Code
   named_scope :roots, :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",
               :conditions => [ "codes.type = ? AND parents.type != ?", NSP_TYPE, NSP_TYPE]
 
+<<<<<<< HEAD
   # the default scope assumes a depth-first ordering of nodes,
   # but it seems possible that a given type has children where right-left != 1
   # so we check the type of our children to be sure we're not a leaf...
@@ -20,6 +21,13 @@ class Nsp < Code
                                   )
                                 ) ",
               :order => quoted_left_column_name
+=======
+  def self.leaves
+    my_leaves = super()
+    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
+    (my_leaves + leaves_with_other_type_kids).uniq
+  end
+>>>>>>> ff2b215455cba58bce058dd5a9863d8dd68ced81
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors

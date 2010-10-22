@@ -41,7 +41,7 @@ class CommentsController < ActiveScaffoldController
         i.organization_id_from = :org_id AND i.data_response_id IN (:drs) OR 
         a.type is null AND a.data_response_id IN (:drs) OR 
         oc.type = 'OtherCost' AND oc.data_response_id IN (:drs)",
-        {:org_id => current_user.organization.id, :drs => current_user.organization.data_responses.map(&:id).join(',')} ]
+        {:org_id => current_user.organization.id, :drs => current_user.organization.data_responses.map(&:id)} ]
     end
   end
 end

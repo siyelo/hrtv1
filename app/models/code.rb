@@ -8,6 +8,14 @@ class Code < ActiveRecord::Base
   has_many :code_assignments, :foreign_key => :code_id
   has_many :activities, :through => :code_assignments
 
+  def self.leaves_for_codes(code_ids)
+
+  end
+
+  def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
+    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
+  end
+ 
   def leaf_assigns_for_activities(type, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", self.class.leaves.map(&:id)])
   end
@@ -19,7 +27,7 @@ class Code < ActiveRecord::Base
   def parents_with_sums(type,activities)
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << "#{e.short_display}"
+      hierarchy << "#{e.short_display} #{'sum goes here'}"
     end
     hierarchy
   end

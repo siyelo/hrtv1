@@ -21,7 +21,6 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   end
 
   def row(csv, code, activities, report_type)
-    #TODO : exclude Spend
     hierarchy = code_hierarchy(code)
     code.leaf_assigns_for_activities(activities).each do |assignment|
       if assignment.amount || assignment.percentage

@@ -20,7 +20,7 @@ class CodeAssignment < ActiveRecord::Base
   ### Validations
   validates_presence_of :activity, :code
   ### Attributes
-  attr_accessible :activity, :code, :amount, :percentage, :cached_amount
+  attr_accessible :activity, :code, :amount, :percentage, :cached_amount, :sum_of_children
 
   ### Named scopes
   named_scope :with_code_ids,   lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
@@ -91,18 +91,18 @@ class CodeAssignment < ActiveRecord::Base
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
           sum_of_children = self.codings_sum(ac.children, activity, max)
-          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
+          ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
           sum_of_children = self.codings_sum(ac.children, activity, max)
-          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
+          ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         else
           sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
-          ca.update_attributes(:cached_amount => my_cached_amount) if my_cached_amount > 0
+          ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         end
       else
         sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
-        self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if my_cached_amount > 0
+        self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if sum_of_children > 0
       end
 
       total += my_cached_amount
@@ -120,7 +120,9 @@ class CodeAssignment < ActiveRecord::Base
       activity = assignments.first.activity
       new_ca = new_klass.new
       new_ca.code_id = ca.code_id
-      new_ca.cached_amount = activity.spend * ca.calculated_amount / activity.budget
+      conversion_ratio = activity.spend / activity.budget
+      new_ca.cached_amount = ca.calculated_amount * conversion_ratio
+      new_ca.sum_of_children = ca.sum_of_children * conversion_ratio
       new_ca.percentage = ca.percentage if ca.percentage
       new_ca.activity = activity
       new_ca.save

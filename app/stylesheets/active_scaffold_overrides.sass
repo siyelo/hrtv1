@@ -82,6 +82,16 @@ body.app
     thead tr th
       background= !mid-blue
       border-left: 1px solid !dark-blue
+      
+    .sub-form 
+      thead tr th
+        background: none
+        border: none
+        font-size: 16px
+        label
+          margin-left: -10px
+      input
+        width: 300px
 
     .active-scaffold-header
       +border-top-radius
@@ -129,12 +139,31 @@ body.app
         margin-bottom: 5px
         padding: 5px 0 6px 0
         width: 400px
+      .subform
+        input, textarea
+          height: 50px
+          width: 300px
 
       ol.form
         width: 100%
         padding: 0
         margin: 0
-
+        
+        .sub-form
+          input, textarea
+            height: 50px
+            width: 300px
+          input[type="button"]
+            height: auto
+            width: auto
+            background: orange
+            border: none
+            +border-radius
+            cursor: pointer
+            padding: 7px 15px
+            color: white
+            &:hover, &:active, &:focus
+              background: $dark-blue
         dl
           border-bottom: 1px #e3e3e3 dashed
           margin-bottom: 10px

@@ -1,43 +1,3 @@
-# == Schema Information
-#
-# Table name: activities
-#
-#  id                                    :integer         primary key
-#  name                                  :string(255)
-#  beneficiary                           :string(255)
-#  target                                :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
-#  provider_id                           :integer
-#  other_cost_type_id                    :integer
-#  description                           :text
-#  type                                  :string(255)
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
-#  spend                                 :decimal(, )
-#  text_for_provider                     :text
-#  text_for_targets                      :text
-#  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer
-#  activity_id                           :integer
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
-#  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  use_budget_codings_for_spend          :boolean         default(FALSE)
-#
-
 #require 'lib/ActAsDataElement' #super class already has it mixed in
 
 class SubActivity < Activity
@@ -120,21 +80,23 @@ class SubActivity < Activity
     if @code_assignments_cache
       @code_assignments_cache
     else
-      @code_assignments_cache = []
-      # change amounts to reflect this subactivity
-      budget_district_coding = get_district_coding :budget
-      budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
-      budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
-
-      spend_district_coding = get_district_coding :spend
-      spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
-      spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
-
-      [budget_district_coding, budget_coding, budget_coding_categories,
-       spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
-        @code_assignments_cache << cas
-       end
-       @code_assignments_cache = @code_assignments_cache.flatten
+      unless activity.nil?
+        @code_assignments_cache = []
+        # change amounts to reflect this subactivity
+        budget_district_coding = get_district_coding :budget
+        budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
+        budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
+  
+        spend_district_coding = get_district_coding :spend
+        spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
+        spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
+  
+        [budget_district_coding, budget_coding, budget_coding_categories,
+         spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
+          @code_assignments_cache << cas
+         end
+         @code_assignments_cache = @code_assignments_cache.flatten
+      end
     end
   end
 
@@ -150,8 +112,12 @@ class SubActivity < Activity
       ca.activity_id = id
       [ca]
     else
-      cas = activity.code_assignments.with_type(coding_type)
-      get_assignments_w_adjusted_amounts type, cas
+      unless activity.nil?
+        cas = activity.code_assignments.with_type(coding_type)
+        get_assignments_w_adjusted_amounts type, cas
+      else
+        []
+      end
     end
   end
 
@@ -172,3 +138,46 @@ class SubActivity < Activity
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: activities
+#
+#  id                                    :integer         primary key
+#  name                                  :string(255)
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer
+#  description                           :text
+#  type                                  :string(255)
+#  budget                                :decimal(, )
+#  spend_q1                              :decimal(, )
+#  spend_q2                              :decimal(, )
+#  spend_q3                              :decimal(, )
+#  spend_q4                              :decimal(, )
+#  start                                 :date
+#  end                                   :date
+#  spend                                 :decimal(, )
+#  text_for_provider                     :text
+#  text_for_targets                      :text
+#  text_for_beneficiaries                :text
+#  spend_q4_prev                         :decimal(, )
+#  data_response_id                      :integer
+#  activity_id                           :integer
+#  budget_percentage                     :decimal(, )
+#  spend_percentage                      :decimal(, )
+#  approved                              :boolean
+#  CodingBudget_amount                   :decimal(, )     default(0.0)
+#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
+#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
+#  CodingSpend_amount                    :decimal(, )     default(0.0)
+#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
+#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
+#  use_budget_codings_for_spend          :boolean         default(FALSE)
+#  budget_q1                             :decimal(, )
+#  budget_q2                             :decimal(, )
+#  budget_q3                             :decimal(, )
+#  budget_q4                             :decimal(, )
+#  budget_q4_prev                        :decimal(, )
+#
+

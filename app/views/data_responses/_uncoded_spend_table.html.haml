@@ -22,4 +22,4 @@
             %th= check_box_tag "", "", activity.spend_by_district?, {:disabled => "disabled"}
             %th= check_box_tag "", "", activity.spend_by_cost_category?, {:disabled => "disabled"}
             %th= check_box_tag "activity_#{activity.id}", true, activity.use_budget_codings_for_spend, {:class => "use_budget_codings_for_spend"}
-            %th= link_to 'Classify', activity_coding_path(activity), :target => "_blank"
+            %th= "#{link_to 'Classify', activity_coding_path(activity), :target => "_blank"} #{link_to 'Edit', edit_activity_path(activity)}"

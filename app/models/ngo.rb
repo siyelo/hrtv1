@@ -1,3 +1,6 @@
+class Ngo < Organization 
+end
+
 # == Schema Information
 #
 # Table name: organizations
@@ -11,5 +14,3 @@
 #  fosaid     :string(255)
 #
 
-class Ngo < Organization 
-end

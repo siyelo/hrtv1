@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101020123839) do
+ActiveRecord::Schema.define(:version => 20101022070756) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20101020123839) do
     t.string  "type"
     t.decimal "percentage"
     t.decimal "cached_amount"
+    t.decimal "sum_of_children"
   end
 
   create_table "codes", :force => true do |t|

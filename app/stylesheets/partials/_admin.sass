@@ -2,8 +2,13 @@ body.app
   .project, .activity, .sub_activity
     &.entry_header
       cursor: pointer
+      font-size: 12px
+      line-height: 1.2em
     &.entry_main
       display: none
+      .actions
+        font-size: 12px
+        margin-bottom: 5px
 
   .hidden
     display: none
@@ -18,15 +23,33 @@ body.app
       font-size: 0.9em
       padding: 20px 10px 10px
       text-transform: none
+    h4
+      font-size: 12px
+      
+    > .summary
+      margin: 0 10px 10px
+      tr
+        td
+          background: #eee
+          border-right: 1px solid white
+          border-bottom: 1px solid white
+          color: $mid-blue
+          width: 50%
+          padding: 7px
+          font-size: 12px
+          &:first-child
+            text-align: right
+            font-weight: bold
 
   a
     color: $orange
     &:hover, &:focus, &:active
       color: $mid-blue
+  .projects
+    width: 100%
 
   .dashboard_form
     float: left
-    margin-right: 2%
     margin-bottom: 20px
     width: 31%
     font-size: 11px
@@ -59,25 +82,25 @@ body.app
     float: left
     width: 67%
 
-  .summary
-    background: none
-    font-size: 11px
-    tr td:first-child
-      font-weight: bold
-      text-align: right
-
-  .third
-    float: left
-    margin-right: 2%
-    margin-bottom: 20px
-    width: 31%
 
 
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-
+    
+    .summary
+      font-size: 12px
+      tr td:first-child
+        font-weight: bold
+        text-align: right
+        width: 45%
+        
+    .activities .summary td
+      font-size: 12px
+      thead tr th
+        font-size: 12px
+      
     h3
       color: $mid-blue
       font-size: 0.9em
@@ -87,16 +110,17 @@ body.app
     table
       background: #eee
       color: !mid-blue
-      font-size: 0.8em
       width: 100%
       a
         font-size: 1em
-
+      .third
+        width: 31%
       th, td
         border-right: 1px solid white
         padding: 7px
 
       tbody
+        font-size: 12px
         th, td
           border-bottom: 1px solid white
 
@@ -107,34 +131,10 @@ body.app
         background: !mid-blue
         border-bottom: 1px solid white
         color: white
-        font-size: 0.9em
+        font-size: 12px
         /* end */
 
-    .third
-      float: left
-      margin-right: 2%
-      margin-bottom: 20px
-      width: 31%
-    .fourth
-      float: left
-      margin-right: 2%
-      width: 23%
-    .third, .half, .fourth
-      li
-        margin-bottom: 10px
-      span
-        display: block
-        font-weight: bold
-        margin-bottom: 5px
-    .two-thirds
-      float: left
-      margin-bottom: 20px
-      width: 67%
-    .half
-      float: left
-      margin-right: 0
-      margin-bottom: 20px
-      width: 50%
+
 
     .name
       font-weight: bold
@@ -178,9 +178,8 @@ body.app
       text-align: right
 
     .activities, .dashboard_comments
-      margin-top: 10px
+
       thead
-        font-size: 1.1em
         tr:hover
           background: $mid-blue
       tbody
@@ -192,13 +191,14 @@ body.app
         display: inline
         float: left
         margin: 0
-        width: 90px
+        width: 80px
 
   ul.compact_tab
     +horizontal-list
     border-bottom: 1px solid $light-blue
     color: $light-blue - #333
     line-height: 1.5em
+    font-size: 12px
     a
       text-decoration: none
 
@@ -207,3 +207,35 @@ body.app
       color: $mid-blue
       display: inline-block
       font-weight: bold
+      
+.full-width, .simple_table
+  .full
+    width: 100%
+    +clearfix
+  .third
+    float: left
+    margin-right: 1%
+    margin-bottom: 20px
+    width: 31%
+    .third
+      margin: 0
+  .fourth
+    float: left
+    margin-right: 2%
+    width: 23%
+  .third, .half, .fourth
+    li
+      margin-bottom: 10px
+    span
+      display: block
+      font-weight: bold
+      margin-bottom: 5px
+  .two-thirds
+    float: left
+    margin-bottom: 20px
+    width: 67%
+  .half
+    float: left
+    margin-right: 0
+    margin-bottom: 20px
+    width: 50%

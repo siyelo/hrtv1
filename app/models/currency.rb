@@ -1,3 +1,7 @@
+class Currency < ActiveRecord::Base
+
+end
+
 # == Schema Information
 #
 # Table name: currencies
@@ -8,6 +12,3 @@
 #  name   :string(255)
 #
 
-class Currency < ActiveRecord::Base
-
-end

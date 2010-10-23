@@ -16,6 +16,7 @@ class SubActivitiesController < ActiveScaffoldController
     :file_field => :file
 
   active_scaffold :sub_activities do |config|
+    config.list.pagination = false
     config.label =  "Sub Implementers"
     config.columns =  @@shown_columns
     list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing

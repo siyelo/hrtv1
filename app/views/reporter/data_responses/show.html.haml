@@ -3,6 +3,9 @@
 :javascript
   _projects = #{@projects.map(&:id).to_json};
 
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
 
@@ -30,7 +33,7 @@
         %td= n2c @data_response.total_activity_budget
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-= render '/admin/data_responses/exec_summary_left'
+= render '/admin/data_responses/form'
 
 .tabs_nav.two-thirds
 
@@ -72,9 +75,10 @@
     .chart{:id => "response_mtef_spend"}
       %strong You need to upgrade your Flash Player
 
-.full
-  = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 
+= link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
+
+.full
   .simple_table
     = render '/admin/data_responses/projects', :projects => @projects
 

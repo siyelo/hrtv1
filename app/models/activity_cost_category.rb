@@ -1,3 +1,8 @@
+class ActivityCostCategory < Code
+  has_many :line_items
+
+end
+
 # == Schema Information
 #
 # Table name: codes
@@ -21,7 +26,3 @@
 #  official_name       :string(255)
 #
 
-class ActivityCostCategory < Code
-  has_many :line_items
-
-end

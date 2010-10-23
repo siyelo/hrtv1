@@ -11,7 +11,7 @@
   = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
   = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
 
-  = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", number_to_currency(cached_amount, :unit => ""), :size => 8, :disabled => true
+  = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", number_to_currency(cached_amount, :unit => ""), :size => 8, :disabled => true, :id => nil
 
   = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
   = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"

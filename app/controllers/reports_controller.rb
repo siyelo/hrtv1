@@ -1,7 +1,9 @@
 class ReportsController < ApplicationController
 
   #authorize_resource :class => Reports
+  before_filter :require_user
 
+  TYPE_MAP = {'budget' => 'CodingBudget', 'spend' => 'CodingSpend'}
 
   def activities_by_district
     authorize! :read, :activities_by_district
@@ -90,7 +92,7 @@ class ReportsController < ApplicationController
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_district_row_report.csv"
   end
-  
+
   def activities_by_district_new
     rep = Reports::ActivitiesByDistrictNew.new
 
@@ -98,7 +100,7 @@ class ReportsController < ApplicationController
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_districts_new.csv"
   end
-  
+
   def activities_by_budget_coding_new
     rep = Reports::ActivitiesByBudgetCodingNew.new
 
@@ -106,11 +108,24 @@ class ReportsController < ApplicationController
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_budget_coding_new.csv"
   end
+
   def activities_by_budget_stratprog
     rep = Reports::ActivitiesByHssp2.new
 
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_budget_stratprog.csv"
+  end
+
+  def activities_by_nsp
+    if current_user.admin?
+      @data_response = DataResponse.find(params[:id])
+    else
+      @data_response = current_user.data_responses.find(params[:id])
+    end
+    rep = Reports::ActivitiesByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_nsp.csv"
   end
 end

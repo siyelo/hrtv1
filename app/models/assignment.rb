@@ -1,3 +1,8 @@
+class Assignment < ActiveRecord::Base
+  belongs_to :user
+end
+
+
 # == Schema Information
 #
 # Table name: assignments
@@ -6,8 +11,4 @@
 #  user_id :integer
 #  role_id :integer
 #
-
-class Assignment < ActiveRecord::Base
-  belongs_to :user
-end
 

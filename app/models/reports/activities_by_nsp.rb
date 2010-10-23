@@ -8,6 +8,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       csv << header()
       @activities = activities
       @report_type = report_type
+      @leaves = Nsp.leaves
       Nsp.roots.each do |nsp_root|
         add_rows csv, nsp_root
       end
@@ -34,7 +35,6 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       if assignment.cached_amount
         row = []
         row = hierarchy.clone
-        (Nsp.deepest_nesting - hierarchy.size).times{ row << nil } #append empty columns if nested higher
         row << assignment.percentage
         row << assignment.cached_amount
         row << assignment.activity.id
@@ -81,6 +81,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       hierarchy << "#{e.official_name} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
       #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
+    (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
     hierarchy
   end
 

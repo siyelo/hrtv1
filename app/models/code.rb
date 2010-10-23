@@ -25,14 +25,6 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
 
-  def parents_with_sums(type,activities)
-    hierarchy = []
-    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << "#{e.short_display} #{'sum goes here'}"
-    end
-    hierarchy
-  end
-
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 

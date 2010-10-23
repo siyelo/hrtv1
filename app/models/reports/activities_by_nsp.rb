@@ -76,10 +76,10 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   protected
 
   def code_hierarchy(code)
-#    @hierarchy_node_sum_cache
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << "#{e.official_name} - #{e.sum_of_assignments_for_activities(@type, @activities)}"
+      hierarchy << "#{e.official_name} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
+      #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
     hierarchy
   end

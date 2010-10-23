@@ -23,7 +23,6 @@ class Code < ActiveRecord::Base
   
   def sum_of_assignments_for_activities (type,activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
-  
   end
 
   def parents_with_sums(type,activities)

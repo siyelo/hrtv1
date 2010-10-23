@@ -32,7 +32,7 @@
 
 = render '/admin/data_responses/exec_summary_left'
 
-#response_charts_nav.two-thirds
+.tabs_nav.two-thirds
 
   %ul.compact_tab
     %li{:id => 'tab1', :class => 'selected'}
@@ -50,7 +50,7 @@
     %li{:id => 'tab7'}
       = link_to "Districts", "#"
 
-#response_charts.two-thirds
+.tabs.two-thirds
   .tab1
     %h4 Total Funding
     .chart{:id => "response_total_funding"}

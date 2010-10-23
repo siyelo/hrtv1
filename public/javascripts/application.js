@@ -115,14 +115,15 @@ var build_data_response_review_screen = function () {
   //
 
   // bind click events for project chart tabs
-  jQuery(".project_charts_nav ul.compact_tab li").click(function (e) {
+  jQuery(".tabs_nav ul li").click(function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element.attr("id")) {
-      jQuery(".project_charts_nav ul.compact_tab li").removeClass('selected');
+      jQuery(".tabs_nav ul li").removeClass('selected');
       element.addClass('selected');
-      jQuery(".project_charts > div").hide();
-      jQuery('.project_charts > div.' + element.attr("id")).show();
+      var tabs = element.parents(".tabs_nav").next(".tabs")
+      tabs.find("> div").hide();
+      tabs.find('> div.' + element.attr("id")).show();
     }
   });
 
@@ -141,14 +142,14 @@ var build_data_response_review_screen = function () {
 
 var admin_data_responses_show = {
   run: function (){
-    return build_data_response_review_screen();
+    build_data_response_review_screen();
   }
 };
 
 // REFACTOR!
 var reporter_data_responses_show = {
   run: function (){
-    return build_data_response_review_screen();
+    build_data_response_review_screen();
   }
 };
 

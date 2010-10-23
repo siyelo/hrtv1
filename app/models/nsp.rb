@@ -23,11 +23,15 @@ class Nsp < Code
                  ) ",
               :order => quoted_left_column_name
 
-#  def self.leaves
-#    my_leaves = super()
-#    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
-#    (my_leaves + leaves_with_other_type_kids).uniq
-#  end
+  def self.old_leaves
+    my_leaves = super()
+    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
+    (my_leaves + leaves_with_other_type_kids).uniq
+  end
+
+  def old_self_and_nsp_ancestors
+    self_and_ancestors.select{|a| a.type == self.type}
+  end
 
   # Returns the array of all parents and self
   def self_and_nsp_ancestors

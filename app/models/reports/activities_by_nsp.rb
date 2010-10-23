@@ -33,7 +33,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     code.leaf_assigns_for_activities(report_type,activities).each do |assignment|
       if assignment.cached_amount
         row = []
-        row = hierarchy
+        row = hierarchy.clone
         (Nsp.deepest_nesting - hierarchy.size).times{ row << nil } #append empty columns if nested higher
         row << assignment.percentage
         row << assignment.cached_amount

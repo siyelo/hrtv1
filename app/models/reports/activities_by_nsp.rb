@@ -20,13 +20,21 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   end
 
   def add_rows csv, code
-#    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
-#    csv << code.external_id.to_s
+    add_code_summary_row(csv, code)
     kids = code.children.with_type("Nsp")
     kids.each do |c|
-      add_rows csv, c
+      add_rows(csv, c)
     end
     row(csv, code, @activities, @report_type)
+  end
+
+  def add_code_summary_row csv, code
+#    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
+#    csv << code.external_id.to_s
+    total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
+    if total_for_code > 0
+      csv << (code_hierarchy(code) << total_for_code)
+    end
   end
 
   def row(csv, code, activities, report_type)

@@ -5,6 +5,7 @@
 .~*
 *sqlite3-journal
 .DS_Store
+resourcetracking.tar.gz
 app/stylesheets/.sass-cache/*
 db/*.sqlite3
 db/*.sqlite3-*

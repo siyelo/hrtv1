@@ -33,7 +33,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 #    csv << code.external_id.to_s
     total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
     if total_for_code > 0
-      csv << (code_hierarchy(code) << total_for_code)
+      csv << (code_hierarchy(code) + [official_name_w_sum(code), total_for_code])
     end
   end
 
@@ -86,11 +86,15 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   def code_hierarchy(code)
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << "#{e.official_name} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
+      hierarchy << official_name_w_sum(e)
       #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
     (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
     hierarchy
+  end
+
+  def official_name_w_sum code
+    "#{code.official_name} - #{code.sum_of_assignments_for_activities(@report_type, @activities)}"
   end
 
 end

@@ -33,8 +33,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 #    csv << code.external_id.to_s
     total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
     if total_for_code > 0
-      csv << (code_hierarchy(code) + [total_for_code])
+      csv << (code_hierarchy(code) + [nil,nil, n2c(total_for_code)]) #put total in Q1 column
     end
+    #TODO merge cells[code.level:amount_column] for this code
   end
 
   def row(csv, code, activities, report_type)
@@ -45,17 +46,20 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         row = []
         row = hierarchy.clone
 #        row << assignment.cached_amount / assignment.activity.budget
-        row << assignment.cached_amount
-        row << activity.id
-        row << activity.name
-        row << activity.description
-        row << "#{activity.start_date} - #{activity.end_date}"
+        row << n2c(assignment.cached_amount)
+        #TODO bold the name in this below
+        if activity.name.blank?
+          row << activity.description.chomp
+        else
+          row << "#{activity.name.chomp} - #{activity.description.chomp}"
+        end
+#        row << "#{activity.start_date} - #{activity.end_date}"
         row << activity.spend_q1 ? 'x' : nil
         row << activity.spend_q2 ? 'x' : nil
         row << activity.spend_q3 ? 'x' : nil
         row << activity.spend_q4 ? 'x' : nil
         row << activity.locations.join(' | ')
-        row << activity.provider.try(:name) if assignment.activity.provider
+        row << activity.provider.try(:short_name) if assignment.activity.provider
         row << activity.organizations.join(' | ')
         unless activity.sub_activities.implemented_by_health_centers.empty?
           row << activity.sub_activities.implemented_by_health_centers.count
@@ -63,6 +67,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
           row << nil
         end
         row << activity.beneficiaries.join(' | ')
+        row << activity.id
         csv <<  row
       end
     end
@@ -75,12 +80,10 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       row << "NSP Level #{i+1}"
     end
 #    row << "% of Activity"
-    row << "Amount"
-    row << "ID"
-    row << "Activity Name"
+    row << "Budget"
     row << "Activity Description"
-    row << "Dates"
-    row << "Spend Q1"
+#    row << "Dates"
+    row << "Q1"
     row << "Q2"
     row << "Q3"
     row << "Q4"
@@ -89,12 +92,15 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     row << "Institutions Assisted"
     row << "# of HC's Sub-implementing"
     row << "Beneficiaries"
+    row << "ID"
     row
   end
 
   protected
 
   def code_hierarchy(code)
+    # TODO merge all columns to the left and put row's value
+    # if there is more than 5 rows in the section
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
       if e==code
@@ -109,7 +115,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   end
 
   def official_name_w_sum code
-    "#{code.official_name} - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
+    "#{code.official_name}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
   end
 
 end

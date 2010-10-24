@@ -31,6 +31,17 @@ class Organization < ActiveRecord::Base
   def user_email_list_limit_3
     users[0,2].collect{|u| u.email}.join ","
   end
+  
+  def short_name
+    #TODO remove district name in (), capitalized, and as below
+    n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?
+    n ||= name
+    n = n.gsub("Health Center", "HC")
+    n = n.gsub("District Hospital", "DH")
+    n = n.gsub("Health Post", "HP")
+    n = n.gsub("Dispensary", "Disp")
+    n
+  end
 
 end
 

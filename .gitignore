@@ -8,6 +8,7 @@
 app/stylesheets/.sass-cache/*
 db/*.sqlite3
 db/*.sqlite3-*
+db/*pgdump*
 config/database.yml
 log/*.log
 tmp/*

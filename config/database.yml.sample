@@ -22,6 +22,15 @@ development:
 #   username: restracker_dev
 #   password: restracker_dev
 
+# START Helpful PostgreSQL Setup Instructions
+#  If you have a fresh install of postgres, you need to create 
+#  a password for the postgres user. 
+#  See "Basic Server Setup" under https://help.ubuntu.com/community/PostgreSQL
+
+#   Once you have the postgres user you can enter psql or from the command
+#   line run these commands below, prefixed with "sudo -u postgres"
+# END
+
 # Postgres setup
 # createuser -d -R -P restracker_dev
 # createdb -O restracker_dev restracker_dev

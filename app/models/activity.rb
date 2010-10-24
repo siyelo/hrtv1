@@ -79,6 +79,7 @@ class Activity < ActiveRecord::Base
   named_scope :only_simple,       { :conditions => ["type is null or type in (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
+  named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified}
@@ -119,6 +120,7 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
+  # THIS METHOD NEEDS TO BE RENAMED TO valid_districts
   def districts
     self.projects.collect do |proj|
       proj.locations

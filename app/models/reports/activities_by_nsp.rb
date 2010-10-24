@@ -2,7 +2,7 @@ require 'fastercsv'
 
 class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   include Reports::Helpers
-
+  
   def initialize(activities, report_type)
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
@@ -33,7 +33,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 #    csv << code.external_id.to_s
     total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
     if total_for_code > 0
-      csv << (code_hierarchy(code) + [official_name_w_sum(code), total_for_code])
+      csv << (code_hierarchy(code) + [total_for_code])
     end
   end
 
@@ -41,20 +41,28 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     hierarchy = code_hierarchy(code)
     code.leaf_assigns_for_activities(report_type,activities).each do |assignment|
       if assignment.cached_amount
+        activity = assignment.activity
         row = []
         row = hierarchy.clone
-        row << assignment.cached_amount / assignment.activity.budget
+#        row << assignment.cached_amount / assignment.activity.budget
         row << assignment.cached_amount
-        row << assignment.activity.id
-        row << assignment.activity.name
-        row << assignment.activity.description
-        row << "#{assignment.activity.start_date} - #{assignment.activity.end_date}"
-        row << assignment.activity.spend_q1 ? 'x' : nil
-        row << assignment.activity.spend_q2 ? 'x' : nil
-        row << assignment.activity.spend_q3 ? 'x' : nil
-        row << assignment.activity.spend_q4 ? 'x' : nil
-        row << assignment.activity.districts.join(' | ')
-        row << assignment.activity.provider.try(:name) if assignment.activity.provider
+        row << activity.id
+        row << activity.name
+        row << activity.description
+        row << "#{activity.start_date} - #{activity.end_date}"
+        row << activity.spend_q1 ? 'x' : nil
+        row << activity.spend_q2 ? 'x' : nil
+        row << activity.spend_q3 ? 'x' : nil
+        row << activity.spend_q4 ? 'x' : nil
+        row << activity.locations.join(' | ')
+        row << activity.provider.try(:name) if assignment.activity.provider
+        row << activity.organizations.join(' | ')
+        unless activity.sub_activities.implemented_by_health_centers.empty?
+          row << activity.sub_activities.implemented_by_health_centers.count
+        else
+          row << nil
+        end
+        row << activity.beneficiaries.join(' | ')
         csv <<  row
       end
     end
@@ -66,7 +74,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     (Nsp.deepest_nesting-1).times do |i|
       row << "NSP Level #{i+1}"
     end
-    row << "% of Activity"
+#    row << "% of Activity"
     row << "Amount"
     row << "ID"
     row << "Activity Name"
@@ -78,6 +86,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     row << "Q4"
     row << "Districts"
     row << "Implementer"
+    row << "Institutions Assisted"
+    row << "# of HC's Sub-implementing"
+    row << "Beneficiaries"
     row
   end
 
@@ -98,7 +109,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   end
 
   def official_name_w_sum code
-    "#{code.official_name} - #{code.sum_of_assignments_for_activities(@report_type, @activities)}"
+    "#{code.official_name} - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
   end
 
 end

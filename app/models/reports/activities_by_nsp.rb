@@ -43,7 +43,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       if assignment.cached_amount
         row = []
         row = hierarchy.clone
-        row << assignment.percentage
+        row << assignment.cached_amount / assignment.activity.budget
         row << assignment.cached_amount
         row << assignment.activity.id
         row << assignment.activity.name
@@ -66,7 +66,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     (Nsp.deepest_nesting-1).times do |i|
       row << "NSP Level #{i+1}"
     end
-    row << "Percentage"
+    row << "% of Activity"
     row << "Amount"
     row << "ID"
     row << "Activity Name"
@@ -86,7 +86,11 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   def code_hierarchy(code)
     hierarchy = []
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
-      hierarchy << official_name_w_sum(e)
+      if e==code
+        hierarchy << official_name_w_sum(e)
+      else
+        hierarchy << nil
+      end
       #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
     (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher

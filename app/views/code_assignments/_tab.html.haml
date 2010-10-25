@@ -1,4 +1,10 @@
 - unless codes.empty?
+
+  - if @coding_error
+    #coding_flash
+      %div.error
+        = @coding_error
+
   - form_for activity, :url => activity_coding_path(activity, :coding_type => coding_type), :method => :put, :html => {:id => ''} do |form|
     %ul.activity_tree
       - codes.each do |code|

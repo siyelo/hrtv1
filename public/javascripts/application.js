@@ -186,6 +186,68 @@ var destroy_resource_custom = function (element) {
   });
 };
 
+var ajaxifyResource = function (resources) {
+  // new
+  jQuery(".resources[data-resources='" + resources + "'] .new_btn").live('click', function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    new_resource(element);
+  });
+
+  // edit
+  jQuery(".resources[data-resources='" + resources + "'] .edit_btn").live('click', function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    edit_resource(element);
+  });
+
+  // cancel
+  jQuery(".resources[data-resources='" + resources + "'] .cancel_btn").live('click', function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    var form_type = get_form_type(element);
+
+    if (form_type === "new") {
+      close_form(element);
+      enable_element(jQuery(".resources[data-resources='" + resources + "'] .new_btn"));
+    } else if (form_type === "edit") {
+      show_resource_custom(element);
+    } else if (form_type === "search") {
+      close_form(element);
+      enable_element(jQuery(".resources[data-resources='" + resources + "'] .search_btn"));
+    } else {
+      throw "Unknown form type:" + form_type;
+    }
+  });
+
+  // submit
+  jQuery(".resources[data-resources='" + resources + "'] .submit_btn").live('click', function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    var form_type = get_form_type(element);
+
+    if (form_type === "new") {
+      create_resource(element);
+    } else if (form_type === "edit") {
+      update_resource(element);
+    } else if (form_type === "search") {
+      search_resources(element);
+    } else {
+      throw "Unknown form type: " + form_type;
+    }
+  });
+
+  // destroy
+  jQuery(".resources[data-resources='" + resources + "'] .destroy_btn").live('click', function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    if (confirm('Are you sure?')) {
+      destroy_resource_custom(element);
+    }
+  });
+};
+
+
 /* Ajax CRUD END */
 
 var collapse_expand = function (e, element, type) {
@@ -324,80 +386,21 @@ var build_data_response_review_screen = function () {
 var admin_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
+    ajaxifyResource('comments');
   }
 };
 
-// REFACTOR!
 var reporter_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
-
-    // new
-    jQuery(".new_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = jQuery(this);
-      new_resource(element);
-    });
-
-    // edit
-    jQuery(".edit_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = jQuery(this);
-      edit_resource(element);
-    });
-
-    // cancel
-    jQuery(".cancel_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = jQuery(this);
-      var form_type = get_form_type(element);
-
-      if (form_type === "new") {
-        close_form(element);
-        enable_element(jQuery(".new_btn"));
-      } else if (form_type === "edit") {
-        show_resource_custom(element);
-      //} else if (form_type === "search") {
-        //close_form(element);
-        //enable_element(jQuery(".search_btn"));
-      } else {
-        throw "Unknown form type:" + form_type;
-      }
-    });
-
-    // submit
-    jQuery(".submit_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = jQuery(this);
-      var form_type = get_form_type(element);
-
-      if (form_type === "new") {
-        create_resource(element);
-      } else if (form_type === "edit") {
-        update_resource(element);
-      //} else if (form_type === "search") {
-        //search_resources(element);
-      } else {
-        throw "Unknown form type: " + form_type;
-      }
-    });
-
-    // destroy
-    jQuery(".destroy_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = jQuery(this);
-      if (confirm('Are you sure?')) {
-        destroy_resource_custom(element);
-      }
-    });
-
+    ajaxifyResource('comments');
   }
 };
 
-// TODO: Refactor!
 var policy_maker_data_responses_show = {
   run: function (){
-    return build_data_response_review_screen();
+    build_data_response_review_screen();
+    ajaxifyResource('comments');
   }
 };
 

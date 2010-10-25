@@ -1,0 +1,7 @@
+%tr{:id => "row_#{comment.id}", :"data-object" => "comment", :"data-url" => "/comments/#{comment.id}", :class => cycle("even", "odd")}
+  %td= comment.title
+  %td= comment.comment
+  %td
+    / js event .edit_btn, .destroy_btn
+    = link_to "Edit", custom_edit_comment_path(comment), :class => "edit_btn"
+    = link_to "Delete", custom_destroy_comment_path(comment), :class => "destroy_btn"

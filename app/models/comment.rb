@@ -6,6 +6,12 @@ class Comment < ActiveRecord::Base
 
   default_scope :order => 'created_at ASC'
 
+  # Attributes
+  attr_accessible :title, :comment
+
+  # Validations
+  validates_presence_of :commentable_id, :commentable_type, :user_id, :title, :comment
+
   ### named scopes
   named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "
   named_scope :on_projects_for, lambda { |organization|

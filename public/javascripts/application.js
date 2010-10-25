@@ -2,6 +2,192 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
+/* Ajax CRUD BEGIN */
+
+var get_row_id = function (element) {
+  return element.parents('tr').attr('id');
+};
+
+var get_resource_id = function (element) {
+  return Number(get_row_id(element).match(/\d+/)[0]);
+};
+
+var get_resource_name = function (element) {
+  return element.parents('.resources').attr("data-resource");
+};
+
+var get_form = function (element) {
+  return element.parents('form');
+};
+
+var add_new_form = function (element, data) {
+  element.parents('.resources').find('.placer').prepend(data)
+};
+
+var add_edit_form = function (row_id, data) {
+  jQuery('#' + row_id).html('<td colspan="100">' + data + '</td>').addClass("edit_row");
+};
+
+var add_new_row = function (resources, data) {
+  resources.find('tbody').prepend(data);
+  enable_element(resources.find('.new_btn'));
+};
+
+var add_existing_row = function (row_id, data) {
+  var row = jQuery('#' + row_id);
+  row.replaceWith(data)
+  var new_row = jQuery('#' + row_id);
+  //new_row.find(".rest_in_place").rest_in_place(); // inplace edit
+};
+
+var add_form = function (data, row_id) {
+  if (row_id) {
+  } else {
+  }
+};
+
+var add_search_form = function (element) {
+  if (element.hasClass('enabled')) {
+    disable_element(element);
+    var resource_name = get_resource_name(element);
+    jQuery.get(resource_name + '/search.js', function (data) {
+      jQuery('#placer').prepend(data);
+    });
+  }
+}
+
+var close_form = function (element) {
+  element.parents('.form_box').remove();
+};
+
+var remove_row = function (row_id) {
+  jQuery("#" + row_id).remove();
+};
+
+var disable_element = function (element) {
+  element.removeClass('enabled').addClass('disabled');
+};
+
+var enable_element = function (element) {
+  element.removeClass('disabled').addClass('enabled');
+};
+
+var buildUrl = function (url) {
+  var parts = url.split('?');
+  if (parts.length > 1) {
+    return parts.join('.js?');
+  } else {
+    return parts[0] + '.js';
+  }
+};
+
+var new_resource = function (element) {
+  if (element.hasClass('enabled')) {
+    disable_element(element);
+    jQuery.get(buildUrl(element.attr('href')), function (data) {
+      add_new_form(element, data);
+    });
+  }
+};
+
+var replaceTable = function (data) {
+  jQuery("#main_table").replaceWith(data);
+  jQuery("#main_table").find(".rest_in_place").rest_in_place(); // inplace edit
+};
+
+var search_resources = function (element, type) {
+  var resource_name = get_resource_name(element);
+  var form = get_form(element);
+  var q = (type === "reset") ? '' : form.find("#s_q").val();
+
+  jQuery.get(resource_name + '.js?q=' + q, function (data) {
+    replaceTable(data);
+    if (type === "reset") {
+     close_form(element);
+     enable_element(jQuery(".search_btn"));
+    }
+  });
+};
+
+var edit_resource = function (element) {
+  var row_id = get_row_id(element);
+  jQuery.get(buildUrl(element.attr('href')), function (data) {
+    add_edit_form(row_id, data);
+  });
+};
+
+var update_resource = function (element) {
+  var row_id = get_row_id(element);
+  var form = get_form(element);
+  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+    close_form(element);
+    response.status === 206 ? add_edit_form(row_id, data) : add_existing_row(row_id, data);
+  });
+};
+
+var create_resource = function (element) {
+  var form = get_form(element);
+  var resources = element.parents('.resources');
+  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+    close_form(element);
+    response.status === 206 ? add_new_form(element, data) : add_new_row(resources, data);
+  });
+};
+
+var show_resource = function (element) {
+  var row_id = get_row_id(element);
+  var resource_id = get_resource_id(element)
+  var resource_name = get_resource_name(element);
+  jQuery.get(resource_name + '/' + resource_id + '.js', function (data) {
+    close_form(element);
+    add_existing_row(row_id, data);
+  });
+};
+
+var destroy_resource = function (element) {
+  var row_id = get_row_id(element);
+  var resource_id = get_resource_id(element)
+  var resource_name = get_resource_name(element);
+  jQuery.post('/' + resource_name + '/' + resource_id + '.js', {'_method': 'delete'}, function (data) {
+    remove_row(row_id);
+  });
+};
+
+var sort_resources = function (element) {
+  var link = element.find('a');
+  var resource_name = get_resource_name(element);
+  var url = resource_name + '.js?' + link.attr('href').replace(/.*\?/, '');
+  jQuery.get(url, function (data) {
+    replaceTable(data);
+  });
+}
+
+var get_form_type = function (element) {
+  // new_form => new; edit_form => edit
+  return element.parents('.form_box').attr('class').replace(/form_box /, '').split('_')[0];
+}
+
+var show_resource_custom = function (element) {
+  var row_id = get_row_id(element);
+  var resource_id = get_resource_id(element)
+  var resource_name = get_resource_name(element);
+  jQuery.get('/' + resource_name + '/' + resource_id + '/custom_show.js', function (data) {
+    close_form(element);
+    add_existing_row(row_id, data);
+  });
+};
+
+var destroy_resource_custom = function (element) {
+  var row_id = get_row_id(element);
+  var resource_id = get_resource_id(element)
+  var resource_name = get_resource_name(element);
+  jQuery.post('/' + resource_name + '/' + resource_id + '/custom_destroy.js', {'_method': 'delete'}, function (data) {
+    remove_row(row_id);
+  });
+};
+
+/* Ajax CRUD END */
+
 var collapse_expand = function (e, element, type) {
   // if target element is link, skip collapsing
   if (e.target.nodeName === 'A') {
@@ -25,7 +211,7 @@ var get_row_id = function (element) {
 };
 
 var get_resource_name = function (element) {
-  return element.parents('#resources').attr('class');
+  return element.parents('.resources').attr("data-resources");
 };
 
 var get_resource_id = function (element) {
@@ -35,16 +221,6 @@ var get_resource_id = function (element) {
 var remove_row = function (row_id) {
   jQuery("#" + row_id).remove();
 };
-
-var destroy_resource = function (element) {
-  var row_id = get_row_id(element);
-  var resource_id = get_resource_id(element)
-  var resource_name = get_resource_name(element);
-  jQuery.post(resource_name + '/' + resource_id + '.js', {'_method': 'delete'}, function (data) {
-    remove_row(row_id);
-  });
-};
-
 
 var admin_data_responses_index = {
   run: function () {
@@ -155,6 +331,66 @@ var admin_data_responses_show = {
 var reporter_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
+
+    // new
+    jQuery(".new_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      new_resource(element);
+    });
+
+    // edit
+    jQuery(".edit_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      edit_resource(element);
+    });
+
+    // cancel
+    jQuery(".cancel_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var form_type = get_form_type(element);
+
+      if (form_type === "new") {
+        close_form(element);
+        enable_element(jQuery(".new_btn"));
+      } else if (form_type === "edit") {
+        show_resource_custom(element);
+      //} else if (form_type === "search") {
+        //close_form(element);
+        //enable_element(jQuery(".search_btn"));
+      } else {
+        throw "Unknown form type:" + form_type;
+      }
+    });
+
+    // submit
+    jQuery(".submit_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var form_type = get_form_type(element);
+
+      if (form_type === "new") {
+        create_resource(element);
+      } else if (form_type === "edit") {
+        update_resource(element);
+      //} else if (form_type === "search") {
+        //search_resources(element);
+      } else {
+        throw "Unknown form type: " + form_type;
+      }
+    });
+
+    // destroy
+    jQuery(".destroy_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (confirm('Are you sure?')) {
+        destroy_resource_custom(element);
+      }
+    });
+
   }
 };
 

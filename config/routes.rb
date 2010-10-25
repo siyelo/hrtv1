@@ -36,7 +36,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
 
-  map.resources :comments, :active_scaffold => true
+  map.resources :comments, :member => {:custom_show => :get, :custom_edit => :get, :custom_update => :put, :custom_delete => :get, :custom_destroy => :delete}, :collection => {:custom_new => :get, :custom_create => :post}, :active_scaffold => true
   map.resources :field_helps, :active_scaffold => true
   map.resources :model_helps, :active_scaffold => true
   map.resources :funding_flows, :active_scaffold => true

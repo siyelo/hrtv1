@@ -31,6 +31,7 @@ Rails::Initializer.run do |config|
   config.gem "authlogic"
   config.gem "cancan"
   config.gem "validates_date_time", :version => '= 1.0.0'
+  config.gem 'formtastic', :version => "0.9.10"
 
   config.time_zone = 'UTC'
 

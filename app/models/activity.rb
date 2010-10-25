@@ -138,7 +138,7 @@ class Activity < ActiveRecord::Base
   end
 
   def classified
-    #TODO override in othercosts and subactivities
+    #TODO override in othercosts and sub_activities
     budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
   end
 
@@ -238,11 +238,11 @@ class Activity < ActiveRecord::Base
   # so the logic for how to return when there is no data
   # is put in the model, thus being shared
   def budget_district_coding
-    district_coding(code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
+    district_coding(CodingBudgetDistrict, code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
   end
 
   def spend_district_coding
-    district_coding(code_assignments.with_type(CodingSpendDistrict.to_s), spend)
+    district_coding(CodingSpendDistrict, code_assignments.with_type(CodingSpendDistrict.to_s), spend)
   end
 
   def budget_stratprog_coding
@@ -319,7 +319,10 @@ class Activity < ActiveRecord::Base
     self.send("#{type}_amount=",  amount)
   end
 
-  def district_coding(assignments, amount)
+  def district_coding(klass, assignments, amount)
+   # if !sub_activities.empty?
+   #   district_codings_from_sub_activities(klass, amount)
+   # els
     if assignments.empty? && amount
       #create even split across locations
       even_split = []
@@ -335,6 +338,19 @@ class Activity < ActiveRecord::Base
     else
       assignments
     end
+  end
+  
+  def district_codings_from_sub_activities(klass, amount)
+    districts_hash = {}
+    Location.all.each do |l| 
+      districts_hash[l] = 0
+    end
+    sub_activities.each do |s|
+      s.code_assignments.select{|ca| ca.type == klass.to_s}.each do |ca|
+        districts_hash[ca.code] += ca.cached_amount
+      end
+    end
+    districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
   end
 end
 

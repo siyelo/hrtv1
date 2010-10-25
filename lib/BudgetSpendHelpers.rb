@@ -52,6 +52,15 @@ module BudgetSpendHelpers
     end
   end
   
+  def toRWF
+    toRWF = (Currency.find_by_symbol currency).try(:toRWF)
+    if toRWF
+      toRWF
+    else
+      0
+    end
+  end
+
   def spend_RWF
     toRWF = (Currency.find_by_symbol currency).try(:toRWF)
     if toRWF

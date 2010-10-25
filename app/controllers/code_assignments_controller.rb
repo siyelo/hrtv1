@@ -33,7 +33,8 @@ class CodeAssignmentsController < ApplicationController
       flash[:notice] = "Activity classification was successfully updated."
     end
 
-    flash[:error] = add_code_assignments_error(coding_class, @activity)
+    @coding_error = add_code_assignments_error(coding_class, @activity)
+    flash[:error] = @coding_error if @coding_error
 
     redirect_to activity_coding_path(@activity)
   end

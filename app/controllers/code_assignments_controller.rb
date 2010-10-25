@@ -46,7 +46,7 @@ class CodeAssignmentsController < ApplicationController
       coding_amount = activity.send("#{coding_class}_amount")
       coding_type = get_coding_type(coding_class)
       coding_type_amount = activity.send(get_coding_type(coding_class))
-      "We're sorry, when we added up your #{coding_name} classifications, they added up to #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{coding_type_amount.to_f - coding_amount.to_f})."
+      "We're sorry, when we added up your #{coding_name} classifications, they added up to #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{coding_type_amount.to_f - coding_amount.to_f}). The total classified should add up to #{coding_type_amount}"
     end
   end
 

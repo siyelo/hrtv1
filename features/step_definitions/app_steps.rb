@@ -49,8 +49,8 @@ end
 
 Given /^the following comments$/ do |table|
   table.hashes.each do |hash|
-    p = Project.find_by_name(hash.delete("project")).comments.create(hash)
-    p.save!
+    commentable = Project.find_by_name(hash.delete("project"))
+    Factory.create(:comment, hash.merge(:commentable => commentable))
   end
 end
 

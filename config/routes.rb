@@ -71,6 +71,10 @@ ActionController::Routing::Routes.draw do |map|
                     :controller => 'reports',
                     :action => 'districts_by_nsp',
                     :type => Regexp.new(ReportsController::TYPE_MAP.keys.join('|'))
+  map.map_districts_by_nsp 'map_districts_by_nsp/:id/:type',
+                    :controller => 'reports',
+                    :action => 'map_districts_by_nsp',
+                    :type => Regexp.new(ReportsController::TYPE_MAP.keys.join('|'))
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
   map.users_in_my_organization 'users_in_my_organization', :controller => 'reports', :action => 'users_in_my_organization'
 

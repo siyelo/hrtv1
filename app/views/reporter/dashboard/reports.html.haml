@@ -5,3 +5,4 @@
 - @data_responses.each do |response|
   %h3=  link_to "Data Grouped by NSP", activities_by_nsp_url(:id => response.id, :type => :budget)
   %h3=  link_to "Districts Grouped by NSP", districts_by_nsp_url(:id => response.id, :type => :budget)
+  %h3=  link_to "Map Districts Grouped by NSP", map_districts_by_nsp_url(:id => response.id, :type => :budget)

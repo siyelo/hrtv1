@@ -138,6 +138,18 @@ class ReportsController < ApplicationController
     rep = Reports::DistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_nsp.csv"
+              :disposition => "attachment; filename=districts_by_nsp.csv"
+  end
+
+  def map_districts_by_nsp
+    if current_user.admin?
+      @data_response = DataResponse.find(params[:id])
+    else
+      @data_response = current_user.data_responses.find(params[:id])
+    end
+    rep = Reports::MapDistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=map_districts_by_nsp.csv"
   end
 end

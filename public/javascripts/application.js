@@ -2,7 +2,12 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
-var collapse_expand = function (element, type) {
+var collapse_expand = function (e, element, type) {
+  // if target element is link, skip collapsing
+  if (e.target.nodeName === 'A') {
+    return;
+  }
+
   var next_element = element.next('.' + type + '.entry_main');
   var next_element_visible = next_element.is(':visible');
   jQuery('.' + type + '.entry_main').hide();
@@ -75,16 +80,16 @@ var createPieChart = function (title, domId, urlEndpoint) {
 
 var build_data_response_review_screen = function () {
 
-  jQuery('.project.entry_header').click(function () {
-    collapse_expand(jQuery(this), 'project');
+  jQuery('.project.entry_header').click(function (e) {
+    collapse_expand(e, jQuery(this), 'project');
   });
 
-  jQuery('.activity.entry_header').click(function () {
-    collapse_expand(jQuery(this), 'activity');
+  jQuery('.activity.entry_header').click(function (e) {
+    collapse_expand(e, jQuery(this), 'activity');
   });
 
-  jQuery('.sub_activity.entry_header').click(function () {
-    collapse_expand(jQuery(this), 'sub_activity');
+  jQuery('.sub_activity.entry_header').click(function (e) {
+    collapse_expand(e, jQuery(this), 'sub_activity');
   });
 
   // bind click events for tabs

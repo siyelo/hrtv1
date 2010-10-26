@@ -27,6 +27,9 @@
     .chart{:id => "dr_#{data_response.id}_mtef_budget"}
       %strong You need to upgrade your Flash Player
 
+    .chart.tree{:id => "dr_#{data_response.id}_mtef_budget_tree"}
+      = render '/shared/data_responses/mtef_budget_tree_chart'
+
   .tab2
     .chart{:id => "dr_#{data_response.id}_mtef_spend"}
       %strong You need to upgrade your Flash Player

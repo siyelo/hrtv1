@@ -25,7 +25,7 @@ module ReportHelpers
       codes_to_exclude = (name_value.collect{|n| n.parent_id} - [nil]).uniq.sort
       c=[]
       name_value.each do |n|
-  if codes_to_exclude.include? n.code_id
+        if codes_to_exclude.include? n.code_id
           c << n.code_id
         end
       end

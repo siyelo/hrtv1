@@ -4,10 +4,10 @@
   %table.dashboard_comments
     %thead
       %tr
-        %th{:colspan => 100}
+        %th{:colspan => 3}
           = "Comments (#{commentable.comments.count})"
           %ul.actions
             / js event: .new_btn, .enabled
-            %li= link_to "Create new", custom_new_comments_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+            %li= link_to "Create new", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
     %tbody
-      = render :partial => 'comments/row', :collection => commentable.comments, :as => :comment
+      = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment

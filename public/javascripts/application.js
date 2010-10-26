@@ -37,7 +37,7 @@ var add_existing_row = function (row_id, data) {
   var row = jQuery('#' + row_id);
   row.replaceWith(data)
   var new_row = jQuery('#' + row_id);
-  //new_row.find(".rest_in_place").rest_in_place(); // inplace edit
+  new_row.find(".rest_in_place").rest_in_place(); // inplace edit
 };
 
 var add_form = function (data, row_id) {
@@ -146,9 +146,7 @@ var show_resource = function (element) {
 
 var destroy_resource = function (element) {
   var row_id = get_row_id(element);
-  var resource_id = get_resource_id(element)
-  var resource_name = get_resource_name(element);
-  jQuery.post('/' + resource_name + '/' + resource_id + '.js', {'_method': 'delete'}, function (data) {
+  jQuery.post(element.attr('href').replace('/delete', '') + '.js', {'_method': 'delete'}, function (data) {
     remove_row(row_id);
   });
 };
@@ -166,25 +164,6 @@ var get_form_type = function (element) {
   // new_form => new; edit_form => edit
   return element.parents('.form_box').attr('class').replace(/form_box /, '').split('_')[0];
 }
-
-var show_resource_custom = function (element) {
-  var row_id = get_row_id(element);
-  var resource_id = get_resource_id(element)
-  var resource_name = get_resource_name(element);
-  jQuery.get('/' + resource_name + '/' + resource_id + '/custom_show.js', function (data) {
-    close_form(element);
-    add_existing_row(row_id, data);
-  });
-};
-
-var destroy_resource_custom = function (element) {
-  var row_id = get_row_id(element);
-  var resource_id = get_resource_id(element)
-  var resource_name = get_resource_name(element);
-  jQuery.post('/' + resource_name + '/' + resource_id + '/custom_destroy.js', {'_method': 'delete'}, function (data) {
-    remove_row(row_id);
-  });
-};
 
 var ajaxifyResource = function (resources) {
   // new
@@ -211,7 +190,7 @@ var ajaxifyResource = function (resources) {
       close_form(element);
       enable_element(jQuery(".resources[data-resources='" + resources + "'] .new_btn"));
     } else if (form_type === "edit") {
-      show_resource_custom(element);
+      show_resource(element);
     } else if (form_type === "search") {
       close_form(element);
       enable_element(jQuery(".resources[data-resources='" + resources + "'] .search_btn"));
@@ -242,7 +221,7 @@ var ajaxifyResource = function (resources) {
     e.preventDefault();
     var element = jQuery(this);
     if (confirm('Are you sure?')) {
-      destroy_resource_custom(element);
+      destroy_resource(element);
     }
   });
 };
@@ -529,4 +508,6 @@ jQuery(function () {
     }).focus();
   });
 
+  // Inplace edit
+  jQuery(".rest_in_place").rest_in_place();
 })

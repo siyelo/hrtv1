@@ -42,7 +42,7 @@ class Comment < ActiveRecord::Base
       }
     }
 
-  named_scope :on_all, lambda { |organization, limit|
+  named_scope :on_all, lambda { |organization|
     {:joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id 
                 LEFT OUTER JOIN funding_flows fs ON fs.id = comments.commentable_id 
                 LEFT OUTER JOIN funding_flows i ON i.id = comments.commentable_id 
@@ -54,9 +54,10 @@ class Comment < ActiveRecord::Base
                       a.type is null AND a.data_response_id IN (:drs) OR 
                       oc.type = 'OtherCost' AND oc.data_response_id IN (:drs)",
                       {:org_id => organization.id, :drs => organization.data_responses.map(&:id)} ],
-    :order => "created_at DESC",
-    :limit => limit}
+    :order => "created_at DESC"}
   }
+
+  named_scope :limit, lambda { |limit| {:limit => limit} }
 
 
 

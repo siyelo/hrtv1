@@ -56,6 +56,10 @@ module NavigationHelpers
       req = DataRequest.find_by_title($1)
       start_data_response_path( DataResponse.find_by_data_request_id req.id)
 
+    when /the admin review data response page for organization "(.+)", request "(.+)"/
+      response = get_data_response($2, $1)
+      admin_data_response_path(response)
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

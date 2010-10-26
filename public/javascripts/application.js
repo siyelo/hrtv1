@@ -374,6 +374,8 @@ var build_data_response_review_screen = function () {
     createPieChart("HSSPII Strategic Objective Expenditure", "project_" + projectId + "_spend_stratobj_coding", "/charts/project_pie?codings_type=HsspSpend&code_type=HsspStratObj&project_id=" + projectId);
   });
 
+  approve_activity_checkbox();
+
 };
 
 var admin_data_responses_show = {
@@ -395,6 +397,15 @@ var policy_maker_data_responses_show = {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }
+};
+
+var approve_activity_checkbox = function () {
+  jQuery(".approve_activity").click(function () {
+    activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+    jQuery.post( "/activities/" + activity_id + "/approve",
+     { checked: jQuery(this).is(':checked'), "_method": "put" }
+    );
+  })
 };
 
 var code_assignments_show = {
@@ -421,8 +432,9 @@ var code_assignments_show = {
       addCollabsibleButtons(tab);
     };
 
+    jQuery('.tooltip').tipsy({gravity: 'w'});
+
     // collapsible checkboxes for tab1
-    jQuery('.tooltip').tipsy({gravity: 'e'});
     addCollabsibleButtons('tab1');
 
     // load budget districts
@@ -470,11 +482,8 @@ var code_assignments_show = {
       );
     })
 
-    jQuery("#approve_activity").click(function () {
-      jQuery.post( "/activities/" + _activity_id + "/approve",
-       { checked: jQuery(this).is(':checked'), "_method": "put" }
-      );
-    })
+    approve_activity_checkbox();
+
   }
 };
 
@@ -498,16 +507,16 @@ jQuery(function () {
     }
   }
 
-  jQuery('#page_tips_open_link').click(function (e) {
+  jQuery('#page_tips_open').click(function (e) {
     e.preventDefault();
-    jQuery('#desc').toggle();
-    jQuery('#page_tips_nav').toggle();
+    jQuery('#page_tips .desc').toggle();
+    jQuery('#page_tips .nav').toggle();
   });
 
-  jQuery('#page_tips_close_link').click(function (e) {
+  jQuery('#page_tips_close').click(function (e) {
     e.preventDefault();
-    jQuery('#desc').toggle();
-    jQuery('#page_tips_nav').toggle();
+    jQuery('#page_tips .desc').toggle();
+    jQuery('#page_tips .nav').toggle();
     jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
   });
 

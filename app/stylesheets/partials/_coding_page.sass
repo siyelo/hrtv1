@@ -1,54 +1,54 @@
-#content
-  #main
-    .nav2
-      +border-top-radius
-      background= !lightest-blue
-      border-bottom: 1px solid !lighter-blue
-      color= !mid-blue
-      padding-left: 5px
-      display: block
+#classification
+  a
+    font-weight: normal
+    font-size: 12px
 
-      ul
-        +horizontal-list
-        margin-bottom: -1px
-        padding-top: 4px
+  .nav2
+    +border-top-radius
+    background= !lightest-blue
+    border-bottom: 1px solid !lighter-blue
+    color= !mid-blue
+    padding-left: 5px
+    display: block
 
-        li
-          display: inline
-          float: left
-          font-size: 0.7em
+    ul
+      +horizontal-list
+      margin-bottom: -1px
+      padding-top: 4px
+
+      li
+        display: inline
+        float: left
+        font-size: 0.7em
+        padding: 5px 9px 2px
+        white-space: nowrap
+
+        //override
+        &:first-child, &:last-child
           padding: 5px 9px 2px
-          white-space: nowrap
-          a
-            font-size: 1.2em
-          //override
-          &:first-child, &:last-child
-            padding: 5px 9px 2px
 
-          &.selected
-            background: none repeat scroll 0 0 #FFFFFF
-            border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
-            border-style: solid solid none
-            border-bottom: none
-            border-width: 1px 1px 0
-            color: !mid-blue
-            font-weight: bold
+        &.selected
+          background: none repeat scroll 0 0 #FFFFFF
+          border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
+          border-style: solid solid none
+          border-bottom: none
+          border-width: 1px 1px 0
+          color: !mid-blue
+          font-weight: bold
 
-    table#activity_description
-      margin-top: 15px
-      padding: 10px
+  table#activity_description
+    margin-top: 15px
+    padding: 10px
 
-      td
-        color= !mid-blue
-        padding: 4px 8px
-        font-size: 0.85em
-        &.title
-          color: #aaa
-          font-size: 0.7em
-          text-transform: uppercase
+    td
+      color= !mid-blue
+      padding: 4px 8px
+      font-size: 0.85em
+      &.title
+        color: #aaa
+        font-size: 0.7em
+        text-transform: uppercase
 
-        a
-          font-size: 1.15em
 
 #activity_classification
   padding: 10px
@@ -84,9 +84,20 @@ ul.activity_tree
     border-top= !lighter-blue " 1px solid "
     font-size: 12px
     list-style: none
-    padding: 10px 0
+    padding: 4px 0
+
     &:hover
       background: #f9f9f9
+
+    input, textarea
+      margin-bottom: 2px
+      padding: 3px
+
+    .greyed
+      color= !light_grey
+      display: inline-block
+      width: 10px
+
     span
       font-size: 1.4em
       font-weight: bold
@@ -97,7 +108,7 @@ ul.activity_tree
     ul
       margin-left: 30px
       li
-        margin-top: 10px
+        margin-top: 4px
         padding-bottom: 0
         border-top= !lightest-blue " 1px dashed "
 
@@ -114,11 +125,12 @@ ul.activity_tree
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
+
 body.app
   ul.activity_tree, #activity_description
     label
       display: inline
-    
+
 .tooltip
   -moz-border-radius: 5px 5px 5px 5px
   background: none repeat scroll 0 0 #DDDDDD

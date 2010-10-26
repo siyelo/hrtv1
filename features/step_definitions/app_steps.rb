@@ -1,9 +1,3 @@
-def get_data_response(data_request_name, organization_name)
-  data_request = DataRequest.find_by_title(data_request_name)
-  organization = Organization.find_by_name(organization_name)
-  DataResponse.find(:first, :conditions => ["data_request_id = ? AND organization_id_responder = ?", data_request.id, organization.id])
-end
-
 Given /^a project$/ do
   @project = Factory.create(:project)
 end
@@ -39,6 +33,15 @@ Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" 
                              :name => activity_name, 
                              :data_response => get_data_response(data_request_name, organization_name), 
                              :projects => [Project.find_by_name(project_name)])
+end
+
+Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
+  # assumes @activity is set !
+  @code_assignment = Factory.create(:coding_budget,
+                                    :activity => @activity,
+                                    :code => Code.find_by_short_display(code_name),
+                                    :amount => amount)
+  @activity.reload
 end
 
 Given /^the following projects$/ do |table|

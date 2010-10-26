@@ -7,14 +7,14 @@
 %li
   = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
   = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", number_to_currency(amount, :unit => ""), :size => 8
-  or
+  .greyed or
   = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
   = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
 
   = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", number_to_currency(cached_amount, :unit => ""), :size => 8, :disabled => true, :id => nil
-
-  = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
   = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
+  = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
+
 
   - unless code.leaf?
     %ul{:id => code.external_id}

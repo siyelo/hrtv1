@@ -3,8 +3,10 @@
     %td.title Organization:
     %td= @activity.organization.name
   %tr
-    %td.title Name:
-    %td= @activity.name
+    %td.title Activity:
+    %td
+      = @activity.name.blank? ? "name n/a" : @activity.name
+      %span= link_to "Edit", edit_activity_path(@activity)
   %tr
     %td.title Description:
     %td= @activity.description
@@ -15,15 +17,10 @@
     %td.title Total Spend for FY 09-10:
     %td= @activity.spend.blank? ? "(spend was not entered)" : @activity.spend
   %tr
-    %td.title
-      = label_tag "use_budget_codings_for_spend", "Use budget codings for Expenditure?"
-      = check_box_tag 'use_budget_codings_for_spend', true, @activity.use_budget_codings_for_spend
-  %tr
-    %td.title
-      = link_to "Edit activity", edit_activity_path(@activity)
+    %td.title= label_tag " ", "Use budget codings for Expenditure?"
+    %td= check_box_tag 'use_budget_codings_for_spend', true, @activity.use_budget_codings_for_spend
 
   - if can? :approve, @activity
     %tr
-      %td.title
-        = label_tag "Approved?"
-        = check_box_tag 'approve_activity', true, @activity.approved
+      %td.title= label_tag "Approved?"
+      %td= check_box_tag 'approve_activity', true, @activity.approved

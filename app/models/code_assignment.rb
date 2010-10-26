@@ -6,21 +6,28 @@ class CodeAssignment < ActiveRecord::Base
   ### Validations
   validates_presence_of :activity, :code
   ### Attributes
-  attr_accessible :activity, :code, :amount, :percentage, :cached_amount, :sum_of_children
+  attr_accessible :activity, :code, :amount, :percentage,
+                  :cached_amount, :sum_of_children
 
   ### Named scopes
-  named_scope :with_code_ids,   lambda { |code_ids| {:conditions => ["code_assignments.code_id IN (?)", code_ids]} }
-  named_scope :with_activity,   lambda { |activity_id| {:conditions => ["activity_id = ?", activity_id]} }
-  named_scope :with_activities, lambda { |activity_ids|{:conditions => ["activity_id in (?)", activity_ids]} }
-  named_scope :with_type,       lambda { |type| {:conditions => ["code_assignments.type = ?", type]} }
-  named_scope :with_code_id,    lambda { |code_id| {:conditions => ["code_assignments.code_id = ?", code_id]} }
-  named_scope :sort_cached_amt, {:order => "code_assignments.cached_amount DESC"} 
+  named_scope :with_code_ids,
+              lambda { |code_ids| { :conditions =>
+                ["code_assignments.code_id IN (?)", code_ids]} }
+  named_scope :with_activity,
+              lambda { |activity_id| { :conditions =>
+                ["activity_id = ?", activity_id]} }
+  named_scope :with_activities,
+              lambda { |activity_ids|{ :conditions =>
+                ["activity_id in (?)", activity_ids]} }
+  named_scope :with_type,
+              lambda { |type| { :conditions =>
+                ["code_assignments.type = ?", type]} }
+  named_scope :with_code_id,
+              lambda { |code_id| { :conditions =>
+                ["code_assignments.code_id = ?", code_id]} }
+  named_scope :sort_cached_amt, { :order => "code_assignments.cached_amount DESC"}
+
   ### methods
-
-#  def self.leaf_assigns_for_activities(type, activities, leaf_ids =[])
-#    self.with_type(self.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0"])
-#  end
-
   def calculated_amount
     if read_attribute(:amount).nil?
       cached_amount

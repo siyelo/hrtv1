@@ -1,6 +1,8 @@
 class ActivitiesController < ActiveScaffoldController
   authorize_resource
 
+  before_filter :require_admin, :only => [:approve]
+
   before_filter :check_user_has_data_response
 
   include ActivitiesHelper

@@ -1,0 +1,3 @@
+- if can? :approve, activity
+  = label_tag "Approved?"
+  = check_box_tag 'approve_activity', true, activity.approved, :id => dom_id(activity), :class => "approve_activity"

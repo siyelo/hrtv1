@@ -1,0 +1,7 @@
+#page_tips
+  .nav
+    = link_to "Show Page Tips", "#", :id => "page_tips_open"
+  .desc
+    %h2 Description
+    %span.close= link_to "Close", "#", :id => "page_tips_close"
+    %p= h @model_help.long

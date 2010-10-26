@@ -4,17 +4,21 @@
 - content_for :sub_nav do
   = render :partial => 'layouts/sub_nav'
 
-.nav2
-  %h2= "Activity Classification"
-  = render 'tab_nav'
+#classification
 
-= render :partial => 'code_assignments/activity_description'
+  = render '/shared/page_help'
 
-#activity_classification
-  %div.tab1
-    = render 'tab', { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => 'tab1' }
-  %div.tab2
-  %div.tab3
-  %div.tab4
-  %div.tab5
-  %div.tab6
+  .nav2
+    %h2= "Activity Classification"
+    = render 'tab_nav'
+
+  = render :partial => 'code_assignments/activity_description'
+
+  #activity_classification
+    %div.tab1
+      = render 'tab', { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => 'tab1' }
+    %div.tab2
+    %div.tab3
+    %div.tab4
+    %div.tab5
+    %div.tab6

@@ -267,7 +267,6 @@ body.app
       text-align: right
 
     .activities, .dashboard_comments
-
       thead
         tr:hover
           background: $mid-blue
@@ -281,6 +280,24 @@ body.app
         float: left
         margin: 0
         width: 80px
+    .activities .actions 
+      ul
+        +horizontal-list
+        background: $lightest-blue
+        margin-bottom: 5px
+        +pie-clearfix
+        
+        
+        li:last-child
+          float: right
+          margin-right: 5px
+        li
+          margin-bottom: 0
+        label
+          display: inline
+        a
+          display: inline-block
+          padding: 4px
 
   ul.compact_tab
     +horizontal-list

@@ -10,6 +10,14 @@ class Code < ActiveRecord::Base
 
   named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
 
+  # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
+  acts_as_nested_set
+
+  named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
+  named_scope :ordered, :order => 'lft'
+
+  ### methods
+
   def self.leaves_for_codes(code_ids)
     # @greg - remove ??
   end
@@ -26,13 +34,6 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
 
-  # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
-  acts_as_nested_set
-
-  named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
-  named_scope :ordered, :order => 'lft'
-
-  ### methods
 
   def name
     to_s

@@ -2,15 +2,21 @@
 
 -# Todo - move
 
-- data_rows = "data.addRows([ ['Global',null,0,0],\r"
+- data_rows = "data.addRows([  ['All Codes',null,0,0],\r"
 
-- CodingBudget.with_code_ids(Nsp.all).with_activities(@data_response.activities).each do |coding|
-  - data_rows << "            ['#{coding.code.external_id}', '#{coding.code.parent.external_id}', #{coding.calculated_amount}, #{coding.code.level}],\r"
+- codes = Nsp.all
+- roots = Nsp.roots
+- codings = CodingBudget.with_code_ids(codes).with_activities(@data_response.activities).all.map_to_hash{ |b| {b.code_id => b} }
+
+- codes.each do |code|
+  -# ignore parents of a different type
+  - parent = Nsp.roots.include?(code) ? 'All Codes' : code.parent.short_display
+  - amount = codings[code.id].nil? ? 0 : codings[code.id].calculated_amount
+  - data_rows << "            ['#{code.short_display}', '#{parent}', #{amount}, #{code.level}],\r"
 
 -# strip last comma
 - data_rows = data_rows[0..(data_rows.rindex(',')-1)]
 - data_rows << "  ]); "
-
 
 :javascript
   google.load("visualization", "1", {packages:["treemap"]});
@@ -27,10 +33,10 @@
       // Create and draw the visualization.
       var tree = new google.visualization.TreeMap(document.getElementById('tree_map_chart'));
       tree.draw(data, {
-        minColor: '#f00',
-        midColor: '#ddd',
-        maxColor: '#0d0',
+        minColor: '#99ccff',
+        midColor: '#6699cc',
+        maxColor: '#336699',
         headerHeight: 15,
         fontColor: 'black',
-        showScale: true});
+        showScale: false});
   }

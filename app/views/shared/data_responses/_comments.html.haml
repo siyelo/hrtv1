@@ -11,6 +11,6 @@
           = "Comments (<span class='count'>#{commentable.comments.count}</span>)"
 
         %th Comment
-        %th Manage
+        %th.manage Manage
     %tbody
       = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment

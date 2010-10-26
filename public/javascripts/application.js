@@ -20,8 +20,8 @@ var get_form = function (element) {
   return element.parents('form');
 };
 
-var add_new_form = function (element, data) {
-  element.parents('.resources').find('.placer').prepend(data)
+var add_new_form = function (resources, data) {
+  resources.find('.placer').html(data);
 };
 
 var add_edit_form = function (row_id, data) {
@@ -30,6 +30,8 @@ var add_edit_form = function (row_id, data) {
 
 var add_new_row = function (resources, data) {
   resources.find('tbody').prepend(data);
+  var resourcesCount = resources.find('tbody tr').length;
+  resources.find('.count').html(resourcesCount);
   enable_element(resources.find('.new_btn'));
 };
 
@@ -81,11 +83,16 @@ var buildUrl = function (url) {
   }
 };
 
+var getResources = function (element) {
+  return element.parents('.resources');
+}
+
 var new_resource = function (element) {
   if (element.hasClass('enabled')) {
+    var resources = getResources(element);
     disable_element(element);
     jQuery.get(buildUrl(element.attr('href')), function (data) {
-      add_new_form(element, data);
+      add_new_form(resources, data);
     });
   }
 };
@@ -127,10 +134,10 @@ var update_resource = function (element) {
 
 var create_resource = function (element) {
   var form = get_form(element);
-  var resources = element.parents('.resources');
+  var resources = getResources(element);
   jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
     close_form(element);
-    response.status === 206 ? add_new_form(element, data) : add_new_row(resources, data);
+    response.status === 206 ? add_new_form(resources, data) : add_new_row(resources, data);
   });
 };
 
@@ -164,7 +171,7 @@ var get_form_type = function (element) {
   return element.parents('.form_box').attr('class').replace(/form_box /, '').split('_')[0];
 }
 
-var ajaxifyResource = function (resources) {
+var ajaxifyResources = function (resources) {
   var block = jQuery(".resources[data-resources='" + resources + "']");
   var newBtn = block.find(".new_btn");
   var editBtn = block.find(".edit_btn");
@@ -372,21 +379,21 @@ var build_data_response_review_screen = function () {
 var admin_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
-    ajaxifyResource('comments');
+    ajaxifyResources('comments');
   }
 };
 
 var reporter_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
-    ajaxifyResource('comments');
+    ajaxifyResources('comments');
   }
 };
 
 var policy_maker_data_responses_show = {
   run: function (){
     build_data_response_review_screen();
-    ajaxifyResource('comments');
+    ajaxifyResources('comments');
   }
 };
 

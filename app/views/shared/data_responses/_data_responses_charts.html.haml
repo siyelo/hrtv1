@@ -24,36 +24,37 @@
 
 .tabs.two-thirds
   .tab1
-    .chart{:id => "dr_#{data_response.id}_mtef_budget"}
-      %strong You need to upgrade your Flash Player
+    %ul.compact_tab
+      %li.mtef_budget_pie.selected= link_to "Pie", "#"
+      %li.mtef_budget_tree= link_to "Tree Map", "#"
 
-    .chart.tree{:id => "dr_#{data_response.id}_mtef_budget_tree"}
-      = render '/shared/data_responses/mtef_budget_tree_chart'
+    .pie
+      .chart{:id => "dr_#{data_response.id}_mtef_budget"}
+    .tree
+      .chart{:id => "dr_#{data_response.id}_mtef_budget_tree"}
+        = render '/shared/data_responses/mtef_budget_tree_chart'
 
   .tab2
-    .chart{:id => "dr_#{data_response.id}_mtef_spend"}
-      %strong You need to upgrade your Flash Player
+    .pie
+      .chart{:id => "dr_#{data_response.id}_mtef_spend"}
+
+    .tree
+      = render '/shared/data_responses/mtef_budget_tree_chart'
 
   .tab3
     .chart{:id => "dr_#{data_response.id}_nsp_budget"}
-      %strong You need to upgrade your Flash Player
 
   .tab4
     .chart{:id => "dr_#{data_response.id}_nsp_spend"}
-      %strong You need to upgrade your Flash Player
 
   .tab5
     .chart{:id => "dr_#{data_response.id}_budget_stratprog_coding"}
-      %strong You need to upgrade your Flash Player
 
   .tab6
     .chart{:id => "dr_#{data_response.id}_budget_stratobj_coding"}
-      %strong You need to upgrade your Flash Player
 
   .tab7
     .chart{:id => "dr_#{data_response.id}_spend_stratprog_coding"}
-      %strong You need to upgrade your Flash Player
 
   .tab8
     .chart{:id => "dr_#{data_response.id}_spend_stratobj_coding"}
-      %strong You need to upgrade your Flash Player

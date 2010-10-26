@@ -333,6 +333,7 @@ var build_data_response_review_screen = function () {
     }
   });
 
+
   // collapsiable project header
   jQuery("#details").click(function (e) {
     e.preventDefault();
@@ -351,6 +352,31 @@ var build_data_response_review_screen = function () {
       tabs.find('> div.' + element.attr("id")).show();
     }
   });
+
+  // bind click events for project chart sub-tabs (Pie | Tree)
+   jQuery(".tabs ul.compact_tab li").click(function (e) {
+     e.preventDefault();
+     var element = jQuery(this);
+     if (element) {
+       jQuery(".tabs ul.compact_tab li").removeClass('selected');
+       element.addClass('selected');
+       if (element.attr("class").match(/mtef_budget_tree/)) {
+         // find the tabX parent and toggle
+
+         // note this wont work since
+         // setting display:none in the css seems to break the
+         // Google visualization rendering of the iframe
+
+         // TODO - ajaxify the call
+         element.parent('ul').parent().find(".pie").hide()
+         element.parent('ul').parent().find(".tree").show()
+       } else {
+         element.parent('ul').parent().find(".tree").hide()
+         element.parent('ul').parent().find(".pie").show()
+       }
+     }
+   });
+
 
   // Data Response charts
   createPieChart("MTEF Budget", "dr_" + _dr_id + "_mtef_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Mtef&data_response_id=" + _dr_id);
@@ -524,4 +550,6 @@ jQuery(function () {
 
   // Inplace edit
   jQuery(".rest_in_place").rest_in_place();
+
+
 })

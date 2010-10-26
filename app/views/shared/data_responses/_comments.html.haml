@@ -1,0 +1,15 @@
+/ js event: .resources, .comments
+%div{:class => "resources comments", :"data-resources" => "comments", :style => "clear: both"}
+  .placer
+  %table.dashboard_comments
+    %thead
+      %tr
+        %th
+          = "Comments (<span class='count'>#{commentable.comments.count}</span>)"
+          %ul.actions
+            / js event: .new_btn, .enabled
+            %li= link_to "Create new", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+        %th Comment
+        %th Manage
+    %tbody
+      = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment

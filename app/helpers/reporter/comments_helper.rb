@@ -1,0 +1,2 @@
+module Reporter::CommentsHelper
+end

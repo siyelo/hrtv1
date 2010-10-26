@@ -104,6 +104,7 @@ ActionController::Routing::Routes.draw do |map|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     reporter.reports 'reports', :controller => 'dashboard', :action => :reports
     reporter.resources :data_responses, :only => [:show]
+    reporter.resources :comments, :member => {:delete => :get}
   end
 
   map.charts 'charts/:action', :controller => 'charts'

@@ -26,12 +26,6 @@ Scenario Outline: Edit data response, see feedback messages
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
 
-Scenario: Comments should show on DResponse page
-  Given a basic org + reporter profile, with data response, signed in
-  And a model help for "DataResponse"
-  When I go to the data response page for "Req1"
-  Then I should see "General Questions / Comments"
-
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
   Given a basic org + reporter profile, with data response, signed in
   When I go to the data response page for "Req1"
@@ -39,7 +33,6 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   And I fill in "data_response_fiscal_year_end_date" with ""
   And I press "Save"
   Then I should not see "Something went wrong, if this happens repeatedly, contact an administrator."
-
 
 @javascript
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form

@@ -43,7 +43,13 @@ class CodeAssignmentsController < ApplicationController
 
   private
   def add_code_assignments_error(coding_class, activity)
-    unless coding_class.classified(activity)
+    if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
+      unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)
+        "We're sorry, you are using the budget classifications for your expenditures and the budget classifications have an error. Please correct the corresponding budget classifications."
+      else
+        nil
+      end
+    elsif !coding_class.classified(activity)
       coding_name = get_coding_name(coding_class)
       coding_type = get_coding_type(coding_class)
       coding_type_amount = activity.send(get_coding_type(coding_class))
@@ -55,7 +61,7 @@ class CodeAssignmentsController < ApplicationController
       difference = number_to_currency(difference, :separator => ".", :unit => "", :delimiter => ",")
       percent_diff = number_to_currency(percent_diff, :separator => ".", :unit => "", :delimiter => ",")
  
-      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is #{percent_diff}%). The total classified should add up to #{coding_type_amount}."
+      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}."
     end
   end
 

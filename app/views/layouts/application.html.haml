@@ -1,7 +1,8 @@
 !!! Strict
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    = render :partial => 'layouts/title'
+    %title= "Resource Tracking Database :: #{yield(:title)}"
+    = render :partial => 'layouts/include_tags'
     = yield(:head)
 
   - if controller.controller_name == "static_page" && controller.action_name == "index"

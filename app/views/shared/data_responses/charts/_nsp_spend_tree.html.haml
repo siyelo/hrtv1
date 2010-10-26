@@ -1,0 +1,21 @@
+
+-# Todo - move to a controller action
+
+- data_rows = "data.addRows([  ['All Codes',null,0,0],\r"
+
+- codes = Nsp.all
+- roots = Nsp.roots
+- codings = CodingBudget.with_code_ids(codes).with_activities(@data_response.activities).all.map_to_hash{ |b| {b.code_id => b} }
+
+- codes.each do |code|
+  -# ignore parents of a different type
+  - parent = roots.include?(code) ? 'All Codes' : code.parent.short_display
+  - amount = codings[code.id].nil? ? 0 : codings[code.id].calculated_amount
+  - data_rows << "            ['#{code.short_display}', '#{parent}', #{amount}, #{code.level}],\r"
+
+-# strip last comma
+- data_rows = data_rows[0..(data_rows.rindex(',')-1)]
+- data_rows << "  ]); "
+
+= render '/shared/data_responses/charts/tree_map', :data_rows => data_rows, :chart_id => chart_id, :chart_name => 'nsp_spend_tree'
+

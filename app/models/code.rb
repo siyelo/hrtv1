@@ -1,4 +1,5 @@
 class Code < ActiveRecord::Base
+  include ActionView::Helpers::NumberHelper
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
 
   acts_as_commentable
@@ -26,6 +27,26 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
 
+  # todo recurse with array then join
+  def self.treemap_for_codes(code_roots, codes, type, activities)
+    front = "data.addRows([ "
+    ending = "  ]); " # we will return front + rows + ending
+
+    # TODO better coloring
+    # format is my value, parent value, box_area_value, coloring_value
+    rows = ["['All Codes',null,0,0]"]
+    code_roots.each do |r|
+      parent_display_cache = {} # code => display_value
+      parent_display_cache[r.parent] = "All Codes"
+      r.self_and_descendants.each do |c|
+        c.treemap_row(rows, type, activities, parent_display_cache) if codes.include?(c)
+      end
+    end
+    #return
+    rows = rows.join(",\r")
+    front + rows + ending
+  end
+
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 
@@ -33,6 +54,24 @@ class Code < ActiveRecord::Base
   named_scope :ordered, :order => 'lft'
 
   ### methods
+  def treemap_row(rows, type, activities, treemap_parent_values)
+    name = to_s_prefer_official
+    sum = sum_of_assignments_for_activities(type, activities)
+    if sum > 0 #TODO add % of total as well, abbrev amount
+      name_w_sum = "#{n2c(sum)}: #{name}"
+      if treemap_parent_values.values.include?(name_w_sum)
+        name_w_sum = "#{n2c(sum)} (2): #{name}"
+      end
+      treemap_parent_values[self] = name_w_sum
+      my_parent_treemap_value = treemap_parent_values[parent]
+      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, 0)
+    end
+  end
+
+  # join these together with just a space
+  def treemap_row_for( code_display, parent_display, box_size, color_value)
+    "            ['#{code_display}', '#{parent_display}', #{box_size}, #{color_value}]"
+  end
 
   def name
     to_s
@@ -42,8 +81,16 @@ class Code < ActiveRecord::Base
     short_display
   end
 
+  def to_s_prefer_official
+   official_name ? official_name : to_s
+  end
+
   def to_s_with_external_id
     to_s + " (" + (external_id.nil? ? 'n/a': external_id) + ")"
+  end
+  #REFACTOR
+  def n2c value
+    number_to_currency value, :separator => ".", :unit => "", :delimiter => ","
   end
 end
 

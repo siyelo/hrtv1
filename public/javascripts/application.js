@@ -137,8 +137,7 @@ var create_resource = function (element) {
 var show_resource = function (element) {
   var row_id = get_row_id(element);
   var resource_id = get_resource_id(element)
-  var resource_name = get_resource_name(element);
-  jQuery.get(resource_name + '/' + resource_id + '.js', function (data) {
+  jQuery.get(element.attr('href') + '/' + resource_id + '.js', function (data) {
     close_form(element);
     add_existing_row(row_id, data);
   });
@@ -166,41 +165,49 @@ var get_form_type = function (element) {
 }
 
 var ajaxifyResource = function (resources) {
+  var block = jQuery(".resources[data-resources='" + resources + "']");
+  var newBtn = block.find(".new_btn");
+  var editBtn = block.find(".edit_btn");
+  var cancelBtn = block.find(".cancel_btn");
+  var searchBtn = block.find(".search_btn");
+  var submitBtn = block.find(".submit_btn");
+  var destroyBtn = block.find(".destroy_btn");
+
   // new
-  jQuery(".resources[data-resources='" + resources + "'] .new_btn").live('click', function (e) {
+  newBtn.live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     new_resource(element);
   });
 
   // edit
-  jQuery(".resources[data-resources='" + resources + "'] .edit_btn").live('click', function (e) {
+  editBtn.live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     edit_resource(element);
   });
 
   // cancel
-  jQuery(".resources[data-resources='" + resources + "'] .cancel_btn").live('click', function (e) {
+  cancelBtn.live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     var form_type = get_form_type(element);
 
     if (form_type === "new") {
       close_form(element);
-      enable_element(jQuery(".resources[data-resources='" + resources + "'] .new_btn"));
+      enable_element(newBtn);
     } else if (form_type === "edit") {
       show_resource(element);
     } else if (form_type === "search") {
       close_form(element);
-      enable_element(jQuery(".resources[data-resources='" + resources + "'] .search_btn"));
+      enable_element(searchBtn);
     } else {
       throw "Unknown form type:" + form_type;
     }
   });
 
   // submit
-  jQuery(".resources[data-resources='" + resources + "'] .submit_btn").live('click', function (e) {
+  submitBtn.live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     var form_type = get_form_type(element);
@@ -217,7 +224,7 @@ var ajaxifyResource = function (resources) {
   });
 
   // destroy
-  jQuery(".resources[data-resources='" + resources + "'] .destroy_btn").live('click', function (e) {
+  destroyBtn.live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (confirm('Are you sure?')) {

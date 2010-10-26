@@ -5,7 +5,7 @@ Feature: Admin can see comments
 
 @admin_comments
 Scenario: See latest comments on dashboard
-  Given organizations, reporters, data request, data responses, projects, comments
+  Given organizations, reporters, data request, data responses, projects
   Given the following comments 
     | project              | title   | comment |
     | TB Treatment Project | title1  | comment1 |
@@ -22,7 +22,7 @@ Scenario: See latest comments on dashboard
 
 @admin_comments
 Scenario: Access comments page from dashboard and edit them
-  Given organizations, reporters, data request, data responses, projects, comments
+  Given organizations, reporters, data request, data responses, projects
   Given the following comments 
     | project              | title   | comment |
     | TB Treatment Project | title1  | comment1 |
@@ -40,7 +40,7 @@ Scenario: Access comments page from dashboard and edit them
 
 @admin_comments
 Scenario: Admin can see all comments
-  Given organizations, reporters, data request, data responses, projects, comments
+  Given organizations, reporters, data request, data responses, projects
   Given the following comments 
     | project              | title   | comment |
     | TB Treatment Project | title1  | comment1 |
@@ -49,10 +49,3 @@ Scenario: Admin can see all comments
   When I go to the comments page
   Then I should see "comment1"
   And I should see "comment2"
-
-# maybe later ?
-#@admin_comments
-#Scenario: See full comment detail when you click on the comment on the listing page
-
-@admin_comments
-Scenario: Respond to comment

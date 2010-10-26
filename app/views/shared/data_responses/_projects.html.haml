@@ -20,7 +20,7 @@
         %td= project.activities.count
         %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td
+        %td.manage
           = link_to "Edit", edit_project_path(project)
           = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
 

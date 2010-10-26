@@ -5,4 +5,4 @@
     - unless code.leaf?
       %ul
         - code.children.each do |child|
-          = render '/admin/data_responses/code_row', :code => child, :activity => activity, :assignments => assignments
+          = render 'shared/data_responses/code_row', :code => child, :activity => activity, :assignments => assignments

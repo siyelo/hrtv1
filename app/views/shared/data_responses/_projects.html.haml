@@ -26,7 +26,7 @@
 
       %tr.project.entry_main.s_border
         %td{:colspan => 100}
-          = render '/admin/data_responses/project_summary', :project => project
-          = render '/admin/data_responses/comments', :commentable => project
-          = render '/admin/data_responses/activities', :activities => project.activities.roots.greatest_first
-          = render '/admin/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+          = render 'shared/data_responses/project_summary', :project => project
+          = render 'shared/data_responses/comments', :commentable => project
+          = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+          = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

@@ -34,10 +34,10 @@
           = link_to "Delete", activity, :method => :delete, :confirm => "Are your sure?"
       %tr.activity.entry_main
         %td.s_border{:colspan => 100}
-          = render '/admin/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
+          = render '/shared/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
 
-          = render '/admin/data_responses/classifications', :activity => activity, :other_costs => other_costs
+          = render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs
 
-          = render '/admin/data_responses/sub_activities', :activity => activity
+          = render '/shared/data_responses/sub_activities', :activity => activity
 
-          = render '/admin/data_responses/comments', :commentable => activity
+          = render '/shared/data_responses/comments', :commentable => activity

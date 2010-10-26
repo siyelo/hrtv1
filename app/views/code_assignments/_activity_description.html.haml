@@ -10,10 +10,10 @@
     %td= @activity.description
   %tr
     %td.title Total Budget for FY 10-11:
-    %td= @activity.budget.blank? ? "(budget not yet specified)" : @activity.budget
+    %td= @activity.budget.blank? ? "(budget was not entered)" : @activity.budget
   %tr
     %td.title Total Spend for FY 09-10:
-    %td= @activity.spend.blank? ? "(spend not yet specified)" : @activity.spend
+    %td= @activity.spend.blank? ? "(spend was not entered)" : @activity.spend
   %tr
     %td.title
       = label_tag "use_budget_codings_for_spend", "Use budget codings for Expenditure?"

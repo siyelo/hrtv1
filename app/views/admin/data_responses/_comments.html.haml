@@ -5,9 +5,9 @@
     %thead
       %tr
         %th{:colspan => 100}
-          = "Comments (#{project.comments.count})"
+          = "Comments (#{commentable.comments.count})"
           %ul.actions
             / js event: .new_btn, .enabled
-            %li= link_to "Create new", custom_new_comments_path(:commentable_type => 'Project', :commentable_id => project.id), :class => "new_btn enabled"
+            %li= link_to "Create new", custom_new_comments_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
     %tbody
-      = render :partial => 'comments/row', :collection => project.comments, :as => :comment
+      = render :partial => 'comments/row', :collection => commentable.comments, :as => :comment

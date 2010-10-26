@@ -2,6 +2,7 @@
 
 :javascript
   _projects = #{@projects.map(&:id).to_json};
+  _dr_id = "#{@data_response.id}";
 
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
@@ -52,24 +53,31 @@
 
 .tabs.two-thirds
   .tab1
-    %h4 Total Funding
-    .chart{:id => "response_total_funding"}
+    .chart{:id => "dr_#{@data_response.id}_total_funding"}
       %strong You need to upgrade your Flash Player
 
   .tab2
-    .chart{:id => "response_spend_by_project"}
+    .chart{:id => "dr_#{@data_response.id}_funding_for_budget"}
       %strong You need to upgrade your Flash Player
 
   .tab3
-    .chart{:id => "response_funders"}
+    .chart{:id => "dr_#{@data_response.id}_spend_by_project"}
       %strong You need to upgrade your Flash Player
 
   .tab4
-    .chart{:id => "response_mtef_budget"}
+    .chart{:id => "dr_#{@data_response.id}_funders"}
       %strong You need to upgrade your Flash Player
 
   .tab5
-    .chart{:id => "response_mtef_spend"}
+    .chart{:id => "dr_#{@data_response.id}_mtef"}
+      %strong You need to upgrade your Flash Player
+
+  .tab6
+    .chart{:id => "dr_#{@data_response.id}_hssp"}
+      %strong You need to upgrade your Flash Player
+
+  .tab7
+    .chart{:id => "dr_#{@data_response.id}_districts"}
       %strong You need to upgrade your Flash Player
 
 .full

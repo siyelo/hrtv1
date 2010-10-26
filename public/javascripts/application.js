@@ -339,15 +339,6 @@ var build_data_response_review_screen = function () {
     jQuery(".projects tbody").toggle();
   });
 
-  //
-  // Data Response summary charts
-  //
-  createPieChart("", "response_total_funding", "/charts/response_total_funding");
-
-  //
-  // project charts
-  //
-
   // bind click events for project chart tabs
   jQuery(".tabs_nav ul li").click(function (e) {
     e.preventDefault();
@@ -361,6 +352,16 @@ var build_data_response_review_screen = function () {
     }
   });
 
+  // Data Response charts
+  createPieChart("Total Funding", "dr_" + _dr_id + "_total_funding", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("Funding for Budget", "dr_" + _dr_id + "_funding_for_budget", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("Spend by Project", "dr_" + _dr_id + "_spend_by_project", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("Funders", "dr_" + _dr_id + "_funders", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("MTEF", "dr_" + _dr_id + "_mtef", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("HSSPII", "dr_" + _dr_id + "_hssp", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("Districts", "dr_" + _dr_id + "_districts", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+
+  // Project charts
   jQuery.each(_projects, function (i, projectId) {
     createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
     createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);

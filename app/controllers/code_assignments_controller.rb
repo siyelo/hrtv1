@@ -32,7 +32,7 @@ class CodeAssignmentsController < ApplicationController
     coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
       coding_class.update_codings(params[:activity][:updates], @activity)
-      flash[:notice] = "Activity classification was successfully updated."
+      flash[:notice] = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
 
     @coding_error = add_code_assignments_error(coding_class, @activity)
@@ -45,10 +45,14 @@ class CodeAssignmentsController < ApplicationController
   def add_code_assignments_error(coding_class, activity)
     unless coding_class.classified(activity)
       coding_name = get_coding_name(coding_class)
-      coding_amount = number_to_currency(activity.send("#{coding_class}_amount"), :separator => ".", :unit => "", :delimiter => ",")
       coding_type = get_coding_type(coding_class)
-      coding_type_amount = number_to_currency(activity.send(get_coding_type(coding_class)), :separator => ".", :unit => "", :delimiter => ",")
-      "We're sorry, when we added up your #{coding_name} classifications, they added up to #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{number_to_currency(coding_type_amount.to_f - coding_amount.to_f, :separator => ".", :unit => "", :delimiter => ",")}). The total classified should add up to #{coding_type_amount}."
+      coding_type_amount = activity.send(get_coding_type(coding_class))
+      coding_amount = activity.send("#{coding_class}_amount")
+      difference = coding_type_amount - coding_amount
+      coding_type_amount = number_to_currency(coding_type_amount, :separator => ".", :unit => "", :delimiter => ",")
+      coding_amount = number_to_currency(coding_amount, :separator => ".", :unit => "", :delimiter => ",")
+      difference = number_to_currency(difference, :separator => ".", :unit => "", :delimiter => ",")
+      "We're sorry, when we added up your #{coding_name} classifications, they added up to #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}). The total classified should add up to #{coding_type_amount}."
     end
   end
 

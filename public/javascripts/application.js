@@ -361,15 +361,10 @@ var build_data_response_review_screen = function () {
        jQuery(".tabs ul.compact_tab li").removeClass('selected');
        element.addClass('selected');
        if (element.attr("class").match(/mtef_budget_tree/)) {
-         // find the tabX parent and toggle
-
-         // note this wont work since
-         // setting display:none in the css seems to break the
-         // Google visualization rendering of the iframe
-
-         // TODO - ajaxify the call
+         // find the tabX parent, toggle it
          element.parent('ul').parent().find(".pie").hide()
          element.parent('ul').parent().find(".tree").show()
+         drawChart(); // instead of a google.setOnLoadCallback(drawChart);
        } else {
          element.parent('ul').parent().find(".tree").hide()
          element.parent('ul').parent().find(".pie").show()

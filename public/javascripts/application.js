@@ -354,22 +354,42 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-   jQuery(".tabs ul.compact_tab li").click(function (e) {
-     e.preventDefault();
-     var element = jQuery(this);
-     if (element) {
-       jQuery(".tabs ul.compact_tab li").removeClass('selected');
-       element.addClass('selected');
-       if (element.attr("class").match(/mtef_budget_tree/)) {
-         // find the tabX parent, toggle it
-         element.parent('ul').parent().find(".pie").hide()
-         element.parent('ul').parent().find(".tree").show()
-         drawChart(); // instead of a google.setOnLoadCallback(drawChart);
-       } else {
-         element.parent('ul').parent().find(".tree").hide()
-         element.parent('ul').parent().find(".pie").show()
-       }
-     }
+  jQuery(".tabs ul.compact_tab li").click(function (e) {
+    e.preventDefault();
+    var element = jQuery(this);
+    if (element) {
+      jQuery(".tabs ul.compact_tab li").removeClass('selected');
+      element.addClass('selected');
+
+      // toggle tabs
+      if (element.attr("class").match(/_tree/)) {
+        // find the tabX parent, toggle it
+        element.parent('ul').parent().find(".pie").hide()
+        element.parent('ul').parent().find(".tree").show()
+      } else {
+          element.parent('ul').parent().find(".tree").hide()
+          element.parent('ul').parent().find(".pie").show()
+      }
+      // draw tree map if not already drawn
+      if (element.attr("class").match(/mtef_budget_tree/)) {
+        // find the tabX parent, toggle it
+        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
+          draw_mtef_budget_tree();
+        }
+      } else if (element.attr("class").match(/mtef_spend_tree/)) {
+        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
+          draw_mtef_spend_tree();
+        }
+      } else if (element.attr("class").match(/nsp_budget_tree/)) {
+        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
+          draw_nsp_budget_tree();
+        }
+      } else if (element.attr("class").match(/nsp_spend_tree/)) {
+        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
+          draw_nsp_spend_tree();
+        }
+      }
+    }
    });
 
 

@@ -1,3 +1,6 @@
+:javascript
+  google.load("visualization", "1", {packages:["treemap"]});
+
 .tabs_nav.two-thirds
 
   %ul.compact_tab
@@ -24,25 +27,40 @@
 
 .tabs.two-thirds
   .tab1
-    %ul.compact_tab
-      %li.mtef_budget_pie.selected= link_to "Pie", "#"
-      %li.mtef_budget_tree= link_to "Tree Map", "#"
-
+    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_budget'
+    - chart_id = "dr_#{data_response.id}_mtef_budget"
     .pie
-      .chart{:id => "dr_#{data_response.id}_mtef_budget"}
+      .chart{:id => chart_id}
     .tree
-      .chart{:id => "dr_#{data_response.id}_mtef_budget_tree"}
-        = render '/shared/data_responses/mtef_budget_tree_chart'
+      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
+        = render '/shared/data_responses/charts/mtef_budget_tree', :chart_id => chart_id + "_tree"
 
   .tab2
+    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_spend'
+    - chart_id = "dr_#{data_response.id}_mtef_spend"
     .pie
-      .chart{:id => "dr_#{data_response.id}_mtef_spend"}
+      .chart{:id => chart_id}
+    .tree
+      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
+        = render '/shared/data_responses/charts/mtef_spend_tree', :chart_id => chart_id + "_tree"
 
   .tab3
-    .chart{:id => "dr_#{data_response.id}_nsp_budget"}
+    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_budget'
+    - chart_id = "dr_#{data_response.id}_nsp_budget"
+    .pie
+      .chart{:id => chart_id}
+    .tree
+      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
+        = render '/shared/data_responses/charts/nsp_budget_tree', :chart_id => chart_id + "_tree"
 
   .tab4
-    .chart{:id => "dr_#{data_response.id}_nsp_spend"}
+    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_spend'
+    - chart_id = "dr_#{data_response.id}_nsp_spend"
+    .pie
+      .chart{:id => chart_id}
+    .tree
+      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
+        = render '/shared/data_responses/charts/nsp_spend_tree', :chart_id => chart_id + "_tree"
 
   .tab5
     .chart{:id => "dr_#{data_response.id}_budget_stratprog_coding"}

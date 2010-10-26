@@ -49,10 +49,13 @@ class CodeAssignmentsController < ApplicationController
       coding_type_amount = activity.send(get_coding_type(coding_class))
       coding_amount = activity.send("#{coding_class}_amount")
       difference = coding_type_amount - coding_amount
+      percent_diff = difference/coding_type_amount * 100
       coding_type_amount = number_to_currency(coding_type_amount, :separator => ".", :unit => "", :delimiter => ",")
       coding_amount = number_to_currency(coding_amount, :separator => ".", :unit => "", :delimiter => ",")
       difference = number_to_currency(difference, :separator => ".", :unit => "", :delimiter => ",")
-      "We're sorry, when we added up your #{coding_name} classifications, they added up to #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}). The total classified should add up to #{coding_type_amount}."
+      percent_diff = number_to_currency(percent_diff, :separator => ".", :unit => "", :delimiter => ",")
+ 
+      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is #{percent_diff}%). The total classified should add up to #{coding_type_amount}."
     end
   end
 

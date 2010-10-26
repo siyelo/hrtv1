@@ -9,18 +9,19 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
-  def self.leaves_for_codes(code_ids)
 
+  def self.leaves_for_codes(code_ids)
+    # @greg - remove ??
   end
 
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
   end
- 
+
   def leaf_assigns_for_activities(type, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
-  
+
   def sum_of_assignments_for_activities (type,activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end

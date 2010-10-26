@@ -14,7 +14,7 @@
     #notice
       = display_warnings(@warnings)
 
-%p.borderful
+%p
   = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
 
 

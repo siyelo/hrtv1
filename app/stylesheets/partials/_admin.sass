@@ -82,13 +82,25 @@ body.app
     float: left
     width: 67%
 
-
+  /* paragraph guide style */
+  #content #main p.guide
+    background: image_url("guide.png") no-repeat 15px 0px
+    color: $mid-blue
+    font-size: 10px
+    letter-spacing: 0.05em
+    margin: 20px 0 10px 5px
+    padding: 0 0 0 35px
 
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
     +clearfix
-    
+    hr
+      background: none
+      border: none
+      border-top: 1px dashed $light-blue
+      margin-top: 20px
+      
     .summary
       font-size: 12px
       tr td:first-child
@@ -104,7 +116,7 @@ body.app
     h3
       color: $mid-blue
       font-size: 0.9em
-      padding: 20px 10px 10px
+      padding: 20px 10px 10px 0
       text-transform: none
 
     table

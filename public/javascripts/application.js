@@ -353,13 +353,14 @@ var build_data_response_review_screen = function () {
   });
 
   // Data Response charts
-  createPieChart("Total Funding", "dr_" + _dr_id + "_total_funding", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("Funding for Budget", "dr_" + _dr_id + "_funding_for_budget", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("Spend by Project", "dr_" + _dr_id + "_spend_by_project", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("Funders", "dr_" + _dr_id + "_funders", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("MTEF", "dr_" + _dr_id + "_mtef", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("HSSPII", "dr_" + _dr_id + "_hssp", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
-  createPieChart("Districts", "dr_" + _dr_id + "_districts", "/charts/data_response_pie?codings_type=CHANGE_ME&code_type=CHANGE_ME&data_response_id=" + _dr_id);
+  createPieChart("MTEF Budget", "dr_" + _dr_id + "_mtef_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Mtef&data_response_id=" + _dr_id);
+  createPieChart("MTEF Expenditure", "dr_" + _dr_id + "_mtef_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Mtef&data_response_id=" + _dr_id);
+  createPieChart("NSP Budget", "dr_" + _dr_id + "_nsp_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Nsp&data_response_id=" + _dr_id);
+  createPieChart("NSP Expenditure", "dr_" + _dr_id + "_nsp_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Nsp&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strat Program Budget", "dr_" + _dr_id + "_budget_stratprog_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratProg&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strat Objective Budget", "dr_" + _dr_id + "_budget_stratobj_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratObj&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strategic Program Expenditure", "dr_" + _dr_id + "_spend_stratprog_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratProg&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strategic Objective Expenditure", "dr_" + _dr_id + "_spend_stratobj_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratObj&data_response_id=" + _dr_id);
 
   // Project charts
   jQuery.each(_projects, function (i, projectId) {

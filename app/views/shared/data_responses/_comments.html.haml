@@ -3,7 +3,7 @@
   .placer
   %ul.actions
     / js event: .new_btn, .enabled
-    %li= link_to "+ Create new", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+    %li= link_to "Create new", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
   %table.dashboard_comments
     %thead
       %tr

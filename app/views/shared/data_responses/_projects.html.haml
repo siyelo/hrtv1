@@ -20,13 +20,13 @@
         %td= project.activities.count
         %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
         %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td
+        %td.manage
           = link_to "Edit", edit_project_path(project)
           = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
 
       %tr.project.entry_main.s_border
         %td{:colspan => 100}
-          = render '/admin/data_responses/project_summary', :project => project
-          = render '/admin/data_responses/comments', :project => project
-          = render '/admin/data_responses/activities', :activities => project.activities.roots.greatest_first
-          = render '/admin/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+          = render 'shared/data_responses/project_summary', :project => project
+          = render 'shared/data_responses/comments', :commentable => project
+          = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+          = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

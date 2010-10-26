@@ -1,7 +1,7 @@
 - other_costs = false unless other_costs
 
 .classifications.two-thirds
-  = render '/code_assignments/tab_nav', :other_costs => other_costs
+  = render 'code_assignments/tab_nav', :other_costs => other_costs
 
 #activity_classification.two-thirds
   .tab1
@@ -9,7 +9,7 @@
     %ul
       - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @code_roots.each do |code|
-        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
   - unless other_costs
     .tab2
@@ -24,13 +24,13 @@
     %ul
       - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @cost_cat_roots.each do |code|
-        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
   .tab4
     %h4 Expenditure Coding
     %ul
       - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @code_roots.each do |code|
-        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
 
   - unless other_costs
     .tab5
@@ -45,4 +45,4 @@
     %ul
       - cost_cat_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
       - @cost_cat_roots.each do |code|
-        = render '/admin/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments

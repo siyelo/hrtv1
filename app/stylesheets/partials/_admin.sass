@@ -45,6 +45,7 @@ body.app
     color: $orange
     &:hover, &:focus, &:active
       color: $mid-blue
+      
   .projects
     width: 100%
 
@@ -55,24 +56,89 @@ body.app
     font-size: 11px
     padding: 0 10px 20px 10px
     +clearfix
-    input, textarea
-      border: 1px solid $light-blue
-      margin-bottom: 10px
-      padding: 7px
-      +border-radius
-    input[type="submit"]
-      background: orange
-      border: none
+  .resources
+    position: relative
+    .actions
       color: white
-      cursor: pointer
-      font-weight: bold
-      padding: 7px 15px
-      text-transform: uppercase
+      position: absolute
+      right: 5px
+      top: 0
+      +border-bottom-radius(3px)
+      
+    .placer
+      position: relative
+      .form_box
+        background: $lightest-blue + #111
+        border-bottom: 1px solid white
+        border-left: 1px solid $lighter-blue
+        border-right: 1px solid $lighter-blue
+        border-top: 6px solid $mid-blue
+        padding: 10px 20px
+        
+    .edit_form
+      padding: 0 10px
+      
+    .dashboard_comments, .placer
+      tbody td
+        font-size: 12px
+      ol
+        +horizontal-list
+        
+        #basic
+          float: left
+          width: 70%
+          li
+            width: 48%
+        .buttons
+          float: left
+          font-size: 12px
+          margin-top: 10px
+          width: 25%
+      input[type=text], label
+        width: 90%
+      textarea
+        height: 30px
+        width: 90%
+    .inline-errors
+      color: red
+      margin: -10px
+      
+    .close
+      background: $mid-blue
+      border: 1px solid white
+      color: white
+      float: right
+      font-size: 12px
+      margin-top: 20px
+      padding: 7px 14px 5px
+      text-decoration: none
+      +border-radius
       &:hover
-        background: $mid-blue
-    label
-      color: $mid-blue
-      display: block
+        background: white
+        border: 1px solid $lighter-blue
+        color: $mid-blue
+    .cancel_btn
+      margin: 15px 0 0 10px
+
+  input, textarea
+    border: 1px solid $light-blue
+    margin-bottom: 10px
+    padding: 7px
+    +border-radius
+  input[type="submit"]
+    background: orange
+    border: none
+    color: white
+    cursor: pointer
+    font-weight: bold
+    padding: 7px 15px
+    text-transform: uppercase
+    &:hover
+      background: $mid-blue
+  label
+    color: $mid-blue
+    display: block
+    font-size: 12px
     td
       display: inline
 
@@ -112,7 +178,20 @@ body.app
       color: !mid-blue
       width: 100%
       a
+        display: inline-block
         font-size: 1em
+        &.new_btn
+          background: white
+          color: $mid-blue
+          font-size: 0.9em
+          padding: 3px 6px 2px
+          text-decoration: none
+          +border-radius
+          &:hover
+            background: orange
+            color: $dark-blue
+        &.disabled
+          display: none
       .third
         width: 31%
       th, td

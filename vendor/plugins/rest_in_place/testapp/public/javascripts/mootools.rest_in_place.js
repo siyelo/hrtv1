@@ -1,0 +1,1 @@
+../../../javascripts/mootools.rest_in_place.js

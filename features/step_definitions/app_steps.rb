@@ -49,8 +49,8 @@ end
 
 Given /^the following comments$/ do |table|
   table.hashes.each do |hash|
-    p = Project.find_by_name(hash.delete("project")).comments.create(hash)
-    p.save!
+    commentable = Project.find_by_name(hash.delete("project"))
+    Factory.create(:comment, hash.merge(:commentable => commentable))
   end
 end
 
@@ -284,7 +284,7 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   }
 end
 
-Given /^organizations, reporters, data request, data responses, projects, comments$/ do
+Given /^organizations, reporters, data request, data responses, projects$/ do
   steps %Q{ 
     Given the following organizations 
       | name   |
@@ -301,6 +301,7 @@ Given /^organizations, reporters, data request, data responses, projects, commen
       | name                 | request | organization |
       | TB Treatment Project | Req1    | UNDP         |
       | Other Project        | Req1    | USAID        |
+    Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "UNDP"
   }
 end
 

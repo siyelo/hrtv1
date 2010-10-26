@@ -1,0 +1,15 @@
+/ js event: .form_box, .new_form, .edit_form
+%div{:class => "form_box #{(@comment.new_record? ? 'new_form' : 'edit_form')}"}
+  / js event: .cancel_btn
+  = link_to "Close", reporter_comments_path, :class => "cancel_btn close"
+  - semantic_form_for @comment, :url => @comment.new_record? ? reporter_comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) : reporter_comment_path(comment) do |f|
+    = f.semantic_errors :state
+    - f.inputs do
+      - f.inputs "", :id => "basic", :class => "collapsible" do
+        = f.input :title, :label => 'Title'
+        = f.input :comment, :label => 'Comment'
+      - f.buttons do
+        / js event: .cancel_btn
+        = link_to "Cancel", reporter_comments_path, :class => "cancel_btn"
+        / js event: .submit_btn
+        = f.commit_button :label => (comment.new_record? ? "Create comment" : "Update comment"), :button_html => { :class => "submit_btn" }

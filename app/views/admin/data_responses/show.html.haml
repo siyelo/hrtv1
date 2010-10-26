@@ -2,6 +2,7 @@
 
 :javascript
   _projects = #{@projects.map(&:id).to_json};
+  _dr_id = "#{@data_response.id}";
 
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
@@ -35,41 +36,58 @@
 .tabs_nav.two-thirds
 
   %ul.compact_tab
+    %li MTEF
     %li{:id => 'tab1', :class => 'selected'}
-      = link_to "Total Funding", "#"
+      = link_to "Budget", "#"
     %li{:id => 'tab2'}
-      = link_to "Funding for Budget", "#"
+      = link_to "Spend", "#"
+    %li NSP
     %li{:id => 'tab3'}
-      = link_to "Spend by Project", "#"
+      = link_to "Budget", "#"
     %li{:id => 'tab4'}
-      = link_to "Funders", "#"
+      = link_to "Spend", "#"
+    %li HSSPII Budget
     %li{:id => 'tab5'}
-      = link_to "MTEF", "#"
+      = link_to "Program", "#"
     %li{:id => 'tab6'}
-      = link_to "HSSPII", "#"
+      = link_to "Objective", "#"
+    %li HSSPII Spend
     %li{:id => 'tab7'}
-      = link_to "Districts", "#"
+      = link_to "Program", "#"
+    %li{:id => 'tab8'}
+      = link_to "Objective", "#"
 
 .tabs.two-thirds
   .tab1
-    %h4 Total Funding
-    .chart{:id => "response_total_funding"}
+    .chart{:id => "dr_#{@data_response.id}_mtef_budget"}
       %strong You need to upgrade your Flash Player
 
   .tab2
-    .chart{:id => "response_spend_by_project"}
+    .chart{:id => "dr_#{@data_response.id}_mtef_spend"}
       %strong You need to upgrade your Flash Player
 
   .tab3
-    .chart{:id => "response_funders"}
+    .chart{:id => "dr_#{@data_response.id}_nsp_budget"}
       %strong You need to upgrade your Flash Player
 
   .tab4
-    .chart{:id => "response_mtef_budget"}
+    .chart{:id => "dr_#{@data_response.id}_nsp_spend"}
       %strong You need to upgrade your Flash Player
 
   .tab5
-    .chart{:id => "response_mtef_spend"}
+    .chart{:id => "dr_#{@data_response.id}_budget_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab6
+    .chart{:id => "dr_#{@data_response.id}_budget_stratobj_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab7
+    .chart{:id => "dr_#{@data_response.id}_spend_stratprog_coding"}
+      %strong You need to upgrade your Flash Player
+
+  .tab8
+    .chart{:id => "dr_#{@data_response.id}_spend_stratobj_coding"}
       %strong You need to upgrade your Flash Player
 
 .full

@@ -339,15 +339,6 @@ var build_data_response_review_screen = function () {
     jQuery(".projects tbody").toggle();
   });
 
-  //
-  // Data Response summary charts
-  //
-  createPieChart("", "response_total_funding", "/charts/response_total_funding");
-
-  //
-  // project charts
-  //
-
   // bind click events for project chart tabs
   jQuery(".tabs_nav ul li").click(function (e) {
     e.preventDefault();
@@ -361,15 +352,26 @@ var build_data_response_review_screen = function () {
     }
   });
 
+  // Data Response charts
+  createPieChart("MTEF Budget", "dr_" + _dr_id + "_mtef_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Mtef&data_response_id=" + _dr_id);
+  createPieChart("MTEF Expenditure", "dr_" + _dr_id + "_mtef_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Mtef&data_response_id=" + _dr_id);
+  createPieChart("NSP Budget", "dr_" + _dr_id + "_nsp_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Nsp&data_response_id=" + _dr_id);
+  createPieChart("NSP Expenditure", "dr_" + _dr_id + "_nsp_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Nsp&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strat Program Budget", "dr_" + _dr_id + "_budget_stratprog_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratProg&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strat Objective Budget", "dr_" + _dr_id + "_budget_stratobj_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratObj&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strategic Program Expenditure", "dr_" + _dr_id + "_spend_stratprog_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratProg&data_response_id=" + _dr_id);
+  createPieChart("HSSPII Strategic Objective Expenditure", "dr_" + _dr_id + "_spend_stratobj_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratObj&data_response_id=" + _dr_id);
+
+  // Project charts
   jQuery.each(_projects, function (i, projectId) {
     createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
     createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
     createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
     createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
-    createPieChart("HSSPII Strat Program Budget", "project_" + projectId + "_budget_stratprog_coding", "/charts/project_pie?codings_type=budget_stratprog_coding&code_type=Nsp&project_id=" + projectId);
-    createPieChart("HSSPII Strat Objective Budget", "project_" + projectId + "_budget_stratobj_coding", "/charts/project_pie?codings_type=budget_stratobj_coding&code_type=Nsp&project_id=" + projectId);
-    createPieChart("HSSPII Strategic Program Expenditure", "project_" + projectId + "_spend_stratprog_coding", "/charts/project_pie?codings_type=spend_stratprog_coding&code_type=Nsp&project_id=" + projectId);
-    createPieChart("HSSPII Strategic Objective Expenditure", "project_" + projectId + "_spend_stratobj_coding", "/charts/project_pie?codings_type=spend_stratobj_coding&code_type=Nsp&project_id=" + projectId);
+    createPieChart("HSSPII Strat Program Budget", "project_" + projectId + "_budget_stratprog_coding", "/charts/project_pie?codings_type=HsspBudget&code_type=HsspStratProg&project_id=" + projectId);
+    createPieChart("HSSPII Strat Objective Budget", "project_" + projectId + "_budget_stratobj_coding", "/charts/project_pie?codings_type=HsspBudget&code_type=HsspStratObj&project_id=" + projectId);
+    createPieChart("HSSPII Strategic Program Expenditure", "project_" + projectId + "_spend_stratprog_coding", "/charts/project_pie?codings_type=HsspSpend&code_type=HsspStratProg&project_id=" + projectId);
+    createPieChart("HSSPII Strategic Objective Expenditure", "project_" + projectId + "_spend_stratobj_coding", "/charts/project_pie?codings_type=HsspSpend&code_type=HsspStratObj&project_id=" + projectId);
   });
 
 };

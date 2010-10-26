@@ -230,7 +230,7 @@ var code_assignments_show = {
     });
 
     // remove flash notice
-    jQuery("#notice").fadeOut(3000);
+    // jQuery("#notice").fadeOut(3000);
 
     jQuery("#use_budget_codings_for_spend").click(function () {
       jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",

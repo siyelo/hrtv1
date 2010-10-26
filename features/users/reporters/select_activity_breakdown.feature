@@ -38,13 +38,24 @@ Scenario: See both budget for an activity classification
   And I should see "Coding"
   And I should see the "Coding" tab is active
 
-Scenario: enter budget for an activity
+Scenario: enter budget for an activity (don't see flash errors)
+  Given I am on the budget classification page for "TB Drugs procurement"
+  When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "5000000.00"
+  And I press "Save"
+  Then I should see "Activity classification was successfully updated."
+  And I should be on the budget classification page for "TB Drugs procurement"
+  And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "5,000,000.00"
+  And I should not see "We're sorry, when we added up"
+
+Scenario: enter budget for an activity (see flash errors)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
+  And I should see "We're sorry, when we added up your Budget Coding classifications, they added up to 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 4.00). The total classified should add up to 5,000,000.00." within "#flashes"
+  And I should see "We're sorry, when we added up your Budget Coding classifications, they added up to 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 4.00). The total classified should add up to 5,000,000.00." within "#coding_flash"
 
 @javascript
 Scenario: enter expenditure for an activity

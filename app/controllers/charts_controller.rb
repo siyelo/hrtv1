@@ -3,14 +3,14 @@ class ChartsController < ApplicationController
   def project_pie
     @project = Project.available_to(current_user).find params[:project_id]
 #    if params[:codings_type].try("include?", "Strat"
-    @assignments = @project.activity_coding params[:codings_type], params[:code_type]
+    @assignments = @project.activity_coding(params[:codings_type], params[:code_type])
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end
 
   def data_response_pie
     @data_response = DataResponse.available_to(current_user).find params[:data_response_id]
-    @assignments = @data_response.activity_coding params[:codings_type], params[:code_type]
+    @assignments = @data_response.activity_coding(params[:codings_type], params[:code_type])
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end

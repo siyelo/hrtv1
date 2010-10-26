@@ -8,7 +8,6 @@ body.app
       display: none
       .actions
         font-size: 12px
-        margin-bottom: 5px
 
   .hidden
     display: none
@@ -55,15 +54,8 @@ body.app
     width: 31%
     font-size: 11px
     padding: 0 10px 20px 10px
-    +clearfix
+    +pie-clearfix
   .resources
-    position: relative
-    .actions
-      color: white
-      position: absolute
-      right: 5px
-      top: 0
-      +border-bottom-radius(3px)
       
     .placer
       position: relative
@@ -160,7 +152,7 @@ body.app
   /* default layout for a simple table */
   .simple_table
     padding: 0 10px 10px 10px
-    +clearfix
+    +pie-clearfix
     hr
       background: none
       border: none
@@ -193,14 +185,17 @@ body.app
         display: inline-block
         font-size: 1em
         &.new_btn
-          background: white
-          color: $mid-blue
-          font-size: 0.9em
-          padding: 3px 6px 2px
+          background: $mid-blue
+          border-bottom: 1px solid $light-blue
+          color: white
+          font-size: 10px
+          margin-top: 10px
+          padding: 6px 12px 5px
           text-decoration: none
-          +border-radius
+          text-transform: uppercase
+          +border-top-radius(3px)
           &:hover
-            background: orange
+            background: $light-blue
             color: $dark-blue
         &.disabled
           display: none
@@ -277,7 +272,7 @@ body.app
         font-size: 1.2em
     .dashboard_districts
       margin-bottom: 20px
-      +clearfix
+      +pie-clearfix
       li
         display: inline
         float: left
@@ -302,7 +297,7 @@ body.app
 .full-width, .simple_table
   .full
     width: 100%
-    +clearfix
+    +pie-clearfix
   .third
     float: left
     margin-right: 1%

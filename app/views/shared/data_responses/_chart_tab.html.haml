@@ -1,10 +1,8 @@
 - pie_chart_id = "dr_#{data_response.id}_#{chart_type}"
 - tree_chart_id = "dr_#{data_response.id}_#{chart_type}_tree"
-- chart_name = "#{chart_type}_tree"
 
 = render '/shared/data_responses/chart_sub_nav', :chart => chart_type
 .pie
   .chart{:id => pie_chart_id}
 .tree
   .chart{:id => tree_chart_id , :style => "width:600px; height:400px;"}
-    = render '/shared/data_responses/tree_map', :data_rows => get_data_rows(data_response, chart_type), :chart_id => tree_chart_id, :chart_name => chart_name

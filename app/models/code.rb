@@ -37,12 +37,10 @@ class Code < ActiveRecord::Base
   
   # todo recurse with array then join
   def self.treemap_for_codes(code_roots, codes, type, activities)
-    front = "data.addRows([ "
-    ending = "  ]); " # we will return front + rows + ending
-    
     # TODO better coloring
     # format is my value, parent value, box_area_value, coloring_value
-    rows = ["['All Codes',null,0,0]"]
+    rows = []
+    rows << ['All Codes',nil,0,0]
     code_roots.each do |r|
       parent_display_cache = {} # code => display_value
       parent_display_cache[r.parent] = "All Codes"
@@ -50,9 +48,8 @@ class Code < ActiveRecord::Base
         c.treemap_row(rows, type, activities, parent_display_cache) if codes.include?(c)
       end
     end
-    #return
-    rows = rows.join(",\r")
-    front + rows + ending
+
+    return rows
   end
 
   def treemap_row(rows, type, activities, treemap_parent_values)
@@ -71,7 +68,7 @@ class Code < ActiveRecord::Base
   
   # join these together with just a space
   def treemap_row_for( code_display, parent_display, box_size, color_value)
-    "            ['#{code_display}', '#{parent_display}', #{box_size}, #{color_value}]"
+    [code_display, parent_display, box_size, color_value]
   end
 
   def name

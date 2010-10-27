@@ -42,9 +42,10 @@ class Code < ActiveRecord::Base
     
     # TODO better coloring
     # format is my value, parent value, box_area_value, coloring_value
-    rows = ["['All Codes',null,0,0],\r"]
+    rows = ["['All Codes',null,0,0]"]
     code_roots.each do |r|
       parent_display_cache = {} # code => display_value
+      parent_display_cache[r.parent] = "All Codes"
       r.self_and_descendants.each do |c|
         c.treemap_row(rows, type, activities, parent_display_cache) if codes.include?(c)
       end
@@ -61,7 +62,7 @@ class Code < ActiveRecord::Base
       name_w_sum = "#{n2c(sum)}: #{name}"
       treemap_parent_values[self] = name_w_sum
       my_parent_treemap_value = treemap_parent_values[parent]
-      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, sum)
+      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, 0)
     end
   end
   

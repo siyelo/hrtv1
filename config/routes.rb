@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :data_responses, :member => {:review => :get, :submit => :put, :start => :get}
+  map.resources :data_responses, :member => { :review => :get, :submit => :put}
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
 

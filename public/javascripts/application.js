@@ -289,7 +289,18 @@ var admin_data_responses_index = {
 };
 
 
-var createPieChart = function (title, domId, urlEndpoint) {
+var get_chart_element_id = function (element_type, options) {
+  return element_type + "_" + options.id + "_" + options.chart_type + '_pie';
+};
+
+var get_pie_chart_element_endpoint = function (element_type, options) {
+  return '/charts/' + element_type + '_pie?id=' + options.id + "&codings_type=" + options.codings_type + "&code_type=" + options.code_type;
+};
+
+var createPieChart = function (element_type, options) {
+  var domId = get_chart_element_id(element_type, options)
+  var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
+
   var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#FFFFFF");
   so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
@@ -298,7 +309,7 @@ var createPieChart = function (title, domId, urlEndpoint) {
     '<settings>' +
       '<labels>' +
         '<label lid="0">' +
-          '<text>' + title + '</title>' +
+          '<text>' + options.title + '</title>' +
         '</label>' +
       '</labels>' +
     '</settings>')
@@ -306,8 +317,39 @@ var createPieChart = function (title, domId, urlEndpoint) {
   so.write(domId);
 };
 
+var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
+  return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;
+};
+
+var drawTreemap = function (element_type, element_id, chart_type, chart_element) {
+  var urlEndpoint = get_treemap_chart_element_endpoint(element_type, chart_type, element_id);
+  jQuery.getJSON(urlEndpoint, function (response) {
+    var data_rows = response;
+
+    // Create and populate the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Code');
+    data.addColumn('string', 'Parent');
+    data.addColumn('number', 'Market trade volume (size)');
+    data.addColumn('number', 'Market increase/decrease (color)');
+    data.addRows(data_rows)
+
+    // Create and draw the visualization.
+    var tree = new google.visualization.TreeMap(chart_element[0]);
+    tree.draw(data, {
+      minColor: '#99ccff',
+      midColor: '#6699cc',
+      maxColor: '#336699',
+      headerHeight: 15,
+      fontColor: 'black',
+      showScale: false
+    });
+  });
+};
 
 var build_data_response_review_screen = function () {
+
+  jQuery('.tooltip').tipsy({gravity: 'w'});
 
   jQuery('.project.entry_header').click(function (e) {
     collapse_expand(e, jQuery(this), 'project');
@@ -333,11 +375,25 @@ var build_data_response_review_screen = function () {
     }
   });
 
-
   // collapsiable project header
-  jQuery("#details").click(function (e) {
+  jQuery("#project_details").click(function (e) {
     e.preventDefault();
-    jQuery(".projects tbody").toggle();
+    jQuery("#projects").toggleClass('collapsed')
+    jQuery("#projects table:first").toggle();
+  });
+
+  // collapsiable activities header - multiple activities!
+  jQuery(".activity_details").click(function (e) {
+    e.preventDefault();
+    jQuery(this).parent(".activities").toggleClass('collapsed')
+    jQuery(this).parent(".activities").find("table:first").toggle();
+  });
+
+  // collapsiable comments header - multiple comments!
+  jQuery(".comment_details").click(function (e) {
+    e.preventDefault();
+    jQuery(this).parent(".comments").toggleClass('collapsed')
+    jQuery(this).parent(".comments").find("div:first").toggle();
   });
 
   // bind click events for project chart tabs
@@ -345,7 +401,7 @@ var build_data_response_review_screen = function () {
     e.preventDefault();
     var element = jQuery(this);
     if (element.attr("id")) {
-      jQuery(".tabs_nav ul li").removeClass('selected');
+      element.parents('.tabs_nav').find("li").removeClass('selected');
       element.addClass('selected');
       var tabs = element.parents(".tabs_nav").next(".tabs")
       tabs.find("> div").hide();
@@ -354,65 +410,60 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-  jQuery(".tabs ul.compact_tab li").click(function (e) {
+  jQuery(".tabs ul.inline_tab li").click(function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element) {
-      jQuery(".tabs ul.compact_tab li").removeClass('selected');
+      element.parents('.inline_tab').find('li').removeClass('selected');
       element.addClass('selected');
+      var tab = element.parent('ul').parent();
+
+      var matchArr = element.attr("class").match(/(.*)_tree/);
 
       // toggle tabs
-      if (element.attr("class").match(/_tree/)) {
-        // find the tabX parent, toggle it
-        element.parent('ul').parent().find(".pie").hide()
-        element.parent('ul').parent().find(".tree").show()
+      if (matchArr) {
+        tab.find(".pie").hide()
+        tab.find(".tree").show()
+
+        // draw treemap chart
+        var treemap_type = matchArr[1];
+        if (treemap_type) {
+          if (tab.find(".tree iframe").length == 0) {
+            var chart_element = tab.find(".tree .chart");
+            var element_type = tab.attr('data-chart_type');
+            var element_id = tab.attr('data-id');
+            drawTreemap(element_type, element_id, treemap_type, chart_element);
+          }
+        } else {
+          throw "Unknown chart type:" + treemap_type;
+        }
       } else {
-          element.parent('ul').parent().find(".tree").hide()
-          element.parent('ul').parent().find(".pie").show()
-      }
-      // draw tree map if not already drawn
-      if (element.attr("class").match(/mtef_budget_tree/)) {
-        // find the tabX parent, toggle it
-        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          draw_mtef_budget_tree();
-        }
-      } else if (element.attr("class").match(/mtef_spend_tree/)) {
-        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          draw_mtef_spend_tree();
-        }
-      } else if (element.attr("class").match(/nsp_budget_tree/)) {
-        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          draw_nsp_budget_tree();
-        }
-      } else if (element.attr("class").match(/nsp_spend_tree/)) {
-        if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          draw_nsp_spend_tree();
-        }
+        tab.find(".tree").hide()
+        tab.find(".pie").show()
       }
     }
    });
 
-
   // Data Response charts
-  createPieChart("MTEF Budget", "dr_" + _dr_id + "_mtef_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Mtef&data_response_id=" + _dr_id);
-  createPieChart("MTEF Expenditure", "dr_" + _dr_id + "_mtef_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Mtef&data_response_id=" + _dr_id);
-  createPieChart("NSP Budget", "dr_" + _dr_id + "_nsp_budget", "/charts/data_response_pie?codings_type=CodingBudget&code_type=Nsp&data_response_id=" + _dr_id);
-  createPieChart("NSP Expenditure", "dr_" + _dr_id + "_nsp_spend", "/charts/data_response_pie?codings_type=CodingSpend&code_type=Nsp&data_response_id=" + _dr_id);
-  createPieChart("HSSPII Strat Program Budget", "dr_" + _dr_id + "_budget_stratprog_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratProg&data_response_id=" + _dr_id);
-  createPieChart("HSSPII Strat Objective Budget", "dr_" + _dr_id + "_budget_stratobj_coding", "/charts/data_response_pie?codings_type=HsspBudget&code_type=HsspStratObj&data_response_id=" + _dr_id);
-  createPieChart("HSSPII Strategic Program Expenditure", "dr_" + _dr_id + "_spend_stratprog_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratProg&data_response_id=" + _dr_id);
-  createPieChart("HSSPII Strategic Objective Expenditure", "dr_" + _dr_id + "_spend_stratobj_coding", "/charts/data_response_pie?codings_type=HsspSpend&code_type=HsspStratObj&data_response_id=" + _dr_id);
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
 
   // Project charts
-  jQuery.each(_projects, function (i, projectId) {
-    createPieChart("MTEF Budget", "project_" + projectId + "_mtef_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Mtef&project_id=" + projectId);
-    createPieChart("MTEF Expenditure", "project_" + projectId + "_mtef_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Mtef&project_id=" + projectId);
-    createPieChart("NSP Budget", "project_" + projectId + "_nsp_budget", "/charts/project_pie?codings_type=CodingBudget&code_type=Nsp&project_id=" + projectId);
-    createPieChart("NSP Expenditure", "project_" + projectId + "_nsp_spend", "/charts/project_pie?codings_type=CodingSpend&code_type=Nsp&project_id=" + projectId);
-    createPieChart("HSSPII Strat Program Budget", "project_" + projectId + "_budget_stratprog_coding", "/charts/project_pie?codings_type=HsspBudget&code_type=HsspStratProg&project_id=" + projectId);
-    createPieChart("HSSPII Strat Objective Budget", "project_" + projectId + "_budget_stratobj_coding", "/charts/project_pie?codings_type=HsspBudget&code_type=HsspStratObj&project_id=" + projectId);
-    createPieChart("HSSPII Strategic Program Expenditure", "project_" + projectId + "_spend_stratprog_coding", "/charts/project_pie?codings_type=HsspSpend&code_type=HsspStratProg&project_id=" + projectId);
-    createPieChart("HSSPII Strategic Objective Expenditure", "project_" + projectId + "_spend_stratobj_coding", "/charts/project_pie?codings_type=HsspSpend&code_type=HsspStratObj&project_id=" + projectId);
+  jQuery.each(_projects, function (i, id) {
+    createPieChart("project", {id: id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
+    createPieChart("project", {id: id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+    createPieChart("project", {id: id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
+    createPieChart("project", {id: id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+    createPieChart("project", {id: id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
+    createPieChart("project", {id: id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
+    createPieChart("project", {id: id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
+    createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
   });
 
   approve_activity_checkbox();
@@ -427,14 +478,14 @@ var admin_data_responses_show = {
 };
 
 var reporter_data_responses_show = {
-  run: function (){
+  run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }
 };
 
 var policy_maker_data_responses_show = {
-  run: function (){
+  run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }

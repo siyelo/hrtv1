@@ -5,8 +5,8 @@
   %tr
     %td.title Activity:
     %td
-      = @activity.name.blank? ? "name n/a" : @activity.name
-      %span= link_to "Edit", edit_activity_path(@activity)
+      = @activity.name.blank? ? "(name n/a)" : @activity.name
+      %span= link_to "Edit this Activity", edit_activity_path(@activity)
   %tr
     %td.title Description:
     %td= @activity.description

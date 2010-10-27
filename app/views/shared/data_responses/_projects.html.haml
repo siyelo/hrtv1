@@ -1,32 +1,39 @@
-%table.projects
-  %thead
-    %tr
-      %th= "Projects (#{projects.count})"
-      %th Activities
-      %th Spend
-      %th Budget
-      %td.manage Manage
-  %tbody.hidden
-    - projects.each do |project|
-      %tr.project.entry_header
-        %td
-          %ul
-            %li.name= project.name
-            %li.descr= project.description.to_s
-            %li.funders
-              = "Funders: "
-              - FundingFlow.sources_for(project).each do |source|
-                = "#{source.from.try(:name)} (#{source.budget}),"
-        %td= project.activities.count
-        %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td.manage
-          = link_to "Edit", edit_project_path(project)
-          = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
+#projects.collapsed
+  %span.indicator
+  = link_to "#{@projects.count} Projects", "#", :id => "project_details", :class => 'like_a_h2'
 
-      %tr.project.entry_main.s_border
-        %td{:colspan => 100}
-          = render 'shared/data_responses/project_summary', :project => project
-          = render 'shared/data_responses/comments', :commentable => project
-          = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
-          = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+  .simple_table
+    %table.hidden
+      %thead
+        %tr
+          %th Project
+          %th Activities
+          %th Spend
+          %th Budget
+          %th.manage Manage
+      %tbody
+        - projects.each do |project|
+          %tr.project.entry_header
+            %td
+              %ul
+                %li.name= project.name
+                %li.descr= project.description.to_s
+                %li.funders
+                  = "Funders: "
+                  - FundingFlow.sources_for(project).each do |source|
+                    = "#{source.from.try(:name)} (#{source.budget}),"
+            %td= project.activities.count
+            %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+            %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+            %td.manage
+              = link_to "Edit", edit_project_path(project)
+              = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
+
+          %tr.project.entry_main.s_border
+            %td{:colspan => 100}
+              = render 'shared/data_responses/project_summary', :project => project
+              = render 'shared/data_responses/comments', :commentable => project
+
+              = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+
+              = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

@@ -5,7 +5,7 @@ Feature: In order to reduce costs
 Scenario: Browse to data response edit page
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"
-  And I follow "Configure"
+  And I follow "Settings"
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
@@ -57,7 +57,7 @@ Scenario: See data response form
   When I follow "Dashboard"
   And I follow "Edit"
   When I follow "My Data"
-  And I follow "Configure"
+  And I follow "Settings"
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 

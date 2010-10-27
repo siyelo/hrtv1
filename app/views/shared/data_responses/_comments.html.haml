@@ -1,16 +1,24 @@
 / js event: .resources, .comments
-%div{:class => "resources comments", :"data-resources" => "comments", :style => "clear: both"}
-  .placer
-  %ul.actions
-    / js event: .new_btn, .enabled
-    %li= link_to "Create new", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
-  %table.dashboard_comments
-    %thead
-      %tr
-        %th
-          = "Comments (<span class='count'>#{commentable.comments.count}</span>)"
 
-        %th Comment
-        %th.manage Manage
-    %tbody
-      = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment
+.comments.collapsed
+  %span.indicator
+  = link_to "#{commentable.comments.count} Comments", "#", :class => "comment_details like_a_h2"
+
+  %div{:class => "resources hidden", :"data-resources" => "comments", :style => "clear: both"}
+    .placer
+
+    .simple_table
+      %ul.actions
+        / js event: .new_btn, .enabled
+        %li= link_to "+ Add Comment", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+
+      %table.dashboard_comments
+        %thead
+          %tr
+            %th
+              = "Comments (<span class='count'>#{commentable.comments.count}</span>)"
+
+            %th Comment
+            %th.manage Manage
+        %tbody
+          = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment

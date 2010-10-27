@@ -1,12 +1,6 @@
 .third
   - other_costs = false unless other_costs
 
-  - unless @policy_maker
-    .actions
-      %ul
-        %li= link_to "Edit Activity", edit_activity_url(activity.id)
-        %li= popup_classify_link_for activity
-        %li= render '/code_assignments/approve', :activity => activity
   %table.summary
     %tbody
       - unless other_costs

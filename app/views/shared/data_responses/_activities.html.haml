@@ -1,43 +1,55 @@
 - other_costs = false unless other_costs
+- non_linked = false unless non_linked
 
-%table.activities
-  %thead
-    %tr
-      %th
-        = other_costs ? "Other Costs" : "Activities"
-        = "(#{activities.count})"
-      %th Classified?
-      %th Approved?
-      - unless other_costs
-        %th Sub-Implementers
-      %th Spend
-      %th Budget
-      %th.manage Manage
-  %tbody
-    - activities.each do |activity|
-      %tr.activity.entry_header
-        %td
-          %ul
-            %li.name
-              = activity.name
-            %li.descr= activity.description.to_s.first(300)
-            - unless activity.type == "OtherCost"
-              %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
-        %td= activity.classified? ? "Yes" : "No"
-        %td= activity.approved
-        - unless other_costs
-          %td= activity.sub_activities.count
-        %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-        %td.manage
-          = link_to "Edit", edit_activity_path(activity)
-          = link_to "Delete", activity, :method => :delete, :confirm => "Are your sure?"
-      %tr.activity.entry_main
-        %td.s_border{:colspan => 100}
-          = render '/shared/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
+.activities.collapsed
+  %span.indicator
+  - header = "Activities"
+  - header = "Non-linked Activities" if non_linked
+  - header = "Other Costs" if other_costs
+  = link_to "#{activities.count} #{header}", "#", :class => "activity_details like_a_h2"
+  - if non_linked
+    %span= link_to "What's this?", "#", :title => "It's possible you have not specified what project(s) these activities are related to. We've listed them here separately for your convenience.", :class => "tooltip help_tip"
 
-          = render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs
+  .simple_table
+    %table.hidden
+      %thead
+        %tr
+          %th= header
+          %th Classified?
+          %th Approved?
+          - unless other_costs
+            %th Sub-Implementers
+          %th Spend
+          %th Budget
+          %th.manage Manage
+      %tbody
+        - activities.each do |activity|
+          %tr.activity.entry_header
+            %td
+              %ul
+                %li.name
+                  = activity.name
+                %li.descr= activity.description.to_s.first(300)
+                - unless activity.type == "OtherCost"
+                  %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
+            %td= activity.classified? ? "Yes" : "No"
+            %td= activity.approved
+            - unless other_costs
+              %td= activity.sub_activities.count
+            %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+            %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+            %td.manage
+              %ul
+                %li= link_to "Edit", edit_activity_path(activity)
+                %li= link_to "Delete", activity, :method => :delete, :confirm => "Are your sure?"
+                %li= render '/code_assignments/approve', :activity => activity
 
-          = render '/shared/data_responses/sub_activities', :activity => activity
+          %tr.activity.entry_main
+            %td.s_border{:colspan => 100}
+              = render '/shared/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
 
-          = render '/shared/data_responses/comments', :commentable => activity
+              = render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs
+
+              = render '/shared/data_responses/sub_activities', :activity => activity
+
+              = render '/shared/data_responses/comments', :commentable => activity

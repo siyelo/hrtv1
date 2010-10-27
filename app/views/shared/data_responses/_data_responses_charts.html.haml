@@ -1,75 +1,27 @@
-:javascript
-  google.load("visualization", "1", {packages:["treemap"]});
+= render '/shared/data_responses/chart_nav'
 
-.tabs_nav.two-thirds
-
-  %ul.inline_tab
-    %li MTEF
-    %li{:id => 'tab1', :class => 'selected'}
-      = link_to "Budget", "#"
-    %li{:id => 'tab2'}
-      = link_to "Spend", "#"
-    %li NSP
-    %li{:id => 'tab3'}
-      = link_to "Budget", "#"
-    %li{:id => 'tab4'}
-      = link_to "Spend", "#"
-    %li HSSPII Budget
-    %li{:id => 'tab5'}
-      = link_to "Program", "#"
-    %li{:id => 'tab6'}
-      = link_to "Objective", "#"
-    %li HSSPII Spend
-    %li{:id => 'tab7'}
-      = link_to "Program", "#"
-    %li{:id => 'tab8'}
-      = link_to "Objective", "#"
 
 .tabs.two-thirds
-  .tab1
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_budget'
-    - chart_id = "dr_#{data_response.id}_mtef_budget"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/mtef_budget_tree', :chart_id => chart_id + "_tree"
+  .tab1{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => data_response, :element_type => 'data_response'
 
-  .tab2
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_spend'
-    - chart_id = "dr_#{data_response.id}_mtef_spend"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/mtef_spend_tree', :chart_id => chart_id + "_tree"
+  .tab2{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :element => data_response, :element_type => 'data_response'
 
-  .tab3
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_budget'
-    - chart_id = "dr_#{data_response.id}_nsp_budget"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/nsp_budget_tree', :chart_id => chart_id + "_tree"
+  .tab3{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :element => data_response, :element_type => 'data_response'
 
-  .tab4
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_spend'
-    - chart_id = "dr_#{data_response.id}_nsp_spend"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/nsp_spend_tree', :chart_id => chart_id + "_tree"
+  .tab4{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => data_response, :element_type => 'data_response'
 
   .tab5
-    .chart{:id => "dr_#{data_response.id}_budget_stratprog_coding"}
+    .chart{:id => "data_response_#{data_response.id}_stratprog_budget_pie"}
 
   .tab6
-    .chart{:id => "dr_#{data_response.id}_budget_stratobj_coding"}
+    .chart{:id => "data_response_#{data_response.id}_stratobj_budget_pie"}
 
   .tab7
-    .chart{:id => "dr_#{data_response.id}_spend_stratprog_coding"}
+    .chart{:id => "data_response_#{data_response.id}_stratprog_spend_pie"}
 
   .tab8
-    .chart{:id => "dr_#{data_response.id}_spend_stratobj_coding"}
+    .chart{:id => "data_response_#{data_response.id}_stratobj_spend_pie"}

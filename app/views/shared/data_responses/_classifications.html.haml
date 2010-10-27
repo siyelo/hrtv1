@@ -3,47 +3,78 @@
 .classifications.two-thirds
   = render 'code_assignments/tab_nav', :other_costs => other_costs
 
-#activity_classification.two-thirds
-  .tab1
-    %h4 Budget Coding
-    %ul
-      - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-      - @code_roots.each do |code|
-        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+#activity_classification.tabs.two-thirds
+  .tab1{:"data-chart_type" => "activity", :"data-id" => activity.id}
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_coding'
+    .pie
+      %h4 Budget Coding
+      %ul
+        - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+        - @code_roots.each do |code|
+          = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+    .tree
+      .chart{:id => "activity_#{activity.id}_budget_coding_tree", :style => "width:600px; height:400px;"}
+
 
   - unless other_costs
-    .tab2
-      %h4 Budget Districts
-      %ul
-        - activity.coding_budget_district.each do |assignment|
-          %li
-            = assignment.code.name
-            = number_to_currency(assignment.calculated_amount, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    .tab2{:"data-chart_type" => "activity", :"data-id" => activity.id}
+      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_districts'
+      .pie
+        %h4 Budget Districts
+        %ul
+          - activity.coding_budget_district.each do |assignment|
+            %li
+              = assignment.code.name
+              = assignment.cached_amount
+      .tree
+        .chart{:id => "activity_#{activity.id}_budget_districts_tree", :style => "width:600px; height:400px;"}
 
-  .tab3
-    %h4 Budget Cost Cat
-    %ul
-      - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-      - @cost_cat_roots.each do |code|
-        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
-  .tab4
-    %h4 Expenditure Coding
-    %ul
-      - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-      - @code_roots.each do |code|
-        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+
+  .tab3{:"data-chart_type" => "activity", :"data-id" => activity.id}
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_cost_categorization'
+    .pie
+      %h4 Budget Cost Cat
+      %ul
+        - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+        - @cost_cat_roots.each do |code|
+          = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+    .tree
+      .chart{:id => "activity_#{activity.id}_budget_cost_categorization_tree", :style => "width:600px; height:400px;"}
+
+
+  .tab4{:"data-chart_type" => "activity", :"data-id" => activity.id}
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_coding'
+    .pie
+      %h4 Expenditure Coding
+      %ul
+        - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+        - @code_roots.each do |code|
+          = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
+    .tree
+      .chart{:id => "activity_#{activity.id}_spend_coding_tree", :style => "width:600px; height:400px;"}
+
 
   - unless other_costs
-    .tab5
-      %h4 Expenditure Districts
+    .tab5{:"data-chart_type" => "activity", :"data-id" => activity.id}
+      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_districts'
+      .pie
+        %h4 Expenditure Districts
+        %ul
+          - activity.coding_spend_district.each do |assignment|
+            %li
+              = assignment.code.name
+              = assignment.cached_amount
+      .tree
+        .chart{:id => "activity_#{activity.id}_spend_districts_tree", :style => "width:600px; height:400px;"}
+
+
+  .tab6{:"data-chart_type" => "activity", :"data-id" => activity.id}
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_cost_categorization'
+    .pie
+      %h4 Expenditure Cost Cat
       %ul
-        - activity.coding_spend_district.each do |assignment|
-          %li
-            = assignment.code.name
-            = assignment.cached_amount
-  .tab6
-    %h4 Expenditure Cost Cat
-    %ul
-      - cost_cat_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-      - @cost_cat_roots.each do |code|
-        = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+        - cost_cat_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+        - @cost_cat_roots.each do |code|
+          = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
+    .tree
+      .chart{:id => "activity_#{activity.id}_spend_cost_categorization_tree", :style => "width:600px; height:400px;"}

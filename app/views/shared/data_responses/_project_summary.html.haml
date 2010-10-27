@@ -1,6 +1,3 @@
-- unless @policy_maker
-  .actions= link_to "Edit Project", edit_project_url(project.id)
-
 %table.third.summary
   %tbody
     %tr
@@ -42,60 +39,29 @@
           - project.locations.map(&:name).each do |loc|
             %li= "#{loc},"
 
-
-.tabs_nav.two-thirds
-
-  %ul.inline_tab
-    %li MTEF
-    %li{:id => 'tab1', :class => 'selected'}
-      = link_to "Budget", "#"
-    %li{:id => 'tab2'}
-      = link_to "Spend", "#"
-    %li NSP
-    %li{:id => 'tab3'}
-      = link_to "Budget", "#"
-    %li{:id => 'tab4'}
-      = link_to "Spend", "#"
-    %li HSSPII Budget
-    %li{:id => 'tab5'}
-      = link_to "Program", "#"
-    %li{:id => 'tab6'}
-      = link_to "Objective", "#"
-    %li HSSPII Spend
-    %li{:id => 'tab7'}
-      = link_to "Program", "#"
-    %li{:id => 'tab8'}
-      = link_to "Objective", "#"
+= render '/shared/data_responses/chart_nav'
 
 .tabs.two-thirds
-  .tab1
-    .chart{:id => "project_#{project.id}_mtef_budget"}
-      %strong You need to upgrade your Flash Player
+  .tab1{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => project, :element_type => 'project'
 
-  .tab2
-    .chart{:id => "project_#{project.id}_mtef_spend"}
-      %strong You need to upgrade your Flash Player
+  .tab2{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :element => project, :element_type => 'project'
 
-  .tab3
-    .chart{:id => "project_#{project.id}_nsp_budget"}
-      %strong You need to upgrade your Flash Player
+  .tab3{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :element => project, :element_type => 'project'
 
-  .tab4
-    .chart{:id => "project_#{project.id}_nsp_spend"}
-      %strong You need to upgrade your Flash Player
+  .tab4{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => project, :element_type => 'project'
 
   .tab5
-    .chart{:id => "project_#{project.id}_budget_stratprog_coding"}
-      %strong You need to upgrade your Flash Player
+    .chart{:id => "project_#{project.id}_stratprog_budget_pie"}
 
   .tab6
-    .chart{:id => "project_#{project.id}_budget_stratobj_coding"}
-      %strong You need to upgrade your Flash Player
+    .chart{:id => "project_#{project.id}_stratobj_budget_pie"}
 
   .tab7
-    .chart{:id => "project_#{project.id}_spend_stratprog_coding"}
-      %strong You need to upgrade your Flash Player
+    .chart{:id => "project_#{project.id}_stratprog_spend_pie"}
 
   .tab8
-    .chart{:id => "project_#{project.id}_spend_stratobj_coding"}
-      %strong You need to upgrade your Flash Player
+    .chart{:id => "project_#{project.id}_stratobj_spend_pie"}

@@ -1,3 +1,4 @@
 :javascript
   _projects = #{projects.map(&:id).to_json};
   _dr_id = "#{data_response.id}";
+  google.load("visualization", "1", {packages:["treemap"]});

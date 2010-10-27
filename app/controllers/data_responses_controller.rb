@@ -1,12 +1,9 @@
 class DataResponsesController < ApplicationController
 
   before_filter :require_user
-  before_filter :find_response, :only => [:show, :start, :update, :review, :submit]
-  before_filter :find_help, :only => [:show, :start, :update, :review]
+  before_filter :find_response, :only => [:edit, :update, :review, :submit]
+  before_filter :find_help, :only => [:edit, :update, :review]
   before_filter :find_review_status, :only => [:review, :submit]
-
-  def show
-  end
 
   # POST /data_responses
   def create
@@ -21,10 +18,9 @@ class DataResponsesController < ApplicationController
     end
   end
 
-  def start
+  def edit
     current_user.current_data_response = @data_response
     current_user.save
-    render :action => 'show'
   end
 
   def update
@@ -33,7 +29,7 @@ class DataResponsesController < ApplicationController
       flash[:notice] = "Successfully updated."
       redirect_to data_response_url(@data_response)
     else
-      render :action => :show
+      render :action => :edit
     end
   end
 

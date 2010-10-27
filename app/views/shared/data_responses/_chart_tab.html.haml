@@ -1,0 +1,8 @@
+%ul.inline_tab
+  %li.selected{:class => "#{chart_type}_pie"}= link_to "Pie", "#"
+  %li{:class => "#{chart_type}_tree"}= link_to "Tree Map", "#"
+
+.pie
+  .chart{:id => "#{element_type}_#{element.id}_#{chart_type}_pie"}
+.tree
+  .chart{:id => "#{element_type}_#{element.id}_#{chart_type}_tree", :style => "width:600px; height:400px;"}

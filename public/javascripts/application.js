@@ -306,7 +306,7 @@ var createPieChart = function (title, domId, urlEndpoint) {
   so.write(domId);
 };
 
-var draw_treemap = function (type) {
+var drawTreemap = function (type) {
   var chart_id  = _treemap_data[type].chart_id;
   var data_rows = _treemap_data[type].data_rows;
 
@@ -380,7 +380,7 @@ var build_data_response_review_screen = function () {
     e.preventDefault();
     var element = jQuery(this);
     if (element) {
-      jQuery(".tabs ul.compact_tab li").removeClass('selected');
+      element.parents('.compact_tab').find('li').removeClass('selected');
       element.addClass('selected');
 
       // toggle tabs
@@ -396,23 +396,19 @@ var build_data_response_review_screen = function () {
       if (element.attr("class").match(/mtef_budget_tree/)) {
         // find the tabX parent, toggle it
         if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          //draw_mtef_budget_tree();
-          draw_treemap('mtef_budget');
+          drawTreemap('mtef_budget');
         }
       } else if (element.attr("class").match(/mtef_spend_tree/)) {
         if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          //draw_mtef_spend_tree();
-          draw_treemap('mtef_spend');
+          drawTreemap('mtef_spend');
         }
       } else if (element.attr("class").match(/nsp_budget_tree/)) {
         if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          //draw_nsp_budget_tree();
-          draw_treemap('nsp_budget');
+          drawTreemap('nsp_budget');
         }
       } else if (element.attr("class").match(/nsp_spend_tree/)) {
         if (element.parent('ul').parent().find(".tree iframe").length == 0) {
-          //draw_nsp_spend_tree();
-          draw_treemap('nsp_spend');
+          drawTreemap('nsp_spend');
         }
       }
     }
@@ -451,14 +447,14 @@ var admin_data_responses_show = {
 };
 
 var reporter_data_responses_show = {
-  run: function (){
+  run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }
 };
 
 var policy_maker_data_responses_show = {
-  run: function (){
+  run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }

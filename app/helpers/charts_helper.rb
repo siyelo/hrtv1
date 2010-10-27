@@ -64,9 +64,17 @@ module ChartsHelper
     treemap_data = {}
 
     chart_types.each do |chart_type|
-      treemap_data[chart_type] = {:chart_id => "dr_#{data_response.id}_#{chart_type}_tree", :data_rows => get_data_rows(data_response, chart_type)}
+      treemap_data[chart_type] = {:chart_id => get_chart_id_tree(data_response, chart_type), :data_rows => get_data_rows(data_response, chart_type)}
     end
 
     treemap_data.to_json
+  end
+
+  def get_chart_id_tree(data_response, chart_type)
+    "dr_#{data_response.id}_#{chart_type}_tree"
+  end
+
+  def get_chart_id_pie(data_response, chart_type)
+    "dr_#{data_response.id}_#{chart_type}"
   end
 end

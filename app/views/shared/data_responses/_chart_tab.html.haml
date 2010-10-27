@@ -1,8 +1,8 @@
-- pie_chart_id = "dr_#{data_response.id}_#{chart_type}"
-- tree_chart_id = "dr_#{data_response.id}_#{chart_type}_tree"
+%ul.compact_tab
+  %li.selected{:class => "#{chart_type}_pie"}= link_to "Pie", "#"
+  %li{:class => "#{chart_type}_tree"}= link_to "Tree Map", "#"
 
-= render '/shared/data_responses/chart_sub_nav', :chart => chart_type
 .pie
-  .chart{:id => pie_chart_id}
+  .chart{:id => get_chart_id_pie(data_response, chart_type)}
 .tree
-  .chart{:id => tree_chart_id , :style => "width:600px; height:400px;"}
+  .chart{:id =>  get_chart_id_tree(data_response, chart_type), :style => "width:600px; height:400px;"}

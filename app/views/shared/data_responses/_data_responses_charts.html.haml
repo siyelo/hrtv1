@@ -36,8 +36,7 @@
     = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :data_response => data_response
 
   .tab5
-    -#.chart{:id => "dr_#{data_response.id}_stratprog_budget"}
-    = render 'shared/data_responses/chart_tab', :chart_type => 'stratprog_budget', :data_response => data_response
+    .chart{:id => "dr_#{data_response.id}_stratprog_budget"}
 
   .tab6
     .chart{:id => "dr_#{data_response.id}_stratobj_budget"}

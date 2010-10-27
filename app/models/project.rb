@@ -5,7 +5,6 @@ require 'lib/ReportHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
-  acts_as_commentable
 
   include ActAsDataElement
   include ActsAsDateChecker
@@ -13,6 +12,9 @@ class Project < ActiveRecord::Base
   configure_act_as_data_element
 
   acts_as_stripper
+
+  # Commentable
+  acts_as_commentable
 
   ### Associations
   has_and_belongs_to_many :activities

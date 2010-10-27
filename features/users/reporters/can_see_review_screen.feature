@@ -22,6 +22,25 @@ Background:
   And I follow "Review"
 
 @reporter_review_screen @javascript
+Scenario: Manage comments on data responses (with Javascript)
+  And I follow "Create new" within ".data_responses"
+  And I fill in "Title" with "comment title"
+  And I fill in "Comment" with "comment body"
+  And I press "Create comment"
+  Then I should see "comment title"
+  And I should see "comment body"
+  When I follow "Edit" within ".data_responses .resources.comments"
+  And I fill in "Title" with "new comment title"
+  And I fill in "Comment" with "new comment body"
+  And I press "Update comment"
+  Then I should see "new comment title"
+  And I should see "new comment body"
+  When I will confirm a js popup
+  And I follow "Delete" within ".data_responses .resources.comments"
+  Then I should not see "new comment title"
+  And I should not see "new comment body"
+
+@reporter_review_screen @javascript
 Scenario: Manage comments on project (with Javascript)
   When I follow "Show/hide details..."
   And I click element ".project .descr"

@@ -56,10 +56,13 @@ class Code < ActiveRecord::Base
   end
 
   def treemap_row(rows, type, activities, treemap_parent_values)
-    name = external_id #to_s_prefer_official
+    name = to_s_prefer_official
     sum = sum_of_assignments_for_activities(type, activities)
-    if sum > 0
+    if sum > 0 #TODO add % of total as well, abbrev amount
       name_w_sum = "#{n2c(sum)}: #{name}"
+      if treemap_parent_values.values.include?(name_w_sum)
+        name_w_sum = "#{n2c(sum)} (2): #{name}"
+      end
       treemap_parent_values[self] = name_w_sum
       my_parent_treemap_value = treemap_parent_values[parent]
       rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, 0)

@@ -27,40 +27,16 @@
 
 .tabs.two-thirds
   .tab1
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_budget'
-    - chart_id = "dr_#{data_response.id}_mtef_budget"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/mtef_budget_tree', :chart_id => chart_id + "_tree"
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :data_response => data_response
 
   .tab2
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'mtef_spend'
-    - chart_id = "dr_#{data_response.id}_mtef_spend"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/mtef_spend_tree', :chart_id => chart_id + "_tree"
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :data_response => data_response
 
   .tab3
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_budget'
-    - chart_id = "dr_#{data_response.id}_nsp_budget"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/nsp_budget_tree', :chart_id => chart_id + "_tree"
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :data_response => data_response
 
   .tab4
-    = render '/shared/data_responses/chart_sub_nav', :chart => 'nsp_spend'
-    - chart_id = "dr_#{data_response.id}_nsp_spend"
-    .pie
-      .chart{:id => chart_id}
-    .tree
-      .chart{:id => chart_id + "_tree" , :style => "width:600px; height:400px;"}
-        = render '/shared/data_responses/charts/nsp_spend_tree', :chart_id => chart_id + "_tree"
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :data_response => data_response
 
   .tab5
     .chart{:id => "dr_#{data_response.id}_budget_stratprog_coding"}

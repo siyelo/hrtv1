@@ -1,7 +1,6 @@
 - javascript "/ampie/swfobject.js"
 
-:javascript
-  _projects = #{@projects.map(&:id).to_json};
+= render 'shared/data_responses/javascript', :projects => @projects, :data_response => @data_response
 
 /%h2= "#{@data_response.data_request.title}: response from #{@data_response.organization.name}"
 %h2= "Response from #{@data_response.organization.name}"
@@ -32,45 +31,7 @@
 
 = render 'shared/data_responses/form'
 
-.tabs_nav.two-thirds
-
-  %ul.compact_tab
-    %li{:id => 'tab1', :class => 'selected'}
-      = link_to "Total Funding", "#"
-    %li{:id => 'tab2'}
-      = link_to "Funding for Budget", "#"
-    %li{:id => 'tab3'}
-      = link_to "Spend by Project", "#"
-    %li{:id => 'tab4'}
-      = link_to "Funders", "#"
-    %li{:id => 'tab5'}
-      = link_to "MTEF", "#"
-    %li{:id => 'tab6'}
-      = link_to "HSSPII", "#"
-    %li{:id => 'tab7'}
-      = link_to "Districts", "#"
-
-.tabs.two-thirds
-  .tab1
-    %h4 Total Funding
-    .chart{:id => "response_total_funding"}
-      %strong You need to upgrade your Flash Player
-
-  .tab2
-    .chart{:id => "response_spend_by_project"}
-      %strong You need to upgrade your Flash Player
-
-  .tab3
-    .chart{:id => "response_funders"}
-      %strong You need to upgrade your Flash Player
-
-  .tab4
-    .chart{:id => "response_mtef_budget"}
-      %strong You need to upgrade your Flash Player
-
-  .tab5
-    .chart{:id => "response_mtef_spend"}
-      %strong You need to upgrade your Flash Player
+= render 'shared/data_responses/data_responses_charts', :data_response => @data_response
 
 .full
   = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'

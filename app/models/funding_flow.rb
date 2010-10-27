@@ -2,8 +2,6 @@ require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
 
-  acts_as_commentable
-
   include ActAsDataElement
   configure_act_as_data_element
 
@@ -15,6 +13,9 @@ class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
   # Validations
   validates_presence_of :project_id
+
+  # Commentable
+  acts_as_commentable
 
   # Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

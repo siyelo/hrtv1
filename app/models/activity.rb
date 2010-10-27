@@ -19,7 +19,6 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  acts_as_commentable
   include ActAsDataElement
   configure_act_as_data_element
 
@@ -32,6 +31,9 @@ class Activity < ActiveRecord::Base
                   :budget, :approved, :use_budget_codings_for_spend
 
   include BudgetSpendHelpers
+
+  # Commentable
+  acts_as_commentable
 
   # Associations
   has_and_belongs_to_many :projects

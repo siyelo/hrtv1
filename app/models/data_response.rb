@@ -7,6 +7,9 @@ class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
   include ReportHelpers
 
+  # Commentable
+  acts_as_commentable
+
   # Associations
 
   has_many :activities, :dependent => :destroy

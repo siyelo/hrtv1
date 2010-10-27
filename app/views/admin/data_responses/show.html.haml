@@ -33,6 +33,9 @@
 
 = render 'shared/data_responses/data_responses_charts', :data_response => @data_response
 
+.simple_table.data_responses
+  = render 'shared/data_responses/comments', :commentable => @data_response
+
 .full
   = link_to "Show/hide details...", "#", :id => "details", :class => 'like_a_h3'
 

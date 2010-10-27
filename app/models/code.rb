@@ -13,6 +13,18 @@ class Code < ActiveRecord::Base
 
   end
 
+  def self.deepest_nesting
+    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+  end
+  def self.roots_with_level
+    a = []
+    self.roots.each do |nsp_root|
+      self.each_with_level(nsp_root.self_and_descendants) do |code, level|       # each_with_level() is faster than level()
+        a << [level, code.id]
+      end
+    end
+    a
+  end
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
   end

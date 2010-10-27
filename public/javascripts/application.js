@@ -373,7 +373,6 @@ var build_data_response_review_screen = function () {
     }
   });
 
-
   // collapsiable project header
   jQuery("#details").click(function (e) {
     e.preventDefault();

@@ -30,6 +30,14 @@ class ChartsController < ApplicationController
     end
   end
 
+  def activity_treemap
+    activity = Activity.find(params[:id])
+    
+    respond_to do |format|
+      format.json { render :json => get_activity_data_rows(activity, params[:chart_type]) }
+    end
+  end
+
   private
 
   # csv format for AM pie chart:
@@ -125,14 +133,33 @@ class ChartsController < ApplicationController
     end
   end
 
-  def get_project_data_rows(data_response, chart_type)
+  def get_project_data_rows(project, chart_type)
     data_rows = []
+    data_rows << ['All Codes',nil,0,0]
 
     case chart_type
     when 'mtef_budget'
     when 'mtef_spend'
     when 'nsp_budget'
     when 'nsp_spend'
+    else
+      raise "Wrong chart type".to_yaml
+    end
+
+    return data_rows
+  end
+
+  def get_activity_data_rows(activity, chart_type)
+    data_rows = []
+    data_rows << ['All Codes',nil,0,0]
+
+    case chart_type
+    when 'budget_coding'
+    when 'budget_districts'
+    when 'budget_cost_categorization'
+    when 'spend_coding'
+    when 'spend_districts'
+    when 'spend_cost_categorization'
     else
       raise "Wrong chart type".to_yaml
     end

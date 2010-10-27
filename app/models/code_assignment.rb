@@ -22,11 +22,13 @@ class CodeAssignment < ActiveRecord::Base
 #  end
 
   def calculated_amount
-    if read_attribute(:amount).nil?
+    # let's always used cached amount for now
+
+#    if read_attribute(:amount).nil?
       cached_amount
-    else
-      read_attribute(:amount)
-    end
+#    else
+#      read_attribute(:amount)
+#    end
   end
 
   def self.update_codings(code_assignments, activity)

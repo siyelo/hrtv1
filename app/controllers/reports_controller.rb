@@ -158,8 +158,7 @@ class ReportsController < ApplicationController
     else
       @data_response = current_user.data_responses.find(params[:id])
     end
-    p = Project.find_by_name("IHSSP")
-    rep = Reports::ActivitiesByFullCoding.new(p.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::ActivitiesByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_full_coding.csv"

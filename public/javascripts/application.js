@@ -329,27 +329,29 @@ var createPieChart = function (element_type, options) {
   so.write(domId);
 };
 
-var drawTreemap = function (type) {
-  var chart_id  = _treemap_data[type].chart_id;
-  var data_rows = _treemap_data[type].data_rows;
+var drawTreemap = function (element_type, chart_type, chart) {
+  jQuery.getJSON('/charts/data_response_treemap?data_response_id=' + _dr_id + '&chart_type=' + chart_type, function (response) {
+    var data_rows = response;
 
-  // Create and populate the data table.
-  var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Code');
-  data.addColumn('string', 'Parent');
-  data.addColumn('number', 'Market trade volume (size)');
-  data.addColumn('number', 'Market increase/decrease (color)');
-  data.addRows(data_rows)
+    // Create and populate the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Code');
+    data.addColumn('string', 'Parent');
+    data.addColumn('number', 'Market trade volume (size)');
+    data.addColumn('number', 'Market increase/decrease (color)');
+    data.addRows(data_rows)
 
-  // Create and draw the visualization.
-  var tree = new google.visualization.TreeMap(document.getElementById(chart_id));
-  tree.draw(data, {
-    minColor: '#99ccff',
-    midColor: '#6699cc',
-    maxColor: '#336699',
-    headerHeight: 15,
-    fontColor: 'black',
-    showScale: false});
+    // Create and draw the visualization.
+    var tree = new google.visualization.TreeMap(chart[0]);
+    tree.draw(data, {
+      minColor: '#99ccff',
+      midColor: '#6699cc',
+      maxColor: '#336699',
+      headerHeight: 15,
+      fontColor: 'black',
+      showScale: false
+    });
+  });
 };
 
 var build_data_response_review_screen = function () {
@@ -418,7 +420,8 @@ var build_data_response_review_screen = function () {
         var treemapType = matchArr[1];
         if (treemapType) {
           if (tab.find(".tree iframe").length == 0) {
-            drawTreemap(treemapType);
+            var chart = tab.find(".tree .chart");
+            drawTreemap('dr', treemapType, chart);
           }
         } else {
           throw "Unknown chart type:" + treemapType;

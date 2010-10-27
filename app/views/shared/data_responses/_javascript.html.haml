@@ -2,5 +2,3 @@
   _projects = #{projects.map(&:id).to_json};
   _dr_id = "#{data_response.id}";
   google.load("visualization", "1", {packages:["treemap"]});
-  _treemap_data = #{get_treemap_data(data_response, ['mtef_budget', 'mtef_spend', 'nsp_budget', 'nsp_spend'])};
-

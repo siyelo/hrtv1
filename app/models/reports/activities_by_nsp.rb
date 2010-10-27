@@ -21,11 +21,11 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
   def add_rows csv, code
     add_code_summary_row(csv, code)
+    row(csv, code, @activities, @report_type)
     kids = code.children.with_type("Nsp")
     kids.each do |c|
       add_rows(csv, c)
     end
-    row(csv, code, @activities, @report_type)
   end
 
   def add_code_summary_row csv, code

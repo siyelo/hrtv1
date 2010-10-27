@@ -3,6 +3,6 @@
   %li{:class => "#{chart_type}_tree"}= link_to "Tree Map", "#"
 
 .pie
-  .chart{:id => get_chart_id_pie(data_response, chart_type)}
+  .chart{:id => "#{element_type}_#{element.id}_#{chart_type}_pie"}
 .tree
-  .chart{:id =>  get_chart_id_tree(data_response, chart_type), :style => "width:600px; height:400px;"}
+  .chart{:id => "#{element_type}_#{element.id}_#{chart_type}_tree", :style => "width:600px; height:400px;"}

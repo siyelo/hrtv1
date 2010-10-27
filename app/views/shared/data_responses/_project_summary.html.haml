@@ -68,34 +68,30 @@
       = link_to "Objective", "#"
 
 .tabs.two-thirds
-  .tab1
-    .chart{:id => "project_#{project.id}_mtef_budget"}
-      %strong You need to upgrade your Flash Player
+  .tab1{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => project, :element_type => 'project'
 
-  .tab2
-    .chart{:id => "project_#{project.id}_mtef_spend"}
-      %strong You need to upgrade your Flash Player
+  .tab2{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :element => project, :element_type => 'project'
 
-  .tab3
-    .chart{:id => "project_#{project.id}_nsp_budget"}
-      %strong You need to upgrade your Flash Player
+  .tab3{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :element => project, :element_type => 'project'
 
-  .tab4
-    .chart{:id => "project_#{project.id}_nsp_spend"}
-      %strong You need to upgrade your Flash Player
+  .tab4{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => project, :element_type => 'project'
 
   .tab5
-    .chart{:id => "project_#{project.id}_stratprog_budget"}
+    .chart{:id => "project_#{project.id}_stratprog_budget_pie"}
       %strong You need to upgrade your Flash Player
 
   .tab6
-    .chart{:id => "project_#{project.id}_stratobj_budget"}
+    .chart{:id => "project_#{project.id}_stratobj_budget_pie"}
       %strong You need to upgrade your Flash Player
 
   .tab7
-    .chart{:id => "project_#{project.id}_stratprog_spend"}
+    .chart{:id => "project_#{project.id}_stratprog_spend_pie"}
       %strong You need to upgrade your Flash Player
 
   .tab8
-    .chart{:id => "project_#{project.id}_stratobj_spend"}
+    .chart{:id => "project_#{project.id}_stratobj_spend_pie"}
       %strong You need to upgrade your Flash Player

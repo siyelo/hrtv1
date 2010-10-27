@@ -23,26 +23,26 @@
       = link_to "Objective", "#"
 
 .tabs.two-thirds
-  .tab1
-    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :data_response => data_response
+  .tab1{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => data_response, :element_type => 'data_response'
 
-  .tab2
-    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :data_response => data_response
+  .tab2{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :element => data_response, :element_type => 'data_response'
 
-  .tab3
-    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :data_response => data_response
+  .tab3{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :element => data_response, :element_type => 'data_response'
 
-  .tab4
-    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :data_response => data_response
+  .tab4{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => data_response, :element_type => 'data_response'
 
   .tab5
-    .chart{:id => "dr_#{data_response.id}_stratprog_budget"}
+    .chart{:id => "data_response_#{data_response.id}_stratprog_budget_pie"}
 
   .tab6
-    .chart{:id => "dr_#{data_response.id}_stratobj_budget"}
+    .chart{:id => "data_response_#{data_response.id}_stratobj_budget_pie"}
 
   .tab7
-    .chart{:id => "dr_#{data_response.id}_stratprog_spend"}
+    .chart{:id => "data_response_#{data_response.id}_stratprog_spend_pie"}
 
   .tab8
-    .chart{:id => "dr_#{data_response.id}_stratobj_spend"}
+    .chart{:id => "data_response_#{data_response.id}_stratobj_spend_pie"}

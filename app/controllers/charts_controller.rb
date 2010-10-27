@@ -1,21 +1,21 @@
 class ChartsController < ApplicationController
 
   def data_response_pie
-    @data_response = DataResponse.available_to(current_user).find(params[:data_response_id])
+    @data_response = DataResponse.available_to(current_user).find(params[:id])
     @assignments = @data_response.activity_coding(params[:codings_type], params[:code_type])
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end
 
   def project_pie
-    @project = Project.available_to(current_user).find(params[:project_id])
+    @project = Project.available_to(current_user).find(params[:id])
     @assignments = @project.activity_coding(params[:codings_type], params[:code_type])
 
     send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
   end
 
   def data_response_treemap
-    data_response = DataResponse.find(params[:data_response_id])
+    data_response = DataResponse.find(params[:id])
     
     respond_to do |format|
       format.json { render :json => get_data_response_data_rows(data_response, params[:chart_type]) }
@@ -23,6 +23,11 @@ class ChartsController < ApplicationController
   end
 
   def project_treemap
+    project = Project.find(params[:id])
+    
+    respond_to do |format|
+      format.json { render :json => get_project_data_rows(project, params[:chart_type]) }
+    end
   end
 
   private
@@ -118,5 +123,20 @@ class ChartsController < ApplicationController
     else
       raise "Wrong chart type".to_yaml
     end
+  end
+
+  def get_project_data_rows(data_response, chart_type)
+    data_rows = []
+
+    case chart_type
+    when 'mtef_budget'
+    when 'mtef_spend'
+    when 'nsp_budget'
+    when 'nsp_spend'
+    else
+      raise "Wrong chart type".to_yaml
+    end
+
+    return data_rows
   end
 end

@@ -290,28 +290,16 @@ var admin_data_responses_index = {
 
 
 var get_chart_element_id = function (element_type, options) {
-  return element_type + "_" + options.id + "_" + options.chart_type;
+  return element_type + "_" + options.id + "_" + options.chart_type + '_pie';
 };
 
-var get_chart_element_endpoint = function (element_type, options) {
-  var url = "/charts/"
-
-  if (element_type === "dr") {
-    url += "data_response_pie?" + "data_response_id=" + options.id
-  } else if (element_type === "project") {
-    url += "project_pie?" + "project_id=" + options.id
-  } else {
-    throw "Unknown element type:" + element_type;
-  }
-
-  url += "&codings_type=" + options.codings_type + "&code_type=" + options.code_type;
-
-  return url;
+var get_pie_chart_element_endpoint = function (element_type, options) {
+  return '/charts/' + element_type + '_pie?id=' + options.id + "&codings_type=" + options.codings_type + "&code_type=" + options.code_type;
 };
 
 var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
-  var urlEndpoint = get_chart_element_endpoint(element_type, options)
+  var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
   var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#FFFFFF");
   so.addVariable("path", "/ampie/");
@@ -329,8 +317,13 @@ var createPieChart = function (element_type, options) {
   so.write(domId);
 };
 
-var drawTreemap = function (element_type, chart_type, chart) {
-  jQuery.getJSON('/charts/data_response_treemap?data_response_id=' + _dr_id + '&chart_type=' + chart_type, function (response) {
+var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
+  return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;
+};
+
+var drawTreemap = function (element_type, element_id, chart_type, chart_element) {
+  var urlEndpoint = get_treemap_chart_element_endpoint(element_type, chart_type, element_id);
+  jQuery.getJSON(urlEndpoint, function (response) {
     var data_rows = response;
 
     // Create and populate the data table.
@@ -342,7 +335,7 @@ var drawTreemap = function (element_type, chart_type, chart) {
     data.addRows(data_rows)
 
     // Create and draw the visualization.
-    var tree = new google.visualization.TreeMap(chart[0]);
+    var tree = new google.visualization.TreeMap(chart_element[0]);
     tree.draw(data, {
       minColor: '#99ccff',
       midColor: '#6699cc',
@@ -392,7 +385,7 @@ var build_data_response_review_screen = function () {
     e.preventDefault();
     var element = jQuery(this);
     if (element.attr("id")) {
-      jQuery(".tabs_nav ul li").removeClass('selected');
+      element.parents('.tabs_nav').find("li").removeClass('selected');
       element.addClass('selected');
       var tabs = element.parents(".tabs_nav").next(".tabs")
       tabs.find("> div").hide();
@@ -417,14 +410,16 @@ var build_data_response_review_screen = function () {
         tab.find(".tree").show()
 
         // draw treemap chart
-        var treemapType = matchArr[1];
-        if (treemapType) {
+        var treemap_type = matchArr[1];
+        if (treemap_type) {
           if (tab.find(".tree iframe").length == 0) {
-            var chart = tab.find(".tree .chart");
-            drawTreemap('dr', treemapType, chart);
+            var chart_element = tab.find(".tree .chart");
+            var element_type = tab.attr('data-chart_type');
+            var element_id = tab.attr('data-id');
+            drawTreemap(element_type, element_id, treemap_type, chart_element);
           }
         } else {
-          throw "Unknown chart type:" + treemapType;
+          throw "Unknown chart type:" + treemap_type;
         }
       } else {
         tab.find(".tree").hide()
@@ -434,14 +429,14 @@ var build_data_response_review_screen = function () {
    });
 
   // Data Response charts
-  createPieChart("dr", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-  createPieChart("dr", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
-  createPieChart("dr", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-  createPieChart("dr", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
-  createPieChart("dr", {id: _dr_id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
-  createPieChart("dr", {id: _dr_id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
-  createPieChart("dr", {id: _dr_id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
-  createPieChart("dr", {id: _dr_id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
 
   // Project charts
   jQuery.each(_projects, function (i, id) {

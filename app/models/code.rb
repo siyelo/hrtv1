@@ -52,18 +52,18 @@ class Code < ActiveRecord::Base
       parent_display_cache = {} # code => display_value , used to connect rows
       parent_display_cache[r.parent] = root_name
       Code.each_with_level(r.self_and_descendants) do |c,level|
-        c.treemap_row(rows, type, activities, parent_display_cache, level) if codes.include?(c)
+        c.treemap_row(rows, type, activities, parent_display_cache, level, sum_of_roots) if codes.include?(c)
       end
     end
 
     rows
   end
 
-  def treemap_row(rows, type, activities, treemap_parent_values, level)
+  def treemap_row(rows, type, activities, treemap_parent_values, level, total_for_percentage)
     name = to_s_prefer_official
     sum = sum_of_assignments_for_activities(type, activities)
     if sum > 0 #TODO add % of total as well, abbrev amount
-      name_w_sum = "#{n2c(sum)}: #{name}"
+      name_w_sum = "#{n2c(sum/total_for_percentage)}%: #{name}"
       if treemap_parent_values.values.include?(name_w_sum)
         name_w_sum = "#{n2c(sum)} (2): #{name}"
       end

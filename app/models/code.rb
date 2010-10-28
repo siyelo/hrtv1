@@ -40,19 +40,26 @@ class Code < ActiveRecord::Base
     # TODO better coloring
     # format is my value, parent value, box_area_value, coloring_value
     rows = []
-    rows << ['All Codes',nil,0,0]
+    sum_of_roots = 0
     code_roots.each do |r|
-      parent_display_cache = {} # code => display_value
-      parent_display_cache[r.parent] = "All Codes"
-      r.self_and_descendants.each do |c|
-        c.treemap_row(rows, type, activities, parent_display_cache) if codes.include?(c)
+      sum_of_roots += r.sum_of_assignments_for_activities(type,activities)
+    end
+    root_name = "#{sum_of_roots}: All Codes" #TODO find some way to call n2c
+    #including the helper doesn't add number_to_currency as class method
+    rows << [root_name,nil,sum_of_roots,0]
+
+    code_roots.each do |r|
+      parent_display_cache = {} # code => display_value , used to connect rows
+      parent_display_cache[r.parent] = root_name
+      Code.each_with_level(r.self_and_descendants) do |c,level|
+        c.treemap_row(rows, type, activities, parent_display_cache, level) if codes.include?(c)
       end
     end
 
-    return rows
+    rows
   end
 
-  def treemap_row(rows, type, activities, treemap_parent_values)
+  def treemap_row(rows, type, activities, treemap_parent_values, level)
     name = to_s_prefer_official
     sum = sum_of_assignments_for_activities(type, activities)
     if sum > 0 #TODO add % of total as well, abbrev amount
@@ -62,7 +69,7 @@ class Code < ActiveRecord::Base
       end
       treemap_parent_values[self] = name_w_sum
       my_parent_treemap_value = treemap_parent_values[parent]
-      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, 0)
+      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, level)
     end
   end
   

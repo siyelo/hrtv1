@@ -4,7 +4,7 @@
 .activities.collapsed
   %span.indicator
   - header = "Activities"
-  - header = "Non-linked Activities" if non_linked
+  - header = "Activities without a Project" if non_linked
   - header = "Other Costs" if other_costs
   = link_to "#{activities.count} #{header}", "#", :class => "activity_details like_a_h2"
   - if non_linked

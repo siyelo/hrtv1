@@ -72,32 +72,21 @@ class ChartsController < ApplicationController
   end
 
   def get_data_response_data_rows(data_response, chart_type)
+    get_summary_data_rows(data_response.activities, chart_type)
+  end
+
+  def get_project_data_rows(project, chart_type)
+    get_summary_data_rows(project.activities, chart_type)
+  end
+
+  def get_summary_data_rows(activities, chart_type)
+    raise "Wrong chart type".to_yaml unless %w[mtef_budget mtef_spend nsp_budget nsp_spend].include? chart_type
     type = chart_type.include?("spend") ? "CodingSpend" : "CodingBudget"
     code_class = chart_type.include?("mtef") ? Mtef : Nsp
     codes = code_class.all
     roots = code_class.roots
-    if %w[mtef_budget mtef_spend nsp_budget nsp_spend].include? chart_type
-      data_rows = Code.treemap_for_codes(roots, codes, type, data_response.activities)
-      return data_rows
-    else
-      raise "Wrong chart type".to_yaml
-    end
-  end
-
-  def get_project_data_rows(project, chart_type)
-    data_rows = []
-    data_rows << ['All Codes',nil,0,0]
-
-    case chart_type
-    when 'mtef_budget'
-    when 'mtef_spend'
-    when 'nsp_budget'
-    when 'nsp_spend'
-    else
-      raise "Wrong chart type".to_yaml
-    end
-
-    return data_rows
+    raise_error_if_bad_summary_chart_type(chart_type)
+    data_rows = Code.treemap_for_codes(roots, codes, type, data_response.activities)
   end
 
   def get_activity_data_rows(activity, chart_type)

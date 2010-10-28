@@ -44,8 +44,9 @@ class Code < ActiveRecord::Base
     code_roots.each do |r|
       sum_of_roots += r.sum_of_assignments_for_activities(type,activities)
     end
-    root_name = "#{sum_of_roots}: All Codes" #TODO find some way to call n2c
+    #TODO find some way to call n2c
     #including the helper doesn't add number_to_currency as class method
+    root_name = "#{Code.new.n2c(sum_of_roots)}: All Codes" 
     rows << [root_name,nil,sum_of_roots,0]
 
     code_roots.each do |r|
@@ -63,7 +64,7 @@ class Code < ActiveRecord::Base
     name = to_s_prefer_official
     sum = sum_of_assignments_for_activities(type, activities)
     if sum > 0 #TODO add % of total as well, abbrev amount
-      name_w_sum = "#{n2c(sum/total_for_percentage)}%: #{name}"
+      name_w_sum = "#{n2c(sum/total_for_percentage*100)}%: #{name}"
       if treemap_parent_values.values.include?(name_w_sum)
         name_w_sum = "#{n2c(sum)} (2): #{name}"
       end

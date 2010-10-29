@@ -41,4 +41,95 @@ describe Organization do
       subject.implementor_for.first.should == project
     end    
   end  
+
+  describe "remove duplicate organization" do
+    it "deletes duplicate after merge" do
+      target = Factory.create(:organization)
+      duplicate = Factory.create(:organization)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      all_organizations = Organization.all
+      all_organizations.should include(target)
+      all_organizations.should_not include(duplicate)
+    end
+
+    it "copies activities from duplicate to target" do
+      target = Factory.create(:organization)
+      target.activities << Factory.create(:activity)
+      duplicate = Factory.create(:organization)
+      duplicate.activities << Factory.create(:activity)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.activities.count.should == 2
+    end
+
+    it "copies data_requests_made from duplicate to target" do
+      target = Factory.create(:organization)
+      Factory.create(:data_request, :requesting_organization => target)
+      duplicate = Factory.create(:organization)
+      Factory.create(:data_request, :requesting_organization => duplicate)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.data_requests_made.count.should == 2
+    end
+
+    it "copies data responses from duplicate to target" do
+      target = Factory.create(:organization)
+      Factory.create(:data_response, :responding_organization => target)
+      duplicate = Factory.create(:organization)
+      Factory.create(:data_response, :responding_organization => duplicate)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.data_responses.count.should == 2
+    end
+
+
+    it "copies out flows from duplicate to target" do
+      target = Factory.create(:organization)
+      target.out_flows << Factory.create(:funding_flow)
+      duplicate = Factory.create(:organization)
+      duplicate.out_flows << Factory.create(:funding_flow)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.out_flows.count.should == 2
+    end
+
+    it "copies in flows from duplicate to target" do
+      target = Factory.create(:organization)
+      target.in_flows << Factory.create(:funding_flow)
+      duplicate = Factory.create(:organization)
+      duplicate.in_flows << Factory.create(:funding_flow)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.in_flows.count.should == 2
+    end
+
+    it "copies locations from duplicate to target" do
+      target = Factory.create(:organization)
+      target.locations << Factory.create(:location)
+      duplicate = Factory.create(:organization)
+      duplicate.locations << Factory.create(:location)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.locations.count.should == 2
+    end
+
+    it "copies users from duplicate to target" do
+      target = Factory.create(:organization)
+      Factory.create(:user, :organization => target)
+      duplicate = Factory.create(:organization)
+      Factory.create(:user, :organization => duplicate)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.users.count.should == 2
+    end
+  end
 end

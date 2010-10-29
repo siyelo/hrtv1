@@ -29,6 +29,9 @@ module NavigationHelpers
     when /the comments page/
       comments_path
 
+    when /the organizations page/
+      organizations_path
+
     when /the login page/
       login_path
 

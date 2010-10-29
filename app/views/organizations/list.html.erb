@@ -1,3 +1,4 @@
+<%= link_to "Merge duplicate organization", duplicate_organizations_path if current_user.role?(:admin) %>
 <% @grid = render :super %> 
 <%= 
   render :partial => "shared/data_entry_for_model_admin",

@@ -21,7 +21,7 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:select => :post}, :active_scaffold => true
 
   map.resources :organizations,
-      :collection => {:browse => :get},
+      :collection => {:browse => :get, :duplicate => :get, :remove_duplicate => :put},
       :member => {:select => :post}, :active_scaffold => true
 
 

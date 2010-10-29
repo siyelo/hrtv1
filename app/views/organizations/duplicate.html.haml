@@ -1,0 +1,13 @@
+- form_tag remove_duplicate_organizations_path, :method => :put do
+  %div
+    %h2 Potential duplicates
+    = label_tag :duplicate_organization_id, "Duplicate organization"
+    = select_tag :duplicate_organization_id, options_for_select(@potential_duplicate_organiations.map{|o| [o.name, o.id]})
+    
+  %div
+    %h2 All organizations
+    = label_tag :target_organization_id, "Target organization"
+    = select_tag :target_organization_id, options_for_select(@all_organizations.map{|o| [o.name, o.id]})
+
+  %div
+    = submit_tag "Merge"

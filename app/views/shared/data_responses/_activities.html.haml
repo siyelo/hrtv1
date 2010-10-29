@@ -42,6 +42,7 @@
               %ul
                 %li= link_to "Edit", edit_activity_path(activity)
                 %li= link_to "Delete", activity, :method => :delete, :confirm => "Are your sure?"
+                %li= popup_classify_link_for activity
                 %li= render '/code_assignments/approve', :activity => activity
 
           %tr.activity.entry_main

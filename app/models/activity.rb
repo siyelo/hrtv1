@@ -301,6 +301,17 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def coding_progress
+    coded = 0
+    coded +=1 if budget?
+    coded +=1 if budget_by_district?
+    coded +=1 if budget_by_cost_category?
+    coded +=1 if spend?
+    coded +=1 if spend_by_district?
+    coded +=1 if spend_by_cost_category?
+    progress = (coded.to_f / 6) * 100
+  end
+
   private
 
   def approved_activity_cannot_be_changed
@@ -341,10 +352,10 @@ class Activity < ActiveRecord::Base
       assignments
     end
   end
-  
+
   def district_codings_from_sub_activities(klass, amount)
     districts_hash = {}
-    Location.all.each do |l| 
+    Location.all.each do |l|
       districts_hash[l] = 0
     end
     sub_activities.each do |s|

@@ -16,7 +16,7 @@ class ChartsController < ApplicationController
 
   def data_response_treemap
     data_response = DataResponse.find(params[:id])
-    
+
     respond_to do |format|
       format.json { render :json => get_data_response_data_rows(data_response, params[:chart_type]) }
     end
@@ -24,7 +24,7 @@ class ChartsController < ApplicationController
 
   def project_treemap
     project = Project.find(params[:id])
-    
+
     respond_to do |format|
       format.json { render :json => get_project_data_rows(project, params[:chart_type]) }
     end
@@ -32,7 +32,7 @@ class ChartsController < ApplicationController
 
   def activity_treemap
     activity = Activity.find(params[:id])
-    
+
     respond_to do |format|
       format.json { render :json => get_activity_data_rows(activity, params[:chart_type]) }
     end

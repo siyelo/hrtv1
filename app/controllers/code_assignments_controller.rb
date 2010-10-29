@@ -15,6 +15,8 @@ class CodeAssignmentsController < ApplicationController
 
     @coding_error = add_code_assignments_error(coding_class, @activity)
 
+    @progress = @activity.coding_progress
+
     if params[:tab].present?
       # ajax requests for all tabs except the first one
       render :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }, :layout => false
@@ -60,7 +62,7 @@ class CodeAssignmentsController < ApplicationController
       coding_amount = number_to_currency(coding_amount, :separator => ".", :unit => "", :delimiter => ",")
       difference = number_to_currency(difference, :separator => ".", :unit => "", :delimiter => ",")
       percent_diff = number_to_currency(percent_diff, :separator => ".", :unit => "", :delimiter => ",")
- 
+
       "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}."
     end
   end

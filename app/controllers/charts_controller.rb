@@ -90,19 +90,24 @@ class ChartsController < ApplicationController
   end
 
   def get_activity_data_rows(activity, chart_type)
-    data_rows = []
-    data_rows << ['All Codes',nil,0,0]
-
     case chart_type
     when 'budget_coding'
+      type = CodingBudget
     when 'budget_districts'
+      type = CodingBudgetDistricts
     when 'budget_cost_categorization'
+      type = CodingBudgetCostCategorization
     when 'spend_coding'
+      type = CodingSpend
     when 'spend_districts'
+      type = CodingSpendDistrict
     when 'spend_cost_categorization'
+      type = CodingSpendCostCategorization
     else
       raise "Wrong chart type".to_yaml
     end
+    roots = type.roots
+    codes = nil #code_class.all #just union Mtef.all Nha.all etc here as appro
 
     return data_rows
   end

@@ -85,8 +85,7 @@ class ChartsController < ApplicationController
     code_class = chart_type.include?("mtef") ? Mtef : Nsp
     codes = code_class.all
     roots = code_class.roots
-    raise_error_if_bad_summary_chart_type(chart_type)
-    data_rows = Code.treemap_for_codes(roots, codes, type, data_response.activities)
+    data_rows = Code.treemap_for_codes(roots, codes, type, activities)
   end
 
   def get_activity_data_rows(activity, chart_type)

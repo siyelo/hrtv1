@@ -72,89 +72,42 @@ class ChartsController < ApplicationController
   end
 
   def get_data_response_data_rows(data_response, chart_type)
-    case chart_type
-    when 'mtef_budget'
-      data_rows = []
-      data_rows << ['All Codes',nil,0,0]
-
-      codes = Mtef.all
-      roots = Mtef.roots
-      data_rows = Code.treemap_for_codes(roots, codes, "CodingBudget", data_response.activities)
-      return data_rows
-    when 'mtef_spend'
-      data_rows = []
-      data_rows << ['All Codes',nil,0,0]
-
-      codes = Mtef.all
-      roots = Mtef.roots
-      codings = CodingBudget.with_code_ids(codes).with_activities(data_response.activities).all.map_to_hash{ |b| {b.code_id => b} }
-
-      codes.each do |code|
-        # ignore parents of a different type
-        parent = roots.include?(code) ? 'All Codes' : code.parent.short_display
-        amount = codings[code.id].nil? ? 0 : codings[code.id].calculated_amount
-        data_rows << [code.short_display, parent, amount, code.level]
-      end
-
-      return data_rows
-    when 'nsp_budget'
-      codes = Nsp.all
-      roots = Nsp.roots
-
-      new_data_rows = Code.treemap_for_codes(roots, codes, "CodingBudget", data_response.activities)
-
-      return new_data_rows
-    when 'nsp_spend'
-      data_rows = []
-      data_rows << ['All Codes',nil,0,0]
-
-      codes = Nsp.all
-      roots = Nsp.roots
-      codings = CodingBudget.with_code_ids(codes).with_activities(data_response.activities).all.map_to_hash{ |b| {b.code_id => b} }
-
-      codes.each do |code|
-        # ignore parents of a different type
-        parent = roots.include?(code) ? 'All Codes' : code.parent.short_display
-        amount = codings[code.id].nil? ? 0 : codings[code.id].calculated_amount
-        data_rows << [code.short_display, parent, amount, code.level]
-      end
-
-      return data_rows
-    else
-      raise "Wrong chart type".to_yaml
-    end
+    get_summary_data_rows(data_response.activities, chart_type)
   end
 
   def get_project_data_rows(project, chart_type)
-    data_rows = []
-    data_rows << ['All Codes',nil,0,0]
+    get_summary_data_rows(project.activities, chart_type)
+  end
 
-    case chart_type
-    when 'mtef_budget'
-    when 'mtef_spend'
-    when 'nsp_budget'
-    when 'nsp_spend'
-    else
-      raise "Wrong chart type".to_yaml
-    end
-
-    return data_rows
+  def get_summary_data_rows(activities, chart_type)
+    raise "Wrong chart type".to_yaml unless %w[mtef_budget mtef_spend nsp_budget nsp_spend].include? chart_type
+    type = chart_type.include?("spend") ? "CodingSpend" : "CodingBudget"
+    code_class = chart_type.include?("mtef") ? Mtef : Nsp
+    codes = code_class.all
+    roots = code_class.roots
+    raise_error_if_bad_summary_chart_type(chart_type)
+    data_rows = Code.treemap_for_codes(roots, codes, type, data_response.activities)
   end
 
   def get_activity_data_rows(activity, chart_type)
-    data_rows = []
-    data_rows << ['All Codes',nil,0,0]
-
     case chart_type
     when 'budget_coding'
+      type = CodingBudget
     when 'budget_districts'
+      type = CodingBudgetDistricts
     when 'budget_cost_categorization'
+      type = CodingBudgetCostCategorization
     when 'spend_coding'
+      type = CodingSpend
     when 'spend_districts'
+      type = CodingSpendDistrict
     when 'spend_cost_categorization'
+      type = CodingSpendCostCategorization
     else
       raise "Wrong chart type".to_yaml
     end
+    roots = type.roots
+    codes = nil #code_class.all #just union Mtef.all Nha.all etc here as appro
 
     return data_rows
   end

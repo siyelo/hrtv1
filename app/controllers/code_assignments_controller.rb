@@ -61,7 +61,7 @@ class CodeAssignmentsController < ApplicationController
       difference = number_to_currency(difference, :separator => ".", :unit => "", :delimiter => ",")
       percent_diff = number_to_currency(percent_diff, :separator => ".", :unit => "", :delimiter => ",")
  
-      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}."
+      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
     end
   end
 

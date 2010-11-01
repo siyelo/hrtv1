@@ -387,3 +387,41 @@ body.app
   .simple_table
     /* a hack, but the padding interferes with .third */
     padding: 0 0 0 10px
+
+.box
+  border: 1px solid $lightest-blue
+  margin-bottom: 20px
+  +border-radius
+  label
+    margin: 10px 10px 0
+  select
+    margin: 10px
+    width: 97.5%
+.preview
+  .organization
+    border-bottom: 1px dashed $mid-blue
+    font-weight: bold
+    margin-bottom: 5px
+    padding-bottom: 5px
+    
+  #duplicate
+    background: $lightest-blue
+    border-top: 3px solid $mid-blue
+    color: $mid-blue
+    float: left
+    font-size: 12px
+    line-height: 1.3em
+    margin-bottom: 20px
+    padding: 10px
+    width: 47%
+  
+  #target
+    background: $lightest-blue
+    border-top: 3px solid $mid-blue
+    color: $mid-blue
+    float: right
+    font-size: 12px
+    line-height: 1.3em
+    margin-bottom: 20px
+    padding: 10px
+    width: 47%

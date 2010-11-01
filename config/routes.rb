@@ -21,7 +21,7 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:select => :post}, :active_scaffold => true
 
   map.resources :organizations,
-      :collection => {:browse => :get, :duplicate => :get, :remove_duplicate => :put},
+      :collection => {:browse => :get},
       :member => {:select => :post}, :active_scaffold => true
 
 
@@ -94,6 +94,7 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.resources :data_responses, :member => {:delete => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    admin.resources :organizations, :collection => {:duplicate => :get, :remove_duplicate => :put}
   end
 
   map.namespace :policy_maker do |policy_maker|

@@ -10,9 +10,9 @@
 
   .nav2
     %h2= "Activity Classification"
-    = render 'tab_nav'
+    = render 'tab_nav', :activity => @activity
 
-  = render :partial => 'code_assignments/activity_description'
+  = render 'code_assignments/activity_description', :activity => @activity
 
   #activity_classification
     %div.tab1

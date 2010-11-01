@@ -1,7 +1,7 @@
 - other_costs = false unless other_costs
 
 .classifications.two-thirds
-  = render 'code_assignments/tab_nav', :other_costs => other_costs
+  = render 'code_assignments/tab_nav', :activity => activity, :other_costs => other_costs
 
 #activity_classification.tabs.two-thirds
   .tab1{:"data-chart_type" => "activity", :"data-id" => activity.id}

@@ -1,4 +1,6 @@
 %table#activity_description
+
+  = render  '/code_assignments/progress_bar', :activity => activity
   %tr
     %td.title Organization:
     %td= @activity.organization.name

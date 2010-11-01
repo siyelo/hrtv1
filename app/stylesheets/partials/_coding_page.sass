@@ -112,9 +112,6 @@ ul.activity_tree
         padding-bottom: 0
         border-top= !lightest-blue " 1px dashed "
 
-      &.incomplete
-        color: orange
-
   .hide
     display: none
 
@@ -150,3 +147,20 @@ body.app
 // Shared
 .tab2, .tab3, .tab4, .tab5, .tab6, .tab7, .tab8, .tab9, .tab10
   display: none
+
+.progress-container
+  border: 1px solid #ccc
+  width: 100px
+  margin: 2px 5px 2px 0
+  padding: 1px
+  float: left
+  background: white
+
+.progress-container > div
+  background-color: #ACE97C
+  height: 12px
+
+ul.inline_tab
+  li.incomplete
+    a
+      color: #973030

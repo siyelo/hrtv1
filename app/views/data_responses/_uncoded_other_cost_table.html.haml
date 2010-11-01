@@ -1,9 +1,8 @@
-%p.guide Click the classify link at the end of each row to classify each other cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. Refreshing this page will remove rows you have corrected.
-%h3= "Uncoded #{type.capitalize}"
-.simple_table
-  - if activities.empty?
-    %p= "All #{type} have been coded."
-  - else
+- if activities.empty?
+- else
+  %p.guide Click the classify link at the end of each row to classify each other cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. Refreshing this page will remove rows you have corrected.
+  %h3= "Uncoded #{type.capitalize}"
+  .simple_table
     %table
       %thead
         %tr
@@ -24,3 +23,4 @@
             %th= check_box_tag "", "", activity.spend?, {:disabled => "disabled"}
             %th= check_box_tag "", "", activity.spend_by_cost_category?, {:disabled => "disabled"}
             %th= "#{link_to 'Classify', activity_coding_path(activity), :target => "_blank"} #{link_to 'Edit', edit_other_cost_path(activity)}"
+      %hr

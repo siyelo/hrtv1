@@ -29,7 +29,7 @@ FasterCSV.foreach("db/fixtures/files/organizations.csv", :headers => true ) do |
     org.fosaid = row[3]
   end
 
-  puts "Creating org #{org.name}, #{org.type}, #{org.locations}\n"
+  puts "Creating/Saving org #{org.name}, #{org.type}, #{org.locations}\n"
   #print "."
   puts "error on #{row}" unless org.save
 

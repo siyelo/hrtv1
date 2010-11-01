@@ -492,8 +492,10 @@ var policy_maker_data_responses_show = {
 };
 
 var approve_activity_checkbox = function () {
-  jQuery(".approve_activity").click(function () {
-    activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+  jQuery(".approve_activity").click(function (e) {
+    e.stopPropagation();
+    //activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+    activity_id = jQuery(this).attr('data-id');
     jQuery.post( "/activities/" + activity_id + "/approve",
      { checked: jQuery(this).is(':checked'), "_method": "put" }
     );

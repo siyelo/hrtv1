@@ -10,7 +10,7 @@ class DataResponsesController < ApplicationController
     respond_to do |format|
       @data_response = DataResponse.new(params[:data_response])
       if @data_response.save
-        format.html { redirect_to( :action => 'start', :id => @data_response.id ) }
+        format.html { redirect_to edit_data_response_url(@data_response) }
       else
         flash[:error] = "Couldn't create your response"
         format.html { redirect_to reporter_dashboard_url() }
@@ -27,7 +27,7 @@ class DataResponsesController < ApplicationController
     @data_response.update_attributes params[:data_response]
     if @data_response.save
       flash[:notice] = "Successfully updated."
-      redirect_to data_response_url(@data_response)
+      redirect_to edit_data_response_url(@data_response)
     else
       render :action => :edit
     end

@@ -112,6 +112,7 @@ class ActivitiesController < ActiveScaffoldController
 
   def approve
     @activity = Activity.available_to(current_user).find(params[:id])
+    raise @activity.to_yaml
     authorize! :approve, @activity
     @activity.update_attributes({ :approved => params[:checked] })
     render :nothing => true

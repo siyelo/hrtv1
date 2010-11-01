@@ -24,7 +24,6 @@ Scenario: See a budget coding breakdown
   And I should see "1,000.00"
 
 # NB: this scenario will only work for 1 activity, 1 classification
-@run
 @javascript
 Scenario: Approve a budget coding breakdown
   Given I am signed in as an admin

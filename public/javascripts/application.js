@@ -295,7 +295,7 @@ var admin_organizations_duplicate = {
       var type = jQuery(this).parents('.box').attr('data-type');
       var box = jQuery('#' + type);
       jQuery.get(organization_id + '.js', function (data) {
-        box.html(data);
+        box.find('.placer').html(data);
       });
     });
   }

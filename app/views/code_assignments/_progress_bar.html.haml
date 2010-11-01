@@ -1,6 +1,6 @@
 
 %tr
-  %td Classification progress:
+  %td Overall Classification progress:
   %td
     .progress-container
       - style = ''
@@ -8,4 +8,4 @@
       - style = "background: #973030" if activity.coding_progress < 30
       - style = style + "; width: #{activity.coding_progress}%"
       %div{:style => style}
-    = link_to "?", "#", :title => 'Indicates the completeness of your Budget & Spend classifications for this activity', :class => "tooltip"
+    = link_to "?", "#", :title => 'Indicates the completeness of your Budget & Spend classifications for this activity. A full green bar indicates completion. You will need to enter classifications for each of the 6 tabs.', :class => "tooltip"

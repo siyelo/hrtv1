@@ -1,7 +1,7 @@
 class ActivitiesController < ActiveScaffoldController
   authorize_resource
 
-  before_filter :require_admin, :only => [:approve]
+  #before_filter :require_admin, :only => [:approve]
 
   before_filter :check_user_has_data_response
 
@@ -112,7 +112,6 @@ class ActivitiesController < ActiveScaffoldController
 
   def approve
     @activity = Activity.available_to(current_user).find(params[:id])
-    raise @activity.to_yaml
     authorize! :approve, @activity
     @activity.update_attributes({ :approved => params[:checked] })
     render :nothing => true

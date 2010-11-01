@@ -40,7 +40,8 @@ Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amo
   @code_assignment = Factory.create(:coding_budget,
                                     :activity => @activity,
                                     :code => Code.find_by_short_display(code_name),
-                                    :amount => amount)
+                                    :amount => amount,
+                                    :cached_amount => amount)
   @activity.reload
 end
 

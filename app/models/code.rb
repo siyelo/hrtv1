@@ -1,5 +1,5 @@
 class Code < ActiveRecord::Base
-  include ActionView::Helpers::NumberHelper 
+  include ActionView::Helpers::NumberHelper
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
 
   acts_as_commentable
@@ -34,7 +34,7 @@ class Code < ActiveRecord::Base
   def sum_of_assignments_for_activities (type,activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
-  
+
   # todo recurse with array then join
   def self.treemap_for_codes(code_roots, codes, type, activities)
     # TODO better coloring
@@ -46,7 +46,7 @@ class Code < ActiveRecord::Base
     end
     #TODO find some way to call n2c
     #including the helper doesn't add number_to_currency as class method
-    root_name = "#{Code.new.n2c(sum_of_roots)}: All Codes" 
+    root_name = "#{Code.new.n2c(sum_of_roots)}: All Codes"
     rows << [root_name,nil,sum_of_roots,0]
 
     code_roots.each do |r|
@@ -70,10 +70,10 @@ class Code < ActiveRecord::Base
       end
       treemap_parent_values[self] = name_w_sum
       my_parent_treemap_value = treemap_parent_values[parent]
-      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, level)
+      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, sum)
     end
   end
-  
+
   # join these together with just a space
   def treemap_row_for( code_display, parent_display, box_size, color_value)
     [code_display, parent_display, box_size, color_value]
@@ -86,7 +86,7 @@ class Code < ActiveRecord::Base
   def to_s
     short_display
   end
-  
+
   def to_s_prefer_official
    official_name ? official_name : to_s
   end

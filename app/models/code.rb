@@ -64,7 +64,7 @@ class Code < ActiveRecord::Base
     name = to_s_prefer_official
     sum = sum_of_assignments_for_activities(type, activities)
     if sum > 0 #TODO add % of total as well, abbrev amount
-      name_w_sum = "#{n2c(sum/total_for_percentage*100)}%: #{name}"
+      name_w_sum = "#{n2c(sum.fdiv(total_for_percentage)*100)}%: #{name}"
       if treemap_parent_values.values.include?(name_w_sum)
         name_w_sum = "#{n2c(sum)} (2): #{name}"
       end

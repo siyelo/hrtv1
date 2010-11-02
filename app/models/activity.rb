@@ -68,6 +68,7 @@ class Activity < ActiveRecord::Base
   validate :approved_activity_cannot_be_changed
 
   # Callbacks
+  before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   before_update :copy_budget_codings_to_spend, :if => Proc.new {|m| m.use_budget_codings_for_spend_changed? && m.use_budget_codings_for_spend }
 
@@ -364,6 +365,19 @@ class Activity < ActiveRecord::Base
       end
     end
     districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
+  end
+
+  # removes code assignments for non-existing locations for this activity
+  def remove_district_codings
+    activity_id = self.id
+    location_ids = locations.map(&:id)
+    code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
+    CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)", 
+                              {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
+
+    code_assignment_types.each do |type|
+      set_classified_amount_cache(type)
+    end
   end
 end
 

@@ -24,6 +24,7 @@ factory_girl -v1.2.4
 faker -v0.3.1
 fastercsv -v1.5.3
 ffi -v0.6.3
+formtastic -v0.9.10
 gherkin -v2.0.2
 github -v0.4.3
 glennr-heroku_san -v0.1.1

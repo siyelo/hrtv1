@@ -340,6 +340,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
       minColor: '#99ccff',
       midColor: '#6699cc',
       maxColor: '#336699',
+      minColorValue: 0,
       headerHeight: 15,
       fontColor: 'black',
       showScale: false

@@ -18,10 +18,10 @@ Background:
 Scenario Outline: Merge duplicate organizations
   Given I am signed in as an admin
   When I go to the organizations page
-  And I follow "Merge duplicate organization"
+  And I follow "Fix duplicate organizations"
   And I select "<duplicate>" from "Duplicate organization"
-  And I select "<target>" from "Target organization"
-  And I press "Merge"
+  And I select "<target>" from "Replacement organization"
+  And I press "Replace"
   Then I should see "<message>"
 
   Examples:

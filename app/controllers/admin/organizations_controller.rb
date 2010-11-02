@@ -11,14 +11,16 @@ class Admin::OrganizationsController < ApplicationController
 
   def duplicate
     @potential_duplicate_organiations = Organization.find(:all, 
-                                                          :select => "organizations.id, organizations.name, COUNT(users.id) as users_count", 
+                                                          :select => "organizations.id, organizations.name, organizations.created_at, COUNT(users.id) as users_count", 
                                                           :joins => "LEFT OUTER JOIN users ON users.organization_id = organizations.id", 
-                                                          :order => "organizations.name ASC",
+                                                          :order => "organizations.name ASC, organizations.created_at DESC",
                                                           :group => "organizations.id HAVING users_count = 0")
-    @all_organizations = Organization.find(:all, :select => "id, name", :order => "name ASC")
+    @all_organizations = Organization.find(:all, :select => "id, name, created_at", :order => "name ASC, created_at DESC")
   end
 
   def remove_duplicate
+    # how do we keep the replacement org selected even after succesful
+    # replacement
     if params[:duplicate_organization_id].blank? && params[:target_organization_id].blank?
       flash[:error] = "Duplicate or target organizations not selected."
       redirect_to duplicate_admin_organizations_path

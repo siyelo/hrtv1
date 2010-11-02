@@ -397,38 +397,21 @@ var build_data_response_review_screen = function () {
     }
   });
 
-  // collapsiable project header
-  jQuery("#project_details").click(function (e) {
-    e.preventDefault();
-    jQuery("#projects").toggleClass('collapsed')
-    jQuery("#projects table:first").toggle();
-  });
-
-  // collapsiable activities header - multiple activities!
-  jQuery(".activity_details").click(function (e) {
-    e.preventDefault();
-    jQuery(this).parent(".activities").toggleClass('collapsed')
-    jQuery(this).parent(".activities").find("table:first").toggle();
-  });
-
-  // collapsiable comments header - multiple comments!
-  jQuery(".comment_details").click(function (e) {
-    e.preventDefault();
-    jQuery(this).parent(".comments").toggleClass('collapsed')
-    jQuery(this).parent(".comments").find("div:first").toggle();
-  });
-
-  // bind click events for project chart tabs
+  // bind click events for tabs
+  // Assumes this convention
+  //  .tabs_nav
+  //    ul > li, li, li
+  // tab content
+  //  .tabs > .tab1, .tab2, .tab3
   jQuery(".tabs_nav ul li").click(function (e) {
     e.preventDefault();
     var element = jQuery(this);
-    if (element.attr("id")) {
-      element.parents('.tabs_nav').find("li").removeClass('selected');
-      element.addClass('selected');
-      var tabs = element.parents(".tabs_nav").next(".tabs")
-      tabs.find("> div").hide();
-      tabs.find('> div.' + element.attr("id")).show();
-    }
+    var index = element.index() + 1; //there is no tab0
+    element.parents('.tabs_nav').find("li").removeClass('selected');
+    element.addClass('selected');
+    var tabs = element.parents(".tabs_nav").next(".tabs")
+    tabs.find("> div").hide();
+    tabs.find('> div.' + "tab" + index).show();
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)

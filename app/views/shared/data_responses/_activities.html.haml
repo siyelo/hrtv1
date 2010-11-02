@@ -1,17 +1,15 @@
 - other_costs = false unless other_costs
 - non_linked = false unless non_linked
 
-.activities.collapsed
-  %span.indicator
+.activities
+
   - header = "Activities"
-  - header = "Activities without a Project" if non_linked
+  -# header = "Activities without a Project" if non_linked
   - header = "Other Costs" if other_costs
-  = link_to "#{activities.count} #{header}", "#", :class => "activity_details like_a_h2"
-  - if non_linked
-    %span= link_to "What's this?", "#", :title => "It's possible you have not specified what project(s) these activities are related to. We've listed them here separately for your convenience.", :class => "tooltip help_tip"
+
 
   .simple_table
-    %table.hidden
+    %table
       %thead
         %tr
           %th= header
@@ -51,6 +49,16 @@
 
               = render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs
 
-              = render '/shared/data_responses/sub_activities', :activity => activity
+              .activity_sub_tabs.tabs_nav
+                %ul.inline_alt_tab
+                  %li{:class => 'selected' }= link_to "Comments (#{activity.comments.count})", "#", :class => "comment_details"
+                  %li= link_to "Sub-Activities (#{activity.sub_activities.count})", "#", :class => "activity_details"
 
-              = render '/shared/data_responses/comments', :commentable => activity
+              .tabs
+                .tab1
+                  = render 'shared/data_responses/comments', :commentable => activity
+                .tab2
+                  = render '/shared/data_responses/sub_activities', :activity => activity
+
+  - if non_linked
+    %span= link_to "What's this?", "#", :title => "It's possible you have not specified what project(s) these activities are related to. We've listed them here separately for your convenience.", :class => "tooltip help_tip"

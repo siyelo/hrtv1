@@ -69,10 +69,10 @@ body.app
       position: relative
       .form_box
         background: $lightest-blue + #111
-        border-bottom: 1px solid white
+        border-top: 1px solid white
         border-left: 1px solid $lighter-blue
         border-right: 1px solid $lighter-blue
-        border-top: 6px solid $mid-blue
+        border-bottom: 4px solid $mid-blue
         padding: 10px 20px
 
     .edit_form
@@ -234,9 +234,12 @@ body.app
         background: $mid-blue
         color: white
         font-size: 11px
+        &:hover
+          background: $mid-blue
         th
           border-bottom: 1px solid white
-
+        tr:hover
+          background: $mid-blue
     .name
       font-weight: bold
     .implementer
@@ -321,6 +324,33 @@ body.app
       color: $mid-blue
       display: inline-block
       font-weight: bold
+      
+  ul.inline_alt_tab
+    +horizontal-list
+    border-bottom: 3px solid $mid-blue
+    color: $light-blue - #333
+    line-height: 1.5em
+    font-size: 12px
+    margin: 0 1px 1px 0
+    li
+      margin-right: 1px
+      padding: 0
+    li:first-child a
+      +border-top-left-radius
+    li:last-child a
+      +border-top-right-radius
+    a
+      background: $light-blue
+      color: $mid-blue
+      display: inline-block
+      padding: 5px 10px 3px 10px
+      text-decoration: none
+      &:hover, &:focus, &:active
+        background: $lightest-blue
+    .selected a
+      background: $mid-blue
+      color: white
+      font-weight: bold
 
 .full-width, .simple_table
   .full
@@ -365,6 +395,32 @@ body.app
     padding-top: 15px
     padding-left: 15px
     display: none
+    
+body.app #content .tabs
+  .comments
+    margin: 0
+    padding: 0
+  .simple_table
+    padding: 0
+  .new_btn
+    background: $mid-blue
+    color: white
+    display: inline-block
+    font-size: 10px
+    margin: 5px 0 10px 0
+    padding: 5px 5px 3px
+    text-decoration: none
+    +border-radius
+    &:hover
+      background: $orange
+    
+.tabs
+  +clearfix
+  width: 100%
+.tabs_nav
+  +clearfix
+  width: 100%
+  
 
 
 // expand/collapse toggle
@@ -390,6 +446,7 @@ body.app
 
 .details_and_charts
   padding-top: 10px
+  +pie-clearfix
   .simple_table
     /* a hack, but the padding interferes with .third */
     padding: 0 0 0 10px

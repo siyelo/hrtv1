@@ -17,7 +17,6 @@ Background:
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "WHO"
   Given a budget coding for "Delivering Services, Implementing Programs, Conducting Research" with amount "1000"
   
-@run
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1" 
@@ -31,8 +30,8 @@ Scenario: Approve a budget coding breakdown
   When I go to the admin review data response page for organization "WHO", request "Req1" 
   When I click element "#project_details"
   And I click element ".project .descr"
-  And I click element ".activity_details"
-  And I click element ".activity .descr"
+  And I click element "#projects .activity_details"
+  And I click element "#projects .activity .descr"
   Then I should see "Approved?"
   When I check "approve_activity"
   Then wait a few moments

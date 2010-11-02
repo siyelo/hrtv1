@@ -1,17 +1,12 @@
 / js event: .resources, .comments
 
-.comments.collapsed
-  %span.indicator
-  = link_to "#{commentable.comments.count} Comments", "#", :class => "comment_details like_a_h2"
+.comments
 
-  %div{:class => "resources hidden", :"data-resources" => "comments", :style => "clear: both"}
-    .placer
+  %div{:class => "resources", :"data-resources" => "comments", :style => "clear: both"}
+
 
     .simple_table
-      %ul.actions
-        / js event: .new_btn, .enabled
-        %li= link_to "+ Add Comment", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
-
+      
       %table.dashboard_comments
         %thead
           %tr
@@ -22,3 +17,9 @@
             %th.manage Manage
         %tbody
           = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment
+    .placer
+    %ul.actions
+      / js event: .new_btn, .enabled
+      %li= link_to "+ Add Comment", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+
+    

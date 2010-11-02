@@ -1,9 +1,6 @@
-#projects.collapsed
-  %span.indicator
-  = link_to "#{@projects.count} Projects", "#", :id => "project_details", :class => 'like_a_h2'
-
+#projects
   .simple_table
-    %table.hidden
+    %table
       %thead
         %tr
           %th Project
@@ -32,8 +29,25 @@
           %tr.project.entry_main.s_border
             %td{:colspan => 100}
               = render 'shared/data_responses/project_summary', :project => project
-              = render 'shared/data_responses/comments', :commentable => project
 
-              = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+              .project_sub_tabs.tabs_nav
+                %ul.inline_alt_tab
+                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.count})", "#", :class => "comment_details"
+                  %li= link_to "Activities (#{project.activities.roots.count})", "#", :class => "activity_details"
+                  %li= link_to "Other Costs (#{project.activities.with_type('OtherCost').count})", "#", :class => "activity_details"
 
-              = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+              .tabs
+                .tab1
+                  = render 'shared/data_responses/comments', :commentable => project
+                .tab2
+                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+                .tab3
+                  = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+
+
+
+
+
+
+
+

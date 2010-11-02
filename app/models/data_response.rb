@@ -38,7 +38,9 @@ class DataResponse < ActiveRecord::Base
 
   # Named scopes
   named_scope :available_to, lambda { |current_user|
-    if current_user.role?(:admin)
+    if current_user.nil?
+      {:conditions => {:id => -1}} #return no records
+    elsif current_user.role?(:admin)
       {}
     else
       {:conditions=>{:organization_id_responder => current_user.organization.id}}

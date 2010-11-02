@@ -9,7 +9,5 @@
         = f.input :title, :label => 'Title'
         = f.input :comment, :label => 'Comment'
       - f.buttons do
-        / js event: .cancel_btn
-        = link_to "Cancel", reporter_comments_path, :class => "cancel_btn"
         / js event: .submit_btn
         = f.commit_button :label => (comment.new_record? ? "Create comment" : "Update comment"), :button_html => { :class => "submit_btn" }

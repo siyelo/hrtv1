@@ -367,3 +367,83 @@ end
 When /^I click element "([^"]*)"$/ do |selector|
   find(selector).click
 end
+
+
+Then /^I can manage the comments$/ do
+  steps %Q{
+    When I click element "#project_details"
+    And I click element "#projects .project .descr"
+    And I click element "#projects .activity_details"
+    And I click element "#projects .activity .descr"
+    And I click element "#projects .activity .comment_details"
+    And I follow "+ Add Comment" within ".activity"
+    And I fill in "Title" with "comment title"
+    And I fill in "Comment" with "comment body"
+    And I press "Create comment"
+    Then I should see "comment title"
+    And I should see "comment body"
+    When I follow "Edit" within "#projects .activity .resources"
+    And I fill in "Title" with "new comment title"
+    And I fill in "Comment" with "new comment body"
+    And I press "Update comment"
+    Then I should see "new comment title"
+    And I should see "new comment body"
+    When I will confirm a js popup
+    And I follow "Delete" within "#projects .activity .resources"
+    Then I should not see "new comment title"
+    And I should not see "new comment body"
+  }
+end
+
+Then /^I should see tabs for comments,projects,non-project activites$/ do
+  steps %Q{
+    Then I should see "Comments" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a#project_details"
+    Then I should see "Projects" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a.activity_details"
+    Then I should see "Activities without a Project" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a.comment_details"
+    Then I should see "Comments" within the selected data response sub-tab
+  }
+end
+
+Then /^I should see tabs for comments,activities,other costs$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project .descr"
+    Then I should see "Comments" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li a.activity_details"
+    Then I should see "Activities" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li:last a.activity_details"
+    Then I should see "Other Costs" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li a.comment_details"
+    Then I should see "Comments" within the selected project sub-tab  
+  }
+end
+
+Then /^I should see tabs for comments,sub-activities when activities already open$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project_sub_tabs ul li a.activity_details"
+    And I click element ".activities .activity.entry_header"
+    Then I should see "Comments" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:last a"
+    Then I should see "Sub-Activities" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:first"
+    Then I should see "Comments" within the selected activity sub-tab  
+  }
+end
+
+Then /^I should see tabs for comments,sub-activities$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project .descr"
+    And I click element ".project_sub_tabs ul li a.activity_details"
+    And I click element ".activities .activity.entry_header"
+    Then I should see "Comments" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:last a"
+    Then I should see "Sub-Activities" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:first"
+    Then I should see "Comments" within the selected activity sub-tab  
+  }
+end

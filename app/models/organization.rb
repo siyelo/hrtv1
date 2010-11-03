@@ -1,3 +1,4 @@
+require 'validation_disabler'
 class Organization < ActiveRecord::Base
 
   acts_as_commentable
@@ -22,6 +23,19 @@ class Organization < ActiveRecord::Base
 
   def self.remove_security
     with_exclusive_scope { find(:all) }
+  end
+
+  def self.merge_organizations!(target, duplicate)
+    ActiveRecord::Base.disable_validation!
+    target.activities << duplicate.activities
+    target.data_requests_made << duplicate.data_requests_made
+    target.data_responses << duplicate.data_responses
+    target.out_flows << duplicate.out_flows
+    target.in_flows << duplicate.in_flows
+    target.locations << duplicate.locations
+    target.users << duplicate.users
+    duplicate.destroy
+    ActiveRecord::Base.enable_validation!
   end
 
   def to_s

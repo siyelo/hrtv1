@@ -1,4 +1,6 @@
 class OrganizationsController < ActiveScaffoldController
+  before_filter :require_admin, :only => [:duplicate, :remove_duplicate]
+
   authorize_resource
 
   @@shown_columns           = [:name, :type]
@@ -31,7 +33,6 @@ class OrganizationsController < ActiveScaffoldController
   def self.create_columns
     @@create_columns
   end
-
   protected
 
   #to get the edit link to not show up

@@ -288,6 +288,26 @@ var admin_data_responses_index = {
   }
 };
 
+var getOrganizationInfo = function (organization_id, box) {
+  jQuery.get(organization_id + '.js', function (data) {
+    box.find('.placer').html(data);
+  });
+};
+
+var admin_organizations_duplicate = {
+  run: function () {
+    jQuery("#duplicate_organization_id, #target_organization_id").change(function() {
+      var organization_id = jQuery(this).val();
+      var type = jQuery(this).parents('.box').attr('data-type');
+      var box = jQuery('#' + type); // type = duplicate; target
+      getOrganizationInfo(organization_id, box);
+    });
+
+    getOrganizationInfo(jQuery("#duplicate_organization_id").val(), jQuery('#duplicate'));
+    getOrganizationInfo(jQuery("#target_organization_id").val(), jQuery('#target'));
+  }
+};
+
 
 var get_chart_element_id = function (element_type, options) {
   return element_type + "_" + options.id + "_" + options.chart_type + '_pie';

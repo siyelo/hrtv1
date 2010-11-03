@@ -1,0 +1,40 @@
+- Mtef
+  - Tree structure
+  - Has root codes
+
+- Nsp
+  - Tree structure
+  - No root codes
+  - Descends from Mtef codes
+
+- Nha (nha + nhanasa)
+  - Tree structure
+  - No root codes
+  - Descends from Mtef and Nsp codes
+
+- Nasa
+  - Tree structure
+  - No root codes
+  - Descends from Nhanasa codes (which are Nha codes)
+
+- CostCategory
+  - Tree structure
+  - Has root codes
+  - No interlaces with other codes
+
+- OtherCostCode
+  - Tree structure
+  - Has root codes
+  - No interlaces with other codes
+
+- Location
+  - No tree structure
+
+- Beneficiary
+  - No tree structure
+
+- HsspStratProg
+  - No tree structure
+
+- HsspStratObj
+  - No tree structure

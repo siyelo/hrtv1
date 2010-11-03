@@ -32,8 +32,33 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
 
+  def self.treemap(activities, chart_type)
+    case chart_type
+    when 'mtef_budget'
+      codes = Mtef.all + Nsp.all + Nha.all + Nasa.all
+      roots = Mtef.roots
+      type  = "CodingBudget"
+    when 'mtef_spend'
+      codes = Mtef.all + Nsp.all + Nha.all + Nasa.all
+      roots = Mtef.roots
+      type  = "CodingSpend"
+    when 'nsp_budget'
+      codes = Nsp.all
+      roots = Nsp.roots
+      type  = "CodingBudget"
+    when 'nsp_spend'
+      codes = Nsp.all
+      roots = Nsp.roots
+      type  = "CodingSpend"
+    else
+      raise "Wrong chart type".to_yaml
+    end
+
+    data_rows = self.get_treemap_rows(roots, codes, type, activities)
+  end
+
   # todo recurse with array then join
-  def self.treemap_for_codes(code_roots, codes, type, activities)
+  def self.get_treemap_rows(code_roots, codes, type, activities)
     # format is my value, parent value, box_area_value, coloring_value
     rows = []
     sum_of_roots = 0
@@ -48,14 +73,14 @@ class Code < ActiveRecord::Base
       parent_display_cache = {} # code => display_value , used to connect rows
       parent_display_cache[r.parent] = root_name
       Code.each_with_level(r.self_and_descendants) do |c,level|
-        c.treemap_row(rows, type, activities, parent_display_cache, level, sum_of_roots) if codes.include?(c)
+        c.get_treemap_row(rows, type, activities, parent_display_cache, level, sum_of_roots) if codes.include?(c)
       end
     end
 
     rows
   end
 
-  def treemap_row(rows, type, activities, treemap_parent_values, level, total_for_percentage)
+  def get_treemap_row(rows, type, activities, treemap_parent_values, level, total_for_percentage)
     name  = to_s_prefer_official
     sum   = sum_of_assignments_for_activities(type, activities)
     if sum > 0 #TODO add % of total as well, abbrev amount

@@ -20,6 +20,7 @@ class Activity < ActiveRecord::Base
   }
 
   include ActAsDataElement
+  include NumberHelper
   configure_act_as_data_element
 
   # Attributes
@@ -313,7 +314,73 @@ class Activity < ActiveRecord::Base
     progress = (coded.to_f / 6) * 100
   end
 
+  def treemap(chart_type)
+    case chart_type
+    when 'budget_coding'
+      coding_treemap(CodingBudget, budget)
+    when 'budget_districts'
+      districts_treemap(coding_budget_district, budget)
+    when 'budget_cost_categorization'
+      coding_treemap(CodingBudgetCostCategorization, budget)
+    when 'spend_coding'
+      coding_treemap(CodingSpend, spend)
+    when 'spend_districts'
+      districts_treemap(coding_spend_district, spend)
+    when 'spend_cost_categorization'
+      coding_treemap(CodingSpendCostCategorization, spend)
+    else
+      raise "Wrong chart type".to_yaml
+    end
+  end
+
   private
+  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
+  def coding_treemap(type, total_amount)
+    code_roots  = type.available_codes(self)
+    assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
+
+    data_rows = []
+    treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
+    data_rows << [treemap_root, nil, 0, 0] #todo amount
+
+    code_roots.each do |code|
+      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
+    end
+    return data_rows
+  end
+
+  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
+    if assignments.has_key?(code.id)
+      percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
+      label       = "#{percentage}%: #{code.to_s_prefer_official}"
+      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
+      unless code.leaf?
+        code.children.each do |child|
+          build_treemap_rows(data_rows, child, label, total_amount, assignments)
+        end
+      end
+    end
+  end
+
+  def districts_treemap(districts, total_amount)
+    data_rows = []
+    treemap_root = "#{districts.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
+    data_rows << [treemap_root, nil, 0, 0]
+    districts.each do |assignment|
+      percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
+      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
+      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
+    end
+    data_rows
+  end
+
+  def get_sum(code_roots, assignments)
+    sum = 0
+    code_roots.each do |code|
+      sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
+    end
+    sum
+  end
 
   def approved_activity_cannot_be_changed
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]

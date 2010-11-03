@@ -1,15 +1,6 @@
 module Reports::Helpers
-  include NumberHelper # gives n2c method available
-
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
+  include NumberHelper # gives n2c method
+  include StringCleanerHelper # gives h method
 
   def get_amount(activity, location)
     ca = activity.code_assignments.detect{|ca| ca.code_id == location.id}
@@ -31,7 +22,6 @@ module Reports::Helpers
       "yes"
     end
   end
-
 
   def get_max_amount(activity)
     case activity.type.to_s

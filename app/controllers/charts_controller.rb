@@ -1,23 +1,25 @@
 class ChartsController < ApplicationController
+  include StringCleanerHelper # gives h method
+
   def data_response_pie
     @data_response = DataResponse.available_to(current_user).find(params[:id])
     @assignments = @data_response.activity_coding(params[:codings_type], params[:code_type])
 
-    send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
+    send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')
   end
 
   def project_pie
     @project = Project.available_to(current_user).find(params[:id])
     @assignments = @project.activity_coding(params[:codings_type], params[:code_type])
 
-    send_data get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present'
+    send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')
   end
 
   def data_response_treemap
     data_response = DataResponse.find(params[:id])
 
     respond_to do |format|
-      format.json { render :json => get_activities_data_rows(data_response.activities, params[:chart_type]) }
+      format.json { render :json => Code.treemap(data_response.activities, params[:chart_type]) }
     end
   end
 
@@ -25,7 +27,7 @@ class ChartsController < ApplicationController
     project = Project.find(params[:id])
 
     respond_to do |format|
-      format.json { render :json => get_activities_data_rows(project.activities, params[:chart_type]) }
+      format.json { render :json => Code.treemap(project.activities, params[:chart_type]) }
     end
   end
 
@@ -33,7 +35,7 @@ class ChartsController < ApplicationController
     activity = Activity.find(params[:id])
 
     respond_to do |format|
-      format.json { render :json => get_activity_data_rows(activity, params[:chart_type]) }
+      format.json { render :json => activity.treemap(params[:chart_type]) }
     end
   end
 
@@ -56,96 +58,7 @@ class ChartsController < ApplicationController
     csv_string
   end
 
-  def h(str)
-    if str
-      str.gsub!(',', '  ')
-      str.gsub!("\n", '  ')
-      str.gsub!("\t", '  ')
-      str.gsub!("\015", "  ") # damn you ^M
-    end
-    str
-  end
-
   def first_n_words(string, n)
     string.split(' ').slice(0,n).join(' ') + '...'
-  end
-
-  def get_activities_data_rows(activities, chart_type)
-    raise "Wrong chart type".to_yaml unless %w[mtef_budget mtef_spend nsp_budget nsp_spend].include? chart_type
-    type = chart_type.include?("spend") ? "CodingSpend" : "CodingBudget"
-    code_class = chart_type.include?("mtef") ? Mtef : Nsp
-    if code_class == Mtef
-      codes = Mtef.all + Nsp.all + Nha.all + Nasa.all
-      roots = Mtef.roots
-    else
-      codes = code_class.all
-      roots = code_class.roots
-    end
-    data_rows = Code.treemap_for_codes(roots, codes, type, activities)
-  end
-
-  def get_activity_data_rows(activity, chart_type)
-    case chart_type
-    when 'budget_coding'
-      coding_treemap(CodingBudget, CodingBudget.available_codes(activity), activity, activity.budget)
-    when 'budget_districts'
-      districts_treemap(CodingBudgetDistrict, activity.coding_budget_district, activity.budget)
-    when 'budget_cost_categorization'
-      coding_treemap(CodingBudgetCostCategorization, CodingBudgetCostCategorization.available_codes(activity), activity, activity.budget)
-    when 'spend_coding'
-      coding_treemap(CodingSpend, CodingSpend.available_codes(activity), activity, activity.spend)
-    when 'spend_districts'
-      districts_treemap(CodingSpendDistrict, activity.coding_spend_district, activity.spend)
-    when 'spend_cost_categorization'
-      coding_treemap(CodingSpendCostCategorization, CodingSpendCostCategorization.available_codes(activity), activity, activity.spend)
-    else
-      raise "Wrong chart type".to_yaml
-    end
-  end
-
-  def coding_treemap(type, code_roots, activity, total_amount)
-    assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-
-    data_rows = []
-    treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
-    data_rows << [treemap_root, nil, 0, 0] #todo amount
-
-    code_roots.each do |code|
-      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
-    end
-    return data_rows
-  end
-
-  def districts_treemap(type, districts, total_amount)
-    data_rows = []
-    treemap_root = "#{districts.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
-    data_rows << [treemap_root, nil, 0, 0]
-    districts.each do |assignment|
-      percentage  = (assignment.cached_amount / total_amount * 100).round(0)
-      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
-      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
-    end
-    data_rows
-  end
-
-  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
-    if assignments.has_key?(code.id)
-      percentage  = (assignments[code.id].cached_amount / total_amount * 100).round(0)
-      label       = "#{percentage}%: #{code.to_s_prefer_official}"
-      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
-      unless code.leaf?
-        code.children.each do |child|
-          build_treemap_rows(data_rows, child, label, total_amount, assignments)
-        end
-      end
-    end
-  end
-
-  def get_sum(code_roots, assignments)
-    sum = 0
-    code_roots.each do |code|
-      sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
-    end
-    sum
   end
 end

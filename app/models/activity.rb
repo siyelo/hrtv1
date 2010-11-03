@@ -362,11 +362,11 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def districts_treemap(districts, total_amount)
+  def districts_treemap(code_assignments, total_amount)
     data_rows = []
-    treemap_root = "#{districts.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
+    treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
     data_rows << [treemap_root, nil, 0, 0]
-    districts.each do |assignment|
+    code_assignments.each do |assignment|
       percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
       label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
       data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]

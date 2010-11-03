@@ -18,7 +18,7 @@ class ChartsController < ApplicationController
     data_response = DataResponse.find(params[:id])
 
     respond_to do |format|
-      format.json { render :json => get_data_response_data_rows(data_response, params[:chart_type]) }
+      format.json { render :json => get_activities_data_rows(data_response.activities, params[:chart_type]) }
     end
   end
 
@@ -26,7 +26,7 @@ class ChartsController < ApplicationController
     project = Project.find(params[:id])
 
     respond_to do |format|
-      format.json { render :json => get_project_data_rows(project, params[:chart_type]) }
+      format.json { render :json => get_activities_data_rows(project.activities, params[:chart_type]) }
     end
   end
 
@@ -71,15 +71,7 @@ class ChartsController < ApplicationController
     string.split(' ').slice(0,n).join(' ') + '...'
   end
 
-  def get_data_response_data_rows(data_response, chart_type)
-    get_summary_data_rows(data_response.activities, chart_type)
-  end
-
-  def get_project_data_rows(project, chart_type)
-    get_summary_data_rows(project.activities, chart_type)
-  end
-
-  def get_summary_data_rows(activities, chart_type)
+  def get_activities_data_rows(activities, chart_type)
     raise "Wrong chart type".to_yaml unless %w[mtef_budget mtef_spend nsp_budget nsp_spend].include? chart_type
     type = chart_type.include?("spend") ? "CodingSpend" : "CodingBudget"
     code_class = chart_type.include?("mtef") ? Mtef : Nsp

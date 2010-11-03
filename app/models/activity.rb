@@ -43,7 +43,7 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id, :dependent => :destroy
-  has_many :code_assignments
+  has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 
   # handy associations - use instead of named_scopes

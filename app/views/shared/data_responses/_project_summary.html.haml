@@ -5,32 +5,32 @@
       %td= "#{project.start_date} to #{project.end_date}"
     %tr
       %td Total Budget:
-      %td= number_to_currency(project.entire_budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %td= n2c(project.entire_budget, project.currency)
     %tr
       %td Total Budget (current FY):
-      %td= number_to_currency(project.budget, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %td= n2c(project.budget, project.currency)
     %tr
       %td Total Spend (past FY):
-      %td= number_to_currency(project.spend, :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %td= n2c(project.spend, project.currency)
     %tr
       %td Spend Q4 (FY 08-09):
-      %td=  number_to_currency(project.spend_q4_prev , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+      %td=  n2c(project.spend_q4_prev, project.currency)
     - unless @policy_maker
       %tr
         %td Spend Q1:
-        %td=  number_to_currency(project.spend_q1 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td=  n2c(project.spend_q1, project.currency)
 
       %tr
         %td Spend Q2:
-        %td=  number_to_currency(project.spend_q2 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td=  n2c(project.spend_q2, project.currency)
 
       %tr
         %td Spend Q3:
-        %td=  number_to_currency(project.spend_q3 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td=  n2c(project.spend_q3, project.currency)
 
       %tr
         %td Spend Q4:
-        %td=  number_to_currency(project.spend_q4 , :unit => project.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+        %td=  n2c(project.spend_q4, project.currency)
 
     %tr
       %td Districts:

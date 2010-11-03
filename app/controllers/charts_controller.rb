@@ -1,5 +1,4 @@
 class ChartsController < ApplicationController
-
   def data_response_pie
     @data_response = DataResponse.available_to(current_user).find(params[:id])
     @assignments = @data_response.activity_coding(params[:codings_type], params[:code_type])
@@ -105,11 +104,13 @@ class ChartsController < ApplicationController
   end
 
   def coding_treemap(type, code_roots, activity, total_amount)
+    assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+
     data_rows = []
-    treemap_root = "All Codes"
+    treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
     data_rows << [treemap_root, nil, 0, 0] #todo amount
 
-    assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+
     code_roots.each do |code|
       build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
     end
@@ -139,5 +140,13 @@ class ChartsController < ApplicationController
         end
       end
     end
+  end
+
+  def get_sum(code_roots, assignments)
+    sum = 0
+    code_roots.each do |code|
+      sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
+    end
+    sum
   end
 end

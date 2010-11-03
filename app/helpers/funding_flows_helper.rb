@@ -34,7 +34,7 @@ module FundingFlowsHelper
     end
   end
 
-  def collect_orgs project
+  def collect_orgs(project)
     ids = Set.new
     project.locations.each do |l| #in future this should scope right with default
       ids.merge l.organization_ids
@@ -42,12 +42,11 @@ module FundingFlowsHelper
     ids
   end
 
-  def spend_column record
-    number_to_currency(record.spend, :unit => '', :separator => ".", :delimiter => ",")
+  def spend_column(record)
+    n2c(record.spend)
   end
 
-  def budget_column record
-    number_to_currency(record.budget, :unit => '', :separator => ".", :delimiter => ",")
+  def budget_column(record)
+    n2c(record.budget)
   end
-
 end

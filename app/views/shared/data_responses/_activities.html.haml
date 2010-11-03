@@ -34,8 +34,8 @@
             %td= activity.approved
             - unless other_costs
               %td= activity.sub_activities.count
-            %td= number_to_currency(activity.spend, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
-            %td= number_to_currency(activity.budget, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+            %td= n2c(activity.spend, activity.currency)
+            %td= n2c(activity.budget, activity.currency)
             %td.manage
               %ul
                 %li= link_to "Edit", edit_activity_path(activity)

@@ -1,7 +1,7 @@
 - if assignments.has_key?(code.id)
   %li
     = code.short_display
-    = number_to_currency(assignments[code.id].calculated_amount, :unit => activity.currency.to_s + ' ', :separator => ".", :delimiter => ",")
+    = n2c(assignments[code.id].calculated_amount, activity.currency)
     - unless code.leaf?
       %ul
         - code.children.each do |child|

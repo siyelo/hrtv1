@@ -1,5 +1,6 @@
 class Code < ActiveRecord::Base
-  include ActionView::Helpers::NumberHelper
+  include NumberHelper
+  extend NumberHelper
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
 
   acts_as_commentable
@@ -39,9 +40,8 @@ class Code < ActiveRecord::Base
     code_roots.each do |r|
       sum_of_roots += r.sum_of_assignments_for_activities(type,activities)
     end
-    #TODO find some way to call n2c
-    #including the helper doesn't add number_to_currency as class method
-    root_name = "#{Code.new.n2c(sum_of_roots)}: All Codes"
+
+    root_name = "#{n2c(sum_of_roots)}: All Codes"
     rows << [root_name, nil, sum_of_roots, 0]
 
     code_roots.each do |r|
@@ -83,10 +83,6 @@ class Code < ActiveRecord::Base
 
   def to_s_with_external_id
     to_s + " (" + (external_id.nil? ? 'n/a': external_id) + ")"
-  end
-  #REFACTOR
-  def n2c value
-    number_to_currency value, :separator => ".", :unit => "", :delimiter => ","
   end
 end
 

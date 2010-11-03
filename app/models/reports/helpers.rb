@@ -1,5 +1,6 @@
 module Reports::Helpers
-  include ActionView::Helpers::NumberHelper 
+  include NumberHelper # gives n2c method available
+
   def h(str)
     if str
       str.gsub!(',', '  ')
@@ -8,10 +9,6 @@ module Reports::Helpers
       str.gsub!("\015", "  ") # damn you ^M
     end
     str
-  end
-
-  def n2c value
-    number_to_currency value, :separator => ".", :unit => "", :delimiter => ","
   end
 
   def get_amount(activity, location)

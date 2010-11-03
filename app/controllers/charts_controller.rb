@@ -110,9 +110,25 @@ class ChartsController < ApplicationController
     else
       raise "Wrong chart type".to_yaml
     end
-    roots = type.roots
-    codes = nil #code_class.all #just union Mtef.all Nha.all etc here as appro
 
+    data_rows = []
+    treemap_root = "All Codes"
+    data_rows << [treemap_root, nil, 0, 0] #todo amount
+
+    code_roots  = Code.for_activities.roots
+    assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
+    code_roots.each do |code|
+      if assignments.has_key?(code.id)
+        data_rows << [code.short_display, treemap_root, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
+        #unless code.leaf?
+        #  code.children.each do |child|
+        #    #recurse
+        #end
+      end
+    end
+
+    #TODO: districts
     return data_rows
   end
+
 end

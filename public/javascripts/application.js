@@ -362,8 +362,8 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
       maxColor: '#41a200',
       headerHeight: 20,
       fontColor: 'white',
-			fontSize: '12',
-			headerColor: '#425160',
+      fontSize: '12',
+      headerColor: '#425160',
       showScale: false
     });
   });
@@ -403,15 +403,23 @@ var build_data_response_review_screen = function () {
   //    ul > li, li, li
   // tab content
   //  .tabs > .tab1, .tab2, .tab3
+  // BUT if you supply an id (e.g. tab1), it will use that
+  // (useful if tab nav has non-clickable items in the list)
   jQuery(".tabs_nav ul li").click(function (e) {
     e.preventDefault();
     var element = jQuery(this);
-    var index = element.index() + 1; //there is no tab0
+    var target_tab = 'tab1'
+
+    if (element.attr("id")) {
+      target_tab = element.attr("id");
+    } else {
+      target_tab = "tab" + (element.index() + 1); //there is no tab0
+    }
     element.parents('.tabs_nav').find("li").removeClass('selected');
     element.addClass('selected');
     var tabs = element.parents(".tabs_nav").next(".tabs")
     tabs.find("> div").hide();
-    tabs.find('> div.' + "tab" + index).show();
+    tabs.find('> div.' + target_tab).show();
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)

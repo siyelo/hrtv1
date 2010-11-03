@@ -17,11 +17,7 @@ class Code < ActiveRecord::Base
   named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
   named_scope :ordered, :order => 'lft'
 
-  ### methods
-
-  def self.leaves_for_codes(code_ids)
-    # @greg - remove ??
-  end
+  ### Public Methods
 
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
@@ -31,13 +27,12 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
 
-  def sum_of_assignments_for_activities (type,activities = self.activities)
+  def sum_of_assignments_for_activities (type, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
   end
 
   # todo recurse with array then join
   def self.treemap_for_codes(code_roots, codes, type, activities)
-    # TODO better coloring
     # format is my value, parent value, box_area_value, coloring_value
     rows = []
     sum_of_roots = 0
@@ -47,7 +42,7 @@ class Code < ActiveRecord::Base
     #TODO find some way to call n2c
     #including the helper doesn't add number_to_currency as class method
     root_name = "#{Code.new.n2c(sum_of_roots)}: All Codes"
-    rows << [root_name,nil,sum_of_roots,0]
+    rows << [root_name, nil, sum_of_roots, 0]
 
     code_roots.each do |r|
       parent_display_cache = {} # code => display_value , used to connect rows
@@ -70,13 +65,8 @@ class Code < ActiveRecord::Base
       end
       treemap_parent_values[self] = name_w_sum
       my_parent_treemap_value = treemap_parent_values[parent]
-      rows << treemap_row_for(name_w_sum, my_parent_treemap_value, sum, sum)
+      rows << [name_w_sum, my_parent_treemap_value, sum, sum]
     end
-  end
-
-  # join these together with just a space
-  def treemap_row_for( code_display, parent_display, box_size, color_value)
-    [code_display, parent_display, box_size, color_value]
   end
 
   def name

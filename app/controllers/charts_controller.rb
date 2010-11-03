@@ -86,23 +86,19 @@ class ChartsController < ApplicationController
   end
 
   def get_activity_data_rows(activity, chart_type)
-
-    code_roots = Code.for_activities.roots
-    cost_cat_roots = CostCategory.roots
-
     case chart_type
     when 'budget_coding'
-      coding_treemap(CodingBudget, code_roots, activity, activity.budget)
+      coding_treemap(CodingBudget, CodingBudget.available_codes(activity), activity, activity.budget)
     when 'budget_districts'
       districts_treemap(CodingBudgetDistrict, activity.coding_budget_district, activity.budget)
     when 'budget_cost_categorization'
-      coding_treemap(CodingBudgetCostCategorization, cost_cat_roots, activity, activity.budget)
+      coding_treemap(CodingBudgetCostCategorization, CodingBudgetCostCategorization.available_codes(activity), activity, activity.budget)
     when 'spend_coding'
-      coding_treemap(CodingSpend, code_roots, activity, activity.spend)
+      coding_treemap(CodingSpend, CodingSpend.available_codes(activity), activity, activity.spend)
     when 'spend_districts'
       districts_treemap(CodingSpendDistrict, activity.coding_spend_district, activity.spend)
     when 'spend_cost_categorization'
-      coding_treemap(CodingSpendCostCategorization, cost_cat_roots, activity, activity.spend)
+      coding_treemap(CodingSpendCostCategorization, CodingSpendCostCategorization.available_codes(activity), activity, activity.spend)
     else
       raise "Wrong chart type".to_yaml
     end

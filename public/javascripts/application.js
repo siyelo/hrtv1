@@ -357,13 +357,13 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     // Create and draw the visualization.
     var tree = new google.visualization.TreeMap(chart_element[0]);
     tree.draw(data, {
-      minColor: '#e92600',
-      midColor: '#fff',
-      maxColor: '#41a200',
+      minColor: '#3c9bc9',
+      midColor: '#3c78c9',
+      maxColor: '#3c53c9',
       headerHeight: 20,
-      fontColor: 'white',
+      fontColor: 'black',
       fontSize: '12',
-      headerColor: '#425160',
+      headerColor: '#E6EDF3',
       showScale: false
     });
   });

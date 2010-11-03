@@ -86,41 +86,62 @@ class ChartsController < ApplicationController
   end
 
   def get_activity_data_rows(activity, chart_type)
+
+    code_roots = Code.for_activities.roots
+    cost_cat_roots = CostCategory.roots
+
     case chart_type
     when 'budget_coding'
-      type = CodingBudget
+      coding_treemap(CodingBudget, code_roots, activity, activity.budget)
     when 'budget_districts'
-      type = CodingBudgetDistricts
+      districts_treemap(CodingBudgetDistrict, activity.coding_budget_district, activity.budget)
     when 'budget_cost_categorization'
-      type = CodingBudgetCostCategorization
+      coding_treemap(CodingBudgetCostCategorization, cost_cat_roots, activity, activity.budget)
     when 'spend_coding'
-      type = CodingSpend
+      coding_treemap(CodingSpend, code_roots, activity, activity.spend)
     when 'spend_districts'
-      type = CodingSpendDistrict
+      districts_treemap(CodingSpendDistrict, activity.coding_spend_district, activity.spend)
     when 'spend_cost_categorization'
-      type = CodingSpendCostCategorization
+      coding_treemap(CodingSpendCostCategorization, cost_cat_roots, activity, activity.spend)
     else
       raise "Wrong chart type".to_yaml
     end
+  end
 
+  def coding_treemap(type, code_roots, activity, total_amount)
     data_rows = []
     treemap_root = "All Codes"
     data_rows << [treemap_root, nil, 0, 0] #todo amount
 
-    code_roots  = Code.for_activities.roots
     assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
     code_roots.each do |code|
-      if assignments.has_key?(code.id)
-        data_rows << [code.short_display, treemap_root, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
-        #unless code.leaf?
-        #  code.children.each do |child|
-        #    #recurse
-        #end
-      end
+      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
     end
-
-    #TODO: districts
     return data_rows
   end
 
+  def districts_treemap(type, districts, total_amount)
+    data_rows = []
+    treemap_root = "All Codes"
+    data_rows << [treemap_root, nil, 0, 0]
+    districts.each do |assignment|
+      percentage  = (assignment.cached_amount / total_amount * 100).round(0)
+      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
+      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
+    end
+    data_rows
+  end
+
+  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
+    if assignments.has_key?(code.id)
+      percentage  = (assignments[code.id].cached_amount / total_amount * 100).round(0)
+      label       = "#{percentage}%: #{code.to_s_prefer_official}"
+      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
+      unless code.leaf?
+        code.children.each do |child|
+          build_treemap_rows(data_rows, child, label, total_amount, assignments)
+        end
+      end
+    end
+  end
 end

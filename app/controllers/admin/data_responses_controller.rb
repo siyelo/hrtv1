@@ -3,17 +3,17 @@ class Admin::DataResponsesController < ApplicationController
   skip_before_filter :load_help
 
   def index
-    @submitted_data_responses = DataResponse.available_to(current_user).submitted.all
+    @submitted_data_responses   = DataResponse.available_to(current_user).submitted.all
     @in_progress_data_responses = DataResponse.available_to(current_user).in_process
-    @empty_data_responses = DataResponse.available_to(current_user).empty
+    @empty_data_responses       = DataResponse.available_to(current_user).empty
   end
 
   def show
-    @data_response = DataResponse.find(params[:id])
-    @projects = @data_response.projects.find(:all, :order => "name ASC")
+    @data_response               = DataResponse.find(params[:id])
+    @projects                    = @data_response.projects.find(:all, :order => "name ASC")
     @activities_without_projects = @data_response.activities.roots.without_a_project
-    @code_roots = Code.for_activities.roots
-    @cost_cat_roots = CostCategory.roots
+    @code_roots                  = Code.for_activities.roots
+    @cost_cat_roots              = CostCategory.roots
   end
 
   def destroy

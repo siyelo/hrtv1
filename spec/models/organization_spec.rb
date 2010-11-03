@@ -87,6 +87,19 @@ describe Organization do
       target.data_responses.count.should == 2
     end
 
+    it "copies also invalid data responses from duplicate to target" do
+      target = Factory.create(:organization)
+      Factory.create(:data_response, :responding_organization => target)
+      duplicate = Factory.create(:organization)
+      duplicate_data_response = Factory.build(:data_response, :responding_organization => duplicate,
+                    :fiscal_year_start_date => Date.parse("2010-02-01"), 
+                    :fiscal_year_end_date => Date.parse("2010-01-01"))
+      duplicate_data_response.save(false)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.data_responses.count.should == 2
+    end
 
     it "copies out flows from duplicate to target" do
       target = Factory.create(:organization)

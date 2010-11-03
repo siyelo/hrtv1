@@ -10,6 +10,8 @@ load 'db/seed_files/model_help.rb' #don't load model help now that we're in prod
 
 load 'db/seed_files/codes.rb'
 
+load 'db/seed_files/hssp2_codes.rb'
+
 load 'db/seed_files/cost_categories.rb'
 
 load 'db/seed_files/other_cost_codes.rb'

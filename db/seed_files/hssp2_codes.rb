@@ -58,4 +58,4 @@ FasterCSV.foreach("db/seed_files/hssp2_codes.csv", :headers=>true) do |row|
   end
 end
 
-puts "...Loading codes.csv DONE"
+puts "...Loading hssp2 codes.csv DONE"

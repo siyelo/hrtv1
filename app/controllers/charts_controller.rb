@@ -110,7 +110,6 @@ class ChartsController < ApplicationController
     treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
     data_rows << [treemap_root, nil, 0, 0] #todo amount
 
-
     code_roots.each do |code|
       build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
     end
@@ -119,7 +118,7 @@ class ChartsController < ApplicationController
 
   def districts_treemap(type, districts, total_amount)
     data_rows = []
-    treemap_root = "All Codes"
+    treemap_root = "#{districts.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
     data_rows << [treemap_root, nil, 0, 0]
     districts.each do |assignment|
       percentage  = (assignment.cached_amount / total_amount * 100).round(0)

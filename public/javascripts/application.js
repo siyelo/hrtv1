@@ -357,9 +357,9 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     // Create and draw the visualization.
     var tree = new google.visualization.TreeMap(chart_element[0]);
     tree.draw(data, {
-      minColor: '#3c9bc9',
-      midColor: '#3c78c9',
-      maxColor: '#3c53c9',
+      minColor: '#35ff35',
+      midColor: '#09c500',
+      maxColor: '#08a100',
       headerHeight: 20,
       fontColor: 'black',
       fontSize: '12',

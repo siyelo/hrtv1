@@ -182,7 +182,7 @@ class ReportsController < ApplicationController
     else
       @data_response = current_user.data_responses.find(params[:id])
     end
-    rep = Reports::MapDistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::MapDistrictsByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=map_districts_by_full_coding.csv"

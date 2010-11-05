@@ -9,7 +9,7 @@ class Reports::ActivitiesByFullCoding < Reports::CodedActivityReport
       csv << header()
       @activities = activities
       @report_type = report_type
-      @leaves = Nsp.leaves
+      @leaves = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.type.to_s)}
       Mtef.roots.reverse.each do |nsp_root|
         add_rows csv, nsp_root
       end

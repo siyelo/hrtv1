@@ -36,13 +36,17 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
   def set_district_hash_for_code code
     cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
     activities = {}
-    cas.each{ |ca| activities[ca.activity] = ca.cached_amount }
-    activities.each do |a, amt|
+    cas.each{ |ca|
+      activities[ca.activity] = {}
+      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
+      activities[ca.activity][:amount] = ca.cached_amount
+    }
+    activities.each do |a, h|
       if @district_proportions_hash.key? a
         #have cached values, so speed up these proportions
         @district_proportions_hash[a].each do |loc, proportion|
-          @districts_hash[loc][:total] += amt * proportion
-          @districts_hash[loc][code] += amt * proportion
+          @districts_hash[loc][:total] += h[:leaf_amount] * proportion
+          @districts_hash[loc][code] += h[:amount] * proportion
         end
       else
         @district_proportions_hash[a] = {}
@@ -50,8 +54,8 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
           proportion = bd.cached_amount / a.budget
           loc = bd.code
           @district_proportions_hash[a][loc] = proportion
-          @districts_hash[loc][:total] += amt * proportion
-          @districts_hash[loc][code] += amt * proportion
+          @districts_hash[loc][:total] += h[:leaf_amount] * proportion
+          @districts_hash[loc][code] += h[:amount] * proportion
         end
       end
     end

@@ -124,7 +124,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
   end
 
   def official_name_w_sum code
-    "#{code.official_name}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
+    "#{code.official_name ? code.official_name : code.short_display}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
   end
 
 end

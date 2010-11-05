@@ -3,7 +3,8 @@ require 'fastercsv'
 class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   include Reports::Helpers
   
-  def initialize(activities, report_type)
+  def initialize(activities, report_type, show_respondent = false)
+    @show_respondent = show_respondent
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
@@ -64,7 +65,12 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         row << activity.spend_q3 ? 'x' : nil
         row << activity.spend_q4 ? 'x' : nil
         row << activity.locations.join(' | ')
-        row << activity.provider.try(:short_name) if assignment.activity.provider
+        row << activity.data_response.responding_organization.try(:short_name) if @show_respondent
+        if assignment.activity.provider
+          row << activity.provider.try(:short_name) 
+        else
+          row << "No Implementer Specified"
+        end
         row << activity.organizations.join(' | ')
         unless activity.sub_activities.implemented_by_health_centers.empty?
           row << activity.sub_activities.implemented_by_health_centers.count
@@ -80,9 +86,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
   def header()
     row = []
-    row << "NSP Top Level"
+    row << "NSP Code"
     (Nsp.deepest_nesting-1).times do |i|
-      row << "NSP Level #{i+1}"
+      row << "NSP Code"
     end
 #    row << "% of Activity"
     row << "Budget"
@@ -93,6 +99,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
     row << "Q3"
     row << "Q4"
     row << "Districts"
+    row << "Data Source" if @show_respondent
     row << "Implementer"
     row << "Institutions Assisted"
     row << "# of HC's Sub-implementing"
@@ -120,7 +127,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   end
 
   def official_name_w_sum code
-    "#{code.official_name}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
+    "#{code.official_name ? code.official_name : code.short_display}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
   end
 
 end

@@ -1,14 +1,14 @@
 require 'fastercsv'
 
-class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
+class Reports::MapDistrictsByFullCoding < Reports::CodedActivityReport
   include Reports::Helpers
   
   def initialize(activities, report_type)
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    Nsp.all.each do |e|
-      @codes_to_include << e
+    Code.all.each do |e|
+      @codes_to_include << e if ["Mtef", "Nha", "Nsp", "Nasa"].include?(e.type.to_s)
     end
     @districts_hash = {}
     Location.all.each do |l|
@@ -92,7 +92,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
   def add_rows csv, code
     add_code_summary_row(csv, code)
     row(csv, code, @activities, @report_type) if @districts_hash.key? code
-    kids = code.children.with_type("Nsp")
+    kids = code.children
     kids.each do |c|
       add_rows(csv, c)
     end
@@ -118,7 +118,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
     # TODO merge all columns to the left and put row's value
     # if there is more than 5 rows in the section
     hierarchy = []
-    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
+    Code.each_with_level(code.self_and_ancestors) do |e, level| # each_with_level() is faster than level()
       if e==code
         hierarchy << official_name_w_sum(e)
       else
@@ -126,7 +126,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
       end
       #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
-    (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
+    (Code.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
     hierarchy
   end
 

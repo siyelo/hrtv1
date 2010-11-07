@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101104104520) do
+ActiveRecord::Schema.define(:version => 20101104193756) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -54,6 +54,11 @@ ActiveRecord::Schema.define(:version => 20101104104520) do
     t.decimal   "budget_q4_prev"
   end
 
+  add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
+  add_index "activities", ["data_response_id"], :name => "index_activities_on_data_response_id"
+  add_index "activities", ["provider_id"], :name => "index_activities_on_provider_id"
+  add_index "activities", ["type"], :name => "index_activities_on_type"
+
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "beneficiary_id"
@@ -93,6 +98,9 @@ ActiveRecord::Schema.define(:version => 20101104104520) do
     t.decimal "cached_amount"
     t.decimal "sum_of_children"
   end
+
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
+  add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
     t.integer   "parent_id"
@@ -172,6 +180,7 @@ ActiveRecord::Schema.define(:version => 20101104104520) do
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
+  add_index "data_responses", ["organization_id_responder"], :name => "index_data_responses_on_organization_id_responder"
 
   create_table "field_helps", :force => true do |t|
     t.string    "attribute_name"
@@ -204,6 +213,10 @@ ActiveRecord::Schema.define(:version => 20101104104520) do
     t.decimal   "budget_q4"
     t.decimal   "budget_q4_prev"
   end
+
+  add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
+  add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
+  add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
   create_table "help_requests", :force => true do |t|
     t.string    "email"
@@ -287,6 +300,8 @@ ActiveRecord::Schema.define(:version => 20101104104520) do
     t.decimal   "budget_q4"
     t.decimal   "budget_q4_prev"
   end
+
+  add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
 
   create_table "sessions", :force => true do |t|
     t.string    "session_id", :null => false

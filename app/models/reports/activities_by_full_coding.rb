@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByNsp < Reports::CodedActivityReport
+class Reports::ActivitiesByFullCoding < Reports::CodedActivityReport
   include Reports::Helpers
   
   def initialize(activities, report_type, show_respondent = false)
@@ -9,8 +9,8 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       csv << header()
       @activities = activities
       @report_type = report_type
-      @leaves = Nsp.leaves
-      Nsp.roots.reverse.each do |nsp_root|
+      @leaves = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.type.to_s)}
+      Mtef.roots.reverse.each do |nsp_root|
         add_rows csv, nsp_root
       end
     end
@@ -23,7 +23,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   def add_rows csv, code
     add_code_summary_row(csv, code)
     row(csv, code, @activities, @report_type)
-    kids = code.children.with_type("Nsp")
+    kids = code.children#.with_type("Nsp")
     kids.each do |c|
       add_rows(csv, c)
     end
@@ -40,7 +40,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
   def row(csv, code, activities, report_type)
     hierarchy = code_hierarchy(code)
-    cas = code.leaf_assigns_for_activities(report_type,activities)
+    #TODO don't show code hierarchy 
+    # since can tell by indentation
+    cas = code.leaf_assigns_for_activities_for_code_set(report_type, @leaves, activities)
     cas.each do |assignment|
       if assignment.cached_amount
         activity = assignment.activity
@@ -78,9 +80,9 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
   def header()
     row = []
-    row << "NSP Code"
-    (Nsp.deepest_nesting-1).times do |i|
-      row << "NSP Code"
+    row << "Code"
+    (Code.deepest_nesting-1).times do |i|
+      row << "Code"
     end
     row << "Budget"
     row << "Activity Description"
@@ -101,21 +103,19 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
   protected
 
   def code_hierarchy(code)
-    # TODO merge all columns to the left and put row's value
-    # if there is more than 5 rows in the section
     hierarchy = []
-    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level|
+    Code.each_with_level(code.self_and_ancestors) do |e, level| # each_with_level() is faster than level()
       if e==code
         hierarchy << official_name_w_sum(e)
       else
         hierarchy << nil
       end
-      #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
-    (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
+    (Code.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
     hierarchy
   end
 
+  #TODO refactor name now that we dont show sum w it
   def official_name_w_sum code
     "#{code.official_name ? code.official_name : code.short_display}"
   end

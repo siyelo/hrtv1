@@ -85,6 +85,15 @@ class Activity < ActiveRecord::Base
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
 
+  def self.canonical
+      #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
+      a=Activity.all(:joins => "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
+        LEFT JOIN data_responses provider_dr ON provider_dr.organization_id_responder = activities.provider_id
+        LEFT JOIN (SELECT organization_id, count(*) as num_users FROM users GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id_responder ",
+                   :conditions => ["activities.provider_id = data_responses.organization_id_responder OR (provider_dr.id IS NULL OR org_users_count.organization_id IS NULL)"])
+      a.uniq
+  end
+
   def self.unclassified
     self.find(:all).select {|a| !a.classified}
   end

@@ -108,15 +108,15 @@ class Activity < ActiveRecord::Base
     projects.valid_providers
   end
 
-  def locations
-    if read_attribute(:locations)
-     read_attribute(:locations)
-    elsif provider.try(:locations)
-     provider.try(:locations)
-    else
-     []
-    end
-  end
+#  def locations
+#    if read_attribute(:locations)
+#     read_attribute(:locations)
+#    elsif provider.try(:locations)
+#     provider.try(:locations)
+#    else
+#     []
+#    end
+#  end
 
   #convenience
   def implementer

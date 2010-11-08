@@ -83,7 +83,7 @@ class Code < ActiveRecord::Base
     #root_name = "#{n2c(sum_of_roots)}: All Codes"
     root_name = "All Codes"
     rows << [root_name, nil, sum_of_roots, 0]
-    return rows
+    #return rows
     code_roots.each do |r|
       parent_display_cache = {} # code => display_value , used to connect rows
       parent_display_cache[r.parent] = root_name

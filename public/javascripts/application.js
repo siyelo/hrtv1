@@ -364,7 +364,21 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
       fontColor: 'black',
       fontSize: '12',
       headerColor: '#E6EDF3',
-      showScale: false
+      showScale: false,
+      showTooltips: false
+    });
+
+    // manual tipsy
+    chart_element.tipsy({gravity: 'w', trigger: 'manual'})
+
+    google.visualization.events.addListener(tree, 'onmouseover', function (e) {
+      chart_element.attr('title', data_rows[e.row][0]);
+      chart_element.tipsy('show');
+    });
+
+    google.visualization.events.addListener(tree, 'onmouseout', function (e) {
+      chart_element.attr('title', '');
+      chart_element.tipsy('hide');
     });
   });
 };

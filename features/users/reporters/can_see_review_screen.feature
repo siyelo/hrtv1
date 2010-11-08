@@ -67,7 +67,7 @@ Scenario: Manage comments on project (with Javascript)
 Scenario: Manage comments on activities (with Javascript)
   Then I can manage the comments
 
-@reporter_review_screen @javascript @run
+@reporter_review_screen @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
   Then I should see tabs for comments,activities,other costs 

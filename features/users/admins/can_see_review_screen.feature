@@ -7,7 +7,7 @@ Background:
   Given organizations, reporters, data request, data responses, projects
   Given I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Review submitted data responses"
+  And I follow "Review data responses"
   And I follow "Show"
 
 @admin_review_screen @javascript

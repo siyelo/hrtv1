@@ -70,7 +70,6 @@ class Code < ActiveRecord::Base
     data_rows = self.get_treemap_rows(roots, codes, type, activities)
   end
 
-  # todo recurse with array then join
   def self.get_treemap_rows(code_roots, codes, type, activities)
     # format is my value, parent value, box_area_value, coloring_value
     rows = []
@@ -79,7 +78,8 @@ class Code < ActiveRecord::Base
       sum_of_roots += r.sum_of_assignments_for_activities(type,activities)
     end
 
-    root_name = "#{n2c(sum_of_roots)}: All Codes"
+    #root_name = "#{n2c(sum_of_roots)}: All Codes"
+    root_name = "All Codes"
     rows << [root_name, nil, sum_of_roots, 0]
 
     code_roots.each do |r|

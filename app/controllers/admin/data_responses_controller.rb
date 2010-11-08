@@ -14,6 +14,7 @@ class Admin::DataResponsesController < ApplicationController
     @activities_without_projects = @data_response.activities.roots.without_a_project
     @code_roots                  = Code.for_activities.roots
     @cost_cat_roots              = CostCategory.roots
+    @other_cost_roots            = OtherCostCode.roots
   end
 
   def destroy

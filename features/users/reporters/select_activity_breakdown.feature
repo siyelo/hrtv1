@@ -168,41 +168,22 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
-<<<<<<< HEAD
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-=======
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
->>>>>>> master
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
-<<<<<<< HEAD
   Then the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2)" should contain "600,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-=======
-  Then the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(2)" should contain "600,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-
->>>>>>> master
 
 @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in same rootomitting the parents, using percentages)
@@ -214,39 +195,24 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
-<<<<<<< HEAD
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
-=======
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
->>>>>>> master
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
-<<<<<<< HEAD
   Then the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
-=======
-  Then the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
->>>>>>> master
   # change coding and see if budget codings are changed
   When I follow "Coding" within "#tab1"
   And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "TB Drugs procurement"
-<<<<<<< HEAD
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
@@ -258,19 +224,6 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "240,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "120,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
-=======
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
-  # check if expenditure codings are also changed
-  And I follow "Coding" within "#tab4"
-  And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
-  Then the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "240,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "240,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "120,000.00"
-  And the cached field "input:nth-child(6)" within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
->>>>>>> master
   # change  budget and spend for activity
   When I follow "Activities"
   And I follow "Edit"
@@ -278,14 +231,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I fill in "Total Spend GOR FY 09-10" with "2000"
   And I press "Update"
   And I go to the budget classification page for "TB Drugs procurement"
-<<<<<<< HEAD
   Then the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "20.00"
-=======
-  Then the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"
-  And the cached field "input:nth-child(6)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "20.00"
->>>>>>> master

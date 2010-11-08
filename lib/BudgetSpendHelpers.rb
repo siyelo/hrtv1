@@ -58,11 +58,13 @@ module BudgetSpendHelpers
   end
 
   def spend_RWF
+    return 0 if spend.nil?
     toRWF = Currency.find_by_symbol(currency).try(:toRWF)
     toRWF ? spend * toRWF : 0
   end
 
   def budget_RWF
+    return 0 if budget.nil?
     toRWF = Currency.find_by_symbol(currency).try(:toRWF)
     toRWF ? budget * toRWF : 0
   end

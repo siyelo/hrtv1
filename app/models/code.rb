@@ -80,8 +80,7 @@ class Code < ActiveRecord::Base
       logger.debug("#{r.to_s} - sum is #{s.to_s}")
       sum_of_roots += s
     end
-    #root_name = "#{n2c(sum_of_roots)}: All Codes"
-    root_name = "All Codes"
+    root_name = "#{n2c(sum_of_roots)}: All Codes"
     rows << [root_name, nil, sum_of_roots, 0]
     #return rows
     code_roots.each do |r|

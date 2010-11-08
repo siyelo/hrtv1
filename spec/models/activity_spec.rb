@@ -28,8 +28,7 @@ describe Activity do
   describe "commenting on an activity" do
     it "should assign to an activity" do
       activity     = Factory(:activity)
-      comment     = Factory(:comment)
-      activity.comments << comment
+      comment      = Factory(:comment, :commentable => activity )
       activity.comments.should have(1).item
       activity.comments.first.should == comment
     end
@@ -68,7 +67,8 @@ describe Activity do
   end
   
   describe "finding total spend for strategic objective codes" do
-    it "return nothing if no codes assigned to HSSP spend" do  
+    it "return nothing if no codes assigned to HSSP spend" do
+      pending #https://www.pivotaltracker.com/story/show/6115671  
       activity     = Factory(:activity)
       activity.spend_stratobj_coding.should == []
     end

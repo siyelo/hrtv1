@@ -1,4 +1,3 @@
-#require 'lib/ActAsDataElement' #super class already has it mixed in
 
 class SubActivity < Activity
   belongs_to :activity
@@ -86,11 +85,11 @@ class SubActivity < Activity
         budget_district_coding = get_district_coding :budget
         budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
         budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
-  
+
         spend_district_coding = get_district_coding :spend
         spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
         spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
-  
+
         [budget_district_coding, budget_coding, budget_coding_categories,
          spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
           @code_assignments_cache << cas

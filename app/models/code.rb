@@ -34,15 +34,15 @@ class Code < ActiveRecord::Base
     a
   end
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
+    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
   end
 
   def leaf_assigns_for_activities(type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
+    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
 
   def sum_of_assignments_for_activities (type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type).with_activities(activities).sum(:cached_amount)
+    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sum(:cached_amount)
   end
 
   def self.treemap(activities, chart_type)
@@ -72,16 +72,18 @@ class Code < ActiveRecord::Base
 
   def self.get_treemap_rows(code_roots, codes, type, activities)
     # format is my value, parent value, box_area_value, coloring_value
+    activities = Activity.only_simple_activities(activities)
     rows = []
     sum_of_roots = 0
     code_roots.each do |r|
-      sum_of_roots += r.sum_of_assignments_for_activities(type,activities)
+      s = r.sum_of_assignments_for_activities(type,activities)
+      logger.debug("#{r.to_s} - sum is #{s.to_s}")
+      sum_of_roots += s
     end
-
     #root_name = "#{n2c(sum_of_roots)}: All Codes"
     root_name = "All Codes"
     rows << [root_name, nil, sum_of_roots, 0]
-
+    return rows
     code_roots.each do |r|
       parent_display_cache = {} # code => display_value , used to connect rows
       parent_display_cache[r.parent] = root_name

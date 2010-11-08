@@ -85,6 +85,10 @@ class Activity < ActiveRecord::Base
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
 
+  def self.only_simple_activities(activities)
+    activities.select{|s| s.type.nil? or s.type == "OtherCost"}
+  end
+
   def self.canonical
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
       a=Activity.all(:joins => "INNER JOIN data_responses ON activities.data_response_id = data_responses.id

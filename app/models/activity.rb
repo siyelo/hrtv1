@@ -373,7 +373,7 @@ class Activity < ActiveRecord::Base
 
   def district_coding(klass, assignments, amount)
    #TODO we will want to be able to override / check against the derived district codings
-   unless assignments.empty? 
+   if !assignments.empty? 
      return assignments
    elsif !sub_activities.empty?
      return district_codings_from_sub_activities(klass, amount)

@@ -39,6 +39,6 @@ config.gem 'faker',            :lib => false
 if ENV.include?('AUTOFEATURE')
   config.gem "ZenTest",          :lib => false
   config.gem "autotest-rails",   :lib => false
-  config.gem "autotest-fsevent", :lib => false
+  #config.gem "autotest-fsevent", :lib => false # Only Darwin (Mac OS X) systems are supported
   config.gem "autotest-growl",   :lib => false
 end

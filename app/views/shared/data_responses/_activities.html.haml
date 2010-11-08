@@ -52,13 +52,15 @@
               .activity_sub_tabs.tabs_nav
                 %ul.inline_alt_tab
                   %li{:class => 'selected' }= link_to "Comments (#{activity.comments.count})", "#", :class => "comment_details"
-                  %li= link_to "Sub-Activities (#{activity.sub_activities.count})", "#", :class => "activity_details"
+                  - unless other_costs
+                    %li= link_to "Sub-Activities (#{activity.sub_activities.count})", "#", :class => "activity_details"
 
               .tabs
                 .tab1
                   = render 'shared/data_responses/comments', :commentable => activity
-                .tab2
-                  = render '/shared/data_responses/sub_activities', :activity => activity
+                - unless other_costs
+                  .tab2
+                    = render '/shared/data_responses/sub_activities', :activity => activity
 
   - if non_linked
     %span= link_to "What's this?", "#", :title => "It's possible you have not specified what project(s) these activities are related to. We've listed them here separately for your convenience.", :class => "tooltip help_tip"

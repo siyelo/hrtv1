@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(:version => 20101104193756) do
     t.string    "hssp2_stratprog_val"
     t.string    "hssp2_stratobj_val"
     t.string    "official_name"
+    t.decimal   "target_amount",       :default => 0.0
   end
 
   create_table "comments", :force => true do |t|

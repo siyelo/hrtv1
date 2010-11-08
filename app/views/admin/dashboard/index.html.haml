@@ -1,9 +1,9 @@
 %h2 Policy Maker Dashboard
-%ul
+%ul.policy_maker_dashboard
   %li= link_to "Review data responses", policy_maker_data_responses_path
 
 %h2 Admin Dashboard
-%ul
+%ul.admin_dashboard
   %li=  link_to "Review data responses", admin_data_responses_path
   %li=  link_to "Manage help and page comments", model_helps_url
   %li=  link_to "Manage organizations", organizations_url
@@ -14,7 +14,7 @@
   %li=  link_to "Respond to help requests", help_requests_url
 
 %h2 Reports
-%ul
+%ul.admin_reports
   %li=  link_to "Activities Report", activity_report_path
   %li=  link_to "Activities by District", activities_by_district_new_path
   %li=  link_to "Activities - One Row Per District Coded in Classifications + District Classifications Summary per Activity", activities_by_district_row_report_path

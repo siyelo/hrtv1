@@ -16,7 +16,7 @@ Scenario: Manage data responses
     Given a data response to "Req1" by "UNDP" 
     Given I am signed in as an admin
     When I follow "Dashboard"
-    And I follow "Review submitted data responses"
+    And I follow "Review data responses" within ".admin_dashboard"
     Then I should see "UNDP"
     When I follow "Delete"
     And I press "Delete"
@@ -36,7 +36,7 @@ Scenario: Manage data responses (with JS)
     Given a data response to "Req1" by "UNDP" 
     Given I am signed in as an admin
     When I follow "Dashboard"
-    And I follow "Review submitted data responses"
+    And I follow "Review data responses" within ".admin_dashboard"
     Then I should see "UNDP"
     When I will confirm a js popup
     And I follow "Delete"

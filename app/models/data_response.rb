@@ -95,13 +95,20 @@ class DataResponse < ActiveRecord::Base
 #    end
 #  end
   def total_project_budget
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget_RWF}
+    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
   end
 
   def total_project_spend
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
+    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend}
   end
 
+  def total_project_budget_RWF
+    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget_RWF}
+  end
+
+  def total_project_spend_RWF
+    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
+  end
   def activity_count
     activities.only_simple.count
   end
@@ -122,15 +129,24 @@ class DataResponse < ActiveRecord::Base
     total_activity_method("budget")
   end
 
+  def total_activity_spend_RWF
+    total_activity_method("spend_RWF")
+  end
+
+  def total_activity_budget_RWF
+    total_activity_method("budget_RWF")
+  end
+
   def total_activity_method(method)
     activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
-        sum + a.send(method+"_RWF")
+        sum + a.send(method)
       else
         sum
       end
     end
   end
+
 end
 
 # == Schema Information

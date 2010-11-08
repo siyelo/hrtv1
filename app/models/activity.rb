@@ -348,46 +348,6 @@ class Activity < ActiveRecord::Base
 
   private
   # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
-  def coding_treemap(type, total_amount)
-    code_roots  = type.available_codes(self)
-    assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
-
-    data_rows = []
-    #treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
-    treemap_root = "All Codes"
-    data_rows << [treemap_root, nil, 0, 0] #todo amount
-
-    code_roots.each do |code|
-      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
-    end
-    return data_rows
-  end
-
-  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
-    if assignments.has_key?(code.id)
-      percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
-      label       = "#{percentage}%: #{code.to_s_prefer_official}"
-      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
-      unless code.leaf?
-        code.children.each do |child|
-          build_treemap_rows(data_rows, child, label, total_amount, assignments)
-        end
-      end
-    end
-  end
-
-  def districts_treemap(code_assignments, total_amount)
-    data_rows = []
-    #treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
-    treemap_root = "All Codes"
-    data_rows << [treemap_root, nil, 0, 0]
-    code_assignments.each do |assignment|
-      percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
-      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
-      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
-    end
-    data_rows
-  end
 
   def get_sum(code_roots, assignments)
     sum = 0
@@ -395,10 +355,6 @@ class Activity < ActiveRecord::Base
       sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
     end
     sum
-  end
-
-  def approved_activity_cannot_be_changed
-    errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
   end
 
   def max_for_coding(type)
@@ -416,10 +372,12 @@ class Activity < ActiveRecord::Base
   end
 
   def district_coding(klass, assignments, amount)
-   # if !sub_activities.empty?
-   #   district_codings_from_sub_activities(klass, amount)
-   # els
-    if assignments.empty? && amount
+   #TODO we will want to be able to override / check against the derived district codings
+   unless assignments.empty? 
+     return assignments
+   elsif !sub_activities.empty?
+     return district_codings_from_sub_activities(klass, amount)
+   elsif amount
       #create even split across locations
       even_split = []
       locations.each do |l|
@@ -460,6 +418,51 @@ class Activity < ActiveRecord::Base
     code_assignment_types.each do |type|
       set_classified_amount_cache(type)
     end
+  end
+  
+  def approved_activity_cannot_be_changed
+    errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
+  end
+  
+  def coding_treemap(type, total_amount)
+    code_roots  = type.available_codes(self)
+    assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
+
+    data_rows = []
+    #treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
+    treemap_root = "All Codes"
+    data_rows << [treemap_root, nil, 0, 0] #todo amount
+
+    code_roots.each do |code|
+      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
+    end
+    return data_rows
+  end
+
+  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
+    if assignments.has_key?(code.id)
+      percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
+      label       = "#{percentage}%: #{code.to_s_prefer_official}"
+      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
+      unless code.leaf?
+        code.children.each do |child|
+          build_treemap_rows(data_rows, child, label, total_amount, assignments)
+        end
+      end
+    end
+  end
+
+  def districts_treemap(code_assignments, total_amount)
+    data_rows = []
+    #treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
+    treemap_root = "All Codes"
+    data_rows << [treemap_root, nil, 0, 0]
+    code_assignments.each do |assignment|
+      percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
+      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
+      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
+    end
+    data_rows
   end
 end
 

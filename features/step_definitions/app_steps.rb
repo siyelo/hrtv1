@@ -368,7 +368,6 @@ When /^I click element "([^"]*)"$/ do |selector|
   find(selector).click
 end
 
-
 Then /^I can manage the comments$/ do
   steps %Q{
     When I click element "#project_details"

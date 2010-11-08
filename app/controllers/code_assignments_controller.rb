@@ -61,7 +61,7 @@ class CodeAssignmentsController < ApplicationController
       difference = n2c(difference)
       percent_diff = n2c(percent_diff)
 
-      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}."
+      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
     end
   end
 

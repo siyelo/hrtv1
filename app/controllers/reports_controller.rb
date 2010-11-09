@@ -101,48 +101,50 @@ class ReportsController < ApplicationController
   end
 
   def activities_by_nsp
-    find_data_response
-    rep = Reports::ActivitiesByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
   def districts_by_nsp
-    find_data_response
-    rep = Reports::DistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::DistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv,"districts_by_nsp.csv")
   end
 
   def map_districts_by_nsp
-    find_data_response
-    rep = Reports::MapDistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::MapDistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv,"map_districts_by_nsp.csv")
   end
   def activities_by_full_coding
-    find_data_response
-    rep = Reports::ActivitiesByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 
   def districts_by_full_coding
-    find_data_response
-    rep = Reports::DistrictsByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::DistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv,"districts_by_full_coding.csv")
   end
 
   def map_districts_by_full_coding
-    find_data_response
-    rep = Reports::MapDistrictsByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    set_activities
+    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin?)
     send_csv(rep.csv,"map_districts_by_full_coding.csv")
   end
 
   protected
 
-  def find_data_response
+  def set_activities
     if current_user.admin?
-      @data_response = DataResponse.find(params[:id])
+      dr = DataResponse.find(params[:id])
+      @activities = Activity.only_simple.canonical
     else
-      @data_response = current_user.data_responses.find(params[:id])
+      dr = current_user.data_responses.find(params[:id])
     end
+    @activities ||= dr.activities
   end
 
   def send_csv(text, filename)

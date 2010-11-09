@@ -412,11 +412,14 @@ class Activity < ActiveRecord::Base
     activity_id = self.id
     location_ids = locations.map(&:id)
     code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-    CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)", 
+    deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)", 
                               {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
 
-    code_assignment_types.each do |type|
-      set_classified_amount_cache(type)
+    # only if there are deleted code assignments, update the district cached amounts
+    if deleted_count > 0
+      code_assignment_types.each do |type|
+        set_classified_amount_cache(type)
+      end
     end
   end
   

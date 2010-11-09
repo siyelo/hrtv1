@@ -11,6 +11,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     @districts_hash = {}
     @codes_to_include.each do |c|
       @districts_hash[c] = {}
+      @districts_hash[c][:total] = 0
       Location.all.each do |l|
         @districts_hash[c][l] = 0
       end
@@ -50,28 +51,33 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     if @codes_to_include.include? code
       set_district_hash_for_code code
     end
-    #TODO merge cells[code.level:amount_column] for this code
   end
 
-  # We've got non-report type report type hard coding here
-  # so it uses budgets
   def set_district_hash_for_code code
     cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
     activities = {}
-    cas.each{ |ca| activities[ca.activity] = ca.cached_amount }
-    activities.each do |a, amt|
+    cas.each{ |ca|
+      activities[ca.activity] = {}
+      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
+      activities[ca.activity][:amount] = ca.cached_amount
+    }
+    activities.each do |a, h|
       if @district_proportions_hash.key? a
         #have cached values, so speed up these proportions
         @district_proportions_hash[a].each do |loc, proportion|
-          @districts_hash[code][loc] += amt * proportion
+          @districts_hash[code][:total] += h[:leaf_amount] * proportion
+          @districts_hash[code][loc] += h[:amount] * proportion
         end
       else
         @district_proportions_hash[a] = {}
+        # We've got non-report type report type hard coding here
+        # so it uses budgets
         a.budget_district_coding.each do |bd|
           proportion = bd.cached_amount / a.budget
           loc = bd.code
-          @districts_hash[code][loc] += amt * proportion
           @district_proportions_hash[a][loc] = proportion
+          @districts_hash[code][:total] += h[:leaf_amount] * proportion
+          @districts_hash[code][loc] += h[:amount] * proportion
         end
       end
     end
@@ -81,7 +87,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     hierarchy = code_hierarchy(code)
     location_to_amount_for_code = @districts_hash[code]
     location_to_amount_for_code.each do |loc, amt|
-      if amt != 0
+      if amt != 0 and loc != :total
         row = []
         row = hierarchy.clone
         row << loc.to_s.upcase
@@ -109,7 +115,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     # TODO merge all columns to the left and put row's value
     # if there is more than 5 rows in the section
     hierarchy = []
-    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level| # each_with_level() is faster than level()
+    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level|
       if e==code
         hierarchy << official_name_w_sum(e)
       else
@@ -122,7 +128,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
   end
 
   def official_name_w_sum code
-    "#{code.official_name ? code.official_name : code.short_display}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
+    "#{code.official_name ? code.official_name : code.short_display}"
   end
 
 end

@@ -3,16 +3,15 @@
     %thead
       %tr
         %th Sub-Implementer
-        %th Classified
         %th Budget
         %th Budget percentage
         %th Spend
         %th Spend percentage
     %tbody
+      /TODO sort by budget & calculate %'s if missing
       - activity.sub_activities.each do |sub_activity|
         %tr.sub_activity.entry_header
           %td=  sub_activity.implementer.try(:name)
-          %td= sub_activity.classified? ? "Yes" : "No"
           %td= n2c(sub_activity.budget, sub_activity.currency)
           %td= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
           %td= n2c(sub_activity.spend, sub_activity.currency)

@@ -71,50 +71,33 @@ class ReportsController < ApplicationController
   def users_in_my_organization
     authorize! :read, :users_in_my_organization
     rep = Reports::UsersByOrganization.new(current_user)
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=users_by_organization.csv"
+    send_csv rep.csv, "users_by_organization.csv"
   end
 
+  # TODO ALL NEED TO BE AUTHORIZED!!!
   def activity_report
     rep = Reports::ActivityReport.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activity_report.csv"
+    send_csv(rep.csv,"activity_report.csv")
   end
 
   def activities_by_district_row_report
     rep = Reports::DistrictCodingsBudgetReport.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_district_row_report.csv"
+    send_csv(rep.csv,"activities_by_district_row_report.csv")
   end
 
   def activities_by_district_new
     rep = Reports::ActivitiesByDistrictNew.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_districts_new.csv"
+    send_csv(rep.csv,"activities_by_districts_new.csv")
   end
 
   def activities_by_budget_coding_new
     rep = Reports::ActivitiesByBudgetCodingNew.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_budget_coding_new.csv"
+    send_csv(rep.csv,"activities_by_budget_coding_new.csv")
   end
 
   def activities_by_budget_stratprog
     rep = Reports::ActivitiesByHssp2.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_budget_stratprog.csv"
+    send_csv(rep.csv,"activities_by_budget_stratprog.csv")
   end
 
   def activities_by_nsp
@@ -124,9 +107,7 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::ActivitiesByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_nsp.csv"
+    send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
   def districts_by_nsp
@@ -136,9 +117,7 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::DistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=districts_by_nsp.csv"
+    send_csv(rep.csv,"districts_by_nsp.csv")
   end
 
   def map_districts_by_nsp
@@ -148,9 +127,7 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::MapDistrictsByNsp.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=map_districts_by_nsp.csv"
+    send_csv(rep.csv,"map_districts_by_nsp.csv")
   end
   def activities_by_full_coding
     if current_user.admin?
@@ -159,9 +136,7 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::ActivitiesByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_full_coding.csv"
+    send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 
   def districts_by_full_coding
@@ -171,9 +146,7 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::DistrictsByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=districts_by_full_coding.csv"
+    send_csv(rep.csv,"districts_by_full_coding.csv")
   end
 
   def map_districts_by_full_coding
@@ -183,8 +156,13 @@ class ReportsController < ApplicationController
       @data_response = current_user.data_responses.find(params[:id])
     end
     rep = Reports::MapDistrictsByFullCoding.new(@data_response.activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
-    send_data rep.csv,
+    send_csv(rep.csv,"map_districts_by_full_coding.csv")
+  end
+
+  protected
+  def send_csv(text, filename)
+    send_data text,
               :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=map_districts_by_full_coding.csv"
+              :disposition => "attachment; filename=#{filename}"
   end
 end

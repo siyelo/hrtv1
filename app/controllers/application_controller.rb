@@ -8,9 +8,23 @@ class ApplicationController < AuthlogicController
   filter_parameter_logging :password, :password_confirmation
 
   include ApplicationHelper
+  include SslRequirement
 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = "You are not authorized to do that"
     redirect_to login_url
+  end
+
+  protected
+
+  # Require SSL for all actions in all controllers
+  # redefined method from SSL requirement plugin
+  # This method is redefined in static pages controller for actoins: :index, :about, :contact, :news
+  def ssl_required?
+    if Rails.env == "production" || Rails.env == "staging"# || Rails.env == "development"
+      true
+    else
+      false
+    end
   end
 end

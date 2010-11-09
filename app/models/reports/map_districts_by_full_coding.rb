@@ -50,6 +50,8 @@ class Reports::MapDistrictsByFullCoding < Reports::CodedActivityReport
         end
       else
         @district_proportions_hash[a] = {}
+        # We've got non-report type report type hard coding here
+        # so it uses budgets
         a.budget_district_coding.each do |bd|
           proportion = bd.cached_amount / a.budget
           loc = bd.code

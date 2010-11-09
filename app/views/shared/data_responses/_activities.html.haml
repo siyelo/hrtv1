@@ -51,7 +51,7 @@
 
               .activity_sub_tabs.tabs_nav
                 %ul.inline_alt_tab
-                  %li{:class => 'selected' }= link_to "Comments (#{activity.comments.count})", "#", :class => "comment_details"
+                  %li{:class => 'selected' }= link_to "Comments (#{activity.comments.size})", "#", :class => "comment_details"
                   - unless other_costs
                     %li= link_to "Sub-Activities (#{activity.sub_activities.count})", "#", :class => "activity_details"
 

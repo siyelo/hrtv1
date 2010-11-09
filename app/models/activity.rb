@@ -72,6 +72,9 @@ class Activity < ActiveRecord::Base
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   before_update :copy_budget_codings_to_spend, :if => Proc.new {|m| m.use_budget_codings_for_spend_changed? && m.use_budget_codings_for_spend }
+  after_create  :update_counter_cache
+  after_destroy :update_counter_cache
+
 
   # TODO handle the saving of codes or the getting of codes correctly
   # when use_budget_codings_for_spend is true
@@ -347,7 +350,11 @@ class Activity < ActiveRecord::Base
   end
 
   private
-  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
+  def update_counter_cache
+    self.data_response.activities_count = data_response.activities.only_simple.count
+    self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
+    self.data_response.save(false)
+  end
 
   def get_sum(code_roots, assignments)
     sum = 0
@@ -357,6 +364,7 @@ class Activity < ActiveRecord::Base
     sum
   end
 
+  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
   def max_for_coding(type)
     case type.to_s
     when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"

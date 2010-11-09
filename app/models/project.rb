@@ -5,26 +5,33 @@ require 'lib/ReportHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
-
-  include ActAsDataElement
   include ActsAsDateChecker
   include ReportHelpers
-  configure_act_as_data_element
 
   acts_as_stripper
 
   # Commentable
   acts_as_commentable
 
-  ### Associations
+  # Associations
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
   has_many :funding_flows #, :dependent => :nullify
-
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
   has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
+  belongs_to :data_response, :counter_cache => true
+  has_one :owner, :through => :data_response, :source => :responding_organization
 
-  ### Validations
+  # Named scopes
+  named_scope :available_to, lambda { |current_user|
+    if current_user.role?(:admin)
+      {}
+    else
+      {:conditions=>{:data_response_id => current_user.current_data_response.try(:id)}}
+    end
+  }
+
+  # Validations
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -34,13 +41,14 @@ class Project < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
+  # Attributes
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-                  :start_date, :end_date, :currency
+                  :start_date, :end_date, :currency, :data_response
 
   include BudgetSpendHelpers
   after_create :create_helpful_records_for_workflow
 
-  ### public methods
+  # public methods
   def organization
     self.data_response.responding_organization
   end

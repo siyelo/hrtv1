@@ -47,11 +47,11 @@
               %td= data_response.projects.count
               %td= n2c data_response.total_project_spend
               %td= n2c data_response.total_project_budget
-              %td= data_response.activity_count
-              %td= data_response.sub_activity_count
+              %td= data_response.activities_count
+              %td= data_response.sub_activities_count
               %td= n2c data_response.total_activity_spend
               %td= n2c data_response.total_activity_budget
-              %td= "#{data_response.unclassified_activities_count} / #{data_response.activity_count}"
+              %td= "#{data_response.unclassified_activities_count} / #{data_response.activities_count}"
               %td
                 = link_to "Show", [:admin, data_response]
     .simple_table

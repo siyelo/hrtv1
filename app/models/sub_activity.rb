@@ -1,7 +1,14 @@
-
 class SubActivity < Activity
+
+  # Associations
   belongs_to :activity
+
+  # Attributes
   attr_accessible :activity_id, :spend_percentage, :budget_percentage
+
+  # Callbacks
+  after_create  :update_counter_cache
+  after_destroy :update_counter_cache
 
   #TODO: refactor
   [:projects, :name, :description,  :start, :end,
@@ -135,6 +142,12 @@ class SubActivity < Activity
       end
       new_assignments
     end
+  end
+
+  private
+  def update_counter_cache
+    self.data_response.sub_activities_count = data_response.sub_activities.count
+    self.data_response.save(false)
   end
 end
 

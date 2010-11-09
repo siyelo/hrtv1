@@ -429,9 +429,8 @@ class Activity < ActiveRecord::Base
     assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
 
     data_rows = []
-    #treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
-    treemap_root = "All Codes"
-    data_rows << [treemap_root, nil, 0, 0] #todo amount
+    treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
+    data_rows << [treemap_root, nil, 0, 0] #TODO amount
 
     code_roots.each do |code|
       build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
@@ -454,8 +453,7 @@ class Activity < ActiveRecord::Base
 
   def districts_treemap(code_assignments, total_amount)
     data_rows = []
-    #treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
-    treemap_root = "All Codes"
+    treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
     data_rows << [treemap_root, nil, 0, 0]
     code_assignments.each do |assignment|
       percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
@@ -506,5 +504,3 @@ end
 #  budget_q3                             :decimal(, )
 #  budget_q4                             :decimal(, )
 #  budget_q4_prev                        :decimal(, )
-#
-

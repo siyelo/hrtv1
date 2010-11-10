@@ -7,5 +7,17 @@ Factory.define :code_assignment, :class => CodeAssignment do |f|
 end
 
 Factory.define :coding_budget, :class => CodingBudget, :parent => :code_assignment do |f|
-    f.code            { Factory.create :mtef_code }
+  f.code            { Factory.create :mtef_code }
+end
+
+Factory.define :coding_spend, :class => CodingSpend, :parent => :code_assignment do |f|
+  f.code            { Factory.create :mtef_code }
+end
+
+Factory.define :coding_budget_district, :class => CodingBudgetDistrict, :parent => :code_assignment do |f|
+  f.code            { Factory.create :mtef_code }
+end
+
+Factory.define :coding_budget_cost_categorization, :class => CodingBudgetCostCategorization, :parent => :code_assignment do |f|
+  f.code            { Factory.create :mtef_code }
 end

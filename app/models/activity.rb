@@ -305,11 +305,18 @@ class Activity < ActiveRecord::Base
   def copy_budget_codings_to_spend(types = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'])
     types.each do |budget_type|
       spend_type = budget_type.gsub(/Budget/, "Spend")
-      code_assignments.with_type(spend_type).delete_all # remove old 'Spend' code assignment
+      CodeAssignment.delete_all(["type = ?", spend_type]) # remove old 'Spend' code assignment
       code_assignments.with_type(budget_type).each do |ca|
+        # TODO: move to code_assignment model as a new method
         spend_ca = ca.clone
         spend_ca.type = spend_type
-        spend_ca.cached_amount = spend * ca.calculated_amount / budget if spend && budget && ca.calculated_amount
+        if spend
+          if budget && budget > 0 && ca.calculated_amount > 0
+            spend_ca.cached_amount = spend * ca.calculated_amount / budget
+          elsif ca.percentage
+            spend_ca.cached_amount = ca.percentage * spend / 100
+          end
+        end
         spend_ca.percentage = ca.percentage if ca.percentage
         spend_ca.save!
       end

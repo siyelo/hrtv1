@@ -74,7 +74,8 @@ class ActivitiesController < ActiveScaffoldController
         c = c.to_sym
         config.columns[c].inplace_edit = true
         quarterly_amount_field_options config.columns[c]
-        config.columns[c].label = "#{m.capitalize} in Your FY 09-10 "+quarter.capitalize
+        fy = m == "spend" ? "09-10" : "10-11"
+        config.columns[c].label = "#{m.capitalize} in Your FY #{fy} "+quarter.capitalize
       end
     end
     config.columns[:spend_q4_prev].inplace_edit = true
@@ -82,7 +83,7 @@ class ActivitiesController < ActiveScaffoldController
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
     config.columns[:budget_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:budget_q4_prev]
-    config.columns[:budget_q4_prev].label = "Budget in your FY 08-09 Q4"
+    config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
     [:text_for_beneficiaries, :text_for_targets, :text_for_provider].each do |c|
       config.columns[c].form_ui = :textarea
       config.columns[c].options = {:cols => 50, :rows => 3}

@@ -50,16 +50,22 @@ class FundingFlowsController < ActiveScaffoldController
       config.columns[c].inplace_edit = true
     end
     config.columns[:budget].inplace_edit = true
-    %w[q1 q2 q3 q4].each do |quarter|
-      c="spend_"+quarter
-      c=c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Spend in your FY 09-10 "+quarter.capitalize
+    %w[spend budget].each do |m|
+      %w[q1 q2 q3 q4].each do |quarter|
+        c = m+"_"+quarter
+        c = c.to_sym
+        config.columns[c].inplace_edit = true
+        quarterly_amount_field_options config.columns[c]
+        fy = m == "spend" ? "09-10" : "10-11"
+        config.columns[c].label = "#{m.capitalize} in Your FY #{fy} "+quarter.capitalize
+      end
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
     config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:budget_q4_prev].inplace_edit = true
+    quarterly_amount_field_options config.columns[:budget_q4_prev]
+    config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
   end
 
   def self.create_columns

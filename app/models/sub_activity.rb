@@ -1,7 +1,7 @@
 class SubActivity < Activity
 
   # Associations
-  belongs_to :activity
+  belongs_to :activity, :counter_cache => true
 
   # Attributes
   attr_accessible :activity_id, :spend_percentage, :budget_percentage

@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(:version => 20101109161736) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",                        :default => 0
+    t.integer  "sub_activities_count",                  :default => 0
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"

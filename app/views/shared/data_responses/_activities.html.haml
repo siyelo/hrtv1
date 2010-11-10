@@ -29,11 +29,11 @@
                   = activity.name
                 %li.descr= activity.description.to_s.first(300)
                 - unless activity.type == "OtherCost"
-                  %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
+                  %li.implementer= "Implementer: #{activity.provider.try(:name)}"
             %td= activity.classified? ? "Yes" : "No"
             %td= activity.approved
             - unless other_costs
-              %td= activity.sub_activities.count
+              %td= activity.sub_activities.size
             %td= n2c(activity.spend, activity.currency)
             %td= n2c(activity.budget, activity.currency)
             %td.manage
@@ -53,7 +53,7 @@
                 %ul.inline_alt_tab
                   %li{:class => 'selected' }= link_to "Comments (#{activity.comments.size})", "#", :class => "comment_details"
                   - unless other_costs
-                    %li= link_to "Sub-Activities (#{activity.sub_activities.count})", "#", :class => "activity_details"
+                    %li= link_to "Sub-Activities (#{activity.sub_activities.size})", "#", :class => "activity_details"
 
               .tabs
                 .tab1

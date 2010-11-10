@@ -7,6 +7,7 @@ class AddCounterCaches < ActiveRecord::Migration
     add_column :data_responses, :activities_without_projects_count, :integer, :default => 0
     add_column :projects, :comments_count, :integer, :default => 0
     add_column :activities, :comments_count, :integer, :default => 0
+    add_column :activities, :sub_activities_count, :integer, :default => 0
 
     DataResponse.reset_column_information
     DataResponse.find(:all).each do |dr|
@@ -25,6 +26,7 @@ class AddCounterCaches < ActiveRecord::Migration
     Activity.reset_column_information
     Activity.find(:all).each do |a|
       Activity.update_counters(a.id, :comments_count => a.comments.length)
+      Activity.update_counters(a.id, :sub_activities_count => a.sub_activities.length)
     end
   end
 
@@ -36,5 +38,6 @@ class AddCounterCaches < ActiveRecord::Migration
     remove_column :data_responses, :activities_without_projects_count
     remove_column :projects, :comments_count
     remove_column :activities, :comments_count
+    remove_column :activities, :sub_activities_count
   end
 end

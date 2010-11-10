@@ -29,7 +29,7 @@ Rails::Initializer.run do |config|
   config.gem "compass", :version => "= 0.10.2"
   config.gem 'hoptoad_notifier'
   config.gem "authlogic"
-  config.gem "cancan"
+  config.gem "cancan", :version => ">= 1.4.0"
   config.gem "validates_date_time", :version => '= 1.0.0'
   config.gem 'formtastic', :version => "0.9.10"
   config.gem "seer", :version => "=0.9.1"

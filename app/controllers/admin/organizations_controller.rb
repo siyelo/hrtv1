@@ -14,7 +14,7 @@ class Admin::OrganizationsController < ApplicationController
                                                           :select => "organizations.id, organizations.name, organizations.created_at, COUNT(users.id) as users_count", 
                                                           :joins => "LEFT OUTER JOIN users ON users.organization_id = organizations.id", 
                                                           :order => "organizations.name ASC, organizations.created_at DESC",
-                                                          :group => "organizations.id",
+                                                          :group => "organizations.id, organizations.name, organizations.created_at, COUNT(users.id)",
                                                           :having => "COUNT(users.id) = 0")
     @all_organizations = Organization.find(:all, :select => "id, name, created_at", :order => "name ASC, created_at DESC")
   end

@@ -48,9 +48,15 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         row = hierarchy.clone
         row << n2c(assignment.cached_amount)
         if activity.name.blank?
-          row << activity.description.chomp
+          unless activity.description.nil?
+            row << activity.description.chomp
+          else
+            row << nil
+          end
         else
-          row << "#{activity.name.chomp} - #{activity.description.chomp}"
+          val = "#{activity.name.chomp}"
+          val += " - #{activity.description.chomp}" unless activity.description.nil?
+          row << val
         end
         row << activity.spend_q1 ? 'x' : nil
         row << activity.spend_q2 ? 'x' : nil

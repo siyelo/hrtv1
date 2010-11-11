@@ -11,6 +11,9 @@ class Admin::OrganizationsController < ApplicationController
 
   def destroy
     @organization = Organization.find(params[:id])
+    # make namespace to check that org has maybe only a DR
+    # before deleting
+    #if @organization.
     @organization.destroy
 
     respond_to do |format|

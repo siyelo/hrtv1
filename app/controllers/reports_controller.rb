@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
 
   def activities_by_nsp
     set_activities
-    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin? )
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
@@ -137,7 +137,7 @@ class ReportsController < ApplicationController
   end
   def activities_by_full_coding
     set_activities
-    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin? )
     send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 

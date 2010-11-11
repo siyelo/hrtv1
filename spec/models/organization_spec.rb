@@ -144,5 +144,16 @@ describe Organization do
 
       target.users.count.should == 2
     end
+
+    it "copies provider_for from duplicate to target" do
+      target = Factory.create(:organization)
+      Factory.create(:activity, :provider => target)
+      duplicate = Factory.create(:organization)
+      Factory.create(:activity, :provider => duplicate)
+
+      Organization.merge_organizations!(target, duplicate)
+
+      target.provider_for.count.should == 2
+    end
   end
 end

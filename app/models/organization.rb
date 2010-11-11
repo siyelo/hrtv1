@@ -32,6 +32,7 @@ class Organization < ActiveRecord::Base
     target.data_responses << duplicate.data_responses
     target.out_flows << duplicate.out_flows
     target.in_flows << duplicate.in_flows
+    target.provider_for << duplicate.provider_for
     target.locations << duplicate.locations
     target.users << duplicate.users
     duplicate.destroy

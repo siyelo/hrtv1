@@ -62,7 +62,7 @@ class Reports::ActivitiesByBudgetCostCat
   def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_coding.map(&:code_id)
+    act_codes  = activity.budget_cost_category_coding.map(&:code_id)
 
     row = []
     row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]

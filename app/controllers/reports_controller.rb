@@ -41,6 +41,15 @@ class ReportsController < ApplicationController
               :disposition => "attachment; filename=activities_by_budget_cost_cat.csv"
   end
 
+  def activities_by_budget_districts
+    authorize! :read, :activities_by_budget_cost_cat
+    rep = Reports::ActivitiesByBudgetDistricts.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_budget_districts.csv"
+  end
+
   def activities_by_expenditure_coding
     authorize! :read, :activities_by_expenditure_coding
     rep = Reports::ActivitiesByExpenditureCoding.new
@@ -57,6 +66,15 @@ class ReportsController < ApplicationController
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
               :disposition => "attachment; filename=activities_by_expenditure_cost_cat.csv"
+  end
+
+  def activities_by_expenditure_districts
+    authorize! :read, :activities_by_expenditure_cost_cat
+    rep = Reports::ActivitiesByExpenditureDistricts.new
+
+    send_data rep.csv,
+              :type => 'text/csv; charset=iso-8859-1; header=present',
+              :disposition => "attachment; filename=activities_by_expenditure_districts.csv"
   end
 
   def users_by_organization

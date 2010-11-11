@@ -1,15 +1,15 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCoding
+class Reports::ActivitiesByExpenditureDistricts
   include Reports::Helpers
 
   def initialize
 
     codes = []
     code_ids = []
-    Code.for_activities.roots.ordered.each do |c|
-      codes << c.self_and_descendants.map { |e| e.to_s_with_external_id }
-      code_ids << c.self_and_descendants.map(&:id)
+    Location.all.each do |c|
+      codes << c
+      code_ids << c.id
     end
     codes.flatten!
     code_ids.flatten!
@@ -73,7 +73,7 @@ class Reports::ActivitiesByBudgetCoding
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     code_ids.each do |code_id|
       if act_codes.include?(code_id)
-        ca = CodingBudget.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        ca = CodingSpendDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         unless ca.try(:cached_amount).nil?
           row << ca.cached_amount
         else

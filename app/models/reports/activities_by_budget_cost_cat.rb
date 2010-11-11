@@ -20,17 +20,19 @@ class Reports::ActivitiesByBudgetCostCat
       csv << build_header(beneficiaries, codes)
 
       #print data
-      Activity.all.each do |a|
-        row = build_row(a, beneficiaries, code_ids)
-        #print out a row for each project
-        if a.projects.empty?
-          row.unshift(" ")
-          csv << row.flatten
-        else
-          a.projects.each do |proj|
-            proj_row = row.dup
-            proj_row.unshift("#{h proj.name}")
-            csv << proj_row.flatten
+      Activity.find(:all, :conditions => "activity_id IS NULL").each do |a|
+        if [Activity].include?(a.class)
+          row = build_row(a, beneficiaries, code_ids)
+          #print out a row for each project
+          if a.projects.empty?
+            row.unshift(" ")
+            csv << row.flatten
+          else
+            a.projects.each do |proj|
+              proj_row = row.dup
+              proj_row.unshift("#{h proj.name}")
+              csv << proj_row.flatten
+            end
           end
         end
       end
@@ -46,11 +48,11 @@ class Reports::ActivitiesByBudgetCostCat
   def build_header(beneficiaries, codes)
     #print header
     header = []
-    header << [ "project", "org.name", "org.type", "activity.name", "activity.description" ]
+    header << [ "project", "org.name", "org.type", "activity.id","activity.name", "activity.description" ]
     beneficiaries.each do |ben|
       header << "#{ben}"
     end
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider"]
+    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider"]
     codes.each do |code|
       header << "#{code}"
     end
@@ -60,29 +62,30 @@ class Reports::ActivitiesByBudgetCostCat
   def build_row(activity, beneficiaries, code_ids)
     org        = activity.data_response.responding_organization
     act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_cost_category_coding.map(&:code_id)
+    act_codes  = activity.budget_coding.map(&:code_id)
 
     row = []
-    row << [ "#{h org.name}", "#{org.type}", "#{h activity.name}", "#{h activity.description}" ]
+    row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
     beneficiaries.each do |ben|
       row << (act_benefs.include?(ben) ? "yes" : " " )
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
     code_ids.each do |code_id|
       if act_codes.include?(code_id)
-        ca = CodeAssignment.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        unless ca.amount.nil?
-          row << ca.amount
+        ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        unless ca.try(:cached_amount).nil?
+          row << ca.cached_amount
         else
-          row << "#{ca.percentage}%"
+          row << 0
         end
       else
-        row << " "
+        row << nil
       end
     end
     row.flatten
   end
+
 
 end
 

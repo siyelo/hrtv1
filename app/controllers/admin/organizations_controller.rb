@@ -11,7 +11,7 @@ class Admin::OrganizationsController < ApplicationController
 
   def destroy
     @organization = Organization.find(params[:id])
-    # make namespace to check that org has maybe only a DR
+    # make namespace to check that org is empty, i.e. no DR & no users or an empty DR and no users
     # before deleting
     #if @organization.
     @organization.destroy

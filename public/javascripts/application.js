@@ -345,8 +345,9 @@ var replaceOrganization = function (form) {
 };
 
 var destroyOrganization = function (organization_id, type) {
-  jQuery.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data) {
-    removeOrganizationFromLists(organization_id, type);
+  jQuery.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
+    var data = jQuery.parseJSON(data)
+    response.status === 206 ? displayFlashForReplaceOrganization('error', data.message) : removeOrganizationFromLists(organization_id, type);
   });
 }
 

@@ -47,3 +47,7 @@ end
 Then /^the "([^"]*)" text should not be "([^"]*)"$/ do |label, value|
   find_field(label).text.should_not == value
 end
+
+Then /^the "([^"]*)" text should match "([^"]*)"$/ do |label, value|
+  find_field(label).text.should match(value)
+end

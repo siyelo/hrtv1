@@ -11,19 +11,13 @@ class Admin::OrganizationsController < ApplicationController
 
   def destroy
     @organization = Organization.find(params[:id])
-    # make namespace to check that org is empty, i.e. no DR & no users or an empty DR and no users
-    # before deleting
-    #if @organization.
-    @organization.destroy
 
-    respond_to do |format|
-      format.html do
-        flash[:notice] = "Organization was successfully deleted."
-        redirect_to :back
-      end
-      format.js { render :nothing => true }
+    if @organization.is_empty?
+      @organization.destroy
+      render_notice("Organization was successfully deleted.", duplicate_admin_organizations_path)
+    else
+      render_error("You cannot delete non empty organization.", duplicate_admin_organizations_path)
     end
-
   end
 
   def duplicate
@@ -50,20 +44,8 @@ class Admin::OrganizationsController < ApplicationController
       if duplicate.users.count > 0
         render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
-
         Organization.merge_organizations!(target, duplicate)
-        message = "Organizations successfully merged."
-
-        respond_to do |format|
-          format.html do
-            flash[:notice] = message
-            redirect_to duplicate_admin_organizations_path
-          end
-          format.js do
-            render :json => {:message => message}.to_json
-          end
-        end
-
+        render_notice("Organizations successfully merged.", duplicate_admin_organizations_path)
       end
     end
   end
@@ -77,6 +59,18 @@ class Admin::OrganizationsController < ApplicationController
       end
       format.js do
         render :json => {:message => message}.to_json, :status => :partial_content
+      end
+    end
+  end
+
+  def render_notice(message, path)
+    respond_to do |format|
+      format.html do
+        flash[:notice] = message
+        redirect_to path
+      end
+      format.js do
+        render :json => {:message => message}.to_json
       end
     end
   end

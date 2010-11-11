@@ -64,3 +64,16 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
     | organization     | select_type                 | info_block                  |
     | UNAIDS           | Duplicate organization      | .box[data-type='duplicate'] |
     | UNAIDS - 0 users | Replacement organization    | .box[data-type='target']    |
+
+@admin_organizations @javascript
+@run
+Scenario: Try to delete non-empty organization (with JS)
+  Given I am signed in as an admin
+  When I go to the organizations page
+  And I follow "Fix duplicate organizations"
+  And I select "WHO - 1 user" from "Replacement organization"
+  And I will confirm a js popup
+  And I follow "Delete" within ".box[data-type='target']"
+  # Check that WHO organization is not deleted
+  Then the "Replacement organization" text should match "WHO - 1 user"
+  And I should see "You cannot delete non empty organization."

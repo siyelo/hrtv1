@@ -149,7 +149,7 @@ class ReportsController < ApplicationController
 
   def map_districts_by_full_coding
     set_activities
-    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin?)
+    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
     send_csv(rep.csv,"map_districts_by_full_coding.csv")
   end
 

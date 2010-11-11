@@ -42,6 +42,61 @@ describe Organization do
     end    
   end  
 
+  #empty=true
+  #empty &&= data_responses.select({|dr| !dr.empty?}).empty? # no non-empty dr's
+  #empty &&= users.empty?
+  #empty &&= in_flows.empty? && implementer_for.empty? && out_flows.empty? && projects.empty?
+
+  describe "empty organization" do
+    it "is empty when it has nothing" do
+      organization = Factory.create(:organization)
+      organization.is_empty?.should be_true
+    end
+
+    it "is empty when it has empty data response" do
+      organization = Factory.create(:organization)
+      dr = Factory.create(:data_response)
+      organization.is_empty?.should be_true
+    end
+
+    it "is not empty when it has non empty data response" do
+      organization = Factory.create(:organization)
+      dr = Factory.create(:data_response, :responding_organization => organization)
+      Factory.create(:project, :data_response => dr)
+      organization.is_empty?.should_not be_true
+    end
+
+    it "is not empty when it has users" do
+      organization = Factory.create(:organization)
+      Factory.create(:user, :organization => organization)
+      organization.is_empty?.should_not be_true
+    end
+
+    it "is not empty when it has in flows" do
+      organization = Factory.create(:organization)
+      organization.in_flows << Factory.create(:funding_flow)
+      organization.is_empty?.should_not be_true
+    end
+
+    it "is not empty when it has out flows" do
+      organization = Factory.create(:organization)
+      organization.out_flows << Factory.create(:funding_flow)
+      organization.is_empty?.should_not be_true
+    end
+
+    it "is not empty when it has out flows" do
+      organization = Factory.create(:organization)
+      organization.out_flows << Factory.create(:funding_flow)
+      organization.is_empty?.should_not be_true
+    end
+
+    it "is not empty when it has provider_for" do
+      organization = Factory.create(:organization)
+      Factory.create(:activity, :provider => organization)
+      organization.is_empty?.should_not be_true
+    end
+  end
+
   describe "remove duplicate organization" do
     it "deletes duplicate after merge" do
       target = Factory.create(:organization)

@@ -294,6 +294,63 @@ var getOrganizationInfo = function (organization_id, box) {
   });
 };
 
+var displayFlashForReplaceOrganization = function (type, message) {
+  jQuery('#content .wrapper').prepend(
+    jQuery('<div/>').attr({id: 'flashes'}).append(
+      jQuery('<div/>').attr({id: type}).text(message)
+    )
+  );
+
+  // fade out flash message
+  jQuery("#" + type).fadeOut(3000, function () {
+    jQuery("#flashes").remove()
+  });
+}
+
+var removeOrganizationFromLists = function (duplicate_id, box_type) {
+  jQuery.each(['duplicate', 'target'], function (i, name) {
+    var select_element = jQuery("#" + name + "_organization_id");
+    var current_option = select_element.find("option[value='" + duplicate_id + "']");
+
+    // remove element from page
+    if (name === box_type) {
+      var next_option = current_option.next().val();
+      if (next_option) {
+        select_element.val(next_option);
+      }
+
+      // update info block
+      getOrganizationInfo(select_element.val(), jQuery('#' + name));
+    }
+
+    current_option.remove();
+  });
+}
+
+var ReplaceOrganizationSuccessCallback = function (message, duplicate_id) {
+  removeOrganizationFromLists(duplicate_id, 'duplicate');
+  displayFlashForReplaceOrganization('notice', message);
+};
+
+var ReplaceOrganizationErrorCallback = function (message) {
+  displayFlashForReplaceOrganization('error', message)
+}
+
+var replaceOrganization = function (form) {
+  var duplicate_id = jQuery("#duplicate_organization_id").val();
+  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+    var data = jQuery.parseJSON(data)
+    response.status === 206 ? ReplaceOrganizationErrorCallback(data.message) : ReplaceOrganizationSuccessCallback(data.message, duplicate_id);
+  });
+};
+
+var destroyOrganization = function (organization_id, type) {
+  jQuery.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
+    var data = jQuery.parseJSON(data)
+    response.status === 206 ? displayFlashForReplaceOrganization('error', data.message) : removeOrganizationFromLists(organization_id, type);
+  });
+}
+
 var admin_organizations_duplicate = {
   run: function () {
     jQuery("#duplicate_organization_id, #target_organization_id").change(function() {
@@ -305,6 +362,28 @@ var admin_organizations_duplicate = {
 
     getOrganizationInfo(jQuery("#duplicate_organization_id").val(), jQuery('#duplicate'));
     getOrganizationInfo(jQuery("#target_organization_id").val(), jQuery('#target'));
+
+    jQuery("#replace_organization").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var form = element.parents('form')
+      if (confirm('Are you sure?')) {
+        replaceOrganization(form);
+      }
+    });
+
+    jQuery(".destroy_btn").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var type = element.parents('.box').attr('data-type');
+      var select_element;
+
+      select_element = (type === 'duplicate') ? jQuery("#duplicate_organization_id") : jQuery("#target_organization_id");
+
+      if (confirm('Are you sure you want to delete "' + select_element.find('option:selected').text() + '"?')) {
+        destroyOrganization(select_element.val(), type);
+      }
+    });
   }
 };
 

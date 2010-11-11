@@ -9,6 +9,23 @@ class Admin::OrganizationsController < ApplicationController
     end
   end
 
+  def destroy
+    @organization = Organization.find(params[:id])
+    # make namespace to check that org is empty, i.e. no DR & no users or an empty DR and no users
+    # before deleting
+    #if @organization.
+    @organization.destroy
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = "Organization was successfully deleted."
+        redirect_to :back
+      end
+      format.js { render :nothing => true }
+    end
+
+  end
+
   def duplicate
     @potential_duplicate_organiations = Organization.find(:all, 
                                                           :select => "organizations.id, organizations.name, organizations.created_at, COUNT(users.id) as users_count", 
@@ -20,26 +37,47 @@ class Admin::OrganizationsController < ApplicationController
   end
 
   def remove_duplicate
-    # how do we keep the replacement org selected even after succesful
-    # replacement
     if params[:duplicate_organization_id].blank? && params[:target_organization_id].blank?
-      flash[:error] = "Duplicate or target organizations not selected."
-      redirect_to duplicate_admin_organizations_path
+      render_error("Duplicate or target organizations not selected.", duplicate_admin_organizations_path)
+
     elsif params[:duplicate_organization_id] == params[:target_organization_id]
-      flash[:error] = "Same organizations for duplicate and target selected."
-      redirect_to duplicate_admin_organizations_path
+      render_error("Same organizations for duplicate and target selected.", duplicate_admin_organizations_path)
+
     else
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
+
       if duplicate.users.count > 0
-        flash[:error] = "Duplicate organization #{duplicate.name} has users."
-        redirect_to duplicate_admin_organizations_path
+        render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
+
         Organization.merge_organizations!(target, duplicate)
-        flash[:notice] = "Organizations successfully merged."
-        redirect_to duplicate_admin_organizations_path
+        message = "Organizations successfully merged."
+
+        respond_to do |format|
+          format.html do
+            flash[:notice] = message
+            redirect_to duplicate_admin_organizations_path
+          end
+          format.js do
+            render :json => {:message => message}.to_json
+          end
+        end
+
       end
     end
   end
 
+  private
+  def render_error(message, path)
+    respond_to do |format|
+      format.html do
+        flash[:error] = message
+        redirect_to path
+      end
+      format.js do
+        render :json => {:message => message}.to_json, :status => :partial_content
+      end
+    end
+  end
 end

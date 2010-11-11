@@ -16,7 +16,7 @@ class Admin::OrganizationsController < ApplicationController
       @organization.destroy
       render_notice("Organization was successfully deleted.", duplicate_admin_organizations_path)
     else
-      render_error("You cannot delete non empty organization.", duplicate_admin_organizations_path)
+      render_error("You cannot delete an organization that has users or data associated with it.", duplicate_admin_organizations_path)
     end
   end
 

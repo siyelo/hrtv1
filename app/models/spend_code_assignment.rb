@@ -8,6 +8,10 @@ class SpendCodeAssignment < CodeAssignment
     end
   end
 
+  def activity_amount
+    ret = activity.try(:spend)
+    ret.nil? ? 0 : ret
+  end
 end
 
 # == Schema Information

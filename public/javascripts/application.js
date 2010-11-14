@@ -400,7 +400,7 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for tabs
-  jQuery(".classifications ul li").click(function (e) {
+  jQuery(".classifications ul li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element.attr("id")) {
@@ -419,7 +419,7 @@ var build_data_response_review_screen = function () {
   //  .tabs > .tab1, .tab2, .tab3
   // BUT if you supply an id (e.g. tab1), it will use that
   // (useful if tab nav has non-clickable items in the list)
-  jQuery(".tabs_nav ul li").click(function (e) {
+  jQuery(".tabs_nav ul li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     var target_tab = 'tab1'
@@ -437,7 +437,7 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-  jQuery(".tabs ul.inline_tab li").click(function (e) {
+  jQuery(".tabs ul.inline_tab li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element) {
@@ -494,6 +494,13 @@ var build_data_response_review_screen = function () {
   });
 
   approve_activity_checkbox();
+
+  jQuery.each(jQuery('.activity_classifications'), function (i, element) {
+    element = jQuery(element);
+    jQuery.get('/activities/' + element.attr('data-activity_id') + '/classifications?other_costs=' + element.attr('data-other_costs'), function (data) {
+      element.append(data)
+    })
+  });
 
 };
 

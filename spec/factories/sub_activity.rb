@@ -5,4 +5,5 @@ Factory.define :sub_activity, :class => SubActivity do |f|
   f.description     { Sham.description }
   f.budget          { 5000000.00 }
   f.activity        { Factory.create :activity }
+  f.data_response   { Factory.create(:data_response) }
 end

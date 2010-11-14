@@ -495,10 +495,11 @@ var build_data_response_review_screen = function () {
 
   approve_activity_checkbox();
 
+  // Ajax load of classifications for activities
   jQuery.each(jQuery('.activity_classifications'), function (i, element) {
     element = jQuery(element);
     jQuery.get('/activities/' + element.attr('data-activity_id') + '/classifications?other_costs=' + element.attr('data-other_costs'), function (data) {
-      element.append(data)
+      element.html(data);
     })
   });
 

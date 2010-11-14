@@ -11,7 +11,7 @@ class CodeAssignmentsController < ApplicationController
     @codes = coding_class.available_codes(@activity)
     @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
 
-    @coding_error = add_code_assignments_error(coding_class, @activity)
+    @error_message = add_code_assignments_error(coding_class, @activity)
 
     @progress = @activity.coding_progress
 
@@ -29,16 +29,32 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :update, @activity
 
+    notice_message = nil
     coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
       coding_class.update_codings(params[:activity][:updates], @activity)
-      flash[:notice] = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
+      notice_message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
 
-    @coding_error = add_code_assignments_error(coding_class, @activity)
-    flash[:error] = @coding_error if @coding_error
+    @error_message = add_code_assignments_error(coding_class, @activity)
 
-    redirect_to activity_coding_path(@activity)
+    respond_to do |format|
+      format.html do
+        flash[:error]  = @error_message if @error_message
+        flash[:notice] = notice_message if notice_message
+
+        redirect_to activity_coding_path(@activity)
+      end
+      format.js do
+        @coding_type = params[:coding_type] || 'CodingBudget'
+        coding_class = params[:coding_type].constantize
+        @codes = coding_class.available_codes(@activity)
+        @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
+
+        tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }, :layout => false
+        render :json => {:message => {:error => @error_message, :notice => notice_message}, :tab => tab}.to_json
+      end
+    end
   end
 
   private

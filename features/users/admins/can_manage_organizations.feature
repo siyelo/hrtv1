@@ -66,7 +66,6 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
     | UNAIDS - 0 users | Replacement organization    | .box[data-type='target']    |
 
 @admin_organizations @javascript
-@run
 Scenario: Try to delete non-empty organization (with JS)
   Given I am signed in as an admin
   When I go to the organizations page

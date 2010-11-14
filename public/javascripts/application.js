@@ -303,7 +303,7 @@ var displayFlashForReplaceOrganization = function (type, message) {
 
   // fade out flash message
   jQuery("#" + type).fadeOut(3000, function () {
-    jQuery("#flashes").remove()
+    jQuery("#flashes").remove();
   });
 }
 
@@ -632,6 +632,44 @@ var code_assignments_show = {
     };
 
     jQuery('.tooltip').tipsy({gravity: 'w'});
+
+    jQuery('.submit_btn').live('click', function (e) {
+      e.preventDefault();
+
+      var element = jQuery(this);
+      var form = getForm(element);
+      var tab = jQuery("#activity_classification > div:visible");
+
+      // add ajax loader image
+      element.after(jQuery('<img/>').attr({id: 'ajax-loader', src: '/images/ajax-loader.gif'}));
+
+      jQuery.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
+        // flash messages
+        jQuery('#flashes').remove();
+        var flashes = jQuery('<div/>').attr({id: 'flashes'});
+        jQuery('#content .wrapper').prepend(flashes);
+        //flashes.fadeOut(5000, function () {
+          //jQuery("#flashes").remove();
+        //});
+
+        // flash message in tab
+        jQuery('#activity_classification .coding_flash:visible').remove();
+        var coding_flash = jQuery('<div/>').attr({'class': 'coding_flash'});
+        tab.prepend(coding_flash);
+
+        if (data.message.notice) {
+          flashes.append(jQuery('<div/>').attr({id: 'notice'}).text(data.message.notice));
+        }
+
+        if (data.message.error) {
+          flashes.append(jQuery('<div/>').attr({id: 'error'}).text(data.message.error));
+          coding_flash.append(jQuery('<div/>').attr({'class': 'error'}).text(data.message.error));
+        }
+
+        tab.html('');
+        appendTab(tab.attr('class'), data.tab);
+      });
+    });
 
     // collapsible checkboxes for tab1
     addCollabsibleButtons('tab1');

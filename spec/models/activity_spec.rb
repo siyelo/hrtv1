@@ -74,4 +74,24 @@ describe Activity do
     end
   end
     
+
+   describe "counter cache" do
+     it "caches comments count" do
+       activity = Factory.create(:activity)
+       activity.comments_count.should == 0
+       Factory.create(:comment, :commentable => activity)
+       activity.reload.comments_count.should == 1
+       Factory.create(:comment, :commentable => activity)
+       activity.reload.comments_count.should == 2
+     end
+
+     it "caches sub activities count" do
+       activity = Factory.create(:activity)
+       activity.sub_activities_count.should == 0
+       Factory.create(:sub_activity, :activity => activity)
+       activity.reload.sub_activities_count.should == 1
+       Factory.create(:sub_activity, :activity => activity)
+       activity.reload.sub_activities_count.should == 2
+     end
+   end
 end

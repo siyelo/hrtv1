@@ -20,8 +20,8 @@
                   - FundingFlow.sources_for(project).each do |source|
                     = "#{source.from.try(:name)} (#{source.budget}),"
             %td= project.activities.count
-            %td= n2c(project.spend, project.currency)
-            %td= n2c(project.budget, project.currency)
+            %td= n2c(project.spend, project.currency || project.data_response.currency)
+            %td= n2c(project.budget, project.currency || project.data_response.currency)
             %td.manage
               = link_to "Edit", edit_project_path(project)
               = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"

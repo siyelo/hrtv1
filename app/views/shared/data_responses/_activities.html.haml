@@ -27,7 +27,8 @@
               %ul
                 %li.name
                   = activity.name
-                %li.descr= activity.description.to_s.first(300)
+                %li.descr= truncate(activity.description, :length => 300, :omission => '<span class="orange">...</span>')
+                %li.descr_full= activity.description
                 - unless activity.type == "OtherCost"
                   %li.implementer= "Implementer: #{activity.implementer.try(:name)}"
             %td= activity.classified? ? "Yes" : "No"

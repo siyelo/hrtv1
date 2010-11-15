@@ -4,8 +4,14 @@ describe DataResponse do
   
   describe "basic validations" do
     subject { Factory(:data_response) }  
+    it { should have_many(:projects) }
+    it { should have_many(:activities) }
+    it { should have_many(:funding_flows) }
+    it { should belong_to(:responding_organization) }
+    it { should belong_to(:data_request) }
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id_responder) }
+    it { should validate_presence_of(:currency) } #on update
     it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
     it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
     it { should_not allow_value('').for(:fiscal_year_start_date) }

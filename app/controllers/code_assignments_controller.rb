@@ -59,7 +59,8 @@ class CodeAssignmentsController < ApplicationController
     end
   end
 
-  private
+private
+
   def add_code_assignments_error(coding_class, activity)
     if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
       unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)

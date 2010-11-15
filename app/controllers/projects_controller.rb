@@ -73,17 +73,20 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
   end
 
-
   def create_from_file
     super @@columns_for_file_upload
   end
+
+protected
 
   def beginning_of_chain
     super.available_to current_user
   end
 
-  #fixes create
+  # An AS hook to fix :create
+  #   When we remove AS, we need to make sure :data_response_id is in the params!
   def before_create_save record
     record.data_response = current_user.current_data_response
   end
+
 end

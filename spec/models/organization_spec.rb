@@ -131,7 +131,7 @@ describe Organization do
       target.data_requests_made.count.should == 2
     end
 
-    it "copies data responses from duplicate to target" do
+    it "deletes data responses from duplicate when organization is merged" do
       target = Factory.create(:organization)
       Factory.create(:data_response, :responding_organization => target)
       duplicate = Factory.create(:organization)
@@ -139,21 +139,8 @@ describe Organization do
 
       Organization.merge_organizations!(target, duplicate)
 
-      target.data_responses.count.should == 2
-    end
-
-    it "copies also invalid data responses from duplicate to target" do
-      target = Factory.create(:organization)
-      Factory.create(:data_response, :responding_organization => target)
-      duplicate = Factory.create(:organization)
-      duplicate_data_response = Factory.build(:data_response, :responding_organization => duplicate,
-                    :fiscal_year_start_date => Date.parse("2010-02-01"), 
-                    :fiscal_year_end_date => Date.parse("2010-01-01"))
-      duplicate_data_response.save(false)
-
-      Organization.merge_organizations!(target, duplicate)
-
-      target.data_responses.count.should == 2
+      target.data_responses.count.should == 1
+      DataResponse.count.should == 1
     end
 
     it "copies out flows from duplicate to target" do
@@ -187,17 +174,6 @@ describe Organization do
       Organization.merge_organizations!(target, duplicate)
 
       target.locations.count.should == 2
-    end
-
-    it "copies users from duplicate to target" do
-      target = Factory.create(:organization)
-      Factory.create(:user, :organization => target)
-      duplicate = Factory.create(:organization)
-      Factory.create(:user, :organization => duplicate)
-
-      Organization.merge_organizations!(target, duplicate)
-
-      target.users.count.should == 2
     end
 
     it "copies provider_for from duplicate to target" do

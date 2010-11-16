@@ -25,12 +25,15 @@
           %tr.activity.entry_header
             %td
               %ul
+                %li.comment_indicator
+                  =image_tag"comment.png"
                 %li.name
                   = activity.name
                 %li.descr= truncate(activity.description, :length => 300, :omission => '<span class="orange">...</span>')
                 %li.descr_full= activity.description
                 - unless activity.type == "OtherCost"
                   %li.implementer= "Implementer: #{activity.provider.try(:name)}"
+                
             %td= activity.classified? ? "Yes" : "No"
             %td= activity.approved
             - unless other_costs

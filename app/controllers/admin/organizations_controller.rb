@@ -27,7 +27,9 @@ class Admin::OrganizationsController < ApplicationController
                                                           :order => "organizations.name ASC, organizations.created_at DESC",
                                                           :group => "organizations.id, organizations.name, organizations.created_at",
                                                           :having => "COUNT(users.id) = 0")
-    @all_organizations = Organization.find(:all, :select => "id, name, created_at", :order => "name ASC, created_at DESC")
+    @all_organizations = Organization.find(:all, 
+                                           :select => "id, name, created_at, (SELECT COUNT(users.id) FROM users WHERE users.organization_id = organizations.id) AS users_count", 
+                                           :order => "name ASC, created_at DESC")
   end
 
   def remove_duplicate

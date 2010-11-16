@@ -4,6 +4,8 @@ body.app
       cursor: pointer
       font-size: 12px
       line-height: 1.2em
+      ul
+        position: relative
     &.entry_main
       display: none
       .actions
@@ -245,6 +247,20 @@ body.app
     .implementer
       font-style: italic
       font-size: 0.9em
+    .descr
+      padding-right: 40px
+    .comment_indicator
+      right: 10px
+      margin-top: -5px
+      padding: 0
+      position: absolute
+      top: 50%
+      +opacity(0.7)
+      &:hover
+        +opacity(1)
+    .funders
+      font-size: 10px
+      font-style: italic
     #activity_classification
       padding: 0
       h4
@@ -260,8 +276,7 @@ body.app
 
     li
       padding-top: 5px
-      &.funders
-        font-size: 0.8em
+
     .active
       background: $light-blue
       color: $dark-blue
@@ -275,7 +290,7 @@ body.app
           display: none
         .descr
           display: block
-      &.entry_header
+
         &.active
           .descr_full
             display: block

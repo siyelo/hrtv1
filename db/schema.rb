@@ -17,43 +17,43 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
   end
 
   create_table "activities", :force => true do |t|
-    t.string    "name"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "provider_id"
-    t.text      "description"
-    t.string    "type"
-    t.decimal   "budget"
-    t.decimal   "spend_q1"
-    t.decimal   "spend_q2"
-    t.decimal   "spend_q3"
-    t.decimal   "spend_q4"
-    t.date      "start"
-    t.date      "end"
-    t.decimal   "spend"
-    t.text      "text_for_provider"
-    t.text      "text_for_targets"
-    t.text      "text_for_beneficiaries"
-    t.decimal   "spend_q4_prev"
-    t.integer   "data_response_id"
-    t.integer   "activity_id"
-    t.decimal   "budget_percentage"
-    t.decimal   "spend_percentage"
-    t.boolean   "approved"
-    t.decimal   "CodingBudget_amount",                   :default => 0.0
-    t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal   "CodingSpend_amount",                    :default => 0.0
-    t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
-    t.boolean   "use_budget_codings_for_spend",          :default => false
-    t.decimal   "budget_q1"
-    t.decimal   "budget_q2"
-    t.decimal   "budget_q3"
-    t.decimal   "budget_q4"
-    t.decimal   "budget_q4_prev"
-    t.integer   "comments_count",                        :default => 0
-    t.integer   "sub_activities_count",                  :default => 0
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "provider_id"
+    t.text     "description"
+    t.string   "type"
+    t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
+    t.date     "start"
+    t.date     "end"
+    t.decimal  "spend"
+    t.text     "text_for_provider"
+    t.text     "text_for_targets"
+    t.text     "text_for_beneficiaries"
+    t.decimal  "spend_q4_prev"
+    t.integer  "data_response_id"
+    t.integer  "activity_id"
+    t.decimal  "budget_percentage"
+    t.decimal  "spend_percentage"
+    t.boolean  "approved"
+    t.decimal  "CodingBudget_amount"
+    t.decimal  "CodingBudgetCostCategorization_amount"
+    t.decimal  "CodingBudgetDistrict_amount"
+    t.decimal  "CodingSpend_amount"
+    t.decimal  "CodingSpendCostCategorization_amount"
+    t.decimal  "CodingSpendDistrict_amount"
+    t.boolean  "use_budget_codings_for_spend",          :default => false
+    t.decimal  "budget_q1"
+    t.decimal  "budget_q2"
+    t.decimal  "budget_q3"
+    t.decimal  "budget_q4"
+    t.decimal  "budget_q4_prev"
+    t.integer  "comments_count",                        :default => 0
+    t.integer  "sub_activities_count",                  :default => 0
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -64,11 +64,6 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
   create_table "activities_beneficiaries", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "beneficiary_id"
-  end
-
-  create_table "activities_indicators", :id => false, :force => true do |t|
-    t.integer "activity_id"
-    t.integer "indicator_id"
   end
 
   create_table "activities_locations", :id => false, :force => true do |t|
@@ -120,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
     t.string    "hssp2_stratprog_val"
     t.string    "hssp2_stratobj_val"
     t.string    "official_name"
+    t.decimal   "target_amount",       :default => 0.0
   end
 
   create_table "comments", :force => true do |t|
@@ -162,27 +158,27 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
   end
 
   create_table "data_responses", :force => true do |t|
-    t.integer   "data_element_id"
-    t.integer   "data_request_id"
-    t.boolean   "complete",                          :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "organization_id_responder"
-    t.string    "currency"
-    t.date      "fiscal_year_start_date"
-    t.date      "fiscal_year_end_date"
-    t.string    "contact_name"
-    t.string    "contact_position"
-    t.string    "contact_phone_number"
-    t.string    "contact_main_office_phone_number"
-    t.string    "contact_office_location"
-    t.boolean   "submitted"
-    t.timestamp "submitted_at"
-    t.integer   "projects_count",                    :default => 0
-    t.integer   "comments_count",                    :default => 0
-    t.integer   "activities_count",                  :default => 0
-    t.integer   "sub_activities_count",              :default => 0
-    t.integer   "activities_without_projects_count", :default => 0
+    t.integer  "data_element_id"
+    t.integer  "data_request_id"
+    t.boolean  "complete",                          :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "organization_id_responder"
+    t.string   "currency"
+    t.date     "fiscal_year_start_date"
+    t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
+    t.boolean  "submitted"
+    t.datetime "submitted_at"
+    t.integer  "projects_count",                    :default => 0
+    t.integer  "comments_count",                    :default => 0
+    t.integer  "activities_count",                  :default => 0
+    t.integer  "sub_activities_count",              :default => 0
+    t.integer  "activities_without_projects_count", :default => 0
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -227,14 +223,6 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
   create_table "help_requests", :force => true do |t|
     t.string    "email"
     t.text      "message"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "indicators", :force => true do |t|
-    t.string    "name"
-    t.text      "description"
-    t.string    "source"
     t.timestamp "created_at"
     t.timestamp "updated_at"
   end

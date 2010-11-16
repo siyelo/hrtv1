@@ -8,7 +8,7 @@ class Organization < ActiveRecord::Base
   has_many :data_requests_made,
            :class_name => "DataRequest",
            :foreign_key => :organization_id_requester
-  has_many :data_responses, :foreign_key => :organization_id_responder
+  has_many :data_responses, :foreign_key => :organization_id_responder, :dependent => :destroy
   has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from"
   has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to"
   has_many :donor_for, :through => :out_flows, :source => :project
@@ -37,12 +37,10 @@ class Organization < ActiveRecord::Base
     ActiveRecord::Base.disable_validation!
     target.activities << duplicate.activities
     target.data_requests_made << duplicate.data_requests_made
-    target.data_responses << duplicate.data_responses
     target.out_flows << duplicate.out_flows
     target.in_flows << duplicate.in_flows
     target.provider_for << duplicate.provider_for
     target.locations << duplicate.locations
-    target.users << duplicate.users
     duplicate.destroy
     ActiveRecord::Base.enable_validation!
   end

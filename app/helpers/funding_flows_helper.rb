@@ -5,7 +5,7 @@ module FundingFlowsHelper
     # or we could require the other org make the funding flow
     # and then have callback create the record for the other org
     if association.name == :from
-        ["type in (?) or id = ?", "Donor", current_user.organization.id ]
+        super #[]#"type in (?) or id = ?", "Donor", current_user.organization.id ]
     elsif association.name == :to
       ids=Set.new
       if @record.project
@@ -19,9 +19,11 @@ module FundingFlowsHelper
       unless ids.size == 0
         s=current_user.organization.id
         ids << s if s
-        ["id in (?) or type in (?)", ids, "Ngo"]
+        #["id in (?) or type in (?)", ids, "Ngo"]
+        super
       else
-        ["type in (?) or id = ? or type in (?)", "Ngo", current_user.organization.id, "Donor" ]
+        #["type in (?) or id = ? or type in (?)", "Ngo", current_user.organization.id, "Donor" ]
+        super
       end
     elsif association.name == :project
         ids = Set.new

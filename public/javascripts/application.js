@@ -644,30 +644,35 @@ var code_assignments_show = {
       element.after(jQuery('<img/>').attr({id: 'ajax-loader', src: '/images/ajax-loader.gif'}));
 
       jQuery.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
+
+        tab.html('');
+        appendTab(tab.attr('class'), data.tab);
+
         // flash messages
         jQuery('#flashes').remove();
         var flashes = jQuery('<div/>').attr({id: 'flashes'});
         jQuery('#content .wrapper').prepend(flashes);
-        //flashes.fadeOut(5000, function () {
-          //jQuery("#flashes").remove();
-        //});
+        flashes.delay(5000).fadeOut(3000, function () {
+          jQuery(this).remove();
+        });
 
-        // flash message in tab
-        jQuery('#activity_classification .coding_flash:visible').remove();
-        var coding_flash = jQuery('<div/>').attr({'class': 'coding_flash'});
-        tab.prepend(coding_flash);
+        // bottom flash message in tab
+        var coding_flash_below = jQuery('<div/>').attr({'class': 'coding_flash'});
 
         if (data.message.notice) {
           flashes.append(jQuery('<div/>').attr({id: 'notice'}).text(data.message.notice));
+          coding_flash_below.append(jQuery('<div/>').attr({'class': 'notice'}).text(data.message.notice));
         }
 
         if (data.message.error) {
           flashes.append(jQuery('<div/>').attr({id: 'error'}).text(data.message.error));
-          coding_flash.append(jQuery('<div/>').attr({'class': 'error'}).text(data.message.error));
+          coding_flash_below.append(jQuery('<div/>').attr({'class': 'error'}).text(data.message.error));
         }
 
-        tab.html('');
-        appendTab(tab.attr('class'), data.tab);
+        tab.append(coding_flash_below);
+        coding_flash_below.delay(5000).fadeOut(3000, function (element) {
+          jQuery(this).remove();
+        });
       });
     });
 

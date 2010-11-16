@@ -9,6 +9,7 @@
     padding: 15px 10px 15px 65px
     background-position: 15px 7px
     background-repeat: no-repeat
+    margin-bottom: 5px
 
   #success
     border-color: #9c9
@@ -40,6 +41,7 @@
     background-image: url(/images/alerterror_icon.png)
     background-color: #FFBABA
 
+// Inline flash messages on code assignments page
 .coding_flash
   +border-radius(5px)
   +box-shadow(!very-light-grey, 0, 2px, 5px)
@@ -47,11 +49,20 @@
   padding-bottom: 1em
   width: 75%
 
-  .error
-    background-image: url(/images/alerterror_icon.png)
-    background-color: #FFBABA
+  div
     background-position: 15px 7px
     background-repeat: no-repeat
     padding: 15px 10px 15px 65px
-    border-color: #c99
-    color: #D8000C
+    margin-bottom: 5px
+
+    &.error
+      background-image: url(/images/alerterror_icon.png)
+      background-color: #FFBABA
+      border-color: #c99
+      color: #D8000C
+
+    &.notice
+      background-image: url(/images/alertinfo_icon.png)
+      background-color: #BDE5F8
+      border-color: #9c9
+      color: #00529B

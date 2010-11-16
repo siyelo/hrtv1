@@ -20,7 +20,7 @@ class CommentsController < ActiveScaffoldController
   end
 
   #fixes create
-  def before_create record
+  def before_create_save(record)
     record.user = current_user
   end
 

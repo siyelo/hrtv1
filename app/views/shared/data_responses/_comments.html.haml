@@ -1,17 +1,12 @@
 / js event: .resources, .comments
-
 .comments
-
   %div{:class => "resources", :"data-resources" => "comments", :style => "clear: both"}
-
-
     .simple_table
-      
       %table.dashboard_comments
         %thead
           %tr
             %th
-              = "Comments (<span class='count'>#{commentable.comments.count}</span>)"
+              = "Comments (<span class='count'>#{commentable.comments.size}</span>)"
 
             %th Comment
             %th.manage Manage
@@ -21,5 +16,3 @@
     %ul.actions
       / js event: .new_btn, .enabled
       %li= link_to "+ Add Comment", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
-
-    

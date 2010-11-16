@@ -29,7 +29,6 @@
         %td= n2c(@data_response.total_activity_budget, @data_response.currency)
         %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
 
-
 .details_and_charts
   = render 'shared/data_responses/response_details'
   = render 'shared/data_responses/data_responses_charts', :data_response => @data_response
@@ -37,9 +36,9 @@
 
 #data_response_sub_tabs.tabs_nav
   %ul.inline_alt_tab
-    %li{:class => 'selected' }= link_to "Comments (#{@data_response.comments.count})", "#", :class => "comment_details"
+    %li{:class => 'selected' }= link_to "Comments (#{@data_response.comments.size})", "#", :class => "comment_details"
     %li= link_to "Projects (#{@projects.count})", "#", :id => "project_details"
-    %li= link_to "Activities without a Project (#{@activities_without_projects.count})", "#", :class => "activity_details"
+    %li= link_to "Activities without a Project (#{@data_response.activities_without_projects_count})", "#", :class => "activity_details"
 
 .tabs
   .tab1

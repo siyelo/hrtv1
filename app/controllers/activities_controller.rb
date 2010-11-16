@@ -123,4 +123,10 @@ class ActivitiesController < ActiveScaffoldController
     render :nothing => true
   end
 
+  def classifications
+    activity = Activity.find(params[:id])
+    other_costs = params[:other_costs] == '1' ? true : false
+    code_roots =  other_costs ? OtherCostCode.roots : Code.for_activities.roots
+    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.for_activities.roots)}
+  end
 end

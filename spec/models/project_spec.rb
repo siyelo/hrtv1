@@ -170,5 +170,15 @@ describe Project do
     c.project.should == nil
   end
   
+   describe "counter cache" do
+     it "caches comments count" do
+       project = Factory.create(:project)
+       project.comments_count.should == 0
+       Factory.create(:comment, :commentable => project)
+       project.reload.comments_count.should == 1
+       Factory.create(:comment, :commentable => project)
+       project.reload.comments_count.should == 2
+     end
+   end
   
 end

@@ -17,7 +17,7 @@
                 %li.descr= project.description.to_s
                 %li.funders
                   = "Funders: "
-                  - FundingFlow.sources_for(project).each do |source|
+                  - FundingFlow.sources_for(project).find(:all, :include => :from).each do |source|
                     = "#{source.from.try(:name)} (#{source.budget}),"
             %td= project.activities.count
             %td= n2c(project.spend, project.currency || project.data_response.currency)
@@ -32,7 +32,7 @@
 
               .project_sub_tabs.tabs_nav
                 %ul.inline_alt_tab
-                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.count})", "#", :class => "comment_details"
+                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.size})", "#", :class => "comment_details"
                   %li= link_to "Activities (#{project.activities.roots.count})", "#", :class => "activity_details"
                   %li= link_to "Other Costs (#{project.activities.with_type('OtherCost').count})", "#", :class => "activity_details"
 
@@ -40,6 +40,6 @@
                 .tab1
                   = render 'shared/data_responses/comments', :commentable => project
                 .tab2
-                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first.find(:all, :include => {:sub_activities => :provider})
                 .tab3
                   = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

@@ -51,8 +51,10 @@ class CodeAssignmentsController < ApplicationController
         @codes = coding_class.available_codes(@activity)
         @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
 
-        tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }, :layout => false
-        render :json => {:message => {:error => @error_message, :notice => notice_message}, :tab => tab}.to_json
+        tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }
+        tab_nav = render_to_string :partial => 'tab_nav', :locals => { :activity => @activity }
+        activity_description = render_to_string :partial => 'activity_description', :locals => { :activity => @activity }
+        render :json => {:message => {:error => @error_message, :notice => notice_message}, :tab => tab, :tab_nav => tab_nav, :activity_description => activity_description}.to_json
       end
     end
   end

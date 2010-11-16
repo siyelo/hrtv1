@@ -302,7 +302,7 @@ var displayFlashForReplaceOrganization = function (type, message) {
   );
 
   // fade out flash message
-  jQuery("#" + type).fadeOut(3000, function () {
+  jQuery("#" + type).delay(5000).fadeOut(3000, function () {
     jQuery("#flashes").remove();
   });
 }
@@ -516,7 +516,7 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-  jQuery(".tabs ul.inline_tab li").click(function (e) {
+  jQuery(".tabs ul.inline_tab li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element) {
@@ -645,8 +645,16 @@ var code_assignments_show = {
 
       jQuery.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
 
+        // replace tab form
         tab.html('');
         appendTab(tab.attr('class'), data.tab);
+
+        // replace nav
+        jQuery(".inline_tab").replaceWith(data.tab_nav);
+        jQuery('#' + tab.attr('class')).click(); // click the current tab
+
+        // replace activity description
+        jQuery("#activity_description").replaceWith(data.activity_description);
 
         // flash messages
         jQuery('#flashes').remove();
@@ -704,7 +712,7 @@ var code_assignments_show = {
     });
 
     // bind click events for tabs
-    jQuery(".nav2 ul li").click(function (e) {
+    jQuery(".nav2 ul li").live('click', function (e) {
       e.preventDefault();
       var element = jQuery(this);
       if (element.attr("id")) {
@@ -716,9 +724,9 @@ var code_assignments_show = {
     });
 
     // remove flash notice
-    // jQuery("#notice").fadeOut(3000);
+    // jQuery("#notice").delay(5000).fadeOut(3000);
 
-    jQuery("#use_budget_codings_for_spend").click(function () {
+    jQuery("#use_budget_codings_for_spend").live('click', function () {
       jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",
        { checked: jQuery(this).is(':checked'), "_method": "put" }
       );

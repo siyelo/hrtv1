@@ -55,7 +55,7 @@ Scenario: enter budget for an activity (see flash errors)
   And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field should contain "1,234,567.00"
   And I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
-  And I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#coding_flash"
+  And I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .coding_flash"
 
 @javascript
 Scenario: enter expenditure for an activity
@@ -102,7 +102,6 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "1234567.00" within ".tab1"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab1" should contain "1,234,567.00"
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
@@ -113,7 +112,7 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   And I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "7654321.00" within ".tab1"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "TB Drugs procurement"
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab1" should contain "7,654,321.00"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
@@ -186,6 +185,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
 @javascript
+@run
 Scenario: Use budget by coding for expenditure by coding (deep coding in same rootomitting the parents, using percentages)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
@@ -212,7 +212,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "TB Drugs procurement"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"

@@ -52,7 +52,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
   def self.in_process
-    self.find(:all,:conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
+    self.find(:all, :include => [:responding_organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 
   def self.remove_security
@@ -72,7 +72,7 @@ class DataResponse < ActiveRecord::Base
 
   #named_scope :empty, options_hash_for_empty
   def self.empty
-    drs = self.find(:all, options_hash_for_empty)
+    drs = self.find(:all, options_hash_for_empty, :include => {:responding_organization => :users})
     drs.select do |dr|
       (["Agencies", "Donors", "Donor", "Implementer", "Implementers", "International NGO"]).include?(dr.responding_organization.raw_type)
     end

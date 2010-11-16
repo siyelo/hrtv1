@@ -44,7 +44,7 @@
           - @in_progress_data_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
               %td= data_response.responding_organization
-              %td= data_response.projects.count
+              %td= data_response.projects.size
               %td= n2c data_response.total_project_spend_RWF
               %td= n2c data_response.total_project_budget_RWF
               %td= data_response.activities_count

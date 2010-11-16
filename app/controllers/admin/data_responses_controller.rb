@@ -3,9 +3,9 @@ class Admin::DataResponsesController < ApplicationController
   skip_before_filter :load_help
 
   def index
-    @submitted_data_responses   = DataResponse.available_to(current_user).submitted.all
-    @in_progress_data_responses = DataResponse.available_to(current_user).in_process
     @empty_data_responses       = DataResponse.available_to(current_user).empty
+    @in_progress_data_responses = DataResponse.available_to(current_user).in_process
+    @submitted_data_responses   = DataResponse.available_to(current_user).submitted.find(:all, :include => :responding_organization)
   end
 
   def show

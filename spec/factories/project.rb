@@ -6,5 +6,5 @@ Factory.define :project, :class => Project do |f|
   f.budget              { 20000000.00 }
   f.start_date          { Date.parse("2010-01-01") }
   f.end_date            { Date.parse("2010-12-31") }
-  f.data_response_id    { Factory.create(:data_response) }
+  f.data_response       { Factory.create(:data_response) }
 end

@@ -13,6 +13,7 @@ class DataResponse < ActiveRecord::Base
   # Associations
 
   has_many :activities, :dependent => :destroy
+  has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
   @@data_associations = %w[activities funding_flows projects]
@@ -108,13 +109,6 @@ class DataResponse < ActiveRecord::Base
 
   def total_project_spend_RWF
     projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
-  end
-  def activity_count
-    activities.only_simple.count
-  end
-
-  def sub_activity_count
-    activities.with_type("SubActivity").count
   end
 
   def unclassified_activities_count

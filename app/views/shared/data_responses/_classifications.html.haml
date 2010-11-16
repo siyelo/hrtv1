@@ -1,9 +1,3 @@
-- other_costs = false unless other_costs
-- if other_costs
-  - code_roots = @other_cost_roots
-- else
-  - code_roots = @code_roots
-
 .classifications.two-thirds
   = render 'code_assignments/tab_nav', :activity => activity, :other_costs => other_costs
 
@@ -40,7 +34,7 @@
       %h4 Budget Cost Cat
       %ul
         - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-        - @cost_cat_roots.each do |code|
+        - cost_cat_roots.each do |code|
           = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
     .tree
       .chart{:id => "activity_#{activity.id}_budget_cost_categorization_tree", :style => "width:600px; height:400px;"}
@@ -52,7 +46,7 @@
       %h4 Expenditure Coding
       %ul
         - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-        - @code_roots.each do |code|
+        - code_roots.each do |code|
           = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => budget_assignments
     .tree
       .chart{:id => "activity_#{activity.id}_spend_coding_tree", :style => "width:600px; height:400px;"}
@@ -78,7 +72,7 @@
       %h4 Expenditure Cost Cat
       %ul
         - cost_cat_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
-        - @cost_cat_roots.each do |code|
+        - cost_cat_roots.each do |code|
           = render 'shared/data_responses/code_row', :code => code, :activity => activity, :assignments => cost_cat_assignments
     .tree
       .chart{:id => "activity_#{activity.id}_spend_cost_categorization_tree", :style => "width:600px; height:400px;"}

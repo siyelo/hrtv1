@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101110152010) do
+ActiveRecord::Schema.define(:version => 20101111123715) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
     t.decimal   "budget_q3"
     t.decimal   "budget_q4"
     t.decimal   "budget_q4_prev"
+    t.integer   "comments_count",                        :default => 0
+    t.integer   "sub_activities_count",                  :default => 0
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -96,7 +98,7 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
     t.string  "type"
     t.decimal "percentage"
     t.decimal "cached_amount",   :default => 0.0
-    t.decimal "sum_of_children"
+    t.decimal "sum_of_children", :default => 0.0
   end
 
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
@@ -162,7 +164,7 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
   create_table "data_responses", :force => true do |t|
     t.integer   "data_element_id"
     t.integer   "data_request_id"
-    t.boolean   "complete",                         :default => false
+    t.boolean   "complete",                          :default => false
     t.timestamp "created_at"
     t.timestamp "updated_at"
     t.integer   "organization_id_responder"
@@ -176,6 +178,11 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
     t.string    "contact_office_location"
     t.boolean   "submitted"
     t.timestamp "submitted_at"
+    t.integer   "projects_count",                    :default => 0
+    t.integer   "comments_count",                    :default => 0
+    t.integer   "activities_count",                  :default => 0
+    t.integer   "sub_activities_count",              :default => 0
+    t.integer   "activities_without_projects_count", :default => 0
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -230,16 +237,6 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
     t.string    "source"
     t.timestamp "created_at"
     t.timestamp "updated_at"
-  end
-
-  create_table "line_items", :force => true do |t|
-    t.text      "description"
-    t.integer   "activity_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "activity_cost_category_id"
-    t.decimal   "budget"
-    t.decimal   "spend"
   end
 
   create_table "locations", :force => true do |t|
@@ -298,6 +295,7 @@ ActiveRecord::Schema.define(:version => 20101110152010) do
     t.decimal   "budget_q3"
     t.decimal   "budget_q4"
     t.decimal   "budget_q4_prev"
+    t.integer   "comments_count",   :default => 0
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

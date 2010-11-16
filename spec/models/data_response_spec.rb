@@ -50,5 +50,51 @@ describe DataResponse do
        dr.errors.on(:currency).should_not be_nil
      end
    end
-  
+
+   describe "counter cache" do
+     it "caches projects count" do
+       dr = Factory.create(:data_response)
+       dr.projects_count.should == 0
+       Factory.create(:project, :data_response => dr)
+       dr.reload.projects_count.should == 1
+       Factory.create(:project, :data_response => dr)
+       dr.reload.projects_count.should == 2
+     end
+
+     it "caches comments count" do
+       dr = Factory.create(:data_response)
+       dr.comments_count.should == 0
+       Factory.create(:comment, :commentable => dr)
+       dr.reload.comments_count.should == 1
+       Factory.create(:comment, :commentable => dr)
+       dr.reload.comments_count.should == 2
+     end
+
+     it "caches activities count" do
+       dr = Factory.create(:data_response)
+       dr.activities_count.should == 0
+       Factory.create(:activity, :data_response => dr)
+       dr.reload.activities_count.should == 1
+       Factory.create(:activity, :data_response => dr)
+       dr.reload.activities_count.should == 2
+     end
+
+     it "caches sub activities count" do
+       dr = Factory.create(:data_response)
+       dr.sub_activities_count.should == 0
+       Factory.create(:sub_activity, :data_response => dr)
+       dr.reload.sub_activities_count.should == 1
+       Factory.create(:sub_activity, :data_response => dr)
+       dr.reload.sub_activities_count.should == 2
+     end
+
+     it "caches activities without projects count" do
+       dr = Factory.create(:data_response)
+       dr.activities_without_projects_count.should == 0
+       Factory.create(:activity, :data_response => dr, :projects => [])
+       dr.reload.activities_without_projects_count.should == 1
+       Factory.create(:activity, :data_response => dr, :projects => [])
+       dr.reload.activities_without_projects_count.should == 2
+     end
+   end
 end

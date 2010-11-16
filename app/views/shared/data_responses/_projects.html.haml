@@ -14,7 +14,7 @@
             %td
               %ul
                 %li.comment_indicator
-                  =image_tag"comment.png"
+                  = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => project)
                 %li.name= project.name
                 %li.descr= project.description.to_s
                 %li.funders

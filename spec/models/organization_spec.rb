@@ -150,9 +150,7 @@ describe Organization do
                     :fiscal_year_start_date => Date.parse("2010-02-01"), 
                     :fiscal_year_end_date => Date.parse("2010-01-01"))
       duplicate_data_response.save(false)
-
       Organization.merge_organizations!(target, duplicate)
-
       target.data_responses.count.should == 2
     end
 
@@ -161,9 +159,7 @@ describe Organization do
       target.out_flows << Factory.create(:funding_flow)
       duplicate = Factory.create(:organization)
       duplicate.out_flows << Factory.create(:funding_flow)
-
       Organization.merge_organizations!(target, duplicate)
-
       target.out_flows.count.should == 2
     end
 
@@ -172,9 +168,7 @@ describe Organization do
       target.in_flows << Factory.create(:funding_flow)
       duplicate = Factory.create(:organization)
       duplicate.in_flows << Factory.create(:funding_flow)
-
       Organization.merge_organizations!(target, duplicate)
-
       target.in_flows.count.should == 2
     end
 

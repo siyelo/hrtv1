@@ -19,7 +19,6 @@ Background:
   When I follow "Dashboard"
   And I follow "Edit"
 
-@run
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
@@ -31,7 +30,6 @@ Scenario: See a breakdown for an activity
   And I should see "District" within "#tab5"
   And I should see "Cost Categorization" within "#tab6"
   And I should see "Providing Technical Assistance"
-
 
 # note you cant drive this via the normal 'Classify' popup link in Capybara 
 # - it wont follow the new browser window 

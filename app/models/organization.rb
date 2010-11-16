@@ -44,6 +44,7 @@ class Organization < ActiveRecord::Base
     target.locations << duplicate.locations
     target.users << duplicate.users
     duplicate.destroy
+    #target.save #maybe this is missing?
     ActiveRecord::Base.enable_validation!
   end
 

@@ -40,12 +40,12 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
     t.decimal  "budget_percentage"
     t.decimal  "spend_percentage"
     t.boolean  "approved"
-    t.decimal  "CodingBudget_amount"
-    t.decimal  "CodingBudgetCostCategorization_amount"
-    t.decimal  "CodingBudgetDistrict_amount"
-    t.decimal  "CodingSpend_amount"
-    t.decimal  "CodingSpendCostCategorization_amount"
-    t.decimal  "CodingSpendDistrict_amount"
+    t.decimal  "CodingBudget_amount",                   :default => 0.0
+    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
+    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
+    t.decimal  "CodingSpend_amount",                    :default => 0.0
+    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
+    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
     t.boolean  "use_budget_codings_for_spend",          :default => false
     t.decimal  "budget_q1"
     t.decimal  "budget_q2"
@@ -310,27 +310,6 @@ ActiveRecord::Schema.define(:version => 20101111123715) do
     t.integer  "data_response_id_current"
     t.text     "text_for_organization"
     t.string   "full_name"
-  end
-
-  create_table "virtual_code_codes", :force => true do |t|
-    t.integer  "code_id"
-    t.integer  "virtual_code_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "virtual_code_groups", :force => true do |t|
-    t.string   "title"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "virtual_codes", :force => true do |t|
-    t.string   "title"
-    t.integer  "virtual_code_group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
 end

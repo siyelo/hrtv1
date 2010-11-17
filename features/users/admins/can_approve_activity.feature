@@ -17,9 +17,11 @@ Background:
   Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "WHO"
   Given a budget coding for "Delivering Services, Implementing Programs, Conducting Research" with amount "1000"
   
+@javascript
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1" 
+  Then wait a few moments
   Then I should see "Delivering Services, Implementing Programs, Conducting Research"
   And I should see "1,000.00"
 

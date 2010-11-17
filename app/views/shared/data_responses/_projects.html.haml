@@ -13,8 +13,9 @@
           %tr.project.entry_header
             %td
               %ul
-                %li.comment_indicator
-                  =image_tag"comment.png"
+                - if project.comments.size > 0
+                  %li.comment_indicator
+                    = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => project)
                 %li.name= project.name
                 %li.descr= project.description.to_s
                 %li.funders

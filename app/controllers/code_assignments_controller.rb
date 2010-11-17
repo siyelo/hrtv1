@@ -73,6 +73,7 @@ private
       coding_type = get_coding_type(coding_class)
       coding_type_amount = activity.send(get_coding_type(coding_class))
       coding_amount = activity.send("#{coding_class}_amount")
+      coding_amount = 0 if coding_amount.nil?
       difference = coding_type_amount - coding_amount
       percent_diff = difference/coding_type_amount * 100
       coding_type_amount = n2c(coding_type_amount)

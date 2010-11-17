@@ -34,7 +34,8 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
   Then I should see "TB Treatment Project"
   And I should see "UNDP"
   And I should see "1000.00"
-  
+
+@run
 Scenario: Creates an implementer funding flow
   Given the following organizations 
     | name   |
@@ -48,7 +49,7 @@ Scenario: Creates an implementer funding flow
   Given a data request with title "Req1" from "UNAIDS"
   Given a data response to "Req1" by "UNDP"
   Given a project with name "TB Treatment Project with more than 20 chars" for request "Req1" and organization "UNDP"
-  Given an implementer "WHO" for project "TB Treatment Project with more than 20 chars"
+  Given an implementer "WHO" who we gave "20000000.00" for project "TB Treatment Project with more than 20 chars"
   Given I am signed in as "undp_user"
   When I follow "Dashboard"
   And I follow "Edit"

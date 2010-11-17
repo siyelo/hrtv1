@@ -143,6 +143,7 @@ class DataResponse < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: data_responses
@@ -153,7 +154,7 @@ end
 #  complete                         :boolean         default(FALSE)
 #  created_at                       :timestamp
 #  updated_at                       :timestamp
-#  organization_id_responder        :integer
+#  organization_id_responder        :integer         indexed
 #  currency                         :string(255)
 #  fiscal_year_start_date           :date
 #  fiscal_year_end_date             :date

@@ -42,7 +42,8 @@ describe Activity do
         project      = Factory(:project)
         flow         = Factory(:funding_flow, :from => our_org, 
                                               :to => other_org, 
-                                              :project => project)
+                                              :project => project,
+                                              :data_response => project.data_response)
         activity     = Factory(:activity, { :projects => [project], 
                                             :provider => other_org })
         activity.provider.should == other_org # duh

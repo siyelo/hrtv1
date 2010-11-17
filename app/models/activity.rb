@@ -94,32 +94,21 @@ class Activity < ActiveRecord::Base
 
   def self.canonical
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
-      a=Activity.all(:joins => "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
+      a = Activity.all(:joins =>
+        "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
         LEFT JOIN data_responses provider_dr ON provider_dr.organization_id_responder = activities.provider_id
-        LEFT JOIN (SELECT organization_id, count(*) as num_users FROM users GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id_responder ",
-                   :conditions => ["activities.provider_id = data_responses.organization_id_responder OR (provider_dr.id IS NULL OR org_users_count.organization_id IS NULL)"])
+        LEFT JOIN (SELECT organization_id, count(*) as num_users
+                     FROM users
+                  GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id_responder ",
+       :conditions => ["activities.provider_id = data_responses.organization_id_responder
+                        OR (provider_dr.id IS NULL
+                        OR org_users_count.organization_id IS NULL)"])
       a.uniq
   end
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified}
   end
-
-  # delegate :providers, :to => :projects
-  def valid_providers
-    #TODO use delegates_to
-    projects.valid_providers
-  end
-
-#  def locations
-#    if read_attribute(:locations)
-#     read_attribute(:locations)
-#    elsif provider.try(:locations)
-#     provider.try(:locations)
-#    else
-#     []
-#    end
-#  end
 
   #convenience
   def implementer
@@ -388,7 +377,7 @@ class Activity < ActiveRecord::Base
 
   def district_coding(klass, assignments, amount)
    #TODO we will want to be able to override / check against the derived district codings
-   if !assignments.empty? 
+   if !assignments.empty?
      return assignments
    elsif !sub_activities.empty?
      return district_codings_from_sub_activities(klass, amount)
@@ -427,7 +416,7 @@ class Activity < ActiveRecord::Base
     activity_id = self.id
     location_ids = locations.map(&:id)
     code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-    deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)", 
+    deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
                               {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
 
     # only if there are deleted code assignments, update the district cached amounts
@@ -437,11 +426,11 @@ class Activity < ActiveRecord::Base
       end
     end
   end
-  
+
   def approved_activity_cannot_be_changed
     errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
   end
-  
+
   def coding_treemap(type, total_amount)
     code_roots  = type.available_codes(self)
     assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
@@ -522,3 +511,46 @@ end
 #  budget_q3                             :decimal(, )
 #  budget_q4                             :decimal(, )
 #  budget_q4_prev                        :decimal(, )
+
+# == Schema Information
+#
+# Table name: activities
+#
+#  id                                    :integer         primary key
+#  name                                  :string(255)
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer         indexed
+#  description                           :text
+#  type                                  :string(255)     indexed
+#  budget                                :decimal(, )
+#  spend_q1                              :decimal(, )
+#  spend_q2                              :decimal(, )
+#  spend_q3                              :decimal(, )
+#  spend_q4                              :decimal(, )
+#  start                                 :date
+#  end                                   :date
+#  spend                                 :decimal(, )
+#  text_for_provider                     :text
+#  text_for_targets                      :text
+#  text_for_beneficiaries                :text
+#  spend_q4_prev                         :decimal(, )
+#  data_response_id                      :integer         indexed
+#  activity_id                           :integer         indexed
+#  budget_percentage                     :decimal(, )
+#  spend_percentage                      :decimal(, )
+#  approved                              :boolean
+#  CodingBudget_amount                   :decimal(, )     default(0.0)
+#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
+#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
+#  CodingSpend_amount                    :decimal(, )     default(0.0)
+#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
+#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
+#  use_budget_codings_for_spend          :boolean         default(FALSE)
+#  budget_q1                             :decimal(, )
+#  budget_q2                             :decimal(, )
+#  budget_q3                             :decimal(, )
+#  budget_q4                             :decimal(, )
+#  budget_q4_prev                        :decimal(, )
+#
+

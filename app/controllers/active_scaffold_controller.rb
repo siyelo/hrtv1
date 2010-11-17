@@ -12,7 +12,7 @@ class ActiveScaffoldController < ApplicationController
       #redirect_to root_url
   end
 
-  protected
+protected
 
   @@classify_popup_link_options =
     { :action     => "popup_classification",
@@ -148,6 +148,7 @@ class ActiveScaffoldController < ApplicationController
   def help_model
     ModelHelp.find_by_model_name self.controller_model_class.to_s
   end
+
   #TODO now that we're loading model help in the controller, maybe we
   # pass in a help object here from the controller instead
   # of doing the find here?

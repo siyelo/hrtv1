@@ -4,34 +4,39 @@ class FundingFlow < ActiveRecord::Base
 
   include ActAsDataElement
   configure_act_as_data_element
-
-  # Attributes
-  attr_accessible :budget, :organization_text, :project,
-    :from, :to, :self_provider_flag,
-    :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
-
   include BudgetSpendHelpers
-  # Validations
-  validates_presence_of :project_id
-
-  # Commentable
   acts_as_commentable
 
-  # Associations
+  ### Associations
+  #
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
+  delegate :organization, :to => :project
 
-  named_scope :sources_for, lambda { |project|
-      { :joins => "JOIN projects p ON p.id = funding_flows.project_id ",
-        :conditions => ["self_provider_flag = 0 AND organization_id_from is not NULL AND organization_id_to = ? AND p.id = ?", project.organization.id, project.id ]
-      }
-    }
+  belongs_to :data_response #todo: deprecate in favour of: delegate :data_response, :to => :project
+
+  ### Attributes
+  #
+  attr_accessible :budget, :organization_text, :project,
+                  :from, :to, :self_provider_flag, :spend, :spend_q4_prev,
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response_id
+
+  ### Validations
+  #
+  validates_presence_of :project_id, :organization_id_from, :organization_id_to
+
+  validates_presence_of :data_response_id # required for AS/available_to magickery
+                                          # consider removing relation and delegating to project
+
+  delegate :organization, :to => :project
+  delegate :data_response, :to => :project
+
+  delegate :organization, :to => :project
+  delegate :data_response, :to => :project
 
   def to_s
-    "Flow"#: #{from.to_s} to #{to.to_s} for #{project.to_s}"
-    # TODO replace when fix text flying over action links
-    # in nested scaffolds
+    "Flow"
   end
 
   # had to add this in to solve some odd AS bug...
@@ -42,7 +47,9 @@ class FundingFlow < ActiveRecord::Base
   def name
     from.name
   end
+
 end
+
 
 # == Schema Information
 #
@@ -51,7 +58,7 @@ end
 #  id                   :integer         primary key
 #  organization_id_from :integer
 #  organization_id_to   :integer
-#  project_id           :integer
+#  project_id           :integer         indexed
 #  created_at           :timestamp
 #  updated_at           :timestamp
 #  budget               :decimal(, )
@@ -60,10 +67,10 @@ end
 #  spend_q3             :decimal(, )
 #  spend_q4             :decimal(, )
 #  organization_text    :text
-#  self_provider_flag   :integer         default(0)
+#  self_provider_flag   :integer         default(0), indexed
 #  spend                :decimal(, )
 #  spend_q4_prev        :decimal(, )
-#  data_response_id     :integer
+#  data_response_id     :integer         indexed
 #  budget_q1            :decimal(, )
 #  budget_q2            :decimal(, )
 #  budget_q3            :decimal(, )

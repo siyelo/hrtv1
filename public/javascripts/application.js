@@ -736,10 +736,10 @@ var code_assignments_show = {
     // remove flash notice
     // jQuery("#notice").delay(5000).fadeOut(3000);
 
-    jQuery("#use_budget_codings_for_spend").live('click', function () {
-      jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",
-       { checked: jQuery(this).is(':checked'), "_method": "put" }
-      );
+    jQuery("#use_budget_codings_for_spend").live('click', function (e) {
+      var checked = jQuery(this).is(':checked');
+
+      update_use_budget_codings_for_spend(e, _activity_id, checked);
     })
 
     approve_activity_checkbox();
@@ -747,13 +747,20 @@ var code_assignments_show = {
   }
 };
 
+var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
+  if (!checked || checked && confirm('All your expenditure codings will be overridden. Are you sure?')) {
+    jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
+  } else {
+    e.preventDefault();
+  }
+};
+
 var data_responses_review = {
   run: function () {
-    jQuery(".use_budget_codings_for_spend").click(function () {
+    jQuery(".use_budget_codings_for_spend").click(function (e) {
+      var checked = jQuery(this).is(':checked');
       activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
-      jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend",
-       { checked: jQuery(this).is(':checked'), "_method": "put" }
-      );
+      update_use_budget_codings_for_spend(e, activity_id, checked);
     })
   }
 }

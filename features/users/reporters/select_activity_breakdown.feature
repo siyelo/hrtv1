@@ -109,7 +109,8 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab1" should contain "1,234,567.00"
-  When I check "Use budget codings for Expenditure?"
+  When I will confirm a js popup
+  And I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
@@ -137,7 +138,8 @@ Scenario: Use budget by district for expenditure by district
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "District" within "#tab2"
   Then the "Burera" field within ".tab2" should contain "1,234,567.00"
-  When I check "Use budget codings for Expenditure?"
+  When I will confirm a js popup
+  And I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "District" within "#tab5"
   And I wait until "Burera" is visible
@@ -154,6 +156,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "Cost Categorization" within "#tab3"
   And the "Drugs, Commodities & Consumables" field within ".tab3" should contain "1,234,567.00"
+  And I will confirm a js popup
   And I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Cost Categorization" within "#tab6"
@@ -183,7 +186,8 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  When I check "Use budget codings for Expenditure?"
+  When I will confirm a js popup
+  And I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
@@ -209,6 +213,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
+  When I will confirm a js popup
   When I check "Use budget codings for Expenditure?"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"

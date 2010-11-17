@@ -25,8 +25,9 @@
           %tr.activity.entry_header
             %td
               %ul
-                %li.comment_indicator
-                  = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => activity)
+                - if activity.comments.size > 0
+                  %li.comment_indicator
+                    = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => activity)
                 %li.name
                   = activity.name
                 %li.descr= truncate(activity.description, :length => 300, :omission => '<span class="orange">...</span>')

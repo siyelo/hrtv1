@@ -165,6 +165,14 @@ describe Activity do
       code_assignments[1].amount.should == 50
     end
 
+    it "does not calculates spend amount when there is amount for budget and code_assignment amount is nil" do
+      activity = Factory(:activity, :budget => 100, :spend => 50)
+      Factory(:coding_budget, :activity => activity, :amount => nil, :cached_amount => 100)
+      activity.copy_budget_codings_to_spend(['CodingBudget'])
+      code_assignments = activity.code_assignments
+      code_assignments[1].amount.should == nil
+    end
+
     it "calculates spend percentage when there is percentage for budget" do
       activity = Factory(:activity, :budget => 100, :spend => 50)
       Factory(:coding_budget, :activity => activity, :percentage => 50)

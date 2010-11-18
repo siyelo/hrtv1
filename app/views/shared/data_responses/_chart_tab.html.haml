@@ -1,6 +1,4 @@
-%ul.inline_tab
-  %li.selected{:class => "#{chart_type}_pie"}= link_to "Pie", "#"
-  %li{:class => "#{chart_type}_tree"}= link_to "Tree Map", "#"
+= render 'shared/data_responses/codings_inline_tab', :chart_type => chart_type, :link_name => 'Pie'
 
 .pie
   .chart{:id => "#{element_type}_#{element.id}_#{chart_type}_pie"}

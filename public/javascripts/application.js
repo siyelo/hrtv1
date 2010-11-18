@@ -465,8 +465,8 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 var build_data_response_review_screen = function () {
 
   jQuery('.tooltip').tipsy({gravity: 'w'});
-
   jQuery('.comments_tooltip').tipsy({fade: true, gravity: 'sw', html: true});
+  jQuery('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
   jQuery('.project.entry_header').click(function (e) {
     collapse_expand(e, jQuery(this), 'project');

@@ -3,7 +3,7 @@
 
 #activity_classification.tabs.two-thirds
   .tab1{:"data-chart_type" => "activity", :"data-id" => activity.id}
-    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_coding'
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_coding', :link_name => 'Codings'
     .pie
       %h4 Budget Coding
       %ul
@@ -16,7 +16,7 @@
 
   - unless other_costs
     .tab2{:"data-chart_type" => "activity", :"data-id" => activity.id}
-      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_districts'
+      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_districts', :link_name => 'Codings'
       .pie
         %h4 Budget Districts
         %ul
@@ -29,7 +29,7 @@
 
 
   .tab3{:"data-chart_type" => "activity", :"data-id" => activity.id}
-    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_cost_categorization'
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_cost_categorization', :link_name => 'Codings'
     .pie
       %h4 Budget Cost Cat
       %ul
@@ -41,7 +41,7 @@
 
 
   .tab4{:"data-chart_type" => "activity", :"data-id" => activity.id}
-    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_coding'
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_coding', :link_name => 'Codings'
     .pie
       %h4 Expenditure Coding
       %ul
@@ -54,7 +54,7 @@
 
   - unless other_costs
     .tab5{:"data-chart_type" => "activity", :"data-id" => activity.id}
-      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_districts'
+      = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_districts', :link_name => 'Codings'
       .pie
         %h4 Expenditure Districts
         %ul
@@ -67,7 +67,7 @@
 
 
   .tab6{:"data-chart_type" => "activity", :"data-id" => activity.id}
-    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_cost_categorization'
+    = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_cost_categorization', :link_name => 'Codings'
     .pie
       %h4 Expenditure Cost Cat
       %ul

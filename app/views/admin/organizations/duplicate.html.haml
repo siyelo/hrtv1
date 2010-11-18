@@ -2,7 +2,7 @@
   .box{:"data-type" => 'duplicate'}
     %h2 Potential problem organization (duplicate)
     = label_tag :duplicate_organization_id, "Duplicate organization"
-    = select_tag :duplicate_organization_id, options_for_select(@potential_duplicate_organiations.map{|o| [o.name, o.id]})
+    = select_tag :duplicate_organization_id, options_for_select(@organizations_without_users.map{|o| [o.name, o.id]})
     = link_to "Delete", '#', :class => "destroy_btn"
   // TODO add tabs here for Fix Duplicate, Mark/Comment On Data Referencing This and functionality for those
   .box{:"data-type" => 'target'}

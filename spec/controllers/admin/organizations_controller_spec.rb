@@ -111,6 +111,27 @@ describe Admin::OrganizationsController do
         end
       end
     end
+  end
 
+  describe "duplicate organization" do
+    before :each do
+      login(Factory.create(:admin))
+      organizations = [mock_model(Organization)]
+      Organization.stub!(:without_users).and_return(organizations)
+      Organization.stub!(:ordered).and_return(organizations)
+    end
+
+    it "assigns variables" do
+      Organization.should_receive(:without_users)
+      Organization.should_receive(:ordered)
+      get :duplicate
+      assigns(:organizations_without_users).should_not be_nil
+      assigns(:all_organizations).should_not be_nil
+    end
+
+    it "renders duplicate template" do
+      get :duplicate
+      response.should render_template('admin/organizations/duplicate')
+    end
   end
 end

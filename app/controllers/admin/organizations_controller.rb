@@ -21,15 +21,8 @@ class Admin::OrganizationsController < ApplicationController
   end
 
   def duplicate
-    @potential_duplicate_organiations = Organization.find(:all, 
-                                                          :select => "organizations.id, organizations.name, organizations.created_at, COUNT(users.id) as users_count", 
-                                                          :joins => "LEFT OUTER JOIN users ON users.organization_id = organizations.id", 
-                                                          :order => "organizations.name ASC, organizations.created_at DESC",
-                                                          :group => "organizations.id, organizations.name, organizations.created_at",
-                                                          :having => "COUNT(users.id) = 0")
-    @all_organizations = Organization.find(:all, 
-                                           :select => "id, name, created_at, (SELECT COUNT(users.id) FROM users WHERE users.organization_id = organizations.id) AS users_count", 
-                                           :order => "name ASC, created_at DESC")
+    @organizations_without_users = Organization.without_users
+    @all_organizations = Organization.ordered
   end
 
   def remove_duplicate

@@ -78,11 +78,13 @@ describe Organization do
     it "is not empty when it has non empty data response" do
       dr = Factory(:data_response, :responding_organization => @organization)
       Factory(:project, :data_response => dr)
+      @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
     it "is not empty when it has users" do
       Factory(:user, :organization => @organization)
+      @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
@@ -106,6 +108,7 @@ describe Organization do
 
     it "is not empty when it has provider_for" do
       Factory(:activity, :provider => @organization)
+      @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
@@ -201,6 +204,43 @@ describe Organization do
       Factory(:activity, :provider => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.provider_for.count.should == 2
+    end
+  end
+
+  describe "counter cache" do
+    it "caches users count" do
+      o = Factory.create(:organization)
+      o.users_count.should == 0
+      Factory.create(:user, :organization => o)
+      o.reload.users_count.should == 1
+      Factory.create(:user, :organization => o)
+      o.reload.users_count.should == 2
+    end
+  end
+
+  describe "named_scopes" do
+    describe "without_users" do
+      it "returns empty array when there are no organizations" do
+        Organization.without_users.should be_empty
+      end
+
+      it "returns organizations without users" do
+        org1 = Factory(:organization, :name => 'Org1')
+        Factory(:user, :organization => org1)
+
+        org2 = Factory(:organization, :name => 'Org2')
+
+        Organization.without_users.should == [org2]
+      end
+    end
+
+    describe "ordered" do
+      it "should order organizations by name" do
+        org1 = Factory(:organization, :name => 'Org2')
+        org2 = Factory(:organization, :name => 'Org1')
+
+        Organization.ordered.should == [org2, org1]
+      end
     end
   end
 end

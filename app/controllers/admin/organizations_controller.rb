@@ -28,15 +28,13 @@ class Admin::OrganizationsController < ApplicationController
   def remove_duplicate
     if params[:duplicate_organization_id].blank? && params[:target_organization_id].blank?
       render_error("Duplicate or target organizations not selected.", duplicate_admin_organizations_path)
-
     elsif params[:duplicate_organization_id] == params[:target_organization_id]
       render_error("Same organizations for duplicate and target selected.", duplicate_admin_organizations_path)
-
     else
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if duplicate.users.count > 0
+      if duplicate.users.size > 0
         render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
         Organization.merge_organizations!(target, duplicate)

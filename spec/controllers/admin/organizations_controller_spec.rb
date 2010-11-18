@@ -54,7 +54,7 @@ describe Admin::OrganizationsController do
       end
 
       describe 'js format' do
-        it "returns proper json when request is with js format" do
+        it "returns proper json" do
           delete :destroy, :id => "1", :format => "js"
           response.body.should == '{"message":"Organization was successfully deleted."}'
         end
@@ -132,6 +132,152 @@ describe Admin::OrganizationsController do
     it "renders duplicate template" do
       get :duplicate
       response.should render_template('admin/organizations/duplicate')
+    end
+  end
+
+  describe "remove duplicate organization" do
+    before :each do
+      login(Factory.create(:admin))
+    end
+
+    describe "duplicate_organization_id and target_organization_id are blank" do
+      describe 'html format' do
+        it "redirects to the duplicate_admin_organizations_path" do
+          put :remove_duplicate
+          response.should redirect_to(duplicate_admin_organizations_path)
+        end
+
+        it "sets flash error" do
+          put :remove_duplicate
+          flash[:error].should == "Duplicate or target organizations not selected."
+        end
+      end
+
+      describe 'js format' do
+        it "returns proper json" do
+          put :remove_duplicate, :format => 'js'
+          response.body.should == '{"message":"Duplicate or target organizations not selected."}'
+        end
+
+        it "does not redirect" do
+          put :remove_duplicate, :format => 'js'
+          response.should_not be_redirect
+        end
+
+        it "sets status to :partial_content" do
+          put :remove_duplicate, :format => 'js'
+          response.status.should == "206 Partial Content"
+        end
+      end
+    end
+
+    describe "duplicate_organization_id and target_organization_id have same value" do
+      describe 'html format' do
+        it "redirects to the duplicate_admin_organizations_path" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
+          response.should redirect_to(duplicate_admin_organizations_path)
+        end
+
+        it "sets flash error" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
+          flash[:error].should == "Same organizations for duplicate and target selected."
+        end
+      end
+
+      describe 'js format' do
+        it "returns proper json" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
+          response.body.should == '{"message":"Same organizations for duplicate and target selected."}'
+        end
+
+        it "does not redirect" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
+          response.should_not be_redirect
+        end
+
+        it "sets status to :partial_content" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
+          response.status.should == "206 Partial Content"
+        end
+      end
+    end
+
+    describe "duplicate organization has users" do
+      before :each do
+        Organization.stub!(:find).with("1").and_return(@org1 = mock_model(Organization))
+        Organization.stub!(:find).with("2").and_return(@org2 = mock_model(Organization))
+        @org1.stub!(:users).and_return(users = mock('users'))
+        @org1.stub!(:name).and_return('org1')
+        users.stub!(:size).and_return(1)
+      end
+
+      describe 'html format' do
+        it "redirects to the duplicate_admin_organizations_path" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
+          response.should redirect_to(duplicate_admin_organizations_path)
+        end
+
+        it "sets flash error" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
+          flash[:error].should == "Duplicate organization org1 has users."
+        end
+      end
+
+      describe 'js format' do
+        it "returns proper json" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.body.should == '{"message":"Duplicate organization org1 has users."}'
+        end
+
+        it "does not redirect" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.should_not be_redirect
+        end
+
+        it "sets status to :partial_content" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.status.should == "206 Partial Content"
+        end
+      end
+    end
+
+    describe "merge organizations" do
+      before :each do
+        Organization.stub!(:find).with("1").and_return(@org1 = mock_model(Organization))
+        Organization.stub!(:find).with("2").and_return(@org2 = mock_model(Organization))
+        Organization.stub!(:"merge_organizations!").with(@org2, @org1).and_return(true)
+        @org1.stub!(:users).and_return(users = mock('users'))
+        users.stub!(:size).and_return(0)
+      end
+
+      describe 'html format' do
+        it "redirects to the duplicate_admin_organizations_path" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
+          response.should redirect_to(duplicate_admin_organizations_path)
+        end
+
+        it "sets flash error" do
+          put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
+          flash[:notice].should == "Organizations successfully merged."
+        end
+      end
+
+      describe 'js format' do
+        it "returns proper json" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.body.should == '{"message":"Organizations successfully merged."}'
+        end
+
+        it "does not redirect" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.should_not be_redirect
+        end
+
+        it "sets status to :partial_content" do
+          put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
+          response.status.should == "200 OK"
+        end
+      end
     end
   end
 end

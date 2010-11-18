@@ -304,12 +304,13 @@ class Activity < ActiveRecord::Base
         spend_ca.type = spend_type
         if spend
           if budget && budget > 0 && ca.calculated_amount > 0
+            spend_ca.amount = spend * ca.amount / budget
             spend_ca.cached_amount = spend * ca.calculated_amount / budget
           elsif ca.percentage
+            spend_ca.percentage = ca.percentage
             spend_ca.cached_amount = ca.percentage * spend / 100
           end
         end
-        spend_ca.percentage = ca.percentage if ca.percentage
         spend_ca.save!
       end
     end

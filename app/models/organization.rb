@@ -30,7 +30,7 @@ class Organization < ActiveRecord::Base
   end
 
   def is_empty?
-    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false

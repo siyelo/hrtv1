@@ -748,7 +748,7 @@ var code_assignments_show = {
 };
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
-  if (!checked || checked && confirm('All your expenditure codings will be overridden. Are you sure?')) {
+  if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
     jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
   } else {
     e.preventDefault();

@@ -114,7 +114,7 @@ Scenario: Use budget by coding for expenditure by coding (and change existing bu
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within "#tab4"
   And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
-  Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,234,567.00"
+  Then the "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" field within ".tab4" should contain "1,481,480.40"
   When I follow "Coding" within "#tab1"
   And I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "7654321.00" within ".tab1"
   And I press "Save"
@@ -143,7 +143,7 @@ Scenario: Use budget by district for expenditure by district
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "District" within "#tab5"
   And I wait until "Burera" is visible
-  Then the "Burera" field within ".tab5" should contain "1,234,567.00"
+  Then the "Burera" field within ".tab5" should contain "1,481,480.40"
 
 @javascript
 Scenario: Use budget by cost categorization for expenditure by cost categorization
@@ -161,7 +161,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Cost Categorization" within "#tab6"
   And I wait until "Drugs, Commodities \& Consumables" is visible
-  Then the "Drugs, Commodities & Consumables" field within ".tab6" should contain "1,234,567.00"
+  Then the "Drugs, Commodities & Consumables" field within ".tab6" should contain "1,481,480.40"
 
 @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages) 

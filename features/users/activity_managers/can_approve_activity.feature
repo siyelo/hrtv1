@@ -19,7 +19,6 @@ Background:
   When I follow "Dashboard"
   And I follow "Edit"
 
-@run
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"

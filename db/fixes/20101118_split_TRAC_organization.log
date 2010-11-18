@@ -1,0 +1,306 @@
+IN DEV
+
+ruby-1.8.7-p299 > load 'db/fixes/20101118_split_TRAC_organization.rb'
+  Organization Load (0.2ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 3054)
+Creating TRAC+ - Malaria...
+  Organization Load (1.1ms)   SELECT "organizations".id FROM "organizations" WHERE ("organizations"."name" = 'TRAC+ - Malaria') LIMIT 1
+  Ngo Create (0.5ms)   INSERT INTO "organizations" ("name", "created_at", "updated_at", "type", "raw_type", "fosaid") VALUES('TRAC+ - Malaria', '2010-11-18 19:06:11', '2010-11-18 19:06:11', 'Ngo', 'Agencies', NULL)
+  cloned a new organization: TRAC+ - Malaria (from TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics)
+  DataResponse Load (0.3ms)   SELECT * FROM "data_responses" WHERE ("data_responses".organization_id_responder = 3054) LIMIT 1
+  DataRequest Load (0.3ms)   SELECT * FROM "data_requests" WHERE ("data_requests"."id" = 8)
+  User Load (1.3ms)   SELECT * FROM "users" WHERE ("users"."email" = 'joseph.baguma@gmail.com')
+  Organization Load (0.1ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 3054)
+  User Load (0.5ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."email") = 'joseph.baguma@gmail.com' AND "users".id <> 2269) LIMIT 1
+  User Load (0.4ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."username") = 'joseph.baguma' AND "users".id <> 2269) LIMIT 1
+  DataResponse Create (0.3ms)   INSERT INTO "data_responses" ("created_at", "organization_id_responder", "contact_name", "data_request_id", "updated_at", "contact_phone_number", "contact_office_location", "submitted_at", "contact_main_office_phone_number", "fiscal_year_start_date", "complete", "currency", "fiscal_year_end_date", "submitted", "data_element_id", "contact_position") VALUES('2010-11-18 19:06:11', 4377, NULL, 8, '2010-11-18 19:06:11', NULL, NULL, NULL, NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL)
+  User Update (0.2ms)   UPDATE "users" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id_current" = 6668, "organization_id" = 4377 WHERE "id" = 2269
+  moved user: joseph.baguma@gmail.com
+  Ngo Load (0.2ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 4377) AND ( ("organizations"."type" = 'Ngo' ) )
+  Project Load (0.4ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'TREATMENT : DIAGNOSIS') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Training, Seminars and Workshops') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.2ms)   SELECT * FROM "projects" WHERE ("projects"."id" = 508 AND ("projects".data_response_id = 5903))
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Monitoring and Evaluation') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'LLIN Distribution') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Insecticide monitoring') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Human Resource') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.2ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'FIGHT AGAINST MALARIA') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Community outreach') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'Community interventions') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.3ms)   SELECT * FROM "projects" WHERE ("projects"."name" = 'BCC MASS MEDIA') AND ("projects".data_response_id = 5903) LIMIT 1
+  Project Load (0.2ms)   SELECT * FROM "projects" WHERE ("projects"."id" = 382 AND ("projects".data_response_id = 5903))
+  Activity Load (0.8ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 487 )
+  Location Load (1.2ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2543 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.2ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2543 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.3ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2543
+  Project Update (0.3ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 487
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 479 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2523 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2523 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.2ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2523
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 479
+  Activity Load (0.4ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 508 )
+  Project Update (0.2ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 508
+  Activity Load (0.7ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 481 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2526 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.2ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2526 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.3ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2526
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 481
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 483 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2539 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2539 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.2ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2539
+  Project Update (0.2ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 483
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 486 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2542 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2542 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.2ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2542
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 486
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 478 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2522 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2522 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.1ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2522
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 478
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 400 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2020 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2020 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.1ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2020
+  Project Update (0.2ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 400
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 485 )
+  Location Load (1.0ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2541 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.3ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2541 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.2ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2541
+  Project Update (0.2ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 485
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 480 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2524 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2524 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.1ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2524
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 480
+  Activity Load (0.6ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 484 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2540 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2540 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.1ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2540
+  Project Update (0.1ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 484
+  Activity Load (0.8ms)   SELECT * FROM "activities" INNER JOIN "activities_projects" ON "activities".id = "activities_projects".activity_id WHERE ("activities_projects".project_id = 382 )
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 1990 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 1990 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.1ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 1990
+  Location Load (0.9ms)   SELECT * FROM "codes" INNER JOIN "activities_locations" ON "codes".id = "activities_locations".location_id WHERE ("activities_locations".activity_id = 2726 ) AND ( ("codes"."type" = 'Location' ) )
+  CodeAssignment Delete all (0.1ms)   DELETE FROM "code_assignments" WHERE (activity_id = 2726 AND type IN ('CodingBudgetDistrict','CodingSpendDistrict') AND code_id NOT IN (NULL))
+  Activity Update (0.2ms)   UPDATE "activities" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 2726
+  Project Update (0.2ms)   UPDATE "projects" SET "updated_at" = '2010-11-18 19:06:11', "data_response_id" = 6668 WHERE "id" = 382
+  DataResponse Load (0.2ms)   SELECT * FROM "data_responses" WHERE ("data_responses"."id" = 6668)
+  SQL (0.1ms)   SELECT count(*) AS count_all FROM "projects" WHERE ("projects".data_response_id = 6668)
+  FundingFlow Load (8.3ms)   SELECT * FROM "funding_flows" WHERE ("funding_flows".organization_id_to = 3054)
+  FundingFlow Update (0.3ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 816
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 860
+  FundingFlow Update (1.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 862
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 889
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 997
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1134
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1135
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1146
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1147
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1148
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1149
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1200
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1201
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1207
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1208
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1224
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1225
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1244
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1245
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1262
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1263
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1271
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1272
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1274
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1275
+  FundingFlow Update (0.3ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1282
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1283
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1287
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1289
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1292
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1296
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1297
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1298
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1299
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1300
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1301
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1303
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1304
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1312
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1324
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1325
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1326
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1327
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1334
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1335
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1340
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1341
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1386
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1390
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1391
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1392
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1393
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1394
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1397
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1398
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1399
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1400
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1401
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1402
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1495
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1527
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1536
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1558
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1559
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1560
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1561
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1562
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1563
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1564
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1565
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1566
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:11', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1567
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1568
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1569
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1570
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1571
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1576
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1577
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1578
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1587
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1588
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1589
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1608
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1609
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1610
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1621
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1622
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1623
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1624
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1625
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1626
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1631
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1632
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1634
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1635
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1636
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1717
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1718
+  FundingFlow Update (0.2ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1719
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_to" = 4377, "data_response_id" = 6668 WHERE "id" = 1838
+  Ngo Load (0.2ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 4377) AND ( ("organizations"."type" = 'Ngo' ) )
+  SQL (0.4ms)   SELECT count(*) AS count_all FROM "funding_flows" WHERE ("funding_flows".organization_id_to = 4377)
+  FundingFlow Load (3.3ms)   SELECT * FROM "funding_flows" WHERE ("funding_flows".organization_id_from = 3054)
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1135
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1147
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1149
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1201
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1208
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1225
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1245
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1263
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1272
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1275
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1283
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1287
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1289
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1292
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1296
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1298
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1301
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1304
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1312
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1325
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1327
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1335
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1341
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377, "data_response_id" = 6668 WHERE "id" = 1345
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1391
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1393
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1398
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1401
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1559
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1561
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1564
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1567
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1570
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1577
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1588
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1609
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1622
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1625
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1632
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1635
+  FundingFlow Update (0.1ms)   UPDATE "funding_flows" SET "updated_at" = '2010-11-18 19:06:12', "organization_id_from" = 4377 WHERE "id" = 1718
+  Ngo Load (0.1ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 4377) AND ( ("organizations"."type" = 'Ngo' ) )
+  SQL (0.4ms)   SELECT count(*) AS count_all FROM "funding_flows" WHERE ("funding_flows".organization_id_from = 4377)
+  SQL (0.3ms)   SELECT count(*) AS count_all FROM "users" WHERE ("users".organization_id = 4377)
+TRAC+ - Malaria created
+
+
+Creating TRAC+ - TB...
+  Organization Load (0.7ms)   SELECT "organizations".id FROM "organizations" WHERE ("organizations"."name" = 'TRAC+ - TB') LIMIT 1
+  Ngo Create (0.4ms)   INSERT INTO "organizations" ("name", "created_at", "updated_at", "type", "raw_type", "fosaid") VALUES('TRAC+ - TB', '2010-11-18 19:06:12', '2010-11-18 19:06:12', 'Ngo', 'Agencies', NULL)
+  cloned a new organization: TRAC+ - TB (from TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics)
+  DataResponse Load (0.2ms)   SELECT * FROM "data_responses" WHERE ("data_responses".organization_id_responder = 3054) LIMIT 1
+  DataRequest Load (0.2ms)   SELECT * FROM "data_requests" WHERE ("data_requests"."id" = 8)
+  User Load (0.4ms)   SELECT * FROM "users" WHERE ("users"."email" = 'kayirangwae1@rw.cdc.gov')
+  Organization Load (0.1ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 3054)
+  User Load (0.4ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."email") = 'kayirangwae1@rw.cdc.gov' AND "users".id <> 2153) LIMIT 1
+  User Load (0.4ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."username") = 'kayirangwae1' AND "users".id <> 2153) LIMIT 1
+  DataResponse Create (0.2ms)   INSERT INTO "data_responses" ("created_at", "organization_id_responder", "contact_name", "data_request_id", "updated_at", "contact_phone_number", "contact_office_location", "submitted_at", "contact_main_office_phone_number", "fiscal_year_start_date", "complete", "currency", "fiscal_year_end_date", "submitted", "data_element_id", "contact_position") VALUES('2010-11-18 19:06:12', 4378, NULL, 8, '2010-11-18 19:06:12', NULL, NULL, NULL, NULL, NULL, 'f', NULL, NULL, NULL, NULL, NULL)
+  User Update (0.1ms)   UPDATE "users" SET "updated_at" = '2010-11-18 19:06:12', "data_response_id_current" = 6669, "organization_id" = 4378 WHERE "id" = 2153
+  moved user: kayirangwae1@rw.cdc.gov
+  User Load (0.4ms)   SELECT * FROM "users" WHERE ("users"."email" = 'mukakigerie@yahoo.com')
+  Organization Load (0.1ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 3054)
+  User Load (0.4ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."email") = 'mukakigerie@yahoo.com' AND "users".id <> 2265) LIMIT 1
+  User Load (0.4ms)   SELECT "users".id FROM "users" WHERE (LOWER("users"."username") = 'emukakigeri' AND "users".id <> 2265) LIMIT 1
+  User Update (0.1ms)   UPDATE "users" SET "updated_at" = '2010-11-18 19:06:12', "data_response_id_current" = 6669, "organization_id" = 4378 WHERE "id" = 2265
+  moved user: mukakigerie@yahoo.com
+  Ngo Load (0.1ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 4378) AND ( ("organizations"."type" = 'Ngo' ) )
+  SQL (0.3ms)   SELECT count(*) AS count_all FROM "users" WHERE ("users".organization_id = 4378)
+TRAC+ - Malaria created
+TRAC+ - TB created
+
+
+Moving TRAC+ to TRAC+ - HIV...
+  Ngo Load (0.2ms)   SELECT * FROM "organizations" WHERE ("organizations"."id" = 3054) AND ( ("organizations"."type" = 'Ngo' ) )
+  Organization Load (0.5ms)   SELECT "organizations".id FROM "organizations" WHERE ("organizations"."name" = 'TRAC+ - HIV' AND "organizations".id <> 3054) LIMIT 1
+  Ngo Update (0.3ms)   UPDATE "organizations" SET "updated_at" = '2010-11-18 19:06:12', "name" = 'TRAC+ - HIV' WHERE "id" = 3054
+  SQL (0.3ms)   SELECT count(*) AS count_all FROM "users" WHERE ("users".organization_id = 3054)
+Moved TRAC+ to TRAC+ - HIV
+ => []
+
+
+
+
+
+
+
+
+IN PROD
+
+
+>> load 'db/fixes/20101118_split_TRAC_organization.rb'
+Creating TRAC+ - Malaria...
+  cloned a new organization: TRAC+ - Malaria (from TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics)
+  moved user: joseph.baguma@gmail.com
+TRAC+ - Malaria created
+
+
+Creating TRAC+ - TB...
+  cloned a new organization: TRAC+ - TB (from TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics)
+  moved user: kayirangwae1@rw.cdc.gov
+  moved user: mukakigerie@yahoo.com
+TRAC+ - Malaria created
+TRAC+ - TB created
+
+
+Moving TRAC+ to TRAC+ - HIV...
+Moved TRAC+ to TRAC+ - HIV
+=> true
+
+

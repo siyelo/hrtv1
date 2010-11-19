@@ -26,7 +26,7 @@ describe Admin::OrganizationsController do
       login(Factory.create(:admin))
     end
 
-    describe "when organization is empty" do
+    context "when organization is empty" do
       before :each do
         Organization.stub!(:find).with("1").and_return(@mock_object = mock_model(Organization, :is_empty? => true, :destroy => true))
       end
@@ -41,7 +41,7 @@ describe Admin::OrganizationsController do
         delete :destroy, :id => "1"
       end
 
-      describe 'html format' do
+      context 'html format' do
         it "sets flash notice" do
           delete :destroy, :id => "1"
           flash[:notice].should == "Organization was successfully deleted."
@@ -53,7 +53,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json" do
           delete :destroy, :id => "1", :format => "js"
           response.body.should == '{"message":"Organization was successfully deleted."}'
@@ -67,7 +67,7 @@ describe Admin::OrganizationsController do
     end
 
 
-    describe "when organization is not empty" do
+    context "when organization is not empty" do
       before :each do
         Organization.stub!(:find).with("1").and_return(@mock_object = mock_model(Organization, :is_empty? => false, :destroy => true))
       end
@@ -82,7 +82,7 @@ describe Admin::OrganizationsController do
         delete :destroy, :id => "1"
       end
 
-      describe 'html format' do
+      context 'html format' do
         it "sets flash notice" do
           delete :destroy, :id => "1"
           flash[:error].should == "You cannot delete an organization that has users or data associated with it."
@@ -94,7 +94,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json when request is with js format" do
           delete :destroy, :id => "1", :format => "js"
           response.body.should == '{"message":"You cannot delete an organization that has users or data associated with it."}'
@@ -117,7 +117,7 @@ describe Admin::OrganizationsController do
     before :each do
       login(Factory.create(:admin))
       organizations = [mock_model(Organization)]
-      Organization.stub!(:without_users).and_return(organizations)
+      Organization.stub_chain(:without_users, :ordered).and_return(organizations)
       Organization.stub!(:ordered).and_return(organizations)
     end
 
@@ -140,8 +140,8 @@ describe Admin::OrganizationsController do
       login(Factory.create(:admin))
     end
 
-    describe "duplicate_organization_id and target_organization_id are blank" do
-      describe 'html format' do
+    context "duplicate_organization_id and target_organization_id are blank" do
+      context 'html format' do
         it "redirects to the duplicate_admin_organizations_path" do
           put :remove_duplicate
           response.should redirect_to(duplicate_admin_organizations_path)
@@ -153,7 +153,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json" do
           put :remove_duplicate, :format => 'js'
           response.body.should == '{"message":"Duplicate or target organizations not selected."}'
@@ -171,8 +171,8 @@ describe Admin::OrganizationsController do
       end
     end
 
-    describe "duplicate_organization_id and target_organization_id have same value" do
-      describe 'html format' do
+    context "duplicate_organization_id and target_organization_id have same value" do
+      context 'html format' do
         it "redirects to the duplicate_admin_organizations_path" do
           put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 1
           response.should redirect_to(duplicate_admin_organizations_path)
@@ -184,7 +184,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json" do
           put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 1
           response.body.should == '{"message":"Same organizations for duplicate and target selected."}'
@@ -202,16 +202,15 @@ describe Admin::OrganizationsController do
       end
     end
 
-    describe "duplicate organization has users" do
+    context "duplicate organization has users" do
       before :each do
         Organization.stub!(:find).with("1").and_return(@org1 = mock_model(Organization))
         Organization.stub!(:find).with("2").and_return(@org2 = mock_model(Organization))
-        @org1.stub!(:users).and_return(users = mock('users'))
         @org1.stub!(:name).and_return('org1')
-        users.stub!(:size).and_return(1)
+        @org1.stub_chain(:users, :size).and_return(1)
       end
 
-      describe 'html format' do
+      context 'html format' do
         it "redirects to the duplicate_admin_organizations_path" do
           put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
           response.should redirect_to(duplicate_admin_organizations_path)
@@ -223,7 +222,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json" do
           put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
           response.body.should == '{"message":"Duplicate organization org1 has users."}'
@@ -241,7 +240,7 @@ describe Admin::OrganizationsController do
       end
     end
 
-    describe "merge organizations" do
+    context "merge organizations" do
       before :each do
         Organization.stub!(:find).with("1").and_return(@org1 = mock_model(Organization))
         Organization.stub!(:find).with("2").and_return(@org2 = mock_model(Organization))
@@ -250,7 +249,7 @@ describe Admin::OrganizationsController do
         users.stub!(:size).and_return(0)
       end
 
-      describe 'html format' do
+      context 'html format' do
         it "redirects to the duplicate_admin_organizations_path" do
           put :remove_duplicate, :duplicate_organization_id => 1, :target_organization_id => 2
           response.should redirect_to(duplicate_admin_organizations_path)
@@ -262,7 +261,7 @@ describe Admin::OrganizationsController do
         end
       end
 
-      describe 'js format' do
+      context 'js format' do
         it "returns proper json" do
           put :remove_duplicate, :format => 'js', :duplicate_organization_id => 1, :target_organization_id => 2
           response.body.should == '{"message":"Organizations successfully merged."}'

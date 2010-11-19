@@ -34,7 +34,7 @@ class Organization < ActiveRecord::Base
   named_scope :ordered, :order => 'name ASC, created_at DESC'
 
   def is_empty?
-    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false
@@ -51,7 +51,7 @@ class Organization < ActiveRecord::Base
     target.provider_for << duplicate.provider_for
     target.locations << duplicate.locations
     target.users << duplicate.users
-    duplicate.destroy
+    duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
     ActiveRecord::Base.enable_validation!
   end
 

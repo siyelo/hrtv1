@@ -1,7 +1,6 @@
-
 #sub-nav
   %ul
-    %li{ :class => (controller.class.to_s == "DataResponsesController" && controller.action_name == 'start' ? "active" : '')}
+    %li{ :class => (controller.class.to_s == "DataResponsesController" && controller.action_name == 'edit' ? "active" : '')}
       = link_to 'Settings', edit_data_response_path(current_user.current_data_response)
 
     %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}

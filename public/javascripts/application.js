@@ -448,7 +448,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     });
 
     // manual tipsy
-    chart_element.tipsy({gravity: 'w', trigger: 'manual'})
+    chart_element.tipsy({gravity: 'e', trigger: 'manual'})
 
     google.visualization.events.addListener(tree, 'onmouseover', function (e) {
       chart_element.attr('title', data_rows[e.row][0]);
@@ -465,7 +465,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 var build_data_response_review_screen = function () {
 
   jQuery('.tooltip').tipsy({gravity: 'w'});
-  jQuery('.comments_tooltip').tipsy({fade: true, gravity: 'sw', html: true});
+  jQuery('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
   jQuery('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
   jQuery('.project.entry_header').click(function (e) {

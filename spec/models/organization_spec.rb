@@ -116,6 +116,11 @@ describe Organization do
       @organization.locations << Factory.create(:location)
       @organization.is_empty?.should_not be_true
     end
+
+    it "is not empty when it has activities" do
+      @organization.activities << Factory.create(:activity)
+      @organization.is_empty?.should_not be_true
+    end
   end
 
 
@@ -208,6 +213,14 @@ describe Organization do
   end
 
   describe "counter cache" do
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:organization)
+      end
+
+      it_should_behave_like "comments_cacher"
+    end
+
     it "caches users count" do
       o = Factory.create(:organization)
       o.users_count.should == 0

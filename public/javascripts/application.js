@@ -448,7 +448,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     });
 
     // manual tipsy
-    chart_element.tipsy({gravity: 'w', trigger: 'manual'})
+    chart_element.tipsy({gravity: 'e', trigger: 'manual'})
 
     google.visualization.events.addListener(tree, 'onmouseover', function (e) {
       chart_element.attr('title', data_rows[e.row][0]);

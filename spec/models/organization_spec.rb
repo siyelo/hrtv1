@@ -116,6 +116,11 @@ describe Organization do
       @organization.locations << Factory.create(:location)
       @organization.is_empty?.should_not be_true
     end
+
+    it "is not empty when it has activities" do
+      @organization.activities << Factory.create(:activity)
+      @organization.is_empty?.should_not be_true
+    end
   end
 
 

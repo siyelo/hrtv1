@@ -183,13 +183,12 @@ describe Activity do
   end
 
   describe "counter cache" do
-    it "caches comments count" do
-      activity = Factory.create(:activity)
-      activity.comments_count.should == 0
-      Factory.create(:comment, :commentable => activity)
-      activity.reload.comments_count.should == 1
-      Factory.create(:comment, :commentable => activity)
-      activity.reload.comments_count.should == 2
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:activity)
+      end
+
+      it_should_behave_like "comments_cacher"
     end
 
     it "caches sub activities count" do

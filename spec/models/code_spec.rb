@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe ModelHelp do
+describe Code do
   
   describe "creating a record" do
-    subject { Factory(:model_help) }
+    subject { Factory(:code) }
     
     it { should be_valid }
     it { should have_many :comments }
@@ -12,7 +12,7 @@ describe ModelHelp do
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory.create(:model_help)
+        @commentable = Factory.create(:activity)
       end
 
       it_should_behave_like "comments_cacher"

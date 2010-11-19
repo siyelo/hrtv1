@@ -153,14 +153,12 @@ describe Project do
   end
   
   describe "counter cache" do
-    it "caches comments count" do
-      project = Factory.create(:project)
-      project.comments_count.should == 0
-      Factory.create(:comment, :commentable => project)
-      project.reload.comments_count.should == 1
-      Factory.create(:comment, :commentable => project)
-      project.reload.comments_count.should == 2
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:project)
+      end
+
+      it_should_behave_like "comments_cacher"
     end
   end
-  
 end

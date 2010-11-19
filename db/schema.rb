@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101118144820) do
+ActiveRecord::Schema.define(:version => 20101119092211) do
 
   create_table "abilities", :force => true do |t|
     t.datetime "created_at"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20101118144820) do
     t.string   "hssp2_stratprog_val"
     t.string   "hssp2_stratobj_val"
     t.string   "official_name"
+    t.integer  "comments_count",      :default => 0
   end
 
   create_table "comments", :force => true do |t|
@@ -213,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20101118144820) do
     t.decimal  "budget_q3"
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
+    t.integer  "comments_count",       :default => 0
   end
 
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
@@ -249,6 +251,7 @@ ActiveRecord::Schema.define(:version => 20101118144820) do
     t.text     "long"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|
@@ -258,7 +261,8 @@ ActiveRecord::Schema.define(:version => 20101118144820) do
     t.datetime "updated_at"
     t.string   "raw_type"
     t.string   "fosaid"
-    t.integer  "users_count", :default => 0
+    t.integer  "users_count",    :default => 0
+    t.integer  "comments_count", :default => 0
   end
 
   create_table "projects", :force => true do |t|

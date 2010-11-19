@@ -16,8 +16,16 @@ describe FundingFlow do
     # TODO: deprecate in favour of delegate to project
     it { should belong_to :data_response }  #it { should delegate :data_response, :to => :project } #need shmacros
     it { should validate_presence_of(:data_response_id) }
-        
+  end
+
+  describe "counter cache" do
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:funding_flow)
+      end
+
+      it_should_behave_like "comments_cacher"
+    end
   end
         
-  
 end

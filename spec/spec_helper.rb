@@ -17,6 +17,7 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))]
 require 'shoulda'
 
 require 'authlogic/test_case'
+require 'database_cleaner'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -26,8 +27,19 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-end
 
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation, { :except => %w[codes model_helps] }
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
 
 def login( user = Factory.build(:reporter) )
   activate_authlogic
@@ -39,3 +51,12 @@ shared_examples_for "a protected endpoint" do
   it { should set_the_flash.to("You are not authorized to do that") }
 end
 
+shared_examples_for "comments_cacher" do
+  it "caches comments count" do
+    @commentable.comments_count.should == 0
+    Factory.create(:comment, :commentable => @commentable)
+    @commentable.reload.comments_count.should == 1
+    Factory.create(:comment, :commentable => @commentable)
+    @commentable.reload.comments_count.should == 2
+  end
+end

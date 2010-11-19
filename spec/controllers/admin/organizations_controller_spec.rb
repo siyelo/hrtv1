@@ -117,7 +117,7 @@ describe Admin::OrganizationsController do
     before :each do
       login(Factory.create(:admin))
       organizations = [mock_model(Organization)]
-      Organization.stub!(:without_users).and_return(organizations)
+      Organization.stub_chain(:without_users, :ordered).and_return(organizations)
       Organization.stub!(:ordered).and_return(organizations)
     end
 

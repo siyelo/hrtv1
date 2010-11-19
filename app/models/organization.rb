@@ -8,7 +8,7 @@ class Organization < ActiveRecord::Base
   has_many :data_requests_made,
            :class_name => "DataRequest",
            :foreign_key => :organization_id_requester
-  has_many :data_responses, :foreign_key => :organization_id_responder
+  has_many :data_responses, :foreign_key => :organization_id_responder, :dependent => :destroy
   has_many :out_flows,
             :class_name => "FundingFlow",
             :foreign_key => "organization_id_from"
@@ -51,7 +51,7 @@ class Organization < ActiveRecord::Base
     target.provider_for << duplicate.provider_for
     target.locations << duplicate.locations
     target.users << duplicate.users
-    duplicate.destroy
+    duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
     ActiveRecord::Base.enable_validation!
   end
 

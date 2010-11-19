@@ -25,7 +25,7 @@ class ReportsController < ApplicationController
 
   def activities_by_budget_coding
     authorize! :read, :activities_by_budget_coding
-    rep = Reports::ActivitiesByBudgetCoding.new
+    rep = Reports::ActivitiesByCodingBudget.new
 
     send_data rep.csv,
               :type => 'text/csv; charset=iso-8859-1; header=present',
@@ -109,7 +109,7 @@ class ReportsController < ApplicationController
   end
 
   def activities_by_budget_coding_new
-    rep = Reports::ActivitiesByBudgetCodingNew.new
+    rep = Reports::ActivitiesByCodingBudgetNew.new
     send_csv(rep.csv,"activities_by_budget_coding_new.csv")
   end
 
@@ -120,36 +120,36 @@ class ReportsController < ApplicationController
 
   def activities_by_nsp
     set_activities
-    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin? )
+    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget', current_user.admin? )
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
   def districts_by_nsp
     set_activities
-    rep = Reports::DistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::DistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget')
     send_csv(rep.csv,"districts_by_nsp.csv")
   end
 
   def map_districts_by_nsp
     set_activities
-    rep = Reports::MapDistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::MapDistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget')
     send_csv(rep.csv,"map_districts_by_nsp.csv")
   end
   def activities_by_full_coding
     set_activities
-    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin? )
+    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget', current_user.admin? )
     send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 
   def districts_by_full_coding
     set_activities
-    rep = Reports::DistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::DistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget')
     send_csv(rep.csv,"districts_by_full_coding.csv")
   end
 
   def map_districts_by_full_coding
     set_activities
-    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudget')
     send_csv(rep.csv,"map_districts_by_full_coding.csv")
   end
 

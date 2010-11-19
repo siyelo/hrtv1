@@ -20,7 +20,7 @@ class Reports::DistrictsByFullCoding < Reports::CodedActivityReport
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
-      @report_type = report_type
+      @report_type = report_type.constantize
       @leaves = Nsp.leaves
       Mtef.roots.each do |nsp_root|
         add_rows csv, nsp_root

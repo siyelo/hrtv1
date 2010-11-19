@@ -21,7 +21,7 @@ class Admin::OrganizationsController < ApplicationController
   end
 
   def duplicate
-    @organizations_without_users = Organization.without_users
+    @organizations_without_users = Organization.without_users.ordered
     @all_organizations = Organization.ordered
   end
 

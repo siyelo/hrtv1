@@ -20,7 +20,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
-      @report_type = report_type
+      @report_type = report_type.constantize
       @leaves = Nsp.leaves
       Nsp.roots.reverse.each do |nsp_root|
         add_rows csv, nsp_root
@@ -54,7 +54,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
-    cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
+    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
     activities = {}
     cas.each{ |ca|
       activities[ca.activity] = {}
@@ -73,7 +73,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
         # We've got non-report type report type hard coding here
         # so it uses budgets
         a.budget_district_coding.each do |bd|
-          proportion = bd.cached_amount / a.budget
+          proportion = bd.proportion_of_activity
           loc = bd.code
           @district_proportions_hash[a][loc] = proportion
           @districts_hash[code][:total] += h[:leaf_amount] * proportion

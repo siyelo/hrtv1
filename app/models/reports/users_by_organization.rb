@@ -27,11 +27,11 @@ class Reports::UsersByOrganization
   protected
 
   def build_header
-    [ "user.id", "user.username", "user.email", "user.full_name", "organization.name", "organization.type" ]
+    [ "user.id", "user.username", "user.email", "user.full_name", "organization.name", "organization.type", "data_response.status" ]
   end
 
   def build_row(user)
-    [ "#{user.id}", "#{h user.username}", "#{h user.email}", "#{h user.full_name}", "#{h user.organization.try(:name)}", "#{user.organization.try(:type)}" ]
+    [ "#{user.id}", "#{h user.username}", "#{h user.email}", "#{h user.full_name}", "#{h user.organization.try(:name)}", "#{user.organization.try(:type)}", "#{user.organization_status}" ]
   end
 end
 

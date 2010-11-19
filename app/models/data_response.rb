@@ -95,6 +95,13 @@ class DataResponse < ActiveRecord::Base
 #      end
 #    end
 #  end
+
+  def status
+    return "Empty / Not Started" if empty?
+    return "Submitted" if submitted
+    return "In Progress"
+  end
+
   def total_project_budget
     projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
   end

@@ -54,6 +54,15 @@ class User < ActiveRecord::Base
     username
   end
 
+  # Law of Demeter methods
+  def organization_status
+    return "No Organization" if organization.nil?
+    current_dr = current_data_response
+    current_dr ||= organization.data_responses.first
+    return "No Data Response" if current_dr.nil?
+    current_dr.status
+  end
+
 end
 
 

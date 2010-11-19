@@ -72,7 +72,8 @@ class DataResponse < ActiveRecord::Base
 
   #named_scope :empty, options_hash_for_empty
   def self.empty
-    drs = self.find(:all, options_hash_for_empty, :include => {:responding_organization => :users})
+    drs = self.find(:all, options_hash_for_empty)#, :include => {:responding_organization => :users})
+    #GN: commented out optimization, this broke the method, returned too many records
     drs.select do |dr|
       (["Agencies", "Donors", "Donor", "Implementer", "Implementers", "International NGO"]).include?(dr.responding_organization.raw_type)
     end

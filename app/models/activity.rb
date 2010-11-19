@@ -386,7 +386,7 @@ class Activity < ActiveRecord::Base
       #create even split across locations
       even_split = []
       locations.each do |l|
-        ca = CodeAssignment.new
+        ca = klass.new
         ca.activity_id = self.id
         ca.code_id = l.id
         ca.cached_amount = amount / locations.size

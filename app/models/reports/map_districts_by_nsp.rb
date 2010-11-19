@@ -34,7 +34,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
-    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
+    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
     activities = {}
     cas.each{ |ca|
       activities[ca.activity] = {}

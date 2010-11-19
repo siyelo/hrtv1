@@ -4,20 +4,13 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 require 'spec/autorun'
 require 'spec/rails'
-
-# Uncomment the next line to use webrat's matchers
-#require 'webrat/integrations/rspec-rails'
-
 require 'factory_girl'
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))].each {|f| require f}
-# from irb
-# Dir[File.expand_path(File.join(File.dirname(__FILE__),'spec','factories','**','*.rb'))].each {|f| require f}
-
-
 require 'shoulda'
-
 require 'authlogic/test_case'
 require 'database_cleaner'
+
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))].each {|f| require f}
+# Dir[File.expand_path(File.join(File.dirname(__FILE__),'spec','factories','**','*.rb'))].each {|f| require f} # from irb
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
@@ -28,15 +21,8 @@ Spec::Runner.configure do |config|
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
-  config.before(:suite) do
+  config.before :each do
     DatabaseCleaner.strategy = :truncation, { :except => %w[codes model_helps] }
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
     DatabaseCleaner.clean
   end
 end

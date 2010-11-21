@@ -42,8 +42,8 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     
     #cas = @report_type.with_activities(code.provider_for.only_simple.map(&:id))#.with_code_id(code.id)
     # or
-    #provider.provider_for.only_simple.each do |act|
-      act = Activity.find(1107) 
+    provider.provider_for.only_simple.each do |act|
+      #act = Activity.find(1107) 
       cas = act.budget_district_coding #if @activities.include?(act)
       cas.each do |ca|
         amt = ca.calculated_amount #* act.toRWF
@@ -55,7 +55,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
           @districts_hash[loc][:partner_amt][provider] = amt
         end
       end if cas
-    #end
+    end
   end
 
   def row(csv, loc, activities, report_type)
@@ -114,10 +114,10 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
   def add_code_summary_row csv, code
 #    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
 #    csv << code.external_id.to_s
-    total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
-    if total_for_code > 0
-      csv << (code_hierarchy(code) + [nil,nil, "Total Budget - "+n2c(total_for_code)]) #put total in Q1 column
-    end
+#    total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
+#    if total_for_code > 0
+#      csv << (code_hierarchy(code) + [nil,nil, "Total Budget - "+n2c(total_for_code)]) #put total in Q1 column
+#    end
     #TODO merge cells[code.level:amount_column] for this code
   end
 

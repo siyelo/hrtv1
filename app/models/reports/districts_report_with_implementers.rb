@@ -8,7 +8,7 @@ class Reports::DistrictsReportWithImplementers < Reports::SqlReport
     FROM code_assignments ca
     INNER JOIN codes on ca.code_id = codes.id
     INNER JOIN activities on activities.id = ca.activity_id
-    INNER JOIN organizations on organizations.id = ca.provider_id
+    INNER JOIN organizations on organizations.id = activities.provider_id
     INNER JOIN data_responses on data_responses.id = activities.data_response_id
     LEFT JOIN currencies on currencies.symbol = data_responses.currency
     WHERE (ca.type = 'CodingBudgetDistrict' OR ca.type = 'CodingSpendDistrict')
@@ -17,7 +17,7 @@ class Reports::DistrictsReportWithImplementers < Reports::SqlReport
   @@code_select_array = nil
   
   def initialize
-    super(@@select_list, [:short_display, :type, :cached_amount_total, :name], @@where_body, code_select_array)
+    super(@@select_list, [:short_display, :type, :cached_amount_total, :name], @@where_body, [])
   end
  
   def query

@@ -28,6 +28,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
       @codes_to_include.each do |c|
         set_district_hash_for_code c
       end
+      #raise @districts_hash.to_yaml
       Location.all.each do |l|
         row csv, l, @activities, @report_type
       end
@@ -39,19 +40,22 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     provider = code
     #NOTE need to convert currencies and dynamic calcs not being used here 
     
-    cas = @report_type.with_activities(code.provider_for.map(&:id))#.with_code_id(code.id)
+    #cas = @report_type.with_activities(code.provider_for.only_simple.map(&:id))#.with_code_id(code.id)
     # or
- #  provider.provider_for.each do |act| cas = act.budget_district_coding;
-    cas.each do |ca|
-      amt = ca.calculated_amount
-      loc = ca.code
-      @districts_hash[loc][:total] += amt #TODO convert currency
-      unless @districts_hash[loc][:partner_amt][provider].nil?
-        @districts_hash[loc][:partner_amt][provider] += amt
-      else
-        @districts_hash[loc][:partner_amt][provider] = amt
-      end
-    end
+    #provider.provider_for.only_simple.each do |act|
+      act = Activity.find(1107) 
+      cas = act.budget_district_coding #if @activities.include?(act)
+      cas.each do |ca|
+        amt = ca.calculated_amount #* act.toRWF
+        loc = ca.code
+        @districts_hash[loc][:total] += amt #TODO convert currency
+        unless @districts_hash[loc][:partner_amt][provider].nil?
+          @districts_hash[loc][:partner_amt][provider] += amt
+        else
+          @districts_hash[loc][:partner_amt][provider] = amt
+        end
+      end if cas
+    #end
   end
 
   def row(csv, loc, activities, report_type)
@@ -59,14 +63,23 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row = []
     row << loc.to_s.upcase
     row << n2c(@districts_hash[loc].delete(:total)) #remove key
-    code_to_amt = @districts_hash[loc]
-    # instead loop through @districts_hash[loc][:partner_amt].each do |provider, amt|
-    # after sorting by amt
-    @codes_to_include.each do |c|
-      if code_to_amt[c] && code_to_amt[c] != 0
-        row << n2c(code_to_amt[c])
-      else
-        row << nil
+    code_to_amt = @districts_hash[loc][:partner_amt]
+    unless code_to_amt.size == 0
+      sorted_code_amt = code_to_amt.sort{|a,b| a[1]<=>b[1]} #sort by value
+  
+      # show top one
+      top = sorted_code_amt.shift
+      row << top[0].to_s
+      row << n2c(top[1])
+   
+      # show full list
+      row << sorted_code_amt.collect{|e| "#{e[0].to_s}(#{n2c(e[1])})"}.join(",")
+  
+      # show in cols
+      # after sorting by amt
+      sorted_code_amt.each do |e|
+        row << e[0].to_s
+        row << n2c(e[1])
       end
     end
     csv <<  row
@@ -76,8 +89,12 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row = []
     row << "District"
     row << "Total Budget"
-    @codes_to_include.each do |c|
-      row << c.to_s
+    row << "1st Development Partner by Amount"
+    row << "Amount"
+    row << "All DP's"
+    @districts_hash.collect{|k,v| v[:partner_amt]}.map(&:size).max.times do |i| #for one with most partners
+      row << "#{i} DP by Amount"
+      row << "#{i} Amount"
     end
     row
   end

@@ -1,9 +1,7 @@
-require File.join(File.dirname(__FILE__),'./blueprint.rb')
-
 #:user is kind of lame without any roles
 Factory.define :user, :class => User do |f|
-  f.username              { Sham.username }
-  f.email                 { Sham.email }
+  f.sequence(:username)   { |i| "user_#{i}" }
+  f.sequence(:email)      { |i| "user_#{i}@example.com" }
   f.password              { 'password' }
   f.password_confirmation { 'password' }
   f.organization          { Factory(:organization) } #for convenience, though the API assumes you do this first yourself

@@ -50,11 +50,25 @@ end
 Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
   # assumes @activity is set !
   @code_assignment = Factory(:coding_budget,
-                              :activity => @activity,
-                              :code => Code.find_by_short_display(code_name),
-                              :amount => amount,
-                              :cached_amount => amount)
+                             :activity => @activity,
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
   @activity.reload
+end
+
+# Uses "the activity" definition from Pickle
+Given /^a budget coding code_name: "([^"]*)", activity: "([^"]*)", amount: "([^"]*)"$/ do |code_name, activity, amount|
+  @code_assignment = Factory(:coding_budget,
+                             :activity => model(activity),
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
+end
+
+Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$/ do |name, code_name, fields|
+  code_assignments = create_model(name, fields)
+  code_assignments.merge(:code => Code.find_by_short_display(code_name))
 end
 
 Given /^the following projects$/ do |table|
@@ -228,7 +242,6 @@ end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#admin"
     Then I should see "My Profile" within "div#admin"
     Then I should see "Sign out" within "div#admin"
   }
@@ -302,27 +315,34 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end
 
+# keep this
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
-  steps %Q{ 
-    Given the following organizations 
-      | name   |
-      | UNDP   |
-      | GoR    |
-    Given the following reporters 
-       | name         | organization |
-       | undp_user    | UNDP         |
-    Given a data request with title "Req1" from "GoR"
-    Given a data response to "Req1" by "UNDP"
-    Given I am signed in as "undp_user"
-    When I follow "Dashboard"
-    And I follow "Edit"
-  }
-end
+  #steps %Q{ 
+    #Given the following organizations 
+      #| name   |
+      #| UNDP   |
+      #| GoR    |
+    #Given the following reporters 
+       #| name         | organization |
+       #| undp_user    | UNDP         |
+    #Given a data request with title "Req1" from "GoR"
+    #Given a data response to "Req1" by "UNDP"
+    #Given I am signed in as "undp_user"
+    #When I follow "Dashboard"
+    #And I follow "Edit"
+  #}
 
-Given /^a basic org \+ reporter profile, with data response, and project "([^"]*)", signed in$/ do |project_name|
-  steps %Q{
-    Given a basic org + reporter profile, with data response, signed in
-    Given a project with name "#{project_name}" for request "Req1" and organization "UNDP"
+  steps %Q{ 
+    Given an organization exists with name: "GoR"
+    And a data_request exists with title: "Req1", requesting_organization: the organization
+
+    And an organization exists with name: "UNDP"
+    And a data_response exists with data_request: the data_request, responding_organization: the organization
+    And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
+    And a project exists with name: "TB Treatment Project", data_response: the data_response
+    And an activity exists with name: "TB Drugs procurement", data_response: the data_response
+    And the project is one of the activity's projects
+    And I am signed in as "undp_user"
   }
 end
 

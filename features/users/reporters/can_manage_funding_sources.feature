@@ -3,7 +3,11 @@ Feature: NGO/donor can see incoming funding flows for their projects
   As a NGO/Donor
   I want to be able to track incoming funding flows
 
+Background:
+  Given a basic org + reporter profile, with data response, signed in
+
 @wip
+@reporter_funding_sources
 Scenario: Reporter can see current incoming flows (Funding Sources) for their organization
   Given the following organizations 
     | name             |
@@ -31,9 +35,8 @@ Scenario: Reporter can see current incoming flows (Funding Sources) for their or
   Then I should see "TB Treatment Project"
   And I should not see "Some other Project"
 
-
+@reporter_funding_sources
 Scenario: Create incoming funding flow
-  Given a basic org + reporter profile, with data response, and project "TB Treatment Project", signed in
   When I go to the funding sources page
   And I follow "Create New"
   And I select "TB Treatment Project" from "Project"
@@ -44,9 +47,8 @@ Scenario: Create incoming funding flow
   And I should see "UNDP"
   And I should see "1,000.00"
 
-
+@reporter_funding_sources
 Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
-  Given a basic org + reporter profile, with data response, and project "TB Treatment Project", signed in
   When I go to the funding sources page
   And I follow "Create New"
   And I select "TB Treatment Project" from "Project"

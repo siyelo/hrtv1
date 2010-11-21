@@ -2,8 +2,8 @@
 
   = render  '/code_assignments/progress_bar', :activity => activity
   %tr
-    %td.title Organization:
-    %td= @activity.organization.name
+    %td.title Implementer:
+    %td= @activity.implementer.nil? ? "(no implementer selected)" : @activity.implementer.name
   %tr
     %td.title Activity:
     %td

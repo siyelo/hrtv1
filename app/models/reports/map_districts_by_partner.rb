@@ -10,17 +10,14 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
     partners_to_include = [Organization.find_by_name("EGPAF")] #Org.all :joins => :provider_for
-    partners_to_include.all.each do |e|
+    partners_to_include.each do |e|
       @codes_to_include << e #if e.activities.count > 0
     end
     @districts_hash = {}
     Location.all.each do |l|
       @districts_hash[l] = {}
       @districts_hash[l][:total] = 0
-      @districts_hash[l][:max_partner] = nil
-      @districts_hash[l][:max_amount] = -1
       @districts_hash[l][:partner_amt] = {} # partner => amt
-      end
     end
 #    @district_proportions_hash = {} # activity => {location => proportion}
     @csv_string = FasterCSV.generate do |csv|
@@ -28,7 +25,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
       @activities = activities
       @report_type = report_type.constantize
       #@codes_to_include.each do |c|
-      Location.all.each do |c|
+      @codes_to_include.each do |c|
         set_district_hash_for_code c
       end
       Location.all.each do |l|
@@ -38,42 +35,35 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
-    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
-    activities = {}
-    cas.each{ |ca|
-      activities[ca.activity] = {}
-      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
-      activities[ca.activity][:amount] = ca.cached_amount
-    }
-    activities.each do |a, h|
-      if @district_proportions_hash.key? a
-        #have cached values, so speed up these proportions
-        @district_proportions_hash[a].each do |loc, proportion|
-          @districts_hash[loc][:total] += h[:leaf_amount] * proportion
-          @districts_hash[loc][code] += h[:amount] * proportion
-        end
+    #code is provider
+    provider = code
+    #NOTE need to convert currencies and dynamic calcs not being used here 
+    
+    cas = @report_type.with_activities(code.provider_for.map(&:id))#.with_code_id(code.id)
+    # or
+ #  provider.provider_for.each do |act| cas = act.budget_district_coding;
+    cas.each do |ca|
+      amt = ca.calculated_amount
+      loc = ca.code
+      @districts_hash[loc][:total] += amt #TODO convert currency
+      unless @districts_hash[loc][:partner_amt][provider].nil?
+        @districts_hash[loc][:partner_amt][provider] += amt
       else
-        @district_proportions_hash[a] = {}
-        # We've got non-report type report type hard coding here
-        # so it uses budgets
-        a.budget_district_coding.each do |bd|
-          proportion = bd.proportion_of_activity
-          loc = bd.code
-          @district_proportions_hash[a][loc] = proportion
-          @districts_hash[loc][:total] += h[:leaf_amount] * proportion
-          @districts_hash[loc][code] += h[:amount] * proportion
-        end
+        @districts_hash[loc][:partner_amt][provider] = amt
       end
     end
   end
+
   def row(csv, loc, activities, report_type)
     #hierarchy = code_hierarchy(code)
     row = []
     row << loc.to_s.upcase
     row << n2c(@districts_hash[loc].delete(:total)) #remove key
     code_to_amt = @districts_hash[loc]
+    # instead loop through @districts_hash[loc][:partner_amt].each do |provider, amt|
+    # after sorting by amt
     @codes_to_include.each do |c|
-      if code_to_amt[c] != 0
+      if code_to_amt[c] && code_to_amt[c] != 0
         row << n2c(code_to_amt[c])
       else
         row << nil
@@ -87,7 +77,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row << "District"
     row << "Total Budget"
     @codes_to_include.each do |c|
-      row << c.official_name
+      row << c.to_s
     end
     row
   end

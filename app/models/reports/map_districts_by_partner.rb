@@ -42,7 +42,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     
     #cas = @report_type.with_activities(code.provider_for.only_simple.map(&:id))#.with_code_id(code.id)
     # or
-    provider.provider_for.only_simple.each do |act|
+    provider.provider_for.only_simple.canonical.each do |act|
       #act = Activity.find(1107) 
       cas = act.budget_district_coding if @report_type == CodingBudgetDistrict
       cas = act.spend_district_coding if @report_type == CodingSpendDistrict

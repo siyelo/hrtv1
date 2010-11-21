@@ -66,8 +66,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row << n2c(@districts_hash[loc].delete(:total)) #remove key
     code_to_amt = @districts_hash[loc][:partner_amt]
     unless code_to_amt.size == 0
-      sorted_code_amt = code_to_amt.sort{|a,b| a[1]<=>b[1]} #sort by value
-  
+      sorted_code_amt = code_to_amt.sort{|a,b| b[1]<=>a[1]} #sort by value, desc
       # show top one
       top = sorted_code_amt.first
       row << top[0].to_s
@@ -95,8 +94,8 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row << "Amount"
     row << "All DP's"
     (@districts_hash.collect{|k,v| v[:partner_amt]}.map(&:size).max - 1).times do |i| #for one with most partners
-      row << "#{i+1} DP by Amount"
-      row << "#{i+1} Amount"
+      row << "#{i+2} DP by Amount"
+      row << "#{i+2} Amount"
     end
     row
   end

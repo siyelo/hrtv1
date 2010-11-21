@@ -9,7 +9,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    partners_to_include = [Organization.find_by_name("EGPAF")] #Org.all :joins => :provider_for
+    partners_to_include = [Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for
     partners_to_include.each do |e|
       @codes_to_include << e #if e.activities.count > 0
     end
@@ -21,13 +21,13 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     end
 #    @district_proportions_hash = {} # activity => {location => proportion}
     @csv_string = FasterCSV.generate do |csv|
-      csv << header()
       @activities = activities
       @report_type = report_type.constantize
-      #@codes_to_include.each do |c|
       @codes_to_include.each do |c|
         set_district_hash_for_code c
       end
+
+      csv << header()
       #raise @districts_hash.to_yaml
       Location.all.each do |l|
         row csv, l, @activities, @report_type
@@ -44,7 +44,8 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     # or
     provider.provider_for.only_simple.each do |act|
       #act = Activity.find(1107) 
-      cas = act.budget_district_coding #if @activities.include?(act)
+      cas = act.budget_district_coding if @report_type == CodingBudgetDistrict
+      cas = act.spend_district_coding if @report_type == CodingSpendDistrict
       cas.each do |ca|
         amt = ca.calculated_amount #* act.toRWF
         loc = ca.code
@@ -52,7 +53,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
         unless @districts_hash[loc][:partner_amt][provider].nil?
           @districts_hash[loc][:partner_amt][provider] += amt
         else
-          @districts_hash[loc][:partner_amt][provider] = amt
+          @districts_hash[loc][:partner_amt][provider] = amt unless amt == 0
         end
       end if cas
     end
@@ -68,13 +69,14 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
       sorted_code_amt = code_to_amt.sort{|a,b| a[1]<=>b[1]} #sort by value
   
       # show top one
-      top = sorted_code_amt.shift
+      top = sorted_code_amt.first
       row << top[0].to_s
       row << n2c(top[1])
    
       # show full list
       row << sorted_code_amt.collect{|e| "#{e[0].to_s}(#{n2c(e[1])})"}.join(",")
   
+      sorted_code_amt.shift #dont show top again
       # show in cols
       # after sorting by amt
       sorted_code_amt.each do |e|
@@ -92,9 +94,9 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     row << "1st Development Partner by Amount"
     row << "Amount"
     row << "All DP's"
-    @districts_hash.collect{|k,v| v[:partner_amt]}.map(&:size).max.times do |i| #for one with most partners
-      row << "#{i} DP by Amount"
-      row << "#{i} Amount"
+    (@districts_hash.collect{|k,v| v[:partner_amt]}.map(&:size).max - 1).times do |i| #for one with most partners
+      row << "#{i+1} DP by Amount"
+      row << "#{i+1} Amount"
     end
     row
   end

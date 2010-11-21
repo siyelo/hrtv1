@@ -155,7 +155,7 @@ class ReportsController < ApplicationController
 
   def map_districts_by_partner
     authorize! :read, :activities_by_expenditure_cost_cat
-    rep = Reports::MapDistrictsByPartner.new(@activities, TYPE_MAP[params[:type]] || 'CodingBudgetDistrict')
+    rep = Reports::MapDistrictsByPartner.new(@activities, params[:type])
     send_csv(rep.csv,"map_districts_by_partner.csv")
   end
   protected

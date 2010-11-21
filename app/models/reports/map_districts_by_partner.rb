@@ -17,17 +17,18 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     Location.all.each do |l|
       @districts_hash[l] = {}
       @districts_hash[l][:total] = 0
-      @codes_to_include.each do |c|
-        @districts_hash[l][c] = 0
+      @districts_hash[l][:max_partner] = nil
+      @districts_hash[l][:max_amount] = -1
+      @districts_hash[l][:partner_amt] = {} # partner => amt
       end
     end
-    @district_proportions_hash = {} # activity => {location => proportion}
+#    @district_proportions_hash = {} # activity => {location => proportion}
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
       @report_type = report_type.constantize
-      @leaves = Nsp.leaves
-      @codes_to_include.each do |c|
+      #@codes_to_include.each do |c|
+      Location.all.each do |c|
         set_district_hash_for_code c
       end
       Location.all.each do |l|

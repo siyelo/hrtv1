@@ -19,6 +19,10 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
                 ["activity_id in (?)", activity_ids]} }
+  named_scope :with_activities_include_implementer,
+              lambda { |activity_ids| {
+                :conditions => ["code_assignments.activity_id in (?)", activity_ids],
+                :joins => [:activity => :provider]} } 
   named_scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_assignments.type = ?", type]} }

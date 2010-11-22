@@ -51,6 +51,10 @@ class FundingFlow < ActiveRecord::Base
     from.name
   end
 
+  def currency
+    project.try(:currency)
+  end
+
 end
 
 

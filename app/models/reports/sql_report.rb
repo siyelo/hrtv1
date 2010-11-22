@@ -21,6 +21,10 @@ class Reports::SqlReport
     end
   end
 
+  def query_results
+    executed_query_results = Organization.find_by_sql query
+  end
+
   protected
 
   def query

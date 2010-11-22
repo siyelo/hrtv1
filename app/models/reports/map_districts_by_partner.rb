@@ -9,7 +9,10 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    partners_to_include = [Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for
+    partners_to_include = DataResponse.in_process.map(&:responding_organization) +
+      DataResponse.submitted.map(&:responding_organization)
+    partners_to_include = partners_to_include.uniq #just in case
+      #[Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for
     partners_to_include.each do |e|
       @codes_to_include << e #if e.activities.count > 0
     end
@@ -47,7 +50,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
       cas = act.budget_district_coding if @report_type == CodingBudgetDistrict
       cas = act.spend_district_coding if @report_type == CodingSpendDistrict
       cas.each do |ca|
-        amt = ca.calculated_amount #* act.toRWF
+        amt = ca.calculated_amount * act.toRWF
         loc = ca.code
         @districts_hash[loc][:total] += amt #TODO convert currency
         unless @districts_hash[loc][:partner_amt][provider].nil?

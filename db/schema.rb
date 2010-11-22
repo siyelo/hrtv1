@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101119092211) do
+ActiveRecord::Schema.define(:version => 20101122031204) do
 
   create_table "abilities", :force => true do |t|
     t.timestamp "created_at"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20101119092211) do
     t.decimal "toRWF"
     t.string  "symbol"
     t.string  "name"
+    t.decimal "toUSD"
   end
 
   create_table "data_elements", :force => true do |t|

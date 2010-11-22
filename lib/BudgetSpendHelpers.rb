@@ -60,7 +60,8 @@ module BudgetSpendHelpers
   end
 
   def toUSD
-    #TODO
+    toUSD = Currency.find_by_symbol(currency).try(:toUSD)
+    toUSD ? toUSD : 0
   end
 
   def spend_RWF

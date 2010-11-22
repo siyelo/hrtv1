@@ -59,6 +59,10 @@ module BudgetSpendHelpers
     toRWF ? toRWF : 0
   end
 
+  def toUSD
+    #TODO
+  end
+
   def spend_RWF
     return 0 if spend.nil?
     toRWF = Currency.find_by_symbol(currency).try(:toRWF)

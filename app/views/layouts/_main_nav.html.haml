@@ -13,10 +13,7 @@
     - workplan_active = !dashboard_active && !help_active && !reports_active
 
     %ul
-      - if current_user.role? :admin
-        %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", admin_dashboard_path
-      - elsif current_user.role?(:reporter) || current_user.role?(:activity_manager)
-        %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", reporter_dashboard_path
+      = render '/shared/dashboard_link', :dashboard_active => dashboard_active
       %li{ :class => workplan_active ? "active" : ''}
         -# this might break if no response selected
         - if current_user && current_user.current_data_response

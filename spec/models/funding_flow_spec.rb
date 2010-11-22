@@ -9,8 +9,8 @@ describe FundingFlow do
     it { should belong_to :to }
     it { should belong_to :project }
     it { should validate_presence_of(:project_id) }
-    it { should validate_presence_of(:organization_id_to) }
-    it { should validate_presence_of(:organization_id_from) }
+    #it { should validate_presence_of(:organization_id_to) }
+    #it { should validate_presence_of(:organization_id_from) }
     #it { should delegate :organization, :to => :project } #need shmacros
     
     # TODO: deprecate in favour of delegate to project

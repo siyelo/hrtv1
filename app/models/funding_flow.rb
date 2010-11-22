@@ -24,7 +24,10 @@ class FundingFlow < ActiveRecord::Base
 
   ### Validations
   #
-  validates_presence_of :project_id, :organization_id_from, :organization_id_to
+
+  #GN: validations break how users create a new org if that org not in the list
+  # sadly they are disabled for now
+  validates_presence_of :project_id#, :organization_id_from, :organization_id_to
 
   validates_presence_of :data_response_id # required for AS/available_to magickery
                                           # consider removing relation and delegating to project

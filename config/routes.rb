@@ -92,6 +92,9 @@ ActionController::Routing::Routes.draw do |map|
   map.map_districts_by_partner 'map_districts_by_partner/:type',
                     :controller => 'reports',
                     :action => 'map_districts_by_partner'
+  map.map_facilities_by_partner 'map_facilities_by_partner/:type',
+                    :controller => 'reports',
+                    :action => 'map_facilities_by_partner'
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
   map.users_in_my_organization 'users_in_my_organization', :controller => 'reports', :action => 'users_in_my_organization'
 

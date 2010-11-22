@@ -13,6 +13,7 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
   delegate :organization, :to => :project
+  delegate :currency, :to => :project
 
   belongs_to :data_response #todo: deprecate in favour of: delegate :data_response, :to => :project
 

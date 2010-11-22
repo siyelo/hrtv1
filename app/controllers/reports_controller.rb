@@ -158,6 +158,11 @@ class ReportsController < ApplicationController
     rep = Reports::MapDistrictsByPartner.new(@activities, params[:type])
     send_csv(rep.csv,"map_districts_by_partner.csv")
   end
+  def map_facilities_by_partner
+    authorize! :read, :activities_by_expenditure_cost_cat
+    rep = Reports::MapFacilitiesByPartner.new(@activities, params[:type])
+    send_csv(rep.csv,"map_facilities_by_partner.csv")
+  end
   protected
 
   def set_activities

@@ -9,15 +9,15 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    facilities_to_include = [Organization.find_by_name("") #Organization.all(:conditions => ["fosaid is not null"])
+    facilities_to_include = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] #Organization.all(:conditions => ["fosaid is not null"])
       #[Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for
     facilities_to_include.each do |e|
       @codes_to_include << e #if e.activities.count > 0
     end
     @districts_hash = {}
-    facilities_to_include.all.each do |l|
+    facilities_to_include.each do |l|
       @districts_hash[l] = {}
-      @districts_hash[l][:total] = 0
+      @districts_hash[l][:total] = 0 
       @districts_hash[l][:partner_amt] = {} # partner => amt
     end
 #    @district_proportions_hash = {} # activity => {location => proportion}
@@ -30,7 +30,7 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
 
       csv << header()
       #raise @districts_hash.to_yaml
-      Location.all.each do |l|
+      @codes_to_include.each do |l|
         row csv, l, @activities, @report_type
       end
     end
@@ -43,20 +43,30 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
     
     #cas = @report_type.with_activities(code.provider_for.only_simple.map(&:id))#.with_code_id(code.id)
     # or
-    facility.provider_for.canonical.each do |act|
-      #act = Activity.find(1107) 
-      amt = act.budget if @report_type == CodingBudgetDistrict
-      amt = act.spend if @report_type == CodingSpendDistrict
-      amt = 0 if amt.nil?
-      amt = amt * act.toRWF
-      loc = facility
-      partner = act.data_response.responding_organization
-      @districts_hash[loc][:total] += amt
-      unless @districts_hash[loc][:partner_amt][partner].nil?
-        @districts_hash[loc][:partner_amt][partner] += amt
-      else
-        @districts_hash[loc][:partner_amt][partner] = amt unless amt == 0
+
+    #if have my own DR, pull lots of info from there
+    # otherwise get who gives me money by activities
+    unless !facility.data_response.first.empty?
+      facility.provider_for.canonical.each do |act|
+        #act = Activity.find(1107) 
+        amt = act.budget if @report_type == CodingBudgetDistrict
+        amt = act.spend if @report_type == CodingSpendDistrict
+        amt = 0 if amt.nil?
+        amt = amt * act.toRWF
+        loc = facility
+        partner = act.data_response.responding_organization
+        @districts_hash[loc][:total] += amt
+        unless @districts_hash[loc][:partner_amt][partner].nil?
+          @districts_hash[loc][:partner_amt][partner] += amt
+        else
+          @districts_hash[loc][:partner_amt][partner] = amt unless amt == 0
+        end
       end
+    else # i have a non empty data response
+      dr = facility.data_responses.last #this will break in the future, but its okay ish with it being last
+      dr.in_flows.all(:conditions => ["data_response_id = ?", dr.id])
+      
+
     end
   end
 

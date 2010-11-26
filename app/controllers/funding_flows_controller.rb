@@ -1,7 +1,7 @@
 class FundingFlowsController < ActiveScaffoldController
   authorize_resource
 
-  @@shown_columns = [:project, :from, :to, :budget, :spend]
+  @@shown_columns = [:project, :from, :to, :spend, :budget ]
   @@create_columns = [:project, :from, :to, :budget, :spend,
                       :spend_q4_prev, :spend_q1, :spend_q2,
                       :spend_q3, :spend_q4]
@@ -41,11 +41,12 @@ class FundingFlowsController < ActiveScaffoldController
     end
 
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :budget
-      end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+      columns.add_subgroup "Budget (Planned Expenditure)" do |budget_group|
+        budget_group.add :budget
+        #budget_group.add :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4 #TODO add and test
       end
     end
 

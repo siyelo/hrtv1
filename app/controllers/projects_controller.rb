@@ -4,7 +4,7 @@ class ProjectsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
+  @@shown_columns   = [:organization, :name, :description,  :spend, :budget]
   @@create_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
     :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
   @@update_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
@@ -39,11 +39,11 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:locations].label              = "Districts Worked In"
     config.columns[:currency].label               = "Currency (if different)"
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
-      end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+      columns.add_subgroup "Budget (Planned Expenditure)" do |budget_group|
+        budget_group.add :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
       end
     end
     config.columns[:entire_budget].label = "Total Project Budget"

@@ -3,7 +3,7 @@ class OtherCostsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [ :projects, :budget, :spend]
+  @@shown_columns = [ :projects, :spend, :budget]
   @@create_columns = [:projects,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
   def self.create_columns
     @@create_columns

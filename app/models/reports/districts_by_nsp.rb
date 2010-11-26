@@ -20,7 +20,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
-      @report_type = report_type.constantize
+      @report_type = report_type
       @leaves = Nsp.leaves
       Nsp.roots.reverse.each do |nsp_root|
         add_rows csv, nsp_root
@@ -55,12 +55,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
 
   def set_district_hash_for_code code
     cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
-    activities = {}
-    cas.each{ |ca|
-      activities[ca.activity] = {}
-      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
-      activities[ca.activity][:amount] = ca.cached_amount
-    }
+    activities = self.cache_activities(cas)
     activities.each do |a, h|
       if @district_proportions_hash.key? a
         #have cached values, so speed up these proportions

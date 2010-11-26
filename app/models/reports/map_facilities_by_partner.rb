@@ -2,9 +2,9 @@ require 'fastercsv'
 
 class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
   include Reports::Helpers
- 
 
-# location => partner, amount 
+
+# location => partner, amount
   def initialize(activities, report_type)
     @codes_to_include = []
     facilities_to_include =  Organization.all(:conditions => ["fosaid is not null"])
@@ -15,7 +15,7 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
     @districts_hash = {}
     facilities_to_include.each do |l|
       @districts_hash[l] = {}
-      @districts_hash[l][:total] = 0 
+      @districts_hash[l][:total] = 0
       @districts_hash[l][:partner_amt] = {} # partner => amt
     end
 #    @district_proportions_hash = {} # activity => {location => proportion}
@@ -42,7 +42,7 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
     # otherwise get who gives me money by activities
     unless !facility.data_responses.last.empty?
       facility.provider_for.canonical.each do |act|
-        #act = Activity.find(1107) 
+        #act = Activity.find(1107)
         amt = act.budget if @report_type == CodingBudgetDistrict
         amt = act.spend if @report_type == CodingSpendDistrict
         amt = 0 if amt.nil?
@@ -88,10 +88,10 @@ class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
       top = sorted_code_amt.first
       row << top[0].to_s
       row << n2c(top[1])
-   
+
       # show full list
       row << sorted_code_amt.collect{|e| "#{e[0].to_s}(#{n2c(e[1])})"}.join(",")
-  
+
       sorted_code_amt.shift #dont show top again
       # show in cols
       # after sorting by amt

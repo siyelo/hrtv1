@@ -2,13 +2,11 @@ require 'fastercsv'
 
 class Reports::MapDistrictsByFullCoding < Reports::CodedActivityReport
   include Reports::Helpers
-  
+
   def initialize(activities, report_type)
     @codes_to_include = []
-  #  [9020101, 90207].each do |e|
-  #    @codes_to_include << Nsp.find_by_external_id(e)
     Code.all.each do |e|
-      @codes_to_include << e if ["Mtef", "Nha", "Nsp", "Nasa"].include?(e.type.to_s)
+      @codes_to_include << e if [Mtef, Nha, Nsp, Nasa].include?(e.class)
     end
     @districts_hash = {}
     Location.all.each do |l|
@@ -22,7 +20,7 @@ class Reports::MapDistrictsByFullCoding < Reports::CodedActivityReport
     @csv_string = FasterCSV.generate do |csv|
       csv << header()
       @activities = activities
-      @report_type = report_type.constantize
+      @report_type = report_type
       @leaves = Nsp.leaves
       @codes_to_include.each do |c|
         set_district_hash_for_code c
@@ -35,12 +33,7 @@ class Reports::MapDistrictsByFullCoding < Reports::CodedActivityReport
 
   def set_district_hash_for_code code
     cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
-    activities = {}
-    cas.each{ |ca|
-      activities[ca.activity] = {}
-      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
-      activities[ca.activity][:amount] = ca.cached_amount
-    }
+    activities = self.cache_activities(cas)
     activities.each do |a, h|
       if @district_proportions_hash.key? a
         #have cached values, so speed up these proportions

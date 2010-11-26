@@ -3,75 +3,66 @@ class ReportsController < ApplicationController
   #authorize_resource :class => Reports
   before_filter :require_user
 
-  TYPE_MAP = {'budget' => 'CodingBudget', 'spend' => 'CodingSpend'}
+  TYPE_MAP = {'budget' => CodingBudget, 'spend' => CodingSpend}
 
   def activities_by_district
     authorize! :read, :activities_by_district
     rep = Reports::ActivitiesByDistrict.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_district.csv"
+    send_csv(rep.csv, "activities_by_district.csv")
   end
 
   def activities_by_district_sub_activities
     authorize! :read, :activities_by_district_sub_activities
     rep = Reports::ActivitiesByDistrictSubActivities.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_district_sub_activities.csv"
+    send_csv(rep.csv, "activities_by_district_sub_activities.csv")
   end
 
   def activities_by_budget_coding
     authorize! :read, :activities_by_budget_coding
-    rep = Reports::ActivitiesByBudgetCoding.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_budget_coding.csv"
+    rep = Reports::ActivitiesByCodingBudget.new
+    send_csv(rep.csv, "activities_by_budget_coding.csv")
   end
 
   def activities_by_budget_cost_cat
     authorize! :read, :activities_by_budget_cost_cat
     rep = Reports::ActivitiesByBudgetCostCat.new
+    send_csv(rep.csv, "activities_by_budget_cost_cat.csv")
+  end
 
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_budget_cost_cat.csv"
+  def activities_by_budget_districts
+    authorize! :read, :activities_by_budget_cost_cat
+    rep = Reports::ActivitiesByBudgetDistricts.new
+    send_csv(rep.csv, "activities_by_budget_districts.csv")
   end
 
   def activities_by_expenditure_coding
     authorize! :read, :activities_by_expenditure_coding
     rep = Reports::ActivitiesByExpenditureCoding.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_expenditure_coding.csv"
+    send_csv(rep.csv, "activities_by_expenditure_coding.csv")
   end
 
   def activities_by_expenditure_cost_cat
     authorize! :read, :activities_by_expenditure_cost_cat
     rep = Reports::ActivitiesByExpenditureCostCat.new
+    send_csv(rep.csv, "activities_by_expenditure_cost_cat.csv")
+  end
 
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=activities_by_expenditure_cost_cat.csv"
+  def activities_by_expenditure_districts
+    authorize! :read, :activities_by_expenditure_cost_cat
+    rep = Reports::ActivitiesByExpenditureDistricts.new
+    send_csv(rep.csv, "activities_by_expenditure_districts.csv")
   end
 
   def users_by_organization
     authorize! :read, :users_by_organization
     rep = Reports::UsersByOrganization.new
-
-    send_data rep.csv,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=users_by_organization.csv"
+    send_csv(rep.csv, "users_by_organization.csv")
   end
 
   def users_in_my_organization
     authorize! :read, :users_in_my_organization
     rep = Reports::UsersByOrganization.new(current_user)
-    send_csv rep.csv, "users_by_organization.csv"
+    send_csv(rep.csv, "users_by_organization.csv")
   end
 
   # TODO ALL NEED TO BE AUTHORIZED!!!
@@ -91,7 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def activities_by_budget_coding_new
-    rep = Reports::ActivitiesByBudgetCodingNew.new
+    rep = Reports::ActivitiesByCodingBudgetNew.new
     send_csv(rep.csv,"activities_by_budget_coding_new.csv")
   end
 
@@ -102,54 +93,70 @@ class ReportsController < ApplicationController
 
   def activities_by_nsp
     set_activities
-    rep = Reports::ActivitiesByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::ActivitiesByNsp.new(@activities, budget_report_type, current_user.admin? )
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
   def districts_by_nsp
     set_activities
-    rep = Reports::DistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::DistrictsByNsp.new(@activities, budget_report_type)
     send_csv(rep.csv,"districts_by_nsp.csv")
   end
 
   def map_districts_by_nsp
     set_activities
-    rep = Reports::MapDistrictsByNsp.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::MapDistrictsByNsp.new(@activities, budget_report_type)
     send_csv(rep.csv,"map_districts_by_nsp.csv")
   end
   def activities_by_full_coding
     set_activities
-    rep = Reports::ActivitiesByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::ActivitiesByFullCoding.new(@activities, budget_report_type, current_user.admin? )
     send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 
   def districts_by_full_coding
     set_activities
-    rep = Reports::DistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding')
+    rep = Reports::DistrictsByFullCoding.new(@activities, budget_report_type)
     send_csv(rep.csv,"districts_by_full_coding.csv")
   end
 
   def map_districts_by_full_coding
     set_activities
-    rep = Reports::MapDistrictsByFullCoding.new(@activities, TYPE_MAP[params[:type]] || 'BudgetCoding', current_user.admin?)
+    rep = Reports::MapDistrictsByFullCoding.new(@activities, budget_report_type)
     send_csv(rep.csv,"map_districts_by_full_coding.csv")
+  end
+
+  def map_districts_by_partner
+    authorize! :read, :activities_by_expenditure_cost_cat
+    rep = Reports::MapDistrictsByPartner.new(@activities, params[:type])
+    send_csv(rep.csv,"map_districts_by_partner.csv")
+  end
+
+  def map_facilities_by_partner
+    authorize! :read, :activities_by_expenditure_cost_cat
+    rep = Reports::MapFacilitiesByPartner.new(@activities, params[:type])
+    send_csv(rep.csv,"map_facilities_by_partner.csv")
   end
 
   protected
 
-  def set_activities
-    if current_user.admin?
-      dr = DataResponse.find(params[:id])
-      @activities = Activity.only_simple.canonical
-    else
-      dr = current_user.data_responses.find(params[:id])
+    def set_activities
+      if current_user.admin?
+        dr = DataResponse.find(params[:id])
+        @activities = Activity.only_simple.canonical
+      else
+        dr = current_user.data_responses.find(params[:id])
+      end
+      @activities ||= dr.activities
     end
-    @activities ||= dr.activities
-  end
 
-  def send_csv(text, filename)
-    send_data text,
-              :type => 'text/csv; charset=iso-8859-1; header=present',
-              :disposition => "attachment; filename=#{filename}"
-  end
+    def send_csv(text, filename)
+      send_data text,
+                :type => 'text/csv; charset=iso-8859-1; header=present',
+                :disposition => "attachment; filename=#{filename}"
+    end
+
+    def budget_report_type
+      TYPE_MAP[params[:type]] || CodingBudget
+    end
 end

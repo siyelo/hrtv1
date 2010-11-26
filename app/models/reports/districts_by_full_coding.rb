@@ -2,11 +2,11 @@ require 'fastercsv'
 
 class Reports::DistrictsByFullCoding < Reports::CodedActivityReport
   include Reports::Helpers
-  
+
   def initialize(activities, report_type)
     @codes_to_include = []
     Code.all.each do |e|
-      @codes_to_include << e if ["Mtef", "Nha", "Nsp", "Nasa"].include?(e.type.to_s)
+      @codes_to_include << e if [Mtef, Nha, Nsp, Nasa].include?(e.class)
     end
     @districts_hash = {}
     @codes_to_include.each do |c|
@@ -54,13 +54,8 @@ class Reports::DistrictsByFullCoding < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
-    cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
-    activities = {}
-    cas.each{ |ca|
-      activities[ca.activity] = {}
-      activities[ca.activity][:leaf_amount] = ca.sum_of_children > 0 ? 0 : ca.cached_amount
-      activities[ca.activity][:amount] = ca.cached_amount
-    }
+    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+    activities = self.cache_activities(cas)
     activities.each do |a, h|
       if @district_proportions_hash.key? a
         #have cached values, so speed up these proportions

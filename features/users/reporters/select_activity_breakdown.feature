@@ -238,7 +238,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   When I follow "Activities"
   And I follow "Edit"
   And I fill in "Total Budget GOR FY 10-11" with "1000"
-  And I fill in "Total Spend GOR FY 09-10" with "2000"
+  And I fill in "Total Spent GOR FY 09-10" with "2000"
   And I press "Update"
   And I go to the budget classification page for "TB Drugs procurement"
   Then the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"

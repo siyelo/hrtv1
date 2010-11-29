@@ -1,6 +1,4 @@
-class Admin::DashboardController < ApplicationController
-  before_filter :require_admin
-  skip_before_filter :load_help
+class Admin::DashboardController < Admin::BaseController
 
   def index
     @comments = Comment.find(:all, :order => 'created_at DESC', :limit => 5)

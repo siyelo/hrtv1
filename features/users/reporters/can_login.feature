@@ -47,3 +47,4 @@ Scenario: Login as a reporter with email address
   And I press "Sign in"
   Then I should see the reporters admin nav
   And I should see "frank@f.com"
+  And I should be on the reporter dashboard page

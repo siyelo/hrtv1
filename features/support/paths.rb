@@ -61,7 +61,7 @@ module NavigationHelpers
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)
-      admin_data_response_path(response)
+      admin_response_path(response)
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

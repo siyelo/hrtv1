@@ -1,0 +1,15 @@
+-# main site landing page - large header
+
+- content_for :body do
+  %body.promo.landing
+    = render "layouts/header"
+    = render :partial => 'layouts/flashes'
+    = yield(:tabs)
+    #content
+      .wrapper
+        = yield
+
+- content_for :footer do
+  = render :partial => 'layouts/footer'
+
+= render 'layouts/app'

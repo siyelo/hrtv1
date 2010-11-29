@@ -116,9 +116,17 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
   map.namespace :admin do |admin|
-    admin.resources :data_responses, :member => {:delete => :get}
+    admin.resources :responses, :collection => {:empty        => :get,
+                                                :in_progress  => :get,
+                                                :submitted    => :get},
+                                :member => {:delete => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    admin.resources :organizations, :collection => {:duplicate => :get, :remove_duplicate => :put}
+    admin.resources :organizations, :collection => { :duplicate         => :get,
+                                                     :remove_duplicate  => :put},
+                                    :active_scaffold => true
+    admin.resources :reports, :only => [:index]
+    admin.resources :users, :active_scaffold => true
+    admin.resources :activities, :active_scaffold => true
   end
 
   map.namespace :policy_maker do |policy_maker|

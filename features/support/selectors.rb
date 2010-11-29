@@ -33,6 +33,9 @@ module HtmlSelectorsHelper
     when /the expenditure cost categorization tab/
       "#tab6"
 
+    when /the main nav/
+      "#main-nav"
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
         "Now, go and add a mapping in #{__FILE__}"

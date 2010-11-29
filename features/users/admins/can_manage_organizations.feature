@@ -4,15 +4,12 @@ Feature: Manage organizations
   I want to be able to manage organizations
 
 Background:
-  Given the following organizations 
-    | name             |
-    | WHO              |
-    | UNAIDS           |
-  Given the following reporters 
-     | name         | organization |
-     | who_user     | WHO          |
-  Given a data request with title "Req1" from "UNAIDS"
-  Given a data response to "Req1" by "WHO"
+  Given an organization exists with name: "UNAIDS"
+  And a data_request exists with title: "Req1", requesting_organization: the organization
+
+  And an organization exists with name: "WHO"
+  And a reporter exists with username: "who_user", organization: the organization
+  And a data_response exists with data_request: the data_request, responding_organization: the organization
   
 @admin_organizations
 Scenario Outline: Merge duplicate organizations
@@ -58,7 +55,7 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
   And I will confirm a js popup
   And I follow "Delete" within "<info_block>"
   Then the "Duplicate organization" text should not be "<organization>"
-  Then the "Replacement organization" text should not be "<organization>"
+  And the "Replacement organization" text should not be "<organization>"
 
   Examples:
     | organization     | select_type                 | info_block                  |

@@ -1,8 +1,6 @@
-require File.join(File.dirname(__FILE__),'./blueprint.rb')
-
 Factory.define :project, :class => Project do |f|
-  f.name                { Sham.project_name }
-  f.description         { Sham.description }
+  f.name                { 'project_name' }
+  f.description         { 'project_description' }
   f.budget              { 20000000.00 }
   f.start_date          { Date.parse("2010-01-01") }
   f.end_date            { Date.parse("2010-12-31") }

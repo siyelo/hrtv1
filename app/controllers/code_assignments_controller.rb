@@ -94,11 +94,11 @@ private
     when 'CodingBudgetCostCategorization'
       "Budget by Cost Category"
     when 'CodingSpend'
-      "Spend Coding"
+      "Spent Coding"
     when 'CodingSpendDistrict'
-      "Spend by District"
+      "Spent by District"
     when 'CodingSpendCostCategorization'
-      "Spend by Cost Category"
+      "Spent by Cost Category"
     end
   end
 

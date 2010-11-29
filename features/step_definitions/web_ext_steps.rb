@@ -51,3 +51,8 @@ end
 Then /^the "([^"]*)" text should match "([^"]*)"$/ do |label, value|
   find_field(label).text.should match(value)
 end
+
+# Pickle
+Given /^#{capture_model} is one of #{capture_model}'s (\w+)$/ do |owned, owner, assoc|
+  model!(owner).send(assoc) << model!(owned)
+end 

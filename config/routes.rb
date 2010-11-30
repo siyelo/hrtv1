@@ -96,6 +96,7 @@ ActionController::Routing::Routes.draw do |map|
                     :controller => 'reports',
                     :action => 'map_facilities_by_partner'
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
+  map.all_codes 'all_report', :controller => 'reports', :action => 'all_codes'
   map.users_in_my_organization 'users_in_my_organization', :controller => 'reports', :action => 'users_in_my_organization'
 
   # these routes make the pages accessible without security checks

@@ -1,0 +1,10 @@
+%h1 Review Districts
+
+%table
+  %thead
+    %tr
+      %th District
+  %tbody
+    - @locations.each do |loc|
+      %tr{:class => cycle("even", "odd")}
+        %td= link_to "#{h loc.name}", admin_district_path(loc)

@@ -27,6 +27,7 @@ formtastic -v0.9.10
 gherkin -v2.0.2
 github -v0.4.3
 glennr-heroku_san -v0.1.1
+glennr-seer -v0.9.2
 haml -v3.0.13
 highline -v1.5.2
 hoe -v2.6.1
@@ -51,7 +52,7 @@ ruby-debug -v0.10.3
 ruby-debug-base -v0.10.3
 ruby_parser -v2.0.4
 rubyforge -v2.0.4
-seer -v0.9.1
+
 selenium-webdriver -v0.0.24
 sexp_processor -v3.0.4
 shoulda -v2.11.1

@@ -1,0 +1,38 @@
+Feature: Admin can review districts
+  In order to reduce costs
+  As an admin
+  I want to be able to see district review screen
+
+Background:
+  Given a code exists with short_display: "Code A"
+  And a code exists with short_display: "Code B"
+  And an organization exists with name: "GoR"
+  And a data_request exists with title: "Req1", requesting_organization: the organization
+  And an organization exists with name: "UNDP"
+  And a reporter exists with username: "undp_user", organization: the organization
+  And a data_response exists with data_request: the data_request, responding_organization: the organization
+  And a project exists with name: "Project A", data_response: the data_response
+  And an activity exists with name: "Activity A", data_response: the data_response
+  And the project is one of the activity's projects
+  And a location exists with short_display: "Location A"
+  And the location is one of the activity's locations
+  And a location exists with short_display: "Location B"
+  And the location is one of the activity's locations
+  And a coding_budget exists with activity: the activity, code: the first code 
+  And a coding_budget exists with activity: the activity, code: the 2nd code 
+
+@run
+Scenario: "Log in as admin, go to district activity detail screen"
+  Given I am signed in as an admin
+  When I follow "Dashboard"
+  And I follow "Districts" within the main nav
+  Then I should see "Review Districts" within "h1"
+  And I follow "Location A"
+  Then I should see "Location A" within "h1"
+  And I follow "Activities" within the group tab
+  Then I should see "Activities" within "h1"
+  When I follow "Activity A"
+  Then I should see "Activity A" within "h1"
+  And I should see "MTEF" within the group tab
+  And I should see "NSP" within the group tab
+  And I should see "HSSP" within the group tab

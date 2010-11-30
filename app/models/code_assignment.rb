@@ -1,4 +1,7 @@
 class CodeAssignment < ActiveRecord::Base
+
+  include NumberHelper
+
   ### Associations
   belongs_to :activity
   belongs_to :code
@@ -44,9 +47,7 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def proportion_of_activity
-    unless activity_amount == 0 or
-           calculated_amount.nil? or
-           calculated_amount == 0
+    unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0
       calculated_amount / activity_amount
     else
       if !percentage.nil?
@@ -57,12 +58,25 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
+  ### methods
+  #
   def calculated_amount
     return cached_amount unless cached_amount.nil?
     return 0
   end
 
   ### Class Methods
+  def code_name
+    code.short_display
+  end
+
+  def currency
+    self.activity.currency
+  end
+
+  def calculated_amount_currency
+    n2c(self.calculated_amount, self.currency).to_s
+  end
 
   def self.update_codings(code_assignments, activity)
     if code_assignments

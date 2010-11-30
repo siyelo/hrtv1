@@ -1,0 +1,10 @@
+%h1 Activities
+
+%table
+  %thead
+    %tr
+      %th Activity
+  %tbody
+    - @activities.each do |act|
+      %tr{:class => cycle("even", "odd")}
+        %td= link_to "#{h act.name}", admin_district_activity_path(@location, act)

@@ -1,0 +1,6 @@
+%h1= h @location.name
+
+%ul#group
+  %li= link_to "Summary", "#"
+  %li= link_to "Organizations", "#"
+  %li= link_to "Activities", admin_district_activities_path(@location)

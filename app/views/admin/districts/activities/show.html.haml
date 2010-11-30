@@ -1,0 +1,49 @@
+- content_for :head do
+  = Seer::init_visualization
+
+%h1= h @activity.name
+
+%table
+  %tbody
+    %tr
+      %td Description:
+      %td= h @activity.description
+    %tr
+      %td Implementer
+      %td= @activity.implementer
+    %tr
+      %td Classification Done ?
+      %td= @activity.classified? ? "Yes" : "No"
+    %tr
+      %td Total Spent
+      %td= n2c(@activity.spend, @activity.currency)
+    %tr
+      %td Total Budgeted
+      %td= n2c(@activity.budget, @activity.currency)
+    %tr
+      %td Approved ?
+      %td= @activity.approved? ? "Yes" : "No"
+
+%ul#group
+  %li= link_to "MTEF", "#"
+  %li= link_to "NSP", "#"
+  %li= link_to "HSSP", "#"
+
+%table
+  %thead
+    %th MTEF Spent
+    %th MTEF Budget
+  %tbody
+    %tr
+      %td
+        %p Pie
+        #mtef_spent_pie
+          = render "pie_chart", :records => @mtef_spent_codings, :div => 'mtef_spent_pie'
+        %p TreeMap
+
+      %td
+        %p Pie
+        #mtef_budget_pie
+          = render "pie_chart", :records => @mtef_budget_codings, :div => 'mtef_budget_pie'
+
+        %p TreeMap

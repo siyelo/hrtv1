@@ -1,5 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-
   map.resources :data_responses, :member => { :review => :get, :submit => :put}
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
@@ -120,13 +119,16 @@ ActionController::Routing::Routes.draw do |map|
                                                 :in_progress  => :get,
                                                 :submitted    => :get},
                                 :member => {:delete => :get}
-    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    admin.resources :districts, :only => [:index, :show] do |districts|
+      districts.resources :activities, :only => [:index, :show], :controller => "Districts::Activities"
+    end
     admin.resources :organizations, :collection => { :duplicate         => :get,
                                                      :remove_duplicate  => :put},
                                     :active_scaffold => true
     admin.resources :reports, :only => [:index]
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
+    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 
   map.namespace :policy_maker do |policy_maker|

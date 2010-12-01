@@ -21,7 +21,6 @@ else
   puts "WARN: configuration file #{config_file_path} not found."
 end
 
-
 Rails::Initializer.run do |config|
 
   config.gem "fastercsv"
@@ -46,3 +45,4 @@ Rails::Initializer.run do |config|
 end
 
 require 'array_extensions'
+require 'version'

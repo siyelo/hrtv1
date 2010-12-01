@@ -127,8 +127,10 @@ class SubActivity < Activity
     end
   end
 
-  def get_assignments_w_adjusted_amounts amount_method, assignments
-    if self.send(amount_method).nil? or self.send(amount_method) <= 0
+  def get_assignments_w_adjusted_amounts(amount_method, assignments)
+    sub_activity_amount = self.send(amount_method) || 0
+    activity_amount = activity.send(amount_method) || 0
+    if sub_activity_amount <= 0
       []
     else
       new_assignments = []
@@ -136,7 +138,8 @@ class SubActivity < Activity
         new_ca = CodeAssignment.new
         new_ca.type = ca.type
         new_ca.code_id = ca.code_id
-        new_ca.cached_amount = self.send(amount_method) * ca.calculated_amount / activity.send(amount_method)
+        ca_amount = ca.calculated_amount || 0
+        new_ca.cached_amount = sub_activity_amount * ca_amount / activity_amount
         new_ca.activity_id = self.id
         new_assignments << new_ca
       end
@@ -145,10 +148,12 @@ class SubActivity < Activity
   end
 
   private
-  def update_counter_cache
-    self.data_response.sub_activities_count = data_response.sub_activities.count
-    self.data_response.save(false)
-  end
+
+    def update_counter_cache
+      self.data_response.sub_activities_count = data_response.sub_activities.count
+      self.data_response.save(false)
+    end
+
 end
 
 

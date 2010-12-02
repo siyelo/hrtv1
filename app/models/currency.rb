@@ -3,6 +3,7 @@ class Currency < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: currencies
@@ -11,5 +12,6 @@ end
 #  toRWF  :decimal(, )
 #  symbol :string(255)
 #  name   :string(255)
+#  toUSD  :decimal(, )
 #
 

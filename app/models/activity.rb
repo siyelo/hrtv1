@@ -42,7 +42,9 @@ class Activity < ActiveRecord::Base
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-  has_many :sub_activities, :class_name => "SubActivity", :foreign_key => :activity_id, :dependent => :destroy
+  has_many :sub_activities, :class_name => "SubActivity",
+                            :foreign_key => :activity_id,
+                            :dependent => :destroy
   has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 
@@ -346,172 +348,145 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def deep_clone
+    clone = self.clone
+    # HABTM's
+    %w[locations projects organizations beneficiaries].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc))
+    end
+    # has-many's
+    %w[code_assignments].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
+    end
+    clone
+  end
+
   private
-  def update_counter_cache
-    self.data_response.activities_count = data_response.activities.only_simple.count
-    self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
-    self.data_response.save(false)
-  end
 
-  def get_sum(code_roots, assignments)
-    sum = 0
-    code_roots.each do |code|
-      sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
+    def update_counter_cache
+      self.data_response.activities_count = data_response.activities.only_simple.count
+      self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
+      self.data_response.save(false)
     end
-    sum
-  end
 
-  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
-  def max_for_coding(type)
-    case type.to_s
-    when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
-      max = budget
-    when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
-      max = spend
-    end
-  end
-
-  def set_classified_amount_cache(type)
-    amount = type.codings_sum(type.available_codes(self), self, max_for_coding(type))
-    self.send("#{type}_amount=",  amount)
-  end
-
-  def district_coding(klass, assignments, amount)
-   #TODO we will want to be able to override / check against the derived district codings
-   if !assignments.empty?
-     return assignments
-   elsif !sub_activities.empty?
-     return district_codings_from_sub_activities(klass, amount)
-   elsif amount
-      #create even split across locations
-      even_split = []
-      locations.each do |l|
-        ca = klass.new
-        ca.activity_id = self.id
-        ca.code_id = l.id
-        ca.cached_amount = amount / locations.size
-        ca.amount = amount / locations.size
-        even_split << ca
+    def get_sum(code_roots, assignments)
+      sum = 0
+      code_roots.each do |code|
+        sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
       end
-      even_split
-    else
-      assignments
+      sum
     end
-  end
 
-  def district_codings_from_sub_activities(klass, amount)
-    districts_hash = {}
-    Location.all.each do |l|
-      districts_hash[l] = 0
-    end
-    sub_activities.each do |s|
-      s.code_assignments.select{|ca| ca.type == klass.to_s}.each do |ca|
-        districts_hash[ca.code] += ca.cached_amount
+    # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
+    def max_for_coding(type)
+      case type.to_s
+      when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+        max = budget
+      when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+        max = spend
       end
     end
-    districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
-  end
 
-  # removes code assignments for non-existing locations for this activity
-  def remove_district_codings
-    activity_id = self.id
-    location_ids = locations.map(&:id)
-    code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-    deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                              {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
+    def set_classified_amount_cache(type)
+      amount = type.codings_sum(type.available_codes(self), self, max_for_coding(type))
+      self.send("#{type}_amount=",  amount)
+    end
 
-    # only if there are deleted code assignments, update the district cached amounts
-    if deleted_count > 0
-      code_assignment_types.each do |type|
-        set_classified_amount_cache(type)
+    def district_coding(klass, assignments, amount)
+     #TODO we will want to be able to override / check against the derived district codings
+     if !assignments.empty?
+       return assignments
+     elsif !sub_activities.empty?
+       return district_codings_from_sub_activities(klass, amount)
+     elsif amount
+        #create even split across locations
+        even_split = []
+        locations.each do |l|
+          ca = klass.new
+          ca.activity_id = self.id
+          ca.code_id = l.id
+          ca.cached_amount = amount / locations.size
+          ca.amount = amount / locations.size
+          even_split << ca
+        end
+        even_split
+      else
+        assignments
       end
     end
-  end
 
-  def approved_activity_cannot_be_changed
-    errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
-  end
-
-  def coding_treemap(type, total_amount)
-    code_roots  = type.available_codes(self)
-    assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
-
-    data_rows = []
-    treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
-    data_rows << [treemap_root, nil, 0, 0] #TODO amount
-
-    code_roots.each do |code|
-      build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
+    def district_codings_from_sub_activities(klass, amount)
+      districts_hash = {}
+      Location.all.each do |l|
+        districts_hash[l] = 0
+      end
+      sub_activities.each do |s|
+        s.code_assignments.select{|ca| ca.type == klass.to_s}.each do |ca|
+          districts_hash[ca.code] += ca.cached_amount
+        end
+      end
+      districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
     end
-    return data_rows
-  end
 
-  def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
-    if assignments.has_key?(code.id)
-      percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
-      label       = "#{percentage}%: #{code.to_s_prefer_official}"
-      data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
-      unless code.leaf?
-        code.children.each do |child|
-          build_treemap_rows(data_rows, child, label, total_amount, assignments)
+    # removes code assignments for non-existing locations for this activity
+    def remove_district_codings
+      activity_id = self.id
+      location_ids = locations.map(&:id)
+      code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
+      deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
+                                {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
+
+      # only if there are deleted code assignments, update the district cached amounts
+      if deleted_count > 0
+        code_assignment_types.each do |type|
+          set_classified_amount_cache(type)
         end
       end
     end
-  end
 
-  def districts_treemap(code_assignments, total_amount)
-    data_rows = []
-    treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
-    data_rows << [treemap_root, nil, 0, 0]
-    code_assignments.each do |assignment|
-      percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
-      label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
-      data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
+    def approved_activity_cannot_be_changed
+      errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
     end
-    data_rows
-  end
-end
 
-# == Schema Information
-#
-# Table name: activities
-#
-#  id                                    :integer         primary key
-#  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
-#  provider_id                           :integer
-#  description                           :text
-#  type                                  :string(255)
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
-#  spend                                 :decimal(, )
-#  text_for_provider                     :text
-#  text_for_targets                      :text
-#  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer
-#  activity_id                           :integer
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
-#  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  use_budget_codings_for_spend          :boolean         default(FALSE)
-#  budget_q1                             :decimal(, )
-#  budget_q2                             :decimal(, )
-#  budget_q3                             :decimal(, )
-#  budget_q4                             :decimal(, )
-#  budget_q4_prev                        :decimal(, )
+    def coding_treemap(type, total_amount)
+      code_roots  = type.available_codes(self)
+      assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
+
+      data_rows = []
+      treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
+      data_rows << [treemap_root, nil, 0, 0] #TODO amount
+
+      code_roots.each do |code|
+        build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
+      end
+      return data_rows
+    end
+
+    def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
+      if assignments.has_key?(code.id)
+        percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
+        label       = "#{percentage}%: #{code.to_s_prefer_official}"
+        data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
+        unless code.leaf?
+          code.children.each do |child|
+            build_treemap_rows(data_rows, child, label, total_amount, assignments)
+          end
+        end
+      end
+    end
+
+    def districts_treemap(code_assignments, total_amount)
+      data_rows = []
+      treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
+      data_rows << [treemap_root, nil, 0, 0]
+      code_assignments.each do |assignment|
+        percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
+        label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
+        data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
+      end
+      data_rows
+    end
+end
 
 # == Schema Information
 #
@@ -553,5 +528,7 @@ end
 #  budget_q3                             :decimal(, )
 #  budget_q4                             :decimal(, )
 #  budget_q4_prev                        :decimal(, )
+#  comments_count                        :integer         default(0)
+#  sub_activities_count                  :integer         default(0)
 #
 

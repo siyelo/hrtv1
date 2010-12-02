@@ -152,26 +152,32 @@ class DataResponse < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: data_responses
 #
-#  id                               :integer         primary key
-#  data_element_id                  :integer
-#  data_request_id                  :integer         indexed
-#  complete                         :boolean         default(FALSE)
-#  created_at                       :timestamp
-#  updated_at                       :timestamp
-#  organization_id_responder        :integer         indexed
-#  currency                         :string(255)
-#  fiscal_year_start_date           :date
-#  fiscal_year_end_date             :date
-#  contact_name                     :string(255)
-#  contact_position                 :string(255)
-#  contact_phone_number             :string(255)
-#  contact_main_office_phone_number :string(255)
-#  contact_office_location          :string(255)
-#  submitted                        :boolean
-#  submitted_at                     :timestamp
+#  id                                :integer         primary key
+#  data_element_id                   :integer
+#  data_request_id                   :integer         indexed
+#  complete                          :boolean         default(FALSE)
+#  created_at                        :timestamp
+#  updated_at                        :timestamp
+#  organization_id_responder         :integer         indexed
+#  currency                          :string(255)
+#  fiscal_year_start_date            :date
+#  fiscal_year_end_date              :date
+#  contact_name                      :string(255)
+#  contact_position                  :string(255)
+#  contact_phone_number              :string(255)
+#  contact_main_office_phone_number  :string(255)
+#  contact_office_location           :string(255)
+#  submitted                         :boolean
+#  submitted_at                      :timestamp
+#  projects_count                    :integer         default(0)
+#  comments_count                    :integer         default(0)
+#  activities_count                  :integer         default(0)
+#  sub_activities_count              :integer         default(0)
+#  activities_without_projects_count :integer         default(0)
 #
 

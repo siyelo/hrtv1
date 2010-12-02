@@ -11,19 +11,19 @@ class Nsp < Code
   # the default scope assumes a depth-first ordering of nodes,
   # but it seems possible that a given type has children where right-left != 1
   # so we check the type of our children to be sure we're not a leaf...
-  named_scope :leaves,
-              :conditions =>
-                "(rgt - lft = 1)  OR
-                 (rgt - lft > 1  AND
-                   ( codes.type <> (SELECT left.type FROM codes AS left
-                                     WHERE left.parent_id = codes.id) OR
-                     codes.type <> (SELECT right.type FROM codes AS right
-                                     WHERE right.parent_id = codes.id)
-                   )
-                 ) ",
-              :order => quoted_left_column_name
+#  named_scope :leaves,
+#              :conditions =>
+#                "(rgt - lft = 1)  OR
+#                 (rgt - lft > 1  AND
+#                   ( codes.type <> (SELECT left.type FROM codes AS left
+#                                     WHERE left.parent_id = codes.id) OR
+#                     codes.type <> (SELECT right.type FROM codes AS right
+#                                     WHERE right.parent_id = codes.id)
+#                   )
+#                 ) ",
+#              :order => quoted_left_column_name
 
-  def self.old_leaves
+  def self.leaves
     my_leaves = super()
     leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
     (my_leaves + leaves_with_other_type_kids).uniq

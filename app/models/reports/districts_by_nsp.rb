@@ -2,7 +2,7 @@ require 'fastercsv'
 
 class Reports::DistrictsByNsp < Reports::CodedActivityReport
   include Reports::Helpers
-  
+
   def initialize(activities, report_type)
     @codes_to_include = []
     Nsp.all.each do |e|

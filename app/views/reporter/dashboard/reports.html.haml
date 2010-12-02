@@ -2,7 +2,8 @@
 
 %h2 Reports
 %h3=  link_to "Users In My Organization", users_in_my_organization_path
-%h3=  link_to "All Codes", all_codes_path
+%h3=  link_to "All Codes (from budget and expenditure classifications screen)", all_codes_path
+%br
 - @data_responses.each do |response|
   %h3=  link_to "Activities Grouped by NSP", activities_by_nsp_url(:id => response.id, :type => :budget)
   %h3=  link_to "Districts Grouped by NSP", districts_by_nsp_url(:id => response.id, :type => :budget)

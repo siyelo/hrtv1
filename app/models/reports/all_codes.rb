@@ -35,6 +35,6 @@ class Reports::AllCodes < Reports::CodedActivityReport
   def header(max_level)
     row = []
     (max_level).times{ |i| row << "Code" }
-    row.concat(["short_display", "description", "type", "hssp2_stratobj_val", "official_name"])
+    row.concat(["Simple Display", "Description", "Type (MTEF, NSP, etc)", "HSSP2 Strategic Objective", "Official (long) name"])
   end
 end

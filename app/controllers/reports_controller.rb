@@ -114,6 +114,11 @@ class ReportsController < ApplicationController
     send_csv(rep.csv, "activities_by_full_coding.csv")
   end
 
+  def all_codes
+    rep = Reports::AllCodes.new
+    send_csv(rep.csv, "all_codes.csv")
+  end
+
   def districts_by_full_coding
     set_activities
     rep = Reports::DistrictsByFullCoding.new(@activities, budget_report_type)

@@ -46,3 +46,19 @@ shared_examples_for "comments_cacher" do
     @commentable.reload.comments_count.should == 2
   end
 end
+
+shared_examples_for "location cloner" do
+  it "should clone locations" do
+    @location = Factory(:location)
+    @original.locations << @location
+    save_and_deep_clone
+    @clone.locations.first.should == @location
+  end
+end
+
+def save_and_deep_clone
+  @original.save!
+  @clone = @original.deep_clone
+  @clone.save!
+  @clone.reload #otherwise seems to cache the old has_many associations
+end

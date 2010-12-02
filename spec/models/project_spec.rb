@@ -161,4 +161,34 @@ describe Project do
       it_should_behave_like "comments_cacher"
     end
   end
+  
+  describe "deep cloning" do
+    before :each do
+      @project = Factory(:project)
+      @original = @project #for shared examples
+      @a1 = Factory(:activity, 
+                     :data_response => @project.data_response,
+                     :projects => [@project])
+      @a2 = Factory(:activity, 
+                     :data_response => @project.data_response,
+                     :projects => [@project])
+      save_and_deep_clone
+    end
+    
+    it "should clone associated activities" do
+      @clone.activities.count.should == 2
+      @clone.activities.first.projects.count.should == 2 # old project HABTM reference on the cloned activity
+    end
+    
+    it "should have the correct number of activities after the original project is destroyed" do
+      @project.destroy
+      @clone.reload
+      @clone.activities.count.should == 2
+      @clone.activities.first.projects.count.should == 1
+    end
+    
+    it_should_behave_like "location cloner"
+    
+  end
+
 end

@@ -108,13 +108,33 @@ class Project < ActiveRecord::Base
       to_s
   end
 
-private
+  def deep_clone
+    clone = self.clone
+    # HABTM's
+    %w[locations].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc))
+    end
 
-  def validate_budgets
-    errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
+    # has_many's with deep associations
+    %w[activities].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.deep_clone })
+    end
+
+    # shallow has_many's
+    %w[funding_flows].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
+    end
+    clone
   end
 
+  private
+
+    def validate_budgets
+      errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
+    end
+
 end
+
 
 
 # == Schema Information
@@ -143,5 +163,6 @@ end
 #  budget_q3        :decimal(, )
 #  budget_q4        :decimal(, )
 #  budget_q4_prev   :decimal(, )
+#  comments_count   :integer         default(0)
 #
 

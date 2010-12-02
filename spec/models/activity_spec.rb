@@ -200,4 +200,38 @@ describe Activity do
       activity.reload.sub_activities_count.should == 2
     end
   end
+  
+  describe "deep cloning" do
+    before :each do
+      @activity = Factory(:activity)
+      @original = @activity #for shared examples
+    end
+    
+    it "should clone associated code assignments" do
+      @ca = Factory(:code_assignment, :activity => @activity)
+      save_and_deep_clone
+      @clone.code_assignments.count.should == 1
+      @clone.code_assignments.first.code.should == @ca.code
+      @clone.code_assignments.first.amount.should == @ca.amount
+      @clone.code_assignments.first.activity.should_not == @activity
+      @clone.code_assignments.first.activity.should == @clone
+    end
+    
+    it "should clone organizations" do
+      @orgs = [Factory(:organization), Factory(:organization)]
+      @activity.organizations << @orgs
+      save_and_deep_clone
+      @clone.organizations.should == @orgs
+    end
+    
+    it "should clone beneficiaries" do
+      @benefs = [Factory(:beneficiary), Factory(:beneficiary)]
+      @activity.beneficiaries << @benefs
+      save_and_deep_clone
+      @clone.beneficiaries.should == @benefs
+    end
+    
+    it_should_behave_like "location cloner"
+  end
+
 end

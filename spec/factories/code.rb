@@ -5,4 +5,3 @@ end
 
 Factory.define :mtef_code, :class => Mtef, :parent => :code do |f|
 end
-

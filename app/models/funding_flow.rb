@@ -58,6 +58,7 @@ class FundingFlow < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
@@ -83,5 +84,6 @@ end
 #  budget_q3            :decimal(, )
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
+#  comments_count       :integer         default(0)
 #
 

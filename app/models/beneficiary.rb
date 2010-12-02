@@ -3,6 +3,7 @@ class Beneficiary < Code
 
 end
 
+
 # == Schema Information
 #
 # Table name: codes
@@ -24,5 +25,6 @@ end
 #  hssp2_stratprog_val :string(255)
 #  hssp2_stratobj_val  :string(255)
 #  official_name       :string(255)
+#  comments_count      :integer         default(0)
 #
 

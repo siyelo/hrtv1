@@ -8,6 +8,7 @@ class OtherCost < Activity
 end
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -48,5 +49,7 @@ end
 #  budget_q3                             :decimal(, )
 #  budget_q4                             :decimal(, )
 #  budget_q4_prev                        :decimal(, )
+#  comments_count                        :integer         default(0)
+#  sub_activities_count                  :integer         default(0)
 #
 

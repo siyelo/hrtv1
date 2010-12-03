@@ -1,86 +1,75 @@
 #flashes
   +border-radius(5px)
-  +box-shadow(!very-light-grey, 0, 2px, 5px)
+  +box-shadow($very-light-grey, 0, 2px, 5px)
   margin: 0 auto
   padding-bottom: 1em
   width: 75%
-
   #success, #notice, #warning, #validation_error, #error
     padding: 15px 10px 15px 65px
     background-position: 15px 7px
     background-repeat: no-repeat
     margin-bottom: 5px
-
   #success
-    border-color: #9c9
-    color: #4F8A10
+    border-color: #99cc99
+    color: #4f8a10
     background-image: url(/images/alertsuccess_icon.png)
-    background-color: #DFF2BF
-
+    background-color: #dff2bf
   #notice
-    border-color: #9c9
-    color: #00529B
+    border-color: #99cc99
+    color: #00529b
     background-image: url(/images/alertinfo_icon.png)
-    background-color: #BDE5F8
-
+    background-color: #bde5f8
   #warning
-    border-color: #9c9
-    color: #9F6000
+    border-color: #99cc99
+    color: #9f6000
     background-image: url(/images/alertwarning_icon.png)
-    background-color: #FEEFB3
-
+    background-color: #feefb3
   #validation_error
-    border-color: #c99
-    color: #D63301
+    border-color: #cc9999
+    color: #d63301
     background-image: url(/images/alertvalidation_error_icon.png)
-    background-color: #FFCCBA
-
+    background-color: #ffccba
   #error
-    border-color: #c99
-    color: #D8000C
+    border-color: #cc9999
+    color: #d8000c
     background-image: url(/images/alerterror_icon.png)
-    background-color: #FFBABA
+    background-color: #ffbaba
 
 // Inline flash messages on code assignments page
 .coding_flash
   +border-radius(5px)
-  +box-shadow(!very-light-grey, 0, 2px, 5px)
+  +box-shadow($very-light-grey, 0, 2px, 5px)
   margin: 0 auto
   padding-bottom: 1em
   width: 75%
-
   div
     background-position: 15px 7px
     background-repeat: no-repeat
     padding: 15px 10px 15px 65px
     margin-bottom: 5px
-
     &.error
       background-image: url(/images/alerterror_icon.png)
-      background-color: #FFBABA
-      border-color: #c99
-      color: #D8000C
-
+      background-color: #ffbaba
+      border-color: #cc9999
+      color: #d8000c
     &.notice
       background-image: url(/images/alertinfo_icon.png)
-      background-color: #BDE5F8
-      border-color: #9c9
-      color: #00529B
+      background-color: #bde5f8
+      border-color: #99cc99
+      color: #00529b
 
 // DR Settings Page
 .errorExplanation
-  background-color: #FFCCBA
-  border-color: #c99
-  color: #D63301
+  background-color: #ffccba
+  border-color: #cc9999
+  color: #d63301
   margin-bottom: 20px
   padding-bottom: 10px
   +border-radius(5px)
-  +box-shadow(!very-light-grey, 0, 2px, 5px)
-  
+  +box-shadow($very-light-grey, 0, 2px, 5px)
   p
     font-style: italic
     font-weight: bold
-  
   ul
     font-size: 12px
     list-style: disc

@@ -95,6 +95,10 @@ body.app
       +border-bottom-left-radius
     &:last-child a
       +border-bottom-right-radius
+    a.signin
+      background: $lightest-blue !important
+      &:hover
+        background: white
   /* end */
 
   /* sub-nav styles */
@@ -411,3 +415,7 @@ body#static_page_submit #content .wrapper #main
       color: white
       &:hover
         background: $mid-blue
+
+textarea, input[type=text]
+  font-family: sans-serif
+  font-size: 14px

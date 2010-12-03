@@ -5,6 +5,7 @@ class ChartsController < ApplicationController
     @data_response = DataResponse.available_to(current_user).find(params[:id])
     @assignments = @data_response.activity_coding(params[:codings_type], params[:code_type])
 
+    #/charts/data_response_pie?id=6586&codings_type=CodingBudget&code_type=CostCategory
     send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')
   end
 

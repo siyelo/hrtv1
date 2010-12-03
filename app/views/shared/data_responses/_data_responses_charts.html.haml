@@ -14,14 +14,8 @@
   .tab4{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
     = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => data_response, :element_type => 'data_response'
 
-  /.tab5
-  /  .chart{:id => "data_response_#{data_response.id}_stratprog_budget_pie"}
+  .tab5{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_budget', :element => data_response, :element_type => 'data_response'
 
-  /.tab6
-  /  .chart{:id => "data_response_#{data_response.id}_stratobj_budget_pie"}
-
-  /.tab7
-  /  .chart{:id => "data_response_#{data_response.id}_stratprog_spend_pie"}
-
-  /.tab8
-  /  .chart{:id => "data_response_#{data_response.id}_stratobj_spend_pie"}
+  .tab6{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_spend', :element => data_response, :element_type => 'data_response'

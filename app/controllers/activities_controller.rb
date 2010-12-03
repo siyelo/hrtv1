@@ -17,11 +17,12 @@ class ActivitiesController < ActiveScaffoldController
   map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
 
   active_scaffold :activity do |config|
-    config.list.pagination = false
-    config.columns        = @@shown_columns
-    config.create.columns = @@create_columns
-    config.update.columns = @@update_columns
-    list.sorting          = {:name => 'DESC'}
+    config.list.pagination = true
+    config.list.per_page   = 200
+    config.columns         = @@shown_columns
+    config.create.columns  = @@create_columns
+    config.update.columns  = @@update_columns
+    list.sorting           = {:name => 'DESC'}
 
     config.action_links.add('Classify', @@classify_popup_link_options)
 

@@ -9,11 +9,12 @@ class ClassificationsController < ActiveScaffoldController
 
 
   active_scaffold :activity do |config|
-    config.list.pagination = false
-    config.actions        = [ :list ]
-    config.label          = 'Activity Classifications'
-    config.columns        = @@shown_columns
-    config.list.sorting   = { :description => 'DESC' }
+    config.list.pagination = true
+    config.list.per_page   = 200
+    config.actions         = [ :list ]
+    config.label           = 'Activity Classifications'
+    config.columns         = @@shown_columns
+    config.list.sorting    = { :description => 'DESC' }
 
     config.action_links.add('Classify', @@classify_popup_link_options)
 

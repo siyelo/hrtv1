@@ -30,7 +30,7 @@
         %td=  n2c(project.spend_q4, project.currency || @data_response.currency)
 
     %tr
-      %td Districts:
+      %td== Districts (#{project.locations.count}/#{Location.count}):
       %td
         %ul.dashboard_districts
           - project.locations.map(&:name).each do |loc|

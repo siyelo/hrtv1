@@ -7,7 +7,6 @@
   -# header = "Activities without a Project" if non_linked
   - header = "Other Costs" if other_costs
 
-
   .simple_table
     %table
       %thead
@@ -55,8 +54,6 @@
               %div{:class => 'activity_classifications', :"data-activity_id" => activity.id, :"data-other_costs" => other_costs ? '1' : '0'}
                 = image_tag "ajax-loader.gif"
               -#= render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs, :cost_cat_roots => @cost_cat_roots, :code_roots => (other_costs ? @other_cost_roots : @code_roots)
-
-
 
               .activity_sub_tabs.tabs_nav
                 %ul.inline_alt_tab

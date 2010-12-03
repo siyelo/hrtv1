@@ -68,7 +68,7 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
         # We've got non-report type report type hard coding here
         # so it uses budgets
         a.budget_district_coding.each do |bd|
-          proportion = bd.cached_amount / a.budget
+          proportion = bd.proportion_of_activity
           loc = bd.code
           @district_proportions_hash[a][loc] = proportion
           @districts_hash[code][:total] += h[:leaf_amount] * proportion

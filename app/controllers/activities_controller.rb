@@ -1,13 +1,11 @@
 class ActivitiesController < ActiveScaffoldController
   authorize_resource
 
-  #before_filter :require_admin, :only => [:approve]
-
   before_filter :check_user_has_data_response
 
   include ActivitiesHelper
 
-  @@shown_columns           = [:organization, :projects, :provider, :description, :name, :budget, :spend ]
+  @@shown_columns           = [:organization, :projects, :provider, :description, :name, :spend, :budget]
   @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
   @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
   @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
@@ -48,16 +46,16 @@ class ActivitiesController < ActiveScaffoldController
 
 
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
-
-      end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
       end
+      columns.add_subgroup "Budget (Planned Expenditure)" do |budget_group|
+        budget_group.add :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
+
+      end
     end
 
-    config.columns[:spend].label = "Total Spend GOR FY 09-10"
+    config.columns[:spend].label = "Total Spent GOR FY 09-10"
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
     [:spend, :budget].each do |c|
       quarterly_amount_field_options config.columns[c]
@@ -80,7 +78,7 @@ class ActivitiesController < ActiveScaffoldController
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:spend_q4_prev].label = "Spent in your FY 08-09 Q4"
     config.columns[:budget_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:budget_q4_prev]
     config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
@@ -125,4 +123,10 @@ class ActivitiesController < ActiveScaffoldController
     render :nothing => true
   end
 
+  def classifications
+    activity = Activity.find(params[:id])
+    other_costs = params[:other_costs] == '1' ? true : false
+    code_roots =  other_costs ? OtherCostCode.roots : Code.for_activities.roots
+    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.for_activities.roots)}
+  end
 end

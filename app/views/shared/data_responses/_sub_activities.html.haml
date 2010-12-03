@@ -5,11 +5,11 @@
         %th Sub-Implementer
         %th Budget
         %th Budget percentage
-        %th Spend
-        %th Spend percentage
+        %th Spent
+        %th Spent percentage
     %tbody
       /TODO sort by budget & calculate %'s if missing
-      - activity.sub_activities.each do |sub_activity|
+      - activity.sub_activities.find(:all, :include => :provider).each do |sub_activity|
         %tr.sub_activity.entry_header
           %td=  sub_activity.implementer.try(:name)
           %td= n2c(sub_activity.budget, sub_activity.currency)

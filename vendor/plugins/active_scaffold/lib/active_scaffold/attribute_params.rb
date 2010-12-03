@@ -56,11 +56,11 @@ module ActiveScaffold
         if multi_parameter_attributes.has_key? column.name
           parent_record.send(:assign_multiparameter_attributes, multi_parameter_attributes[column.name])
         elsif attributes.has_key? column.name
-          value = column_value_from_param_value(parent_record, column, attributes[column.name]) 
+          value = column_value_from_param_value(parent_record, column, attributes[column.name])
 
           # we avoid assigning a value that already exists because otherwise has_one associations will break (AR bug in has_one_association.rb#replace)
           parent_record.send("#{column.name}=", value) unless parent_record.send(column.name) == value
-          
+
         # plural associations may not actually appear in the params if all of the options have been unselected or cleared away.
         # the "form_ui" check is necessary, becuase without it we have problems
         # with subforms. the UI cuts out deep associations, which means they're not present in the
@@ -74,6 +74,12 @@ module ActiveScaffold
       if parent_record.new_record?
         parent_record.class.reflect_on_all_associations.each do |a|
           next unless [:has_one, :has_many].include?(a.macro) and not (a.options[:through] || a.options[:finder_sql])
+
+          # GR: Monkey patch. ffffuuuu AS
+          #  I'd rather let the bloody model save, than figure out how to make
+          # the soon-to-be-thrown-out AS work with the lazy-loaded organization.id in project.in_flows/out_flows
+          next unless ['out_flows', 'in_flows'].include?(a.name)
+
           next unless association_proxy = parent_record.send(a.name)
 
           raise ActiveScaffold::ReverseAssociationRequired, "Association #{a.name}: In order to support :has_one and :has_many where the parent record is new and the child record(s) validate the presence of the parent, ActiveScaffold requires the reverse association (the belongs_to)." unless a.reverse
@@ -85,7 +91,7 @@ module ActiveScaffold
 
       parent_record
     end
-    
+
     def manage_nested_record_from_params(parent_record, column, attributes)
       record = find_or_create_for_params(attributes, column, parent_record)
       if record
@@ -95,7 +101,7 @@ module ActiveScaffold
       end
       record
     end
-    
+
     def column_value_from_param_value(parent_record, column, value)
       # convert the value, possibly by instantiating associated objects
       if value.is_a?(Hash)

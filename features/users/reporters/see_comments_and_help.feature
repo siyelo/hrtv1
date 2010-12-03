@@ -5,7 +5,7 @@ Feature: Reporter can see comments & help for a data response
 
 Scenario Outline: See comments/help
   Given a basic org + reporter profile, with data response, signed in
-  Given model help for "<page>" page
+  And model help for "<page>" page
   When I go to the <page> page
   Then I should see "General Questions / Comments"
   And I should see "Help"

@@ -34,21 +34,21 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
   Then I should see "TB Treatment Project"
   And I should see "UNDP"
   And I should see "1000.00"
-  
+
 Scenario: Creates an implementer funding flow
-  Given the following organizations 
-    | name   |
-    | UNDP   |
-    | UNAIDS |
-    | WHO    |
-  Given the following reporters 
-     | name         | organization |
-     | undp_user    | UNDP         |
-     | un_aids_user | UNAIDS       |
-  Given a data request with title "Req1" from "UNAIDS"
-  Given a data response to "Req1" by "UNDP"
-  Given a project with name "TB Treatment Project with more than 20 chars" for request "Req1" and organization "UNDP"
-  Given an implementer "WHO" for project "TB Treatment Project with more than 20 chars"
+  Given an organization exists with name: "UNAIDS"
+  And a data_request exists with title: "Req1", requesting_organization: the organization
+  And a reporter exists with username: "un_aids_user", organization: the organization
+
+  Given an organization exists with name: "WHO"
+
+  Given an organization exists with name: "UNDP"
+  And a reporter exists with username: "undp_user", organization: the organization
+  And a data_response exists with data_request: the data_request, responding_organization: the organization
+  And a project exists with name: "TB Treatment Project with more than 20 chars", data_response: the data_response
+
+  Given an implementer "WHO" who we gave "20000000.00" for project "TB Treatment Project with more than 20 chars"
+
   Given I am signed in as "undp_user"
   When I follow "Dashboard"
   And I follow "Edit"

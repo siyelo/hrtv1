@@ -1,0 +1,10 @@
+.commentable
+  .name
+    //= commentable.name
+    COMMENTS
+
+.comments_bubble
+- commentable.comments.each do |comment|
+  .comment_entry
+    .title= comment.title
+    .comment= comment.comment

@@ -1,7 +1,5 @@
-require File.join(File.dirname(__FILE__),'./blueprint.rb')
-
 Factory.define :model_help, :class => ModelHelp do |f|
-  f.model_name  { Sham.app_model_name }
-  f.short       { Sham.sentence }
-  f.long        { Sham.description }
+  f.model_name  { 'model_name' }
+  f.short       { 'short model help' }
+  f.long        { 'long model help' }
 end

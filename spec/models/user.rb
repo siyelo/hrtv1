@@ -7,7 +7,7 @@ describe User do
     it { should be_valid }
     it { should validate_presence_of(:username) }
     it { should validate_presence_of(:email) }
-    it { should validate_presence_of(:organization) }
+    it { should validate_presence_of(:organization_id) }
     it { should have_many :data_responses }
     it { should belong_to :organization }
     it { should belong_to :current_data_response }

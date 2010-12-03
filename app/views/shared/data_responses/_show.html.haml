@@ -10,25 +10,24 @@
   %table
     %thead
       %th Projects
-      %th Spend Total
+      %th Spent Total
       %th Budget Total
       %th Activities
       %th Sub Activities
-      %th Spend Total
+      %th Spent Total
       %th Budget Total
       %th Unclassified Activities
     %tbody
       %tr
-        %td= @data_response.projects.count
-        %td= n2c @data_response.total_project_spend
-        %td= n2c @data_response.total_project_budget
-        %td= @data_response.activity_count
-        %td= @data_response.sub_activity_count
+        %td= @data_response.projects.size
+        %td= n2c(@data_response.total_project_spend, @data_response.currency)
+        %td= n2c(@data_response.total_project_budget, @data_response.currency)
+        %td= @data_response.activities_count
+        %td= @data_response.sub_activities_count
         /should we include other costs below? we are now
-        %td= n2c @data_response.total_activity_spend
-        %td= n2c @data_response.total_activity_budget
-        %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activity_count}"
-
+        %td= n2c(@data_response.total_activity_spend, @data_response.currency)
+        %td= n2c(@data_response.total_activity_budget, @data_response.currency)
+        %td= "#{@data_response.unclassified_activities_count} / #{@data_response.activities_count}"
 
 .details_and_charts
   = render 'shared/data_responses/response_details'
@@ -37,9 +36,9 @@
 
 #data_response_sub_tabs.tabs_nav
   %ul.inline_alt_tab
-    %li{:class => 'selected' }= link_to "Comments (#{@data_response.comments.count})", "#", :class => "comment_details"
+    %li{:class => 'selected' }= link_to "Comments (#{@data_response.comments.size})", "#", :class => "comment_details"
     %li= link_to "Projects (#{@projects.count})", "#", :id => "project_details"
-    %li= link_to "Activities without a Project (#{@activities_without_projects.count})", "#", :class => "activity_details"
+    %li= link_to "Activities without a Project (#{@data_response.activities_without_projects_count})", "#", :class => "activity_details"
 
 .tabs
   .tab1

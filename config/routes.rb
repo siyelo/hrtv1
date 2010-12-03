@@ -26,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
 
 
   map.resources :activities,
-                :member => { :approve => :put, :use_budget_codings_for_spend => :put },
+                :member => { :approve => :put, :use_budget_codings_for_spend => :put, :classifications => :get },
                 :active_scaffold => true          do |activity|
 
     map.resources :classifications, :member => { :popup_classification => :get }, :active_scaffold => true
@@ -56,8 +56,10 @@ ActionController::Routing::Routes.draw do |map|
   map.activities_by_district_sub_activities 'activities_by_district_sub_activities', :controller => 'reports', :action => 'activities_by_district_sub_activities'
   map.activities_by_budget_coding 'activities_by_budget_coding', :controller => 'reports', :action => 'activities_by_budget_coding'
   map.activities_by_budget_cost_cat 'activities_by_budget_cost_cat', :controller => 'reports', :action => 'activities_by_budget_cost_cat'
+  map.activities_by_budget_districts 'activities_by_budget_districts', :controller => 'reports', :action => 'activities_by_budget_districts'
   map.activities_by_expenditure_coding 'activities_by_expenditure_coding', :controller => 'reports', :action => 'activities_by_expenditure_coding'
   map.activities_by_expenditure_cost_cat 'activities_by_expenditure_cost_cat', :controller => 'reports', :action => 'activities_by_expenditure_cost_cat'
+  map.activities_by_expenditure_districts 'activities_by_expenditure_districts', :controller => 'reports', :action => 'activities_by_expenditure_districts'
   map.activity_report 'activity_report', :controller => 'reports', :action => 'activity_report'
   map.activities_by_district_new 'activities_by_district_new', :controller => 'reports', :action => 'activities_by_district_new'
   map.activities_by_budget_coding_new 'activities_by_budget_coding_new', :controller => 'reports', :action => 'activities_by_budget_coding_new'
@@ -87,7 +89,14 @@ ActionController::Routing::Routes.draw do |map|
                     :controller => 'reports',
                     :action => 'map_districts_by_full_coding',
                     :type => Regexp.new(ReportsController::TYPE_MAP.keys.join('|'))
+  map.map_districts_by_partner 'map_districts_by_partner/:type',
+                    :controller => 'reports',
+                    :action => 'map_districts_by_partner'
+  map.map_facilities_by_partner 'map_facilities_by_partner/:type',
+                    :controller => 'reports',
+                    :action => 'map_facilities_by_partner'
   map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
+  map.all_codes 'all_report', :controller => 'reports', :action => 'all_codes'
   map.users_in_my_organization 'users_in_my_organization', :controller => 'reports', :action => 'users_in_my_organization'
 
   # these routes make the pages accessible without security checks

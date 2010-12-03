@@ -37,3 +37,6 @@ pull*.dat
 # heroku vars files
 config/settings.secret.yml
 config/settings.loader*
+
+# diffmerge temp files
+___*

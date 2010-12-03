@@ -1,84 +1,120 @@
 Given /^a project$/ do
-  @project = Factory.create(:project)
+  @project = Factory(:project)
 end
 
-Given /^a project with name "([^\"]*)"$/ do |name|
-  @project = Factory.create(:project, :name => name)
-end
+# You shouldn't create project records wihtout a DR/Org !!
+#Given /^a project with name "([^\"]*)"$/ do |name|
+#  @project = Factory(:project, :name => name)
+#end
 
 Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
-  @project = Factory.create(:project, 
-                            :name => project_name, 
-                            :data_response => get_data_response(data_request_name, organization_name))
+  @project = Factory(:project, 
+                    :name          => project_name, 
+                    :data_response => get_data_response(data_request_name, organization_name))
 end
 
 Given /^an implementer "([^"]*)" for project "([^"]*)"$/ do |implementer_name, project_name|
-  @implementer = Factory.create(:implementer, 
-                                :project => Project.find_by_name(project_name),  
-                                :organization_id_from => Organization.find_by_name(implementer_name))
+  steps %Q{
+    Given an implementer "#{implementer_name}" who we gave "20000000" for project "#{project_name}"
+  }
+end
+
+Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ do |implementer_name, budget, project_name|
+  @project = Project.find_by_name(project_name)
+  @implementer = Factory(:implementer, 
+                          :project       => @project,  
+                          :from          => @project.organization,
+                          :budget        => budget,
+                          :to            => Organization.find_by_name(implementer_name),
+                          :data_response => @project.data_response)
 end
 
 Given /^an activity with name "([^\"]*)"$/ do |name|
-  @activity = Factory.create(:activity, :name => name)
+  @activity = Factory(:activity, :name => name)
 end
 
 Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory.create(:activity, 
-                             :name => name, 
-                             :projects => [Project.find_by_name(project)])
+  @activity = Factory(:activity, 
+                       :name => name, 
+                       :projects => [Project.find_by_name(project)])
 end
 
 Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
-  @activity = Factory.create(:activity, 
-                             :name => activity_name, 
-                             :data_response => get_data_response(data_request_name, organization_name), 
-                             :projects => [Project.find_by_name(project_name)])
+  @activity = Factory(:activity, 
+                       :name          => activity_name, 
+                       :data_response => get_data_response(data_request_name, organization_name), 
+                       :projects      => [Project.find_by_name(project_name)])
+
 end
 
 Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
   # assumes @activity is set !
-  @code_assignment = Factory.create(:coding_budget,
-                                    :activity => @activity,
-                                    :code => Code.find_by_short_display(code_name),
-                                    :amount => amount,
-                                    :cached_amount => amount)
+  @code_assignment = Factory(:coding_budget,
+                             :activity => @activity,
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
   @activity.reload
+end
+
+# Uses "the activity" definition from Pickle
+Given /^a budget coding code_name: "([^"]*)", activity: "([^"]*)", amount: "([^"]*)"$/ do |code_name, activity, amount|
+  @code_assignment = Factory(:coding_budget,
+                             :activity => model(activity),
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
+end
+
+Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$/ do |name, code_name, fields|
+  code_assignments = create_model(name, fields)
+  code_assignments.merge(:code => Code.find_by_short_display(code_name))
 end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:project,  { :data_response => get_data_response(hash.delete("request"), hash.delete("organization")) }.merge(hash) )
+    Factory(:project, { :data_response => get_data_response(hash.delete("request"), 
+                                                            hash.delete("organization")) 
+                      }.merge(hash) )
   end
 end
 
 Given /^the following comments$/ do |table|
   table.hashes.each do |hash|
     commentable = Project.find_by_name(hash.delete("project"))
-    Factory.create(:comment, hash.merge(:commentable => commentable))
+    Factory(:comment, hash.merge(:commentable => commentable))
   end
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory(:reporter, 
+                :username              => name, 
+                :email                 => email, 
+                :password              => password, 
+                :password_confirmation => password)
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory.create(:activity_manager, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory(:activity_manager, 
+                :username              => name, 
+                :email                 => email, 
+                :password              => password, 
+                :password_confirmation => password)
 end
 
 Given /^the following reporters$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
-    Factory.create(:reporter, { :username => username,
-                   :organization_id => org.id
-    }.merge(hash) )
+    Factory(:reporter, { :username => username,
+                         :organization => org
+                       }.merge(hash) )
   end
 end
 
 Given /^the root codes$/ do |table|
   table.hashes.each do |hash|
-    f = Factory.create(:root_code, hash.merge(:type => 'Nha'))
+    f = Factory(:root_code, hash.merge(:type => 'Nha'))
   end
 end
 
@@ -86,12 +122,11 @@ Given /^the following activity managers$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
-    Factory.create(:activity_manager, { :username => username,
-                   :organization_id => org.id
-    }.merge(hash) )
+    Factory(:activity_manager, { :username => username,
+                                 :organization => org
+                               }.merge(hash) )
   end
 end
-
 
 
 Given /^I am signed in as "([^"]*)"$/ do |name|
@@ -124,46 +159,54 @@ Given /^I am signed in as an admin$/ do
   }
 end
 
-Given /^the following admin$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
-
-
 Given /^an organization with name "([^"]*)"$/ do |name|
-  @organization = Factory.create(:organization, :name => name)
+  @organization = Factory(:organization, :name => name)
 end
 
 Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
   org  = Organization.find_by_name(requestor)
-  @data_request = Factory.create(:data_request, :title => title, :requesting_organization => org)
+  @data_request = Factory(:data_request, 
+                          :title                   => title, 
+                          :requesting_organization => org)
+
 end
 
 Given /^the following organizations$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:organization, hash)
+    Factory(:organization, hash)
   end
 end
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
-  @organization = Factory.create(:organization, :name => org_name)
-  @user = Factory.create(:reporter, :username => name, :email => 'frank@f.com', 
-                         :password => 'password', :password_confirmation => 'password',
-                         :organization => @organization)
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:reporter, 
+                  :username => name, 
+                  :email => 'frank@f.com', 
+                  :password => 'password', 
+                  :password_confirmation => 'password',
+                  :organization => @organization)
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
-  @organization = Factory.create(:organization, :name => org_name)
-  @user = Factory.create(:activity_manager, :username => name, :email => 'frank@f.com', 
-                         :password => 'password', :password_confirmation => 'password',
-                         :organization => @organization)
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:activity_manager, 
+                  :username              => name, 
+                  :email                 => 'frank@f.com', 
+                  :password              => 'password', 
+                  :password_confirmation => 'password',
+                  :organization          => @organization)
+
 end
 
 Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
-  @organization = Factory.create(:organization, :name => org_name)
-  @user = Factory.create(:admin, :username => name, :email => 'frank@f.com', 
-                         :password => 'password', :password_confirmation => 'password',
-                         :organization => @organization)
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:admin, 
+                  :username              => name, 
+                  :email                 => 'frank@f.com', 
+                  :password              => 'password', 
+                  :password_confirmation => 'password',
+                  :organization          => @organization)
+
 end
 
 Given /^the following funding flows$/ do |table|
@@ -171,16 +214,17 @@ Given /^the following funding flows$/ do |table|
     to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
-    
-    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                   :project_id => project.id, 
-                   :organization_id_from => from_org.id
-    }.merge(hash) )
+    Factory(:funding_flow, { 
+                            :project       => project,
+                            :to            => to_org.id,  
+                            :from          => from_org,
+                            :data_response => project.data_response
+                          }.merge(hash) )
   end
 end
 
 Then /^debug$/ do
-  debugger # express the regexp above with the code you wish you had
+  debugger 
 end
 
 Then /^I should see the "([^"]*)" tab is active$/ do |text|
@@ -198,7 +242,6 @@ end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#admin"
     Then I should see "My Profile" within "div#admin"
     Then I should see "Sign out" within "div#admin"
   }
@@ -259,8 +302,9 @@ end
 
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|  
-  @data_response = Factory.create(:data_response, :data_request => DataRequest.find_by_title(request),
-                                  :responding_organization => Organization.find_by_name(org))
+  @data_response = Factory(:data_response, 
+                            :data_request => DataRequest.find_by_title(request),
+                            :responding_organization => Organization.find_by_name(org))
 end
 
 Then /^wait a few moments$/ do
@@ -271,20 +315,34 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end
 
+# keep this
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+  #steps %Q{ 
+    #Given the following organizations 
+      #| name   |
+      #| UNDP   |
+      #| GoR    |
+    #Given the following reporters 
+       #| name         | organization |
+       #| undp_user    | UNDP         |
+    #Given a data request with title "Req1" from "GoR"
+    #Given a data response to "Req1" by "UNDP"
+    #Given I am signed in as "undp_user"
+    #When I follow "Dashboard"
+    #And I follow "Edit"
+  #}
+
   steps %Q{ 
-    Given the following organizations 
-      | name   |
-      | UNDP   |
-      | GoR    |
-    Given the following reporters 
-       | name         | organization |
-       | undp_user    | UNDP         |
-    Given a data request with title "Req1" from "GoR"
-    Given a data response to "Req1" by "UNDP"
-    Given I am signed in as "undp_user"
-    When I follow "Dashboard"
-    And I follow "Edit"
+    Given an organization exists with name: "GoR"
+    And a data_request exists with title: "Req1", requesting_organization: the organization
+
+    And an organization exists with name: "UNDP"
+    And a data_response exists with data_request: the data_request, responding_organization: the organization
+    And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
+    And a project exists with name: "TB Treatment Project", data_response: the data_response
+    And an activity exists with name: "TB Drugs procurement", data_response: the data_response
+    And the project is one of the activity's projects
+    And I am signed in as "undp_user"
   }
 end
 
@@ -310,7 +368,7 @@ Given /^organizations, reporters, data request, data responses, projects$/ do
 end
 
 Given /^a model help for "([^"]*)"$/ do |model_name|
-  Factory.create(:model_help, :model_name => model_name)
+  Factory(:model_help, :model_name => model_name)
 end
 
 Given /^model help for "([^"]*)" page$/ do |page|
@@ -339,33 +397,6 @@ Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_
   activity = Activity.find_by_name(activity_name)
   location = Location.find_by_short_display(location_name)
   activity.locations << location
-end
-
-When /^I will confirm a js popup$/ do
-  page.evaluate_script('window.confirm = function() { return true; }')
-end
-
-
-Then /^the cached field "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
-  find(selector).value.should == value
-end
-
-Then /^the cached field "([^"]*)" within "([^"]*)" should contain "([^"]*)"$/ do |field, selector, value|
-  within(selector) do
-    find(field).value.should == value
-  end
-end
-
-class Capybara::XPath
-  class << self
-    def element(locator)
-      append("//*[normalize-space(text())=#{s(locator)}]")
-    end
-  end
-end
-
-When /^I click element "([^"]*)"$/ do |selector|
-  find(selector).click
 end
 
 Then /^I can manage the comments$/ do

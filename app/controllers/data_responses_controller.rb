@@ -42,7 +42,7 @@ class DataResponsesController < ApplicationController
       @data_response.submitted_at = Time.now
       @data_response.save
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      redirect_to data_response_url(@data_response)
+      redirect_to review_data_response_url(@data_response)
     else
       flash[:error] = "You cannot submit unless you have coded all your activities and other costs."
       redirect_to review_data_response_url(@data_response)

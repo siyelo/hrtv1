@@ -54,6 +54,11 @@ class Reports::DistrictsByFullCoding < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
+    # I didn't know that when you take a super class, when you get instances of the class,
+    # they are of the type you called the named_scopes on, even though they have a different type
+    # TODO there are hidden bugs potentially all over the place where we find CodeAssignment.with_type !
+    # argh!
+    # cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
     cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
     activities = self.cache_activities(cas)
     activities.each do |a, h|
@@ -68,7 +73,10 @@ class Reports::DistrictsByFullCoding < Reports::CodedActivityReport
         # We've got non-report type report type hard coding here
         # so it uses budgets
         a.budget_district_coding.each do |bd|
-          proportion = bd.cached_amount / a.budget
+          #old buggy division when budget nil
+          # proportion = bd.cached_amount / a.budget
+          # new hot CodeAssignment instance method
+          proportion = bd.proportion_of_activity
           loc = bd.code
           @district_proportions_hash[a][loc] = proportion
           @districts_hash[code][:total] += h[:leaf_amount] * proportion

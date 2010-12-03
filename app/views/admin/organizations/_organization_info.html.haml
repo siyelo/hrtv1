@@ -24,6 +24,10 @@
     = @organization.in_flows.count
 
   %li
+    Implementer for:
+    = @organization.provider_for.count
+
+  %li
     Total locations:
     = @organization.locations.count
 

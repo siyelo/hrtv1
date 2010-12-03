@@ -11,19 +11,19 @@ class Nsp < Code
   # the default scope assumes a depth-first ordering of nodes,
   # but it seems possible that a given type has children where right-left != 1
   # so we check the type of our children to be sure we're not a leaf...
-  named_scope :leaves,
-              :conditions =>
-                "(rgt - lft = 1)  OR
-                 (rgt - lft > 1  AND
-                   ( codes.type <> (SELECT left.type FROM codes AS left
-                                     WHERE left.parent_id = codes.id) OR
-                     codes.type <> (SELECT right.type FROM codes AS right
-                                     WHERE right.parent_id = codes.id)
-                   )
-                 ) ",
-              :order => quoted_left_column_name
+#  named_scope :leaves,
+#              :conditions =>
+#                "(rgt - lft = 1)  OR
+#                 (rgt - lft > 1  AND
+#                   ( codes.type <> (SELECT left.type FROM codes AS left
+#                                     WHERE left.parent_id = codes.id) OR
+#                     codes.type <> (SELECT right.type FROM codes AS right
+#                                     WHERE right.parent_id = codes.id)
+#                   )
+#                 ) ",
+#              :order => quoted_left_column_name
 
-  def self.old_leaves
+  def self.leaves
     my_leaves = super()
     leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
     (my_leaves + leaves_with_other_type_kids).uniq
@@ -95,3 +95,29 @@ end
 #  hssp2_stratobj_val  :string(255)
 #  official_name       :string(255)
 #
+
+
+# == Schema Information
+#
+# Table name: codes
+#
+#  id                  :integer         primary key
+#  parent_id           :integer
+#  lft                 :integer
+#  rgt                 :integer
+#  short_display       :string(255)
+#  long_display        :string(255)
+#  description         :text
+#  created_at          :timestamp
+#  updated_at          :timestamp
+#  start_date          :date
+#  end_date            :date
+#  replacement_code_id :integer
+#  type                :string(255)
+#  external_id         :string(255)
+#  hssp2_stratprog_val :string(255)
+#  hssp2_stratobj_val  :string(255)
+#  official_name       :string(255)
+#  comments_count      :integer         default(0)
+#
+

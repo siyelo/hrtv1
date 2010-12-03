@@ -30,7 +30,7 @@ class Reports::FacilitiesReport < Reports::SqlReport
       [ mtef_codes, nsp_codes ].each do |codes|
           #type, code_id, result_name, header_name
         codes.each do |code|
-          @@code_select_array << [CodingSpend, code.id , "a#{code.id}", "#{code.class} Spend for #{code.to_s_with_external_id}"]
+          @@code_select_array << [CodingSpend, code.id , "a#{code.id}", "#{code.class} Spent for #{code.to_s_with_external_id}"]
           @@code_select_array << [CodingBudget, code.id , "b#{code.id}", "#{code.class} Budget for #{code.to_s_with_external_id}"]
         end
       end
@@ -38,7 +38,7 @@ class Reports::FacilitiesReport < Reports::SqlReport
       [ hssp_strat_prog_codes, hssp_strat_obj_codes ].each do |codes|
           #type, code_id, result_name, header_name
         codes.each do |code|
-          @@code_select_array << [HsspSpend, code.id , "c#{code.id}", "#{code.class} Spend for #{code.to_s_with_external_id}"]
+          @@code_select_array << [HsspSpend, code.id , "c#{code.id}", "#{code.class} Spent for #{code.to_s_with_external_id}"]
           @@code_select_array << [HsspBudget, code.id , "d#{code.id}","#{code.class} Budget for #{code.to_s_with_external_id}"]
         end
       end

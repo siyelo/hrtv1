@@ -19,6 +19,10 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
                 ["activity_id in (?)", activity_ids]} }
+  named_scope :with_activities_include_implementer,
+              lambda { |activity_ids| {
+                :conditions => ["code_assignments.activity_id in (?)", activity_ids],
+                :joins => [:activity => :provider]} } 
   named_scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_assignments.type = ?", type]} }
@@ -26,16 +30,32 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |code_id| { :conditions =>
                 ["code_assignments.code_id = ?", code_id]} }
   named_scope :sort_cached_amt, { :order => "code_assignments.cached_amount DESC"}
+ 
+  # override this in subclasses to make proportion work 
+  def activity_amount
+    #TODO add a class that has a unique name
+    # so its easy to telll that this method
+    # wasnt implemented
+    # this class should error on any method
+    "default crappy value that will break code"
+  end
+
+  def proportion_of_activity
+    unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0 
+      calculated_amount / activity_amount
+    else
+      if !percentage.nil?
+        percentage / 100
+      else
+        0
+      end
+    end
+  end
 
   ### methods
   def calculated_amount
-    # let's always used cached amount for now
-
-#    if read_attribute(:amount).nil?
-      cached_amount
-#    else
-#      read_attribute(:amount)
-#    end
+    return cached_amount unless cached_amount.nil?
+    return 0
   end
 
   def self.update_codings(code_assignments, activity)
@@ -132,17 +152,18 @@ class CodeAssignment < ActiveRecord::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id            :integer         primary key
-#  activity_id   :integer
-#  code_id       :integer
-#  code_type     :string(255)
-#  amount        :decimal(, )
-#  type          :string(255)
-#  percentage    :decimal(, )
-#  cached_amount :decimal(, )
+#  id              :integer         not null, primary key
+#  activity_id     :integer
+#  code_id         :integer         indexed
+#  amount          :decimal(, )
+#  type            :string(255)
+#  percentage      :decimal(, )
+#  cached_amount   :decimal(, )     default(0.0)
+#  sum_of_children :decimal(, )     default(0.0)
 #
 

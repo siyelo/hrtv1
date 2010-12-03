@@ -5,11 +5,8 @@ require 'lib/ReportHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
-
-  include ActAsDataElement
   include ActsAsDateChecker
   include ReportHelpers
-  configure_act_as_data_element
 
   acts_as_stripper
 
@@ -17,14 +14,37 @@ class Project < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
+  #
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
-  has_many :funding_flows #, :dependent => :nullify
 
-  has_many :funding_sources, :through => :funding_flows, :class_name => "Organization", :source => :from
-  has_many :providers, :through => :funding_flows, :class_name => "Organization", :source => :to
+  belongs_to :data_response, :counter_cache => true
+  has_one :owner, :through => :data_response, :source => :responding_organization
+
+  has_many :funding_flows
+  has_many :in_flows, :class_name => "FundingFlow",
+           :conditions => [ 'self_provider_flag = 0 AND
+                            organization_id_to = #{self.organization.id}' ] #note the single quotes !
+  has_many :out_flows, :class_name => "FundingFlow",
+           :conditions => [ 'self_provider_flag = 0 AND
+                            organization_id_from = #{self.organization.id}' ] #note the single quotes !
+  has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
+            :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
+  has_many :providers, :through => :funding_flows, :class_name => "Organization",
+           :source => :to
+
+  ### Named scopes
+  #
+  named_scope :available_to, lambda { |current_user|
+    if current_user.role?(:admin)
+      {}
+    else
+      {:conditions=>{:data_response_id => current_user.current_data_response.try(:id)}}
+    end
+  }
 
   ### Validations
+  #
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -34,24 +54,24 @@ class Project < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
+  # Attributes
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-                  :start_date, :end_date, :currency
+                  :start_date, :end_date, :currency, :data_response
+
+  delegate :organization, :to => :data_response
 
   include BudgetSpendHelpers
-  after_create :create_helpful_records_for_workflow
 
-  ### public methods
-  def organization
-    self.data_response.responding_organization
+  ### Public methods
+  #
+
+  def implementers
+    providers
   end
 
+  # view helper ??!
   def organization_name
     organization.name
-  end
-
-  # returns the funding_sources
-  def funders
-    funding_sources.reject{ |org| org.id == self.organization.id }
   end
 
   def currency
@@ -88,43 +108,34 @@ class Project < ActiveRecord::Base
       to_s
   end
 
-  # this is an AS helper, and currently only seems to be used by activity scaffold.
-  # todo - test this - then refactor
-  # GN: looks like this isn't being used at all for now
-  # let's take it out soon when we have more test coverage
-  def valid_providers
-    f=funding_flows.find(:all, :select => "organization_id_to",
-      :conditions =>
-      ["organization_id_from = ?", owner.id])
-
-    r=f.collect {|f| f.organization_id_to}
-    r
-  end
-
-  def create_helpful_records_for_workflow
-    my_org = owner
-    #puts "this is my org:"+my_org.inspect
-    #TODO pass in the amount attributes and use them on records below
-    #attribs = r.attributes.reject {|a| ! FundingFlow.new.attributes.include? a }
-    shared_attributes = [:budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response]
-    f1 = funding_flows.create({:to => my_org})
-    f2 = funding_flows.create({:from => my_org, :to => my_org, :self_provider_flag => 1})
-    shared_attributes.each do |att|
-      f1.send(att.to_s+"=", self.send(att))
-      f2.send(att.to_s+"=", self.send(att))
+  def deep_clone
+    clone = self.clone
+    # HABTM's
+    %w[locations].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc))
     end
-    f1.save;f2.save;
-    #activities << OtherCost.new #TODO fix and let this work
-  end
 
+    # has_many's with deep associations
+    %w[activities].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.deep_clone })
+    end
+
+    # shallow has_many's
+    %w[funding_flows].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
+    end
+    clone
+  end
 
   private
 
-  def validate_budgets
-    errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
-  end
+    def validate_budgets
+      errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
+    end
 
 end
+
+
 
 # == Schema Information
 #
@@ -146,11 +157,12 @@ end
 #  spend_q3         :decimal(, )
 #  spend_q4         :decimal(, )
 #  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
+#  data_response_id :integer         indexed
 #  budget_q1        :decimal(, )
 #  budget_q2        :decimal(, )
 #  budget_q3        :decimal(, )
 #  budget_q4        :decimal(, )
 #  budget_q4_prev   :decimal(, )
+#  comments_count   :integer         default(0)
 #
 

@@ -3,7 +3,7 @@ class OtherCostsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [ :projects, :budget, :spend]
+  @@shown_columns = [ :projects, :spend, :budget]
   @@create_columns = [:projects,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
   def self.create_columns
     @@create_columns
@@ -33,7 +33,7 @@ class OtherCostsController < ActiveScaffoldController
     config.columns[:description].inplace_edit     = true
     config.columns[:description].label            = "Description (optional)"
     config.columns[:budget].label                 = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label                  = "Total Spend GOR FY 09-10"
+    config.columns[:spend].label                  = "Total Spent GOR FY 09-10"
 
     [:spend, :budget].each do |c|
       quarterly_amount_field_options config.columns[c]
@@ -44,11 +44,11 @@ class OtherCostsController < ActiveScaffoldController
       c = c.to_sym
       config.columns[c].inplace_edit = true
       quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Spend in Your FY 09-10 "+quarter.capitalize
+      config.columns[c].label = "Spent in Your FY 09-10 "+quarter.capitalize
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:spend_q4_prev].label = "Spent in your FY 08-09 Q4"
   end
 
   def create_from_file

@@ -13,6 +13,7 @@ class DataResponse < ActiveRecord::Base
   # Associations
 
   has_many :activities, :dependent => :destroy
+  has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
   @@data_associations = %w[activities funding_flows projects]
@@ -51,7 +52,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
   def self.in_process
-    self.find(:all,:conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
+    self.find(:all, :include => [:responding_organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 
   def self.remove_security
@@ -71,7 +72,8 @@ class DataResponse < ActiveRecord::Base
 
   #named_scope :empty, options_hash_for_empty
   def self.empty
-    drs = self.find(:all, options_hash_for_empty)
+    drs = self.find(:all, options_hash_for_empty)#, :include => {:responding_organization => :users})
+    #GN: commented out optimization, this broke the method, returned too many records
     drs.select do |dr|
       (["Agencies", "Donors", "Donor", "Implementer", "Implementers", "International NGO"]).include?(dr.responding_organization.raw_type)
     end
@@ -94,6 +96,13 @@ class DataResponse < ActiveRecord::Base
 #      end
 #    end
 #  end
+
+  def status
+    return "Empty / Not Started" if empty?
+    return "Submitted" if submitted
+    return "In Progress"
+  end
+
   def total_project_budget
     projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
   end
@@ -108,13 +117,6 @@ class DataResponse < ActiveRecord::Base
 
   def total_project_spend_RWF
     projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
-  end
-  def activity_count
-    activities.only_simple.count
-  end
-
-  def sub_activity_count
-    activities.with_type("SubActivity").count
   end
 
   def unclassified_activities_count
@@ -149,26 +151,33 @@ class DataResponse < ActiveRecord::Base
 
 end
 
+
+
 # == Schema Information
 #
 # Table name: data_responses
 #
-#  id                               :integer         primary key
-#  data_element_id                  :integer
-#  data_request_id                  :integer         indexed
-#  complete                         :boolean         default(FALSE)
-#  created_at                       :timestamp
-#  updated_at                       :timestamp
-#  organization_id_responder        :integer
-#  currency                         :string(255)
-#  fiscal_year_start_date           :date
-#  fiscal_year_end_date             :date
-#  contact_name                     :string(255)
-#  contact_position                 :string(255)
-#  contact_phone_number             :string(255)
-#  contact_main_office_phone_number :string(255)
-#  contact_office_location          :string(255)
-#  submitted                        :boolean
-#  submitted_at                     :timestamp
+#  id                                :integer         primary key
+#  data_element_id                   :integer
+#  data_request_id                   :integer         indexed
+#  complete                          :boolean         default(FALSE)
+#  created_at                        :timestamp
+#  updated_at                        :timestamp
+#  organization_id_responder         :integer         indexed
+#  currency                          :string(255)
+#  fiscal_year_start_date            :date
+#  fiscal_year_end_date              :date
+#  contact_name                      :string(255)
+#  contact_position                  :string(255)
+#  contact_phone_number              :string(255)
+#  contact_main_office_phone_number  :string(255)
+#  contact_office_location           :string(255)
+#  submitted                         :boolean
+#  submitted_at                      :timestamp
+#  projects_count                    :integer         default(0)
+#  comments_count                    :integer         default(0)
+#  activities_count                  :integer         default(0)
+#  sub_activities_count              :integer         default(0)
+#  activities_without_projects_count :integer         default(0)
 #
 

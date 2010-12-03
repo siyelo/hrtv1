@@ -9,4 +9,13 @@ describe ModelHelp do
     it { should have_many :comments }
   end
   
+  describe "counter cache" do
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:model_help)
+      end
+
+      it_should_behave_like "comments_cacher"
+    end
+  end
 end

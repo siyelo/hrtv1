@@ -1,0 +1,5 @@
+- if current_user
+  - path = reporter_dashboard_path
+  - path = admin_dashboard_path if current_user.role? :admin
+
+  %li{ :class => dashboard_active ? "active" : ''}= link_to "Dashboard", path

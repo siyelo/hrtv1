@@ -3,28 +3,32 @@
 - content_for :sub_nav do
   = render :partial => 'layouts/sub_nav'
 
+#page_tips
+  .nav
+    = link_to "Show Page Tips", "#", :id => "page_tips_open"
+  .desc
+    %h2 Description
+    %span.close= link_to "Close", "#", :id => "page_tips_close"
+    %p Welcome to the Resource Tracking Tool! Please don't forget to change your password to something easier to remember by selecting the "change password" link in the upper right corner of the page.
+    %p On this page, you can enter basic information that will be used throughout data entry, such as currency and your fiscal year. This is used to make the data entry experience easier and to customize the process for your organization.
+    %p You can also enter information about a primary contact at your organization that will help the resource tracking team if there are any questions throughout the process.
+
+
 = error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 - form_for @data_response do |form|
   %table
     %tbody
       %tr
-        %td
-          = form.label :currency, "Currency"
-        %td
-          = form.text_field :currency
+        %td= form.label :currency, "Currency"
+        %td= form.text_field :currency
       %tr
-        %td
-          = form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_start_date, :class => 'date_picker'
+        %td= form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
+        %td= form.text_field :fiscal_year_start_date, :class => 'date_picker'
       %tr
-        %td
-          = form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
-        %td
-          = form.text_field :fiscal_year_end_date, :class => 'date_picker'
+        %td= form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
+        %td= form.text_field :fiscal_year_end_date, :class => 'date_picker'
       %tr
-        %td
-          = ""
+        %td= ""
         %td
           %p
             Choose the fiscal year above that you wish to report in according to what is convenient for you.
@@ -35,30 +39,31 @@
             %br
             If this is not the case, contact us using the Help/Contact Us form at the bottom of this page.
       %tr
-        %td
-          = form.label :contact_name, "Point of Contact Name"
-        %td
-          = form.text_field :contact_name
+        %td= form.label :contact_name, "Point of Contact Name"
+        %td= form.text_field :contact_name
       %tr
-        %td
-          = form.label :contact_position, "Point of Contact Position"
-        %td
-          = form.text_field :contact_position
+        %td= form.label :contact_position, "Point of Contact Position"
+        %td= form.text_field :contact_position
       %tr
-        %td
-          = form.label :contact_phone_number, "Point of Contact Phone Number"
-        %td
-          = form.text_field :contact_phone_number
+        %td= form.label :contact_phone_number, "Point of Contact Phone Number"
+        %td= form.text_field :contact_phone_number
       %tr
-        %td
-          = form.label :contact_main_office_phone_number, "Point of Contact Office Phone Number"
-        %td
-          = form.text_field :contact_main_office_phone_number
+        %td= form.label :contact_main_office_phone_number, "Point of Contact Office Phone Number"
+        %td= form.text_field :contact_main_office_phone_number
       %tr
-        %td
-          = form.label :contact_office_location, "Point of Contact Office Location"
-        %td
-          = form.text_field :contact_office_location
+        %td= form.label :contact_office_location, "Point of Contact Office Location"
+        %td= form.text_field :contact_office_location
   = submit_tag 'Save'
 
-= render 'shared/bottom_data_entry', :record_type => DataResponse
+- content_for :comments do
+  #c-help
+    %h2 Commenting tips
+    %p
+      The comment section below is for asking general questions about this page.
+      Ask questions or make comments on the data you have entered
+      using the "Comments" link at the end of each row in the grid above.
+      If you think the answer to your question will help many others, use the grid below this text.
+      All users can see the comments in the table below.
+
+  = render :active_scaffold => "comments", :label => "General Questions / Comments",
+    :constraints => {:commentable_id => @data_response.id, :commentable_type => "ModelHelp"}

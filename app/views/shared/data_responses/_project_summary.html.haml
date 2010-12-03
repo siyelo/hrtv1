@@ -5,32 +5,29 @@
       %td= "#{project.start_date} to #{project.end_date}"
     %tr
       %td Total Budget:
-      %td= n2c(project.entire_budget, project.currency)
+      %td= n2c(project.entire_budget, project.currency || @data_response.currency)
     %tr
-      %td Total Budget (current FY):
-      %td= n2c(project.budget, project.currency)
+      %td Total Budget (current GOR FY):
+      %td= n2c(project.budget, project.currency || @data_response.currency)
     %tr
-      %td Total Spend (past FY):
-      %td= n2c(project.spend, project.currency)
-    %tr
-      %td Spend Q4 (FY 08-09):
-      %td=  n2c(project.spend_q4_prev, project.currency)
+      %td Total Spent (past GOR FY):
+      %td= n2c(project.spend, project.currency || @data_response.currency)
     - unless @policy_maker
       %tr
-        %td Spend Q1:
-        %td=  n2c(project.spend_q1, project.currency)
+        %td Spent Q1:
+        %td=  n2c(project.spend_q1, project.currency || @data_response.currency)
 
       %tr
-        %td Spend Q2:
-        %td=  n2c(project.spend_q2, project.currency)
+        %td Spent Q2:
+        %td=  n2c(project.spend_q2, project.currency || @data_response.currency)
 
       %tr
-        %td Spend Q3:
-        %td=  n2c(project.spend_q3, project.currency)
+        %td Spent Q3:
+        %td=  n2c(project.spend_q3, project.currency || @data_response.currency)
 
       %tr
-        %td Spend Q4:
-        %td=  n2c(project.spend_q4, project.currency)
+        %td Spent Q4:
+        %td=  n2c(project.spend_q4, project.currency || @data_response.currency)
 
     %tr
       %td Districts:

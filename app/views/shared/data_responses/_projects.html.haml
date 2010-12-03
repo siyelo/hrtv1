@@ -5,7 +5,7 @@
         %tr
           %th Project
           %th Activities
-          %th Spend
+          %th Spent
           %th Budget
           %th.manage Manage
       %tbody
@@ -13,15 +13,18 @@
           %tr.project.entry_header
             %td
               %ul
+                - if project.comments.size > 0
+                  %li.comment_indicator
+                    = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => project)
                 %li.name= project.name
                 %li.descr= project.description.to_s
                 %li.funders
                   = "Funders: "
-                  - FundingFlow.sources_for(project).each do |source|
-                    = "#{source.from.try(:name)} (#{source.budget}),"
+                  - project.in_flows.each do |flow|
+                    = "#{flow.from.try(:name)} (#{flow.budget}),"
             %td= project.activities.count
-            %td= n2c(project.spend, project.currency)
-            %td= n2c(project.budget, project.currency)
+            %td= n2c(project.spend, project.currency || project.data_response.currency)
+            %td= n2c(project.budget, project.currency || project.data_response.currency)
             %td.manage
               = link_to "Edit", edit_project_path(project)
               = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
@@ -32,7 +35,7 @@
 
               .project_sub_tabs.tabs_nav
                 %ul.inline_alt_tab
-                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.count})", "#", :class => "comment_details"
+                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.size})", "#", :class => "comment_details"
                   %li= link_to "Activities (#{project.activities.roots.count})", "#", :class => "activity_details"
                   %li= link_to "Other Costs (#{project.activities.with_type('OtherCost').count})", "#", :class => "activity_details"
 
@@ -40,6 +43,6 @@
                 .tab1
                   = render 'shared/data_responses/comments', :commentable => project
                 .tab2
-                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first
+                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first.find(:all, :include => {:sub_activities => :provider})
                 .tab3
                   = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true

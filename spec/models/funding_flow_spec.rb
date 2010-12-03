@@ -1,11 +1,31 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FundingFlow do
-  describe "basic validations" do
-    it "validates present of project_id" do
-      funding_flow = Factory.build(:funding_flow, :project_id => nil)
-      funding_flow.should_not be_valid
-      funding_flow.errors.on(:project_id).should_not be_nil
+  
+  describe "creating a project record" do
+    subject { Factory(:funding_flow) }
+    it { should be_valid }
+    it { should belong_to :from }
+    it { should belong_to :to }
+    it { should belong_to :project }
+    it { should validate_presence_of(:project_id) }
+    #it { should validate_presence_of(:organization_id_to) }
+    #it { should validate_presence_of(:organization_id_from) }
+    #it { should delegate :organization, :to => :project } #need shmacros
+    
+    # TODO: deprecate in favour of delegate to project
+    it { should belong_to :data_response }  #it { should delegate :data_response, :to => :project } #need shmacros
+    it { should validate_presence_of(:data_response_id) }
+  end
+
+  describe "counter cache" do
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:funding_flow)
+      end
+
+      it_should_behave_like "comments_cacher"
     end
   end
+        
 end

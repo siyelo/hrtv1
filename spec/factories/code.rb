@@ -1,10 +1,7 @@
-require File.join(File.dirname(__FILE__),'./blueprint.rb')
-
 Factory.define :code, :class => Code do |f|
-  f.short_display   { Sham.code_name }
-  f.description     { Sham.description }
+  f.sequence(:short_display)   { |i| "code_#{i}" }
+  f.sequence(:description)   { |i| "description_#{i}" }
 end
 
 Factory.define :mtef_code, :class => Mtef, :parent => :code do |f|
 end
-

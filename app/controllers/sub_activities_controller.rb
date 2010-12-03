@@ -36,7 +36,7 @@ class SubActivitiesController < ActiveScaffoldController
     config.columns[:provider].form_ui             = :select
     config.columns[:provider].label               = "Implementer"
     config.columns[:budget].label = "Budget GOR FY 10-11"
-    config.columns[:spend].label = "Spend GOR FY 09-10"
+    config.columns[:spend].label = "Spent GOR FY 09-10"
     config.columns[:text_for_provider].form_ui             = :textarea
     config.columns[:text_for_provider].label               = "Text for Implementer"
     quarterly_amount_field_options config.columns[:text_for_provider]
@@ -89,6 +89,7 @@ class SubActivitiesController < ActiveScaffoldController
   def beginning_of_chain
     super.available_to current_user
   end
+
   #fixes create
   def before_create_save record
     record.data_response = current_user.current_data_response

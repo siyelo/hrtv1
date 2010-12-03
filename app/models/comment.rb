@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   include ActsAsCommentable::Comment
 
-  belongs_to :commentable, :polymorphic => true
+  belongs_to :commentable, :polymorphic => true, :counter_cache => true
   belongs_to :user
 
   default_scope :order => 'created_at ASC'
@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
   attr_accessible :title, :comment
 
   # Validations
-  validates_presence_of :commentable_id, :commentable_type, :title, :comment #:user_id,
+  validates_presence_of :commentable_id, :commentable_type, :title, :comment, :user_id
 
   ### named scopes
   named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "

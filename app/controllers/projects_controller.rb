@@ -4,7 +4,7 @@ class ProjectsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns   = [:organization, :name, :description,  :budget, :spend]
+  @@shown_columns   = [:organization, :name, :description,  :spend, :budget]
   @@create_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
     :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations, :currency]
   @@update_columns  = [:name, :description, :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
@@ -39,16 +39,16 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:locations].label              = "Districts Worked In"
     config.columns[:currency].label               = "Currency (if different)"
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
-      end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+      end
+      columns.add_subgroup "Budget (Planned Expenditure)" do |budget_group|
+        budget_group.add :entire_budget, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
       end
     end
     config.columns[:entire_budget].label = "Total Project Budget"
     config.columns[:budget].label        = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label         = "Total Spend GOR FY 09-10"
+    config.columns[:spend].label         = "Total Spent GOR FY 09-10"
 
     [:spend, :budget, :entire_budget].each do |c|
       quarterly_amount_field_options config.columns[c]
@@ -67,23 +67,26 @@ class ProjectsController < ActiveScaffoldController
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:spend_q4_prev].label = "Spent in your FY 08-09 Q4"
     config.columns[:budget_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:budget_q4_prev]
     config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
   end
 
-
   def create_from_file
     super @@columns_for_file_upload
   end
+
+protected
 
   def beginning_of_chain
     super.available_to current_user
   end
 
-  #fixes create
+  # An AS hook to fix :create
+  #   When we remove AS, we need to make sure :data_response_id is in the params!
   def before_create_save record
     record.data_response = current_user.current_data_response
   end
+
 end

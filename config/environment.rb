@@ -21,7 +21,6 @@ else
   puts "WARN: configuration file #{config_file_path} not found."
 end
 
-
 Rails::Initializer.run do |config|
 
   config.gem "fastercsv"
@@ -29,16 +28,22 @@ Rails::Initializer.run do |config|
   config.gem "compass", :version => "= 0.10.2"
   config.gem 'hoptoad_notifier'
   config.gem "authlogic"
-  config.gem "cancan"
+  config.gem "cancan", :version => ">= 1.4.0"
   config.gem "validates_date_time", :version => '= 1.0.0'
   config.gem 'formtastic', :version => "0.9.10"
   config.gem "seer", :version => "=0.9.1"
+  config.gem "version", :version => "=0.9.2"
 
   config.time_zone = 'UTC'
 
-  #tell rails to load files from all subfolders in app/models/
+  # tell rails to load files from all subfolders in app/models/
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*"].find_all { |f| File.stat(f).directory? }
 
+  # disable spoofing check
+  # http://pivotallabs.com/users/jay/blog/articles/1216-standup-4-7-2010-disabling-rails-ip-spoofing-safeguard
+  # PT: https://www.pivotaltracker.com/story/show/6509545
+  config.action_controller.ip_spoofing_check = false
 end
 
 require 'array_extensions'
+require 'version'

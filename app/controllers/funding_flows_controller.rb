@@ -1,12 +1,15 @@
 class FundingFlowsController < ActiveScaffoldController
   authorize_resource
 
-  @@shown_columns = [:project, :from, :to, :budget, :spend]
-  @@create_columns = [:project, :from, :to, :budget, :spend, :spend_q4_prev, :spend_q1,
-                      :spend_q2, :spend_q3, :spend_q4]
+  @@shown_columns = [:project, :from, :to, :spend, :budget ]
+  @@create_columns = [:project, :from, :to, :budget, :spend,
+                      :spend_q4_prev, :spend_q1, :spend_q2,
+                      :spend_q3, :spend_q4]
 
   @@update_columns = [:project, :organization_text, :from, :to, :budget, :spend,
-                      :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :comments]
+                      :spend_q4_prev,  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                      :comments]
+
   @@columns_for_file_upload = @@shown_columns.map {|c| c.to_s} # TODO extend feature, locations for instance won't work
 
   map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
@@ -29,22 +32,26 @@ class FundingFlowsController < ActiveScaffoldController
     config.nested.add_link("Comments", [:comments])
 
     [:from, :to ].each do |c|
-      config.columns[c].form_ui=:select #TODO comment out when GN gets subform working
-      #GR: these two options together allow a leave-blank and create-new style of creating entities in AS
-      config.columns[c].options             = { :prompt => '--- Select Organization ---', :include_blank => '+ Add a new Organization...' }
-      config.columns[c].inplace_edit        = false
+      config.columns[c].form_ui       = :select #TODO comment out when GN gets subform working
+      # GR: these two options together allow a leave-blank and create-new style
+      # of creating entities in AS
+      config.columns[c].options       = { :prompt => '--- Select Organization ---',
+                                          :include_blank => '+ Add a new Organization...' }
+      config.columns[c].inplace_edit  = false
     end
 
     [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :budget
-      end
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
       end
+      columns.add_subgroup "Budget (Planned Expenditure)" do |budget_group|
+        budget_group.add :budget
+        #budget_group.add :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4 #TODO add and test
+      end
     end
+
     config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label = "Total Spend GOR FY 09-10"
+    config.columns[:spend].label = "Total Spent GOR FY 09-10"
     [:budget, :spend].each do |c|
       quarterly_amount_field_options config.columns[c]
       config.columns[c].inplace_edit = true
@@ -62,7 +69,7 @@ class FundingFlowsController < ActiveScaffoldController
     end
     config.columns[:spend_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Spend in your FY 08-09 Q4"
+    config.columns[:spend_q4_prev].label = "Spent in your FY 08-09 Q4"
     config.columns[:budget_q4_prev].inplace_edit = true
     quarterly_amount_field_options config.columns[:budget_q4_prev]
     config.columns[:budget_q4_prev].label = "Budget in your FY 09-10 Q4"
@@ -75,6 +82,8 @@ class FundingFlowsController < ActiveScaffoldController
   def create_from_file
     super @@columns_for_file_upload
   end
+
+protected
 
   def beginning_of_chain
     super.available_to current_user

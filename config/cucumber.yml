@@ -4,6 +4,7 @@ rerun_opts = rerun.to_s.strip.empty? ? "--format #{ENV['CUCUMBER_FORMAT'] || 'pr
 std_opts = "--format #{ENV['CUCUMBER_FORMAT'] || 'progress'} --strict --tags ~@wip"
 %>
 default: --tags ~@wip
+single: --tags ~@wip -r features/support/env.rb -r features/step_definitions/web_steps.rb -r features/step_definitions/web_ext_steps.rb
 //default: <%= std_opts %> commented this out to fix cuke not working from rake - see http://stackoverflow.com/questions/2620983/cucumber-steps-not-automatically-loaded-when-running-features
 wip: --tags @wip:3 --wip features
 rerun: <%= rerun_opts %> --format rerun --out rerun.txt --strict --tags ~@wip

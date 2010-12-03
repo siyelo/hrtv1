@@ -294,6 +294,63 @@ var getOrganizationInfo = function (organization_id, box) {
   });
 };
 
+var displayFlashForReplaceOrganization = function (type, message) {
+  jQuery('#content .wrapper').prepend(
+    jQuery('<div/>').attr({id: 'flashes'}).append(
+      jQuery('<div/>').attr({id: type}).text(message)
+    )
+  );
+
+  // fade out flash message
+  jQuery("#" + type).delay(5000).fadeOut(3000, function () {
+    jQuery("#flashes").remove();
+  });
+}
+
+var removeOrganizationFromLists = function (duplicate_id, box_type) {
+  jQuery.each(['duplicate', 'target'], function (i, name) {
+    var select_element = jQuery("#" + name + "_organization_id");
+    var current_option = select_element.find("option[value='" + duplicate_id + "']");
+
+    // remove element from page
+    if (name === box_type) {
+      var next_option = current_option.next().val();
+      if (next_option) {
+        select_element.val(next_option);
+      }
+
+      // update info block
+      getOrganizationInfo(select_element.val(), jQuery('#' + name));
+    }
+
+    current_option.remove();
+  });
+}
+
+var ReplaceOrganizationSuccessCallback = function (message, duplicate_id) {
+  removeOrganizationFromLists(duplicate_id, 'duplicate');
+  displayFlashForReplaceOrganization('notice', message);
+};
+
+var ReplaceOrganizationErrorCallback = function (message) {
+  displayFlashForReplaceOrganization('error', message)
+}
+
+var replaceOrganization = function (form) {
+  var duplicate_id = jQuery("#duplicate_organization_id").val();
+  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+    var data = jQuery.parseJSON(data)
+    response.status === 206 ? ReplaceOrganizationErrorCallback(data.message) : ReplaceOrganizationSuccessCallback(data.message, duplicate_id);
+  });
+};
+
+var destroyOrganization = function (organization_id, type) {
+  jQuery.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
+    var data = jQuery.parseJSON(data)
+    response.status === 206 ? displayFlashForReplaceOrganization('error', data.message) : removeOrganizationFromLists(organization_id, type);
+  });
+}
+
 var admin_organizations_duplicate = {
   run: function () {
     jQuery("#duplicate_organization_id, #target_organization_id").change(function() {
@@ -305,6 +362,28 @@ var admin_organizations_duplicate = {
 
     getOrganizationInfo(jQuery("#duplicate_organization_id").val(), jQuery('#duplicate'));
     getOrganizationInfo(jQuery("#target_organization_id").val(), jQuery('#target'));
+
+    jQuery("#replace_organization").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var form = element.parents('form')
+      if (confirm('Are you sure?')) {
+        replaceOrganization(form);
+      }
+    });
+
+    jQuery(".destroy_btn").click(function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      var type = element.parents('.box').attr('data-type');
+      var select_element;
+
+      select_element = (type === 'duplicate') ? jQuery("#duplicate_organization_id") : jQuery("#target_organization_id");
+
+      if (confirm('Are you sure you want to delete "' + select_element.find('option:selected').text() + '"?')) {
+        destroyOrganization(select_element.val(), type);
+      }
+    });
   }
 };
 
@@ -369,7 +448,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     });
 
     // manual tipsy
-    chart_element.tipsy({gravity: 'w', trigger: 'manual'})
+    chart_element.tipsy({gravity: 'e', trigger: 'manual'})
 
     google.visualization.events.addListener(tree, 'onmouseover', function (e) {
       chart_element.attr('title', data_rows[e.row][0]);
@@ -386,6 +465,8 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 var build_data_response_review_screen = function () {
 
   jQuery('.tooltip').tipsy({gravity: 'w'});
+  jQuery('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
+  jQuery('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
   jQuery('.project.entry_header').click(function (e) {
     collapse_expand(e, jQuery(this), 'project');
@@ -400,7 +481,7 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for tabs
-  jQuery(".classifications ul li").click(function (e) {
+  jQuery(".classifications ul li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element.attr("id")) {
@@ -419,7 +500,7 @@ var build_data_response_review_screen = function () {
   //  .tabs > .tab1, .tab2, .tab3
   // BUT if you supply an id (e.g. tab1), it will use that
   // (useful if tab nav has non-clickable items in the list)
-  jQuery(".tabs_nav ul li").click(function (e) {
+  jQuery(".tabs_nav ul li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     var target_tab = 'tab1'
@@ -437,7 +518,7 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-  jQuery(".tabs ul.inline_tab li").click(function (e) {
+  jQuery(".tabs ul.inline_tab li").live('click', function (e) {
     e.preventDefault();
     var element = jQuery(this);
     if (element) {
@@ -494,6 +575,14 @@ var build_data_response_review_screen = function () {
   });
 
   approve_activity_checkbox();
+
+  // Ajax load of classifications for activities
+  jQuery.each(jQuery('.activity_classifications'), function (i, element) {
+    element = jQuery(element);
+    jQuery.get('/activities/' + element.attr('data-activity_id') + '/classifications?other_costs=' + element.attr('data-other_costs'), function (data) {
+      element.html(data);
+    })
+  });
 
 };
 
@@ -554,6 +643,57 @@ var code_assignments_show = {
 
     jQuery('.tooltip').tipsy({gravity: 'w'});
 
+    jQuery('.submit_btn').live('click', function (e) {
+      e.preventDefault();
+
+      var element = jQuery(this);
+      var form = getForm(element);
+      var tab = jQuery("#activity_classification > div:visible");
+
+      // add ajax loader image
+      element.after(jQuery('<img/>').attr({id: 'ajax-loader', src: '/images/ajax-loader.gif'}));
+
+      jQuery.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
+
+        // replace tab form
+        tab.html('');
+        appendTab(tab.attr('class'), data.tab);
+
+        // replace nav
+        jQuery(".inline_tab").replaceWith(data.tab_nav);
+        jQuery('#' + tab.attr('class')).click(); // click the current tab
+
+        // replace activity description
+        jQuery("#activity_description").replaceWith(data.activity_description);
+
+        // flash messages
+        jQuery('#flashes').remove();
+        var flashes = jQuery('<div/>').attr({id: 'flashes'});
+        jQuery('#content .wrapper').prepend(flashes);
+        flashes.delay(5000).fadeOut(3000, function () {
+          jQuery(this).remove();
+        });
+
+        // bottom flash message in tab
+        var coding_flash_below = jQuery('<div/>').attr({'class': 'coding_flash'});
+
+        if (data.message.notice) {
+          flashes.append(jQuery('<div/>').attr({id: 'notice'}).text(data.message.notice));
+          coding_flash_below.append(jQuery('<div/>').attr({'class': 'notice'}).text(data.message.notice));
+        }
+
+        if (data.message.error) {
+          flashes.append(jQuery('<div/>').attr({id: 'error'}).text(data.message.error));
+          coding_flash_below.append(jQuery('<div/>').attr({'class': 'error'}).text(data.message.error));
+        }
+
+        tab.append(coding_flash_below);
+        coding_flash_below.delay(5000).fadeOut(3000, function (element) {
+          jQuery(this).remove();
+        });
+      });
+    });
+
     // collapsible checkboxes for tab1
     addCollabsibleButtons('tab1');
 
@@ -582,7 +722,7 @@ var code_assignments_show = {
     });
 
     // bind click events for tabs
-    jQuery(".nav2 ul li").click(function (e) {
+    jQuery(".nav2 ul li").live('click', function (e) {
       e.preventDefault();
       var element = jQuery(this);
       if (element.attr("id")) {
@@ -594,12 +734,12 @@ var code_assignments_show = {
     });
 
     // remove flash notice
-    // jQuery("#notice").fadeOut(3000);
+    // jQuery("#notice").delay(5000).fadeOut(3000);
 
-    jQuery("#use_budget_codings_for_spend").click(function () {
-      jQuery.post( "/activities/" + _activity_id + "/use_budget_codings_for_spend",
-       { checked: jQuery(this).is(':checked'), "_method": "put" }
-      );
+    jQuery("#use_budget_codings_for_spend").live('click', function (e) {
+      var checked = jQuery(this).is(':checked');
+
+      update_use_budget_codings_for_spend(e, _activity_id, checked);
     })
 
     approve_activity_checkbox();
@@ -607,13 +747,20 @@ var code_assignments_show = {
   }
 };
 
+var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
+  if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
+    jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
+  } else {
+    e.preventDefault();
+  }
+};
+
 var data_responses_review = {
   run: function () {
-    jQuery(".use_budget_codings_for_spend").click(function () {
+    jQuery(".use_budget_codings_for_spend").click(function (e) {
+      var checked = jQuery(this).is(':checked');
       activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
-      jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend",
-       { checked: jQuery(this).is(':checked'), "_method": "put" }
-      );
+      update_use_budget_codings_for_spend(e, activity_id, checked);
     })
   }
 }

@@ -11,7 +11,7 @@ class CodeAssignmentsController < ApplicationController
     @codes = coding_class.available_codes(@activity)
     @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
 
-    @coding_error = add_code_assignments_error(coding_class, @activity)
+    @error_message = add_code_assignments_error(coding_class, @activity)
 
     @progress = @activity.coding_progress
 
@@ -29,19 +29,38 @@ class CodeAssignmentsController < ApplicationController
     @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :update, @activity
 
+    notice_message = nil
     coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
       coding_class.update_codings(params[:activity][:updates], @activity)
-      flash[:notice] = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
+      notice_message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
 
-    @coding_error = add_code_assignments_error(coding_class, @activity)
-    flash[:error] = @coding_error if @coding_error
+    @error_message = add_code_assignments_error(coding_class, @activity)
 
-    redirect_to activity_coding_path(@activity)
+    respond_to do |format|
+      format.html do
+        flash[:error]  = @error_message if @error_message
+        flash[:notice] = notice_message if notice_message
+
+        redirect_to activity_coding_path(@activity)
+      end
+      format.js do
+        @coding_type = params[:coding_type] || 'CodingBudget'
+        coding_class = params[:coding_type].constantize
+        @codes = coding_class.available_codes(@activity)
+        @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
+
+        tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }
+        tab_nav = render_to_string :partial => 'tab_nav', :locals => { :activity => @activity }
+        activity_description = render_to_string :partial => 'activity_description', :locals => { :activity => @activity }
+        render :json => {:message => {:error => @error_message, :notice => notice_message}, :tab => tab, :tab_nav => tab_nav, :activity_description => activity_description}.to_json
+      end
+    end
   end
 
-  private
+private
+
   def add_code_assignments_error(coding_class, activity)
     if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
       unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)
@@ -54,6 +73,7 @@ class CodeAssignmentsController < ApplicationController
       coding_type = get_coding_type(coding_class)
       coding_type_amount = activity.send(get_coding_type(coding_class))
       coding_amount = activity.send("#{coding_class}_amount")
+      coding_amount = 0 if coding_amount.nil?
       difference = coding_type_amount - coding_amount
       percent_diff = difference/coding_type_amount * 100
       coding_type_amount = n2c(coding_type_amount)
@@ -74,11 +94,11 @@ class CodeAssignmentsController < ApplicationController
     when 'CodingBudgetCostCategorization'
       "Budget by Cost Category"
     when 'CodingSpend'
-      "Spend Coding"
+      "Spent Coding"
     when 'CodingSpendDistrict'
-      "Spend by District"
+      "Spent by District"
     when 'CodingSpendCostCategorization'
-      "Spend by Cost Category"
+      "Spent by Cost Category"
     end
   end
 

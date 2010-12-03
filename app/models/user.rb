@@ -8,13 +8,13 @@ class User < ActiveRecord::Base
   # Associations
   has_many  :assignments
   has_many  :comments
-  belongs_to :organization
+  belongs_to :organization, :counter_cache => true
   has_many :data_responses, :through => :organization
   belongs_to :current_data_response, :class_name => "DataResponse",
               :foreign_key => :data_response_id_current
 
   # Validations
-  validates_presence_of  :username, :email, :organization
+  validates_presence_of  :username, :email, :organization_id
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
@@ -52,6 +52,15 @@ class User < ActiveRecord::Base
 
   def to_s
     username
+  end
+
+  # Law of Demeter methods
+  def organization_status
+    return "No Organization" if organization.nil?
+    current_dr = current_data_response
+    current_dr ||= organization.data_responses.first
+    return "No Data Response" if current_dr.nil?
+    current_dr.status
   end
 
 end

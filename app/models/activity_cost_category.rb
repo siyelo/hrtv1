@@ -1,7 +1,7 @@
 class ActivityCostCategory < Code
-  has_many :line_items
 
 end
+
 
 # == Schema Information
 #
@@ -24,5 +24,6 @@ end
 #  hssp2_stratprog_val :string(255)
 #  hssp2_stratobj_val  :string(255)
 #  official_name       :string(255)
+#  comments_count      :integer         default(0)
 #
 

@@ -32,7 +32,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
   end
 
   def set_district_hash_for_code code
-    cas = CodeAssignment.with_activities(@activities.map(&:id)).with_code_id(code.id).with_type(@report_type)
+    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
     activities = self.cache_activities(cas)
     activities.each do |a, h|
       if @district_proportions_hash.key? a
@@ -44,7 +44,7 @@ class Reports::MapDistrictsByNsp < Reports::CodedActivityReport
       else
         @district_proportions_hash[a] = {}
         a.budget_district_coding.each do |bd|
-          proportion = bd.cached_amount / a.budget
+          proportion = bd.proportion_of_activity
           loc = bd.code
           @district_proportions_hash[a][loc] = proportion
           @districts_hash[loc][:total] += h[:leaf_amount] * proportion

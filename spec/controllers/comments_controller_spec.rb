@@ -267,7 +267,6 @@ describe "Requesting Comment endpoints as a reporter" do
   context "Requesting /comments/1 using DELETE" do
     before do
       @comment = Factory.create(:comment)
-      
     end
     it "should delete the comment if it belongs to me" do 
       pending

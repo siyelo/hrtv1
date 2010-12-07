@@ -35,4 +35,15 @@ class FundingSourcesController < ActiveScaffoldController
     ModelHelp.find_by_model_name "FundingSource"
   end
 
+  protected
+
+    #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
+    # dont know why its not working with super()
+    def before_update_save(record)
+      record.comments.each do |comment|
+        comment.user = current_user
+      end
+    end
+
+
 end

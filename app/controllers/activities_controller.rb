@@ -109,6 +109,14 @@ class ActivitiesController < ActiveScaffoldController
     record.data_response = current_user.current_data_response
   end
 
+  #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
+  # dont know why its not working with super()
+  def before_update_save(record)
+    record.comments.each do |comment|
+      comment.user = current_user
+    end
+  end
+
   def approve
     @activity = Activity.available_to(current_user).find(params[:id])
     authorize! :approve, @activity

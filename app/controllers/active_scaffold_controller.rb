@@ -13,6 +13,12 @@ class ActiveScaffoldController < ApplicationController
   end
 
 protected
+  #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
+  def before_update_save(record)
+    record.comments.each do |comment|
+      comment.user = current_user
+    end
+  end
 
   @@classify_popup_link_options =
     { :action     => "popup_classification",

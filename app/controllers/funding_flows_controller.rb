@@ -83,18 +83,29 @@ class FundingFlowsController < ActiveScaffoldController
     super @@columns_for_file_upload
   end
 
-protected
+  protected
 
-  def beginning_of_chain
-    super.available_to current_user
-  end
+    def beginning_of_chain
+      super.available_to current_user
+    end
 
-  #fixes create()
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
+    #fixes create()
+    def before_create_save(record)
+      record.data_response = current_user.current_data_response unless record.project.nil?
+    end
 
-  def create_respond_to_html
-    redirect_to funding_sources_data_entry_url
-  end
+    #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
+    # dont know why its not working with super()
+    def before_update_save(record)
+      record.comments.each do |comment|
+        comment.user = current_user
+      end
+    end
+
+    def create_respond_to_html
+      redirect_to funding_sources_data_entry_url
+    end
+
+
+
 end

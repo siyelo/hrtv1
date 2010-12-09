@@ -84,20 +84,6 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  # copy all Budget codings for an activity across to its respective
-  # Spend Coding
-  def self.use_budget_for_expenditure(activity)
-    budget_type      = self.to_s
-    spend_type       = budget_type.gsub(/Budget/, "Spend")
-    spend_type_klass = spend_type.constantize
-    if spend_type_klass.with_activity(activity.id).delete_all
-      if activity.copy_budget_codings_to_spend([budget_type]) # copy the same budget codings to spend
-        return activity.update_classified_amount_cache(spend_type_klass) # update cache for spend
-      end
-    end
-    false
-  end
-
   # assumes a format like "17,798,123.00"
   def self.currency_to_number(number_string, options ={})
     options.symbolize_keys!
@@ -167,15 +153,16 @@ class CodeAssignment < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id              :integer         not null, primary key
-#  activity_id     :integer
-#  code_id         :integer         indexed
+#  id              :integer         primary key
+#  activity_id     :integer         indexed => [code_id, type]
+#  code_id         :integer         indexed, indexed => [activity_id, type]
 #  amount          :decimal(, )
-#  type            :string(255)
+#  type            :string(255)     indexed => [activity_id, code_id]
 #  percentage      :decimal(, )
 #  cached_amount   :decimal(, )     default(0.0)
 #  sum_of_children :decimal(, )     default(0.0)

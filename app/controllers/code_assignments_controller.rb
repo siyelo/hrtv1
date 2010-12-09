@@ -4,20 +4,19 @@ class CodeAssignmentsController < ApplicationController
 
   def show
     authorize! :read, @activity
-
-    @coding_type = params[:coding_type] || 'CodingBudget'
-    coding_class = @coding_type.constantize
-
-    @codes = coding_class.available_codes(@activity)
+    @coding_type         = params[:coding_type] || 'CodingBudget'
+    coding_class         = @coding_type.constantize
+    @codes               = coding_class.available_codes(@activity)
     @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
-
-    @error_message = add_code_assignments_error(coding_class, @activity)
-
-    @progress = @activity.coding_progress
-
+    @error_message       = add_code_assignments_error(coding_class, @activity)
+    @progress            = @activity.coding_progress
     if params[:tab].present?
       # ajax requests for all tabs except the first one
-      render :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }, :layout => false
+      render :partial => 'tab', :locals => {:coding_type => @coding_type,
+                                            :activity => @activity,
+                                            :codes => @codes,
+                                            :tab => params[:tab] },
+                                :layout => false
     else
       # show page with first tab loaded
       @model_help = ModelHelp.find_by_model_name 'CodeAssignment'
@@ -27,21 +26,17 @@ class CodeAssignmentsController < ApplicationController
 
   def update
     authorize! :update, @activity
-
     notice_message = nil
     coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
       coding_class.update_codings(params[:activity][:updates], @activity)
       notice_message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
-
     @error_message = add_code_assignments_error(coding_class, @activity)
-
     respond_to do |format|
       format.html do
         flash[:error]  = @error_message if @error_message
         flash[:notice] = notice_message if notice_message
-
         redirect_to activity_coding_path(@activity)
       end
       format.js do
@@ -49,7 +44,6 @@ class CodeAssignmentsController < ApplicationController
         coding_class = params[:coding_type].constantize
         @codes = coding_class.available_codes(@activity)
         @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
-
         tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }
         tab_nav = render_to_string :partial => 'tab_nav', :locals => { :activity => @activity }
         activity_description = render_to_string :partial => 'activity_description', :locals => { :activity => @activity }
@@ -60,16 +54,15 @@ class CodeAssignmentsController < ApplicationController
 
   def copy_budget_to_spend
     authorize! :update, @activity
-    coding_class = params[:coding_type].constantize
     respond_to do |format|
-      if coding_class.use_budget_for_expenditure(@activity)
+      if @activity.copy_budget_codings_to_spend([params[:coding_type]])
         format.html do
-          flash[:notice] = "Budget Coding source was successfully copied across to it's respective Spend Coding."
+          flash[:notice] = "Budget split was successfully copied across."
           redirect_to activity_coding_path(@activity)
         end
       else
         format.html do
-          flash[:error] = "We could not copy your Budget Coding across."
+          flash[:error] = "We could not copy your Budget split across."
           redirect_to activity_coding_path(@activity)
         end
       end
@@ -83,13 +76,7 @@ class CodeAssignmentsController < ApplicationController
     end
 
     def add_code_assignments_error(coding_class, activity)
-      if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
-        unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)
-          "We're sorry, you are using the budget classifications for your expenditures and the budget classifications have an error. Please correct the corresponding budget classifications."
-        else
-          nil
-        end
-      elsif !coding_class.classified(activity)
+      if !coding_class.classified(activity)
         coding_name = get_coding_name(coding_class)
         coding_type = get_coding_type(coding_class)
         coding_type_amount = activity.send(get_coding_type(coding_class))

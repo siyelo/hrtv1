@@ -733,37 +733,10 @@ var code_assignments_show = {
       }
     });
 
-    // remove flash notice
-    // jQuery("#notice").delay(5000).fadeOut(3000);
-
-    jQuery("#use_budget_codings_for_spend").live('click', function (e) {
-      var checked = jQuery(this).is(':checked');
-
-      update_use_budget_codings_for_spend(e, _activity_id, checked);
-    })
-
     approve_activity_checkbox();
 
   }
 };
-
-var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
-  if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
-    jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
-  } else {
-    e.preventDefault();
-  }
-};
-
-var data_responses_review = {
-  run: function () {
-    jQuery(".use_budget_codings_for_spend").click(function (e) {
-      var checked = jQuery(this).is(':checked');
-      activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
-      update_use_budget_codings_for_spend(e, activity_id, checked);
-    })
-  }
-}
 
 jQuery(function () {
   var id = jQuery('body').attr("id");

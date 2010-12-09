@@ -5,7 +5,8 @@
       %div.error
         = @error_message
 
-  %p= link_to "Copy this #{coding_type} to the corresponding #{coding_type.gsub(/Budget/, "Spend")}", copy_budget_to_spend_activity_coding_path(activity, :coding_type => coding_type), :method => :put, :confirm => "This will overwrite ALL the expenditure codes for #{coding_type}. This operation cannot be undone. Are you sure?"
+  - if coding_type =~ /Budget/
+    %p= link_to "Use this Budget split for the corresponding Spend", copy_budget_to_spend_activity_coding_path(activity, :coding_type => coding_type), :method => :put, :confirm => "This will overwrite ALL the expenditure codes for #{coding_type}. This operation cannot be undone. Are you sure?"
 
   - form_for activity, :url => activity_coding_path(activity, :coding_type => coding_type), :method => :put, :html => {:id => ''} do |form|
     %ul.activity_tree

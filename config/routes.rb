@@ -26,11 +26,15 @@ ActionController::Routing::Routes.draw do |map|
 
 
   map.resources :activities,
-                :member => { :approve => :put, :use_budget_codings_for_spend => :put, :classifications => :get },
+                :member => {:approve => :put,
+                            :use_budget_codings_for_spend => :put,
+                            :classifications => :get},
                 :active_scaffold => true          do |activity|
 
-    map.resources :classifications, :member => { :popup_classification => :get }, :active_scaffold => true
-    activity.resource :coding, :controller => :code_assignments, :only => [:show, :update]
+    map.resources :classifications, :member => {:popup_classification => :get }, :active_scaffold => true
+    activity.resource :coding, :controller => :code_assignments,
+                               :only => [:show, :update],
+                               :member => {:copy_budget_to_spend => :put}
     map.resources :sub_activities, :active_scaffold => true
   end
 

@@ -1,8 +1,8 @@
 class CodeAssignmentsController < ApplicationController
   authorize_resource
+  before_filter :load_activity
 
   def show
-    @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :read, @activity
 
     @coding_type = params[:coding_type] || 'CodingBudget'
@@ -26,7 +26,6 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update
-    @activity = Activity.available_to(current_user).find(params[:activity_id])
     authorize! :update, @activity
 
     notice_message = nil
@@ -59,55 +58,77 @@ class CodeAssignmentsController < ApplicationController
     end
   end
 
-private
-
-  def add_code_assignments_error(coding_class, activity)
-    if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
-      unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)
-        "We're sorry, you are using the budget classifications for your expenditures and the budget classifications have an error. Please correct the corresponding budget classifications."
+  def copy_budget_to_spend
+    authorize! :update, @activity
+    coding_class = params[:coding_type].constantize
+    respond_to do |format|
+      if coding_class.use_budget_for_expenditure(@activity)
+        format.html do
+          flash[:notice] = "Budget Coding source was successfully copied across to it's respective Spend Coding."
+          redirect_to activity_coding_path(@activity)
+        end
       else
-        nil
+        format.html do
+          flash[:error] = "We could not copy your Budget Coding across."
+          redirect_to activity_coding_path(@activity)
+        end
       end
-    elsif !coding_class.classified(activity)
-      coding_name = get_coding_name(coding_class)
-      coding_type = get_coding_type(coding_class)
-      coding_type_amount = activity.send(get_coding_type(coding_class))
-      coding_amount = activity.send("#{coding_class}_amount")
-      coding_amount = 0 if coding_amount.nil?
-      difference = coding_type_amount - coding_amount
-      percent_diff = difference/coding_type_amount * 100
-      coding_type_amount = n2c(coding_type_amount)
-      coding_amount = n2c(coding_amount)
-      difference = n2c(difference)
-      percent_diff = n2c(percent_diff)
-
-      "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
     end
   end
 
-  def get_coding_name(klass)
-    case klass.to_s
-    when 'CodingBudget'
-      "Budget Coding"
-    when 'CodingBudgetDistrict'
-      "Budget by District"
-    when 'CodingBudgetCostCategorization'
-      "Budget by Cost Category"
-    when 'CodingSpend'
-      "Spent Coding"
-    when 'CodingSpendDistrict'
-      "Spent by District"
-    when 'CodingSpendCostCategorization'
-      "Spent by Cost Category"
-    end
-  end
+  private
 
-  def get_coding_type(klass)
-    case klass.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
-      :budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
-      :spend
+    def load_activity
+      @activity = Activity.available_to(current_user).find(params[:activity_id])
     end
-  end
+
+    def add_code_assignments_error(coding_class, activity)
+      if (coding_class.to_s.include?("Spend") and activity.use_budget_codings_for_spend)
+        unless coding_class.to_s.gsub("Spend", "Budget").constantize.classified(activity)
+          "We're sorry, you are using the budget classifications for your expenditures and the budget classifications have an error. Please correct the corresponding budget classifications."
+        else
+          nil
+        end
+      elsif !coding_class.classified(activity)
+        coding_name = get_coding_name(coding_class)
+        coding_type = get_coding_type(coding_class)
+        coding_type_amount = activity.send(get_coding_type(coding_class))
+        coding_amount = activity.send("#{coding_class}_amount")
+        coding_amount = 0 if coding_amount.nil?
+        difference = coding_type_amount - coding_amount
+        percent_diff = difference/coding_type_amount * 100
+        coding_type_amount = n2c(coding_type_amount)
+        coding_amount = n2c(coding_amount)
+        difference = n2c(difference)
+        percent_diff = n2c(percent_diff)
+
+        "We're sorry, when we added up your #{coding_name} classifications, they equaled #{coding_amount} but the #{coding_type} is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount} = #{difference}, which is ~#{percent_diff}%). The total classified should add up to #{coding_type_amount}. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
+      end
+    end
+
+    def get_coding_name(klass)
+      case klass.to_s
+      when 'CodingBudget'
+        "Budget Coding"
+      when 'CodingBudgetDistrict'
+        "Budget by District"
+      when 'CodingBudgetCostCategorization'
+        "Budget by Cost Category"
+      when 'CodingSpend'
+        "Spent Coding"
+      when 'CodingSpendDistrict'
+        "Spent by District"
+      when 'CodingSpendCostCategorization'
+        "Spent by Cost Category"
+      end
+    end
+
+    def get_coding_type(klass)
+      case klass.to_s
+      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
+        :budget
+      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
+        :spend
+      end
+    end
 end

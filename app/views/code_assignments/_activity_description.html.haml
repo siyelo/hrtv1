@@ -18,9 +18,6 @@
   %tr
     %td.title Total Budget for GOR FY 10-11:
     %td= @activity.budget.blank? ? "(budget was not entered)" : n2c(@activity.budget)
-  %tr
-    %td.title= label_tag :use_budget_codings_for_spend, "Use budget codings for Expenditure?"
-    %td= check_box_tag :use_budget_codings_for_spend, true, @activity.use_budget_codings_for_spend
 
   - if can? :approve, @activity
     %tr

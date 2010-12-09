@@ -297,7 +297,7 @@ class Activity < ActiveRecord::Base
         end
         spend_ca.save!
       end
-      self.update_classified_amount_cache(spend_type_klass)
+      #self.update_classified_amount_cache(spend_type_klass)
     end
     true
   end

@@ -57,12 +57,12 @@ class CodeAssignmentsController < ApplicationController
     respond_to do |format|
       if @activity.copy_budget_codings_to_spend([params[:coding_type]])
         format.html do
-          flash[:notice] = "Budget split was successfully copied across."
+          flash[:notice] = "Budget classifications were successfully copied across."
           redirect_to activity_coding_path(@activity)
         end
       else
         format.html do
-          flash[:error] = "We could not copy your Budget split across."
+          flash[:error] = "We could not copy your budget classifications across."
           redirect_to activity_coding_path(@activity)
         end
       end

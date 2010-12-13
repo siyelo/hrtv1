@@ -31,7 +31,6 @@ Rails::Initializer.run do |config|
   config.gem "cancan", :version => ">= 1.4.0"
   config.gem "validates_date_time", :version => '= 1.0.0'
   config.gem 'formtastic', :version => "0.9.10"
-  config.gem "glennr-seer", :lib => 'seer', :version => "=0.9.2"
   config.gem "version", :version => "=0.9.2"
 
   config.time_zone = 'UTC'

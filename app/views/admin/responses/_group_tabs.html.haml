@@ -8,6 +8,7 @@
 - nr_submitted = " (#{@submitted_responses.size})" if @submitted_responses
 - nr_in_progress = " (#{@in_progress_responses.size})" if @in_progress_responses
 - nr_empty = " (#{@empty_responses.size})" if @empty_responses
+
 .group
   %ul
     %li= link_to "Submitted" + nr_submitted, submitted_admin_responses_path, active_if([:index, :submitted])

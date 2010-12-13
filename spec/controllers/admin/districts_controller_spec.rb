@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe Admin::DistrictsController do
 
-  #Delete these examples and add some real ones
-  it "should use Admin::DistrictsController" do
-    controller.should be_an_instance_of(Admin::DistrictsController)
+  before :each do
+    @admin = Factory.create(:admin)
+    login @admin
+    Location.stub!(:find).with("1").and_return(@mock_object = mock_model(Location))
   end
-
 
   describe "GET 'index'" do
     it "should be successful" do
+      Location.should_receive(:all).and_return([@mock_object])
       get 'index'
       response.should be_success
     end
@@ -17,7 +18,8 @@ describe Admin::DistrictsController do
 
   describe "GET 'show'" do
     it "should be successful" do
-      get 'show'
+      Location.should_receive(:find).with("1").and_return(@mock_object)
+      get :show, :id => "1"
       response.should be_success
     end
   end

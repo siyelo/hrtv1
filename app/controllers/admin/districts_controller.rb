@@ -1,12 +1,11 @@
-class Admin::DistrictsController < ApplicationController
-  before_filter :require_admin
+class Admin::DistrictsController < Admin::BaseController
 
   def index
     @locations = Location.all
   end
 
   def show
-   @location = Location.find(params[:id])
+    @location = Location.find(params[:id])
   end
 
 end

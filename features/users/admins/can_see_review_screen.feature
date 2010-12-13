@@ -20,7 +20,9 @@ Background:
   And I am signed in as an admin
   When I follow "Dashboard"
   And I follow "Responses" within the main nav
+  And I follow "In Progress"
   And I follow "Show"
+  Then show me the page
 
 @admin_review_screen @javascript
 Scenario: Manage comments on data responses (with Javascript)

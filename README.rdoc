@@ -32,6 +32,7 @@ Now we'll import the rvm gemset from default.gems.
 * rvm gemset import resource_tracking
 
 Note: if you have an error with database gem you won't be using, you can ignore it.
+Note: if you have an error in forms like "{{attribute}} {{message}}" manually uninstall the "i18n" gem (it is installed as a dependency of formtastic gem and used in Rails 3)
 
 === Local Setup
 

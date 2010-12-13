@@ -1,6 +1,15 @@
+%ul.breadcrumb
+  %li= link_to "Districts", admin_districts_path
+  %li >
+
 %h1= h @location.name
 
-%ul#group
-  %li= link_to "Summary", "#"
-  %li= link_to "Organizations", "#"
-  %li= link_to "Activities", admin_district_activities_path(@location)
+%h2 MTEF Spent
+
+%h2 MTEF Budgeted
+
+%h2 Organizations
+%p= link_to "Organizations", "#"
+
+%h2 Activities
+%p= link_to "Activities", admin_district_activities_path(@location)

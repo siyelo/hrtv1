@@ -11,7 +11,6 @@ Feature: See Reports
 #   And a data_response exists with data_request: the data_request, responding_organization: the organization
   
 @admin
-@run
 Scenario Outline: Navigate to reports page
   Given I am signed in as an admin
   When I follow "Dashboard"

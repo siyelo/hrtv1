@@ -34,6 +34,9 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |code_id| { :conditions =>
                 ["code_assignments.code_id = ?", code_id]} }
   named_scope :sort_cached_amt, { :order => "code_assignments.cached_amount DESC"}
+  named_scope :with_location,
+              lambda { |location_id| { :conditions =>
+                ["code_assignments.code_id = ?", location_id]} }
 
   ### Instance Methods
 

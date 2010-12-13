@@ -21,7 +21,6 @@ Background:
   And a coding_budget exists with activity: the activity, code: the first code 
   And a coding_budget exists with activity: the activity, code: the 2nd code 
 
-@run
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"

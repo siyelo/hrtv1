@@ -13,9 +13,9 @@ Scenario: Login via home page
 Scenario: See login form
   When I go to the login page
   Then I should see the visitors header
-  And I should see "Sign in" within "body#login"
-  And I should see "Username or Email" within "body#login"
-  And I should see "Password" within "body#login"
+  And I should see "Sign in" within ".sign_in_form"
+  And I should see "Username or Email" within ".sign_in_form"
+  And I should see "Password" within ".sign_in_form"
   And I should see the common footer
 
 @reporter_login

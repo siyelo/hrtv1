@@ -1,49 +1,62 @@
 - content_for :head do
-  = Seer::init_visualization
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-%h1= h @activity.name
+:javascript
+  google.load("visualization", "1", {packages:["corechart"]});
+  var _spent_pie_values = #{@spent_pie_values};
+  var _budget_pie_values = #{@budget_pie_values};
+  var _spent_ratio_pie_values = #{@spent_ratio_pie_values};
+  var _budget_ratio_pie_values = #{@budget_ratio_pie_values};
+
+
+%ul.breadcrumb
+  %li= link_to "Districts", admin_districts_path
+  %li >
+  %li= link_to h(@location.name), admin_district_path(@location)
+  %li >
+  %li= link_to 'Activities', admin_district_activities_path(@location)
+  %li >
+
+%h1= "Activity: #{friendly_name(@activity.name)} [#{@activity.organization_name}]"
 
 %table
   %tbody
     %tr
       %td Description:
-      %td= h @activity.description
+      %td= h @activity.description.titleize
     %tr
       %td Implementer
       %td= @activity.implementer
     %tr
-      %td Classification Done ?
-      %td= @activity.classified? ? "Yes" : "No"
-    %tr
-      %td Total Spent
-      %td= n2c(@activity.spend, @activity.currency)
-    %tr
-      %td Total Budgeted
-      %td= n2c(@activity.budget, @activity.currency)
+      %td Currency
+      %td= @activity.currency
     %tr
       %td Approved ?
       %td= @activity.approved? ? "Yes" : "No"
-
-%ul#group
-  %li= link_to "MTEF", "#"
-  %li= link_to "NSP", "#"
-  %li= link_to "HSSP", "#"
-
-%table
-  %thead
-    %th MTEF Spent
-    %th MTEF Budget
-  %tbody
     %tr
-      %td
-        %p Pie
-        #mtef_spent_pie
-          = render "pie_chart", :records => @mtef_spent_codings, :div => 'mtef_spent_pie'
-        %p TreeMap
+      %td Classification Done ?
+      %td= @activity.classified? ? "Yes" : "No"
 
-      %td
-        %p Pie
-        #mtef_budget_pie
-          = render "pie_chart", :records => @mtef_budget_codings, :div => 'mtef_budget_pie'
+%div
+  %h2 Proportion Spent
+  #spent_ratio_pie
 
-        %p TreeMap
+%div
+  %h2 Proportion Budgeted
+  #budget_ratio_pie
+
+
+%ul.group
+  %li= link_to "MTEF", admin_district_activity_path(@location, @activity), active_if([:show, :mtef])
+  %li= link_to "NSP", "#", active_if([:nsp])
+  %li= link_to "HSSP", "#", active_if([:hssp])
+
+
+%div
+  %h2 MTEF Spent
+  #spent_pie
+
+%div
+  %h2 MTEF Budgeted
+  #budget_pie
+

@@ -24,6 +24,8 @@ Scenario: Manage data responses
 
 @admin_data_responses @javascript
 Scenario: Manage data responses (with JS)
+  When I follow "Responses"
+  When I follow "Empty"
   When I will confirm a js popup
   And I follow "Delete"
   Then I should not see "UNDP"

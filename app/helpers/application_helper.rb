@@ -55,4 +55,21 @@ module ApplicationHelper
   def current_controller?(controller)
     controller == request.path_parameters[:controller].split('/').last
   end
+
+  def friendly_name(name)
+    name.blank? ? "(no name)" : h(name.titleize)
+  end
+
+  # appends a .active class
+  def active_if(action_name)
+    active = false
+    current = controller.action_name.to_sym
+    if action_name.is_a?(Array)
+      active = true if action_name.include?(current)
+    else
+      active = true if action_name == current
+    end
+    { :class => ('active' if active) }
+  end
+
 end

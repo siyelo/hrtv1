@@ -275,7 +275,20 @@ var removeRow = function (resources, rowId) {
   updateCount(resources);
 };
 
-var admin_data_responses_index = {
+var admin_responses_index = {
+  run: function () {
+    // destroy
+    jQuery(".destroy_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this);
+      if (confirm('Are you sure?')) {
+        destroyResource(element);
+      }
+    });
+  }
+};
+
+var admin_responses_empty = {
   run: function () {
     // destroy
     jQuery(".destroy_btn").live('click', function (e) {
@@ -591,7 +604,7 @@ var build_data_response_review_screen = function () {
 
 };
 
-var admin_data_responses_show = {
+var admin_responses_show = {
   run: function (){
     build_data_response_review_screen();
     ajaxifyResources('comments');
@@ -740,6 +753,49 @@ var code_assignments_show = {
 
     approve_activity_checkbox();
 
+  }
+};
+
+var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
+  if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
+    jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
+  } else {
+    e.preventDefault();
+  }
+};
+
+var data_responses_review = {
+  run: function () {
+    jQuery(".use_budget_codings_for_spend").click(function (e) {
+      var checked = jQuery(this).is(':checked');
+      activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+      update_use_budget_codings_for_spend(e, activity_id, checked);
+    })
+  }
+}
+
+function drawPieChart(id, records) {
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Task');
+  data.addColumn('number', 'Hours per Day');
+
+  data.addRows(records.length);
+  for (var i = 0; i < records.length; i++) {
+    var record = records[i];
+    data.setValue(i, 0, record[0]);
+    data.setValue(i, 1, record[1]);
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById(id));
+  chart.draw(data, {width: 450, height: 300, title: 'My Daily Activities'});
+};
+
+var admin_districts_activities_show = {
+  run: function () {
+    drawPieChart('spent_ratio_pie', _spent_ratio_pie_values);
+    drawPieChart('budget_ratio_pie', _budget_ratio_pie_values);
+    drawPieChart('spent_pie', _spent_pie_values);
+    drawPieChart('budget_pie', _budget_pie_values);
   }
 };
 

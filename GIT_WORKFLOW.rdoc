@@ -1,0 +1,90 @@
+
+= HRT Git Development & Release workflow
+
+Our git workflow is pretty much described here: http://nvie.com/posts/a-successful-git-branching-model/
+
+Note:
+* We use the branch name +working+ instead of +develop+.
+* We use the release branch name +v1.0+ instead of +release-1.0+ (less typing)
+* In the article he states;
+    "Unfortunately, I have not found a way to make --no-ff the default behaviour of git merge yet, but it really should be.".
+
+But this can actually be configured at the branch-level though, as we do below.
+
+== Git Setup
+
+=== Avoid fastforward merges with --no-ff
+
+    $ git config branch.working.mergeoptions  "--no-ff --no-commit"
+    $ git config branch.master.mergeoptions  "--no-ff --no-commit"
+
+The comments below explain this. I suggest you paste them in your .git/config for future reference.
+
+    [branch "master"]
+    # This is the list of cmdline options that should be added to git-merge
+    # when I merge commits into the master branch.
+
+    # First off, the option --no-commit instructs git not to commit the merge
+    # by default. This allows me to do some final adjustment to the commit log
+    # message before it gets commited. I often use this to add extra info to
+    # the merge message or rewrite my local branch names in the commit message
+    # to branch names sensible to the casual reader of the git log. Putting hefty
+    # changes here would be confusing, but it is the perfect chance to make
+    # CHANGELOG edits.
+
+    # Option --no-ff instructs git to always record a merge commit, even if
+    # the branch being merged into can be fast-forwarded. This is often the
+    # case when you create a short-lived topic branch which tracks master, do
+    # some changes on the topic branch and then merge the changes into the
+    # master which remained unchanged while you were doing your work on the
+    # topic branch. In this case the master branch can be fast-forwarded (that
+    # is the tip of the master branch can be updated to point to the tip of
+    # the topic branch) and this is what git does by default. With --no-ff
+    # option set git creates a real merge commit which records the fact that
+    # another branch was merged. I find this easier to understand and read in
+    # the log.
+    mergeoptions = --no-commit --no-ff
+
+To clean up the merge message as you commit, use;
+
+     git commit -e
+
+=== More useful merge summaries
+
+For all its goodness +--no-ff+ gives you some terse merge messages. This idea below is from Tim Pope: Every time you do a merge you'll get a more meaningful commit log;
+
+    $ git config --global merge.summary true
+
+When in conjunction with the --no-commit option, you have the chance to make your merge commit messages all shiny and nice.
+
+=== Pulling changes from upstream
+
+If you are in the (bad) habit of doing 'git pull', when in fact all you want to do is rebase against upstream (origin), then you should be doing a 'git pull --rebase' or better still
+
+    $ git fetch
+    $ git rebase origin/working
+
+This avoids creating merge commits, when all you want to do is update your local branch (i.e. rebase).
+
+== Releasing
+
+=== Bumping versions
+
+We use a mixture of release branches and release tags. One release branch (e.g. 0.9.0), then multiple release tags made at key milestones (e.g. 0.9.0a, 0.9.0b)
+
+Once you've checked out a release branch from [working], then you should bump the version.
+
+We're using the "version" gem to do all the heavy lifting. It gives us release tagging for free.
+
+=== Dont forget to push your release tags
+
+Add this to your git config for the remote that you want to always push tags to.
+
+      push = +refs/tags/*:refs/tags/*
+
+E.g.
+
+    [remote "origin"]
+      fetch = +refs/heads/*:refs/remotes/origin/*
+      url = git@github.com:rwandaonrails/resource_tracking.git
+      push = +refs/tags/*:refs/tags/*

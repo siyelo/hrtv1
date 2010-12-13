@@ -159,14 +159,15 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
@@ -193,6 +194,7 @@ end
 #  CodingSpend_amount                    :decimal(, )     default(0.0)
 #  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
 #  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
+#  use_budget_codings_for_spend          :boolean         default(FALSE)
 #  budget_q1                             :decimal(, )
 #  budget_q2                             :decimal(, )
 #  budget_q3                             :decimal(, )

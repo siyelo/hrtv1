@@ -5,22 +5,22 @@ class ClassificationsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :organization, :description, :budget?, :budget_by_district?, :budget_by_cost_category?,
-                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved, :use_budget_codings_for_spend]
+                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved]
 
 
   active_scaffold :activity do |config|
-    config.list.pagination = false
-    config.actions        = [ :list ]
-    config.label          = 'Activity Classifications'
-    config.columns        = @@shown_columns
-    config.list.sorting   = { :description => 'DESC' }
+    config.list.pagination = true
+    config.list.per_page   = 200
+    config.actions         = [ :list ]
+    config.label           = 'Activity Classifications'
+    config.columns         = @@shown_columns
+    config.list.sorting    = { :description => 'DESC' }
 
     config.action_links.add('Classify', @@classify_popup_link_options)
 
     config.columns[:description].inplace_edit           = true
     config.columns[:description].label                  = "Activity Description"
     config.columns[:approved].label                     = "Approved?"
-    config.columns[:use_budget_codings_for_spend].label = "Use budget codings for Expenditure?"
     config.columns[:budget?].list_ui                    = :checkbox
     config.columns[:budget_by_cost_category?].list_ui   = :checkbox
     config.columns[:budget_by_district?].list_ui        = :checkbox

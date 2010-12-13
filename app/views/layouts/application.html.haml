@@ -15,7 +15,7 @@
     = render :partial => 'layouts/user_session'
   - elsif controller.controller_name == "help_requests" && %w[create new].include?(controller.action_name)
     = render :partial => 'layouts/user_session'
-  - elsif [ "CodeAssignmentsController", "Admin::DataResponsesController", "PolicyMaker::DataResponsesController", "Reporter::DataResponsesController"].include? controller.class.to_s
+  - elsif [ "CodeAssignmentsController", "Admin::DataResponsesController", "PolicyMaker::DataResponsesController", "Reporter::DataResponsesController"].include?(controller.class.to_s) || (controller.class.to_s == "DataResponsesController" && controller.action_name == 'review')
     = render :partial => 'layouts/full_width'
   - else
     = render :partial => 'layouts/inner_pages'

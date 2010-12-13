@@ -1,10 +1,11 @@
-.commentable
-  .name
-    //= commentable.name
-    COMMENTS
+.comment_indicator_wrap
+  .commentable
+    .name
+      //= commentable.name
+      COMMENTS
 
-.comments_bubble
-- commentable.comments.each do |comment|
-  .comment_entry
-    .title= comment.title
-    .comment= comment.comment
+  .comments_bubble
+  - commentable.comments.each do |comment|
+    .comment_entry
+      .title= comment.title
+      .comment= comment.comment

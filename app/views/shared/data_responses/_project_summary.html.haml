@@ -30,7 +30,7 @@
         %td=  n2c(project.spend_q4, project.currency || @data_response.currency)
 
     %tr
-      %td Districts:
+      %td== Districts (#{project.locations.count}/#{Location.count}):
       %td
         %ul.dashboard_districts
           - project.locations.map(&:name).each do |loc|
@@ -51,14 +51,20 @@
   .tab4{:"data-chart_type" => "project", :"data-id" => project.id}
     = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => project, :element_type => 'project'
 
-  .tab5
-    .chart{:id => "project_#{project.id}_stratprog_budget_pie"}
+  .tab5{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_budget', :element => project, :element_type => 'project'
 
-  .tab6
-    .chart{:id => "project_#{project.id}_stratobj_budget_pie"}
+  .tab6{:"data-chart_type" => "project", :"data-id" => project.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_spend', :element => project, :element_type => 'project'
 
-  .tab7
-    .chart{:id => "project_#{project.id}_stratprog_spend_pie"}
+  -#.tab5
+    -#.chart{:id => "project_#{project.id}_stratprog_budget_pie"}
 
-  .tab8
-    .chart{:id => "project_#{project.id}_stratobj_spend_pie"}
+  -#.tab6
+    -#.chart{:id => "project_#{project.id}_stratobj_budget_pie"}
+
+  -#.tab7
+    -#.chart{:id => "project_#{project.id}_stratprog_spend_pie"}
+
+  -#.tab8
+    -#.chart{:id => "project_#{project.id}_stratobj_spend_pie"}

@@ -16,11 +16,12 @@ class SubActivitiesController < ActiveScaffoldController
     :file_field => :file
 
   active_scaffold :sub_activities do |config|
-    config.list.pagination = false
-    config.label =  "Sub Implementers"
-    config.columns =  @@shown_columns
-    list.sorting = {:budget => 'DESC'} #adding this didn't break in place editing
-   #  TODO add back in when implemented in functioning manner
+    config.list.pagination = true
+    config.list.per_page   = 200
+    config.label           =  "Sub Implementers"
+    config.columns         =  @@shown_columns
+    list.sorting           = {:budget => 'DESC'} #adding this didn't break in place editing
+    #  TODO add back in when implemented in functioning manner
     config.action_links.add('Upload',
       :action => "create_from_file_form",
       :controller => "sub_activities",

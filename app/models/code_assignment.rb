@@ -1,10 +1,11 @@
 class CodeAssignment < ActiveRecord::Base
-
   ### Associations
   belongs_to :activity
   belongs_to :code
+
   ### Validations
   validates_presence_of :activity, :code
+
   ### Attributes
   attr_accessible :activity, :code, :amount, :percentage,
                   :cached_amount, :sum_of_children
@@ -22,7 +23,7 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_activities_include_implementer,
               lambda { |activity_ids| {
                 :conditions => ["code_assignments.activity_id in (?)", activity_ids],
-                :joins => [:activity => :provider]} } 
+                :joins => [:activity => :provider]} }
   named_scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_assignments.type = ?", type]} }
@@ -30,8 +31,10 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |code_id| { :conditions =>
                 ["code_assignments.code_id = ?", code_id]} }
   named_scope :sort_cached_amt, { :order => "code_assignments.cached_amount DESC"}
- 
-  # override this in subclasses to make proportion work 
+
+  ### Instance Methods
+
+  # override this in subclasses to make proportion work
   def activity_amount
     #TODO add a class that has a unique name
     # so its easy to telll that this method
@@ -41,7 +44,9 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def proportion_of_activity
-    unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0 
+    unless activity_amount == 0 or
+           calculated_amount.nil? or
+           calculated_amount == 0
       calculated_amount / activity_amount
     else
       if !percentage.nil?
@@ -52,11 +57,12 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  ### methods
   def calculated_amount
     return cached_amount unless cached_amount.nil?
     return 0
   end
+
+  ### Class Methods
 
   def self.update_codings(code_assignments, activity)
     if code_assignments
@@ -66,25 +72,15 @@ class CodeAssignment < ActiveRecord::Base
 
       self.with_activity(activity.id).delete_all
 
-      # TODO update all the codings, create the ones that are actually new
+      # if there are any codes, then save them!
       selected_codes.each do |code|
-        self.create!(
-          :activity => activity,
-          :code => code,
-          :amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
-          :percentage => code_assignments[code.id.to_s]["percentage"]
-        ) if code
+        self.create!(:activity => activity,
+                     :code => code,
+                     :amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
+                     :percentage => code_assignments[code.id.to_s]["percentage"]
+        )
       end
-
-      if activity.use_budget_codings_for_spend
-        budget_type = self.to_s
-        activity.copy_budget_codings_to_spend([budget_type]) # copy the same budget codings to spend
-        spend_type = budget_type.gsub(/Budget/, "Spend") # get appropriate spend type
-        activity.update_classified_amount_cache(self) # update cache for budget
-        activity.update_classified_amount_cache(spend_type.constantize) # update cache for spend
-      else
-        activity.update_classified_amount_cache(self)
-      end
+      activity.update_classified_amount_cache(self)
     end
   end
 
@@ -150,18 +146,23 @@ class CodeAssignment < ActiveRecord::Base
     end
     new_assignments
   end
+
+  protected
+
+
 end
+
 
 
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id              :integer         not null, primary key
-#  activity_id     :integer
-#  code_id         :integer         indexed
+#  id              :integer         primary key
+#  activity_id     :integer         indexed => [code_id, type]
+#  code_id         :integer         indexed, indexed => [activity_id, type]
 #  amount          :decimal(, )
-#  type            :string(255)
+#  type            :string(255)     indexed => [activity_id, code_id]
 #  percentage      :decimal(, )
 #  cached_amount   :decimal(, )     default(0.0)
 #  sum_of_children :decimal(, )     default(0.0)

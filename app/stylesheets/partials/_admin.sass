@@ -10,17 +10,13 @@ body.app
       display: none
       .actions
         font-size: 12px
-
   .hidden
     display: none
-
   .manage
     width: 100px
-
     label
       display: inline
       // this is since it inherits :block from body.app otherwise
-
   .full-width
     h2
       background: none
@@ -33,12 +29,11 @@ body.app
       text-transform: none
     h4
       font-size: 12px
-
     > .summary
       margin: 0 10px 10px
       tr
         td
-          background: !very-light-grey
+          background: $very-light-grey
           border-right: 1px solid white
           border-bottom: 1px solid white
           color: $mid-blue
@@ -48,16 +43,13 @@ body.app
           &:first-child
             text-align: right
             font-weight: bold
-            
   .nav, .nav2
     h2
       margin-left: 0
-
   a
     color: $orange
     &:hover, &:focus, &:active
       color: $mid-blue
-
   .dashboard_form
     float: left
     margin-bottom: 20px
@@ -66,26 +58,22 @@ body.app
     padding: 0 10px 20px 10px
     +pie-clearfix
   .resources
-
     .placer
       position: relative
       .form_box
-        background: $lightest-blue + #111
+        background: $lightest-blue + #111111
         border-top: 1px solid white
         border-left: 1px solid $lighter-blue
         border-right: 1px solid $lighter-blue
         border-bottom: 4px solid $mid-blue
         padding: 10px 20px
-
     .edit_form
       padding: 0 10px
-
     .dashboard_comments, .placer
       tbody td
         font-size: 12px
       ol
         +horizontal-list
-
         #basic
           float: left
           width: 70%
@@ -104,7 +92,6 @@ body.app
     .inline-errors
       color: red
       margin: -10px
-
     .close
       background: $mid-blue
       border: 1px solid white
@@ -121,7 +108,6 @@ body.app
         color: $mid-blue
     .cancel_btn
       margin: 15px 0 0 10px
-
   input, textarea
     border: 1px solid $light-blue
     margin-bottom: 10px
@@ -143,37 +129,32 @@ body.app
     font-size: 12px
     td
       display: inline
-
   #response_charts_nav, #response_charts
     font-size: 0.8em
     padding-bottom: 15px
     float: left
     width: 67%
-
-  /* paragraph guide style */
+  /* paragraph guide style
   #content #main p.guide
     background: image_url("guide.png") no-repeat 15px 0px
     color: $mid-blue
-    font-size: 10px
+    font-size: 11px
+    font-style: italic
     letter-spacing: 0.05em
     margin: 20px 0 10px 5px
     padding: 0 0 0 35px
-
-  /* default layout for a simple table */
+  /* default layout for a simple table
   .simple_table
     padding: 0 10px
     +pie-clearfix
-
-    /* a hack, but the padding interferes with .third */
+    /* a hack, but the padding interferes with .third
     &.response_summary
       padding: 0 0 0 10px
-
     hr
       background: none
       border: none
       border-top: 1px dashed $light-blue
       margin-top: 20px
-
     // 2-col summary tables in each Response/Project/Activity
     .summary
       font-size: 12px
@@ -181,12 +162,10 @@ body.app
         font-weight: bold
         text-align: right
         width: 45%
-
     .activities .summary td
       font-size: 12px
       thead tr th
         font-size: 11px
-
     h3
       color: $mid-blue
       font-size: 0.9em
@@ -210,9 +189,8 @@ body.app
           color: $dark-blue
       &.disabled
         display: none
-
     table
-      background: !very-light-grey
+      background: $very-light-grey
       color: $mid-blue
       width: 100%
       a
@@ -223,15 +201,12 @@ body.app
       th, td
         border-right: 1px solid white
         padding: 7px
-
       tbody
         font-size: 12px
         th, td
           border-bottom: 1px solid white
-
         tr:hover
           background: #f9f9f9
-
       thead
         background: $mid-blue
         color: white
@@ -273,16 +248,13 @@ body.app
         border: 1px solid $light-blue
         margin: -1px 0 0
         padding: 7px 5px 5px
-
     li
       padding-top: 5px
-
     .active
       background: $light-blue
       color: $dark-blue
       &:hover
         background: $light-blue
-
     // activity description
     .activity
       &.entry_header
@@ -290,13 +262,11 @@ body.app
           display: none
         .descr
           display: block
-
         &.active
           .descr_full
             display: block
           .descr
             display: none
-
     .s_border
       background: white
       border: 3px solid $lighter-blue
@@ -310,11 +280,9 @@ body.app
       float: right
       margin-right: 0
       text-align: right
-
     .orange
-      color: #CC873C
+      color: #cc873c
       font-size: 18px
-
     .activities, .dashboard_comments
       tbody
         font-size: 1.2em
@@ -332,8 +300,6 @@ body.app
         background: $lightest-blue
         margin-bottom: 5px
         +pie-clearfix
-
-
         li:last-child
           float: right
           margin-right: 5px
@@ -344,11 +310,10 @@ body.app
         a
           display: inline-block
           padding: 4px
-
   ul.inline_tab
     +horizontal-list
     border-bottom: 1px solid $light-blue
-    color: $light-blue - #333
+    color: $light-blue - #333333
     line-height: 1.5em
     font-size: 12px
     a
@@ -358,11 +323,10 @@ body.app
       color: $mid-blue
       display: inline-block
       font-weight: bold
-      
   ul.inline_alt_tab
     +horizontal-list
     border-bottom: 3px solid $mid-blue
-    color: $light-blue - #333
+    color: $light-blue - #333333
     line-height: 1.5em
     font-size: 12px
     margin: 0 1px 1px 0
@@ -429,7 +393,7 @@ body.app
     padding-top: 15px
     padding-left: 15px
     display: none
-    
+
 body.app #content .tabs
   .comments
     margin: 0
@@ -447,19 +411,18 @@ body.app #content .tabs
     +border-radius
     &:hover
       background: $orange
-    
+
 .tabs
   +clearfix
   width: 100%
+
 .tabs_nav
   +clearfix
   width: 100%
-  
-
 
 // expand/collapse toggle
 .indicator
-  background:  image_url("icon_collapse.png") no-repeat 0px 3px
+  background: image_url("icon_collapse.png") no-repeat 0px 3px
   display: inline-block
   height: 16px
   width: 16px
@@ -468,7 +431,7 @@ body.app #content .tabs
   float: left
   width: auto
   .indicator
-    background:  image_url("icon_expand.png") no-repeat 0px 3px
+    background: image_url("icon_expand.png") no-repeat 0px 3px
 
 #projects
   width: 100%
@@ -482,13 +445,14 @@ body.app #content .tabs
   padding-top: 10px
   +pie-clearfix
   .simple_table
-    /* a hack, but the padding interferes with .third */
+    /* a hack, but the padding interferes with .third
     padding: 0 0 0 10px
 
-/* fix for review screen - classifications content squashing against sub-tab */
+/* fix for review screen - classifications content squashing against sub-tab
 .pie
   h4
     padding-top: 10px
+
 .box
   border: 1px solid $lightest-blue
   margin-bottom: 20px
@@ -500,13 +464,13 @@ body.app #content .tabs
     width: 97.5%
   .destroy_btn
     margin: 10px
+
 .preview
   .organization
     border-bottom: 1px dashed $mid-blue
     font-weight: bold
     margin-bottom: 5px
     padding-bottom: 5px
-    
   #duplicate
     background: $lightest-blue
     border-top: 3px solid $mid-blue
@@ -517,7 +481,6 @@ body.app #content .tabs
     margin-bottom: 20px
     padding: 10px
     width: 47%
-  
   #target
     background: $lightest-blue
     border-top: 3px solid $mid-blue
@@ -529,16 +492,16 @@ body.app #content .tabs
     padding: 10px
     width: 47%
 
-
-/* comments tipsy styles */
+/* comments tipsy styles
 
 .commentable
   .name
-    background: $light-blue + #222
+    background: $light-blue + #222222
     font-size: 11px
     font-weight: bold
     margin-bottom: 3px
     padding: 3px 5px
+
 .comment_entry
   .title
     font-size: 12px

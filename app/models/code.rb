@@ -63,6 +63,14 @@ class Code < ActiveRecord::Base
       codes = Nsp.all
       roots = Nsp.roots
       type  = "CodingSpend"
+    when 'cc_budget'
+      codes = CostCategory.all
+      roots = CostCategory.roots
+      type  = "CodingBudgetCostCategorization"
+    when 'cc_spend'
+      codes = CostCategory.all
+      roots = CostCategory.roots
+      type  = "CodingSpendCostCategorization"
     else
       raise "Wrong chart type".to_yaml
     end

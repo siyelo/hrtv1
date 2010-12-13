@@ -1,13 +1,12 @@
-
-=normal_link()
-  color= !orange
+=normal_link
+  color: $orange
   background: none
   font-size: 0.8em
   padding-left: 10px
   text-decoration: none
   &:hover
     background: none
-    color= !mid-blue
+    color: $mid-blue
     text-decoration: underline
 
 body.app
@@ -15,17 +14,13 @@ body.app
     min-width: 900px
     padding: 0 50px
     position: relative
-
   #header_app
     height: 40px
-    
   p
     font-size: 0.8em
     line-height: 1.2em
     +clearfix
-
-
-  /* overriding the shared logo style*/
+  /* overriding the shared logo style
   #header_app
     a
       text-decoration: none
@@ -38,16 +33,13 @@ body.app
         padding-top: 4px
         span
           margin-left: -5px
-  /* end */
-
-  /* app main nav styles */
+  /* end
+  /* app main nav styles
   #main-nav
-    background= image_url("bg-blue.jpg")
-
+    background: image_url(unquote("bg-blue.jpg"))
     a
-      color= !lighter-blue
+      color: $lighter-blue
       font-size: 0.8em
-
     ul
       display: block
       overflow: hidden
@@ -58,8 +50,8 @@ body.app
         &:last-child a
           +border-top-right-radius
         a
-          background: !light-blue
-          color: !mid-blue
+          background: $light-blue
+          color: $mid-blue
           display: inline
           float: left
           font-size: 0.75em
@@ -68,36 +60,35 @@ body.app
           text-decoration: none
           text-transform: uppercase
           &:hover
-            background: !lightest-blue
-            color: !mid-blue
-
+            background: $lightest-blue
+            color: $mid-blue
       li.active
         a
           background: white
-          color= !dark-blue
+          color: $dark-blue
           letter-spacing: 0.05em
-
     img
       float: right
       margin-top: -35px
-  /* end */
-
-  /* adding properties to the shared flashes styles */
+  /* end
+  /* adding properties to the shared flashes styles
   #flashes
     margin-bottom: -5px
     #notice a
       text-transform: uppercase
-  /* end */
-
-  /* adding properties to the shared admin style */
+  /* end
+  /* adding properties to the shared admin style
   #admin ul li
     &:first-child a
       +border-bottom-left-radius
     &:last-child a
       +border-bottom-right-radius
-  /* end */
-
-  /* sub-nav styles */
+    a.signin
+      background: $lightest-blue !important
+      &:hover
+        background: white
+  /* end
+  /* sub-nav styles
   #sub-nav
     +box-shadow(#f0f0f0, 0, 2px, 7px)
     margin: 15px 0 0 0
@@ -106,20 +97,19 @@ body.app
       padding: 0 15px 15px 15px
     .active
       a
-        background: !orange
+        background: $orange
         color: white
     a
       +border-radius
-      background: !lightest-blue
-      color: !mid-blue
+      background: $lightest-blue
+      color: $mid-blue
       display: inline-block
       font-size: 0.8em
       padding: 7px 10px 6px 10px
       text-decoration: none
       &:hover, &:focus
-        background: !mid-blue
+        background: $mid-blue
         color: white
-
   #page_tips
     .nav
       display: none
@@ -128,59 +118,48 @@ body.app
       a
         float: right
         +normal_link
-
   #content .wrapper
     margin: 0 50px 15px 50px
     padding: 0 0 20px 0
-
     #crumbs
       padding: 0 0 0 10px
       overflow: hidden
-
       ul, a
-        color: #999
+        color: #999999
         font-size: 0.7em
-
       ul
         float: left
-
       a
         +border-radius
-        color= !mid-blue
+        color: $mid-blue
         margin-left: 5px
         padding: 5px 7px
         &:hover
-          background= !light-blue
-          color= !mid-blue
+          background: $light-blue
+          color: $mid-blue
           text-decoration: none
-
-
     #main
       float: left
       min-width: 600px
       padding: 20px 0 0 15px
       width: 70%
-
       a
-        color= !orange
+        color: $orange
         font-size: 0.8em
         text-decoration: none
         &:hover
-          color= !mid-blue
+          color: $mid-blue
           text-decoration: underline
-
       > a
         padding-left: 10px
-
       h3
-        color= !mid-blue
+        color: $mid-blue
         font-size: 0.9em
         padding: 10px 0 0 10px
-
       .next, input[type=submit]
         +border-radius
         border: 1px
-        background= !orange
+        background: $orange
         color: white
         cursor: pointer
         margin-right: -10px
@@ -188,7 +167,7 @@ body.app
         text-decoration: none
         text-transform: uppercase
         &:hover
-          background= !mid-blue
+          background: $mid-blue
           color: white
           text-decoration: none
         &.big
@@ -198,109 +177,86 @@ body.app
           margin: 10px 0 10px 10px
           padding: 13px 20px 10px 20px
           overflow: hidden
-
       .next
         margin-top: -5px
-
       .nav2 a
         font-size: 1em
-
       // fix the tiny AS links.
       table
         .actions
           a
             font-size: 1em
-
       .link_like
-        color: #09c
+        color: #0099cc
         cursor: pointer
         float: left
-
         &:hover
-          color: #069
+          color: #006699
           text-decoration: underline
-
-
     .comments
-      border-bottom: 1px dashed #ddd
+      border-bottom: 1px dashed #dddddd
       display: block
       margin: 20px 0 10px
       width: 100%
       +clearfix
-      
     .collapsed
       margin: 0
       width: auto
-
     a.comments
       border: none
-
     #page_tips .desc, #helper, #c-help
       +border-radius
-      border: !very-light-grey 1px solid
+      border: $very-light-grey 1px solid
       padding-bottom: 15px
       margin-bottom: 10px
-
     #page_tips .desc
       span.close
         float: right
-
       .close
         margin: -25px 10px 0 0
-
     #c-help
       margin: 20px 0
-
-
-
     #sidebar
       float: right
       min-width: 200px
       padding: 20px 15px 0 0
       width: 25%
-
       #helper
         .title
           padding-top: 10px
           padding-bottom: 8px
         a
-          color= !orange
+          color: $orange
           font-size: 0.8em
           text-decoration: none
           text-transform: uppercase
         p
           padding: 10px 10px 0 10px
-
         #terms, #examples
-          border-top: 1px dashed #ccc
+          border-top: 1px dashed #cccccc
           a
-            color= !mid-blue
+            color: $mid-blue
             font-size: 0.9em
             font-weight: bold
             line-height: 1.34
             text-decoration: underline
           p
-            color: #999
+            color: #999999
             font-size: 0.8em
             line-height: 1.34
             margin-bottom: 5px
-
         #examples
           padding: 0 10px
           font-size: 0.9em
-
     // google apps style of sub-tabs
-
     h2, p
       padding: 10px
-
     h2
       +border-top-radius
-      background= !lightest-blue
-      color= !mid-blue
+      background: $lightest-blue
+      color: $mid-blue
       font-size: 0.8em
       letter-spacing: 0.05em
-
   #content #map_fields_form
     .map_fields
       padding-left: 10px
@@ -312,7 +268,6 @@ body.app
     td
       font-size: 0.8em
       padding: 2px 0
-
   #guide
     h2
       +border-radius
@@ -339,7 +294,6 @@ body.app
     ul li
       list-style-type: disc
       margin-left: 10px
-
   /* comments styles
   #main > ul
     border: 1px solid $lightest-blue
@@ -347,7 +301,6 @@ body.app
     padding: 10px
     li
       margin-bottom: 3px
-
   #content #main .dashboard_comments
     border: 1px solid $lightest-blue
     link-type: none
@@ -362,52 +315,49 @@ body.app
       span
         font-size: 1.3em
     p
-      color: $light-blue - #777
+      color: $light-blue - #777777
       &.main
         padding: 0 20px 3px 6px
       &.time
-        color: $light-blue - #333
+        color: $light-blue - #333333
         font-size: 0.7em
         font-style: italic
         padding: 0 20px 5px 6px
     .read_more
       padding-bottom: 10px
-/* adding styles for the Submit page */
-body#static_page_submit #content .wrapper #main
 
+/* adding styles for the Submit page
+body#static_page_submit #content .wrapper #main
   h3
     padding-bottom: 5px
     padding-left: 0
-
   p
-    border: 1px solid !lightest-blue
-    color: !mid-blue
+    border: 1px solid $lightest-blue
+    color: $mid-blue
     margin-bottom: 20px
-
   table
-    background: !very-light-grey
-    color: !mid-blue
+    background: $very-light-grey
+    color: $mid-blue
     font-size: 0.8em
     margin: 0 0 20px 0
     width: 100%
-
     a
       font-size: 1em
-
     th, td
       border-right: 1px solid white
       padding: 7px
-
     tbody
       th, td
         border-bottom: 1px solid white
-
       tr:hover
         background: #f9f9f9
-
     thead
-      background: !mid-blue
+      background: $mid-blue
       border-bottom: 1px solid white
       color: white
       &:hover
         background: $mid-blue
+
+textarea, input[type=text]
+  font-family: sans-serif
+  font-size: 14px

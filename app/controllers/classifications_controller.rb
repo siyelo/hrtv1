@@ -5,7 +5,7 @@ class ClassificationsController < ActiveScaffoldController
   before_filter :check_user_has_data_response
 
   @@shown_columns = [ :organization, :description, :budget?, :budget_by_district?, :budget_by_cost_category?,
-                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved, :use_budget_codings_for_spend]
+                      :spend?, :spend_by_district?, :spend_by_cost_category?, :approved]
 
 
   active_scaffold :activity do |config|
@@ -21,7 +21,6 @@ class ClassificationsController < ActiveScaffoldController
     config.columns[:description].inplace_edit           = true
     config.columns[:description].label                  = "Activity Description"
     config.columns[:approved].label                     = "Approved?"
-    config.columns[:use_budget_codings_for_spend].label = "Use budget codings for Expenditure?"
     config.columns[:budget?].list_ui                    = :checkbox
     config.columns[:budget_by_cost_category?].list_ui   = :checkbox
     config.columns[:budget_by_district?].list_ui        = :checkbox

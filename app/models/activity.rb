@@ -2,6 +2,7 @@ require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 
 class Activity < ActiveRecord::Base
+  ### Class constants
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => [ "6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
@@ -19,24 +20,25 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
+  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
+
+  ### Includes
   include ActAsDataElement
   include NumberHelper
   configure_act_as_data_element
 
-  # Attributes
+  ### Attributes
   attr_accessible :projects, :locations, :text_for_provider,
                   :provider, :name, :description,  :start, :end,
                   :text_for_beneficiaries, :beneficiaries,
                   :text_for_targets, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :approved, :use_budget_codings_for_spend
+                  :budget, :approved
 
   include BudgetSpendHelpers
-
-  # Commentable
   acts_as_commentable
 
-  # Associations
+  ### Associations
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -52,36 +54,17 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget_district
   has_many :coding_spend_district
 
-  # Note: once we re-enable these, we need to clean up the accessor methods below that can use these
-  # associations instead of the roundabout named_scopes and class methods
-  #has_many :budget_code_assignments
-  #has_many :budget_codes, :through => :code_assignments
-  #has_many :budget_location_assignments
-  #has_many :budget_locations, :through => :code_assignments
-  #has_many :budget_cost_category_assignments
-  #has_many :budget_cost_categories, :through => :code_assignments
-  #has_many :spend_code_assignments
-  #has_many :spend_codes, :through => :code_assignments
-  #has_many :spend_location_assignments
-  #has_many :spend_locations, :through => :code_assignments
-  #has_many :spend_cost_category_assignments
-  #has_many :spend_cost_categories, :through => :code_assignments
-
-  # Validations
+  ### Validations
   validate :approved_activity_cannot_be_changed
 
-  # Callbacks
+  ### Callbacks
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
-  before_update :copy_budget_codings_to_spend, :if => Proc.new {|m| m.use_budget_codings_for_spend_changed? && m.use_budget_codings_for_spend }
   after_create  :update_counter_cache
   after_destroy :update_counter_cache
 
+  ### Named scopes
 
-  # TODO handle the saving of codes or the getting of codes correctly
-  # when use_budget_codings_for_spend is true
-
-  # Named scopes
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
@@ -89,6 +72,9 @@ class Activity < ActiveRecord::Base
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
+
+
+  ### Public Methods
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
@@ -111,6 +97,9 @@ class Activity < ActiveRecord::Base
   def self.unclassified
     self.find(:all).select {|a| !a.classified}
   end
+
+
+  ### Instance Methods
 
   #convenience
   def implementer
@@ -186,11 +175,7 @@ class Activity < ActiveRecord::Base
   # these comment outs should be okay now that there
   # is the before_save
   def spend?
-    if use_budget_codings_for_spend && budget? && !budget.nil?
-      true
-    else
-      CodingSpend.classified(self)
-    end
+    CodingSpend.classified(self)
   end
 
   def spend_coding
@@ -198,19 +183,11 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_by_district?
-    unless use_budget_codings_for_spend && budget_by_district? && !budget.nil?
-      CodingSpendDistrict.classified(self)
-    else
-      true
-    end
+    CodingSpendDistrict.classified(self)
   end
 
   def spend_by_cost_category?
-    unless use_budget_codings_for_spend && budget_by_cost_category? && !budget.nil?
-      CodingSpendCostCategorization.classified(self)
-    else
-      true
-    end
+    CodingSpendCostCategorization.classified(self)
   end
 
   def spend_cost_category_coding
@@ -296,26 +273,33 @@ class Activity < ActiveRecord::Base
   # CodingBudget -> CodingSpend
   # CodingBudgetDistrict -> CodingSpendDistrict
   # CodingBudgetCostCategorization -> CodingSpendCostCategorization
-  def copy_budget_codings_to_spend(types = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'])
+  def copy_budget_codings_to_spend(types = BUDGET_CODING_CLASSES)
     types.each do |budget_type|
-      spend_type = budget_type.gsub(/Budget/, "Spend")
-      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type]) # remove old 'Spend' code assignment
+      spend_type        = budget_type.gsub(/Budget/, "Spend")
+      spend_type_klass  = spend_type.constantize
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?",
+                                self.id,
+                                spend_type]) # remove old 'Spend' code assignment
+
+      # GR: AFAICT this copies across the ratio, not just the amounts
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
-        spend_ca = ca.clone
+        spend_ca      = ca.clone
         spend_ca.type = spend_type
         if spend
           if budget && budget > 0 && ca.calculated_amount > 0
-            spend_ca.amount = spend * ca.amount / budget if ca.amount
-            spend_ca.cached_amount = spend * ca.calculated_amount / budget
+            spend_ca.amount         = spend * ca.amount / budget if ca.amount
+            spend_ca.cached_amount  = spend * ca.calculated_amount / budget
           elsif ca.percentage
-            spend_ca.percentage = ca.percentage
-            spend_ca.cached_amount = ca.percentage * spend / 100
+            spend_ca.percentage     = ca.percentage
+            spend_ca.cached_amount  = ca.percentage * spend / 100
           end
         end
         spend_ca.save!
       end
+      self.update_classified_amount_cache(spend_type_klass)
     end
+    true
   end
 
   def coding_progress
@@ -488,14 +472,15 @@ class Activity < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
@@ -522,7 +507,6 @@ end
 #  CodingSpend_amount                    :decimal(, )     default(0.0)
 #  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
 #  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  use_budget_codings_for_spend          :boolean         default(FALSE)
 #  budget_q1                             :decimal(, )
 #  budget_q2                             :decimal(, )
 #  budget_q3                             :decimal(, )

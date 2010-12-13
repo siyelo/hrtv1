@@ -73,8 +73,7 @@ class Activity < ActiveRecord::Base
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
 
-
-  ### Public Methods
+  ### Public Class Methods
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
@@ -99,7 +98,7 @@ class Activity < ActiveRecord::Base
   end
 
 
-  ### Instance Methods
+  ### Public Instance Methods
 
   #convenience
   def implementer
@@ -297,7 +296,7 @@ class Activity < ActiveRecord::Base
         end
         spend_ca.save!
       end
-      self.update_classified_amount_cache(spend_type_klass)
+      #self.update_classified_amount_cache(spend_type_klass)
     end
     true
   end

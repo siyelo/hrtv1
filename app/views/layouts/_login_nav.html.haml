@@ -4,7 +4,7 @@
     %ul
       %li= link_to "Dashboard", user_dashboard_path(current_user)
       %li= link_to "My Profile", edit_user_url(current_user.id)
-      %li= link_to "Sign out", logout_path
+      %li.last= link_to "Sign out", logout_path
     %span
       - if current_user.organization
         = "#{current_user.email} [#{truncate(current_user.organization.name, :length => 35)}]"

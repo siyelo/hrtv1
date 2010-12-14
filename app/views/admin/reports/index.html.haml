@@ -1,7 +1,7 @@
-%h1 Reports
+%h1.main_heading All Reports
 %h2 Activities
 
-%ul.admin_reports
+%ul.admin_reports.link_list
   %li=  link_to "Activities Report", activity_report_path
   %li=  link_to "Activities by District", activities_by_district_new_path
   %li=  link_to "Activities - One Row Per District Coded in Classifications + District Classifications Summary per Activity", activities_by_district_row_report_path
@@ -13,12 +13,12 @@
   %li=  link_to "Activities By Expenditure Districts (beta)", activities_by_expenditure_districts_path
 
 %h2 Maps
-%ul
+%ul.link_list
   %li=  link_to "Map Districts by Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
   %li=  link_to "Map Districts by Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
   %li=  link_to "Map Facilities by Partner Budget", map_facilities_by_partner_url( :type => "CodingBudgetDistrict")
   %li=  link_to "Map Facilities by Partner Spending", map_facilities_by_partner_url( :type => "CodingSpendDistrict")
 
 %h2 Users
-%ul
+%ul.link_list
   %li=  link_to "Users By Organization", users_by_organization_path

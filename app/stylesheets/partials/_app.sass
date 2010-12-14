@@ -13,7 +13,8 @@
 body.app
   .wrapper
     min-width: 900px
-    padding: 0 50px
+    max-width: 1280px
+    margin: 0 auto
     position: relative
 
   #header_app
@@ -21,7 +22,7 @@ body.app
 
   h1
     font: bold 24px/30px Arial,sans-serif
-    color= $dark-grey
+    color: $mid-blue
 
   p
     font-size: 0.8em
@@ -39,7 +40,7 @@ body.app
       position: absolute
       width: 300px
       h1
-        padding-top: 4px
+        margin-top: -9px
         span
           margin-left: -5px
   /* end */
@@ -61,8 +62,8 @@ body.app
         display: block
 
         a
-          border: 1px solid #888
-          margin: 0px -1px
+          border: 1px solid $mid-blue
+          margin: 3px -1px 0
           background: !light-blue
           color: !mid-blue
           display: inline
@@ -72,16 +73,25 @@ body.app
           font-weight: bold
           padding: 12px 15px 8px 17px
           text-decoration: none
-
+          +linear-gradient(color-stops($light-blue - #111, $light-blue - #444))
+          +text-shadow($light-blue, 0, 1px, 1px)
+          
           &:hover
             background: !lightest-blue
             color: !mid-blue
+            +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
+            +text-shadow(#fff, 0, 1px, 1px)
 
           &.active
             border-bottom:  1px solid #FFF
             background: white
             color= !dark-blue
             letter-spacing: 0.05em
+            margin: 0
+            padding-top: 15px
+            +border-top-radius(3px)
+            +linear-gradient(color-stops($lightest-blue, white))
+            +text-shadow(#fff, 0, 1px, 1px)
 
     img
       float: right
@@ -106,7 +116,7 @@ body.app
   /* sub-nav styles */
   #sub-nav
     +box-shadow(#f0f0f0, 0, 2px, 7px)
-    margin: 15px 0 0 0
+    margin: 15px 0 10px
     ul
       +horizontal-list
       padding: 0 15px 15px 15px
@@ -136,7 +146,6 @@ body.app
         +normal_link
 
   #content .wrapper
-    margin: 0 50px 15px 50px
     padding: 0 0 20px 0
 
     #crumbs
@@ -354,7 +363,7 @@ body.app
     li
       margin-bottom: 3px
 
-  #content #main .dashboard_comments
+  #content .dashboard_comments
     border: 1px solid $lightest-blue
     link-type: none
     padding: 20px 10px 0
@@ -419,30 +428,53 @@ body#static_page_submit #content .wrapper #main
         background: $mid-blue
 
 // Grouping tab styles
-ul.group
-  +horizontal-list
+.group
+  border-bottom: 1px solid $light-blue
   margin-top: 10px
   margin-bottom: 15px
-  font-size: 11px
+  
+  ul
+    font-size: 11px
+    margin-bottom: 0 !important
+    +linear-gradient(color-stops(white, $lightest-blue + #090909))
 
   li
+    display: inline-block
     padding: 0px
 
     a
+      border-top: 1px solid #FFF
+      display: block
       line-height: 1.6em
       padding: 5px 15px
-      display: block
-      border-top: 1px solid #FFF
-      border-bottom: 1px solid #CCC
       text-decoration: none
 
       &:hover, &:focus
         text-decoration: underline
 
       &.active
+        background: white
+        border-top: 1px solid $light-blue
+        border-right: 1px solid $light-blue
+        border-bottom: 1px solid white
+        border-left: 1px solid $light-blue
+        color: $mid-blue
         font-weight: bold
-        border-top: 1px solid #CCC
-        border-right: 1px solid #CCC
-        border-bottom: 1px solid #FFF
-        border-left: 1px solid #CCC
+        margin-bottom: -1px
+        +linear-gradient(color-stops($lightest-blue + #090909, white))
 
+.main_heading
+  +box-shadow(#eee, 0, 3px, 3px)
+  margin: 0 -15px 15px
+  padding: 5px 15px 10px
+  +clearfix
+  
+.link_list
+  border: 1px solid $lightest-blue
+  padding: 7px 0 12px
+  li a
+    display: inline-block
+    font-size: 12px
+    padding: 0 0 3px 10px
+    &:hover
+      background: image_url("icon_mark.png") no-repeat left top

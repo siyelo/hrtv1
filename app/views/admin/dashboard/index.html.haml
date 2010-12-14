@@ -1,9 +1,11 @@
+%h1.main_heading Main Dashboard
+
 %h2 Policy Maker Dashboard
-%ul.policy_maker_dashboard
+%ul.policy_maker_dashboard.link_list
   %li= link_to "Review data responses", policy_maker_data_responses_path
 
 %h2 Admin Dashboard
-%ul.admin_dashboard
+%ul.admin_dashboard.link_list
   %li=  link_to "Manage help and page comments", model_helps_url
   %li=  link_to "Manage activities", activities_url
   %li=  link_to "Manage comments", comments_url

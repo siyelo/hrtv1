@@ -1,25 +1,2 @@
-!!! Strict
-%html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
-  %head
-    %title= "Resource Tracking Database :: #{yield(:title)}"
-    = render :partial => 'layouts/include_tags'
-    = yield(:head)
-
-  - if controller.controller_name == "static_page" && controller.action_name == "index"
-    = render :partial => 'layouts/landing_page'
-  - elsif controller.controller_name == "static_page" && controller.action_name == "about"
-    = render :partial => 'layouts/landing_page'
-  - elsif controller.controller_name == "user_sessions"
-    = render :partial => 'layouts/user_session'
-  - elsif controller.controller_name == "static_page" && %w[news contact].include?(controller.action_name)
-    = render :partial => 'layouts/user_session'
-  - elsif controller.controller_name == "help_requests" && %w[create new].include?(controller.action_name)
-    = render :partial => 'layouts/user_session'
-  - elsif [ "CodeAssignmentsController", "Admin::DataResponsesController", "PolicyMaker::DataResponsesController", "Reporter::DataResponsesController"].include?(controller.class.to_s) || (controller.class.to_s == "DataResponsesController" && controller.action_name == 'review')
-    = render :partial => 'layouts/full_width'
-  - else
-    = render :partial => 'layouts/inner_pages'
-
-  = render :partial => 'layouts/footer'
-  - unless RAILS_ENV == 'production'
-    %p= "v#{Version.current}"
+-# default layout is the Promotional site (static pages)
+= render 'layouts/promo_inner'

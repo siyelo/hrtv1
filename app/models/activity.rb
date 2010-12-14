@@ -41,7 +41,8 @@ class Activity < ActiveRecord::Base
   ### Associations
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
+  belongs_to :provider, :foreign_key => :provider_id,
+                        :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",

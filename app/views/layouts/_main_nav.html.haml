@@ -13,7 +13,7 @@
     - workplan_active = !dashboard_active && !help_active && !reports_active
 
     %ul
-      = render '/shared/dashboard_link', :dashboard_active => dashboard_active
+      %li= link_to "Dashboard", user_dashboard_path(current_user)
       %li{ :class => workplan_active ? "active" : ''}
         -# this might break if no response selected
         - if current_user && current_user.current_data_response

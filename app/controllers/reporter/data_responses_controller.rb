@@ -1,5 +1,4 @@
-class Reporter::DataResponsesController < ApplicationController
-  before_filter :require_user
+class Reporter::DataResponsesController < Reporter::BaseController
 
   def show
     if current_user.admin?
@@ -14,5 +13,4 @@ class Reporter::DataResponsesController < ApplicationController
     @other_cost_roots            = OtherCostCode.roots
     @policy_maker                = true #view helper
   end
-
 end

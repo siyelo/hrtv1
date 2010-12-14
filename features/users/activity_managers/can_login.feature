@@ -10,5 +10,6 @@ Scenario: Login as an activity manager with a username
   And I fill in "Username or Email" with "Frank"
   And I fill in "Password" with "password"
   When I press "Sign in"
-  Then I should see the reporters admin nav
+  Then I should be on the reporter dashboard page
+  And I should see the reporters admin nav
   And I should see the main nav tabs

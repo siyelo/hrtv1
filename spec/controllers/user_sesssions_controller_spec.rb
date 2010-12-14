@@ -24,7 +24,7 @@ describe UserSessionsController do
     end
 
     it { should set_the_flash.to("Successfully logged in.") }
-    it { should redirect_to(static_page_url(:user_guide)) }
+    it { should redirect_to(reporter_dashboard_path) }
 
     it "redirects the user to root path when requesting the login form" do
       get :new

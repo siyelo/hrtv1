@@ -1,0 +1,36 @@
+
+- content_for :body do
+  - full_width_page = false
+  - full_width_page = true if [ "CodeAssignmentsController"].include? controller.class.to_s
+
+  %body{:id => get_controller_id(controller), :class => "app"}
+    = render "layouts/header_app"
+    = render "layouts/main_nav"
+
+    #content
+      .wrapper
+        = yield :sub_nav
+        = render 'layouts/flashes'
+
+        - unless full_width_page
+          #main
+            = yield :page_help
+            = yield
+            .comments
+              = yield :comments
+          #sidebar
+            :javascript
+              $('sidebar').hide()
+            #helper
+              = yield :side_bar
+
+        - else
+          .full-width
+            = yield
+
+        = yield(:main)
+
+- content_for :footer do
+  = render :partial => 'layouts/footer'
+
+= render 'layouts/app'

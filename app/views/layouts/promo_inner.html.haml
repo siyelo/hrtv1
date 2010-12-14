@@ -1,0 +1,17 @@
+-# an inner page with a compact header
+
+- content_for :body do
+  %body.promo.login
+    = render "layouts/header_app"
+    = render :partial => 'layouts/flashes'
+    #content
+      .wrapper
+        = yield
+
+- content_for :footer do
+  = render :partial => 'layouts/footer'
+
+= render 'layouts/app'
+
+- unless RAILS_ENV == 'production'
+  %p= "v#{Version.current}"

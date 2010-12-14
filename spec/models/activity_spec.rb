@@ -53,6 +53,7 @@ describe Activity do
     
     context "across multiple projects" do
       it "should allow assignment to multiple projects" do
+        # this will be removed with https://www.pivotaltracker.com/story/show/5530048
         pending
       end
     end

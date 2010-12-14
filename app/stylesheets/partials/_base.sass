@@ -10,21 +10,22 @@
 // $blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $blueprint-grid-columns - $blueprint-grid-margin
 
 // Compass imports
-@import compass/reset
-@import compass/utilities
-@import compass/css3
+@import "compass/reset"
+@import "compass/utilities"
+@import "compass/css3"
 
 // Custom colors
-$dark-blue: #20303f
-$mid-blue: #425160
-$light-blue: #c1ced9
-$lighter-blue: #d0dde7
-$lightest-blue: #e6edf3
-$orange: #cc873c
-$light_grey: #888888
-$very-light-blue: #f4f9fd
-$very-light-grey: #eeeeee
+!dark-blue              = #20303f
+!mid-blue               = #425160
+!light-blue             = #c1ced9
+!lighter-blue           = #d0dde7
+!lightest-blue          = #e6edf3
+!orange                 = #cc873c
+!light_grey             = #888
+!very-light-blue        = #f4f9fd
+!very-light-grey        = #EEE
+$dark-grey              = #515151
 
-$header-blue: #3d4d5d
-$login-nav-blue: #596a7b
-$login-nav-light-blue: $login-nav-blue + #333333
+!header-blue            = #3d4d5d
+!login-nav-blue         = #596a7b
+!login-nav-light-blue   = !login-nav-blue + #333

@@ -1,4 +1,5 @@
 class CodeAssignmentsController < ApplicationController
+  layout 'reporter'
   authorize_resource
   before_filter :load_activity
 

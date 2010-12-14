@@ -102,4 +102,16 @@ describe DataResponse do
       dr.reload.activities_without_projects_count.should == 2
     end
   end
+  
+  describe "searching for in-progress data responses" do
+    it "should not be in progress on creation" do
+      @dr = Factory.create(:data_response)
+      DataResponse.in_progress.should_not include(@dr)
+    end
+    it "should be in progress if it has a project" do
+      @dr   = Factory(:data_response)
+      @proj = Factory(:project, :data_response => @dr)
+      DataResponse.in_progress.should include(@dr)
+    end
+  end
 end

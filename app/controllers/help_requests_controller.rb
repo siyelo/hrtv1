@@ -1,4 +1,6 @@
 class HelpRequestsController < ApplicationController
+  layout 'promo_inner' #TODO: separate reporter/admin actions
+
   authorize_resource
   @@shown_columns = [:email, :message, :created_at]
 
@@ -14,6 +16,7 @@ class HelpRequestsController < ApplicationController
   def new
     @help_request = HelpRequest.new
   end
+
   def create
     @help_request = HelpRequest.new(params[:help_request])
     if @help_request.save

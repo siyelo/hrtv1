@@ -1,5 +1,46 @@
-class Admin::OrganizationsController < ApplicationController
+class Admin::OrganizationsController < ActiveScaffoldController
+  layout 'admin'  # duplicated - should inherit from BaseController
+
   before_filter :require_admin
+
+  authorize_resource
+
+
+  ### Active Scaffold crud
+
+  @@shown_columns           = [:name, :type]
+  @@create_columns          = [:name, :type]
+  @@columns_for_file_upload = @@create_columns.map {|c| c.to_s}
+
+  map_fields :create_from_file, @@columns_for_file_upload, :file_field => :file
+
+  active_scaffold :organization do |config|
+    config.columns                                 = @@shown_columns
+    config.list.pagination                         = true
+    config.list.per_page                           = 200
+    list.sorting                                   = {:name => 'DESC'}
+    config.columns[:out_flows].association.reverse = :from
+    config.columns[:in_flows].association.reverse  = :to
+    config.create.columns                          = @@create_columns
+    config.update.columns                          = config.create.columns
+    config.subform.columns                         = [:name, :type]
+    config.columns[:name].description              = "Before creating a new organization, ensure this organization doesn't already exist by checking the drop down list in the create or add existing form."
+    config.columns[:type].form_ui                  = :select
+    config.columns[:type].options                  = {:options => [
+                                                      ["Donor","Donor"],
+                                                      ["NGO","Ngo"],
+                                                      ["Other", "Organization"] ]}
+    # in nested scaffolds delete just removes the association
+    config.nested.shallow_delete = true
+  end
+
+  ### Public Class Methods
+
+  def self.create_columns
+    @@create_columns
+  end
+
+  ### Public Instance Methods
 
   def show
     @organization = Organization.find(params[:id])
@@ -43,28 +84,37 @@ class Admin::OrganizationsController < ApplicationController
     end
   end
 
-  private
-  def render_error(message, path)
-    respond_to do |format|
-      format.html do
-        flash[:error] = message
-        redirect_to path
-      end
-      format.js do
-        render :json => {:message => message}.to_json, :status => :partial_content
-      end
-    end
-  end
+  protected
 
-  def render_notice(message, path)
-    respond_to do |format|
-      format.html do
-        flash[:notice] = message
-        redirect_to path
-      end
-      format.js do
-        render :json => {:message => message}.to_json
+    #to get the edit link to not show up
+    def update_authorized?
+      authorize! :update, Organization
+    end
+
+  private
+
+    def render_error(message, path)
+      respond_to do |format|
+        format.html do
+          flash[:error] = message
+          redirect_to path
+        end
+        format.js do
+          render :json => {:message => message}.to_json, :status => :partial_content
+        end
       end
     end
-  end
+
+    def render_notice(message, path)
+      respond_to do |format|
+        format.html do
+          flash[:notice] = message
+          redirect_to path
+        end
+        format.js do
+          render :json => {:message => message}.to_json
+        end
+      end
+    end
+
 end

@@ -9,7 +9,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    partners_to_include = DataResponse.in_process.map(&:responding_organization) +
+    partners_to_include = DataResponse.in_progress.map(&:responding_organization) +
       DataResponse.submitted.map(&:responding_organization)
     partners_to_include = partners_to_include.uniq #just in case
       #[Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for

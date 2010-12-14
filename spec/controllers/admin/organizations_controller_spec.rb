@@ -1,11 +1,14 @@
 require 'spec_helper'
 
 describe Admin::OrganizationsController do
-
+  
   describe "show organization" do
     before :each do
       login(Factory.create(:admin))
-      Organization.stub!(:find).with("1").and_return(@mock_object = mock_model(Organization))
+      @mock_object = mock_model(Organization)
+      @mock_object.stub!(:authorized_for?).and_return(true)
+      @mock_object.stub!(:no_errors_in_associated?).and_return(true)
+      Organization.stub!(:find).with("1").and_return(@mock_object)
     end
 
     it "finds organization" do
@@ -28,7 +31,12 @@ describe Admin::OrganizationsController do
 
     context "when organization is empty" do
       before :each do
-        Organization.stub!(:find).with("1").and_return(@mock_object = mock_model(Organization, :is_empty? => true, :destroy => true))
+        @mock_object = mock_model(Organization, 
+                                  :is_empty? => true, 
+                                  :authorized_for? => true,
+                                  :to_label => 'org label',
+                                  :destroy => true)
+        Organization.stub!(:find).with("1").and_return(@mock_object)
       end
 
       it "finds organization" do
@@ -69,7 +77,12 @@ describe Admin::OrganizationsController do
 
     context "when organization is not empty" do
       before :each do
-        Organization.stub!(:find).with("1").and_return(@mock_object = mock_model(Organization, :is_empty? => false, :destroy => true))
+        @mock_object = mock_model(Organization, 
+                                  :is_empty? => false, 
+                                  :authorized_for? => true,
+                                  :to_label => 'org label',
+                                  :destroy => true)
+        Organization.stub!(:find).with("1").and_return(@mock_object)
       end
 
       it "finds organization" do

@@ -13,7 +13,9 @@ Background:
   And an activity exists with name: "TB Drugs procurement", data_response: the data_response
   And the project is one of the activity's projects
   And a budget coding code_name: "Delivering Services, Implementing Programs, Conducting Research", activity: "the activity", amount: "1000"
-  
+
+# Textmate syntax highlighting FTL! '
+
 @admin_approve_activity @javascript
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin

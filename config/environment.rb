@@ -32,6 +32,7 @@ Rails::Initializer.run do |config|
   config.gem "validates_date_time", :version => '= 1.0.0'
   config.gem 'formtastic', :version => "0.9.10"
   config.gem "version", :version => "=0.9.2"
+  config.gem 'will_paginate', :version => '~> 2.3.11'
 
   config.time_zone = 'UTC'
 

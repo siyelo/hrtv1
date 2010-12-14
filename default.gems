@@ -64,3 +64,4 @@ text-hyphen -v1.0.0
 trollop -v1.16.2
 validates_date_time -v1.0.0
 version -v0.9.2
+will_paginate -v2.3.11

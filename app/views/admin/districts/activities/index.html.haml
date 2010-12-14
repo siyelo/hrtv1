@@ -8,10 +8,11 @@
 
 %h2 Spent
 
+%p= @total_spent
+
 %h2 Budgeted
 
-
-%h2= "Activities (#{@activities.count})"
+%h2= "Activities (#{short_page_entries_info(@spend_codings)})"
 %table.standard
   %thead
     %tr
@@ -23,16 +24,24 @@
       %th Total Budgeted
 
   %tbody
-    - @activities.each do |act|
-      - project = act.projects.first
+    - @spend_codings.each do |c|
+      - act = c.try(:activity)
       %tr{:class => cycle("even", "odd")}
-        %td= link_to "#{friendly_name(act.name)}", admin_district_activity_path(@location, act)
-        %td= h act.organization.name
-        %td= h friendly_name(project.try(:name))
-        %td
-          - if project
-            %ul
-              - project.funding_sources.map(&:name).uniq.each do |name|
-                %li= name
-        %td= act.spend
-        %td= act.budget
+        - if act.nil?
+          %td{:colspan => 100}= "Bad data! code id: #{c.id}"
+        - else
+          - project = act.projects.first
+          - budget = act.coding_budget_district.with_location(@location.id).find(:first)
+          %td= link_to "#{friendly_name(act.name)}", admin_district_activity_path(@location, act)
+          %td= h act.organization.name
+          %td= h friendly_name(project.try(:name))
+          %td
+            - if project
+              %ul
+                - project.funding_sources.map(&:name).uniq.each do |name|
+                  %li= name
+          %td= c.cached_amount.round(2)
+          %td
+            = budget.nil? ? 'n/a' : budget.cached_amount
+
+= will_paginate @spend_codings

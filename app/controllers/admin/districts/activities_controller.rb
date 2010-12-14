@@ -2,29 +2,18 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
   before_filter  :load_location
   PRECISION = 6
   def index
-    @activities = @location.activities.greatest_first
+    #@activities = @location.activities.greatest_first.paginate :page => params[:page],
+    #                                                           :per_page => 25
+    @spend_codings = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page],
+                                                                                      :per_page => 25
+    @total_spent = CodingSpendDistrict.sum(:cached_amount,
+                                           :conditions => ["code_id = ?", @location.id])
   end
 
   def show
     @activity = Activity.find(params[:id])
-    @district_spend_coding = @activity.coding_spend_district.with_location(@location).find(:first)
-    @spend_coded_ok = @district_spend_coding && @activity.spend && @activity.spend > 0 && @district_spend_coding.calculated_amount
-    if @spend_coded_ok
-      @district_spent_ratio   = @district_spend_coding.cached_amount / @activity.spend # % that this district has allocated
-      @district_spent         = @activity.spend * @district_spent_ratio
-      @spent_ratio_pie_values = prepare_ratio_pie_values(@activity.spend, @district_spent, "Spent by Districts")
-      @spent_pie_values       = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "MTEF Spent")
-    end
-
-    @district_budget_coding = @activity.coding_budget_district.with_location(@location).find(:first)
-    @budget_coded_ok = @district_budget_coding && @activity.budget && @activity.budget > 0 && @district_budget_coding.calculated_amount
-    if @budget_coded_ok
-      @district_budgeted_ratio = @district_budget_coding.cached_amount / @activity.budget # % that this district has allocated
-      @district_budgeted       = @activity.budget * @district_budgeted_ratio
-      @budget_ratio_pie_values = prepare_ratio_pie_values(@activity.budget, @district_budgeted, "Budget by Districts")
-      @budget_pie_values = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "MTEF Budget")
-    end
-
+    load_spend_pies
+    load_budget_pies
     unless @spend_coded_ok && @budget_coded_ok
       flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so we can't generate any useful charts for you!"
     end
@@ -34,6 +23,28 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
 
     def load_location
       @location = Location.find(params[:district_id])
+    end
+
+    def load_spend_pies
+      @district_spend_coding = @activity.coding_spend_district.with_location(@location).find(:first)
+      @spend_coded_ok = @district_spend_coding && @activity.spend && @activity.spend > 0 && @district_spend_coding.calculated_amount
+      if @spend_coded_ok
+        @district_spent_ratio   = @district_spend_coding.cached_amount / @activity.spend # % that this district has allocated
+        @district_spent         = @activity.spend * @district_spent_ratio
+        @spent_ratio_pie_values = prepare_ratio_pie_values(@activity.spend, @district_spent, "Spent by Districts")
+        @spent_pie_values       = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "MTEF Spent")
+      end
+    end
+
+    def load_budget_pies
+      @district_budget_coding = @activity.coding_budget_district.with_location(@location).find(:first)
+      @budget_coded_ok = @district_budget_coding && @activity.budget && @activity.budget > 0 && @district_budget_coding.calculated_amount
+      if @budget_coded_ok
+        @district_budgeted_ratio = @district_budget_coding.cached_amount / @activity.budget # % that this district has allocated
+        @district_budgeted       = @activity.budget * @district_budgeted_ratio
+        @budget_ratio_pie_values = prepare_ratio_pie_values(@activity.budget, @district_budgeted, "Budget by Districts")
+        @budget_pie_values = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "MTEF Budget")
+      end
     end
 
     def prepare_pie_values(code_assignments, ratio, title)

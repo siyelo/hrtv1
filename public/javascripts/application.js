@@ -774,28 +774,36 @@ var data_responses_review = {
   }
 }
 
-function drawPieChart(id, records) {
+function drawPieChart(id, raw_data) {
   var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Task');
-  data.addColumn('number', 'Hours per Day');
+  data.addColumn('string', raw_data.names.column1);
+  data.addColumn('number', raw_data.names.column2);
 
-  data.addRows(records.length);
-  for (var i = 0; i < records.length; i++) {
-    var record = records[i];
-    data.setValue(i, 0, record[0]);
-    data.setValue(i, 1, record[1]);
+  data.addRows(raw_data.values.length);
+  for (var i = 0; i < raw_data.values.length; i++) {
+    var value = raw_data.values[i];
+    data.setValue(i, 0, value[0]);
+    data.setValue(i, 1, value[1]);
   };
 
   var chart = new google.visualization.PieChart(document.getElementById(id));
-  chart.draw(data, {width: 450, height: 300, title: 'My Daily Activities'});
+  chart.draw(data, {width: 450, height: 300, title: raw_data.names.title});
 };
 
 var admin_districts_activities_show = {
   run: function () {
-    drawPieChart('spent_ratio_pie', _spent_ratio_pie_values);
-    drawPieChart('budget_ratio_pie', _budget_ratio_pie_values);
-    drawPieChart('spent_pie', _spent_pie_values);
-    drawPieChart('budget_pie', _budget_pie_values);
+    if (typeof(_spent_ratio_pie_values) !== "undefined") {
+      drawPieChart('spent_ratio_pie', _spent_ratio_pie_values);
+    }
+    if (typeof(_budget_ratio_pie_values) !== "undefined") {
+      drawPieChart('budget_ratio_pie', _budget_ratio_pie_values);
+    }
+    if (typeof(_spent_pie_values) !== "undefined") {
+      drawPieChart('spent_pie', _spent_pie_values);
+    }
+    if (typeof(_budget_pie_values) !== "undefined") {
+      drawPieChart('budget_pie', _budget_pie_values);
+    }
   }
 };
 

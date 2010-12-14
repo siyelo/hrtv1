@@ -1,12 +1,13 @@
-- content_for :head do
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+- if !@spent_pie_values.nil? && !@budget_pie_values.nil?
+  - content_for :head do
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-:javascript
-  google.load("visualization", "1", {packages:["corechart"]});
-  var _spent_pie_values = #{@spent_pie_values};
-  var _budget_pie_values = #{@budget_pie_values};
-  var _spent_ratio_pie_values = #{@spent_ratio_pie_values};
-  var _budget_ratio_pie_values = #{@budget_ratio_pie_values};
+  :javascript
+    google.load("visualization", "1", {packages:["corechart"]});
+    var _spent_pie_values = #{@spent_pie_values};
+    var _budget_pie_values = #{@budget_pie_values};
+    var _spent_ratio_pie_values = #{@spent_ratio_pie_values};
+    var _budget_ratio_pie_values = #{@budget_ratio_pie_values};
 
 
 %ul.breadcrumb
@@ -17,7 +18,9 @@
   %li= link_to 'Activities', admin_district_activities_path(@location)
   %li >
 
-%h1= "Activity: #{friendly_name(@activity.name)} [#{@activity.organization_name}]"
+%h1= "Activity: #{friendly_name(@activity.name)}"
+
+%h2= "Organization: #{@activity.organization_name}"
 
 %table
   %tbody
@@ -31,32 +34,29 @@
       %td Currency
       %td= @activity.currency
     %tr
-      %td Approved ?
+      %td Approved?
       %td= @activity.approved? ? "Yes" : "No"
-    %tr
-      %td Classification Done ?
-      %td= @activity.classified? ? "Yes" : "No"
 
-%div
-  %h2 Proportion Spent
-  #spent_ratio_pie
+- if @budget_coded_ok && @spend_coded_ok
+  %div
+    %h2 Proportion Spent
+    #spent_ratio_pie
 
-%div
-  %h2 Proportion Budgeted
-  #budget_ratio_pie
+  %div
+    %h2 Proportion Budgeted
+    #budget_ratio_pie
 
-
-%ul.group
-  %li= link_to "MTEF", admin_district_activity_path(@location, @activity), active_if([:show, :mtef])
-  %li= link_to "NSP", "#", active_if([:nsp])
-  %li= link_to "HSSP", "#", active_if([:hssp])
+  %ul.group
+    %li= link_to "MTEF", admin_district_activity_path(@location, @activity), active_if([:show, :mtef])
+    %li= link_to "NSP", "#", active_if([:nsp])
+    %li= link_to "HSSP", "#", active_if([:hssp])
 
 
-%div
-  %h2 MTEF Spent
-  #spent_pie
+  %div
+    %h2 MTEF Spent
+    #spent_pie
 
-%div
-  %h2 MTEF Budgeted
-  #budget_pie
+  %div
+    %h2 MTEF Budgeted
+    #budget_pie
 

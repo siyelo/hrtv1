@@ -478,3 +478,27 @@ body#static_page_submit #content .wrapper #main
     padding: 0 0 3px 10px
     &:hover
       background: image_url("icon_mark.png") no-repeat left top
+
+// Pretty Table (with clickable rows)
+table.standard
+  border-collapse: collapse
+  font-size: 11px
+  line-height: 14px
+
+  tr
+    background-color: #eee
+    border-top: 1px solid #fff
+    border-spacing: 0
+
+    &:hover
+      background-color: #ccc
+
+  th, td
+    padding: 3px 5px
+
+  td
+    border-bottom: 1px solid !light_grey
+    vertical-align: middle
+
+  td:hover
+    cursor: pointer

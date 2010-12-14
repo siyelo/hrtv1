@@ -12,8 +12,8 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
     if @spend_coded_ok
       @district_spent_ratio   = @district_spend_coding.cached_amount / @activity.spend # % that this district has allocated
       @district_spent         = @activity.spend * @district_spent_ratio
-      @spent_ratio_pie_values = prepare_ratio_pie_values(@activity.spend, @district_spent, "Spent activity / district ratio")
-      @spent_pie_values       = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "Spent pie")
+      @spent_ratio_pie_values = prepare_ratio_pie_values(@activity.spend, @district_spent, "Spent by Districts")
+      @spent_pie_values       = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "MTEF Spent")
     end
 
     @district_budget_coding = @activity.coding_budget_district.with_location(@location).find(:first)
@@ -21,8 +21,8 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
     if @budget_coded_ok
       @district_budgeted_ratio = @district_budget_coding.cached_amount / @activity.budget # % that this district has allocated
       @district_budgeted       = @activity.budget * @district_budgeted_ratio
-      @budget_ratio_pie_values = prepare_ratio_pie_values(@activity.budget, @district_budgeted, "Budget activity / district ratio")
-      @budget_pie_values = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "Budget pie")
+      @budget_ratio_pie_values = prepare_ratio_pie_values(@activity.budget, @district_budgeted, "Budget by Districts")
+      @budget_pie_values = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "MTEF Budget")
     end
 
     unless @spend_coded_ok && @budget_coded_ok

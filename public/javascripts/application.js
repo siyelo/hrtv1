@@ -843,5 +843,12 @@ jQuery(function () {
   // Inplace edit
   jQuery(".rest_in_place").rest_in_place();
 
+  // clickable table rows
+  jQuery('.standard tr').click(function() {
+    var href = jQuery(this).find("a").attr("href");
+    if(href) {
+        window.location = href;
+    }
+  });
 
 })

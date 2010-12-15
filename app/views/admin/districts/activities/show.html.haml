@@ -1,16 +1,11 @@
 = render 'pie_chart_loader'
 
-
-
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
-  %li >
   %li= link_to h(@location.name), admin_district_path(@location)
-  %li >
   %li= link_to 'Activities', admin_district_activities_path(@location)
-  %li >
 
-%h1= "Activity: #{friendly_name(@activity.name)}"
+%h1.main_heading= "Activity: #{friendly_name(@activity.name)}"
 
 %h2= "Organization: #{@activity.organization_name}"
 

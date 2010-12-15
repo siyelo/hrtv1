@@ -2,16 +2,14 @@
 
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
-  %li >
   %li= link_to h(@location.name), admin_district_path(@location)
-  %li >
 
-%h1 Activities
+%h1.main_heading Activities
 
 %div
   %h2 Spent
 
-%p= @total_spent
+%p.bordered= @total_spent
 
 %div
   %h2 Budgeted

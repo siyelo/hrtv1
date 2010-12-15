@@ -108,9 +108,9 @@ body.app
   /* adding properties to the shared admin style */
   #admin ul li
     &:first-child a
-      +border-bottom-left-radius
+    +border-bottom-left-radius
     &:last-child a
-      +border-bottom-right-radius
+    +border-bottom-right-radius
   /* end */
 
   /* sub-nav styles */
@@ -502,3 +502,44 @@ table.standard
 
   td:hover
     cursor: pointer
+
+.breadcrumb
+  +border-radius
+  +clearfix
+  +horizontal-list
+  border: 1px dotted $lightest-blue
+  font-size: 11px
+  margin-top: 7px
+  margin-bottom: 4px !important
+  padding: 5px
+  
+  a
+    background: image_url("icon_mark.png") no-repeat right center
+    padding-right: 10px
+    
+.bordered
+  border: 1px solid $lightest-blue
+  margin-bottom: 10px
+  +border-bottom-radius
+  
+.pagination
+  font-size: 12px
+  margin-top: 20px
+  span, a
+    background: $lightest-blue
+    border: 1px solid $light-blue
+    display: inline-block
+    line-height: 1
+    padding: 6px 8px 5px
+    text-decoration: none
+    +border-radius
+    &:hover, &:focus
+      background: $light-blue
+      border: 1px solid $light-blue
+      color: white
+  .disabled
+    color: #aaa
+  .current
+    background: $mid-blue
+    border: 1px solid $mid-blue
+    color: white

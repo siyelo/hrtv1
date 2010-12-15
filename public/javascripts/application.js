@@ -750,9 +750,7 @@ var code_assignments_show = {
         jQuery('#activity_classification > div.' + element.attr("id")).show();
       }
     });
-
     approve_activity_checkbox();
-
   }
 };
 
@@ -778,49 +776,40 @@ function drawPieChart(id, raw_data) {
   var data = new google.visualization.DataTable();
   data.addColumn('string', raw_data.names.column1);
   data.addColumn('number', raw_data.names.column2);
-
   data.addRows(raw_data.values.length);
   for (var i = 0; i < raw_data.values.length; i++) {
     var value = raw_data.values[i];
     data.setValue(i, 0, value[0]);
     data.setValue(i, 1, value[1]);
   };
-
   var chart = new google.visualization.PieChart(document.getElementById(id));
   chart.draw(data, {width: 450, height: 300, title: raw_data.names.title});
 };
 
+var districtReviewPieCharts = function () {
+  if (typeof(_budget_pie_values) !== "undefined") {
+    drawPieChart('spent_pie', _spent_pie_values);
+  }
+  if (typeof(_budget_pie_values) !== "undefined") {
+    drawPieChart('budget_pie', _budget_pie_values);
+  }
+  if (typeof(_mtef_spent_pie_values) !== "undefined") {
+    drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
+  }
+  if (typeof(_mtef_budget_pie_values) !== "undefined") {
+    drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
+  }
+};
+
 var admin_districts_activities_show = {
   run: function () {
-    if (typeof(_spent_ratio_pie_values) !== "undefined") {
-      drawPieChart('spent_ratio_pie', _spent_ratio_pie_values);
-    }
-    if (typeof(_budget_ratio_pie_values) !== "undefined") {
-      drawPieChart('budget_ratio_pie', _budget_ratio_pie_values);
-    }
-    if (typeof(_mtef_spent_pie_values) !== "undefined") {
-      drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
-    }
-    if (typeof(_mtef_budget_pie_values) !== "undefined") {
-      drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
-    }
+    districtReviewPieCharts();
   }
 };
 
 var admin_districts_activities_index = {
   run: function () {
-    if (typeof(_mtef_spent_pie_values) !== "undefined") {
-      drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
-    }
-    if (typeof(_mtef_budget_pie_values) !== "undefined") {
-      drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
-    }
-    if (typeof(_activities_spent_pie_values) !== "undefined") {
-      drawPieChart('activities_spent_pie', _activities_spent_pie_values);
-    }
-    if (typeof(_activities_budget_pie_values) !== "undefined") {
-      drawPieChart('activities_budget_pie', _activities_budget_pie_values);
-    }
+    districtReviewPieCharts();
   }
 };
 
@@ -846,7 +835,6 @@ jQuery(function () {
     jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
   });
 
-
   // Date picker
   jQuery('.date_picker').live('click', function () {
     jQuery(this).datepicker('destroy').datepicker({
@@ -861,7 +849,7 @@ jQuery(function () {
   jQuery(".rest_in_place").rest_in_place();
 
   // clickable table rows
-  jQuery('.standard tr').click(function() {
+  jQuery('.clickable tr').click(function() {
     var href = jQuery(this).find("a").attr("href");
     if(href) {
         window.location = href;

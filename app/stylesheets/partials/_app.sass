@@ -75,7 +75,7 @@ body.app
           text-decoration: none
           +linear-gradient(color-stops($light-blue - #111, $light-blue - #444))
           +text-shadow($light-blue, 0, 1px, 1px)
-          
+
           &:hover
             background: !lightest-blue
             color: !mid-blue
@@ -388,7 +388,7 @@ body.app
         padding: 0 20px 5px 6px
     .read_more
       padding-bottom: 10px
-      
+
 /* adding styles for the Submit page */
 body#static_page_submit #content .wrapper #main
 
@@ -431,7 +431,7 @@ body#static_page_submit #content .wrapper #main
 
 // Grouping tab styles
 
-  
+
 ul.group
   border-bottom: 1px solid $light-blue
   margin-top: 10px
@@ -469,7 +469,7 @@ ul.group
   margin: 0 -15px 15px
   padding: 5px 15px 10px
   +clearfix
-  
+
 .link_list
   border: 1px solid $lightest-blue
   padding: 7px 0 12px
@@ -481,32 +481,26 @@ ul.group
       background: image_url("icon_mark.png") no-repeat left top
 
 // Pretty Table (with clickable rows)
+
 table.standard
   color: $mid-blue
   font-size: 11px
   line-height: 14px
   width: 100%
-  
+
   thead
     color: white
     font-weight: bold
-    
+
     th
       padding-top: 12px
-      
+
   tbody tr
     border-spacing: 0
-    
+
     &.odd
       background: $lightest-blue + #090909
       +linear-gradient(color-stops(white, $lightest-blue + #090909))
-
-    &:hover
-      background: $lightest-blue
-      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
-      color: $dark-blue
-      td
-        border-bottom: 1px solid !light_blue
 
   th, td
     padding: 10px 7px 4px
@@ -519,9 +513,22 @@ table.standard
       font-size: 12px
       font-weight: bold
       text-transform: uppercase
+
+// Pretty Table with clickable rows
+table.clickable
+
+  tbody tr
+
+    &:hover
+      background: $lightest-blue
+      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
+      color: $dark-blue
+      td
+        border-bottom: 1px solid !light_blue
+
   td:hover
     cursor: pointer
-    
+
 table.rounded
   th:first-child
     background: $mid-blue !important
@@ -539,16 +546,16 @@ table.rounded
   margin-top: 7px
   margin-bottom: 4px !important
   padding: 5px
-  
+
   a
     background: image_url("icon_mark.png") no-repeat right center
     padding-right: 10px
-    
+
 .bordered
   border: 1px solid $lightest-blue
   margin-bottom: 10px
   +border-bottom-radius
-  
+
 .pagination
   font-size: 12px
   margin-top: 20px
@@ -570,6 +577,6 @@ table.rounded
     background: $mid-blue
     border: 1px solid $mid-blue
     color: white
-    
+
 .half h2
   clear: both

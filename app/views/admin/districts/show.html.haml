@@ -3,9 +3,14 @@
 
 %h1.main_heading= h @location.name
 
-%h2 MTEF Spent
+.full
+  .first-half
+    %h2 MTEF Spent
+    #mtef_spent_pie.bordered
 
-%h2 MTEF Budgeted
+  .second-half
+    %h2 MTEF Budgeted
+    #mtef_budget_pie.bordered
 
 %h2 Organizations
 %p= link_to "Organizations", "#"

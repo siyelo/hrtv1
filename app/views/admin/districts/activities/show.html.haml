@@ -1,4 +1,4 @@
-= render 'pie_chart_loader'
+= render 'admin/districts/pie_chart_js'
 
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
@@ -9,7 +9,7 @@
 
 %h2= "Organization: #{@activity.organization_name}"
 
-%table
+%table.standard
   %tbody
     %tr
       %td Description:
@@ -24,26 +24,28 @@
       %td Approved?
       %td= @activity.approved? ? "Yes" : "No"
 
-- if @budget_coded_ok && @spend_coded_ok
-  %div
-    %h2 Proportion Spent
-    #spent_ratio_pie
+%br
+- if @charts_loaded
+  .full
+    .first-half
+      %h2 Proportion Spent
+      #spent_pie
 
-  %div
-    %h2 Proportion Budgeted
-    #budget_ratio_pie
+    .second-half
+      %h2 Proportion Budgeted
+      #budget_pie.bordered
 
   %ul.group
     %li= link_to "MTEF", admin_district_activity_path(@location, @activity), active_if([:show, :mtef])
     %li= link_to "NSP", "#", active_if([:nsp])
     %li= link_to "HSSP", "#", active_if([:hssp])
 
+  .full
+    .first-half
+      %h2 MTEF Spent
+      #mtef_spent_pie.bordered
 
-  %div
-    %h2 MTEF Spent
-    #mtef_spent_pie
-
-  %div
-    %h2 MTEF Budgeted
-    #mtef_budget_pie
+    .second-half
+      %h2 MTEF Budgeted
+      #mtef_budget_pie.bordered
 

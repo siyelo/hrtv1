@@ -1,21 +1,19 @@
 
 %h1.main_heading Review Districts
 
-%table.standard.rounded
+%table.standard.rounded.clickable
   %thead
     %tr
       %th District
-      %th Projects
-      %th Activities
       %th Organizations
+      %th Activities
       %th Total Budget
       %th Total Spent
   %tbody
     - @locations.each do |loc|
       %tr{:class => cycle("even", "odd")}
         %td= link_to "#{h loc.name}", admin_district_path(loc)
-        %td= loc.projects_count
-        %td= loc.activities_count
         %td= loc.organizations_count
+        %td= loc.activities_count
         %td= n2c(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total))
         %td= n2c(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total))

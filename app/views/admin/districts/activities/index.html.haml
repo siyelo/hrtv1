@@ -1,4 +1,4 @@
-= render 'pie_chart_loader'
+= render 'admin/districts/pie_chart_js'
 
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
@@ -9,23 +9,15 @@
 .full
   .first-half
     %h2 Spent
-    #activities_spent_pie.bordered
+    #spent_pie.bordered
 
   .second-half
     %h2 Budgeted
-    #activities_budget_pie.bordered
-
-.full
-  .first-half
-    %h2 MTEF Spent
-    #mtef_spent_pie.bordered
-
-  .second-half
-    %h2 MTEF Budgeted
-    #mtef_budget_pie.bordered
+    #budget_pie.bordered
 
 %h2= "Activities (#{short_page_entries_info(@spend_codings)})"
-%table.standard
+
+%table.standard.clickable
   %thead
     %tr
       %th Name

@@ -108,9 +108,9 @@ body.app
   /* adding properties to the shared admin style */
   #admin ul li
     &:first-child a
-    +border-bottom-left-radius
+      +border-bottom-left-radius
     &:last-child a
-    +border-bottom-right-radius
+      +border-bottom-right-radius
   /* end */
 
   /* sub-nav styles */
@@ -312,6 +312,7 @@ body.app
     h2
       +border-top-radius
       background= !lightest-blue
+      clear: both
       color= !mid-blue
       font-size: 0.8em
       letter-spacing: 0.05em
@@ -387,6 +388,7 @@ body.app
         padding: 0 20px 5px 6px
     .read_more
       padding-bottom: 10px
+      
 /* adding styles for the Submit page */
 body#static_page_submit #content .wrapper #main
 
@@ -428,15 +430,14 @@ body#static_page_submit #content .wrapper #main
         background: $mid-blue
 
 // Grouping tab styles
-.group
+
+  
+ul.group
   border-bottom: 1px solid $light-blue
   margin-top: 10px
   margin-bottom: 15px
-  
-  ul
-    font-size: 11px
-    margin-bottom: 0 !important
-    +linear-gradient(color-stops(white, $lightest-blue + #090909))
+  font-size: 11px
+  +linear-gradient(color-stops(white, $lightest-blue + #090909))
 
   li
     display: inline-block
@@ -444,7 +445,7 @@ body#static_page_submit #content .wrapper #main
 
     a
       border-top: 1px solid #FFF
-      display: block
+      display: inline-block
       line-height: 1.6em
       padding: 5px 15px
       text-decoration: none
@@ -481,27 +482,53 @@ body#static_page_submit #content .wrapper #main
 
 // Pretty Table (with clickable rows)
 table.standard
-  border-collapse: collapse
+  color: $mid-blue
   font-size: 11px
   line-height: 14px
-
-  tr
-    background-color: #eee
-    border-top: 1px solid #fff
+  width: 100%
+  
+  thead
+    color: white
+    font-weight: bold
+    
+    th
+      padding-top: 12px
+      
+  tbody tr
     border-spacing: 0
+    
+    &.odd
+      background: $lightest-blue + #090909
+      +linear-gradient(color-stops(white, $lightest-blue + #090909))
 
     &:hover
-      background-color: #ccc
+      background: $lightest-blue
+      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
+      color: $dark-blue
+      td
+        border-bottom: 1px solid !light_blue
 
   th, td
-    padding: 3px 5px
+    padding: 10px 7px 4px
+    min-width: 100px
 
   td
-    border-bottom: 1px solid !light_grey
+    border-bottom: 1px dashed !light_blue
     vertical-align: middle
-
+    a
+      font-size: 12px
+      font-weight: bold
+      text-transform: uppercase
   td:hover
     cursor: pointer
+    
+table.rounded
+  th:first-child
+    background: $mid-blue !important
+    +border-top-left-radius
+  th:last-child
+    background: $mid-blue !important
+    +border-top-right-radius
 
 .breadcrumb
   +border-radius
@@ -543,3 +570,6 @@ table.standard
     background: $mid-blue
     border: 1px solid $mid-blue
     color: white
+    
+.half h2
+  clear: both

@@ -815,6 +815,12 @@ var admin_districts_activities_index = {
     if (typeof(_mtef_budget_pie_values) !== "undefined") {
       drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
     }
+    if (typeof(_activities_spent_pie_values) !== "undefined") {
+      drawPieChart('activities_spent_pie', _activities_spent_pie_values);
+    }
+    if (typeof(_activities_budget_pie_values) !== "undefined") {
+      drawPieChart('activities_budget_pie', _activities_budget_pie_values);
+    }
   }
 };
 

@@ -6,21 +6,23 @@
 
 %h1.main_heading Activities
 
-%div
-  %h2 Spent
+.full
+  .first-half
+    %h2 Spent
+    #activities_spent_pie.bordered
 
-%p.bordered= @total_spent
+  .second-half
+    %h2 Budgeted
+    #activities_budget_pie.bordered
 
-%div
-  %h2 Budgeted
+.full
+  .first-half
+    %h2 MTEF Spent
+    #mtef_spent_pie.bordered
 
-%div
-  %h2 MTEF Spent
-  #mtef_spent_pie
-
-%div
-  %h2 MTEF Budgeted
-  #mtef_budget_pie
+  .second-half
+    %h2 MTEF Budgeted
+    #mtef_budget_pie.bordered
 
 %h2= "Activities (#{short_page_entries_info(@spend_codings)})"
 %table.standard

@@ -4,8 +4,10 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
   def index
     @spend_codings = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page],
                                                                                       :per_page => 25
-    @mtef_spent_pie_values  = load_mtef_spent_pie
-    @mtef_budget_pie_values = load_mtef_budget_pie
+    @mtef_spent_pie_values         = load_mtef_spent_pie
+    @mtef_budget_pie_values        = load_mtef_budget_pie
+    @activities_spent_pie_values   = load_activities_spent_pie
+    @activities_budget_pie_values  = load_activities_budget_pie
   end
 
   def show
@@ -81,6 +83,45 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
       @total_in_all_districts = district_klass.sum(:cached_amount)
       @district_ratio   = @total_in_district / @total_in_all_districts # % that this district has allocated
       return prepare_pie_values(coding_klass.with_code_ids(Mtef.leaves), @district_ratio, chart_title)
+    end
+
+    def prepare_activities_pie_values(code_assignments, title)
+      values = []
+      other = 0
+      code_assignments.each_with_index do |ca, index|
+        if index < 5
+          values << [(ca.activity_name || "No name"), ca.total]
+        else
+          other += ca.total.to_f
+        end
+      end
+
+      values << ['Other', other]
+
+      {
+        :values => values,
+        :names => {:column1 => 'Activity', :column2 => 'Amount', :title => title}
+      }.to_json
+    end
+
+    def load_activities_spent_pie
+      spent_codings = @location.code_assignments.with_type("CodingSpendDistrict").find(:all, 
+        :select => "code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS total",
+        :joins => :activity,
+        :group => 'code_assignments.activity_id',
+        :order => 'cached_amount DESC')
+
+      prepare_activities_pie_values(spent_codings, "Spent by Activities")
+    end
+
+    def load_activities_budget_pie
+      budget_codings = @location.code_assignments.with_type("CodingBudgetDistrict").find(:all, 
+        :select => "code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS total",
+        :joins => :activity,
+        :group => 'code_assignments.activity_id',
+        :order => 'cached_amount DESC')
+
+      prepare_activities_pie_values(budget_codings, "Budget by Activities")
     end
 
 end

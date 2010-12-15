@@ -435,7 +435,7 @@ body#static_page_submit #content .wrapper #main
 ul.group
   border-bottom: 1px solid $light-blue
   margin-top: 10px
-  margin-bottom: 15px
+  margin-bottom: 20px
   font-size: 11px
   +linear-gradient(color-stops(white, $lightest-blue + #090909))
 
@@ -447,7 +447,7 @@ ul.group
       border-top: 1px solid #FFF
       display: inline-block
       line-height: 1.6em
-      padding: 5px 15px
+      padding: 8px 15px 5px
       text-decoration: none
 
       &:hover, &:focus
@@ -462,6 +462,7 @@ ul.group
         color: $mid-blue
         font-weight: bold
         margin-bottom: -1px
+        +border-top-radius
         +linear-gradient(color-stops($lightest-blue + #090909, white))
 
 .main_heading
@@ -503,7 +504,7 @@ table.standard
       +linear-gradient(color-stops(white, $lightest-blue + #090909))
 
   th, td
-    padding: 10px 7px 4px
+    padding: 12px 7px 3px
     min-width: 100px
 
   td
@@ -529,6 +530,8 @@ table.clickable
   td:hover
     cursor: pointer
 
+// Pretty Table with rounded thead
+// use it when there is no additional heading (for ex. h2)
 table.rounded
   th:first-child
     background: $mid-blue !important

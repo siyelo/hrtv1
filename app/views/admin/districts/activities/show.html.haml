@@ -1,51 +1,81 @@
-= render 'admin/districts/pie_chart_js'
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart", "treemap"]});
+  var _code_spent_pie_values      = #{js_safe(@code_spent_pie_values)};
+  var _code_budget_pie_values     = #{js_safe(@code_budget_pie_values)};
+  var _spent_pie_values           = #{js_safe(@spent_pie_values)};
+  var _budget_pie_values          = #{js_safe(@budget_pie_values)};
+  var _mtef_spent_treemap_values  = #{js_safe(@mtef_spent_treemap_values)};
+  var _mtef_budget_treemap_values = #{js_safe(@mtef_budget_treemap_values)};
 
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
   %li= link_to h(@location.name), admin_district_path(@location)
   %li= link_to 'Activities', admin_district_activities_path(@location)
 
-%h1.main_heading= "Activity: #{friendly_name(@activity.name)}"
+%h1.main_heading= "Activity: #{friendly_name(@activity)}"
 
-%h2= "Organization: #{@activity.organization_name}"
+%h2 Summary
 
 %table.standard
   %tbody
     %tr
-      %td Description:
+      %td Organization
+      %td= h @activity.organization_name
+    %tr
+      %td Activity Name:
+      %td= @activity.name.blank? ? "n/a" : h(@activity.name)
+    %tr
+      %td Activity Description:
       %td= h @activity.description.titleize
     %tr
       %td Implementer
-      %td= @activity.implementer
+      %td= h @activity.implementer
+    %tr
+      %td Associated Project
+      %td= h friendly_name(@activity.project)
     %tr
       %td Currency
       %td= @activity.currency
     %tr
       %td Approved?
-      %td= @activity.approved? ? "Yes" : "No"
-
+      %td
+        = @activity.approved? ? "Yes" : "No"
+        .hint Whether this activity has been approved by a reviewer yet.
 %br
 - if @charts_loaded
   .full
     .first-half
       %h2 Proportion Spent
-      #spent_pie
+      #spent_pie.bordered
 
     .second-half
-      %h2 Proportion Budgeted
+      %h2 Proportion Budget
       #budget_pie.bordered
 
   %ul.group
-    %li= link_to "MTEF", admin_district_activity_path(@location, @activity), active_if([:show, :mtef])
-    %li= link_to "NSP", "#", active_if([:nsp])
-    %li= link_to "HSSP", "#", active_if([:hssp])
+    %li= link_to "NSP", admin_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
+    %li= link_to "MTEF", admin_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
+
+  - type = 'NSP'
+  - type = 'MTEF' if @mtef
 
   .full
     .first-half
-      %h2 MTEF Spent
-      #mtef_spent_pie.bordered
+      %h2= "#{type} Spent"
+      #code_spent_pie.bordered
 
     .second-half
-      %h2 MTEF Budgeted
-      #mtef_budget_pie.bordered
+      %h2= "#{type} Budget"
+      #code_budget_pie.bordered
 
+  .full
+    .first-half
+      %h2= "#{type} Spent"
+      #mtef_spent_treemap.bordered
+
+    .second-half
+      %h2= "#{type} Budget"
+      #mtef_budget_treemap.bordered

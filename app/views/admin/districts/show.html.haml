@@ -1,3 +1,14 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  var _treemap = #{@treemap.to_json};
+  var packages = _treemap ? ["treemap"] : ["corechart"];
+  google.load("visualization", "1", {packages: packages});
+  var _code_spent_values  = #{js_safe(@code_spent_values)};
+  var _code_budget_values = #{js_safe(@code_budget_values)};
+
+
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
 
@@ -5,15 +16,34 @@
 
 .full
   .first-half
-    %h2 MTEF Spent
-    #mtef_spent_pie.bordered
+    %h2 Top Organizations by Expenditure
+    %p.bordered= link_to "View all Organizations", "#"
+    = render 'admin/districts/organizations/table_mini', :top_organizations => @top_organizations, :location => @location
+  .second-half
+    %h2 Top Activities by Expenditure
+    %p.bordered= link_to "View all Activities", admin_district_activities_path(@location)
+    = render 'admin/districts/activities/table_mini', :top_activities => @top_activities, :location => @location
+
+%ul.group
+  %li= link_to "NSP", admin_district_path(@location, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", admin_district_path(@location, :code_type => "mtef"), active_if(@mtef)
+
+%ul.group
+  %li= link_to "Treemap", admin_district_path(@location, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
+  %li= link_to "Pie", admin_district_path(@location, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
+
+- type = 'NSP'
+- type = 'MTEF' if @mtef
+
+.full
+  .first-half
+    %h2= "#{type} Spent"
+    #code_spent.bordered
 
   .second-half
-    %h2 MTEF Budgeted
-    #mtef_budget_pie.bordered
+    %h2= "#{type} Budget"
+    #code_budget.bordered
 
-%h2 Organizations
-%p= link_to "Organizations", "#"
 
-%h2 Activities
-%p= link_to "Activities", admin_district_activities_path(@location)
+
+

@@ -126,6 +126,11 @@ class Activity < ActiveRecord::Base
     self.data_response.responding_organization
   end
 
+  # helper until we enforce this in the model association!
+  def project
+    self.projects.first
+  end
+
   def organization_name
     organization.name
   end

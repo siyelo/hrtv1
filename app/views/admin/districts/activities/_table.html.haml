@@ -1,0 +1,31 @@
+
+%table.standard.clickable
+  %thead
+    %tr
+      %th Name
+      %th Organization
+      %th Project
+      %th Funders
+      %th Total Spent
+      %th Total Budget
+
+  %tbody
+    - spend_codings.each do |c|
+      - act = c.try(:activity)
+      %tr{:class => cycle("even", "odd")}
+        - if act.nil?
+          %td{:colspan => 100}= "Bad data! code id: #{c.id}"
+        - else
+          - project = act.projects.first
+          - budget = act.coding_budget_district.with_location(location.id).find(:first)
+          %td= link_to "#{friendly_name(act)}", admin_district_activity_path(location, act)
+          %td= h act.organization.name
+          %td= h friendly_name(project)
+          %td
+            - if project
+              %ul
+                - project.funding_sources.map(&:name).uniq.each do |name|
+                  %li= name
+          %td= c.cached_amount.round(2)
+          %td
+            = budget.nil? ? 'n/a' : budget.cached_amount

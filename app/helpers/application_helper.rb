@@ -2,6 +2,10 @@
 module ApplicationHelper
   include NumberHelper # gives n2c method available
 
+  # include these again so that each module using this module doesnt need to
+  include ERB::Util
+  include ActionView::Helpers::TextHelper
+
   # Adds title on page
   def title(page_title)
     content_for(:title) { page_title }
@@ -52,12 +56,23 @@ module ApplicationHelper
   # alternative to rails' current_page?() method
   # which doesnt allow you to have extra params in the URI after the
   # controller name.
-  def current_controller?(controller)
-    controller == request.path_parameters[:controller].split('/').last
+  def current_controller?(controller_name)
+    current = request.path_parameters[:controller].split('/').last
+    return true if controller_name == current
+    parent_controller?(controller_name)
   end
 
-  def friendly_name(name)
-    name.blank? ? "(no name)" : h(name.titleize)
+  # check if this controller is anywhere the controller hierarchy
+  def parent_controller?(controller_name)
+    parent = request.path_parameters[:controller].split('/').last.split('::').first.downcase
+    controller_name == parent
+  end
+
+  def friendly_name(object, truncate_length = 45)
+    return "n/a" unless object
+    name = object.name.blank? ? object.description : object.name
+    return "n/a" if name.blank?
+    return truncate(h(name).titleize, :length => truncate_length)
   end
 
   # appends a .active class
@@ -66,6 +81,8 @@ module ApplicationHelper
     current = controller.action_name.to_sym
     if action_name.is_a?(Array)
       active = true if action_name.include?(current)
+    elsif (action_name.class == TrueClass || action_name.class == FalseClass)
+      active = action_name
     else
       active = true if action_name == current
     end

@@ -1,24 +1,38 @@
+- title 'Admin Reports'
+
 %h1.main_heading All Reports
+
 %h2 Activities
 
 %ul.admin_reports.link_list
-  %li=  link_to "Activities Report", activity_report_path
-  %li=  link_to "Activities by District", activities_by_district_new_path
-  %li=  link_to "Activities - One Row Per District Coded in Classifications + District Classifications Summary per Activity", activities_by_district_row_report_path
-  %li=  link_to "Activities By Budget Coding (beta)", activities_by_budget_coding_path
-  %li=  link_to "Activities By Budget Cost Categorization (beta)", activities_by_budget_cost_cat_path
-  %li=  link_to "Activities By Budget Districts (beta)", activities_by_budget_districts_path
-  %li=  link_to "Activities By Expenditure Coding (beta)", activities_by_expenditure_coding_path
-  %li=  link_to "Activities By Expenditure Cost Categorization (beta)", activities_by_expenditure_cost_cat_path
-  %li=  link_to "Activities By Expenditure Districts (beta)", activities_by_expenditure_districts_path
+  %li
+    =  link_to "Summary", activity_report_path
+    %span.hint Formerly named the "Activities Report"
+  %li=  link_to "By District", activities_by_district_new_path
+  %li
+    =  link_to "One Row Per District", activities_by_district_row_report_path
+    %span.hint Coded in Classifications + District Classifications Summary per Activity
+  %li=  link_to "By Budget Coding (beta)", activities_by_budget_coding_path
+  %li=  link_to "By Budget Cost Categorization (beta)", activities_by_budget_cost_cat_path
+  %li=  link_to "By Budget Districts (beta)", activities_by_budget_districts_path
+  %li=  link_to "By Expenditure Coding (beta)", activities_by_expenditure_coding_path
+  %li=  link_to "By Expenditure Cost Categorization (beta)", activities_by_expenditure_cost_cat_path
+  %li=  link_to "By Expenditure Districts (beta)", activities_by_expenditure_districts_path
 
 %h2 Maps
+
+%h3 Districts
+
 %ul.link_list
-  %li=  link_to "Map Districts by Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
-  %li=  link_to "Map Districts by Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
-  %li=  link_to "Map Facilities by Partner Budget", map_facilities_by_partner_url( :type => "CodingBudgetDistrict")
-  %li=  link_to "Map Facilities by Partner Spending", map_facilities_by_partner_url( :type => "CodingSpendDistrict")
+  %li=  link_to "By Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
+  %li=  link_to "By Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
+
+%h3 Facilities
+
+%ul.link_list
+  %li=  link_to "By Partner Budget", map_facilities_by_partner_url( :type => "CodingBudgetDistrict")
+  %li=  link_to "By Partner Spending", map_facilities_by_partner_url( :type => "CodingSpendDistrict")
 
 %h2 Users
 %ul.link_list
-  %li=  link_to "Users By Organization", users_by_organization_path
+  %li=  link_to "By Organization", users_by_organization_path

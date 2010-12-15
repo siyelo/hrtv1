@@ -19,10 +19,10 @@ class CodeAssignment < ActiveRecord::Base
                 ["code_assignments.code_id IN (?)", code_ids]} }
   named_scope :with_activity,
               lambda { |activity_id| { :conditions =>
-                ["activity_id = ?", activity_id]} }
+                ["code_assignments.activity_id = ?", activity_id]} }
   named_scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
-                ["activity_id in (?)", activity_ids]} }
+                ["code_assignments.activity_id in (?)", activity_ids]} }
   named_scope :with_activities_include_implementer,
               lambda { |activity_ids| {
                 :conditions => ["code_assignments.activity_id in (?)", activity_ids],
@@ -80,6 +80,23 @@ class CodeAssignment < ActiveRecord::Base
   def calculated_amount_currency
     n2c(self.calculated_amount, self.currency).to_s
   end
+
+  def self.treemap_sums(code_ids, coding_type, activities)
+    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all, 
+      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount) AS cached_amount',
+      :group => 'code_assignments.code_id, code_assignments.activity_id'
+    ).group_by{|ca| ca.code_id}
+  end
+
+  def self.treemap_ratios(code_id, activities, activity_value)
+    CodeAssignment.with_code_id(code_id).with_activities(activities).find(:all,
+      :joins => :activity, 
+      :select => "code_assignments.activity_id, activities.#{activity_value}, (code_assignments.cached_amount / activities.#{activity_value}) AS ratio",
+      :group => "code_assignments.activity_id, activities.#{activity_value}, ratio",
+      :conditions => "activities.#{activity_value} > 0"
+    ).group_by{|ca| ca.activity_id}
+  end
+
 
   def self.update_codings(code_assignments, activity)
     if code_assignments

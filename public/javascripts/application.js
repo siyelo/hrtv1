@@ -772,44 +772,97 @@ var data_responses_review = {
   }
 }
 
-function drawPieChart(id, raw_data) {
+function drawPieChart(id, data_rows) {
+  if (typeof(data_rows) === "undefined") {
+    return;
+  }
+
   var data = new google.visualization.DataTable();
-  data.addColumn('string', raw_data.names.column1);
-  data.addColumn('number', raw_data.names.column2);
-  data.addRows(raw_data.values.length);
-  for (var i = 0; i < raw_data.values.length; i++) {
-    var value = raw_data.values[i];
+  data.addColumn('string', data_rows.names.column1);
+  data.addColumn('number', data_rows.names.column2);
+  data.addRows(data_rows.values.length);
+  for (var i = 0; i < data_rows.values.length; i++) {
+    var value = data_rows.values[i];
     data.setValue(i, 0, value[0]);
     data.setValue(i, 1, value[1]);
   };
   var chart = new google.visualization.PieChart(document.getElementById(id));
-  chart.draw(data, {width: 450, height: 300, title: raw_data.names.title});
+  chart.draw(data, {width: 450, height: 300, chartArea: {width: 360, height: 220}});
 };
 
-var districtReviewPieCharts = function () {
-  if (typeof(_budget_pie_values) !== "undefined") {
-    drawPieChart('spent_pie', _spent_pie_values);
+var drawTreemapChart = function (id, data_rows, treemap_gravity) {
+  if (typeof(data_rows) === "undefined") {
+    return;
   }
-  if (typeof(_budget_pie_values) !== "undefined") {
-    drawPieChart('budget_pie', _budget_pie_values);
+
+  var chart_element = jQuery("#" + id);
+  chart_element.css({width: "450px", height: "300px"});
+
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Code');
+  data.addColumn('string', 'Parent');
+  data.addColumn('number', 'Market trade volume (size)');
+  data.addColumn('number', 'Market increase/decrease (color)');
+  data.addRows(data_rows)
+
+  // Create and draw the visualization.
+  var tree = new google.visualization.TreeMap(chart_element[0]);
+  tree.draw(data, {
+    minColor: '#35ff35',
+    midColor: '#09c500',
+    maxColor: '#08a100',
+    headerHeight: 20,
+    fontColor: 'black',
+    fontSize: '12',
+    headerColor: '#E6EDF3',
+    showScale: false,
+    showTooltips: false
+  });
+
+  // manual tipsy
+  if (typeof(treemap_gravity) === "undefined") {
+    treemap_gravity = 'e'
   }
-  if (typeof(_mtef_spent_pie_values) !== "undefined") {
-    drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
-  }
-  if (typeof(_mtef_budget_pie_values) !== "undefined") {
-    drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
+  chart_element.tipsy({gravity: treemap_gravity, trigger: 'manual'})
+
+  google.visualization.events.addListener(tree, 'onmouseover', function (e) {
+    chart_element.attr('title', data_rows[e.row][0]);
+    chart_element.tipsy('show');
+  });
+
+  google.visualization.events.addListener(tree, 'onmouseout', function (e) {
+    chart_element.attr('title', '');
+    chart_element.tipsy('hide');
+  });
+}
+
+var admin_districts_show = {
+  run: function () {
+    if (_treemap) {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
+    } else {
+      drawPieChart('code_spent', _code_spent_values);
+      drawPieChart('code_budget', _code_budget_values);
+    }
   }
 };
 
 var admin_districts_activities_show = {
   run: function () {
-    districtReviewPieCharts();
+    drawPieChart('spent_pie', _spent_pie_values);
+    drawPieChart('budget_pie', _budget_pie_values);
+    drawPieChart('code_spent_pie', _code_spent_pie_values);
+    drawPieChart('code_budget_pie', _code_budget_pie_values);
+    drawTreemapChart('spent_treemap', _mtef_spent_treemap_values, 'w');
+    drawTreemapChart('budget_treemap', _mtef_budget_treemap_values, 'e');
   }
 };
 
 var admin_districts_activities_index = {
   run: function () {
-    districtReviewPieCharts();
+    drawPieChart('spent_pie', _spent_pie_values);
+    drawPieChart('budget_pie', _budget_pie_values);
   }
 };
 

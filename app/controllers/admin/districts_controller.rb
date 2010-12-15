@@ -1,4 +1,5 @@
 class Admin::DistrictsController < Admin::BaseController
+  MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
 
   def index
     @locations = Location.all_with_counters
@@ -12,8 +13,32 @@ class Admin::DistrictsController < Admin::BaseController
 
   def show
     @location = Location.find(params[:id])
-    @mtef_spent_pie_values        = DistrictPies::mtef_spent(@location)
-    @mtef_budget_pie_values       = DistrictPies::mtef_budget(@location)
+    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
+
+    case params[:code_type]
+    when "mtef"
+      @mtef = true
+      if @treemap
+        @code_spent_values   = DistrictTreemaps::district_mtef_spent(@location, @location.activities)
+        @code_budget_values  = DistrictTreemaps::district_mtef_budget(@location, @location.activities)
+      else
+        @code_spent_values   = DistrictPies::activities_mtef_spent(@location, MTEF_CODE_LEVEL)
+        @code_budget_values  = DistrictPies::activities_mtef_budget(@location, MTEF_CODE_LEVEL)
+      end
+    else
+      @nsp = true
+      #TODO: - NSP level 1 or 2 etc
+      if @treemap
+        @code_spent_values   = DistrictTreemaps::nsp_spent(@location, @location.activities)
+        @code_budget_values  = DistrictTreemaps::nsp_budget(@location, @location.activities)
+      else
+        @code_spent_values   = DistrictPies::activities_nsp_spent(@location)
+        @code_budget_values  = DistrictPies::activities_nsp_budget(@location)
+      end
+    end
+
+    @top_activities        = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.find(:all, :limit => 5)
+    @top_organizations     = CodingSpendDistrict.top_organizations(@location.id)
   end
 
 end

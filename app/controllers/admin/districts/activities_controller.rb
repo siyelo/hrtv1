@@ -1,13 +1,11 @@
 class Admin::Districts::ActivitiesController < Admin::BaseController
-  before_filter  :load_location
-  PRECISION = 6
+  before_filter :load_location
+
   def index
-    #@activities = @location.activities.greatest_first.paginate :page => params[:page],
-    #                                                           :per_page => 25
     @spend_codings = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page],
                                                                                       :per_page => 25
-    @total_spent = CodingSpendDistrict.sum(:cached_amount,
-                                           :conditions => ["code_id = ?", @location.id])
+    @mtef_spent_pie_values  = load_mtef_spent_pie
+    @mtef_budget_pie_values = load_mtef_budget_pie
   end
 
   def show
@@ -32,7 +30,7 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
         @district_spent_ratio   = @district_spend_coding.cached_amount / @activity.spend # % that this district has allocated
         @district_spent         = @activity.spend * @district_spent_ratio
         @spent_ratio_pie_values = prepare_ratio_pie_values(@activity.spend, @district_spent, "Spent by Districts")
-        @spent_pie_values       = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "MTEF Spent")
+        @mtef_spent_pie_values  = prepare_pie_values(CodingSpend.with_code_ids(Mtef.leaves).with_activity(@activity), @district_spent_ratio, "MTEF Spent")
       end
     end
 
@@ -43,7 +41,7 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
         @district_budgeted_ratio = @district_budget_coding.cached_amount / @activity.budget # % that this district has allocated
         @district_budgeted       = @activity.budget * @district_budgeted_ratio
         @budget_ratio_pie_values = prepare_ratio_pie_values(@activity.budget, @district_budgeted, "Budget by Districts")
-        @budget_pie_values = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "MTEF Budget")
+        @mtef_budget_pie_values  = prepare_pie_values(CodingBudget.with_code_ids(Mtef.leaves).with_activity(@activity), @district_budgeted_ratio, "MTEF Budget")
       end
     end
 
@@ -68,4 +66,21 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
         :names => {:column1 => 'Code name', :column2 => 'Amount', :title => title}
       }.to_json
     end
+
+    def load_mtef_spent_pie
+      load_mtef_pie( CodingSpendDistrict, CodingSpend, @location, "MTEF Spend")
+    end
+
+    def load_mtef_budget_pie
+      load_mtef_pie( CodingBudgetDistrict, CodingBudget, @location, "MTEF Budget")
+    end
+
+    def load_mtef_pie(district_klass, coding_klass, location, chart_title)
+      @total_in_district = district_klass.sum(:cached_amount,
+                                              :conditions => ["code_id = ?", @location.id])
+      @total_in_all_districts = district_klass.sum(:cached_amount)
+      @district_ratio   = @total_in_district / @total_in_all_districts # % that this district has allocated
+      return prepare_pie_values(coding_klass.with_code_ids(Mtef.leaves), @district_ratio, chart_title)
+    end
+
 end

@@ -1,0 +1,9 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart"]});
+  var _mtef_spent_pie_values = #{js_safe(@mtef_spent_pie_values)};
+  var _mtef_budget_pie_values = #{js_safe(@mtef_budget_pie_values)};
+  var _spent_ratio_pie_values = #{js_safe(@spent_ratio_pie_values)};
+  var _budget_ratio_pie_values = #{js_safe(@budget_ratio_pie_values)};

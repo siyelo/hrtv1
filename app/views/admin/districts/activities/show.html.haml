@@ -1,13 +1,5 @@
-- if !@spent_pie_values.nil? && !@budget_pie_values.nil?
-  - content_for :head do
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+= render 'pie_chart_loader'
 
-  :javascript
-    google.load("visualization", "1", {packages:["corechart"]});
-    var _spent_pie_values = #{@spent_pie_values};
-    var _budget_pie_values = #{@budget_pie_values};
-    var _spent_ratio_pie_values = #{@spent_ratio_pie_values};
-    var _budget_ratio_pie_values = #{@budget_ratio_pie_values};
 
 
 %ul.breadcrumb
@@ -54,9 +46,9 @@
 
   %div
     %h2 MTEF Spent
-    #spent_pie
+    #mtef_spent_pie
 
   %div
     %h2 MTEF Budgeted
-    #budget_pie
+    #mtef_budget_pie
 

@@ -1,3 +1,5 @@
+= render 'pie_chart_loader'
+
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
   %li >
@@ -6,11 +8,21 @@
 
 %h1 Activities
 
-%h2 Spent
+%div
+  %h2 Spent
 
 %p= @total_spent
 
-%h2 Budgeted
+%div
+  %h2 Budgeted
+
+%div
+  %h2 MTEF Spent
+  #mtef_spent_pie
+
+%div
+  %h2 MTEF Budgeted
+  #mtef_budget_pie
 
 %h2= "Activities (#{short_page_entries_info(@spend_codings)})"
 %table.standard

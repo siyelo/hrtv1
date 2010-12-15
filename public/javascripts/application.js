@@ -798,11 +798,22 @@ var admin_districts_activities_show = {
     if (typeof(_budget_ratio_pie_values) !== "undefined") {
       drawPieChart('budget_ratio_pie', _budget_ratio_pie_values);
     }
-    if (typeof(_spent_pie_values) !== "undefined") {
-      drawPieChart('spent_pie', _spent_pie_values);
+    if (typeof(_mtef_spent_pie_values) !== "undefined") {
+      drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
     }
-    if (typeof(_budget_pie_values) !== "undefined") {
-      drawPieChart('budget_pie', _budget_pie_values);
+    if (typeof(_mtef_budget_pie_values) !== "undefined") {
+      drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
+    }
+  }
+};
+
+var admin_districts_activities_index = {
+  run: function () {
+    if (typeof(_mtef_spent_pie_values) !== "undefined") {
+      drawPieChart('mtef_spent_pie', _mtef_spent_pie_values);
+    }
+    if (typeof(_mtef_budget_pie_values) !== "undefined") {
+      drawPieChart('mtef_budget_pie', _mtef_budget_pie_values);
     }
   }
 };

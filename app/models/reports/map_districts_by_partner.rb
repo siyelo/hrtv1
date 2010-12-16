@@ -25,7 +25,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
 #    @district_proportions_hash = {} # activity => {location => proportion}
     @csv_string = FasterCSV.generate do |csv|
       @activities = activities
-      @report_type = report_type
+      @report_type = report_type.constantize
       @codes_to_include.each do |c|
         set_district_hash_for_code c
       end

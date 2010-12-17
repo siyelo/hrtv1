@@ -120,7 +120,8 @@ ActionController::Routing::Routes.draw do |map|
                                                 :submitted    => :get},
                                 :member => {:delete => :get}
     admin.resources :districts, :only => [:index, :show] do |districts|
-      districts.resources :activities, :only => [:index, :show], :controller => "Districts::Activities"
+      districts.resources :activities, :only => [:index, :show], :controller => "districts/activities"
+      districts.resources :organizations, :only => [:index, :show], :controller => "districts/organizations"
     end
     admin.resources :organizations, :collection => { :duplicate         => :get,
                                                      :remove_duplicate  => :put},

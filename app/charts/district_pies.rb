@@ -4,12 +4,26 @@ module DistrictPies
   class << self
     include ApplicationHelper
 
-    ### index
+    ### admin/district/:id/organizations
+    def organizations(location, code_type)
+      records = Organization.find :all,
+        :select => "organizations.id, organizations.name, SUM(ca1.cached_amount) as value",
+      :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
+        INNER JOIN activities a1 ON dr1.id = a1.data_response_id
+        INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id AND ca1.type = '#{code_type}' AND ca1.code_id = #{location.id}",
+      :group => "organizations.id, organizations.name",
+      :order => "value DESC"
+
+      prepare_organizations_pie_values(records)
+    end
+
+    ### admin/district/:id/activities
     def activities_spent(location)
       spent_codings = location.code_assignments.with_type("CodingSpendDistrict").find(:all,
-        :select => "code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
+        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
         :joins => :activity,
-        :group => 'code_assignments.activity_id, activities.name',
+        :include => :activity,
+        :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
         :order => 'cached_amount DESC')
 
       prepare_activities_pie_values(spent_codings)
@@ -17,9 +31,10 @@ module DistrictPies
 
     def activities_budget(location)
       budget_codings = location.code_assignments.with_type("CodingBudgetDistrict").find(:all,
-        :select => "code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
+        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
         :joins => :activity,
-        :group => 'code_assignments.activity_id, activities.name',
+        :include => :activity,
+        :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
         :order => 'cached_amount DESC')
 
       prepare_activities_pie_values(budget_codings)
@@ -107,12 +122,31 @@ module DistrictPies
 
       def prepare_activities_pie_values(code_assignments)
         values = []
-        other = 0
+        other = 0.0
         code_assignments.each_with_index do |ca, index|
           if index < 5
             values << [friendly_name(ca.activity), ca.cached_amount.to_f.round(2)]
           else
             other += ca.cached_amount.to_f
+          end
+        end
+
+        values << ['Other', other.round(2)]
+
+        {
+          :values => values,
+          :names => {:column1 => 'Activity', :column2 => 'Amount'}
+        }.to_json
+      end
+
+      def prepare_organizations_pie_values(organizations)
+        values = []
+        other = 0.0
+        organizations.each_with_index do |organization, index|
+          if index < 5
+            values << [organization.name, organization.value.to_f.round(2)]
+          else
+            other += organization.value.to_f
           end
         end
 

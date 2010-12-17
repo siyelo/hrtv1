@@ -53,26 +53,43 @@ module ApplicationHelper
     end
   end
 
+  # need to ensure we dont activate a different 'root' tab when we are on a
+  # nested controller of the same name
+  # Eg. Dashboard | Activities | Districts
+  # where Districts has a nested-controller also called 'Activities'
+  def build_admin_nav_tab(tab)
+    parent = 'admin'
+    active =  current_controller_with_nesting?(parent, tab)
+    unless active
+      if tab == 'districts'
+        active = current_controller_with_nesting?('districts', 'activities') ||
+                 current_controller_with_nesting?('districts', 'organizations')
+      end
+    end
+    return link_to tab.humanize, { :controller => "/#{parent}/#{tab}" }, :class => ('active' if active)
+  end
+
   # alternative to rails' current_page?() method
   # which doesnt allow you to have extra params in the URI after the
   # controller name.
   def current_controller?(controller_name)
     current = request.path_parameters[:controller].split('/').last
-    return true if controller_name == current
-    parent_controller?(controller_name)
+    controller_name == current
   end
 
-  # check if this controller is anywhere the controller hierarchy
-  def parent_controller?(controller_name)
-    parent = request.path_parameters[:controller].split('/').last.split('::').first.downcase
-    controller_name == parent
+  # check the request matches the form 'parent/controller'
+  def current_controller_with_nesting?(parent_name, controller_name)
+    path    = request.path_parameters[:controller].split('/')
+    current = path.pop
+    parent  = path.pop
+    controller_name == current && parent_name == parent
   end
 
   def friendly_name(object, truncate_length = 45)
     return "n/a" unless object
     name = object.name.blank? ? object.description : object.name
     return "n/a" if name.blank?
-    return truncate(h(name).titleize, :length => truncate_length)
+    return truncate(name.titleize, :length => truncate_length)
   end
 
   # appends a .active class

@@ -81,31 +81,28 @@ class CodeAssignment < ActiveRecord::Base
     n2c(self.calculated_amount, self.currency).to_s
   end
 
-  def self.treemap_sums(code_ids, coding_type, activities)
+  def self.treemap_totals(code_ids, coding_type, activities)
     CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all, 
       :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount) AS cached_amount',
       :group => 'code_assignments.code_id, code_assignments.activity_id'
     ).group_by{|ca| ca.code_id}
   end
 
-  def self.treemap_ratios(code_id, activities, activity_value)
-    CodeAssignment.with_code_id(code_id).with_activities(activities).find(:all,
+  def self.treemap_ratios(code_id, activities, district_type, activity_value)
+    CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activities).find(:all,
       :joins => :activity, 
-      :select => "code_assignments.activity_id, activities.#{activity_value}, (code_assignments.cached_amount / activities.#{activity_value}) AS ratio",
-      :group => "code_assignments.activity_id, activities.#{activity_value}, ratio",
+      :select => "code_assignments.activity_id, activities.#{activity_value}, (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
+      :group => "code_assignments.activity_id, activities.#{activity_value}",
       :conditions => "activities.#{activity_value} > 0"
     ).group_by{|ca| ca.activity_id}
   end
-
 
   def self.update_codings(code_assignments, activity)
     if code_assignments
       code_assignments.delete_if { |key,val| val["amount"].nil? || val["percentage"].nil? }
       code_assignments.delete_if { |key,val| val["amount"].empty? && val["percentage"].empty? }
       selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
-
       self.with_activity(activity.id).delete_all
-
       # if there are any codes, then save them!
       selected_codes.each do |code|
         self.create!(:activity => activity,
@@ -125,7 +122,6 @@ class CodeAssignment < ActiveRecord::Base
     currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
     defaults  = defaults.merge(currency)
     delimiter = options[:delimiter] || defaults[:delimiter]
-
     number_string.gsub(delimiter,'')
   end
 
@@ -136,7 +132,6 @@ class CodeAssignment < ActiveRecord::Base
 
     available_codes.each do |ac|
       ca = self.with_activity(activity).with_code_id(ac.id).first
-
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
@@ -154,10 +149,8 @@ class CodeAssignment < ActiveRecord::Base
         sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
         self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if sum_of_children > 0
       end
-
       total += my_cached_amount
     end
-
     total
   end
 

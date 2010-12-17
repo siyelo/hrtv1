@@ -2,7 +2,8 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
   before_filter :load_location
 
   def index
-    @spend_codings     = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page], :per_page => 25, :include => {:activity => [{:data_response => :responding_organization}, :projects]}
+    #@activities        = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page], :per_page => 25, :include => {:activity => [{:data_response => :responding_organization}, :projects]}
+    @activities        = Activity.top_by_spent_and_budget({:per_page => 25, :page => params[:page], :code_id => @location.id})
     @spent_pie_values  = DistrictPies::activities_spent(@location)
     @budget_pie_values = DistrictPies::activities_budget(@location)
   end
@@ -12,27 +13,37 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
     @spent_pie_values           = DistrictPies::activity_spent_ratio(@location, @activity)
     @budget_pie_values          = DistrictPies::activity_budget_ratio(@location, @activity)
 
+    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
+
     case params[:code_type]
     when "mtef"
       @mtef = true
-      @code_spent_pie_values      = DistrictPies::activity_mtef_spent(@location, @activity)
-      @code_budget_pie_values     = DistrictPies::activity_mtef_budget(@location, @activity)
-      @code_spent_treemap_values  = DistrictTreemaps::district_mtef_spent(@location, [@activity])
-      @code_budget_treemap_values = DistrictTreemaps::district_mtef_budget(@location, [@activity])
-    else #default NSP
+      if @treemap
+        @code_spent_values   = DistrictTreemaps::district_mtef_spent(@location, [@activity])
+        @code_budget_values  = DistrictTreemaps::district_mtef_budget(@location, [@activity])
+      else
+        @code_spent_values  = DistrictPies::activity_mtef_spent(@location, @activity)
+        @code_budget_values = DistrictPies::activity_mtef_budget(@location, @activity)
+      end
+    else
       @nsp = true
-      @code_spent_pie_values      = DistrictPies::activity_nsp_spent(@location, @activity)
-      @code_budget_pie_values     = DistrictPies::activity_nsp_budget(@location, @activity)
-   end
+      if @treemap
+        @code_spent_values   = DistrictTreemaps::nsp_spent(@location, [@activity])
+        @code_budget_values  = DistrictTreemaps::nsp_budget(@location, [@activity])
+      else
+        @code_spent_values   = DistrictPies::activity_nsp_spent(@location, @activity)
+        @code_budget_values  = DistrictPies::activity_nsp_budget(@location, @activity)
+      end
+    end
     @charts_loaded  = @spent_pie_values && @budget_pie_values &&
-                      @code_spent_pie_values && @code_budget_pie_values
+                      @code_spent_values && @code_budget_values
 
     unless @charts_loaded
-      flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so we can't generate any useful charts for you!"
+      flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so some of the charts may be missing!"
     end
   end
 
-  protected
+  private
 
     def load_location
       @location = Location.find(params[:district_id])

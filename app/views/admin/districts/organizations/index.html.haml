@@ -1,0 +1,28 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart"]});
+  var _spent_pie_values       = #{js_safe(@spent_pie_values)};
+  var _budget_pie_values      = #{js_safe(@budget_pie_values)};
+
+%ul.breadcrumb
+  %li= link_to "Districts", admin_districts_path
+  %li= link_to h(@location.name), admin_district_path(@location)
+
+%h1.main_heading Organizations
+
+.full
+  .first-half
+    %h2 Spent
+    #spent_pie.bordered
+
+  .second-half
+    %h2 Budget
+    #budget_pie.bordered
+
+%h2= "Organizations (#{short_page_entries_info(@organizations)})"
+
+= render 'admin/districts/organizations/table', :organizations => @organizations, :location => @location
+
+= will_paginate @organizations

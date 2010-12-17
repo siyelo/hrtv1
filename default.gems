@@ -37,6 +37,7 @@ json -v1.4.3
 json_pure -v1.4.3
 linecache -v0.43
 mime-types -v1.16
+money -v3.5.4
 nokogiri -v1.4.2
 open_gem -v1.4.2
 paginator -v1.1.1

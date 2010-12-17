@@ -22,15 +22,15 @@ else
 end
 
 Rails::Initializer.run do |config|
-
-  config.gem "fastercsv"
-  config.gem "haml",    :version => ">= 3.0.12"
-  config.gem "compass", :version => "= 0.10.2"
-  config.gem 'hoptoad_notifier'
   config.gem "authlogic"
   config.gem "cancan", :version => ">= 1.4.0"
-  config.gem "validates_date_time", :version => '= 1.0.0'
+  config.gem "compass", :version => "= 0.10.2"
+  config.gem "fastercsv"
   config.gem 'formtastic', :version => "0.9.10"
+  config.gem "haml",    :version => ">= 3.0.12"
+  config.gem 'hoptoad_notifier'
+  config.gem 'money', :version => "=3.5.4"
+  config.gem "validates_date_time", :version => '= 1.0.0'
   config.gem "version", :version => "=0.9.2"
   config.gem 'will_paginate', :version => '~> 2.3.11'
 

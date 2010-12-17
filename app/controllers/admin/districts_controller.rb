@@ -37,8 +37,8 @@ class Admin::DistrictsController < Admin::BaseController
       end
     end
 
-    @top_activities        = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.find(:all, :limit => 5)
-    @top_organizations     = CodingSpendDistrict.top_organizations(@location.id)
+    #@top_activities        = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.find(:all, :limit => 5)
+    @top_activities        = Activity.top_by_spent({:limit => 5, :code_id => @location.id})
+    @top_organizations     = Organization.top_by_spent({:limit => 5, :code_id => @location.id})
   end
-
 end

@@ -21,9 +21,8 @@
     %h2 Budget
     #budget_pie.bordered
 
-%h2= "Activities (#{short_page_entries_info(@spend_codings)})"
+%h2= "Activities (#{short_page_entries_info(@activities)})"
 
-= render 'admin/districts/activities/table', :spend_codings => @spend_codings, :location => @location
+= render 'admin/districts/activities/table', :activities => @activities, :location => @location
 
-
-= will_paginate @spend_codings
+= will_paginate @activities

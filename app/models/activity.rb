@@ -35,6 +35,17 @@ class Activity < ActiveRecord::Base
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved
 
+  ### ValueObject Attributes
+  MONEY_OPTS = {:class_name => "Money",
+                :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
+                :converter   => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money")}}
+
+  composed_of :new_spend, {:mapping => [%w(new_spend_cents cents), %w(new_spend_currency currency_as_string)]
+                          }.merge(MONEY_OPTS)
+  composed_of :new_budget, {:mapping => [%w(new_budget_cents cents), %w(new_budget_currency currency_as_string)]
+                          }.merge(MONEY_OPTS)
+  # TODO - money objects for q1, q2 etc - #GR: /me avoiding for now since these are hardly used
+
   include BudgetSpendHelpers
   acts_as_commentable
 
@@ -65,7 +76,6 @@ class Activity < ActiveRecord::Base
   after_destroy :update_counter_cache
 
   ### Named scopes
-
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
@@ -254,7 +264,7 @@ class Activity < ActiveRecord::Base
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
-  def assigns_for_strategic_codes assigns, strat_hash, new_klass
+  def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
@@ -348,6 +358,47 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
+  end
+
+  def self.top_by_spent_and_budget(options)
+    per_page = options[:per_page] || 25
+    page     = options[:page]     || 1
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => "activities.id, activities.name, activities.description, organizations.name AS org_name, data_responses.currency AS amount_currency, SUM(ca1.cached_amount) as spent_sum, SUM(ca2.cached_amount) as budget_sum",
+      :joins => "
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
+        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
+      :include => {:projects => {:funding_flows => :project}},
+      :group => "activities.id, activities.name, activities.description, org_name, amount_currency",
+      :order => "spent_sum DESC, budget_sum DESC"
+    })
+
+    scope.paginate :all, :per_page => per_page, :page => page
+  end
+
+  def self.top_by_spent(options)
+    limit    = options[:limit]    || nil
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => "activities.id, activities.name, activities.description, organizations.name AS org_name, data_responses.currency AS amount_currency, SUM(ca1.cached_amount) as spent_sum",
+      :joins => "
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
+      :group => "activities.id, activities.name, activities.description, org_name, amount_currency",
+      :order => "spent_sum DESC"
+    })
+
+    scope.find :all, :limit => limit
   end
 
   private

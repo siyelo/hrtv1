@@ -3,19 +3,18 @@
 
 :javascript
   google.load("visualization", "1", {packages:["corechart", "treemap"]});
-  var _code_spent_pie_values      = #{js_safe(@code_spent_pie_values)};
-  var _code_budget_pie_values     = #{js_safe(@code_budget_pie_values)};
-  var _spent_pie_values           = #{js_safe(@spent_pie_values)};
-  var _budget_pie_values          = #{js_safe(@budget_pie_values)};
-  var _mtef_spent_treemap_values  = #{js_safe(@mtef_spent_treemap_values)};
-  var _mtef_budget_treemap_values = #{js_safe(@mtef_budget_treemap_values)};
+  var _treemap = #{@treemap.to_json};
+  var _spent_pie_values   = #{js_safe(@spent_pie_values)};
+  var _budget_pie_values  = #{js_safe(@budget_pie_values)};
+  var _code_spent_values  = #{js_safe(@code_spent_values)};
+  var _code_budget_values = #{js_safe(@code_budget_values)};
 
 %ul.breadcrumb
   %li= link_to "Districts", admin_districts_path
   %li= link_to h(@location.name), admin_district_path(@location)
   %li= link_to 'Activities', admin_district_activities_path(@location)
 
-%h1.main_heading= "Activity: #{friendly_name(@activity)}"
+%h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
 
 %h2 Summary
 
@@ -45,37 +44,33 @@
         = @activity.approved? ? "Yes" : "No"
         .hint Whether this activity has been approved by a reviewer yet.
 %br
-- if @charts_loaded
-  .full
-    .first-half
-      %h2 Proportion Spent
-      #spent_pie.bordered
 
-    .second-half
-      %h2 Proportion Budget
-      #budget_pie.bordered
+.full
+  .first-half
+    %h2 Proportion Spent
+    #spent_pie.bordered
 
-  %ul.group
-    %li= link_to "NSP", admin_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
-    %li= link_to "MTEF", admin_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
+  .second-half
+    %h2 Proportion Budget
+    #budget_pie.bordered
 
-  - type = 'NSP'
-  - type = 'MTEF' if @mtef
 
-  .full
-    .first-half
-      %h2= "#{type} Spent"
-      #code_spent_pie.bordered
+%ul.group
+  %li= link_to "NSP", admin_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", admin_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
 
-    .second-half
-      %h2= "#{type} Budget"
-      #code_budget_pie.bordered
+%ul.group
+  %li= link_to "Treemap", admin_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
+  %li= link_to "Pie", admin_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
 
-  .full
-    .first-half
-      %h2= "#{type} Spent"
-      #mtef_spent_treemap.bordered
+- type = 'NSP'
+- type = 'MTEF' if @mtef
 
-    .second-half
-      %h2= "#{type} Budget"
-      #mtef_budget_treemap.bordered
+.full
+  .first-half
+    %h2= "#{type} Spent"
+    #code_spent.bordered
+
+  .second-half
+    %h2= "#{type} Budget"
+    #code_budget.bordered

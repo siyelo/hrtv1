@@ -1,17 +1,27 @@
-%h1.main_heading Main Dashboard
+%h1.main_heading Admin Dashboard
 
-%h2 Policy Maker Dashboard
-%ul.policy_maker_dashboard.link_list
-  %li= link_to "Review data responses", policy_maker_data_responses_path
+.first-half
+  %h2
+    =image_tag"icon_reporter.png", :class => "heading_icon"
+    Policy Maker Dashboard
+  .dashboard_section
+    %ul.policy_maker_dashboard
+      %li= link_to "Review data responses", policy_maker_data_responses_path
 
-%h2 Admin Dashboard
-%ul.admin_dashboard.link_list
-  %li=  link_to "Manage help and page comments", model_helps_url
-  %li=  link_to "Manage activities", activities_url
-  %li=  link_to "Manage comments", comments_url
-  %li=  link_to "Manage codes", codes_url
-  %li=  link_to "Respond to help requests", help_requests_url
+  %h2
+    =image_tag"icon_admin.png", :class => "heading_icon"
+    Admin Dashboard
+  .dashboard_section
+    %ul.admin_dashboard
+      %li=  link_to "Manage help and page comments", model_helps_url
+      %li=  link_to "Manage activities", activities_url
+      %li=  link_to "Manage comments", comments_url
+      %li=  link_to "Manage codes", codes_url
+      %li=  link_to "Respond to help requests", help_requests_url
 
-%h2 Recent Comments
-= render 'reporter/dashboard/comment_short_list', :comments => @comments
+.second-half
+  %h2
+    =image_tag"icon_comments.png", :class => "heading_icon"
+    Recent Comments
+  = render 'reporter/dashboard/comment_short_list', :comments => @comments
 

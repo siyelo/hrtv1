@@ -4,82 +4,73 @@ module DistrictTreemaps
   class << self
     def district_mtef_spent(location, activities)
       #return Code.treemap(location.activities, 'mtef_spend').to_json
-
-      codes = Mtef.all + Nsp.all + Nha.all + Nasa.all
-      roots = Mtef.roots
-      type  = "CodingSpend"
+      codes          = Mtef.all + Nsp.all + Nha.all + Nasa.all
+      roots          = Mtef.roots
+      type           = "CodingSpend"
+      district_type  = "CodingSpendDistrict"
       activity_value = "spend"
-
-      get_treemap_rows(roots, codes, type, activities, location, activity_value).to_json
+      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
     end
 
     def district_mtef_budget(location, activities)
       #return Code.treemap(location.activities, 'mtef_budget').to_json
-      codes = Mtef.all + Nsp.all + Nha.all + Nasa.all
-      roots = Mtef.roots
-      type  = "CodingBudget"
+      codes          = Mtef.all + Nsp.all + Nha.all + Nasa.all
+      roots          = Mtef.roots
+      type           = "CodingBudget"
+      district_type  = "CodingBudgetDistrict"
       activity_value = "budget"
-      get_treemap_rows(roots, codes, type, activities, location, activity_value).to_json
+      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
     end
 
     def nsp_spent(location, activities)
       #return Code.treemap(location.activities, 'nsp_spend').to_json
-      codes = Nsp.all
-      roots = Nsp.roots
-      type  = "CodingSpend"
+      codes          = Nsp.all
+      roots          = Nsp.roots
+      type           = "CodingSpend"
+      district_type  = "CodingSpendDistrict"
       activity_value = "spend"
-      get_treemap_rows(roots, codes, type, activities, location, activity_value).to_json
+      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
     end
 
     def nsp_budget(location, activities)
       #return Code.treemap(location.activities, 'nsp_budget').to_json
-      codes = Nsp.all
-      roots = Nsp.roots
-      type  = "CodingBudget"
+      codes          = Nsp.all
+      roots          = Nsp.roots
+      type           = "CodingBudget"
+      district_type  = "CodingBudgetDistrict"
       activity_value = "budget"
-      get_treemap_rows(roots, codes, type, activities, location, activity_value).to_json
+      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
     end
 
 
     private
 
-      def get_treemap_rows(code_roots, codes, type, activities, location, activity_value)
+      def get_treemap_rows(root_codes, codes, type, activities, location, district_type, activity_value)
         # format is my value, parent value, box_area_value, coloring_value
-        activities = Activity.only_simple_activities(activities)
+        activities         = Activity.only_simple_activities(activities)
+        code_ids           = get_all_code_ids(root_codes)
+        treemap_totals     = CodeAssignment.treemap_totals(code_ids, type.to_s, activities)
+        treemap_ratios     = CodeAssignment.treemap_ratios(location.id, activities, district_type, activity_value)
+        treemap_sums       = prepare_treemap_sums(treemap_totals, treemap_ratios, code_ids)
 
-        rows = []
-        root_sum = get_root_sum(code_roots.map(&:id), type, activities, location, activity_value)
+        rows           = []
 
-        root_name = "#{n2c(root_sum)}: All Codes"
-        rows << [root_name, nil, root_sum, 0]
+        root_codes_sum = get_root_codes_sum(root_codes, treemap_sums)
+        root_name = "#{n2c(root_codes_sum)}: All Codes"
 
-        code_roots.each do |code|
+        rows << [root_name, nil, root_codes_sum, 0]
+
+        root_codes.each do |code|
           parent_display_cache = {} # code => display_value , used to connect rows
           parent_display_cache[code.parent_id] = root_name
 
-          root_and_descendants = code.self_and_descendants
-          treemap_sums = CodeAssignment.treemap_sums(root_and_descendants.map(&:id), type.to_s, activities)
-          treemap_ratios = CodeAssignment.treemap_ratios(location.id, activities, activity_value)
-
-          root_and_descendants.each do |c|
-            sum = detect_sum(treemap_sums, treemap_ratios, c.id)
-            get_treemap_row(c, rows, type, activities, parent_display_cache, root_sum, sum) if codes.include?(c)
+          code.self_and_descendants.each do |c|
+            sum = treemap_sums[c.id]
+            get_treemap_row(c, rows, type, activities, parent_display_cache, root_codes_sum, sum) if codes.include?(c)
           end
         end
 
         rows
-      end
-
-      def get_root_sum(code_ids, type, activities, location, activity_value)
-        sum = 0
-
-        code_ids.each do |code_id|
-          treemap_sums = CodeAssignment.treemap_sums(code_id, type.to_s, activities)
-          treemap_ratios = CodeAssignment.treemap_ratios(location.id, activities, activity_value)
-          sum += detect_sum(treemap_sums, treemap_ratios, code_id)
-        end
-
-        sum
       end
 
       def get_treemap_row(code, rows, type, activities, treemap_parent_values, total_for_percentage, sum)
@@ -98,18 +89,39 @@ module DistrictTreemaps
         end
       end
 
-      def detect_sum(sums, ratios, code_id)
+      def prepare_treemap_sums(treemap_sums, treemap_ratios, code_ids)
+        sums = {}
+        code_ids.each do |code_id|
+          sums[code_id] = detect_sum(treemap_sums, treemap_ratios, code_id)
+        end
+        sums
+      end
+
+      def detect_sum(treemap_totals, treemap_ratios, code_id)
         sum = 0
 
-        amounts = sums[code_id]
+        amounts = treemap_totals[code_id]
         if amounts.present?
           amounts.each do |amount|
-            ratio = ratios[amount.activity_id]
-            sum += amount.cached_amount * (ratio.present? ? ratio.first.ratio.to_f : 1)
+            ratios = treemap_ratios[amount.activity_id]
+            if ratios.present?
+              ratio = ratios.first.ratio.to_f
+              sum += amount.cached_amount * ratio
+            end
           end
         end
 
         sum
+      end
+
+      def get_all_code_ids(root_codes)
+        root_codes.inject([]){|code_ids, code| code_ids.concat(code.self_and_descendants.map(&:id))}.uniq
+      end
+
+      def get_root_codes_sum(root_codes, sums)
+        #raise root_codes.to_yaml
+        #raise root_codes.map(&:id).to_yaml
+        root_codes.inject(0){|sum, code| sum + sums[code.id]}
       end
   end
 end

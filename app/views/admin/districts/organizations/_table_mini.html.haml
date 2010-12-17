@@ -8,4 +8,4 @@
     - top_organizations.each do |organization|
       %tr{:class => cycle("even", "odd")}
         %td= h organization.name
-        %td= n2c(organization.cached_amount, organization.amount_currency)
+        %td= n2c(organization.spent_sum, 'RWF')

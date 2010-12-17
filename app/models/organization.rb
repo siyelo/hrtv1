@@ -29,6 +29,46 @@ class Organization < ActiveRecord::Base
     with_exclusive_scope { find(:all) }
   end
 
+  def self.top_by_spent_and_budget(options)
+    per_page = options[:per_page] || 25
+    page     = options[:page]     || 1
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => 'organizations.id, organizations.name, SUM(ca1.cached_amount * COALESCE(currencies."toRWF", 1)) as spent_sum, SUM(ca2.cached_amount * COALESCE(currencies."toRWF", 1)) as budget_sum',
+      :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
+        LEFT OUTER JOIN currencies ON data_responses.currency = currencies.symbol
+        INNER JOIN activities ON data_responses.id = activities.data_response_id
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
+        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
+      :group => "organizations.id, organizations.name",
+      :order => "spent_sum DESC, budget_sum DESC"
+    })
+
+    scope.paginate :all, :per_page => per_page, :page => page
+  end
+
+  def self.top_by_spent(options)
+    limit    = options[:limit]    || nil
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => 'organizations.id, organizations.name, SUM(ca1.cached_amount * COALESCE(currencies."toRWF", 1)) as spent_sum',
+      :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
+        LEFT OUTER JOIN currencies ON data_responses.currency = currencies.symbol
+        INNER JOIN activities ON data_responses.id = activities.data_response_id
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
+      :group => "organizations.id, organizations.name",
+      :order => "spent_sum DESC"
+    })
+
+    scope.find :all, :limit => limit
+  end
+
   # Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'name ASC, created_at DESC'

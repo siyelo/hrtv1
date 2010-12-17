@@ -12,13 +12,14 @@
 
 body.app
   .wrapper
-    min-width: 900px
+    min-width: 960px
     max-width: 1280px
     margin: 0 auto
+    padding: 0 15px
     position: relative
 
   #header_app
-    height: 40px
+    height: 30px
 
   h1
     font: bold 24px/30px Arial,sans-serif
@@ -34,11 +35,20 @@ body.app
   #header_app
     a
       text-decoration: none
+    .wrapper
+      +pie-clearfix
     #logo
-      font-size: 0.6em
-      padding: 10px 0
+      color: $light-blue
+      font-size: 14px
+      font-weight: bold
+      padding: 6px 0
       position: absolute
+      text-transform: uppercase
       width: 300px
+      +opacity(0.8)
+      +text-shadow(#000, 0, 1px, 1px)
+      &:hover
+        +opacity(1)
       h1
         margin-top: -9px
         span
@@ -58,6 +68,7 @@ body.app
     ul
       display: block
       overflow: hidden
+      min-width: 650px
       li
         display: block
 
@@ -106,11 +117,14 @@ body.app
   /* end */
 
   /* adding properties to the shared admin style */
-  #admin ul li
-    &:first-child a
-      +border-bottom-left-radius
-    &:last-child a
-      +border-bottom-right-radius
+  #admin
+    margin-right: 15px
+    
+    //ul li
+    //  &:first-child a
+    //    +border-bottom-left-radius
+    //  &:last-child a
+    //    +border-bottom-right-radius
   /* end */
 
   /* sub-nav styles */
@@ -124,6 +138,7 @@ body.app
       a
         background: !orange
         color: white
+        
     a
       +border-radius
       background: !lightest-blue
@@ -376,7 +391,7 @@ body.app
       font-size: 0.75em
       padding-bottom: 7px
       span
-        font-size: 1.3em
+        font-size: 1em
     p
       color: $light-blue - #777
       &.main
@@ -471,15 +486,52 @@ ul.group
   padding: 5px 15px 10px
   +clearfix
 
+.heading_icon
+  margin: 0 3px -3px 0
 .link_list
   border: 1px solid $lightest-blue
   padding: 7px 0 12px
   li a
+    border-bottom: 1px solid #eee
     display: inline-block
     font-size: 12px
     padding: 0 0 3px 10px
+
+.dashboard_section
+  border: 1px solid $lightest-blue
+  margin-bottom: 20px
+  padding: 7px 10px 12px 10px
+  +border-bottom-radius
+  +clearfix
+  .first-half, .second-half
+    margin: 0 !important
+    
+  h3
+    padding-top: 10px !important
+
+  a
+    background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
+    display: block
+    font-size: 12px
+    margin-bottom: 5px
+    padding: 10px 8px 8px 28px
+    text-decoration: none
+    +border-radius
     &:hover
-      background: image_url("icon_mark.png") no-repeat left top
+      background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+
+#heading-activity
+  background: image_url("icon_activity.png") no-repeat center left
+#heading-map
+  background: image_url("icon_map.png") no-repeat center left
+#heading-users
+  background: image_url("icon_users.png") no-repeat center left
+
+.hint
+  color: #666
+  display: block
+  font-size: 10px
+  padding-top: 3px
 
 // Pretty Table (with clickable rows)
 
@@ -556,8 +608,10 @@ table.rounded
 
 .bordered
   border: 1px solid $lightest-blue
+  border-top: none
   margin-bottom: 10px
   +border-bottom-radius
+  +clearfix
 
 .pagination
   font-size: 12px

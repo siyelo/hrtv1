@@ -20,6 +20,10 @@ Background:
   And the location is one of the activity's locations
   And a coding_budget exists with activity: the activity, code: the first code 
   And a coding_budget exists with activity: the activity, code: the 2nd code 
+  And a coding_spend exists with activity: the activity, code: the first code 
+  And a coding_spend exists with activity: the activity, code: the 2nd code 
+  And a coding_budget_district exists with activity: the activity, code: the first location
+  And a coding_spend_district exists with activity: the activity, code: the first location
 
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
@@ -28,10 +32,11 @@ Scenario: "Log in as admin, go to district activity detail screen"
   Then I should see "Review Districts" within "h1"
   And I follow "Location A"
   Then I should see "Location A" within "h1"
-  And I follow "Activities" within the group tab
+  And I follow "View all Activities"
   Then I should see "Activities" within "h1"
   When I follow "Activity A"
   Then I should see "Activity A" within "h1"
-  And I should see "MTEF" within the group tab
-  And I should see "NSP" within the group tab
-  And I should see "HSSP" within the group tab
+  And I should see "Proportion Spent"
+  And I should see "Proportion Budget"
+  And I should see "NSP Spent"
+  And I should see "NSP Budget"

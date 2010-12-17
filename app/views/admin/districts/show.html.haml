@@ -17,12 +17,14 @@
 .full
   .first-half
     %h2 Top Organizations by Expenditure
-    %p.bordered= link_to "View all Organizations", "#"
     = render 'admin/districts/organizations/table_mini', :top_organizations => @top_organizations, :location => @location
+    %p.bordered= link_to "View all Organizations", admin_district_organizations_path(@location), :class => "right"
+    
   .second-half
     %h2 Top Activities by Expenditure
-    %p.bordered= link_to "View all Activities", admin_district_activities_path(@location)
     = render 'admin/districts/activities/table_mini', :top_activities => @top_activities, :location => @location
+    %p= link_to "View all Activities", admin_district_activities_path(@location), :class => "right"
+    
 
 %ul.group
   %li= link_to "NSP", admin_district_path(@location, :code_type => "nsp"), active_if(@nsp)
@@ -43,7 +45,4 @@
   .second-half
     %h2= "#{type} Budget"
     #code_budget.bordered
-
-
-
 

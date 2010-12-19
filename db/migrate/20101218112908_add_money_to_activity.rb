@@ -17,9 +17,10 @@ class AddMoneyToActivity < ActiveRecord::Migration
   end
 
   def self.build_money(id, amount, currency)
-    pp "A: #{id}:  Amount: #{amount},  Currency: #{currency}"
+    #pp "A: #{id}:  Amount: #{amount},  Currency: #{currency}"
+    puts "."
     m = Money.new((amount*100).to_i, currency)
-    pp "         New => #{m.to_s}, Currency: #{m.currency} (#{m.cents})"
+    #pp "         New => #{m.to_s}, Currency: #{m.currency} (#{m.cents})"
     pp "WARN: conversion rounding difference" unless ("%.2f" % (amount || 0)) == m.to_s
     m
   end

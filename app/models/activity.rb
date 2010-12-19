@@ -24,7 +24,10 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include ActAsDataElement
-  include NumberHelper
+  include NumberHelper #TODO: deprecate with Money methods
+  include BudgetSpendHelpers #TODO: deprecate with Money methods
+  acts_as_commentable
+  include MoneyHelper
   configure_act_as_data_element
 
   ### Attributes
@@ -36,18 +39,16 @@ class Activity < ActiveRecord::Base
                   :budget, :approved
 
   ### ValueObject Attributes
-  MONEY_OPTS = {:class_name => "Money",
-                :constructor => Proc.new { |cents, currency| Money.new(cents || 0, currency || Money.default_currency) },
-                :converter   => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money")}}
-
-  composed_of :new_spend, {:mapping => [%w(new_spend_cents cents), %w(new_spend_currency currency_as_string)]
-                          }.merge(MONEY_OPTS)
-  composed_of :new_budget, {:mapping => [%w(new_budget_cents cents), %w(new_budget_currency currency_as_string)]
-                          }.merge(MONEY_OPTS)
-  # TODO - money objects for q1, q2 etc - #GR: /me avoiding for now since these are hardly used
-
-  include BudgetSpendHelpers
-  acts_as_commentable
+  composed_of :new_spend,
+              {:mapping => [%w(new_spend_cents cents),
+                            %w(new_spend_currency currency_as_string)]
+              }.merge(MONEY_OPTS)
+  composed_of :new_budget,
+              {:mapping => [%w(new_budget_cents cents),
+                            %w(new_budget_currency currency_as_string)]
+              }.merge(MONEY_OPTS)
+  # TODO - money objects for q1, q2 etc
+  #   GR: /me avoiding for now since these are hardly used
 
   ### Associations
   has_and_belongs_to_many :projects
@@ -70,6 +71,7 @@ class Activity < ActiveRecord::Base
   validate :approved_activity_cannot_be_changed
 
   ### Callbacks
+  before_save :update_money_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   after_create  :update_counter_cache
@@ -368,14 +370,28 @@ class Activity < ActiveRecord::Base
     raise "Missing code_id param".to_yaml unless code_id
 
     scope = self.scoped({
-      :select => "activities.id, activities.name, activities.description, organizations.name AS org_name, data_responses.currency AS amount_currency, SUM(ca1.cached_amount) as spent_sum, SUM(ca2.cached_amount) as budget_sum",
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
+                  data_responses.currency AS amount_currency,
+                  SUM(ca1.cached_amount) as spent_sum,
+                  SUM(ca2.cached_amount) as budget_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
-        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+               AND ca1.type = 'CodingSpendDistrict'
+               AND ca1.code_id = #{code_id}
+        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+               AND ca2.type = 'CodingBudgetDistrict'
+               AND ca2.code_id = #{code_id}",
       :include => {:projects => {:funding_flows => :project}},
-      :group => "activities.id, activities.name, activities.description, org_name, amount_currency",
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name,
+                 amount_currency",
       :order => "spent_sum DESC, budget_sum DESC"
     })
 
@@ -389,12 +405,23 @@ class Activity < ActiveRecord::Base
     raise "Missing code_id param".to_yaml unless code_id
 
     scope = self.scoped({
-      :select => "activities.id, activities.name, activities.description, organizations.name AS org_name, data_responses.currency AS amount_currency, SUM(ca1.cached_amount) as spent_sum",
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
+                  data_responses.currency AS amount_currency,
+                  SUM(ca1.cached_amount) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
-      :group => "activities.id, activities.name, activities.description, org_name, amount_currency",
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+               AND ca1.type = 'CodingSpendDistrict'
+               AND ca1.code_id = #{code_id}",
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name,
+                 amount_currency",
       :order => "spent_sum DESC"
     })
 
@@ -526,7 +553,15 @@ class Activity < ActiveRecord::Base
       end
       data_rows
     end
+
+    #currency is still derived from the parent project or DR
+    def update_money_amounts
+      self.new_budget = gimme_the_caaaasssssshhhh(self.budget, self.currency)
+      self.new_spend = gimme_the_caaaasssssshhhh(self.spend, self.currency)
+    end
+
 end
+
 
 
 
@@ -534,10 +569,10 @@ end
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
@@ -564,7 +599,6 @@ end
 #  CodingSpend_amount                    :decimal(, )     default(0.0)
 #  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
 #  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  use_budget_codings_for_spend          :boolean         default(FALSE)
 #  budget_q1                             :decimal(, )
 #  budget_q2                             :decimal(, )
 #  budget_q3                             :decimal(, )
@@ -572,5 +606,9 @@ end
 #  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
+#  new_spend                             :integer         default(0), not null
+#  new_spend_currency                    :string(255)
+#  new_budget                            :integer         default(0), not null
+#  new_budget_currency                   :string(255)
 #
 

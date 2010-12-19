@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(:version => 20101218123858) do
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",                        :default => 0
     t.integer  "sub_activities_count",                  :default => 0
-    t.string   "spend_currency_as_string"
     t.integer  "new_spend",                             :default => 0,   :null => false
     t.string   "new_spend_currency"
     t.integer  "new_budget",                            :default => 0,   :null => false

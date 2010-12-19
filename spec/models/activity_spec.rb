@@ -235,4 +235,37 @@ describe Activity do
     it_should_behave_like "location cloner"
   end
 
+  describe "keeping Money amounts in-sync" do
+    before :each do
+      @a = Factory.build(:activity)
+      @a.budget = 123.45
+      @a.spend = 123.45
+      @a.save
+      @a.reload
+    end
+    it "should update new_spend on creation" do   
+      @a.new_spend.cents.should == 12345
+      @a.new_spend.to_s.should == "123.45"
+      @a.new_spend.currency.should == Money::Currency.new("USD")
+    end
+    it "should update new_spend on update" do   
+      @a.spend = 456.78
+      @a.save
+      @a.new_spend.cents.should == 45678
+      @a.new_spend.to_s.should == "456.78"
+      @a.new_spend.currency.should == Money::Currency.new("USD")
+    end
+    it "should update new_budget on creation" do   
+      @a.new_budget.cents.should == 12345
+      @a.new_budget.to_s.should == "123.45"
+      @a.new_budget.currency.should == Money::Currency.new("USD")
+    end
+    it "should update new_budget on update" do   
+      @a.budget = 456.78
+      @a.save
+      @a.new_budget.cents.should == 45678
+      @a.new_budget.to_s.should == "456.78"
+      @a.new_budget.currency.should == Money::Currency.new("USD")
+    end    
+  end
 end

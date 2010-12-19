@@ -51,4 +51,38 @@ describe CodeAssignment do
     assignment.amount.to_s.should == output
   end
   
+  describe "keeping Money amounts in-sync" do
+    before :each do
+      @ca = Factory.build(:code_assignment)
+      @ca.amount = 123.45
+      @ca.cached_amount = 123.45
+      @ca.save
+      @ca.reload
+    end
+    it "should update amount on creation" do   
+      @ca.new_amount.cents.should == 12345
+      @ca.new_amount.to_s.should == "123.45"
+      @ca.new_amount.currency.should == Money::Currency.new("USD")
+    end
+    it "should update amount on update" do   
+      @ca.amount = 456.78
+      @ca.save
+      @ca.new_amount.cents.should == 45678
+      @ca.new_amount.to_s.should == "456.78"
+      @ca.new_amount.currency.should == Money::Currency.new("USD")
+    end
+    it "should update cached_amount on creation" do   
+      @ca.new_cached_amount.cents.should == 12345
+      @ca.new_cached_amount.to_s.should == "123.45"
+      @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
+    end
+    it "should update cached_amount on update" do   
+      @ca.cached_amount = 456.78
+      @ca.save
+      @ca.new_cached_amount.cents.should == 45678
+      @ca.new_cached_amount.to_s.should == "456.78"
+      @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
+    end    
+  end
+  
 end

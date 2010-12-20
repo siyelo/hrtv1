@@ -49,9 +49,9 @@ module DistrictTreemaps
         # format is my value, parent value, box_area_value, coloring_value
         activities         = Activity.only_simple_activities(activities)
         code_ids           = get_all_code_ids(root_codes)
-        treemap_totals     = CodeAssignment.treemap_totals(code_ids, type.to_s, activities)
-        treemap_ratios     = CodeAssignment.treemap_ratios(location.id, activities, district_type, activity_value)
-        treemap_sums       = prepare_treemap_sums(treemap_totals, treemap_ratios, code_ids)
+        code_assignments   = CodeAssignment.sums_by_code_id(code_ids, type.to_s, activities)
+        treemap_ratios     = CodeAssignment.ratios_by_activity_id(location.id, activities.map(&:id), district_type, activity_value)
+        treemap_sums       = prepare_treemap_sums(code_assignments, treemap_ratios, code_ids)
 
         rows           = []
 
@@ -97,10 +97,10 @@ module DistrictTreemaps
         sums
       end
 
-      def detect_sum(treemap_totals, treemap_ratios, code_id)
+      def detect_sum(code_assignments, treemap_ratios, code_id)
         sum = 0
 
-        amounts = treemap_totals[code_id]
+        amounts = code_assignments[code_id]
         if amounts.present?
           amounts.each do |amount|
             ratios = treemap_ratios[amount.activity_id]

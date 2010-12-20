@@ -1,6 +1,7 @@
 currencies = {
-["$", "US $", "$", "US DOLLARS", "American Dollar", "US Dollar", "US Dollars", "USD", "dollars", "DOLLARS", "usd","USD ","US$", "USD  776,391"] => "USD",
+["$", "US $", "$", "US DOLLARS", "American Dollar", "us dollars", "us  dollars",  "us Dollars", "U.S. Dollar", "US dollars", "US Dollar", "US Dollars", "USD", "dollars", "DOLLARS", "usd","USD ","US$", "USD  776,391"] => "USD",
 ["EURO", "Euro", "Euros", "€"] => "EUR",
+["Pounds Sterling", "GBP ", "gbp"] => "GBP",
 ["FRW","Francs rwandais","RWF","Rwandan Francs", "rwandan francs", "Rwf","rwfs","frws","rfws", "rwf", "Frw", "RFW", 'frw'] => "RWF"
 }
 

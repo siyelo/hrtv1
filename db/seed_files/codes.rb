@@ -21,7 +21,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
   begin
     i = i + 1
     c               = Code.find_or_initialize_by_external_id(row[id_col])
-    puts "found existing code at #{c.id}" unless c.id.nil?
+    puts "WARN found existing code at #{c.id}" unless c.id.nil?
     unless row[parent_id_col].blank?
       p               = Code.find_by_external_id(row[parent_id_col])
       c.parent_id     = p.id unless p.nil?
@@ -32,10 +32,8 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
       c.type = "Code" #Assume default
     else
       unless row[type_col].include? "HsspS" #this should make STI stop complaining
-        puts row[type_col]
         t = row[type_col].capitalize
       else
-        puts row[type_col]
         t = row[type_col]
       end
       c.type          = t
@@ -50,7 +48,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
     c.type          = "Nha" if c.type.downcase == "nhanasa"
 
     #print "."
-    puts "on code #{c.external_id}"
+    puts "on code #{c.external_id} (#{c.type})"
     c.save!
   rescue
     puts "Error reading input csv. line: #{i}. id: #{row[id_col]}. Error: #{$!}"

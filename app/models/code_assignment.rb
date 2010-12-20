@@ -14,6 +14,11 @@ class CodeAssignment < ActiveRecord::Base
   attr_accessible :activity, :code, :amount, :percentage,
                   :cached_amount, :sum_of_children
 
+  # the _in_usd column needs to be synchronized across all objects regularly
+  # otherwise different exchange rates will apply since this field is
+  # normalized (using lates exchange rate) when each record is saved
+  attr_accessible :new_cached_amount_in_usd
+
   ### ValueObject Attributes
   composed_of :new_amount,
               {:mapping => [%w(new_amount_cents cents),
@@ -157,16 +162,16 @@ class CodeAssignment < ActiveRecord::Base
     n2c(self.calculated_amount, self.currency).to_s
   end
 
-  def self.treemap_totals(code_ids, coding_type, activities)
-    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
+  def self.sums_by_code_id(code_ids, coding_type, activities)
+    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all, 
       :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount) AS cached_amount',
       :group => 'code_assignments.code_id, code_assignments.activity_id'
     ).group_by{|ca| ca.code_id}
   end
 
-  def self.treemap_ratios(code_id, activities, district_type, activity_value)
-    CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activities).find(:all,
-      :joins => :activity,
+  def self.ratios_by_activity_id(code_id, activity_ids, district_type, activity_value)
+    CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activity_ids).find(:all,
+      :joins => :activity, 
       :select => "code_assignments.activity_id, activities.#{activity_value}, (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
       :group => "code_assignments.activity_id, activities.#{activity_value}",
       :conditions => "activities.#{activity_value} > 0"
@@ -200,10 +205,10 @@ class CodeAssignment < ActiveRecord::Base
       currency = self.activity.currency unless self.activity.nil?
       self.new_amount        = gimme_the_caaaasssssshhhh(self.amount, currency)
       self.new_cached_amount = gimme_the_caaaasssssshhhh(self.cached_amount, currency)
+      self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
     end
 
 end
-
 
 
 # == Schema Information

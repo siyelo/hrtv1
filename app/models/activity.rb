@@ -129,7 +129,7 @@ class Activity < ActiveRecord::Base
   def currency
     tentative_currency = data_response.try(:currency)
     unless projects.empty?
-      tentative_currency ||= projects.first.currency
+      tentative_currency = projects.first.currency unless projects.first.currency.blank?
     end
     tentative_currency
   end
@@ -374,9 +374,8 @@ class Activity < ActiveRecord::Base
                   activities.name,
                   activities.description,
                   organizations.name AS org_name,
-                  data_responses.currency AS amount_currency,
-                  SUM(ca1.cached_amount) as spent_sum,
-                  SUM(ca2.cached_amount) as budget_sum",
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum,
+                  SUM(ca2.new_cached_amount_in_usd) as budget_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
@@ -390,8 +389,7 @@ class Activity < ActiveRecord::Base
       :group => "activities.id,
                  activities.name,
                  activities.description,
-                 org_name,
-                 amount_currency",
+                 org_name",
       :order => "spent_sum DESC, budget_sum DESC"
     })
 
@@ -409,8 +407,7 @@ class Activity < ActiveRecord::Base
                   activities.name,
                   activities.description,
                   organizations.name AS org_name,
-                  data_responses.currency AS amount_currency,
-                  SUM(ca1.cached_amount) as spent_sum",
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
@@ -420,8 +417,7 @@ class Activity < ActiveRecord::Base
       :group => "activities.id,
                  activities.name,
                  activities.description,
-                 org_name,
-                 amount_currency",
+                 org_name",
       :order => "spent_sum DESC"
     })
 
@@ -431,6 +427,7 @@ class Activity < ActiveRecord::Base
   private
 
     def update_counter_cache
+      return false unless self.data_response
       self.data_response.activities_count = data_response.activities.only_simple.count
       self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
       self.data_response.save(false)
@@ -557,12 +554,12 @@ class Activity < ActiveRecord::Base
     #currency is still derived from the parent project or DR
     def update_money_amounts
       self.new_budget = gimme_the_caaaasssssshhhh(self.budget, self.currency)
+      self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
       self.new_spend = gimme_the_caaaasssssshhhh(self.spend, self.currency)
+      self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
     end
 
 end
-
-
 
 
 # == Schema Information

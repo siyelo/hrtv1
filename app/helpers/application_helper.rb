@@ -1,6 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   include NumberHelper # gives n2c method available
+  include CurrencyHelper
 
   # include these again so that each module using this module doesnt need to
   include ERB::Util

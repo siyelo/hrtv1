@@ -10,23 +10,8 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to "#{friendly_name(activity)}", admin_district_activity_path(location, activity)
         %td= h activity.org_name
-        %td= n2c(activity.spent_sum, activity.amount_currency)
-
--# OLD top activities
--#%table.standard.clickable
-  -#%thead
-    -#%tr
-      -#%th Activity
-      -#%th Organization
-      -#%th Total Spent
-
-  -#%tbody
-    -#- top_activities.each do |c|
-      -#- act = c.try(:activity)
-      -#%tr{:class => cycle("even", "odd")}
-        -#- if act.nil?
-          -#%td{:colspan => 100}= "Bad data! code id: #{c.id}"
-        -#- else
-          -#%td= link_to "#{friendly_name(act)}", admin_district_activity_path(location, act)
-          -#%td= h act.organization.name
-          -#%td= n2c(c.cached_amount, c.currency)
+        - spent_total = Money.new(activity.spent_sum, :USD)
+        %td
+          %ul
+            %li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"

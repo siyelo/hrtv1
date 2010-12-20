@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
   config.gem "compass", :version => "= 0.10.2"
   config.gem "fastercsv"
   config.gem 'formtastic', :version => "0.9.10"
+  config.gem 'google_currency', :version => ">= 1.0.3", :lib => false
   config.gem "haml",    :version => ">= 3.0.12"
   config.gem 'hoptoad_notifier'
   config.gem 'money', :version => "=3.5.4"
@@ -48,3 +49,4 @@ end
 
 require 'array_extensions'
 require 'version'
+require 'lib/array'

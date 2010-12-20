@@ -102,6 +102,40 @@ module DistrictPies
       activity_spent(location, activity, coding_klass, codes)
     end
 
+    ### admin/district/:id/organizations/:id
+    def organization_mtef_spent(location, activities)
+      coding_type    = "CodingSpend"
+      codes          = Mtef.leaves
+      district_type  = "CodingSpendDistrict"
+      activity_value = "spend"
+      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
+    end
+
+    def organization_mtef_budget(location, activities)
+      coding_type    = "CodingBudget"
+      codes          = Mtef.leaves
+      district_type  = "CodingBudgetDistrict"
+      activity_value = "budget"
+      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
+    end
+
+    def organization_nsp_spent(location, activities)
+      coding_type    = "CodingSpend"
+      codes          = Nsp.roots
+      district_type  = "CodingSpendDistrict"
+      activity_value = "spend"
+      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
+    end
+
+    def organization_nsp_budget(location, activities)
+      coding_type    = "CodingBudget"
+      codes          = Nsp.roots
+      district_type  = "CodingBudgetDistrict"
+      activity_value = "budget"
+
+      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
+    end
+
     private
 
       def activity_spent(location, activity, coding_klass, codes)
@@ -158,6 +192,29 @@ module DistrictPies
         }.to_json
       end
 
+      def prepare_organization_pie_values(location, coding_type, code_ids, activities, district_type, activity_value)
+        code_assignments = CodeAssignment.sums_by_code_id(code_ids, coding_type, activities)
+        ratios           = CodeAssignment.ratios_by_activity_id(location.id, activities, district_type, activity_value)
+        sums             = prepare_sums(code_assignments, ratios, code_ids)
+
+        values = []
+
+        code_assignments.each_with_index do |ca, index|
+          code_id = ca[0]
+          if ca[1].present?
+            code_name = ca[1].first.code_name
+            value = sums[code_id]
+            values << [code_name, value] if value
+          end
+        end
+
+        {
+          :values => values,
+          :names => {:column1 => 'Activity', :column2 => 'Amount'}
+        }.to_json
+      end
+
+
       def load_nsp_pie(district_klass, coding_klass, location)
         codes = Nsp.roots
         return load_pie(codes, district_klass, coding_klass, location, -1)
@@ -211,6 +268,31 @@ module DistrictPies
           ],
           :names => {:column1 => 'Code name', :column2 => 'Amount'}
         }.to_json
+      end
+
+      def prepare_sums(treemap_sums, treemap_ratios, code_ids)
+        sums = {}
+        code_ids.each do |code_id|
+          sums[code_id] = detect_sum(treemap_sums, treemap_ratios, code_id)
+        end
+        sums
+      end
+      
+      def detect_sum(code_assignments, treemap_ratios, code_id)
+        sum = 0
+
+        amounts = code_assignments[code_id]
+        if amounts.present?
+          amounts.each do |amount|
+            ratios = treemap_ratios[amount.activity_id]
+            if ratios.present?
+              ratio = ratios.first.ratio.to_f
+              sum += amount.cached_amount * ratio
+            end
+          end
+        end
+
+        sum
       end
     end
 end

@@ -16,7 +16,9 @@ class ProjectsController < ActiveScaffoldController
   end
   @@columns_for_file_upload = @@upload_columns.map {|c| c.to_s} # TODO fix bug, >1 location won't work
 
- # record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
+  include CurrencyHelper
+  @@currency_opts = self.currency_options
+# record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
 
   map_fields :create_from_file,
     @@columns_for_file_upload,
@@ -38,6 +40,9 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:locations].form_ui            = :select
     config.columns[:locations].label              = "Districts Worked In"
     config.columns[:currency].label               = "Currency (if different)"
+    config.columns[:currency].form_ui             = :select
+    config.columns[:currency].options             = {:options => @@currency_opts}
+
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Past Expenditure" do |funds_group|
         funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
@@ -77,16 +82,18 @@ class ProjectsController < ActiveScaffoldController
     super @@columns_for_file_upload
   end
 
-protected
+  protected
 
-  def beginning_of_chain
-    super.available_to current_user
-  end
+    def beginning_of_chain
+      super.available_to current_user
+    end
 
-  # An AS hook to fix :create
-  #   When we remove AS, we need to make sure :data_response_id is in the params!
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
+    # An AS hook to fix :create
+    #   When we remove AS, we need to make sure :data_response_id is in the params!
+    def before_create_save record
+      record.data_response = current_user.current_data_response
+    end
+
+
 
 end

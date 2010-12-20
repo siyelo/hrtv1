@@ -71,15 +71,17 @@ describe CodeAssignment do
       @ca.new_amount.to_s.should == "456.78"
       @ca.new_amount.currency.should == Money::Currency.new("USD")
     end
-    it "should update cached_amount on creation" do   
+    it "should update cached_amount(_in_usd) on creation" do   
       @ca.new_cached_amount.cents.should == 12345
+      @ca.new_cached_amount_in_usd.should == 12345
       @ca.new_cached_amount.to_s.should == "123.45"
       @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
     end
-    it "should update cached_amount on update" do   
+    it "should update cached_amount(_in_usd) on update" do   
       @ca.cached_amount = 456.78
       @ca.save
       @ca.new_cached_amount.cents.should == 45678
+      @ca.new_cached_amount_in_usd.should == 45678
       @ca.new_cached_amount.to_s.should == "456.78"
       @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
     end    

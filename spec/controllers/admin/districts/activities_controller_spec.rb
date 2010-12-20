@@ -11,8 +11,8 @@ describe Admin::Districts::ActivitiesController do
 
   describe "GET 'index'" do
     it "should be successful" do
-      Location.should_receive(:find).with("1").and_return(@location)
-      Activity.should_receive(:all).and_return([@activity])
+      Location.should_receive(:find).with(@location.id.to_s).and_return(@location)
+      Activity.should_receive(:top_by_spent_and_budget).and_return([@activity])
       get 'index', :district_id => @location.id
       response.should be_success
     end
@@ -20,9 +20,9 @@ describe Admin::Districts::ActivitiesController do
 
   describe "GET 'show'" do
     it "should be successful" do
-      Location.should_receive(:find).with("1").and_return(@location)
-      Activity.should_receive(:find).with("1").and_return(@activity)
-      get :show, :id => "1", :district_id => @location.id
+      Location.should_receive(:find).with(@location.id.to_s).and_return(@location)
+      Activity.should_receive(:find).with(@activity.id.to_s).and_return(@activity)
+      get :show, :id => @activity.id, :district_id => @location.id
       response.should be_success
     end
   end

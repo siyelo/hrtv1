@@ -876,6 +876,18 @@ var admin_districts_organizations_index = {
   }
 };
 
+var admin_districts_organizations_show = {
+  run: function () {
+    if (_treemap) {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
+    } else {
+      drawPieChart('code_spent', _code_spent_values);
+      drawPieChart('code_budget', _code_budget_values);
+    }
+  }
+};
+
 jQuery(function () {
   var id = jQuery('body').attr("id");
   if (id) {

@@ -7,7 +7,7 @@ module MoneyHelper
   def gimme_the_caaaasssssshhhh(amount, currency)
     amount = 0 unless amount
     currency = Money.default_currency if currency.blank? #bad data, bad bad data.
-    Money.new((amount*100).to_i, currency)
+    Money.new((amount.to_f.round(2)*100).to_i, currency)
   end
 
 end

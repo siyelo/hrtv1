@@ -8,19 +8,18 @@
     - if @empty_responses.empty?
       %p All data responses have been started.
     - else
-      %table
+      %table.standard
         %thead
           %tr
             %th Organization
             %th User Emails
             %th Point of Contact Phone Number
-            %th
+            %th Actions
         %tbody
           - @empty_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-              %td= data_response.responding_organization
+              %td= link_to data_response.responding_organization, admin_response_path(data_response)
               %td= data_response.responding_organization.user_email_list_limit_3
               %td= data_response.contact_phone_number
               %td
-                = link_to "Show", admin_response_path(data_response)
                 = link_to "Delete", delete_admin_response_path(data_response), :class => "destroy_btn"

@@ -20,4 +20,6 @@ load 'db/seed_files/districts.rb'
 
 load 'db/seed_files/beneficiaries.rb'
 
+load 'db/seed_files/currencies.rb'
+
 puts "...seeding DONE\n\n"

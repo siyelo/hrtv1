@@ -48,10 +48,12 @@ ActiveRecord::Schema.define(:version => 20101218123858) do
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",                        :default => 0
     t.integer  "sub_activities_count",                  :default => 0
-    t.integer  "new_spend",                             :default => 0,   :null => false
+    t.integer  "new_spend_cents",                       :default => 0,   :null => false
     t.string   "new_spend_currency"
-    t.integer  "new_budget",                            :default => 0,   :null => false
+    t.integer  "new_spend_in_usd",                      :default => 0,   :null => false
+    t.integer  "new_budget_cents",                      :default => 0,   :null => false
     t.string   "new_budget_currency"
+    t.integer  "new_budget_in_usd",                     :default => 0,   :null => false
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -85,13 +87,15 @@ ActiveRecord::Schema.define(:version => 20101218123858) do
     t.decimal "amount"
     t.string  "type"
     t.decimal "percentage"
-    t.decimal "cached_amount",       :default => 0.0
-    t.decimal "sum_of_children",     :default => 0.0
-    t.integer "new_amount",          :default => 0,   :null => false
+    t.decimal "cached_amount",              :default => 0.0
+    t.decimal "sum_of_children",            :default => 0.0
+    t.integer "new_amount_cents",           :default => 0,   :null => false
     t.string  "new_amount_currency"
+    t.integer "new_cached_amount_cents",    :default => 0,   :null => false
+    t.string  "new_cached_amount_currency"
+    t.integer "new_cached_amount_in_usd",   :default => 0,   :null => false
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|

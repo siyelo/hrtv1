@@ -2,7 +2,6 @@ class Admin::Districts::ActivitiesController < Admin::BaseController
   before_filter :load_location
 
   def index
-    #@activities        = CodingSpendDistrict.with_code_id(@location.id).sort_cached_amt.paginate :page => params[:page], :per_page => 25, :include => {:activity => [{:data_response => :responding_organization}, :projects]}
     @activities        = Activity.top_by_spent_and_budget({:per_page => 25, :page => params[:page], :code_id => @location.id})
     @spent_pie_values  = DistrictPies::activities_spent(@location)
     @budget_pie_values = DistrictPies::activities_budget(@location)

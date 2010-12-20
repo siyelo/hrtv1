@@ -7,6 +7,7 @@
   var _budget_pie_values      = #{js_safe(@budget_pie_values)};
 
 %ul.breadcrumb
+  %li= link_to "Reports", admin_reports_path
   %li= link_to "Districts", reports_districts_path
   %li= link_to h(@location.name), reports_district_path(@location)
 

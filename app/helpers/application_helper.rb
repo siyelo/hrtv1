@@ -62,10 +62,11 @@ module ApplicationHelper
     parent = 'admin'
     active =  current_controller_with_nesting?(parent, tab)
     unless active
-      if tab == 'districts'
-        parent = 'reports'
-        active = current_controller_with_nesting?('districts', 'activities') ||
-                 current_controller_with_nesting?('districts', 'organizations')
+      if tab == 'reports'
+        active = current_controller_with_nesting?('admin', 'districts') ||
+                 current_controller_with_nesting?('districts', 'activities') ||
+                 current_controller_with_nesting?('districts', 'organizations') ||
+                 current_controller_with_nesting?('admin', 'responses')
       end
     end
     return link_to tab.humanize, { :controller => "/#{parent}/#{tab}" }, :class => ('active' if active)

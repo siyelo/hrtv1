@@ -4,7 +4,55 @@
 
 .first-half
   %h2
-    =image_tag "icon_activity.png", :class => "heading_icon"
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Data Responses
+  .dashboard_section
+    %ul.admin_reports
+      %li
+        %a{ :href => admin_responses_path, :class => "drill_down"}
+          Review Data Responses
+          %span.hint Interactive data response reports
+
+  %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Districts
+  .dashboard_section
+    %ul.admin_reports
+      %li
+        %a{ :href => admin_districts_path, :class => "drill_down"}
+          Review Districts
+          %span.hint Interactive reports for all districts
+
+  %h2
+    =image_tag "icon_users.png", :class => "heading_icon"
+    Users
+  .dashboard_section
+    %ul
+      %li=  link_to "By Organization", users_by_organization_path
+
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Maps
+  .dashboard_section
+    .first-half
+      %h3 Districts
+
+      %ul
+        %li=  link_to "By Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
+        %li=  link_to "By Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
+    .second-half
+      %h3 Facilities
+
+      %ul
+        %li=  link_to "By Partner Budget", map_facilities_by_partner_url( :type => "CodingBudgetDistrict")
+        %li=  link_to "By Partner Spending", map_facilities_by_partner_url( :type => "CodingSpendDistrict")
+
+
+
+
+.second-half
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
     Activities
   .dashboard_section
     %ul.admin_reports
@@ -24,27 +72,3 @@
       %li=  link_to "By Expenditure Cost Categorization (beta)", activities_by_expenditure_cost_cat_path
       %li=  link_to "By Expenditure Districts (beta)", activities_by_expenditure_districts_path
 
-.second-half
-  %h2
-    =image_tag "icon_map.png", :class => "heading_icon"
-    Maps
-  .dashboard_section
-    .first-half
-      %h3 Districts
-
-      %ul
-        %li=  link_to "By Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
-        %li=  link_to "By Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
-    .second-half
-      %h3 Facilities
-
-      %ul
-        %li=  link_to "By Partner Budget", map_facilities_by_partner_url( :type => "CodingBudgetDistrict")
-        %li=  link_to "By Partner Spending", map_facilities_by_partner_url( :type => "CodingSpendDistrict")
-
-  %h2
-    =image_tag "icon_users.png", :class => "heading_icon"
-    Users
-  .dashboard_section
-    %ul
-      %li=  link_to "By Organization", users_by_organization_path

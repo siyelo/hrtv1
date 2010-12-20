@@ -21,7 +21,7 @@
         - else
           = link_to 'My Data', ''
       - if current_user && current_user.role?(:admin)
-        %li= link_to "Districts", admin_districts_path()
+        %li= link_to "Districts", reports_districts_path()
       %li{ :class => reports_active ? "active" : ''}
         = link_to 'Reports', reporter_reports_path
       %li{ :class => (controller.controller_path.split('/').first == 'reports') ? "active" : ''}

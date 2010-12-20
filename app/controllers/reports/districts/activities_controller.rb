@@ -1,4 +1,4 @@
-class Admin::Districts::ActivitiesController < Admin::BaseController
+class Reports::Districts::ActivitiesController < Reports::BaseController
   before_filter :load_location
 
   def index

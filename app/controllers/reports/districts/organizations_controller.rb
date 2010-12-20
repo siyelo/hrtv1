@@ -1,4 +1,4 @@
-class Admin::Districts::OrganizationsController < Admin::BaseController
+class Reports::Districts::OrganizationsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
   before_filter :load_location
 

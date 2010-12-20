@@ -7,8 +7,8 @@
   var _budget_pie_values      = #{js_safe(@budget_pie_values)};
 
 %ul.breadcrumb
-  %li= link_to "Districts", admin_districts_path
-  %li= link_to h(@location.name), admin_district_path(@location)
+  %li= link_to "Districts", reports_districts_path
+  %li= link_to h(@location.name), reports_district_path(@location)
 
 %h1.main_heading Activities
 
@@ -23,6 +23,6 @@
 
 %h2= "Activities (#{short_page_entries_info(@activities)})"
 
-= render 'admin/districts/activities/table', :activities => @activities, :location => @location
+= render 'reports/districts/activities/table', :activities => @activities, :location => @location
 
 = will_paginate @activities

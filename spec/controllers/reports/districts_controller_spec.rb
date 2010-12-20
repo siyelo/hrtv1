@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::DistrictsController do
+describe Reports::DistrictsController do
 
   before :each do
     @admin = Factory.create(:admin)

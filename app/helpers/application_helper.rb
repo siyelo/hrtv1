@@ -63,6 +63,7 @@ module ApplicationHelper
     active =  current_controller_with_nesting?(parent, tab)
     unless active
       if tab == 'districts'
+        parent = 'reports'
         active = current_controller_with_nesting?('districts', 'activities') ||
                  current_controller_with_nesting?('districts', 'organizations')
       end

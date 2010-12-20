@@ -1,4 +1,4 @@
-class Admin::DistrictsController < Admin::BaseController
+class Reports::DistrictsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
 
   def index

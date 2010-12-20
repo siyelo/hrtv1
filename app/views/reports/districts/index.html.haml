@@ -13,7 +13,7 @@
   %tbody
     - @locations.each do |loc|
       %tr{:class => cycle("even", "odd")}
-        %td= link_to "#{h loc.name}", admin_district_path(loc)
+        %td= link_to "#{h loc.name}", reports_district_path(loc)
         %td= loc.organizations_count
         %td= loc.activities_count
         %td= n2c(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total))

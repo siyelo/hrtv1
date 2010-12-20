@@ -119,10 +119,6 @@ ActionController::Routing::Routes.draw do |map|
                                                 :in_progress  => :get,
                                                 :submitted    => :get},
                                 :member => {:delete => :get}
-    admin.resources :districts, :only => [:index, :show] do |districts|
-      districts.resources :activities, :only => [:index, :show], :controller => "districts/activities"
-      districts.resources :organizations, :only => [:index, :show], :controller => "districts/organizations"
-    end
     admin.resources :organizations, :collection => { :duplicate         => :get,
                                                      :remove_duplicate  => :put},
                                     :active_scaffold => true
@@ -130,6 +126,13 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+  end
+
+  map.namespace :reports do |reports|
+    reports.resources :districts, :only => [:index, :show] do |districts|
+      districts.resources :activities, :only => [:index, :show], :controller => "districts/activities"
+      districts.resources :organizations, :only => [:index, :show], :controller => "districts/organizations"
+    end
   end
 
   map.namespace :policy_maker do |policy_maker|

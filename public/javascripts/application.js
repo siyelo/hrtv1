@@ -836,7 +836,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
   });
 }
 
-var admin_districts_show = {
+var reports_districts_show = {
   run: function () {
     if (_treemap) {
       drawTreemapChart('code_spent', _code_spent_values, 'w');
@@ -848,7 +848,7 @@ var admin_districts_show = {
   }
 };
 
-var admin_districts_activities_show = {
+var reports_districts_activities_show = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values);
     drawPieChart('budget_pie', _budget_pie_values);
@@ -862,21 +862,21 @@ var admin_districts_activities_show = {
   }
 };
 
-var admin_districts_activities_index = {
+var reports_districts_activities_index = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values);
     drawPieChart('budget_pie', _budget_pie_values);
   }
 };
 
-var admin_districts_organizations_index = {
+var reports_districts_organizations_index = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values);
     drawPieChart('budget_pie', _budget_pie_values);
   }
 };
 
-var admin_districts_organizations_show = {
+var reports_districts_organizations_show = {
   run: function () {
     if (_treemap) {
       drawTreemapChart('code_spent', _code_spent_values, 'w');

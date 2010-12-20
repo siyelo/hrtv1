@@ -42,7 +42,7 @@ module CurrencyHelper
 
     def currency_options_for_select
       prios, all_currencies = load_currencies_in_order
-      return prios.map{|c| {c[0] => c[1]}} + all_currencies.map{|c| {c[0] => c[1]}}
+      return prios + all_currencies
     end
 
     protected

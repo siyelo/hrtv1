@@ -10,9 +10,9 @@
   var _code_budget_values = #{js_safe(@code_budget_values)};
 
 %ul.breadcrumb
-  %li= link_to "Districts", admin_districts_path
-  %li= link_to h(@location.name), admin_district_path(@location)
-  %li= link_to 'Activities', admin_district_activities_path(@location)
+  %li= link_to "Districts", reports_districts_path
+  %li= link_to h(@location.name), reports_district_path(@location)
+  %li= link_to 'Activities', reports_district_activities_path(@location)
 
 %h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
 
@@ -59,12 +59,12 @@
 
 
 %ul.group
-  %li= link_to "NSP", admin_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
-  %li= link_to "MTEF", admin_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
+  %li= link_to "NSP", reports_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", reports_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
 
 %ul.group
-  %li= link_to "Treemap", admin_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
-  %li= link_to "Pie", admin_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
+  %li= link_to "Treemap", reports_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
+  %li= link_to "Pie", reports_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
 
 - type = 'NSP'
 - type = 'MTEF' if @mtef

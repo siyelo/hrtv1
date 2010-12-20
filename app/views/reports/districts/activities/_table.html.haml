@@ -13,7 +13,7 @@
     - activities.each do |activity|
       %tr{:class => cycle("even", "odd")}
         - project = activity.projects.first
-        %td= link_to "#{friendly_name(activity)}", admin_district_activity_path(location, activity)
+        %td= link_to "#{friendly_name(activity)}", reports_district_activity_path(location, activity)
         %td= h activity.org_name
         %td= h friendly_name(project)
         %td

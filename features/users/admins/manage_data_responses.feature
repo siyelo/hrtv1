@@ -14,7 +14,7 @@ Background:
 @admin_data_responses
 Scenario: Manage data responses
   When I follow "Dashboard"
-  And I follow "Responses" within the main nav
+  And I follow "Review Responses"
   And I follow "Empty"
   Then I should see "UNDP"
   When I follow "Delete"

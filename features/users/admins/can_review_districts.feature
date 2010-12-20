@@ -28,7 +28,7 @@ Background:
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Districts" within the main nav
+  And I follow "Review Districts"
   Then I should see "Review Districts" within "h1"
   And I follow "Location A"
   Then I should see "Location A" within "h1"

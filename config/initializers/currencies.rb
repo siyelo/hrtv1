@@ -1,7 +1,7 @@
-#require 'money/bank/google_currency'
+require 'money/bank/google_currency'
 
 ## set default bank to instance of GoogleCurrency
-#Money.default_bank = Money::Bank::GoogleCurrency.new
+Money.default_bank = Money::Bank::GoogleCurrency.new
 
 #  RWF rates dont seem to be available by default,
 # so grab from our currencies (db) table

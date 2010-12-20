@@ -1,4 +1,4 @@
 class Reports::BaseController < ApplicationController
-  layout 'admin'
+  layout 'reports'
   before_filter :require_user
 end

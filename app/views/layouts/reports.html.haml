@@ -1,7 +1,10 @@
 - content_for :body do
   %body{:id => get_controller_id(controller), :class => "app"}
     = render 'layouts/header_app'
-    = render 'layouts/admin_main_nav'
+    - if current_user.role?(:admin)
+      = render 'layouts/admin_main_nav'
+    - else
+      = render "layouts/reporter_main_nav"
 
     #content
       .wrapper

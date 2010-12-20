@@ -1,11 +1,11 @@
 #header_app
   .wrapper
-    %a{:href => '/', :id => "logo"}
-      #logo
-        - if current_user && current_user.organization
-          = "#{truncate(current_user.organization.name, :length => 35)}"
-        - else
-          = "No organization specified"
+    //%a{:href => '/', :id => "logo"}
+    #logo
+      - if current_user && current_user.organization
+        = "#{truncate(current_user.organization.name, :length => 35)}"
+      - else
+        = "No organization specified"
         //= image_tag('coat_of_arms.png')
         //%h1
         //  UBU
@@ -13,4 +13,4 @@
     .right
       =image_tag"rwanda-coat-of-arms-app.png"
     = render :partial => '/layouts/login_nav'
-    
+

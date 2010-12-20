@@ -19,14 +19,12 @@ Background:
   And a comment exists with title: "title2", comment: "comment2", commentable: the project
   And I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Responses" within the main nav
+  And I follow "Review Responses"
   And I follow "In Progress"
-  And I follow "Show"
-  Then show me the page
+  And I follow "UNDP"
 
 @admin_review_screen @javascript
 Scenario: Manage comments on data responses (with Javascript)
-  When I click element ".comment_details"
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
   And I fill in "Comment" with "comment body"

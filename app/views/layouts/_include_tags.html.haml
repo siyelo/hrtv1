@@ -1,7 +1,7 @@
 - if controller.class.superclass.name == "ActiveScaffoldController"
   = render 'layouts/active_scaffold_js'
 
-= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.4.custom.min', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 's3Slider', "jquery.effects.core", "jquery.effects.highlight.js", 'jquery.rest_in_place.js', 'application', :cache => true
+= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.4.custom.min', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 's3Slider', "jquery.effects.core", "jquery.effects.highlight.js", 'jquery.rest_in_place.js', 'application', :cache => 'all.js'
 
 -# google visualization
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>

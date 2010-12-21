@@ -65,7 +65,7 @@ Scenario Outline: Edit data response, see feedback messages
 @reporter_data_response
 Scenario: User can start a data response
   When I follow "Dashboard"
-  And I follow "Edit"
+  And I follow "Edit Req1"
   Then I should see "Currency"
   And I should see "Start of Fiscal Year 2008-2009"
   And I should see "End of Fiscal Year 2008-2009"

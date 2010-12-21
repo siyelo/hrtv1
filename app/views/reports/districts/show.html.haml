@@ -10,7 +10,7 @@
 
 
 %ul.breadcrumb
-  %li= link_to "Reports", admin_reports_path
+  %li= link_to "Reports", user_report_dashboard_path(current_user)
   %li= link_to "Districts", reports_districts_path
 
 %h1.main_heading= h @location.name

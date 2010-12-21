@@ -17,14 +17,15 @@ class ApplicationController < AuthlogicController
 
   protected
 
-  # Require SSL for all actions in all controllers
-  # redefined method from SSL requirement plugin
-  # This method is redefined in static pages controller for actoins: :index, :about, :contact, :news
-  def ssl_required?
-    if Rails.env == "production" || Rails.env == "staging"# || Rails.env == "development"
-      true
-    else
-      false
+    # Require SSL for all actions in all controllers
+    # redefined method from SSL requirement plugin
+    # This method is redefined in static pages controller for actions: :index, :about, :contact, :news
+    def ssl_required?
+      if Rails.env == "production" || Rails.env == "staging"# || Rails.env == "development"
+        true
+      else
+        false
+      end
     end
-  end
+
 end

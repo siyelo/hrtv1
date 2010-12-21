@@ -54,6 +54,19 @@ module ApplicationHelper
     end
   end
 
+  # Generates proper dashboard url link depending on the type of user
+  def user_report_dashboard_path current_user
+    if current_user
+      if current_user.role? :admin
+        admin_reports_path
+      elsif current_user.role? :reporter
+        reporter_reports_path
+      else
+        raise 'user role not found'
+      end
+    end
+  end
+
   # need to ensure we dont activate a different 'root' tab when we are on a
   # nested controller of the same name
   # Eg. Dashboard | Activities | Districts

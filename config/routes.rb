@@ -110,7 +110,7 @@ ActionController::Routing::Routes.draw do |map|
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact about news submit user_guide reports].join('|'))
+                  :page => Regexp.new(%w[about contact about news submit user_guide].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
@@ -141,8 +141,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.reports 'reports', :controller => 'dashboard', :action => :reports
     reporter.resources :data_responses, :only => [:show]
+    reporter.resources :reports, :only => [:index]
     reporter.resources :comments, :member => {:delete => :get}
   end
 

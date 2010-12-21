@@ -1,30 +1,26 @@
 #main-nav
   .wrapper
-    - help_active = reports_active = false
-    - if controller.controller_name == 'dashboard'
-      -dashboard_active = true if controller.action_name == 'index'
-      -reports_active   = true if controller.action_name == 'reports'
-
-    - if controller.class.to_s == "StaticPageController"
+    - help_active = reports_active = dashboard_active = false
+    - if [Reporter::DashboardController].include? controller.class
+      - dashboard_active = true
+    - elsif controller.class == StaticPageController
       - help_active      = true if params[:page] == 'user_guide'
-      - reports_active   = true if params[:page] == 'reports'
+    - elsif [Reporter::ReportsController,
+             Reports::DistrictsController,
+             Reports::Districts::ActivitiesController,
+             Reports::Districts::OrganizationsController].include? controller.class
+      - reports_active   = true
 
     -# will break if more tabs are added!
     - workplan_active = !dashboard_active && !help_active && !reports_active
 
     %ul
-      %li{:class => dashboard_active ? "active" : ''}= link_to "Dashboard", user_dashboard_path(current_user)
-      %li{:class => workplan_active ? "active" : ''}
+      %li= link_to "Dashboard", user_dashboard_path(current_user), :class =>  ('active' if dashboard_active)
+      %li
         -# this might break if no response selected
+        - path = ''
         - if current_user && current_user.current_data_response
-          = link_to 'My Data', edit_data_response_path(current_user.current_data_response)
-        - else
-          = link_to 'My Data', ''
-      - if current_user && current_user.role?(:admin)
-        %li= link_to "Districts", reports_districts_path()
-      %li{ :class => reports_active ? "active" : ''}
-        = link_to 'Reports', reporter_reports_path
-      %li{ :class => (controller.controller_path.split('/').first == 'reports') ? "active" : ''}
-        = link_to 'Districts', reports_districts_path
-      %li{ :class => help_active ? "active" : ''}
-        = link_to 'Help', static_page_path(:user_guide)
+          - path = edit_data_response_path(current_user.current_data_response)
+        = link_to 'My Data', path, :class =>  ('active' if workplan_active)
+      %li= link_to 'Reports', reporter_reports_path, :class => ('active' if reports_active)
+      %li= link_to 'Help', static_page_path(:user_guide), :class => ('active' if help_active)

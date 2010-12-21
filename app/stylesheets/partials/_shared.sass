@@ -141,28 +141,36 @@ body
   /* shared footer styles */
   #footer
     color: !mid-blue
-    font-size: 10px
-    line-height: 1.4
+    font-size: 11px
     margin-bottom: 15px
     text-align: center
     text-transform: uppercase
     +pie-clearfix
-    
+
+    ul
+      line-height: 16px
+      li.powered
+        text-transform: none
+
+    h2.logo
+      color: !dark-blue
+      font-size: 13px
+
+
     .left
       float: left
-      margin-top: -5px
       h1
         display: inline-block
       img
         margin-bottom: -5px
-    
+
     a
       color: !mid-blue
       padding-right: 10px
       text-decoration: none
       &:hover, &:focus
         color: orange
-        
+
     ul
       +horizontal-list
       margin-bottom: 10px

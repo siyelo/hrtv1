@@ -1,4 +1,4 @@
-rails --version 2.3.8
+rails --version "2.3.8"
 authlogic
 compass --version "= 0.10.2"
 cancan --version ">= 1.4"

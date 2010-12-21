@@ -4,7 +4,6 @@ compass --version "= 0.10.2"
 cancan --version ">= 1.4"
 fastercsv
 formtastic --version "= 0.9.10" --ignore-dependencies
-google_currency --version ">=1.0.3"
 haml --version ">= 3.0.12"
 money --version ">= 3.5.4" --ignore-dependencies
 google_currency --version ">=1.0.3" --ignore-dependencies

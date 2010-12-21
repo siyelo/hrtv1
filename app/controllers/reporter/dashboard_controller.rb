@@ -6,8 +6,5 @@ class Reporter::DashboardController < Reporter::BaseController
     @comments                  = Comment.on_all(current_user.organization).limit(5)
   end
 
-  def reports
-    @data_responses            = current_user.data_responses
-  end
 end
 

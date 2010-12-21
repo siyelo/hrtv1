@@ -1,0 +1,33 @@
+
+%table.standard.clickable
+  %thead
+    %tr
+      %th Name
+      %th Organization
+      %th Project
+      %th Funders
+      %th Total Spent
+      %th Total Budget
+
+  %tbody
+    - activities.each do |activity|
+      %tr{:class => cycle("even", "odd")}
+        - project = activity.projects.first
+        %td= link_to "#{friendly_name(activity)}", reports_district_activity_path(location, activity)
+        %td= h activity.org_name
+        %td= h friendly_name(project)
+        %td
+          - if project
+            %ul
+              - project.funding_sources.map(&:name).uniq.each do |name|
+                %li= name
+        - spent_total = Money.new(activity.spent_sum, :USD)
+        - budget_total = Money.new(activity.budget_sum, :USD)
+        %td
+          %ul
+            %li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"
+        %td
+          %ul
+            %li= n2c(budget_total.exchange_to(:RWF), 'RWF')
+            %li= "(#{n2c(budget_total, '$')})"

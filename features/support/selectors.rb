@@ -36,6 +36,9 @@ module HtmlSelectorsHelper
     when /the main nav/
       "#main-nav"
 
+    when /the group tab/
+      "ul#group"
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
         "Now, go and add a mapping in #{__FILE__}"

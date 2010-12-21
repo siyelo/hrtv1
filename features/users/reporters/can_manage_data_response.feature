@@ -14,8 +14,9 @@ Scenario: Browse to data response edit page
 
 @reporter_data_response
 Scenario Outline: Edit data response, see feedback messages
+  When I follow "My Data"
   When I go to the data response page for "Req1"
-  And I fill in "data_response_currency" with "USD"
+  And I select "Euro (EUR)" from "data_response_currency"
   And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
   And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
   And I press "Save"
@@ -45,9 +46,10 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   Then I should not see "ActionController::InvalidAuthenticityToken"
 
 @reporter_data_response
+@run
 Scenario Outline: Edit data response, see feedback messages
   When I go to the data response page for "Req1"
-  And I fill in "data_response_currency" with "USD"
+  And I select "Euro (EUR)" from "data_response_currency"
   And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
   And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
   And I press "Save"
@@ -63,7 +65,7 @@ Scenario Outline: Edit data response, see feedback messages
 @reporter_data_response
 Scenario: User can start a data response
   When I follow "Dashboard"
-  And I follow "Edit"
+  And I follow "Edit Req1"
   Then I should see "Currency"
   And I should see "Start of Fiscal Year 2008-2009"
   And I should see "End of Fiscal Year 2008-2009"

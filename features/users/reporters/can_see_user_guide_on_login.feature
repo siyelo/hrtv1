@@ -9,9 +9,9 @@ Scenario: Login and see user guide
   And I fill in "Username or Email" with "Frank"
   And I fill in "Password" with "password"
   And I press "Sign in"
-  Then I should be on the user guide page
-  And I should see the reporters admin nav
-  And I should see the main nav tabs
+  Then I should be on the reporter dashboard page
+  When I follow "Help"
+  Then I should see the reporters admin nav
   And I should not see the data response tabs
   And I should see "Using the Resource Tracking Tool"
   And I should see the common footer

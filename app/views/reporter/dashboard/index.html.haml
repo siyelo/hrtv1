@@ -1,22 +1,55 @@
-%h2 Donor/NGO Dashboard
-%ul
-  %li
-    %h3 Data Requests
+%h1.main_heading Dashboard
 
-    - @data_responses.each do |response|
-      %p.current_request
-        = response.data_request.title
-        = link_to "Edit", edit_data_response_url(response)
-  %li
-    - @data_requests_unfulfilled.each do |req|
-      - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
-        = form.hidden_field(:organization_id_responder)
-        = form.hidden_field(:data_request_id)
-        %p.unfulfilled_request
-          = req.title
-          = form.submit "Respond"
+.first-half
+  %h2
+    =image_tag "icon_admin.png", :class => "heading_icon"
+    My Responses
+  .dashboard_section
+    %ul.admin_dashboard
+      - if @data_responses.empty?
+        %li You have not responded to any Data Requests yet.
+      - @data_responses.each do |response|
+        %li.current_request
+          = link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
 
-%h2 Recent Comments
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Data Requests
+  .dashboard_section
+    %ul.admin_dashboard
+      - if @data_requests_unfulfilled.empty?
+        %li You do not need to respond to any Data Requests right now.
+        %span.hint Check back regularly for new Data Requests
+      - @data_requests_unfulfilled.each do |req|
+        - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
+          = form.hidden_field(:organization_id_responder)
+          = form.hidden_field(:data_request_id)
+          %li.unfulfilled_request
+            = req.title
+            = form.submit "Respond"
 
-= render 'reporter/dashboard/comment_short_list', :comments => @comments
+
+  %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Reports
+  .dashboard_section
+    %ul.admin_reports
+      %li
+        %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
+          Review My Response
+          %span.hint Interactive report of your current data response
+      %li
+        %a{ :href => reports_districts_path, :class => "drill_down"}
+          Review Districts
+          %span.hint Interactive reports of all Districts
+      %li
+        %a{ :href => reporter_reports_path, :class => "drill_down"}
+          All Reports
+          %span.hint Export a report in CSV
+
+.second-half
+  %h2
+    =image_tag"icon_comments.png", :class => "heading_icon"
+    Recent Comments
+  = render 'reporter/dashboard/comment_short_list', :comments => @comments
 

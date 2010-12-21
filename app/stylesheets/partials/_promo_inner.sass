@@ -1,15 +1,29 @@
 /* STYLES EXCLUSIVE TO THE LOGIN/INNER PROMO PAGES */
 body.login
 
-  /* overriding the shared logo style*/
   #header, #header_app
+    /* overriding the shared logo style*/
     #logo
       font-size: 0.6em
       padding: 4px 0 3px 10px
       h1
         span
           margin-left: -5px
-  /* end */
+    /* end */
+
+    /* overriding the shared tagline style*/
+    #tagline
+      float: left
+      text-align: left
+      padding-top: 5px
+      a
+        color: !light-blue
+        font-weight: bold
+        text-decoration: none
+        &:hover, &:focus
+          color: !lightest-blue
+
+    /* end */
 
   /* adding properties to the shared flashes styles */
   #flashes

@@ -352,9 +352,21 @@ body.app
       color: white
       font-weight: bold
 
+
 .full-width, .simple_table
   .full
     width: 100%
+    +pie-clearfix
+  .first-half
+    float: left
+    margin-bottom: 20px
+    width: 49%
+    +pie-clearfix
+  .second-half
+    float: right
+    margin-right: 0
+    margin-bottom: 20px
+    width: 49%
     +pie-clearfix
   .third
     float: left
@@ -368,6 +380,7 @@ body.app
     margin-right: 2%
     width: 23%
   .third, .half, .fourth
+    +pie-clearfix
     li
       margin-bottom: 10px
     span
@@ -383,6 +396,7 @@ body.app
     margin-right: 0
     margin-bottom: 20px
     width: 50%
+    +pie-clearfix
 
 #tree_map_chart
   width: 600px

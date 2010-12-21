@@ -182,6 +182,11 @@ describe Activity do
       code_assignments[1].percentage.should == 50
     end
   end
+  
+  it "should save a null object without complaining" do
+    a = Activity.new
+    lambda{a.save(false)}.should_not raise_error
+  end
 
   describe "counter cache" do
     context "comments cache" do
@@ -235,4 +240,98 @@ describe Activity do
     it_should_behave_like "location cloner"
   end
 
+  describe "keeping Money amounts in-sync" do
+    before :each do
+      @a        = Factory.build(:activity)
+      @a.budget = 123.45
+      @a.spend  = 123.45
+      @a.save
+      @a.reload
+    end
+    
+    it "should update new_spend on creation" do   
+      @a.new_spend.cents.should == 12345
+      @a.new_spend.to_s.should == "123.45"
+      @a.new_spend.currency.should == Money::Currency.new("USD")
+      @a.new_spend_in_usd.should == 12345      
+    end
+    
+    it "should update new_spend on update" do   
+      @a.spend = 456.78
+      @a.save
+      @a.new_spend.cents.should == 45678
+      @a.new_spend.to_s.should == "456.78"
+      @a.new_spend.currency.should == Money::Currency.new("USD")
+      @a.new_spend_in_usd.should == 45678
+    end
+    
+    it "should update new_budget and new_budget_in_usd after currency change" do   
+      exchange_rate = BigDecimal("1") / BigDecimal("500") # 1/500 with uber precision
+      Money.add_rate("RWF", "USD", exchange_rate)
+      @p = @a.project
+      @p.currency = 'RWF'
+      @p.save
+      @a.reload
+      @a.spend = 789.10
+      @a.save
+      @a.new_spend.cents.should == 78910
+      @a.new_spend.to_s.should == "789.10"
+      @a.new_spend.currency.should == Money::Currency.new("RWF")
+      @a.new_spend_in_usd.should ==  157 #(789.10 * exchange_rate), rounded down
+    end
+    
+    it "should update new_budget on creation" do   
+      @a.new_budget.cents.should == 12345
+      @a.new_budget.to_s.should == "123.45"
+      @a.new_budget.currency.should == Money::Currency.new("USD")
+      @a.new_budget_in_usd.should == 12345
+    end
+    
+    it "should update new_budget on update" do   
+      @a.budget = 456.78
+      @a.save
+      @a.new_budget.cents.should == 45678
+      @a.new_budget.to_s.should == "456.78"
+      @a.new_budget.currency.should == Money::Currency.new("USD")
+      @a.new_budget_in_usd.should == 45678
+    end
+    
+    it "should update new_budget and new_budget_in_usd after currency change" do   
+      exchange_rate = BigDecimal("1") / BigDecimal("500") # 1/500 with uber precision
+      Money.add_rate("RWF", "USD", exchange_rate)
+      @p = @a.project
+      @p.currency = 'RWF'
+      @p.save
+      @a.reload
+      @a.budget = 789.10
+      @a.save
+      @a.new_budget.cents.should == 78910
+      @a.new_budget.to_s.should == "789.10"
+      @a.new_budget.currency.should == Money::Currency.new("RWF")
+      @a.new_budget_in_usd.should ==  157 #(789.10 * exchange_rate), rounded down
+    end    
+  end
+  
+  # TODO: deprecate in favour of Money objects (cents & currencies coupled on each amount field)
+  describe "currency convenience lookups on DR/Project" do
+    before :each do
+      @a  = Factory(:activity)
+      @dr = @a.data_response
+      @dr.currency = 'RWF'
+      @dr.save
+      @a.reload
+    end
+    
+    it "should return the data response's currency" do
+      @a.currency.should == "RWF"
+    end
+  
+    it "should return the data response's currency, unless the project overrides it" do
+      p = @a.project
+      p.currency = 'CHF'
+      p.save
+      @a.reload
+      @a.currency.should == "CHF"
+    end
+  end
 end

@@ -1,17 +1,47 @@
-%h1.main_heading Main Dashboard
+%h1.main_heading Admin Dashboard
 
-%h2 Policy Maker Dashboard
-%ul.policy_maker_dashboard.link_list
-  %li= link_to "Review data responses", policy_maker_data_responses_path
+.first-half
+  %h2
+    =image_tag"icon_admin.png", :class => "heading_icon"
+    Manage
+  .dashboard_section
+    %ul.admin_dashboard
+      %li= link_to "Organizations", admin_organizations_path, :class => 'drill_down'
+      %li= link_to "Users", admin_users_path, :class => 'drill_down'
+      %li=  link_to "Activities", activities_url, :class => 'drill_down'
+      %li=  link_to "Comments", comments_url, :class => 'drill_down'
+      %li=  link_to "Codes", codes_url, :class => 'drill_down'
+      %li=  link_to "Respond to help requests", help_requests_url, :class => 'drill_down'
+      %li=  link_to "Help and page tips", model_helps_url, :class => 'drill_down'
 
-%h2 Admin Dashboard
-%ul.admin_dashboard.link_list
-  %li=  link_to "Manage help and page comments", model_helps_url
-  %li=  link_to "Manage activities", activities_url
-  %li=  link_to "Manage comments", comments_url
-  %li=  link_to "Manage codes", codes_url
-  %li=  link_to "Respond to help requests", help_requests_url
+  %h2
+    =image_tag"icon_reporter.png", :class => "heading_icon"
+    Policy Maker Dashboard
+  .dashboard_section
+    %ul.policy_maker_dashboard
+      %li= link_to "Review data responses", policy_maker_data_responses_path, :class => 'drill_down'
 
-%h2 Recent Comments
-= render 'reporter/dashboard/comment_short_list', :comments => @comments
+.second-half
+  %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Reports
+  .dashboard_section
+    %ul.admin_reports
+      %li
+        %a{ :href => admin_responses_path, :class => "drill_down"}
+          Review Responses
+          %span.hint Interactive reports
+      %li
+        %a{ :href => reports_districts_path, :class => "drill_down"}
+          Review Districts
+          %span.hint Interactive reports
+      %li
+        %a{ :href => admin_reports_path, :class => "drill_down"}
+          All Reports
+          %span.hint Export a report in CSV
+
+  %h2
+    =image_tag"icon_comments.png", :class => "heading_icon"
+    Recent Comments
+  = render 'reporter/dashboard/comment_short_list', :comments => @comments
 

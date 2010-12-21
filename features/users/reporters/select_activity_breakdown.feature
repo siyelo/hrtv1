@@ -133,7 +133,6 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I wait until "Drugs, Commodities \& Consumables" is visible
   Then the "Drugs, Commodities & Consumables" field within ".tab6" should contain "1,481,480.40"
 
-@run
 @reporter_activity_breakdown @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages) 
   Given I am on the budget classification page for "TB Drugs procurement"
@@ -169,7 +168,6 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
-@run
 @reporter_activity_breakdown @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in same rootomitting the parents, using percentages)
   Given I am on the budget classification page for "TB Drugs procurement"

@@ -1,11 +1,11 @@
 
 - content_for :body do
   - full_width_page = false
-  - full_width_page = true if [ "CodeAssignmentsController"].include? controller.class.to_s
+  - full_width_page = true if [ "CodeAssignmentsController", "Reporter::DashboardController", "Reporter::ReportsController"].include? controller.class.to_s
 
   %body{:id => get_controller_id(controller), :class => "app"}
     = render "layouts/header_app"
-    = render "layouts/main_nav"
+    = render "layouts/reporter_main_nav"
 
     #content
       .wrapper
@@ -20,7 +20,7 @@
               = yield :comments
           #sidebar
             :javascript
-              $('sidebar').hide()
+              jQuery('#sidebar').hide()
             #helper
               = yield :side_bar
 

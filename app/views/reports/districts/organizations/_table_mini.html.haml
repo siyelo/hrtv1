@@ -1,0 +1,11 @@
+%table.standard.clickable
+  %thead
+    %tr
+      %th Organization
+      %th Total Spent
+
+  %tbody
+    - top_organizations.each do |organization|
+      %tr{:class => cycle("even", "odd")}
+        %td= link_to organization.name, reports_district_organization_path(@location, organization)
+        %td= n2c(organization.spent_sum, 'RWF')

@@ -1,0 +1,20 @@
+- content_for :body do
+  %body{:id => get_controller_id(controller), :class => "app"}
+    = render 'layouts/header_app'
+    - if current_user.role?(:admin)
+      = render 'layouts/admin_main_nav'
+    - else
+      = render "layouts/reporter_main_nav"
+
+    #content
+      .wrapper
+        = yield :sub_nav
+        = render 'layouts/flashes'
+        .full-width
+          = yield
+
+-# content_for :footer do
+  -#if you want to do your own thing
+  -#= render :partial => 'layouts/some_different_footer'
+
+= render 'layouts/app'

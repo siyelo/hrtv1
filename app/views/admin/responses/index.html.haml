@@ -1,4 +1,4 @@
-%h1.main_heading Data Responses
+= render "heading"
 
 = render 'group_tabs'
 
@@ -8,19 +8,19 @@
     - if @submitted_responses.empty?
       %p No submitted data responses are waiting for review.
     - else
-      %table
+      %table.standard.clickable
         %thead
           %tr
             %th Organization
+            %th Projects
+            %th Activities
+            %th Sub Activities
             %th Date/time submitted
-            %th Total budget
-            %th Total spent
-            %th
         %tbody
           - @submitted_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-              %td= data_response.responding_organization
+              %td=link_to data_response.responding_organization, admin_response_path(data_response)
+              %td= data_response.projects.size
+              %td= data_response.activities_count
+              %td= data_response.sub_activities_count
               %td= data_response.submitted_at
-              %td
-              %td
-              %td= link_to "Show", admin_response_path(data_response)

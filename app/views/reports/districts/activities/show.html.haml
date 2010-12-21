@@ -1,0 +1,80 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart", "treemap"]});
+  var _treemap = #{@treemap.to_json};
+  var _spent_pie_values   = #{js_safe(@spent_pie_values)};
+  var _budget_pie_values  = #{js_safe(@budget_pie_values)};
+  var _code_spent_values  = #{js_safe(@code_spent_values)};
+  var _code_budget_values = #{js_safe(@code_budget_values)};
+
+%ul.breadcrumb
+  %li= link_to "Reports", user_report_dashboard_path(current_user)
+  %li= link_to "Districts", reports_districts_path
+  %li= link_to h(@location.name), reports_district_path(@location)
+  %li= link_to 'Activities', reports_district_activities_path(@location)
+
+%h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
+
+%h2 Summary
+
+%table.standard
+  %tbody
+    %tr
+      %td Organization
+      %td= h @activity.organization_name
+    %tr
+      %td Activity Name:
+      %td= @activity.name.blank? ? "n/a" : h(@activity.name)
+    %tr
+      %td Activity Description:
+      %td= h @activity.description.titleize
+    %tr
+      %td Implementer
+      %td= h @activity.implementer
+    %tr
+      %td Associated Project
+      %td= h friendly_name(@activity.project)
+    %tr
+      %td Total Spend
+      %td= n2c(@activity.new_spend,  @activity.new_spend.currency.to_s)
+    %tr
+      %td Total Budget
+      %td= n2c(@activity.new_budget,  @activity.new_budget.currency.to_s)
+    %tr
+      %td Approved?
+      %td
+        = @activity.approved? ? "Yes" : "No"
+        .hint Whether this activity has been approved by a reviewer yet.
+%br
+
+.full
+  .first-half
+    %h2 Proportion Spent
+    #spent_pie.bordered
+
+  .second-half
+    %h2 Proportion Budget
+    #budget_pie.bordered
+
+
+%ul.group
+  %li= link_to "NSP", reports_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", reports_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
+
+%ul.group
+  %li= link_to "Treemap", reports_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
+  %li= link_to "Pie", reports_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
+
+- type = 'NSP'
+- type = 'MTEF' if @mtef
+
+.full
+  .first-half
+    %h2= "#{type} Spent"
+    #code_spent.bordered
+
+  .second-half
+    %h2= "#{type} Budget"
+    #code_budget.bordered

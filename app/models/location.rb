@@ -2,6 +2,20 @@ class Location < Code
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :organizations
+
+  named_scope :all_with_counters,
+                :select => "codes.id, codes.short_display, codes.type,
+                  (SELECT COUNT(*) FROM projects
+                    INNER JOIN locations_projects ON projects.id = locations_projects.project_id
+                    WHERE locations_projects.location_id = codes.id) AS projects_count,
+                  (SELECT COUNT(*) FROM organizations
+                    INNER JOIN locations_organizations ON organizations.id = locations_organizations.organization_id
+                    WHERE locations_organizations.location_id = codes.id) AS organizations_count,
+                  (SELECT COUNT(*) FROM activities
+                    INNER JOIN activities_locations ON activities.id = activities_locations.activity_id
+                    WHERE activities_locations.location_id = codes.id) AS activities_count
+                 ",
+                :order => "short_display ASC"
 end
 
 

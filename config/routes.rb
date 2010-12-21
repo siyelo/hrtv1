@@ -1,5 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-
   map.resources :data_responses, :member => { :review => :get, :submit => :put}
 
   map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
@@ -111,7 +110,7 @@ ActionController::Routing::Routes.draw do |map|
   map.static_page ':page',
                   :controller => 'static_page',
                   :action => 'show',
-                  :page => Regexp.new(%w[about contact about news submit user_guide reports].join('|'))
+                  :page => Regexp.new(%w[about contact about news submit user_guide].join('|'))
 
   map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
 
@@ -120,13 +119,20 @@ ActionController::Routing::Routes.draw do |map|
                                                 :in_progress  => :get,
                                                 :submitted    => :get},
                                 :member => {:delete => :get}
-    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     admin.resources :organizations, :collection => { :duplicate         => :get,
                                                      :remove_duplicate  => :put},
                                     :active_scaffold => true
     admin.resources :reports, :only => [:index]
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
+    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+  end
+
+  map.namespace :reports do |reports|
+    reports.resources :districts, :only => [:index, :show] do |districts|
+      districts.resources :activities, :only => [:index, :show], :controller => "districts/activities"
+      districts.resources :organizations, :only => [:index, :show], :controller => "districts/organizations"
+    end
   end
 
   map.namespace :policy_maker do |policy_maker|
@@ -135,8 +141,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.reports 'reports', :controller => 'dashboard', :action => :reports
     reporter.resources :data_responses, :only => [:show]
+    reporter.resources :reports, :only => [:index]
     reporter.resources :comments, :member => {:delete => :get}
   end
 

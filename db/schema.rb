@@ -9,45 +9,51 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101213101136) do
+ActiveRecord::Schema.define(:version => 20101221005238) do
 
   create_table "activities", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "provider_id"
-    t.text     "description"
-    t.string   "type"
-    t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
-    t.date     "start"
-    t.date     "end"
-    t.decimal  "spend"
-    t.text     "text_for_provider"
-    t.text     "text_for_targets"
-    t.text     "text_for_beneficiaries"
-    t.decimal  "spend_q4_prev"
-    t.integer  "data_response_id"
-    t.integer  "activity_id"
-    t.decimal  "budget_percentage"
-    t.decimal  "spend_percentage"
-    t.boolean  "approved"
-    t.decimal  "CodingBudget_amount",                   :default => 0.0
-    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal  "CodingSpend_amount",                    :default => 0.0
-    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",                        :default => 0
-    t.integer  "sub_activities_count",                  :default => 0
+    t.string    "name"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "provider_id"
+    t.text      "description"
+    t.string    "type"
+    t.decimal   "budget"
+    t.decimal   "spend_q1"
+    t.decimal   "spend_q2"
+    t.decimal   "spend_q3"
+    t.decimal   "spend_q4"
+    t.date      "start"
+    t.date      "end"
+    t.decimal   "spend"
+    t.text      "text_for_provider"
+    t.text      "text_for_targets"
+    t.text      "text_for_beneficiaries"
+    t.decimal   "spend_q4_prev"
+    t.integer   "data_response_id"
+    t.integer   "activity_id"
+    t.decimal   "budget_percentage"
+    t.decimal   "spend_percentage"
+    t.boolean   "approved"
+    t.decimal   "CodingBudget_amount",                   :default => 0.0
+    t.decimal   "CodingBudgetCostCategorization_amount", :default => 0.0
+    t.decimal   "CodingBudgetDistrict_amount",           :default => 0.0
+    t.decimal   "CodingSpend_amount",                    :default => 0.0
+    t.decimal   "CodingSpendCostCategorization_amount",  :default => 0.0
+    t.decimal   "CodingSpendDistrict_amount",            :default => 0.0
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
+    t.integer   "comments_count",                        :default => 0
+    t.integer   "sub_activities_count",                  :default => 0
+    t.integer   "new_spend_cents",                       :default => 0,   :null => false
+    t.string    "new_spend_currency"
+    t.integer   "new_spend_in_usd",                      :default => 0,   :null => false
+    t.integer   "new_budget_cents",                      :default => 0,   :null => false
+    t.string    "new_budget_currency"
+    t.integer   "new_budget_in_usd",                     :default => 0,   :null => false
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -81,11 +87,15 @@ ActiveRecord::Schema.define(:version => 20101213101136) do
     t.decimal "amount"
     t.string  "type"
     t.decimal "percentage"
-    t.decimal "cached_amount",   :default => 0.0
-    t.decimal "sum_of_children", :default => 0.0
+    t.decimal "cached_amount",              :default => 0.0
+    t.decimal "sum_of_children",            :default => 0.0
+    t.integer "new_amount_cents",           :default => 0,   :null => false
+    t.string  "new_amount_currency"
+    t.integer "new_cached_amount_cents",    :default => 0,   :null => false
+    t.string  "new_cached_amount_currency"
+    t.integer "new_cached_amount_in_usd",   :default => 0,   :null => false
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|

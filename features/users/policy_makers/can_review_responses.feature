@@ -18,11 +18,10 @@ Background:
   And a project exists with name: "Other Project", data_response: the data_response
   And a comment exists with title: "title2", comment: "comment2", commentable: the project
 
-@run
 Scenario: "See list of all responses via admin dashboard"
   And I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Responses" within the main nav
+  And I follow "Review Responses"
   Then I should see "Data Responses" within "h1"
 
 @wip
@@ -36,6 +35,3 @@ Scenario: "See list of all responses"
   And I follow "Responses" within the main nav
   And I follow "Show"
 
-
-
-  

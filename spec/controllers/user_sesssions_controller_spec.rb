@@ -35,7 +35,7 @@ describe UserSessionsController do
   context "not logged in" do
     it "redirects the user to root path when requesting logout" do
       delete :destroy
-      response.should redirect_to new_user_session_path
+      response.should redirect_to login_path
     end
   end
 end

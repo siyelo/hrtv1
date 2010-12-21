@@ -9,5 +9,5 @@
     - organizations.each do |organization|
       %tr{:class => cycle("even", "odd")}
         %td= link_to organization.name, reports_district_organization_path(location, organization)
-        %td= n2c(organization.spent_sum, 'RWF')
-        %td= n2c(organization.budget_sum, 'RWF')
+        %td= n2c(organization.spent_sum.to_i, 'RWF')
+        %td= n2c(organization.budget_sum.to_i, 'RWF')

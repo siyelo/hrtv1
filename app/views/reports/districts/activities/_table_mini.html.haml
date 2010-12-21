@@ -10,7 +10,7 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to "#{friendly_name(activity)}", reports_district_activity_path(location, activity)
         %td= h activity.org_name
-        - spent_total = Money.new(activity.spent_sum, :USD)
+        - spent_total = Money.new(activity.spent_sum.to_i, :USD)
         %td
           %ul
             %li= n2c(spent_total.exchange_to(:RWF), 'RWF')

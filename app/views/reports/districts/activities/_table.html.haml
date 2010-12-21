@@ -21,8 +21,8 @@
             %ul
               - project.funding_sources.map(&:name).uniq.each do |name|
                 %li= name
-        - spent_total = Money.new(activity.spent_sum, :USD)
-        - budget_total = Money.new(activity.budget_sum, :USD)
+        - spent_total = Money.new(activity.spent_sum.to_i, :USD)
+        - budget_total = Money.new(activity.budget_sum.to_i, :USD)
         %td
           %ul
             %li= n2c(spent_total.exchange_to(:RWF), 'RWF')

@@ -17,14 +17,14 @@
 
 %h1.main_heading= "Organization: #{h(friendly_name(@organization))}"
 
-%h2 Summary
-
-%table.standard
-  %tbody
-    %tr
-      %td Organization
-      %td= h @organization.name
-%br
+/ %h2 Summary
+/
+/ %table.standard
+/   %tbody
+/     %tr
+/       %td Organization
+/       %td= h @organization.name
+/ %br
 
 %ul.group
   %li= link_to "NSP", reports_district_organization_path(@location, @organization, :code_type => "nsp"), active_if(@nsp)

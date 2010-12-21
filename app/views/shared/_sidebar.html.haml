@@ -4,7 +4,7 @@
 
 - content_for :side_bar do
   :javascript
-    $('sidebar').show()
+    jQuery('#sidebar').show()
   %h2 Help
   %p.title= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
   #terms

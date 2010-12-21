@@ -1,0 +1,46 @@
+/* STYLES EXCLUSIVE TO THE LANDING PAGES */
+body.landing
+
+  #header #logo
+    img
+      height: 50px
+      margin: -2px 7px 0 0
+      width: 46px
+
+  #content
+
+    .slider
+      float: left
+      margin: 30px 20px 15px 30px
+
+      #s3slider
+        span.top
+          font-size: 1em
+          line-height: 1.2em
+
+    #browsers
+      background: #f9f9f9
+      border: 1px solid !very-light-grey
+      float: left
+      margin-left: 30px
+      margin-bottom: 30px
+      padding: 20px 20px 15px
+      +border-radius
+      +clearfix
+      ul
+        +horizontal-list
+        li
+          width: 35px
+        img
+          width: 100%
+      h2
+        color: #555
+        font-size: 0.8em
+        margin-bottom: 7px
+        text-transform: none
+
+  #admin ul li
+    &:first-child a
+      +border-bottom-left-radius
+    &.last a
+

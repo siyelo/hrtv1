@@ -1,0 +1,27 @@
+= render "heading"
+
+= render 'group_tabs'
+
+/ js event: #resources, .data_responses
+%div{:class => "resources", :"data-resources" => "data_responses"}
+  .simple_table
+    - if @in_progress_responses.empty?
+      %p No data responses are in progress.
+    - else
+      %table.standard.clickable
+        %thead
+          %tr
+            %th Organization
+            %th Projects
+            %th Activities
+            %th Sub Activities
+            %th Unclassified Activities
+        %tbody
+          - @in_progress_responses.each do |data_response|
+            %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
+              %td= link_to  data_response.responding_organization, admin_response_path(data_response)
+              %td= data_response.projects.size
+              %td= data_response.activities_count
+              %td= data_response.sub_activities_count
+
+              %td= "#{data_response.unclassified_activities_count} / #{data_response.activities_count}"

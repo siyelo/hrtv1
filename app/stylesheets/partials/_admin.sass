@@ -18,14 +18,16 @@ body.app
       display: inline
       // this is since it inherits :block from body.app otherwise
   .full-width
+    ul
+      margin-bottom: 10px
+      +border-bottom-radius
     h2
       background: none
-      margin: 10px 10px 0
       text-transform: none
     h3, .like_a_h3
       color: $mid-blue
       font-size: 0.9em
-      padding: 20px 10px 10px
+      padding: 20px 0 10px
       text-transform: none
     h4
       font-size: 12px
@@ -145,11 +147,8 @@ body.app
     padding: 0 0 0 35px
   /* default layout for a simple table
   .simple_table
-    padding: 0 10px
     +pie-clearfix
     /* a hack, but the padding interferes with .third
-    &.response_summary
-      padding: 0 0 0 10px
     hr
       background: none
       border: none
@@ -286,6 +285,9 @@ body.app
     .activities, .dashboard_comments
       tbody
         font-size: 1.2em
+    .dashboard_comments
+      border: none !important
+      padding: 0 !important
     .dashboard_districts
       margin-bottom: 20px
       +pie-clearfix
@@ -350,9 +352,21 @@ body.app
       color: white
       font-weight: bold
 
+
 .full-width, .simple_table
   .full
     width: 100%
+    +pie-clearfix
+  .first-half
+    float: left
+    margin-bottom: 20px
+    width: 49%
+    +pie-clearfix
+  .second-half
+    float: right
+    margin-right: 0
+    margin-bottom: 20px
+    width: 49%
     +pie-clearfix
   .third
     float: left
@@ -366,6 +380,7 @@ body.app
     margin-right: 2%
     width: 23%
   .third, .half, .fourth
+    +pie-clearfix
     li
       margin-bottom: 10px
     span
@@ -381,6 +396,7 @@ body.app
     margin-right: 0
     margin-bottom: 20px
     width: 50%
+    +pie-clearfix
 
 #tree_map_chart
   width: 600px
@@ -444,9 +460,6 @@ body.app #content .tabs
 .details_and_charts
   padding-top: 10px
   +pie-clearfix
-  .simple_table
-    /* a hack, but the padding interferes with .third
-    padding: 0 0 0 10px
 
 /* fix for review screen - classifications content squashing against sub-tab
 .pie

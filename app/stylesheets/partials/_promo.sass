@@ -1,0 +1,29 @@
+/* STYLES SHARED BY ALL 'PROMO SITE' PAGES */
+body.promo
+
+  .wrapper
+    +clearfix
+    margin: 0 auto
+    width: 960px
+
+  /* adding properties to the shared admin style */
+  #admin ul li
+    &:first-child a
+      +border-bottom-left-radius
+    &:last-child a
+      +border-bottom-right-radius
+  /* end */
+
+  #content
+    color: black
+    line-height: 1.3
+    margin-bottom: 20px
+
+    .text
+      margin: 45px 30px 30px 0
+      h3
+        font-size: 1.1em
+
+      p
+        font-size: 0.85em
+        margin: 15px 0

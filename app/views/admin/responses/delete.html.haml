@@ -1,0 +1,9 @@
+- title("Delete data response")
+
+%h1 Delete data response
+
+Are you sure you want to delete data response from organization
+%b= @data_response.responding_organization.try(:name)
+?
+
+= button_to 'Delete', admin_response_path(@data_response), :method => :delete

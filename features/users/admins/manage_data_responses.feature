@@ -1,5 +1,6 @@
-Feature: In order to review data responses
-  As a reporter
+Feature: Admin can manage data responses
+  In order to reduce costs
+  As an admin
   I want to be able to manage data responses
 
 Background:
@@ -9,12 +10,13 @@ Background:
   And an organization exists with name: "UNDP", raw_type: "Agencies"
   And a data_response exists with data_request: the data_request, responding_organization: the organization
   And I am signed in as an admin
-  When I follow "Dashboard"
-  And I follow "Review data responses" within ".admin_dashboard"
-  Then I should see "UNDP"
 
 @admin_data_responses
 Scenario: Manage data responses
+  When I follow "Dashboard"
+  And I follow "Review Responses"
+  And I follow "Empty"
+  Then I should see "UNDP"
   When I follow "Delete"
   And I press "Delete"
   Then I should see "Data response was successfully deleted"
@@ -22,6 +24,8 @@ Scenario: Manage data responses
 
 @admin_data_responses @javascript
 Scenario: Manage data responses (with JS)
+  When I follow "Responses"
+  When I follow "Empty"
   When I will confirm a js popup
   And I follow "Delete"
   Then I should not see "UNDP"

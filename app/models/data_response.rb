@@ -51,7 +51,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
-  def self.in_process
+  def self.in_progress
     self.find(:all, :include => [:responding_organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 

@@ -1,7 +1,6 @@
 # TODO: move this to /app/controller/comments_controller.rb
 # when AS gets removed
-class Reporter::CommentsController < ApplicationController
-  before_filter :require_user
+class Reporter::CommentsController < Reporter::BaseController
 
   def new
     @comment = Comment.new
@@ -25,7 +24,7 @@ class Reporter::CommentsController < ApplicationController
 
   def edit
     @comment = current_user.role?(:admin) ? Comment.find(params[:id]) : current_user.comments.find(params[:id])
-    
+
     respond_to do |format|
       format.html
       format.js { render :partial => "form", :locals => {:comment => @comment } }
@@ -54,7 +53,7 @@ class Reporter::CommentsController < ApplicationController
 
   def update
     @comment = find_comment
-    
+
     if @comment.update_attributes(params[:comment])
       respond_to do |format|
         format.html do

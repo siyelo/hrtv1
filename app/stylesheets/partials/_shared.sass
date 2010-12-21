@@ -6,6 +6,9 @@ body
   /* shared heading styles */
   h1, h2, h3, h4, h5, h6
     font-weight: bold
+
+  h2, h3, h4, h5, h6
+    font-weight: bold
     text-transform: uppercase
 
   /* universal float right class */
@@ -15,27 +18,22 @@ body
   /* shared content>wrapper styles */
   #content .wrapper
     +border-bottom-radius
-    +box-shadow(!very-light-grey, 0, 2px, 5px)
     +clearfix
     background: white
+    margin: 0 auto
+    padding: 0 10px
 
   /* shared header styles */
   #header, #header_app
-    background= image_url("bg-blue.jpg")
-    color: !lightest-blue
-    +clearfix
+    background: image_url("bg-blue.jpg")
+    color: $lightest-blue
+    +pie-clearfix
 
     #logo
       float: left
       padding: 45px 0 35px
       width: 400px
       +text-shadow(#222, 0, 0, 15px)
-      
-      img
-        float: left
-        height: 22px
-        margin-right: 3px
-        width: 20px
 
       h1
         color: orange
@@ -59,40 +57,39 @@ body
         letter-spacing: 0.02em
         padding-left: 55px
         text-transform: uppercase
-
+    .right
+      margin-top: 9px
     #admin
       float: right
       width: 550px
 
       span
-        font-size: 0.7em
+        color: $light-blue
+        font-size: 11px
         float: right
-        padding-top: 10px
+        padding-top: 14px
 
 
       ul
-        +border-radius
-        +box-shadow(#444, 0, 0, 15px)
         +horizontal-list
         float: right
         padding-left: 10px
 
         li
-          padding: 0
+          padding: 10px 5px
 
           a
-            background: !light-blue
-            color: !dark-blue
+            border-left: 1px solid $dark-blue
+            color: !light-blue
             display: inline-block
-            font-size: 0.6em
+            font-size: 11px
             font-weight: bold
-            padding: 10px
+            padding-left: 8px
             text-decoration: none
-            text-transform: uppercase
-
+            img
+              margin: 0 2px -2px 0
             &:hover, &:focus
-              background: !lightest-blue
-              color: !dark-blue
+              color: !lightest-blue
 
     #tagline
       float: right
@@ -126,13 +123,13 @@ body
       a
         font-size: 0.8em
   /* end */
-  
+
   /* warning text */
   p.warning
     border: 1px solid red
     color: red
   /* end */
-  
+
   /* bordered paragraph style */
   p.borderful
     border: 1px solid !lightest-blue
@@ -141,20 +138,45 @@ body
   /* end */
 
   /* shared footer styles */
+  /* shared footer styles */
   #footer
+    color: !mid-blue
+    font-size: 11px
     margin-bottom: 15px
     text-align: center
-    a
+    text-transform: uppercase
+    +pie-clearfix
+
+    ul
+      line-height: 16px
+      li.powered
+        text-transform: none
+
+    h2.logo
       color: !dark-blue
-      font-size: 0.7em
+      font-size: 13px
+
+
+    .left
+      float: left
+      h1
+        display: inline-block
+      img
+        margin-bottom: -5px
+
+    a
+      color: !mid-blue
       padding-right: 10px
       text-decoration: none
-      text-transform: uppercase
       &:hover, &:focus
         color: orange
-        
+
+    ul
+      +horizontal-list
+      margin-bottom: 10px
+
   .wrapper > .full-width
     padding: 5px 15px 0
-    
+
   .like_a_h2
     font-size: 12px

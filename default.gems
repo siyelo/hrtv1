@@ -23,10 +23,12 @@ factory_girl -v1.2.4
 faker -v0.3.1
 fastercsv -v1.5.3
 ffi -v0.6.3
-formtastic -v0.9.10
+formtastic -v0.9.10 --ignore-dependencies
 gherkin -v2.0.2
 github -v0.4.3
 glennr-heroku_san -v0.1.1
+glennr-seer -v0.9.2
+google_currency -v1.0.3
 haml -v3.0.13
 highline -v1.5.2
 hoe -v2.6.1
@@ -36,6 +38,7 @@ json -v1.4.3
 json_pure -v1.4.3
 linecache -v0.43
 mime-types -v1.16
+money -v3.5.4 --ignore-dependencies
 nokogiri -v1.4.2
 open_gem -v1.4.2
 paginator -v1.1.1
@@ -51,7 +54,7 @@ ruby-debug -v0.10.3
 ruby-debug-base -v0.10.3
 ruby_parser -v2.0.4
 rubyforge -v2.0.4
-seer -v0.9.1
+
 selenium-webdriver -v0.0.24
 sexp_processor -v3.0.4
 shoulda -v2.11.1
@@ -63,3 +66,4 @@ text-hyphen -v1.0.0
 trollop -v1.16.2
 validates_date_time -v1.0.0
 version -v0.9.2
+will_paginate -v2.3.11

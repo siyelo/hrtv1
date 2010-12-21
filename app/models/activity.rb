@@ -24,7 +24,10 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include ActAsDataElement
-  include NumberHelper
+  include NumberHelper #TODO: deprecate with Money methods
+  include BudgetSpendHelpers #TODO: deprecate with Money methods
+  acts_as_commentable
+  include MoneyHelper
   configure_act_as_data_element
 
   ### Attributes
@@ -35,13 +38,23 @@ class Activity < ActiveRecord::Base
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved
 
-  include BudgetSpendHelpers
-  acts_as_commentable
+  ### ValueObject Attributes
+  composed_of :new_spend,
+              {:mapping => [%w(new_spend_cents cents),
+                            %w(new_spend_currency currency_as_string)]
+              }.merge(MONEY_OPTS)
+  composed_of :new_budget,
+              {:mapping => [%w(new_budget_cents cents),
+                            %w(new_budget_currency currency_as_string)]
+              }.merge(MONEY_OPTS)
+  # TODO - money objects for q1, q2 etc
+  #   GR: /me avoiding for now since these are hardly used
 
   ### Associations
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
+  belongs_to :provider, :foreign_key => :provider_id,
+                        :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",
@@ -58,13 +71,13 @@ class Activity < ActiveRecord::Base
   validate :approved_activity_cannot_be_changed
 
   ### Callbacks
+  before_save :update_money_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   after_create  :update_counter_cache
   after_destroy :update_counter_cache
 
   ### Named scopes
-
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
@@ -116,13 +129,18 @@ class Activity < ActiveRecord::Base
   def currency
     tentative_currency = data_response.try(:currency)
     unless projects.empty?
-      tentative_currency ||= projects.first.currency
+      tentative_currency = projects.first.currency unless projects.first.currency.blank?
     end
     tentative_currency
   end
 
   def organization
     self.data_response.responding_organization
+  end
+
+  # helper until we enforce this in the model association!
+  def project
+    self.projects.first
   end
 
   def organization_name
@@ -248,7 +266,7 @@ class Activity < ActiveRecord::Base
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
-  def assigns_for_strategic_codes assigns, strat_hash, new_klass
+  def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
     strat_hash.each do |prog, code_ids|
@@ -344,9 +362,72 @@ class Activity < ActiveRecord::Base
     clone
   end
 
+  def self.top_by_spent_and_budget(options)
+    per_page = options[:per_page] || 25
+    page     = options[:page]     || 1
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum,
+                  SUM(ca2.new_cached_amount_in_usd) as budget_sum",
+      :joins => "
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+               AND ca1.type = 'CodingSpendDistrict'
+               AND ca1.code_id = #{code_id}
+        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+               AND ca2.type = 'CodingBudgetDistrict'
+               AND ca2.code_id = #{code_id}",
+      :include => {:projects => {:funding_flows => :project}},
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name",
+      :order => "spent_sum DESC, budget_sum DESC"
+    })
+
+    scope.paginate :all, :per_page => per_page, :page => page
+  end
+
+  def self.top_by_spent(options)
+    limit    = options[:limit]    || nil
+    code_id  = options[:code_id]
+
+    raise "Missing code_id param".to_yaml unless code_id
+
+    scope = self.scoped({
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
+      :joins => "
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+               AND ca1.type = 'CodingSpendDistrict'
+               AND ca1.code_id = #{code_id}",
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name",
+      :order => "spent_sum DESC"
+    })
+
+    scope.find :all, :limit => limit
+  end
+
   private
 
     def update_counter_cache
+      return false unless self.data_response
       self.data_response.activities_count = data_response.activities.only_simple.count
       self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
       self.data_response.save(false)
@@ -469,6 +550,15 @@ class Activity < ActiveRecord::Base
       end
       data_rows
     end
+
+    #currency is still derived from the parent project or DR
+    def update_money_amounts
+      self.new_budget = gimme_the_caaaasssssshhhh(self.budget, self.currency)
+      self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
+      self.new_spend = gimme_the_caaaasssssshhhh(self.spend, self.currency)
+      self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
+    end
+
 end
 
 
@@ -477,10 +567,10 @@ end
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
@@ -507,7 +597,6 @@ end
 #  CodingSpend_amount                    :decimal(, )     default(0.0)
 #  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
 #  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  use_budget_codings_for_spend          :boolean         default(FALSE)
 #  budget_q1                             :decimal(, )
 #  budget_q2                             :decimal(, )
 #  budget_q3                             :decimal(, )
@@ -515,5 +604,11 @@ end
 #  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
+#  new_spend_cents                       :integer         default(0), not null
+#  new_spend_currency                    :string(255)
+#  new_spend_in_usd                      :integer         default(0), not null
+#  new_budget_cents                      :integer         default(0), not null
+#  new_budget_currency                   :string(255)
+#  new_budget_in_usd                     :integer         default(0), not null
 #
 

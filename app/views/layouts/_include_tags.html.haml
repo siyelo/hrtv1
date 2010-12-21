@@ -1,10 +1,10 @@
-= javascript_include_tag :defaults, 'jquery-1.4.2.min', 'jquery-ui-1.8.4.custom.min', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 's3Slider', "jquery.effects.core", "jquery.effects.highlight.js", 'jquery.rest_in_place.js', :cache => true
+- if controller.class.superclass.name == "ActiveScaffoldController"
+  = render 'layouts/active_scaffold_js'
+
+= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.4.custom.min', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 's3Slider', "jquery.effects.core", "jquery.effects.highlight.js", 'jquery.rest_in_place.js', 'application', :cache => true
 
 -# google visualization
-= Seer::init_visualization
-
-= record_select_includes
-= active_scaffold_includes
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 :javascript
   rails_authenticity_token = "#{form_authenticity_token}";
@@ -15,5 +15,3 @@
 
 /[if lt IE 8]
   = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
-
-

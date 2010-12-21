@@ -2,14 +2,17 @@
 
   - if current_user
     %ul
-      = render '/shared/dashboard_link', :dashboard_active => false
-      %li= link_to "My Profile", edit_user_url(current_user.id)
-      %li= link_to "Sign out", logout_path
+      %li
+        %a{ :href => user_dashboard_path(current_user)}
+          = image_tag"icon_dashboard.png"
+          Dashboard
+      %li
+        %a{ :href => edit_user_url(current_user.id)}
+          = image_tag"icon_profile.png"
+          My Profile
+      %li.last= link_to "Sign out", logout_path
     %span
-      - if current_user.organization
-        = "#{current_user.email} [#{truncate(current_user.organization.name, :length => 35)}]"
-      - else
-        = "#{current_user.email} [No organization specified]"
+      = "#{current_user.email}"
 
   - else
     %ul

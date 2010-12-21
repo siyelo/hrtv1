@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-
+  layout 'reporter' #TODO: separate reporter/admin actions
   #authorize_resource :class => Reports
   before_filter :require_user
 

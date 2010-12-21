@@ -1,0 +1,16 @@
+/
+  a count next to each item in brackets would be awesome
+  e.g.  Submitted (51)
+  but these need to be looked up or cached as the queries are
+  too slow
+/
+- nr_submitted = nr_in_progress = nr_empty = ''
+- nr_submitted = " (#{@submitted_responses.size})" if @submitted_responses
+- nr_in_progress = " (#{@in_progress_responses.size})" if @in_progress_responses
+- nr_empty = " (#{@empty_responses.size})" if @empty_responses
+
+
+%ul.group
+  %li= link_to "Submitted" + nr_submitted, submitted_admin_responses_path, active_if([:index, :submitted])
+  %li= link_to "In Progress" + nr_in_progress, in_progress_admin_responses_path, active_if(:in_progress)
+  %li= link_to "Empty" + nr_empty, empty_admin_responses_path, active_if(:empty)

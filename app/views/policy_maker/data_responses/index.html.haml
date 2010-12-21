@@ -20,8 +20,8 @@
               %td= data_response.responding_organization.user_email_list_limit_3
               %td= data_response.contact_phone_number
               %td
-                = link_to "Show", [:admin, data_response]
-                = link_to "Delete", delete_admin_data_response_path(data_response), :class => "destroy_btn"
+                = link_to "Show", admin_response_path(data_response)
+                = link_to "Delete", delete_admin_response_path(data_response), :class => "destroy_btn"
   .simple_table
     %h3="In Process Data Responses (#{@in_progress_data_responses.size})"
     - if @in_progress_data_responses.empty?
@@ -53,7 +53,7 @@
               %td= n2c data_response.total_activity_budget
               %td= "#{data_response.unclassified_activities_count} / #{data_response.activities_count}"
               %td
-                = link_to "Show", [:admin, data_response]
+                = link_to "Show", admin_response_path(data_response)
     .simple_table
       %h3="Submitted data responses for review (#{@submitted_data_responses.size})"
       - if @submitted_data_responses.empty?
@@ -74,4 +74,4 @@
                 %td= data_response.submitted_at
                 %td
                 %td
-                %td= link_to "Show", [:admin, data_response]
+                %td= link_to "Show", admin_response_path(data_response)

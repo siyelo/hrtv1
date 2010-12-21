@@ -1,2 +1,0 @@
-module Admin::DataResponsesHelper
-end

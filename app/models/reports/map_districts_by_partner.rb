@@ -9,7 +9,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
   #    @codes_to_include << Nsp.find_by_external_id(e)
-    partners_to_include = DataResponse.in_process.map(&:responding_organization) +
+    partners_to_include = DataResponse.in_progress.map(&:responding_organization) +
       DataResponse.submitted.map(&:responding_organization)
     partners_to_include = partners_to_include.uniq #just in case
       #[Organization.find_by_name("EGPAF"), Organization.find_by_name("CCHIPs")] #Org.all :joins => :provider_for
@@ -25,7 +25,7 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
 #    @district_proportions_hash = {} # activity => {location => proportion}
     @csv_string = FasterCSV.generate do |csv|
       @activities = activities
-      @report_type = report_type
+      @report_type = report_type.constantize
       @codes_to_include.each do |c|
         set_district_hash_for_code c
       end

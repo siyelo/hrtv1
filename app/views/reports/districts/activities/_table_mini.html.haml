@@ -13,5 +13,6 @@
         - spent_total = Money.new(activity.spent_sum.to_i, :USD)
         %td
           %ul
-            %li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            -#%li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(spent_total.usd_to_rwf, 'RWF')
             %li= "(#{n2c(spent_total, '$')})"

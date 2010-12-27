@@ -22,11 +22,13 @@
         - budget_total = Money.new(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total).to_i, :USD)
         %td
           %ul
-            %li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            -#%li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(spent_total.usd_to_rwf, 'RWF')
             %li= "(#{n2c(spent_total, '$')})"
           -#= n2c(spent_total)
         %td
           %ul
-            %li= n2c(budget_total.exchange_to(:RWF), 'RWF')
+            -#%li= n2c(budget_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(budget_total.usd_to_rwf, 'RWF')
             %li= "(#{n2c(budget_total, '$')})"
           -#= n2c(budget_total)

@@ -379,10 +379,10 @@ class Activity < ActiveRecord::Base
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+        LEFT OUTER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
                AND ca1.type = 'CodingSpendDistrict'
                AND ca1.code_id = #{code_id}
-        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+        LEFT OUTER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
                AND ca2.type = 'CodingBudgetDistrict'
                AND ca2.code_id = #{code_id}",
       :include => {:projects => {:funding_flows => :project}},

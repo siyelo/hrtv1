@@ -44,9 +44,9 @@ class Organization < ActiveRecord::Base
                   SUM(ca2.new_cached_amount_in_usd) as budget_sum",
       :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+        LEFT OUTER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
           AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
-        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+        LEFT OUTER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
           AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
       :group => "organizations.id, organizations.name",
       :order => "spent_sum DESC, budget_sum DESC"

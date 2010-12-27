@@ -7,7 +7,7 @@ module DistrictPies
     ### admin/district/:id/organizations
     def organizations(location, code_type)
       records = Organization.find :all,
-        :select => "organizations.id, organizations.name, SUM(ca1.cached_amount) as value",
+        :select => "organizations.id, organizations.name, SUM(ca1.new_cached_amount_in_usd) as value",
       :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
         INNER JOIN activities a1 ON dr1.id = a1.data_response_id
         INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id AND ca1.type = '#{code_type}' AND ca1.code_id = #{location.id}",
@@ -20,22 +20,22 @@ module DistrictPies
     ### admin/district/:id/activities
     def activities_spent(location)
       spent_codings = location.code_assignments.with_type("CodingSpendDistrict").find(:all,
-        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
+        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.new_cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
-        :order => 'cached_amount DESC')
+        :order => 'value DESC')
 
       prepare_activities_pie_values(spent_codings)
     end
 
     def activities_budget(location)
       budget_codings = location.code_assignments.with_type("CodingBudgetDistrict").find(:all,
-        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.cached_amount) AS cached_amount",
+        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.new_cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
-        :order => 'cached_amount DESC')
+        :order => 'value DESC')
 
       prepare_activities_pie_values(budget_codings)
     end
@@ -60,7 +60,7 @@ module DistrictPies
     ### show
     def activity_spent_ratio(location, activity)
       district_spend_coding = activity.coding_spend_district.with_location(location).find(:first)
-      spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.calculated_amount
+      spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.cached_amount
       if spend_coded_ok
         district_spent_ratio   = district_spend_coding.cached_amount / activity.spend # % that this district has allocated
         district_spent         = activity.spend * district_spent_ratio
@@ -82,7 +82,7 @@ module DistrictPies
 
     def activity_budget_ratio(location, activity)
       district_budget_coding = activity.coding_budget_district.with_location(location).find(:first)
-      budget_coded_ok = district_budget_coding && activity.budget && activity.budget > 0 && district_budget_coding.calculated_amount
+      budget_coded_ok = district_budget_coding && activity.budget && activity.budget > 0 && district_budget_coding.cached_amount
       if budget_coded_ok
         district_budgeted_ratio = district_budget_coding.cached_amount / activity.budget # % that this district has allocated
         district_budgeted       = activity.budget * district_budgeted_ratio
@@ -147,10 +147,11 @@ module DistrictPies
            activity_amount = activity.spend
          end
          coded_ok = district_coding && activity_amount &&
-                    activity_amount > 0 && district_coding.calculated_amount
+                    activity_amount > 0 && district_coding.cached_amount
          if coded_ok
+           code_assignments = coding_klass.with_code_ids(codes).with_activity(activity).select_for_pies
            ratio   = district_coding.cached_amount / activity_amount # % that this district has allocated
-           prepare_pie_values(coding_klass.with_code_ids(codes).with_activity(activity), ratio)
+           prepare_pie_values(code_assignments, ratio)
          end
        end
 
@@ -159,9 +160,9 @@ module DistrictPies
         other = 0.0
         code_assignments.each_with_index do |ca, index|
           if index < 5
-            values << [friendly_name(ca.activity), ca.cached_amount.to_f.round(2)]
+            values << [friendly_name(ca.activity), ca.value.to_f.round(2)]
           else
-            other += ca.cached_amount.to_f
+            other += ca.value.to_f
           end
         end
 
@@ -231,12 +232,9 @@ module DistrictPies
       end
 
       def load_pie(codes, district_klass, coding_klass, location, level = -1)
+        code_assignments = coding_klass.with_code_ids(codes).select_for_pies
         district_ratio   = calculate_district_ratio(district_klass, coding_klass, location)
-
-        return prepare_pie_values(coding_klass.with_code_ids(codes).find(:all,
-          :select => "code_assignments.code_id, SUM(code_assignments.cached_amount) AS cached_amount",
-          :include => :code,
-          :group => 'code_assignments.code_id'), district_ratio)
+        return prepare_pie_values(code_assignments, district_ratio)
       end
 
       # % that this district has allocated
@@ -250,7 +248,7 @@ module DistrictPies
       def prepare_pie_values(code_assignments, ratio)
         values = []
         code_assignments.each do |ca|
-          values << [ca.code_name, (ca.calculated_amount * ratio).round(2)]
+          values << [ca.code_name, (ca.value.to_f * ratio).round(2)]
         end
 
         {
@@ -277,7 +275,7 @@ module DistrictPies
         end
         sums
       end
-      
+
       def detect_sum(code_assignments, treemap_ratios, code_id)
         sum = 0
 
@@ -287,7 +285,7 @@ module DistrictPies
             ratios = treemap_ratios[amount.activity_id]
             if ratios.present?
               ratio = ratios.first.ratio.to_f
-              sum += amount.cached_amount * ratio
+              sum += amount.value.to_f * ratio
             end
           end
         end

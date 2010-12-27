@@ -38,12 +38,16 @@ class Organization < ActiveRecord::Base
     raise "Missing code_id param".to_yaml unless code_id
 
     scope = self.scoped({
-      :select => 'organizations.id, organizations.name, SUM(ca1.cached_amount * COALESCE(currencies."toRWF", 1)) as spent_sum, SUM(ca2.cached_amount * COALESCE(currencies."toRWF", 1)) as budget_sum',
+      :select => "organizations.id,
+                  organizations.name,
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum,
+                  SUM(ca2.new_cached_amount_in_usd) as budget_sum",
       :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
-        LEFT OUTER JOIN currencies ON data_responses.currency = currencies.symbol
         INNER JOIN activities ON data_responses.id = activities.data_response_id
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
-        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+          AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}
+        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+          AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
       :group => "organizations.id, organizations.name",
       :order => "spent_sum DESC, budget_sum DESC"
     })
@@ -58,11 +62,13 @@ class Organization < ActiveRecord::Base
     raise "Missing code_id param".to_yaml unless code_id
 
     scope = self.scoped({
-      :select => 'organizations.id, organizations.name, SUM(ca1.cached_amount * COALESCE(currencies."toRWF", 1)) as spent_sum',
+      :select => "organizations.id,
+                  organizations.name,
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
       :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
-        LEFT OUTER JOIN currencies ON data_responses.currency = currencies.symbol
         INNER JOIN activities ON data_responses.id = activities.data_response_id
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+          AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
       :group => "organizations.id, organizations.name",
       :order => "spent_sum DESC"
     })

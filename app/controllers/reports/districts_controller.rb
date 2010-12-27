@@ -4,10 +4,10 @@ class Reports::DistrictsController < Reports::BaseController
   def index
     @locations = Location.all_with_counters
     @spent_codings = CodingSpendDistrict.find(:all,
-                       :select => "code_id, SUM(cached_amount) AS total",
+                       :select => "code_id, SUM(new_cached_amount_in_usd) AS total",
                        :conditions => ["code_id IN (?)", @locations.map(&:id)], :group => 'code_id')
     @budget_codings = CodingBudgetDistrict.find(:all,
-                       :select => "code_id, SUM(cached_amount) AS total",
+                       :select => "code_id, SUM(new_cached_amount_in_usd) AS total",
                        :conditions => ["code_id IN (?)", @locations.map(&:id)], :group => 'code_id')
   end
 

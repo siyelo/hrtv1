@@ -13,9 +13,18 @@ class Location < Code
                     WHERE locations_organizations.location_id = codes.id) AS organizations_count,
                   (SELECT COUNT(*) FROM activities
                     INNER JOIN activities_locations ON activities.id = activities_locations.activity_id
-                    WHERE activities_locations.location_id = codes.id) AS activities_count
-                 ",
-                :order => "short_display ASC"
+                    WHERE activities_locations.location_id = codes.id) AS activities_count,
+                  SUM(ca1.cached_amount) as spent_sum,
+                  SUM(ca2.cached_amount) as budget_sum
+                ",
+                :joins => "
+                  LEFT OUTER JOIN code_assignments ca1 ON codes.id = ca1.code_id
+                     AND ca1.type = 'CodingSpendDistrict'
+                  LEFT OUTER JOIN code_assignments ca2 ON codes.id = ca2.code_id
+                     AND ca2.type = 'CodingBudgetDistrict'
+                ",
+                :order => "short_display ASC",
+                :group => "codes.id, codes.short_display, codes.type"
 end
 
 

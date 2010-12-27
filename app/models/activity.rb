@@ -128,7 +128,7 @@ class Activity < ActiveRecord::Base
 
   def currency
     tentative_currency = data_response.try(:currency)
-    unless projects.empty?
+    unless projects.blank?
       tentative_currency = projects.first.currency unless projects.first.currency.blank?
     end
     tentative_currency

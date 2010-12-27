@@ -9,5 +9,18 @@
     - organizations.each do |organization|
       %tr{:class => cycle("even", "odd")}
         %td= link_to organization.name, reports_district_organization_path(location, organization)
-        %td= n2c(organization.spent_sum.to_i, 'RWF')
-        %td= n2c(organization.budget_sum.to_i, 'RWF')
+
+        - spent_total = Money.new(organization.spent_sum.to_i, :USD)
+        - budget_total = Money.new(organization.budget_sum.to_i, :USD)
+        %td
+          %ul
+            %li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"
+
+          -#= n2c(organization.spent_sum.to_i, 'RWF')
+        %td
+          %ul
+            %li= n2c(budget_total.exchange_to(:RWF), 'RWF')
+            %li= "(#{n2c(budget_total, '$')})"
+
+          -#= n2c(organization.budget_sum.to_i, 'RWF')

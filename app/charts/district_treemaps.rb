@@ -106,7 +106,7 @@ module DistrictTreemaps
             ratios = treemap_ratios[amount.activity_id]
             if ratios.present?
               ratio = ratios.first.ratio.to_f
-              sum += amount.cached_amount * ratio
+              sum += amount.value.to_f * ratio
             end
           end
         end

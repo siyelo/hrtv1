@@ -40,22 +40,31 @@ module DistrictPies
       prepare_activities_pie_values(budget_codings)
     end
 
-    def activities_nsp_spent(location)
-      load_nsp_pie(CodingSpendDistrict, CodingSpend, location)
+    def district_pie(location, type, is_spent, level = -1)
+      case type
+      when 'mtef'
+        codes = get_mtef_codes(level)
+        if is_spent
+          load_pie(codes, CodingSpendDistrict, CodingSpend, location)
+        else
+          load_pie(codes, CodingBudgetDistrict, CodingBudget, location)
+        end
+      when 'cost_category'
+        if is_spent
+          load_pie(CostCategory.roots, CodingSpendDistrict, CodingSpendCostCategorization, location)
+        else
+          load_pie(CostCategory.roots, CodingBudgetDistrict, CodingBudgetCostCategorization, location)
+        end
+      when 'nsp'
+        if is_spent
+          load_pie(Nsp.roots, CodingSpendDistrict, CodingSpend, location)
+        else
+          load_pie(Nsp.roots, CodingBudgetDistrict, CodingBudget, location)
+        end
+      else
+        raise "Invalid type #{type}".to_yaml
+      end
     end
-
-    def activities_nsp_budget(location)
-      load_nsp_pie(CodingBudgetDistrict, CodingBudget, location)
-    end
-
-    def activities_mtef_spent(location, level = -1)
-      load_mtef_pie(CodingSpendDistrict, CodingSpend, location, level)
-    end
-
-    def activities_mtef_budget(location, level = -1)
-      load_mtef_pie(CodingBudgetDistrict, CodingBudget, location, level)
-    end
-
 
     ### show
     def activity_spent_ratio(location, activity)
@@ -68,16 +77,22 @@ module DistrictPies
       end
     end
 
-    def activity_nsp_spent(location, activity)
-      coding_klass = CodingSpend
-      codes = Nsp.leaves
-      activity_spent(location, activity, coding_klass, codes)
-    end
+    def activity_pie(location, activity, type, is_spent)
+      case type
+      when 'mtef'
+        codes = Mtef.leaves
+        coding_klass = is_spent ? CodingSpend : CodingBudget
+      when 'nsp'
+        codes = Nsp.leaves
+        coding_klass = is_spent ? CodingSpend : CodingBudget
+      when 'cost_category'
+        codes = CostCategory.leaves
+        coding_klass = is_spent ? CodingSpendCostCategorization : CodingBudgetCostCategorization
+      else
+        raise "Invalid type".to_yaml
+      end
 
-    def activity_mtef_spent(location, activity)
-      coding_klass = CodingSpend
-      codes = Mtef.leaves
-      activity_spent(location, activity, coding_klass, codes)
+      get_activity_pie(location, activity, coding_klass, codes)
     end
 
     def activity_budget_ratio(location, activity)
@@ -90,55 +105,36 @@ module DistrictPies
       end
     end
 
-    def activity_nsp_budget(location, activity)
-      coding_klass = CodingBudget
-      codes = Nsp.leaves
-      activity_spent(location, activity, coding_klass, codes)
-    end
-
-    def activity_mtef_budget(location, activity)
-      coding_klass = CodingBudget
-      codes = Mtef.leaves
-      activity_spent(location, activity, coding_klass, codes)
-    end
-
     ### admin/district/:id/organizations/:id
-    def organization_mtef_spent(location, activities)
-      coding_type    = "CodingSpend"
-      codes          = Mtef.leaves
-      district_type  = "CodingSpendDistrict"
-      activity_value = "spend"
-      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
-    end
+    def organization_pie(location, activities, type, is_spent)
+      case type
+      when 'mtef'
+        codes = Mtef.leaves
+        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
+      when 'cost_category'
+        codes = CostCategory.roots
+        coding_type = is_spent ? "CodingSpendCostCategorization" : "CodingBudgetCostCategorization"
+      when 'nsp'
+        codes = Nsp.roots
+        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
+      else
+        raise "Invalid type".to_yaml
+      end
 
-    def organization_mtef_budget(location, activities)
-      coding_type    = "CodingBudget"
-      codes          = Mtef.leaves
-      district_type  = "CodingBudgetDistrict"
-      activity_value = "budget"
-      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
-    end
-
-    def organization_nsp_spent(location, activities)
-      coding_type    = "CodingSpend"
-      codes          = Nsp.roots
-      district_type  = "CodingSpendDistrict"
-      activity_value = "spend"
-      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
-    end
-
-    def organization_nsp_budget(location, activities)
-      coding_type    = "CodingBudget"
-      codes          = Nsp.roots
-      district_type  = "CodingBudgetDistrict"
-      activity_value = "budget"
+      if is_spent
+        district_type  = "CodingSpendDistrict"
+        activity_value = "spend"
+      else
+        district_type  = "CodingBudgetDistrict"
+        activity_value = "budget"
+      end
 
       prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
     end
 
     private
 
-      def activity_spent(location, activity, coding_klass, codes)
+      def get_activity_pie(location, activity, coding_klass, codes)
          if coding_klass == CodingBudget
            district_coding = activity.coding_budget_district.with_location(location).find(:first)
            activity_amount = activity.budget
@@ -217,21 +213,22 @@ module DistrictPies
 
 
       def load_nsp_pie(district_klass, coding_klass, location)
-        codes = Nsp.roots
-        return load_pie(codes, district_klass, coding_klass, location, -1)
+        load_pie(Nsp.roots, district_klass, coding_klass, location)
       end
 
-      def load_mtef_pie(district_klass, coding_klass, location, level = -1)
+
+      def get_mtef_codes(level = -1)
         unless level == -1
           codes = []
           Mtef.each_with_level(Mtef.all){|o, lvl| codes << o if lvl == level}
         else
           codes = Mtef.leaves
         end
-        return load_pie(codes, district_klass, coding_klass, location, level = -1)
+
+        return codes
       end
 
-      def load_pie(codes, district_klass, coding_klass, location, level = -1)
+      def load_pie(codes, district_klass, coding_klass, location)
         code_assignments = coding_klass.with_code_ids(codes).select_for_pies
         district_ratio   = calculate_district_ratio(district_klass, coding_klass, location)
         return prepare_pie_values(code_assignments, district_ratio)

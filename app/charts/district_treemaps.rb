@@ -2,47 +2,36 @@ module DistrictTreemaps
   extend NumberHelper
 
   class << self
-    def mtef(location, activities, type)
+    def treemap(location, activities, type, is_spent)
       #return Code.treemap(location.activities, 'mtef_spend').to_json
       #return Code.treemap(location.activities, 'mtef_budget').to_json
-      codes          = Mtef.all + Nsp.all + Nha.all + Nasa.all
-      roots          = Mtef.roots
 
-      if type == "spend"
-        ca_type           = "CodingSpend"
-        district_type     = "CodingSpendDistrict"
-        activity_value    = "spend"
-      elsif type == "budget"
-        ca_type           = "CodingBudget"
-        district_type     = "CodingBudgetDistrict"
-        activity_value    = "budget"
+      if type == 'mtef'
+        codes   = Mtef.all + Nsp.all + Nha.all + Nasa.all
+        roots   = Mtef.roots
+        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
+      elsif type == 'nsp'
+        codes   = Nsp.all
+        roots   = Nsp.roots
+        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
+      elsif type == 'cost_category'
+        codes = CostCategory.all
+        roots = CostCategory.roots
+        coding_type = is_spent ? "CodingSpendCostCategorization" : "CodingBudgetCostCategorization"
       else
-        raise "Invalid type for district mtef treemap".to_yaml
+        raise "Invalid type for district treemap".to_yaml
       end
 
-      get_treemap_rows(roots, codes, ca_type, activities, location, district_type, activity_value).to_json
-    end
+      if is_spent
+        district_type     = "CodingSpendDistrict"
+        activity_value    = "spend"
+      else
+        district_type     = "CodingBudgetDistrict"
+        activity_value    = "budget"
+      end
 
-    def nsp_spent(location, activities)
-      #return Code.treemap(location.activities, 'nsp_spend').to_json
-      codes          = Nsp.all
-      roots          = Nsp.roots
-      type           = "CodingSpend"
-      district_type  = "CodingSpendDistrict"
-      activity_value = "spend"
-      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
+      get_treemap_rows(roots, codes, coding_type, activities, location, district_type, activity_value).to_json
     end
-
-    def nsp_budget(location, activities)
-      #return Code.treemap(location.activities, 'nsp_budget').to_json
-      codes          = Nsp.all
-      roots          = Nsp.roots
-      type           = "CodingBudget"
-      district_type  = "CodingBudgetDistrict"
-      activity_value = "budget"
-      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
-    end
-
 
     private
 

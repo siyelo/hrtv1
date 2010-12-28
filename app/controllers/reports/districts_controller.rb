@@ -19,30 +19,30 @@ class Reports::DistrictsController < Reports::BaseController
     when "mtef"
       @mtef = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::mtef(@location, @location.activities, 'spend')
-        @code_budget_values  = DistrictTreemaps::mtef(@location, @location.activities, 'budget')
+        @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'mtef', true)
+        @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'mtef', false)
       else
-        @code_spent_values   = DistrictPies::activities_mtef_spent(@location, MTEF_CODE_LEVEL)
-        @code_budget_values  = DistrictPies::activities_mtef_budget(@location, MTEF_CODE_LEVEL)
+        @code_spent_values   = DistrictPies::district_pie(@location, 'mtef', true, MTEF_CODE_LEVEL)
+        @code_budget_values  = DistrictPies::district_pie(@location, 'mtef', false, MTEF_CODE_LEVEL)
       end
     when 'cost_category'
       @cost_category = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::district_cost_category_spent(@location, @location.activities)
-        @code_budget_values  = DistrictTreemaps::district_cost_category_budget(@location, @location.activities)
+        @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'cost_category', 'true')
+        @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'cost_category', false)
       else
-        @code_spent_values   = DistrictPies::activities_cost_category_spent(@location)
-        @code_budget_values  = DistrictPies::activities_cost_category_budget(@location)
+        @code_spent_values   = DistrictPies::district_pie(@location, 'cost_category', true)
+        @code_budget_values  = DistrictPies::district_pie(@location, 'cost_category', false)
       end
     else
       @nsp = true
       #TODO: - NSP level 1 or 2 etc
       if @treemap
-        @code_spent_values   = DistrictTreemaps::nsp(@location, @location.activities, 'spent')
-        @code_budget_values  = DistrictTreemaps::nsp(@location, @location.activities, 'budget')
+        @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'nsp', true)
+        @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'nsp', false)
       else
-        @code_spent_values   = DistrictPies::activities_nsp_spent(@location)
-        @code_budget_values  = DistrictPies::activities_nsp_budget(@location)
+        @code_spent_values   = DistrictPies::district_pie(@location, 'nsp', true)
+        @code_budget_values  = DistrictPies::district_pie(@location, 'nsp', false)
       end
     end
 

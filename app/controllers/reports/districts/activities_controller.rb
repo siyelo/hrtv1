@@ -18,20 +18,29 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     when "mtef"
       @mtef = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::mtef(@location, [@activity], 'spent')
-        @code_budget_values  = DistrictTreemaps::mtef(@location, [@activity], 'budget')
+        @code_spent_values   = DistrictTreemaps::treemap(@location, [@activity], 'mtef', true)
+        @code_budget_values  = DistrictTreemaps::treemap(@location, [@activity], 'mtef', false)
       else
-        @code_spent_values  = DistrictPies::activity_mtef_spent(@location, @activity)
-        @code_budget_values = DistrictPies::activity_mtef_budget(@location, @activity)
+        @code_spent_values  = DistrictPies::activity_pie(@location, @activity, 'mtef', true)
+        @code_budget_values = DistrictPies::activity_pie(@location, @activity, 'mtef', false)
+      end
+    when 'cost_category'
+      @cost_category = true
+      if @treemap
+        @code_spent_values   = DistrictTreemaps::treemap(@location, [@activity], 'cost_category', true)
+        @code_budget_values  = DistrictTreemaps::treemap(@location, [@activity], 'cost_category', false)
+      else
+        @code_spent_values  = DistrictPies::activity_pie(@location, @activity, 'cost_category', true)
+        @code_budget_values = DistrictPies::activity_pie(@location, @activity, 'cost_category', false)
       end
     else
       @nsp = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::nsp(@location, [@activity], 'spent')
-        @code_budget_values  = DistrictTreemaps::nsp(@location, [@activity], 'budget')
+        @code_spent_values   = DistrictTreemaps::treemap(@location, [@activity], 'nsp', true)
+        @code_budget_values  = DistrictTreemaps::treemap(@location, [@activity], 'nsp', false)
       else
-        @code_spent_values   = DistrictPies::activity_nsp_spent(@location, @activity)
-        @code_budget_values  = DistrictPies::activity_nsp_budget(@location, @activity)
+        @code_spent_values   = DistrictPies::activity_pie(@location, @activity, 'nsp', true)
+        @code_budget_values  = DistrictPies::activity_pie(@location, @activity, 'nsp', false)
       end
     end
     @charts_loaded  = @spent_pie_values && @budget_pie_values &&

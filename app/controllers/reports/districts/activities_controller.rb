@@ -18,8 +18,8 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     when "mtef"
       @mtef = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::district_mtef_spent(@location, [@activity])
-        @code_budget_values  = DistrictTreemaps::district_mtef_budget(@location, [@activity])
+        @code_spent_values   = DistrictTreemaps::mtef(@location, [@activity], 'spent')
+        @code_budget_values  = DistrictTreemaps::mtef(@location, [@activity], 'budget')
       else
         @code_spent_values  = DistrictPies::activity_mtef_spent(@location, @activity)
         @code_budget_values = DistrictPies::activity_mtef_budget(@location, @activity)
@@ -27,8 +27,8 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     else
       @nsp = true
       if @treemap
-        @code_spent_values   = DistrictTreemaps::nsp_spent(@location, [@activity])
-        @code_budget_values  = DistrictTreemaps::nsp_budget(@location, [@activity])
+        @code_spent_values   = DistrictTreemaps::nsp(@location, [@activity], 'spent')
+        @code_budget_values  = DistrictTreemaps::nsp(@location, [@activity], 'budget')
       else
         @code_spent_values   = DistrictPies::activity_nsp_spent(@location, @activity)
         @code_budget_values  = DistrictPies::activity_nsp_budget(@location, @activity)

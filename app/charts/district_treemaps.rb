@@ -2,24 +2,25 @@ module DistrictTreemaps
   extend NumberHelper
 
   class << self
-    def district_mtef_spent(location, activities)
+    def mtef(location, activities, type)
       #return Code.treemap(location.activities, 'mtef_spend').to_json
-      codes          = Mtef.all + Nsp.all + Nha.all + Nasa.all
-      roots          = Mtef.roots
-      type           = "CodingSpend"
-      district_type  = "CodingSpendDistrict"
-      activity_value = "spend"
-      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
-    end
-
-    def district_mtef_budget(location, activities)
       #return Code.treemap(location.activities, 'mtef_budget').to_json
       codes          = Mtef.all + Nsp.all + Nha.all + Nasa.all
       roots          = Mtef.roots
-      type           = "CodingBudget"
-      district_type  = "CodingBudgetDistrict"
-      activity_value = "budget"
-      get_treemap_rows(roots, codes, type, activities, location, district_type, activity_value).to_json
+
+      if type == "spend"
+        ca_type           = "CodingSpend"
+        district_type     = "CodingSpendDistrict"
+        activity_value    = "spend"
+      elsif type == "budget"
+        ca_type           = "CodingBudget"
+        district_type     = "CodingBudgetDistrict"
+        activity_value    = "budget"
+      else
+        raise "Invalid type for district mtef treemap".to_yaml
+      end
+
+      get_treemap_rows(roots, codes, ca_type, activities, location, district_type, activity_value).to_json
     end
 
     def nsp_spent(location, activities)

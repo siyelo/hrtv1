@@ -49,7 +49,8 @@ class Organization < ActiveRecord::Base
         LEFT OUTER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
           AND ca2.type = 'CodingBudgetDistrict' AND ca2.code_id = #{code_id}",
       :group => "organizations.id, organizations.name",
-      :order => "spent_sum DESC, budget_sum DESC"
+      :order => "spent_sum DESC, budget_sum DESC",
+      :conditions => "ca1.new_cached_amount_in_usd > 0 OR ca2.new_cached_amount_in_usd > 0"
     })
 
     scope.paginate :all, :per_page => per_page, :page => page

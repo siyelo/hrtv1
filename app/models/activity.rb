@@ -390,7 +390,8 @@ class Activity < ActiveRecord::Base
                  activities.name,
                  activities.description,
                  org_name",
-      :order => "spent_sum DESC, budget_sum DESC"
+      :order => "spent_sum DESC, budget_sum DESC",
+      :conditions => "ca1.new_cached_amount_in_usd > 0 OR ca2.new_cached_amount_in_usd > 0"
     })
 
     scope.paginate :all, :per_page => per_page, :page => page

@@ -848,6 +848,18 @@ var reports_districts_show = {
   }
 };
 
+var reports_countries_show = {
+  run: function () {
+    if (_treemap) {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
+    } else {
+      drawPieChart('code_spent', _code_spent_values);
+      drawPieChart('code_budget', _code_budget_values);
+    }
+  }
+}
+
 var reports_districts_activities_show = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values);

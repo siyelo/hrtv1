@@ -1,7 +1,7 @@
-Feature: Admin can review districts
+Feature: Admin can review country
   In order to reduce costs
   As an admin
-  I want to be able to see district review screen
+  I want to be able to see country review screen
 
 Background:
   Given a code exists with short_display: "Code A"
@@ -25,19 +25,19 @@ Background:
   And a coding_budget_district exists with activity: the activity, code: the first location
   And a coding_spend_district exists with activity: the activity, code: the first location
 
-@districts_review
+@country_review
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Review Districts"
-  Then I should see "Review Districts" within "h1"
-  And I follow "Location A"
-  Then I should see "Location A" within "h1"
-  And I follow "View all Activities"
-  Then I should see "Activities" within "h1"
-  When I follow "Activity A"
-  Then I should see "Activity A" within "h1"
-  And I should see "Proportion Spent"
-  And I should see "Proportion Budget"
-  And I should see "NSP Spent"
-  And I should see "NSP Budget"
+  And I follow "National Review"
+  #Then I should see "Review Districts" within "h1"
+  #And I follow "Location A"
+  #Then I should see "Location A" within "h1"
+  #And I follow "View all Activities"
+  #Then I should see "Activities" within "h1"
+  #When I follow "Activity A"
+  #Then I should see "Activity A" within "h1"
+  #And I should see "Proportion Spent"
+  #And I should see "Proportion Budget"
+  #And I should see "NSP Spent"
+  #And I should see "NSP Budget"

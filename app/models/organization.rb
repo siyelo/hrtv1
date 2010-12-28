@@ -66,11 +66,36 @@ class Organization < ActiveRecord::Base
       :select => "organizations.id,
                   organizations.name,
                   SUM(ca1.new_cached_amount_in_usd) as spent_sum",
-      :joins => "INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
+      :joins => "
+        INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id
         INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
-          AND ca1.type = 'CodingSpendDistrict' AND ca1.code_id = #{code_id}",
-      :group => "organizations.id, organizations.name",
+          AND ca1.type = 'CodingSpendDistrict'
+          AND ca1.code_id = #{code_id}",
+      :group => "organizations.id,
+                 organizations.name",
+      :order => "spent_sum DESC"
+    })
+
+    scope.find :all, :limit => limit
+  end
+
+  def self.top_by_spent_for_country(options)
+    limit    = options[:limit] || nil
+    code_ids = Mtef.leaves.map(&:id).join(',')
+
+    scope = self.scoped({
+      :select => "organizations.id,
+                  organizations.name,
+                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
+      :joins => "
+        INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN activities ON data_responses.id = activities.data_response_id
+        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+          AND ca1.type = 'CodingSpend'
+          AND ca1.code_id IN (#{code_ids})",
+      :group => "organizations.id,
+                 organizations.name",
       :order => "spent_sum DESC"
     })
 

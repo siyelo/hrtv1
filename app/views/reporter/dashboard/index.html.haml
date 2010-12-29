@@ -18,8 +18,8 @@
   .dashboard_section
     %ul.admin_dashboard
       - if @data_requests_unfulfilled.empty?
-        %li You do not need to respond to any Data Requests right now.
-        %span.hint Check back regularly for new Data Requests
+        %li You do not need to respond to any additional data requests right now.
+        %span.hint We will email you with any additional requests for data
       - @data_requests_unfulfilled.each do |req|
         - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
           = form.hidden_field(:organization_id_responder)
@@ -34,10 +34,11 @@
     Reports
   .dashboard_section
     %ul.admin_reports
-      %li
-        %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
-          Review My Response
-          %span.hint Interactive report of your current data response
+      - if current_user.current_data_response
+        %li
+          %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
+            Review My Response
+            %span.hint Interactive report of your current data response
       %li
         %a{ :href => reports_districts_path, :class => "drill_down"}
           Review Districts

@@ -128,7 +128,7 @@ class Activity < ActiveRecord::Base
 
   def currency
     tentative_currency = data_response.try(:currency)
-    unless projects.empty?
+    unless projects.blank?
       tentative_currency = projects.first.currency unless projects.first.currency.blank?
     end
     tentative_currency
@@ -379,10 +379,10 @@ class Activity < ActiveRecord::Base
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
+        LEFT OUTER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
                AND ca1.type = 'CodingSpendDistrict'
                AND ca1.code_id = #{code_id}
-        INNER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
+        LEFT OUTER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
                AND ca2.type = 'CodingBudgetDistrict'
                AND ca2.code_id = #{code_id}",
       :include => {:projects => {:funding_flows => :project}},
@@ -390,7 +390,8 @@ class Activity < ActiveRecord::Base
                  activities.name,
                  activities.description,
                  org_name",
-      :order => "spent_sum DESC, budget_sum DESC"
+      :order => "spent_sum DESC, budget_sum DESC",
+      :conditions => "ca1.new_cached_amount_in_usd > 0 OR ca2.new_cached_amount_in_usd > 0"
     })
 
     scope.paginate :all, :per_page => per_page, :page => page

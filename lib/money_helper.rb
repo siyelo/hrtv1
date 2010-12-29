@@ -11,3 +11,11 @@ module MoneyHelper
   end
 
 end
+
+# exchange_to(:RWF) - gives wrong values on big numbers
+# use usd_to_rwf method instead
+class Money
+  def usd_to_rwf
+    self * self.bank.rates["USD_TO_RWF"]
+  end
+end

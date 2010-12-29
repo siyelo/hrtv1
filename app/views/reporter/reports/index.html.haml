@@ -8,10 +8,11 @@
     Data Responses
   .dashboard_section
     %ul.admin_reports
-      %li
-        %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
-          Review My Response
-          %span.hint Interactive report of your current data response
+      - if current_user.current_data_response
+        %li
+          %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
+            Review My Response
+            %span.hint Interactive report of your current data response
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

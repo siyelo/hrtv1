@@ -18,5 +18,17 @@
         %td= link_to "#{h loc.name}", reports_district_path(loc)
         %td= loc.organizations_count
         %td= loc.activities_count
-        %td= n2c(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total))
-        %td= n2c(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total))
+        - spent_total = Money.new(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total).to_i, :USD)
+        - budget_total = Money.new(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total).to_i, :USD)
+        %td
+          %ul
+            -#%li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(spent_total.usd_to_rwf, 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"
+          -#= n2c(spent_total)
+        %td
+          %ul
+            -#%li= n2c(budget_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(budget_total.usd_to_rwf, 'RWF')
+            %li= "(#{n2c(budget_total, '$')})"
+          -#= n2c(budget_total)

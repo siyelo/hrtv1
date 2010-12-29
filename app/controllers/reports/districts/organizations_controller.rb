@@ -3,9 +3,14 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
   before_filter :load_location
 
   def index
+    @organizations     = Organization.top_by_spent_and_budget({
+                                                               :per_page => 25,
+                                                               :page => params[:page],
+                                                               :code_ids => [@location.id],
+                                                               :type => 'district'
+                                                             })
     @spent_pie_values  = DistrictPies::organizations(@location, "CodingSpendDistrict")
     @budget_pie_values = DistrictPies::organizations(@location, "CodingBudgetDistrict")
-    @organizations     = Organization.top_by_spent_and_budget({:per_page => 25, :page => params[:page], :code_id => @location.id})
   end
 
   def show

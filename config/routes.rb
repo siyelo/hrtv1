@@ -133,7 +133,10 @@ ActionController::Routing::Routes.draw do |map|
       districts.resources :activities, :only => [:index, :show], :controller => "districts/activities"
       districts.resources :organizations, :only => [:index, :show], :controller => "districts/organizations"
     end
-    reports.resource :country
+    reports.resource :country do |country|
+      country.resources :activities, :only => [:index, :show], :controller => "countries/activities"
+      country.resources :organizations, :only => [:index, :show], :controller => "countries/organizations"
+    end
   end
 
   map.namespace :policy_maker do |policy_maker|

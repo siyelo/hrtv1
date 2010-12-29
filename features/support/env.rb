@@ -18,6 +18,7 @@ require 'capybara/session'
 require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links with onclick javascript handlers without using @culerity or @javascript
 
 require 'factory_girl'
+require 'spec/stubs/cucumber'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'/../../spec/factories','**','*.rb'))].each {|f| require f}
 
 #allow us to catch all errors - mainly for CanCan auth errors

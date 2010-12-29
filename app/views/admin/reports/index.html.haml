@@ -24,6 +24,17 @@
           %span.hint Interactive reports for all districts
 
   %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    National
+  .dashboard_section
+    %ul.admin_reports
+      %li
+        %a{ :href => reports_country_path, :class => "drill_down"}
+          National review
+          %span.hint Interactive reports of country
+      %li
+
+  %h2
     =image_tag "icon_users.png", :class => "heading_icon"
     Users
   .dashboard_section

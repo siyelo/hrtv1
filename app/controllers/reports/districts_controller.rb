@@ -22,8 +22,8 @@ class Reports::DistrictsController < Reports::BaseController
         @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'mtef', true)
         @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'mtef', false)
       else
-        @code_spent_values   = DistrictPies::district_pie(@location, 'mtef', true, MTEF_CODE_LEVEL)
-        @code_budget_values  = DistrictPies::district_pie(@location, 'mtef', false, MTEF_CODE_LEVEL)
+        @code_spent_values   = DistrictPies::pie(@location, 'mtef', true, MTEF_CODE_LEVEL)
+        @code_budget_values  = DistrictPies::pie(@location, 'mtef', false, MTEF_CODE_LEVEL)
       end
     when 'cost_category'
       @cost_category = true
@@ -31,8 +31,8 @@ class Reports::DistrictsController < Reports::BaseController
         @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'cost_category', 'true')
         @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'cost_category', false)
       else
-        @code_spent_values   = DistrictPies::district_pie(@location, 'cost_category', true)
-        @code_budget_values  = DistrictPies::district_pie(@location, 'cost_category', false)
+        @code_spent_values   = DistrictPies::pie(@location, 'cost_category', true)
+        @code_budget_values  = DistrictPies::pie(@location, 'cost_category', false)
       end
     else
       @nsp = true
@@ -41,12 +41,20 @@ class Reports::DistrictsController < Reports::BaseController
         @code_spent_values   = DistrictTreemaps::treemap(@location, @location.activities, 'nsp', true)
         @code_budget_values  = DistrictTreemaps::treemap(@location, @location.activities, 'nsp', false)
       else
-        @code_spent_values   = DistrictPies::district_pie(@location, 'nsp', true)
-        @code_budget_values  = DistrictPies::district_pie(@location, 'nsp', false)
+        @code_spent_values   = DistrictPies::pie(@location, 'nsp', true)
+        @code_budget_values  = DistrictPies::pie(@location, 'nsp', false)
       end
     end
 
-    @top_activities        = Activity.top_by_spent({:limit => 5, :code_id => @location.id})
-    @top_organizations     = Organization.top_by_spent({:limit => 5, :code_id => @location.id})
+    @top_activities    = Activity.top_by_spent({
+                                                :limit => 5,
+                                                :code_ids => [@location.id],
+                                                :type => 'district'
+                                              })
+    @top_organizations = Organization.top_by_spent({
+                                                    :limit => 5,
+                                                    :code_ids => [@location.id],
+                                                    :type => 'district'
+                                                  })
   end
 end

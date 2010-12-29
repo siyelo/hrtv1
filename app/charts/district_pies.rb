@@ -7,74 +7,55 @@ module DistrictPies
     ### admin/district/:id/organizations
     def organizations(location, code_type)
       records = Organization.find :all,
-        :select => "organizations.id, organizations.name, SUM(ca1.new_cached_amount_in_usd) as value",
-      :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
-        INNER JOIN activities a1 ON dr1.id = a1.data_response_id
-        INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id AND ca1.type = '#{code_type}' AND ca1.code_id = #{location.id}",
-      :group => "organizations.id, organizations.name",
+        :select => "organizations.id,
+          organizations.name,
+          SUM(ca1.new_cached_amount_in_usd) as value",
+        :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
+          INNER JOIN activities a1 ON dr1.id = a1.data_response_id
+          INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id
+            AND ca1.type = '#{code_type}'
+            AND ca1.code_id = #{location.id}",
+      :group => "organizations.id,
+                 organizations.name",
       :order => "value DESC"
 
       prepare_organizations_pie_values(records)
     end
 
     ### admin/district/:id/activities
-    def activities_spent(location)
-      spent_codings = location.code_assignments.with_type("CodingSpendDistrict").find(:all,
-        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.new_cached_amount_in_usd) AS value",
+    def activities(location, coding_type)
+      spent_codings = location.code_assignments.with_type(coding_type).find(:all,
+        :select => "code_assignments.id,
+                    code_assignments.activity_id,
+                    activities.name AS activity_name,
+                    SUM(code_assignments.new_cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
-        :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
+        :group => 'code_assignments.activity_id,
+                   activities.name,
+                   code_assignments.id',
         :order => 'value DESC')
 
       prepare_activities_pie_values(spent_codings)
     end
 
-    def activities_budget(location)
-      budget_codings = location.code_assignments.with_type("CodingBudgetDistrict").find(:all,
-        :select => "code_assignments.id, code_assignments.activity_id, activities.name AS activity_name, SUM(code_assignments.new_cached_amount_in_usd) AS value",
-        :joins => :activity,
-        :include => :activity,
-        :group => 'code_assignments.activity_id, activities.name, code_assignments.id',
-        :order => 'value DESC')
-
-      prepare_activities_pie_values(budget_codings)
-    end
-
-    def district_pie(location, type, is_spent, level = -1)
+    def pie(location, type, is_spent, level = -1)
       case type
       when 'mtef'
         codes = get_mtef_codes(level)
-        if is_spent
-          load_pie(codes, CodingSpendDistrict, CodingSpend, location)
-        else
-          load_pie(codes, CodingBudgetDistrict, CodingBudget, location)
-        end
+        coding_klass = is_spent ? CodingSpend : CodingBudget
       when 'cost_category'
-        if is_spent
-          load_pie(CostCategory.roots, CodingSpendDistrict, CodingSpendCostCategorization, location)
-        else
-          load_pie(CostCategory.roots, CodingBudgetDistrict, CodingBudgetCostCategorization, location)
-        end
+        codes = CostCategory.roots
+        coding_klass = is_spent ? CodingSpendCostCategorization : CodingBudgetCostCategorization
       when 'nsp'
-        if is_spent
-          load_pie(Nsp.roots, CodingSpendDistrict, CodingSpend, location)
-        else
-          load_pie(Nsp.roots, CodingBudgetDistrict, CodingBudget, location)
-        end
+        codes = Nsp.roots
+        coding_klass = is_spent ? CodingSpend : CodingBudget
       else
         raise "Invalid type #{type}".to_yaml
       end
-    end
 
-    ### show
-    def activity_spent_ratio(location, activity)
-      district_spend_coding = activity.coding_spend_district.with_location(location).find(:first)
-      spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.cached_amount
-      if spend_coded_ok
-        district_spent_ratio   = district_spend_coding.cached_amount / activity.spend # % that this district has allocated
-        district_spent         = activity.spend * district_spent_ratio
-        prepare_ratio_pie_values(location, activity.spend, district_spent)
-      end
+      district_klass = is_spent ? CodingSpendDistrict : CodingBudgetDistrict
+      load_pie(codes, district_klass, coding_klass, location)
     end
 
     def activity_pie(location, activity, type, is_spent)
@@ -93,6 +74,17 @@ module DistrictPies
       end
 
       get_activity_pie(location, activity, coding_klass, codes)
+    end
+
+    ### show
+    def activity_spent_ratio(location, activity)
+      district_spend_coding = activity.coding_spend_district.with_location(location).find(:first)
+      spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.cached_amount
+      if spend_coded_ok
+        district_spent_ratio   = district_spend_coding.cached_amount / activity.spend # % that this district has allocated
+        district_spent         = activity.spend * district_spent_ratio
+        prepare_ratio_pie_values(location, activity.spend, district_spent)
+      end
     end
 
     def activity_budget_ratio(location, activity)
@@ -210,12 +202,6 @@ module DistrictPies
           :names => {:column1 => 'Activity', :column2 => 'Amount'}
         }.to_json
       end
-
-
-      def load_nsp_pie(district_klass, coding_klass, location)
-        load_pie(Nsp.roots, district_klass, coding_klass, location)
-      end
-
 
       def get_mtef_codes(level = -1)
         unless level == -1

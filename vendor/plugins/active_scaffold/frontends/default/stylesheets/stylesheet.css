@@ -25,8 +25,7 @@ width: 100%;
 border-collapse: separate;
 }
 
-.active-scaffold a,
-.active-scaffold a:visited {
+.active-scaffold a {
 color: #06c;
 text-decoration: none;
 }
@@ -157,7 +156,7 @@ display: block;
 background-color: #555;
 }
 
-.active-scaffold th a, .active-scaffold th a:visited {
+.active-scaffold th a {
 color: #fff;
 padding: 2px 15px 2px 5px;
 }
@@ -322,7 +321,7 @@ font: bold 11px verdana, sans-serif;
 }
 
 .blue-theme .active-scaffold .active-scaffold-header div.actions a,
-.blue-theme .active-scaffold .active-scaffold-header div.actions a:visited {
+.blue-theme .active-scaffold {
 color: #06c;
 }
 
@@ -398,8 +397,7 @@ margin: 0 -2px;
 font: bold 12px arial, sans-serif;
 }
 
-.blue-theme .active-scaffold-footer a,
-.blue-theme .active-scaffold-footer a:visited {
+.blue-theme .active-scaffold-footer a {
 color: #fff;
 }
 

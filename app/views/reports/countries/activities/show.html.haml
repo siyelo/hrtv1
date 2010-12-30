@@ -46,16 +46,6 @@
         .hint Whether this activity has been approved by a reviewer yet.
 %br
 
-.full
-  .first-half
-    %h2 Proportion Spent
-    #spent_pie.bordered
-
-  .second-half
-    %h2 Proportion Budget
-    #budget_pie.bordered
-
-
 %ul.group
   %li= link_to "NSP", reports_country_activity_path(@activity, :code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_country_activity_path(@activity, :code_type => "mtef"), active_if(@mtef)

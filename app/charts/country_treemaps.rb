@@ -1,23 +1,24 @@
 module CountryTreemaps
   extend NumberHelper
+  extend HelperMethods
 
   class << self
-    def treemap(type, is_spent, activities = nil)
-      if type == 'mtef'
+    def treemap(code_type, activities, is_spent)
+      case code_type
+      when 'mtef'
         codes   = Mtef.all + Nsp.all + Nha.all + Nasa.all
         roots   = Mtef.roots
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      elsif type == 'nsp'
+      when 'nsp'
         codes   = Nsp.all
         roots   = Nsp.roots
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      elsif type == 'cost_category'
+      when 'cost_category'
         codes = CostCategory.all
         roots = CostCategory.roots
-        coding_type = is_spent ? "CodingSpendCostCategorization" : "CodingBudgetCostCategorization"
       else
         raise "Invalid type for district treemap".to_yaml
       end
+
+      coding_type = get_coding_type(code_type, is_spent)
 
       get_treemap_rows(roots, codes, coding_type, activities).to_json
     end

@@ -13,8 +13,7 @@ Background:
 
 @admin_data_responses
 Scenario: Manage data responses
-  When I follow "Dashboard"
-  And I follow "Review Responses"
+  And I follow "Review Organization Expenditures and Budgets"
   And I follow "Empty"
   Then I should see "UNDP"
   When I follow "Delete"
@@ -24,7 +23,7 @@ Scenario: Manage data responses
 
 @admin_data_responses @javascript
 Scenario: Manage data responses (with JS)
-  When I follow "Responses"
+  And I follow "Review Organization Expenditures and Budgets"
   When I follow "Empty"
   When I will confirm a js popup
   And I follow "Delete"

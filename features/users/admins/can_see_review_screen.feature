@@ -19,7 +19,7 @@ Background:
   And a comment exists with title: "title2", comment: "comment2", commentable: the project
   And I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Review Responses"
+  And I follow "Review Organization Expenditures and Budgets"
   And I follow "In Progress"
   And I follow "UNDP"
 
@@ -44,11 +44,12 @@ Scenario: Manage comments on data responses (with Javascript)
 
 @admin_review_screen @javascript
 Scenario: Manage comments on project (with Javascript)
+  When wait a few moments
   When I click element "#project_details"
   And I click element ".project .descr"
   And I click element ".project .comment_details"
   And I follow "+ Add Comment" within ".project"
-  And I fill in "Title" with "comment title" 
+  And I fill in "Title" with "comment title"
   And I fill in "Comment" with "comment body"
   And I press "Create comment"
   Then I should see "comment title"
@@ -91,6 +92,6 @@ Scenario: Manage comments on activities (with Javascript)
 @admin_review_screen @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
-  Then I should see tabs for comments,activities,other costs 
+  Then I should see tabs for comments,activities,other costs
   Then I should see tabs for comments,sub-activities when activities already open
-  
+

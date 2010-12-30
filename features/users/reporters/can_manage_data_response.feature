@@ -22,7 +22,7 @@ Scenario Outline: Edit data response, see feedback messages
   And I press "Save"
   Then I should see "<message>"
   And I should see "<specific_message>"
-  
+
   Examples:
     | start_date | end_date   | message                              | specific_message                          |
     | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |
@@ -46,7 +46,6 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   Then I should not see "ActionController::InvalidAuthenticityToken"
 
 @reporter_data_response
-@run
 Scenario Outline: Edit data response, see feedback messages
   When I go to the data response page for "Req1"
   And I select "Euro (EUR)" from "data_response_currency"
@@ -55,7 +54,7 @@ Scenario Outline: Edit data response, see feedback messages
   And I press "Save"
   Then I should see "<message>"
   And I should see "<specific_message>"
-  
+
   Examples:
     | start_date | end_date   | message                              | specific_message                          |
     | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |

@@ -30,7 +30,7 @@ Background:
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "National review"
+  And I follow "Review National Expenditures and Budgets"
   And I follow "View all Activities"
   Then I should see "Activities" within "h1"
   When I follow "Activity A"

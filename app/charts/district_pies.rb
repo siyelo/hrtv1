@@ -1,8 +1,8 @@
 module DistrictPies
-
+  extend ApplicationHelper
+  extend HelperMethods
 
   class << self
-    include ApplicationHelper
 
     ### admin/district/:id/organizations
     def organizations(location, code_type)
@@ -39,41 +39,29 @@ module DistrictPies
       prepare_activities_pie_values(spent_codings)
     end
 
-    def pie(location, type, is_spent, level = -1)
-      case type
-      when 'mtef'
-        codes = get_mtef_codes(level)
-        coding_klass = is_spent ? CodingSpend : CodingBudget
-      when 'cost_category'
-        codes = CostCategory.roots
-        coding_klass = is_spent ? CodingSpendCostCategorization : CodingBudgetCostCategorization
-      when 'nsp'
-        codes = Nsp.roots
-        coding_klass = is_spent ? CodingSpend : CodingBudget
-      else
-        raise "Invalid type #{type}".to_yaml
-      end
+    def pie(location, code_type, is_spent, level = -1)
+      codes = get_codes(code_type)
+      coding_type = get_coding_type(code_type, is_spent)
 
       district_klass = is_spent ? CodingSpendDistrict : CodingBudgetDistrict
-      load_pie(codes, district_klass, coding_klass, location)
+      load_pie(codes, district_klass, coding_type, location)
     end
 
-    def activity_pie(location, activity, type, is_spent)
-      case type
+    def activity_pie(location, activity, code_type, is_spent)
+      case code_type
       when 'mtef'
         codes = Mtef.leaves
-        coding_klass = is_spent ? CodingSpend : CodingBudget
       when 'nsp'
         codes = Nsp.leaves
-        coding_klass = is_spent ? CodingSpend : CodingBudget
       when 'cost_category'
         codes = CostCategory.leaves
-        coding_klass = is_spent ? CodingSpendCostCategorization : CodingBudgetCostCategorization
       else
-        raise "Invalid type".to_yaml
+        raise "Invalid code type #{code_type}".to_yaml
       end
 
-      get_activity_pie(location, activity, coding_klass, codes)
+      coding_type = get_coding_type(code_type, is_spent)
+
+      get_activity_pie(location, activity, coding_type, codes)
     end
 
     ### show
@@ -126,8 +114,8 @@ module DistrictPies
 
     private
 
-      def get_activity_pie(location, activity, coding_klass, codes)
-         if coding_klass == CodingBudget
+      def get_activity_pie(location, activity, coding_type, codes)
+         if coding_type == "CodingBudget"
            district_coding = activity.coding_budget_district.with_location(location).find(:first)
            activity_amount = activity.budget
          else
@@ -137,7 +125,7 @@ module DistrictPies
          coded_ok = district_coding && activity_amount &&
                     activity_amount > 0 && district_coding.cached_amount
          if coded_ok
-           code_assignments = coding_klass.with_code_ids(codes).with_activity(activity).select_for_pies
+           code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).with_activity(activity).select_for_pies
            ratio   = district_coding.cached_amount / activity_amount # % that this district has allocated
            prepare_pie_values(code_assignments, ratio)
          end
@@ -214,14 +202,14 @@ module DistrictPies
         return codes
       end
 
-      def load_pie(codes, district_klass, coding_klass, location)
-        code_assignments = coding_klass.with_code_ids(codes).select_for_pies
-        district_ratio   = calculate_district_ratio(district_klass, coding_klass, location)
+      def load_pie(codes, district_klass, coding_type, location)
+        code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).select_for_pies
+        district_ratio   = calculate_district_ratio(district_klass, location)
         return prepare_pie_values(code_assignments, district_ratio)
       end
 
       # % that this district has allocated
-      def calculate_district_ratio(district_klass, coding_klass, location)
+      def calculate_district_ratio(district_klass, location)
         total_in_district = district_klass.sum(:cached_amount,
                                                :conditions => ["code_id = ?", location.id])
         total_in_all_districts = district_klass.sum(:cached_amount)

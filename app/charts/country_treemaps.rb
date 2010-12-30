@@ -89,15 +89,5 @@ module CountryTreemaps
         end
         sums
       end
-
-      def get_all_code_ids(root_codes)
-        root_codes.inject([]){|code_ids, code| code_ids.concat(code.self_and_descendants.map(&:id))}.uniq
-      end
-
-      def get_root_codes_sum(root_codes, sums)
-        #raise root_codes.to_yaml
-        #raise root_codes.map(&:id).to_yaml
-        root_codes.inject(0){|sum, code| sum + sums[code.id]}
-      end
   end
 end

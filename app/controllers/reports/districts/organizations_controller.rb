@@ -4,49 +4,24 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
 
   def index
     @organizations     = Organization.top_by_spent_and_budget({
-                                                               :per_page => 25,
-                                                               :page => params[:page],
-                                                               :code_ids => [@location.id],
-                                                               :type => 'district'
-                                                             })
+                         :per_page => 25, :page => params[:page],
+                         :code_ids => [@location.id], :type => 'district'})
     @spent_pie_values  = DistrictPies::organizations(@location, "CodingSpendDistrict")
     @budget_pie_values = DistrictPies::organizations(@location, "CodingBudgetDistrict")
   end
 
   def show
-    @organization               = Organization.find(params[:id])
+    @organization      = Organization.find(params[:id])
+    @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
+    code_type          = get_code_type_and_initialize(params[:code_type])
+    activities         = @organization.dr_activities
 
-    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
-
-    activities = @organization.dr_activities
-    case params[:code_type]
-    when "mtef"
-      @mtef = true
-      if @treemap
-        @code_spent_values   = DistrictTreemaps::treemap(@location, activities, 'mtef', true)
-        @code_budget_values  = DistrictTreemaps::treemap(@location, activities, 'mtef', false)
-      else
-        @code_spent_values  = DistrictPies::organization_pie(@location, activities, 'mtef', true)
-        @code_budget_values = DistrictPies::organization_pie(@location, activities, 'mtef', false)
-      end
-    when 'cost_category'
-      @cost_category = true
-      if @treemap
-        @code_spent_values   = DistrictTreemaps::treemap(@location, activities, 'cost_category', true)
-        @code_budget_values  = DistrictTreemaps::treemap(@location, activities, 'cost_category', false)
-      else
-        @code_spent_values  = DistrictPies::organization_pie(@location, activities, 'cost_category', true)
-        @code_budget_values = DistrictPies::organization_pie(@location, activities, 'cost_category', false)
-      end
+    if @treemap
+      @code_spent_values   = DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = DistrictTreemaps::treemap(@location, code_type, activities, false)
     else
-      @nsp = true
-      if @treemap
-        @code_spent_values   = DistrictTreemaps::treemap(@location, activities, 'nsp', true)
-        @code_budget_values  = DistrictTreemaps::treemap(@location, activities, 'nsp', false)
-      else
-        @code_spent_values   = DistrictPies::organization_pie(@location, activities, 'nsp', true)
-        @code_budget_values  = DistrictPies::organization_pie(@location, activities, 'nsp', false)
-      end
+      @code_spent_values  = DistrictPies::organization_pie(@location, activities, code_type, true)
+      @code_budget_values = DistrictPies::organization_pie(@location, activities, code_type, false)
     end
   end
 

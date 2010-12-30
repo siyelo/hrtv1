@@ -1,8 +1,7 @@
 module CountryPies
+  extend HelperMethods
 
   class << self
-    include HelperMethods
-
     ### admin/district/:id/organizations
     def organizations_pie(code_type)
       records = Organization.find :all,

@@ -5,7 +5,7 @@
   - spent_sort  = "desc"
   - spent_class = "asc"
 - else
-  - spent_sort  = "asc"
+  - spent_sort  = "desc"
   - spent_class = ""
 
 - if params[:sort] == 'budget_desc'
@@ -15,7 +15,7 @@
   - budget_sort = "desc"
   - budget_class = "asc"
 - else
-  - budget_sort  = "asc"
+  - budget_sort  = "desc"
   - budget_class = ""
 
 %th= link_to "Total Spent", "?sort=spent_#{spent_sort}", :class => spent_class

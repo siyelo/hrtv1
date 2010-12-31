@@ -115,7 +115,7 @@ module DistrictPies
     private
 
       def get_activity_pie(location, activity, coding_type, codes)
-         if coding_type == "CodingBudget"
+         if coding_type == "CodingBudget" || coding_type == "CodingBudgetCostCategorization"
            district_coding = activity.coding_budget_district.with_location(location).find(:first)
            activity_amount = activity.budget
          else

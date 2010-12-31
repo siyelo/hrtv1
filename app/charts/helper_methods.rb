@@ -64,7 +64,7 @@ module HelperMethods
       :select => "codes.id as code_id,
                   codes.parent_id as parent_id,
                   codes.short_display AS my_name,
-                  SUM(code_assignments.new_cached_amount_in_usd / 100) AS value",
+                  SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
       :conditions => ["codes.type = ?
         AND code_assignments.type = ?
         AND activities.id IN (?)",

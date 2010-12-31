@@ -51,8 +51,8 @@ class Organization < ActiveRecord::Base
     scope = self.scoped({
       :select => "organizations.id,
                   organizations.name,
-                  SUM(ca1.new_cached_amount_in_usd) as spent_sum,
-                  SUM(ca2.new_cached_amount_in_usd) as budget_sum",
+                  COALESCE(SUM(ca1.new_cached_amount_in_usd),0) as spent_sum,
+                  COALESCE(SUM(ca2.new_cached_amount_in_usd),0) as budget_sum",
       :joins => "
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id

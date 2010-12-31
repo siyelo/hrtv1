@@ -385,8 +385,8 @@ class Activity < ActiveRecord::Base
                   activities.name,
                   activities.description,
                   organizations.name AS org_name,
-                  SUM(ca1.new_cached_amount_in_usd) as spent_sum,
-                  SUM(ca2.new_cached_amount_in_usd) as budget_sum",
+                  COALESCE(SUM(ca1.new_cached_amount_in_usd),0) as spent_sum,
+                  COALESCE(SUM(ca2.new_cached_amount_in_usd),0) as budget_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder

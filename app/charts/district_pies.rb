@@ -48,25 +48,25 @@ module DistrictPies
     end
 
     def activity_pie(location, activity, code_type, is_spent)
-      case code_type
-      when 'mtef'
-        codes = Mtef.leaves
-      when 'nsp'
-        codes = Nsp.leaves
-      when 'cost_category'
-        codes = CostCategory.leaves
-      else
-        raise "Invalid code type #{code_type}".to_yaml
+      code_klass_string = get_code_klass_string(code_type)
+      coding_type       = get_coding_type(code_type, is_spent)
+      district_type     = is_spent ? "CodingSpendDistrict" : "CodingBudgetDistrict"
+      activity_amount   = is_spent ? activity.spend : activity.budget
+
+      district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_location(location).last
+      coded_ok          = district_coding && district_coding.cached_amount &&
+                          activity_amount && activity_amount > 0
+
+      if coded_ok
+        code_assignments = get_code_assignments_for_codes_pie(code_klass_string, coding_type, [activity])
+        ratio   = district_coding.cached_amount / activity_amount # % that this district has allocated
+        prepare_pie_values(code_assignments, ratio)
       end
-
-      coding_type = get_coding_type(code_type, is_spent)
-
-      get_activity_pie(location, activity, coding_type, codes)
     end
 
     ### show
     def activity_spent_ratio(location, activity)
-      district_spend_coding = activity.coding_spend_district.with_location(location).find(:first)
+      district_spend_coding = activity.coding_spend_district.with_location(location).last
       spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.cached_amount
       if spend_coded_ok
         district_spent_ratio   = district_spend_coding.cached_amount / activity.spend # % that this district has allocated
@@ -76,7 +76,8 @@ module DistrictPies
     end
 
     def activity_budget_ratio(location, activity)
-      district_budget_coding = activity.coding_budget_district.with_location(location).find(:first)
+      # TODO
+      district_budget_coding = activity.coding_budget_district.with_location(location).last
       budget_coded_ok = district_budget_coding && activity.budget && activity.budget > 0 && district_budget_coding.cached_amount
       if budget_coded_ok
         district_budgeted_ratio = district_budget_coding.cached_amount / activity.budget # % that this district has allocated
@@ -86,20 +87,9 @@ module DistrictPies
     end
 
     ### admin/district/:id/organizations/:id
-    def organization_pie(location, activities, type, is_spent)
-      case type
-      when 'mtef'
-        codes = Mtef.leaves
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      when 'cost_category'
-        codes = CostCategory.roots
-        coding_type = is_spent ? "CodingSpendCostCategorization" : "CodingBudgetCostCategorization"
-      when 'nsp'
-        codes = Nsp.roots
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      else
-        raise "Invalid type".to_yaml
-      end
+    def organization_pie(location, activities, code_type, is_spent)
+      #codes = get_codes(code_type)
+      coding_type = get_coding_type(code_type, is_spent)
 
       if is_spent
         district_type  = "CodingSpendDistrict"
@@ -109,28 +99,11 @@ module DistrictPies
         activity_value = "budget"
       end
 
-      prepare_organization_pie_values(location, coding_type, codes.map(&:id), activities, district_type, activity_value)
+      code_klass = get_code_klass(code_type)
+      prepare_organization_pie_values(location, coding_type, code_klass.all.map(&:id), activities, district_type, activity_value)
     end
 
     private
-
-      def get_activity_pie(location, activity, coding_type, codes)
-         if coding_type == "CodingBudget" || coding_type == "CodingBudgetCostCategorization"
-           district_coding = activity.coding_budget_district.with_location(location).find(:first)
-           activity_amount = activity.budget
-         else
-           district_coding = activity.coding_spend_district.with_location(location).find(:first)
-           activity_amount = activity.spend
-         end
-         coded_ok = district_coding && activity_amount &&
-                    activity_amount > 0 && district_coding.cached_amount
-         if coded_ok
-           code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).with_activity(activity).select_for_pies
-           ratio   = district_coding.cached_amount / activity_amount # % that this district has allocated
-           prepare_pie_values(code_assignments, ratio)
-         end
-       end
-
       def prepare_activities_pie_values(code_assignments)
         values = []
         other = 0.0
@@ -170,36 +143,42 @@ module DistrictPies
       end
 
       def prepare_organization_pie_values(location, coding_type, code_ids, activities, district_type, activity_value)
-        code_assignments = CodeAssignment.sums_by_code_id(code_ids, coding_type, activities)
-        ratios           = CodeAssignment.ratios_by_activity_id(location.id, activities, district_type, activity_value)
-        sums             = prepare_sums(code_assignments, ratios, code_ids)
+        code_assignments = CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
+      :select => "codes.id as code_id,
+                  codes.parent_id as parent_id,
+                  code_assignments.activity_id,
+                  codes.short_display AS my_name,
+                  SUM(code_assignments.new_cached_amount_in_usd / 100) AS value",
+      :joins => [:activity, :code],
+      :group => "codes.short_display,
+                 codes.id,
+                 codes.parent_id,
+                 code_assignments.activity_id",
+      :order => 'value DESC')
+        code_assignments_by_activity = code_assignments.group_by{|ca| ca.activity_id}
+        ratios_by_activity = CodeAssignment.ratios_by_activity_id(location.id, activities, district_type, activity_value)
+
+        code_totals = {}
+        code_assignments_by_activity.each do |activity_id, code_assignments|
+          code_assignments = remove_parent_code_assignments(code_assignments)
+          code_assignments.each do |code_assignment|
+            if ratios_by_activity[activity_id].present?
+              ratio = ratios_by_activity[activity_id].first.ratio.to_f
+              current_value = code_totals[code_assignment.my_name] || 0
+              code_totals[code_assignment.my_name] = current_value + code_assignment.value.to_f * ratio
+            end
+          end
+        end
 
         values = []
-
-        code_assignments.each_with_index do |ca, index|
-          code_id = ca[0]
-          if ca[1].present?
-            code_name = ca[1].first.code_name
-            value = sums[code_id]
-            values << [code_name, value] if value
-          end
+        code_totals.each do |code_name, value|
+          values << [code_name, value]
         end
 
         {
           :values => values,
           :names => {:column1 => 'Activity', :column2 => 'Amount'}
         }.to_json
-      end
-
-      def get_mtef_codes(level = -1)
-        unless level == -1
-          codes = []
-          Mtef.each_with_level(Mtef.all){|o, lvl| codes << o if lvl == level}
-        else
-          codes = Mtef.leaves
-        end
-
-        return codes
       end
 
       def load_pie(codes, district_klass, coding_type, location)

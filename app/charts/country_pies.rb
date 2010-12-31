@@ -52,8 +52,8 @@ module CountryPies
     end
 
     def codes_for_activities_pie(code_type, activities, is_spent)
-      code_klass  = get_code_klass(code_type)
-      coding_type = get_coding_type(code_type, is_spent)
+      code_klass_string = get_code_klass_string(code_type)
+      coding_type       = get_coding_type(code_type, is_spent)
 
       code_assignments = CodeAssignment.find(:all,
         :select => "codes.id as code_id,
@@ -63,7 +63,7 @@ module CountryPies
         :conditions => ["codes.type = ?
           AND code_assignments.type = ?
           AND activities.id IN (?)",
-          code_klass, coding_type, activities.map(&:id)],
+          code_klass_string, coding_type, activities.map(&:id)],
         :joins => [:activity, :code],
         :group => "codes.short_display, codes.id, codes.parent_id",
         :order => 'value DESC')

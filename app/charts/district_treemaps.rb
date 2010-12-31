@@ -1,26 +1,24 @@
 module DistrictTreemaps
   extend NumberHelper
+  extend HelperMethods
 
   class << self
-    def treemap(location, activities, type, is_spent)
-      #return Code.treemap(location.activities, 'mtef_spend').to_json
-      #return Code.treemap(location.activities, 'mtef_budget').to_json
-
-      if type == 'mtef'
+    def treemap(location, code_type, activities, is_spent)
+      case code_type
+      when 'mtef'
         codes   = Mtef.all + Nsp.all + Nha.all + Nasa.all
         roots   = Mtef.roots
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      elsif type == 'nsp'
+      when 'nsp'
         codes   = Nsp.all
         roots   = Nsp.roots
-        coding_type = is_spent ? "CodingSpend" : "CodingBudget"
-      elsif type == 'cost_category'
+      when 'cost_category'
         codes = CostCategory.all
         roots = CostCategory.roots
-        coding_type = is_spent ? "CodingSpendCostCategorization" : "CodingBudgetCostCategorization"
       else
-        raise "Invalid type for district treemap".to_yaml
+        raise "Invalid type for district treemap #{code_type}".to_yaml
       end
+
+      coding_type = get_coding_type(code_type, is_spent)
 
       if is_spent
         district_type     = "CodingSpendDistrict"
@@ -102,16 +100,6 @@ module DistrictTreemaps
         end
 
         sum
-      end
-
-      def get_all_code_ids(root_codes)
-        root_codes.inject([]){|code_ids, code| code_ids.concat(code.self_and_descendants.map(&:id))}.uniq
-      end
-
-      def get_root_codes_sum(root_codes, sums)
-        #raise root_codes.to_yaml
-        #raise root_codes.map(&:id).to_yaml
-        root_codes.inject(0){|sum, code| sum + sums[code.id]}
       end
   end
 end

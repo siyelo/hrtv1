@@ -2,8 +2,7 @@
   %thead
     %tr
       %th Organization
-      %th Total Spent
-      %th Total Budget
+      = render :partial => 'reports/shared/sort_columns'
 
   %tbody
     - organizations.each do |organization|

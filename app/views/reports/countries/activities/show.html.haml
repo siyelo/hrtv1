@@ -1,0 +1,72 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart", "treemap"]});
+  var _treemap = #{@treemap.to_json};
+  var _code_spent_values  = #{js_safe(@code_spent_values)};
+  var _code_budget_values = #{js_safe(@code_budget_values)};
+
+%ul.breadcrumb
+  %li= link_to 'Reports', user_report_dashboard_path(current_user)
+  %li= link_to 'National', reports_country_path
+  %li= link_to 'Activities', reports_country_activities_path
+
+%h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
+
+%h2 Summary
+
+%table.standard
+  %tbody
+    %tr
+      %td Organization
+      %td= h @activity.organization_name
+    %tr
+      %td Activity Name:
+      %td= @activity.name.blank? ? "n/a" : h(@activity.name)
+    %tr
+      %td Activity Description:
+      %td= h @activity.description.to_s.titleize
+    %tr
+      %td Implementer
+      %td= h @activity.implementer
+    %tr
+      %td Associated Project
+      %td= h friendly_name(@activity.project)
+    %tr
+      %td Total Spend
+      %td= n2c(@activity.new_spend,  @activity.new_spend.currency.to_s)
+    %tr
+      %td Total Budget
+      %td= n2c(@activity.new_budget,  @activity.new_budget.currency.to_s)
+    %tr
+      %td Approved?
+      %td
+        = @activity.approved? ? "Yes" : "No"
+        .hint Whether this activity has been approved by a reviewer yet.
+%br
+
+%ul.group
+  %li= link_to "NSP", reports_country_activity_path(@activity, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", reports_country_activity_path(@activity, :code_type => "mtef"), active_if(@mtef)
+  %li= link_to "Cost Category", reports_country_activity_path(@activity, :code_type => "cost_category"), active_if(@cost_category)
+
+%ul.group
+  %li= link_to "Treemap", reports_country_activity_path(@activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
+  %li= link_to "Pie", reports_country_activity_path(@activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
+
+- if @mtef
+  - type = 'MTEF'
+- elsif @cost_category
+  - type = 'Cost Category'
+- else
+  - type = 'NSP'
+
+.full
+  .first-half
+    %h2= "#{type} Spent"
+    #code_spent.bordered
+
+  .second-half
+    %h2= "#{type} Budget"
+    #code_budget.bordered

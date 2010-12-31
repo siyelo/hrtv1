@@ -21,7 +21,7 @@ Background:
 Scenario: "See list of all responses via admin dashboard"
   And I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Review Responses"
+  And I follow "Review Organization Expenditures and Budgets"
   Then I should see "Data Responses" within "h1"
 
 @wip

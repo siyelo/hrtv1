@@ -8,8 +8,8 @@ end
 #end
 
 Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
-  @project = Factory(:project, 
-                    :name          => project_name, 
+  @project = Factory(:project,
+                    :name          => project_name,
                     :data_response => get_data_response(data_request_name, organization_name))
 end
 
@@ -21,8 +21,8 @@ end
 
 Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ do |implementer_name, budget, project_name|
   @project = Project.find_by_name(project_name)
-  @implementer = Factory(:implementer, 
-                          :project       => @project,  
+  @implementer = Factory(:implementer,
+                          :project       => @project,
                           :from          => @project.organization,
                           :budget        => budget,
                           :to            => Organization.find_by_name(implementer_name),
@@ -34,15 +34,15 @@ Given /^an activity with name "([^\"]*)"$/ do |name|
 end
 
 Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory(:activity, 
-                       :name => name, 
+  @activity = Factory(:activity,
+                       :name => name,
                        :projects => [Project.find_by_name(project)])
 end
 
 Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
-  @activity = Factory(:activity, 
-                       :name          => activity_name, 
-                       :data_response => get_data_response(data_request_name, organization_name), 
+  @activity = Factory(:activity,
+                       :name          => activity_name,
+                       :data_response => get_data_response(data_request_name, organization_name),
                        :projects      => [Project.find_by_name(project_name)])
 
 end
@@ -73,8 +73,8 @@ end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory(:project, { :data_response => get_data_response(hash.delete("request"), 
-                                                            hash.delete("organization")) 
+    Factory(:project, { :data_response => get_data_response(hash.delete("request"),
+                                                            hash.delete("organization"))
                       }.merge(hash) )
   end
 end
@@ -87,18 +87,18 @@ Given /^the following comments$/ do |table|
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory(:reporter, 
-                :username              => name, 
-                :email                 => email, 
-                :password              => password, 
+@user = Factory(:reporter,
+                :username              => name,
+                :email                 => email,
+                :password              => password,
                 :password_confirmation => password)
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-@user = Factory(:activity_manager, 
-                :username              => name, 
-                :email                 => email, 
-                :password              => password, 
+@user = Factory(:activity_manager,
+                :username              => name,
+                :email                 => email,
+                :password              => password,
                 :password_confirmation => password)
 end
 
@@ -165,8 +165,8 @@ end
 
 Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
   org  = Organization.find_by_name(requestor)
-  @data_request = Factory(:data_request, 
-                          :title                   => title, 
+  @data_request = Factory(:data_request,
+                          :title                   => title,
                           :requesting_organization => org)
 
 end
@@ -179,20 +179,20 @@ end
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:reporter, 
-                  :username => name, 
-                  :email => 'frank@f.com', 
-                  :password => 'password', 
+  @user = Factory(:reporter,
+                  :username => name,
+                  :email => 'frank@f.com',
+                  :password => 'password',
                   :password_confirmation => 'password',
                   :organization => @organization)
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:activity_manager, 
-                  :username              => name, 
-                  :email                 => 'frank@f.com', 
-                  :password              => 'password', 
+  @user = Factory(:activity_manager,
+                  :username              => name,
+                  :email                 => 'frank@f.com',
+                  :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
 
@@ -200,10 +200,10 @@ end
 
 Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:admin, 
-                  :username              => name, 
-                  :email                 => 'frank@f.com', 
-                  :password              => 'password', 
+  @user = Factory(:admin,
+                  :username              => name,
+                  :email                 => 'frank@f.com',
+                  :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
 
@@ -214,9 +214,9 @@ Given /^the following funding flows$/ do |table|
     to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
-    Factory(:funding_flow, { 
+    Factory(:funding_flow, {
                             :project       => project,
-                            :to            => to_org.id,  
+                            :to            => to_org.id,
                             :from          => from_org,
                             :data_response => project.data_response
                           }.merge(hash) )
@@ -224,7 +224,7 @@ Given /^the following funding flows$/ do |table|
 end
 
 Then /^debug$/ do
-  debugger 
+  debugger
 end
 
 Then /^I should see the "([^"]*)" tab is active$/ do |text|
@@ -277,7 +277,7 @@ Then /^I should not see the data response tabs$/ do
   }
 end
 
-# use this when you need to match the EXACT value of a field (vs the "should contain" matcher) 
+# use this when you need to match the EXACT value of a field (vs the "should contain" matcher)
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
@@ -301,8 +301,8 @@ end
 
 
 # band aid fix
-Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|  
-  @data_response = Factory(:data_response, 
+Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
+  @data_response = Factory(:data_response,
                             :data_request => DataRequest.find_by_title(request),
                             :responding_organization => Organization.find_by_name(org))
 end
@@ -317,12 +317,12 @@ end
 
 # keep this
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
-  #steps %Q{ 
-    #Given the following organizations 
+  #steps %Q{
+    #Given the following organizations
       #| name   |
       #| UNDP   |
       #| GoR    |
-    #Given the following reporters 
+    #Given the following reporters
        #| name         | organization |
        #| undp_user    | UNDP         |
     #Given a data request with title "Req1" from "GoR"
@@ -332,7 +332,7 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
     #And I follow "Edit"
   #}
 
-  steps %Q{ 
+  steps %Q{
     Given an organization exists with name: "GoR"
     And a data_request exists with title: "Req1", requesting_organization: the organization
 
@@ -347,19 +347,19 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
 end
 
 Given /^organizations, reporters, data request, data responses, projects$/ do
-  steps %Q{ 
-    Given the following organizations 
+  steps %Q{
+    Given the following organizations
       | name   |
       | UNDP   |
       | USAID  |
       | GoR    |
-    Given the following reporters 
+    Given the following reporters
        | name         | organization |
        | undp_user    | UNDP         |
     Given a data request with title "Req1" from "GoR"
     Given a data response to "Req1" by "UNDP"
     Given a data response to "Req1" by "USAID"
-    Given the following projects 
+    Given the following projects
       | name                 | request | organization |
       | TB Treatment Project | Req1    | UNDP         |
       | Other Project        | Req1    | USAID        |
@@ -388,7 +388,7 @@ Given /^model help for "([^"]*)" page$/ do |page|
                     when 'review'
                       "DataResponseReview"
                     end
-  steps %Q{ 
+  steps %Q{
     Given a model help for "#{model_help_name}"
   }
 end
@@ -447,7 +447,7 @@ Then /^I should see tabs for comments,activities,other costs$/ do
     When I click element ".project_sub_tabs ul li:last a.activity_details"
     Then I should see "Other Costs" within the selected project sub-tab
     When I click element ".project_sub_tabs ul li a.comment_details"
-    Then I should see "Comments" within the selected project sub-tab  
+    Then I should see "Comments" within the selected project sub-tab
   }
 end
 
@@ -460,7 +460,7 @@ Then /^I should see tabs for comments,sub-activities when activities already ope
     When I click element ".activity_sub_tabs ul li:last a"
     Then I should see "Sub-Activities" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
-    Then I should see "Comments" within the selected activity sub-tab  
+    Then I should see "Comments" within the selected activity sub-tab
   }
 end
 
@@ -474,6 +474,12 @@ Then /^I should see tabs for comments,sub-activities$/ do
     When I click element ".activity_sub_tabs ul li:last a"
     Then I should see "Sub-Activities" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
-    Then I should see "Comments" within the selected activity sub-tab  
+    Then I should see "Comments" within the selected activity sub-tab
   }
+end
+
+Given /^"([^"]*)" and "([^"]*)" are fake Mtef roots$/ do |arg1, arg2|
+  code1 = Code.find_by_short_display(arg1)
+  code2 = Code.find_by_short_display(arg2)
+  Mtef.stub!(:roots).and_return([code1, code2])
 end

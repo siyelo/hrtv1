@@ -29,7 +29,7 @@
       %td= @activity.name.blank? ? "n/a" : h(@activity.name)
     %tr
       %td Activity Description:
-      %td= h @activity.description.titleize
+      %td= h @activity.description.to_s.titleize
     %tr
       %td Implementer
       %td= h @activity.implementer

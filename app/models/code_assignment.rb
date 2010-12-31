@@ -56,7 +56,7 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
   named_scope :select_for_pies,
-              :select => "code_assignments.code_id, SUM(code_assignments.new_cached_amount_in_usd) AS value",
+              :select => "code_assignments.code_id, SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
@@ -179,8 +179,11 @@ class CodeAssignment < ActiveRecord::Base
   def self.ratios_by_activity_id(code_id, activity_ids, district_type, activity_value)
     CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activity_ids).find(:all,
       :joins => :activity,
-      :select => "code_assignments.activity_id, activities.#{activity_value}, (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
-      :group => "code_assignments.activity_id, activities.#{activity_value}",
+      :select => "code_assignments.activity_id,
+                  activities.#{activity_value},
+                  (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
+      :group => "code_assignments.activity_id,
+                 activities.#{activity_value}",
       :conditions => "activities.#{activity_value} > 0"
     ).group_by{|ca| ca.activity_id}
   end

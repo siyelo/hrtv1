@@ -1,4 +1,15 @@
-class Mtef < Code 
+class Mtef < Code
+
+  def self.codes_by_level(level = -1)
+    unless level == -1
+      codes = []
+      Mtef.each_with_level(Mtef.all){|o, lvl| codes << o if lvl == level}
+    else
+      codes = Mtef.leaves
+    end
+
+    return codes
+  end
 
 end
 

@@ -6,8 +6,7 @@
       %th Organization
       %th Project
       %th Funders
-      %th Total Spent
-      %th Total Budget
+      = render :partial => 'reports/shared/sort_columns'
 
   %tbody
     - activities.each do |activity|

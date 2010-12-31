@@ -18,18 +18,19 @@ Background:
   And the location is one of the activity's locations
   And a location exists with short_display: "Location B"
   And the location is one of the activity's locations
-  And a coding_budget exists with activity: the activity, code: the first code 
-  And a coding_budget exists with activity: the activity, code: the 2nd code 
-  And a coding_spend exists with activity: the activity, code: the first code 
-  And a coding_spend exists with activity: the activity, code: the 2nd code 
+  And a coding_budget exists with activity: the activity, code: the first code
+  And a coding_budget exists with activity: the activity, code: the 2nd code
+  And a coding_spend exists with activity: the activity, code: the first code
+  And a coding_spend exists with activity: the activity, code: the 2nd code
   And a coding_budget_district exists with activity: the activity, code: the first location
   And a coding_spend_district exists with activity: the activity, code: the first location
 
+@districts_review
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"
-  And I follow "Review Districts"
-  Then I should see "Review Districts" within "h1"
+  And I follow "Review District Expenditures and Budgets"
+  Then I should see "Review District Expenditures and Budgets" within "h1"
   And I follow "Location A"
   Then I should see "Location A" within "h1"
   And I follow "View all Activities"

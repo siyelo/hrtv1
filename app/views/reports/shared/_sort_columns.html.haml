@@ -1,0 +1,22 @@
+- if params[:sort] == 'spent_desc'
+  - spent_sort  = "asc"
+  - spent_class = "desc"
+- elsif params[:sort] == 'spent_asc'
+  - spent_sort  = "desc"
+  - spent_class = "asc"
+- else
+  - spent_sort  = "asc"
+  - spent_class = ""
+
+- if params[:sort] == 'budget_desc'
+  - budget_sort = "asc"
+  - budget_class = "desc"
+- elsif params[:sort] == 'budget_asc'
+  - budget_sort = "desc"
+  - budget_class = "asc"
+- else
+  - budget_sort  = "asc"
+  - budget_class = ""
+
+%th= link_to "Total Spent", "?sort=spent_#{spent_sort}", :class => spent_class
+%th= link_to "Total Budget", "?sort=budget_#{budget_sort}", :class => budget_class

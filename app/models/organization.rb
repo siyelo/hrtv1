@@ -35,9 +35,14 @@ class Organization < ActiveRecord::Base
     page     = options[:page]     || 1
     code_ids = options[:code_ids]
     type     = options[:type]
+    sort     = options[:sort]
 
-    raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
-    raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
+    raise "Missing code_ids param".to_yaml if code_ids.blank? ||
+      !code_ids.kind_of?(Array)
+    raise "Missing type param".to_yaml if type.blank? &&
+      (type != 'district' || type != 'country')
+    raise "Invalid sort type" if !sort.blank? &&
+      !['spent_asc', 'spent_desc', 'budget_asc', 'budget_desc'].include?(sort)
 
     ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
     ca2_type = (type == 'district') ? 'CodingBudgetDistrict' : 'CodingBudget'
@@ -59,8 +64,7 @@ class Organization < ActiveRecord::Base
           AND ca2.code_id IN (#{code_ids})",
       :group => "organizations.id,
                  organizations.name",
-      :order => "spent_sum DESC,
-                 budget_sum DESC",
+      :order => SortOrder.get_sort_order(sort),
       :conditions => "ca1.new_cached_amount_in_usd > 0 OR ca2.new_cached_amount_in_usd > 0"
     })
 

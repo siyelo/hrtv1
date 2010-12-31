@@ -4,7 +4,7 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
 
   def index
     @organizations     = Organization.top_by_spent_and_budget({
-                         :per_page => 25, :page => params[:page],
+                         :per_page => 25, :page => params[:page], :sort => params[:sort],
                          :code_ids => [@location.id], :type => 'district'})
     @spent_pie_values  = DistrictPies::organizations(@location, "CodingSpendDistrict")
     @budget_pie_values = DistrictPies::organizations(@location, "CodingBudgetDistrict")

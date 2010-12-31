@@ -2,7 +2,7 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
 
   def index
     @activities        = Activity.top_by_spent_and_budget({
-                         :per_page => 25, :page => params[:page],
+                         :per_page => 25, :page => params[:page], :sort => params[:sort],
                          :code_ids => Mtef.roots.map(&:id), :type => 'country'})
     @spent_pie_values  = CountryPies::activities_pie("CodingSpend")
     @budget_pie_values = CountryPies::activities_pie("CodingBudget")

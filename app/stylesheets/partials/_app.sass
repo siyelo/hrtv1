@@ -556,12 +556,22 @@ table.standard
   width: 100%
 
   thead
-    color: white
+    color: $lightest-blue
     font-weight: bold
-
+    
     th
       padding-top: 12px
-
+      
+      a
+        color: $lightest-blue
+        display: block
+        text-decoration: none
+        &:hover, &:focus, &:active
+          color: #fff
+        &.asc
+          background: image_url("active_scaffold/default/arrow_up.gif") no-repeat right center
+        &.desc
+          background: image_url("active_scaffold/default/arrow_down.gif") no-repeat right center
   tbody tr
     border-spacing: 0
 

@@ -1,15 +1,61 @@
 /* STYLES EXCLUSIVE TO THE LANDING PAGES */
 body.landing
-
-  #header #logo
-    img
-      height: 50px
-      margin: -2px 7px 0 0
-      width: 46px
-
-  #content
+  background: image_url("landing_pattern.jpg")
+  #header
+    background: image_url("landing_wall.jpg") no-repeat center top
+    height: 525px
+    #admin
+      margin-top: 42px
+      span
+        color: $dark-blue
+        font-weight: bold
+        padding-right: 10px
+        text-transform: uppercase
+      ul
+        background: $dark-blue
+        padding-right: 20px
+        +border-radius(3px)
+        li
+          &:first-child a
+            +border-bottom-left-radius
+          a.signin
+            color: white
+    #logo
+      h1
+        color: $dark-orange
+        font-size: 20px
+        font-weight: bold
+        +text-shadow(#ccc, 0, 1px, 1px)
+        span
+          color: $dark-blue
+          margin-left: -6px
+      img
+        //height: 50px
+        margin: -9px 7px 0 0
+        //width: 46px
     .wrapper
-      +box-shadow(#eee, 0, 2px, 6px)
+      height: 525px
+      position: relative
+  #headline
+    height: 145px
+    margin-top: 140px
+    width: 960px
+    +replace-text("landing_headline.png")
+  #kids
+    bottom: -2px
+    height: 212px
+    left: -20px
+    position: absolute
+    width: 355px
+    +replace-text("landing_kids.png")
+  #screens
+    bottom: 0
+    height: 208px
+    position: absolute
+    right: 0px
+    width: 612px
+    +replace-text("landing_screens.png")
+  #content
     .slider
       float: left
       margin: 30px 20px 15px 30px
@@ -18,31 +64,48 @@ body.landing
         span.top
           font-size: 1em
           line-height: 1.2em
+  #main
+    float: left
+    width: 600px
+  #sidebar
+    float: right
+    widthL 360px
+  #browsers
+    background: #f9f9f9
+    border: 1px solid !very-light-grey
+    float: left
+    margin-left: 30px
+    margin-bottom: 30px
+    padding: 20px 20px 15px
+    +border-radius
+    +clearfix
+    ul
+      +horizontal-list
+      li
+        width: 35px
+      img
+        width: 100%
+    h2
+      color: #555
+      font-size: 0.8em
+      margin-bottom: 7px
+      text-transform: none
 
-    #browsers
-      background: #f9f9f9
-      border: 1px solid !very-light-grey
-      float: left
-      margin-left: 30px
-      margin-bottom: 30px
-      padding: 20px 20px 15px
-      +border-radius
-      +clearfix
-      ul
-        +horizontal-list
-        li
-          width: 35px
-        img
-          width: 100%
+  #footer .wrapper
+    background: image_url("landing_grad.png") repeat-x !important
+    margin-top: 30px
+    padding: 30px
+    width: 900px
+
+  ul.right
+    li
+      color: $light-blue !important
+      float: right !important
+      padding-right: 0 !important
       h2
-        color: #555
-        font-size: 0.8em
-        margin-bottom: 7px
-        text-transform: none
-
-  #admin ul li
-    &:first-child a
-      +border-bottom-left-radius
-    a.signin
-      color: white
-
+        color: $light-blue - #333 !important
+      a
+        color: $light-blue !important
+        padding-right: 0 !important
+        padding-left: 15px
+        padding-bottom: 10px

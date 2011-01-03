@@ -1,0 +1,29 @@
+#footer
+  .wrapper
+    %ul.right
+      %li= link_to "About", static_page_url(:about)
+      %li= link_to "Help / Contact Us", static_page_url(:contact)
+      %li= link_to "News", static_page_url(:news)
+      %br
+      %li
+        %h2.logo
+          %span Powered by
+          Health Resource Tracker
+        
+    %ul.left
+      %li
+        - if ENV['HRT_COUNTRY'] == 'kenya'
+          %a{:href => '/'}
+            = image_tag "kenya-coat-of-arms-small.png"
+            %h1 HEALTH
+
+        - else
+          %a{:href => '/'}
+            = image_tag "rwanda-coat-of-arms-small.png"
+            %h2 UBUZIMA
+      %li
+        %a{:href => 'http://www.usaid.gov/', :target => '_blank'}
+          = image_tag "usaid.jpg"
+      %li
+        %a{:href => 'http://www.hs2020.org/', :target => '_blank'}
+          = image_tag "hs2020.jpg"

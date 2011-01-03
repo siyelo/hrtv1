@@ -1,26 +1,26 @@
-- content_for :head do
-  = stylesheet_link_tag 's3slider.css', :media => 'screen'
-  :javascript
-    jQuery(document).ready(function(){
-      jQuery('#s3slider').s3Slider({
-        timeOut: 4000
-      });
-    });
+//- content_for :head do
+//  = stylesheet_link_tag 's3slider.css', :media => 'screen'
+//  :javascript
+//    jQuery(document).ready(function(){
+//      jQuery('#s3slider').s3Slider({
+//        timeOut: 4000
+//      });
+//    });
+//
+//.slider
+//  #s3slider
+//    %ul#s3sliderContent
+//      %li.s3sliderImage
+//        %img{ :src => "images/slider/1.png" }
+//        %span.top
+//          Resources going where they're most needed
+//      %li.s3sliderImage
+//        %img{ :src => "images/slider/2.jpg" }
+//        %span.top
+//          To improve and save lives
+//      %div.clear.s3sliderImage
 
-
-.slider
-  #s3slider
-    %ul#s3sliderContent
-      %li.s3sliderImage
-        %img{ :src => "images/slider/1.png" }
-        %span.top
-          Resources going where they're most needed
-      %li.s3sliderImage
-        %img{ :src => "images/slider/2.jpg" }
-        %span.top
-          To improve and save lives
-      %div.clear.s3sliderImage
-.text
+#main
   %h3 Better Information.
   %h3 Better Decisions.
   %p The Health Resource Tracker tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.

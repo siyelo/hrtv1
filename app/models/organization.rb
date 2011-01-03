@@ -51,21 +51,29 @@ class Organization < ActiveRecord::Base
     scope = self.scoped({
       :select => "organizations.id,
                   organizations.name,
-                  COALESCE(SUM(ca1.new_cached_amount_in_usd),0) as spent_sum,
-                  COALESCE(SUM(ca2.new_cached_amount_in_usd),0) as budget_sum",
+                  COALESCE(SUM(spent_sum),0) as spent_sum,
+                  COALESCE(SUM(budget_sum),0) as budget_sum",
       :joins => "
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id
-        LEFT OUTER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
-          AND ca1.type = '#{ca1_type}'
+        LEFT OUTER JOIN (
+          SELECT ca1.activity_id, SUM(ca1.new_cached_amount_in_usd) as spent_sum
+          FROM code_assignments ca1
+          WHERE ca1.type = '#{ca1_type}'
           AND ca1.code_id IN (#{code_ids})
-        LEFT OUTER JOIN code_assignments ca2 ON activities.id = ca2.activity_id
-          AND ca2.type = '#{ca2_type}'
-          AND ca2.code_id IN (#{code_ids})",
+          GROUP BY ca1.activity_id
+        ) ca1 ON activities.id = ca1.activity_id
+        LEFT OUTER JOIN (
+          SELECT ca2.activity_id, SUM(ca2.new_cached_amount_in_usd) as budget_sum
+          FROM code_assignments ca2
+          WHERE ca2.type = '#{ca2_type}'
+          AND ca2.code_id IN (#{code_ids})
+          GROUP BY ca2.activity_id
+        ) ca2 ON activities.id = ca2.activity_id",
       :group => "organizations.id,
                  organizations.name",
       :order => SortOrder.get_sort_order(sort),
-      :conditions => "ca1.new_cached_amount_in_usd > 0 OR ca2.new_cached_amount_in_usd > 0"
+      :conditions => "spent_sum > 0 OR budget_sum > 0"
     })
 
     scope.paginate :all, :per_page => per_page, :page => page

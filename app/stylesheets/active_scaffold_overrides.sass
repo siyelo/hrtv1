@@ -113,7 +113,7 @@ body.app
 
     .active-scaffold th.desc a, .active-scaffold th a
       &:hover
-        color: !lighter-blue
+        color: $lighter-blue
 
     .active-scaffold-records
       padding-left: 10px
@@ -121,7 +121,7 @@ body.app
     .active-scaffold
 
       h4, h5
-        color: !mid-blue
+        color: $mid-blue
         padding: 0
         text-transform: uppercase
 
@@ -132,8 +132,9 @@ body.app
 
       input[type=text], select, textarea
         +border-radius
-        border= !light-blue " 1px solid "
+        border: $light-blue " 1px solid "
         color: !dark-blue
+        font-size: 12px
         font-weight: normal
         letter-spacing: 0.05em
         margin-bottom: 5px
@@ -251,3 +252,6 @@ body.app
           right: 20px
           top: 20px
           vertical-align: center
+
+    #page_tips_close:hover
+      color: $dark-blue !important

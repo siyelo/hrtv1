@@ -180,8 +180,8 @@ body.app
         margin-left: 5px
         padding: 5px 7px
         &:hover
-          background= !light-blue
-          color= !mid-blue
+          background: $light-blue
+          color: $mid-blue
           text-decoration: none
 
 
@@ -196,8 +196,7 @@ body.app
         font-size: 0.8em
         text-decoration: none
         &:hover
-          color= !mid-blue
-          text-decoration: underline
+          color: $lightest-blue
 
       > a
         padding-left: 10px
@@ -207,30 +206,7 @@ body.app
         font-size: 0.9em
         padding: 10px 0 0 10px
 
-      .next, input[type=submit]
-        +border-radius
-        border: 1px
-        background= !orange
-        color: white
-        cursor: pointer
-        margin-right: -10px
-        padding: 9px 15px 7px 15px
-        text-decoration: none
-        text-transform: uppercase
-        &:hover
-          background= !mid-blue
-          color: white
-          text-decoration: none
-        &.big
-          clear: both
-          display: inline-block
-          float: none
-          margin: 10px 0 10px 10px
-          padding: 13px 20px 10px 20px
-          overflow: hidden
 
-      .next
-        margin-top: -5px
 
       .nav2 a
         font-size: 1em
@@ -249,7 +225,34 @@ body.app
         &:hover
           color: #069
           text-decoration: underline
+    .next, input[type=submit]
+      +border-radius
+      border: 1px
+      background: $orange
+      color: white
+      cursor: pointer
+      font-size: 14px
+      font-weight: bold
+      padding: 9px 15px 7px 15px
+      text-decoration: none
+      text-transform: uppercase
+      +linear-gradient(color-stops($orange, $orange - #333))
+      +box-shadow(#666, 0, 1px, 3px)
+      +text-shadow(#666, 0, 1px, 1px)
+      &:hover
+        background= !mid-blue
+        color: white
+        text-decoration: none
+      &.big
+        clear: both
+        display: inline-block
+        float: none
+        margin: 10px 0
+        padding: 13px 20px 10px 20px
+        overflow: hidden
 
+    .next
+      margin-top: -5px
 
     .comments
       border-bottom: 1px dashed #ddd
@@ -553,12 +556,22 @@ table.standard
   width: 100%
 
   thead
-    color: white
+    color: $lightest-blue
     font-weight: bold
-
+    
     th
       padding-top: 12px
-
+      
+      a
+        color: $lightest-blue
+        display: block
+        text-decoration: none
+        &:hover, &:focus, &:active
+          color: #fff
+        &.asc
+          background: image_url("active_scaffold/default/arrow_up.gif") no-repeat right center
+        &.desc
+          background: image_url("active_scaffold/default/arrow_down.gif") no-repeat right center
   tbody tr
     border-spacing: 0
 

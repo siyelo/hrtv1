@@ -1,0 +1,17 @@
+%table.standard.clickable
+  %thead
+    %tr
+      %th Organization
+      %th Total Spent
+
+  %tbody
+    - top_organizations.each do |organization|
+      %tr{:class => cycle("even", "odd")}
+        %td= link_to organization.name, reports_country_organization_path(organization)
+        %td
+          - spent_total = Money.new(organization.spent_sum.to_i, :USD)
+          %ul
+            -#%li= n2c(spent_total.exchange_to(:RWF), 'RWF')
+            %li= n2c(spent_total.usd_to_rwf, 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"
+          -#= n2c(organization.spent_sum.to_i, 'RWF')

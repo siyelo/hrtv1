@@ -4,12 +4,12 @@
   margin: 0 auto
   padding-bottom: 1em
   width: 75%
-  #success, #notice, #warning, #validation_error, #error
+  #success, #notice, #warning, #validation_error, #error, #info
     padding: 15px 10px 15px 65px
     background-position: 15px 7px
     background-repeat: no-repeat
     margin-bottom: 5px
-  #success
+  #success, #info
     border-color: #99cc99
     color: #4f8a10
     background-image: url(/images/alertsuccess_icon.png)
@@ -34,6 +34,8 @@
     color: #d8000c
     background-image: url(/images/alerterror_icon.png)
     background-color: #ffbaba
+  a:hover
+    color: $dark-blue !important
 
 // Inline flash messages on code assignments page
 .coding_flash

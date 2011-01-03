@@ -29,7 +29,7 @@
       %td= @activity.name.blank? ? "n/a" : h(@activity.name)
     %tr
       %td Activity Description:
-      %td= h @activity.description.titleize
+      %td= h @activity.description.to_s.titleize
     %tr
       %td Implementer
       %td= h @activity.implementer
@@ -62,13 +62,18 @@
 %ul.group
   %li= link_to "NSP", reports_district_activity_path(@location, @activity, :code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_district_activity_path(@location, @activity, :code_type => "mtef"), active_if(@mtef)
+  %li= link_to "Cost Category", reports_district_activity_path(@location, @activity, :code_type => "cost_category"), active_if(@cost_category)
 
 %ul.group
   %li= link_to "Treemap", reports_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
   %li= link_to "Pie", reports_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
 
-- type = 'NSP'
-- type = 'MTEF' if @mtef
+- if @mtef
+  - type = 'MTEF'
+- elsif @cost_category
+  - type = 'Cost Category'
+- else
+  - type = 'NSP'
 
 .full
   .first-half

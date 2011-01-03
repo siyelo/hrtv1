@@ -8,7 +8,8 @@ body.landing
       width: 46px
 
   #content
-
+    .wrapper
+      +box-shadow(#eee, 0, 2px, 6px)
     .slider
       float: left
       margin: 30px 20px 15px 30px
@@ -42,5 +43,6 @@ body.landing
   #admin ul li
     &:first-child a
       +border-bottom-left-radius
-    &.last a
+    a.signin
+      color: white
 

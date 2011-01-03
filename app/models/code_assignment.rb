@@ -55,6 +55,12 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_location,
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
+  named_scope :select_for_pies,
+              :select => "code_assignments.code_id, SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
+              :include => :code,
+              :group => 'code_assignments.code_id',
+              :order => 'value DESC'
+
 
   ### Callbacks
   before_save :update_money_amounts
@@ -163,17 +169,21 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def self.sums_by_code_id(code_ids, coding_type, activities)
-    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all, 
-      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount) AS cached_amount',
-      :group => 'code_assignments.code_id, code_assignments.activity_id'
+    CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
+      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.new_cached_amount_in_usd) AS value',
+      :group => 'code_assignments.code_id, code_assignments.activity_id',
+      :order => 'value DESC'
     ).group_by{|ca| ca.code_id}
   end
 
   def self.ratios_by_activity_id(code_id, activity_ids, district_type, activity_value)
     CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activity_ids).find(:all,
-      :joins => :activity, 
-      :select => "code_assignments.activity_id, activities.#{activity_value}, (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
-      :group => "code_assignments.activity_id, activities.#{activity_value}",
+      :joins => :activity,
+      :select => "code_assignments.activity_id,
+                  activities.#{activity_value},
+                  (CAST(SUM(code_assignments.cached_amount) AS REAL) / CAST(activities.#{activity_value} AS REAL)) AS ratio",
+      :group => "code_assignments.activity_id,
+                 activities.#{activity_value}",
       :conditions => "activities.#{activity_value} > 0"
     ).group_by{|ca| ca.activity_id}
   end

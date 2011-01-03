@@ -3,36 +3,25 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
   before_filter :load_location
 
   def index
+    @organizations     = Organization.top_by_spent_and_budget({
+                         :per_page => 25, :page => params[:page], :sort => params[:sort],
+                         :code_ids => [@location.id], :type => 'district'})
     @spent_pie_values  = DistrictPies::organizations(@location, "CodingSpendDistrict")
     @budget_pie_values = DistrictPies::organizations(@location, "CodingBudgetDistrict")
-    @organizations     = Organization.top_by_spent_and_budget({:per_page => 25, :page => params[:page], :code_id => @location.id})
   end
 
   def show
-    @organization               = Organization.find(params[:id])
+    @organization      = Organization.find(params[:id])
+    @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
+    code_type          = get_code_type_and_initialize(params[:code_type])
+    activities         = @organization.dr_activities
 
-    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
-
-    activities = @organization.dr_activities
-    case params[:code_type]
-    when "mtef"
-      @mtef = true
-      if @treemap
-        @code_spent_values   = DistrictTreemaps::district_mtef_spent(@location, activities)
-        @code_budget_values  = DistrictTreemaps::district_mtef_budget(@location, activities)
-      else
-        @code_spent_values  = DistrictPies::organization_mtef_spent(@location, activities)
-        @code_budget_values = DistrictPies::organization_mtef_budget(@location, activities)
-      end
+    if @treemap
+      @code_spent_values   = DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = DistrictTreemaps::treemap(@location, code_type, activities, false)
     else
-      @nsp = true
-      if @treemap
-        @code_spent_values   = DistrictTreemaps::nsp_spent(@location, activities)
-        @code_budget_values  = DistrictTreemaps::nsp_budget(@location, activities)
-      else
-        @code_spent_values   = DistrictPies::organization_nsp_spent(@location, activities)
-        @code_budget_values  = DistrictPies::organization_nsp_budget(@location, activities)
-      end
+      @code_spent_values  = DistrictPies::organization_pie(@location, activities, code_type, true)
+      @code_budget_values = DistrictPies::organization_pie(@location, activities, code_type, false)
     end
   end
 

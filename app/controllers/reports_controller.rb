@@ -144,6 +144,11 @@ class ReportsController < ApplicationController
     send_csv(rep.csv,"map_facilities_by_partner.csv")
   end
 
+  def joint_annual_workplan_report
+    rep = Reports::JointAnnualWorkplanReport.new(current_user)
+    send_csv(rep.csv, "joint_annual_workplan_report.csv")
+  end
+
   protected
 
     def set_activities

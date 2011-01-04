@@ -11,6 +11,7 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  named_scope :with_types,       lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
 
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set

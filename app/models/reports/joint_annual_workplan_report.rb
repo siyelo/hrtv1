@@ -6,7 +6,7 @@ class Reports::JointAnnualWorkplanReport
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
       :select => "activities.*, data_responses.currency AS dr_currency",
-      #:conditions => ["activities.id IN (?)", [4498, 4499]], # TODO: remove this
+      :conditions => ["activities.id IN (?)", [4498, 4499]], # TODO: remove this
       :include => [:locations, :provider, :organizations,
         :beneficiaries, {:data_response => :responding_organization}])
 
@@ -47,8 +47,30 @@ class Reports::JointAnnualWorkplanReport
     row << activity.beneficiaries.map(&:short_display).join(' | ')
     row << activity.id
     row << activity.budget
+    row << "TODO"
 
     csv << row
+
+    build_code_assignment_rows(csv, activity)
+  end
+
+  private
+
+  def build_code_assignment_rows(csv, activity)
+    activity.code_assignments.with_type('CodingBudget').find(:all, :include => :code).each do |ca|
+      activity.locations.each do |location|
+        district_coding = activity.code_assignments.with_code_id(location.id).with_type('CodingBudgetDistrict').first
+        if activity.budget && district_coding
+          ratio = district_coding.cached_amount / activity.budget
+        else
+          ratio = 0
+        end
+        row = []
+        16.times {row << nil}
+        row << "#{ca.code.try(:short_display)} (#{location.short_display}) - #{ca.cached_amount * ratio}"
+        csv << row
+      end
+    end
   end
 
   def header()
@@ -68,6 +90,8 @@ class Reports::JointAnnualWorkplanReport
     row << "Beneficiaries"
     row << "ID"
     row << "Total Budget"
+    row << "Converted Budget"
+    row << "Budget Code"
     row
   end
 end

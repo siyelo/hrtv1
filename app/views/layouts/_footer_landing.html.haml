@@ -6,24 +6,27 @@
       %li= link_to "News", static_page_url(:news)
       %br
       %li
-        %h2.logo
+        %h2
           %span Powered by
           Health Resource Tracker
-        
-    %ul.left
+      
+    %ul#browsers
       %li
-        - if ENV['HRT_COUNTRY'] == 'kenya'
-          %a{:href => '/'}
-            = image_tag "kenya-coat-of-arms-small.png"
-            %h1 HEALTH
-
-        - else
-          %a{:href => '/'}
-            = image_tag "rwanda-coat-of-arms-small.png"
-            %h2 UBUZIMA
+        %p
+          Recommended
+          %br
+          Browsers:
       %li
-        %a{:href => 'http://www.usaid.gov/', :target => '_blank'}
-          = image_tag "usaid.jpg"
+        %a{:href => 'http://firefox.com/'}
+          = image_tag"firefox_icon.png"
       %li
-        %a{:href => 'http://www.hs2020.org/', :target => '_blank'}
-          = image_tag "hs2020.jpg"
+        %a{:href => 'http://www.google.com/chrome/'}
+          = image_tag"chrome_icon.png"
+      %li
+        %a{:href => 'http://opera.com/'}
+          = image_tag"opera_icon.png"
+      %li
+        %a{:href => 'http://www.apple.com/safari/'}
+          = image_tag"safari_icon.png"
+          
+    

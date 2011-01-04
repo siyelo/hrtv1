@@ -1,6 +1,6 @@
 /* STYLES EXCLUSIVE TO THE LANDING PAGES */
 body.landing
-  background: image_url("landing_pattern.jpg")
+  background: image_url("landing_pattern.png")
   #header
     background: image_url("landing_wall.jpg") no-repeat center top
     height: 525px
@@ -8,9 +8,11 @@ body.landing
       margin-top: 42px
       span
         color: $dark-blue
-        font-weight: bold
+        font-family: 'Avenir'
+        letter-spacing: 1px
         padding-right: 10px
         text-transform: uppercase
+        +text-shadow(#ddd, 0, 1px, 1px)
       ul
         background: $dark-blue
         padding-right: 20px
@@ -23,9 +25,10 @@ body.landing
     #logo
       h1
         color: $dark-orange
-        font-size: 20px
-        font-weight: bold
-        +text-shadow(#ccc, 0, 1px, 1px)
+        font-family: 'Avenir'
+        font-size: 24px
+        text-transform: none
+        +text-shadow(#ddd, 0, 1px, 1px)
         span
           color: $dark-blue
           margin-left: -6px
@@ -56,6 +59,11 @@ body.landing
     width: 612px
     +replace-text("landing_screens.png")
   #content
+    background: image_url("landing_grad_dark.png") repeat-x top
+    
+    .wrapper
+      background: image_url("landing_glow.png") no-repeat center top !important
+      padding-top: 50px
     .slider
       float: left
       margin: 30px 20px 15px 30px
@@ -66,34 +74,73 @@ body.landing
           line-height: 1.2em
   #main
     float: left
-    width: 600px
+    padding-left: 30px
+    width: 480px
+    h3
+      color: #fff
+      font-family: 'Avenir'
+      font-size: 24px
+      font-weight: normal
+      margin-bottom: 20px
+      text-transform: none
+    p
+      color: #eee
+      font-size: 12px
+      line-height: 1.4
+      padding-bottom: 15px
   #sidebar
+    background: image_url("landing_grad.png") repeat-x
     float: right
-    widthL 360px
-  #browsers
-    background: #f9f9f9
-    border: 1px solid !very-light-grey
-    float: left
-    margin-left: 30px
-    margin-bottom: 30px
-    padding: 20px 20px 15px
-    +border-radius
-    +clearfix
+    padding: 30px
+    width: 360px
     ul
       +horizontal-list
       li
-        width: 35px
-      img
-        width: 100%
+        width: 48%
+    img
+      +opacity(0.8)
+      &:hover
+        +opacity(1)
     h2
-      color: #555
-      font-size: 0.8em
+      color: #f9f9f9
+      font-family: 'Avenir'
+      font-weight: normal
+      margin-bottom: 30px
+      text-transform: none
+      
+    h3
+      color: #f9f9f9
+      font-size: 12px
+      padding-bottom: 2px
+    p
+      color: #ccc
+      font-size: 11px
+      padding-bottom: 10px
+  #browsers
+    margin-bottom: 30px
+    padding: 20px 20px 15px
+    text-align: left
+    +border-radius
+    +clearfix
+    +horizontal-list
+    p
+      color: #ccc
+      font-size: 10px
+      line-height: 1.25
+      padding: 3px 5px 0 0
+    img
+      width: 30px
+    h2
+      color: #f9f9f9
+      font-family: 'Avenir'
+      font-size: 14px
+      font-weight: normal
       margin-bottom: 7px
       text-transform: none
 
   #footer .wrapper
     background: image_url("landing_grad.png") repeat-x !important
-    margin-top: 30px
+    margin-top: 35px
     padding: 30px
     width: 900px
 
@@ -103,7 +150,9 @@ body.landing
       float: right !important
       padding-right: 0 !important
       h2
-        color: $light-blue - #333 !important
+        color: $light-blue - #666
+        font-size: 10px
+        padding-top: 2px
       a
         color: $light-blue !important
         padding-right: 0 !important

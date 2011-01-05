@@ -145,7 +145,7 @@ class ReportsController < ApplicationController
   end
 
   def joint_annual_workplan_report
-    rep = Reports::JointAnnualWorkplanReport.new(current_user)
+    rep = Reports::JointAnnualWorkplanReport.new(current_user, params[:type])
     send_csv(rep.csv, "joint_annual_workplan_report.csv")
   end
 

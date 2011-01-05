@@ -60,6 +60,7 @@ class Activity < ActiveRecord::Base
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
+  has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 

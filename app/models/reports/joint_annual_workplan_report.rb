@@ -5,7 +5,7 @@ class Reports::JointAnnualWorkplanReport
 
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-      #:conditions => ["activities.id IN (?)", [4498, 4499]], # TODO: remove this
+      :conditions => ["activities.id IN (?)", [4498, 4499]], # TODO: remove this
       :include => [:locations, :provider, :organizations,
         :beneficiaries, {:data_response => :responding_organization}])
 
@@ -55,12 +55,16 @@ class Reports::JointAnnualWorkplanReport
   private
 
     def build_code_assignment_rows(csv, activity, base_row)
-      activity.budget_cost_category_coding.each do |cost_category_coding|
-        activity.budget_district_coding.each do |district_coding|
-          activity.budget_coding.each do |ca|
+      cost_cats = fake_one_assignment_if_none(activity, activity.budget_cost_category_coding)
+      districts = fake_one_assignment_if_none(activity, activity.budget_district_coding)
+      codings = fake_one_assignment_if_none(activity, activity.budget_coding)
+
+      cost_cats.each do |cost_category_coding|
+        districts.each do |district_coding|
+          codings.each do |ca|
             row = base_row.dup
             #amount = "#{ca.cached_amount} * #{get_district_ratio(activity, district_coding)} * #{get_cost_category_ratio(activity, cost_category_coding)}" # FOR DEBUG ONLY
-            amount = ca.cached_amount * get_district_ratio(activity, district_coding) * get_cost_category_ratio(activity, cost_category_coding)
+            amount = activity.budget * get_ratio(activity, ca.cached_amount) * get_ratio(activity, district_coding.cached_amount) * get_ratio(activity, cost_category_coding.cached_amount)
             row << amount
             row << Money.new((amount * 100).to_i, activity.currency.to_sym).exchange_to(:USD)
             row << nil
@@ -101,15 +105,18 @@ class Reports::JointAnnualWorkplanReport
       row
     end
 
-    def get_district_ratio(activity, district_coding)
-      activity.budget && activity.budget > 0 ?
-        district_coding.cached_amount / activity.budget : 0
+    def fake_one_assignment_if_none activity, codings
+      if codings.empty?
+        [CodeAssignment.new(:cached_amount => activity.budget)]
+      else
+        codings
+      end
     end
-
-    def get_cost_category_ratio(activity, cost_category_coding)
+   
+    def get_ratio(activity, assigned_amount)
       activity.budget && activity.budget > 0 ?
-        cost_category_coding.cached_amount / activity.budget : 0
-    end
+        assigned_amount / activity.budget : 0
+    end 
 
     def get_currency(activity)
       activity.currency.blank? ? :USD : activity.currency.to_sym

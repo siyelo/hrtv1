@@ -5,7 +5,7 @@ class Reports::JointAnnualWorkplanReport
 
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-      :conditions => ["activities.id IN (?)", [4498, 4499]], # TODO: remove this
+      #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
       :include => [:locations, :provider, :organizations,
         :beneficiaries, {:data_response => :responding_organization}])
 
@@ -57,16 +57,16 @@ class Reports::JointAnnualWorkplanReport
     def build_code_assignment_rows(csv, activity, base_row)
       cost_cats = fake_one_assignment_if_none(activity, activity.budget_cost_category_coding)
       districts = fake_one_assignment_if_none(activity, activity.budget_district_coding)
-      codings = fake_one_assignment_if_none(activity, activity.budget_coding)
+      codings   = fake_one_assignment_if_none(activity, activity.budget_coding)
 
       cost_cats.each do |cost_category_coding|
         districts.each do |district_coding|
           codings.each do |ca|
             row = base_row.dup
-            #amount = "#{ca.cached_amount} * #{get_district_ratio(activity, district_coding)} * #{get_cost_category_ratio(activity, cost_category_coding)}" # FOR DEBUG ONLY
-            amount = activity.budget * get_ratio(activity, ca.cached_amount) * get_ratio(activity, district_coding.cached_amount) * get_ratio(activity, cost_category_coding.cached_amount)
+            #amount = "#{ca.cached_amount} * #{get_district_ratio(activity, district_coding)} * #{get_cost_category_ratio(activity, cost_category_coding)}" # NOTE: FOR DEBUG ONLY
+            amount = (activity.budget || 0) * get_ratio(activity, ca) * get_ratio(activity, district_coding) * get_ratio(activity, cost_category_coding)
             row << amount
-            row << Money.new((amount * 100).to_i, activity.currency.to_sym).exchange_to(:USD)
+            row << Money.new((amount * 100).to_i, get_currency(activity)).exchange_to(:USD)
             row << nil
             row << ca.code.try(:short_display)
             row << district_coding.code.try(:short_display)
@@ -77,7 +77,7 @@ class Reports::JointAnnualWorkplanReport
       end
     end
 
-    def header()
+    def header
       row = []
       row << "Activity Description"
       row << "Q1"
@@ -105,18 +105,13 @@ class Reports::JointAnnualWorkplanReport
       row
     end
 
-    def fake_one_assignment_if_none activity, codings
-      if codings.empty?
-        [CodeAssignment.new(:cached_amount => activity.budget)]
-      else
-        codings
-      end
+    def fake_one_assignment_if_none(activity, codings)
+      codings.empty? ? [CodeAssignment.new(:cached_amount => activity.budget)] : codings
     end
-   
-    def get_ratio(activity, assigned_amount)
-      activity.budget && activity.budget > 0 ?
-        assigned_amount / activity.budget : 0
-    end 
+
+    def get_ratio(activity, ca)
+      activity.budget && activity.budget > 0 ? ca.cached_amount / activity.budget : 0
+    end
 
     def get_currency(activity)
       activity.currency.blank? ? :USD : activity.currency.to_sym

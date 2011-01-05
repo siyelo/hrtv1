@@ -5,7 +5,7 @@ class Reports::JointAnnualWorkplanReport
 
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-      #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+      :conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
       :include => [:locations, :provider, :organizations,
         :beneficiaries, {:data_response => :responding_organization}])
 
@@ -31,7 +31,8 @@ class Reports::JointAnnualWorkplanReport
 
   def build_rows(csv, activity, hc_sub_activity_count)
     row = []
-    row << "#{activity.name} - #{activity.description}"
+    row << activity.name
+    row << activity.description
     row << activity.budget_q1
     row << activity.budget_q2
     row << activity.budget_q3
@@ -66,6 +67,7 @@ class Reports::JointAnnualWorkplanReport
             #amount = "#{ca.cached_amount} * #{get_district_ratio(activity, district_coding)} * #{get_cost_category_ratio(activity, cost_category_coding)}" # NOTE: FOR DEBUG ONLY
             amount = (activity.budget || 0) * get_ratio(activity, ca) * get_ratio(activity, district_coding) * get_ratio(activity, cost_category_coding)
             row << amount
+            row << get_percentage(activity, amount)
             row << Money.new((amount * 100).to_i, get_currency(activity)).exchange_to(:USD)
             row << nil
             row << ca.code.try(:short_display)
@@ -79,6 +81,7 @@ class Reports::JointAnnualWorkplanReport
 
     def header
       row = []
+      row << "Activity Name"
       row << "Activity Description"
       row << "Q1"
       row << "Q2"
@@ -97,6 +100,7 @@ class Reports::JointAnnualWorkplanReport
       row << "Converted Budget (USD)"
       row << "National?"
       row << "Classified Budget"
+      row << "Classified Budget Percentage"
       row << "Converted Classified Budget (USD)"
       row << "HSSPII"
       row << "Code"
@@ -115,5 +119,10 @@ class Reports::JointAnnualWorkplanReport
 
     def get_currency(activity)
       activity.currency.blank? ? :USD : activity.currency.to_sym
+    end
+
+    def get_percentage(activity, amount)
+      percentage = activity.budget && activity.budget > 0 ? amount / activity.budget : 0
+      number_to_percentage(percentage)
     end
 end

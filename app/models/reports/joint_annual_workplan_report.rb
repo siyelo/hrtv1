@@ -3,19 +3,19 @@ require 'fastercsv'
 class Reports::JointAnnualWorkplanReport
   include Reports::Helpers
 
- def initialize(current_user, type)
+  def initialize(current_user, type)
     raise "Invalid type #{type}".to_yaml unless ['budget', 'spent'].include?(type)
     is_spent = (type == 'spent')
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-      #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-      :include => [:locations, :provider, :organizations,
-        :beneficiaries, {:data_response => :responding_organization}])
+                                                                 #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                                                                 :include => [:locations, :provider, :organizations,
+                                                                              :beneficiaries, {:data_response => :responding_organization}])
 
     hc_sub_activities = Activity.with_type('SubActivity').
-                          implemented_by_health_centers.find(:all,
-                            :select => 'activity_id, COUNT(*) AS total',
-                            :group => 'activity_id')
+      implemented_by_health_centers.find(:all,
+                                         :select => 'activity_id, COUNT(*) AS total',
+                                         :group => 'activity_id')
 
     @csv_string = FasterCSV.generate do |csv|
       csv << header(is_spent)
@@ -88,94 +88,94 @@ class Reports::JointAnnualWorkplanReport
 
   private
 
-    def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings)
-        cost_category_codings.each do |cost_category_coding|
-          district_codings.each do |district_coding|
-            codings.each do |ca|
-              row = base_row.dup
-              amount = (amount_total || 0) *
-                       get_ratio(amount_total, ca) *
-                       get_ratio(amount_total, district_coding) *
-                       get_ratio(amount_total, cost_category_coding)
-              row << amount
-              row << get_percentage(amount_total, amount)
-              row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
-              row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
-              row << codes_cache[ca.code_id].try(:short_display)
-              row << codes_cache[district_coding.code_id].try(:short_display)
-              row << codes_cache[cost_category_coding.code_id].try(:short_display)
-              csv << row
-            end
-          end
+  def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings)
+    cost_category_codings.each do |cost_category_coding|
+      district_codings.each do |district_coding|
+        codings.each do |ca|
+          row = base_row.dup
+          amount = (amount_total || 0) *
+            get_ratio(amount_total, ca) *
+            get_ratio(amount_total, district_coding) *
+            get_ratio(amount_total, cost_category_coding)
+          row << amount
+          row << get_percentage(amount_total, amount)
+          row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
+          row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+          row << codes_cache[ca.code_id].try(:short_display)
+          row << codes_cache[district_coding.code_id].try(:short_display)
+          row << codes_cache[cost_category_coding.code_id].try(:short_display)
+          csv << row
         end
-    end
-
-    def header(is_spent)
-      amount_type = is_spent ? 'Spent' : 'Budget'
-
-      row = []
-      row << "Activity Name"
-      row << "Activity Description"
-      row << "Q1"
-      row << "Q2"
-      row << "Q3"
-      row << "Q4"
-      row << "Districts"
-      row << "No of sub-activities"
-      row << "Sub-implementers"
-      row << "Data Source"
-      row << "Implementer"
-      row << "Institutions Assisted"
-      row << "# of facilities implementing"
-      row << "Beneficiaries"
-      row << "ID"
-      row << "Currency"
-      row << "Total #{amount_type}"
-      row << "Converted #{amount_type} (USD)"
-      row << "National?"
-      row << "Classified #{amount_type}"
-      row << "Classified #{amount_type} Percentage"
-      row << "Converted Classified #{amount_type} (USD)"
-      row << "HSSPII"
-      row << "Code"
-      row << "District"
-      row << "Cost Category"
-
-      row
-    end
-
-    def get_fake_ca
-      @fake ||= CodeAssignment.new
-    end
-
-    def fake_one_assignment_if_none(amount_total, codings)
-      fake_ca = get_fake_ca
-      fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
-
-      codings.empty? ? [fake_ca] : codings
-    end
-
-    def get_ratio(amount_total, ca)
-      amount_total && amount_total > 0 ? ca.cached_amount / amount_total : 0
-    end
-
-    def get_currency(activity)
-      activity.currency.blank? ? :USD : activity.currency.to_sym
-    end
-
-    def get_percentage(amount_total, amount)
-      percentage = amount_total && amount_total > 0 ? amount / amount_total : 0
-      number_to_percentage(percentage)
-    end
-
-    def codes_cache
-      return @codes_cache if @codes_cache
-
-      @codes_cache = {}
-      Code.all.each do |code|
-        @codes_cache[code.id] = code
       end
-
-      return @codes_cache
     end
+  end
+
+  def header(is_spent)
+    amount_type = is_spent ? 'Spent' : 'Budget'
+
+    row = []
+    row << "Activity Name"
+    row << "Activity Description"
+    row << "Q1"
+    row << "Q2"
+    row << "Q3"
+    row << "Q4"
+    row << "Districts"
+    row << "No of sub-activities"
+    row << "Sub-implementers"
+    row << "Data Source"
+    row << "Implementer"
+    row << "Institutions Assisted"
+    row << "# of facilities implementing"
+    row << "Beneficiaries"
+    row << "ID"
+    row << "Currency"
+    row << "Total #{amount_type}"
+    row << "Converted #{amount_type} (USD)"
+    row << "National?"
+    row << "Classified #{amount_type}"
+    row << "Classified #{amount_type} Percentage"
+    row << "Converted Classified #{amount_type} (USD)"
+    row << "HSSPII"
+    row << "Code"
+    row << "District"
+    row << "Cost Category"
+
+    row
+  end
+
+  def get_fake_ca
+    @fake ||= CodeAssignment.new
+  end
+
+  def fake_one_assignment_if_none(amount_total, codings)
+    fake_ca = get_fake_ca
+    fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
+
+    codings.empty? ? [fake_ca] : codings
+  end
+
+  def get_ratio(amount_total, ca)
+    amount_total && amount_total > 0 ? ca.cached_amount / amount_total : 0
+  end
+
+  def get_currency(activity)
+    activity.currency.blank? ? :USD : activity.currency.to_sym
+  end
+
+  def get_percentage(amount_total, amount)
+    percentage = amount_total && amount_total > 0 ? amount / amount_total : 0
+    number_to_percentage(percentage)
+  end
+
+  def codes_cache
+    return @codes_cache if @codes_cache
+
+    @codes_cache = {}
+    Code.all.each do |code|
+      @codes_cache[code.id] = code
+    end
+
+    return @codes_cache
+  end
 end

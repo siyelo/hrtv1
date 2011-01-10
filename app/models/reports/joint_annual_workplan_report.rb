@@ -8,7 +8,7 @@ class Reports::JointAnnualWorkplanReport
     is_spent = (type == 'spent')
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-      :conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+      #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
       :include => [:locations, :provider, :organizations,
         :beneficiaries, {:data_response => :responding_organization}])
 
@@ -44,7 +44,6 @@ class Reports::JointAnnualWorkplanReport
       codings               = activity.spend_coding
       district_codings      = activity.spend_district_coding
       cost_category_codings = activity.spend_cost_category_coding
-      stratobj_codings      = activity.spend_stratobj_coding
     else
       amount_q1             = activity.budget_q1
       amount_q2             = activity.budget_q2
@@ -55,14 +54,12 @@ class Reports::JointAnnualWorkplanReport
       codings               = activity.budget_coding
       district_codings      = activity.budget_district_coding
       cost_category_codings = activity.budget_cost_category_coding
-      stratobj_codings      = activity.budget_stratobj_coding
     end
 
     # add fake code assignment if none, so that loops keep running
     codings               = fake_one_assignment_if_none(amount_total, codings)
     district_codings      = fake_one_assignment_if_none(amount_total, district_codings)
     cost_category_codings = fake_one_assignment_if_none(amount_total, cost_category_codings)
-    stratobj_codings      = fake_one_assignment_if_none(amount_total, stratobj_codings)
 
     # build rows
     row = []
@@ -86,13 +83,12 @@ class Reports::JointAnnualWorkplanReport
     row << Money.new(amount_total.to_i * 100, currency) .exchange_to(:USD)
     row << is_national
 
-    build_code_assignment_rows(csv, currency, row.dup, amount_total, codings, district_codings, cost_category_codings, stratobj_codings)
+    build_code_assignment_rows(csv, currency, row.dup, amount_total, codings, district_codings, cost_category_codings)
   end
 
   private
 
-    def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings, stratobj_codings)
-      stratobj_codings.each do |stratobj_coding|
+    def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings)
         cost_category_codings.each do |cost_category_coding|
           district_codings.each do |district_coding|
             codings.each do |ca|
@@ -100,20 +96,18 @@ class Reports::JointAnnualWorkplanReport
               amount = (amount_total || 0) *
                        get_ratio(amount_total, ca) *
                        get_ratio(amount_total, district_coding) *
-                       get_ratio(amount_total, cost_category_coding) *
-                       get_ratio(amount_total, stratobj_coding)
+                       get_ratio(amount_total, cost_category_coding)
               row << amount
               row << get_percentage(amount_total, amount)
               row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
-              row << codes_cache[stratobj_coding.code_id]
-              row << codes_cache[ca.code_id]
-              row << codes_cache[district_coding.code_id]
-              row << codes_cache[cost_category_coding.code_id]
+              row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+              row << codes_cache[ca.code_id].try(:short_display)
+              row << codes_cache[district_coding.code_id].try(:short_display)
+              row << codes_cache[cost_category_coding.code_id].try(:short_display)
               csv << row
             end
           end
         end
-      end
     end
 
     def header(is_spent)
@@ -132,7 +126,7 @@ class Reports::JointAnnualWorkplanReport
       row << "Data Source"
       row << "Implementer"
       row << "Institutions Assisted"
-      row << "# of HC's Sub-implementing"
+      row << "# of facilities implementing"
       row << "Beneficiaries"
       row << "ID"
       row << "Currency"
@@ -179,7 +173,7 @@ class Reports::JointAnnualWorkplanReport
 
       @codes_cache = {}
       Code.all.each do |code|
-        @codes_cache[code.id] = code.short_display
+        @codes_cache[code.id] = code
       end
 
       return @codes_cache

@@ -44,7 +44,7 @@ class Reports::JointAnnualWorkplanReport
       codings               = activity.spend_coding
       district_codings      = activity.spend_district_coding
       cost_category_codings = activity.spend_cost_category_coding
-      stratprog_codings     = activity.spend_stratprog_coding
+      stratobj_codings      = activity.spend_stratobj_coding
     else
       amount_q1             = activity.budget_q1
       amount_q2             = activity.budget_q2
@@ -55,14 +55,14 @@ class Reports::JointAnnualWorkplanReport
       codings               = activity.budget_coding
       district_codings      = activity.budget_district_coding
       cost_category_codings = activity.budget_cost_category_coding
-      stratprog_codings     = activity.budget_stratprog_coding
+      stratobj_codings      = activity.budget_stratobj_coding
     end
 
     # add fake code assignment if none, so that loops keep running
     codings               = fake_one_assignment_if_none(amount_total, codings)
     district_codings      = fake_one_assignment_if_none(amount_total, district_codings)
     cost_category_codings = fake_one_assignment_if_none(amount_total, cost_category_codings)
-    stratprog_codings     = fake_one_assignment_if_none(amount_total, stratprog_codings)
+    stratobj_codings      = fake_one_assignment_if_none(amount_total, stratobj_codings)
 
     # build rows
     row = []
@@ -86,13 +86,13 @@ class Reports::JointAnnualWorkplanReport
     row << Money.new(amount_total.to_i * 100, currency) .exchange_to(:USD)
     row << is_national
 
-    build_code_assignment_rows(csv, currency, row.dup, amount_total, codings, district_codings, cost_category_codings, stratprog_codings)
+    build_code_assignment_rows(csv, currency, row.dup, amount_total, codings, district_codings, cost_category_codings, stratobj_codings)
   end
 
   private
 
-    def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings, stratprog_codings)
-      stratprog_codings.each do |stratprog_coding|
+    def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings, stratobj_codings)
+      stratobj_codings.each do |stratobj_coding|
         cost_category_codings.each do |cost_category_coding|
           district_codings.each do |district_coding|
             codings.each do |ca|
@@ -101,11 +101,11 @@ class Reports::JointAnnualWorkplanReport
                        get_ratio(amount_total, ca) *
                        get_ratio(amount_total, district_coding) *
                        get_ratio(amount_total, cost_category_coding) *
-                       get_ratio(amount_total, stratprog_coding)
+                       get_ratio(amount_total, stratobj_coding)
               row << amount
               row << get_percentage(amount_total, amount)
               row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
-              row << codes_cache[stratprog_coding.code_id]
+              row << codes_cache[stratobj_coding.code_id]
               row << codes_cache[ca.code_id]
               row << codes_cache[district_coding.code_id]
               row << codes_cache[cost_category_coding.code_id]

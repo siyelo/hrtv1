@@ -56,10 +56,6 @@ class Nsp < Code
     a
   end
 
-  def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
-  end
-
   def self.leaves_with_level
     # NSP 'leaves' are sometimes also embedded in other hierarchies, so we override the default awesome_nested_set :leaves
     a = []

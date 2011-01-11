@@ -61,6 +61,11 @@ class Reports::JointAnnualWorkplanReport
     district_codings      = fake_one_assignment_if_none(amount_total, district_codings)
     cost_category_codings = fake_one_assignment_if_none(amount_total, cost_category_codings)
 
+
+    # TODO: new
+    coding_with_parent_codes = get_coding_with_parent_codes(codings)
+    cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
+
     # build rows
     row = []
     row << activity.name
@@ -71,11 +76,11 @@ class Reports::JointAnnualWorkplanReport
     row << amount_q4
     row << activity.locations.map(&:short_display).join(' | ')
     row << activity.sub_activities_count
+    row << hc_sub_activity_count
     row << activity.sub_implementers.map(&:name).join(' | ')
     row << activity.data_response.responding_organization.try(:name)
     row << activity.provider.try(:name) || "No Implementer Specified"
     row << activity.organizations.map(&:name).join(' | ')
-    row << hc_sub_activity_count
     row << activity.beneficiaries.map(&:short_display).join(' | ')
     row << activity.id
     row << activity.currency
@@ -83,99 +88,139 @@ class Reports::JointAnnualWorkplanReport
     row << Money.new(amount_total.to_i * 100, currency) .exchange_to(:USD)
     row << is_national
 
-    build_code_assignment_rows(csv, currency, row.dup, amount_total, codings, district_codings, cost_category_codings)
+    build_code_assignment_rows(csv, currency, row.dup, amount_total, coding_with_parent_codes, district_codings, cost_category_coding_with_parent_codes)
   end
 
   private
 
-  def build_code_assignment_rows(csv, currency, base_row, amount_total, codings, district_codings, cost_category_codings)
-    cost_category_codings.each do |cost_category_coding|
-      district_codings.each do |district_coding|
-        codings.each do |ca|
-          row = base_row.dup
-          amount = (amount_total || 0) *
-            get_ratio(amount_total, ca) *
-            get_ratio(amount_total, district_coding) *
-            get_ratio(amount_total, cost_category_coding)
-          row << amount
-          row << get_percentage(amount_total, amount)
-          row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
-          row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
-          row << codes_cache[ca.code_id].try(:short_display)
-          row << codes_cache[district_coding.code_id].try(:short_display)
-          row << codes_cache[cost_category_coding.code_id].try(:short_display)
-          csv << row
+    def build_code_assignment_rows(csv, currency, base_row, amount_total, coding_with_parent_codes, district_codings, cost_category_coding_with_parent_codes)
+      cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
+        cost_category_coding = cost_category_ca_coding[0]
+        cost_category_codes  = cost_category_ca_coding[1]
+
+        district_codings.each do |district_coding|
+          coding_with_parent_codes.each do |ca_codes|
+            ca = ca_codes[0]
+            codes = ca_codes[1]
+
+            row = base_row.dup
+            amount = (amount_total || 0) *
+              get_ratio(amount_total, ca) *
+              get_ratio(amount_total, district_coding) *
+              get_ratio(amount_total, cost_category_coding)
+            row << amount
+            row << get_percentage(amount_total, amount)
+            row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
+            row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+
+            Code.deepest_nesting.times do |i|
+              code = codes[i]
+              if code
+                row << codes_cache[code.id].try(:short_display)
+              else
+                row << nil
+              end
+            end
+
+            row << codes_cache[district_coding.code_id].try(:short_display)
+
+            CostCategory.deepest_nesting.times do |i|
+              code = cost_category_codes[i]
+              if code
+                row << codes_cache[code.id].try(:short_display)
+              else
+                row << nil
+              end
+            end
+
+            csv << row
+          end
         end
       end
     end
-  end
 
-  def header(is_spent)
-    amount_type = is_spent ? 'Spent' : 'Budget'
+    def header(is_spent)
+      amount_type = is_spent ? 'Spent' : 'Budget'
 
-    row = []
-    row << "Activity Name"
-    row << "Activity Description"
-    row << "Q1"
-    row << "Q2"
-    row << "Q3"
-    row << "Q4"
-    row << "Districts"
-    row << "No of sub-activities"
-    row << "Sub-implementers"
-    row << "Data Source"
-    row << "Implementer"
-    row << "Institutions Assisted"
-    row << "# of facilities implementing"
-    row << "Beneficiaries"
-    row << "ID"
-    row << "Currency"
-    row << "Total #{amount_type}"
-    row << "Converted #{amount_type} (USD)"
-    row << "National?"
-    row << "Classified #{amount_type}"
-    row << "Classified #{amount_type} Percentage"
-    row << "Converted Classified #{amount_type} (USD)"
-    row << "HSSPII"
-    row << "Code"
-    row << "District"
-    row << "Cost Category"
+      row = []
+      row << "Activity Name"
+      row << "Activity Description"
+      row << "Q1"
+      row << "Q2"
+      row << "Q3"
+      row << "Q4"
+      row << "Districts"
+      row << "# of sub-activities"
+      row << "# of facilities implementing"
+      row << "Sub-implementers"
+      row << "Data Source"
+      row << "Implementer"
+      row << "Institutions Assisted"
+      row << "Beneficiaries"
+      row << "ID"
+      row << "Currency"
+      row << "Total #{amount_type}"
+      row << "Converted #{amount_type} (USD)"
+      row << "National?"
+      row << "Classified #{amount_type}"
+      row << "Classified #{amount_type} Percentage"
+      row << "Converted Classified #{amount_type} (USD)"
+      row << "HSSPII"
+      Code.deepest_nesting.times do
+        row << "Code"
+      end
+      row << "District"
+      CostCategory.deepest_nesting.times do
+        row << "Cost Category"
+      end
 
-    row
-  end
-
-  def get_fake_ca
-    @fake ||= CodeAssignment.new
-  end
-
-  def fake_one_assignment_if_none(amount_total, codings)
-    fake_ca = get_fake_ca
-    fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
-
-    codings.empty? ? [fake_ca] : codings
-  end
-
-  def get_ratio(amount_total, ca)
-    amount_total && amount_total > 0 ? ca.cached_amount / amount_total : 0
-  end
-
-  def get_currency(activity)
-    activity.currency.blank? ? :USD : activity.currency.to_sym
-  end
-
-  def get_percentage(amount_total, amount)
-    percentage = amount_total && amount_total > 0 ? amount / amount_total : 0
-    number_to_percentage(percentage)
-  end
-
-  def codes_cache
-    return @codes_cache if @codes_cache
-
-    @codes_cache = {}
-    Code.all.each do |code|
-      @codes_cache[code.id] = code
+      row
     end
 
-    return @codes_cache
-  end
+    def get_fake_ca
+      @fake ||= CodeAssignment.new
+    end
+
+    def fake_one_assignment_if_none(amount_total, codings)
+      fake_ca = get_fake_ca
+      fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
+
+      codings.empty? ? [fake_ca] : codings
+    end
+
+    def get_ratio(amount_total, ca)
+      amount_total && amount_total > 0 ? ca.cached_amount / amount_total : 0
+    end
+
+    def get_currency(activity)
+      activity.currency.blank? ? :USD : activity.currency.to_sym
+    end
+
+    def get_percentage(amount_total, amount)
+      percentage = amount_total && amount_total > 0 ? amount / amount_total : 0
+      number_to_percentage(percentage)
+    end
+
+    def codes_cache
+      return @codes_cache if @codes_cache
+
+      @codes_cache = {}
+      Code.all.each do |code|
+        @codes_cache[code.id] = code
+      end
+
+      return @codes_cache
+    end
+
+    def get_coding_with_parent_codes(codings)
+      coding_with_parent_codes = []
+
+      real_codings  = codings.select{|ca| ca.amount.present? || ca.percentage.present?}
+      real_codings.each do |ca|
+        coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
+      end
+
+      coding_with_parent_codes
+    end
+
 end

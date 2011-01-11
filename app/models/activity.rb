@@ -517,6 +517,7 @@ class Activity < ActiveRecord::Base
       end
     end
 
+    # TODO: remove this!? -  does sub activities has code assignments?
     def district_codings_from_sub_activities(klass, amount)
       districts_hash = {}
       Location.all.each do |l|
@@ -527,7 +528,7 @@ class Activity < ActiveRecord::Base
           districts_hash[ca.code] += ca.cached_amount
         end
       end
-      districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
+      districts_hash.select{|loc,amt| amt > 0}.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
     end
 
     # removes code assignments for non-existing locations for this activity

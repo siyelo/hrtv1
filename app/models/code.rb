@@ -22,7 +22,10 @@ class Code < ActiveRecord::Base
   ### Public Methods
 
   def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    #@depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    # TODO: check if this change has broken the other reports
+    # c = Code.find 1434 has 7 parents
+    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
   end
 
   def self.roots_with_level

@@ -21,7 +21,7 @@ expect \"Are you sure you wish to continue? (y/n)? \"
 send \"y\r\"
 set results $expect_out(buffer)
 expect eof"
-echo "  db pull done at `date '+%Y-%m-%d-%I%Mhrs'`"
+echo "  db pull done at `date '+%Y-%m-%d-%H%Mhrs'`"
 
 echo "  gzipping it"
 gzip $BACKUP_DB_FILE

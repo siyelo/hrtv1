@@ -8,9 +8,9 @@ class Reports::JointAnnualWorkplanReport
     is_spent = (type == 'spent')
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                                                                 #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-                                                                 :include => [:locations, :provider, :organizations,
-                                                                              :beneficiaries, {:data_response => :responding_organization}])
+                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                   :include => [:locations, :provider, :organizations,
+                                :beneficiaries, {:data_response => :responding_organization}])
 
     hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -135,6 +135,7 @@ class Reports::JointAnnualWorkplanReport
             last_code = codes.last
             row << last_code.try(:short_display)
             row << last_code.try(:official_name)
+            row << last_code.try(:type)
 
             row << codes_cache[district_coding.code_id].try(:short_display)
 
@@ -189,6 +190,7 @@ class Reports::JointAnnualWorkplanReport
       end
       row << "Lowest level Code"
       row << "Lowest level Official Code"
+      row << "Code type"
       row << "District"
       CostCategory.deepest_nesting.times do
         row << "Cost Category"
@@ -217,8 +219,7 @@ class Reports::JointAnnualWorkplanReport
     end
 
     def get_percentage(amount_total, amount)
-      percentage = amount_total && amount_total > 0 ? amount / amount_total : 0
-      number_to_percentage(percentage)
+      amount_total && amount_total > 0 ? amount / amount_total : 0
     end
 
     def codes_cache
@@ -232,15 +233,50 @@ class Reports::JointAnnualWorkplanReport
       return @codes_cache
     end
 
+    def code_descendants_cache
+      return @code_descendants_cache if @code_descendants_cache
+
+      @code_descendants_cache = {}
+      Code.all.each do |code|
+        @code_descendants_cache[code.id] = code.descendants
+      end
+
+      return @code_descendants_cache
+    end
+
     def get_coding_with_parent_codes(codings)
       coding_with_parent_codes = []
+      coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
 
-      real_codings  = codings.select{|ca| ca.amount.present? || ca.percentage.present?}
+      real_codings  = codings.select do |ca|
+        code = codes_cache[ca.code_id]
+        (ca.amount.present? || ca.percentage.present?) &&
+        code && lowest_level_code?(code, coded_codes)
+      end
+
       real_codings.each do |ca|
         coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
       end
 
       coding_with_parent_codes
+    end
+
+
+    def lowest_level_code?(code, coded_codes)
+      llcode = true
+
+      # check if any of the descendants of the code is in the code assignments
+      descendants = code_descendants_cache[code.id]
+      if descendants.present?
+        descendants.each do |dcode|
+          if coded_codes.include?(dcode)
+            llcode = false
+            break
+          end
+        end
+      end
+
+      return llcode
     end
 
 end

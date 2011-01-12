@@ -31,7 +31,7 @@ class Reports::ActivityReport
     def build_header
       header = []
       header << [ "project", "org.name", "org.type", "activity.id", "activity.name", "activity.description" ]
-      header << ["activity.text_for_beneficiaries", "activity.budget", "activity.spend", "currency"]
+      header << [ "activity.budget", "activity.spend", "currency"]
       header << ["activity.start", "activity.end", "activity.provider", "activity.provider.FOSAID"]
       header << ["activity.text_for_beneficiaries", "activity.text_for_targets"]
       header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]

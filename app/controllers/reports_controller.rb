@@ -147,12 +147,14 @@ class ReportsController < ApplicationController
 
     def set_activities
       if current_user.admin?
-        dr = DataResponse.find(params[:id])
+        #dr = DataResponse.find(params[:id])
+        # THIS BREAKS ADMINS GETTING REPORTS FOR ONLY ONE DR
+        # I DONT THINK SITE LINKS TO ANY REPORTS LIKE THAT AT THE MOMENT
         @activities = Activity.only_simple.canonical
       else
         dr = current_user.data_responses.find(params[:id])
+        @activities = dr.activities
       end
-      @activities ||= dr.activities
     end
 
     def send_csv(text, filename)

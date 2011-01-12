@@ -34,18 +34,9 @@
           Review District Expenditures and Budgets
           %span.hint Interactive reports
 
-      - if current_user.current_data_response
-        %li=  link_to "By NSP", districts_by_nsp_url(:id => current_user.current_data_response.id, :type => :budget)
-        %li= link_to "By All Codes", districts_by_full_coding_url(:id => current_user.current_data_response.id, :type => :budget)
-      - else
-        %li
-          %a{ :href => '#'}
-            By NSP
-            %span.hint WARN: Not available since "current data response" is not set.
-        %li
-          %a{ :href => '#'}
-            By All Codes
-            %span.hint WARN: Not available since "current data response" is not set.
+      / :id => 1 is a hack for simpler routes used on many of reports
+      %li= link_to "By NSP", districts_by_nsp_url(:id =>  1, :type => :budget)
+      %li= link_to "By All Codes", districts_by_full_coding_url(:id =>  1, :type => :budget)
   %h2
     =image_tag "icon_users.png", :class => "heading_icon"
     Users
@@ -63,18 +54,8 @@
       %ul
         %li=  link_to "By Partner Budget", map_districts_by_partner_url( :type => "CodingBudgetDistrict")
         %li=  link_to "By Partner Spending", map_districts_by_partner_url( :type => "CodingSpendDistrict")
-        - if current_user.current_data_response
-          %li=  link_to "By NSP", map_districts_by_nsp_url(:id => current_user.current_data_response.id, :type => :budget)
-          %li=  link_to "By All Codes", map_districts_by_full_coding_url(:id => current_user.current_data_response.id, :type => :budget)
-        - else
-          %li
-            %a{ :href => '#'}
-              By NSP
-              %span.hint WARN: Not available since "current data response" is not set.
-          %li
-            %a{ :href => '#'}
-              By All Codes
-              %span.hint WARN: Not available since "current data response" is not set.
+        %li=  link_to "By NSP", map_districts_by_nsp_url(:id =>  1, :type => :budget)
+        %li=  link_to "By All Codes", map_districts_by_full_coding_url(:id =>  1, :type => :budget)
 
     .second-half
       %h3 Facilities
@@ -107,15 +88,5 @@
       %li=  link_to "By Expenditure Coding (beta)", activities_by_expenditure_coding_path
       %li=  link_to "By Expenditure Cost Categorization (beta)", activities_by_expenditure_cost_cat_path
       %li=  link_to "By Expenditure Districts (beta)", activities_by_expenditure_districts_path
-      - if current_user.current_data_response
-        %li=  link_to "By NSP", activities_by_nsp_url(:id => current_user.current_data_response.id, :type => :budget)
-        %li=  link_to "By All Codes", activities_by_full_coding_url(:id => current_user.current_data_response.id, :type => :budget)
-      - else
-        %li
-          %a{ :href => '#'}
-            By NSP
-            %span.hint WARN: Not available since "current data response" is not set.
-        %li
-          %a{ :href => '#'}
-            By All Codes
-            %span.hint WARN: Not available since "current data response" is not set.
+      %li=  link_to "By NSP", activities_by_nsp_url(:id =>  1, :type => :budget)
+      %li=  link_to "By All Codes", activities_by_full_coding_url(:id =>  1, :type => :budget)

@@ -92,15 +92,17 @@ body
             &:hover, &:focus
               color: !lightest-blue
             &.signin
-              background: $light-blue
+              background: image_url("landing_signin.png") no-repeat left center $dark-blue
               border: none
-              color: $dark-blue
-              margin-top: -16px
-              padding: 16px
+              color: $light-blue
+              font-family: 'Avenir'
+              font-weight: normal
+              margin-left: 8px
+              padding: 4px 8px 4px 24px
               text-transform: uppercase
               +border-radius(3px)
               &:hover
-                background: white
+                color: white
 
     #tagline
       float: right
@@ -150,7 +152,6 @@ body
   /* end */
 
   /* shared footer styles */
-  /* shared footer styles */
   #footer
     color: !mid-blue
     font-size: 11px
@@ -162,12 +163,12 @@ body
     ul
       line-height: 16px
       li.powered
+        font-size: 11px
         text-transform: none
 
     h2.logo
       color: !dark-blue
       font-size: 13px
-
 
     .left
       float: left

@@ -112,6 +112,7 @@ class Reports::JointAnnualWorkplanReport
             row << get_percentage(amount_total, amount)
             row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
             row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+            row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
 
             Code.deepest_nesting.times do |i|
               code = codes[i]
@@ -121,6 +122,19 @@ class Reports::JointAnnualWorkplanReport
                 row << nil
               end
             end
+
+            Code.deepest_nesting.times do |i|
+              code = codes[i]
+              if code
+                row << codes_cache[code.id].try(:official_name)
+              else
+                row << nil
+              end
+            end
+
+            last_code = codes.last
+            row << last_code.try(:short_display)
+            row << last_code.try(:official_name)
 
             row << codes_cache[district_coding.code_id].try(:short_display)
 
@@ -165,10 +179,16 @@ class Reports::JointAnnualWorkplanReport
       row << "Classified #{amount_type}"
       row << "Classified #{amount_type} Percentage"
       row << "Converted Classified #{amount_type} (USD)"
-      row << "HSSPII"
+      row << "HSSPII Strat obj"
+      row << "HSSPII Strat prog"
       Code.deepest_nesting.times do
         row << "Code"
       end
+      Code.deepest_nesting.times do
+        row << "Official Code"
+      end
+      row << "Lowest level Code"
+      row << "Lowest level Official Code"
       row << "District"
       CostCategory.deepest_nesting.times do
         row << "Cost Category"

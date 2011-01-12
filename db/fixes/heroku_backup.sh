@@ -2,7 +2,7 @@
 APP='resourcetracking'
 BUNDLE='rtbackup'
 OLD_BUNDLE=`heroku bundles --app $APP | awk '{print $1}'`
-DATE=`date '+%Y-%m-%d-%I%Mhrs'`
+DATE=`date '+%Y-%m-%d-%H%Mhrs'`
 BACKUP_DIR=/root/hrt_backups/
 BACKUP_DB_FILE=$BACKUP_DIR/$APP-backup.$DATE.db
 

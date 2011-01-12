@@ -2,7 +2,7 @@ class SpendCodeAssignment < CodeAssignment
 
   def self.classified(activity)
     if activity.spend == nil
-      true 
+      true
     else
       activity.spend == activity.send("#{self}_amount")
     end
@@ -13,8 +13,6 @@ class SpendCodeAssignment < CodeAssignment
     ret.nil? ? 0 : ret
   end
 end
-
-
 
 
 

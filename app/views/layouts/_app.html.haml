@@ -2,7 +2,7 @@
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
     - page = "#{yield(:title)} | " if @content_for_title
-    %title= "#{page}Resource Tracking Database "
+    %title= "#{page}Health Resource Tracker "
     = render 'layouts/include_tags'
     = yield(:head)
 

@@ -1,5 +1,6 @@
 module HelperMethods
-  MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
+  MTEF_CODE_LEVEL = 0 # users may not code activities to level 1 of MTEF codes
+                      # so use level 0 for completeness
 
   def get_coding_type(code_type, is_spent)
     case code_type
@@ -41,7 +42,7 @@ module HelperMethods
     when 'nsp'
       Nsp.roots
     when "mtef"
-      Mtef.codes_by_level(MTEF_CODE_LEVEL)
+      Mtef.codes_by_level(MTEF_CODE_LEVEL) # TODO: root cause of 8182669
     when 'cost_category'
       CostCategory.roots
     else

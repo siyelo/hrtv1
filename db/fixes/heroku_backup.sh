@@ -10,7 +10,7 @@ echo ""
 echo ""
 echo "$DATE: Backing up $APP..."
 
-echo "  Doing db:pull to sqlite3..."
+echo "  Starting db:pull to sqlite3..."
 
 # gifted 'expect' idea from http://trnsfrmr.com/2010/08/23/automate-dbpull-from-heroku/
 expect -c "
@@ -21,8 +21,6 @@ expect \"Are you sure you wish to continue? (y/n)? \"
 send \"y\r\"
 set results $expect_out(buffer)
 expect eof"
-date >> /home/www/sites/xxx/db/backuplog.log
-echo "  db pull done at `date '+%Y-%m-%d-%I%Mhrs'`"
 
-echo "...done"
+echo "...db pull done at `date '+%Y-%m-%d-%I%Mhrs'`"
 echo ""

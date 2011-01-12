@@ -29,37 +29,29 @@ class Reports::ActivityReport
 
   protected
 
-  def build_header
-    #print header
-    header = []
-    header << [ "project", "org.name", "org.type", "activity.id", "activity.name", "activity.description" ]
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider", "activity.provider.FOSAID"]
-    header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]
-    header.flatten
-  end
-
-  def add_rows_to_csv rows, csv
-    if rows.first.class == Array
-      rows.each {|r| add_rows_to_csv r, csv}
-    elsif rows.empty?
-      #do nothing
-    else
-      csv << rows
+    def build_header
+      header = []
+      header << [ "project", "org.name", "org.type", "activity.id", "activity.name", "activity.description" ]
+      header << ["activity.text_for_beneficiaries", "activity.budget", "activity.spend", "currency"]
+      header << ["activity.start", "activity.end", "activity.provider", "activity.provider.FOSAID"]
+      header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]
+      header.flatten
     end
-  end
 
-  def build_rows(activity)
-    rows=[]
-    org        = activity.data_response.responding_organization
-    #TODO handle sub activities correctly
-#    if activity.sub_activities.size > 0
-#      activity.sub_activities.each do |sa|
-#        sa_rows = []
-#        sa_rows = build_rows sa
-#        rows << sa_rows unless sa_rows.empty?
-#      end
-#      rows
-#    else
+    def add_rows_to_csv rows, csv
+      if rows.first.class == Array
+        rows.each {|r| add_rows_to_csv r, csv}
+      elsif rows.empty?
+        #do nothing
+      else
+        csv << rows
+      end
+    end
+
+    def build_rows(activity)
+      rows=[]
+      org        = activity.data_response.responding_organization
+      #TODO handle sub activities correctly
       row = []
       row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
       row << ["#{h activity.text_for_beneficiaries}",  "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}" ]
@@ -87,7 +79,6 @@ class Reports::ActivityReport
         end
       end
       rows
-#    end
-  end
+    end
 
 end

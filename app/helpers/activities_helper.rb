@@ -20,7 +20,6 @@ module ActivitiesHelper
     elsif params[:controller] == "activities" #this might intro a bug
       #right now for some reason projects is trying to pick up the
       #options for the association for activities
-      logger.debug("in 2")
       if association.name == :provider
           ids = Set.new
           Project.available_to(current_user).all.each do |p|
@@ -50,6 +49,8 @@ module ActivitiesHelper
       else
         super
       end
+    else
+      super # per AS docs, have to end options_for_association_conditions with supercall
     end
   end
 

@@ -19,7 +19,7 @@ class ReportsController < ApplicationController
 
   def activities_by_budget_coding
     authorize! :read, :activities_by_budget_coding
-    rep = Reports::ActivitiesByCodingBudget.new
+    rep = Reports::ActivitiesByBudgetCoding.new
     send_csv(rep.csv, "activities_by_budget_coding.csv")
   end
 
@@ -81,8 +81,9 @@ class ReportsController < ApplicationController
     send_csv(rep.csv,"activities_by_districts_new.csv")
   end
 
+  # TODO remove, not being used
   def activities_by_budget_coding_new
-    rep = Reports::ActivitiesByCodingBudgetNew.new
+    rep = Reports::ActivitiesByBudgetCodingNew.new
     send_csv(rep.csv,"activities_by_budget_coding_new.csv")
   end
 

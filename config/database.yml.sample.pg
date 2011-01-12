@@ -16,19 +16,19 @@
 # END
 
 # Postgres setup
-# createuser -d -R -P restracker_dev
-# createdb -O restracker_dev restracker_dev
+# createuser -d -R -P hrt_dev
+# createdb -O hrt_dev hrt_dev
 
 # to load a pgdump.sql from Heroku:
-# psql -f pgdump.sql restracker_dev restracker_dev -W
+# psql -f pgdump.sql hrt_dev hrt_dev -W
 
 development:
   adapter: postgresql
   encoding: unicode
-  database: restracker_dev
+  database: hrt_dev
   pool: 5
-  username: restracker_dev
-  password: restracker_dev
+  username: hrt_dev
+  password: hrt_dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -36,10 +36,10 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: restracker_test
+  database: hrt_test
   pool: 5
-  username: restracker_test
-  password: restracker_test
+  username: hrt_test
+  password: hrt_test
 
 # note - yes this is a duplication of the test db - but with just
 #   cucumber:
@@ -48,9 +48,9 @@ test:
 cucumber:
   adapter: postgresql
   encoding: unicode
-  database: restracker_test
+  database: hrt_test
   pool: 5
-  username: restracker_test
-  password: restracker_test
+  username: hrt_test
+  password: hrt_test
 
 # prod config doesnt matter since we're using heroku

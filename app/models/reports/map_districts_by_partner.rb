@@ -2,9 +2,9 @@ require 'fastercsv'
 
 class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
   include Reports::Helpers
- 
 
-# location => partner, amount 
+
+# location => partner, amount
   def initialize(activities, report_type)
     @codes_to_include = []
   #  [9020101, 90207].each do |e|
@@ -41,12 +41,12 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
   def set_district_hash_for_code code
     #code is provider
     provider = code
-    #NOTE need to convert currencies and dynamic calcs not being used here 
-    
+    #NOTE need to convert currencies and dynamic calcs not being used here
+
     #cas = @report_type.with_activities(code.provider_for.only_simple.map(&:id))#.with_code_id(code.id)
     # or
     provider.provider_for.only_simple.canonical.each do |act|
-      #act = Activity.find(1107) 
+      #act = Activity.find(1107)
       cas = act.budget_district_coding if @report_type == CodingBudgetDistrict
       cas = act.spend_district_coding if @report_type == CodingSpendDistrict
       cas.each do |ca|
@@ -74,10 +74,10 @@ class Reports::MapDistrictsByPartner < Reports::CodedActivityReport
       top = sorted_code_amt.first
       row << top[0].to_s
       row << n2c(top[1])
-   
+
       # show full list
       row << sorted_code_amt.collect{|e| "#{e[0].to_s}(#{n2c(e[1])})"}.join(",")
-  
+
       sorted_code_amt.shift #dont show top again
       # show in cols
       # after sorting by amt

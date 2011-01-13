@@ -41,6 +41,10 @@ class Reports::ActivitiesByNha < Reports::CodedActivityReport
       row << 'Converted Total Spent (USD)'
       row << 'Classified Spent'
       row << 'Converted Classified Spent (USD)'
+      row << "Code type"
+      row << "Code sub account"
+      row << "Code nha code"
+      row << "Code nasa code"
       row << 'NHA/NASA Code'
       Code.deepest_nesting.times do
         row << 'Code'
@@ -94,6 +98,11 @@ class Reports::ActivitiesByNha < Reports::CodedActivityReport
 
         row << ca.cached_amount
         row << Money.new(ca.new_cached_amount_in_usd, :USD).exchange_to(:USD)
+
+        row << last_code.try(:type)
+        row << last_code.try(:sub_account)
+        row << last_code.try(:nha_code)
+        row << last_code.try(:nasa_code)
 
         if (last_code.type == 'Nha' || last_code.type == 'Nasa')
           row << last_code.try(:official_name)

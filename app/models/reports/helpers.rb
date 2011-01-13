@@ -91,4 +91,36 @@ module Reports::Helpers
 
     return llcode
   end
+
+
+  def get_funding_sources(activity)
+    funding_sources = []
+    activity.projects.each do |project|
+      project.funding_sources.each do |funding_source|
+        funding_sources << funding_source
+      end
+    end
+    #funding_sources = funding_sources - [a.organization]
+
+    funding_sources.map{|f| f.name}.uniq.join(', ')
+  end
+
+  def get_sub_implementers(activity)
+    activity.sub_implementers.map{|si| si.name}.join(' | ')
+  end
+
+  def get_locations(activity)
+    activity.locations.map{|l| l.short_display}.join(' | ')
+  end
+
+  def add_codes_to_row(row, codes, deepest_nesting, attr)
+    deepest_nesting.times do |i|
+      code = codes[i]
+      if code
+        row << codes_cache[code.id].try(attr)
+      else
+        row << nil
+      end
+    end
+  end
 end

@@ -46,31 +46,20 @@ class Reports::ActivitiesByNha < Reports::CodedActivityReport
       row << "Code nha code"
       row << "Code nasa code"
       row << 'NHA/NASA Code'
-      Code.deepest_nesting.times do
-        row << 'Code'
-      end
+      Code.deepest_nesting.times{ row << 'Code' }
 
       row
     end
 
     # nha and nasa only track expenditure
     def build_rows(csv, activity)
-
-      funding_sources = []
-      activity.projects.each do |project|
-        project.funding_sources.each do |funding_source|
-          funding_sources << funding_source
-        end
-      end
-      #funding_sources = funding_sources - [a.organization]
-
       row = []
-      row << funding_sources.map{|f| f.name}.uniq.join(', ')
+      row << get_funding_sources(activity)
       row << activity.organization.try(:raw_type)
       row << activity.organization.try(:name)
       row << activity.provider.try(:name)
-      row << activity.locations.map{|l| l.short_display}.join(' | ')
-      row << activity.sub_implementers.map{|s| s.name}.join(' | ')
+      row << get_locations(activity)
+      row << get_sub_implementers(activity)
       row << activity.name
       row << activity.description
       row << activity.currency
@@ -88,38 +77,30 @@ class Reports::ActivitiesByNha < Reports::CodedActivityReport
       coding_with_parent_codes = get_coding_with_parent_codes(activity.spend_coding)
 
       coding_with_parent_codes.each do |ca_codes|
-        ca = ca_codes[0]
-        codes = ca_codes[1]
-
-        row = base_row.dup
-        #row << ca.cached_amount
-
+        ca        = ca_codes[0]
+        codes     = ca_codes[1]
         last_code = codes.last
+        row       = base_row.dup
 
         row << ca.cached_amount
         row << Money.new(ca.new_cached_amount_in_usd, :USD).exchange_to(:USD)
-
         row << last_code.try(:type)
         row << last_code.try(:sub_account)
         row << last_code.try(:nha_code)
         row << last_code.try(:nasa_code)
+        row << get_nha_or_nasa(last_code)
 
-        if (last_code.type == 'Nha' || last_code.type == 'Nasa')
-          row << last_code.try(:official_name)
-        else
-          row << 'n/a'
-        end
-
-        Code.deepest_nesting.times do |i|
-          code = codes[i]
-          if code
-            row << codes_cache[code.id].try(:short_display)
-          else
-            row << nil
-          end
-        end
+        add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
 
         csv << row
+      end
+    end
+
+    def get_nha_or_nasa(last_code)
+      if (last_code.type == 'Nha' || last_code.type == 'Nasa')
+        last_code.try(:official_name)
+      else
+        'n/a'
       end
     end
 end

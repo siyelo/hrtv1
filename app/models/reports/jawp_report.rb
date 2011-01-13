@@ -74,14 +74,15 @@ class Reports::JawpReport
     row << amount_q2
     row << amount_q3
     row << amount_q4
-    row << activity.locations.map(&:short_display).join(' | ')
+    row << get_locations(activity)
     row << activity.sub_activities_count
     row << hc_sub_activity_count
-    row << activity.sub_implementers.map(&:name).join(' | ')
-    row << activity.data_response.responding_organization.try(:name)
+    row << get_sub_implementers(activity)
+    row << activity.organization.try(:name)
+    row << get_funding_sources(activity)
     row << activity.provider.try(:name) || "No Implementer Specified"
-    row << activity.organizations.map(&:name).join(' | ')
-    row << activity.beneficiaries.map(&:short_display).join(' | ')
+    row << get_institutions_assisted(activity)
+    row << get_beneficiaries(activity)
     row << activity.id
     row << activity.currency
     row << amount_total
@@ -100,37 +101,22 @@ class Reports::JawpReport
 
         district_codings.each do |district_coding|
           coding_with_parent_codes.each do |ca_codes|
-            ca = ca_codes[0]
-            codes = ca_codes[1]
-
-            row = base_row.dup
+            ca     = ca_codes[0]
+            codes  = ca_codes[1]
+            row    = base_row.dup
             amount = (amount_total || 0) *
               get_ratio(amount_total, ca) *
               get_ratio(amount_total, district_coding) *
               get_ratio(amount_total, cost_category_coding)
+
             row << amount
             row << get_percentage(amount_total, amount)
             row << Money.new((amount * 100).to_i, currency).exchange_to(:USD)
             row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
             row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
 
-            Code.deepest_nesting.times do |i|
-              code = codes[i]
-              if code
-                row << codes_cache[code.id].try(:short_display)
-              else
-                row << nil
-              end
-            end
-
-            Code.deepest_nesting.times do |i|
-              code = codes[i]
-              if code
-                row << codes_cache[code.id].try(:official_name)
-              else
-                row << nil
-              end
-            end
+            add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
+            add_codes_to_row(row, codes, Code.deepest_nesting, :official_name)
 
             last_code = codes.last
             row << last_code.try(:short_display)
@@ -139,17 +125,9 @@ class Reports::JawpReport
             row << last_code.try(:sub_account)
             row << last_code.try(:nha_code)
             row << last_code.try(:nasa_code)
-
             row << codes_cache[district_coding.code_id].try(:short_display)
 
-            CostCategory.deepest_nesting.times do |i|
-              code = cost_category_codes[i]
-              if code
-                row << codes_cache[code.id].try(:short_display)
-              else
-                row << nil
-              end
-            end
+            add_codes_to_row(row, cost_category_codes, CostCategory.deepest_nesting, :short_display)
 
             csv << row
           end
@@ -172,6 +150,7 @@ class Reports::JawpReport
       row << "# of facilities implementing"
       row << "Sub-implementers"
       row << "Data Source"
+      row << 'Funding Source'
       row << "Implementer"
       row << "Institutions Assisted"
       row << "Beneficiaries"
@@ -185,12 +164,8 @@ class Reports::JawpReport
       row << "Converted Classified #{amount_type} (USD)"
       row << "HSSPII Strat obj"
       row << "HSSPII Strat prog"
-      Code.deepest_nesting.times do
-        row << "Code"
-      end
-      Code.deepest_nesting.times do
-        row << "Official Code"
-      end
+      Code.deepest_nesting.times{ row << "Code" }
+      Code.deepest_nesting.times{ row << "Official Code" }
       row << "Lowest level Code"
       row << "Lowest level Official Code"
       row << "Code type"
@@ -198,9 +173,7 @@ class Reports::JawpReport
       row << "Code nha code"
       row << "Code nasa code"
       row << "District"
-      CostCategory.deepest_nesting.times do
-        row << "Cost Category"
-      end
+      CostCategory.deepest_nesting.times{ row << "Cost Category" }
 
       row
     end
@@ -222,5 +195,13 @@ class Reports::JawpReport
 
     def get_percentage(amount_total, amount)
       amount_total && amount_total > 0 ? amount / amount_total : 0
+    end
+
+    def get_institutions_assisted(activity)
+      activity.organizations.map{|o| o.name}.join(' | ')
+    end
+
+    def get_beneficiaries(activity)
+      activity.beneficiaries.map{|o| o.short_display}.join(' | ')
     end
 end

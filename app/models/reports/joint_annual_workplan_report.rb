@@ -136,6 +136,9 @@ class Reports::JointAnnualWorkplanReport
             row << last_code.try(:short_display)
             row << last_code.try(:official_name)
             row << last_code.try(:type)
+            row << last_code.try(:sub_account)
+            row << last_code.try(:nha_code)
+            row << last_code.try(:nasa_code)
 
             row << codes_cache[district_coding.code_id].try(:short_display)
 
@@ -191,6 +194,9 @@ class Reports::JointAnnualWorkplanReport
       row << "Lowest level Code"
       row << "Lowest level Official Code"
       row << "Code type"
+      row << "Code sub account"
+      row << "Code nha code"
+      row << "Code nasa code"
       row << "District"
       CostCategory.deepest_nesting.times do
         row << "Cost Category"

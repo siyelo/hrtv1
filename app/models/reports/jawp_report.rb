@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::JointAnnualWorkplanReport
+class Reports::JawpReport
   include Reports::Helpers
 
   def initialize(current_user, type)
@@ -8,7 +8,7 @@ class Reports::JointAnnualWorkplanReport
     is_spent = (type == 'spent')
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                   :conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])
 

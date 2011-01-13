@@ -150,9 +150,9 @@ class ReportsController < ApplicationController
     send_csv(rep.csv,"map_facilities_by_partner.csv")
   end
 
-  def joint_annual_workplan_report
-    rep = Reports::JointAnnualWorkplanReport.new(current_user, params[:type])
-    send_csv(rep.csv, "joint_annual_workplan_report_#{params[:type]}.csv")
+  def jawp_report
+    rep = Reports::JawpReport.new(current_user, params[:type])
+    send_csv(rep.csv, "jawp_report_#{params[:type]}.csv")
   end
 
   protected

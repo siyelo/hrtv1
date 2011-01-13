@@ -88,8 +88,8 @@
       %li=  link_to "By Expenditure Coding (beta)", activities_by_expenditure_coding_path
       %li=  link_to "By Expenditure Cost Categorization (beta)", activities_by_expenditure_cost_cat_path
       %li=  link_to "By Expenditure Districts (beta)", activities_by_expenditure_districts_path
-      %li=  link_to "Joint annual workplan report By Budget (beta)", joint_annual_workplan_report_path(:type => 'budget')
-      %li=  link_to "Joint annual workplan report By Expenditure (beta)", joint_annual_workplan_report_path(:type => 'spent')
+      %li=  link_to "Joint annual workplan report By Budget (beta)", jawp_report_path(:type => 'budget')
+      %li=  link_to "Joint annual workplan report By Expenditure (beta)", jawp_report_path(:type => 'spent')
       %li=  link_to "By NSP", activities_by_nsp_url(:id =>  1, :type => :budget)
       %li=  link_to "By NHA/NASA", activities_by_nha_url(:id => current_user.current_data_response.id)
       %li=  link_to "By All Codes", activities_by_full_coding_url(:id =>  1, :type => :budget)

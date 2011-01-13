@@ -60,6 +60,7 @@ class Activity < ActiveRecord::Base
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
+  has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
 
@@ -81,10 +82,22 @@ class Activity < ActiveRecord::Base
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
-  named_scope :only_simple,       { :conditions => ["type is null or type in (?)", ["OtherCost"]] }
+  named_scope :only_simple,       { :conditions => ["activities.type IS NULL
+                                    OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
+  named_scope :canonical_with_scope, {
+    :joins =>
+      "INNER JOIN data_responses
+        ON activities.data_response_id = data_responses.id
+      LEFT JOIN data_responses provider_dr
+        ON provider_dr.organization_id_responder = activities.provider_id
+      LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
+    :conditions => ["activities.provider_id = data_responses.organization_id_responder
+                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"],
+    :group => 'activities.id'
+  }
 
   ### Public Class Methods
 
@@ -504,6 +517,7 @@ class Activity < ActiveRecord::Base
       end
     end
 
+    # TODO: remove this!? -  does sub activities has code assignments?
     def district_codings_from_sub_activities(klass, amount)
       districts_hash = {}
       Location.all.each do |l|
@@ -514,7 +528,7 @@ class Activity < ActiveRecord::Base
           districts_hash[ca.code] += ca.cached_amount
         end
       end
-      districts_hash.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
+      districts_hash.select{|loc,amt| amt > 0}.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
     end
 
     # removes code assignments for non-existing locations for this activity

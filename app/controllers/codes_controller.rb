@@ -10,7 +10,7 @@ class CodesController < ActiveScaffoldController
   # Active Scaffold Methods and Config
 
   @@shown_columns = [:short_display, :type, :description]
-  @@create_columns = [:short_display, :type, :long_display, :official_name, :description]
+  @@create_columns = [:short_display, :type, :long_display, :official_name, :description, :sub_account, :nha_code, :nasa_code]
   def self.create_columns
     @@create_columns
   end

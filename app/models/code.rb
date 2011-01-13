@@ -11,6 +11,7 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  named_scope :with_types,       lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
 
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
@@ -21,7 +22,10 @@ class Code < ActiveRecord::Base
   ### Public Methods
 
   def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    #@depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    # TODO: check if this change has broken the other reports
+    # c = Code.find 1434 has 7 parents
+    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
   end
 
   def self.roots_with_level

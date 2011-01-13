@@ -98,6 +98,12 @@ class ReportsController < ApplicationController
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
+  def activities_by_nha
+    set_activities
+    rep = Reports::ActivitiesByNha.new(@activities, budget_report_type)
+    send_csv(rep.csv,"activities_by_nha.csv")
+  end
+
   def districts_by_nsp
     set_activities
     rep = Reports::DistrictsByNsp.new(@activities, budget_report_type)
@@ -142,6 +148,11 @@ class ReportsController < ApplicationController
     authorize! :read, :activities_by_expenditure_cost_cat
     rep = Reports::MapFacilitiesByPartner.new(@activities, params[:type])
     send_csv(rep.csv,"map_facilities_by_partner.csv")
+  end
+
+  def jawp_report
+    rep = Reports::JawpReport.new(current_user, params[:type])
+    send_csv(rep.csv, "jawp_report_#{params[:type]}.csv")
   end
 
   protected

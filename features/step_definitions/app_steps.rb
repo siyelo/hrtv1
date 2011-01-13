@@ -243,7 +243,7 @@ end
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
     Then I should see "My Profile" within "div#admin"
-    Then I should see "Sign out" within "div#admin"
+    Then I should see "Sign Out" within "div#admin"
   }
 end
 

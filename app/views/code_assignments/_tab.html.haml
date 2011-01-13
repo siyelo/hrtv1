@@ -1,8 +1,8 @@
 - unless codes.empty?
 
   - if @error_message
-    .coding_flash
-      %div.error
+    .flashes
+      .error
         = @error_message
 
   - if coding_type =~ /Budget/

@@ -67,12 +67,15 @@ ActionController::Routing::Routes.draw do |map|
   map.activities_by_budget_coding_new 'activities_by_budget_coding_new', :controller => 'reports', :action => 'activities_by_budget_coding_new'
   map.activities_by_district_row_report 'activities_by_district_row_report', :controller => 'reports', :action => 'activities_by_district_row_report'
   map.activities_by_budget_stratprog 'activities_by_budget_stratprog', :controller => 'reports', :action => 'activities_by_budget_stratprog'
-  
+
   #TODO refactor these so ID not required and we can undo hack in admin/reports/index.html.haml
   map.activities_by_nsp 'activities_by_nsp/:id/:type',
                     :controller => 'reports',
                     :action => 'activities_by_nsp',
                     :type => Regexp.new(ReportsController::TYPE_MAP.keys.join('|'))
+  map.activities_by_nha 'activities_by_nha',
+                    :controller => 'reports',
+                    :action => 'activities_by_nha'
   map.activities_by_full_coding 'activities_by_full_coding/:id/:type',
                     :controller => 'reports',
                     :action => 'activities_by_full_coding',

@@ -98,6 +98,12 @@ class ReportsController < ApplicationController
     send_csv(rep.csv,"activities_by_nsp.csv")
   end
 
+  def activities_by_nha
+    set_activities
+    rep = Reports::ActivitiesByNha.new(@activities, budget_report_type)
+    send_csv(rep.csv,"activities_by_nha.csv")
+  end
+
   def districts_by_nsp
     set_activities
     rep = Reports::DistrictsByNsp.new(@activities, budget_report_type)

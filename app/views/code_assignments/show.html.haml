@@ -1,6 +1,8 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
+= render 'layouts/active_scaffold_js'
+
 - content_for :sub_nav do
   = render :partial => 'layouts/sub_nav'
 

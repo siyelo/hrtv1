@@ -71,12 +71,21 @@ body.app
       display: block
       overflow: hidden
       min-width: 650px
+      
       li
+        +box-shadow(#111, 0, 0px, 13px)
         display: block
+        
+        &:first-child a
+          +border-top-left-radius
+        &:last-child a
+          +border-top-right-radius
 
         a
           border: 1px solid $mid-blue
-          margin: 3px -1px 0
+          border-left: 1px solid $light-blue - #222
+          border-right: 1px solid $mid-blue + #222
+          margin: 3px 0 0
           background: !light-blue
           color: !mid-blue
           display: inline
@@ -86,7 +95,7 @@ body.app
           font-weight: bold
           padding: 12px 15px 8px 17px
           text-decoration: none
-          +linear-gradient(color-stops($light-blue - #111, $light-blue - #444))
+          +linear-gradient(color-stops($light-blue - #111, $light-blue - #555))
           +text-shadow($light-blue, 0, 1px, 1px)
 
           &:hover
@@ -96,7 +105,8 @@ body.app
             +text-shadow(#fff, 0, 1px, 1px)
 
           &.active
-            border-bottom:  1px solid #FFF
+            border-bottom: 1px solid #FFF
+            border-left: none
             background: white
             color= !dark-blue
             letter-spacing: 0.05em
@@ -120,7 +130,14 @@ body.app
 
   /* adding properties to the shared admin style */
   #admin
-    margin-right: 15px
+    margin-top: 10px
+    right: 75px
+    position: absolute
+    z-index: 10
+    span
+      padding-top: 10px !important
+    a
+      padding: 5px 10px !important
 
     //ul li
     //  &:first-child a

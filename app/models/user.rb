@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
                   :organization_id, :organization, :roles
 
   # Associations
-  has_many  :assignments
   has_many  :comments
   belongs_to :organization, :counter_cache => true
   has_many :data_responses, :through => :organization

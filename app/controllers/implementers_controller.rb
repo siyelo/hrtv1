@@ -1,4 +1,4 @@
-class ProvidersController < ActiveScaffoldController
+class ImplementersController < ActiveScaffoldController
   authorize_resource :class => FundingFlow
 
   before_filter :check_user_has_data_response

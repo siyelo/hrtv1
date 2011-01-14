@@ -67,6 +67,7 @@ Scenario: Manage comments on project (with Javascript)
 
 @admin_review_screen @javascript
 Scenario: Manage comments on activities (with Javascript)
+  When wait a few moments
   When I click element "#project_details"
   And I click element "#projects .project .descr"
   And I click element "#projects .activity_details"

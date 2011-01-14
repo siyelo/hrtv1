@@ -103,7 +103,7 @@ class FundingFlowsController < ActiveScaffoldController
     end
 
     def create_respond_to_html
-      redirect_to funding_sources_data_entry_url
+      redirect_to funding_sources_url
     end
 
 

@@ -38,7 +38,7 @@ class CodeAssignmentsController < ApplicationController
       format.html do
         flash[:error]  = @error_message if @error_message
         flash[:notice] = notice_message if notice_message
-        redirect_to activity_coding_path(@activity)
+        redirect_to activity_code_assignments_url(@activity)
       end
       format.js do
         @coding_type = params[:coding_type] || 'CodingBudget'
@@ -59,12 +59,12 @@ class CodeAssignmentsController < ApplicationController
       if @activity.copy_budget_codings_to_spend([params[:coding_type]])
         format.html do
           flash[:notice] = "Budget classifications were successfully copied across."
-          redirect_to activity_coding_path(@activity)
+          redirect_to activity_code_assignments_url(@activity)
         end
       else
         format.html do
           flash[:error] = "We could not copy your budget classifications across."
-          redirect_to activity_coding_path(@activity)
+          redirect_to activity_code_assignments_url(@activity)
         end
       end
     end

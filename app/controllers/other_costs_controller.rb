@@ -65,6 +65,6 @@ class OtherCostsController < ActiveScaffoldController
   end
 
   def popup_coding
-    redirect_to activity_coding_url(params[:id])
+    redirect_to activity_code_assignments_url(params[:id])
   end
 end

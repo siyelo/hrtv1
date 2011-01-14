@@ -13,5 +13,5 @@ Scenario: Login and see user guide
   When I follow "Help"
   Then I should see the reporters admin nav
   And I should not see the data response tabs
-  And I should see "Using the Resource Tracking Tool"
+  And I should see "Using the Health Resource Tracker"
   And I should see the common footer

@@ -716,26 +716,26 @@ var code_assignments_show = {
     addCollabsibleButtons('tab1');
 
     // load budget districts
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingBudgetDistrict&tab=tab2', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingBudgetDistrict&tab=tab2', function (response) {
       appendTab('tab2', response);
     });
 
     // load budget cost categorization
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingBudgetCostCategorization&tab=tab3', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingBudgetCostCategorization&tab=tab3', function (response) {
       appendTab('tab3', response);
     });
 
     // load expenditure
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpend&tab=tab4', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpend&tab=tab4', function (response) {
       appendTab('tab4', response);
     });
 
     // load expenditure districts
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendDistrict&tab=tab5', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpendDistrict&tab=tab5', function (response) {
       appendTab('tab5', response);
     });
     // load expenditure cost categories
-    jQuery.get('/activities/' + _activity_id + '/coding?coding_type=CodingSpendCostCategorization&tab=tab6', function (response) {
+    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpendCostCategorization&tab=tab6', function (response) {
       appendTab('tab6', response);
     });
 

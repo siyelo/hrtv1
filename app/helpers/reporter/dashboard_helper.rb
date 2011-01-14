@@ -1,42 +1,30 @@
 module Reporter::DashboardHelper
-
   def commentable_path(type, commentable, user)
     case type
-      when "Project"
-        edit_project_path commentable.id
-      when "FundingFlow"
-        #if commentable.try(:to) == user.organization
-          #funding_sources_data_entry_path
-          edit_funding_flow_path commentable.id
-        #else
-        #  providers_data_entry_path
-        #end
-      when "Activity"
-        edit_activity_path commentable.id
-      when "OtherCost"
-        edit_other_cost_path commentable.id
+    when "Project"
+      edit_project_path(commentable.id)
+    when "FundingFlow"
+      edit_funding_flow_path(commentable.id)
+    when "Activity"
+      edit_activity_path(commentable.id)
+    when "OtherCost"
+      edit_other_cost_path(commentable.id)
     end
   end
 
   def commentable_name(type, commentable, user)
     case type
-      when "FundingFlow"
-        if commentable.try(:to) == user.organization
-          type = "Funding Source"
-        else
-          type = "Implementer"
-        end
-      when "OtherCost"
-        type = "Other Cost"
+    when "FundingFlow"
+      (commentable.try(:to) == user.organization) ?
+        "Funding Source" : "Implementer"
+    when "OtherCost"
+      "Other Cost"
+    else
+      type
     end
-    type
   end
 
   def model_name(model)
-    no_title = "(no title)"
-    model.try(:name) || no_title
-  rescue
-    no_title
+    model.try(:name) || "(no title)"
   end
-
 end

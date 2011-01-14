@@ -170,8 +170,10 @@ class ActiveScaffoldController < ApplicationController
           if help
             #TODO join with ruby array methods or something better
             if self.respond_to? :create_columns
+              attr_helps = help.find(:all, :conditions => ['attribute_name IN (?)', self.create_columns.map{|c| c.to_s}])
               self.create_columns.each do |column|
-                h = help.find_by_attribute_name(column.to_s)
+                #h = help.find_by_attribute_name(column.to_s)
+                h = attr_helps.detect{|attr_help| attr_help.attribute_name == column.to_s}
                 set_active_scaffold_column_description column, h.long unless h.nil?
               end
             end

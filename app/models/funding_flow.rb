@@ -38,6 +38,9 @@ class FundingFlow < ActiveRecord::Base
   delegate :organization, :to => :project
   delegate :data_response, :to => :project
 
+  # Named scopes
+  named_scope :with_organizations, :conditions => "organization_id_from IS NOT NULL AND organization_id_to IS NOT NULL"
+
   def to_s
     "Flow"
   end

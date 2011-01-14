@@ -1,6 +1,7 @@
 module Reports::Helpers
   include NumberHelper # gives n2c method
   include StringCleanerHelper # gives h method
+  extend ActiveSupport::Memoizable
 
   def get_amount(activity, location)
     ca = activity.code_assignments.detect{|ca| ca.code_id == location.id}
@@ -35,6 +36,7 @@ module Reports::Helpers
   def get_currency(activity)
     activity.currency.blank? ? :USD : activity.currency.to_sym
   end
+  memoize :get_currency
 
   def get_coding_with_parent_codes(codings)
     coding_with_parent_codes = []
@@ -93,17 +95,24 @@ module Reports::Helpers
   end
 
 
+  def get_funding_source_name(activity)
+    get_funding_sources(activity).map{|f| f.from.try(:name)}.uniq.join(', ')
+  end
+
+  def get_funding_source_type(activity)
+    get_funding_sources(activity).map{|f| f.from.try(:type)}.uniq.join(', ')
+  end
+
   def get_funding_sources(activity)
     funding_sources = []
     activity.projects.each do |project|
-      project.funding_sources.each do |funding_source|
+      project.in_flows.with_organizations.each do |funding_source|
         funding_sources << funding_source
       end
     end
-    #funding_sources = funding_sources - [a.organization]
-
-    funding_sources.map{|f| f.name}.uniq.join(', ')
+    funding_sources
   end
+  memoize :get_funding_sources
 
   def get_sub_implementers(activity)
     activity.sub_implementers.map{|si| si.name}.join(' | ')
@@ -122,5 +131,26 @@ module Reports::Helpers
         row << nil
       end
     end
+  end
+
+  def get_funding_sources_total(funding_sources, is_spent)
+    sum = 0
+    funding_sources.each do |fs|
+      if is_spent
+        sum += fs.spend if fs.spend
+      else
+        sum += fs.budget if fs.budget
+      end
+    end
+    sum
+  end
+
+  def get_funding_source_amount(funding_source, is_spent)
+    amount = is_spent ? funding_source.spend : funding_source.budget
+    amount || 0 # return 0 when amount is nil
+  end
+
+  def get_ratio(amount_total, amount)
+    amount_total && amount_total > 0 ? amount / amount_total : 0
   end
 end

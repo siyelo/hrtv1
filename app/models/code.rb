@@ -109,7 +109,9 @@ class Code < ActiveRecord::Base
   def get_treemap_row(rows, type, activities, treemap_parent_values, level, total_for_percentage)
     name  = to_s_prefer_official
     sum   = sum_of_assignments_for_activities(type, activities)
-    if sum > 0 #TODO add % of total as well, abbrev amount
+    ignore_second_parent = treemap_parent_values.empty? || treemap_parent_values.keys.include?(parent_id) # TODO: data problem with treemap: uncaught exception: Parent doubly defined.
+
+    if sum > 0 && ignore_second_parent #TODO add % of total as well, abbrev amount
       name_w_sum = "#{n2c(sum.fdiv(total_for_percentage)*100)}%: #{name}"
       if treemap_parent_values.values.include?(name_w_sum)
         name_w_sum = "#{n2c(sum)} (2): #{name}"

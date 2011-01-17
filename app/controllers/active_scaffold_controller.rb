@@ -1,5 +1,6 @@
 class ActiveScaffoldController < ApplicationController
-  layout 'reporter'
+  layout :set_layout
+
   before_filter :load_help
   before_filter :set_defaults
 
@@ -14,6 +15,13 @@ class ActiveScaffoldController < ApplicationController
   end
 
   protected
+    def set_layout
+      if current_user.role?(:reporter)
+        'reporter'
+      else
+        'admin'
+      end
+    end
 
     #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
     def before_update_save(record)

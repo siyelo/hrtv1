@@ -1,60 +1,79 @@
-# seed code values
-#
-# Expected Columns
+puts "Correcting intrahealth subimplementors..."
 
-puts "Loading intrahealth_budget.csv..."
-# if we do lookups by col id, not name, then FasterCSV
-# is more forgiving with (non)/quoted csv's
+provider_col  = 1
+i             = 0
 
-# indices start at 0
-provider_col            = 1
+# DEBUG: CHECK RUN
+# if error is not raised then mapping is OK
+#FasterCSV.foreach("db/fixes/intrahealth_budgets.csv", :headers=>false) do |row|
+  #i = i + 1
+  #if i == 1
+    #((provider_col + 1)...row.size).each do |value|
+      #description = row[value]
+      #activity = Activity.find_by_description(description)
+      #raise "No activity found".to_yaml unless activity
+      #p activity.sub_activities.count
+    #end
+  #else
+    ##p Organization.find(:all, :conditions => ["name LIKE ?", "%#{row[1].split(' ').first}%"]).map{|o| o.name}
+    #organization_name = row[provider_col]
+    #organization = Organization.find_by_name(organization_name)
+    #raise "No organization found".to_yaml unless organization
+    #p organization.try(:name)
+  #end
+#end
 
-i = 0
-dr = data_response = DataResponse.find(6550) #looked up in console #drs.first unless drs.size > 1
-pivot_table_hash = {}
-pivot_attribs = nil
-FasterCSV.foreach("db/fixes/intrahealth_budgets.csv", :headers=>false) do |row|
-  begin
-    i = i + 1
-    #puts row.inspect
-    if i == 1 #first row
-      pivot_attribs = row.clone
-    else
-      row_hash = {}
-      ((provider_col+1)...row.size).each do |pivot_val_index|
-        row_hash[pivot_attribs[pivot_val_index]] = row[pivot_val_index] if row[pivot_val_index] != nil
-      end
-      pivot_table_hash[row[provider_col]] = row_hash
+
+activities = []
+
+p "Collecting budgets..."
+FasterCSV.foreach("db/fixes/intrahealth_budgets.csv", :headers => false) do |row|
+  i = i + 1
+
+  if i == 1
+    ((provider_col + 1)...row.size).each do |value|
+      description = row[value]
+      activity = Activity.find_by_description(description)
+      #raise "No activity found".to_yaml unless activity # TODO: uncomment this
+      activities << {:activity => activity, :items => []}
+    end
+  else
+    organization_name = row[provider_col]
+    organization = Organization.find_by_name(organization_name)
+    #raise "No organization found".to_yaml unless organization # TODO: uncomment this
+    ((provider_col + 1)...row.size).each_with_index do |value, index|
+      activities[index][:items] << {:organization => organization, :budget => row[value]}
     end
   end
 end
 
-#puts pivot_table_hash.inspect
-#puts pivot_attribs.inspect
+p "Collecting spents..."
+i = 0 # reset counter !!!
+FasterCSV.foreach("db/fixes/intrahealth_spent.csv", :headers => false) do |row|
+  i = i + 1
 
-#this mapping is just a draft, doesn't actually work except for TB/HIV
-map_budget_input_file_to_activity_description = { 
-  "Paediatric Treatment (PDTX) (5%)" => "PDTX",
- "Prevention to Mother to Child Transmission(MTCT) (4.9%)/65%" => "MTCT",
- "TB/HIV (2.09%)" => "TB/HIV",
- "Maternal Child Health(MCH) (6.52%)" => "MCH",
- "Family Planning (6.52%)" => "6",
- "Adulth Treatment(HTXS) (47.93%)" => "HTXS",
- "Paediatric Care & Support (PDCS)(5.4%)" => "PDCS",
- "Adult Care & Support (HBHC) (19.2%)" => "HBHC",
- "Voluntary Couselling and Testing (HVCT) (2.44%)/35%" => "HVCT"}
+  if i == 1
+    # do nothing
+  else
+    organization_name = row[provider_col]
+    organization = Organization.find_by_name(organization_name)
+    #raise "No organization found".to_yaml unless organization # TODO: uncomment this
+    ((provider_col + 1)...row.size).each_with_index do |value, index|
+      activities[index][:items][i - 2][:spent] = row[value] # assumes order is same
+    end
+  end
+end
 
-#actual activity descriptions (taken from console)
-#["Adult Care and Support (HBHC)",  "Adult treatment(HTXS)", "Testing and Couselling(HVCT)", "TB/HIV", "Prevention for Mother to Child Transmission(MTCT)", "Paediatric Care and Support (PDCS", "Paediatric Treatment (PDTX)", "Maternal Child Health(MCH)", "Family Planning program"]
+activities.each do |activity|
+  # activity
+  p activity[:activity].name
 
-#use map to look up activity under intrahealth, then map 
-# provider names that are the keys of pivot_table_hash
-# to then create sub activities
+  # TODO: remove sub_activities
 
-#e.g. first row of budgets file after the header
-# creates two subactivities, both with same provider,
-# one with budget of 34,555 under activity w description "Prevention for Mother to Child Transmission(MTCT)"
-# other with budget of 18,606 under activity w description "Testing and Couselling(HVCT)"
+  # sub activities
+  activity[:items].each do |item|
+    p "Organization: #{item[:organization].try(:name)}, budget: #{item[:budget]}; spent: #{item[:spent]}"
 
-
-#then, after budgets done, do same for spent file
+    # TODO: create sub_activities
+  end
+end

@@ -88,7 +88,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :model_helps,     :active_scaffold => true
   map.resources :funding_flows,   :active_scaffold => true
   map.resources :codes,           :active_scaffold => true
-  map.resources :other_costs,     :active_scaffold => true
+  map.resources :other_costs,
+                :member => {:popup_classification => :get},
+                :active_scaffold => true
+  #map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
   map.resources :users,           :active_scaffold => true
   map.resources :help_requests,   :active_scaffold => true
 end

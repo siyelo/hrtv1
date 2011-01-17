@@ -17,7 +17,8 @@ class OtherCostsController < ActiveScaffoldController
 
   active_scaffold :other_costs do |config|
     config.action_links.add('Detail Cost Areas',
-      :action => "popup_coding",
+      :action => "popup_classification",
+      :parameters => { :controller => '/other_costs' },
       :type => :member,
       :popup => true,
       :label => "Detail Cost Areas")
@@ -64,7 +65,7 @@ class OtherCostsController < ActiveScaffoldController
     record.data_response = current_user.current_data_response
   end
 
-  def popup_coding
+  def popup_classification
     redirect_to activity_code_assignments_url(params[:id])
   end
 end

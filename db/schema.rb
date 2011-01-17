@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20110118082105) do
+=======
+ActiveRecord::Schema.define(:version => 20110117112926) do
+>>>>>>> 2ada2cb... Move AIDSRelief project from internal_for_dev2 to CRS
 
   create_table "activities", :force => true do |t|
     t.string    "name"

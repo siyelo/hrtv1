@@ -25,6 +25,10 @@ module Reporter::DashboardHelper
   end
 
   def model_name(model)
-    model.try(:name) || "(no title)"
+    if model.respond_to?(:name)
+      model.try(:name) || "(no title)"
+    else
+      "(no title)"
+    end
   end
 end

@@ -30,8 +30,8 @@ puts "*** #{date}: Backup of #{HEROKU_APP} started... ***"
 
 puts "  Starting pgbackup to #{backup_db_file}..."
 run "heroku pgbackups:capture --expire --app #{HEROKU_APP}"
-url = `heroku pgbackups:url --app #{HEROKU_APP}`
-run "curl -o #{backup_db_file} #{url}"
+url = `heroku pgbackups:url --app #{HEROKU_APP}`.chomp
+run "curl -o #{backup_db_file} '#{url}'"
 run "gzip #{backup_db_file}"
 
 date           = get_date()

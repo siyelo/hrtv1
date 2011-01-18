@@ -34,7 +34,7 @@ date           = get_date()
 backup_db_file = "#{BACKUP_DIR}/#{APP}-backup.#{date}.sqlite3.db"
 
 puts "  Starting sqlite backup to #{backup_db_file}..."
-run "heroku db:pull sqlite://#{backup_db_file} --app #{app} --confirm #{app}"
+run "heroku db:pull sqlite://#{backup_db_file} --app #{APP} --confirm #{APP}"
 puts "  ...sqlite backup done at #{get_date}"
 run "gzip #{backup_db_file}"
 

@@ -54,7 +54,6 @@ ruby-debug -v0.10.3
 ruby-debug-base -v0.10.3
 ruby_parser -v2.0.4
 rubyforge -v2.0.4
-
 selenium-webdriver -v0.0.24
 sexp_processor -v3.0.4
 shoulda -v2.11.1

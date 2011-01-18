@@ -20,7 +20,7 @@ APP        = ARGV[0] || 'resourcetracking'
 BACKUP_DIR = ARGV[1] || '/root/hrt_backups/'
 
 date           = get_date()
-backup_db_file = "#{BACKUP_DIR}/#{APP}-backup.#{date}.pgbackup.db"
+backup_db_file = "#{BACKUP_DIR}/#{APP}-backup.#{date}.pgbackup.db".gsub('//','/')
 
 puts "*** #{date}: Backup of #{APP} started... ***"
 

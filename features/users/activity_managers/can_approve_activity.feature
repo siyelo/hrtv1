@@ -1,4 +1,4 @@
-Feature: Activity Manager can approve a code breakdown for each activity 
+Feature: Activity Manager can approve a code breakdown for each activity
   In order to increase the quality of information reported
   As a NGO/Donor Activity Manager
   I want to be able to approve activity splits
@@ -28,9 +28,9 @@ Scenario: See a breakdown for an activity
   And I should see "Cost Categorization" within "#tab6"
   And I should see "Providing Technical Assistance"
 
-# note you cant drive this via the normal 'Classify' popup link in Capybara 
-# - it wont follow the new browser window 
-# The "wait a few moments" between checking the box and going to the next page is to avoid 
+# note you cant drive this via the normal 'Classify' popup link in Capybara
+# - it wont follow the new browser window
+# The "wait a few moments" between checking the box and going to the next page is to avoid
 # the ERROR Errno::EINVAL: Invalid argument -> webrick/httpresponse.rb:324:in `write'
 # - I think capy just needs time to finish the ajax post request...
 @activity_manager_approve_activity @javascript

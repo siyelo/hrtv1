@@ -28,6 +28,7 @@ Scenario: See both budget for an activity classification
   And I should see the "Coding" tab is active
 
 @reporter_activity_breakdown
+@run
 Scenario: enter budget for an activity (don't see flash errors)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "5000000.00"
@@ -170,7 +171,6 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
 @reporter_activity_breakdown @javascript
-@run
 Scenario: Use budget by coding for expenditure by coding (deep coding in same rootomitting the parents, using percentages)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"

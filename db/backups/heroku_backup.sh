@@ -8,7 +8,7 @@ echo "$DATE: Backing up $APP..."
 
 DATE=`date '+%Y-%m-%d-%H%Mhrs'`
 BACKUP_DB_FILE=$BACKUP_DIR/$APP-backup.$DATE.pgbackup.db
-echo "  Starting pgbackup to $BACKUP_TYPE..."
+echo "  Starting pgbackup to $BACKUP_DB_FILE..."
 heroku pgbackups:capture --expire --app $APP
 curl -o $BACKUP_DB_FILE `heroku pgbackups:url --app $APP`
 echo "  gzipping it"
@@ -19,7 +19,7 @@ for BACKUP_TYPE in sqlite
 do
   DATE=`date '+%Y-%m-%d-%H%Mhrs'`
   BACKUP_DB_FILE=$BACKUP_DIR/$APP-backup.$DATE.$BACKUP_TYPE.db
-  echo "  Starting db:pull backup to $BACKUP_TYPE..."
+  echo "  Starting db:pull backup to $BACKUP_DB_FILE..."
   # gifted 'expect' idea from http://trnsfrmr.com/2010/08/23/automate-dbpull-from-heroku/
   expect -c "
   #Your timeout should correspond to the number of seconds you expect pull to take.

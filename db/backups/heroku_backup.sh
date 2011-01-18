@@ -1,30 +1,32 @@
 # backs up a heroku app db to sqlite3 using heroku db:pull
 APP='resourcetracking'
-BUNDLE='rtbackup'
-OLD_BUNDLE=`heroku bundles --app $APP | awk '{print $1}'`
-DATE=`date '+%Y-%m-%d-%H%Mhrs'`
 BACKUP_DIR=/root/hrt_backups/
-BACKUP_DB_FILE=$BACKUP_DIR/$APP-backup.$DATE.db
 
 echo ""
 echo ""
 echo "$DATE: Backing up $APP..."
 
-echo "  Starting db:pull to sqlite3..."
+for BACKUP_TYPE in sqlite postgres
+do
+  DATE=`date '+%Y-%m-%d-%H%Mhrs'`
+  BACKUP_DB_FILE=$BACKUP_DIR/$APP-backup.$DATE.$BACKUP_TYPE.db
 
-# gifted 'expect' idea from http://trnsfrmr.com/2010/08/23/automate-dbpull-from-heroku/
-expect -c "
-#Your timeout should correspond to the number of seconds you expect pull to take.
-set timeout 600
-spawn heroku db:pull sqlite://$BACKUP_DB_FILE --app $APP
-expect \"Are you sure you wish to continue? (y/n)? \"
-send \"y\r\"
-set results $expect_out(buffer)
-expect eof"
-echo "  db pull done at `date '+%Y-%m-%d-%H%Mhrs'`"
+  echo "  Starting db:pull backup to $BACKUP_TYPE..."
 
-echo "  gzipping it"
-gzip $BACKUP_DB_FILE
+  # gifted 'expect' idea from http://trnsfrmr.com/2010/08/23/automate-dbpull-from-heroku/
+  expect -c "
+  #Your timeout should correspond to the number of seconds you expect pull to take.
+  set timeout 600
+  spawn heroku db:pull $BACKUP_TYPE://$BACKUP_DB_FILE --app $APP
+  expect \"Are you sure you wish to continue? (y/n)? \"
+  send \"y\r\"
+  set results $expect_out(buffer)
+  expect eof"
+  echo "  $BACKUP_TYPE backup done at `date '+%Y-%m-%d-%H%Mhrs'`"
+
+  echo "  gzipping it"
+  gzip $BACKUP_DB_FILE
+done
 
 echo "...done"
 echo ""

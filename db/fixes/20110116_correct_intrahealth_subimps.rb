@@ -43,6 +43,15 @@ FasterCSV.foreach("db/fixes/intrahealth_spent.csv", :headers => false) do |row|
   end
 end
 
+def create_sub_activity(activity, organization, item)
+  activity.sub_activities.create!(
+    :data_response => activity.data_response,
+    :provider => organization,
+    :budget => item[:budget].to_s.gsub(',', '.').to_f,
+    :spend => item[:spend].to_s.gsub(',', '.').to_f
+  )
+end
+
 Activity.transaction do
   activity_items.each do |activity_item|
     activity = activity_item[:activity]
@@ -52,14 +61,14 @@ Activity.transaction do
     activity_item[:items].each do |item|
       organization = item[:organization]
       puts "Creating sub implementers for activity #{activity.description} and organization #{organization.name}"
-      puts item[:budget].to_s.gsub(',', '.').to_f
-      puts item[:spend].to_s.gsub(',', '.').to_f
-      activity.sub_activities.create!(
-        :data_response => activity.data_response,
-        :provider => organization,
-        :budget => item[:budget].to_s.gsub(',', '.').to_f,
-        :spend => item[:spend].to_s.gsub(',', '.').to_f
-      )
+
+      if activity.approved?
+        activity.update_attributes({:approved => false}) # unapproved the activity
+        create_sub_activity(activity, organization, item)
+        activity.update_attributes({:approved => true}) # approved the activity
+      else
+        create_sub_activity(activity, organization, item)
+      end
     end
   end
 end

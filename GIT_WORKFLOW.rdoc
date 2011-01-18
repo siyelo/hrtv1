@@ -4,7 +4,7 @@
 Our git workflow is pretty much described here: http://nvie.com/posts/a-successful-git-branching-model/
 
 Note:
-* We use the branch name +working+ instead of +develop+.
+* We use the branch name +dev+ instead of +develop+.
 * We use the release branch name +v1.0+ instead of +release-1.0+ (less typing)
 * In the article he states;
     "Unfortunately, I have not found a way to make --no-ff the default behaviour of git merge yet, but it really should be.".
@@ -15,7 +15,7 @@ But this can actually be configured at the branch-level though, as we do below.
 
 === Avoid fastforward merges with --no-ff
 
-    $ git config branch.working.mergeoptions  "--no-ff --no-commit"
+    $ git config branch.dev.mergeoptions  "--no-ff --no-commit"
     $ git config branch.master.mergeoptions  "--no-ff --no-commit"
 
 The comments below explain this. I suggest you paste them in your .git/config for future reference.
@@ -62,7 +62,7 @@ When in conjunction with the --no-commit option, you have the chance to make you
 If you are in the (bad) habit of doing 'git pull', when in fact all you want to do is rebase against upstream (origin), then you should be doing a 'git pull --rebase' or better still
 
     $ git fetch
-    $ git rebase origin/working
+    $ git rebase origin/dev
 
 This avoids creating merge commits, when all you want to do is update your local branch (i.e. rebase).
 
@@ -72,7 +72,7 @@ This avoids creating merge commits, when all you want to do is update your local
 
 We use a mixture of release branches and release tags. One release branch (e.g. 0.9.0), then multiple release tags made at key milestones (e.g. 0.9.0a, 0.9.0b)
 
-Once you've checked out a release branch from [working], then you should bump the version.
+Once you've checked out a release branch from [dev], then you should bump the version.
 
 We're using the "version" gem to do all the heavy lifting. It gives us release tagging for free.
 

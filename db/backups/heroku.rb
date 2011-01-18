@@ -5,6 +5,10 @@
 #  1. To postgres using pgbackup
 #  2. To sqlite3 using heroku db:pull
 #
+# Usage:
+#   backup.rb HEROKU_APP DIR
+# E.g.
+#  backup.rb resourcetracking /backups
 
 def run(cmd)
   puts cmd + "\n"
@@ -16,25 +20,25 @@ def get_date
 end
 
 args       = ARGV.join(' ')
-APP        = ARGV[0] || 'resourcetracking'
-BACKUP_DIR = ARGV[1] || '/root/hrt_backups/'
+HEROKU_APP = ARGV[0] || 'resourcetracking'
+BACKUP_DIR = ARGV[1] || '.'
 
 date           = get_date()
-backup_db_file = "#{BACKUP_DIR}/#{APP}-backup.#{date}.pgbackup.db".gsub('//','/')
+backup_db_file = "#{BACKUP_DIR}/#{HEROKU_APP}-backup.#{date}.pgbackup.db".gsub('//','/')
 
-puts "*** #{date}: Backup of #{APP} started... ***"
+puts "*** #{date}: Backup of #{HEROKU_APP} started... ***"
 
 puts "  Starting pgbackup to #{backup_db_file}..."
-run "heroku pgbackups:capture --expire --app #{APP}"
-url = `heroku pgbackups:url --app #{APP}`
+run "heroku pgbackups:capture --expire --app #{HEROKU_APP}"
+url = `heroku pgbackups:url --app #{HEROKU_APP}`
 run "curl -o #{backup_db_file} #{url}"
 run "gzip #{backup_db_file}"
 
 date           = get_date()
-backup_db_file = "#{BACKUP_DIR}/#{APP}-backup.#{date}.sqlite3.db"
+backup_db_file = "#{BACKUP_DIR}/#{HEROKU_APP}-backup.#{date}.sqlite3.db"
 
 puts "  Starting sqlite backup to #{backup_db_file}..."
-run "heroku db:pull sqlite://#{backup_db_file} --app #{APP} --confirm #{APP}"
+run "heroku db:pull sqlite://#{backup_db_file} --app #{HEROKU_APP} --confirm #{HEROKU_APP}"
 puts "  ...sqlite backup done at #{get_date}"
 run "gzip #{backup_db_file}"
 

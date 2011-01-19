@@ -5,15 +5,15 @@ class Reports::CodedActivityReport < Reports::ActivityReport
   attr_accessor :codes, :code_ids, :get_codes_array_method, :code_id_method
 
   # TODO accept hash {codes :=> { code_ids, get_codes_array_method, code_id_method}
-  def initialize codes= nil, get_codes_array_method = nil, code_id_method = nil
+  def initialize(codes = nil, get_codes_array_method = nil, code_id_method = nil)
     #add to cols only when you are doing a row join, not column join
     #dont do chaining yet, just one set of codes
     # TODO add beneficiaries as first instance of codes
 
-    @codes = codes
+    @codes                  = codes
     @get_codes_array_method = get_codes_array_method
-    @code_id_method = code_id_method
-    @code_ids = codes.map(&:id)
+    @code_id_method         = code_id_method
+    @code_ids               = codes.map(&:id)
   end
 
   protected

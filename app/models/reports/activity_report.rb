@@ -11,14 +11,13 @@ class Reports::ActivityReport
   def csv
     unless @csv_string
       @csv_string = FasterCSV.generate do |csv|
-        csv << build_header()
-        Activity.all.each do |a|
-          if a.class == Activity && a.sub_activities.empty?
-            rows = build_rows(a)
-            add_rows_to_csv rows, csv
-          elsif a.class == SubActivity
-            rows = build_rows(a)
-            add_rows_to_csv rows, csv
+        csv << build_header
+
+        #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |a| # DEBUG ONLY
+        Activity.all.each do |activity|
+          if ((activity.class == Activity && activity.sub_activities.empty?) ||
+              activity.class == SubActivity)
+            csv << build_row(activity)
           end
         end
       end
@@ -29,57 +28,82 @@ class Reports::ActivityReport
   protected
 
     def build_header
-      header = []
-      header << [ "project", "org.name", "org.type", "activity.id", "activity.name", "activity.description" ]
-      header << [ "activity.budget", "activity.spend", "currency"]
-      header << ["activity.start", "activity.end", "activity.provider", "activity.provider.FOSAID"]
-      header << ["activity.text_for_beneficiaries", "activity.text_for_targets"]
-      header << ["Is Sub Activity?", "parent_activity.total_budget", "parent_activity.total_spend"]
-      header.flatten
+     row = []
+
+     row << "project"
+     row << "org.name"
+     row << "org.type"
+     row << "activity.id"
+     row << "activity.name"
+     row << "activity.description"
+     row << "activity.budget"
+     row << "activity.spend"
+     row << "currency"
+     row << "activity.start"
+     row << "activity.end"
+     row << "activity.provider"
+     row << "activity.provider.FOSAID"
+     row << "activity.text_for_beneficiaries"
+     row << "activity.text_for_targets"
+     row << "Is Sub Activity?"
+     row << "parent_activity.total_budget"
+     row << "parent_activity.total_spend"
+
+     row
     end
 
-    def add_rows_to_csv rows, csv
-      if rows.first.class == Array
-        rows.each {|r| add_rows_to_csv r, csv}
-      elsif rows.empty?
-        #do nothing
-      else
-        csv << rows
-      end
-    end
-
-    def build_rows(activity)
-      rows = []
-      org        = activity.data_response.responding_organization
+    def build_row(activity)
+      organization  = activity.data_response.responding_organization
       #TODO handle sub activities correctly
+
       row = []
-      row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
-      row << [  "#{activity.budget}", "#{activity.spend}", "#{activity.currency}",  "#{activity.start}", "#{activity.end}"]
-      row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
-      row << (activity.provider.nil? ? " " : "#{h activity.provider.fosaid}" )
-      row << [ "#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}" ]
-      if activity.class == SubActivity
-        row << "yes"
-        row << activity.activity.budget
-        row << activity.activity.spend
-      else
-        row << ""
-        row << ""
-        row << ""
-      end
-      row.flatten
-      if activity.projects.empty?
-        row.unshift(" ")
-        rows = [ row.flatten ]
-      else
-        activity.projects.each do |proj|
-          proj_row = row.dup
-          proj_row.unshift("#{h proj.name}")
-          rows << proj_row.flatten
-          break
-        end
-      end
-      rows
+
+      row << first_project(activity)
+      row << "#{h organization.name}"
+      row << "#{organization.type}"
+      row << "#{activity.id}"
+      row << "#{h activity.name}"
+      row << "#{h activity.description}"
+      row << "#{activity.budget}"
+      row << "#{activity.spend}"
+      row << "#{activity.currency}"
+      row << "#{activity.start}"
+      row << "#{activity.end}"
+      row << provider_name(activity)
+      row << provider_fosaid(activity)
+      row << "#{h activity.text_for_beneficiaries}"
+      row << "#{h activity.text_for_targets}"
+      row << is_activity(activity)
+      row << parent_activity_budget(activity)
+      row << parent_activity_spend(activity)
+
+      row
     end
 
+  private
+
+    def provider_name(activity)
+      activity.provider ? "#{h activity.provider.name}" : " "
+    end
+
+    def provider_fosaid(activity)
+      activity.provider ? "#{h activity.provider.fosaid}" : " "
+    end
+
+    def is_activity(activity)
+      activity.class == SubActivity ? "yes" : ""
+    end
+
+    def parent_activity_budget(activity)
+      activity.class == SubActivity ? activity.activity.budget : ""
+    end
+
+    def parent_activity_spend(activity)
+      activity.class == SubActivity ? activity.activity.spend : ""
+    end
+
+    def first_project(activity)
+      project = activity.projects.first
+      project ? "#{h project.name}" : " "
+    end
 end

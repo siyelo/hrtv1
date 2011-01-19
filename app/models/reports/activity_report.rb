@@ -5,24 +5,28 @@ class Reports::ActivityReport
 
   attr_accessor :query, :cols, :conditions, :joins
 
-  def initialize options = {}
+  def initialize(options = {})
   end
 
   def csv
-    unless @csv_string
-      @csv_string = FasterCSV.generate do |csv|
-        csv << build_header
+    return @csv_string if @csv_string
 
-        #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |a| # DEBUG ONLY
-        Activity.all.each do |activity|
-          if ((activity.class == Activity && activity.sub_activities.empty?) ||
-              activity.class == SubActivity)
-            csv << build_row(activity)
-          end
+    @csv_string = FasterCSV.generate do |csv|
+      csv << build_header
+
+      #
+      # NOTE: can't eager load :projects association because
+      # sub_activity delegates it to activity and there is some problem
+      #
+      #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |activity| # DEBUG ONLY
+      #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
+      Activity.find(:all, :include => :provider).each do |activity|
+        if ((activity.class == Activity && activity.sub_activities.empty?) ||
+            activity.class == SubActivity)
+          csv << build_row(activity)
         end
       end
     end
-    @csv_string
   end
 
   protected
@@ -30,6 +34,7 @@ class Reports::ActivityReport
     def build_header
      row = []
 
+     row << "funding_source"
      row << "project"
      row << "org.name"
      row << "org.type"
@@ -58,6 +63,7 @@ class Reports::ActivityReport
 
       row = []
 
+      row << get_funding_source_name(activity)
       row << first_project(activity)
       row << "#{h organization.name}"
       row << "#{organization.type}"

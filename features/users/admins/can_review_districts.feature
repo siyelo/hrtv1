@@ -15,8 +15,10 @@ Background:
   And an activity exists with name: "Activity A", data_response: the data_response
   And the project is one of the activity's projects
   And a location exists with short_display: "Location A"
+  And a district exists with old_location: the location
   And the location is one of the activity's locations
   And a location exists with short_display: "Location B"
+  And a district exists with old_location: the location
   And the location is one of the activity's locations
   And a coding_budget exists with activity: the activity, code: the first code
   And a coding_budget exists with activity: the activity, code: the 2nd code

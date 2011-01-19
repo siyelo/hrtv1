@@ -3,6 +3,8 @@ class Reports::DistrictsController < Reports::BaseController
 
   def index
     @locations = Location.all_with_counters
+    #raise @locations.map(&:id).to_yaml
+    @total_population = District.sum(:population)
     @spent_codings = CodingSpendDistrict.find(:all,
                        :select => "code_id, SUM(new_cached_amount_in_usd) AS total",
                        :conditions => ["code_id IN (?)", @locations.map(&:id)],

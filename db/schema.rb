@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110118112751) do
+ActiveRecord::Schema.define(:version => 20110119113315) do
 
   create_table "activities", :force => true do |t|
     t.string    "name"
@@ -188,6 +188,14 @@ ActiveRecord::Schema.define(:version => 20110118112751) do
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
   add_index "data_responses", ["organization_id_responder"], :name => "index_data_responses_on_organization_id_responder"
+
+  create_table "districts", :force => true do |t|
+    t.string   "name"
+    t.integer  "population"
+    t.integer  "old_location_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "field_helps", :force => true do |t|
     t.string    "attribute_name"

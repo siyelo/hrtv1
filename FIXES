@@ -1,9 +1,5 @@
 Fixes to be run on production deploy
 
-- 2011 01 18:
-  ruby script/runner db/fixes/20110117_move_aids_relief_from_internal_for_dev2_to_crs.rb
-  ruby script/runner db/fixes/20110118_upload_pih_subimplementers_data.rb
-  ruby script/runner db/fixes/20110116_correct_intrahealth_subimps.rb
   ruby script/runner db/fixes/20110118_update_classified_amount_caches.rb
 
 

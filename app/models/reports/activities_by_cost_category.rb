@@ -1,9 +1,17 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCostCat
+class Reports::ActivitiesByCostCategory
   include Reports::Helpers
 
-  def initialize
+  def initialize(type)
+    if type == :budget
+      @is_budget = true
+    elsif type == :spent
+      @is_budget = false
+    else
+      raise "Invalid type #{type}".to_yaml
+    end
+
     codes         = get_codes
     code_ids      = codes.map{|code| code.id}
     beneficiaries = get_beneficiaries
@@ -56,7 +64,11 @@ class Reports::ActivitiesByBudgetCostCat
     def build_row(activity, beneficiaries, code_ids, project_name)
       organization = activity.organization
       act_benefs   = activity.beneficiaries.map{|code| code.short_display}
-      act_codes    = activity.budget_cost_category_coding.map{|ca| ca.code_id}
+      if @is_budget
+        act_codes  = activity.budget_cost_category_coding.map{|ca| ca.code_id}
+      else
+        act_codes  = activity.spend_cost_category_coding.map{|ca| ca.code_id}
+      end
       row          = []
 
       row << get_funding_source_name(activity)
@@ -92,7 +104,12 @@ class Reports::ActivitiesByBudgetCostCat
 
     def get_code_assignment_value(activity, act_codes, code_id)
       if act_codes.include?(code_id)
-        ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        # @coding_klass can be: CodingBudgetCostCategorization
+        if @is_budget
+          ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        else
+          ca = CodingSpendCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        end
         ca ? ca.cached_amount : 0
       else
         nil

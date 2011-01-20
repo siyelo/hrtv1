@@ -42,13 +42,15 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_district_row_report'
         Reports::DistrictCodingsBudgetReport.new
       when 'activities_by_budget_coding'
-        Reports::ActivitiesByCoding.new(CodingBudget)
+        Reports::ActivitiesByCoding.new(:budget)
+      when 'activities_by_budget_cost_cat'
+        Reports::ActivitiesByCostCategory.new(:budget)
       when 'activities_by_budget_districts'
         Reports::ActivitiesByBudgetDistricts.new
       when 'activities_by_expenditure_coding'
-        Reports::ActivitiesByCoding.new(CodingSpend)
+        Reports::ActivitiesByCoding.new(:spent)
       when 'activities_by_expenditure_cost_cat'
-        Reports::ActivitiesByExpenditureCostCat.new
+        Reports::ActivitiesByCostCategory.new(:spent)
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByExpenditureDistricts.new
       when 'jawp_report'
@@ -67,8 +69,6 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByDistrict.new
       when 'activities_by_district_sub_activities'
         Reports::ActivitiesByDistrictSubActivities.new
-      when 'activities_by_budget_cost_cat'
-        Reports::ActivitiesByBudgetCostCat.new
       else
         raise "Invalid report request '#{params[:id]}'"
       end

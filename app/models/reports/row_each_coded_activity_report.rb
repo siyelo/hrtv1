@@ -4,7 +4,7 @@ class Reports::RowEachCodedActivityReport < Reports::CodedActivityReport
 
   attr_accessor :codes, :code_ids, :get_codes_array_method, :code_id_method, :code_class
 
-  def initialize codes= nil, get_codes_array_method = nil, code_id_method = nil, code_column_name = nil
+  def initialize(codes = nil, get_codes_array_method = nil, code_id_method = nil, code_column_name = nil)
     super(codes, get_codes_array_method, code_id_method)
     @code_column_name = code_column_name
   end
@@ -12,12 +12,11 @@ class Reports::RowEachCodedActivityReport < Reports::CodedActivityReport
   protected
 
   def build_header
-    #print header
-    header = []
-    header << super()
-    header << @code_column_name
-    header << "#{@code_column_name} Value"
-    header.flatten
+    row = super
+    row << @code_column_name
+    row << "#{@code_column_name} Value"
+
+    row
   end
 
   def build_rows(activity)
@@ -26,12 +25,12 @@ class Reports::RowEachCodedActivityReport < Reports::CodedActivityReport
 
     base_rows.each do |base_row|
       act_codes = get_codes_from_activity(activity).map(&code_id_method)
-      
+
       @code_ids.each do |code_id|
 	row = []
         if act_codes.include?(code_id)
           row << display_value_for_code(code_id)
-          column_value = value_for_code_column activity, code_id
+          column_value = value_for_code_column(activity, code_id)
           row << column_value
           rows << (base_row + row).flatten
         else

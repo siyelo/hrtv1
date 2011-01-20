@@ -31,17 +31,13 @@ class Reports::CodedActivityReport < Reports::ActivityReport
 
 
     def build_header
-      #print header
-      header = []
-      header << super()
+      row = super
       codes.each do |code|
-        if code.respond_to? :to_s_with_external_id
-          header << "#{code.to_s_with_external_id}"
-        else
-          header << "#{code}"
-        end
+        row << (code.respond_to?(:to_s_with_external_id) ?
+                "#{code.to_s_with_external_id}" : "#{code}")
       end
-      header.flatten
+
+      row
     end
 
     # override for more complex behavior

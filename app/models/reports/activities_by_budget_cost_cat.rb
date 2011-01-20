@@ -4,7 +4,6 @@ class Reports::ActivitiesByBudgetCostCat
   include Reports::Helpers
 
   def initialize
-
     codes = []
     code_ids = []
     Code.roots.reject { |r| ! [CostCategory].include? r.class }.each do |c|
@@ -85,7 +84,4 @@ class Reports::ActivitiesByBudgetCostCat
     end
     row.flatten
   end
-
-
 end
-

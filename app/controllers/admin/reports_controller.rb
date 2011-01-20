@@ -42,11 +42,11 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_district_row_report'
         Reports::DistrictCodingsBudgetReport.new
       when 'activities_by_budget_coding'
-        Reports::ActivitiesByBudgetCoding.new
+        Reports::ActivitiesByCoding.new(CodingBudget)
       when 'activities_by_budget_districts'
         Reports::ActivitiesByBudgetDistricts.new
       when 'activities_by_expenditure_coding'
-        Reports::ActivitiesByExpenditureCoding.new
+        Reports::ActivitiesByCoding.new(CodingSpend)
       when 'activities_by_expenditure_cost_cat'
         Reports::ActivitiesByExpenditureCostCat.new
       when 'activities_by_expenditure_districts'

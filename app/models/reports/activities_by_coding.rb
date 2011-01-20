@@ -1,9 +1,10 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetCoding
+class Reports::ActivitiesByCoding
   include Reports::Helpers
 
-  def initialize
+  def initialize(coding_klass)
+    @coding_klass = coding_klass
     codes         = get_codes
     code_ids      = codes.map{|code| code.id}
     beneficiaries = get_beneficiaries
@@ -92,7 +93,8 @@ class Reports::ActivitiesByBudgetCoding
 
     def get_code_assignment_value(activity, act_codes, code_id)
       if act_codes.include?(code_id)
-        ca = CodingBudget.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        # @coding_klass can be: CodingBudget, CodingSpend
+        ca = @coding_klass.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         ca ? ca.cached_amount : 0
       else
         nil

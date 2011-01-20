@@ -4,34 +4,21 @@ class Reports::ActivitiesByBudgetCostCat
   include Reports::Helpers
 
   def initialize
-    codes = []
-    code_ids = []
-    Code.roots.reject { |r| ! [CostCategory].include? r.class }.each do |c|
-      codes << c.self_and_descendants.map { |e| e.to_s_with_external_id }
-      code_ids << c.self_and_descendants.map(&:id)
-    end
-    codes.flatten!
-    code_ids.flatten!
+    codes         = get_codes
+    code_ids      = codes.map{|code| code.id}
+    beneficiaries = get_beneficiaries
 
-    beneficiaries = Beneficiary.find(:all, :select => 'short_display').map(&:short_display).sort
-
-    @csv_string = FasterCSV.generate do |csv|
+    @csv_string   = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, codes)
 
-      #print data
-      Activity.find(:all, :conditions => "activity_id IS NULL").each do |a|
-        if [Activity].include?(a.class)
-          row = build_row(a, beneficiaries, code_ids)
-          #print out a row for each project
-          if a.projects.empty?
-            row.unshift(" ")
-            csv << row.flatten
-          else
-            a.projects.each do |proj|
-              proj_row = row.dup
-              proj_row.unshift("#{h proj.name}")
-              csv << proj_row.flatten
-            end
+      # if [Activity].include?(activity.class) -> type IS NULL
+      Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL").each do |activity|
+        #print out a row for each project
+        if activity.projects.empty?
+          csv << build_row(activity, beneficiaries, code_ids, " ")
+        else
+          activity.projects.each do |project|
+            csv << build_row(activity, beneficiaries, code_ids, "#{h project.name}")
           end
         end
       end
@@ -42,46 +29,75 @@ class Reports::ActivitiesByBudgetCostCat
     @csv_string
   end
 
-  protected
+  private
 
-  def build_header(beneficiaries, codes)
-    #print header
-    header = []
-    header << [ "project", "org.name", "org.type", "activity.id","activity.name", "activity.description" ]
-    beneficiaries.each do |ben|
-      header << "#{ben}"
-    end
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.budget", "activity.spend", "currency","activity.start", "activity.end", "activity.provider"]
-    codes.each do |code|
-      header << "#{code}"
-    end
-    header.flatten
-  end
+    def build_header(beneficiaries, codes)
+      row = []
 
-  def build_row(activity, beneficiaries, code_ids)
-    org        = activity.data_response.responding_organization
-    act_benefs = activity.beneficiaries.map(&:short_display)
-    act_codes  = activity.budget_cost_category_coding.map(&:code_id)
+      row << "funding_source"
+      row << "project"
+      row << "org.name"
+      row << "org.type"
+      row << "activity.id"
+      row << "activity.name"
+      row << "activity.description"
+      beneficiaries.each{|beneficiary| row << "#{beneficiary}"}
+      row << "activity.text_for_beneficiaries"
+      row << "activity.text_for_targets"
+      row << "activity.budget"
+      row << "activity.spend"
+      row << "currency"
+      row << "activity.start"
+      row << "activity.end"
+      row << "activity.provider"
+      codes.each{|code| row << "#{code.to_s_with_external_id}"}
 
-    row = []
-    row << [ "#{h org.name}", "#{org.type}", "#{activity.id}","#{h activity.name}", "#{h activity.description}" ]
-    beneficiaries.each do |ben|
-      row << (act_benefs.include?(ben) ? "yes" : " " )
+      row
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}",  "#{activity.start}", "#{activity.end}" ]
-    row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
-    code_ids.each do |code_id|
+
+    def build_row(activity, beneficiaries, code_ids, project_name)
+      organization = activity.organization
+      act_benefs   = activity.beneficiaries.map{|code| code.short_display}
+      act_codes    = activity.budget_cost_category_coding.map{|ca| ca.code_id}
+      row          = []
+
+      row << get_funding_source_name(activity)
+      row << project_name
+      row << "#{h organization.name}"
+      row << "#{organization.type}"
+      row << "#{activity.id}"
+      row << "#{h activity.name}"
+      row << "#{h activity.description}"
+      beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
+      row << "#{h activity.text_for_beneficiaries}"
+      row << "#{h activity.text_for_targets}"
+      row << "#{activity.budget}"
+      row << "#{activity.spend}"
+      row << "#{activity.data_response.currency}"
+      row << "#{activity.start}"
+      row << "#{activity.end}"
+      row << provider_name(activity)
+      code_ids.each{|code_id| row << get_code_assignment_value(activity, act_codes, code_id)}
+
+      row
+    end
+
+    def get_codes
+      codes = []
+      CostCategory.roots.each do |code|
+        code.self_and_descendants.map do |code2|
+          codes << code2
+        end
+      end
+      codes
+    end
+
+    def get_code_assignment_value(activity, act_codes, code_id)
       if act_codes.include?(code_id)
         ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        unless ca.try(:cached_amount).nil?
-          row << ca.cached_amount
-        else
-          row << 0
-        end
+        ca ? ca.cached_amount : 0
       else
-        row << nil
+        nil
       end
     end
-    row.flatten
-  end
 end

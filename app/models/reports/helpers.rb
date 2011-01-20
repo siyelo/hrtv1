@@ -157,4 +157,8 @@ module Reports::Helpers
   def provider_name(activity)
     activity.provider ? "#{h activity.provider.name}" : " "
   end
+
+  def get_beneficiaries
+    Beneficiary.find(:all, :select => 'short_display').map{|code| code.short_display}.sort
+  end
 end

@@ -6,12 +6,12 @@ class Reports::ActivitiesByBudgetCoding
   def initialize
     codes         = get_codes
     code_ids      = codes.map{|code| code.id}
-    beneficiaries = Beneficiary.find(:all, :select => 'short_display').map{|code| code.short_display}.sort
+    beneficiaries = get_beneficiaries
 
-    @csv_string = FasterCSV.generate do |csv|
+    @csv_string   = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, codes)
 
-      # if [Activity].include?(activity.class) - type IS NULL
+      # if [Activity].include?(activity.class) -> type IS NULL
       Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL").each do |activity|
         if activity.projects.empty?
           csv << build_row(activity, beneficiaries, code_ids, " ")
@@ -56,8 +56,8 @@ class Reports::ActivitiesByBudgetCoding
 
     def build_row(activity, beneficiaries, code_ids, project_name)
       organization = activity.organization
-      act_benefs   = activity.beneficiaries.map(&:short_display)
-      act_codes    = activity.budget_coding.map(&:code_id)
+      act_benefs   = activity.beneficiaries.map{|code| code.short_display}
+      act_codes    = activity.budget_coding.map{|ca| ca.code_id}
       row          = []
 
       row << get_funding_source_name(activity)

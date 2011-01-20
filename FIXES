@@ -1,5 +1,0 @@
-Fixes to be run on production deploy
-
-- 2011 01 18:
-  db/fixes/20110117_move_aids_relief_from_internal_for_dev2_to_crs.rb
-  db/fixes/20110118_upload_pih_subimplementers_data.rb

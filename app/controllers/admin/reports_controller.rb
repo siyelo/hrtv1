@@ -46,13 +46,13 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_budget_cost_cat'
         Reports::ActivitiesByCostCategory.new(:budget)
       when 'activities_by_budget_districts'
-        Reports::ActivitiesByBudgetDistricts.new
+        Reports::ActivitiesByDistricts.new(:budget)
       when 'activities_by_expenditure_coding'
         Reports::ActivitiesByCoding.new(:spent)
       when 'activities_by_expenditure_cost_cat'
         Reports::ActivitiesByCostCategory.new(:spent)
       when 'activities_by_expenditure_districts'
-        Reports::ActivitiesByExpenditureDistricts.new
+        Reports::ActivitiesByDistricts.new(:spent)
       when 'jawp_report'
         Reports::JawpReport.new(current_user, params[:type])
       when 'activities_by_nsp'

@@ -1,9 +1,17 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByBudgetDistricts
+class Reports::ActivitiesByDistricts
   include Reports::Helpers
 
-  def initialize
+  def initialize(type)
+    if type == :budget
+      @is_budget = true
+    elsif type == :spent
+      @is_budget = false
+    else
+      raise "Invalid type #{type}".to_yaml
+    end
+
     codes         = Location.all
     code_ids      = codes.map{|code| code.id}
     beneficiaries = get_beneficiaries
@@ -54,10 +62,14 @@ class Reports::ActivitiesByBudgetDistricts
     end
 
     def build_row(activity, beneficiaries, code_ids, project_name)
-      org        = activity.data_response.responding_organization
-      act_benefs = activity.beneficiaries.map(&:short_display)
-      act_codes  = activity.budget_district_coding.map(&:code_id)
-      row        = []
+      org         = activity.data_response.responding_organization
+      act_benefs  = activity.beneficiaries.map(&:short_display)
+      if @is_budget
+        act_codes = activity.budget_district_coding.map(&:code_id)
+      else
+        act_codes = activity.spend_district_coding.map(&:code_id)
+      end
+      row         = []
 
       row << get_funding_source_name(activity)
       row << project_name
@@ -82,7 +94,11 @@ class Reports::ActivitiesByBudgetDistricts
 
     def get_code_assignment_value(activity, act_codes, code_id)
       if act_codes.include?(code_id)
-        ca = CodingBudgetDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        if @is_budget
+          ca = CodingBudgetDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        else
+          ca = CodingSpendDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        end
          ca ? ca.cached_amount : 0
       else
         nil

@@ -161,4 +161,9 @@ module Reports::Helpers
   def get_beneficiaries
     Beneficiary.find(:all, :select => 'short_display').map{|code| code.short_display}.sort
   end
+
+  # if [Activity].include?(activity.class) -> type IS NULL
+  def root_activities
+    Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL")
+  end
 end

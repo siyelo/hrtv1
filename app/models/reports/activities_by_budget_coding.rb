@@ -11,8 +11,7 @@ class Reports::ActivitiesByBudgetCoding
     @csv_string   = FasterCSV.generate do |csv|
       csv << build_header(beneficiaries, codes)
 
-      # if [Activity].include?(activity.class) -> type IS NULL
-      Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL").each do |activity|
+      root_activities.each do |activity|
         if activity.projects.empty?
           csv << build_row(activity, beneficiaries, code_ids, " ")
         else

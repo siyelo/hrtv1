@@ -59,9 +59,9 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByNha.new(activities, report_type)
       when 'activities_by_full_coding'
         Reports::ActivitiesByFullCoding.new(activities, report_type, current_user.admin? )
-      when 'activities_by_budget_coding_new' # TODO remove, not being used
+      when 'activities_by_budget_coding_new' # TODO: remove, not being used
         Reports::ActivitiesByBudgetCodingNew.new
-      when 'activities_by_budget_stratprog' # TODO remove, not being used
+      when 'activities_by_budget_stratprog' # TODO: remove, not being used
         Reports::ActivitiesByHssp2.new
       when 'activities_by_district'
         Reports::ActivitiesByDistrict.new

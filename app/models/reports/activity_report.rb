@@ -5,7 +5,7 @@ class Reports::ActivityReport
 
   attr_accessor :query, :cols, :conditions, :joins
 
-  def initialize(options = {})
+  def initialize
   end
 
   def csv
@@ -87,10 +87,6 @@ class Reports::ActivityReport
     end
 
   private
-
-    def provider_name(activity)
-      activity.provider ? "#{h activity.provider.name}" : " "
-    end
 
     def provider_fosaid(activity)
       activity.provider ? "#{h activity.provider.fosaid}" : " "

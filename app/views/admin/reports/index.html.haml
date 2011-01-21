@@ -35,7 +35,7 @@
           %span.hint Interactive reports
 
       %li= link_to "By NSP", admin_report_path('districts_by_nsp', :type => :budget)
-      %li= link_to "By All Codes", admin_report_path('districts_by_full_coding', :type => :budget)
+      %li= link_to "By All Codes", admin_report_path('districts_by_all_codes', :type => :budget)
   %h2
     =image_tag "icon_users.png", :class => "heading_icon"
     Users
@@ -54,7 +54,7 @@
         %li=  link_to "By Partner Budget", admin_report_path('map_districts_by_partner', :type => "budget")
         %li=  link_to "By Partner Spending", admin_report_path('map_districts_by_partner', :type => "spent")
         %li=  link_to "By NSP", admin_report_path('map_districts_by_nsp', :type => :budget)
-        %li=  link_to "By All Codes", admin_report_path('map_districts_by_full_coding', :type => :budget)
+        %li=  link_to "By All Codes", admin_report_path('map_districts_by_all_codes', :type => :budget)
 
     .second-half
       %h3 Facilities

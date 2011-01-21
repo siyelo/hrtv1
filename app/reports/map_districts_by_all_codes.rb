@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::MapDistrictsByFullCoding
+class Reports::MapDistrictsByAllCodes
   include Reports::Helpers
 
   def initialize(activities, report_type)

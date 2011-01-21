@@ -1,9 +1,7 @@
 require 'fastercsv'
 
-class Reports::ActivityReport
+class Reports::ActivitiesSummary
   include Reports::Helpers
-
-  attr_accessor :query, :cols, :conditions, :joins
 
   def initialize
   end
@@ -29,32 +27,32 @@ class Reports::ActivityReport
     end
   end
 
-  protected
+  private
 
     def build_header
-     row = []
+      row = []
 
-     row << "funding_source"
-     row << "project"
-     row << "org.name"
-     row << "org.type"
-     row << "activity.id"
-     row << "activity.name"
-     row << "activity.description"
-     row << "activity.budget"
-     row << "activity.spend"
-     row << "currency"
-     row << "activity.start"
-     row << "activity.end"
-     row << "activity.provider"
-     row << "activity.provider.FOSAID"
-     row << "activity.text_for_beneficiaries"
-     row << "activity.text_for_targets"
-     row << "Is Sub Activity?"
-     row << "parent_activity.total_budget"
-     row << "parent_activity.total_spend"
+      row << "funding_source"
+      row << "project"
+      row << "org.name"
+      row << "org.type"
+      row << "activity.id"
+      row << "activity.name"
+      row << "activity.description"
+      row << "activity.budget"
+      row << "activity.spend"
+      row << "currency"
+      row << "activity.start"
+      row << "activity.end"
+      row << "activity.provider"
+      row << "activity.provider.FOSAID"
+      row << "activity.text_for_beneficiaries"
+      row << "activity.text_for_targets"
+      row << "Is Sub Activity?"
+      row << "parent_activity.total_budget"
+      row << "parent_activity.total_spend"
 
-     row
+      row
     end
 
     def build_row(activity)
@@ -86,26 +84,4 @@ class Reports::ActivityReport
       row
     end
 
-  private
-
-    def provider_fosaid(activity)
-      activity.provider ? "#{h activity.provider.fosaid}" : " "
-    end
-
-    def is_activity(activity)
-      activity.class == SubActivity ? "yes" : ""
-    end
-
-    def parent_activity_budget(activity)
-      activity.class == SubActivity ? activity.activity.budget : ""
-    end
-
-    def parent_activity_spend(activity)
-      activity.class == SubActivity ? activity.activity.spend : ""
-    end
-
-    def first_project(activity)
-      project = activity.projects.first
-      project ? "#{h project.name}" : " "
-    end
 end

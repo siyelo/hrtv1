@@ -20,21 +20,21 @@ class Admin::ReportsController < Admin::BaseController
       case params[:id]
       when 'districts_by_nsp'
         Reports::DistrictsByNsp.new(activities, report_type)
-      when 'districts_by_full_coding'
-        Reports::DistrictsByFullCoding.new(activities, report_type)
+      when 'districts_by_all_codes'
+        Reports::DistrictsByAllCodes.new(activities, report_type)
       when 'users_by_organization'
         Reports::UsersByOrganization.new
       when 'map_districts_by_partner'
         Reports::MapDistrictsByPartner.new(params[:type].to_s.to_sym)
       when 'map_districts_by_nsp'
         Reports::MapDistrictsByNsp.new(activities, report_type)
-      when 'map_districts_by_full_coding'
+      when 'map_districts_by_all_codes'
         @activities = Activity.only_simple.canonical
-        Reports::MapDistrictsByFullCoding.new(@activities, report_type)
+        Reports::MapDistrictsByAllCodes.new(@activities, report_type)
       when 'map_facilities_by_partner'
         Reports::MapFacilitiesByPartner.new(params[:type].to_s.to_sym)
       when 'activity_report'
-        Reports::ActivityReport.new
+        Reports::ActivitiesSummary.new
       when 'activities_by_district_new'
         Reports::ActivitiesByDistrictNew.new
       when 'activities_by_district_row_report'
@@ -59,10 +59,6 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByNha.new(activities, report_type)
       when 'activities_by_full_coding'
         Reports::ActivitiesByFullCoding.new(activities, report_type, current_user.admin? )
-      when 'activities_by_budget_coding_new' # TODO: remove, not being used
-        Reports::ActivitiesByBudgetCodingNew.new
-      when 'activities_by_budget_stratprog' # TODO: remove, not being used
-        Reports::ActivitiesByHssp2.new
       when 'activities_by_district'
         Reports::ActivitiesByDistrict.new
       when 'activities_by_district_sub_activities'

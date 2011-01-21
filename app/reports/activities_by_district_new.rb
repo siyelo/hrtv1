@@ -1,10 +1,10 @@
 require 'fastercsv'
 
-class Reports::CodedActivityReport
+class Reports::ActivitiesByDistrictNew
   include Reports::Helpers
 
-  def initialize(codes = nil)
-    @codes    = codes
+  def initialize
+    @codes = Location.roots.collect{|code| code.self_and_descendants}.flatten
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
@@ -86,3 +86,4 @@ class Reports::CodedActivityReport
       row
     end
 end
+

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Reports::ActivityReport do
+describe Reports::ActivitiesSummary do
 
   describe "add rows to csv" do
     it "should now display values when rows is empty array" do

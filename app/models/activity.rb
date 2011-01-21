@@ -123,7 +123,6 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified}
   end
 
-
   ### Public Instance Methods
 
   #convenience
@@ -140,11 +139,9 @@ class Activity < ActiveRecord::Base
   end
 
   def currency
-    tentative_currency = data_response.try(:currency)
-    unless projects.blank?
-      tentative_currency = projects.first.currency unless projects.first.currency.blank?
-    end
-    tentative_currency
+    return project.currency unless project.nil? # TODO: change project to be always present, thus simplifying this logic.
+    return data_response.currency unless data_response.nil?
+    Money.default_currency
   end
 
   def organization
@@ -153,7 +150,7 @@ class Activity < ActiveRecord::Base
 
   # helper until we enforce this in the model association!
   def project
-    self.projects.first
+    self.projects.first unless projects.empty?
   end
 
   def organization_name
@@ -592,9 +589,10 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_money_amounts
-      self.new_budget = gimme_the_caaaasssssshhhh(self.budget, self.currency)
+      zero = BigDecimal.new("0")
+      self.new_budget = Money.from_bigdecimal(self.budget || zero, self.currency)
       self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
-      self.new_spend = gimme_the_caaaasssssshhhh(self.spend, self.currency)
+      self.new_spend = Money.from_bigdecimal(self.spend || zero, self.currency)
       self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
     end
 

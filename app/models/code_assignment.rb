@@ -162,7 +162,7 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def currency
-    self.activity.currency
+    self.activity.nil? ? nil : self.activity.currency
   end
 
   def calculated_amount_currency
@@ -207,16 +207,16 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-
   protected
 
     #currency is still derived from the parent activities' project/DR
     def update_money_amounts
-      currency = ""
-      currency = self.activity.currency unless self.activity.nil?
-      self.new_amount        = gimme_the_caaaasssssshhhh(self.amount, currency)
-      self.new_cached_amount = gimme_the_caaaasssssshhhh(self.cached_amount, currency)
-      self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
+      if currency
+        zero = BigDecimal.new("0")
+        self.new_amount        = Money.from_bigdecimal(self.amount || zero, currency)
+        self.new_cached_amount = Money.from_bigdecimal(self.cached_amount || zero, currency)
+        self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
+      end
     end
 end
 

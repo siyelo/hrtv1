@@ -75,11 +75,10 @@ class Project < ActiveRecord::Base
   end
 
   def currency
-    if read_attribute(:currency).try(:empty?)
-      data_response.currency
-    else
-      read_attribute(:currency)
-    end
+    c = read_attribute(:currency)
+    return c unless c.blank?
+    return data_response.currency unless data_response.nil?
+    Money.default_currency
   end
 
   # if these are needed to fix saving, then they are missing

@@ -149,6 +149,12 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  def currency
+    c = read_attribute(:currency)
+    return c unless c.blank?
+    Money.default_currency
+  end
+
 end
 
 

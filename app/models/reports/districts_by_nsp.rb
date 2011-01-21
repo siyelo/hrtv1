@@ -64,8 +64,7 @@ class Reports::DistrictsByNsp
     # TODO: refactor: duplicate method
     def set_district_hash_for_code(code)
       code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
-      activities = cache_activities(code_assignments)
-      activities.each do |activity, amounts_hash|
+      cache_activities(code_assignments).each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
           #have cached values, so speed up these proportions
           @district_proportions_hash[activity].each do |location, proportion|

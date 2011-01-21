@@ -31,11 +31,11 @@ class DataResponse < ActiveRecord::Base
   # Validations
   validates_presence_of :data_request_id
   validates_presence_of :organization_id_responder
+  validates_presence_of :currency
 
   validates_date :fiscal_year_start_date, :on => :update
   validates_date :fiscal_year_end_date, :on => :update
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date.", :on => :update
-  validates_presence_of :currency, :on => :update
 
   # Named scopes
   named_scope :available_to, lambda { |current_user|

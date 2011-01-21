@@ -1,30 +1,26 @@
 require 'fastercsv'
 
-class Reports::DistrictsByNsp < Reports::CodedActivityReport
+class Reports::DistrictsByNsp
   include Reports::Helpers
 
   def initialize(activities, report_type)
-    @codes_to_include = []
-    Nsp.all.each do |e|
-      @codes_to_include << e
-    end
-    @districts_hash = {}
-    @codes_to_include.each do |c|
-      @districts_hash[c] = {}
-      @districts_hash[c][:total] = 0
-      Location.all.each do |l|
-        @districts_hash[c][l] = 0
-      end
-    end
+    @activities                = activities
+    @report_type               = report_type
+    @leaves                    = Nsp.leaves
+    @codes_to_include          = Nsp.all
     @district_proportions_hash = {} # activity => {location => proportion}
-    @csv_string = FasterCSV.generate do |csv|
-      csv << header()
-      @activities = activities
-      @report_type = report_type
-      @leaves = Nsp.leaves
-      Nsp.roots.reverse.each do |nsp_root|
-        add_rows csv, nsp_root
+    @districts_hash            = {}
+    @codes_to_include.each do |code|
+      @districts_hash[code] = {}
+      @districts_hash[code][:total] = 0
+      Location.all.each do |location|
+        @districts_hash[code][location] = 0
       end
+    end
+
+    @csv_string = FasterCSV.generate do |csv|
+      csv << build_header
+      Nsp.roots.reverse.each{|nsp_root| add_rows(csv, nsp_root)}
     end
   end
 
@@ -32,98 +28,86 @@ class Reports::DistrictsByNsp < Reports::CodedActivityReport
     @csv_string
   end
 
-  def add_rows csv, code
-    add_code_summary_row(csv, code)
-    row(csv, code, @activities, @report_type) if @districts_hash.key? code
-    kids = code.children.with_type("Nsp")
-    kids.each do |c|
-      add_rows(csv, c)
-    end
-  end
+  private
 
-  def add_code_summary_row csv, code
-#    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
-#    csv << code.external_id.to_s
-    total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
-    if total_for_code > 0
-      csv << (code_hierarchy(code) + [nil,nil, "Total Budget - "+n2c(total_for_code)]) #put total in Q1 column
-    end
-    if @codes_to_include.include? code
-      set_district_hash_for_code code
-    end
-  end
+    def build_header
+      row = []
 
-  def set_district_hash_for_code code
-    cas = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
-    activities = self.cache_activities(cas)
-    activities.each do |a, h|
-      if @district_proportions_hash.key? a
-        #have cached values, so speed up these proportions
-        @district_proportions_hash[a].each do |loc, proportion|
-          @districts_hash[code][:total] += h[:leaf_amount] * proportion
-          @districts_hash[code][loc] += h[:amount] * proportion
-        end
-      else
-        @district_proportions_hash[a] = {}
-        # We've got non-report type report type hard coding here
-        # so it uses budgets
-        a.budget_district_coding.each do |bd|
-          proportion = bd.proportion_of_activity
-          loc = bd.code
-          @district_proportions_hash[a][loc] = proportion
-          @districts_hash[code][:total] += h[:leaf_amount] * proportion
-          @districts_hash[code][loc] += h[:amount] * proportion
-        end
-      end
-    end
-  end
+      Nsp.deepest_nesting.times{|i| row << "NSP Code"}
+      row << "District"
+      row << "Budget"
 
-  def row(csv, code, activities, report_type)
-    hierarchy = code_hierarchy(code)
-    location_to_amount_for_code = @districts_hash[code]
-    location_to_amount_for_code.each do |loc, amt|
-      if amt != 0 and loc != :total
+      row
+    end
+
+    def add_rows(csv, code)
+      add_code_summary_row(csv, code)
+      add_code_row(csv, code) if @districts_hash.key?(code)
+      code.children.with_type("Nsp").each{|code| add_rows(csv, code)}
+    end
+
+    def add_code_summary_row(csv, code)
+      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if code_total > 0
         row = []
-        row = hierarchy.clone
-        row << loc.to_s.upcase
-        row << n2c(amt)
-        csv <<  row
+        add_nsp_code_hierarchy(row, code)
+        row << nil
+        row << nil
+        row << "Total Budget - " + n2c(code_total) #put total in Q1 column
+
+        csv << row
+      end
+
+      set_district_hash_for_code(code) if @codes_to_include.include?(code)
+    end
+
+    def set_district_hash_for_code(code)
+      code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      activities = cache_activities(code_assignments)
+      activities.each do |activity, amounts_hash|
+        if @district_proportions_hash.key?(activity)
+          #have cached values, so speed up these proportions
+          @district_proportions_hash[activity].each do |location, proportion|
+            @districts_hash[code][:total]   += amounts_hash[:leaf_amount] * proportion
+            @districts_hash[code][location] += amounts_hash[:amount] * proportion
+          end
+        else
+          @district_proportions_hash[activity] = {}
+          # We've got non-report type report type hard coding here
+          # so it uses budgets
+          activity.budget_district_coding.each do |code_assignment|
+            proportion = code_assignment.proportion_of_activity
+            location = code_assignment.code
+            @district_proportions_hash[activity][location] = proportion
+            @districts_hash[code][:total]   += amounts_hash[:leaf_amount] * proportion
+            @districts_hash[code][location] += amounts_hash[:amount] * proportion
+          end
+        end
       end
     end
-  end
 
-  def header()
-    row = []
-    row << "NSP Code"
-    (Nsp.deepest_nesting-1).times do |i|
-      row << "NSP Code"
-    end
-#    row << "% of Spending"
-    row << "District"
-    row << "Budget"
-    row
-  end
+    def add_code_row(csv, code)
+      @districts_hash[code].each do |location, amount|
+        if amount != 0 && location != :total
+          row = []
+          add_nsp_code_hierarchy(row, code)
 
-  protected
+          row << location.to_s.upcase
+          row << n2c(amount)
 
-  def code_hierarchy(code)
-    # TODO merge all columns to the left and put row's value
-    # if there is more than 5 rows in the section
-    hierarchy = []
-    Nsp.each_with_level(code.self_and_nsp_ancestors) do |e, level|
-      if e==code
-        hierarchy << official_name_w_sum(e)
-      else
-        hierarchy << nil
+          csv << row
+        end
       end
-      #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
-    (Nsp.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
-    hierarchy
-  end
 
-  def official_name_w_sum code
-    "#{code.official_name ? code.official_name : code.short_display}"
-  end
-
+    def cache_activities(code_assignments)
+      activities = {}
+      code_assignments.each do |ca|
+        activities[ca.activity] = {}
+        sum_of_children = ca.sum_of_children.nil? ? 0 : ca.sum_of_children
+        activities[ca.activity][:leaf_amount] = sum_of_children > 0 ? 0 : ca.cached_amount
+        activities[ca.activity][:amount] = ca.cached_amount
+      end
+      activities
+    end
 end

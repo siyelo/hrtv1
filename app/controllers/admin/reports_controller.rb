@@ -33,8 +33,7 @@ class Admin::ReportsController < Admin::BaseController
         @activities = Activity.only_simple.canonical
         Reports::MapDistrictsByFullCoding.new(@activities, report_type)
       when 'map_facilities_by_partner'
-        # @activities is nil !? - that how it was in the old reports controller
-        Reports::MapFacilitiesByPartner.new(@activities, params[:type])
+        Reports::MapFacilitiesByPartner.new(params[:type].to_s.to_sym)
       when 'activity_report'
         Reports::ActivityReport.new
       when 'activities_by_district_new'

@@ -185,4 +185,13 @@ module Reports::Helpers
   def official_name_w_sum(code)
     code.official_name ? "#{code.official_name}" : "#{code.short_display}"
   end
+
+  def add_nsp_code_hierarchy(row, code)
+    counter = 0
+    Nsp.each_with_level(code.self_and_nsp_ancestors) do |other_code, level|
+      counter += 1
+      row << (code == other_code ? official_name_w_sum(other_code) : nil)
+    end
+    (Nsp.deepest_nesting - counter).times{ row << nil }
+  end
 end

@@ -11,10 +11,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
-
-      Nsp.roots.reverse.each do |nsp_root|
-        add_rows(csv, nsp_root)
-      end
+      Nsp.roots.reverse.each{|nsp_root| add_rows(csv, nsp_root)}
     end
   end
 
@@ -52,14 +49,12 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       code.children.with_type("Nsp").each{|c| add_rows(csv, c)}
     end
 
-    def add_code_summary_row csv, code
-      # csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
-      # csv << code.external_id.to_s
-      total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
-      if total_for_code > 0
+    def add_code_summary_row(csv, code)
+      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if code_total > 0
         row = []
-        add_code_hierarchy(row, code)
-        row << "Total Budget - " + n2c(total_for_code) #put total in Q1 column
+        add_nsp_code_hierarchy(row, code)
+        row << "Total Budget - " + n2c(code_total) #put total in Q1 column
 
         csv << row
       end
@@ -71,7 +66,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         if assignment.cached_amount
           activity = assignment.activity
           row      = []
-          add_code_hierarchy(row, code)
+          add_nsp_code_hierarchy(row, code)
 
           row << n2c(assignment.cached_amount)
           row << activity_description(activity)
@@ -95,14 +90,5 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
 
     def get_provider_name(activity)
       activity.provider ? activity.provider.try(:short_name) : "No Implementer Specified"
-    end
-
-    def add_code_hierarchy(row, code)
-      counter = 0
-      Nsp.each_with_level(code.self_and_nsp_ancestors) do |other_code, level|
-        counter += 1
-        row << (code == other_code ? official_name_w_sum(other_code) : nil)
-      end
-      (Nsp.deepest_nesting - counter).times{ row << nil }
     end
 end

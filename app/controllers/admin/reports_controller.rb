@@ -25,8 +25,7 @@ class Admin::ReportsController < Admin::BaseController
       when 'users_by_organization'
         Reports::UsersByOrganization.new
       when 'map_districts_by_partner'
-        # @activities is nil !? - that how it was in the old reports controller
-        Reports::MapDistrictsByPartner.new(@activities, params[:type])
+        Reports::MapDistrictsByPartner.new(params[:type].to_s.to_sym)
       when 'map_districts_by_nsp'
         Reports::MapDistrictsByNsp.new(activities, report_type)
       when 'map_districts_by_full_coding'

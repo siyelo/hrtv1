@@ -80,6 +80,7 @@ class Reports::MapFacilitiesByPartner
 
     def build_row(csv, organization)
       row = []
+
       row << organization.fosaid
       row << organization.locations.last.to_s
       row << organization.to_s.upcase
@@ -90,6 +91,7 @@ class Reports::MapFacilitiesByPartner
       csv <<  row
     end
 
+    # TODO: refactor - duplicate method
     def add_partners(row, organization)
       partners = @districts_hash[organization][:partners]
 

@@ -152,7 +152,7 @@ class DataResponse < ActiveRecord::Base
   def currency
     c = read_attribute(:currency)
     return c unless c.blank?
-    Money.default_currency
+    Money.default_currency.iso_code
   end
 
 end

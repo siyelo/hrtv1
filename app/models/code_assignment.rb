@@ -65,7 +65,6 @@ class CodeAssignment < ActiveRecord::Base
   ### Callbacks
   before_save :update_money_amounts
 
-
   ### Class Methods
 
   # assumes a format like "17,798,123.00"
@@ -106,26 +105,6 @@ class CodeAssignment < ActiveRecord::Base
       total += my_cached_amount
     end
     total
-  end
-
-  def self.copy_coding_from_budget_to_spend assignments, new_klass, save = true
-    new_assignments = []
-    #make new code assignments
-    #shift values to correct amount
-    #save them
-    assignments.each do |ca|
-      activity = assignments.first.activity
-      new_ca = new_klass.new
-      new_ca.code_id = ca.code_id
-      conversion_ratio = activity.spend / activity.budget
-      new_ca.cached_amount = ca.calculated_amount * conversion_ratio
-      new_ca.sum_of_children = ca.sum_of_children * conversion_ratio
-      new_ca.percentage = ca.percentage if ca.percentage
-      new_ca.activity = activity
-      new_ca.save
-      new_assignments << new_ca
-    end
-    new_assignments
   end
 
 
@@ -211,6 +190,7 @@ class CodeAssignment < ActiveRecord::Base
 
     #currency is still derived from the parent activities' project/DR
     def update_money_amounts
+      debugger
       if currency
         zero = BigDecimal.new("0")
         self.new_amount        = Money.from_bigdecimal(self.amount || zero, currency)

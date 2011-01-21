@@ -22,8 +22,10 @@
   %table
     %tbody
       %tr
-        %td= form.label :currency, "Currency"
-        %td= form.select :currency, currency_options_for_select
+        %td= form.label :currency, "Default Currency"
+        %td
+          = form.select :currency, currency_options_for_select
+          %p.hint You can override this currency on individual projects
       %tr
         %td= form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
         %td= form.text_field :fiscal_year_start_date, :class => 'date_picker'

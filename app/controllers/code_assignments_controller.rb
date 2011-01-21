@@ -10,7 +10,7 @@ class CodeAssignmentsController < ApplicationController
     @codes               = coding_class.available_codes(@activity)
     @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
     @error_message       = add_code_assignments_error(coding_class, @activity)
-    @progress            = @activity.coding_progress
+    @progress            = coding_progress(@activity)
     if params[:tab].present?
       # ajax requests for all tabs except the first one
       render :partial => 'tab', :locals => {:coding_type => @coding_type,

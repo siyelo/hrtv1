@@ -48,7 +48,7 @@ class Activity < ActiveRecord::Base
                             %w(new_budget_currency currency_as_string)]
               }.merge(MONEY_OPTS)
   # TODO - money objects for q1, q2 etc
-  #   GR: /me avoiding for now since these are hardly used
+  #   GR: avoiding for now since these are hardly used and will likely be deprecated.
 
   ### Associations
   has_and_belongs_to_many :projects
@@ -141,7 +141,7 @@ class Activity < ActiveRecord::Base
   def currency
     return project.currency unless project.nil? # TODO: change project to be always present, thus simplifying this logic.
     return data_response.currency unless data_response.nil?
-    Money.default_currency
+    Money.default_currency.iso_code
   end
 
   def organization
@@ -304,9 +304,7 @@ class Activity < ActiveRecord::Base
     types.each do |budget_type|
       spend_type        = budget_type.gsub(/Budget/, "Spend")
       spend_type_klass  = spend_type.constantize
-      CodeAssignment.delete_all(["activity_id = ? AND type = ?",
-                                self.id,
-                                spend_type]) # remove old 'Spend' code assignment
+      self.code_assignments.with_type(spend_type).delete_all
 
       # GR: AFAICT this copies across the ratio, not just the amounts
       code_assignments.with_type(budget_type).each do |ca|
@@ -322,22 +320,12 @@ class Activity < ActiveRecord::Base
             spend_ca.cached_amount  = ca.percentage * spend / 100
           end
         end
-        spend_ca.save!
+        self.code_assignments << spend_ca
       end
+## GR: TODO - check why this resets cached amount for cloned assignments
       self.update_classified_amount_cache(spend_type_klass)
     end
     true
-  end
-
-  def coding_progress
-    coded = 0
-    coded +=1 if budget?
-    coded +=1 if budget_by_district?
-    coded +=1 if budget_by_cost_category?
-    coded +=1 if spend?
-    coded +=1 if spend_by_district?
-    coded +=1 if spend_by_cost_category?
-    progress = (coded.to_f / 6) * 100
   end
 
   def treemap(chart_type)
@@ -597,8 +585,6 @@ class Activity < ActiveRecord::Base
     end
 
 end
-
-
 
 # == Schema Information
 #

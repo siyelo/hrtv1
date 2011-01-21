@@ -88,6 +88,7 @@ describe Activity do
     def copy_budget_to_expenditure_check_cached_amount(activity, type, expected_cached_amount)
       activity.copy_budget_codings_to_spend([type])
       code_assignments = activity.code_assignments
+      #debugger
       code_assignments[1].cached_amount.should == expected_cached_amount
     end
 
@@ -243,14 +244,16 @@ describe Activity do
   describe "keeping Money amounts in-sync" do
     before :each do
       Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
-      @a        = Factory.build(:activity)
+      @a        = Factory(:activity,
+                          :projects => [Factory(:project,
+                            :data_response => Factory(:data_response, :currency => 'USD'))])
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save
       @a.reload
     end
-    
-    it "should update new_spend on creation" do   
+
+    it "should update new_spend on creation" do
       @a.new_spend.cents.should == 12345
       @a.new_spend.currency.should == Money::Currency.new("USD")
       @a.new_spend_in_usd.should == 12345      

@@ -1,15 +1,14 @@
 require 'fastercsv'
 
-class Reports::AllCodes < Reports::CodedActivityReport
+class Reports::AllCodes
   include Reports::Helpers
 
   def initialize
+    max_level = Code.deepest_nesting
+
     @csv_string = FasterCSV.generate do |csv|
-      max_level = Code.deepest_nesting
-      csv << header(max_level)
-      Mtef.roots.reverse.each do |code|
-        add_rows(csv, code, max_level, 0)
-      end
+      csv << build_header(max_level)
+      Mtef.roots.reverse.each{|code| add_rows(csv, code, max_level, 0)}
     end
   end
 
@@ -17,28 +16,35 @@ class Reports::AllCodes < Reports::CodedActivityReport
     @csv_string
   end
 
-  def add_rows(csv, code, max_level, current_level)
-    row = []
-    current_level.times{|i| row << '' }
-    row << code.short_display
-    (max_level - (current_level + 1)).times{ |i| row << '' }
-    row.concat([code.short_display, code.description, code.type, code.hssp2_stratobj_val, code.official_name])
-
-    csv << row
-
-    code.children.each do |code|
-      add_rows(csv, code, max_level, current_level + 1)
-    end
-  end
-
   private
-  def header(max_level)
-    row = []
-    max_level.times{ |i| row << "Code" }
-    row.concat(["Simple Display",
-                "Description",
-                "Type (MTEF, NSP, etc)",
-                "HSSP2 Strategic Objective",
-                "Official (long) name"])
-  end
+
+    def build_header(max_level)
+      row = []
+
+      max_level.times{ |i| row << "Code" }
+      row << "Simple Display"
+      row << "Description"
+      row << "Type (MTEF, NSP, etc)"
+      row << "HSSP2 Strategic Objective"
+      row << "Official (long) name"
+
+      row
+    end
+
+    def add_rows(csv, code, max_level, current_level)
+      row = []
+
+      current_level.times{|i| row << '' }
+      row << code.short_display
+      (max_level - (current_level + 1)).times{ |i| row << '' }
+      row << code.short_display
+      row << code.description
+      row << code.type
+      row << code.hssp2_stratobj_val
+      row << code.official_name
+
+      csv << row
+
+      code.children.each{|code| add_rows(csv, code, max_level, current_level + 1)}
+    end
 end

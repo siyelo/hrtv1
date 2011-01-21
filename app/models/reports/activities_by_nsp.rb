@@ -53,7 +53,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
       code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
       if code_total > 0
         row = []
-        add_nsp_code_hierarchy(row, code)
+        add_nsp_codes_hierarchy(row, code)
         row << "Total Budget - " + n2c(code_total) #put total in Q1 column
 
         csv << row
@@ -66,7 +66,7 @@ class Reports::ActivitiesByNsp < Reports::CodedActivityReport
         if assignment.cached_amount
           activity = assignment.activity
           row      = []
-          add_nsp_code_hierarchy(row, code)
+          add_nsp_codes_hierarchy(row, code)
 
           row << n2c(assignment.cached_amount)
           row << activity_description(activity)

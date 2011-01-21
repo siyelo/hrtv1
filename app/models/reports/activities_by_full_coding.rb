@@ -45,32 +45,28 @@ class Reports::ActivitiesByFullCoding
 
     def add_rows(csv, code)
       add_code_summary_row(csv, code)
-      add_code_row(csv, code, @activities, @report_type)
+      add_code_row(csv, code)
       code.children.each{|code| add_rows(csv, code)}
     end
 
     def add_code_summary_row(csv, code)
-      # csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
-      # csv << code.external_id.to_s
-      total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
-      if total_for_code > 0
+      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if code_total > 0
         row = []
-        add_code_hierarchy(row, code)
-        row << "Total Budget - " + n2c(total_for_code) #put total in Q1 column
+        add_all_codes_hierarchy(row, code)
+        row << "Total Budget - " + n2c(code_total) #put total in Q1 column
 
         csv << row
       end
     end
 
-    def add_code_row(csv, code, activities, report_type)
-      #TODO don't show code hierarchy
-      # since can tell by indentation
-      code_assignments = code.leaf_assigns_for_activities_for_code_set(report_type, @leaves, activities)
+    def add_code_row(csv, code)
+      code_assignments = code.leaf_assigns_for_activities_for_code_set(@report_type, @leaves, @activities)
       code_assignments.each do |assignment|
         if assignment.cached_amount
           activity = assignment.activity
           row      = []
-          add_code_hierarchy(row, code)
+          add_all_codes_hierarchy(row, code)
 
           row << n2c(assignment.cached_amount)
           row << activity_description(activity)
@@ -94,14 +90,5 @@ class Reports::ActivitiesByFullCoding
 
     def get_provider_name(activity)
       activity.provider ? activity.provider.try(:short_name) : "No Implementer Specified"
-    end
-
-    def add_code_hierarchy(row, code)
-      counter = 0
-      Code.each_with_level(code.self_and_ancestors) do |other_code, level|
-        counter += 1
-        row << (code == other_code ? official_name_w_sum(other_code) : nil)
-      end
-      (Code.deepest_nesting - counter).times{ row << nil }
     end
 end

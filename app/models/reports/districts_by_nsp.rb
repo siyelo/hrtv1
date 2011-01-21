@@ -50,7 +50,7 @@ class Reports::DistrictsByNsp
       code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
       if code_total > 0
         row = []
-        add_nsp_code_hierarchy(row, code)
+        add_nsp_codes_hierarchy(row, code)
         row << nil
         row << nil
         row << "Total Budget - " + n2c(code_total) #put total in Q1 column
@@ -61,6 +61,7 @@ class Reports::DistrictsByNsp
       set_district_hash_for_code(code) if @codes_to_include.include?(code)
     end
 
+    # TODO: refactor: duplicate method
     def set_district_hash_for_code(code)
       code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
       activities = cache_activities(code_assignments)
@@ -90,7 +91,7 @@ class Reports::DistrictsByNsp
       @districts_hash[code].each do |location, amount|
         if amount != 0 && location != :total
           row = []
-          add_nsp_code_hierarchy(row, code)
+          add_nsp_codes_hierarchy(row, code)
 
           row << location.to_s.upcase
           row << n2c(amount)
@@ -98,16 +99,5 @@ class Reports::DistrictsByNsp
           csv << row
         end
       end
-    end
-
-    def cache_activities(code_assignments)
-      activities = {}
-      code_assignments.each do |ca|
-        activities[ca.activity] = {}
-        sum_of_children = ca.sum_of_children.nil? ? 0 : ca.sum_of_children
-        activities[ca.activity][:leaf_amount] = sum_of_children > 0 ? 0 : ca.cached_amount
-        activities[ca.activity][:amount] = ca.cached_amount
-      end
-      activities
     end
 end

@@ -186,12 +186,32 @@ module Reports::Helpers
     code.official_name ? "#{code.official_name}" : "#{code.short_display}"
   end
 
-  def add_nsp_code_hierarchy(row, code)
+  def add_all_codes_hierarchy(row, code)
+    counter = 0
+    Code.each_with_level(code.self_and_ancestors) do |other_code, level|
+      counter += 1
+      row << (code == other_code ? official_name_w_sum(other_code) : nil)
+    end
+    (Code.deepest_nesting - counter).times{ row << nil }
+  end
+
+  def add_nsp_codes_hierarchy(row, code)
     counter = 0
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |other_code, level|
       counter += 1
       row << (code == other_code ? official_name_w_sum(other_code) : nil)
     end
     (Nsp.deepest_nesting - counter).times{ row << nil }
+  end
+
+  def cache_activities(code_assignments)
+    activities = {}
+    code_assignments.each do |ca|
+      activities[ca.activity] = {}
+      sum_of_children = ca.sum_of_children.nil? ? 0 : ca.sum_of_children
+      activities[ca.activity][:leaf_amount] = sum_of_children > 0 ? 0 : ca.cached_amount
+      activities[ca.activity][:amount] = ca.cached_amount
+    end
+    activities
   end
 end

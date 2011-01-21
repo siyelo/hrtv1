@@ -166,4 +166,23 @@ module Reports::Helpers
   def root_activities
     Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL")
   end
+
+  def number_of_health_centers(activity)
+    health_centers = activity.sub_activities.implemented_by_health_centers.count
+    health_centers > 0 ? health_centers : nil
+  end
+
+  def activity_description(activity)
+    if activity.name
+      val = "#{activity.name.chomp}"
+      val += " - #{activity.description.chomp}" if activity.description
+      val
+    else
+      activity.description ? activity.description.chomp : nil
+    end
+  end
+
+  def official_name_w_sum(code)
+    code.official_name ? "#{code.official_name}" : "#{code.short_display}"
+  end
 end

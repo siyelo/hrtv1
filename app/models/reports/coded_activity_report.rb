@@ -78,6 +78,4 @@ class Reports::CodedActivityReport < Reports::ActivityReport
       #  row << "#{ca.percentage}%"
       #end
     end
-
 end
-

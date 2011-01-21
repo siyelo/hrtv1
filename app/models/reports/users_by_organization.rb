@@ -6,17 +6,7 @@ class Reports::UsersByOrganization
   def initialize(user = nil)
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
-
-      if user
-        users = User.find(:all, :conditions => ["users.organization_id = ?", user.organization_id])
-      else
-        users = User.find(:all, :include => :organization)
-      end
-
-      #print data
-      users.each do |u|
-        csv << build_row(u)
-      end
+      users(user).each{|user| csv << build_row(user)}
     end
   end
 
@@ -24,14 +14,42 @@ class Reports::UsersByOrganization
     @csv_string
   end
 
-  protected
+  private
 
-  def build_header
-    [ "user.id", "user.username", "user.email", "user.full_name", "organization.name", "organization.type", "data_response.status" ]
-  end
+    def build_header
+      row = []
 
-  def build_row(user)
-    [ "#{user.id}", "#{h user.username}", "#{h user.email}", "#{h user.full_name}", "#{h user.organization.try(:name)}", "#{user.organization.try(:type)}", "#{user.organization_status}" ]
-  end
+      row << "user.id"
+      row << "user.username"
+      row << "user.email"
+      row << "user.full_name"
+      row << "organization.name"
+      row << "organization.type"
+      row << "data_response.status"
+
+      row
+    end
+
+    def build_row(user)
+      row = []
+
+      row << user.id
+      row << user.username
+      row << user.email
+      row << user.full_name
+      row << user.organization.try(:name)
+      row << user.organization.try(:type)
+      row << user.organization_status
+
+      row
+    end
+
+    def users(user)
+      if user
+        User.find(:all, :conditions => ["users.organization_id = ?", user.organization_id])
+      else
+        User.find(:all, :include => :organization)
+      end
+    end
 end
 

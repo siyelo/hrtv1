@@ -1,170 +1,137 @@
 require 'fastercsv'
 
-class Reports::MapFacilitiesByPartner < Reports::CodedActivityReport
+class Reports::MapFacilitiesByPartner
   include Reports::Helpers
 
-
-# location => partner, amount
-  def initialize(activities, report_type)
-    @codes_to_include = []
-    facilities_to_include =  Organization.all(:conditions => ["fosaid is not null"])
-#[Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")]
-    facilities_to_include.each do |e|
-      @codes_to_include << e #if e.activities.count > 0
-    end
-    @districts_hash = {}
-    facilities_to_include.each do |l|
-      @districts_hash[l] = {}
-      @districts_hash[l][:total] = 0
-      @districts_hash[l][:partner_amt] = {} # partner => amt
-    end
-#    @district_proportions_hash = {} # activity => {location => proportion}
-    @csv_string = FasterCSV.generate do |csv|
-      @activities = activities
-      @report_type = report_type.constantize
-      @codes_to_include.each do |c|
-        set_district_hash_for_code c
-      end
-
-      csv << header()
-      #raise @districts_hash.to_yaml
-      @codes_to_include.each do |l|
-        row csv, l, @activities, @report_type
-      end
-    end
-  end
-
-  def set_district_hash_for_code code
-    #code is facility
-    facility = code
-
-    #if have my own DR, pull lots of info from there
-    # otherwise get who gives me money by activities
-    unless !facility.data_responses.last.empty?
-      facility.provider_for.canonical.each do |act|
-        #act = Activity.find(1107)
-        amt = act.budget if @report_type == CodingBudgetDistrict
-        amt = act.spend if @report_type == CodingSpendDistrict
-        amt = 0 if amt.nil?
-        amt = amt * act.toRWF
-        loc = facility
-        partner = act.data_response.responding_organization
-        adjust_partner_value_in_hash(loc, partner, amt)
-      end
-    else # i have a non empty data response
-      dr = facility.data_responses.last #this will break in the future, but its okay ish with it being last
-      facility.in_flows.all(:conditions => ["data_response_id = ?", dr.id]).each do |flow|
-        amt = flow.budget if @report_type == CodingBudgetDistrict
-        amt = flow.spend if @report_type == CodingSpendDistrict
-        amt = 0 if amt.nil?
-        amt = amt * flow.toRWF
-        loc = facility
-        partner = flow.from
-        adjust_partner_value_in_hash(loc, partner, amt)
-      end
-    end
-  end
-
-  def adjust_partner_value_in_hash(loc, partner, amt)
-    @districts_hash[loc][:total] += amt
-    unless @districts_hash[loc][:partner_amt][partner].nil?
-      @districts_hash[loc][:partner_amt][partner] += amt
+  def initialize(type)
+    if type == :budget
+      @is_budget = true
+    elsif type == :spent
+      @is_budget = false
     else
-      @districts_hash[loc][:partner_amt][partner] = amt unless amt == 0
+      raise "Invalid type #{type}".to_yaml
+    end
+
+    #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
+    organizations   = Organization.all(:conditions => ["fosaid is not null"])
+    prepare_districts_hash(organizations)
+
+    @csv_string = FasterCSV.generate do |csv|
+      csv << build_header
+      organizations.each{|organization| build_row(csv, organization)}
     end
   end
 
-  def row(csv, loc, activities, report_type)
-    #hierarchy = code_hierarchy(code)
-    row = []
-    row << loc.fosaid
-    row << loc.locations.last.to_s
-    row << loc.to_s.upcase
-    row << n2c(@districts_hash[loc].delete(:total)) #remove key
-    code_to_amt = @districts_hash[loc][:partner_amt]
-    unless code_to_amt.size == 0
-      sorted_code_amt = code_to_amt.sort{|a,b| b[1]<=>a[1]} #sort by value, desc
-      # show top one
-      top = sorted_code_amt.first
-      row << top[0].to_s
-      row << n2c(top[1])
-
-      # show full list
-      row << sorted_code_amt.collect{|e| "#{e[0].to_s}(#{n2c(e[1])})"}.join(",")
-
-      sorted_code_amt.shift #dont show top again
-      # show in cols
-      # after sorting by amt
-      sorted_code_amt.each do |e|
-        row << e[0].to_s
-        row << n2c(e[1])
-      end
-    end
-    csv <<  row
-  end
-
-  def header()
-    row = []
-    row << "FOSAID"
-    row << "District"
-    row << "Facility Name"
-    row << "Total Budget"
-    row << "1st Development Partner by Amount"
-    row << "Amount"
-    row << "All DP's"
-    (@districts_hash.collect{|k,v| v[:partner_amt]}.map(&:size).max - 1).times do |i| #for one with most partners
-      row << "#{i+2} DP by Amount"
-      row << "#{i+2} Amount"
-    end
-    row
-  end
   def csv
     @csv_string
   end
 
-  def add_rows csv, code
-    add_code_summary_row(csv, code)
-    row(csv, code, @activities, @report_type) if @districts_hash.key? code
-    kids = code.children
-    kids.each do |c|
-      add_rows(csv, c)
-    end
-  end
+  private
 
-  def add_code_summary_row csv, code
-#    csv << "In NSP #{code.short_display} #{code.id} #{code.external_id} "
-#    csv << code.external_id.to_s
-#    total_for_code = code.sum_of_assignments_for_activities(@report_type, @activities)
-#    if total_for_code > 0
-#      csv << (code_hierarchy(code) + [nil,nil, "Total Budget - "+n2c(total_for_code)]) #put total in Q1 column
-#    end
-    #TODO merge cells[code.level:amount_column] for this code
-  end
+    def prepare_districts_hash(organizations)
+      @districts_hash = {}
+      organizations.each do|organization|
+        @districts_hash[organization] = {}
+        @districts_hash[organization][:total] = 0
+        @districts_hash[organization][:partners] = {} # partner => amount
+        dr = organization.data_responses.last
 
-  # We've got non-report type report type hard coding here
-  # so it uses budgets
-
-
-  protected
-
-  def code_hierarchy(code)
-    # TODO merge all columns to the left and put row's value
-    # if there is more than 5 rows in the section
-    hierarchy = []
-    Code.each_with_level(code.self_and_ancestors) do |e, level| # each_with_level() is faster than level()
-      if e==code
-        hierarchy << official_name_w_sum(e)
-      else
-        hierarchy << nil
+        # if have my own DR, pull lots of info from there
+        # otherwise get who gives me money by activities
+        if dr
+          organization.in_flows.all(:conditions => ["data_response_id = ?", dr.id]).each do |flow|
+            set_amounts(organization, flow.from, in_flow_amount(flow))
+          end
+        else
+          organization.provider_for.canonical.each do |activity|
+            set_amounts(organization, activity.organization, activity_amount(activity))
+          end
+        end
       end
-      #hierarchy << "#{e.external_id} - #{e.sum_of_assignments_for_activities(@report_type, @activities)}"
     end
-    (Code.deepest_nesting - hierarchy.size).times{ hierarchy << nil } #append empty columns if nested higher
-    hierarchy
-  end
 
-  def official_name_w_sum code
-    "#{code.official_name}" # - #{n2c( code.sum_of_assignments_for_activities(@report_type, @activities) )}"
-  end
+    def set_amounts(organization, partner, amount)
+      @districts_hash[organization][:total] += amount
 
+      if @districts_hash[organization][:partners][partner]
+        @districts_hash[organization][:partners][partner] += amount
+      else
+        @districts_hash[organization][:partners][partner] = amount unless amount == 0
+      end
+    end
+
+    def build_header
+      row = []
+
+      row << "FOSAID"
+      row << "District"
+      row << "Facility Name"
+      row << "Total Budget"
+      row << "1st Development Partner by Amount"
+      row << "Amount"
+      row << "All DP's"
+      max_partners_length.times do |i|
+        row << "#{i+2} DP by Amount"
+        row << "#{i+2} Amount"
+      end
+
+      row
+    end
+
+    def build_row(csv, organization)
+      row = []
+      row << organization.fosaid
+      row << organization.locations.last.to_s
+      row << organization.to_s.upcase
+      row << n2c(@districts_hash[organization].delete(:total)) #remove key
+
+      add_partners(row, organization)
+
+      csv <<  row
+    end
+
+    def add_partners(row, organization)
+      partners = @districts_hash[organization][:partners]
+
+      if partners.present?
+        sorted_partners = sort_partners(partners)
+        top_partner     = sorted_partners.first
+
+        row << top_partner[0].to_s
+        row << n2c(top_partner[1])
+        row << full_partners_list(sorted_partners)
+
+        sorted_partners.shift # dont show top_partner again
+        sorted_partners.each do |partner|
+          row << partner[0].to_s
+          row << n2c(partner[1])
+        end
+      end
+    end
+
+    def activity_amount(activity)
+      amount = @is_budget ? activity.budget : activity.spend
+      amount = 0 unless amount
+
+      amount * activity.toRWF
+    end
+
+    def in_flow_amount(funding_flow)
+      amount = @is_budget ? funding_flow.budget : funding_flow.spend
+      amount = 0 unless amount
+
+      amount * funding_flow.toRWF
+    end
+
+    def max_partners_length
+      @districts_hash.map{|k,v| v[:partners]}.map{|partner| partner.size}.max - 1
+    end
+
+    def sort_partners(partners)
+      partners.sort{|a,b| b[1] <=> a[1]} #sort by value, desc
+    end
+
+    def full_partners_list(sorted_partners)
+      sorted_partners.map{|partner| "#{partner[0].to_s}(#{n2c(partner[1])})"}.join(",")
+    end
 end

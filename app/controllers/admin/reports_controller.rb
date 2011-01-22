@@ -35,8 +35,8 @@ class Admin::ReportsController < Admin::BaseController
         Reports::MapFacilitiesByPartner.new(params[:type].to_s.to_sym)
       when 'activity_report'
         Reports::ActivitiesSummary.new
-      when 'activities_by_district_new'
-        Reports::ActivitiesByDistrictNew.new
+      when 'activities_by_district'
+        Reports::ActivitiesByDistrict.new
       when 'activities_by_district_row_report'
         Reports::ActivitiesByDistrictRowReport.new
       when 'activities_by_budget_coding'

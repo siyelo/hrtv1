@@ -1,10 +1,10 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByDistrictNew
+class Reports::ActivitiesByDistrict
   include Reports::Helpers
 
   def initialize
-    @codes = Location.roots.collect{|code| code.self_and_descendants}.flatten
+    @locations = Location.roots.collect{|code| code.self_and_descendants}.flatten
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
@@ -33,7 +33,7 @@ class Reports::ActivitiesByDistrictNew
     def build_header
      row = []
 
-     row << "funding_source"
+     #row << "funding_source"
      row << "project"
      row << "org.name"
      row << "org.type"
@@ -52,21 +52,20 @@ class Reports::ActivitiesByDistrictNew
      row << "Is Sub Activity?"
      row << "parent_activity.total_budget"
      row << "parent_activity.total_spend"
-     @codes.each{|code| row << code.to_s_with_external_id}
+     @locations.each{|location| row << location.to_s_with_external_id}
 
      row
     end
 
     def build_row(activity)
-      organization  = activity.data_response.responding_organization
       #TODO handle sub activities correctly
 
       row = []
 
-      row << get_funding_source_name(activity)
+      #row << get_funding_source_name(activity)
       row << first_project(activity)
-      row << "#{h organization.name}"
-      row << "#{organization.type}"
+      row << "#{h activity.organization.name}"
+      row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
@@ -82,8 +81,12 @@ class Reports::ActivitiesByDistrictNew
       row << is_activity(activity)
       row << parent_activity_budget(activity)
       row << parent_activity_spend(activity)
+      @locations.each{|location| row << location_included?(activity, location)}
 
       row
     end
-end
 
+    def location_included?(activity, code)
+      activity.locations.include?(code) ? "yes" : " "
+    end
+end

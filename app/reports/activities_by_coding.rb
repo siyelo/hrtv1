@@ -4,14 +4,7 @@ class Reports::ActivitiesByCoding
   include Reports::Helpers
 
   def initialize(type)
-    if type == :budget
-      @is_budget = true
-    elsif type == :spent
-      @is_budget = false
-    else
-      raise "Invalid type #{type}".to_yaml
-    end
-
+    @is_budget    = is_budget?(type)
     codes         = get_codes
     code_ids      = codes.map{|code| code.id}
     beneficiaries = get_beneficiaries
@@ -40,7 +33,7 @@ class Reports::ActivitiesByCoding
     def build_header(beneficiaries, codes)
       row = []
 
-      row << "funding_source"
+      #row << "funding_source"
       row << "project"
       row << "org.name"
       row << "org.type"
@@ -62,23 +55,22 @@ class Reports::ActivitiesByCoding
     end
 
     def build_row(activity, beneficiaries, code_ids, project_name)
-      organization = activity.organization
-      act_benefs   = activity.beneficiaries.map{|code| code.short_display}
+      act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        act_codes    = activity.budget_coding.map{|ca| ca.code_id}
+        code_assignments = activity.budget_coding.map{|ca| ca.code_id}
       else
-        act_codes    = activity.spend_coding.map{|ca| ca.code_id}
+        code_assignments = activity.spend_coding.map{|ca| ca.code_id}
       end
-      row          = []
+      row = []
 
-      row << get_funding_source_name(activity)
+      #row << get_funding_source_name(activity)
       row << project_name
-      row << "#{h organization.name}"
-      row << "#{organization.type}"
+      row << "#{h activity.organization.name}"
+      row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
-      beneficiaries.each{|ben| row << (act_benefs.include?(ben) ? "yes" : " " )}
+      beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
       row << "#{h activity.text_for_targets}"
       row << "#{activity.budget}"
@@ -87,7 +79,7 @@ class Reports::ActivitiesByCoding
       row << "#{activity.start}"
       row << "#{activity.end}"
       row << provider_name(activity)
-      code_ids.each{|code_id| row << get_code_assignment_value(activity, act_codes, code_id)}
+      code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 
       row
     end
@@ -102,8 +94,8 @@ class Reports::ActivitiesByCoding
       codes
     end
 
-    def get_code_assignment_value(activity, act_codes, code_id)
-      if act_codes.include?(code_id)
+    def get_code_assignment_value(activity, code_assignments, code_id)
+      if code_assignments.include?(code_id)
         if @is_budget
           ca = CodingBudget.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         else

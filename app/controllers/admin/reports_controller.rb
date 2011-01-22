@@ -6,16 +6,12 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def show
-    report      = get_report
-    report_name = params[:type].present? ?
-      "#{params[:id]}_#{params[:type]}.csv" : "#{params[:id]}.csv"
-
     send_csv(report.csv, report_name)
   end
 
   private
 
-    def get_report
+    def report
       report_type = get_report_type(params[:type])
       case params[:id]
       when 'districts_by_nsp'
@@ -66,5 +62,12 @@ class Admin::ReportsController < Admin::BaseController
 
     def activities
       Activity.only_simple.canonical
+    end
+
+    def report_name
+      name = "#{params[:id]}"
+      name += "_#{params[:type]}" if params[:type].present?
+      name += ".csv"
+      return name
     end
 end

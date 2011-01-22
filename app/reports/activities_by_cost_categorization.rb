@@ -1,17 +1,10 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByCostCategory
+class Reports::ActivitiesByCostCategorization
   include Reports::Helpers
 
   def initialize(type)
-    if type == :budget
-      @is_budget = true
-    elsif type == :spent
-      @is_budget = false
-    else
-      raise "Invalid type #{type}".to_yaml
-    end
-
+    @is_budget    = is_budget?(type)
     codes         = get_codes
     code_ids      = codes.map{|code| code.id}
     beneficiaries = get_beneficiaries
@@ -40,7 +33,7 @@ class Reports::ActivitiesByCostCategory
     def build_header(beneficiaries, codes)
       row = []
 
-      row << "funding_source"
+      #row << "funding_source"
       row << "project"
       row << "org.name"
       row << "org.type"
@@ -62,19 +55,18 @@ class Reports::ActivitiesByCostCategory
     end
 
     def build_row(activity, beneficiaries, code_ids, project_name)
-      organization = activity.organization
-      act_benefs   = activity.beneficiaries.map{|code| code.short_display}
+      act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        act_codes  = activity.budget_cost_category_coding.map{|ca| ca.code_id}
+        code_assignments = activity.budget_cost_category_coding.map{|ca| ca.code_id}
       else
-        act_codes  = activity.spend_cost_category_coding.map{|ca| ca.code_id}
+        code_assignments = activity.spend_cost_category_coding.map{|ca| ca.code_id}
       end
-      row          = []
+      row = []
 
-      row << get_funding_source_name(activity)
+      #row << get_funding_source_name(activity)
       row << project_name
-      row << "#{h organization.name}"
-      row << "#{organization.type}"
+      row << "#{h activity.organization.name}"
+      row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
@@ -87,7 +79,7 @@ class Reports::ActivitiesByCostCategory
       row << "#{activity.start}"
       row << "#{activity.end}"
       row << provider_name(activity)
-      code_ids.each{|code_id| row << get_code_assignment_value(activity, act_codes, code_id)}
+      code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 
       row
     end
@@ -95,16 +87,15 @@ class Reports::ActivitiesByCostCategory
     def get_codes
       codes = []
       CostCategory.roots.each do |code|
-        code.self_and_descendants.map do |code2|
+        code.self_and_descendants.each do |code2|
           codes << code2
         end
       end
       codes
     end
 
-    def get_code_assignment_value(activity, act_codes, code_id)
-      if act_codes.include?(code_id)
-        # @coding_klass can be: CodingBudgetCostCategorization
+    def get_code_assignment_value(activity, code_assignments, code_id)
+      if code_assignments.include?(code_id)
         if @is_budget
           ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         else

@@ -236,4 +236,13 @@ module Reports::Helpers
     activity.class == SubActivity ? activity.activity.spend : ""
   end
 
+  def is_budget?(type)
+    if type == :budget
+      true
+    elsif type == :spent
+      false
+    else
+      raise "Invalid type #{type}".to_yaml
+    end
+  end
 end

@@ -33,7 +33,7 @@ class Reports::ActivitiesByCostCategorization
     def build_header(beneficiaries, codes)
       row = []
 
-      #row << "funding_source"
+      row << "funding_source"
       row << "project"
       row << "org.name"
       row << "org.type"
@@ -63,7 +63,7 @@ class Reports::ActivitiesByCostCategorization
       end
       row = []
 
-      #row << get_funding_source_name(activity)
+      row << get_funding_source_name(activity)
       row << project_name
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"

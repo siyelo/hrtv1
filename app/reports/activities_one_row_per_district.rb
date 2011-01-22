@@ -1,10 +1,10 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByDistrictRowReport
+class Reports::ActivitiesOneRowPerDistrict
   include Reports::Helpers
 
   def initialize
-    @codes = Location.roots.collect{|code| code.self_and_descendants}.flatten
+    @locations = Location.roots.collect{|code| code.self_and_descendants}.flatten
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
@@ -18,7 +18,7 @@ class Reports::ActivitiesByDistrictRowReport
       Activity.find(:all, :include => :provider).each do |activity|
         if ((activity.class == Activity && activity.sub_activities.empty?) ||
             activity.class == SubActivity)
-          csv << build_row(activity)
+          build_rows(csv, activity)
         end
       end
     end
@@ -51,21 +51,20 @@ class Reports::ActivitiesByDistrictRowReport
      row << "Is Sub Activity?"
      row << "parent_activity.total_budget"
      row << "parent_activity.total_spend"
-     @codes.each{|code| row << code.to_s_with_external_id}
+     @locations.each{|code| row << code.to_s_with_external_id}
+     row << "District"
+     row << "District Value"
 
      row
     end
 
-    def build_row(activity)
-      organization  = activity.data_response.responding_organization
-      #TODO handle sub activities correctly
-
+    def build_rows(csv, activity)
       row = []
 
       row << get_funding_source_name(activity)
       row << first_project(activity)
-      row << "#{h organization.name}"
-      row << "#{organization.type}"
+      row << "#{h activity.organization.name}"
+      row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
@@ -81,9 +80,21 @@ class Reports::ActivitiesByDistrictRowReport
       row << is_activity(activity)
       row << parent_activity_budget(activity)
       row << parent_activity_spend(activity)
-      row << "District"
-      row << "District Value"
+      @locations.each{|location| row << get_value(activity, location)}
 
-      row
+      # add row per each activity location
+      activity.locations.each do |location|
+        location_row = row.dup
+        location_row << location.short_display
+        location_row << get_value(activity, location)
+
+        csv << location_row
+      end
+    end
+
+    def get_value(activity, location)
+      code_assignments = activity.budget_district_coding.select{|ca| ca.code_id == location.id}
+      code_assignments = code_assignments.last
+      code_assignments ? code_assignments.calculated_amount : " "
     end
 end

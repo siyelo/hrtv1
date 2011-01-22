@@ -37,8 +37,8 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesSummary.new
       when 'activities_by_district'
         Reports::ActivitiesByDistrict.new
-      when 'activities_by_district_row_report'
-        Reports::ActivitiesByDistrictRowReport.new
+      when 'activities_one_row_per_district'
+        Reports::ActivitiesOneRowPerDistrict.new
       when 'activities_by_budget_coding'
         Reports::ActivitiesByCoding.new(:budget)
       when 'activities_by_budget_cost_categorization'

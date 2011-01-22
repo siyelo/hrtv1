@@ -33,7 +33,7 @@ class Reports::ActivitiesByDistrict
     def build_header
      row = []
 
-     #row << "funding_source"
+     row << "funding_source"
      row << "project"
      row << "org.name"
      row << "org.type"
@@ -62,7 +62,7 @@ class Reports::ActivitiesByDistrict
 
       row = []
 
-      #row << get_funding_source_name(activity)
+      row << get_funding_source_name(activity)
       row << first_project(activity)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"

@@ -24,16 +24,16 @@ class Reporter::ReportsController < Reporter::BaseController
         Reports::AllCodes.new
       when 'activities_by_nsp'
         Reports::ActivitiesByNsp.new(activities, report_type, current_user.admin?)
-      when 'activities_by_full_coding'
-        Reports::ActivitiesByFullCoding.new(activities, report_type, current_user.admin? )
+      when 'activities_by_all_codes'
+        Reports::ActivitiesByAllCodes.new(activities, report_type, current_user.admin? )
       when 'districts_by_nsp'
         Reports::DistrictsByNsp.new(activities, report_type)
-      when 'districts_by_full_coding'
-        Reports::DistrictsByFullCoding.new(activities, report_type)
+      when 'districts_by_all_codes'
+        Reports::DistrictsByAllCodes.new(activities, report_type)
       when 'map_districts_by_nsp'
         Reports::MapDistrictsByNsp.new(activities, report_type)
-      when 'map_districts_by_full_coding'
-        Reports::MapDistrictsByFullCoding.new(activities, report_type)
+      when 'map_districts_by_all_codes'
+        Reports::MapDistrictsByAllCodes.new(activities, report_type)
       else
         raise "Invalid report request '#{params[:id]}'"
       end

@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::ActivitiesByNha < Reports::CodedActivityReport
+class Reports::ActivitiesByNha
   include Reports::Helpers
 
   def initialize(current_user, type)

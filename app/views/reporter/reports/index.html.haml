@@ -66,7 +66,7 @@
     .dashboard_section
       %ul.admin_reports
         %li=  link_to "Grouped by NSP", reporter_report_path('activities_by_nsp', :dr_id => response.id, :type => :budget)
-        %li= link_to "Grouped by All Codes", reporter_report_path('activities_by_full_coding', :dr_id => response.id, :type => :budget)
+        %li= link_to "Grouped by All Codes", reporter_report_path('activities_by_all_codes', :dr_id => response.id, :type => :budget)
 
     %h2
       =image_tag "icon_reporter.png", :class => "heading_icon"
@@ -74,7 +74,7 @@
     .dashboard_section
       %ul.admin_reports
         %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp', :dr_id => response.id, :type => :budget)
-        %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_full_coding', :dr_id => response.id, :type => :budget)
+        %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes', :dr_id => response.id, :type => :budget)
 
   .second-half
     %h2
@@ -85,7 +85,7 @@
         %h3 Districts
         %ul
           %li=  link_to "Grouped by NSP", reporter_report_path('map_districts_by_nsp', :dr_id => response.id, :type => :budget)
-          %li=  link_to "Grouped by All Codes", reporter_report_path('map_districts_by_full_coding', :dr_id => response.id, :type => :budget)
+          %li=  link_to "Grouped by All Codes", reporter_report_path('map_districts_by_all_codes', :dr_id => response.id, :type => :budget)
 
       .second-half
         %h3 Facilities

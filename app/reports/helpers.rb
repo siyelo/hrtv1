@@ -153,4 +153,96 @@ module Reports::Helpers
   def get_ratio(amount_total, amount)
     amount_total && amount_total > 0 ? amount / amount_total : 0
   end
+
+  def provider_name(activity)
+    activity.provider ? "#{h activity.provider.name}" : " "
+  end
+
+  def get_beneficiaries
+    Beneficiary.find(:all, :select => 'short_display').map{|code| code.short_display}.sort
+  end
+
+  # if [Activity].include?(activity.class) -> type IS NULL
+  def root_activities
+    Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL")
+  end
+
+  def number_of_health_centers(activity)
+    health_centers = activity.sub_activities.implemented_by_health_centers.count
+    health_centers > 0 ? health_centers : nil
+  end
+
+  def activity_description(activity)
+    if activity.name
+      val = "#{activity.name.chomp}"
+      val += " - #{activity.description.chomp}" if activity.description
+      val
+    else
+      activity.description ? activity.description.chomp : nil
+    end
+  end
+
+  def official_name_w_sum(code)
+    code.official_name ? "#{code.official_name}" : "#{code.short_display}"
+  end
+
+  def add_all_codes_hierarchy(row, code)
+    counter = 0
+    Code.each_with_level(code.self_and_ancestors) do |other_code, level|
+      counter += 1
+      row << (code == other_code ? official_name_w_sum(other_code) : nil)
+    end
+    (Code.deepest_nesting - counter).times{ row << nil }
+  end
+
+  def add_nsp_codes_hierarchy(row, code)
+    counter = 0
+    Nsp.each_with_level(code.self_and_nsp_ancestors) do |other_code, level|
+      counter += 1
+      row << (code == other_code ? official_name_w_sum(other_code) : nil)
+    end
+    (Nsp.deepest_nesting - counter).times{ row << nil }
+  end
+
+  def cache_activities(code_assignments)
+    activities = {}
+    code_assignments.each do |ca|
+      activities[ca.activity] = {}
+      sum_of_children = ca.sum_of_children.nil? ? 0 : ca.sum_of_children
+      activities[ca.activity][:leaf_amount] = sum_of_children > 0 ? 0 : ca.cached_amount
+      activities[ca.activity][:amount] = ca.cached_amount
+    end
+    activities
+  end
+
+  def first_project(activity)
+    project = activity.projects.first
+    project ? "#{h project.name}" : " "
+  end
+
+  def provider_fosaid(activity)
+    activity.provider ? "#{h activity.provider.fosaid}" : " "
+  end
+
+  def is_activity(activity)
+    activity.class == SubActivity ? "yes" : ""
+  end
+
+  def parent_activity_budget(activity)
+    activity.class == SubActivity ? activity.activity.budget : ""
+  end
+
+  def parent_activity_spend(activity)
+    activity.class == SubActivity ? activity.activity.spend : ""
+  end
+
+  def is_budget?(type)
+    if type == :budget
+      true
+    elsif type == :spent
+      false
+    else
+      raise "Invalid type #{type}".to_yaml
+    end
+  end
 end

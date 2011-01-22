@@ -38,17 +38,17 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_district_new'
         Reports::ActivitiesByDistrictNew.new
       when 'activities_by_district_row_report'
-        Reports::DistrictCodingsBudgetReport.new
+        Reports::ActivitiesByDistrictRowReport.new
       when 'activities_by_budget_coding'
         Reports::ActivitiesByCoding.new(:budget)
-      when 'activities_by_budget_cost_cat'
-        Reports::ActivitiesByCostCategory.new(:budget)
+      when 'activities_by_budget_cost_categorization'
+        Reports::ActivitiesByCostCategorization.new(:budget)
       when 'activities_by_budget_districts'
         Reports::ActivitiesByDistricts.new(:budget)
       when 'activities_by_expenditure_coding'
         Reports::ActivitiesByCoding.new(:spent)
-      when 'activities_by_expenditure_cost_cat'
-        Reports::ActivitiesByCostCategory.new(:spent)
+      when 'activities_by_expenditure_cost_categorization'
+        Reports::ActivitiesByCostCategorization.new(:spent)
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByDistricts.new(:spent)
       when 'jawp_report'
@@ -57,12 +57,8 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByNsp.new(activities, report_type, current_user.admin?)
       when 'activities_by_nha'
         Reports::ActivitiesByNha.new(activities, report_type)
-      when 'activities_by_full_coding'
-        Reports::ActivitiesByFullCoding.new(activities, report_type, current_user.admin? )
-      when 'activities_by_district'
-        Reports::ActivitiesByDistrict.new
-      when 'activities_by_district_sub_activities'
-        Reports::ActivitiesByDistrictSubActivities.new
+      when 'activities_by_all_codes'
+        Reports::ActivitiesByAllCodes.new(activities, report_type, current_user.admin? )
       else
         raise "Invalid report request '#{params[:id]}'"
       end

@@ -9,9 +9,6 @@ module ReportsControllerHelpers
     end
 
     def report_name
-      name = "#{params[:id]}"
-      name += "_#{params[:type]}" if params[:type].present?
-      name += ".csv"
-      return name
+      "#{params[:id]}.csv"
     end
 end

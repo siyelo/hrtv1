@@ -4,8 +4,7 @@ class Reports::JawpReport
   include Reports::Helpers
 
   def initialize(current_user, type)
-    raise "Invalid type #{type}".to_yaml unless ['budget', 'spent'].include?(type)
-    is_spent = (type == 'spent')
+    @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
                    #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
@@ -19,10 +18,10 @@ class Reports::JawpReport
                                          :group => 'activity_id')
 
     @csv_string = FasterCSV.generate do |csv|
-      csv << header(is_spent)
+      csv << build_header
       @activities.each do |activity|
         hc_sub_activities_count = hc_sub_activities.detect{|sa| sa.activity_id == activity.id}.try(:total) || 0
-        build_rows(csv, activity, hc_sub_activities_count, is_spent)
+        build_rows(csv, activity, hc_sub_activities_count)
       end
     end
   end
@@ -33,21 +32,21 @@ class Reports::JawpReport
 
   private
 
-  def build_rows(csv, activity, hc_sub_activity_count, is_spent)
-    if is_spent
-      amount_q1             = activity.spend_q1
-      amount_q2             = activity.spend_q2
-      amount_q3             = activity.spend_q3
-      amount_q4             = activity.spend_q4
-      amount_total          = activity.spend
-      is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
-    else
+  def build_rows(csv, activity, hc_sub_activity_count)
+    if @is_budget
       amount_q1             = activity.budget_q1
       amount_q2             = activity.budget_q2
       amount_q3             = activity.budget_q3
       amount_q4             = activity.budget_q4
       amount_total          = activity.budget
       is_national           = (activity.budget_district_coding.empty? ? 'yes' : 'no')
+    else
+      amount_q1             = activity.spend_q1
+      amount_q2             = activity.spend_q2
+      amount_q3             = activity.spend_q3
+      amount_q4             = activity.spend_q4
+      amount_total          = activity.spend
+      is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
     end
 
     # build rows
@@ -72,26 +71,26 @@ class Reports::JawpReport
     row << Money.new(amount_total.to_i * 100, get_currency(activity)) .exchange_to(:USD)
     row << is_national
 
-    build_code_assignment_rows(csv, row, activity, amount_total, is_spent)
+    build_code_assignment_rows(csv, row, activity, amount_total)
   end
 
   private
 
-    def build_code_assignment_rows(csv, base_row, activity, amount_total, is_spent)
-      if is_spent
-        codings               = fake_one_assignment_if_none(amount_total, activity.spend_coding)
-        district_codings      = fake_one_assignment_if_none(amount_total, activity.spend_district_coding)
-        cost_category_codings = fake_one_assignment_if_none(amount_total, activity.spend_cost_category_coding)
-      else
+    def build_code_assignment_rows(csv, base_row, activity, amount_total)
+      if @is_budget
         codings               = fake_one_assignment_if_none(amount_total, activity.budget_coding)
         district_codings      = fake_one_assignment_if_none(amount_total, activity.budget_district_coding)
         cost_category_codings = fake_one_assignment_if_none(amount_total, activity.budget_cost_category_coding)
+      else
+        codings               = fake_one_assignment_if_none(amount_total, activity.spend_coding)
+        district_codings      = fake_one_assignment_if_none(amount_total, activity.spend_district_coding)
+        cost_category_codings = fake_one_assignment_if_none(amount_total, activity.spend_cost_category_coding)
       end
 
       coding_with_parent_codes = get_coding_with_parent_codes(codings)
       cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
       funding_sources = get_funding_sources(activity)
-      funding_sources_total = get_funding_sources_total(funding_sources, is_spent)
+      funding_sources_total = get_funding_sources_total(funding_sources, @is_budget)
 
       cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
         cost_category_coding = cost_category_ca_coding[0]
@@ -104,7 +103,7 @@ class Reports::JawpReport
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount = get_funding_source_amount(funding_source, is_spent)
+              funding_source_amount = get_funding_source_amount(funding_source, @is_budget)
               amount                = (amount_total || 0) *
                 get_ratio(amount_total, ca.cached_amount) *
                 get_ratio(amount_total, district_coding.cached_amount) *
@@ -136,8 +135,8 @@ class Reports::JawpReport
       end
     end
 
-    def header(is_spent)
-      amount_type = is_spent ? 'Spent' : 'Budget'
+    def build_header
+      amount_type = @is_budget ? 'Budget' : 'Spent'
 
       row = []
       row << "Activity Name"

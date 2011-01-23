@@ -50,8 +50,10 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByCostCategorization.new(:spent)
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByDistricts.new(:spent)
-      when 'jawp_report' # TODO: remove type param
-        Reports::JawpReport.new(current_user, params[:type])
+      when 'jawp_report_budget'
+        Reports::JawpReport.new(current_user, :budget)
+      when 'jawp_report_spent'
+        Reports::JawpReport.new(current_user, :spent)
       when 'activities_by_nsp_budget'
         Reports::ActivitiesByNsp.new(activities, :budget, current_user.admin?)
       when 'activities_by_nha'

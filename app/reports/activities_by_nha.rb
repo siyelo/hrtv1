@@ -55,10 +55,10 @@ class Reports::ActivitiesByNha
     # nha and nasa only track expenditure
     def build_rows(csv, activity)
       funding_sources       = get_funding_sources(activity)
-      funding_sources_total = get_funding_sources_total(funding_sources, true) # for spent
+      funding_sources_total = get_funding_sources_total(funding_sources, false) # for spent
 
       funding_sources.each do |funding_source|
-        funding_source_amount = get_funding_source_amount(funding_source, true) # for spent
+        funding_source_amount = get_funding_source_amount(funding_source, false) # for spent
         funding_source_ratio  = get_ratio(funding_sources_total, funding_source_amount)
 
         row = []

@@ -20,15 +20,13 @@ class Reports::MapDistrictsByNsp
     end
 
     @codes.each{|code| set_district_hash_for_code(code)}
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Location.all.each{|location| build_row(csv, location)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Location.all.each{|location| build_row(csv, location)}
+    end
   end
 
   private

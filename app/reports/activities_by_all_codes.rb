@@ -8,15 +8,13 @@ class Reports::ActivitiesByAllCodes
     @activities        = activities
     @show_organization = show_organization
     @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.type.to_s)}
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Mtef.roots.reverse.each{|code| add_rows(csv, code)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Mtef.roots.reverse.each{|code| add_rows(csv, code)}
+    end
   end
 
   private

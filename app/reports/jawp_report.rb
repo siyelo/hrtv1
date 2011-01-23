@@ -12,27 +12,22 @@ class Reports::JawpReport
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])
 
-    hc_sub_activities = Activity.with_type('SubActivity').
+    @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
                                          :group => 'activity_id')
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      @activities.each do |activity|
-        hc_sub_activities_count = hc_sub_activities.detect{|sa| sa.activity_id == activity.id}.try(:total) || 0
-        build_rows(csv, activity, hc_sub_activities_count)
-      end
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      @activities.each{|activity| build_rows(csv, activity)}
+    end
   end
 
   private
 
-  def build_rows(csv, activity, hc_sub_activity_count)
+  def build_rows(csv, activity)
     if @is_budget
       amount_q1             = activity.budget_q1
       amount_q2             = activity.budget_q2
@@ -49,7 +44,6 @@ class Reports::JawpReport
       is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
     end
 
-    # build rows
     row = []
     row << activity.name
     row << activity.description
@@ -59,7 +53,7 @@ class Reports::JawpReport
     row << amount_q4
     row << get_locations(activity)
     row << activity.sub_activities_count
-    row << hc_sub_activity_count
+    row << get_hc_sub_activity_count(activity)
     row << get_sub_implementers(activity)
     row << activity.organization.try(:name)
     row << activity.provider.try(:name) || "No Implementer Specified"
@@ -202,4 +196,7 @@ class Reports::JawpReport
       activity.beneficiaries.map{|o| o.short_display}.join(' | ')
     end
 
+    def get_hc_sub_activity_count(activity)
+      @hc_sub_activities.detect{|sa| sa.activity_id == activity.id}.try(:total) || 0
+    end
 end

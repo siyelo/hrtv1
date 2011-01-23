@@ -17,15 +17,13 @@ class Reports::DistrictsByNsp
         @districts_hash[code][location] = 0
       end
     end
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Nsp.roots.reverse.each{|nsp_root| add_rows(csv, nsp_root)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Nsp.roots.reverse.each{|code| add_rows(csv, code)}
+    end
   end
 
   private

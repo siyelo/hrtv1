@@ -9,21 +9,17 @@ class Reports::ActivitiesByNha
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 {:data_response => :responding_organization}])
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << header
-      @activities.each do |activity|
-        build_rows(csv, activity)
-      end
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      @activities.each{|activity| build_rows(csv, activity)}
+    end
   end
 
   private
-    def header
+    def build_header
       row = []
       row << 'Funding Source'
       row << 'Org type'

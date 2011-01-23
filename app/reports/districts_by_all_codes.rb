@@ -20,15 +20,13 @@ class Reports::DistrictsByAllCodes
         @districts_hash[c][l] = 0
       end
     end
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Mtef.roots.each{|nsp_root| add_rows(csv, nsp_root)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Mtef.roots.each{|code| add_rows(csv, code)}
+    end
   end
 
   private

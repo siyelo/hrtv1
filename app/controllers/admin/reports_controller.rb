@@ -32,7 +32,7 @@ class Admin::ReportsController < Admin::BaseController
         Reports::MapFacilitiesByPartner.new(:budget)
       when 'map_facilities_by_partner_spent'
         Reports::MapFacilitiesByPartner.new(:spent)
-      when 'activity_report'
+      when 'activities_summary'
         Reports::ActivitiesSummary.new
       when 'activities_by_district'
         Reports::ActivitiesByDistrict.new

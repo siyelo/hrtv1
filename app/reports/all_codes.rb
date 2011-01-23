@@ -4,24 +4,22 @@ class Reports::AllCodes
   include Reports::Helpers
 
   def initialize
-    max_level = Code.deepest_nesting
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header(max_level)
-      Mtef.roots.reverse.each{|code| add_rows(csv, code, max_level, 0)}
-    end
+    @max_level = Code.deepest_nesting
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Mtef.roots.reverse.each{|code| add_rows(csv, code, 0)}
+    end
   end
 
   private
 
-    def build_header(max_level)
+    def build_header
       row = []
 
-      max_level.times{ |i| row << "Code" }
+      @max_level.times{ |i| row << "Code" }
       row << "Simple Display"
       row << "Description"
       row << "Type (MTEF, NSP, etc)"
@@ -31,12 +29,12 @@ class Reports::AllCodes
       row
     end
 
-    def add_rows(csv, code, max_level, current_level)
+    def add_rows(csv, code, current_level)
       row = []
 
       current_level.times{|i| row << '' }
       row << code.short_display
-      (max_level - (current_level + 1)).times{ |i| row << '' }
+      (@max_level - (current_level + 1)).times{ |i| row << '' }
       row << code.short_display
       row << code.description
       row << code.type
@@ -45,6 +43,6 @@ class Reports::AllCodes
 
       csv << row
 
-      code.children.each{|code| add_rows(csv, code, max_level, current_level + 1)}
+      code.children.each{|code| add_rows(csv, code, current_level + 1)}
     end
 end

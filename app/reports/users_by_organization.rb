@@ -4,14 +4,14 @@ class Reports::UsersByOrganization
   include Reports::Helpers
 
   def initialize(user = nil)
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      users(user).each{|user| csv << build_row(user)}
-    end
+    @user = user
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      users(@user).each{|user| csv << build_row(user)}
+    end
   end
 
   private

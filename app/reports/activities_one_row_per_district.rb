@@ -5,8 +5,10 @@ class Reports::ActivitiesOneRowPerDistrict
 
   def initialize
     @locations = Location.roots.collect{|code| code.self_and_descendants}.flatten
+  end
 
-    @csv_string = FasterCSV.generate do |csv|
+  def csv
+    FasterCSV.generate do |csv|
       csv << build_header
 
       #
@@ -22,10 +24,6 @@ class Reports::ActivitiesOneRowPerDistrict
         end
       end
     end
-  end
-
-  def csv
-    @csv_string
   end
 
   private

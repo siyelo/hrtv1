@@ -4,7 +4,10 @@ class Reports::ActivitiesSummary
   include Reports::Helpers
 
   def initialize
-    @csv_string = FasterCSV.generate do |csv|
+  end
+
+  def csv
+    FasterCSV.generate do |csv|
       csv << build_header
 
       #
@@ -20,10 +23,6 @@ class Reports::ActivitiesSummary
         end
       end
     end
-  end
-
-  def csv
-    @csv_string
   end
 
   private

@@ -3,20 +3,18 @@ require 'fastercsv'
 class Reports::ActivitiesByAllCodes
   include Reports::Helpers
 
-  def initialize(activities, report_type, show_organization = false)
+  def initialize(activities, type, show_organization = false)
+    @is_budget         = is_budget?(type)
     @activities        = activities
-    @report_type       = report_type
     @show_organization = show_organization
     @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.type.to_s)}
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Mtef.roots.reverse.each{|code| add_rows(csv, code)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Mtef.roots.reverse.each{|code| add_rows(csv, code)}
+    end
   end
 
   private
@@ -50,7 +48,11 @@ class Reports::ActivitiesByAllCodes
     end
 
     def add_code_summary_row(csv, code)
-      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if @is_budget
+        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
+      else
+        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
+      end
       if code_total > 0
         row = []
         add_all_codes_hierarchy(row, code)
@@ -61,7 +63,11 @@ class Reports::ActivitiesByAllCodes
     end
 
     def add_code_row(csv, code)
-      code_assignments = code.leaf_assigns_for_activities_for_code_set(@report_type, @leaves, @activities)
+      if @is_budget
+        code_assignments = code.leaf_assigns_for_activities_for_code_set(CodingBudget, @leaves, @activities)
+      else
+        code_assignments = code.leaf_assigns_for_activities_for_code_set(CodingSpend, @leaves, @activities)
+      end
       code_assignments.each do |assignment|
         if assignment.cached_amount
           activity = assignment.activity

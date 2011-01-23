@@ -3,27 +3,23 @@ require 'fastercsv'
 class Reports::ActivitiesByNha
   include Reports::Helpers
 
-  def initialize(current_user, type)
+  def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
                    #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 {:data_response => :responding_organization}])
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << header
-      @activities.each do |activity|
-        build_rows(csv, activity)
-      end
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      @activities.each{|activity| build_rows(csv, activity)}
+    end
   end
 
   private
-    def header
+    def build_header
       row = []
       row << 'Funding Source'
       row << 'Org type'
@@ -55,10 +51,10 @@ class Reports::ActivitiesByNha
     # nha and nasa only track expenditure
     def build_rows(csv, activity)
       funding_sources       = get_funding_sources(activity)
-      funding_sources_total = get_funding_sources_total(funding_sources, true) # for spent
+      funding_sources_total = get_funding_sources_total(funding_sources, false) # for spent
 
       funding_sources.each do |funding_source|
-        funding_source_amount = get_funding_source_amount(funding_source, true) # for spent
+        funding_source_amount = get_funding_source_amount(funding_source, false) # for spent
         funding_source_ratio  = get_ratio(funding_sources_total, funding_source_amount)
 
         row = []

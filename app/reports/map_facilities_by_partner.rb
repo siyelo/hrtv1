@@ -15,15 +15,13 @@ class Reports::MapFacilitiesByPartner
     #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
     organizations   = Organization.all(:conditions => ["fosaid is not null"])
     prepare_districts_hash(organizations)
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      organizations.each{|organization| build_row(csv, organization)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      organizations.each{|organization| build_row(csv, organization)}
+    end
   end
 
   private

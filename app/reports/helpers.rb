@@ -133,20 +133,20 @@ module Reports::Helpers
     end
   end
 
-  def get_funding_sources_total(funding_sources, is_spent)
+  def get_funding_sources_total(funding_sources, is_budget)
     sum = 0
     funding_sources.each do |fs|
-      if is_spent
-        sum += fs.spend if fs.spend
-      else
+      if is_budget
         sum += fs.budget if fs.budget
+      else
+        sum += fs.spend if fs.spend
       end
     end
     sum
   end
 
-  def get_funding_source_amount(funding_source, is_spent)
-    amount = is_spent ? funding_source.spend : funding_source.budget
+  def get_funding_source_amount(funding_source, is_budget)
+    amount = is_budget ? funding_source.budget :  funding_source.spend
     amount || 0 # return 0 when amount is nil
   end
 

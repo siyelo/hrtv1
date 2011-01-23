@@ -34,8 +34,8 @@
           Review District Expenditures and Budgets
           %span.hint Interactive reports
 
-      %li= link_to "By NSP", admin_report_path('districts_by_nsp', :type => :budget)
-      %li= link_to "By All Codes", admin_report_path('districts_by_all_codes', :type => :budget)
+      %li= link_to "By NSP", admin_report_path('districts_by_nsp_budget')
+      %li= link_to "By All Codes", admin_report_path('districts_by_all_codes_budget')
   %h2
     =image_tag "icon_users.png", :class => "heading_icon"
     Users
@@ -51,17 +51,17 @@
       %h3 Districts
 
       %ul
-        %li=  link_to "By Partner Budget", admin_report_path('map_districts_by_partner', :type => "budget")
-        %li=  link_to "By Partner Spending", admin_report_path('map_districts_by_partner', :type => "spent")
-        %li=  link_to "By NSP", admin_report_path('map_districts_by_nsp', :type => :budget)
-        %li=  link_to "By All Codes", admin_report_path('map_districts_by_all_codes', :type => :budget)
+        %li=  link_to "By Partner Budget", admin_report_path('map_districts_by_partner_budget')
+        %li=  link_to "By Partner Spending", admin_report_path('map_districts_by_partner_spent')
+        %li=  link_to "By NSP", admin_report_path('map_districts_by_nsp_budget')
+        %li=  link_to "By All Codes", admin_report_path('map_districts_by_all_codes_budget')
 
     .second-half
       %h3 Facilities
 
       %ul
-        %li=  link_to "By Partner Budget", admin_report_path('map_facilities_by_partner', :type => "budget")
-        %li=  link_to "By Partner Spending", admin_report_path('map_facilities_by_partner', :type => "spent")
+        %li=  link_to "By Partner Budget", admin_report_path('map_facilities_by_partner_budget')
+        %li=  link_to "By Partner Spending", admin_report_path('map_facilities_by_partner_spent')
 
 
 
@@ -73,7 +73,7 @@
   .dashboard_section
     %ul.admin_reports
       %li
-        - link_to admin_report_path('activity_report') do
+        - link_to admin_report_path('activities_summary') do
           Summary
           %span.hint Formerly named the "Activities Report"
       %li=  link_to "By District", admin_report_path('activities_by_district')
@@ -87,8 +87,8 @@
       %li=  link_to "By Expenditure Coding (beta)", admin_report_path('activities_by_expenditure_coding')
       %li=  link_to "By Expenditure Cost Categorization (beta)", admin_report_path('activities_by_expenditure_cost_categorization')
       %li=  link_to "By Expenditure Districts (beta)", admin_report_path('activities_by_expenditure_districts')
-      %li=  link_to "Joint annual workplan report By Budget (beta)", admin_report_path('jawp_report', :type => 'budget')
-      %li=  link_to "Joint annual workplan report By Expenditure (beta)", admin_report_path('jawp_report', :type => 'spent')
-      %li=  link_to "By NSP", admin_report_path('activities_by_nsp', :type => :budget)
+      %li=  link_to "Joint annual workplan report By Budget (beta)", admin_report_path('jawp_report_budget')
+      %li=  link_to "Joint annual workplan report By Expenditure (beta)", admin_report_path('jawp_report_spent')
+      %li=  link_to "By NSP", admin_report_path('activities_by_nsp_budget')
       %li=  link_to "By NHA/NASA", admin_report_path('activities_by_nha')
-      %li=  link_to "By All Codes", admin_report_path('activities_by_all_codes', :type => :budget)
+      %li=  link_to "By All Codes", admin_report_path('activities_by_all_codes_budget')

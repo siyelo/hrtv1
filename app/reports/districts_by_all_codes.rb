@@ -3,9 +3,9 @@ require 'fastercsv'
 class Reports::DistrictsByAllCodes
   include Reports::Helpers
 
-  def initialize(activities, report_type)
+  def initialize(activities, type)
+    @is_budget                 = is_budget?(type)
     @activities                = activities
-    @report_type               = report_type
     @leaves                    = Nsp.leaves
     @codes_to_include          = []
     @districts_hash            = {}
@@ -20,15 +20,13 @@ class Reports::DistrictsByAllCodes
         @districts_hash[c][l] = 0
       end
     end
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Mtef.roots.each{|nsp_root| add_rows(csv, nsp_root)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Mtef.roots.each{|code| add_rows(csv, code)}
+    end
   end
 
   private
@@ -65,7 +63,11 @@ class Reports::DistrictsByAllCodes
 
     # TODO: refactor - duplicate method
     def add_code_summary_row(csv, code)
-      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if @is_budget
+        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
+      else
+        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
+      end
       if code_total > 0
         row = []
         add_all_codes_hierarchy(row, code)
@@ -81,7 +83,11 @@ class Reports::DistrictsByAllCodes
 
     # TODO: refactor - duplicate method
     def set_district_hash_for_code(code)
-      code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      if @is_budget
+        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      else
+        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      end
       activities = cache_activities(code_assignments)
       activities.each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)

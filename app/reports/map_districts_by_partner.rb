@@ -22,17 +22,16 @@ class Reports::MapDistrictsByPartner
       @districts_hash[location][:total] = 0
       @districts_hash[location][:partners] = {} # partner => amount
     end
-    partners.each{|partner| set_district_hash_for_code(partner)}
 
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Location.all.each{|location| build_row(csv, location)}
-    end
+    partners.each{|partner| set_district_hash_for_code(partner)}
   end
 
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Location.all.each{|location| build_row(csv, location)}
+    end
   end
 
   private

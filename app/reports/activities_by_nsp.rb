@@ -3,20 +3,18 @@ require 'fastercsv'
 class Reports::ActivitiesByNsp
   include Reports::Helpers
 
-  def initialize(activities, report_type, show_organization = false)
+  def initialize(activities, type, show_organization = false)
+    @is_budget         = is_budget?(type)
     @activities        = activities
-    @report_type       = report_type
     @show_organization = show_organization
     @leaves            = Nsp.leaves
-
-    @csv_string = FasterCSV.generate do |csv|
-      csv << build_header
-      Nsp.roots.reverse.each{|nsp_root| add_rows(csv, nsp_root)}
-    end
   end
 
   def csv
-    @csv_string
+    FasterCSV.generate do |csv|
+      csv << build_header
+      Nsp.roots.reverse.each{|code| add_rows(csv, code)}
+    end
   end
 
   private
@@ -45,12 +43,16 @@ class Reports::ActivitiesByNsp
 
     def add_rows(csv, code)
       add_code_summary_row(csv, code)
-      add_code_row(csv, code, @activities, @report_type)
+      add_code_row(csv, code)
       code.children.with_type("Nsp").each{|c| add_rows(csv, c)}
     end
 
     def add_code_summary_row(csv, code)
-      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if @is_budget
+        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
+      else
+        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
+      end
       if code_total > 0
         row = []
         add_nsp_codes_hierarchy(row, code)
@@ -60,8 +62,12 @@ class Reports::ActivitiesByNsp
       end
     end
 
-    def add_code_row(csv, code, activities, report_type)
-      cas = code.leaf_assigns_for_activities(report_type,activities)
+    def add_code_row(csv, code)
+      if @is_budget
+        cas = code.leaf_assigns_for_activities(CodingBudget, @activities)
+      else
+        cas = code.leaf_assigns_for_activities(CodingSpend, @activities)
+      end
       cas.each do |assignment|
         if assignment.cached_amount
           activity = assignment.activity

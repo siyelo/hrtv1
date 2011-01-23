@@ -3,9 +3,9 @@ require 'fastercsv'
 class Reports::MapDistrictsByNsp
   include Reports::Helpers
 
-  def initialize(activities, report_type)
+  def initialize(activities, type)
+    @is_budget                 = is_budget?(type)
     @activities                = activities
-    @report_type               = report_type
     @codes                     = Nsp.all
     @leaves                    = Nsp.leaves
     @districts_hash            = {}
@@ -62,7 +62,11 @@ class Reports::MapDistrictsByNsp
 
     # TODO: refactor - duplicate method
     def set_district_hash_for_code(code)
-      code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      if @is_budget
+        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      else
+        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      end
       cache_activities(code_assignments).each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
           #have cached values, so speed up these proportions

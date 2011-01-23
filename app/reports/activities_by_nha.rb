@@ -3,7 +3,7 @@ require 'fastercsv'
 class Reports::ActivitiesByNha
   include Reports::Helpers
 
-  def initialize(current_user, type)
+  def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
                    #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY

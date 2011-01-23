@@ -3,9 +3,9 @@ require 'fastercsv'
 class Reports::DistrictsByNsp
   include Reports::Helpers
 
-  def initialize(activities, report_type)
+  def initialize(activities, type)
+    @is_budget                 = is_budget?(type)
     @activities                = activities
-    @report_type               = report_type
     @leaves                    = Nsp.leaves
     @codes_to_include          = Nsp.all
     @district_proportions_hash = {} # activity => {location => proportion}
@@ -47,7 +47,11 @@ class Reports::DistrictsByNsp
     end
 
     def add_code_summary_row(csv, code)
-      code_total = code.sum_of_assignments_for_activities(@report_type, @activities)
+      if @is_budget
+        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
+      else
+        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
+      end
       if code_total > 0
         row = []
         add_nsp_codes_hierarchy(row, code)
@@ -63,7 +67,11 @@ class Reports::DistrictsByNsp
 
     # TODO: refactor: duplicate method
     def set_district_hash_for_code(code)
-      code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      if @is_budget
+        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      else
+        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      end
       cache_activities(code_assignments).each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
           #have cached values, so speed up these proportions

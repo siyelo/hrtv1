@@ -12,23 +12,26 @@ class Admin::ReportsController < Admin::BaseController
   private
 
     def report
-      report_type = get_report_type(params[:type])
       case params[:id]
-      when 'districts_by_nsp'
-        Reports::DistrictsByNsp.new(activities, report_type)
-      when 'districts_by_all_codes'
-        Reports::DistrictsByAllCodes.new(activities, report_type)
+      when 'districts_by_nsp_budget'
+        Reports::DistrictsByNsp.new(activities, :budget)
+      when 'districts_by_all_codes_budget'
+        Reports::DistrictsByAllCodes.new(activities, :budget)
       when 'users_by_organization'
         Reports::UsersByOrganization.new
-      when 'map_districts_by_partner'
-        Reports::MapDistrictsByPartner.new(params[:type].to_s.to_sym)
-      when 'map_districts_by_nsp'
-        Reports::MapDistrictsByNsp.new(activities, report_type)
-      when 'map_districts_by_all_codes'
+      when 'map_districts_by_partner_budget'
+        Reports::MapDistrictsByPartner.new(:budget)
+      when 'map_districts_by_partner_spent'
+        Reports::MapDistrictsByPartner.new(:spent)
+      when 'map_districts_by_nsp_budget'
+        Reports::MapDistrictsByNsp.new(activities, :budget)
+      when 'map_districts_by_all_codes_budget'
         @activities = Activity.only_simple.canonical
-        Reports::MapDistrictsByAllCodes.new(@activities, report_type)
-      when 'map_facilities_by_partner'
-        Reports::MapFacilitiesByPartner.new(params[:type].to_s.to_sym)
+        Reports::MapDistrictsByAllCodes.new(@activities, :budget)
+      when 'map_facilities_by_partner_budget'
+        Reports::MapFacilitiesByPartner.new(:budget)
+      when 'map_facilities_by_partner_spent'
+        Reports::MapFacilitiesByPartner.new(:spent)
       when 'activity_report'
         Reports::ActivitiesSummary.new
       when 'activities_by_district'
@@ -47,14 +50,14 @@ class Admin::ReportsController < Admin::BaseController
         Reports::ActivitiesByCostCategorization.new(:spent)
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByDistricts.new(:spent)
-      when 'jawp_report'
+      when 'jawp_report' # TODO: remove type param
         Reports::JawpReport.new(current_user, params[:type])
-      when 'activities_by_nsp'
-        Reports::ActivitiesByNsp.new(activities, report_type, current_user.admin?)
+      when 'activities_by_nsp_budget'
+        Reports::ActivitiesByNsp.new(activities, :budget, current_user.admin?)
       when 'activities_by_nha'
-        Reports::ActivitiesByNha.new(activities, report_type)
-      when 'activities_by_all_codes'
-        Reports::ActivitiesByAllCodes.new(activities, report_type, current_user.admin? )
+        Reports::ActivitiesByNha.new(activities)
+      when 'activities_by_all_codes_budget'
+        Reports::ActivitiesByAllCodes.new(activities, :budget, current_user.admin? )
       else
         raise "Invalid report request '#{params[:id]}'"
       end
@@ -62,12 +65,5 @@ class Admin::ReportsController < Admin::BaseController
 
     def activities
       Activity.only_simple.canonical
-    end
-
-    def report_name
-      name = "#{params[:id]}"
-      name += "_#{params[:type]}" if params[:type].present?
-      name += ".csv"
-      return name
     end
 end

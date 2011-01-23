@@ -3,9 +3,9 @@ require 'fastercsv'
 class Reports::MapDistrictsByAllCodes
   include Reports::Helpers
 
-  def initialize(activities, report_type)
+  def initialize(activities, type)
+    @is_budget                 = is_budget?(type)
     @activities                = activities
-    @report_type               = report_type
     @district_proportions_hash = {} # activity => {location => proportion}
     @districts_hash            = {}
     @leaves                    = Nsp.leaves
@@ -27,7 +27,7 @@ class Reports::MapDistrictsByAllCodes
 
     @csv_string = FasterCSV.generate do |csv|
       csv << build_header
-      Location.all.each{|location| build_row(csv, location, @activities, @report_type)}
+      Location.all.each{|location| build_row(csv, location)}
     end
   end
 
@@ -47,7 +47,7 @@ class Reports::MapDistrictsByAllCodes
       row
     end
 
-    def build_row(csv, location, activities, report_type)
+    def build_row(csv, location)
       row = []
 
       row << location.to_s.upcase
@@ -62,7 +62,11 @@ class Reports::MapDistrictsByAllCodes
     end
 
     def set_district_hash_for_code(code)
-      code_assignments = @report_type.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      if @is_budget
+        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      else
+        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
+      end
       cache_activities(code_assignments).each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
           #have cached values, so speed up these proportions

@@ -28,7 +28,6 @@ Scenario: See both budget for an activity classification
   And I should see the "Coding" tab is active
 
 @reporter_activity_breakdown
-@run
 Scenario: enter budget for an activity (don't see flash errors)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "5000000.00"
@@ -171,8 +170,10 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
 @reporter_activity_breakdown @javascript
+@run
 Scenario: Use budget by coding for expenditure by coding (deep coding in same rootomitting the parents, using percentages)
   Given I am on the budget classification page for "TB Drugs procurement"
+  Then show me the page
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
@@ -201,6 +202,8 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I press "Save"
   Then wait a few moments
   Then wait a few moments
+  Then wait a few moments
+  Then show me the page
   Then I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 150,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 150,000.00 = 4,850,000.00, which is ~97.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
   And I go to the budget classification page for "TB Drugs procurement"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"

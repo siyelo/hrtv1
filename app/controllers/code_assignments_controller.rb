@@ -119,4 +119,18 @@ class CodeAssignmentsController < ApplicationController
         :spend
       end
     end
+  
+  protected
+  
+    def coding_progress(activity)
+      coded = 0
+      coded +=1 if activity.budget?
+      coded +=1 if activity.budget_by_district?
+      coded +=1 if activity.budget_by_cost_category?
+      coded +=1 if activity.spend?
+      coded +=1 if activity.spend_by_district?
+      coded +=1 if activity.spend_by_cost_category?
+      progress = (coded.to_f / 6) * 100
+    end
+  
 end

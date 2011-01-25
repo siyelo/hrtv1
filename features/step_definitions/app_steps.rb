@@ -308,7 +308,7 @@ Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
 end
 
 Then /^wait a few moments$/ do
-  sleep 3
+  sleep 4
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|

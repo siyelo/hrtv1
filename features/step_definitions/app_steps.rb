@@ -308,7 +308,7 @@ Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
 end
 
 Then /^wait a few moments$/ do
-  sleep 3
+  sleep 4
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
@@ -418,7 +418,7 @@ Then /^I can manage the comments$/ do
     And I press "Update comment"
     Then I should see "new comment title"
     And I should see "new comment body"
-    When I will confirm a js popup
+    When I confirm the popup dialog
     And I follow "Delete" within "#projects .activity .resources"
     Then I should not see "new comment title"
     And I should not see "new comment body"

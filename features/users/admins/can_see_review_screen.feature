@@ -37,7 +37,7 @@ Scenario: Manage comments on data responses (with Javascript)
   And I press "Update comment"
   Then I should see "new comment title"
   And I should see "new comment body"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   And I follow "Delete" within ".comments"
   Then I should not see "new comment title"
   And I should not see "new comment body"
@@ -60,7 +60,7 @@ Scenario: Manage comments on project (with Javascript)
   And I press "Update comment"
   Then I should see "new comment title"
   And I should see "new comment body"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   And I follow "Delete" within ".project .resources"
   Then I should not see "new comment title"
   And I should not see "new comment body"
@@ -85,7 +85,7 @@ Scenario: Manage comments on activities (with Javascript)
   And I press "Update comment"
   Then I should see "new comment title"
   And I should see "new comment body"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   And I follow "Delete" within "#projects .activity .resources"
   Then I should not see "new comment title"
   And I should not see "new comment body"

@@ -48,7 +48,7 @@ class Activity < ActiveRecord::Base
                             %w(new_budget_currency currency_as_string)]
               }.merge(MONEY_OPTS)
   # TODO - money objects for q1, q2 etc
-  #   GR: /me avoiding for now since these are hardly used
+  #   GR: avoiding for now since these are hardly used and will likely be deprecated.
 
   ### Associations
   has_and_belongs_to_many :projects
@@ -123,7 +123,6 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified}
   end
 
-
   ### Public Instance Methods
 
   #convenience
@@ -140,11 +139,9 @@ class Activity < ActiveRecord::Base
   end
 
   def currency
-    tentative_currency = data_response.try(:currency)
-    unless projects.blank?
-      tentative_currency = projects.first.currency unless projects.first.currency.blank?
-    end
-    tentative_currency
+    return project.currency unless project.nil? # TODO: change project to be always present, thus simplifying this logic.
+    return data_response.currency unless data_response.nil?
+    Money.default_currency.iso_code
   end
 
   def organization
@@ -153,7 +150,7 @@ class Activity < ActiveRecord::Base
 
   # helper until we enforce this in the model association!
   def project
-    self.projects.first
+    self.projects.first unless projects.empty?
   end
 
   def organization_name
@@ -307,11 +304,9 @@ class Activity < ActiveRecord::Base
     types.each do |budget_type|
       spend_type        = budget_type.gsub(/Budget/, "Spend")
       spend_type_klass  = spend_type.constantize
-      CodeAssignment.delete_all(["activity_id = ? AND type = ?",
-                                self.id,
-                                spend_type]) # remove old 'Spend' code assignment
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type])
 
-      # GR: AFAICT this copies across the ratio, not just the amounts
+      # copy across the ratio, not just the amount
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
         spend_ca      = ca.clone
@@ -325,7 +320,7 @@ class Activity < ActiveRecord::Base
             spend_ca.cached_amount  = ca.percentage * spend / 100
           end
         end
-        spend_ca.save!
+        self.code_assignments << spend_ca
       end
       self.update_classified_amount_cache(spend_type_klass)
     end
@@ -462,6 +457,17 @@ class Activity < ActiveRecord::Base
     scope.find :all, :limit => limit
   end
 
+  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
+  def max_for_coding(type)
+    case type.to_s
+    when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+      max = budget
+    when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+      max = spend
+    end
+  end
+
+
   private
 
     def update_counter_cache
@@ -477,16 +483,6 @@ class Activity < ActiveRecord::Base
         sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
       end
       sum
-    end
-
-    # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
-    def max_for_coding(type)
-      case type.to_s
-      when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
-        max = budget
-      when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
-        max = spend
-      end
     end
 
     def set_classified_amount_cache(type)
@@ -592,15 +588,14 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_money_amounts
-      self.new_budget = gimme_the_caaaasssssshhhh(self.budget, self.currency)
+      zero = BigDecimal.new("0")
+      self.new_budget = Money.from_bigdecimal(self.budget || zero, self.currency)
       self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
-      self.new_spend = gimme_the_caaaasssssshhhh(self.spend, self.currency)
+      self.new_spend = Money.from_bigdecimal(self.spend || zero, self.currency)
       self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
     end
 
 end
-
-
 
 # == Schema Information
 #

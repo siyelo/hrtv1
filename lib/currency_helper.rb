@@ -8,6 +8,7 @@
 
 module CurrencyHelper
   OTHER_PRIORITIES = [:rwf] #RWF is a prio currency
+  PRIORITY_CUTOFF = 3
 
   ### jump through hoops to include this in the ActiveScaffold controllers
   def self.included( klass )
@@ -16,11 +17,11 @@ module CurrencyHelper
 
   module InstanceMethods
     # Returns an array of currency id where
-    # priority < 10
+    # priority < PRIORITY_CUTOFF
     def major_currencies(hash)
       hash.inject([]) do |array, (id, attributes)|
         priority = attributes[:priority]
-        if priority && priority < 10
+        if priority && priority < PRIORITY_CUTOFF
           array[priority] ||= []
           array[priority] << id
         end
@@ -50,7 +51,7 @@ module CurrencyHelper
         hash = Money::Currency::TABLE
         prios = hash.inject([]) do |array, (id, attributes)|
           priority = attributes[:priority]
-          if (priority && priority < 10) || OTHER_PRIORITIES.include?(id)
+          if (priority && priority < PRIORITY_CUTOFF) || OTHER_PRIORITIES.include?(id)
             iso_code = id.to_s.upcase
             array << [attributes[:name] + " (#{iso_code})", iso_code]
           end

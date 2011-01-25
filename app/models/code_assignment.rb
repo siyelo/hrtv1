@@ -61,10 +61,8 @@ class CodeAssignment < ActiveRecord::Base
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
 
-
   ### Callbacks
   before_save :update_money_amounts
-
 
   ### Class Methods
 
@@ -85,46 +83,27 @@ class CodeAssignment < ActiveRecord::Base
 
     available_codes.each do |ac|
       ca = self.with_activity(activity).with_code_id(ac.id).first
+      children = ac.children
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
-          sum_of_children = self.codings_sum(ac.children, activity, max)
+          sum_of_children = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
-          sum_of_children = self.codings_sum(ac.children, activity, max)
+          sum_of_children = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         else
-          sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
+          sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         end
       else
-        sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
+        sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
         self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if sum_of_children > 0
       end
       total += my_cached_amount
     end
     total
-  end
-
-  def self.copy_coding_from_budget_to_spend assignments, new_klass, save = true
-    new_assignments = []
-    #make new code assignments
-    #shift values to correct amount
-    #save them
-    assignments.each do |ca|
-      activity = assignments.first.activity
-      new_ca = new_klass.new
-      new_ca.code_id = ca.code_id
-      conversion_ratio = activity.spend / activity.budget
-      new_ca.cached_amount = ca.calculated_amount * conversion_ratio
-      new_ca.sum_of_children = ca.sum_of_children * conversion_ratio
-      new_ca.percentage = ca.percentage if ca.percentage
-      new_ca.activity = activity
-      new_ca.save
-      new_assignments << new_ca
-    end
-    new_assignments
   end
 
 
@@ -161,7 +140,7 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def currency
-    self.activity.currency
+    self.activity.nil? ? nil : self.activity.currency
   end
 
   def calculated_amount_currency
@@ -206,18 +185,17 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-
   protected
 
     #currency is still derived from the parent activities' project/DR
     def update_money_amounts
-      currency = ""
-      currency = self.activity.currency unless self.activity.nil?
-      self.new_amount        = gimme_the_caaaasssssshhhh(self.amount, currency)
-      self.new_cached_amount = gimme_the_caaaasssssshhhh(self.cached_amount, currency)
-      self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
+      if currency
+        zero = BigDecimal.new("0")
+        self.new_amount        = Money.from_bigdecimal(self.amount || zero, currency)
+        self.new_cached_amount = Money.from_bigdecimal(self.cached_amount || zero, currency)
+        self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
+      end
     end
-
 end
 
 

@@ -28,7 +28,6 @@ Scenario: See both budget for an activity classification
   And I should see the "Coding" tab is active
 
 @reporter_activity_breakdown
-@run
 Scenario: enter budget for an activity (don't see flash errors)
   Given I am on the budget classification page for "TB Drugs procurement"
   When I fill in "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" with "5000000.00"
@@ -109,7 +108,7 @@ Scenario: Use budget by district for expenditure by district
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "District" within the budget districts tab
   Then the "Burera" field within ".tab2" should contain "1,234,567.00"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   Then wait a few moments
   And I follow "Click here to copy the budget classifications below to the expenditure District tab"
   And I go to the budget classification page for "TB Drugs procurement"
@@ -128,7 +127,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I should be on the budget classification page for "TB Drugs procurement"
   When I follow "Cost Categorization" within the budget cost categorization tab
   And the "Drugs, Commodities & Consumables" field within ".tab3" should contain "1,234,567.00"
-  And I will confirm a js popup
+  And I confirm the popup dialog
   And I follow "Click here to copy the budget classifications below to the expenditure Cost Category tab"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Cost Categorization" within the expenditure cost categorization tab
@@ -158,7 +157,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   And I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within the expenditure coding tab
@@ -186,7 +185,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   When I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
   And I go to the budget classification page for "TB Drugs procurement"
   And I follow "Coding" within the expenditure coding tab
@@ -201,7 +200,8 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I press "Save"
   Then wait a few moments
   Then wait a few moments
-  Then I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 150,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 150,000.00 = 4,850,000.00, which is ~97.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
+  Then wait a few moments
+  Then I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
   And I go to the budget classification page for "TB Drugs procurement"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
   And the cached field "input:nth-child(7)" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"

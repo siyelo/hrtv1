@@ -242,16 +242,18 @@ describe Activity do
 
   describe "keeping Money amounts in-sync" do
     before :each do
-      @a        = Factory.build(:activity)
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
+      @a        = Factory(:activity,
+                          :projects => [Factory(:project,
+                            :data_response => Factory(:data_response, :currency => 'USD'))])
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save
       @a.reload
     end
-    
-    it "should update new_spend on creation" do   
+
+    it "should update new_spend on creation" do
       @a.new_spend.cents.should == 12345
-      @a.new_spend.to_s.should == "123.45"
       @a.new_spend.currency.should == Money::Currency.new("USD")
       @a.new_spend_in_usd.should == 12345      
     end
@@ -260,14 +262,11 @@ describe Activity do
       @a.spend = 456.78
       @a.save
       @a.new_spend.cents.should == 45678
-      @a.new_spend.to_s.should == "456.78"
       @a.new_spend.currency.should == Money::Currency.new("USD")
       @a.new_spend_in_usd.should == 45678
     end
     
     it "should update new_budget and new_budget_in_usd after currency change" do   
-      exchange_rate = BigDecimal("1") / BigDecimal("500") # 1/500 with uber precision
-      Money.add_rate("RWF", "USD", exchange_rate)
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
@@ -275,14 +274,24 @@ describe Activity do
       @a.spend = 789.10
       @a.save
       @a.new_spend.cents.should == 78910
-      @a.new_spend.to_s.should == "789.10"
       @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should ==  157 #(789.10 * exchange_rate), rounded down
+      @a.new_spend_in_usd.should ==  132 #(789.10 * exchange_rate), rounded down
     end
     
+    it "should update new_budget and new_budget_in_usd after currency change with a big number" do   
+      @p = @a.project
+      @p.currency = 'RWF'
+      @p.save
+      @a.reload
+      @a.spend = 198402000.0
+      @a.save
+      @a.new_spend.cents.should == 19840200000
+      @a.new_spend.currency.should == Money::Currency.new("RWF")
+      @a.new_spend_in_usd.should == 33210914
+    end
+        
     it "should update new_budget on creation" do   
       @a.new_budget.cents.should == 12345
-      @a.new_budget.to_s.should == "123.45"
       @a.new_budget.currency.should == Money::Currency.new("USD")
       @a.new_budget_in_usd.should == 12345
     end
@@ -291,14 +300,11 @@ describe Activity do
       @a.budget = 456.78
       @a.save
       @a.new_budget.cents.should == 45678
-      @a.new_budget.to_s.should == "456.78"
       @a.new_budget.currency.should == Money::Currency.new("USD")
       @a.new_budget_in_usd.should == 45678
     end
     
     it "should update new_budget and new_budget_in_usd after currency change" do   
-      exchange_rate = BigDecimal("1") / BigDecimal("500") # 1/500 with uber precision
-      Money.add_rate("RWF", "USD", exchange_rate)
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
@@ -306,9 +312,8 @@ describe Activity do
       @a.budget = 789.10
       @a.save
       @a.new_budget.cents.should == 78910
-      @a.new_budget.to_s.should == "789.10"
       @a.new_budget.currency.should == Money::Currency.new("RWF")
-      @a.new_budget_in_usd.should ==  157 #(789.10 * exchange_rate), rounded down
+      @a.new_budget_in_usd.should ==  132
     end    
   end
   

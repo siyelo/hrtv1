@@ -327,6 +327,17 @@ class Activity < ActiveRecord::Base
     true
   end
 
+  def coding_progress
+    coded = 0
+    coded +=1 if budget?
+    coded +=1 if budget_by_district?
+    coded +=1 if budget_by_cost_category?
+    coded +=1 if spend?
+    coded +=1 if spend_by_district?
+    coded +=1 if spend_by_cost_category?
+    progress = (coded.to_f / 6) * 100
+  end
+
   def treemap(chart_type)
     case chart_type
     when 'budget_coding'
@@ -455,6 +466,7 @@ class Activity < ActiveRecord::Base
       max = spend
     end
   end
+
 
   private
 

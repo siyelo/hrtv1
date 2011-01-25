@@ -88,7 +88,6 @@ describe Activity do
     def copy_budget_to_expenditure_check_cached_amount(activity, type, expected_cached_amount)
       activity.copy_budget_codings_to_spend([type])
       code_assignments = activity.code_assignments
-      #debugger
       code_assignments[1].cached_amount.should == expected_cached_amount
     end
 

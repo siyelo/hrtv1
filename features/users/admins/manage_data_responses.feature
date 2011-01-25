@@ -25,6 +25,6 @@ Scenario: Manage data responses
 Scenario: Manage data responses (with JS)
   And I follow "Review Organization Expenditures and Budgets"
   When I follow "Empty"
-  When I will confirm a js popup
+  When I confirm the popup dialog
   And I follow "Delete"
   Then I should not see "UNDP"

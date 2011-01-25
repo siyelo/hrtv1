@@ -64,7 +64,6 @@ Scenario: Manage comments on project (with Javascript)
   And I should not see "new comment body"
 
 @reporter_review_screen @javascript
-@run
 Scenario: Manage comments on activities (with Javascript)
   Then I can manage the comments
 

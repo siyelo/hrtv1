@@ -1,6 +1,7 @@
 require 'money/bank/google_currency'
 
-## set default bank to instance of GoogleCurrency
+### set default bank to instance of GoogleCurrency. Use a custom rounding method
+#   for better precision.
 Money.default_bank = Money::Bank::GoogleCurrency.new {|n| n.round(4)}
 
 case ENV['HRT_COUNTRY']

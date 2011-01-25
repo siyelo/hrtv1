@@ -190,7 +190,6 @@ class CodeAssignment < ActiveRecord::Base
 
     #currency is still derived from the parent activities' project/DR
     def update_money_amounts
-      debugger
       if currency
         zero = BigDecimal.new("0")
         self.new_amount        = Money.from_bigdecimal(self.amount || zero, currency)

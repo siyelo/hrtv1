@@ -304,9 +304,9 @@ class Activity < ActiveRecord::Base
     types.each do |budget_type|
       spend_type        = budget_type.gsub(/Budget/, "Spend")
       spend_type_klass  = spend_type.constantize
-      self.code_assignments.with_type(spend_type).delete_all
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type])
 
-      # GR: AFAICT this copies across the ratio, not just the amounts
+      # copy across the ratio, not just the amount
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
         spend_ca      = ca.clone
@@ -322,7 +322,6 @@ class Activity < ActiveRecord::Base
         end
         self.code_assignments << spend_ca
       end
-## GR: TODO - check why this resets cached amount for cloned assignments
       self.update_classified_amount_cache(spend_type_klass)
     end
     true

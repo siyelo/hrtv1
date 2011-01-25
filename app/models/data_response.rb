@@ -149,13 +149,12 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  # TODO: make currency mandatory, fix old records, remove this complexity
   def currency
     c = read_attribute(:currency)
-    unless new_record?
-      return c unless c.blank?
-      c = Money.default_currency.iso_code
-    end
-    c
+    return c if new_record?
+    return c unless c.blank?
+    return Money.default_currency.iso_code
   end
 
 end

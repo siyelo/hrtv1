@@ -462,6 +462,16 @@ class Activity < ActiveRecord::Base
     scope.find :all, :limit => limit
   end
 
+  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
+  def max_for_coding(type)
+    case type.to_s
+    when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+      max = budget
+    when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+      max = spend
+    end
+  end
+
   private
 
     def update_counter_cache
@@ -477,16 +487,6 @@ class Activity < ActiveRecord::Base
         sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
       end
       sum
-    end
-
-    # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
-    def max_for_coding(type)
-      case type.to_s
-      when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
-        max = budget
-      when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
-        max = spend
-      end
     end
 
     def set_classified_amount_cache(type)

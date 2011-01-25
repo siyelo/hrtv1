@@ -84,10 +84,8 @@ class CodeAssignment < ActiveRecord::Base
     my_cached_amount = 0
 
     available_codes.each do |ac|
-      #ca = self.with_activity(activity).with_code_id(ac.id).first # not cached
-      ca = get_code_assignment(activity.id, ac.id) # cached
-      #children = ac.children # not cached
-      children = get_children(ac) # cached
+      ca = self.with_activity(activity).with_code_id(ac.id).first
+      children = ac.children
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
@@ -219,25 +217,6 @@ class CodeAssignment < ActiveRecord::Base
       self.new_amount        = gimme_the_caaaasssssshhhh(self.amount, currency)
       self.new_cached_amount = gimme_the_caaaasssssshhhh(self.cached_amount, currency)
       self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
-    end
-
-    # caching for codings_sum method
-    class << self
-      extend ActiveSupport::Memoizable
-
-      def get_children(code)
-        code.children
-      end
-      memoize :get_children
-
-      def get_cached_code_assignments(activity_id)
-        self.with_activity(activity_id)
-      end
-      memoize :get_cached_code_assignments
-
-      def get_code_assignment(activity_id, code_id)
-        get_cached_code_assignments(activity_id).detect{|ca| ca.code_id == code_id}
-      end
     end
 end
 

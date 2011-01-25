@@ -13,11 +13,12 @@ describe Currency do
   #   @a.save
   #   @a.reload
   # end
-  
+
+  ### this wont work - there'll always be some rounding issues converting back.
+  # Money::Bank.exchange_with() will apply a small rounding, losing precision when 
+  # it stores cents 
+  # Refer also: http://github.com/RubyMoney/money/issues/4#comment_224880
   #
-  ### this wont work - there'll be some rounding issues converting back.
-  #
-  # see http://github.com/RubyMoney/money/issues/4#comment_224880
   # it "should convert large amounts back correctly" do
   #   a = Money.new(ONE_HUNDRED_BILLION_DOLLARS, :RWF)
   #   b = Money.new(a.exchange_to(:USD).cents, "USD")

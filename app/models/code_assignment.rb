@@ -61,7 +61,6 @@ class CodeAssignment < ActiveRecord::Base
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
 
-
   ### Callbacks
   before_save :update_money_amounts
 

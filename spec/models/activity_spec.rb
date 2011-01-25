@@ -288,7 +288,7 @@ describe Activity do
       @a.save
       @a.new_spend.cents.should == 19840200000
       @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should == 33210913  # accept rounding error: $332109.1260
+      @a.new_spend_in_usd.should == 33210914
     end
         
     it "should update new_budget on creation" do   

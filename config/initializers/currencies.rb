@@ -1,7 +1,7 @@
 require 'money/bank/google_currency'
 
 ## set default bank to instance of GoogleCurrency
-Money.default_bank = Money::Bank::GoogleCurrency.new
+Money.default_bank = Money::Bank::GoogleCurrency.new {|n| n.round(4)}
 
 case ENV['HRT_COUNTRY']
 when 'kenya'
@@ -22,9 +22,10 @@ Money::Currency::TABLE[:eur][:priority] = 3
 # so grab from our currencies (db) table
 class CurrencyNotFound < StandardError; end
 begin
-  raise CurrencyNotFound, "could not find USD to RWF conversion in Currencies table" unless Currency.find_by_symbol("USD")
-  Money.add_rate("USD", "RWF", Currency.find_by_symbol("USD").toRWF)
-  Money.add_rate("RWF", "USD", BigDecimal("1")/Currency.find_by_symbol("USD").toRWF)
+  usd = Currency.find_by_symbol("USD")
+  raise CurrencyNotFound, "could not find USD to RWF conversion in Currencies table" unless usd
+  Money.add_rate("USD", "RWF", usd.toRWF)
+  Money.add_rate("RWF", "USD", BigDecimal("1")/usd.toRWF)
 rescue CurrencyNotFound => e
   puts "WARNING: #{e.message}"
   # dont rethrow. Just handle the problem later

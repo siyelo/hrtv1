@@ -11,7 +11,7 @@ Scenario: "See data requests"
   When I go to the reporter dashboard page
   Then I should see "Data Requests"
 
-@activity_manager_dashboard
+@activity_manager_dashboard @wip
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given an organization exists with name: "WHO"
   And a data_request exists with title: "Some request", requesting_organization: the organization

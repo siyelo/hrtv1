@@ -8,6 +8,7 @@ Scenario: "See data requests"
   When I go to the reporter dashboard page
   Then I should see "Dashboard"
 
+@wip
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given a basic org + reporter profile, with data response, signed in
   When I go to the reporter dashboard page

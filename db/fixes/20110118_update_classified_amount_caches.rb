@@ -45,7 +45,7 @@ Activity.all.each_with_index do |a, index|
       a.new_spend = gimme_the_caaaasssssshhhh(a.spend, a.currency)
       a.new_spend_in_usd = a.new_spend.exchange_to(:USD).cents
 
-      a.save
+      a.save(false) # save approved activities
     end
   end
 end

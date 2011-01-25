@@ -1,8 +1,8 @@
-Activity.all.each do |a|
+Activity.all.each_with_index do |a, index|
+  puts "Updating activity id: #{a.id}, counter: #{index}"
   if [OtherCost, Activity].include?(a.class)
     [CodingBudget, CodingBudgetCostCategorization, CodingBudgetDistrict,
      CodingSpend, CodingSpendCostCategorization, CodingSpendDistrict].each do |type|
-      puts "Updating activity #{a.id} #{a.description}"
       a.update_classified_amount_cache(type)
     end
   end

@@ -84,22 +84,25 @@ class CodeAssignment < ActiveRecord::Base
     my_cached_amount = 0
 
     available_codes.each do |ac|
-      ca = self.with_activity(activity).with_code_id(ac.id).first
+      #ca = self.with_activity(activity).with_code_id(ac.id).first # not cached
+      ca = get_code_assignment(activity.id, ac.id) # cached
+      #children = ac.children # not cached
+      children = get_children(ac) # cached
       if ca
         if ca.amount.present? && ca.amount > 0
           my_cached_amount = ca.amount
-          sum_of_children = self.codings_sum(ac.children, activity, max)
+          sum_of_children = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         elsif ca.percentage.present? && ca.percentage > 0
           my_cached_amount = ca.percentage * max / 100
-          sum_of_children = self.codings_sum(ac.children, activity, max)
+          sum_of_children = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         else
-          sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
+          sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
           ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
         end
       else
-        sum_of_children = my_cached_amount = self.codings_sum(ac.children, activity, max)
+        sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
         self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if sum_of_children > 0
       end
       total += my_cached_amount
@@ -218,6 +221,24 @@ class CodeAssignment < ActiveRecord::Base
       self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
     end
 
+    # caching for codings_sum method
+    class << self
+      extend ActiveSupport::Memoizable
+
+      def get_children(code)
+        code.children
+      end
+      memoize :get_children
+
+      def get_cached_code_assignments(activity_id)
+        self.with_activity(activity_id)
+      end
+      memoize :get_cached_code_assignments
+
+      def get_code_assignment(activity_id, code_id)
+        get_cached_code_assignments(activity_id).detect{|ca| ca.code_id == code_id}
+      end
+    end
 end
 
 

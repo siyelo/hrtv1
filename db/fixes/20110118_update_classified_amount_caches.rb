@@ -40,10 +40,6 @@ Activity.all.each_with_index do |a, index|
      CodingSpend, CodingSpendCostCategorization, CodingSpendDistrict].each do |type|
       amount = codings_sum(type.available_codes(a), a, a.max_for_coding(type), type, cache_object)
       a.send("#{type}_amount=",  amount)
-      a.new_budget = gimme_the_caaaasssssshhhh(a.budget, a.currency)
-      a.new_budget_in_usd = a.new_budget.exchange_to(:USD).cents
-      a.new_spend = gimme_the_caaaasssssshhhh(a.spend, a.currency)
-      a.new_spend_in_usd = a.new_spend.exchange_to(:USD).cents
 
       a.save(false) # save approved activities
     end

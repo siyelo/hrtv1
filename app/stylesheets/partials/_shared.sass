@@ -62,6 +62,7 @@ body
       margin-top: 9px
     #admin
       float: right
+      font-family: 'Avenir'
       width: 550px
 
       span
@@ -69,38 +70,55 @@ body
         font-size: 11px
         float: right
         padding-top: 14px
+        letter-spacing: 1px
+        padding-right: 10px
+        text-transform: uppercase
+        +text-shadow(#111, 0, 1px, 1px)
 
 
       ul
         +horizontal-list
+        border: 1px solid $dark-blue
         float: right
-        padding-left: 10px
+        +box-shadow(rgba(0, 0, 0, 0.2), 0, 2px, 2px)
+        +border-radius(6px)
 
         li
-          padding: 10px 5px
+          
+          padding: 0
+          
+          &:first-child 
+            border-right: 1px solid $mid-blue
+            a
+              +border-left-radius
+              border-right: 1px solid $dark-blue
+          &:last-child
+            border-left: 1px solid $mid-blue
+            a
+              +border-right-radius
+              border-left: 1px solid $dark-blue
 
           a
-            border-left: 1px solid $dark-blue
-            color: !light-blue
+            background: $dark-blue
+            border-top: 1px solid $mid-blue + #222
+            color: $light-blue
             display: inline-block
+            float: left
             font-size: 11px
-            font-weight: bold
-            padding-left: 8px
+            height: 14px
+            padding: 11px 12px 12px
             text-decoration: none
+            +linear-gradient(color-stops($mid-blue, $dark-blue))
+            +text-shadow(#111, 0, 1px, 1px)
             img
               margin: 0 2px -2px 0
             &:hover, &:focus
-              color: !lightest-blue
+              background: $mid-blue
+              color: #fff
             &.signin
-              background: $light-blue
-              border: none
-              color: $dark-blue
-              margin-top: -16px
-              padding: 16px
               text-transform: uppercase
-              +border-radius(3px)
-              &:hover
-                background: white
+              img
+                margin-bottom: -5px
 
     #tagline
       float: right
@@ -150,7 +168,6 @@ body
   /* end */
 
   /* shared footer styles */
-  /* shared footer styles */
   #footer
     color: !mid-blue
     font-size: 11px
@@ -162,12 +179,12 @@ body
     ul
       line-height: 16px
       li.powered
+        font-size: 11px
         text-transform: none
 
     h2.logo
       color: !dark-blue
       font-size: 13px
-
 
     .left
       float: left
@@ -192,3 +209,6 @@ body
 
   .like_a_h2
     font-size: 12px
+    
+.borderless
+  border: none !important

@@ -83,13 +83,13 @@ module ActiveScaffold
           ActiveScaffold::Config::Core.asset_path(name, frontend)
         end
       end
-      
+
       # Provides stylesheets to include with +stylesheet_link_tag+
       def active_scaffold_stylesheets(frontend = :default)
         [ActiveScaffold::Config::Core.asset_path("stylesheet.css", frontend)]
       end
 
-      # Provides stylesheets for IE to include with +stylesheet_link_tag+ 
+      # Provides stylesheets for IE to include with +stylesheet_link_tag+
       def active_scaffold_ie_stylesheets(frontend = :default)
         [ActiveScaffold::Config::Core.asset_path("stylesheet-ie.css", frontend)]
       end
@@ -146,7 +146,7 @@ module ActiveScaffold
             url_options[:authenticity_token] = form_authenticity_token
           end
 
-          # robd: protect against submitting get links as forms, since this causes annoying 
+          # robd: protect against submitting get links as forms, since this causes annoying
           # 'Do you wish to resubmit your form?' messages whenever you go back and forwards.
         elsif link.method != :get
           # Needs to be in html_options to as the adding _method to the url is no longer supported by Rails

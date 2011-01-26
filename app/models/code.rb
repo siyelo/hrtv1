@@ -11,6 +11,7 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   named_scope :with_type,       lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  named_scope :with_types,       lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
 
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
@@ -21,7 +22,10 @@ class Code < ActiveRecord::Base
   ### Public Methods
 
   def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    #@depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
+    # TODO: check if this change has broken the other reports
+    # c = Code.find 1434 has 7 parents
+    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
   end
 
   def self.roots_with_level
@@ -105,7 +109,9 @@ class Code < ActiveRecord::Base
   def get_treemap_row(rows, type, activities, treemap_parent_values, level, total_for_percentage)
     name  = to_s_prefer_official
     sum   = sum_of_assignments_for_activities(type, activities)
-    if sum > 0 #TODO add % of total as well, abbrev amount
+    ignore_second_parent = treemap_parent_values.empty? || treemap_parent_values.keys.include?(parent_id) # TODO: data problem with treemap: uncaught exception: Parent doubly defined.
+
+    if sum > 0 && ignore_second_parent #TODO add % of total as well, abbrev amount
       name_w_sum = "#{n2c(sum.fdiv(total_for_percentage)*100)}%: #{name}"
       if treemap_parent_values.values.include?(name_w_sum)
         name_w_sum = "#{n2c(sum)} (2): #{name}"

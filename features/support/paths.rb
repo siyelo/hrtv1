@@ -36,21 +36,21 @@ module NavigationHelpers
       login_path
 
     when /the funding sources page/
-      funding_sources_data_entry_path
+      funding_sources_path
 
     when /the implementers page/
-      providers_data_entry_path
+      implementers_path
 
     when /the other costs page/
       other_costs_path
 
     when /the budget classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      activity_coding_path(activity)
+      activity_code_assignments_path(activity)
 
     when /the activity classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      activity_coding_path(activity)
+      activity_code_assignments_path(activity)
 
     when /the user guide page/
       static_page_path(:user_guide)

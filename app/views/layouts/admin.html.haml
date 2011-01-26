@@ -10,8 +10,7 @@
         .full-width
           = yield
 
--# content_for :footer do
-  -#if you want to do your own thing
-  -#= render :partial => 'layouts/some_different_footer'
+- content_for :footer do
+  = render :partial => 'layouts/footer'
 
 = render 'layouts/app'

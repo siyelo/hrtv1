@@ -10,11 +10,17 @@
         %a{ :href => edit_user_url(current_user.id)}
           = image_tag"icon_profile.png"
           My Profile
-      %li.last= link_to "Sign out", logout_path
+      %li
+        %a{ :href => logout_path }
+          = image_tag"icon_logout.png"
+          Sign Out
     %span
       = "#{current_user.email}"
 
   - else
     %ul
-      %li= link_to "Sign in", login_path, :class => "signin"
+      %li.borderless
+        %a{ :href => login_path, :class => "signin borderless"}
+          =image_tag"icon_signin.png"
+          Sign in
     %span Have an account?

@@ -1,8 +1,12 @@
 class Location < Code
+
+  # Associations
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :organizations
+  has_one :district, :foreign_key => 'old_location_id'
 
+  # Named scopes
   named_scope :all_with_counters,
                 :select => "codes.id, codes.short_display, codes.type,
                   (SELECT COUNT(*) FROM projects
@@ -24,6 +28,7 @@ class Location < Code
                      AND ca2.type = 'CodingBudgetDistrict'
                 ",
                 :order => "short_display ASC",
+                :include => :district,
                 :group => "codes.id, codes.short_display, codes.type"
 end
 

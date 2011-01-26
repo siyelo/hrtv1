@@ -11,5 +11,5 @@
         If you think the answer to your question will help many others, use the grid below this text.
         All users can see the comments in the table below.
 
-    = render :active_scaffold => "comments", :label => "General Questions / Comments",
+    = render :active_scaffold => "comments", :label => "Questions on this Page",
       :constraints => {:commentable_id => @model_help.id, :commentable_type => "ModelHelp"}

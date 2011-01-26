@@ -1,5 +1,4 @@
-class HelpRequestsController < ApplicationController
-  layout 'promo_inner' #TODO: separate reporter/admin actions
+class HelpRequestsController < ActiveScaffoldController
 
   authorize_resource
   @@shown_columns = [:email, :message, :created_at]

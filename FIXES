@@ -1,5 +1,0 @@
-Fixes to be run on production deploy
-
-  ruby script/runner db/fixes/20110118_update_classified_amount_caches.rb
-
-

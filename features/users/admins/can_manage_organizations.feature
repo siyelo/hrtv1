@@ -34,7 +34,7 @@ Scenario Outline: Merge duplicate organizations (with JS)
   And I should see "Organization: <duplicate_box>" within "#duplicate"
   And I select "<target>" from "Replacement organization"
   And I should see "Organization: <target_box>" within "#target"
-  And I will confirm a js popup
+  And I confirm the popup dialog
   And I press "Replace"
   Then I should see "<message>"
   And the "Duplicate organization" text should be "<select_text>"
@@ -51,7 +51,7 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
   When I go to the organizations page
   And I follow "Fix duplicate organizations"
   And I select "<organization>" from "<select_type>"
-  And I will confirm a js popup
+  And I confirm the popup dialog
   And I follow "Delete" within "<info_block>"
   Then the "Duplicate organization" text should not be "<organization>"
   And the "Replacement organization" text should not be "<organization>"
@@ -67,7 +67,7 @@ Scenario: Try to delete non-empty organization (with JS)
   When I go to the organizations page
   And I follow "Fix duplicate organizations"
   And I select "WHO - 1 user" from "Replacement organization"
-  And I will confirm a js popup
+  And I confirm the popup dialog
   And I follow "Delete" within ".box[data-type='target']"
   # Check that WHO organization is not deleted
   Then the "Replacement organization" text should match "WHO - 1 user"

@@ -51,39 +51,37 @@ describe CodeAssignment do
     assignment.amount.to_s.should == output
   end
 
-  describe "keeping Money amounts in-sync" do
+  describe "keeping Money amounts in-sync (default should be RWF)" do
     before :each do
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
       @ca = Factory.build(:code_assignment)
       @ca.amount = 123.45
       @ca.cached_amount = 123.45
       @ca.save
       @ca.reload
     end
-    it "should update amount on creation" do
+    it "should update new_amount on creation" do
       @ca.new_amount.cents.should == 12345
       @ca.new_amount.to_s.should == "123.45"
-      @ca.new_amount.currency.should == Money::Currency.new("USD")
+      @ca.new_amount.currency.should == Money::Currency.new("RWF")
     end
-    it "should update amount on update" do
+    it "should update new_amount on update" do
       @ca.amount = 456.78
       @ca.save
       @ca.new_amount.cents.should == 45678
-      @ca.new_amount.to_s.should == "456.78"
-      @ca.new_amount.currency.should == Money::Currency.new("USD")
+      @ca.new_amount.currency.should == Money::Currency.new("RWF")
     end
     it "should update cached_amount(_in_usd) on creation" do
       @ca.new_cached_amount.cents.should == 12345
-      @ca.new_cached_amount_in_usd.should == 12345
-      @ca.new_cached_amount.to_s.should == "123.45"
-      @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
+      @ca.new_cached_amount_in_usd.should == 21
+      @ca.new_cached_amount.currency.should == Money::Currency.new("RWF")
     end
     it "should update cached_amount(_in_usd) on update" do
       @ca.cached_amount = 456.78
       @ca.save
       @ca.new_cached_amount.cents.should == 45678
-      @ca.new_cached_amount_in_usd.should == 45678
-      @ca.new_cached_amount.to_s.should == "456.78"
-      @ca.new_cached_amount.currency.should == Money::Currency.new("USD")
+      @ca.new_cached_amount_in_usd.should == 76
+      @ca.new_cached_amount.currency.should == Money::Currency.new("RWF")
     end
   end
 

@@ -1,5 +1,6 @@
 class ActiveScaffoldController < ApplicationController
-  layout 'reporter'
+  layout :set_layout
+
   before_filter :load_help
   before_filter :set_defaults
 
@@ -14,6 +15,13 @@ class ActiveScaffoldController < ApplicationController
   end
 
   protected
+    def set_layout
+      if current_user.role?(:reporter)
+        'reporter'
+      else
+        'admin'
+      end
+    end
 
     #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
     def before_update_save(record)
@@ -87,17 +95,10 @@ class ActiveScaffoldController < ApplicationController
     #TODO move into ActiveRecord:Base
     # GR: metric_fu is complaining like hell about this method...
     def new_from_hash_w_constraints model_hash, constraints
-
-        logger.debug(model_hash.inspect)
-        #logger.debug(active_scaffold_constraints.inspect)
-        #logger.debug(session[:last_data_entry_constraints].inspect)
-
       # overwrite values with constrained values for this record
       unless constraints.nil? || constraints.empty?
         model_hash.merge! constraints
       end
-
-        logger.debug(model_hash.inspect)
 
       klass = controller_model_class
       couldnt_find_models = {} # any fields that held id's
@@ -105,7 +106,6 @@ class ActiveScaffoldController < ApplicationController
       # no matching record was found
 
       model_hash.each do |k,v|
-
         # TODO remove dirty hack
         # is this field an association or regular column?
         # model should be responsible for knowing what field to look for,
@@ -131,7 +131,6 @@ class ActiveScaffoldController < ApplicationController
             couldnt_find_models[k]={:association => k,
               :raw_value => model_hash.delete(k), :cleaned_value => v}
           end
-
         end
       end
       record = klass.new model_hash
@@ -170,8 +169,10 @@ class ActiveScaffoldController < ApplicationController
           if help
             #TODO join with ruby array methods or something better
             if self.respond_to? :create_columns
+              attr_helps = help.find(:all, :conditions => ['attribute_name IN (?)', self.create_columns.map{|c| c.to_s}])
               self.create_columns.each do |column|
-                h = help.find_by_attribute_name(column.to_s)
+                #h = help.find_by_attribute_name(column.to_s)
+                h = attr_helps.detect{|attr_help| attr_help.attribute_name == column.to_s}
                 set_active_scaffold_column_description column, h.long unless h.nil?
               end
             end

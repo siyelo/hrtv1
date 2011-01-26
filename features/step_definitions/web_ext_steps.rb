@@ -13,7 +13,7 @@ When /^(.*) within ([^:"]+):$/ do |step, scope, table_or_string|
   end
 end
 
-When /^I will confirm a js popup$/ do
+When /^I confirm the popup dialog$/ do
   page.evaluate_script('window.confirm = function() { return true; }')
 end
 

@@ -10,6 +10,7 @@
       %th Organizations
       %th Activities
       %th Total Spent
+      %th Per capita spending
       %th Total Budget
 
   %tbody
@@ -26,6 +27,12 @@
             %li= n2c(spent_total.usd_to_rwf, 'RWF')
             %li= "(#{n2c(spent_total, '$')})"
           -#= n2c(spent_total)
+        %td
+          - if loc.district
+            %ul
+              - spent_per_capita = Money.new((loc.district.population.to_f / @total_population) * @spent_codings.detect{|c| c.code_id == loc.id}.try(:total).to_i, :USD)
+              %li= n2c(spent_per_capita.usd_to_rwf, 'RWF')
+              %li= "(#{n2c(spent_per_capita, '$')})"
         %td
           %ul
             -#%li= n2c(budget_total.exchange_to(:RWF), 'RWF')

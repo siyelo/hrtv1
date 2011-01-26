@@ -13,22 +13,22 @@ class Reports::MapFacilitiesByPartner
     end
 
     #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
-    organizations   = Organization.all(:conditions => ["fosaid is not null"])
-    prepare_districts_hash(organizations)
+    @organizations   = Organization.all(:conditions => ["fosaid is not null"])
+    prepare_districts_hash
   end
 
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      organizations.each{|organization| build_row(csv, organization)}
+      @organizations.each{|organization| build_row(csv, organization)}
     end
   end
 
   private
 
-    def prepare_districts_hash(organizations)
+    def prepare_districts_hash
       @districts_hash = {}
-      organizations.each do|organization|
+      @organizations.each do|organization|
         @districts_hash[organization] = {}
         @districts_hash[organization][:total] = 0
         @districts_hash[organization][:partners] = {} # partner => amount

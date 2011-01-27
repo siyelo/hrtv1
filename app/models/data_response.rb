@@ -1,5 +1,4 @@
 require 'lib/ActAsDataElement'
-require 'lib/ReportHelpers'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base

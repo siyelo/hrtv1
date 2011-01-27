@@ -1,6 +1,6 @@
-module CountryTreemaps
+module Charts::CountryTreemaps
   extend NumberHelper
-  extend HelperMethods
+  extend Charts::HelperMethods
 
   class << self
     def treemap(code_type, activities, is_spent)

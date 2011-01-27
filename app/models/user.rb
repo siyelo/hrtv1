@@ -30,6 +30,13 @@ class User < ActiveRecord::Base
     self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
   end
 
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    Notifier.deliver_password_reset_instructions(self)
+  end
+
+
+
   ROLES = %w[admin reporter activity_manager]
 
   def roles=(roles)

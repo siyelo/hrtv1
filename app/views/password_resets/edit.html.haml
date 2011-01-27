@@ -1,0 +1,16 @@
+- title "Change Your Password"
+
+%h1 Change Password
+
+%p Please reset your password
+
+- form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
+  = f.error_messages :header_message => '', :message => ""
+
+  = f.label :password
+  = f.password_field :password
+
+  = f.label :password_confirmation
+  = f.password_field :password_confirmation
+
+  = f.submit "Change Password"

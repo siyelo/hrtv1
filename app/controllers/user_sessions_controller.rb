@@ -1,5 +1,4 @@
 class UserSessionsController < ApplicationController
-  layout 'promo_inner' #TODO: separate reporter/admin actions
 
   before_filter :require_no_user, :only => [:new]
   before_filter :require_user, :only => [:destroy]

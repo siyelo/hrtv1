@@ -5,7 +5,6 @@ require 'validators'
 class DataResponse < ActiveRecord::Base
 
   include ActsAsDateChecker
-  include ReportHelpers
 
   # Commentable
   acts_as_commentable

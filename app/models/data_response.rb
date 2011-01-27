@@ -1,11 +1,9 @@
 require 'lib/ActAsDataElement'
-require 'lib/ReportHelpers'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base
 
   include ActsAsDateChecker
-  include ReportHelpers
 
   # Commentable
   acts_as_commentable

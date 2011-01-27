@@ -1,6 +1,6 @@
-module DistrictPies
+module Charts::DistrictPies
   extend ApplicationHelper
-  extend HelperMethods
+  extend Charts::HelperMethods
 
   class << self
 

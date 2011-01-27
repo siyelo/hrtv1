@@ -1,5 +1,5 @@
-module CountryPies
-  extend HelperMethods
+module Charts::CountryPies
+  extend Charts::HelperMethods
 
   class << self
     ### admin/district/:id/organizations

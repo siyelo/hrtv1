@@ -143,7 +143,5 @@ module Charts::ActivityTreemaps
           rows << [name_w_sum, my_parent_treemap_value, sum, sum]
         end
       end
-
-
   end
 end

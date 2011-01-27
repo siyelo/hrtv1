@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110119113315) do
+ActiveRecord::Schema.define(:version => 20110127155931) do
 
   create_table "activities", :force => true do |t|
     t.string    "name"
@@ -82,21 +82,22 @@ ActiveRecord::Schema.define(:version => 20110119113315) do
   end
 
   create_table "code_assignments", :force => true do |t|
-    t.integer "activity_id"
-    t.integer "code_id"
-    t.decimal "amount"
-    t.string  "type"
-    t.decimal "percentage"
-    t.decimal "cached_amount",              :default => 0.0
-    t.decimal "sum_of_children",            :default => 0.0
-    t.integer "new_amount_cents",           :default => 0,   :null => false
-    t.string  "new_amount_currency"
-    t.integer "new_cached_amount_cents",    :default => 0,   :null => false
-    t.string  "new_cached_amount_currency"
-    t.integer "new_cached_amount_in_usd",   :default => 0,   :null => false
+    t.integer  "activity_id"
+    t.integer  "code_id"
+    t.decimal  "amount"
+    t.string   "type"
+    t.decimal  "percentage"
+    t.decimal  "cached_amount",              :default => 0.0
+    t.decimal  "sum_of_children",            :default => 0.0
+    t.integer  "new_amount_cents",           :default => 0,   :null => false
+    t.string   "new_amount_currency"
+    t.integer  "new_cached_amount_cents",    :default => 0,   :null => false
+    t.string   "new_cached_amount_currency"
+    t.integer  "new_cached_amount_in_usd",   :default => 0,   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|

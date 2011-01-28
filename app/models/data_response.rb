@@ -2,7 +2,6 @@ require 'lib/ActAsDataElement'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base
-
   include ActsAsDateChecker
 
   # Commentable

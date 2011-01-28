@@ -14,7 +14,7 @@ class UserSessionsController < ApplicationController
       flash[:notice] = "Successfully signed in."
       redirect_to user_dashboard_path(current_user)
     else
-      flash[:error] = "Wrong Username/email and password combination. If you think this message is being shown in error after multiple tries, use the form on the contact page (link below) to get help."
+      flash.now[:error] = "Wrong Username/email and password combination. If you think this message is being shown in error after multiple tries, use the form on the contact page (link below) to get help."
       render :action => :new
     end
   end

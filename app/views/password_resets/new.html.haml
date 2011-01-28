@@ -1,11 +1,12 @@
 - title "Forgot Password"
 
-%h1
-  Forgot Password
-  = link_to "(Login)", login_path
+.sign_in_form
+  %h3
+    Forgot Password
+    = link_to "(Sign In)", login_path
 
-- semantic_form_for 'user', :url => password_resets_path do |f|
-  - f.inputs do
-    = f.input :email
-  - f.buttons do
-    = f.commit_button
+  - semantic_form_for 'user', :url => password_resets_path do |f|
+    - f.inputs do
+      = f.input :email
+    - f.buttons do
+      = f.commit_button

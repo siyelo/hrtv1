@@ -1,5 +1,7 @@
 - title "Sign in"
 
 .sign_in_form
-  %h3 Sign in
+  %h3
+    Sign in
+    = link_to "(forgot password)", new_password_reset_path
   = render :partial => 'login_form'

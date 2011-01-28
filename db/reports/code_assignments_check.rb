@@ -1,10 +1,6 @@
 require 'fastercsv'
 require 'set'
 
-# delete all spend code assignments where activity spent is 0
-# spent classifications are invalid & if you join budget and spent code assignments for a respective type (e.g budgetcodings and spendcodings) and the amounts are equal
-
-
 def same?(cas1, cas2)
   cas1.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set ==
   cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set
@@ -24,8 +20,6 @@ csv = FasterCSV.generate do |csv|
 
   # data
   activities.each_with_index do |activity, index|
-    #cas1 = CodeAssignment.with_activity(activity).with_types([CodingBudget.to_s, CodingBudgetDistrict.to_s, CodingBudgetCostCategorization.to_s])
-    #cas2 = CodeAssignment.with_activity(activity).with_types([CodingSpend.to_s, CodingSpendDistrict.to_s, CodingSpendCostCategorization.to_s])
     puts "Checking activity with id: #{activity.id} | #{index + 1}/#{total}"
 
     cas11 = CodeAssignment.with_activity(activity).with_type(CodingBudget.to_s)
@@ -39,7 +33,7 @@ csv = FasterCSV.generate do |csv|
     same_district_codings = same?(cas21, cas22)
     same_cost_category_codings = same?(cas31, cas32)
 
-    # print only the code assignments if there is same and if they are no empty
+    # print only the code assignments if they are same and if they are not empty
     if ((same_codings || same_district_codings || same_cost_category_codings) &&
        (cas12.present? || cas22.present? || cas32.present?))
       row = []

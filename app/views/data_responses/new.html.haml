@@ -1,0 +1,13 @@
+- title("New Response")
+
+%h1 New Response
+
+= error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @data_response, :url => data_responses_path, :html => {:method => :post} do |f|
+  - f.inputs do
+    = f.input :organization_id_responder, :as => :hidden, :value => current_user.organization
+    = f.input :data_request_id, :as => :hidden, :value => @request
+    = f.input :currency, :as => :select, :collection => currency_options_for_select, :include_blank => true
+  - f.buttons do
+    = f.commit_button

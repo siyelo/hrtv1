@@ -1,0 +1,43 @@
+
+- form_for @data_response do |form|
+  %table
+    %tbody
+      %tr
+        %td= form.label :currency, "Default Currency"
+        %td
+          = form.select :currency, currency_options_for_select, :include_blank => true
+          %p.hint You can override this currency on individual projects
+      %tr
+        %td= form.label :fiscal_year_start_date, "Start of Fiscal Year 2008-2009"
+        %td= form.text_field :fiscal_year_start_date, :class => 'date_picker'
+      %tr
+        %td= form.label :fiscal_year_end_date, "End of Fiscal Year 2008-2009"
+        %td= form.text_field :fiscal_year_end_date, :class => 'date_picker'
+      %tr
+        %td= ""
+        %td
+          %p
+            Choose the fiscal year above that you wish to report in according to what is convenient for you. The date format is YYYY-MM-DD, for example January 10, 2011 is 2011-01-10.
+            %br
+            This may correspond to the fiscal year of your organization, donors, GOR, etc.
+            %br
+            We will extrapolate that your 2010-2011 begins and ends on the same dates, one year later.
+            %br
+            If this is not the case, contact us using the Help/Contact Us form at the bottom of this page.
+      %tr
+        %td= form.label :contact_name, "Point of Contact Name"
+        %td= form.text_field :contact_name
+      %tr
+        %td= form.label :contact_position, "Point of Contact Position"
+        %td= form.text_field :contact_position
+      %tr
+        %td= form.label :contact_phone_number, "Point of Contact Phone Number"
+        %td= form.text_field :contact_phone_number
+      %tr
+        %td= form.label :contact_main_office_phone_number, "Point of Contact Office Phone Number"
+        %td= form.text_field :contact_main_office_phone_number
+      %tr
+        %td= form.label :contact_office_location, "Point of Contact Office Location"
+        %td= form.text_field :contact_office_location
+  = submit_tag 'Save'
+

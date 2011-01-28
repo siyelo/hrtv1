@@ -1,12 +1,12 @@
 - title "Change Your Password"
 
-%h1 Change Password
+.sign_in_form
 
-%p Please reset your password
+  %h3 Change Password
 
-- semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
-  - f.inputs do
-    = f.input :password
-    = f.input :password_confirmation
-  - f.buttons do
-    = f.commit_button "Change Password"
+  - semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
+    - f.inputs do
+      = f.input :password, :label => "New Password"
+      = f.input :password_confirmation
+    - f.buttons do
+      = f.commit_button "Change My Password"

@@ -76,7 +76,7 @@ describe Activity do
     end
   end
 
-  describe "use budget for expenditure codings" do
+  describe "use budget for spent codings" do
     def copy_budget_to_expenditure_check(activity, actual_type, expected_type)
       activity.copy_budget_codings_to_spend([actual_type])
       code_assignments = activity.code_assignments
@@ -85,28 +85,53 @@ describe Activity do
       code_assignments[1].class.to_s.should == expected_type
     end
 
+    def dont_copy_budget_to_expenditure_check(activity, actual_type, expected_type)
+      activity.copy_budget_codings_to_spend([actual_type])
+      code_assignments = activity.code_assignments
+      code_assignments.length.should == 1
+      code_assignments[0].class.to_s.should == actual_type
+    end
+
     def copy_budget_to_expenditure_check_cached_amount(activity, type, expected_cached_amount)
       activity.copy_budget_codings_to_spend([type])
       code_assignments = activity.code_assignments
       code_assignments[1].cached_amount.should == expected_cached_amount
     end
 
-    it "copies budget for expenditure codings for CodingBudget" do
+    it "copies budget for spent codings for CodingBudget" do
       activity = Factory(:activity)
       Factory(:coding_budget, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "copies budget for expenditure codings for CodingBudgetDistrict" do
+    it "copies budget for spent codings for CodingBudgetDistrict" do
       activity = Factory(:activity)
       Factory(:coding_budget_district, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetDistrict', 'CodingSpendDistrict')
     end
 
-    it "copies budget for expenditure codings for CodingBudgetCostCategorization" do
+    it "copies budget for spent codings for CodingBudgetCostCategorization" do
       activity = Factory(:activity)
       Factory(:coding_budget_cost_categorization, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
+    end
+
+    it "does not copy budget to spent when spent is nil" do
+      activity = Factory(:activity, :spend => nil)
+      Factory(:coding_budget, :activity => activity)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+    end
+
+    it "does not copy budget to spent when spent is 0" do
+      activity = Factory(:activity, :spend => 0)
+      Factory(:coding_budget, :activity => activity)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+    end
+
+    it "does not copy budget to spent and budget are present, but cached_amount is nil" do
+      activity = Factory(:activity)
+      Factory(:coding_budget, :activity => activity, :cached_amount => nil)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
     it "deletes existing Spend codes before copying" do
@@ -114,34 +139,6 @@ describe Activity do
       Factory(:coding_budget, :activity => activity)
       Factory(:coding_spend, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
-    end
-
-    it "calculates cached_amount when spend is nil" do
-      activity = Factory(:activity, :spend => nil)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when spend is 0" do
-      activity = Factory(:activity, :spend => 0)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when budget is nil" do
-      activity = Factory(:activity, :budget => nil)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when budget is 0" do
-      activity = Factory(:activity, :budget => 0)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
     end
 
     it "calculates spend cached_amount when there is calculated cache amount for budget" do

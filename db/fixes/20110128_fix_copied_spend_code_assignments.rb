@@ -6,8 +6,8 @@ def same?(cas1, cas2)
   cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set
 end
 
-#activities = Activity.all
-activities = [Activity.find(7312)]
+activities = Activity.all
+#activities = [Activity.find(7312)]
 total      = activities.length
 
 activities.each_with_index do |activity, index|

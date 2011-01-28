@@ -308,9 +308,9 @@ class Activity < ActiveRecord::Base
       # copy across the ratio, not just the amount
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
-        if spend && spend > 0 && budget && budget > 0 && ca.calculated_amount > 0
-          spend_ca      = ca.clone
-          spend_ca.type = spend_type
+        if spend && spend > 0 && budget && budget > 0 && ca.cached_amount && ca.cached_amount > 0
+          spend_ca                = ca.clone
+          spend_ca.type           = spend_type
           spend_ca.amount         = spend * ca.amount / budget if ca.amount
           spend_ca.percentage     = ca.percentage if ca.percentage
           spend_ca.cached_amount  = spend * ca.calculated_amount / budget

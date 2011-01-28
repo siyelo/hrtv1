@@ -13,14 +13,15 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed

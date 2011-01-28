@@ -4,13 +4,9 @@
 
 %p Please reset your password
 
-- form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
-  = f.error_messages :header_message => '', :message => ""
-
-  = f.label :password
-  = f.password_field :password
-
-  = f.label :password_confirmation
-  = f.password_field :password_confirmation
-
-  = f.submit "Change Password"
+- semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
+  - f.inputs do
+    = f.input :password
+    = f.input :password_confirmation
+  - f.buttons do
+    = f.commit_button "Change Password"

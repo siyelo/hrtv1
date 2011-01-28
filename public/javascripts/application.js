@@ -948,6 +948,10 @@ jQuery(function () {
     }
   }
 
+  jQuery("#closeFlash").click(function(){
+    jQuery("#flashes").fadeOut("slow");
+  });
+
   jQuery('#page_tips_open').click(function (e) {
     e.preventDefault();
     jQuery('#page_tips .desc').toggle();

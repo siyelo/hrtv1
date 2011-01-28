@@ -7,14 +7,15 @@
         #tagline
           %h2= link_to "Health Resource Tracker", root_path
           %h6 Improving lives through better health policy
-        = render :partial => 'layouts/login_nav'
+        = render 'layouts/login_nav'
 
-    = render :partial => 'layouts/flashes'
+    = render 'layouts/flashes'
+
     #content
       .wrapper
         = yield
 
 - content_for :footer do
-  = render :partial => 'layouts/footer'
+  = render 'layouts/footer'
 
 = render 'layouts/app'

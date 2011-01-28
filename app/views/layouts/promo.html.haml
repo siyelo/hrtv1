@@ -3,7 +3,6 @@
 - content_for :body do
   %body.promo.landing
     = render "layouts/header"
-    = render :partial => 'layouts/flashes'
     = yield(:tabs)
     #content
       .wrapper

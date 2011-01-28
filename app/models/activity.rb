@@ -497,11 +497,13 @@ class Activity < ActiveRecord::Base
 
     # removes code assignments for non-existing locations for this activity
     def remove_district_codings
-      activity_id = self.id
-      location_ids = locations.map(&:id)
+      activity_id           = self.id
+      location_ids          = locations.map(&:id)
       code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
       deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                                {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
+                        {:activity_id => activity_id,
+                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
+                         :location_ids => location_ids}])
 
       # only if there are deleted code assignments, update the district cached amounts
       if deleted_count > 0
@@ -517,23 +519,24 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_money_amounts
-      zero = BigDecimal.new("0")
-      self.new_budget = Money.from_bigdecimal(self.budget || zero, self.currency)
+      zero                   = BigDecimal.new("0")
+      self.new_budget        = Money.from_bigdecimal(self.budget || zero, self.currency)
       self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
-      self.new_spend = Money.from_bigdecimal(self.spend || zero, self.currency)
-      self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
+      self.new_spend         = Money.from_bigdecimal(self.spend || zero, self.currency)
+      self.new_spend_in_usd  = self.new_spend.exchange_to(:USD).cents
     end
 
 end
+
 
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed

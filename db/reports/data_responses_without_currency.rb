@@ -1,19 +1,41 @@
 require 'fastercsv'
 
-drs = DataResponse.find_by_sql("
-        SELECT data_responses.id AS data_response_id, organizations.id AS organization_id, organizations.name AS organization_name, users.email AS email
-        FROM data_responses
-        LEFT OUTER JOIN organizations ON data_responses.organization_id_responder = organizations.id
-        LEFT OUTER JOIN users ON organizations.id = users.organization_id
-        WHERE data_responses.currency IS NULL")
+drs = DataResponse.find(:all,
+                        :conditions => "data_responses.currency IS NULL",
+                        :include => [{:responding_organization => :users}, :projects]
+                       )
+
+max_projects = Project.find(:first,
+                        :select => 'COUNT(*) AS count',
+                        :joins => :data_response,
+                        :conditions => "data_responses.currency IS NULL",
+                        :group => 'data_response_id',
+                        :order => 'count DESC').count
 
 csv = FasterCSV.generate do |csv|
-  csv << ["organization_id", "organization_name", "data_response_id", "user_email"]
-  drs.group_by{|dr| dr.organization_id }.each do |organization, users|
-    row = [organization.id, users[0].try(:organization_name), users[0].try(:data_response_id)]
-    users.each do |user|
-      row << user.try(:email)
+  # header
+  row = ["organization_id", "organization_name", "data_response_id", "user_emails"]
+
+  max_projects.times.each do |i|
+    row << "Project name #{i}"
+    row << "Currency #{i}"
+  end
+
+  csv << row
+
+  # data
+  drs.each do |dr|
+    row = [dr.responding_organization.id,
+           dr.responding_organization.name,
+           dr.id,
+           dr.responding_organization.users.map{|u| u.email}.join(', ')
+          ]
+
+    dr.projects.each do |project|
+      row << "#{project.id} - #{project.name}"
+      row << project.currency
     end
+
     csv << row
   end
 end

@@ -43,8 +43,7 @@ describe DataResponse do
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
       dr.should_not be_valid
     end
-    
-    
+  
   end 
 
   describe "counter cache" do

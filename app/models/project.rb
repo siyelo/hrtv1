@@ -72,12 +72,12 @@ class Project < ActiveRecord::Base
     organization.name
   end
 
+  # Returns DR.currency if no project currency specified
   def currency
     c = read_attribute(:currency)
     return c if new_record?
     return c unless c.blank?
-    return data_response.currency unless data_response.nil?
-    return Money.default_currency.iso_code
+    return data_response.currency
   end
 
   # if these are needed to fix saving, then they are missing

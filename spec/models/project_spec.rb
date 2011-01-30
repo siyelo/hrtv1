@@ -190,5 +190,17 @@ describe Project do
     it_should_behave_like "location cloner"
     
   end
-
+  
+  describe 'Currency' do
+    it "should return the Data Response currency if no currency overridden" do
+      @data_response = Factory(:data_response, :currency => 'CHF')
+      @project       = Factory(:project, 
+                                :data_response => @data_response,
+                                :currency => nil)
+      @project.currency.should == 'CHF'
+      @project.currency = 'EUR'
+      @project.save
+      @project.currency.should == 'EUR'
+    end
+  end  
 end

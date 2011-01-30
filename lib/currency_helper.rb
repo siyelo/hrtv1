@@ -8,7 +8,7 @@
 
 module CurrencyHelper
   OTHER_PRIORITIES = [:rwf] #RWF is a prio currency
-  PRIORITY_CUTOFF = 3
+  PRIORITY_CUTOFF = 5
 
   ### jump through hoops to include this in the ActiveScaffold controllers
   def self.included( klass )

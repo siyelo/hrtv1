@@ -17,6 +17,9 @@ else
 end
 Money::Currency::TABLE[:usd][:priority] = 2
 Money::Currency::TABLE[:eur][:priority] = 3
+Money::Currency::TABLE[:chf][:priority] = 4
+Money::Currency::TABLE[:aud][:priority] = 11
+Money::Currency::TABLE[:gbp][:priority] = 11
 
 
 #  RWF rates dont seem to be available by default,

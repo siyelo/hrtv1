@@ -56,7 +56,7 @@ ruby_parser -v2.0.4
 rubyforge -v2.0.4
 selenium-webdriver -v0.0.24
 sexp_processor -v3.0.4
-shoulda -v2.11.1
+shoulda -v2.11.3
 sinatra -v1.0
 sqlite3-ruby -v1.3.1
 sys-uname -v0.8.4

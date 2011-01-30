@@ -27,6 +27,6 @@ describe Currency do
     @p.save
     @a.reload
     @a.save
-    @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS * BigDecimal("597.400")
+    @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS * (BigDecimal("1") / BigDecimal("597.400"))
   end
 end

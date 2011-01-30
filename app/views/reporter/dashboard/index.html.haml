@@ -9,25 +9,20 @@
       - if @data_responses.empty?
         %li You have not responded to any Data Requests yet.
       - @data_responses.each do |response|
-        %li.current_request
-          = link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
+        %li.current_request= link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
 
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Data Requests
   .dashboard_section
-    %ul.admin_dashboard
-      - if @data_requests_unfulfilled.empty?
-        %li You do not need to respond to any additional data requests right now.
-        %span.hint We will email you with any additional requests for data
-      - @data_requests_unfulfilled.each do |req|
-        - form_for DataResponse.new(:responding_organization => current_user.organization, :data_request => req), :url => data_responses_path, :method => :post do |form|
-          = form.hidden_field(:organization_id_responder)
-          = form.hidden_field(:data_request_id)
-          %li.unfulfilled_request
-            = req.title
-            = form.submit "Respond"
-
+    - if @data_requests_unfulfilled.empty?
+      %p You do not need to respond to any additional data requests right now.
+      %span.hint We will email you with any additional requests for data
+    - else
+      %ul.admin_dashboard
+        - @data_requests_unfulfilled.each do |req|
+          %li= req.title
+      %p= link_to "Start a new data request", new_data_response_path
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

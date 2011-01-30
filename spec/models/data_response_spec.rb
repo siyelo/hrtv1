@@ -14,7 +14,6 @@ describe DataResponse do
   end
 
   describe "custom date validations" do
-    subject { Factory(:data_response) }
     it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
     it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
     it { should_not allow_value('').for(:fiscal_year_start_date) }

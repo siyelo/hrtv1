@@ -12,12 +12,9 @@ class DataResponsesController < ApplicationController
 
   # POST /data_responses
   def create
-    req       = DataRequest.find(params[:data_response][:data_request_id])
-    currency  = params[:data_response][:currency]
-    org       = current_user.organization
-    @data_response = DataResponse.new(:data_request_id => req,
-                                      :responding_organization => org,
-                                      :currency => currency)
+    org             = current_user.organization
+    @data_response  = DataResponse.new(params[:data_response].merge(
+                                        :responding_organization => org))
     respond_to do |format|
       if @data_response.save
         flash[:notice] = "Successfully created your response"

@@ -11,25 +11,8 @@ class CodeAssignment < ActiveRecord::Base
   validates_presence_of :activity_id, :code_id
 
   ### Attributes
-  attr_accessible :activity, :code, :amount, :percentage,
-                  :cached_amount, :sum_of_children
-
-  # the _in_usd column needs to be synchronized across all objects regularly
-  # otherwise different exchange rates will apply since this field is
-  # normalized (using lates exchange rate) when each record is saved
-  attr_accessible :new_cached_amount_in_usd
-
-  ### ValueObject Attributes
-  composed_of :new_amount,
-              {:mapping => [%w(new_amount_cents cents),
-                            %w(new_amount_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
-  # cached amount could probably just reuse the amount currency
-  # but included here for simplicity
-  composed_of :new_cached_amount,
-              {:mapping => [%w(new_cached_amount_cents cents),
-                            %w(new_cached_amount_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
+  attr_accessible :activity, :code, :amount, :percentage, :sum_of_children,
+                  :cached_amount, :cached_amount_in_usd
 
   ### Named scopes
   named_scope :with_code_ids,
@@ -56,15 +39,17 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
   named_scope :select_for_pies,
-              :select => "code_assignments.code_id, SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
+              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd/100) AS value",
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
 
   ### Callbacks
-  before_save :update_money_amounts
+  before_save :update_cached_amount_in_usd
+
 
   ### Class Methods
+  #
 
   # assumes a format like "17,798,123.00"
   def self.currency_to_number(number_string, options ={})
@@ -108,6 +93,7 @@ class CodeAssignment < ActiveRecord::Base
 
 
   ### Instance Methods
+  #
 
   # override this in subclasses to make proportion work
   def activity_amount
@@ -149,7 +135,7 @@ class CodeAssignment < ActiveRecord::Base
 
   def self.sums_by_code_id(code_ids, coding_type, activities)
     CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
-      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.new_cached_amount_in_usd) AS value',
+      :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount_in_usd) AS value',
       :group => 'code_assignments.code_id, code_assignments.activity_id',
       :order => 'value DESC'
     ).group_by{|ca| ca.code_id}
@@ -187,37 +173,26 @@ class CodeAssignment < ActiveRecord::Base
 
   protected
 
-    #currency is still derived from the parent activities' project/DR
-    def update_money_amounts
-      if currency
-        zero = BigDecimal.new("0")
-        self.new_amount        = Money.from_bigdecimal(self.amount || zero, currency)
-        self.new_cached_amount = Money.from_bigdecimal(self.cached_amount || zero, currency)
-        self.new_cached_amount_in_usd = self.new_cached_amount.exchange_to(:USD).cents
-      end
+    # currency is derived from the parent activities' project/DR
+    def update_cached_amount_in_usd
+      rate = Money.default_bank.get_rate(self.currency, "USD")
+      self.cached_amount_in_usd = (self.cached_amount || 0) * rate
     end
-
 end
-
-
-
-
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id                         :integer         primary key
-#  activity_id                :integer         indexed => [code_id, type]
-#  code_id                    :integer         indexed, indexed => [activity_id, type]
-#  amount                     :decimal(, )
-#  type                       :string(255)     indexed => [activity_id, code_id]
-#  percentage                 :decimal(, )
-#  cached_amount              :decimal(, )     default(0.0)
-#  sum_of_children            :decimal(, )     default(0.0)
-#  new_amount_cents           :integer         default(0), not null
-#  new_amount_currency        :string(255)
-#  new_cached_amount_cents    :integer         default(0), not null
-#  new_cached_amount_currency :string(255)
-#  new_cached_amount_in_usd   :integer         default(0), not null
+#  id                   :integer         not null, primary key
+#  activity_id          :integer
+#  code_id              :integer         indexed
+#  amount               :decimal(, )
+#  type                 :string(255)
+#  percentage           :decimal(, )
+#  cached_amount        :decimal(, )     default(0.0)
+#  sum_of_children      :decimal(, )     default(0.0)
+#  created_at           :datetime
+#  updated_at           :datetime
+#  cached_amount_in_usd :decimal(, )     default(0.0)
 #
 

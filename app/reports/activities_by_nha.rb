@@ -88,7 +88,7 @@ class Reports::ActivitiesByNha
         row       = base_row.dup
 
         row << (ca.cached_amount || 0) * funding_source_ratio
-        row << Money.new((ca.new_cached_amount_in_usd * funding_source_ratio).to_i, :USD).exchange_to(:USD)
+        row << Money.new((ca.cached_amount_in_usd * funding_source_ratio).to_i, :USD).exchange_to(:USD)
         row << last_code.try(:type)
         row << last_code.try(:sub_account)
         row << last_code.try(:nha_code)

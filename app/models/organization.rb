@@ -57,14 +57,14 @@ class Organization < ActiveRecord::Base
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id
         LEFT OUTER JOIN (
-          SELECT ca1.activity_id, SUM(ca1.new_cached_amount_in_usd) as spent_sum
+          SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as spent_sum
           FROM code_assignments ca1
           WHERE ca1.type = '#{ca1_type}'
           AND ca1.code_id IN (#{code_ids})
           GROUP BY ca1.activity_id
         ) ca1 ON activities.id = ca1.activity_id
         LEFT OUTER JOIN (
-          SELECT ca2.activity_id, SUM(ca2.new_cached_amount_in_usd) as budget_sum
+          SELECT ca2.activity_id, SUM(ca2.cached_amount_in_usd) as budget_sum
           FROM code_assignments ca2
           WHERE ca2.type = '#{ca2_type}'
           AND ca2.code_id IN (#{code_ids})
@@ -93,7 +93,7 @@ class Organization < ActiveRecord::Base
     scope = self.scoped({
       :select => "organizations.id,
                   organizations.name,
-                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
+                  SUM(ca1.cached_amount_in_usd) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id

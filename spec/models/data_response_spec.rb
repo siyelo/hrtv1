@@ -103,4 +103,29 @@ describe DataResponse do
       DataResponse.in_progress.should include(@dr)
     end
   end
+  
+  describe 'Currency cache update' do
+    before :each do
+      Money.add_rate("CHF", "USD", 0.5)
+      Money.add_rate("EUR", "USD", 1.5)
+      @dr        = Factory(:data_response, :currency => 'CHF')
+      @project   = Factory(:project, :data_response => @dr,
+                            :currency => nil)
+      @activity  = Factory(:activity, :data_response => @dr,
+                            :projects => [@project],
+                            :budget => 1000, :spend => 2000)
+
+    end
+    
+    it "should update cached USD amounts on Activity and Code Assignment" do
+      @activity.budget_in_usd.should == 500
+      @activity.spend_in_usd.should == 1000
+      @dr.reload # dr.activities wont be updated otherwise
+      @dr.currency = 'EUR'
+      @dr.save
+      @activity.reload
+      @activity.budget_in_usd.should == 1500
+      @activity.spend_in_usd.should == 3000
+    end
+  end
 end

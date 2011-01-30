@@ -191,16 +191,35 @@ describe Project do
     
   end
   
-  describe 'Currency' do
-    it "should return the Data Response currency if no currency overridden" do
+  describe 'Currency cache update' do
+    before :each do
+      Money.add_rate("CHF", "USD", 0.5)
+      Money.add_rate("EUR", "USD", 1.5)
       @data_response = Factory(:data_response, :currency => 'CHF')
       @project       = Factory(:project, 
                                 :data_response => @data_response,
                                 :currency => nil)
+      @activity      = Factory(:activity, :projects => [@project],
+                                :budget => 1000, :spend => 2000)
+
+    end
+    
+    it "should return the Data Response currency if no currency overridden" do
       @project.currency.should == 'CHF'
       @project.currency = 'EUR'
       @project.save
       @project.currency.should == 'EUR'
     end
+    
+    it "should update cached USD amounts on Activity and Code Assignment" do
+      @activity.budget_in_usd.should == 500
+      @activity.spend_in_usd.should == 1000
+      @project.currency = 'EUR'
+      @project.save
+      @activity.reload
+      @activity.budget_in_usd.should == 1500
+      @activity.spend_in_usd.should == 3000
+    end
+    
   end  
 end

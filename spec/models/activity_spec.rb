@@ -4,7 +4,6 @@ describe Activity do
 
   describe "creating an activity record" do
     subject { Factory(:activity) }
-
     it { should be_valid }
     it { should have_many :sub_activities }
     it { should have_many :code_assignments }
@@ -250,67 +249,53 @@ describe Activity do
     end
 
     it "should update new_spend on creation" do
-      @a.new_spend.cents.should == 12345
-      @a.new_spend.currency.should == Money::Currency.new("USD")
-      @a.new_spend_in_usd.should == 12345
+      @a.spend_in_usd.should == 123.45
     end
 
     it "should update new_spend on update" do
       @a.spend = 456.78
       @a.save
-      @a.new_spend.cents.should == 45678
-      @a.new_spend.currency.should == Money::Currency.new("USD")
-      @a.new_spend_in_usd.should == 45678
+      @a.spend_in_usd.should == 456.78
     end
 
-    it "should update new_budget and new_budget_in_usd after currency change" do
+    it "should update new_budget and budget_in_usd after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 789.10
       @a.save
-      @a.new_spend.cents.should == 78910
-      @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should ==  132 #(789.10 * exchange_rate), rounded down
+      @a.spend_in_usd.should ==  132 #(789.10 * exchange_rate), rounded down
     end
 
-    it "should update new_budget and new_budget_in_usd after currency change with a big number" do
+    it "should update new_budget and budget_in_usd after currency change with a big number" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 198402000.0
       @a.save
-      @a.new_spend.cents.should == 19840200000
-      @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should == 33210914
+      @a.spend_in_usd.should == 33210914
     end
 
     it "should update new_budget on creation" do
-      @a.new_budget.cents.should == 12345
-      @a.new_budget.currency.should == Money::Currency.new("USD")
-      @a.new_budget_in_usd.should == 12345
+      @a.budget_in_usd.should == 123.45
     end
 
     it "should update new_budget on update" do
-      @a.budget = 456.78
+      @a.budget = 456.79
       @a.save
-      @a.new_budget.cents.should == 45678
-      @a.new_budget.currency.should == Money::Currency.new("USD")
-      @a.new_budget_in_usd.should == 45678
+      @a.budget_in_usd.should == 456.79
     end
 
-    it "should update new_budget and new_budget_in_usd after currency change" do
+    it "should update new_budget and budget_in_usd after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.budget = 789.10
       @a.save
-      @a.new_budget.cents.should == 78910
-      @a.new_budget.currency.should == Money::Currency.new("RWF")
-      @a.new_budget_in_usd.should ==  132
+      @a.budget_in_usd.should ==  132
     end
   end
 

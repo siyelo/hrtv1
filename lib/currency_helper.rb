@@ -47,6 +47,7 @@ module CurrencyHelper
     end
 
     protected
+
       def load_currencies_in_order
         hash = Money::Currency::TABLE
         prios = hash.inject([]) do |array, (id, attributes)|

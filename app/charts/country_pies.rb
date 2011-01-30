@@ -7,7 +7,7 @@ module Charts::CountryPies
       records = Organization.find :all,
         :select => "organizations.id,
                     organizations.name as my_name,
-                    SUM(ca1.new_cached_amount_in_usd/100) as value",
+                    SUM(ca1.cached_amount_in_usd/100) as value",
       :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
         INNER JOIN activities a1 ON dr1.id = a1.data_response_id
         INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id
@@ -24,7 +24,7 @@ module Charts::CountryPies
         :select => "code_assignments.id,
                     code_assignments.activity_id,
                     COALESCE(activities.name, activities.description) AS my_name,
-                    SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
+                    SUM(code_assignments.cached_amount_in_usd/100) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.id,
@@ -42,7 +42,7 @@ module Charts::CountryPies
       code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).find(:all,
               :select => "code_assignments.code_id,
                 codes.short_display as my_name,
-                SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
+                SUM(code_assignments.cached_amount_in_usd/100) AS value",
               :joins => :code,
               :group => 'code_assignments.code_id,
                          codes.short_display',

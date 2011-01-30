@@ -37,18 +37,6 @@ class Activity < ActiveRecord::Base
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved
 
-  ### ValueObject Attributes
-  composed_of :new_spend,
-              {:mapping => [%w(new_spend_cents cents),
-                            %w(new_spend_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
-  composed_of :new_budget,
-              {:mapping => [%w(new_budget_cents cents),
-                            %w(new_budget_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
-  # TODO - money objects for q1, q2 etc
-  #   GR: avoiding for now since these are hardly used and will likely be deprecated.
-
   ### Associations
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
@@ -71,7 +59,7 @@ class Activity < ActiveRecord::Base
   validate :approved_activity_cannot_be_changed
 
   ### Callbacks
-  before_save :update_money_amounts
+  before_save :update_cached_usd_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   after_create  :update_counter_cache
@@ -375,14 +363,14 @@ class Activity < ActiveRecord::Base
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
         LEFT OUTER JOIN (
-          SELECT ca1.activity_id, SUM(ca1.new_cached_amount_in_usd) as spent_sum
+          SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as spent_sum
           FROM code_assignments ca1
           WHERE ca1.type = '#{ca1_type}'
           AND ca1.code_id IN (#{code_ids})
           GROUP BY ca1.activity_id
         ) ca1 ON activities.id = ca1.activity_id
         LEFT OUTER JOIN (
-          SELECT ca2.activity_id, SUM(ca2.new_cached_amount_in_usd) as budget_sum
+          SELECT ca2.activity_id, SUM(ca2.cached_amount_in_usd) as budget_sum
           FROM code_assignments ca2
           WHERE ca2.type = '#{ca2_type}'
           AND ca2.code_id IN (#{code_ids})
@@ -416,7 +404,7 @@ class Activity < ActiveRecord::Base
                   activities.name,
                   activities.description,
                   organizations.name AS org_name,
-                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
+                  SUM(ca1.cached_amount_in_usd) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
@@ -518,25 +506,24 @@ class Activity < ActiveRecord::Base
     end
 
     #currency is still derived from the parent project or DR
-    def update_money_amounts
-      zero                   = BigDecimal.new("0")
-      self.new_budget        = Money.from_bigdecimal(self.budget || zero, self.currency)
-      self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
-      self.new_spend         = Money.from_bigdecimal(self.spend || zero, self.currency)
-      self.new_spend_in_usd  = self.new_spend.exchange_to(:USD).cents
+    def update_cached_usd_amounts
+      rate = Money.default_bank.get_rate(self.currency, "USD")
+      self.budget_in_usd = (self.budget || 0) * rate
+      self.spend_in_usd = (self.spend || 0) * rate
     end
 
 end
+
 
 
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
@@ -570,11 +557,7 @@ end
 #  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
-#  new_spend_cents                       :integer         default(0), not null
-#  new_spend_currency                    :string(255)
-#  new_spend_in_usd                      :integer         default(0), not null
-#  new_budget_cents                      :integer         default(0), not null
-#  new_budget_currency                   :string(255)
-#  new_budget_in_usd                     :integer         default(0), not null
+#  spend_in_usd                          :decimal(, )     default(0.0)
+#  budget_in_usd                         :decimal(, )     default(0.0)
 #
 

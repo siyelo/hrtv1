@@ -5,10 +5,10 @@ require 'validators'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
+  include CurrencyCacheHelpers
+  include BudgetSpendHelpers
 
   acts_as_stripper
-
-  # Commentable
   acts_as_commentable
 
   ### Associations
@@ -58,7 +58,10 @@ class Project < ActiveRecord::Base
 
   delegate :organization, :to => :data_response
 
-  include BudgetSpendHelpers
+  ### Callbacks
+  #
+  after_save :update_cached_currency_amounts
+
 
   ### Public methods
   #

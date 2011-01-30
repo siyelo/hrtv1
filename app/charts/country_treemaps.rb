@@ -34,7 +34,7 @@ module Charts::CountryTreemaps
 
         # format is my value, parent value, box_area_value, coloring_value
         code_assignments   = scope.find(:all,
-          :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.new_cached_amount_in_usd/100) AS value',
+          :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount_in_usd/100) AS value',
           :group => 'code_assignments.code_id, code_assignments.activity_id',
           :order => 'value DESC'
         ).group_by{|ca| ca.code_id}

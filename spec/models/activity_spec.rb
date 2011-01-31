@@ -239,74 +239,83 @@ describe Activity do
   describe "keeping Money amounts in-sync" do
     before :each do
       Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
-      @a        = Factory(:activity,
-                          :projects => [Factory(:project,
-                            :data_response => Factory(:data_response, :currency => 'USD'))])
+      @dr = Factory(:data_response, :currency => 'USD')
+      @a        = Factory(:activity, :data_response => @dr,  
+                          :projects => [Factory(:project,:data_response => @dr)])
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save
       @a.reload
     end
 
-    it "should update new_spend on creation" do
+    it "should update spend in USD on creation" do
       @a.spend_in_usd.should == 123.45
     end
 
-    it "should update new_spend on update" do
+    it "should update spend in USD on update" do
       @a.spend = 456.78
       @a.save
       @a.spend_in_usd.should == 456.78
     end
 
-    it "should update new_budget and budget_in_usd after currency change" do
+    it "should update spend_in_USD after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 789.10
       @a.save
-      @a.spend_in_usd.should ==  132 #(789.10 * exchange_rate), rounded down
+      @a.spend_in_usd.should ==  789.10 * (1/597.400)
     end
 
-    it "should update new_budget and budget_in_usd after currency change with a big number" do
+    it "should update spend_in_USD after currency change with a big number" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 198402000.0
       @a.save
-      @a.spend_in_usd.should == 33210914
+      @a.spend_in_usd.should == 332109.139604954804151322397053900324284
     end
 
     it "should update new_budget on creation" do
       @a.budget_in_usd.should == 123.45
     end
 
-    it "should update new_budget on update" do
+    it "should update budget_in_usd on update" do
       @a.budget = 456.79
       @a.save
       @a.budget_in_usd.should == 456.79
     end
 
-    it "should update new_budget and budget_in_usd after currency change" do
+    it "should update budget_in_usd after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.budget = 789.10
       @a.save
-      @a.budget_in_usd.should ==  132
+      @a.budget_in_usd.should ==  789.10 * (1/597.400)
     end
+    
+    it "should set cached amounts in USD to 0 if bad data means currency is nil" do
+      d = @a.data_response
+      d.currency = nil
+      d.save(false)
+      @a.reload
+      @a.budget = 789.10
+      @a.save
+      @a.currency.should == nil
+      @a.budget_in_usd.should == 0
+    end
+    
   end
 
-  # TODO: deprecate in favour of Money objects (cents & currencies coupled on each amount field)
   describe "currency convenience lookups on DR/Project" do
     before :each do
-      @a  = Factory(:activity)
-      @dr = @a.data_response
-      @dr.currency = 'RWF'
-      @dr.save
-      @a.reload
+      @dr = Factory(:data_response, :currency => 'RWF')
+      @a  = Factory(:activity, :data_response => @dr,  
+                          :projects => [Factory(:project,:data_response => @dr)])
     end
 
     it "should return the data response's currency" do

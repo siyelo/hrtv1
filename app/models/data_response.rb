@@ -7,7 +7,6 @@ class DataResponse < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
-  #
   has_many :activities, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
@@ -25,7 +24,6 @@ class DataResponse < ActiveRecord::Base
   belongs_to  :data_request
 
   ### Validations
-  #
   validates_presence_of :data_request_id
   validates_presence_of :organization_id_responder
   validates_presence_of :currency
@@ -34,7 +32,6 @@ class DataResponse < ActiveRecord::Base
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date."
 
   ### Named scopes
-  #
   named_scope :available_to, lambda { |current_user|
     if current_user.nil?
       {:conditions => {:id => -1}} #return no records
@@ -139,10 +136,7 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
-
 end
-
-
 
 # == Schema Information
 #

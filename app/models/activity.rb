@@ -126,9 +126,7 @@ class Activity < ActiveRecord::Base
   end
 
   def currency
-    return project.currency unless project.nil? # TODO: change project to be always present, thus simplifying this logic.
-    return data_response.currency unless data_response.nil?
-    Money.default_currency.iso_code
+    self.project.nil? ? nil : self.project.currency
   end
 
   def organization
@@ -507,7 +505,7 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      rate = Money.default_bank.get_rate(self.currency, "USD")
+      rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
       self.budget_in_usd = (self.budget || 0) * rate
       self.spend_in_usd = (self.spend || 0) * rate
     end

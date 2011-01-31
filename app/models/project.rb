@@ -12,7 +12,6 @@ class Project < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
-  #
   has_and_belongs_to_many :activities
   has_and_belongs_to_many :locations
 
@@ -32,7 +31,6 @@ class Project < ActiveRecord::Base
            :source => :to
 
   ### Named scopes
-  #
   named_scope :available_to, lambda { |current_user|
     if current_user.role?(:admin)
       {}
@@ -42,7 +40,6 @@ class Project < ActiveRecord::Base
   }
 
   ### Validations
-  #
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -52,20 +49,17 @@ class Project < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
-  # Attributes
+  ### Attributes
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
                   :start_date, :end_date, :currency, :data_response
 
   delegate :organization, :to => :data_response
 
   ### Callbacks
-  #
   after_save :update_cached_currency_amounts
-
 
   ### Public methods
   #
-
   def implementers
     providers
   end

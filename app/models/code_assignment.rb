@@ -47,6 +47,8 @@ class CodeAssignment < ActiveRecord::Base
   ### Callbacks
   before_save :update_cached_amount_in_usd
 
+  ### Delegates
+  delegate :data_response, :to => :activity
 
   ### Class Methods
   #
@@ -175,10 +177,11 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activities' project/DR
     def update_cached_amount_in_usd
-      rate = Money.default_bank.get_rate(self.currency, "USD")
+      rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
       self.cached_amount_in_usd = (self.cached_amount || 0) * rate
     end
 end
+
 # == Schema Information
 #
 # Table name: code_assignments

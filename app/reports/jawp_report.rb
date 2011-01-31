@@ -7,7 +7,7 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                   :conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])

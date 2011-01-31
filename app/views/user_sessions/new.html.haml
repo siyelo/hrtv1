@@ -1,5 +1,16 @@
 - title "Sign in"
 
 .sign_in_form
-  %h3 Sign in
-  = render :partial => 'login_form'
+  %h3
+    Sign in
+    = link_to "(forgot password)", new_password_reset_path
+
+  - semantic_form_for @user_session, :url => user_session_path do |f|
+    - f.inputs do
+      = f.input :username, :label => "Username or Email"
+      = f.input :password
+      = f.input :remember_me, :as => :boolean, :required => false
+
+    - f.buttons do
+      = f.commit_button :label => "Sign in"
+

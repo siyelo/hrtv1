@@ -1,5 +1,6 @@
 module BudgetSpendHelpers
 
+  # add spend_gor_qX methods here
   def spend
     if total_quarterly_spending_w_shift
       total_quarterly_spending_w_shift
@@ -27,6 +28,7 @@ module BudgetSpendHelpers
     end
   end
 
+  # add budget_gor_qX methods here
   def budget
     if total_quarterly_budget_w_shift
       total_quarterly_budget_w_shift

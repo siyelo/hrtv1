@@ -6,8 +6,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resource  :user_session
   map.login     'login', :controller => 'user_sessions', :action => 'new'
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
+  map.resources :password_resets
 
-  map.resources :data_responses, :member => { :review => :get, :submit => :put}
+  map.resources :data_responses,
+                  :member => {:review => :get,
+                              :submit => :put}
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   # STATIC PAGES

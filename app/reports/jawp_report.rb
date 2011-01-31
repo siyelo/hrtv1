@@ -7,7 +7,7 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                   #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])
@@ -27,6 +27,8 @@ class Reports::JawpReport
 
   private
 
+  # GN: change amount methods here to budget_gor_qX 
+  # as defined in lib/BudgetSpendHelpers.rb & mixed into activity
   def build_rows(csv, activity)
     if @is_budget
       amount_q1             = activity.budget_q1
@@ -104,6 +106,14 @@ class Reports::JawpReport
                 get_ratio(amount_total, cost_category_coding.cached_amount) *
                 get_ratio(funding_sources_total, funding_source_amount)
 
+              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s 
+
+              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s 
+
+              #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
+
+              #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
+               
               row << funding_source.from.name
               row << funding_source.from.type
               row << amount

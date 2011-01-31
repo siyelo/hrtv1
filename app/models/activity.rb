@@ -24,7 +24,6 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include ActAsDataElement
-  include NumberHelper #TODO: deprecate with Money methods
   include BudgetSpendHelpers #TODO: deprecate with Money methods
   acts_as_commentable
   include MoneyHelper
@@ -37,18 +36,6 @@ class Activity < ActiveRecord::Base
                   :text_for_targets, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :approved
-
-  ### ValueObject Attributes
-  composed_of :new_spend,
-              {:mapping => [%w(new_spend_cents cents),
-                            %w(new_spend_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
-  composed_of :new_budget,
-              {:mapping => [%w(new_budget_cents cents),
-                            %w(new_budget_currency currency_as_string)]
-              }.merge(MONEY_OPTS)
-  # TODO - money objects for q1, q2 etc
-  #   GR: avoiding for now since these are hardly used and will likely be deprecated.
 
   ### Associations
   has_and_belongs_to_many :projects
@@ -72,7 +59,7 @@ class Activity < ActiveRecord::Base
   validate :approved_activity_cannot_be_changed
 
   ### Callbacks
-  before_save :update_money_amounts
+  before_save :update_cached_usd_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   after_create  :update_counter_cache
@@ -96,7 +83,7 @@ class Activity < ActiveRecord::Base
       LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
     :conditions => ["activities.provider_id = data_responses.organization_id_responder
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"],
-    :group => 'activities.id'
+    :group => 'activities.id, activities.name'
   }
 
   ### Public Class Methods
@@ -139,9 +126,7 @@ class Activity < ActiveRecord::Base
   end
 
   def currency
-    return project.currency unless project.nil? # TODO: change project to be always present, thus simplifying this logic.
-    return data_response.currency unless data_response.nil?
-    Money.default_currency.iso_code
+    self.project.nil? ? nil : self.project.currency
   end
 
   def organization
@@ -309,18 +294,14 @@ class Activity < ActiveRecord::Base
       # copy across the ratio, not just the amount
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
-        spend_ca      = ca.clone
-        spend_ca.type = spend_type
-        if spend
-          if budget && budget > 0 && ca.calculated_amount > 0
-            spend_ca.amount         = spend * ca.amount / budget if ca.amount
-            spend_ca.cached_amount  = spend * ca.calculated_amount / budget
-          elsif ca.percentage
-            spend_ca.percentage     = ca.percentage
-            spend_ca.cached_amount  = ca.percentage * spend / 100
-          end
+        if spend && spend > 0 && budget && budget > 0 && ca.cached_amount && ca.cached_amount > 0
+          spend_ca                = ca.clone
+          spend_ca.type           = spend_type
+          spend_ca.amount         = spend * ca.amount / budget if ca.amount
+          spend_ca.percentage     = ca.percentage if ca.percentage
+          spend_ca.cached_amount  = spend * ca.calculated_amount / budget
+          self.code_assignments << spend_ca
         end
-        self.code_assignments << spend_ca
       end
       self.update_classified_amount_cache(spend_type_klass)
     end
@@ -336,25 +317,6 @@ class Activity < ActiveRecord::Base
     coded +=1 if spend_by_district?
     coded +=1 if spend_by_cost_category?
     progress = (coded.to_f / 6) * 100
-  end
-
-  def treemap(chart_type)
-    case chart_type
-    when 'budget_coding'
-      coding_treemap(CodingBudget, budget)
-    when 'budget_districts'
-      districts_treemap(coding_budget_district, budget)
-    when 'budget_cost_categorization'
-      coding_treemap(CodingBudgetCostCategorization, budget)
-    when 'spend_coding'
-      coding_treemap(CodingSpend, spend)
-    when 'spend_districts'
-      districts_treemap(coding_spend_district, spend)
-    when 'spend_cost_categorization'
-      coding_treemap(CodingSpendCostCategorization, spend)
-    else
-      raise "Wrong chart type".to_yaml
-    end
   end
 
   def deep_clone
@@ -399,14 +361,14 @@ class Activity < ActiveRecord::Base
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
         LEFT OUTER JOIN (
-          SELECT ca1.activity_id, SUM(ca1.new_cached_amount_in_usd) as spent_sum
+          SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as spent_sum
           FROM code_assignments ca1
           WHERE ca1.type = '#{ca1_type}'
           AND ca1.code_id IN (#{code_ids})
           GROUP BY ca1.activity_id
         ) ca1 ON activities.id = ca1.activity_id
         LEFT OUTER JOIN (
-          SELECT ca2.activity_id, SUM(ca2.new_cached_amount_in_usd) as budget_sum
+          SELECT ca2.activity_id, SUM(ca2.cached_amount_in_usd) as budget_sum
           FROM code_assignments ca2
           WHERE ca2.type = '#{ca2_type}'
           AND ca2.code_id IN (#{code_ids})
@@ -440,7 +402,7 @@ class Activity < ActiveRecord::Base
                   activities.name,
                   activities.description,
                   organizations.name AS org_name,
-                  SUM(ca1.new_cached_amount_in_usd) as spent_sum",
+                  SUM(ca1.cached_amount_in_usd) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
@@ -475,14 +437,6 @@ class Activity < ActiveRecord::Base
       self.data_response.activities_count = data_response.activities.only_simple.count
       self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
       self.data_response.save(false)
-    end
-
-    def get_sum(code_roots, assignments)
-      sum = 0
-      code_roots.each do |code|
-        sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
-      end
-      sum
     end
 
     def set_classified_amount_cache(type)
@@ -529,11 +483,13 @@ class Activity < ActiveRecord::Base
 
     # removes code assignments for non-existing locations for this activity
     def remove_district_codings
-      activity_id = self.id
-      location_ids = locations.map(&:id)
+      activity_id           = self.id
+      location_ids          = locations.map(&:id)
       code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
       deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                                {:activity_id => activity_id, :code_assignment_types => code_assignment_types.map{|ca| ca.to_s}, :location_ids => location_ids}])
+                        {:activity_id => activity_id,
+                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
+                         :location_ids => location_ids}])
 
       # only if there are deleted code assignments, update the district cached amounts
       if deleted_count > 0
@@ -547,55 +503,14 @@ class Activity < ActiveRecord::Base
       errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
     end
 
-    def coding_treemap(type, total_amount)
-      code_roots  = type.available_codes(self)
-      assignments = type.with_activity(self).all.map_to_hash{ |b| {b.code_id => b} }
-
-      data_rows = []
-      treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
-      data_rows << [treemap_root, nil, 0, 0] #TODO amount
-
-      code_roots.each do |code|
-        build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
-      end
-      return data_rows
-    end
-
-    def build_treemap_rows(data_rows, code, parent_name, total_amount, assignments)
-      if assignments.has_key?(code.id)
-        percentage  = total_amount ? (assignments[code.id].cached_amount.to_f / total_amount * 100).round(0) : "?"
-        label       = "#{percentage}%: #{code.to_s_prefer_official}"
-        data_rows << [label, parent_name, assignments[code.id].cached_amount, assignments[code.id].cached_amount]
-        unless code.leaf?
-          code.children.each do |child|
-            build_treemap_rows(data_rows, child, label, total_amount, assignments)
-          end
-        end
-      end
-    end
-
-    def districts_treemap(code_assignments, total_amount)
-      data_rows = []
-      treemap_root = "#{code_assignments.inject(0){|sum, d| sum + d.cached_amount}}: All Codes"
-      data_rows << [treemap_root, nil, 0, 0]
-      code_assignments.each do |assignment|
-        percentage  = total_amount ? (assignment.cached_amount / total_amount * 100).round(0) : "?"
-        label       = "#{percentage}%: #{assignment.code.to_s_prefer_official}"
-        data_rows << [label, treemap_root, assignment.cached_amount, assignment.cached_amount]
-      end
-      data_rows
-    end
-
     #currency is still derived from the parent project or DR
-    def update_money_amounts
-      zero = BigDecimal.new("0")
-      self.new_budget = Money.from_bigdecimal(self.budget || zero, self.currency)
-      self.new_budget_in_usd = self.new_budget.exchange_to(:USD).cents
-      self.new_spend = Money.from_bigdecimal(self.spend || zero, self.currency)
-      self.new_spend_in_usd = self.new_spend.exchange_to(:USD).cents
+    def update_cached_usd_amounts
+      rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
+      self.budget_in_usd = (self.budget || 0) * rate
+      self.spend_in_usd = (self.spend || 0) * rate
     end
-
 end
+
 
 # == Schema Information
 #
@@ -638,11 +553,7 @@ end
 #  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
-#  new_spend_cents                       :integer         default(0), not null
-#  new_spend_currency                    :string(255)
-#  new_spend_in_usd                      :integer         default(0), not null
-#  new_budget_cents                      :integer         default(0), not null
-#  new_budget_currency                   :string(255)
-#  new_budget_in_usd                     :integer         default(0), not null
+#  spend_in_usd                          :decimal(, )     default(0.0)
+#  budget_in_usd                         :decimal(, )     default(0.0)
 #
 

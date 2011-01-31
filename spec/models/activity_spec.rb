@@ -1,10 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-  
+
   describe "creating an activity record" do
     subject { Factory(:activity) }
-    
     it { should be_valid }
     it { should have_many :sub_activities }
     it { should have_many :code_assignments }
@@ -14,17 +13,17 @@ describe Activity do
     it { should have_and_belong_to_many :projects }
     it { should belong_to :provider }
   end
-  
+
   describe "assigning an activity to a project" do
     it "should assign to a project" do
       project      = Factory(:project)
       activity     = Factory(:activity)
       project.activities << activity
       project.activities.should have(1).item
-      project.activities.first.should == activity      
+      project.activities.first.should == activity
     end
   end
-  
+
   describe "commenting on an activity" do
     it "should assign to an activity" do
       activity     = Factory(:activity)
@@ -33,24 +32,24 @@ describe Activity do
       activity.comments.first.should == comment
     end
   end
-  
+
   describe "can show who we provided money to (providers)" do
     context "on a single project" do
-      it "should have at least 1 provider" do  
+      it "should have at least 1 provider" do
         our_org      = Factory(:organization)
         other_org    = Factory(:organization)
         project      = Factory(:project)
-        flow         = Factory(:funding_flow, :from => our_org, 
-                                              :to => other_org, 
+        flow         = Factory(:funding_flow, :from => our_org,
+                                              :to => other_org,
                                               :project => project,
                                               :data_response => project.data_response)
-        activity     = Factory(:activity, { :projects => [project], 
+        activity     = Factory(:activity, { :projects => [project],
                                             :provider => other_org })
         activity.provider.should == other_org # duh
-        activity.projects.should have(1).project         
+        activity.projects.should have(1).project
       end
     end
-    
+
     context "across multiple projects" do
       it "should allow assignment to multiple projects" do
         # this will be removed with https://www.pivotaltracker.com/story/show/5530048
@@ -58,7 +57,7 @@ describe Activity do
       end
     end
   end
-  
+
   it "cannot be edited once approved" do
     a = Factory(:activity)
     a.approved.should == nil
@@ -67,16 +66,16 @@ describe Activity do
     a.spend = 2000
     a.save.should == false
   end
-  
+
   describe "finding total spend for strategic objective codes" do
     it "return nothing if no codes assigned to HSSP spend" do
-      pending #https://www.pivotaltracker.com/story/show/6115671  
+      pending #https://www.pivotaltracker.com/story/show/6115671
       activity     = Factory(:activity)
       activity.spend_stratobj_coding.should == []
     end
   end
 
-  describe "use budget for expenditure codings" do
+  describe "use budget for spent codings" do
     def copy_budget_to_expenditure_check(activity, actual_type, expected_type)
       activity.copy_budget_codings_to_spend([actual_type])
       code_assignments = activity.code_assignments
@@ -85,28 +84,53 @@ describe Activity do
       code_assignments[1].class.to_s.should == expected_type
     end
 
+    def dont_copy_budget_to_expenditure_check(activity, actual_type, expected_type)
+      activity.copy_budget_codings_to_spend([actual_type])
+      code_assignments = activity.code_assignments
+      code_assignments.length.should == 1
+      code_assignments[0].class.to_s.should == actual_type
+    end
+
     def copy_budget_to_expenditure_check_cached_amount(activity, type, expected_cached_amount)
       activity.copy_budget_codings_to_spend([type])
       code_assignments = activity.code_assignments
       code_assignments[1].cached_amount.should == expected_cached_amount
     end
 
-    it "copies budget for expenditure codings for CodingBudget" do
+    it "copies budget for spent codings for CodingBudget" do
       activity = Factory(:activity)
       Factory(:coding_budget, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "copies budget for expenditure codings for CodingBudgetDistrict" do
+    it "copies budget for spent codings for CodingBudgetDistrict" do
       activity = Factory(:activity)
       Factory(:coding_budget_district, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetDistrict', 'CodingSpendDistrict')
     end
 
-    it "copies budget for expenditure codings for CodingBudgetCostCategorization" do
+    it "copies budget for spent codings for CodingBudgetCostCategorization" do
       activity = Factory(:activity)
       Factory(:coding_budget_cost_categorization, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
+    end
+
+    it "does not copy budget to spent when spent is nil" do
+      activity = Factory(:activity, :spend => nil)
+      Factory(:coding_budget, :activity => activity)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+    end
+
+    it "does not copy budget to spent when spent is 0" do
+      activity = Factory(:activity, :spend => 0)
+      Factory(:coding_budget, :activity => activity)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+    end
+
+    it "does not copy budget to spent and budget are present, but cached_amount is nil" do
+      activity = Factory(:activity)
+      Factory(:coding_budget, :activity => activity, :cached_amount => nil)
+      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
     it "deletes existing Spend codes before copying" do
@@ -116,37 +140,9 @@ describe Activity do
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "calculates cached_amount when spend is nil" do
-      activity = Factory(:activity, :spend => nil)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when spend is 0" do
-      activity = Factory(:activity, :spend => 0)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when budget is nil" do
-      activity = Factory(:activity, :budget => nil)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates cached_amount when budget is 0" do
-      activity = Factory(:activity, :budget => 0)
-      Factory(:coding_budget, :activity => activity)
-      expected_cached_value = 0
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
     it "calculates spend cached_amount when there is calculated cache amount for budget" do
       activity = Factory(:activity, :budget => 100, :spend => 50)
-      ca = Factory(:coding_budget, :activity => activity, :cached_amount => 100)
+      ca = Factory(:coding_budget, :activity => activity, :cached_amount => 100, :amount => 100)
       expected_cached_value = 50
       copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
     end
@@ -182,7 +178,7 @@ describe Activity do
       code_assignments[1].percentage.should == 50
     end
   end
-  
+
   it "should save a null object without complaining" do
     a = Activity.new
     lambda{a.save(false)}.should_not raise_error
@@ -206,13 +202,13 @@ describe Activity do
       activity.reload.sub_activities_count.should == 2
     end
   end
-  
+
   describe "deep cloning" do
     before :each do
       @activity = Factory(:activity)
       @original = @activity #for shared examples
     end
-    
+
     it "should clone associated code assignments" do
       @ca = Factory(:code_assignment, :activity => @activity)
       save_and_deep_clone
@@ -222,115 +218,110 @@ describe Activity do
       @clone.code_assignments.first.activity.should_not == @activity
       @clone.code_assignments.first.activity.should == @clone
     end
-    
+
     it "should clone organizations" do
       @orgs = [Factory(:organization), Factory(:organization)]
       @activity.organizations << @orgs
       save_and_deep_clone
       @clone.organizations.should == @orgs
     end
-    
+
     it "should clone beneficiaries" do
       @benefs = [Factory(:beneficiary), Factory(:beneficiary)]
       @activity.beneficiaries << @benefs
       save_and_deep_clone
       @clone.beneficiaries.should == @benefs
     end
-    
+
     it_should_behave_like "location cloner"
   end
 
   describe "keeping Money amounts in-sync" do
     before :each do
       Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
-      @a        = Factory(:activity,
-                          :projects => [Factory(:project,
-                            :data_response => Factory(:data_response, :currency => 'USD'))])
+      @dr = Factory(:data_response, :currency => 'USD')
+      @a        = Factory(:activity, :data_response => @dr,  
+                          :projects => [Factory(:project,:data_response => @dr)])
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save
       @a.reload
     end
 
-    it "should update new_spend on creation" do
-      @a.new_spend.cents.should == 12345
-      @a.new_spend.currency.should == Money::Currency.new("USD")
-      @a.new_spend_in_usd.should == 12345      
+    it "should update spend in USD on creation" do
+      @a.spend_in_usd.should == 123.45
     end
-    
-    it "should update new_spend on update" do   
+
+    it "should update spend in USD on update" do
       @a.spend = 456.78
       @a.save
-      @a.new_spend.cents.should == 45678
-      @a.new_spend.currency.should == Money::Currency.new("USD")
-      @a.new_spend_in_usd.should == 45678
+      @a.spend_in_usd.should == 456.78
     end
-    
-    it "should update new_budget and new_budget_in_usd after currency change" do   
+
+    it "should update spend_in_USD after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 789.10
       @a.save
-      @a.new_spend.cents.should == 78910
-      @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should ==  132 #(789.10 * exchange_rate), rounded down
+      @a.spend_in_usd.should ==  789.10 * (1/597.400)
     end
-    
-    it "should update new_budget and new_budget_in_usd after currency change with a big number" do   
+
+    it "should update spend_in_USD after currency change with a big number" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.spend = 198402000.0
       @a.save
-      @a.new_spend.cents.should == 19840200000
-      @a.new_spend.currency.should == Money::Currency.new("RWF")
-      @a.new_spend_in_usd.should == 33210914
+      @a.spend_in_usd.should == 332109.139604954804151322397053900324284
     end
-        
-    it "should update new_budget on creation" do   
-      @a.new_budget.cents.should == 12345
-      @a.new_budget.currency.should == Money::Currency.new("USD")
-      @a.new_budget_in_usd.should == 12345
+
+    it "should update new_budget on creation" do
+      @a.budget_in_usd.should == 123.45
     end
-    
-    it "should update new_budget on update" do   
-      @a.budget = 456.78
+
+    it "should update budget_in_usd on update" do
+      @a.budget = 456.79
       @a.save
-      @a.new_budget.cents.should == 45678
-      @a.new_budget.currency.should == Money::Currency.new("USD")
-      @a.new_budget_in_usd.should == 45678
+      @a.budget_in_usd.should == 456.79
     end
-    
-    it "should update new_budget and new_budget_in_usd after currency change" do   
+
+    it "should update budget_in_usd after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
       @a.reload
       @a.budget = 789.10
       @a.save
-      @a.new_budget.cents.should == 78910
-      @a.new_budget.currency.should == Money::Currency.new("RWF")
-      @a.new_budget_in_usd.should ==  132
-    end    
-  end
-  
-  # TODO: deprecate in favour of Money objects (cents & currencies coupled on each amount field)
-  describe "currency convenience lookups on DR/Project" do
-    before :each do
-      @a  = Factory(:activity)
-      @dr = @a.data_response
-      @dr.currency = 'RWF'
-      @dr.save
-      @a.reload
+      @a.budget_in_usd.should ==  789.10 * (1/597.400)
     end
     
+    it "should set cached amounts in USD to 0 if bad data means currency is nil" do
+      d = @a.data_response
+      d.currency = nil
+      d.save(false)
+      @a.reload
+      @a.budget = 789.10
+      @a.save
+      @a.currency.should == nil
+      @a.budget_in_usd.should == 0
+    end
+    
+  end
+
+  describe "currency convenience lookups on DR/Project" do
+    before :each do
+      @dr = Factory(:data_response, :currency => 'RWF')
+      @a  = Factory(:activity, :data_response => @dr,  
+                          :projects => [Factory(:project,:data_response => @dr)])
+    end
+
     it "should return the data response's currency" do
       @a.currency.should == "RWF"
     end
-  
+
     it "should return the data response's currency, unless the project overrides it" do
       p = @a.project
       p.currency = 'CHF'

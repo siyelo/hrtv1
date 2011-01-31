@@ -4,8 +4,8 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
     @activities        = Activity.top_by_spent_and_budget({
                          :per_page => 25, :page => params[:page], :sort => params[:sort],
                          :code_ids => Mtef.roots.map(&:id), :type => 'country'})
-    @spent_pie_values  = CountryPies::activities_pie("CodingSpend")
-    @budget_pie_values = CountryPies::activities_pie("CodingBudget")
+    @spent_pie_values  = Charts::CountryPies::activities_pie("CodingSpend")
+    @budget_pie_values = Charts::CountryPies::activities_pie("CodingBudget")
   end
 
   def show
@@ -14,11 +14,11 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
     code_type     = get_code_type_and_initialize(params[:code_type])
 
     if @treemap
-      @code_spent_values   = CountryTreemaps::treemap(code_type, [@activity], true)
-      @code_budget_values  = CountryTreemaps::treemap(code_type, [@activity], false)
+      @code_spent_values   = Charts::CountryTreemaps::treemap(code_type, [@activity], true)
+      @code_budget_values  = Charts::CountryTreemaps::treemap(code_type, [@activity], false)
     else
-      @code_spent_values  = CountryPies::codes_for_activities_pie(code_type, [@activity], true)
-      @code_budget_values = CountryPies::codes_for_activities_pie(code_type, [@activity], false)
+      @code_spent_values  = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], true)
+      @code_budget_values = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], false)
     end
 
     @charts_loaded  = @code_spent_values && @code_budget_values

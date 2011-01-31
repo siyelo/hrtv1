@@ -1,6 +1,6 @@
 config.gem 'rspec',            :lib => false, :version => '>= 1.3.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec'))
 config.gem 'rspec-rails',      :lib => false, :version => '>= 1.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
-config.gem 'shoulda'
+config.gem 'shoulda',          :lib => false, :version => '>= 2.11.3'
 config.gem "factory_girl",     :lib => false, :version => '=1.2.4'
 
 config.cache_classes                                 = true

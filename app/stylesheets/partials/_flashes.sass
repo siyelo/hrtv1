@@ -2,37 +2,32 @@
   +border-radius(5px)
   +box-shadow($very-light-grey, 0, 2px, 5px)
   margin: 0 auto
-  padding-bottom: 1em
+  padding-bottom: 5px
   width: 75%
   #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-    padding: 15px 10px 15px 65px
+    padding: 15px 10px 15px 25px
     background-position: 15px 7px
     background-repeat: no-repeat
     margin-bottom: 5px
   #success, #info, .success, .info
     border-color: #99cc99
     color: #4f8a10
-    background-image: url(/images/alertsuccess_icon.png)
     background-color: #dff2bf
   #notice, .notice
     border-color: #99cc99
     color: #00529b
-    background-image: url(/images/alertinfo_icon.png)
     background-color: #bde5f8
   #warning, .warning
     border-color: #99cc99
     color: #9f6000
-    background-image: url(/images/alertwarning_icon.png)
     background-color: #feefb3
   #validation_error, .validation_error
     border-color: #cc9999
     color: #d63301
-    background-image: url(/images/alertvalidation_error_icon.png)
     background-color: #ffccba
   #error, .error
     border-color: #cc9999
     color: #d8000c
-    background-image: url(/images/alerterror_icon.png)
     background-color: #ffbaba
   a:hover
     color: $dark-blue !important
@@ -47,15 +42,13 @@
   div
     background-position: 15px 7px
     background-repeat: no-repeat
-    padding: 15px 10px 15px 65px
+    padding: 15px 10px 15px 25px
     margin-bottom: 5px
     &.error
-      background-image: url(/images/alerterror_icon.png)
       background-color: #ffbaba
       border-color: #cc9999
       color: #d8000c
     &.notice
-      background-image: url(/images/alertinfo_icon.png)
       background-color: #bde5f8
       border-color: #99cc99
       color: #00529b

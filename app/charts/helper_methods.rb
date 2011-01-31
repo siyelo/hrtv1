@@ -1,4 +1,4 @@
-module HelperMethods
+module Charts::HelperMethods
   MTEF_CODE_LEVEL = 0 # users may not code activities to level 1 of MTEF codes
                       # so use level 0 for completeness
 
@@ -65,7 +65,7 @@ module HelperMethods
       :select => "codes.id as code_id,
                   codes.parent_id as parent_id,
                   codes.short_display AS my_name,
-                  SUM(code_assignments.new_cached_amount_in_usd/100) AS value",
+                  SUM(code_assignments.cached_amount_in_usd/100) AS value",
       :conditions => ["codes.type = ?
         AND code_assignments.type = ?
         AND activities.id IN (?)",
@@ -85,4 +85,20 @@ module HelperMethods
     code_assignments = code_assignments.reject{|ca| parent_ids.include?(ca.code_id)}
   end
 
+  def get_virtual_codes(activities, virtual_type)
+    raise 1.to_yaml
+    codes = []
+    assignments = activities.collect{|a| a.send(virtual_type)}.flatten
+    assignments.group_by {|a| a.code}.each do |code, array|
+      row = [code.short_display, array.inject(0) {|sum, v| sum + v.cached_amount}]
+      def row.value
+        self[1]
+      end
+      def row.name
+        self[0]
+      end
+      codes << row
+    end
+    codes
+  end
 end

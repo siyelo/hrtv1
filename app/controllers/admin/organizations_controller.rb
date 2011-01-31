@@ -35,13 +35,13 @@ class Admin::OrganizationsController < ActiveScaffoldController
   end
 
   ### Public Class Methods
-
+  #
   def self.create_columns
     @@create_columns
   end
 
   ### Public Instance Methods
-
+  #
   def show
     @organization = Organization.find(params[:id])
 

@@ -1,6 +1,6 @@
-module DistrictTreemaps
+module Charts::DistrictTreemaps
   extend NumberHelper
-  extend HelperMethods
+  extend Charts::HelperMethods
 
   class << self
     def treemap(location, code_type, activities, is_spent)

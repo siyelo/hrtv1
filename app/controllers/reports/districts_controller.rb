@@ -6,11 +6,11 @@ class Reports::DistrictsController < Reports::BaseController
     #raise @locations.map(&:id).to_yaml
     @total_population = District.sum(:population)
     @spent_codings = CodingSpendDistrict.find(:all,
-                       :select => "code_id, SUM(new_cached_amount_in_usd) AS total",
+                       :select => "code_id, SUM(cached_amount_in_usd) AS total",
                        :conditions => ["code_id IN (?)", @locations.map(&:id)],
                        :group => 'code_id')
     @budget_codings = CodingBudgetDistrict.find(:all,
-                       :select => "code_id, SUM(new_cached_amount_in_usd) AS total",
+                       :select => "code_id, SUM(cached_amount_in_usd) AS total",
                        :conditions => ["code_id IN (?)", @locations.map(&:id)],
                        :group => 'code_id')
   end
@@ -21,11 +21,11 @@ class Reports::DistrictsController < Reports::BaseController
     code_type = get_code_type_and_initialize(params[:code_type])
 
     if @treemap
-      @code_spent_values   = DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
-      @code_budget_values  = DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
+      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
+      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
     else
-      @code_spent_values   = DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
-      @code_budget_values  = DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
+      @code_spent_values   = Charts::DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
+      @code_budget_values  = Charts::DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
     end
 
 

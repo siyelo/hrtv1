@@ -162,6 +162,11 @@ end
 
 
 
+
+
+
+
+
 # == Schema Information
 #
 # Table name: activities
@@ -203,11 +208,7 @@ end
 #  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
-#  new_spend_cents                       :integer         default(0), not null
-#  new_spend_currency                    :string(255)
-#  new_spend_in_usd                      :integer         default(0), not null
-#  new_budget_cents                      :integer         default(0), not null
-#  new_budget_currency                   :string(255)
-#  new_budget_in_usd                     :integer         default(0), not null
+#  spend_in_usd                          :decimal(, )     default(0.0)
+#  budget_in_usd                         :decimal(, )     default(0.0)
 #
 

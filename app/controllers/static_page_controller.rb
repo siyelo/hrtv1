@@ -1,5 +1,4 @@
 class StaticPageController < ApplicationController
-  layout 'promo_inner'
   skip_before_filter :load_help
 
   before_filter :require_user, :except => [:index, :news, :contact, :about]

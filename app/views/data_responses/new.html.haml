@@ -1,0 +1,17 @@
+- title("New Response")
+
+%h1.main_heading New Response
+
+= error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @data_response, :url => data_responses_path, :html => {:method => :post} do |f|
+  - f.inputs do
+    = f.input :data_request_id, :as => :select, :collection => @unfulfilled_requests, :include_blank => false
+    = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year (FY)", :input_html => {:class => 'date_picker'}
+    = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}
+    %span.hint
+      The request you would like to create a new response to.
+    = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true
+    %span.hint All amounts you enter will assume this currency. You can override the currency for individual projects if you like.
+  - f.buttons do
+    = f.commit_button "Create Response"

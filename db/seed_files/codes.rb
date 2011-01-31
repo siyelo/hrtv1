@@ -20,42 +20,80 @@ nha_code_col      = 14
 nasa_code_col     = 15
 
 i = 0
-FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
+FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
   begin
     i = i + 1
-    c               = Code.find_or_initialize_by_external_id(row[id_col])
-    puts "WARN found existing code at #{c.id}" unless c.id.nil?
-    unless row[parent_id_col].blank?
-      p               = Code.find_by_external_id(row[parent_id_col])
-      c.parent_id     = p.id unless p.nil?
-    else
-            c.parent = nil
-    end
+
     unless row[type_col]
-      c.type = "Code" #Assume default
+      klass_string = "Code" #Assume default
     else
       unless row[type_col].include? "HsspS" #this should make STI stop complaining
-        t = row[type_col].capitalize
+        klass_string = row[type_col].capitalize
       else
-        t = row[type_col]
+        klass_string = row[type_col]
       end
-      c.type          = t
     end
-    c.description   = row[description_col]
-    c.sub_account   = row[sub_account_col]
-    c.nha_code      = row[nha_code_col]
-    c.nasa_code     = row[nasa_code_col]
-    c.short_display = row[short_display_col]
-    c.short_display = row[class_col] unless c.short_display
-    c.long_display  = row[long_display_col]
-    c.official_name = row[class_col]
-    c.hssp2_stratprog_val = row[stratprog_col]
-    c.hssp2_stratobj_val = row[stratobj_col]
-    c.type          = "Nha" if c.type.downcase == "nhanasa"
+    klass_string = "Nha" if klass_string.downcase == "nhanasa"
 
-    #print "."
-    puts "on code #{c.external_id} (#{c.type})"
-    c.save!
+
+    #check if code exists with the type in the sheet and with the external id
+    #if not, check if Code.find_by_external_id with same conditions you use for parent
+    #if you find it, dont initialize a new code
+    #we in fact shouldnt be initializing any new codes this time we run the script
+
+
+    original_code = Code.find(:all, :conditions => ['external_id = ? AND type = ?',
+                                                    row[id_col], klass_string])
+
+    if original_code.length == 1
+      c = original_code.first
+
+      puts "Updating existing code at #{c.id}"
+
+      parent_external_id = row[parent_id_col]
+      unless parent_external_id.blank?
+        parents = Code.find(:all,
+                            :conditions => ['external_id = ? AND type IN (?)',
+                              parent_external_id, Code::ACTIVITY_ROOT_TYPES])
+
+        if parents.length > 1
+          raise "More that one code with same external_id: #{parent_external_id}
+                code ids: #{parents.map(&:id).join(', ')}".to_yaml
+        end
+
+        if (p = parents.first)
+          c.parent_id = p.id
+        end
+      else
+        c.parent = nil
+      end
+
+      c.description   = row[description_col]
+      if c.respond_to? :sub_account=
+        c.sub_account   = row[sub_account_col]
+        c.nha_code      = row[nha_code_col]
+        c.nasa_code     = row[nasa_code_col]
+      end
+      c.short_display = row[short_display_col]
+      c.short_display = row[class_col] unless c.short_display
+      c.long_display  = row[long_display_col]
+      c.official_name = row[class_col]
+      c.hssp2_stratprog_val = row[stratprog_col]
+      c.hssp2_stratobj_val = row[stratobj_col]
+
+      #print "."
+      puts "on code #{c.external_id} (#{c.type})"
+      c.save!
+    elsif original_code.length > 1
+      puts "!!!! Duplicate codes with ids #{original_code.map(&:id).join(', ')}"
+    else
+      problematic_code = Code.find_by_external_id(row[id_col])
+      if problematic_code
+        puts "!!!! Wrong type for code with id: #{problematic_code.id}"
+      else
+        puts "!!!! Missing code with external_id: #{row[id_col]}"
+      end
+    end
   rescue
     puts "Error reading input csv. line: #{i}. id: #{row[id_col]}. Error: #{$!}"
     exit 1;

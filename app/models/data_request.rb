@@ -19,13 +19,8 @@ class DataRequest < ActiveRecord::Base
   end
 
   def self.find_all_unfulfill_request
-    DataRequest.find(:all, :conditions=>["complete = ?", false])
+    DataRequest.find(:all, :conditions => ["complete = ?", false])
   end
-
-  def add_data_element data
-    data_element << data
-  end
-
 end
 
 # == Schema Information

@@ -1,17 +1,12 @@
 require 'lib/ActAsDataElement'
-require 'lib/ReportHelpers'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base
-
   include ActsAsDateChecker
-  include ReportHelpers
-
-  # Commentable
+  include CurrencyCacheHelpers
   acts_as_commentable
 
-  # Associations
-
+  ### Associations
   has_many :activities, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
@@ -28,16 +23,15 @@ class DataResponse < ActiveRecord::Base
 
   belongs_to  :data_request
 
-  # Validations
+  ### Validations
   validates_presence_of :data_request_id
   validates_presence_of :organization_id_responder
   validates_presence_of :currency
+  validates_date :fiscal_year_start_date
+  validates_date :fiscal_year_end_date
+  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date."
 
-  validates_date :fiscal_year_start_date, :on => :update
-  validates_date :fiscal_year_end_date, :on => :update
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date, :message => "Start date must come before End date.", :on => :update
-
-  # Named scopes
+  ### Named scopes
   named_scope :available_to, lambda { |current_user|
     if current_user.nil?
       {:conditions => {:id => -1}} #return no records
@@ -51,6 +45,10 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
+  ### Callbacks
+  after_save :update_cached_currency_amounts
+
+  ### Class Methods
   def self.in_progress
     self.find(:all, :include => [:responding_organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
@@ -86,16 +84,6 @@ class DataResponse < ActiveRecord::Base
   def organization
     responding_organization #for convenience
   end
-
-  # Law of Demeter methods
-#  %w[projects activities funding_flows].each do |assoc|
-#    %w[spend budget].each do |total_method|
-#      method_name = "#{assoc}_total_#{total_method}"
-#      def method_name
-#        send(assoc).sum {|m| m.send(total_method)}
-#      end
-#    end
-#  end
 
   def status
     return "Empty / Not Started" if empty?
@@ -148,18 +136,7 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
-
-  # TODO: make currency mandatory, fix old records, remove this complexity
-  def currency
-    c = read_attribute(:currency)
-    return c if new_record?
-    return c unless c.blank?
-    return Money.default_currency.iso_code
-  end
-
 end
-
-
 
 # == Schema Information
 #

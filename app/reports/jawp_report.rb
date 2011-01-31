@@ -106,6 +106,14 @@ class Reports::JawpReport
                 get_ratio(amount_total, cost_category_coding.cached_amount) *
                 get_ratio(funding_sources_total, funding_source_amount)
 
+              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s 
+
+              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s 
+
+              #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
+
+              #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
+               
               row << funding_source.from.name
               row << funding_source.from.type
               row << amount

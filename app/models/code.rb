@@ -3,10 +3,13 @@ class Code < ActiveRecord::Base
   extend NumberHelper
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
 
+  ### Comments
   acts_as_commentable
 
+  ### Attributes
   attr_accessible :long_display, :short_display, :description, :start_date, :end_date
 
+  ### Relations
   has_many :code_assignments, :foreign_key => :code_id
   has_many :activities, :through => :code_assignments
 

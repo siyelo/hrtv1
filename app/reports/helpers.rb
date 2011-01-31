@@ -104,6 +104,8 @@ module Reports::Helpers
   end
 
   def get_funding_sources(activity)
+    #TODO fake one if none so works correctly, w name of Not Entered
+    #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
     funding_sources = []
     activity.projects.each do |project|
       project.in_flows.with_organizations.each do |funding_source|

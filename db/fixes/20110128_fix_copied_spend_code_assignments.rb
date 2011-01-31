@@ -2,8 +2,12 @@ require 'fastercsv'
 require 'set'
 
 def same?(cas1, cas2)
-  cas1.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set ==
-  cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set
+  #puts cas1.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set.to_a if cas1.first.try(:activity).try(:id) == 908
+  #puts cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set.to_a if cas1.first.try(:activity).try(:id) == 908
+  #raise '908' if cas1.first.try(:activity).try(:id) == 908
+  # this doesn't work correctly for some reason
+  cas1.map{|ca| [ca.code_id, ca.cached_amount ]}.to_set ==
+    cas2.map{|ca| [ca.code_id, ca.cached_amount ]}.to_set && cas2.size > 0
 end
 
 activities = Activity.all

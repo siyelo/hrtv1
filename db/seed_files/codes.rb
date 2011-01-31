@@ -42,9 +42,11 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers=>true) do |row|
       c.type          = t
     end
     c.description   = row[description_col]
-    #c.sub_account   = row[sub_account_col]
-    #c.nha_code      = row[nha_code_col]
-    #c.nasa_code     = row[nasa_code_col]
+    if c.respond_to? :sub_account=
+      c.sub_account   = row[sub_account_col]
+      c.nha_code      = row[nha_code_col]
+      c.nasa_code     = row[nasa_code_col]
+    end
     c.short_display = row[short_display_col]
     c.short_display = row[class_col] unless c.short_display
     c.long_display  = row[long_display_col]

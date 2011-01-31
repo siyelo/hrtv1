@@ -15,8 +15,6 @@ d.activities.each do |a|
           #{a.currency},
           #{a.budget.to_s},
           $#{a.budget_in_usd.round(2)},
-          #{a.spend.to_s},
-          $#{(a.spend_in_usd.round(2))},
           #{ca.id},
           #{ca.type},
           #{ca.cached_amount},
@@ -26,11 +24,9 @@ d.activities.each do |a|
           #{a.CodingBudgetCostCategorization_amount},
           #{a.CodingSpend_amount},
           #{a.CodingSpendDistrict_amount},
-          #{a.CodingSpendCostCategorization_amount}"
+          #{a.CodingSpendCostCategorization_amount}" unless [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].include?(ca.type)
     end
 end
 
 puts "Total Budget: #{total_budget},
-      Total Spend: #{total_spend},
-      Total Budget USD: #{total_budget_usd},
-      Total Spend USD: #{total_spend_usd}"
+      Total Budget USD: #{total_budget_usd}"

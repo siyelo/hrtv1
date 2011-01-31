@@ -2,12 +2,12 @@ class BudgetCodeAssignment < CodeAssignment
 
   def self.classified(activity)
     if activity.budget == nil
-      true 
+      true
     else
       activity.budget == activity.send("#{self}_amount")
     end
   end
-  
+
   def activity_amount
     ret = activity.try(:budget)
     ret.nil? ? 0 : ret

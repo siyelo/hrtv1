@@ -1,4 +1,5 @@
 class CreateDataElements < ActiveRecord::Migration
+  class DataElement < ActiveRecord::Base; end # model and table removed in later migrations
   def self.up
 
     create_table :data_elements do |t|

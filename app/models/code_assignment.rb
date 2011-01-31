@@ -1,6 +1,5 @@
 class CodeAssignment < ActiveRecord::Base
-
-  include NumberHelper #TODO: deprecate with Money methods
+  include NumberHelper
   include MoneyHelper
 
   ### Associations

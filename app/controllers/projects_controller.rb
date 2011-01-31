@@ -40,7 +40,7 @@ class ProjectsController < ActiveScaffoldController
     config.columns[:locations].label              = "Districts Worked In"
     config.columns[:currency].label               = "Currency (if different)"
     config.columns[:currency].form_ui             = :select
-    config.columns[:currency].options             = {:options => @@currency_opts}
+    config.columns[:currency].options             = {:options => @@currency_opts, :include_blank => true}
 
     [config.update.columns, config.create.columns].each do |columns|
       columns.add_subgroup "Past Expenditure" do |funds_group|

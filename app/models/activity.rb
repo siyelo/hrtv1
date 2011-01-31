@@ -509,9 +509,7 @@ class Activity < ActiveRecord::Base
       self.budget_in_usd = (self.budget || 0) * rate
       self.spend_in_usd = (self.spend || 0) * rate
     end
-
 end
-
 
 
 # == Schema Information

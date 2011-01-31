@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110131114301) do
+ActiveRecord::Schema.define(:version => 20110131155644) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -35,25 +35,25 @@ ActiveRecord::Schema.define(:version => 20110131114301) do
     t.decimal  "budget_percentage"
     t.decimal  "spend_percentage"
     t.boolean  "approved"
-    t.decimal  "CodingBudget_amount",                   :default => 0.0
-    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal  "CodingSpend_amount",                    :default => 0.0
-    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
+    t.decimal  "CodingBudget_amount",                                :default => 0.0
+    t.decimal  "CodingBudgetCostCategorization_amount",              :default => 0.0
+    t.decimal  "CodingBudgetDistrict_amount",                        :default => 0.0
+    t.decimal  "CodingSpend_amount",                                 :default => 0.0
+    t.decimal  "CodingSpendCostCategorization_amount",               :default => 0.0
+    t.decimal  "CodingSpendDistrict_amount",                         :default => 0.0
     t.decimal  "budget_q1"
     t.decimal  "budget_q2"
     t.decimal  "budget_q3"
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",                        :default => 0
-    t.integer  "sub_activities_count",                  :default => 0
-    t.integer  "new_spend_cents",                       :default => 0,   :null => false
+    t.integer  "comments_count",                                     :default => 0
+    t.integer  "sub_activities_count",                               :default => 0
+    t.integer  "new_spend_cents",                       :limit => 8, :default => 0,   :null => false
     t.string   "new_spend_currency"
-    t.integer  "new_spend_in_usd",                      :default => 0,   :null => false
-    t.integer  "new_budget_cents",                      :default => 0,   :null => false
+    t.integer  "new_spend_in_usd",                      :limit => 8, :default => 0,   :null => false
+    t.integer  "new_budget_cents",                      :limit => 8, :default => 0,   :null => false
     t.string   "new_budget_currency"
-    t.integer  "new_budget_in_usd",                     :default => 0,   :null => false
+    t.integer  "new_budget_in_usd",                     :limit => 8, :default => 0,   :null => false
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -87,17 +87,18 @@ ActiveRecord::Schema.define(:version => 20110131114301) do
     t.decimal  "amount"
     t.string   "type"
     t.decimal  "percentage"
-    t.decimal  "cached_amount",              :default => 0.0
-    t.decimal  "sum_of_children",            :default => 0.0
-    t.integer  "new_amount_cents",           :default => 0,   :null => false
+    t.decimal  "cached_amount",                           :default => 0.0
+    t.decimal  "sum_of_children",                         :default => 0.0
+    t.integer  "new_amount_cents",           :limit => 8, :default => 0,   :null => false
     t.string   "new_amount_currency"
-    t.integer  "new_cached_amount_cents",    :default => 0,   :null => false
+    t.integer  "new_cached_amount_cents",    :limit => 8, :default => 0,   :null => false
     t.string   "new_cached_amount_currency"
-    t.integer  "new_cached_amount_in_usd",   :default => 0,   :null => false
+    t.integer  "new_cached_amount_in_usd",   :limit => 8, :default => 0,   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -118,6 +119,9 @@ ActiveRecord::Schema.define(:version => 20110131114301) do
     t.string   "hssp2_stratobj_val"
     t.string   "official_name"
     t.integer  "comments_count",      :default => 0
+    t.string   "sub_account"
+    t.string   "nha_code"
+    t.string   "nasa_code"
   end
 
   create_table "comments", :force => true do |t|
@@ -294,6 +298,12 @@ ActiveRecord::Schema.define(:version => 20110131114301) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "sqlite_stat1", :id => false, :force => true do |t|
+    t.text "tbl"
+    t.text "idx"
+    t.text "stat"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "username"

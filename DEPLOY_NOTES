@@ -1,0 +1,5 @@
+- Because of migration not fully run on last deploy (schema_migrations not updated with migration value), we need to first drop the districts table manually from script console and then run the migrations
+
+ruby script/console
+
+  ActiveRecord::Base.connection.execute 'drop table districts'

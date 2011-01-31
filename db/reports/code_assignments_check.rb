@@ -2,8 +2,13 @@ require 'fastercsv'
 require 'set'
 
 def same?(cas1, cas2)
-  cas1.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set ==
-  cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set
+  #puts cas1.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set.to_a if cas1.first.try(:activity).try(:id) == 908
+  #puts cas2.map{|ca| [ca.code_id, ca.amount, ca.percentage]}.to_set.to_a if cas1.first.try(:activity).try(:id) == 908
+  #raise '908' if cas1.first.try(:activity).try(:id) == 908
+  # this doesn't work correctly for some reason
+  cas1.map{|ca| [ca.code_id, ca.cached_amount ]}.to_set ==
+    cas2.map{|ca| [ca.code_id, ca.cached_amount ]}.to_set && cas2.size > 0
+
 end
 
 activities = Activity.all
@@ -14,7 +19,7 @@ total = activities.length
 
 csv = FasterCSV.generate do |csv|
   # header
-  row = ["index", "id", "name", "Same assignments?", "Same district assignments?", "Same cost_category assignments?"]
+  row = ["index", "id", "name", "currency", "spent", "budget", "Same assignments?", "Same district assignments?", "Same cost_category assignments?"]
   csv << row
 
 
@@ -40,6 +45,9 @@ csv = FasterCSV.generate do |csv|
       row << index
       row << activity.id
       row << activity.name
+      row << activity.currency
+      row << activity.spend
+      row << activity.budget
       row << (same_codings ? 'Yes' : 'No')
       row << (same_district_codings ? 'Yes' : 'No')
       row << (same_cost_category_codings ? 'Yes' : 'No')

@@ -7,7 +7,7 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                   #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
+                   :conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])
@@ -27,6 +27,8 @@ class Reports::JawpReport
 
   private
 
+  # GN: change amount methods here to budget_gor_qX 
+  # as defined in lib/BudgetSpendHelpers.rb & mixed into activity
   def build_rows(csv, activity)
     if @is_budget
       amount_q1             = activity.budget_q1

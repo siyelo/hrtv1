@@ -15,13 +15,6 @@ describe Admin::OrganizationsController do
       Organization.should_receive(:find).with("1").and_return(@mock_object)
       get :show, :id => "1"
     end
-
-    describe 'js format' do
-      it "renders partial organization_info" do
-        get :show, :id => "1", :format => 'js'
-        response.should render_template('admin/organizations/_organization_info')
-      end
-    end
   end
 
   describe "destroy organization" do

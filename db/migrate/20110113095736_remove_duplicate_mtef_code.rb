@@ -6,13 +6,13 @@ class RemoveDuplicateMtefCode < ActiveRecord::Migration
       real_id = 1197
       dupe = Code.find(dupe_id)
       real = Code.find(real_id)
-  
+
       puts ActiveRecord::Base.connection.execute("
         update code_assignments
         set code_id = #{real_id}
         where code_id = #{dupe_id}")
-  
-      puts c.delete + " deleted " if c
+
+      puts "#{dupe.delete} deleted " if dupe
     rescue ActiveRecord::RecordNotFound
       puts "Didn't remove duplicate that wasn't found"
     end

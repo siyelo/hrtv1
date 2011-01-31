@@ -95,7 +95,7 @@ class Activity < ActiveRecord::Base
       LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
     :conditions => ["activities.provider_id = data_responses.organization_id_responder
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"],
-    :group => 'activities.id'
+    :group => 'activities.id, activities.name'
   }
 
   ### Public Class Methods

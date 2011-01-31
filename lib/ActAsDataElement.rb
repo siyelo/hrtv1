@@ -3,6 +3,9 @@ module ActAsDataElement
     base.extend(ClassMethods)
   end
 
+
+  #TODO GN refactor and pull counter caching back in from
+  # models like project
   module ClassMethods
     #include ApplicationHelper
     def configure_act_as_data_element

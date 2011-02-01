@@ -1,3 +1,5 @@
+- usd_to_rwf = Money.default_bank.get_rate("USD", "RWF")
+
 %table.standard
   %thead
     %tr
@@ -9,19 +11,14 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to organization.name, reports_district_organization_path(location, organization)
 
-        - spent_total = Money.new(organization.spent_sum.to_i, :USD)
-        - budget_total = Money.new(organization.budget_sum.to_i, :USD)
+        -### postgres hack - sum column not cast properly
+        - spent_total = BigDecimal.new(organization.spent_sum)
+        - budget_total = BigDecimal.new(organization.budget_sum)
         %td
           %ul
-            -#%li= n2c(spent_total.exchange_to(:RWF), 'RWF')
-            %li= n2c(spent_total.usd_to_rwf, 'RWF')
+            %li= n2c(spent_total * usd_to_rwf, 'RWF')
             %li= "(#{n2c(spent_total, '$')})"
-
-          -#= n2c(organization.spent_sum.to_i, 'RWF')
         %td
           %ul
-            -#%li= n2c(budget_total.exchange_to(:RWF), 'RWF')
-            %li= n2c(budget_total.usd_to_rwf, 'RWF')
+            %li= n2c(budget_total * usd_to_rwf, 'RWF')
             %li= "(#{n2c(budget_total, '$')})"
-
-          -#= n2c(organization.budget_sum.to_i, 'RWF')

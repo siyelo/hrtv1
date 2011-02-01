@@ -7,15 +7,16 @@ class District < ActiveRecord::Base
   validates_presence_of :name, :population
 end
 
+
 # == Schema Information
 #
 # Table name: districts
 #
-#  id              :integer         not null, primary key
+#  id              :integer         primary key
 #  name            :string(255)
 #  population      :integer
 #  old_location_id :integer
-#  created_at      :datetime
-#  updated_at      :datetime
+#  created_at      :timestamp
+#  updated_at      :timestamp
 #
 

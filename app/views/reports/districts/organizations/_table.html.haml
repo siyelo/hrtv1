@@ -11,9 +11,8 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to organization.name, reports_district_organization_path(location, organization)
 
-        -### postgres hack - sum column not cast properly
-        - spent_total = BigDecimal.new(organization.spent_sum)
-        - budget_total = BigDecimal.new(organization.budget_sum)
+        - spent_total = organization.spent_sum
+        - budget_total = organization.budget_sum
         %td
           %ul
             %li= n2c(spent_total * usd_to_rwf, 'RWF')

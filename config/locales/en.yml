@@ -6,3 +6,9 @@ en:
 
   formtastic:
     submit: "Submit"
+
+# "{{attribute}} {{message}}" fix
+  activerecord:
+    errors:
+      full_messages:
+        format: "%{attribute} %{message}"

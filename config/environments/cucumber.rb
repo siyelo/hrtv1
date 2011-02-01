@@ -20,25 +20,3 @@ config.action_controller.allow_forgery_protection    = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
-
-config.gem 'cucumber-rails',   :lib => false, :version => '=0.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/cucumber-rails'))
-config.gem 'database_cleaner', :lib => false, :version => '=0.5.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/database_cleaner'))
-config.gem 'capybara',         :lib => false, :version => '=0.3.9' unless File.directory?(File.join(Rails.root, 'vendor/plugins/capybara'))
-config.gem "factory_girl",     :lib => false, :version => '=1.2.4'
-config.gem 'shoulda',          :lib => false, :version => '>=2.11.3'
-config.gem 'pickle'
-
-### Autotest
-# dont forget to make a ~/.autotest file with
-#   require "autotest/growl"
-#   require "autotest/fsevent"
-#
-# Enable with
-#    $ export AUTOFEATURE=true
-#
-if ENV.include?('AUTOFEATURE')
-  config.gem "ZenTest",          :lib => false
-  config.gem "autotest-rails",   :lib => false
-  #config.gem "autotest-fsevent", :lib => false # Only Darwin (Mac OS X) systems are supported
-  config.gem "autotest-growl",   :lib => false
-end

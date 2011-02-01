@@ -20,9 +20,7 @@ $nha_code_col      = 14
 $nasa_code_col     = 15
 
 
-def update_code(c, row)
-  puts "Updating existing code at #{c.id}"
-
+def set_attributes_for_code(c, row)
   parent_external_id = row[$parent_id_col]
   unless parent_external_id.blank?
     parents = Code.find(:all,
@@ -54,8 +52,6 @@ def update_code(c, row)
   c.hssp2_stratprog_val = row[$stratprog_col]
   c.hssp2_stratobj_val = row[$stratobj_col]
 
-  #print "."
-  puts "on code #{c.external_id} (#{c.type})"
   c.save!
 end
 
@@ -88,16 +84,20 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
 
     if original_code.length == 1
       c = original_code.first
-      update_code(c, row)
+      puts "Updating existing code at #{c.id}"
+      set_attributes_for_code(c, row)
     elsif original_code.length > 1
       puts "!!!! Duplicate codes with ids #{original_code.map(&:id).join(', ')}"
     else
       problematic_code = Code.find_by_external_id(row[$id_col])
       if problematic_code
-        puts "!!!! Wrong type for code with id: #{problematic_code.id}"
+        puts "!!!! Wrong type for code with id: #{problematic_code.id} and external_id #{row[$id_col]}"
       else
-        c = Code.new(:external_id => (row[$id_col]))
-        update_code(c, row)
+        puts "Creating new code with external_id #{row[$id_col]}"
+        c = Code.new
+        c.external_id = row[$id_col]
+        c.type = klass_string
+        set_attributes_for_code(c, row)
       end
     end
   rescue

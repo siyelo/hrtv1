@@ -75,6 +75,7 @@ class Activity < ActiveRecord::Base
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
+    :select => 'DISTINCT activities.*',
     :joins =>
       "INNER JOIN data_responses
         ON activities.data_response_id = data_responses.id
@@ -82,8 +83,7 @@ class Activity < ActiveRecord::Base
         ON provider_dr.organization_id_responder = activities.provider_id
       LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
     :conditions => ["activities.provider_id = data_responses.organization_id_responder
-                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"],
-    :group => 'activities.id, activities.name'
+                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
 
   ### Public Class Methods

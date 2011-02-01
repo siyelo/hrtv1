@@ -27,21 +27,21 @@ class Reports::JawpReport
 
   private
 
-  # GN: change amount methods here to budget_gor_qX 
-  # as defined in lib/BudgetSpendHelpers.rb & mixed into activity
+  # gor_quarters methods returns values for US fiscal year (10th month)
+  # otherwise it returns the values for Rwanda fiscal year
   def build_rows(csv, activity)
     if @is_budget
-      amount_q1             = activity.budget_q1
-      amount_q2             = activity.budget_q2
-      amount_q3             = activity.budget_q3
-      amount_q4             = activity.budget_q4
+      amount_q1             = activity.budget_gor_quarter(1)
+      amount_q2             = activity.budget_gor_quarter(2)
+      amount_q3             = activity.budget_gor_quarter(3)
+      amount_q4             = activity.budget_gor_quarter(4)
       amount_total          = activity.budget
       is_national           = (activity.budget_district_coding.empty? ? 'yes' : 'no')
     else
-      amount_q1             = activity.spend_q1
-      amount_q2             = activity.spend_q2
-      amount_q3             = activity.spend_q3
-      amount_q4             = activity.spend_q4
+      amount_q1             = activity.spend_gor_quarter(1)
+      amount_q2             = activity.spend_gor_quarter(2)
+      amount_q3             = activity.spend_gor_quarter(3)
+      amount_q4             = activity.spend_gor_quarter(4)
       amount_total          = activity.spend
       is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
     end
@@ -82,11 +82,11 @@ class Reports::JawpReport
         district_codings      = fake_one_assignment_if_none(amount_total, activity.spend_district_coding)
         cost_category_codings = fake_one_assignment_if_none(amount_total, activity.spend_cost_category_coding)
       end
+      funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
+      funding_sources_total = get_funding_sources_total(funding_sources, @is_budget)
 
       coding_with_parent_codes = get_coding_with_parent_codes(codings)
       cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
-      funding_sources = get_funding_sources(activity)
-      funding_sources_total = get_funding_sources_total(funding_sources, @is_budget)
 
       cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
         cost_category_coding = cost_category_ca_coding[0]
@@ -106,16 +106,16 @@ class Reports::JawpReport
                 get_ratio(amount_total, cost_category_coding.cached_amount) *
                 get_ratio(funding_sources_total, funding_source_amount)
 
-              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s 
+              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s
 
-              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s 
+              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s
 
               #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
 
               #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
-               
-              row << funding_source.from.name
-              row << funding_source.from.type
+
+              row << funding_source.from.try(:name)
+              row << funding_source.from.try(:type)
               row << amount
               row << get_percentage(amount_total, amount)
               row << Money.new((amount * 100).to_i, get_currency(activity)).exchange_to(:USD)
@@ -192,6 +192,18 @@ class Reports::JawpReport
       fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
 
       codings.empty? ? [fake_ca] : codings
+    end
+
+    def fake_one_funding_source_if_none(funding_sources)
+      if funding_sources.empty?
+        if @is_budget
+          [FundingFlow.new(:budget => 1)]
+        else
+          [FundingFlow.new(:spend => 1)]
+        end
+      else
+        funding_sources
+      end
     end
 
     def get_percentage(amount_total, amount)

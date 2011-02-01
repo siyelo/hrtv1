@@ -21,8 +21,8 @@
         %td= link_to "#{h loc.name}", reports_district_path(loc)
         %td= loc.organizations_count
         %td= loc.activities_count
-        - spent_total  = @spent_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0
-        - budget_total = @budget_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0
+        - spent_total  = BigDecimal.new(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0)
+        - budget_total = BigDecimal.new(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0)
         %td
           %ul
             %li= n2c(spent_total * usd_to_rwf, 'RWF')
@@ -30,7 +30,7 @@
         %td
           - if loc.district
             %ul
-              - spent_per_capita = (loc.district.population.to_f / @total_population) * @spent_codings.detect{|c| c.code_id == loc.id}.try(:total)
+              - spent_per_capita = (loc.district.population.to_f / @total_population) * BigDecimal.new(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0)
               %li= n2c(spent_per_capita * usd_to_rwf, 'RWF')
               %li= "(#{n2c(spent_per_capita, '$')})"
         %td

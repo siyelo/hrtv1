@@ -62,7 +62,7 @@ class Activity < ActiveRecord::Base
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
-  after_create  :update_counter_cache
+  after_save  :update_counter_cache
   after_destroy :update_counter_cache
 
   ### Named scopes
@@ -433,10 +433,11 @@ class Activity < ActiveRecord::Base
   private
 
     def update_counter_cache
-      return false unless self.data_response
-      self.data_response.activities_count = data_response.activities.only_simple.count
-      self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
-      self.data_response.save(false)
+      if (dr = self.data_response)
+        dr.activities_count = dr.activities.only_simple.count
+        dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
+        dr.save(false)
+      end
     end
 
     def set_classified_amount_cache(type)

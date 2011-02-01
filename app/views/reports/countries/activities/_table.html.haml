@@ -21,11 +21,14 @@
             %ul
               - project.funding_sources.map(&:name).uniq.each do |name|
                 %li= name
+        -### postgres hack - sum column not cast properly
+        - spent_total = BigDecimal.new(activity.spent_sum)
+        - budget_total = BigDecimal.new(activity.budget_sum)
         %td
           %ul
-            %li= n2c(activity.spent_sum * usd_to_rwf, 'RWF')
-            %li= "(#{n2c(activity.spent_sum, '$')})"
+            %li= n2c(spent_total * usd_to_rwf, 'RWF')
+            %li= "(#{n2c(spent_total, '$')})"
         %td
           %ul
-            %li= n2c(activity.budget_sum * usd_to_rwf, 'RWF')
-            %li= "(#{n2c(activity.budget_sum, '$')})"
+            %li= n2c(budget_total * usd_to_rwf, 'RWF')
+            %li= "(#{n2c(budget_total, '$')})"

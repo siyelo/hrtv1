@@ -93,7 +93,7 @@ class Organization < ActiveRecord::Base
     scope = self.scoped({
       :select => "organizations.id,
                   organizations.name,
-                  CAST(SUM(ca1.cached_amount_in_usd) AS DECIMAL) as spent_sum",
+                  SUM(ca1.cached_amount_in_usd) as spent_sum",
       :joins => "
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
         INNER JOIN activities ON data_responses.id = activities.data_response_id

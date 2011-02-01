@@ -7,7 +7,7 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-                   :conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
                                 :beneficiaries, {:data_response => :responding_organization}])
@@ -27,21 +27,21 @@ class Reports::JawpReport
 
   private
 
-  # GN: change amount methods here to budget_gor_qX
-  # as defined in lib/BudgetSpendHelpers.rb & mixed into activity
+  # gor_quarters methods returns values for US fiscal year (10th month)
+  # otherwise it returns the values for Rwanda fiscal year
   def build_rows(csv, activity)
     if @is_budget
-      amount_q1             = activity.budget_q1
-      amount_q2             = activity.budget_q2
-      amount_q3             = activity.budget_q3
-      amount_q4             = activity.budget_q4
+      amount_q1             = activity.budget_gor_quarter(1)
+      amount_q2             = activity.budget_gor_quarter(2)
+      amount_q3             = activity.budget_gor_quarter(3)
+      amount_q4             = activity.budget_gor_quarter(4)
       amount_total          = activity.budget
       is_national           = (activity.budget_district_coding.empty? ? 'yes' : 'no')
     else
-      amount_q1             = activity.spend_q1
-      amount_q2             = activity.spend_q2
-      amount_q3             = activity.spend_q3
-      amount_q4             = activity.spend_q4
+      amount_q1             = activity.spend_gor_quarter(1)
+      amount_q2             = activity.spend_gor_quarter(2)
+      amount_q3             = activity.spend_gor_quarter(3)
+      amount_q4             = activity.spend_gor_quarter(4)
       amount_total          = activity.spend
       is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
     end

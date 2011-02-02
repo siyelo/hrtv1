@@ -76,7 +76,7 @@ class CodeAssignmentsController < ApplicationController
     end
 
     def add_code_assignments_error(coding_class, activity)
-      if !coding_class.classified(activity)
+      if !activity.send(get_coding_classified_method(coding_class))
         coding_type        = get_coding_type(coding_class)
         coding_type_amount = activity.send(coding_type)
         coding_amount      = activity.send("#{coding_class}_amount")
@@ -121,5 +121,21 @@ class CodeAssignmentsController < ApplicationController
       when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
         :spend
       end
+    end
+
+    def get_coding_classified_method(klass)
+      case klass.to_s
+      when 'CodingBudget'
+        :budget_coded?
+      when 'CodingBudgetDistrict'
+        :budget_by_district_coded?
+      when 'CodingBudgetCostCategorization'
+        :budget_by_cost_category_coded?
+      when 'CodingSpend'
+        :spend_coded?
+      when 'CodingSpendDistrict'
+        :spend_by_district_coded?
+      when 'CodingSpendCostCategorization'
+        :spend_by_cost_category_coded?      end
     end
 end

@@ -39,12 +39,12 @@ describe CodingBudgetDistrict do
       }
 
       CodingBudgetDistrict.update_codings(params, activity)
-      CodingBudgetDistrict.classified(activity).should == true
+      activity.budget_by_district_coded?.should == true
 
       activity.locations = [loc1]
       activity.save!
 
-      CodingBudgetDistrict.classified(activity).should == false
+      activity.budget_by_district_coded?.should == false
     end
   end
 end

@@ -38,7 +38,7 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
   named_scope :select_for_pies,
-              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd/100) AS value",
+              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd) AS value",
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
@@ -96,15 +96,8 @@ class CodeAssignment < ActiveRecord::Base
   ### Instance Methods
   #
 
-  # override this in subclasses to make proportion work
-  def activity_amount
-    #TODO add a class that has a unique name
-    # so its easy to telll that this method
-    # wasnt implemented
-    # this class should error on any method
-    "default crappy value that will break code"
-  end
-
+  # This is only used in some reports
+  # activity_amount can (and should) be deprecated if we deprecate this too
   def proportion_of_activity
     unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0
       calculated_amount / activity_amount
@@ -168,6 +161,11 @@ class CodeAssignment < ActiveRecord::Base
                      :percentage => code_assignments[code.id.to_s]["percentage"]
         )
       end
+
+      # TODO: find what's the problem with this !
+      # sum_of_children gets saved properly when this is called 2 times
+      #
+      activity.update_classified_amount_cache(self)
       activity.update_classified_amount_cache(self)
     end
   end

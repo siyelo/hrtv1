@@ -22,19 +22,6 @@ else
 end
 
 Rails::Initializer.run do |config|
-  config.gem "authlogic"
-  config.gem "cancan", :version => ">= 1.4.0"
-  config.gem "compass", :version => "= 0.10.2"
-  config.gem "fastercsv"
-  config.gem 'formtastic', :version => "0.9.10"
-  config.gem 'google_currency', :version => ">= 1.0.3", :lib => false
-  config.gem "haml",    :version => ">= 3.0.12"
-  config.gem 'hoptoad_notifier'
-  config.gem 'money', :version => "=3.5.4"
-  config.gem "validates_date_time", :version => '= 1.0.0'
-  config.gem "version", :version => "=0.9.2"
-  config.gem 'will_paginate', :version => '~> 2.3.11'
-
   config.time_zone = 'UTC'
 
   # tell rails to load files from all subfolders in app/models/

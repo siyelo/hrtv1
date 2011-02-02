@@ -62,7 +62,7 @@ class Activity < ActiveRecord::Base
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
-  after_create  :update_counter_cache
+  after_save  :update_counter_cache
   after_destroy :update_counter_cache
 
   ### Named scopes
@@ -75,6 +75,7 @@ class Activity < ActiveRecord::Base
   named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
+    :select => 'DISTINCT activities.*',
     :joins =>
       "INNER JOIN data_responses
         ON activities.data_response_id = data_responses.id
@@ -82,8 +83,7 @@ class Activity < ActiveRecord::Base
         ON provider_dr.organization_id_responder = activities.provider_id
       LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
     :conditions => ["activities.provider_id = data_responses.organization_id_responder
-                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"],
-    :group => 'activities.id, activities.name'
+                    OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
 
   ### Public Class Methods
@@ -151,55 +151,50 @@ class Activity < ActiveRecord::Base
 
   def classified
     #TODO override in othercosts and sub_activities
-    budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
+    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded? &&
+    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
   end
 
   def classified?
     classified
   end
 
-  # TODO: use the cached values to check if the activity is classified!
-  def budget?
-    CodingBudget.classified(self)
+  def budget_coded?
+    self.budget == self.CodingBudget_amount
   end
 
-  #TODO TODO make methods like this for the spend_coding etc
+  def budget_by_district_coded?
+    return true if self.locations.empty? #TODO: remove when locations are mandatory
+    self.budget == self.CodingBudgetDistrict_amount
+  end
+
+  def budget_by_cost_category_coded?
+    self.budget == self.CodingBudgetCostCategorization_amount
+  end
+
   def budget_coding
     code_assignments.with_type(CodingBudget.to_s)
-  end
-
-  def budget_by_district?
-    # how about just using "!budget_locations.empty?" ?
-    # or
-    #   return true if !budget_locations.empty? && (activity.budget == nil)
-    #   activity.budget == CodingBudgetDistrict_amount
-    CodingBudgetDistrict.classified(self)
-  end
-
-  def budget_by_cost_category?
-    CodingBudgetCostCategorization.classified(self)
   end
 
   def budget_cost_category_coding
     code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
 
-  # these comment outs should be okay now that there
-  # is the before_save
-  def spend?
-    CodingSpend.classified(self)
+  def spend_coded?
+    self.spend == self.CodingSpend_amount
+  end
+
+  def spend_by_district_coded?
+    return true if self.locations.empty? #TODO: remove
+    self.spend == self.CodingSpendDistrict_amount
+  end
+
+  def spend_by_cost_category_coded?
+    self.spend == self.CodingSpendCostCategorization_amount
   end
 
   def spend_coding
     code_assignments.with_type(CodingSpend.to_s)
-  end
-
-  def spend_by_district?
-    CodingSpendDistrict.classified(self)
-  end
-
-  def spend_by_cost_category?
-    CodingSpendCostCategorization.classified(self)
   end
 
   def spend_cost_category_coding
@@ -207,17 +202,17 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_classified?
-    budget? && budget_by_district? && budget_by_cost_category?
+    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded?
   end
 
   def spend_classified?
-    spend? && spend_by_district? && spend_by_cost_category?
+    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
   end
 
-  # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb
+  # Called from migrations
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
-    self.save
+    self.save(false) # save the activity with new cached amounts event if it's approved
   end
 
   # Updates classified amount caches if budget or spend have been changed
@@ -261,6 +256,22 @@ class Activity < ActiveRecord::Base
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
+  def spend_coding_sum_in_usd
+    self.spend_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def budget_coding_sum_in_usd
+    self.budget_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def spend_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingSpendDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
+  def budget_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
   def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
@@ -294,12 +305,11 @@ class Activity < ActiveRecord::Base
       # copy across the ratio, not just the amount
       code_assignments.with_type(budget_type).each do |ca|
         # TODO: move to code_assignment model as a new method
-        if spend && spend > 0 && budget && budget > 0 && ca.cached_amount && ca.cached_amount > 0
+        if spend && spend > 0
           spend_ca                = ca.clone
           spend_ca.type           = spend_type
-          spend_ca.amount         = spend * ca.amount / budget if ca.amount
-          spend_ca.percentage     = ca.percentage if ca.percentage
-          spend_ca.cached_amount  = spend * ca.calculated_amount / budget
+          spend_ca.amount         = spend * ca.amount / budget if ca.amount && budget && budget > 0
+          spend_ca.percentage     = ca.percentage
           self.code_assignments << spend_ca
         end
       end
@@ -310,12 +320,12 @@ class Activity < ActiveRecord::Base
 
   def coding_progress
     coded = 0
-    coded +=1 if budget?
-    coded +=1 if budget_by_district?
-    coded +=1 if budget_by_cost_category?
-    coded +=1 if spend?
-    coded +=1 if spend_by_district?
-    coded +=1 if spend_by_cost_category?
+    coded +=1 if budget_coded?
+    coded +=1 if budget_by_district_coded?
+    coded +=1 if budget_by_cost_category_coded?
+    coded +=1 if spend_coded?
+    coded +=1 if spend_by_district_coded?
+    coded +=1 if spend_by_cost_category_coded?
     progress = (coded.to_f / 6) * 100
   end
 
@@ -332,93 +342,6 @@ class Activity < ActiveRecord::Base
     clone
   end
 
-  def self.top_by_spent_and_budget(options)
-    per_page = options[:per_page] || 25
-    page     = options[:page]     || 1
-    code_ids = options[:code_ids]
-    type     = options[:type]
-    sort     = options[:sort]
-
-    raise "Missing code_ids param".to_yaml if code_ids.blank? ||
-      !code_ids.kind_of?(Array)
-    raise "Missing type param".to_yaml if type.blank? &&
-      (type != 'district' || type != 'country')
-    raise "Invalid sort type" if !sort.blank? &&
-      !['spent_asc', 'spent_desc', 'budget_asc', 'budget_desc'].include?(sort)
-
-    ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
-    ca2_type = (type == 'district') ? 'CodingBudgetDistrict' : 'CodingBudget'
-    code_ids = code_ids.join(',')
-
-    scope = self.scoped({
-      :select => "activities.id,
-                  activities.name,
-                  activities.description,
-                  organizations.name AS org_name,
-                  COALESCE(SUM(spent_sum),0) as spent_sum,
-                  COALESCE(SUM(budget_sum),0) as budget_sum",
-      :joins => "
-        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        LEFT OUTER JOIN (
-          SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as spent_sum
-          FROM code_assignments ca1
-          WHERE ca1.type = '#{ca1_type}'
-          AND ca1.code_id IN (#{code_ids})
-          GROUP BY ca1.activity_id
-        ) ca1 ON activities.id = ca1.activity_id
-        LEFT OUTER JOIN (
-          SELECT ca2.activity_id, SUM(ca2.cached_amount_in_usd) as budget_sum
-          FROM code_assignments ca2
-          WHERE ca2.type = '#{ca2_type}'
-          AND ca2.code_id IN (#{code_ids})
-          GROUP BY ca2.activity_id
-        ) ca2 ON activities.id = ca2.activity_id",
-      :include => {:projects => {:funding_flows => :project}},
-      :group => "activities.id,
-                 activities.name,
-                 activities.description,
-                 org_name",
-      :order => SortOrder.get_sort_order(sort),
-      :conditions => "spent_sum > 0 OR budget_sum > 0"
-    })
-
-    scope.paginate :all, :per_page => per_page, :page => page
-  end
-
-  def self.top_by_spent(options)
-    limit    = options[:limit]    || nil
-    code_ids = options[:code_ids]
-    type     = options[:type]
-
-    raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
-    raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
-
-    ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
-    code_ids = code_ids.join(',')
-
-    scope = self.scoped({
-      :select => "activities.id,
-                  activities.name,
-                  activities.description,
-                  organizations.name AS org_name,
-                  SUM(ca1.cached_amount_in_usd) as spent_sum",
-      :joins => "
-        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
-               AND ca1.type = '#{ca1_type}'
-               AND ca1.code_id IN (#{code_ids})",
-      :group => "activities.id,
-                 activities.name,
-                 activities.description,
-                 org_name",
-      :order => "spent_sum DESC"
-    })
-
-    scope.find :all, :limit => limit
-  end
-
   # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
   def max_for_coding(type)
     case type.to_s
@@ -429,14 +352,14 @@ class Activity < ActiveRecord::Base
     end
   end
 
-
   private
 
     def update_counter_cache
-      return false unless self.data_response
-      self.data_response.activities_count = data_response.activities.only_simple.count
-      self.data_response.activities_without_projects_count = data_response.activities.roots.without_a_project.count
-      self.data_response.save(false)
+      if (dr = self.data_response)
+        dr.activities_count = dr.activities.only_simple.count
+        dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
+        dr.save(false)
+      end
     end
 
     def set_classified_amount_cache(type)

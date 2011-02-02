@@ -13,15 +13,3 @@ require 'rake/version_task'
 Rake::VersionTask.new do |task|
   task.with_git_tag = true
 end
-
-begin
-  require 'heroku_san/tasks'
-rescue LoadError
-  STDERR.puts "Run `rake gems:install` to install heroku_san gem"
-end
-
-begin
-  require 'metric_fu'
-rescue LoadError
-  STDERR.puts "Run `rvm gemset import` or `rake gems:install` to install metric fu"
-end

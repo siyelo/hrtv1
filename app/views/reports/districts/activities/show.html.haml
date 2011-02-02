@@ -17,36 +17,8 @@
 
 %h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
 
-%h2 Summary
+= render 'reports/shared/activity_summary'
 
-%table.standard
-  %tbody
-    %tr
-      %td Organization
-      %td= h @activity.organization_name
-    %tr
-      %td Activity Name:
-      %td= @activity.name.blank? ? "n/a" : h(@activity.name)
-    %tr
-      %td Activity Description:
-      %td= h @activity.description.to_s.titleize
-    %tr
-      %td Implementer
-      %td= h @activity.implementer
-    %tr
-      %td Associated Project
-      %td= h friendly_name(@activity.project)
-    %tr
-      %td Total Spend
-      %td= n2c(@activity.spend,  @activity.currency.to_s)
-    %tr
-      %td Total Budget
-      %td= n2c(@activity.budget,  @activity.currency.to_s)
-    %tr
-      %td Approved?
-      %td
-        = @activity.approved? ? "Yes" : "No"
-        .hint Whether this activity has been approved by a reviewer yet.
 %br
 
 .full

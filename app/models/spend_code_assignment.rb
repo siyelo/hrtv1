@@ -1,13 +1,5 @@
 class SpendCodeAssignment < CodeAssignment
 
-  def self.classified(activity)
-    if activity.spend == nil
-      true
-    else
-      activity.spend == activity.send("#{self}_amount")
-    end
-  end
-
   def activity_amount
     ret = activity.try(:spend)
     ret.nil? ? 0 : ret

@@ -21,11 +21,11 @@
           %tr
             %th= activity.name
             %th= activity.description
-            %th= check_box_tag "", "", activity.budget?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.budget_by_district?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.budget_by_cost_category?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend_by_district?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend_by_cost_category?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.budget_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.budget_by_district_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.budget_by_cost_category_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.spend_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.spend_by_district_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.spend_by_cost_category_coded?, {:disabled => "disabled"}
             %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_activity_path(activity)}"
     %hr

@@ -23,6 +23,8 @@ class DataResponse < ActiveRecord::Base
 
   belongs_to  :data_request
 
+  attr_accessible :organization_id_responder, :fiscal_year_end_date,
+                  :fiscal_year_start_date, :currency
   ### Validations
   validates_presence_of :data_request_id
   validates_presence_of :organization_id_responder

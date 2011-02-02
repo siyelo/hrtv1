@@ -39,12 +39,12 @@ describe CodingSpendDistrict do
       }
 
       CodingSpendDistrict.update_codings(params, activity)
-      CodingSpendDistrict.classified(activity).should == true
+      activity.spend_by_district_coded?.should == true
 
       activity.locations = [loc1]
       activity.save!
 
-      CodingSpendDistrict.classified(activity).should == false
+      activity.spend_by_district_coded?.should == false
     end
   end
 end

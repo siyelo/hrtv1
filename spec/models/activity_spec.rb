@@ -127,31 +127,11 @@ describe Activity do
       dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "does not copy budget to spent and budget are present, but cached_amount is nil" do
-      activity = Factory(:activity)
-      Factory(:coding_budget, :activity => activity, :cached_amount => nil)
-      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
-    end
-
-    it "deletes existing Spend codes before copying" do
+    it "deletes existing Spend codings before copying the budget ones" do
       activity = Factory(:activity)
       Factory(:coding_budget, :activity => activity)
       Factory(:coding_spend, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
-    end
-
-    it "calculates spend cached_amount when there is calculated cache amount for budget" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
-      ca = Factory(:coding_budget, :activity => activity, :cached_amount => 100, :amount => 100)
-      expected_cached_value = 50
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates spend cached_amount when there is no calculated cache amount for budget and code assigment has percentages" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
-      Factory(:coding_budget, :activity => activity, :percentage => 50)
-      expected_cached_value = 25
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
     end
 
     it "calculates spend amount when there is amount for budget" do
@@ -162,7 +142,7 @@ describe Activity do
       code_assignments[1].amount.should == 50
     end
 
-    it "does not calculates spend amount when there is amount for budget and code_assignment amount is nil" do
+    it "sets spend amount to nil when there is amount for budget and code_assignment amount is nil" do
       activity = Factory(:activity, :budget => 100, :spend => 50)
       Factory(:coding_budget, :activity => activity, :amount => nil, :cached_amount => 100)
       activity.copy_budget_codings_to_spend(['CodingBudget'])
@@ -170,13 +150,26 @@ describe Activity do
       code_assignments[1].amount.should == nil
     end
 
-    it "calculates spend percentage when there is percentage for budget" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
+    def check_percentage_copying(budget)
+      activity = Factory(:activity, :budget => budget, :spend => 50)
       Factory(:coding_budget, :activity => activity, :percentage => 50)
       activity.copy_budget_codings_to_spend(['CodingBudget'])
       code_assignments = activity.code_assignments
       code_assignments[1].percentage.should == 50
     end
+
+    it "copies percentage from budget to spend code assignment when budget is 100" do
+      check_percentage_copying(100)
+    end
+
+    it "copies percentage from budget to spend code assignment when budget is nil" do
+      check_percentage_copying(nil)
+    end
+
+    it "copies percentage from budget to spend code assignment when budget is 0" do
+      check_percentage_copying(0)
+    end
+
   end
 
   it "should save a null object without complaining" do
@@ -240,7 +233,7 @@ describe Activity do
     before :each do
       Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
       @dr = Factory(:data_response, :currency => 'USD')
-      @a        = Factory(:activity, :data_response => @dr,  
+      @a        = Factory(:activity, :data_response => @dr,
                           :projects => [Factory(:project,:data_response => @dr)])
       @a.budget = 123.45
       @a.spend  = 123.45
@@ -297,7 +290,7 @@ describe Activity do
       @a.save
       @a.budget_in_usd.should ==  789.10 * (1/597.400)
     end
-    
+
     it "should set cached amounts in USD to 0 if bad data means currency is nil" do
       d = @a.data_response
       d.currency = nil
@@ -308,13 +301,13 @@ describe Activity do
       @a.currency.should == nil
       @a.budget_in_usd.should == 0
     end
-    
+
   end
 
   describe "currency convenience lookups on DR/Project" do
     before :each do
       @dr = Factory(:data_response, :currency => 'RWF')
-      @a  = Factory(:activity, :data_response => @dr,  
+      @a  = Factory(:activity, :data_response => @dr,
                           :projects => [Factory(:project,:data_response => @dr)])
     end
 
@@ -328,6 +321,142 @@ describe Activity do
       p.save
       @a.reload
       @a.currency.should == "CHF"
+    end
+  end
+
+  describe "budget_gor_quarter" do
+    context "Invalid quarter" do
+      before :each do
+        activity = Factory.create(:activity)
+      end
+
+      it "raises errors when quarter is invalid - 0" do
+        lambda { activity.budget_gor_quarter(0) }.should raise_error
+      end
+
+      it "raises errors when quarter is invalid - 5" do
+        lambda { activity.budget_gor_quarter(5) }.should raise_error
+      end
+    end
+
+    context "US Goverment" do
+      before :each do
+        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+      end
+
+      it "returns proper budget for 1st quarter" do
+        activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(1).should == 123
+      end
+
+      it "returns proper budget for 2nd quarter" do
+        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(2).should == 123
+      end
+
+      it "returns proper budget for 3rd quarter" do
+        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(3).should == 123
+      end
+
+      it "returns proper budget for 4th quarter" do
+        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(4).should == 123
+      end
+    end
+
+    context "Goverment of Rwanda" do
+      before :each do
+        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+      end
+
+      it "returns proper budget for 1st quarter" do
+        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(1).should == 123
+      end
+
+      it "returns proper budget for 2nd quarter" do
+        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(2).should == 123
+      end
+
+      it "returns proper budget for 3rd quarter" do
+        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(3).should == 123
+      end
+
+      it "returns proper budget for 4th quarter" do
+        activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @data_response)
+        activity.budget_gor_quarter(4).should == 123
+      end
+    end
+  end
+
+  describe "spend_gor_quarter" do
+    context "Invalid quarter" do
+      before :each do
+        activity = Factory.create(:activity)
+      end
+
+      it "raises errors when quarter is invalid - 0" do
+        lambda { activity.spend_gor_quarter(0) }.should raise_error
+      end
+
+      it "raises errors when quarter is invalid - 5" do
+        lambda { activity.spend_gor_quarter(5) }.should raise_error
+      end
+    end
+
+    context "US Goverment" do
+      before :each do
+        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+      end
+
+      it "returns proper budget for 1st quarter" do
+        activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(1).should == 123
+      end
+
+      it "returns proper budget for 2nd quarter" do
+        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(2).should == 123
+      end
+
+      it "returns proper budget for 3rd quarter" do
+        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(3).should == 123
+      end
+
+      it "returns proper budget for 4th quarter" do
+        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(4).should == 123
+      end
+    end
+
+    context "Goverment of Rwanda" do
+      before :each do
+        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+      end
+
+      it "returns proper budget for 1st quarter" do
+        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(1).should == 123
+      end
+
+      it "returns proper budget for 2nd quarter" do
+        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(2).should == 123
+      end
+
+      it "returns proper budget for 3rd quarter" do
+        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(3).should == 123
+      end
+
+      it "returns proper budget for 4th quarter" do
+        activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @data_response)
+        activity.spend_gor_quarter(4).should == 123
+      end
     end
   end
 end

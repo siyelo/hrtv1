@@ -315,27 +315,10 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end
 
-# keep this
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
-  #steps %Q{
-    #Given the following organizations
-      #| name   |
-      #| UNDP   |
-      #| GoR    |
-    #Given the following reporters
-       #| name         | organization |
-       #| undp_user    | UNDP         |
-    #Given a data request with title "Req1" from "GoR"
-    #Given a data response to "Req1" by "UNDP"
-    #Given I am signed in as "undp_user"
-    #When I follow "Dashboard"
-    #And I follow "Edit"
-  #}
-
   steps %Q{
     Given an organization exists with name: "GoR"
-    And a data_request exists with title: "Req1", requesting_organization: the organization
-
+    And a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
     And a data_response exists with data_request: the data_request, responding_organization: the organization
     And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response

@@ -22,29 +22,29 @@ describe DataResponse do
     it { should_not allow_value('2010-12-41').for(:fiscal_year_start_date) }
     it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
     it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
-    
+
     it "accepts start date < end date" do
-      dr = Factory.build(:data_response, 
+      dr = Factory.build(:data_response,
                          :fiscal_year_start_date => DateTime.new(2010, 01, 01),
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 02) )
       dr.should be_valid
     end
 
     it "does not accept start date > end date" do
-      dr = Factory.build(:data_response, 
+      dr = Factory.build(:data_response,
                          :fiscal_year_start_date => DateTime.new(2010, 01, 02),
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
       dr.should_not be_valid
     end
 
     it "does not accept start date = end date" do
-      dr = Factory.build(:data_response, 
+      dr = Factory.build(:data_response,
                          :fiscal_year_start_date => DateTime.new(2010, 01, 01),
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
       dr.should_not be_valid
     end
-  
-  end 
+
+  end
 
   describe "counter cache" do
     context "comments cache" do
@@ -91,7 +91,7 @@ describe DataResponse do
       dr.reload.activities_without_projects_count.should == 2
     end
   end
-  
+
   describe "searching for in-progress data responses" do
     it "should not be in progress on creation" do
       @dr = Factory.create(:data_response)
@@ -103,7 +103,7 @@ describe DataResponse do
       DataResponse.in_progress.should include(@dr)
     end
   end
-  
+
   describe 'Currency cache update' do
     before :each do
       Money.add_rate("CHF", "USD", 0.5)
@@ -116,7 +116,7 @@ describe DataResponse do
                             :budget => 1000, :spend => 2000)
 
     end
-    
+
     it "should update cached USD amounts on Activity and Code Assignment" do
       @activity.budget_in_usd.should == 500
       @activity.spend_in_usd.should == 1000

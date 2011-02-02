@@ -151,55 +151,50 @@ class Activity < ActiveRecord::Base
 
   def classified
     #TODO override in othercosts and sub_activities
-    budget? && budget_by_district? && budget_by_cost_category? && spend? && spend_by_district? && spend_by_cost_category?
+    budget? && budget_by_district? && budget_by_cost_category? &&
+    spend? && spend_by_district? && spend_by_cost_category?
   end
 
   def classified?
     classified
   end
 
-  # TODO: use the cached values to check if the activity is classified!
   def budget?
-    CodingBudget.classified(self)
-  end
-
-  #TODO TODO make methods like this for the spend_coding etc
-  def budget_coding
-    code_assignments.with_type(CodingBudget.to_s)
+    self.budget == self.CodingBudget_amount
   end
 
   def budget_by_district?
-    # how about just using "!budget_locations.empty?" ?
-    # or
-    #   return true if !budget_locations.empty? && (activity.budget == nil)
-    #   activity.budget == CodingBudgetDistrict_amount
-    CodingBudgetDistrict.classified(self)
+    return true if self.locations.empty? #TODO: remove when locations are mandatory
+    self.budget == self.CodingBudgetDistrict_amount
   end
 
   def budget_by_cost_category?
-    CodingBudgetCostCategorization.classified(self)
+    self.budget == self.CodingBudgetCostCategorization_amount
+  end
+
+  def budget_coding
+    code_assignments.with_type(CodingBudget.to_s)
   end
 
   def budget_cost_category_coding
     code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
 
-  # these comment outs should be okay now that there
-  # is the before_save
   def spend?
-    CodingSpend.classified(self)
+    self.spend == self.CodingSpend_amount
+  end
+
+  def spend_by_district?
+    return true if self.locations.empty? #TODO: remove
+    self.spend == self.CodingSpendDistrict_amount
+  end
+
+  def spend_by_cost_category?
+    self.spend == self.CodingSpendCostCategorization_amount
   end
 
   def spend_coding
     code_assignments.with_type(CodingSpend.to_s)
-  end
-
-  def spend_by_district?
-    CodingSpendDistrict.classified(self)
-  end
-
-  def spend_by_cost_category?
-    CodingSpendCostCategorization.classified(self)
   end
 
   def spend_cost_category_coding
@@ -214,7 +209,7 @@ class Activity < ActiveRecord::Base
     spend? && spend_by_district? && spend_by_cost_category?
   end
 
-  # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb
+  # Called from migrations
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
     self.save(false) # save the activity with new cached amounts event if it's approved

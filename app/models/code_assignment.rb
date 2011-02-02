@@ -96,15 +96,8 @@ class CodeAssignment < ActiveRecord::Base
   ### Instance Methods
   #
 
-  # override this in subclasses to make proportion work
-  def activity_amount
-    #TODO add a class that has a unique name
-    # so its easy to telll that this method
-    # wasnt implemented
-    # this class should error on any method
-    "default crappy value that will break code"
-  end
-
+  # This is only used in some reports
+  # activity_amount can (and should) be deprecated if we deprecate this too
   def proportion_of_activity
     unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0
       calculated_amount / activity_amount

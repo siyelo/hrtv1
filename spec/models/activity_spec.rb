@@ -127,31 +127,11 @@ describe Activity do
       dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "does not copy budget to spent and budget are present, but cached_amount is nil" do
-      activity = Factory(:activity)
-      Factory(:coding_budget, :activity => activity, :cached_amount => nil)
-      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
-    end
-
-    it "deletes existing Spend codes before copying" do
+    it "deletes existing Spend codings before copying the budget ones" do
       activity = Factory(:activity)
       Factory(:coding_budget, :activity => activity)
       Factory(:coding_spend, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
-    end
-
-    it "calculates spend cached_amount when there is calculated cache amount for budget" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
-      ca = Factory(:coding_budget, :activity => activity, :cached_amount => 100, :amount => 100)
-      expected_cached_value = 50
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
-    end
-
-    it "calculates spend cached_amount when there is no calculated cache amount for budget and code assigment has percentages" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
-      Factory(:coding_budget, :activity => activity, :percentage => 50)
-      expected_cached_value = 25
-      copy_budget_to_expenditure_check_cached_amount(activity, 'CodingBudget', expected_cached_value)
     end
 
     it "calculates spend amount when there is amount for budget" do
@@ -162,7 +142,7 @@ describe Activity do
       code_assignments[1].amount.should == 50
     end
 
-    it "does not calculates spend amount when there is amount for budget and code_assignment amount is nil" do
+    it "sets spend amount to nil when there is amount for budget and code_assignment amount is nil" do
       activity = Factory(:activity, :budget => 100, :spend => 50)
       Factory(:coding_budget, :activity => activity, :amount => nil, :cached_amount => 100)
       activity.copy_budget_codings_to_spend(['CodingBudget'])
@@ -170,13 +150,26 @@ describe Activity do
       code_assignments[1].amount.should == nil
     end
 
-    it "calculates spend percentage when there is percentage for budget" do
-      activity = Factory(:activity, :budget => 100, :spend => 50)
+    def check_percentage_copying(budget)
+      activity = Factory(:activity, :budget => budget, :spend => 50)
       Factory(:coding_budget, :activity => activity, :percentage => 50)
       activity.copy_budget_codings_to_spend(['CodingBudget'])
       code_assignments = activity.code_assignments
       code_assignments[1].percentage.should == 50
     end
+
+    it "copies percentage from budget to spend code assignment when budget is 100" do
+      check_percentage_copying(100)
+    end
+
+    it "copies percentage from budget to spend code assignment when budget is nil" do
+      check_percentage_copying(nil)
+    end
+
+    it "copies percentage from budget to spend code assignment when budget is 0" do
+      check_percentage_copying(0)
+    end
+
   end
 
   it "should save a null object without complaining" do

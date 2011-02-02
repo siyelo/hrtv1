@@ -30,6 +30,7 @@ group :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
   gem 'wirble'
+  gem 'mongrel'
 end
 
 group :test, :development do

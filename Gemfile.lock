@@ -24,6 +24,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       selenium-webdriver (>= 0.0.3)
+    cgi_multipart_eof_fix (2.5.0)
     childprocess (0.1.6)
       ffi (~> 0.6.3)
     columnize (0.3.2)
@@ -39,15 +40,18 @@ GEM
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     culerity (0.2.15)
+    daemons (1.1.0)
     database_cleaner (0.6.1)
     diff-lcs (1.1.2)
     factory_girl (1.2.4)
     fastercsv (1.5.4)
+    fastthread (1.0.7)
     ffi (0.6.3)
       rake (>= 0.8.7)
     formtastic (0.9.10)
       actionpack (>= 2.3.0)
       activesupport (>= 2.3.0)
+    gem_plugin (0.2.3)
     gherkin (2.3.3)
       json (~> 1.4.6)
     google_currency (1.0.3)
@@ -71,6 +75,11 @@ GEM
     mime-types (1.16)
     money (3.5.5)
       i18n (~> 0.4)
+    mongrel (1.1.5)
+      cgi_multipart_eof_fix (>= 2.4)
+      daemons (>= 1.0.3)
+      fastthread (>= 1.0.1)
+      gem_plugin (>= 0.2.3)
     nokogiri (1.4.4)
     open_gem (1.4.2)
       launchy (~> 0.3.5)
@@ -154,6 +163,7 @@ DEPENDENCIES
   hoptoad_notifier
   launchy
   money
+  mongrel
   open_gem
   pickle (~> 0.4.4)
   rails (= 2.3.8)

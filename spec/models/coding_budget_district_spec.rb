@@ -44,7 +44,7 @@ describe CodingBudgetDistrict do
       activity.locations = [loc1]
       activity.save!
 
-      CodingBudgetDistrict.classified(activity).should == false
+      activity.budget_by_district?.should == false
     end
   end
 end

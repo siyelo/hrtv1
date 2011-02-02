@@ -44,7 +44,7 @@ describe CodingSpendDistrict do
       activity.locations = [loc1]
       activity.save!
 
-      CodingSpendDistrict.classified(activity).should == false
+      activity.spend_by_district?.should == false
     end
   end
 end

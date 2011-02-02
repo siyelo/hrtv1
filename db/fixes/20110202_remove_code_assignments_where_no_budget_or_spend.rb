@@ -2,7 +2,7 @@ budget_types = [CodingBudget, CodingBudgetCostCategorization, CodingBudgetDistri
 spend_types = [CodingSpend, CodingSpendCostCategorization, CodingSpendDistrict]
 
 puts "Deleting budget code assignments where activity.budget is nil..."
-activities = Activity.find(:all, :conditions => {:budget => nil})
+activities = Activity.only_simple.find(:all, :conditions => {:budget => nil})
 activities_total = activities.length
 ca_total = 0
 activities.each_with_index do |activity, index|
@@ -16,7 +16,7 @@ end
 puts " #{ca_total} code assignments deleted."
 
 puts "Deleting budget code assignments where activity.budget is 0..."
-activities = Activity.find(:all, :conditions => {:budget => 0})
+activities = Activity.only_simple.find(:all, :conditions => {:budget => 0})
 activities_total = activities.length
 ca_total = 0
 activities.each_with_index do |activity, index|
@@ -30,7 +30,7 @@ end
 puts " #{ca_total} code assignments deleted."
 
 puts "Deleting spend code assignments where activity.spend is nil..."
-activities = Activity.find(:all, :conditions => {:spend => nil})
+activities = Activity.only_simple.find(:all, :conditions => {:spend => nil})
 activities_total = activities.length
 ca_total = 0
 activities.each_with_index do |activity, index|
@@ -44,7 +44,7 @@ end
 puts " #{ca_total} code assignments deleted."
 
 puts "Deleting spend code assignments where activity.spend is 0..."
-activities = Activity.find(:all, :conditions => {:spend => 0})
+activities = Activity.only_simple.find(:all, :conditions => {:spend => 0})
 activities_total = activities.length
 ca_total = 0
 activities.each_with_index do |activity, index|

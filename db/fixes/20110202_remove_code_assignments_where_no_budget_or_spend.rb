@@ -1,24 +1,58 @@
+budget_types = [CodingBudget, CodingBudgetCostCategorization, CodingBudgetDistrict]
+spend_types = [CodingSpend, CodingSpendCostCategorization, CodingSpendDistrict]
 
-budget_types = [CodingBudget.to_s, CodingBudgetCostCategorization.to_s, CodingBudgetDistrict.to_s]
-spend_types = [CodingSpend.to_s, CodingSpendCostCategorization.to_s, CodingSpendDistrict.to_s]
+puts "Deleting budget code assignments where activity.budget is nil..."
+activities = Activity.find(:all, :conditions => {:budget => nil})
+activities_total = activities.length
+ca_total = 0
+activities.each_with_index do |activity, index|
+  puts "Processing activity with id #{activity.id} :: #{index + 1}/#{activities_total}"
+  budget_types.each do |type|
+    total = CodeAssignment.delete_all(['activity_id = ? AND code_assignments.type = ?', activity.id, type.to_s])
+    activity.update_classified_amount_cache(type) if total > 0
+    ca_total += total
+  end
+end
+puts " #{ca_total} code assignments deleted."
 
-print "Deleting budget code assignments where activity.budget is nil..."
-ca11 = CodeAssignment.find(:all, :joins => :activity, :conditions => ['activities.budget IS NULL AND code_assignments.type IN (?)', budget_types])
-ca11_total = CodeAssignment.delete_all(["id IN (?)", ca11.map(&:id)])
-puts " #{ca11_total} code assignments deleted."
+puts "Deleting budget code assignments where activity.budget is 0..."
+activities = Activity.find(:all, :conditions => {:budget => 0})
+activities_total = activities.length
+ca_total = 0
+activities.each_with_index do |activity, index|
+  puts "Processing activity with id #{activity.id} :: #{index + 1}/#{activities_total}"
+  budget_types.each do |type|
+    total = CodeAssignment.delete_all(['activity_id = ? AND code_assignments.type = ?', activity.id, type.to_s])
+    activity.update_classified_amount_cache(type) if total > 0
+    ca_total += total
+  end
+end
+puts " #{ca_total} code assignments deleted."
 
-print "Deleting spend code assignments where activity.spend is nil..."
-ca12 = CodeAssignment.find(:all, :joins => :activity, :conditions => ['activities.spend IS NULL AND code_assignments.type IN (?)', spend_types])
-ca12_total = CodeAssignment.delete_all(["id IN (?)", ca12.map(&:id)])
-puts " #{ca12_total} code assignments deleted."
+puts "Deleting spend code assignments where activity.spend is nil..."
+activities = Activity.find(:all, :conditions => {:spend => nil})
+activities_total = activities.length
+ca_total = 0
+activities.each_with_index do |activity, index|
+  puts "Processing activity with id #{activity.id} :: #{index + 1}/#{activities_total}"
+  spend_types.each do |type|
+    total = CodeAssignment.delete_all(['activity_id = ? AND code_assignments.type = ?', activity.id, type.to_s])
+    activity.update_classified_amount_cache(type) if total > 0
+    ca_total += total
+  end
+end
+puts " #{ca_total} code assignments deleted."
 
-print "Deleting budget code assignments where activity.budget is nil..."
-ca21 = CodeAssignment.find(:all, :joins => :activity, :conditions => ['activities.budget = 0 AND code_assignments.type IN (?)', budget_types])
-ca21_total = CodeAssignment.delete_all(["id IN (?)", ca21.map(&:id)])
-puts " #{ca21_total} code assignments deleted."
-
-print "Deleting spend code assignments where activity.spend is nil..."
-ca22 = CodeAssignment.find(:all, :joins => :activity, :conditions => ['activities.spend = 0 AND code_assignments.type IN (?)', spend_types])
-ca22_total = CodeAssignment.delete_all(["id IN (?)", ca22.map(&:id)])
-puts " #{ca22_total} code assignments deleted."
-
+puts "Deleting spend code assignments where activity.spend is 0..."
+activities = Activity.find(:all, :conditions => {:spend => 0})
+activities_total = activities.length
+ca_total = 0
+activities.each_with_index do |activity, index|
+  puts "Processing activity with id #{activity.id} :: #{index + 1}/#{activities_total}"
+  spend_types.each do |type|
+    total = CodeAssignment.delete_all(['activity_id = ? AND code_assignments.type = ? ', activity.id, type.to_s])
+    activity.update_classified_amount_cache(type) if total > 0
+    ca_total += total
+  end
+end
+puts " #{ca_total} code assignments deleted."

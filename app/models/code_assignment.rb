@@ -168,6 +168,11 @@ class CodeAssignment < ActiveRecord::Base
                      :percentage => code_assignments[code.id.to_s]["percentage"]
         )
       end
+
+      # TODO: find what's the problem with this !
+      # sum_of_children gets saved properly when this is called 2 times
+      #
+      activity.update_classified_amount_cache(self)
       activity.update_classified_amount_cache(self)
     end
   end

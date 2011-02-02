@@ -12,7 +12,7 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to "#{friendly_name(activity)}", reports_district_activity_path(location, activity)
         %td= h activity.org_name
-        - spent_total = BigDecimal.new(activity.spent_sum)
+        - spent_total = activity.spent_sum
         %td
           %ul
             %li= n2c(spent_total * usd_to_rwf, 'RWF')

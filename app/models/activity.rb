@@ -261,6 +261,22 @@ class Activity < ActiveRecord::Base
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
+  def spend_coding_sum_in_usd
+    self.spend_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def budget_coding_sum_in_usd
+    self.budget_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def spend_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingSpendDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
+  def budget_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
   def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
@@ -331,93 +347,6 @@ class Activity < ActiveRecord::Base
     clone
   end
 
-  def self.top_by_spent_and_budget(options)
-    per_page = options[:per_page] || 25
-    page     = options[:page]     || 1
-    code_ids = options[:code_ids]
-    type     = options[:type]
-    sort     = options[:sort]
-
-    raise "Missing code_ids param".to_yaml if code_ids.blank? ||
-      !code_ids.kind_of?(Array)
-    raise "Missing type param".to_yaml if type.blank? &&
-      (type != 'district' || type != 'country')
-    raise "Invalid sort type" if !sort.blank? &&
-      !['spent_asc', 'spent_desc', 'budget_asc', 'budget_desc'].include?(sort)
-
-    ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
-    ca2_type = (type == 'district') ? 'CodingBudgetDistrict' : 'CodingBudget'
-    code_ids = code_ids.join(',')
-
-    scope = self.scoped({
-      :select => "activities.id,
-                  activities.name,
-                  activities.description,
-                  organizations.name AS org_name,
-                  COALESCE(SUM(spent_sum),0) as spent_sum,
-                  COALESCE(SUM(budget_sum),0) as budget_sum",
-      :joins => "
-        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        LEFT OUTER JOIN (
-          SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as spent_sum
-          FROM code_assignments ca1
-          WHERE ca1.type = '#{ca1_type}'
-          AND ca1.code_id IN (#{code_ids})
-          GROUP BY ca1.activity_id
-        ) ca1 ON activities.id = ca1.activity_id
-        LEFT OUTER JOIN (
-          SELECT ca2.activity_id, SUM(ca2.cached_amount_in_usd) as budget_sum
-          FROM code_assignments ca2
-          WHERE ca2.type = '#{ca2_type}'
-          AND ca2.code_id IN (#{code_ids})
-          GROUP BY ca2.activity_id
-        ) ca2 ON activities.id = ca2.activity_id",
-      :include => {:projects => {:funding_flows => :project}},
-      :group => "activities.id,
-                 activities.name,
-                 activities.description,
-                 org_name",
-      :order => SortOrder.get_sort_order(sort),
-      :conditions => "spent_sum > 0 OR budget_sum > 0"
-    })
-
-    scope.paginate :all, :per_page => per_page, :page => page
-  end
-
-  def self.top_by_spent(options)
-    limit    = options[:limit]    || nil
-    code_ids = options[:code_ids]
-    type     = options[:type]
-
-    raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
-    raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
-
-    ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
-    code_ids = code_ids.join(',')
-
-    scope = self.scoped({
-      :select => "activities.id,
-                  activities.name,
-                  activities.description,
-                  organizations.name AS org_name,
-                  SUM(ca1.cached_amount_in_usd) as spent_sum",
-      :joins => "
-        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
-               AND ca1.type = '#{ca1_type}'
-               AND ca1.code_id IN (#{code_ids})",
-      :group => "activities.id,
-                 activities.name,
-                 activities.description,
-                 org_name",
-      :order => "spent_sum DESC"
-    })
-
-    scope.find :all, :limit => limit
-  end
-
   # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
   def max_for_coding(type)
     case type.to_s
@@ -427,7 +356,6 @@ class Activity < ActiveRecord::Base
       max = spend
     end
   end
-
 
   private
 

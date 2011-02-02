@@ -70,7 +70,7 @@ describe CodeAssignment do
     end
     
     it "should update cached_amount_in_usd on creation" do
-      @ca.cached_amount_in_usd.should == 0.206645463675929
+      @ca.cached_amount_in_usd.should == 0.2066454636759290257783729494476063499 # pg precision! ( sqlite worked with 0.206645463675929)
     end
     
     it "should update cached_amount_in_usd on update" do

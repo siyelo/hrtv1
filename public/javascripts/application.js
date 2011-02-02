@@ -659,8 +659,6 @@ var code_assignments_show = {
       addCollabsibleButtons(tab);
     };
 
-    jQuery('.tooltip').tipsy({gravity: 'w'});
-
     jQuery('.submit_btn').live('click', function (e) {
       e.preventDefault();
 
@@ -940,6 +938,10 @@ var reports_countries_activities_show = {
 
 
 jQuery(function () {
+
+  // tipsy tooltips everywhere!
+  jQuery('.tooltip').tipsy({gravity: 'w'});
+
   var id = jQuery('body').attr("id");
   if (id) {
     controller_action = id;

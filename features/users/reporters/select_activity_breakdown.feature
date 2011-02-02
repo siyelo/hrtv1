@@ -5,7 +5,7 @@ Feature: NGO/donor can enter a code breakdown for each activity
 
 Background:
   Given a basic org + reporter profile, with data response, signed in
-
+  
 @reporter_activity_breakdown
 Scenario: See a breakdown for an activity
   When I go to the activities page

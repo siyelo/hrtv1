@@ -9,7 +9,7 @@ module Charts::DistrictPies
       records = Organization.find :all,
         :select => "organizations.id,
           organizations.name,
-          SUM(ca1.cached_amount_in_usd/100) as value",
+          SUM(ca1.cached_amount_in_usd) as value",
         :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
           INNER JOIN activities a1 ON dr1.id = a1.data_response_id
           INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id
@@ -28,7 +28,7 @@ module Charts::DistrictPies
         :select => "code_assignments.id,
                     code_assignments.activity_id,
                     activities.name AS activity_name,
-                    SUM(code_assignments.cached_amount_in_usd/100) AS value",
+                    SUM(code_assignments.cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.activity_id,
@@ -51,15 +51,15 @@ module Charts::DistrictPies
       code_klass_string = get_code_klass_string(code_type)
       coding_type       = get_coding_type(code_type, is_spent)
       district_type     = is_spent ? "CodingSpendDistrict" : "CodingBudgetDistrict"
-      activity_amount   = is_spent ? activity.spend : activity.budget
+      activity_amount   = is_spent ? activity.spend_in_usd : activity.budget_in_usd
 
       district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_location(location).last
-      coded_ok          = district_coding && district_coding.cached_amount &&
+      coded_ok          = district_coding && district_coding.cached_amount_in_usd &&
                           activity_amount && activity_amount > 0
 
       if coded_ok
         code_assignments = get_code_assignments_for_codes_pie(code_klass_string, coding_type, [activity])
-        ratio   = district_coding.cached_amount / activity_amount # % that this district has allocated
+        ratio   = district_coding.cached_amount_in_usd / activity_amount # % that this district has allocated
         prepare_pie_values(code_assignments, ratio)
       end
     end
@@ -67,22 +67,22 @@ module Charts::DistrictPies
     ### show
     def activity_spent_ratio(location, activity)
       district_spend_coding = activity.coding_spend_district.with_location(location).last
-      spend_coded_ok = district_spend_coding && activity.spend && activity.spend > 0 && district_spend_coding.cached_amount
+      spend_coded_ok = district_spend_coding && activity.spend_in_usd && activity.spend_in_usd > 0 && district_spend_coding.cached_amount_in_usd
       if spend_coded_ok
-        district_spent_ratio   = district_spend_coding.cached_amount / activity.spend # % that this district has allocated
-        district_spent         = activity.spend * district_spent_ratio
-        prepare_ratio_pie_values(location, activity.spend, district_spent)
+        district_spent_ratio   = district_spend_coding.cached_amount_in_usd / activity.spend_in_usd # % that this district has allocated
+        district_spent         = activity.spend_in_usd * district_spent_ratio
+        prepare_ratio_pie_values(location, activity.spend_in_usd, district_spent)
       end
     end
 
     def activity_budget_ratio(location, activity)
       # TODO
       district_budget_coding = activity.coding_budget_district.with_location(location).last
-      budget_coded_ok = district_budget_coding && activity.budget && activity.budget > 0 && district_budget_coding.cached_amount
+      budget_coded_ok = district_budget_coding && activity.budget_in_usd && activity.budget_in_usd > 0 && district_budget_coding.cached_amount_in_usd
       if budget_coded_ok
-        district_budgeted_ratio = district_budget_coding.cached_amount / activity.budget # % that this district has allocated
-        district_budgeted       = activity.budget * district_budgeted_ratio
-        prepare_ratio_pie_values(location, activity.budget, district_budgeted)
+        district_budgeted_ratio = district_budget_coding.cached_amount_in_usd / activity.budget_in_usd # % that this district has allocated
+        district_budgeted       = activity.budget_in_usd * district_budgeted_ratio
+        prepare_ratio_pie_values(location, activity.budget_in_usd, district_budgeted)
       end
     end
 
@@ -93,10 +93,10 @@ module Charts::DistrictPies
 
       if is_spent
         district_type  = "CodingSpendDistrict"
-        activity_value = "spend"
+        activity_value = "spend_in_usd"
       else
         district_type  = "CodingBudgetDistrict"
-        activity_value = "budget"
+        activity_value = "budget_in_usd"
       end
 
       code_klass = get_code_klass(code_type)
@@ -109,7 +109,7 @@ module Charts::DistrictPies
         other = 0.0
         code_assignments.each_with_index do |ca, index|
           if index < 5
-            values << [friendly_name(ca.activity), ca.value.to_f.round(2)]
+            values << [friendly_name(ca.activity), ca.value.to_f.round(2)] #value is the aggregate column from the sql
           else
             other += ca.value.to_f
           end
@@ -148,7 +148,7 @@ module Charts::DistrictPies
                   codes.parent_id as parent_id,
                   code_assignments.activity_id,
                   codes.short_display AS my_name,
-                  SUM(code_assignments.cached_amount_in_usd/100) AS value",
+                  SUM(code_assignments.cached_amount_in_usd) AS value",
       :joins => [:activity, :code],
       :group => "codes.short_display,
                  codes.id,
@@ -211,7 +211,7 @@ module Charts::DistrictPies
         {
           :values => [
             ["#{location.name}", district_amount.round(2)],
-            ["Other Districts", activity_amount.round(2)]
+            ["Other Districts", activity_amount.round(2) - district_amount.round(2)]
 
           ],
           :names => {:column1 => 'Code name', :column2 => 'Amount'}
@@ -228,7 +228,6 @@ module Charts::DistrictPies
 
       def detect_sum(code_assignments, treemap_ratios, code_id)
         sum = 0
-
         amounts = code_assignments[code_id]
         if amounts.present?
           amounts.each do |amount|
@@ -239,8 +238,8 @@ module Charts::DistrictPies
             end
           end
         end
-
         sum
       end
+
     end
 end

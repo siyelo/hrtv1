@@ -21,8 +21,8 @@
             %ul
               - project.funding_sources.map(&:name).uniq.each do |name|
                 %li= name
-        - spent_total  = BigDecimal.new(activity.spent_sum)
-        - budget_total = BigDecimal.new(activity.budget_sum)
+        - spent_total  = activity.spent_sum
+        - budget_total = activity.budget_sum
         %td
           %ul
             %li= n2c(spent_total * usd_to_rwf, 'RWF')

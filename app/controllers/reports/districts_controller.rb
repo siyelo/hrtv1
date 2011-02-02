@@ -2,17 +2,14 @@ class Reports::DistrictsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
 
   def index
-    @locations = Location.all_with_counters
-    #raise @locations.map(&:id).to_yaml
+    @locations        = Location.all_with_counters
     @total_population = District.sum(:population)
-    @spent_codings = CodingSpendDistrict.find(:all,
-                       :select => "code_id, SUM(cached_amount_in_usd) AS total",
-                       :conditions => ["code_id IN (?)", @locations.map(&:id)],
-                       :group => 'code_id')
-    @budget_codings = CodingBudgetDistrict.find(:all,
-                       :select => "code_id, SUM(cached_amount_in_usd) AS total",
-                       :conditions => ["code_id IN (?)", @locations.map(&:id)],
-                       :group => 'code_id')
+    @spent_codings    = CodingSpendDistrict.sum(:cached_amount_in_usd,
+                          :conditions => ["code_id IN (?)", @locations.map(&:id)],
+                          :group => 'code_id')
+    @budget_codings   = CodingBudgetDistrict.sum(:cached_amount_in_usd,
+                          :conditions => ["code_id IN (?)", @locations.map(&:id)],
+                          :group => 'code_id')
   end
 
   def show
@@ -29,9 +26,9 @@ class Reports::DistrictsController < Reports::BaseController
     end
 
 
-    @top_activities    = Activity.top_by_spent({
+    @top_activities    = Reports::Activity.top_by_spent({
                          :limit => 5, :code_ids => [@location.id], :type => 'district'})
-    @top_organizations = Organization.top_by_spent({
+    @top_organizations = Reports::Organization.top_by_spent({
                          :limit => 5, :code_ids => [@location.id], :type => 'district'})
   end
 end

@@ -3,24 +3,24 @@
 %ul.inline_tab
   %li Budget:
 
-  - style = CodingBudget.classified(activity) ? 'selected' : 'selected incomplete'
+  - style = activity.budget_coded? ? 'selected' : 'selected incomplete'
   %li{:id => 'tab1', :class => style }= link_to "Coding", "#"
 
   - unless other_costs
-    - style = CodingBudgetDistrict.classified(activity) ? '' : 'incomplete'
+    - style = activity.budget_by_district_coded? ? '' : 'incomplete'
     %li{:id => 'tab2', :class => style}= link_to "District", "#"
 
-  - style = CodingBudgetCostCategorization.classified(activity) ? '' : 'incomplete'
+  - style = activity.budget_by_cost_category_coded? ? '' : 'incomplete'
   %li{:id => 'tab3', :class => style}=   link_to "Cost Categorization", "#"
 
   %li Expenditure:
 
-  - style = CodingSpend.classified(activity) ? '' : 'incomplete'
+  - style = activity.spend_coded? ? '' : 'incomplete'
   %li{:id => 'tab4', :class => style}=   link_to "Coding", "#"
 
   - unless other_costs
-    - style = CodingSpendDistrict.classified(activity) ? '' : 'incomplete'
+    - style = activity.spend_by_district_coded? ? '' : 'incomplete'
     %li{:id => 'tab5', :class => style}= link_to "District", "#"
 
-  - style = CodingSpendCostCategorization.classified(activity) ? '' : 'incomplete'
+  - style = activity.spend_by_cost_category_coded? ? '' : 'incomplete'
   %li{:id => 'tab6', :class => style}=   link_to "Cost Categorization", "#"

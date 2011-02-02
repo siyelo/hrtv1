@@ -151,24 +151,24 @@ class Activity < ActiveRecord::Base
 
   def classified
     #TODO override in othercosts and sub_activities
-    budget? && budget_by_district? && budget_by_cost_category? &&
-    spend? && spend_by_district? && spend_by_cost_category?
+    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded? &&
+    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
   end
 
   def classified?
     classified
   end
 
-  def budget?
+  def budget_coded?
     self.budget == self.CodingBudget_amount
   end
 
-  def budget_by_district?
+  def budget_by_district_coded?
     return true if self.locations.empty? #TODO: remove when locations are mandatory
     self.budget == self.CodingBudgetDistrict_amount
   end
 
-  def budget_by_cost_category?
+  def budget_by_cost_category_coded?
     self.budget == self.CodingBudgetCostCategorization_amount
   end
 
@@ -180,16 +180,16 @@ class Activity < ActiveRecord::Base
     code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
 
-  def spend?
+  def spend_coded?
     self.spend == self.CodingSpend_amount
   end
 
-  def spend_by_district?
+  def spend_by_district_coded?
     return true if self.locations.empty? #TODO: remove
     self.spend == self.CodingSpendDistrict_amount
   end
 
-  def spend_by_cost_category?
+  def spend_by_cost_category_coded?
     self.spend == self.CodingSpendCostCategorization_amount
   end
 
@@ -202,11 +202,11 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_classified?
-    budget? && budget_by_district? && budget_by_cost_category?
+    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded?
   end
 
   def spend_classified?
-    spend? && spend_by_district? && spend_by_cost_category?
+    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
   end
 
   # Called from migrations
@@ -320,12 +320,12 @@ class Activity < ActiveRecord::Base
 
   def coding_progress
     coded = 0
-    coded +=1 if budget?
-    coded +=1 if budget_by_district?
-    coded +=1 if budget_by_cost_category?
-    coded +=1 if spend?
-    coded +=1 if spend_by_district?
-    coded +=1 if spend_by_cost_category?
+    coded +=1 if budget_coded?
+    coded +=1 if budget_by_district_coded?
+    coded +=1 if budget_by_cost_category_coded?
+    coded +=1 if spend_coded?
+    coded +=1 if spend_by_district_coded?
+    coded +=1 if spend_by_cost_category_coded?
     progress = (coded.to_f / 6) * 100
   end
 

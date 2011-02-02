@@ -35,13 +35,24 @@ class CodingTree
     def ca
       @object[:ca]
     end
+
+    # Node is valid if:
+    #   - cached_amount and sum_of_children have same amount,
+    #     except for the leaf code assignments
+    #   - all children nodes are valid
+    def valid?
+      ((ca.cached_amount == ca.sum_of_children) ||
+        (ca.sum_of_children == 0 && children.empty?)) &&
+        children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
+
+    end
   end
 
   def initialize(activity, coding_klass)
     @roots            = []
     codes             = coding_klass.available_codes(activity)
     @code_assignments = coding_klass.with_activity(activity)
-    @_root       = Tree.new({})
+    @_root            = Tree.new({})
 
     build_subtree(@_root, codes)
   end
@@ -59,5 +70,10 @@ class CodingTree
 
   def roots
     @_root.children
+  end
+
+  # CodingTree is valid if all root assignments are valid
+  def valid?
+    @_root.children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
   end
 end

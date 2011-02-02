@@ -1,3 +1,16 @@
+#  USAGE:
+#
+#  activity    = Activity.find(889)
+#  coding_type = CodingBudget
+
+#  ct = CodingTree.new(activity, coding_type)
+#
+#  p ct.roots[0].code.short_display
+#  p ct.roots[0].ca.cached_amount
+#  p ct.roots[0].children[0].code.short_display
+#  p ct.roots[0].children[0].children[0].code.short_display
+#  p ct.roots[0].children[0].children[0].children[0].code.short_display
+
 class CodingTree
   class Tree
     def initialize(object)

@@ -10,12 +10,7 @@ class AddCacheColumnsForClassifiedToActivity < ActiveRecord::Migration
     add_column :activities, "#{CodingSpendCostCategorization}_amount", :decimal, :default => 0
     add_column :activities, "#{CodingSpendDistrict}_amount", :decimal, :default => 0
 
-    Activity.all.each do |activity|
-      puts "Migrating... activity #{activity.id}"
-      [CodingBudget,CodingBudgetCostCategorization,CodingBudgetDistrict,CodingSpend,CodingSpendCostCategorization,CodingSpendDistrict].each do |type|
-        activity.update_classified_amount_cache(type)
-      end
-    end
+    load 'db/fixes/update_activity_cached_amount_columns.rb'
   end
 
   def self.down

@@ -38,7 +38,7 @@ class CodeAssignment < ActiveRecord::Base
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
   named_scope :select_for_pies,
-              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd/100) AS value",
+              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd) AS value",
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'

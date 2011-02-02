@@ -9,7 +9,7 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
   end
 
   def show
-    @activity     = Activity.find(params[:id])
+    @activity     = ::Activity.find(params[:id])
     @treemap      = params[:chart_type] == "treemap" || params[:chart_type].blank?
     code_type     = get_code_type_and_initialize(params[:code_type])
 
@@ -22,6 +22,9 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
     end
 
     @charts_loaded  = @code_spent_values && @code_budget_values
+
+    @spent_assignments_sum    = @activity.spend_coding_sum_in_usd
+    @budget_assignments_sum   = @activity.budget_coding_sum_in_usd
 
     unless @charts_loaded
       flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so some of the charts may be missing!"

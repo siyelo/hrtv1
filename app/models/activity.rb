@@ -261,6 +261,22 @@ class Activity < ActiveRecord::Base
     assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
   end
 
+  def spend_coding_sum_in_usd
+    self.spend_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def budget_coding_sum_in_usd
+    self.budget_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  def spend_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingSpendDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
+  def budget_district_coding_sum_in_usd(district)
+    self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
   def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program

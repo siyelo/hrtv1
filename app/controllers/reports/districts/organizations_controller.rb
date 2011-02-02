@@ -11,7 +11,7 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
   end
 
   def show
-    @organization      = Organization.find(params[:id])
+    @organization      = ::Organization.find(params[:id])
     @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
     code_type          = get_code_type_and_initialize(params[:code_type])
     activities         = @organization.dr_activities

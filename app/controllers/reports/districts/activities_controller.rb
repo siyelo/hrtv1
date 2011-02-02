@@ -10,7 +10,7 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
   end
 
   def show
-    @activity          = Activity.find(params[:id])
+    @activity          = ::Activity.find(params[:id])
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity)
     @budget_pie_values = Charts::DistrictPies::activity_budget_ratio(@location, @activity)
     @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
@@ -26,6 +26,9 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
 
     @charts_loaded  = @spent_pie_values && @budget_pie_values &&
                       @code_spent_values && @code_budget_values
+
+    @spent_assignments_sum    = @activity.spend_district_coding_sum_in_usd(@location)
+    @budget_assignments_sum   = @activity.budget_district_coding_sum_in_usd(@location)
 
     unless @charts_loaded
       flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so some of the charts may be missing!"

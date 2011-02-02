@@ -217,7 +217,7 @@ class Activity < ActiveRecord::Base
   # Called from migration 20100924042908_add_cache_columns_for_classified_to_activity.rb
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
-    self.save
+    self.save(false) # save the activity with new cached amounts event if it's approved
   end
 
   # Updates classified amount caches if budget or spend have been changed

@@ -43,19 +43,4 @@ activities.each_with_index do |activity, index|
     CodeAssignment.with_activity(activity).with_type(CodingSpendCostCategorization.to_s).delete_all
     activity.copy_budget_codings_to_spend([CodingBudgetCostCategorization.to_s])
   end
-
-  if !activity.spend > 0
-    delete_all(cas12) if cas12.present?
-    delete_all(cas22) if cas22.present?
-    delete_all(cas32) if cas32.present?
-  end
-
-end
-
-def delete_all activity, cas
-  type=cas.first.try(:type)
-  cas.each do |ca|
-    ca.delete
-  end
-  activity.send(:set_classified_amount_cache(type)) if type
 end

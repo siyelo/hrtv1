@@ -54,18 +54,7 @@ describe CodingTree do
     CodingBudget.should_receive(:available_codes).and_return([@code1, @code2])
   end
 
-  context "coding tree" do
-    it "has roots" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
-      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
-      ct  = CodingTree.new(@activity, CodingBudget)
-      ct.roots.length.should == 2
-      ct.roots.map(&:ca).should   == [ca1, ca2]
-      ct.roots.map(&:code).should == [@code1, @code2]
-    end
-  end
-
-  context "tree node" do
+  describe "Tree" do
     it "has code associated" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ct  = CodingTree.new(@activity, CodingBudget)
@@ -99,5 +88,55 @@ describe CodingTree do
       ct.roots[0].children[0].children.map(&:code).should == [@code111]
     end
   end
-end
 
+  context "root" do
+    it "has roots" do
+      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
+      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
+      ct  = CodingTree.new(@activity, CodingBudget)
+      ct.roots.length.should == 2
+      ct.roots.map(&:ca).should   == [ca1, ca2]
+      ct.roots.map(&:code).should == [@code1, @code2]
+    end
+  end
+
+  context "valid" do
+    it "is valid when there are only roots" do
+      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
+      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
+      ct  = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == true
+    end
+
+    it "is valid when sum_of_children is same as parent cached_sum (2 level)" do
+      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100)
+      ct   = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == true
+    end
+
+    it "is valid when sum_of_children is same as parent cached_sum (3 level)" do
+      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+      ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
+      ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
+      ct    = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == true
+    end
+  end
+
+  context "not valid" do
+    it "is valid when root children has greated amount" do
+      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
+      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
+      ct   = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == false
+    end
+
+    it "is valid when root children has lower amount" do
+      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
+      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
+      ct   = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == false
+    end
+  end
+end

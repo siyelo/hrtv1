@@ -44,7 +44,6 @@ class CodingTree
       ((ca.cached_amount == ca.sum_of_children) ||
         (ca.sum_of_children == 0 && children.empty?)) &&
         children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
-
     end
   end
 

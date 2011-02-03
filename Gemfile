@@ -31,6 +31,9 @@ group :development do
   gem 'taps'
   gem 'wirble'
   gem 'mongrel'
+  gem 'interactive_editor'
+  gem 'sketches'
+  gem 'looksee'
 end
 
 group :test, :development do

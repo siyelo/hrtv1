@@ -1,8 +1,8 @@
 require 'fastercsv'
 
 #activities = [Activity.find(7312)]
-activities = Activity.only_simple.find(:all, :conditions => "id < 1000")
-#activities = Activity.only_simple.all
+#activities = Activity.only_simple.find(:all, :conditions => "id < 1000")
+activities = Activity.only_simple.all
 total = activities.length
 
 def b(bool)

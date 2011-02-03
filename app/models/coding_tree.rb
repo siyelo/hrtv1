@@ -48,23 +48,11 @@ class CodingTree
   end
 
   def initialize(activity, coding_klass)
-    @roots            = []
     codes             = coding_klass.available_codes(activity)
     @code_assignments = coding_klass.with_activity(activity)
     @_root            = Tree.new({})
 
     build_subtree(@_root, codes)
-  end
-
-  def build_subtree(root, codes)
-    codes.each do |code|
-      code_assignment = @code_assignments.detect{|ca| ca.code_id == code.id}
-      if code_assignment
-        node = Tree.new({:ca => code_assignment, :code => code})
-        root.children << node
-        build_subtree(node, code.children) unless code.leaf?
-      end
-    end
   end
 
   def roots
@@ -75,4 +63,38 @@ class CodingTree
   def valid?
     @_root.children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
   end
+
+  def valid_ca?(code_assignment)
+    node = find_node(roots, code_assignment)
+    node && node.valid?
+  end
+
+  private
+
+    def build_subtree(root, codes)
+      codes.each do |code|
+        code_assignment = @code_assignments.detect{|ca| ca.code_id == code.id}
+        if code_assignment
+          node = Tree.new({:ca => code_assignment, :code => code})
+          root.children << node
+          build_subtree(node, code.children) unless code.leaf?
+        end
+      end
+    end
+
+    def find_node(nodes, code_assignment)
+      found_node = nil
+
+      nodes.each do |node|
+        if node.ca == code_assignment
+          found_node = node
+          break
+        else
+          found_node = find_node(node.children, code_assignment)
+          break if found_node
+        end
+      end
+
+      found_node
+    end
 end

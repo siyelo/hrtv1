@@ -1,26 +1,21 @@
 module WorkflowHelper
-  @@map = {
-            "data_responses/start" => "projects",
-            "projects/index" => "funding_sources",
-            "funding_sources/index" => "implementers",
-            "implementers/index" => "activities",
-            "activities/index" => "other_costs",
-            "other_costs/index" => "submit"
-          }
 
   def next_workflow_path
-    if next_workflow_path_wo_slash
-      '/' + next_workflow_path_wo_slash
+    case "#{params[:controller]}/#{params[:action]}"
+    when "data_responses/start"
+      projects_path
+    when "projects/index"
+      funding_sources_path
+    when "funding_sources/index"
+      implementers_path
+    when "implementers/index"
+      activities_path
+    when "activities/index"
+      other_costs_path
+    when "other_costs/index"
+      review_data_response_path(current_user.current_data_response)
     else
-      '/'
+      root_path
     end
-  end
-
-  def next_workflow_path_wo_slash
-    @@map[current_workflow_url]
-  end
-
-  def current_workflow_url
-    "#{params[:controller]}/#{params[:action]}"
   end
 end

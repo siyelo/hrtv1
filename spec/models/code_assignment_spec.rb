@@ -70,7 +70,11 @@ describe CodeAssignment do
     end
 
     it "should update cached_amount_in_usd on creation" do
-      @ca.cached_amount_in_usd.should == 0.2066454636759290257783729494476063499 # pg precision! ( sqlite worked with 0.206645463675929)
+      if ActiveRecord::Base.connection.adapter_name == "SQLite"
+        @ca.cached_amount_in_usd.should == 0.206645463675929 # sqlite precision!
+      else
+        @ca.cached_amount_in_usd.should == 0.2066454636759290257783729494476063499 # pg precision!
+      end
     end
 
     it "should update cached_amount_in_usd on update" do

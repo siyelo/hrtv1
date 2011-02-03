@@ -7,5 +7,7 @@ activities.each_with_index do |activity, index|
   puts "Updating activity id: #{activity.id}, :: #{index + 1}/#{total}"
   ca_types.each do |type|
     activity.update_classified_amount_cache(type)
+    print "."
   end
 end
+puts "Activities cache update done..."

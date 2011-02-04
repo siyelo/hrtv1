@@ -3,7 +3,7 @@ require 'fastercsv'
 class Reports::JawpReport
   include Reports::Helpers
 
-  def initialize(current_user, type)
+  def initialize(type)
     @is_budget         = is_budget?(type)
 
     @activities = Activity.only_simple.find(:all,

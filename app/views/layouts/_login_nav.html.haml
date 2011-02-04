@@ -3,16 +3,16 @@
   - if current_user
     %ul
       %li
-        %a{ :href => user_dashboard_path(current_user)}
-          = image_tag"icon_dashboard.png"
+        - link_to user_dashboard_path(current_user) do
+          = image_tag("icon_dashboard.png")
           Dashboard
       %li
-        %a{ :href => edit_user_url(current_user.id)}
-          = image_tag"icon_profile.png"
+        - link_to edit_profile_path do
+          = image_tag("icon_profile.png")
           My Profile
       %li
-        %a{ :href => logout_path }
-          = image_tag"icon_logout.png"
+        - link_to logout_path do
+          = image_tag("icon_logout.png")
           Sign Out
     %span
       = "#{current_user.email}"

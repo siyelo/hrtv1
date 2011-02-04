@@ -30,7 +30,7 @@
         %td
           - if loc.district
             %ul
-              - spent_per_capita = (loc.district.population.to_f / @total_population) * BigDecimal.new(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0)
+              - spent_per_capita = ( BigDecimal.new(@spent_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0) ) / loc.district.population.to_f  
               %li= n2c(spent_per_capita * usd_to_rwf, 'RWF')
               %li= "(#{n2c(spent_per_capita, '$')})"
         %td

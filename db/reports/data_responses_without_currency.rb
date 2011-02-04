@@ -2,7 +2,7 @@ require 'fastercsv'
 
 drs = DataResponse.find(:all,
                         :conditions => "data_responses.currency IS NULL",
-                        :include => [{:responding_organization => :users}, :projects]
+                        :include => [{:organization => :users}, :projects]
                        )
 
 max_projects = Project.find(:first,
@@ -25,10 +25,10 @@ csv = FasterCSV.generate do |csv|
 
   # data
   drs.each do |dr|
-    row = [dr.responding_organization.id,
-           dr.responding_organization.name,
+    row = [dr.organization.id,
+           dr.organization.name,
            dr.id,
-           dr.responding_organization.users.map{|u| u.email}.join(', ')
+           dr.organization.users.map{|u| u.email}.join(', ')
           ]
 
     dr.projects.each do |project|

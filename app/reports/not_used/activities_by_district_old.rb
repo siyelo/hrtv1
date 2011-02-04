@@ -47,7 +47,7 @@ class Reports::ActivitiesByDistrictOld
   end
 
   def build_row(activity, beneficiaries, locations)
-    org        = activity.data_response.responding_organization
+    org        = activity.data_response.organization
     act_benefs = activity.beneficiaries.map(&:short_display)
     act_locs   = activity.locations.map(&:short_display)
 

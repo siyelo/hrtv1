@@ -53,6 +53,6 @@ class Admin::ResponsesController < Admin::BaseController
   protected
 
     def find_submitted
-      @submitted_responses   = DataResponse.available_to(current_user).submitted.find(:all, :include => :responding_organization)
+      @submitted_responses   = DataResponse.available_to(current_user).submitted.find(:all, :include => :organization)
     end
 end

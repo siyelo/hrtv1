@@ -80,9 +80,9 @@ class Activity < ActiveRecord::Base
       "INNER JOIN data_responses
         ON activities.data_response_id = data_responses.id
       LEFT JOIN data_responses provider_dr
-        ON provider_dr.organization_id_responder = activities.provider_id
-      LEFT JOIN organizations ON provider_dr.organization_id_responder = organizations.id",
-    :conditions => ["activities.provider_id = data_responses.organization_id_responder
+        ON provider_dr.organization_id = activities.provider_id
+      LEFT JOIN organizations ON provider_dr.organization_id = organizations.id",
+    :conditions => ["activities.provider_id = data_responses.organization_id
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
 
@@ -96,11 +96,11 @@ class Activity < ActiveRecord::Base
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
       a = Activity.all(:joins =>
         "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
-        LEFT JOIN data_responses provider_dr ON provider_dr.organization_id_responder = activities.provider_id
+        LEFT JOIN data_responses provider_dr ON provider_dr.organization_id = activities.provider_id
         LEFT JOIN (SELECT organization_id, count(*) as num_users
                      FROM users
-                  GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id_responder ",
-       :conditions => ["activities.provider_id = data_responses.organization_id_responder
+                  GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id ",
+       :conditions => ["activities.provider_id = data_responses.organization_id
                         OR (provider_dr.id IS NULL
                         OR org_users_count.organization_id IS NULL)"])
       a.uniq
@@ -129,8 +129,9 @@ class Activity < ActiveRecord::Base
     self.project.nil? ? nil : self.project.currency
   end
 
+  # TODO change this with delegate
   def organization
-    self.data_response.responding_organization
+    self.data_response.organization
   end
 
   # helper until we enforce this in the model association!

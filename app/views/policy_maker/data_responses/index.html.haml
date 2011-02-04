@@ -16,8 +16,8 @@
         %tbody
           - @empty_data_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-              %td= data_response.responding_organization
-              %td= data_response.responding_organization.user_email_list_limit_3
+              %td= data_response.organization
+              %td= data_response.organization.user_email_list_limit_3
               %td= data_response.contact_phone_number
               %td
                 = link_to "Show", admin_response_path(data_response)
@@ -43,7 +43,7 @@
         %tbody
           - @in_progress_data_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-              %td= data_response.responding_organization
+              %td= data_response.organization
               %td= data_response.projects.count
               %td= n2c data_response.total_project_spend
               %td= n2c data_response.total_project_budget
@@ -70,7 +70,7 @@
           %tbody
             - @submitted_data_responses.each do |data_response|
               %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-                %td= data_response.responding_organization
+                %td= data_response.organization
                 %td= data_response.submitted_at
                 %td
                 %td

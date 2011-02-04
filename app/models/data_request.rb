@@ -11,7 +11,7 @@ class DataRequest < ActiveRecord::Base
 
   named_scope :unfulfilled, lambda {|organization|
     return {} unless organization
-    { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id_responder = ? )", organization.id] }
+    { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id = ? )", organization.id] }
   }
 
   def self.find_unfulfill_request organization_id

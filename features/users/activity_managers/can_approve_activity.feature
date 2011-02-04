@@ -8,7 +8,7 @@ Background:
   And a data_request exists with title: "Req1", requesting_organization: the organization
 
   And an organization exists with name: "WHO"
-  And a data_response exists with data_request: the data_request, responding_organization: the organization
+  And a data_response exists with data_request: the data_request, organization: the organization
   And an activity_manager exists with username: "who_manager", organization: the organization, current_data_response: the data_response
   And a project exists with name: "TB Treatment Project", data_response: the data_response
   And an activity exists with name: "TB Drugs procurement", data_response: the data_response

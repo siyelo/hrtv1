@@ -12,8 +12,8 @@ class Reports::MapDistrictsByPartner
       raise "Invalid type #{type}".to_yaml
     end
 
-    partners = DataResponse.in_progress.map(&:responding_organization) +
-      DataResponse.submitted.map(&:responding_organization)
+    partners = DataResponse.in_progress.map(&:organization) +
+      DataResponse.submitted.map(&:organization)
     partners = partners.uniq
 
     @districts_hash = {}

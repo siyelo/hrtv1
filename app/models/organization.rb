@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   has_many :data_requests_made,
            :class_name => "DataRequest",
            :foreign_key => :organization_id_requester
-  has_many :data_responses, :foreign_key => :organization_id_responder, :dependent => :destroy
+  has_many :data_responses, :foreign_key => :organization_id, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
   has_many :out_flows,
             :class_name => "FundingFlow",

@@ -29,7 +29,7 @@ class Reports::Activity
                   COALESCE(SUM(ca_budget_sum),0) AS budget_sum_raw",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id
         LEFT OUTER JOIN (
           SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as ca_spent_sum
           FROM code_assignments ca1
@@ -79,7 +79,7 @@ class Reports::Activity
                   SUM(ca1.cached_amount_in_usd) AS spent_sum_raw",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
-        INNER JOIN organizations ON organizations.id = data_responses.organization_id_responder
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id
         INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
                AND ca1.type = '#{ca1_type}'
                AND ca1.code_id IN (#{code_ids})",

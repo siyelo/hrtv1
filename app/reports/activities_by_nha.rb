@@ -8,7 +8,7 @@ class Reports::ActivitiesByNha
                    #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    :include => [:locations, :provider, :organizations,
-                                {:data_response => :responding_organization}])
+                                {:data_response => :organization}])
   end
 
   def csv

@@ -160,7 +160,7 @@
 <text text-anchor="start" x="3084" y="-1019.4" style="font-family:Times New Roman;font-size:11.00;">complete :boolean</text>
 <text text-anchor="start" x="3084" y="-1002.4" style="font-family:Times New Roman;font-size:11.00;">created_at :timestamp</text>
 <text text-anchor="start" x="3084" y="-985.4" style="font-family:Times New Roman;font-size:11.00;">updated_at :timestamp</text>
-<text text-anchor="start" x="3084" y="-968.4" style="font-family:Times New Roman;font-size:11.00;">organization_id_responder :integer</text>
+<text text-anchor="start" x="3084" y="-968.4" style="font-family:Times New Roman;font-size:11.00;">organization_id :integer</text>
 <text text-anchor="start" x="3084" y="-951.4" style="font-family:Times New Roman;font-size:11.00;">currency :string</text>
 <text text-anchor="start" x="3084" y="-934.4" style="font-family:Times New Roman;font-size:11.00;">fiscal_year_start_date :date</text>
 <text text-anchor="start" x="3084" y="-917.4" style="font-family:Times New Roman;font-size:11.00;">fiscal_year_end_date :date</text>

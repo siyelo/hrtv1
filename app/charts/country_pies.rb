@@ -8,7 +8,7 @@ module Charts::CountryPies
         :select => "organizations.id,
                     organizations.name as my_name,
                     SUM(ca1.cached_amount_in_usd) as value",
-      :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id_responder
+      :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id
         INNER JOIN activities a1 ON dr1.id = a1.data_response_id
         INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id
           AND ca1.type = '#{code_type}'",

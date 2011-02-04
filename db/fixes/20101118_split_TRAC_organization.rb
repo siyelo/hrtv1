@@ -34,7 +34,7 @@ Organization.transaction do
   trac_malaria = clone_to_new(original_trac, "TRAC+ - Malaria")
   original_dr = original_trac.data_responses.first
   new_dr = DataResponse.new(:data_request => original_dr.data_request,
-                        :responding_organization => trac_malaria)
+                        :organization => trac_malaria)
 
   existing_user_emails = ["joseph.baguma@gmail.com"]
   move_users(original_trac, trac_malaria, existing_user_emails, new_dr)
@@ -103,7 +103,7 @@ Organization.transaction do
   trac_tb = clone_to_new(original_trac, "TRAC+ - TB")
   original_dr = original_trac.data_responses.first
   new_dr = DataResponse.new(:data_request => original_dr.data_request,
-                        :responding_organization => trac_tb)
+                        :organization => trac_tb)
 
   existing_user_emails = ["kayirangwae1@rw.cdc.gov", "mukakigerie@yahoo.com"]
   move_users(original_trac, trac_tb, existing_user_emails, new_dr)

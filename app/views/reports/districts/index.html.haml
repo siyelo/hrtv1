@@ -14,6 +14,7 @@
       %th Total Spent
       %th Per capita spending
       %th Total Budget
+      %th Per capita budget
 
   %tbody
     - @locations.each do |loc|
@@ -37,3 +38,9 @@
           %ul
             %li= n2c(budget_total * usd_to_rwf, 'RWF')
             %li= "(#{n2c(budget_total, '$')})"
+        %td
+          - if loc.district
+            %ul
+              - budget_per_capita = ( BigDecimal.new(@budget_codings.detect{|c| c.code_id == loc.id}.try(:total) || 0) ) / loc.district.population.to_f  
+              %li= n2c(budget_per_capita * usd_to_rwf, 'RWF')
+              %li= "(#{n2c(budget_per_capita, '$')})"

@@ -54,9 +54,9 @@ def generate_report(key)
   when 'activities_by_expenditure_districts'
     Reports::ActivitiesByDistricts.new(:spent)
   when 'jawp_report_budget'
-    Reports::JawpReport.new(:budget)
+    Reports::JawpReport.new(:budget, jawp_activities)
   when 'jawp_report_spent'
-    Reports::JawpReport.new(:spent)
+    Reports::JawpReport.new(:spent, jawp_activities)
   when 'activities_by_nsp_budget'
     Reports::ActivitiesByNsp.new(activities, :budget, true)
   when 'activities_by_nha'
@@ -70,6 +70,14 @@ end
 
 def activities
   Activity.only_simple.canonical
+end
+
+def jawp_activities
+     Activity.only_simple.find(:all,
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                   :include => [:locations, :provider, :organizations,
+                                :beneficiaries, {:data_response => :organization}])
 end
 
 namespace :reports do

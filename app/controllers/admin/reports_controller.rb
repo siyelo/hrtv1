@@ -19,7 +19,8 @@ class Admin::ReportsController < Admin::BaseController
       end
     end
 
-    send_csv(report.csv, "#{report_name}_#{time}")
+    report_name = params[:id]
+    send_csv(report.csv, "#{report_name}_#{time}.csv")
   end
 
   private
@@ -65,9 +66,9 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByDistricts.new(:spent)
       when 'jawp_report_budget'
-        Reports::JawpReport.new(:budget)
+        Reports::JawpReport.new(:budget, jawp_activities)
       when 'jawp_report_spent'
-        Reports::JawpReport.new(:spent)
+        Reports::JawpReport.new(:spent, jawp_activities)
       when 'activities_by_nsp_budget'
         Reports::ActivitiesByNsp.new(activities, :budget, true)
       when 'activities_by_nha'
@@ -81,6 +82,14 @@ class Admin::ReportsController < Admin::BaseController
 
     def activities
       Activity.only_simple.canonical
+    end
+
+    def jawp_activities
+     Activity.only_simple.find(:all,
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                   :include => [:locations, :provider, :organizations,
+                                :beneficiaries, {:data_response => :organization}])
     end
 
     def report_time(time)

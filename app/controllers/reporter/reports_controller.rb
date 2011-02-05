@@ -30,7 +30,7 @@ class Reporter::ReportsController < Reporter::BaseController
       when 'map_districts_by_all_codes_budget'
         Reports::MapDistrictsByAllCodes.new(activities, :budget)
       else
-        raise "Invalid report request '#{params[:id]}'"
+        raise "Invalid report request '#{params[:id]}'" #TODO GN this should do security exception
       end
     end
 

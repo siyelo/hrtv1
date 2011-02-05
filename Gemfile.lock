@@ -66,12 +66,15 @@ GEM
       activesupport
       builder
     i18n (0.5.0)
+    interactive_editor (0.0.6)
+      spoon (>= 0.0.1)
     json (1.4.6)
     json_pure (1.5.1)
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
     linecache (0.43)
+    looksee (0.2.1)
     mime-types (1.16)
     money (3.5.5)
       i18n (~> 0.4)
@@ -122,6 +125,8 @@ GEM
     shoulda (2.11.3)
     sinatra (1.0)
       rack (>= 1.0)
+    sketches (0.1.1)
+    spoon (0.0.1)
     spork (0.8.4)
     sqlite3 (1.3.3)
     sqlite3-ruby (1.3.3)
@@ -161,7 +166,9 @@ DEPENDENCIES
   heroku
   hirb
   hoptoad_notifier
+  interactive_editor
   launchy
+  looksee
   money
   mongrel
   open_gem
@@ -173,6 +180,7 @@ DEPENDENCIES
   ruby-debug
   ruby-pg
   shoulda
+  sketches
   spork
   sqlite3-ruby
   taps

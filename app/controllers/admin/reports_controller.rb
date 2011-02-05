@@ -6,12 +6,28 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def show
-    send_csv(report.csv, report_name)
+    if params[:force] == "true"
+      report = generate_report
+      time = report_time(Time.now.utc)
+    else
+      report = Report.find_last_by_key(params[:id])
+      if report
+        time = report_time(report.updated_at)
+      else
+        report = generate_report # if the report is not in database, generate it!
+        time = report_time(Time.now.utc)
+      end
+    end
+
+    report_name = params[:id]
+    send_csv(report.csv, "#{report_name}_#{time}.csv")
   end
 
   private
 
-    def report
+    # NOTE: if you change something in this method,
+    # be sure to update the rake task: reports.rake !!!
+    def generate_report
       case params[:id]
       when 'districts_by_nsp_budget'
         Reports::DistrictsByNsp.new(activities, :budget)
@@ -26,8 +42,7 @@ class Admin::ReportsController < Admin::BaseController
       when 'map_districts_by_nsp_budget'
         Reports::MapDistrictsByNsp.new(activities, :budget)
       when 'map_districts_by_all_codes_budget'
-        @activities = Activity.only_simple.canonical
-        Reports::MapDistrictsByAllCodes.new(@activities, :budget)
+        Reports::MapDistrictsByAllCodes.new(activities, :budget)
       when 'map_facilities_by_partner_budget'
         Reports::MapFacilitiesByPartner.new(:budget)
       when 'map_facilities_by_partner_spent'
@@ -51,15 +66,15 @@ class Admin::ReportsController < Admin::BaseController
       when 'activities_by_expenditure_districts'
         Reports::ActivitiesByDistricts.new(:spent)
       when 'jawp_report_budget'
-        Reports::JawpReport.new(current_user, :budget)
+        Reports::JawpReport.new(:budget, jawp_activities)
       when 'jawp_report_spent'
-        Reports::JawpReport.new(current_user, :spent)
+        Reports::JawpReport.new(:spent, jawp_activities)
       when 'activities_by_nsp_budget'
-        Reports::ActivitiesByNsp.new(activities, :budget, current_user.admin?)
+        Reports::ActivitiesByNsp.new(activities, :budget, true)
       when 'activities_by_nha'
         Reports::ActivitiesByNha.new(activities)
       when 'activities_by_all_codes_budget'
-        Reports::ActivitiesByAllCodes.new(activities, :budget, current_user.admin? )
+        Reports::ActivitiesByAllCodes.new(activities, :budget, true)
       else
         raise "Invalid report request '#{params[:id]}'"
       end
@@ -67,5 +82,17 @@ class Admin::ReportsController < Admin::BaseController
 
     def activities
       Activity.only_simple.canonical
+    end
+
+    def jawp_activities
+     Activity.only_simple.find(:all,
+                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+                   :include => [:locations, :provider, :organizations,
+                                :beneficiaries, {:data_response => :organization}])
+    end
+
+    def report_time(time)
+      time.strftime("%Y%m%d-%H%M")
     end
 end

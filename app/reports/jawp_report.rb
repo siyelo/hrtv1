@@ -3,14 +3,17 @@ require 'fastercsv'
 class Reports::JawpReport
   include Reports::Helpers
 
-  def initialize(current_user, type)
+  def initialize(type, activities)
     @is_budget         = is_budget?(type)
 
-    @activities = Activity.only_simple.find(:all,
+    @activities = activities
+#Activity.only_simple.find(:all,
                    #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-                   :include => [:locations, :provider, :organizations,
-                                :beneficiaries, {:data_response => :organization}])
+
+#                   :include => [:locations, :provider, :organizations,
+
+#                                :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,

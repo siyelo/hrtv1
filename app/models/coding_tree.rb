@@ -41,7 +41,7 @@ class CodingTree
     #     except for the leaf code assignments
     #   - all children nodes are valid
     def valid?
-      ((ca.cached_amount == ca.sum_of_children) ||
+      ((ca.cached_amount >= ca.sum_of_children) ||
         (ca.sum_of_children == 0 && children.empty?)) &&
         children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
     end

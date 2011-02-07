@@ -1,4 +1,4 @@
-class HsspSpend < SpendCodeAssignment
+class HsspSpend < CodeAssignment
 end
 
 # == Schema Information

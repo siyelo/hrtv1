@@ -1,9 +1,5 @@
 class Nasa < Code
-
 end
-
-
-
 
 # == Schema Information
 #

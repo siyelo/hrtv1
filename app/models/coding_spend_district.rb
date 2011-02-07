@@ -1,4 +1,4 @@
-class CodingSpendDistrict < SpendCodeAssignment
+class CodingSpendDistrict < CodeAssignment
 end
 
 # == Schema Information

@@ -1,4 +1,4 @@
-class CodingSpendCostCategorization < SpendCodeAssignment
+class CodingSpendCostCategorization < CodeAssignment
 end
 
 # == Schema Information

@@ -1,4 +1,4 @@
-class CodingBudgetDistrict < BudgetCodeAssignment
+class CodingBudgetDistrict < CodeAssignment
 end
 
 # == Schema Information

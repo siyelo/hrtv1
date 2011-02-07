@@ -1,9 +1,5 @@
-
 class OtherCostType < Code
 end
-
-
-
 
 # == Schema Information
 #

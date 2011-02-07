@@ -1,9 +1,5 @@
 class ActivityCostCategory < Code
-
 end
-
-
-
 
 # == Schema Information
 #

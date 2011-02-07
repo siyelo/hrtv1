@@ -1,4 +1,4 @@
-class HsspBudget < BudgetCodeAssignment
+class HsspBudget < CodeAssignment
 end
 
 # == Schema Information

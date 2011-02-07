@@ -1,8 +1,6 @@
 class Currency < ActiveRecord::Base
 end
 
-
-
 # == Schema Information
 #
 # Table name: currencies

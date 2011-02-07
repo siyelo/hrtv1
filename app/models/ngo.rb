@@ -1,7 +1,5 @@
-class Ngo < Organization 
+class Ngo < Organization
 end
-
-
 
 # == Schema Information
 #

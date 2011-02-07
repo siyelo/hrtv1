@@ -16,6 +16,7 @@ config/database.yml
 log/*.log
 tmp/*
 public/stylesheets/compiled/*
+public/system/*
 
 # Cucumber/webrat tmp files
 webrat-*

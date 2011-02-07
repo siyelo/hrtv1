@@ -11,7 +11,9 @@ gem 'google_currency'
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'money'
+gem "paperclip", "~> 2.3"
 gem 'rails', '2.3.8'
+gem 'settingslogic'
 gem 'validates_date_time', "= 1.0.0"
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"

@@ -1,4 +1,5 @@
 class Report < ActiveRecord::Base
+  has_attached_file :csv, Settings.paperclip.to_options
 end
 
 # == Schema Information

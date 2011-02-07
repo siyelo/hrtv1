@@ -1,22 +1,29 @@
 # check for production environment
 
+def log(message)
+  Rails.logger.info message
+  puts message
+end
+
 def update_report(t)
   key = t.name_with_args.gsub(/reports:/, '')
 
-  Rails.logger.info "RAKE BEGIN: #{key}"
-  puts "RAKE BEGIN: #{key}"
+  log "RAKE BEGIN: #{key}"
 
   report     = Report.find_or_initialize_by_key(key)
   raw_csv    = report.generate.csv
   filename   = "#{RAILS_ROOT}/tmp/#{key}_#{Process.pid}.csv"
+  zipfile    = filename + ".zip"
   File.open(filename, 'w')  {|f| f.write(raw_csv) }
-  tempfile = File.new(filename, 'r')
+  cmd = "zip -9 #{zipfile} #{filename}"
+  log "Zipping with:  #{cmd}"
+  system cmd
+  tempfile = File.new(zipfile, 'r')
   report.csv = tempfile
   report.save
   File.delete filename
 
-  Rails.logger.info "RAKE END  : #{key}"
-  puts "RAKE END  : #{key}"
+  log "RAKE END  : #{key}"
 end
 
 namespace :reports do

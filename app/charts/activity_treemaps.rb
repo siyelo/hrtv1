@@ -57,7 +57,8 @@ module Charts::ActivityTreemaps
     private
 
       def coding_treemap(activity, type, total_amount)
-        code_roots  = type.available_codes(activity)
+        coding_tree = CodingTree.new(activity, type)
+        code_roots  = coding_tree.available_codes
         assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
 
         data_rows = []

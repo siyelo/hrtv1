@@ -3,7 +3,7 @@
 - amount     = assignment.nil? ? '' : assignment.amount
 - percentage = assignment.nil? ? '' : assignment.percentage
 - cached_amount = assignment.nil? ? '' : assignment.cached_amount
-- style = @ct.valid_ca?(assignment) ? '' : 'color: red;'
+- style = @coding_tree.valid_ca?(assignment) ? '' : 'color: red;'
 
 %li
   = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)

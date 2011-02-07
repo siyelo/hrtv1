@@ -371,7 +371,8 @@ class Activity < ActiveRecord::Base
     end
 
     def set_classified_amount_cache(type)
-      amount = type.codings_sum(type.available_codes(self), self, max_for_coding(type))
+      coding_tree = CodingTree.new(self, type)
+      amount = type.codings_sum(coding_tree.available_codes, self, max_for_coding(type))
       self.send("#{type}_amount=",  amount)
     end
 

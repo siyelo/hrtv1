@@ -66,6 +66,45 @@ class CodingTree
     node && node.valid?
   end
 
+  def available_codes
+    case @coding_klass.to_s
+    when 'CodingBudget'
+      if @activity.class.to_s == "OtherCost"
+        OtherCostCode.roots
+      else
+        Code.for_activities.roots
+      end
+    when 'CodingBudgetCostCategorization'
+      CostCategory.roots
+    when 'CodingBudgetDistrict'
+      @activity.locations
+    when 'CodingSpend'
+      if @activity.class.to_s == "OtherCost"
+        OtherCostCode.roots
+      else
+        Code.for_activities.roots
+      end
+    when 'CodingSpendCostCategorization'
+      CostCategory.roots
+    when 'CodingSpendDistrict'
+      @activity.locations
+    when 'HsspBudget'
+      if @activity.class.to_s == "OtherCost"
+        []
+      else
+        HsspStratObj.all + HsspStratProg.all
+      end
+    when 'HsspSpend'
+      if @activity.class.to_s == "OtherCost"
+        []
+      else
+        HsspStratObj.all + HsspStratProg.all
+      end
+    else
+      raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+    end
+  end
+
   private
 
     def inner_root
@@ -73,7 +112,7 @@ class CodingTree
     end
 
     def build_tree
-      codes             = @coding_klass.available_codes(@activity)
+      codes             = available_codes
       @code_assignments = @coding_klass.with_activity(@activity)
       @inner_root       = Tree.new({})
 

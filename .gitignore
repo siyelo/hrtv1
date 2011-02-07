@@ -42,3 +42,5 @@ config/settings.loader*
 
 # diffmerge temp files
 ___*
+
+.amazon_keys

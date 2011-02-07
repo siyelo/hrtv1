@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 #source "http://gems.github.com"
 
 gem 'authlogic'
+gem 'aws-s3'
 gem 'cancan'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'

@@ -16,11 +16,11 @@
 # END
 
 # Postgres setup
-# createuser -d -R -P hrt_dev
-# createdb -O hrt_dev hrt_dev
+#   createuser -d -R -P hrt_dev
+#   createdb -O hrt_dev hrt_dev
 
-# to load a pgdump.sql from Heroku:
-# psql -f pgdump.sql hrt_dev hrt_dev -W
+# to load a pgdump.sql from Heroku (pgbackup)
+#   pg_restore --verbose --clean --no-acl --no-owner -h localhost -U hrt_dev -d hrt_dev blah.pgbackup.db
 
 development:
   adapter: postgresql

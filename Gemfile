@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 #source "http://gems.github.com"
 
 gem 'authlogic'
+gem 'aws-s3', :require => 'aws/s3'
 gem 'cancan'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
@@ -10,7 +11,9 @@ gem 'google_currency'
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'money'
+gem "paperclip", "~> 2.3"
 gem 'rails', '2.3.8'
+gem 'settingslogic'
 gem 'validates_date_time', "= 1.0.0"
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"
@@ -31,6 +34,9 @@ group :development do
   gem 'taps'
   gem 'wirble'
   gem 'mongrel'
+  gem 'interactive_editor'
+  gem 'sketches'
+  gem 'looksee'
 end
 
 group :test, :development do

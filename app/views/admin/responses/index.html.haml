@@ -19,7 +19,7 @@
         %tbody
           - @submitted_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
-              %td=link_to data_response.responding_organization, admin_response_path(data_response)
+              %td=link_to data_response.organization, admin_response_path(data_response)
               %td= data_response.projects.size
               %td= data_response.activities_count
               %td= data_response.sub_activities_count

@@ -54,7 +54,7 @@ class Reports::ActivitiesSummary
     end
 
     def build_row(activity)
-      organization  = activity.data_response.responding_organization
+      organization  = activity.data_response.organization
       #TODO handle sub activities correctly
 
       row = []

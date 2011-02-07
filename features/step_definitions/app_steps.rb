@@ -304,7 +304,7 @@ end
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
   @data_response = Factory(:data_response,
                             :data_request => DataRequest.find_by_title(request),
-                            :responding_organization => Organization.find_by_name(org))
+                            :organization => Organization.find_by_name(org))
 end
 
 Then /^wait a few moments$/ do
@@ -320,7 +320,7 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
     Given an organization exists with name: "GoR"
     And a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
-    And a data_response exists with data_request: the data_request, responding_organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
     And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response

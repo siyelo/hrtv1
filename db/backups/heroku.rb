@@ -9,6 +9,8 @@
 #   backup.rb HEROKU_APP DIR
 # E.g.
 #  backup.rb resourcetracking /backups
+# or in crontab 7am & 11pm daily
+#  0 7,23 * * * /root/health_resource_tracker/db/backups/heroku.rb resourcetracking ~/hrt_backups
 
 def run(cmd)
   puts cmd + "\n"

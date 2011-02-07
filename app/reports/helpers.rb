@@ -25,7 +25,7 @@ module Reports::Helpers
   end
 
   def get_max_amount(activity)
-    case activity.type.to_s
+    case activity.class.to_s
     when 'CodingBudget', 'CodingBudgetCostCategorization', 'CodingBudgetDistrict'
       activity.budget
     when 'CodingSpend', 'CodingSpendCostCategorization', 'CodingSpendDistrict'

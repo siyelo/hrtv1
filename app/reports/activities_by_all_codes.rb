@@ -7,7 +7,7 @@ class Reports::ActivitiesByAllCodes
     @is_budget         = is_budget?(type)
     @activities        = activities
     @show_organization = show_organization
-    @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.type.to_s)}
+    @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.class.to_s)}
   end
 
   def csv

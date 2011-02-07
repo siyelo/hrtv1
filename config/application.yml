@@ -1,0 +1,41 @@
+defaults: &defaults
+
+development:
+  <<: *defaults
+  paperclip:
+    storage: :s3
+    s3_credentials:
+      bucket: us.assets.dev.hrtapp.com
+      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
+    s3_permissions: public-read
+
+test:
+  <<: *defaults
+  paperclip:
+    storage: :filesystem
+
+cucumber:
+  <<: *defaults
+  paperclip:
+    storage: :filesystem
+
+staging:
+  <<: *defaults
+  paperclip:
+    storage: :s3
+    s3_credentials:
+      bucket: us.assets.staging.hrtapp.com
+      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
+    s3_permissions: public-read
+
+production:
+  <<: *defaults
+  paperclip:
+    storage: :s3
+    s3_credentials:
+      bucket: us.assets.hrtapp.com
+      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
+    s3_permissions: public-read

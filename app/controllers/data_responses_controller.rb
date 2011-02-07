@@ -14,7 +14,7 @@ class DataResponsesController < ApplicationController
   def create
     org             = current_user.organization
     @data_response  = DataResponse.new(params[:data_response].merge(
-                                        :responding_organization => org))
+                                        :organization => org))
     respond_to do |format|
       if @data_response.save
         flash[:notice] = "Successfully created your response"

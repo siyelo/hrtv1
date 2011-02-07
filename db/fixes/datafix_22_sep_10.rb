@@ -33,7 +33,7 @@ user.password =  user.password_confirmation = user.email; user.save!
 # seems like a broken DReq
 user          = User.find_by_email 'uwicyp@yahoo.fr'
 org           = user.organization
-DataResponse.create! :responding_organization => org, :data_request => DataRequest.first
+DataResponse.create! :organization => org, :data_request => DataRequest.first
 
 
 # line 23 - TRAC+ - TREATMENT AND RESEARCH CENTRE ON HIV/AIDS, TB, MALARIA AND OTHER EPIDEMICS
@@ -60,12 +60,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
       # Activity.find(1872).organizations.push(Organization.find(3954))
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     pp old_org.locations
@@ -82,12 +82,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     pp old_org.locations
@@ -96,7 +96,7 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
 
   # this org seems to just have users and no data, so move the users
   old_org       = Organization.find 4008
-    DataResponse.find_by_organization_id_responder 4008
+    DataResponse.find_by_organization_id 4008
 
     # Update activity.organizations (Institutions Assisted) that point to this org
     puts "Found #{old_org.activities.count} activities"
@@ -115,12 +115,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     pp old_org.locations
@@ -148,12 +148,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
    # old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    #FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    #FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     #FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-   # FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+   # FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
   #  FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
    # old_org.locations
@@ -170,12 +170,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
      old_org.locations
@@ -194,12 +194,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     pp old_org.locations
@@ -217,12 +217,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     old_org.locations
@@ -240,12 +240,12 @@ DataResponse.create! :responding_organization => org, :data_request => DataReque
     old_org.activities.each { |a| a.organizations.delete(old_org); a.organizations.push(Organization.find(3954)) }
 
     # update Fflows from old_org
-    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_from(old_org.id).each { |fflow| fflow.organization_id_from = Organization.find(3954).id; fflow.save! }
 
     # update Fflows in
     # update Fflows to old_org (if any)
-    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.responding_organization}" }
+    FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| puts "  Updating fflow #{fflow.id} by Org: #{fflow.data_response.organization}" }
     FundingFlow.find_all_by_organization_id_to(old_org.id).each { |fflow| fflow.organization_id_to = Organization.find(3954).id; fflow.save! }
     #locations
     old_org.locations

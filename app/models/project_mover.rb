@@ -13,8 +13,8 @@ class ProjectMover
     check_move() if check
     check_users_on_target_org() if check
     if @project && @project.data_response && @target_response
-      from_org = @source_response.responding_organization
-      to_org = @target_response.responding_organization
+      from_org = @source_response.organization
+      to_org = @target_response.organization
       puts "Moving Project: (#{@project.id}) \"#{@project.name.first(25)}...\", From Organization: (#{from_org.id}) #{from_org.name}, To Organization: (#{to_org.id}) #{to_org.name}"
       @cloned_project = @project.deep_clone
       @cloned_project.data_response = @target_response
@@ -53,6 +53,6 @@ class ProjectMover
     end
 
     def check_users_on_target_org
-      raise "No users exist on target organization - not moving" unless @target_response.responding_organization.users.size > 0
+      raise "No users exist on target organization - not moving" unless @target_response.organization.users.size > 0
     end
 end

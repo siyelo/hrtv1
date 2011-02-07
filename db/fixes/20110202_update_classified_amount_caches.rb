@@ -40,7 +40,8 @@ total = activities.length
 activities.each_with_index do |activity, index|
   puts "Updating activity id: #{activity.id}, :: #{index + 1}/#{total}"
   ca_types.each do |type|
-    amount = codings_sum(type.available_codes(activity), activity, activity.max_for_coding(type), type, cache_object)
+    coding_tree = CodingTree.new(activity, type)
+    amount = codings_sum(coding_tree.available_codes, activity, activity.max_for_coding(type), type, cache_object)
     activity.send("#{type}_amount=",  amount)
     activity.save(false) # save approved activities
     print "."

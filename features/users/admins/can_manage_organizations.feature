@@ -8,8 +8,8 @@ Background:
   And a data_request exists with title: "Req1", requesting_organization: the organization
   And an organization exists with name: "WHO"
   And a reporter exists with username: "who_user", organization: the organization
-  And a data_response exists with data_request: the data_request, responding_organization: the organization
-  
+  And a data_response exists with data_request: the data_request, organization: the organization
+
 @admin_organizations
 Scenario Outline: Merge duplicate organizations
   Given I am signed in as an admin

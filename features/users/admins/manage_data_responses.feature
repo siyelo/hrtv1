@@ -8,7 +8,7 @@ Background:
   And a data_request exists with title: "Req1", requesting_organization: the organization
   And a reporter exists with username: "undp_user", organization: the organization
   And an organization exists with name: "UNDP", raw_type: "Agencies"
-  And a data_response exists with data_request: the data_request, responding_organization: the organization
+  And a data_response exists with data_request: the data_request, organization: the organization
   And I am signed in as an admin
 
 @admin_data_responses

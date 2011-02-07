@@ -62,16 +62,17 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
 #
-#  id                   :integer         primary key
+#  id                   :integer         not null, primary key
 #  organization_id_from :integer
 #  organization_id_to   :integer
 #  project_id           :integer         indexed
-#  created_at           :timestamp
-#  updated_at           :timestamp
+#  created_at           :datetime
+#  updated_at           :datetime
 #  budget               :decimal(, )
 #  spend_q1             :decimal(, )
 #  spend_q2             :decimal(, )

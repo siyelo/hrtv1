@@ -6,10 +6,10 @@ describe DataResponse do
     it { should have_many(:projects) }
     it { should have_many(:activities) }
     it { should have_many(:funding_flows) }
-    it { should belong_to(:responding_organization) }
+    it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
     it { should validate_presence_of(:data_request_id) }
-    it { should validate_presence_of(:organization_id_responder) }
+    it { should validate_presence_of(:organization_id) }
     it { should validate_presence_of(:currency) }
   end
 

@@ -22,7 +22,7 @@ Scenario: See unfulfilled/current Data Requests listed
   And a data_request exists with title: "Req1", requesting_organization: the organization
   And an organization exists with name: "UNAIDS"
   And a reporter exists with username: "some_user", organization: the organization
-  And a data_response exists with data_request: the data_request, responding_organization: the organization
+  And a data_response exists with data_request: the data_request, organization: the organization
   And I am signed in as "some_user"
   When I go to the reporter dashboard page
   Then I should see "Req1" within ".current_request"

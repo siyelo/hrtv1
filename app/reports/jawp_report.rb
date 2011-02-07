@@ -3,14 +3,17 @@ require 'fastercsv'
 class Reports::JawpReport
   include Reports::Helpers
 
-  def initialize(current_user, type)
+  def initialize(type, activities)
     @is_budget         = is_budget?(type)
 
-    @activities = Activity.only_simple.canonical_with_scope.find(:all,
+    @activities = activities
+#Activity.only_simple.find(:all,
                    #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
                    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-                   :include => [:locations, :provider, :organizations,
-                                :beneficiaries, {:data_response => :responding_organization}])
+
+#                   :include => [:locations, :provider, :organizations,
+
+#                                :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -66,6 +69,7 @@ class Reports::JawpReport
     row << amount_total
     row << Money.new(amount_total.to_i * 100, get_currency(activity)) .exchange_to(:USD)
     row << is_national
+    row << Activity.only_simple.canonical_with_scope.find(:first, :conditions => {:id => activity.id}).nil?
 
     build_code_assignment_rows(csv, row, activity, amount_total)
   end
@@ -162,6 +166,7 @@ class Reports::JawpReport
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
+      row << "Possible Duplicate?"
       row << 'Funding Source'
       row << 'Funding Source Type'
       row << "Classified #{amount_type}"

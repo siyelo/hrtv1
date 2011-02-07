@@ -15,7 +15,7 @@ module ActAsDataElement
 
       attr_accessible :data_response
 
-      has_one :owner, :through => :data_response, :source => :responding_organization
+      has_one :owner, :through => :data_response, :source => :organization
 
       named_scope :available_to, lambda { |current_user|
         if current_user.role?(:admin)

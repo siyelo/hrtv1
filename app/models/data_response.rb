@@ -17,17 +17,14 @@ class DataResponse < ActiveRecord::Base
               :class_name => "User",
               :foreign_key => :data_response_id_current
 
-  belongs_to  :responding_organization,
-              :class_name => "Organization",
-              :foreign_key => "organization_id_responder"
-
+  belongs_to  :organization
   belongs_to  :data_request
 
-  attr_accessible :organization_id_responder, :fiscal_year_end_date,
+  attr_accessible :organization_id, :fiscal_year_end_date,
                   :fiscal_year_start_date, :currency
   ### Validations
   validates_presence_of :data_request_id
-  validates_presence_of :organization_id_responder
+  validates_presence_of :organization_id
   validates_presence_of :currency
   validates_date :fiscal_year_start_date
   validates_date :fiscal_year_end_date
@@ -40,7 +37,7 @@ class DataResponse < ActiveRecord::Base
     elsif current_user.role?(:admin)
       {}
     else
-      {:conditions=>{:organization_id_responder => current_user.organization.id}}
+      {:conditions=>{:organization_id => current_user.organization.id}}
     end
   }
 
@@ -52,7 +49,7 @@ class DataResponse < ActiveRecord::Base
 
   ### Class Methods
   def self.in_progress
-    self.find(:all, :include => [:responding_organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
+    self.find(:all, :include => [:organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 
   def self.remove_security
@@ -72,19 +69,15 @@ class DataResponse < ActiveRecord::Base
 
   #named_scope :empty, options_hash_for_empty
   def self.empty
-    drs = self.find(:all, options_hash_for_empty)#, :include => {:responding_organization => :users})
+    drs = self.find(:all, options_hash_for_empty)#, :include => {:organization => :users})
     #GN: commented out optimization, this broke the method, returned too many records
     drs.select do |dr|
-      (["Agencies", "Donors", "Donor", "Implementer", "Implementers", "International NGO"]).include?(dr.responding_organization.raw_type)
+      (["Agencies", "Donors", "Donor", "Implementer", "Implementers", "International NGO"]).include?(dr.organization.raw_type)
     end
   end
 
   def empty?
     activities.empty? && projects.empty? && funding_flows.empty?
-  end
-
-  def organization
-    responding_organization #for convenience
   end
 
   def status
@@ -141,6 +134,8 @@ class DataResponse < ActiveRecord::Base
 end
 
 
+
+
 # == Schema Information
 #
 # Table name: data_responses
@@ -150,7 +145,7 @@ end
 #  complete                          :boolean         default(FALSE)
 #  created_at                        :datetime
 #  updated_at                        :datetime
-#  organization_id_responder         :integer         indexed
+#  organization_id                   :integer         indexed
 #  currency                          :string(255)
 #  fiscal_year_start_date            :date
 #  fiscal_year_end_date              :date

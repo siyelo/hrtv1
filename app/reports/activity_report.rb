@@ -1,6 +1,6 @@
-class Reports::Organization
+class Reports::ActivityReport
 
-  # Returns Organization objects that respond to spent_sum() and budget_sum()
+  # Returns Activity objects that respond to spent_sum() and budget_sum() and paginate
   #
   def self.top_by_spent_and_budget(options)
     per_page = options[:per_page] || 25
@@ -20,14 +20,16 @@ class Reports::Organization
     ca2_type = (type == 'district') ? 'CodingBudgetDistrict' : 'CodingBudget'
     code_ids = code_ids.join(',')
 
-    scope = ::Organization.scoped({
-      :select => "organizations.id,
-                  organizations.name,
+    scope = ::Activity.scoped({
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
                   COALESCE(SUM(ca_spent_sum),0) AS spent_sum_raw,
                   COALESCE(SUM(ca_budget_sum),0) AS budget_sum_raw",
       :joins => "
-        INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN activities ON data_responses.id = activities.data_response_id
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id
         LEFT OUTER JOIN (
           SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as ca_spent_sum
           FROM code_assignments ca1
@@ -42,8 +44,11 @@ class Reports::Organization
           AND ca2.code_id IN (#{code_ids})
           GROUP BY ca2.activity_id
         ) ca2 ON activities.id = ca2.activity_id",
-      :group => "organizations.id,
-                 organizations.name",
+      :include => {:projects => {:funding_flows => :project}},
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name",
       :order => SortOrder.get_sort_order(sort),
       :conditions => "ca_spent_sum > 0 OR ca_budget_sum > 0"
     })
@@ -55,8 +60,6 @@ class Reports::Organization
     results
   end
 
-  # Returns Organization objects that respond to spent_sum()
-  #
   def self.top_by_spent(options)
     limit    = options[:limit]    || nil
     code_ids = options[:code_ids]
@@ -65,26 +68,30 @@ class Reports::Organization
     raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
     raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
 
-    ca_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
+    ca1_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
     code_ids = code_ids.join(',')
 
-    scope = ::Organization.scoped({
-      :select => "organizations.id,
-                  organizations.name,
+    scope = ::Activity.scoped({
+      :select => "activities.id,
+                  activities.name,
+                  activities.description,
+                  organizations.name AS org_name,
                   SUM(ca1.cached_amount_in_usd) AS spent_sum_raw",
       :joins => "
-        INNER JOIN data_responses ON organizations.id = data_responses.organization_id_responder
-        INNER JOIN activities ON data_responses.id = activities.data_response_id
+        INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN organizations ON organizations.id = data_responses.organization_id
         INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
-          AND ca1.type = '#{ca_type}'
-          AND ca1.code_id IN (#{code_ids})",
-      :group => "organizations.id,
-                 organizations.name",
+               AND ca1.type = '#{ca1_type}'
+               AND ca1.code_id IN (#{code_ids})",
+      :group => "activities.id,
+                 activities.name,
+                 activities.description,
+                 org_name",
       :order => "spent_sum_raw DESC"
     })
 
     results = scope.find :all, :limit => limit
-    # Dynamically define a method on the resulting Org instance that converts
+    # Dynamically define a method on the resulting instance that converts
     # the aggregate column to the correct type, since AR doesnt always do this
     # http://www.ruby-forum.com/topic/852228
     results.each{|r| def r.spent_sum; BigDecimal.new(spent_sum_raw.to_s) end}

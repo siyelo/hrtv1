@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   has_and_belongs_to_many :locations
 
   belongs_to :data_response, :counter_cache => true
-  has_one :owner, :through => :data_response, :source => :responding_organization
+  has_one :owner, :through => :data_response, :source => :organization
 
   has_many :funding_flows
   has_many :in_flows, :class_name => "FundingFlow",
@@ -132,17 +132,18 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
 #
-#  id               :integer         primary key
+#  id               :integer         not null, primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
+#  created_at       :datetime
+#  updated_at       :datetime
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )

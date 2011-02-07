@@ -5,25 +5,33 @@ def log(message)
   puts message
 end
 
-def update_report(t)
-  key = t.name_with_args.gsub(/reports:/, '')
-
-  log "RAKE BEGIN: #{key}"
-
-  report     = Report.find_or_initialize_by_key(key)
-  raw_csv    = report.generate.csv
-  filename   = "#{RAILS_ROOT}/tmp/#{key}_#{Process.pid}.csv"
+def zip_file(filename)
   zipfile    = filename + ".zip"
-  File.open(filename, 'w')  {|f| f.write(raw_csv) }
   cmd = "zip -9 #{zipfile} #{filename}"
   log "Zipping with:  #{cmd}"
   system cmd
-  tempfile = File.new(zipfile, 'r')
+  zipfile
+end
+
+def update_report(t)
+  start_time = Time.now
+  key = t.name_with_args.gsub(/reports:/, '')
+  log "#{start_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE BEGIN: #{key}"
+  report     = Report.find_or_initialize_by_key(key)
+  raw_csv    = report.generate.csv
+  filename   = "#{RAILS_ROOT}/tmp/#{key}_#{Process.pid}.csv"
+  File.open(filename, 'w')  {|f| f.write(raw_csv) }
+  zipfile    = zip_file(filename)
+  tempfile   = File.new(zipfile, 'r')
+  log "Saving report..."
   report.csv = tempfile
   report.save
+  log "removing tempfile..."
   File.delete filename
-
-  log "RAKE END  : #{key}"
+  log "removing zipfile..."
+  File.delete zipfile
+  end_time = Time.now
+  log "#{end_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE END: #{key} (Elapsed: #{(end_time - start_time).round(2)}s)"
 end
 
 namespace :reports do

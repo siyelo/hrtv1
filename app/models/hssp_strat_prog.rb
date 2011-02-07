@@ -1,9 +1,5 @@
 class HsspStratProg < Code
-
 end
-
-
-
 
 # == Schema Information
 #

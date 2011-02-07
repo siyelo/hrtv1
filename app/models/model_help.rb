@@ -1,5 +1,9 @@
 class ModelHelp < ActiveRecord::Base
+
+  ### Comments
   acts_as_commentable
+
+  ### Associations
   has_many :field_help
 
   # for active scaffold labels & drop downs
@@ -7,8 +11,6 @@ class ModelHelp < ActiveRecord::Base
     model_name
   end
 end
-
-
 
 # == Schema Information
 #

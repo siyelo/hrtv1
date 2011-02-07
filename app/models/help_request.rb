@@ -1,4 +1,6 @@
 class HelpRequest < ActiveRecord::Base
+
+  ### Validations
   validates_presence_of  :message, :email
 end
 

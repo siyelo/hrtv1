@@ -1,9 +1,5 @@
 class Nha < Code
-
 end
-
-
-
 
 # == Schema Information
 #

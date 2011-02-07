@@ -38,7 +38,8 @@ Activity.all.each_with_index do |a, index|
   if [OtherCost, Activity].include?(a.class)
     [CodingBudget, CodingBudgetCostCategorization, CodingBudgetDistrict,
      CodingSpend, CodingSpendCostCategorization, CodingSpendDistrict].each do |type|
-      amount = codings_sum(type.available_codes(a), a, a.max_for_coding(type), type, cache_object)
+      coding_tree = CodingTree.new(a, type)
+      amount = codings_sum(coding_tree.available_codes, a, a.max_for_coding(type), type, cache_object)
       a.send("#{type}_amount=",  amount)
 
       a.save(false) # save approved activities

@@ -68,11 +68,6 @@ class Nsp < Code
   end
 end
 
-
-
-
-
-
 # == Schema Information
 #
 # Table name: codes

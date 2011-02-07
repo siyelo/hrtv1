@@ -1,20 +1,5 @@
-class CodingSpendCostCategorization < SpendCodeAssignment
-
-  def self.available_codes(activity = nil)
-    CostCategory.roots
-  end
+class CodingSpendCostCategorization < CodeAssignment
 end
-
-
-
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #

@@ -15,6 +15,11 @@ test:
   paperclip:
     storage: :filesystem
 
+cucumber:
+  <<: *defaults
+  paperclip:
+    storage: :filesystem
+
 staging:
   <<: *defaults
   paperclip:

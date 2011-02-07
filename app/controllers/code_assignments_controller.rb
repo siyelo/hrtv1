@@ -7,7 +7,8 @@ class CodeAssignmentsController < ApplicationController
     authorize! :read, @activity
     @coding_type         = params[:coding_type] || 'CodingBudget'
     @coding_class        = @coding_type.constantize
-    @codes               = @coding_class.available_codes(@activity)
+    @coding_tree         = CodingTree.new(@activity, @coding_class)
+    @codes               = @coding_tree.available_codes
     @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
     @error_message       = add_code_assignments_error(@coding_class, @activity)
     if params[:tab].present?
@@ -40,9 +41,10 @@ class CodeAssignmentsController < ApplicationController
         redirect_to activity_code_assignments_url(@activity)
       end
       format.js do
-        @coding_type = params[:coding_type] || 'CodingBudget'
-        @coding_class = params[:coding_type].constantize
-        @codes = @coding_class.available_codes(@activity)
+        @coding_type         = params[:coding_type] || 'CodingBudget'
+        @coding_class        = params[:coding_type].constantize
+        @coding_tree         = CodingTree.new(@activity, @coding_class)
+        @codes               = @coding_tree.available_codes
         @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
         tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }
         tab_nav = render_to_string :partial => 'tab_nav', :locals => { :activity => @activity }

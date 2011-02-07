@@ -1,24 +1,5 @@
-class CodingBudget < BudgetCodeAssignment
-
-  def self.available_codes(activity = nil)
-    if activity.class.to_s == "OtherCost"
-      OtherCostCode.roots
-    else
-      Code.for_activities.roots
-    end
-  end
+class CodingBudget < CodeAssignment
 end
-
-
-
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #

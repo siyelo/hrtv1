@@ -1,20 +1,5 @@
-class CodingBudgetDistrict < BudgetCodeAssignment
-
-  def self.available_codes(activity = nil)
-    activity.locations
-  end
+class CodingBudgetDistrict < CodeAssignment
 end
-
-
-
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #

@@ -92,13 +92,14 @@ class CodeAssignment < ActiveRecord::Base
     total
   end
 
-
   ### Instance Methods
   #
 
   # This is only used in some reports
   # activity_amount can (and should) be deprecated if we deprecate this too
   def proportion_of_activity
+    activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
+
     unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0
       calculated_amount / activity_amount
     else
@@ -176,6 +177,16 @@ class CodeAssignment < ActiveRecord::Base
     def update_cached_amount_in_usd
       rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
       self.cached_amount_in_usd = (self.cached_amount || 0) * rate
+    end
+
+  private
+
+    # Checks if it's a budget code assignment
+    def budget?
+      ['CodingBudget',
+       'CodingBudgetCostCategorization',
+       'CodingBudgetDistrict',
+       'HsspBudget'].include?(type.to_s)
     end
 end
 

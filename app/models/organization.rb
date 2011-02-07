@@ -2,8 +2,10 @@ require 'validation_disabler'
 
 class Organization < ActiveRecord::Base
 
+  ### Comments
   acts_as_commentable
 
+  ### Associations
   has_many :users # people in this organization
   has_and_belongs_to_many :activities # activities that target / aid this org
   has_many :data_requests_made,
@@ -22,8 +24,10 @@ class Organization < ActiveRecord::Base
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
   has_and_belongs_to_many :locations
 
+  ### Attributes
   attr_accessible :name
 
+  ### Validations
   validates_presence_of :name
   validates_uniqueness_of :name
 
@@ -31,7 +35,7 @@ class Organization < ActiveRecord::Base
     with_exclusive_scope { find(:all) }
   end
 
-  # Named scopes
+  ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'name ASC, created_at DESC'
 
@@ -77,8 +81,6 @@ class Organization < ActiveRecord::Base
   end
 
 end
-
-
 
 # == Schema Information
 #

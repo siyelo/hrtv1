@@ -1,9 +1,5 @@
 class HsspStratObj < Code
-
 end
-
-
-
 
 # == Schema Information
 #

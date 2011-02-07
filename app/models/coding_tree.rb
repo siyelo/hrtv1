@@ -48,20 +48,17 @@ class CodingTree
   end
 
   def initialize(activity, coding_klass)
-    codes             = coding_klass.available_codes(activity)
-    @code_assignments = coding_klass.with_activity(activity)
-    @_root            = Tree.new({})
-
-    build_subtree(@_root, codes)
+    @activity     = activity
+    @coding_klass = coding_klass
   end
 
   def roots
-    @_root.children
+    inner_root.children
   end
 
   # CodingTree is valid if all root assignments are valid
   def valid?
-    @_root.children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
+    inner_root.children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
   end
 
   def valid_ca?(code_assignment)
@@ -69,7 +66,61 @@ class CodingTree
     node && node.valid?
   end
 
+  # TODO: write specs for this method
+  def available_codes
+    case @coding_klass.to_s
+    when 'CodingBudget'
+      if @activity.class.to_s == "OtherCost"
+        OtherCostCode.roots
+      else
+        Code.for_activities.roots
+      end
+    when 'CodingBudgetCostCategorization'
+      CostCategory.roots
+    when 'CodingBudgetDistrict'
+      @activity.locations
+    when 'CodingSpend'
+      if @activity.class.to_s == "OtherCost"
+        OtherCostCode.roots
+      else
+        Code.for_activities.roots
+      end
+    when 'CodingSpendCostCategorization'
+      CostCategory.roots
+    when 'CodingSpendDistrict'
+      @activity.locations
+    when 'HsspBudget'
+      if @activity.class.to_s == "OtherCost"
+        []
+      else
+        HsspStratObj.all + HsspStratProg.all
+      end
+    when 'HsspSpend'
+      if @activity.class.to_s == "OtherCost"
+        []
+      else
+        HsspStratObj.all + HsspStratProg.all
+      end
+    else
+      raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+    end
+  end
+
   private
+
+    def inner_root
+      @inner_root ||= build_tree
+    end
+
+    def build_tree
+      codes             = available_codes
+      @code_assignments = @coding_klass.with_activity(@activity)
+      @inner_root       = Tree.new({})
+
+      build_subtree(@inner_root, codes)
+
+      return @inner_root
+    end
 
     def build_subtree(root, codes)
       codes.each do |code|

@@ -1,0 +1,8 @@
+development:
+  bucket: us.assets.dev.hrtapp.com
+test:
+  bucket: us.assets.test.hrtapp.com
+staging:
+  bucket: us.assets.staging.hrtapp.com
+production:
+  bucket: us.assets.hrtapp.com

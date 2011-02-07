@@ -6,6 +6,9 @@ class Report < ActiveRecord::Base
     {:path => "report/:attachment/:key.:extension"
     }.merge(Settings.paperclip.to_options)
 
+  validates_presence_of :key
+  validates_uniqueness_of :key
+
   before_save :generate_csv_zip
   after_save :cleanup_temp_files
 

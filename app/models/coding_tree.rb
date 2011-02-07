@@ -66,6 +66,7 @@ class CodingTree
     node && node.valid?
   end
 
+  # TODO: write specs for this method
   def available_codes
     case @coding_klass.to_s
     when 'CodingBudget'

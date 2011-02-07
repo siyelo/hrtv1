@@ -23,16 +23,17 @@ class DataRequest < ActiveRecord::Base
   end
 end
 
+
 # == Schema Information
 #
 # Table name: data_requests
 #
-#  id                        :integer         primary key
+#  id                        :integer         not null, primary key
 #  organization_id_requester :integer
 #  title                     :string(255)
 #  complete                  :boolean         default(FALSE)
 #  pending_review            :boolean         default(FALSE)
-#  created_at                :timestamp
-#  updated_at                :timestamp
+#  created_at                :datetime
+#  updated_at                :datetime
 #
 

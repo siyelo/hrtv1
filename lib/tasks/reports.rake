@@ -73,11 +73,11 @@ def activities
 end
 
 def jawp_activities
-     Activity.only_simple.find(:all,
-                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
-                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-                   :include => [:locations, :provider, :organizations,
-                                :beneficiaries, {:data_response => :organization}])
+  Activity.only_simple.find(:all,
+    #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
+    #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
+    :include => [:locations, :provider, :organizations,
+                :beneficiaries, {:data_response => :organization}])
 end
 
 namespace :reports do

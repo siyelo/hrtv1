@@ -6,10 +6,10 @@ class CodeAssignmentsController < ApplicationController
   def show
     authorize! :read, @activity
     @coding_type         = params[:coding_type] || 'CodingBudget'
-    coding_class         = @coding_type.constantize
-    @codes               = coding_class.available_codes(@activity)
-    @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
-    @error_message       = add_code_assignments_error(coding_class, @activity)
+    @coding_class        = @coding_type.constantize
+    @codes               = @coding_class.available_codes(@activity)
+    @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
+    @error_message       = add_code_assignments_error(@coding_class, @activity)
     if params[:tab].present?
       # ajax requests for all tabs except the first one
       render :partial => 'tab', :locals => {:coding_type => @coding_type,
@@ -27,12 +27,12 @@ class CodeAssignmentsController < ApplicationController
   def update
     authorize! :update, @activity
     notice_message = nil
-    coding_class = params[:coding_type].constantize
+    @coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
-      coding_class.update_codings(params[:activity][:updates], @activity)
+      @coding_class.update_codings(params[:activity][:updates], @activity)
       notice_message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
-    @error_message = add_code_assignments_error(coding_class, @activity)
+    @error_message = add_code_assignments_error(@coding_class, @activity)
     respond_to do |format|
       format.html do
         flash[:error]  = @error_message if @error_message
@@ -41,9 +41,9 @@ class CodeAssignmentsController < ApplicationController
       end
       format.js do
         @coding_type = params[:coding_type] || 'CodingBudget'
-        coding_class = params[:coding_type].constantize
-        @codes = coding_class.available_codes(@activity)
-        @current_assignments = coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
+        @coding_class = params[:coding_type].constantize
+        @codes = @coding_class.available_codes(@activity)
+        @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
         tab = render_to_string :partial => 'tab', :locals => { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => params[:tab] }
         tab_nav = render_to_string :partial => 'tab_nav', :locals => { :activity => @activity }
         activity_description = render_to_string :partial => 'activity_description', :locals => { :activity => @activity }

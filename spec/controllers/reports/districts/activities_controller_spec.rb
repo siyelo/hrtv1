@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Reports::Districts::ActivitiesController do
-  
+
   before :each do
     @admin = Factory.create(:admin)
     login @admin
@@ -12,7 +12,7 @@ describe Reports::Districts::ActivitiesController do
   describe "GET 'index'" do
     it "should be successful" do
       Location.should_receive(:find).with(@location.id.to_s).and_return(@location)
-      Reports::Activity.should_receive(:top_by_spent_and_budget).and_return([@activity])
+      Reports::ActivityReport.should_receive(:top_by_spent_and_budget).and_return([@activity])
       get 'index', :district_id => @location.id
       response.should be_success
     end

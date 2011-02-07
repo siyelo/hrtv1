@@ -1,4 +1,4 @@
-class Reports::Activity
+class Reports::ActivityReport
 
   # Returns Activity objects that respond to spent_sum() and budget_sum() and paginate
   #

@@ -123,16 +123,16 @@ describe CodingTree do
       ct.valid?.should == true
     end
 
+    it "is valid when root children has lower amount" do
+      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
+      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
+      ct   = CodingTree.new(@activity, CodingBudget)
+      ct.valid?.should == true
+    end
+
     it "is not valid when root children has greated amount" do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
-      ct   = CodingTree.new(@activity, CodingBudget)
-      ct.valid?.should == false
-    end
-
-    it "is not valid when root children has lower amount" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.valid?.should == false
     end
@@ -150,8 +150,8 @@ describe CodingTree do
     end
 
     it "detects invalid node when coding tree is not valid" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
+      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
+      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.valid_ca?(ca1).should == false
       ct.valid_ca?(ca11).should == true

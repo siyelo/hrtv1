@@ -2,7 +2,7 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
   before_filter :load_location
 
   def index
-    @activities        = Reports::Activity.top_by_spent_and_budget({
+    @activities        = Reports::ActivityReport.top_by_spent_and_budget({
                          :per_page => 25, :page => params[:page], :sort => params[:sort],
                          :code_ids => [@location.id], :type => 'district'})
     @spent_pie_values  = Charts::DistrictPies::activities(@location, "CodingSpendDistrict")
@@ -10,7 +10,7 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
   end
 
   def show
-    @activity          = ::Activity.find(params[:id])
+    @activity          = Activity.find(params[:id])
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity)
     @budget_pie_values = Charts::DistrictPies::activity_budget_ratio(@location, @activity)
     @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?

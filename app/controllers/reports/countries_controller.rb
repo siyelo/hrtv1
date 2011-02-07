@@ -13,9 +13,9 @@ class Reports::CountriesController < Reports::BaseController
     end
 
     code_ids = Mtef.roots.map(&:id)
-    @top_activities        = Reports::Activity.top_by_spent({
+    @top_activities        = Reports::ActivityReport.top_by_spent({
                               :limit => 5, :code_ids => code_ids, :type => 'country'})
-    @top_organizations     = Reports::Organization.top_by_spent({
+    @top_organizations     = Reports::OrganizationReport.top_by_spent({
                               :limit => 5, :code_ids => code_ids, :type => 'country'})
   end
 end

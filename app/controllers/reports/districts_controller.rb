@@ -26,9 +26,9 @@ class Reports::DistrictsController < Reports::BaseController
     end
 
 
-    @top_activities    = Reports::Activity.top_by_spent({
+    @top_activities    = Reports::ActivityReport.top_by_spent({
                          :limit => 5, :code_ids => [@location.id], :type => 'district'})
-    @top_organizations = Reports::Organization.top_by_spent({
+    @top_organizations = Reports::OrganizationReport.top_by_spent({
                          :limit => 5, :code_ids => [@location.id], :type => 'district'})
   end
 end

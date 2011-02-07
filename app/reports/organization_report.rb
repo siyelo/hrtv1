@@ -1,4 +1,4 @@
-class Reports::Organization
+class Reports::OrganizationReport
 
   # Returns Organization objects that respond to spent_sum() and budget_sum()
   #

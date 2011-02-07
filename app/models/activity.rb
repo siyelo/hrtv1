@@ -92,6 +92,7 @@ class Activity < ActiveRecord::Base
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
   end
 
+
   def self.canonical
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
       a = Activity.all(:joins =>
@@ -108,6 +109,12 @@ class Activity < ActiveRecord::Base
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified}
+  end
+
+  def self.jawp_activities
+    Activity.only_simple.find(:all,
+      :include => [:locations, :provider, :organizations,
+                  :beneficiaries, {:data_response => :organization}])
   end
 
   ### Public Instance Methods

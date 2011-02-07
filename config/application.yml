@@ -8,7 +8,6 @@ development:
       bucket: us.assets.dev.hrtapp.com
       access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
       secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    path: user/:attachment/:style/:id.:extension
     s3_permissions: public-read
 
 test:
@@ -24,7 +23,6 @@ staging:
       bucket: us.assets.staging.hrtapp.com
       access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
       secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    path: user/:attachment/:style/:id.:extension
     s3_permissions: public-read
 
 production:
@@ -35,5 +33,4 @@ production:
       bucket: us.assets.hrtapp.com
       access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
       secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    path: user/:attachment/:style/:id.:extension
     s3_permissions: public-read

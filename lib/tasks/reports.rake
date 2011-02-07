@@ -6,132 +6,132 @@ def log(message)
 end
 
 def update_report(t)
-  start_time = Time.now
-  key = t.name_with_args.gsub(/reports:/, '')
+  start_time  = Time.now
+  key         = t.name_with_args.gsub(/reports:/, '')
   log "#{start_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE BEGIN: #{key}"
-  report     = Report.find_or_initialize_by_key(key)
-  report.save # regenerates csv
-  end_time = Time.now
+  report      = Report.find_or_initialize_by_key(key)
+  report.save   # regenerates csv
+  end_time    = Time.now
   log "#{end_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE END: #{key} (Elapsed: #{(end_time - start_time).round(2)}s)"
 end
 
 namespace :reports do
-  desc "Saves 'districts_by_nsp_budget' report to database"
+  desc "Caches 'districts_by_nsp_budget' report"
   task :districts_by_nsp_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'districts_by_all_codes_budget' report to database"
+  desc "Caches 'districts_by_all_codes_budget' report"
   task :districts_by_all_codes_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'users_by_organization' report to database"
+  desc "Caches 'users_by_organization' report"
   task :users_by_organization => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_districts_by_partner_budget' report to database"
+  desc "Caches 'map_districts_by_partner_budget' report"
   task :map_districts_by_partner_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_districts_by_partner_spent' report to database"
+  desc "Caches 'map_districts_by_partner_spent' report"
   task :map_districts_by_partner_spent => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_districts_by_nsp_budget' report to database"
+  desc "Caches 'map_districts_by_nsp_budget' report"
   task :map_districts_by_nsp_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_districts_by_all_codes_budget' report to database"
+  desc "Caches 'map_districts_by_all_codes_budget' report"
   task :map_districts_by_all_codes_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_facilities_by_partner_budget' report to database"
+  desc "Caches 'map_facilities_by_partner_budget' report"
   task :map_facilities_by_partner_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'map_facilities_by_partner_spent' report to database"
+  desc "Caches 'map_facilities_by_partner_spent' report"
   task :map_facilities_by_partner_spent => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_summary' report to database"
+  desc "Caches 'activities_summary' report"
   task :activities_summary => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_district' report to database"
+  desc "Caches 'activities_by_district' report"
   task :activities_by_district => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_one_row_per_district' report to database"
+  desc "Caches 'activities_one_row_per_district' report"
   task :activities_one_row_per_district => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_budget_coding' report to database"
+  desc "Caches 'activities_by_budget_coding' report"
   task :activities_by_budget_coding => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_budget_cost_categorization' report to database"
+  desc "Caches 'activities_by_budget_cost_categorization' report"
   task :activities_by_budget_cost_categorization => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_budget_districts' report to database"
+  desc "Caches 'activities_by_budget_districts' report"
   task :activities_by_budget_districts => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_expenditure_coding' report to database"
+  desc "Caches 'activities_by_expenditure_coding' report"
   task :activities_by_expenditure_coding => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_expenditure_cost_categorization' report to database"
+  desc "Caches 'activities_by_expenditure_cost_categorization' report"
   task :activities_by_expenditure_cost_categorization => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_expenditure_districts' report to database"
+  desc "Caches 'activities_by_expenditure_districts' report"
   task :activities_by_expenditure_districts => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'jawp_report_budget' report to database"
+  desc "Caches 'jawp_report_budget' report"
   task :jawp_report_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'jawp_report_spent' report to database"
+  desc "Caches 'jawp_report_spent' report"
   task :jawp_report_spent => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_nsp_budget' report to database"
+  desc "Caches 'activities_by_nsp_budget' report"
   task :activities_by_nsp_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_nha' report to database"
+  desc "Caches 'activities_by_nha' report"
   task :activities_by_nha => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves 'activities_by_all_codes_budget' report to database"
+  desc "Caches 'activities_by_all_codes_budget' report"
   task :activities_by_all_codes_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Saves all reports to database"
+  desc "Cache all reports"
   task :all => [
     'districts_by_nsp_budget',
     'districts_by_all_codes_budget',

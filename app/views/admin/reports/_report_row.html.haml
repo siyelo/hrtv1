@@ -3,10 +3,10 @@
 - if rep
   = link_to title, admin_report_path(rep)
   %ul.report_actions
-    %li= link_to image_tag("icon_csv.png"), admin_report_path(rep), :title => 'CSV (Comma Separated Value) report'
-    %li= link_to image_tag("icon_formatted.png"), admin_report_path(rep, :formatted => true), :title => 'Formatted report'
-    %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
     %li= link_to image_tag("icon_edit.png"), edit_admin_report_path(rep)
+    %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
+    %li= link_to image_tag("icon_formatted.png"), admin_report_path(rep, :formatted => true), :title => 'Formatted report'
+    %li= link_to image_tag("icon_csv.png"), admin_report_path(rep), :title => 'CSV (Comma Separated Value) report'
 
 - else # If report wasnt generated yet, allow user to regen it.
   = link_to title, generate_admin_report_path(key), :title => 'Generate report', :class => "grayed-out"

@@ -94,6 +94,7 @@ body.app
           font-weight: bold
           padding: 12px 15px 8px 17px
           text-decoration: none
+          +transition(hover, 1s, ease, 0)
           +linear-gradient(color-stops($light-blue - #111, $light-blue - #555))
           +text-shadow($light-blue, 0, 1px, 1px)
 
@@ -532,12 +533,14 @@ ul.group
     margin: 0 !important
   li
     position: relative
+    +transition(hover, 1s, ease, 0)
     &:hover
       a
         background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
         color: $mid-blue
+        +transition(hover, 1s, ease, 0)
       ul.report_actions
-        display: block
+        opacity: 1
   h3
     padding-top: 10px !important
     
@@ -549,16 +552,18 @@ ul.group
     padding: 10px 8px 8px 28px
     text-decoration: none
     +border-radius
+    +transition(hover, 1s, ease, 0)
     &.grayed-out
       color: #999
     &:hover
       background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
       
   ul.report_actions
-    display: none
+    opacity: 0
     position: absolute
     top: 6px
     right: 10px
+    +transition(hover, 0.6s, ease, 0)
     li
       display: inline
       float: right

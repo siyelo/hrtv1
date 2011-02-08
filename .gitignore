@@ -10,6 +10,7 @@ app/stylesheets/.sass-cache/*
 db/*.sqlite3
 db/*.sqlite3-*
 db/*.gz
+db/*.db
 db/*.tgz
 db/*pgdump*
 config/database.yml

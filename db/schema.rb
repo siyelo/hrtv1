@@ -83,14 +83,14 @@ ActiveRecord::Schema.define(:version => 20110207095400) do
     t.decimal  "amount"
     t.string   "type"
     t.decimal  "percentage"
-    t.decimal  "cached_amount",        :default => 0.0
-    t.decimal  "sum_of_children",      :default => 0.0
+    t.decimal  "cached_amount",          :default => 0.0
+    t.decimal  "sum_of_children",        :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "cached_amount_in_usd", :default => 0.0
+    t.decimal  "cached_amount_in_usd",   :default => 0.0
+    t.decimal  "sum_of_children_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -301,12 +301,6 @@ ActiveRecord::Schema.define(:version => 20110207095400) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
-  create_table "sqlite_stat1", :id => false, :force => true do |t|
-    t.text "tbl"
-    t.text "idx"
-    t.text "stat"
-  end
-
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "email"
@@ -322,5 +316,8 @@ ActiveRecord::Schema.define(:version => 20110207095400) do
     t.string   "full_name"
     t.string   "perishable_token",         :default => "", :null => false
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

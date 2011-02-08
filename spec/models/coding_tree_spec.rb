@@ -91,7 +91,7 @@ describe CodingTree do
     end
   end
 
-  context "root" do
+  describe "root" do
     it "has roots" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
@@ -103,7 +103,7 @@ describe CodingTree do
     end
   end
 
-  context "coding tree" do
+  describe "coding tree" do
     it "is valid when there are only roots" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
@@ -146,7 +146,7 @@ describe CodingTree do
     end
   end
 
-  context "code assignment" do
+  describe "code assignment" do
     it "all code assignments are valid when coding tree is valid" do
       ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
       ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
@@ -165,6 +165,146 @@ describe CodingTree do
       ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid_ca?(ca1).should == false
       ct.valid_ca?(ca11).should == true
+    end
+  end
+
+  # NOTE: these specs are done with stubing, but they need to be changed
+  # to check for real objects once we remove codes seeds from test db
+  describe "available_codes" do
+    before :each do
+      @fake_codes = [mock(:code)]
+    end
+
+    it "returns codes for simple activity and 'CodingBudget' type" do
+      Code.stub_chain(:for_activities, :roots).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, CodingBudget)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingBudget' type" do
+      OtherCostCode.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:other_cost)
+      ct       = CodingTree.new(activity, CodingBudget)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'CodingBudgetCostCategorization' type" do
+      CostCategory.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, CodingBudgetCostCategorization)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingBudgetCostCategorization' type" do
+      CostCategory.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:other_cost)
+      ct       = CodingTree.new(activity, CodingBudgetCostCategorization)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'CodingBudgetDistrict' type" do
+      activity = Factory.create(:activity)
+      activity.stub(:locations).and_return(@fake_codes)
+
+      ct       = CodingTree.new(activity, CodingBudgetDistrict)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingBudgetDistrict' type" do
+      activity = Factory.create(:other_cost)
+      activity.stub(:locations).and_return(@fake_codes)
+
+      ct       = CodingTree.new(activity, CodingBudgetDistrict)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'HsspBudget' type" do
+      HsspStratObj.stub(:all).and_return(@fake_codes)
+      HsspStratProg.stub(:all).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, HsspBudget)
+      ct.available_codes.should == @fake_codes.concat(@fake_codes)
+    end
+
+    it "returns codes for other cost activity and 'HsspBudget' type" do
+      HsspStratObj.stub(:all).and_return(@fake_codes)
+      HsspStratProg.stub(:all).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, HsspBudget)
+      ct.available_codes.should == @fake_codes.concat(@fake_codes)
+    end
+
+    it "returns codes for simple activity and 'CodingSpend' type" do
+      Code.stub_chain(:for_activities, :roots).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, CodingSpend)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingSpend' type" do
+      OtherCostCode.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:other_cost)
+      ct       = CodingTree.new(activity, CodingSpend)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'CodingSpendCostCategorization' type" do
+      CostCategory.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, CodingSpendCostCategorization)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingSpendCostCategorization' type" do
+      CostCategory.stub(:roots).and_return(@fake_codes)
+
+      activity = Factory.create(:other_cost)
+      ct       = CodingTree.new(activity, CodingSpendCostCategorization)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'CodingSpendDistrict' type" do
+      activity = Factory.create(:activity)
+      activity.stub(:locations).and_return(@fake_codes)
+
+      ct       = CodingTree.new(activity, CodingSpendDistrict)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for other cost activity and 'CodingSpendDistrict' type" do
+      activity = Factory.create(:other_cost)
+      activity.stub(:locations).and_return(@fake_codes)
+
+      ct       = CodingTree.new(activity, CodingSpendDistrict)
+      ct.available_codes.should == @fake_codes
+    end
+
+    it "returns codes for simple activity and 'HsspSpend' type" do
+      HsspStratObj.stub(:all).and_return(@fake_codes)
+      HsspStratProg.stub(:all).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, HsspSpend)
+      ct.available_codes.should == @fake_codes.concat(@fake_codes)
+    end
+
+    it "returns codes for other cost activity and 'HsspSpend' type" do
+      HsspStratObj.stub(:all).and_return(@fake_codes)
+      HsspStratProg.stub(:all).and_return(@fake_codes)
+
+      activity = Factory.create(:activity)
+      ct       = CodingTree.new(activity, HsspSpend)
+      ct.available_codes.should == @fake_codes.concat(@fake_codes)
     end
   end
 end

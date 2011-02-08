@@ -69,38 +69,14 @@ class CodingTree
   # TODO: write specs for this method
   def available_codes
     case @coding_klass.to_s
-    when 'CodingBudget'
-      if @activity.class.to_s == "OtherCost"
-        OtherCostCode.roots
-      else
-        Code.for_activities.roots
-      end
-    when 'CodingBudgetCostCategorization'
+    when 'CodingBudget', 'CodingSpend'
+      @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.for_activities.roots
+    when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
-    when 'CodingBudgetDistrict'
+    when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       @activity.locations
-    when 'CodingSpend'
-      if @activity.class.to_s == "OtherCost"
-        OtherCostCode.roots
-      else
-        Code.for_activities.roots
-      end
-    when 'CodingSpendCostCategorization'
-      CostCategory.roots
-    when 'CodingSpendDistrict'
-      @activity.locations
-    when 'HsspBudget'
-      if @activity.class.to_s == "OtherCost"
-        []
-      else
-        HsspStratObj.all + HsspStratProg.all
-      end
-    when 'HsspSpend'
-      if @activity.class.to_s == "OtherCost"
-        []
-      else
-        HsspStratObj.all + HsspStratProg.all
-      end
+    when 'HsspBudget', 'HsspSpend'
+      @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
     else
       raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
     end

@@ -2,7 +2,6 @@ class Admin::ReportsController < Admin::BaseController
   include ReportsControllerHelpers
 
   def index
-    flash.now[:notice] = "If any of the reports time out or take too long, please email Steve Musau <Stephen_Musau@abtassoc.com> to get them."
   end
 
   def show

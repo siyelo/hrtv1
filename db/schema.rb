@@ -83,14 +83,14 @@ ActiveRecord::Schema.define(:version => 20110207095400) do
     t.decimal  "amount"
     t.string   "type"
     t.decimal  "percentage"
-    t.decimal  "cached_amount",          :default => 0.0
-    t.decimal  "sum_of_children",        :default => 0.0
+    t.decimal  "cached_amount",        :default => 0.0
+    t.decimal  "sum_of_children",      :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "cached_amount_in_usd",   :default => 0.0
-    t.decimal  "sum_of_children_in_usd", :default => 0.0
+    t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|

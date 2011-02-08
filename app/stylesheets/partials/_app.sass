@@ -530,13 +530,48 @@ ul.group
   +clearfix
   .first-half, .second-half
     margin: 0 !important
-
+  li
+    position: relative
+    &:hover
+      a
+        background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+        color: $mid-blue
+      ul.report_actions
+        display: block
   h3
     padding-top: 10px !important
-
-  li
-    ul
-      +horizontal-list
+    
+  a
+    background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
+    display: block
+    font-size: 12px
+    margin-bottom: 5px
+    padding: 10px 8px 8px 28px
+    text-decoration: none
+    +border-radius
+    &.grayed-out
+      color: #999
+    &:hover
+      background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+      
+  ul.report_actions
+    display: none
+    position: absolute
+    top: 6px
+    right: 10px
+    li
+      display: inline
+      float: right
+    a
+      background: none
+      display: inline
+      opacity: 0.3
+      padding: 0 2px
+      &:hover
+        opacity: 0.9
+      &.regenerate
+        opacity: 0.9
+      
 
 #heading-activity
   background: image_url("icon_reporter.png") no-repeat center left

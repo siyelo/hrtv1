@@ -1,5 +1,31 @@
 class Report < ActiveRecord::Base
 
+  REPORTS = [
+    'districts_by_nsp_budget',
+    'districts_by_all_codes_budget',
+    'users_by_organization',
+    'map_districts_by_partner_budget',
+    'map_districts_by_partner_spent',
+    'map_districts_by_nsp_budget',
+    'map_districts_by_all_codes_budget',
+    'map_facilities_by_partner_budget',
+    'map_facilities_by_partner_spent',
+    'activities_summary',
+    'activities_by_district',
+    'activities_one_row_per_district',
+    'activities_by_budget_coding',
+    'activities_by_budget_cost_categorization',
+    'activities_by_budget_districts',
+    'activities_by_expenditure_coding',
+    'activities_by_expenditure_cost_categorization',
+    'activities_by_expenditure_districts',
+    'jawp_report_budget',
+    'jawp_report_spent',
+    'activities_by_nsp_budget',
+    'activities_by_nha',
+    'activities_by_all_codes_budget'
+  ]
+
   attr_accessible :key
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
   has_attached_file :csv,

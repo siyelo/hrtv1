@@ -1,36 +1,25 @@
 class Admin::ReportsController < Admin::BaseController
   include ReportsControllerHelpers
 
-  before_filter :find_report, :only => [:edit, :update]
+  before_filter :find_report, :only => [:show, :edit, :update]
 
   def index
+    @reports = Report.all
+    @report_map = @reports.map_to_hash{|r| {r.key => r}}
   end
 
+  # returns the report csv, or the formatted csv
   def show
-    report = Report.find_last_by_key(params[:id])
-
-    if params[:force] == "true" || report.nil?
-      report = Report.create(:key => params[:id])
-    end
-
-    redirect_to report.csv.url
-  end
-
-  def new
-    @report = Report.new()
-  end
-
-  # POST admin/reports
-  def create
-    @report  = Report.new(params[:report])
-    respond_to do |format|
-      if @report.save
-        flash[:notice] = "Successfully created report"
-        format.html { redirect_to admin_reports_path() }
+    url = @report.csv.url
+    if params[:formatted] == "true"
+      if @report.formatted_csv.exists?
+        url = @report.formatted_csv.url
       else
-        format.html { render :action => :new }
+        flash[:error] = "Formatted report does not exist."
+        url = admin_reports_path()
       end
     end
+    redirect_to url
   end
 
   def edit
@@ -44,6 +33,13 @@ class Admin::ReportsController < Admin::BaseController
     else
       render :action => :edit
     end
+  end
+
+  def generate
+    @report = Report.new(:key => params[:id])
+    @report.generate_csv_zip
+    @report.save
+    redirect_to @report.csv.url
   end
 
   protected

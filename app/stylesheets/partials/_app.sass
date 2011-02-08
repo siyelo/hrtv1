@@ -534,22 +534,9 @@ ul.group
   h3
     padding-top: 10px !important
 
-  a
-    background: image_url("icon_csv.png") no-repeat $lightest-blue + #090909 10px center
-    display: block
-    font-size: 12px
-    margin-bottom: 5px
-    padding: 10px 8px 8px 34px
-    text-decoration: none
-    +border-radius
-    &:hover
-      background: image_url("icon_csv.png") no-repeat $lightest-blue 10px center
-
-    &.drill_down
-      background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
-      padding: 10px 8px 8px 28px
-      &:hover
-        background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+  li
+    ul
+      +horizontal-list
 
 #heading-activity
   background: image_url("icon_reporter.png") no-repeat center left

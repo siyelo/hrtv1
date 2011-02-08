@@ -14,15 +14,17 @@ describe Report do
     it { should be_valid }
     it { should validate_presence_of(:key) }
     it { should allow_mass_assignment_of(:key) }
+    it { should allow_mass_assignment_of(:csv) }
+    it { should allow_mass_assignment_of(:formatted_csv) }
       
     it "should only accept unique keys" do
       Report.create!(:key => 'users_by_organization')
       Report.new.should validate_uniqueness_of( :key )
     end
 
-    it "should save a csv attachment" do
+    it "should save attachments" do
       report      = Report.new(:key => 'users_by_organization')    
-      report.should_receive(:save_attached_files).and_return(true)
+      report.should_receive(:save_attached_files).twice.and_return(true)
       report.save.should == true
     end
   end  

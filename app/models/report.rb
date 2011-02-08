@@ -26,16 +26,19 @@ class Report < ActiveRecord::Base
     'activities_by_all_codes_budget'
   ]
 
-  attr_accessible :key
+  attr_accessible :key, :csv, :formatted_csv
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
   has_attached_file :csv,
+    {:path => "report/:attachment/:key.:extension"
+    }.merge(Settings.paperclip.to_options)
+  has_attached_file :formatted_csv,
     {:path => "report/:attachment/:key.:extension"
     }.merge(Settings.paperclip.to_options)
 
   validates_presence_of :key
   validates_uniqueness_of :key
+  validates_inclusion_of :key, :in => REPORTS
 
-  before_save :generate_csv_zip
   after_save :cleanup_temp_files
 
   ### Instance Methods
@@ -44,12 +47,8 @@ class Report < ActiveRecord::Base
     self.key
   end
 
-  def generate
-     self.run_report
-  end
-
   def generate_csv_zip
-    self.generate
+    self.run_report
     self.create_tmp_csv
     self.zip_file
     self.attach_zip_file

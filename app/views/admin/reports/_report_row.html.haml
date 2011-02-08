@@ -1,0 +1,12 @@
+- rep = @report_map[key]
+
+- if rep
+  = link_to title, admin_report_path(rep)
+  .csv= link_to image_tag("icon_csv.png"), admin_report_path(rep), :title => 'CSV (Comma Separated Value) report'
+  .formatted= link_to image_tag("icon_formatted.png"), admin_report_path(rep, :formatted => true), :title => 'Formatted report'
+  = link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
+  .edit= link_to image_tag("icon_edit.png"), edit_admin_report_path(rep)
+
+- else # If report wasnt generated yet, allow user to regen it.
+  = link_to title, generate_admin_report_path(key), :title => 'Generate report'
+  = link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'

@@ -28,4 +28,13 @@ class ApplicationController < AuthlogicController
       end
     end
 
+    def set_layout
+      if current_user.role?(:reporter)
+        'reporter'
+      else
+        'admin'
+      end
+    end
+
+
 end

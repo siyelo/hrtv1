@@ -8,6 +8,10 @@ ActionController::Routing::Routes.draw do |map|
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
   map.resources :password_resets
 
+
+  # PROFILE
+  map.resource :profile, :only => [:edit, :update]
+
   map.resources :data_responses,
                   :member => {:review => :get,
                               :submit => :put}

@@ -57,11 +57,4 @@ class UsersController < ActiveScaffoldController
       @s+username
     end
   end
-
-  # hack to make redirect after edit look like success when
-  # change their password
-  rescue_from CanCan::AccessDenied do |exception|
-      flash[:notice] = "Successfully updated your profile"
-      redirect_to user_dashboard_path(current_user)
-  end
 end

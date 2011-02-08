@@ -4,11 +4,11 @@ Feature: NGO/donor can view review page
   I want to be able to see review screen
 
 Background:
-  Given the following organizations 
+  Given the following organizations
     | name             |
     | WHO              |
     | UNAIDS           |
-  Given the following reporters 
+  Given the following reporters
     | name             | organization |
     | who_user         | WHO          |
   Given a data request with title "Req1" from "UNAIDS"
@@ -70,5 +70,5 @@ Scenario: Manage comments on activities (with Javascript)
 @reporter_review_screen @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
-  Then I should see tabs for comments,activities,other costs 
+  Then I should see tabs for comments,activities,other costs
   Then I should see tabs for comments,sub-activities when activities already open

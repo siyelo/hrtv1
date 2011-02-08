@@ -15,14 +15,6 @@ class ActiveScaffoldController < ApplicationController
   end
 
   protected
-    def set_layout
-      if current_user.role?(:reporter)
-        'reporter'
-      else
-        'admin'
-      end
-    end
-
     #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
     def before_update_save(record)
       record.comments.each do |comment|

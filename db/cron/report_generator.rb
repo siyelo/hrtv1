@@ -14,11 +14,11 @@
 # == Notes
 # Be sure to set the cron to run during quiet periods (overnight).
 #  E.g.
-#    Fast reports, 1am daily
-#      0 1 * * * report_generator.rb resourcetracking fast
+#    Fast reports, 1am daily, except sunday
+#      0 0 * * 1-6 report_generator.rb resourcetracking fast
 #
-#    Slow reports, 12am sunday
-#      0 0 * * 0 report_generator.rb resourcetracking slow
+#    All reports (including slow ones), 12am Sundays
+#      0 0 * * 0 report_generator.rb resourcetracking all
 #
 
 require File.join(File.dirname(__FILE__), 'script_helper')

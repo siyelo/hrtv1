@@ -132,8 +132,8 @@ namespace :reports do
     update_report(t)
   end
 
-  desc "Cache all reports"
-  task :all => [
+  desc "Cache reports"
+  task :fast => [
     'districts_by_nsp_budget',
     'districts_by_all_codes_budget',
     'users_by_organization',
@@ -158,4 +158,13 @@ namespace :reports do
     'activities_by_nha',
     'activities_by_all_codes_budget'
   ]
+
+  task :slow => [
+    'activities_by_district'
+  ]
+
+  desc "Cache all reports"
+  task :all => [ 'fast', 'slow']
+
+
 end

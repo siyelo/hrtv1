@@ -1,28 +1,22 @@
 #!/usr/bin/env ruby
-
 #
 # Back up a heroku app
 #  1. To postgres using pgbackup
 #  2. To sqlite3 using heroku db:pull
 #
 # Usage:
-#   backup.rb HEROKU_APP DIR
+#   db_backup.rb HEROKU_APP DIR
 # E.g.
 #  backup.rb resourcetracking /backups
 # or in crontab 7am & 11pm daily
-#  0 7,23 * * * /root/health_resource_tracker/db/backups/heroku.rb resourcetracking ~/hrt_backups
+#  0 7,23 * * * db_backup.rb resourcetracking ~/hrt_backups
 
-def run(cmd)
-  puts cmd + "\n"
-  system cmd
-end
+require File.join(File.dirname(__FILE__), 'script_helper')
 
-def get_date
-  `date '+%Y-%m-%d-%H%Mhrs'`.chomp
-end
+include ScriptHelper
 
 args       = ARGV.join(' ')
-HEROKU_APP = ARGV[0] || 'resourcetracking'
+HEROKU_APP = ARGV[0] || DEFAULT_PRODUCTION_APP
 BACKUP_DIR = ARGV[1] || '.'
 
 date           = get_date()

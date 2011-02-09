@@ -9,7 +9,7 @@ describe Report do
       Reports::UsersByOrganization.stub(:new).and_return(csv_report)
     end  
     
-    subject { Report.new(:key => 'somekey') }
+    subject { Report.new(:key => 'users_by_organization') }
     
     it { should be_valid }
     it { should validate_presence_of(:key) }
@@ -20,6 +20,13 @@ describe Report do
     it "should only accept unique keys" do
       Report.create!(:key => 'users_by_organization')
       Report.new.should validate_uniqueness_of( :key )
+    end
+    
+    it "should accept only keys for certain Reports" do
+      r = Report.new(:key => 'users_by_organization')
+      r.should be_valid
+      r = Report.new(:key => 'blahblah')
+      r.should_not be_valid
     end
 
     it "should save attachments" do

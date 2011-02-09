@@ -35,8 +35,10 @@ class Admin::ReportsController < Admin::BaseController
     end
   end
 
+  # regenerate the report csv.
+  # find it using the report key, if it exists.
   def generate
-    @report = Report.new(:key => params[:id])
+    @report = Report.find_or_initialize_by_key(params[:id])
     @report.generate_csv_zip
     @report.save
     redirect_to @report.csv.url

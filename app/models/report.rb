@@ -118,7 +118,7 @@ class Report < ActiveRecord::Base
 
     def zip_file
       self.zip_file_name = self.temp_file_name + ".zip"
-      cmd = "zip -9 #{self.zip_file_name} #{self.temp_file_name}"
+      cmd = "zip -j -9 #{self.zip_file_name} #{self.temp_file_name}"
       system cmd
     end
 

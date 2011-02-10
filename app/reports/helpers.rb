@@ -247,4 +247,6 @@ module Reports::Helpers
       raise "Invalid type #{type}".to_yaml
     end
   end
+
+  #usd_to_rwf = Money.default_bank.get_rate("USD", "RWF")
 end

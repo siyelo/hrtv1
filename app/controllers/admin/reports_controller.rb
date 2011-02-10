@@ -26,8 +26,7 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def update
-    @report.update_attributes params[:report]
-    if @report.save
+    if @report.update_attributes(params[:report])
       flash[:notice] = "Successfully updated."
       redirect_to admin_reports_path()
     else
@@ -42,6 +41,11 @@ class Admin::ReportsController < Admin::BaseController
     @report.generate_csv_zip
     @report.save
     redirect_to @report.csv.url
+  end
+
+  def run_report
+    @report = Report.find(params[:id])
+    @report.run_report
   end
 
   protected

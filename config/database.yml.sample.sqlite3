@@ -6,39 +6,6 @@ development:
   pool: 5
   timeout: 5000
 
-
-# PostgreSQL. Versions 7.4 and 8.x are supported.
-#
-# You need ruby-pg or ruby
-#   gem install ruby-pg
-#     or
-#   gem install ruby-postgres
-#
-# development:
-#   adapter: postgresql
-#   encoding: unicode
-#   database: restracker_dev
-#   pool: 5
-#   username: restracker_dev
-#   password: restracker_dev
-
-# START Helpful PostgreSQL Setup Instructions
-#  If you have a fresh install of postgres, you need to create 
-#  a password for the postgres user. 
-#  See "Basic Server Setup" under https://help.ubuntu.com/community/PostgreSQL
-
-#   Once you have the postgres user you can enter psql or from the command
-#   line run these commands below, prefixed with "sudo -u postgres"
-# END
-
-# Postgres setup
-# createuser -d -R -P restracker_dev
-# createdb -O restracker_dev restracker_dev
-
-# to load a pgdump.sql from Heroku:
-# psql -f pgdump.sql restracker_dev restracker_dev -W
-
-
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.

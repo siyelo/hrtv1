@@ -1,15 +1,46 @@
 class Report < ActiveRecord::Base
+  include ScriptHelper
 
-  attr_accessible :key
+
+  REPORTS = [
+    'districts_by_nsp_budget',
+    'districts_by_all_codes_budget',
+    'users_by_organization',
+    'map_districts_by_partner_budget',
+    'map_districts_by_partner_spent',
+    'map_districts_by_nsp_budget',
+    'map_districts_by_all_codes_budget',
+    'map_facilities_by_partner_budget',
+    'map_facilities_by_partner_spent',
+    'activities_summary',
+    'activities_by_district',
+    'activities_one_row_per_district',
+    'activities_by_budget_coding',
+    'activities_by_budget_cost_categorization',
+    'activities_by_budget_districts',
+    'activities_by_expenditure_coding',
+    'activities_by_expenditure_cost_categorization',
+    'activities_by_expenditure_districts',
+    'jawp_report_budget',
+    'jawp_report_spent',
+    'activities_by_nsp_budget',
+    'activities_by_nha',
+    'activities_by_all_codes_budget'
+  ]
+
+  attr_accessible :key, :csv, :formatted_csv
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
   has_attached_file :csv,
+    {:path => "report/:attachment/:key.:extension"
+    }.merge(Settings.paperclip.to_options)
+  has_attached_file :formatted_csv,
     {:path => "report/:attachment/:key.:extension"
     }.merge(Settings.paperclip.to_options)
 
   validates_presence_of :key
   validates_uniqueness_of :key
+  validates_inclusion_of :key, :in => REPORTS
 
-  before_save :generate_csv_zip
   after_save :cleanup_temp_files
 
   ### Instance Methods
@@ -18,12 +49,8 @@ class Report < ActiveRecord::Base
     self.key
   end
 
-  def generate
-     self.run_report
-  end
-
   def generate_csv_zip
-    self.generate
+    self.run_report
     self.create_tmp_csv
     self.zip_file
     self.attach_zip_file
@@ -87,13 +114,13 @@ class Report < ActiveRecord::Base
     end
 
     def create_tmp_csv
-      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{Process.pid}.csv"
+      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{get_date()}.csv"
       File.open(self.temp_file_name, 'w')  {|f| f.write(self.raw_csv) }
     end
 
     def zip_file
       self.zip_file_name = self.temp_file_name + ".zip"
-      cmd = "zip -9 #{self.zip_file_name} #{self.temp_file_name}"
+      cmd = "zip -j -9 #{self.zip_file_name} #{self.temp_file_name}"
       system cmd
     end
 

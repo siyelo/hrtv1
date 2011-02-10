@@ -8,6 +8,10 @@ ActionController::Routing::Routes.draw do |map|
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
   map.resources :password_resets
 
+
+  # PROFILE
+  map.resource :profile, :only => [:edit, :update]
+
   map.resources :data_responses,
                   :member => {:review => :get,
                               :submit => :put}
@@ -25,7 +29,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :organizations,
                     :collection => { :duplicate => :get, :remove_duplicate  => :put},
                     :active_scaffold => true
-    admin.resources :reports, :only => [:index, :show]
+    admin.resources :reports, :member => {:generate => :get}
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index

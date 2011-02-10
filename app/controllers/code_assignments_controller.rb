@@ -80,7 +80,7 @@ class CodeAssignmentsController < ApplicationController
     def add_code_assignments_error(coding_class, activity)
       if !activity.send(get_coding_classified_method(coding_class))
         coding_type        = get_coding_type(coding_class)
-        coding_type_amount = activity.send(coding_type)
+        coding_type_amount = activity.send(coding_type) || 0
         coding_amount      = activity.send("#{coding_class}_amount")
         coding_amount      = 0 if coding_amount.nil?
         difference         = coding_type_amount - coding_amount

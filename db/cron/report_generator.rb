@@ -21,7 +21,7 @@
 #      0 0 * * 0 report_generator.rb resourcetracking all
 #
 
-require File.join(File.dirname(__FILE__), 'script_helper')
+require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 
 include ScriptHelper
 

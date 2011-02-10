@@ -11,7 +11,7 @@
 # or in crontab 7am & 11pm daily
 #  0 7,23 * * * db_backup.rb resourcetracking ~/hrt_backups
 
-require File.join(File.dirname(__FILE__), 'script_helper')
+require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 
 include ScriptHelper
 

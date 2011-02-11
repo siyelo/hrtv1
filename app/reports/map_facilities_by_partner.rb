@@ -36,7 +36,7 @@ class Reports::MapFacilitiesByPartner
 
         # if have my own DR, pull lots of info from there
         # otherwise get who gives me money by activities
-        if dr
+        if dr && !dr.empty?
           organization.in_flows.all(:conditions => ["data_response_id = ?", dr.id]).each do |flow|
             set_amounts(organization, flow.from, in_flow_amount(flow))
           end

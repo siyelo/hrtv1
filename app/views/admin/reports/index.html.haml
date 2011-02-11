@@ -70,15 +70,9 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li
-        - link_to admin_report_path('activities_summary') do
-          Summary
-          %span.hint Formerly named the "Activities Report"
+      %li= render 'report_row', :title => "Activities Summary", :key => 'activities_summary'
       %li= render 'report_row', :title => "By District", :key => 'activities_by_district'
-      %li
-        - link_to admin_report_path('activities_one_row_per_district') do
-          One Row Per District
-          %span.hint Coded in Classifications + District Classifications Summary per Activity
+      %li= render 'report_row', :title => "One Row Per District", :key => 'activities_one_row_per_district'
       %li= render 'report_row', :title => "By Budget Coding (beta)", :key => 'activities_by_budget_coding'
       %li= render 'report_row', :title => "By Budget Cost Categorization (beta)", :key => 'activities_by_budget_cost_categorization'
       %li= render 'report_row', :title => "By Budget Districts (beta)", :key => 'activities_by_budget_districts'

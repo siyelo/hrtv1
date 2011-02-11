@@ -287,7 +287,7 @@ class Activity < ActiveRecord::Base
       assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
       amount = 0
       assigns_in_codes.each do |ca|
-        amount += ca.calculated_amount
+        amount += ca.cached_amount
       end
       ca = new_klass.new
       ca.activity_id = self.id

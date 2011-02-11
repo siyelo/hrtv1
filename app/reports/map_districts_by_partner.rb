@@ -56,7 +56,7 @@ class Reports::MapDistrictsByPartner
         code_assignments = @is_budget ?
           activity.budget_district_coding : activity.spend_district_coding
         code_assignments.each do |ca|
-          amount = ca.calculated_amount * activity.toRWF
+          amount = ca.cached_amount * activity.toRWF
           loc = ca.code
           @districts_hash[loc][:total] += amount #TODO convert currency
           if @districts_hash[loc][:partners][provider]

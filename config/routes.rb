@@ -29,7 +29,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :organizations,
                     :collection => { :duplicate => :get, :remove_duplicate  => :put},
                     :active_scaffold => true
-    admin.resources :reports, :member => {:generate => :get, :run_report => :get} # run_report used in development for debug
+    admin.resources :reports, :member => {:generate => :get}
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index

@@ -43,11 +43,6 @@ class Admin::ReportsController < Admin::BaseController
     redirect_to @report.csv.url
   end
 
-  def run_report
-    @report = Report.find(params[:id])
-    @report.run_report
-  end
-
   protected
 
     def find_report

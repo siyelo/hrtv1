@@ -30,12 +30,8 @@ class Report < ActiveRecord::Base
 
   attr_accessible :key, :csv, :formatted_csv
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
-  has_attached_file :csv,
-    {:path => "report/:attachment/:key.:extension"
-    }.merge(Settings.paperclip.to_options)
-  has_attached_file :formatted_csv,
-    {:path => "report/:attachment/:key.:extension"
-    }.merge(Settings.paperclip.to_options)
+  has_attached_file :csv, Settings.paperclip.to_options
+  has_attached_file :formatted_csv, Settings.paperclip.to_options
 
   validates_presence_of :key
   validates_uniqueness_of :key

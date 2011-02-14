@@ -1,6 +1,7 @@
 class ActiveScaffoldController < ApplicationController
   layout :set_layout
 
+  before_filter :require_user
   before_filter :load_help
   before_filter :set_defaults
 

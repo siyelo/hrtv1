@@ -23,10 +23,10 @@ class Nsp < Code
 #                 ) ",
 #              :order => quoted_left_column_name
 
+  # NOTE: this method overrides the leaves method from awesome_nested_set
+  # and it returns all Nsp codes which children are not Nsp codes
   def self.leaves
-    my_leaves = super()
-    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
-    (my_leaves + leaves_with_other_type_kids).uniq
+    find(:all, :include => :children).select{|c| !c.children.map(&:type).include?(self.to_s)}
   end
 
   def old_self_and_nsp_ancestors

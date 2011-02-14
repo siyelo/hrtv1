@@ -21,7 +21,7 @@ class AuthlogicController < ActionController::Base
     def require_user
       unless current_user
         store_location
-        flash[:notice] = "You must be logged in to access this page"
+        flash[:error] = "You must be logged in to access this page"
         redirect_to login_url
         return false
       end
@@ -30,7 +30,7 @@ class AuthlogicController < ActionController::Base
     def require_admin
       unless current_user && current_user.role?(:admin)
         store_location
-        flash[:notice] = "You must be an administrator to access that page"
+        flash[:error] = "You must be an administrator to access that page"
         redirect_to login_url
         return false
       end

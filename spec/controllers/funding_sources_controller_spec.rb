@@ -12,9 +12,8 @@ end
 describe FundingSourcesController do
   context "as visitor" do
     context "get index" do
-      before :each do get :index end
-      it { should redirect_to(login_path) }
-      it { should set_the_flash.to("You are not authorized to do that") }
+      before do get :index end
+      it_should_behave_like "a protected endpoint"
     end
   end
 

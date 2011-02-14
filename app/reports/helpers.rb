@@ -210,7 +210,7 @@ module Reports::Helpers
     activities = {}
     code_assignments.each do |ca|
       activities[ca.activity] = {}
-      activities[ca.activity][:leaf_amount] = ca.sum_of_children == 0 ? ca.cached_amount : 0
+      activities[ca.activity][:leaf_amount] = (ca.sum_of_children == 0 ? ca.cached_amount : 0)
       activities[ca.activity][:amount] = ca.cached_amount
     end
     activities

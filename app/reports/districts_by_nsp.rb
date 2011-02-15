@@ -10,12 +10,7 @@ class Reports::DistrictsByNsp
     @nsp_codes                 = Nsp.all
     @locations                 = Location.all
 
-    # optimizations with eager-loading
-    if @is_budget
-      Activity.send(:preload_associations, activities, [:locations, {:coding_budget_district => :activity}])
-    else
-      Activity.send(:preload_associations, activities, [:locations, {:coding_spend_district => :activity}])
-    end
+    preload_district_associations(activities, @is_budget) # eager-load
   end
 
   def csv
@@ -80,7 +75,7 @@ class Reports::DistrictsByNsp
       @coding_sums = CodeAssignment.with_code_ids(@nsp_codes.map{|c| c.id}).
                                     with_type(@coding_class.to_s).
                                     with_activities(@activities).
-                                    sum(:cached_amount, :group => 'code_id')
+                                    sum(:cached_amount_in_usd, :group => 'code_id')
     end
 
     def build_code_amounts
@@ -119,7 +114,7 @@ class Reports::DistrictsByNsp
 
       code_assignments.each do |ca|
         proportion = @activity_proportions[ca.activity][location]
-        amount += ca.cached_amount * proportion if proportion
+        amount += ca.cached_amount_in_usd * proportion if proportion
       end
 
       return amount

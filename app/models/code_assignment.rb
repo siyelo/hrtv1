@@ -94,9 +94,6 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Instance Methods
   #
-
-  # This is only used in some reports
-  # activity_amount can (and should) be deprecated if we deprecate this too
   def proportion_of_activity
     activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
 

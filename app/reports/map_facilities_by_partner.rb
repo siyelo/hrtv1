@@ -4,13 +4,7 @@ class Reports::MapFacilitiesByPartner
   include Reports::Helpers
 
   def initialize(type)
-    if type == :budget
-      @is_budget = true
-    elsif type == :spent
-      @is_budget = false
-    else
-      raise "Invalid type #{type}".to_yaml
-    end
+    @is_budget = is_budget?(type)
 
     #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
     @organizations   = Organization.all(:conditions => ["fosaid is not null"])
@@ -37,11 +31,16 @@ class Reports::MapFacilitiesByPartner
         # if have my own DR, pull lots of info from there
         # otherwise get who gives me money by activities
         if dr && !dr.empty?
-          organization.in_flows.all(:conditions => ["data_response_id = ?", dr.id]).each do |flow|
+          in_flows = organization.in_flows.find(:all,
+                                  :conditions => ["data_response_id = ?", dr.id],
+                                  :include => :project)
+          in_flows.each do |flow|
             set_amounts(organization, flow.from, in_flow_amount(flow))
           end
         else
-          organization.provider_for.canonical.each do |activity|
+          activities = organization.provider_for.canonical
+          #preload_district_associations(activities, @is_budget) # eager-load
+          activities.each do |activity|
             set_amounts(organization, activity.organization, activity_amount(activity))
           end
         end
@@ -110,17 +109,13 @@ class Reports::MapFacilitiesByPartner
     end
 
     def activity_amount(activity)
-      amount = @is_budget ? activity.budget : activity.spend
-      amount = 0 unless amount
-
-      amount * activity.toRWF
+      amount = (@is_budget ? activity.budget_in_usd : activity.spend_in_usd) || 0
+      amount * activity.toUSD
     end
 
     def in_flow_amount(funding_flow)
-      amount = @is_budget ? funding_flow.budget : funding_flow.spend
-      amount = 0 unless amount
-
-      amount * funding_flow.toRWF
+      amount = (@is_budget ? funding_flow.budget : funding_flow.spend) || 0
+      amount * funding_flow.toUSD
     end
 
     def max_partners_length

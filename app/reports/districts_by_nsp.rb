@@ -8,7 +8,14 @@ class Reports::DistrictsByNsp
     @coding_class              = @is_budget ? CodingBudget : CodingSpend
     @activities                = activities
     @nsp_codes                 = Nsp.all
-    @locations                  = Location.all
+    @locations                 = Location.all
+
+    # optimizations with eager-loading
+    if @is_budget
+      Activity.send(:preload_associations, activities, [:locations, {:coding_budget_district => :activity}])
+    else
+      Activity.send(:preload_associations, activities, [:locations, {:coding_spend_district => :activity}])
+    end
   end
 
   def csv

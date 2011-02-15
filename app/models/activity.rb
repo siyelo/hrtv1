@@ -52,7 +52,11 @@ class Activity < ActiveRecord::Base
   has_many :codes, :through => :code_assignments
 
   # handy associations - use instead of named_scopes
+  has_many :coding_budget
+  has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
+  has_many :coding_spend
+  has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
 
   ### Validations
@@ -241,11 +245,11 @@ class Activity < ActiveRecord::Base
   # so the logic for how to return when there is no data
   # is put in the model, thus being shared
   def budget_district_coding
-    district_coding(CodingBudgetDistrict, code_assignments.with_type(CodingBudgetDistrict.to_s), budget)
+    district_coding(CodingBudgetDistrict, coding_budget_district, budget)
   end
 
   def spend_district_coding
-    district_coding(CodingSpendDistrict, code_assignments.with_type(CodingSpendDistrict.to_s), spend)
+    district_coding(CodingSpendDistrict, coding_spend_district, spend)
   end
 
   def budget_stratprog_coding
@@ -378,7 +382,7 @@ class Activity < ActiveRecord::Base
 
     def district_coding(klass, assignments, amount)
      #TODO we will want to be able to override / check against the derived district codings
-     if !assignments.empty?
+     if assignments.present?
        return assignments
      elsif !sub_activities.empty?
        return district_codings_from_sub_activities(klass, amount)

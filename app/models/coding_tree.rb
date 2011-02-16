@@ -73,7 +73,6 @@ class CodingTree
     node && node.valid_node?
   end
 
-  # TODO: write specs for this method
   def available_codes
     case @coding_klass.to_s
     when 'CodingBudget', 'CodingSpend'
@@ -89,7 +88,55 @@ class CodingTree
     end
   end
 
+  def set_cached_amounts!
+    codings_sum(available_codes, @activity, max_value)
+  end
+
+  protected
+    def codings_sum(level_codes, activity, max)
+      total = 0
+      max = 0 if max.nil?
+      my_cached_amount = 0
+
+      level_codes.each do |ac|
+        ca = @coding_klass.with_activity(activity).with_code_id(ac.id).first
+        p ca
+        children = ac.children
+        if ca
+          if ca.amount.present? && ca.amount > 0
+            my_cached_amount = ca.amount
+            sum_of_children = self.codings_sum(children, activity, max)
+            ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
+          elsif ca.percentage.present? && ca.percentage > 0
+            my_cached_amount = ca.percentage * max / 100
+            sum_of_children = self.codings_sum(children, activity, max)
+            ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
+          else
+            sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
+            ca.update_attributes(:cached_amount => my_cached_amount, :sum_of_children => sum_of_children) #if my_cached_amount > 0 or sum_of_children > 0
+          end
+        else
+          sum_of_children = my_cached_amount = self.codings_sum(children, activity, max)
+          self.create!(:activity => activity, :code => ac, :cached_amount => my_cached_amount) if sum_of_children > 0
+        end
+        total += my_cached_amount
+      end
+      total
+    end
+
+
   private
+
+    def max_value
+      case @coding_klass.to_s
+      when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+        @activity.budget
+      when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+        @activity.spend
+      else
+        raise "Type not specified #{type}".to_yaml
+      end
+    end
 
     def inner_root
       @inner_root ||= build_tree

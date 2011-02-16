@@ -358,9 +358,11 @@ class Activity < ActiveRecord::Base
   def max_for_coding(type)
     case type.to_s
     when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
-      max = budget
+      budget
     when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
-      max = spend
+      spend
+    else
+      raise "Type not specified #{type}".to_yaml
     end
   end
 
@@ -376,6 +378,7 @@ class Activity < ActiveRecord::Base
 
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
+      #coding_tree.set_cached_amounts(max_for_coding(type))
       amount = type.codings_sum(coding_tree.available_codes, self, max_for_coding(type))
       self.send("#{type}_amount=",  amount)
     end

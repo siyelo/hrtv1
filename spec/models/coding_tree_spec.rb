@@ -48,7 +48,7 @@ describe CodingTree do
     @code221.move_to_child_of(@code22)
     @code222.move_to_child_of(@code22)
 
-    @activity = Factory.create(:activity)
+    @activity = Factory.create(:activity, :budget => 100, :spend => 200)
 
   end
 
@@ -56,7 +56,7 @@ describe CodingTree do
     it "has code associated" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ct  = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.roots.length.should == 1
       ct.roots[0].code.should == @code1
     end
@@ -64,7 +64,7 @@ describe CodingTree do
     it "has code assignment associated" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ct  = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.roots.length.should == 1
       ct.roots[0].ca.should == ca1
     end
@@ -73,7 +73,7 @@ describe CodingTree do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11)
       ct   = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.roots[0].children.length.should == 1
       ct.roots[0].children.map(&:ca).should == [ca11]
       ct.roots[0].children.map(&:code).should == [@code11]
@@ -84,7 +84,7 @@ describe CodingTree do
       ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11)
       ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111)
       ct    = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.roots[0].children[0].children.length.should == 1
       ct.roots[0].children[0].children.map(&:ca).should == [ca111]
       ct.roots[0].children[0].children.map(&:code).should == [@code111]
@@ -96,7 +96,7 @@ describe CodingTree do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
       ct  = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.roots.length.should == 2
       ct.roots.map(&:ca).should   == [ca1, ca2]
       ct.roots.map(&:code).should == [@code1, @code2]
@@ -108,7 +108,7 @@ describe CodingTree do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
       ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
       ct  = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid?.should == true
     end
 
@@ -116,7 +116,7 @@ describe CodingTree do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100)
       ct   = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid?.should == true
     end
 
@@ -125,7 +125,7 @@ describe CodingTree do
       ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
       ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid?.should == true
     end
 
@@ -133,7 +133,7 @@ describe CodingTree do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
       ct   = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid?.should == true
     end
 
@@ -141,7 +141,7 @@ describe CodingTree do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
       ct   = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid?.should == false
     end
   end
@@ -152,7 +152,7 @@ describe CodingTree do
       ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
       ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid_ca?(ca1).should == true
       ct.valid_ca?(ca11).should == true
       ct.valid_ca?(ca111).should == true
@@ -162,7 +162,7 @@ describe CodingTree do
       ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
       ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
       ct   = CodingTree.new(@activity, CodingBudget)
-      ct.should_receive(:available_codes).and_return([@code1, @code2]) # stub available_codes
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
       ct.valid_ca?(ca1).should == false
       ct.valid_ca?(ca11).should == true
     end
@@ -305,6 +305,26 @@ describe CodingTree do
       activity = Factory.create(:activity)
       ct       = CodingTree.new(activity, HsspSpend)
       ct.available_codes.should == @fake_codes.concat(@fake_codes)
+    end
+  end
+
+  describe "set_cached_amounts" do
+
+    it "sets cached_amount and sum_of_children when only a root ca" do
+      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => nil, :sum_of_children => nil)
+      ct    = CodingTree.new(@activity, CodingBudget)
+      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
+
+      #p ca1.cached_amount.to_s
+      #p ca1.sum_of_children.to_s
+      #p @activity.max_for_coding(CodingBudget).to_s
+      ct.set_cached_amounts! # (@activity.max_for_coding(CodingBudget))
+      p ca1.reload.cached_amount.to_s
+      #amount = type.codings_sum(coding_tree.available_codes, self, max_for_coding(type))
+
+      #ct.valid_ca?(ca1).should == true
+      #ct.valid_ca?(ca11).should == true
+      #ct.valid_ca?(ca111).should == true
     end
   end
 end

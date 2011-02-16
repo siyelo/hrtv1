@@ -10,6 +10,6 @@
 - semantic_form_for @report, :url => admin_report_path(@report), :html => {:multipart => true} do |f|
   - f.inputs do
     = f.input :formatted_csv, :as => :file, :label => "Upload a Formatted Report"
-    %span.hint.padded Upload and replace a formatted version of this report (.csv, .xls, .xlsx, or other document type), preferably in a zip format.
+    %span.hint.padded Upload and replace a formatted version of this report (.xls, .xlsx, or other document type), preferably in a zip format.
   - f.buttons do
     = f.commit_button "Update Report"

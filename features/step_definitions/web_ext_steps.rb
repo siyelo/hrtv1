@@ -22,7 +22,10 @@ Then /^the cached field "([^"]*)" should contain "([^"]*)"$/ do |selector, value
   find(selector).value.should == value
 end
 
-Then /^the cached field "([^"]*)" within "([^"]*)" should contain "([^"]*)"$/ do |field, selector, value|
+Then /^the cached field within "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
+  field = "div input:nth-child(6)"
+  #$page = page
+  #debugger
   within(selector) do
     find(field).value.should == value
   end

@@ -41,9 +41,16 @@ class CodingTree
     #     except for the leaf code assignments
     #   - all children nodes are valid
     def valid?
-      ((ca.cached_amount >= ca.sum_of_children) ||
-        (ca.sum_of_children == 0 && children.empty?)) &&
-        children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
+      valid_node? && valid_children?
+    end
+
+    def valid_node?
+      (ca.cached_amount >= ca.sum_of_children) ||
+        (ca.sum_of_children == 0 && children.empty?)
+    end
+
+    def valid_children?
+      children.detect{|node| node.valid? == false} == nil
     end
   end
 
@@ -58,12 +65,12 @@ class CodingTree
 
   # CodingTree is valid if all root assignments are valid
   def valid?
-    inner_root.children.detect{|node| node.valid? == false} == nil # should be explicitely nil !!
+    inner_root.valid_children?
   end
 
   def valid_ca?(code_assignment)
     node = find_node(roots, code_assignment)
-    node && node.valid?
+    node && node.valid_node?
   end
 
   # TODO: write specs for this method

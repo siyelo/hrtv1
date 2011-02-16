@@ -3,18 +3,22 @@
 - amount     = assignment.nil? ? '' : assignment.amount
 - percentage = assignment.nil? ? '' : assignment.percentage
 - cached_amount = assignment.nil? ? '' : assignment.cached_amount
-- style = @coding_tree.valid_ca?(assignment) ? '' : 'color: red;'
+- invalid_class = assignment && !@coding_tree.valid_ca?(assignment) ? 'invalid' : nil
 
 %li
-  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
-  = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", n2c(amount), :size => 8
-  .greyed or
-  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
-  = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
+  %div{:class => invalid_class}
+    = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
+    = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", n2c(amount), :size => 8
+    .greyed or
+    = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
+    = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
 
-  = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", n2c(cached_amount), :size => 8, :disabled => true, :id => nil, :style => style
-  = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
-  = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
+    = text_field_tag "activity[#{updater_field}][#{code.id}][cached_amount]", n2c(cached_amount), :size => 8, :disabled => true, :id => nil
+    = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
+    = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
+    - if invalid_class
+      = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise.", :class => "tooltip invalid_node"
+
 
 
   - unless code.leaf?

@@ -23,10 +23,10 @@ class Nsp < Code
 #                 ) ",
 #              :order => quoted_left_column_name
 
+  # NOTE: this method overrides the leaves method from awesome_nested_set
+  # and it returns all Nsp codes which children are not Nsp codes
   def self.leaves
-    my_leaves = super()
-    leaves_with_other_type_kids = self.all.select{|c| ! c.children.map(&:type).include?(self.to_s)}
-    (my_leaves + leaves_with_other_type_kids).uniq
+    find(:all, :include => :children).select{|c| !c.children.map(&:type).include?(self.to_s)}
   end
 
   def old_self_and_nsp_ancestors
@@ -94,32 +94,3 @@ end
 #  nha_code            :string(255)
 #  nasa_code           :string(255)
 #
-
-
-# == Schema Information
-#
-# Table name: codes
-#
-#  id                  :integer         not null, primary key
-#  parent_id           :integer
-#  lft                 :integer
-#  rgt                 :integer
-#  short_display       :string(255)
-#  long_display        :string(255)
-#  description         :text
-#  created_at          :datetime
-#  updated_at          :datetime
-#  start_date          :date
-#  end_date            :date
-#  replacement_code_id :integer
-#  type                :string(255)
-#  external_id         :string(255)
-#  hssp2_stratprog_val :string(255)
-#  hssp2_stratobj_val  :string(255)
-#  official_name       :string(255)
-#  comments_count      :integer         default(0)
-#  sub_account         :string(255)
-#  nha_code            :string(255)
-#  nasa_code           :string(255)
-#
-

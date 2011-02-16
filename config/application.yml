@@ -3,12 +3,16 @@ defaults: &defaults
 development:
   <<: *defaults
   paperclip:
-    storage: :s3
-    s3_credentials:
-      bucket: us.assets.dev.hrtapp.com
-      access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
-      secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
-    s3_permissions: public-read
+    # LOCAL CONFIG:
+    storage: :filesystem
+    # S3 CONFIG:
+    #storage: :s3
+    #path: "report/:attachment/:key.:extension"
+    #s3_credentials:
+      #bucket: us.assets.dev.hrtapp.com
+      #access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+      #secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
+    #s3_permissions: public-read
 
 test:
   <<: *defaults
@@ -23,6 +27,7 @@ cucumber:
 staging:
   <<: *defaults
   paperclip:
+    path: "report/:attachment/:key.:extension"
     storage: :s3
     s3_credentials:
       bucket: us.assets.staging.hrtapp.com
@@ -33,6 +38,7 @@ staging:
 production:
   <<: *defaults
   paperclip:
+    path: "report/:attachment/:key.:extension"
     storage: :s3
     s3_credentials:
       bucket: us.assets.hrtapp.com

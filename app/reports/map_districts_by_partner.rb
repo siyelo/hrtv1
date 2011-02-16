@@ -4,17 +4,10 @@ class Reports::MapDistrictsByPartner
   include Reports::Helpers
 
   def initialize(type)
-    if type == :budget
-      @is_budget = true
-    elsif type == :spent
-      @is_budget = false
-    else
-      raise "Invalid type #{type}".to_yaml
-    end
-
-    partners = DataResponse.in_progress.map(&:organization) +
-      DataResponse.submitted.map(&:organization)
-    partners = partners.uniq
+    @is_budget = is_budget?(type)
+    partners   = DataResponse.in_progress.map(&:organization) +
+               DataResponse.submitted.map(&:organization)
+    partners   = partners.uniq
 
     @districts_hash = {}
     Location.all.each do |location|
@@ -52,17 +45,19 @@ class Reports::MapDistrictsByPartner
     end
 
     def set_district_hash_for_code(provider)
-      provider.provider_for.only_simple.canonical.each do |activity|
+      activities = provider.provider_for.only_simple.canonical
+      preload_district_associations(activities, @is_budget) # eager-load
+      activities.each do |activity|
         code_assignments = @is_budget ?
           activity.budget_district_coding : activity.spend_district_coding
         code_assignments.each do |ca|
-          amount = ca.calculated_amount * activity.toRWF
-          loc = ca.code
-          @districts_hash[loc][:total] += amount #TODO convert currency
-          if @districts_hash[loc][:partners][provider]
-            @districts_hash[loc][:partners][provider] += amount
+          amount = ca.cached_amount_in_usd
+          location = ca.code
+          @districts_hash[location][:total] += amount
+          if @districts_hash[location][:partners][provider]
+            @districts_hash[location][:partners][provider] += amount
           else
-            @districts_hash[loc][:partners][provider] = amount unless amount == 0
+            @districts_hash[location][:partners][provider] = amount unless amount == 0
           end
         end if code_assignments
       end

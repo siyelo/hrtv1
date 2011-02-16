@@ -138,7 +138,7 @@ class SubActivity < Activity
         new_ca = CodeAssignment.new
         new_ca.type = ca.type
         new_ca.code_id = ca.code_id
-        ca_amount = ca.calculated_amount || 0
+        ca_amount = ca.cached_amount || 0
         new_ca.cached_amount = sub_activity_amount * ca_amount / activity_amount
         new_ca.activity_id = self.id
         new_assignments << new_ca

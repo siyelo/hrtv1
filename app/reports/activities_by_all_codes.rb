@@ -76,7 +76,7 @@ class Reports::ActivitiesByAllCodes
 
           row << n2c(assignment.cached_amount)
           row << activity_description(activity)
-          row << get_funding_source_name(activity)
+          row << funding_source_name(activity)
           row << activity.spend_q1 ? 'x' : nil
           row << activity.spend_q2 ? 'x' : nil
           row << activity.spend_q3 ? 'x' : nil

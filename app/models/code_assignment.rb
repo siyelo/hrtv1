@@ -94,14 +94,11 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Instance Methods
   #
-
-  # This is only used in some reports
-  # activity_amount can (and should) be deprecated if we deprecate this too
   def proportion_of_activity
     activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
 
-    unless activity_amount == 0 or calculated_amount.nil? or calculated_amount == 0
-      calculated_amount / activity_amount
+    unless activity_amount == 0 or cached_amount.nil? or cached_amount == 0
+      cached_amount / activity_amount
     else
       if !percentage.nil?
         percentage / 100
@@ -111,21 +108,12 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  def calculated_amount
-    return cached_amount unless cached_amount.nil?
-    return 0
-  end
-
   def code_name
     code.short_display
   end
 
   def currency
     self.activity.nil? ? nil : self.activity.currency
-  end
-
-  def calculated_amount_currency
-    n2c(self.calculated_amount, self.currency).to_s
   end
 
   def self.sums_by_code_id(code_ids, coding_type, activities)

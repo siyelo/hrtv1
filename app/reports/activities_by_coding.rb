@@ -61,7 +61,7 @@ class Reports::ActivitiesByCoding
       end
       row = []
 
-      row << get_funding_source_name(activity)
+      row << funding_source_name(activity)
       row << project_name
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
@@ -71,8 +71,8 @@ class Reports::ActivitiesByCoding
       @beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
       row << "#{h activity.text_for_targets}"
-      row << "#{activity.budget}"
-      row << "#{activity.spend}"
+      row << "#{activity.budget_in_usd}"
+      row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"
       row << "#{activity.start}"
       row << "#{activity.end}"
@@ -99,7 +99,7 @@ class Reports::ActivitiesByCoding
         else
           ca = CodingSpend.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         end
-        ca ? ca.cached_amount : 0
+        ca ? ca.cached_amount_in_usd : 0
       else
         nil
       end

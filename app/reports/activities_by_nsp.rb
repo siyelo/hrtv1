@@ -74,9 +74,9 @@ class Reports::ActivitiesByNsp
           row      = []
           add_nsp_codes_hierarchy(row, code)
 
-          row << n2c(assignment.cached_amount)
+          row << n2c(assignment.cached_amount_in_usd)
           row << activity_description(activity)
-          row << get_funding_source_name(activity)
+          row << funding_source_name(activity)
           row << activity.spend_q1 ? 'x' : nil
           row << activity.spend_q2 ? 'x' : nil
           row << activity.spend_q3 ? 'x' : nil

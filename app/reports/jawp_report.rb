@@ -39,6 +39,7 @@ class Reports::JawpReport
       amount_q3             = activity.budget_gor_quarter(3)
       amount_q4             = activity.budget_gor_quarter(4)
       amount_total          = activity.budget
+      amount_total_in_usd   = activity.budget_in_usd
       is_national           = (activity.budget_district_coding.empty? ? 'yes' : 'no')
     else
       amount_q1             = activity.spend_gor_quarter(1)
@@ -46,6 +47,7 @@ class Reports::JawpReport
       amount_q3             = activity.spend_gor_quarter(3)
       amount_q4             = activity.spend_gor_quarter(4)
       amount_total          = activity.spend
+      amount_total_in_usd   = activity.spend_in_usd
       is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
     end
 
@@ -56,6 +58,10 @@ class Reports::JawpReport
     row << amount_q2
     row << amount_q3
     row << amount_q4
+    row << (amount_q1 ? amount_q1 * activity.toUSD : '')
+    row << (amount_q2 ? amount_q2 * activity.toUSD : '')
+    row << (amount_q3 ? amount_q3 * activity.toUSD : '')
+    row << (amount_q4 ? amount_q4 * activity.toUSD : '')
     row << get_locations(activity)
     row << activity.sub_activities_count
     row << get_hc_sub_activity_count(activity)
@@ -67,27 +73,27 @@ class Reports::JawpReport
     row << activity.id
     row << activity.currency
     row << amount_total
-    row << Money.new(amount_total.to_i * 100, get_currency(activity)) .exchange_to(:USD)
+    row << amount_total_in_usd
     row << is_national
     row << Activity.only_simple.canonical_with_scope.find(:first, :conditions => {:id => activity.id}).nil?
 
-    build_code_assignment_rows(csv, row, activity, amount_total)
+    build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
   end
 
   private
 
-    def build_code_assignment_rows(csv, base_row, activity, amount_total)
+    def build_code_assignment_rows(csv, base_row, activity, amount_total, amount_total_in_usd)
       if @is_budget
-        codings               = fake_one_assignment_if_none(amount_total, activity.budget_coding)
-        district_codings      = fake_one_assignment_if_none(amount_total, activity.budget_district_coding)
-        cost_category_codings = fake_one_assignment_if_none(amount_total, activity.budget_cost_category_coding)
+        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_coding)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_district_coding)
+        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_cost_category_coding)
       else
-        codings               = fake_one_assignment_if_none(amount_total, activity.spend_coding)
-        district_codings      = fake_one_assignment_if_none(amount_total, activity.spend_district_coding)
-        cost_category_codings = fake_one_assignment_if_none(amount_total, activity.spend_cost_category_coding)
+        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_coding)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding)
+        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_cost_category_coding)
       end
       funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
-      funding_sources_total = get_funding_sources_total(funding_sources, @is_budget)
+      funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
 
       coding_with_parent_codes = get_coding_with_parent_codes(codings)
       cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
@@ -103,7 +109,7 @@ class Reports::JawpReport
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount = get_funding_source_amount(funding_source, @is_budget)
+              funding_source_amount = get_funding_source_amount(activity, funding_source, @is_budget)
               amount                = (amount_total || 0) *
                 get_ratio(amount_total, ca.cached_amount) *
                 get_ratio(amount_total, district_coding.cached_amount) *
@@ -122,7 +128,7 @@ class Reports::JawpReport
               row << funding_source.from.try(:type)
               row << amount
               row << get_percentage(amount_total, amount)
-              row << Money.new((amount * 100).to_i, get_currency(activity)).exchange_to(:USD)
+              row << amount * activity.toUSD
               row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
               row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
@@ -153,6 +159,10 @@ class Reports::JawpReport
       row << "Q2"
       row << "Q3"
       row << "Q4"
+      row << "Q1 (USD)"
+      row << "Q2 (USD)"
+      row << "Q3 (USD)"
+      row << "Q4 (USD)"
       row << "Districts"
       row << "# of sub-activities"
       row << "# of facilities implementing"
@@ -192,9 +202,10 @@ class Reports::JawpReport
       @fake ||= CodeAssignment.new
     end
 
-    def fake_one_assignment_if_none(amount_total, codings)
+    def fake_one_assignment_if_none(amount_total, amount_total_in_usd, codings)
       fake_ca = get_fake_ca
       fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
+      fake_ca.cached_amount_in_usd = amount_total_in_usd
 
       codings.empty? ? [fake_ca] : codings
     end

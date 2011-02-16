@@ -63,8 +63,8 @@ class Reports::CodedActivityReport
 
       row = []
 
-      row << get_funding_source_name(activity)
-      row << first_project(activity)
+      row << funding_source_name(activity)
+      row << first_project_name(activity)
       row << "#{h organization.name}"
       row << "#{organization.type}"
       row << "#{activity.id}"

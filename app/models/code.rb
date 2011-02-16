@@ -48,8 +48,8 @@ class Code < ActiveRecord::Base
     CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
 
-  def sum_of_assignments_for_activities (type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sum(:cached_amount)
+  def sum_of_assignments_for_activities(type, activities = self.activities)
+    code_assignments.with_type(type.to_s).with_activities(activities).sum(:cached_amount_in_usd)
   end
 
   def name

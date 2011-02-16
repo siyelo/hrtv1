@@ -567,6 +567,11 @@ ul.group
     li
       display: inline
       float: right
+      &.separator
+        border-left: 1px dotted #bbb
+        height: 15px
+        margin: 2px 4px 2px 5px
+        width: 1px
     a
       background: none
       display: inline
@@ -590,6 +595,9 @@ ul.group
   display: block
   font-size: 10px
   padding-top: 3px
+  &.padded
+    padding-top: 0
+    padding-bottom: 20px
 
 // Pretty Table (with clickable rows)
 

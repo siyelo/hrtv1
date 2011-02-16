@@ -8,6 +8,7 @@
     %ul.report_actions
       %li= link_to image_tag("icon_edit.png"), edit_admin_report_path(rep)
       %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
+      %li.separator
       - if rep.formatted_csv?
         %li= link_to image_tag("icon_formatted.png"), admin_report_path(rep, :formatted => true), :title => 'Formatted report'
       %li= link_to image_tag("icon_csv.png"), admin_report_path(rep), :title => 'CSV (Comma Separated Value) report'

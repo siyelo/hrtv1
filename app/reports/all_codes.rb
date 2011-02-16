@@ -3,14 +3,15 @@ require 'fastercsv'
 class Reports::AllCodes
   include Reports::Helpers
 
-  def initialize
+  def initialize(klass = Mtef)
     @max_level = Code.deepest_nesting
+    @klass = klass
   end
 
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      Mtef.roots.reverse.each{|code| add_rows(csv, code, 0)}
+      @klass.roots.reverse.each{|code| add_rows(csv, code, 0)}
     end
   end
 

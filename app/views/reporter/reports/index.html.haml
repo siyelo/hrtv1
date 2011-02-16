@@ -50,8 +50,16 @@
   .dashboard_section
     %ul
       %li
-        - link_to reporter_report_path('all_codes') do
-          All Codes
+        - link_to reporter_report_path('purposes') do
+          Purpose (MTEF, NSP, NHA, etc) Codes
+          %span.hint from budget and expenditure classifications screen
+      %li
+        - link_to reporter_report_path('inputs') do
+          Input (Cost Category) Codes
+          %span.hint from budget and expenditure classifications screen
+      %li
+        - link_to reporter_report_path('locations') do
+          Location (District) Codes
           %span.hint from budget and expenditure classifications screen
 
 - @data_responses.each do |response|

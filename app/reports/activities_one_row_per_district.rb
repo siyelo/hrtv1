@@ -59,15 +59,15 @@ class Reports::ActivitiesOneRowPerDistrict
     def build_rows(csv, activity)
       row = []
 
-      row << get_funding_source_name(activity)
-      row << first_project(activity)
+      row << funding_source_name(activity)
+      row << first_project_name(activity)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
-      row << "#{activity.budget}"
-      row << "#{activity.spend}"
+      row << "#{activity.budget_in_usd}"
+      row << "#{activity.spend_in_usd}"
       row << "#{activity.currency}"
       row << "#{activity.start}"
       row << "#{activity.end}"
@@ -93,6 +93,6 @@ class Reports::ActivitiesOneRowPerDistrict
     def get_value(activity, location)
       code_assignments = activity.budget_district_coding.select{|ca| ca.code_id == location.id}
       code_assignments = code_assignments.last
-      code_assignments ? code_assignments.cached_amount : " "
+      code_assignments ? code_assignments.cached_amount_in_usd : " "
     end
 end

@@ -95,12 +95,8 @@ module Reports::Helpers
   end
 
 
-  def get_funding_source_name(activity)
+  def funding_source_name(activity)
     get_funding_sources(activity).map{|f| f.from.try(:name)}.uniq.join(', ')
-  end
-
-  def get_funding_source_type(activity)
-    get_funding_sources(activity).map{|f| f.from.try(:type)}.uniq.join(', ')
   end
 
   def get_funding_sources(activity)
@@ -135,21 +131,21 @@ module Reports::Helpers
     end
   end
 
-  def get_funding_sources_total(funding_sources, is_budget)
+  def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
     funding_sources.each do |fs|
       if is_budget
-        sum += fs.budget if fs.budget
+        sum += fs.budget * activity.toUSD if fs.budget
       else
-        sum += fs.spend if fs.spend
+        sum += fs.spend * activity.toUSD if fs.spend
       end
     end
     sum
   end
 
-  def get_funding_source_amount(funding_source, is_budget)
+  def get_funding_source_amount(activity, funding_source, is_budget)
     amount = is_budget ? funding_source.budget :  funding_source.spend
-    amount || 0 # return 0 when amount is nil
+    (amount || 0) * activity.toUSD
   end
 
   def get_ratio(amount_total, amount)
@@ -216,7 +212,7 @@ module Reports::Helpers
     activities
   end
 
-  def first_project(activity)
+  def first_project_name(activity)
     project = activity.projects.first
     project ? "#{h project.name}" : " "
   end
@@ -230,11 +226,11 @@ module Reports::Helpers
   end
 
   def parent_activity_budget(activity)
-    activity.class == SubActivity ? activity.activity.budget : ""
+    activity.class == SubActivity ? activity.activity.budget_in_usd : ""
   end
 
   def parent_activity_spend(activity)
-    activity.class == SubActivity ? activity.activity.spend : ""
+    activity.class == SubActivity ? activity.activity.spend_in_usd : ""
   end
 
   def is_budget?(type)

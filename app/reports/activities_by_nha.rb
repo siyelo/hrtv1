@@ -34,6 +34,10 @@ class Reports::ActivitiesByNha
       row << 'Q2'
       row << 'Q3'
       row << 'Q4'
+      row << 'Q1 (USD)'
+      row << 'Q2 (USD)'
+      row << 'Q3 (USD)'
+      row << 'Q4 (USD)'
       row << 'Total Spent'
       row << 'Converted Total Spent (USD)'
       row << 'Classified Spent'
@@ -51,14 +55,14 @@ class Reports::ActivitiesByNha
     # nha and nasa only track expenditure
     def build_rows(csv, activity)
       funding_sources       = get_funding_sources(activity)
-      funding_sources_total = get_funding_sources_total(funding_sources, false) # for spent
+      funding_sources_total = get_funding_sources_total(activity, funding_sources, false) # for spent
 
       funding_sources.each do |funding_source|
-        funding_source_amount = get_funding_source_amount(funding_source, false) # for spent
+        funding_source_amount = get_funding_source_amount(activity, funding_source, false) # for spent
         funding_source_ratio  = get_ratio(funding_sources_total, funding_source_amount)
 
         row = []
-        row << get_funding_source_name(activity)
+        row << funding_source_name(activity)
         row << activity.organization.try(:raw_type)
         row << activity.organization.try(:name)
         row << activity.provider.try(:name)
@@ -71,8 +75,12 @@ class Reports::ActivitiesByNha
         row << activity.spend_q2
         row << activity.spend_q3
         row << activity.spend_q4
+        row << (activity.spend_q1 ? activity.spend_q1 * activity.toUSD : '')
+        row << (activity.spend_q2 ? activity.spend_q2 * activity.toUSD : '')
+        row << (activity.spend_q3 ? activity.spend_q3 * activity.toUSD : '')
+        row << (activity.spend_q4 ? activity.spend_q4 * activity.toUSD : '')
         row << activity.spend
-        row << Money.new(activity.spend.to_i * 100, get_currency(activity)).exchange_to(:USD)
+        row << activity.spend_in_usd
 
         build_code_assignment_rows(csv, activity, row, funding_source_ratio)
       end
@@ -88,7 +96,7 @@ class Reports::ActivitiesByNha
         row       = base_row.dup
 
         row << (ca.cached_amount || 0) * funding_source_ratio
-        row << Money.new((ca.cached_amount_in_usd * funding_source_ratio).to_i, :USD).exchange_to(:USD)
+        row << ca.cached_amount_in_usd * funding_source_ratio
         row << last_code.try(:type)
         row << last_code.try(:sub_account)
         row << last_code.try(:nha_code)

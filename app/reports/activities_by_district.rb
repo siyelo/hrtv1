@@ -60,15 +60,15 @@ class Reports::ActivitiesByDistrict
 
       row = []
 
-      row << get_funding_source_name(activity)
-      row << first_project(activity)
+      row << funding_source_name(activity)
+      row << first_project_name(activity)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
-      row << "#{activity.budget}"
-      row << "#{activity.spend}"
+      row << "#{activity.budget_in_usd}"
+      row << "#{activity.spend_in_usd}"
       row << "#{activity.currency}"
       row << "#{activity.start}"
       row << "#{activity.end}"

@@ -44,7 +44,7 @@ describe CodingTree do
     @code121.move_to_child_of(@code12)
     @code122.move_to_child_of(@code12)
     @code211.move_to_child_of(@code21)
-    @code212.move_to_child_of(@code22)
+    @code212.move_to_child_of(@code21)
     @code221.move_to_child_of(@code22)
     @code222.move_to_child_of(@code22)
 
@@ -310,21 +310,75 @@ describe CodingTree do
 
   describe "set_cached_amounts" do
 
-    it "sets cached_amount and sum_of_children when only a root ca" do
-      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => nil, :sum_of_children => nil)
-      ct    = CodingTree.new(@activity, CodingBudget)
-      ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
+    context "root code assignment" do
+      it "sets cached_amount and sum_of_children for code assignment with amount" do
+        ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                               :amount => 10, :cached_amount => nil, :sum_of_children => nil)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
 
-      #p ca1.cached_amount.to_s
-      #p ca1.sum_of_children.to_s
-      #p @activity.max_for_coding(CodingBudget).to_s
-      ct.set_cached_amounts! # (@activity.max_for_coding(CodingBudget))
-      p ca1.reload.cached_amount.to_s
-      #amount = type.codings_sum(coding_tree.available_codes, self, max_for_coding(type))
+        ct.set_cached_amounts!
+        ca1.reload.cached_amount.should == 10
+        ca1.reload.sum_of_children.should == 0
+      end
 
-      #ct.valid_ca?(ca1).should == true
-      #ct.valid_ca?(ca11).should == true
-      #ct.valid_ca?(ca111).should == true
+      it "sets cached_amount and sum_of_children for code assignment with percentage" do
+        ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                               :percentage => 20, :cached_amount => nil, :sum_of_children => nil)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
+
+        ct.set_cached_amounts!
+
+        ca1.reload.cached_amount.should == 20
+        ca1.reload.sum_of_children.should == 0
+      end
+    end
+
+    context "root and children code assignment" do
+      it "sets cached_amount and sum_of_children for 2 level code assignments with amount" do
+        ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                               :amount => 10, :cached_amount => nil, :sum_of_children => nil)
+        ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+                               :amount => 5, :cached_amount => nil, :sum_of_children => nil)
+        ca12  = Factory.create(:coding_budget, :activity => @activity, :code => @code12,
+                               :amount => 5, :cached_amount => nil, :sum_of_children => nil)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
+
+        ct.set_cached_amounts!
+
+        ca1.reload.cached_amount.should == 10
+        ca1.reload.sum_of_children.should == 10
+
+        ca11.reload.cached_amount.should == 5
+        ca11.reload.sum_of_children.should == 0
+
+        ca12.reload.cached_amount.should == 5
+        ca12.reload.sum_of_children.should == 0
+      end
+
+      it "sets cached_amount and sum_of_children for 2 level code assignments with percentage" do
+        ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                               :percentage => 20, :cached_amount => nil, :sum_of_children => nil)
+        ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+                               :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
+        ca12  = Factory.create(:coding_budget, :activity => @activity, :code => @code12,
+                               :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:available_codes).and_return([@code1, @code2]) # stub available_codes
+
+        ct.set_cached_amounts!
+
+        ca1.reload.cached_amount.should == 20
+        ca1.reload.sum_of_children.should == 20
+
+        ca11.reload.cached_amount.should == 10
+        ca11.reload.sum_of_children.should == 0
+
+        ca12.reload.cached_amount.should == 10
+        ca12.reload.sum_of_children.should == 0
+      end
     end
   end
 end

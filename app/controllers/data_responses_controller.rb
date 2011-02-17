@@ -7,17 +7,17 @@ class DataResponsesController < ApplicationController
   before_filter :find_requests, :only => [:new, :create]
 
   def new
-    @data_response = DataResponse.new()
+    @data_response = DataResponse.new
   end
 
   # POST /data_responses
   def create
-    org             = current_user.organization
-    @data_response  = DataResponse.new(params[:data_response].merge(
-                                        :organization => org))
+    @data_response  = DataResponse.new(params[:data_response])
+    @data_response.organization = current_user.organization
+
     respond_to do |format|
       if @data_response.save
-        flash[:notice] = "Successfully created your response"
+        flash[:notice] = "Your response was successfully created."
         format.html { redirect_to edit_data_response_url(@data_response) }
       else
         format.html { render :action => :new }

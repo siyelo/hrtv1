@@ -354,16 +354,6 @@ class Activity < ActiveRecord::Base
     clone
   end
 
-  # type -> CodingBudget, CodingBudgetCostCategorization, CodingSpend, CodingSpendCostCategorization
-  def max_for_coding(type)
-    case type.to_s
-    when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
-      max = budget
-    when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
-      max = spend
-    end
-  end
-
   private
 
     def update_counter_cache
@@ -376,8 +366,8 @@ class Activity < ActiveRecord::Base
 
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
-      amount = type.codings_sum(coding_tree.available_codes, self, max_for_coding(type))
-      self.send("#{type}_amount=",  amount)
+      coding_tree.set_cached_amounts!
+      self.send("#{type}_amount=", coding_tree.total)
     end
 
     def district_coding(klass, assignments, amount)

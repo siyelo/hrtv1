@@ -58,14 +58,14 @@ module Charts::ActivityTreemaps
 
       def coding_treemap(activity, type, total_amount)
         coding_tree = CodingTree.new(activity, type)
-        code_roots  = coding_tree.available_codes
+        root_codes  = coding_tree.root_codes
         assignments = type.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
 
         data_rows = []
-        treemap_root = "#{n2c(get_sum(code_roots, assignments))}: All Codes"
+        treemap_root = "#{n2c(get_sum(root_codes, assignments))}: All Codes"
         data_rows << [treemap_root, nil, 0, 0] #TODO amount
 
-        code_roots.each do |code|
+        root_codes.each do |code|
           build_treemap_rows(data_rows, code, treemap_root, total_amount, assignments)
         end
         return data_rows
@@ -96,20 +96,20 @@ module Charts::ActivityTreemaps
         end
       end
 
-      def get_sum(code_roots, assignments)
+      def get_sum(root_codes, assignments)
         sum = 0
-        code_roots.each do |code|
+        root_codes.each do |code|
           sum += assignments[code.id].cached_amount if assignments.has_key?(code.id)
         end
         sum
       end
 
-      def get_treemap_rows(code_roots, codes, type, activities)
+      def get_treemap_rows(root_codes, codes, type, activities)
         # format is my value, parent value, box_area_value, coloring_value
         activities = Activity.only_simple_activities(activities)
         rows = []
         sum_of_roots = 0
-        code_roots.each do |r|
+        root_codes.each do |r|
           s = r.sum_of_assignments_for_activities(type,activities)
           #logger.debug("#{r.to_s} - sum is #{s.to_s}")
           sum_of_roots += s
@@ -117,7 +117,7 @@ module Charts::ActivityTreemaps
         root_name = "#{n2c(sum_of_roots)}: All Codes"
         rows << [root_name, nil, sum_of_roots, 0]
         #return rows
-        code_roots.each do |r|
+        root_codes.each do |r|
           parent_display_cache = {} # code => display_value , used to connect rows
           parent_display_cache[r.parent] = root_name
           Code.each_with_level(r.self_and_descendants) do |c,level|

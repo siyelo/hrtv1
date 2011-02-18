@@ -177,6 +177,7 @@ DEPENDENCIES
   hirb
   hoptoad_notifier
   interactive_editor
+  json_pure
   launchy
   looksee
   money

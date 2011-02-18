@@ -18,8 +18,8 @@ Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
 @reporter_dashboard
 Scenario: See unfulfilled/current Data Requests listed
   Given an organization exists with name: "WHO"
-  And a data_request exists with title: "Req2", requesting_organization: the organization
-  And a data_request exists with title: "Req1", requesting_organization: the organization
+  And a data_request exists with title: "Req2", organization: the organization
+  And a data_request exists with title: "Req1", organization: the organization
   And an organization exists with name: "UNAIDS"
   And a reporter exists with username: "some_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization

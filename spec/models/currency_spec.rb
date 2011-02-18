@@ -30,3 +30,14 @@ describe Currency do
     @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS * (BigDecimal("1") / BigDecimal("597.400"))
   end
 end
+# == Schema Information
+#
+# Table name: currencies
+#
+#  id     :integer         primary key
+#  toRWF  :decimal(, )
+#  symbol :string(255)
+#  name   :string(255)
+#  toUSD  :decimal(, )
+#
+

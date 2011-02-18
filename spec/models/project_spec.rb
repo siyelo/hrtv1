@@ -31,7 +31,7 @@ describe Project do
     it "should remove commas from decimal fields on save" do
       [:spend, :budget, :entire_budget].each do |f|
         p = Project.new
-        p.send(f.to_s+"=", "10,783,000.32")
+        p.send(f.to_s + "=", "10,783,000.32")
         p.save
         p.send(f).should == 10783000.32
       end
@@ -223,3 +223,33 @@ describe Project do
 
   end
 end
+
+# == Schema Information
+#
+# Table name: projects
+#
+#  id               :integer         primary key
+#  name             :string(255)
+#  description      :text
+#  start_date       :date
+#  end_date         :date
+#  created_at       :timestamp
+#  updated_at       :timestamp
+#  budget           :decimal(, )
+#  spend            :decimal(, )
+#  entire_budget    :decimal(, )
+#  currency         :string(255)
+#  spend_q1         :decimal(, )
+#  spend_q2         :decimal(, )
+#  spend_q3         :decimal(, )
+#  spend_q4         :decimal(, )
+#  spend_q4_prev    :decimal(, )
+#  data_response_id :integer
+#  budget_q1        :decimal(, )
+#  budget_q2        :decimal(, )
+#  budget_q3        :decimal(, )
+#  budget_q4        :decimal(, )
+#  budget_q4_prev   :decimal(, )
+#  comments_count   :integer         default(0)
+#
+

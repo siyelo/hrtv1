@@ -165,10 +165,7 @@ end
 
 Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
   org  = Organization.find_by_name(requestor)
-  @data_request = Factory(:data_request,
-                          :title                   => title,
-                          :requesting_organization => org)
-
+  @data_request = Factory(:data_request, :title => title, :organization => org)
 end
 
 Given /^the following organizations$/ do |table|

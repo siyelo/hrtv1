@@ -10,16 +10,17 @@ class FieldHelp < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: field_helps
 #
-#  id             :integer         not null, primary key
+#  id             :integer         primary key
 #  attribute_name :string(255)
 #  short          :string(255)
 #  long           :text
 #  model_help_id  :integer
-#  created_at     :datetime
-#  updated_at     :datetime
+#  created_at     :timestamp
+#  updated_at     :timestamp
 #
 

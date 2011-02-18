@@ -29,3 +29,32 @@ describe FundingFlow do
   end
         
 end
+
+# == Schema Information
+#
+# Table name: funding_flows
+#
+#  id                   :integer         primary key
+#  organization_id_from :integer
+#  organization_id_to   :integer
+#  project_id           :integer
+#  created_at           :timestamp
+#  updated_at           :timestamp
+#  budget               :decimal(, )
+#  spend_q1             :decimal(, )
+#  spend_q2             :decimal(, )
+#  spend_q3             :decimal(, )
+#  spend_q4             :decimal(, )
+#  organization_text    :text
+#  self_provider_flag   :integer         default(0)
+#  spend                :decimal(, )
+#  spend_q4_prev        :decimal(, )
+#  data_response_id     :integer
+#  budget_q1            :decimal(, )
+#  budget_q2            :decimal(, )
+#  budget_q3            :decimal(, )
+#  budget_q4            :decimal(, )
+#  budget_q4_prev       :decimal(, )
+#  comments_count       :integer         default(0)
+#
+

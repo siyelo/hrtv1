@@ -2,6 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
+  describe "associations" do
+    it { should have_many :users }
+    it { should have_many :data_requests }
+    it { should have_many :data_responses }
+    it { should have_and_belong_to_many :activities }
+    it { should have_and_belong_to_many :locations }
+  end
+
   describe "creating a organization record" do
     before :each do
       @organization = Factory(:organization)
@@ -9,7 +17,6 @@ describe Organization do
     end
 
     subject { @organization }
-
     it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
@@ -147,11 +154,11 @@ describe Organization do
       @target.activities.count.should == 2
     end
 
-    it "copies data_requests_made from duplicate to @target" do
-      Factory(:data_request, :requesting_organization => @target)
-      Factory(:data_request, :requesting_organization => @duplicate)
+    it "copies data_requests from duplicate to @target" do
+      Factory(:data_request, :organization => @target)
+      Factory(:data_request, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_requests_made.count.should == 2
+      @target.data_requests.count.should == 2
     end
 
     it "copies data responses from @duplicate to @target" do
@@ -257,3 +264,19 @@ describe Organization do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: organizations
+#
+#  id             :integer         primary key
+#  name           :string(255)
+#  type           :string(255)
+#  created_at     :timestamp
+#  updated_at     :timestamp
+#  raw_type       :string(255)
+#  fosaid         :string(255)
+#  users_count    :integer         default(0)
+#  comments_count :integer         default(0)
+#
+

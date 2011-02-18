@@ -17,6 +17,7 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
+  # TODO: write spec
   def locations
     if provider
       if !provider.locations.empty?
@@ -86,7 +87,7 @@ class SubActivity < Activity
     if @code_assignments_cache
       @code_assignments_cache
     else
-      unless activity.nil?
+      if activity
         @code_assignments_cache = []
         # change amounts to reflect this subactivity
         budget_district_coding = get_district_coding :budget
@@ -167,17 +168,18 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer         indexed
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer
 #  description                           :text
-#  type                                  :string(255)     indexed
+#  type                                  :string(255)
 #  budget                                :decimal(, )
 #  spend_q1                              :decimal(, )
 #  spend_q2                              :decimal(, )
@@ -190,8 +192,8 @@ end
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
 #  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer         indexed
-#  activity_id                           :integer         indexed
+#  data_response_id                      :integer
+#  activity_id                           :integer
 #  budget_percentage                     :decimal(, )
 #  spend_percentage                      :decimal(, )
 #  approved                              :boolean

@@ -72,19 +72,20 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: codes
 #
-#  id                  :integer         not null, primary key
+#  id                  :integer         primary key
 #  parent_id           :integer
 #  lft                 :integer
 #  rgt                 :integer
 #  short_display       :string(255)
 #  long_display        :string(255)
 #  description         :text
-#  created_at          :datetime
-#  updated_at          :datetime
+#  created_at          :timestamp
+#  updated_at          :timestamp
 #  start_date          :date
 #  end_date            :date
 #  replacement_code_id :integer

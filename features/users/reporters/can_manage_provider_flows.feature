@@ -37,7 +37,7 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
 
 Scenario: Creates an implementer funding flow
   Given an organization exists with name: "UNAIDS"
-  And a data_request exists with title: "Req1", requesting_organization: the organization
+  And a data_request exists with title: "Req1", organization: the organization
   And a reporter exists with username: "un_aids_user", organization: the organization
 
   Given an organization exists with name: "WHO"

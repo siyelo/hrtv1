@@ -6,3 +6,9 @@ end
 
 Factory.define :provider, :parent => :organization do |f|
 end
+
+Factory.define :donor, :class => Donor, :parent => :organization do |f|
+end
+
+Factory.define :ngo, :class => Ngo, :parent => :organization do |f|
+end

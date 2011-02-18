@@ -123,15 +123,18 @@ class Activity < ActiveRecord::Base
 
   ### Public Instance Methods
 
+  # TODO: remove
   #convenience
   def implementer
     provider
   end
 
+  # TODO: remove
   def start_date
     self.start
   end
 
+  # TODO: remove
   def end_date
     self.end
   end
@@ -150,11 +153,12 @@ class Activity < ActiveRecord::Base
     self.projects.first unless projects.empty?
   end
 
+  # TODO: remove
   def organization_name
     organization.name
   end
 
-  # THIS METHOD NEEDS TO BE RENAMED TO valid_districts
+  # TODO: THIS METHOD NEEDS TO BE RENAMED TO valid_districts
   def districts
     self.projects.collect do |proj|
       proj.locations
@@ -184,10 +188,12 @@ class Activity < ActiveRecord::Base
     self.budget == self.CodingBudgetCostCategorization_amount
   end
 
+  # TODO: deprecate
   def budget_coding
     code_assignments.with_type(CodingBudget.to_s)
   end
 
+  # TODO: deprecate
   def budget_cost_category_coding
     code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
@@ -205,10 +211,12 @@ class Activity < ActiveRecord::Base
     self.spend == self.CodingSpendCostCategorization_amount
   end
 
+  # TODO: deprecate
   def spend_coding
     code_assignments.with_type(CodingSpend.to_s)
   end
 
+  # TODO: deprecate
   def spend_cost_category_coding
     code_assignments.with_type(CodingSpendCostCategorization.to_s)
   end
@@ -244,10 +252,12 @@ class Activity < ActiveRecord::Base
   # methods like this are used for reports
   # so the logic for how to return when there is no data
   # is put in the model, thus being shared
+  # TODO: deprecate
   def budget_district_coding
     district_coding(CodingBudgetDistrict, coding_budget_district, budget)
   end
 
+  # TODO: deprecate
   def spend_district_coding
     district_coding(CodingSpendDistrict, coding_spend_district, spend)
   end
@@ -284,6 +294,7 @@ class Activity < ActiveRecord::Base
     self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
   end
 
+  # TODO: refactor
   def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
@@ -370,6 +381,7 @@ class Activity < ActiveRecord::Base
       self.send("#{type}_amount=", coding_tree.total)
     end
 
+    # TODO: refactor
     def district_coding(klass, assignments, amount)
      #TODO we will want to be able to override / check against the derived district codings
      if assignments.present?
@@ -393,7 +405,6 @@ class Activity < ActiveRecord::Base
       end
     end
 
-    # TODO: remove this!? -  does sub activities has code assignments?
     def district_codings_from_sub_activities(klass, amount)
       districts_hash = {}
       Location.all.each do |l|

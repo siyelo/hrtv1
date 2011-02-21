@@ -2,6 +2,35 @@
 
 .first-half
   %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Data Requests
+  .dashboard_section
+    - if @data_requests_unfulfilled.empty?
+      %p You do not need to respond to any additional data requests right now.
+      %span.hint We will email you with any additional requests for data
+    - else
+      .simple_table
+        %table
+          %thead
+            %tr
+              %td Name
+              %td Requestor
+              %td Due
+              %td Status
+              %td
+          %tbody
+            %tr
+              %td FY2010 Workplan
+              %td USAID
+              %td 1 Dec 2010
+              %td Not Yet Started
+              %td= link_to "Respond", "#"
+      //%ul.admin_dashboard
+      //  - @data_requests_unfulfilled.each do |req|
+      //    %li= req.title
+      %p= link_to "Start a new data response", new_data_response_path
+
+  %h2
     =image_tag "icon_admin.png", :class => "heading_icon"
     My Responses
   .dashboard_section
@@ -11,18 +40,7 @@
       - @data_responses.each do |response|
         %li.current_request= link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
 
-  %h2
-    =image_tag "icon_reporter.png", :class => "heading_icon"
-    Data Requests
-  .dashboard_section
-    - if @data_requests_unfulfilled.empty?
-      %p You do not need to respond to any additional data requests right now.
-      %span.hint We will email you with any additional requests for data
-    - else
-      %ul.admin_dashboard
-        - @data_requests_unfulfilled.each do |req|
-          %li= req.title
-      %p= link_to "Start a new data request", new_data_response_path
+
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

@@ -3,31 +3,19 @@
 .first-half
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
-    Data Requests
+    Data Requests & Responses
   .dashboard_section
-    - if @requests.empty?
-      %p You do not need to respond to any additional data requests right now.
-      %span.hint We will email you with any additional requests for data
-    - else
-      %table.modern_table
-        %thead
-          %tr
-            %td Name
-            %td Requestor
-            %td Due
-            %td
-        %tbody
-          = render :partial => 'request', :collection => @requests
-
-  %h2
-    =image_tag "icon_admin.png", :class => "heading_icon"
-    My Responses
-  .dashboard_section
-    %ul.admin_dashboard
-      - if @data_responses.empty?
-        %li You have not responded to any Data Requests yet.
-      - @data_responses.each do |response|
-        %li.current_request= link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
+    %table.modern_table
+      %thead
+        %tr
+          %td Name
+          %td Requestor
+          %td Due
+          %td Status
+          %td
+      %tbody
+        = render :partial => 'request', :collection => @requests
+        = render :partial => 'response', :collection => @data_responses
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

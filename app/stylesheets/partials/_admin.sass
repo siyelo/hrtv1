@@ -112,7 +112,7 @@ body.app
       margin: 15px 0 0 10px
   input, textarea
     border: 1px solid $light-blue
-    margin-bottom: 10px
+    //margin-bottom: 10px
     padding: 7px
     +border-radius
   input[type="submit"]
@@ -148,22 +148,36 @@ body.app
     padding: 0 0 0 35px
   /* default layout for a simple table
   .modern_table
-    font-size: 11px
+    font-size: 12px
+    margin-top: 10px
     width: 100%
-    
+    td
+      &:first-child
+        padding-left: 7px
+      &:last-child
+        padding-right: 5px
+      
     thead td
       border-bottom: 1px solid $light-blue
-      color: $mid-blue
+      color: $mid-blue + #444
       font-weight: bold
+      padding-bottom: 5px
+      +linear-gradient(color-stops(#fff, $lightest-blue))
     tbody td
-      border-bottom: 1px solid $lighter-blue
+      border-bottom: 1px solid $lightest-blue
       padding-top: 5px
+      &.title
+        color: $orange
+        font-weight: bold
     a
+      background: none
       display: inline-block
       font-size: 11px
+      padding: 0
       &.respond
         background: green
         color: #fff
+        float: right
         font-size: 9px
         font-weight: bold
         padding: 7px 10px 3px

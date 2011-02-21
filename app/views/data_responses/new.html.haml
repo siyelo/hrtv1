@@ -11,4 +11,4 @@
     = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}
     = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "All amounts you enter will assume this currency. You can override the currency for individual projects if you like."
   - f.buttons do
-    = f.commit_button "Create Response"
+    = f.commit_button "Begin Response"

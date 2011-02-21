@@ -18,7 +18,6 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
-  # TODO: write spec
   def locations
     if provider
       if !provider.locations.empty?

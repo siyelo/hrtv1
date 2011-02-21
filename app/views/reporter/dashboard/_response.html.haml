@@ -1,5 +1,5 @@
 %tr
-  %td.title= link_to response.data_request.title, edit_data_response_path(response)
+  %td= link_to response.data_request.title, edit_data_response_path(response), :class => "title"
   %td= response.data_request.organization.name
   %td= response.data_request.due_date.strftime('%d %b %y')
   %td Responding

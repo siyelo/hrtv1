@@ -21,10 +21,6 @@ class DataRequest < ActiveRecord::Base
     DataRequest.find(:all, :conditions => ["complete = ?", false])
   end
 
-  def organization
-    self.requesting_organization
-  end
-
 end
 
 

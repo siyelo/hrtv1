@@ -6,13 +6,11 @@
   = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "You can override the currency for individual projects if you like."
   = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year", :input_html => {:class => 'date_picker'}
   = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
-
-  - if editing
-    = f.input :contact_name, :as => :string, :hint =>"a primary contact at your organization that will help the resource tracking team if there are any questions throughout the process."
-    = f.input :contact_position, :as => :string
-    = f.input :contact_phone_number, :as => :string, :label => "Phone number"
-    = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number"
-    = f.input :contact_office_location, :as => :string, :label => "Office location"
+  = f.input :contact_name, :as => :string, :hint =>"a primary contact at your organization that will help the resource tracking team if there are any questions throughout the process."
+  = f.input :contact_position, :as => :string
+  = f.input :contact_phone_number, :as => :string, :label => "Phone number"
+  = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number"
+  = f.input :contact_office_location, :as => :string, :label => "Office location"
 
 - f.buttons do
   = f.commit_button button_text

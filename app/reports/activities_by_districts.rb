@@ -55,9 +55,9 @@ class Reports::ActivitiesByDistricts
     def build_row(activity, project_name)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        code_assignments = activity.budget_district_coding.map(&:code_id)
+        code_assignments = activity.budget_district_coding_adjusted.map(&:code_id)
       else
-        code_assignments = activity.spend_district_coding.map(&:code_id)
+        code_assignments = activity.spend_district_coding_adjusted.map(&:code_id)
       end
       row = []
 

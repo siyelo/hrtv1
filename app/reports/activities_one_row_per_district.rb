@@ -91,7 +91,7 @@ class Reports::ActivitiesOneRowPerDistrict
     end
 
     def get_value(activity, location)
-      code_assignments = activity.budget_district_coding.select{|ca| ca.code_id == location.id}
+      code_assignments = activity.budget_district_coding_adjusted.select{|ca| ca.code_id == location.id}
       code_assignments = code_assignments.last
       code_assignments ? code_assignments.cached_amount_in_usd : " "
     end

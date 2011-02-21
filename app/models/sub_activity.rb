@@ -48,40 +48,40 @@ class SubActivity < Activity
 
   # Creates new code_assignments records for sub_activity on the fly
   def code_assignments
-    budget_coding + budget_cost_category_coding + budget_district_coding +
-    spend_coding + spend_cost_category_coding + spend_district_coding
+    coding_budget + coding_budget_cost_categorization + budget_district_coding_adjusted +
+    coding_spend + coding_spend_cost_categorization + spend_district_coding_adjusted
   end
   memoize :code_assignments
 
-  def budget_coding
+  def coding_budget
     adjusted_assignments(CodingBudget, budget, activity.budget)
   end
-  memoize :budget_coding
+  memoize :coding_budget
 
-  def budget_district_coding
+  def budget_district_coding_adjusted
     adjusted_district_assignments(CodingBudgetDistrict, budget, activity.budget)
   end
-  memoize :budget_district_coding
+  memoize :budget_district_coding_adjusted
 
-  def budget_cost_category_coding
+  def coding_budget_cost_categorization
     adjusted_assignments(CodingBudgetCostCategorization, budget, activity.budget)
   end
-  memoize :budget_cost_category_coding
+  memoize :coding_budget_cost_categorization
 
-  def spend_coding
+  def coding_spend
     adjusted_assignments(CodingSpend, spend, activity.spend)
   end
-  memoize :spend_coding
+  memoize :coding_spend
 
-  def spend_district_coding
+  def spend_district_coding_adjusted
     adjusted_district_assignments(CodingSpendDistrict, spend, activity.spend)
   end
-  memoize :spend_district_coding
+  memoize :spend_district_coding_adjusted
 
-  def spend_cost_category_coding
+  def coding_spend_cost_categorization
     adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
-  memoize :spend_cost_category_coding
+  memoize :coding_spend_cost_categorization
 
   private
 
@@ -92,7 +92,10 @@ class SubActivity < Activity
 
     # if the provider is a clinic or hospital it has only one location
     # so put all the money towards that location
-    def adjusted_district_assignments(klass, sub_activity_amount = 0, activity_amount = 0)
+    def adjusted_district_assignments(klass, sub_activity_amount, activity_amount)
+      sub_activity_amount = 0 if sub_activity_amount.blank?
+      activity_amount = 0 if activity_amount.blank?
+
       if locations.size == 1 && sub_activity_amount > 0
         [fake_ca(klass, locations.first, sub_activity_amount)]
       else
@@ -100,7 +103,10 @@ class SubActivity < Activity
       end
     end
 
-    def adjusted_assignments(klass, sub_activity_amount = 0, activity_amount = 0)
+    def adjusted_assignments(klass, sub_activity_amount, activity_amount)
+      sub_activity_amount = 0 if sub_activity_amount.blank?
+      activity_amount = 0 if activity_amount.blank?
+
       old_assignments = activity.code_assignments.with_type(klass.to_s)
       new_assignments = []
 
@@ -112,10 +118,6 @@ class SubActivity < Activity
       end
 
       return new_assignments
-    end
-
-    def fake_ca(klass, code, cached_amount)
-      klass.new(:activity => self, :code => code, :cached_amount => cached_amount)
     end
 end
 

@@ -191,7 +191,7 @@ describe SubActivity do
       end
     end
 
-    describe "budget_coding" do
+    describe "coding_budget" do
       it "returns adjusted activity code_assignments" do
         Factory.create(:coding_budget, :activity => @activity,
                        :amount => 10, :cached_amount => 10)
@@ -200,14 +200,14 @@ describe SubActivity do
                                        :data_response => @data_response,
                                        :budget => 6)
 
-        sub_activity.budget_coding.length.should == 1
+        sub_activity.coding_budget.length.should == 1
 
-        sub_activity.budget_coding[0].cached_amount.should == 0.6
-        sub_activity.budget_coding[0].type.should == 'CodingBudget'
+        sub_activity.coding_budget[0].cached_amount.should == 0.6
+        sub_activity.coding_budget[0].type.should == 'CodingBudget'
       end
     end
 
-    describe "budget_cost_category_coding" do
+    describe "coding_budget_cost_categorization" do
       it "returns adjusted activity code_assignments" do
         Factory.create(:coding_budget_cost_categorization, :activity => @activity,
                        :amount => 10, :cached_amount => 10)
@@ -216,15 +216,15 @@ describe SubActivity do
                                        :data_response => @data_response,
                                        :budget => 6)
 
-        sub_activity.budget_cost_category_coding.length.should == 1
+        sub_activity.coding_budget_cost_categorization.length.should == 1
 
-        sub_activity.budget_cost_category_coding[0].cached_amount.should == 0.6
-        sub_activity.budget_cost_category_coding[0].type.should == 'CodingBudgetCostCategorization'
+        sub_activity.coding_budget_cost_categorization[0].cached_amount.should == 0.6
+        sub_activity.coding_budget_cost_categorization[0].type.should == 'CodingBudgetCostCategorization'
       end
     end
 
 
-    describe "budget_district_coding" do
+    describe "budget_district_coding_adjusted" do
       context "sub_activity with 1 location" do
         before :each do
           @location = Factory.create(:location, :short_display => 'Location 1')
@@ -237,8 +237,8 @@ describe SubActivity do
                                           :provider => @implementer,
                                           :data_response => @data_response,
                                           :budget => 4)
-            sub_activity.budget_district_coding.length.should == 1
-            ca = sub_activity.budget_district_coding[0]
+            sub_activity.budget_district_coding_adjusted.length.should == 1
+            ca = sub_activity.budget_district_coding_adjusted[0]
             ca.code.should == @location
             ca.cached_amount.should == 4
             ca.type.should == 'CodingBudgetDistrict'
@@ -266,11 +266,11 @@ describe SubActivity do
                                            :data_response => @data_response,
                                            :budget => 6)
 
-            sub_activity.budget_district_coding.length.should == 1
+            sub_activity.budget_district_coding_adjusted.length.should == 1
 
             # sub_activity_amount * ca_amount / activity_amount
-            sub_activity.budget_district_coding[0].cached_amount.should == 0.6
-            sub_activity.budget_district_coding[0].type.should == 'CodingBudgetDistrict'
+            sub_activity.budget_district_coding_adjusted[0].cached_amount.should == 0.6
+            sub_activity.budget_district_coding_adjusted[0].type.should == 'CodingBudgetDistrict'
           end
         end
 
@@ -288,19 +288,19 @@ describe SubActivity do
                                            :data_response => @data_response,
                                            :budget => 6)
 
-            sub_activity.budget_district_coding.length.should == 2
+            sub_activity.budget_district_coding_adjusted.length.should == 2
 
             # sub_activity_amount * ca_amount / activity_amount
-            sub_activity.budget_district_coding[0].cached_amount.should == 0.6
-            sub_activity.budget_district_coding[0].type.should == 'CodingBudgetDistrict'
-            sub_activity.budget_district_coding[1].cached_amount.should == 1.2
-            sub_activity.budget_district_coding[1].type.should == 'CodingBudgetDistrict'
+            sub_activity.budget_district_coding_adjusted[0].cached_amount.should == 0.6
+            sub_activity.budget_district_coding_adjusted[0].type.should == 'CodingBudgetDistrict'
+            sub_activity.budget_district_coding_adjusted[1].cached_amount.should == 1.2
+            sub_activity.budget_district_coding_adjusted[1].type.should == 'CodingBudgetDistrict'
           end
         end
       end
     end
 
-    describe "spend_coding" do
+    describe "coding_spend" do
       it "returns adjusted activity code_assignments" do
         Factory.create(:coding_spend, :activity => @activity,
                        :amount => 10, :cached_amount => 10)
@@ -309,14 +309,14 @@ describe SubActivity do
                                        :data_response => @data_response,
                                        :spend => 6)
 
-        sub_activity.spend_coding.length.should == 1
+        sub_activity.coding_spend.length.should == 1
 
-        sub_activity.spend_coding[0].cached_amount.should == 0.6
-        sub_activity.spend_coding[0].type.should == 'CodingSpend'
+        sub_activity.coding_spend[0].cached_amount.should == 0.6
+        sub_activity.coding_spend[0].type.should == 'CodingSpend'
       end
     end
 
-    describe "spend_cost_category_coding" do
+    describe "coding_spend_cost_categorization" do
       it "returns adjusted activity code_assignments" do
         Factory.create(:coding_spend_cost_categorization, :activity => @activity,
                        :amount => 10, :cached_amount => 10)
@@ -325,14 +325,14 @@ describe SubActivity do
                                        :data_response => @data_response,
                                        :spend => 6)
 
-        sub_activity.spend_cost_category_coding.length.should == 1
+        sub_activity.coding_spend_cost_categorization.length.should == 1
 
-        sub_activity.spend_cost_category_coding[0].cached_amount.should == 0.6
-        sub_activity.spend_cost_category_coding[0].type.should == 'CodingSpendCostCategorization'
+        sub_activity.coding_spend_cost_categorization[0].cached_amount.should == 0.6
+        sub_activity.coding_spend_cost_categorization[0].type.should == 'CodingSpendCostCategorization'
       end
     end
 
-    describe "spend_district_coding" do
+    describe "spend_district_coding_adjusted" do
       context "sub_activity with 1 location" do
         before :each do
           @location = Factory.create(:location, :short_display => 'Location 1')
@@ -345,8 +345,8 @@ describe SubActivity do
                                           :provider => @implementer,
                                           :data_response => @data_response,
                                           :spend => 4)
-            sub_activity.spend_district_coding.length.should == 1
-            ca = sub_activity.spend_district_coding[0]
+            sub_activity.spend_district_coding_adjusted.length.should == 1
+            ca = sub_activity.spend_district_coding_adjusted[0]
             ca.code.should == @location
             ca.cached_amount.should == 4
             ca.type.should == 'CodingSpendDistrict'
@@ -374,11 +374,11 @@ describe SubActivity do
                                            :data_response => @data_response,
                                            :spend => 6)
 
-            sub_activity.spend_district_coding.length.should == 1
+            sub_activity.spend_district_coding_adjusted.length.should == 1
 
             # sub_activity_amount * ca_amount / activity_amount
-            sub_activity.spend_district_coding[0].cached_amount.should == 0.6
-            sub_activity.spend_district_coding[0].type.should == 'CodingSpendDistrict'
+            sub_activity.spend_district_coding_adjusted[0].cached_amount.should == 0.6
+            sub_activity.spend_district_coding_adjusted[0].type.should == 'CodingSpendDistrict'
           end
         end
 
@@ -396,13 +396,13 @@ describe SubActivity do
                                            :data_response => @data_response,
                                            :spend => 6)
 
-            sub_activity.spend_district_coding.length.should == 2
+            sub_activity.spend_district_coding_adjusted.length.should == 2
 
             # sub_activity_amount * ca_amount / activity_amount
-            sub_activity.spend_district_coding[0].cached_amount.should == 0.6
-            sub_activity.spend_district_coding[0].type.should == 'CodingSpendDistrict'
-            sub_activity.spend_district_coding[1].cached_amount.should == 1.2
-            sub_activity.spend_district_coding[1].type.should == 'CodingSpendDistrict'
+            sub_activity.spend_district_coding_adjusted[0].cached_amount.should == 0.6
+            sub_activity.spend_district_coding_adjusted[0].type.should == 'CodingSpendDistrict'
+            sub_activity.spend_district_coding_adjusted[1].cached_amount.should == 1.2
+            sub_activity.spend_district_coding_adjusted[1].type.should == 'CodingSpendDistrict'
           end
         end
       end

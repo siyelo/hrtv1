@@ -99,7 +99,7 @@ class Reports::DistrictsByAllCodes
           @district_proportions_hash[activity] = {}
           # We've got non-report type report type hard coding here
           # so it uses budgets
-          activity.budget_district_coding.each do |code_assignment|
+          activity.budget_district_coding_adjusted.each do |code_assignment|
             proportion = code_assignment.proportion_of_activity
             location = code_assignment.code
             @district_proportions_hash[activity][location] = proportion

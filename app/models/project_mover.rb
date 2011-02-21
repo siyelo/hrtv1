@@ -15,7 +15,7 @@ class ProjectMover
     if @project && @project.data_response && @target_response
       from_org = @source_response.organization
       to_org = @target_response.organization
-      puts "Moving Project: (#{@project.id}) \"#{@project.name.first(25)}...\", From Organization: (#{from_org.id}) #{from_org.name}, To Organization: (#{to_org.id}) #{to_org.name}"
+      Rails.logger.info "Moving Project: (#{@project.id}) \"#{@project.name.first(25)}...\", From Organization: (#{from_org.id}) #{from_org.name}, To Organization: (#{to_org.id}) #{to_org.name}"
       @cloned_project = @project.deep_clone
       @cloned_project.data_response = @target_response
       if validate

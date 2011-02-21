@@ -102,7 +102,7 @@ class Reports::DistrictsByNsp
 
       @activities.each do |activity|
         @activity_proportions[activity] = {}
-        activity.budget_district_coding.each do |ca|
+        activity.budget_district_coding_adjusted.each do |ca|
           location = @locations.detect{|location| location.id == ca.code_id}
           @activity_proportions[activity][location] = ca.proportion_of_activity
         end

@@ -5,13 +5,296 @@ describe Activity do
   describe "creating an activity record" do
     subject { Factory(:activity) }
     it { should be_valid }
-    it { should have_many :sub_activities }
-    it { should have_many :code_assignments }
+  end
+
+  describe "associations" do
+    it { should belong_to :provider }
+    it { should have_and_belong_to_many :projects }
+    it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
-    it { should have_and_belong_to_many :locations }
-    it { should have_and_belong_to_many :projects }
-    it { should belong_to :provider }
+    it { should have_many :sub_activities }
+    it { should have_many :sub_implementers }
+    it { should have_many :codes }
+    it { should have_many :code_assignments }
+    it { should have_many :coding_budget }
+    it { should have_many :coding_budget_cost_categorization }
+    it { should have_many :coding_budget_district }
+    it { should have_many :coding_spend }
+    it { should have_many :coding_spend_cost_categorization }
+    it { should have_many :coding_spend_district }
+  end
+
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:projects) }
+    it { should allow_mass_assignment_of(:locations) }
+    it { should allow_mass_assignment_of(:beneficiaries) }
+    it { should allow_mass_assignment_of(:provider) }
+    it { should allow_mass_assignment_of(:text_for_provider) }
+    it { should allow_mass_assignment_of(:text_for_beneficiaries) }
+    it { should allow_mass_assignment_of(:text_for_targets) }
+    it { should allow_mass_assignment_of(:name) }
+    it { should allow_mass_assignment_of(:description) }
+    it { should allow_mass_assignment_of(:start) }
+    it { should allow_mass_assignment_of(:end) }
+    it { should allow_mass_assignment_of(:approved) }
+    it { should allow_mass_assignment_of(:budget) }
+    it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:spend_q4_prev) }
+    it { should allow_mass_assignment_of(:spend_q1) }
+    it { should allow_mass_assignment_of(:spend_q2) }
+    it { should allow_mass_assignment_of(:spend_q3) }
+    it { should allow_mass_assignment_of(:spend_q4) }
+  end
+
+  describe "budget_district_coding_adjusted" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+    end
+
+    context "activity has budget district code assignments" do
+      it "returns activity budget district code assignments" do
+        code_assignment = Factory.create(:coding_budget_district, :activity => @activity,
+                                         :amount => 10, :cached_amount => 10)
+
+        @activity.budget_district_coding_adjusted.should == [code_assignment]
+      end
+    end
+
+    context "activity does not have budget district code assignments" do
+      it "returns sub_activity budget district code assignments" do
+        donor         = Factory.create(:donor, :name => 'Donor')
+        ngo           = Factory.create(:ngo, :name => 'Ngo')
+        location1     = Factory.create(:location, :short_display => 'Location1')
+        location2     = Factory.create(:location, :short_display => 'Location2')
+        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [location1])
+        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [location2])
+        data_request  = Factory.create(:data_request, :organization => donor)
+        data_response = Factory.create(:data_response, :organization => ngo,
+                                       :data_request => data_request)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :budget => 4)
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :budget => 3)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer2,
+                                                  :data_response => data_response,
+                                                  :budget => 40)
+
+        @activity.budget_district_coding_adjusted.length.should == 2
+        @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
+        @activity.budget_district_coding_adjusted[0].cached_amount.should == 7
+        @activity.budget_district_coding_adjusted[0].sum_of_children.should == 0
+        @activity.budget_district_coding_adjusted[1].type.should == "CodingBudgetDistrict"
+        @activity.budget_district_coding_adjusted[1].cached_amount.should == 40
+        @activity.budget_district_coding_adjusted[1].sum_of_children.should == 0
+      end
+
+      context "sub_activities does not have budget district code assignments" do
+        it "returns even split on activity locations when activity has locations" do
+          @activity.locations << Factory.create(:location, :short_display => 'Location1')
+          @activity.locations << Factory.create(:location, :short_display => 'Location2')
+          @activity.budget_district_coding_adjusted.length.should == 2
+          @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
+          @activity.budget_district_coding_adjusted[0].cached_amount.should == 50
+          @activity.budget_district_coding_adjusted[0].sum_of_children.should == 0
+          @activity.budget_district_coding_adjusted[1].type.should == "CodingBudgetDistrict"
+          @activity.budget_district_coding_adjusted[1].cached_amount.should == 50
+          @activity.budget_district_coding_adjusted[1].sum_of_children.should == 0
+        end
+
+        it "returns empty array when activity does not have locations" do
+          @activity.budget_district_coding_adjusted.should be_empty
+        end
+      end
+    end
+  end
+
+  describe "spend_district_coding_adjusted" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :spend => 100)
+    end
+
+    context "activity has spend district code assignments" do
+      it "returns activity spend district code assignments" do
+        code_assignment = Factory.create(:coding_spend_district, :activity => @activity,
+                                         :amount => 10, :cached_amount => 10)
+
+        @activity.spend_district_coding_adjusted.should == [code_assignment]
+      end
+    end
+
+    context "activity does not have spend district code assignments" do
+      it "returns sub_activity spend district code assignments" do
+        donor         = Factory.create(:donor, :name => 'Donor')
+        ngo           = Factory.create(:ngo, :name => 'Ngo')
+        location1     = Factory.create(:location, :short_display => 'Location1')
+        location2     = Factory.create(:location, :short_display => 'Location2')
+        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [location1])
+        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [location2])
+        data_request  = Factory.create(:data_request, :organization => donor)
+        data_response = Factory.create(:data_response, :organization => ngo,
+                                       :data_request => data_request)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :spend => 4)
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :spend => 5)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer2,
+                                                  :data_response => data_response,
+                                                  :spend => 50)
+
+        @activity.spend_district_coding_adjusted.length.should == 2
+        @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
+        @activity.spend_district_coding_adjusted[0].cached_amount.should == 9
+        @activity.spend_district_coding_adjusted[0].sum_of_children.should == 0
+        @activity.spend_district_coding_adjusted[1].type.should == "CodingSpendDistrict"
+        @activity.spend_district_coding_adjusted[1].cached_amount.should == 50
+        @activity.spend_district_coding_adjusted[1].sum_of_children.should == 0
+      end
+
+      context "sub_activities does not have spend district code assignments" do
+        it "returns even split on activity locations when activity has locations" do
+          @activity.locations << Factory.create(:location, :short_display => 'Location1')
+          @activity.locations << Factory.create(:location, :short_display => 'Location2')
+          @activity.spend_district_coding_adjusted.length.should == 2
+          @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
+          @activity.spend_district_coding_adjusted[0].cached_amount.should == 50
+          @activity.spend_district_coding_adjusted[0].sum_of_children.should == 0
+          @activity.spend_district_coding_adjusted[1].type.should == "CodingSpendDistrict"
+          @activity.spend_district_coding_adjusted[1].cached_amount.should == 50
+          @activity.spend_district_coding_adjusted[1].sum_of_children.should == 0
+        end
+
+        it "returns empty array when activity does not have locations" do
+          @activity.spend_district_coding_adjusted.should be_empty
+        end
+      end
+    end
+  end
+
+  describe "budget_stratprog_coding" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      Activity::STRAT_PROG_TO_CODES_FOR_TOTALING = {
+        "code1" => ["1", "2"],
+        "code2" => ["3"]
+      }
+    end
+
+    it "should return code assignments" do
+      Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                     :amount => 10, :cached_amount => 10)
+      Factory.create(:coding_budget, :activity => @activity, :code => @code2,
+                     :amount => 30, :cached_amount => 30)
+      Factory.create(:coding_budget, :activity => @activity, :code => @code3,
+                     :amount => 35, :cached_amount => 35)
+
+      @activity.budget_stratprog_coding.length.should == 2
+      @activity.budget_stratprog_coding[0].type.should == 'HsspBudget'
+      @activity.budget_stratprog_coding[0].cached_amount.should == 40
+      @activity.budget_stratprog_coding[1].type.should == 'HsspBudget'
+      @activity.budget_stratprog_coding[1].cached_amount.should == 35
+    end
+  end
+
+  describe "spend_stratprog_coding" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      Activity::STRAT_PROG_TO_CODES_FOR_TOTALING = {
+        "code1" => ["1", "2"],
+        "code2" => ["3"]
+      }
+    end
+
+    it "should return code assignments" do
+      Factory.create(:coding_spend, :activity => @activity, :code => @code1,
+                     :amount => 10, :cached_amount => 10)
+      Factory.create(:coding_spend, :activity => @activity, :code => @code2,
+                     :amount => 30, :cached_amount => 30)
+      Factory.create(:coding_spend, :activity => @activity, :code => @code3,
+                     :amount => 35, :cached_amount => 35)
+
+      @activity.spend_stratprog_coding.length.should == 2
+      @activity.spend_stratprog_coding[0].type.should == 'HsspSpend'
+      @activity.spend_stratprog_coding[0].cached_amount.should == 40
+      @activity.spend_stratprog_coding[1].type.should == 'HsspSpend'
+      @activity.spend_stratprog_coding[1].cached_amount.should == 35
+    end
+  end
+
+  describe "budget_stratobj_coding" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      Activity::STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+        "code1" => ["1", "2"],
+        "code2" => ["3"]
+      }
+    end
+
+    it "should return code assignments" do
+      Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+                     :amount => 10, :cached_amount => 10)
+      Factory.create(:coding_budget, :activity => @activity, :code => @code2,
+                     :amount => 30, :cached_amount => 30)
+      Factory.create(:coding_budget, :activity => @activity, :code => @code3,
+                     :amount => 35, :cached_amount => 35)
+
+      @activity.budget_stratobj_coding.length.should == 2
+      @activity.budget_stratobj_coding[0].type.should == 'HsspBudget'
+      @activity.budget_stratobj_coding[0].cached_amount.should == 40
+      @activity.budget_stratobj_coding[1].type.should == 'HsspBudget'
+      @activity.budget_stratobj_coding[1].cached_amount.should == 35
+    end
+  end
+
+  describe "spend_stratobj_coding" do
+    before :each do
+      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      Activity::STRAT_OBJ_TO_CODES_FOR_TOTALING = {
+        "code1" => ["1", "2"],
+        "code2" => ["3"]
+      }
+    end
+
+    it "should return code assignments" do
+      Factory.create(:coding_spend, :activity => @activity, :code => @code1,
+                     :amount => 10, :cached_amount => 10)
+      Factory.create(:coding_spend, :activity => @activity, :code => @code2,
+                     :amount => 30, :cached_amount => 30)
+      Factory.create(:coding_spend, :activity => @activity, :code => @code3,
+                     :amount => 35, :cached_amount => 35)
+
+      @activity.spend_stratobj_coding.length.should == 2
+      @activity.spend_stratobj_coding[0].type.should == 'HsspSpend'
+      @activity.spend_stratobj_coding[0].cached_amount.should == 40
+      @activity.spend_stratobj_coding[1].type.should == 'HsspSpend'
+      @activity.spend_stratobj_coding[1].cached_amount.should == 35
+    end
   end
 
   describe "assigning an activity to a project" do

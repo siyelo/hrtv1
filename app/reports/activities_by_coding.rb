@@ -55,9 +55,9 @@ class Reports::ActivitiesByCoding
     def build_row(activity, project_name)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        code_assignments = activity.budget_coding.map{|ca| ca.code_id}
+        code_assignments = activity.coding_budget.map{|ca| ca.code_id}
       else
-        code_assignments = activity.spend_coding.map{|ca| ca.code_id}
+        code_assignments = activity.coding_spend.map{|ca| ca.code_id}
       end
       row = []
 

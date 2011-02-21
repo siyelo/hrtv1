@@ -78,8 +78,8 @@ class SubActivity < Activity
 
   # Creates code_assignments for sub_activity on the fly
   def code_assignments
-    budget_district_coding + budget_coding + budget_cost_category_coding +
-    spend_district_coding + spend_coding + spend_cost_category_coding
+    budget_coding + budget_cost_category_coding + budget_district_coding +
+    spend_coding + spend_cost_category_coding + spend_district_coding
   end
   memoize :code_assignments
 

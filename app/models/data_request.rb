@@ -20,6 +20,11 @@ class DataRequest < ActiveRecord::Base
   def self.find_all_unfulfill_request
     DataRequest.find(:all, :conditions => ["complete = ?", false])
   end
+
+  def organization
+    self.requesting_organization
+  end
+
 end
 
 

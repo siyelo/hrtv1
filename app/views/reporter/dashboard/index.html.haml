@@ -19,12 +19,13 @@
               %td Status
               %td
           %tbody
-            %tr
-              %td FY2010 Workplan
-              %td USAID
-              %td 1 Dec 2010
-              %td Not Yet Started
-              %td= link_to "Respond", "#"
+            - @data_requests_unfulfilled.each do |req|
+              %tr
+                %td= req.title
+                %td USAID
+                %td= req.due_date
+                %td Not Yet Started
+                %td= link_to "Respond", "#"
       //%ul.admin_dashboard
       //  - @data_requests_unfulfilled.each do |req|
       //    %li= req.title

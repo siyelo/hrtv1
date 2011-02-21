@@ -46,6 +46,13 @@ class SubActivity < Activity
     end
   end
 
+  # Creates new code_assignments records for sub_activity on the fly
+  def code_assignments
+    budget_coding + budget_cost_category_coding + budget_district_coding +
+    spend_coding + spend_cost_category_coding + spend_district_coding
+  end
+  memoize :code_assignments
+
   def budget_coding
     adjusted_assignments(CodingBudget, budget, activity.budget)
   end
@@ -75,13 +82,6 @@ class SubActivity < Activity
     adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
   memoize :spend_cost_category_coding
-
-  # Creates code_assignments for sub_activity on the fly
-  def code_assignments
-    budget_coding + budget_cost_category_coding + budget_district_coding +
-    spend_coding + spend_cost_category_coding + spend_district_coding
-  end
-  memoize :code_assignments
 
   private
 

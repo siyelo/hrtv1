@@ -48,16 +48,23 @@ class Activity < ActiveRecord::Base
                             :foreign_key => :activity_id,
                             :dependent => :destroy
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
-
-  # handy associations - use instead of named_scopes
+  has_many :code_assignments, :dependent => :destroy
+  # specific code_assignments by type
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
+
+  # TODO: rename
+  # budget_coding -> coding_budget_adjusted
+  # budget_cost_category_coding -> budget_cost_category_coding_adjusted
+  # budget_district_coding -> budget_district_coding_adjusted
+  # spend_coding -> spend_coding_adjusted
+  # spend_cost_category_coding -> spend_cost_category_coding_adjusted
+  # spend_district_coding -> spend_district_coding_adjusted
 
   ### Validations
   validate :approved_activity_cannot_be_changed

@@ -5,7 +5,7 @@
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Data Requests
   .dashboard_section
-    - if @data_requests_unfulfilled.empty?
+    - if @requests.empty?
       %p You do not need to respond to any additional data requests right now.
       %span.hint We will email you with any additional requests for data
     - else
@@ -17,7 +17,7 @@
             %td Due
             %td
         %tbody
-          = render :partial => 'request', :collection => @data_requests_unfulfilled
+          = render :partial => 'request', :collection => @requests
 
   %h2
     =image_tag "icon_admin.png", :class => "heading_icon"

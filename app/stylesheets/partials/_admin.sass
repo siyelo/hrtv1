@@ -147,6 +147,29 @@ body.app
     margin: 20px 0 10px 5px
     padding: 0 0 0 35px
   /* default layout for a simple table
+  .modern_table
+    font-size: 11px
+    width: 100%
+    
+    thead td
+      border-bottom: 1px solid $light-blue
+      color: $mid-blue
+      font-weight: bold
+    tbody td
+      border-bottom: 1px solid $lighter-blue
+      padding-top: 5px
+    a
+      display: inline-block
+      font-size: 11px
+      &.respond
+        background: green
+        color: #fff
+        font-size: 9px
+        font-weight: bold
+        padding: 7px 10px 3px
+        text-transform: uppercase
+        &:hover, &:focus
+          background: orange
   .simple_table
     +pie-clearfix
     /* a hack, but the padding interferes with .third
@@ -174,6 +197,15 @@ body.app
     a
       display: inline-block
       font-size: 1em
+      &.respond
+        background: green
+        color: #fff
+        font-size: 9px
+        font-weight: bold
+        padding: 8px 10px 5px
+        text-transform: uppercase
+        &:hover, &:focus
+          background: orange
       &.new_btn
         background: $mid-blue
         border-bottom: 1px solid $light-blue

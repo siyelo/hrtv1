@@ -1,0 +1,5 @@
+%tr
+  %td= req.title
+  %td= req.organization.name
+  %td= req.due_date.strftime('%d %b %y')
+  %td= link_to "Respond", new_data_response_path, :class => "respond"

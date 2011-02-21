@@ -9,27 +9,15 @@
       %p You do not need to respond to any additional data requests right now.
       %span.hint We will email you with any additional requests for data
     - else
-      .simple_table
-        %table
-          %thead
-            %tr
-              %td Name
-              %td Requestor
-              %td Due
-              %td Status
-              %td
-          %tbody
-            - @data_requests_unfulfilled.each do |req|
-              %tr
-                %td= req.title
-                %td USAID
-                %td= req.due_date
-                %td Not Yet Started
-                %td= link_to "Respond", "#"
-      //%ul.admin_dashboard
-      //  - @data_requests_unfulfilled.each do |req|
-      //    %li= req.title
-      %p= link_to "Start a new data response", new_data_response_path
+      %table.modern_table
+        %thead
+          %tr
+            %td Name
+            %td Requestor
+            %td Due
+            %td
+        %tbody
+          = render :partial => 'request', :collection => @data_requests_unfulfilled
 
   %h2
     =image_tag "icon_admin.png", :class => "heading_icon"
@@ -40,8 +28,6 @@
         %li You have not responded to any Data Requests yet.
       - @data_responses.each do |response|
         %li.current_request= link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
-
-
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

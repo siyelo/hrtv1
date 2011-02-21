@@ -8,10 +8,8 @@ class Organization < ActiveRecord::Base
   ### Associations
   has_many :users # people in this organization
   has_and_belongs_to_many :activities # activities that target / aid this org
-  has_many :data_requests_made,
-           :class_name => "DataRequest",
-           :foreign_key => :organization_id_requester
-  has_many :data_responses, :foreign_key => :organization_id, :dependent => :destroy
+  has_many :data_requests
+  has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
   has_many :out_flows,
             :class_name => "FundingFlow",
@@ -50,7 +48,7 @@ class Organization < ActiveRecord::Base
   def self.merge_organizations!(target, duplicate)
     ActiveRecord::Base.disable_validation!
     target.activities << duplicate.activities
-    target.data_requests_made << duplicate.data_requests_made
+    target.data_requests << duplicate.data_requests
     target.data_responses << duplicate.data_responses
     target.out_flows << duplicate.out_flows
     target.in_flows << duplicate.in_flows
@@ -82,15 +80,16 @@ class Organization < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: organizations
 #
-#  id             :integer         not null, primary key
+#  id             :integer         primary key
 #  name           :string(255)
 #  type           :string(255)
-#  created_at     :datetime
-#  updated_at     :datetime
+#  created_at     :timestamp
+#  updated_at     :timestamp
 #  raw_type       :string(255)
 #  fosaid         :string(255)
 #  users_count    :integer         default(0)

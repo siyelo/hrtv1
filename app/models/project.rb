@@ -133,17 +133,18 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
 #
-#  id               :integer         not null, primary key
+#  id               :integer         primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :timestamp
+#  updated_at       :timestamp
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
@@ -153,7 +154,7 @@ end
 #  spend_q3         :decimal(, )
 #  spend_q4         :decimal(, )
 #  spend_q4_prev    :decimal(, )
-#  data_response_id :integer         indexed
+#  data_response_id :integer
 #  budget_q1        :decimal(, )
 #  budget_q2        :decimal(, )
 #  budget_q3        :decimal(, )

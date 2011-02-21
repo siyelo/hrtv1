@@ -5,7 +5,7 @@ Feature: Admin can see comments
 
 Background:
   Given an organization exists with name: "GoR"
-  And a data_request exists with title: "Req1", requesting_organization: the organization
+  And a data_request exists with title: "Req1", organization: the organization
   And an organization exists with name: "UNDP"
   And a reporter exists with username: "undp_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110215161003) do
+ActiveRecord::Schema.define(:version => 20110221102403) do
 
   create_table "activities", :force => true do |t|
     t.string    "name"
@@ -138,35 +138,35 @@ ActiveRecord::Schema.define(:version => 20110215161003) do
   end
 
   create_table "data_requests", :force => true do |t|
-    t.integer   "organization_id_requester"
-    t.string    "title"
-    t.boolean   "complete",                  :default => false
-    t.boolean   "pending_review",            :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.integer  "organization_id"
+    t.string   "title"
+    t.boolean  "complete",        :default => false
+    t.boolean  "pending_review",  :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "data_responses", :force => true do |t|
-    t.integer   "data_request_id"
-    t.boolean   "complete",                          :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "organization_id"
-    t.string    "currency"
-    t.date      "fiscal_year_start_date"
-    t.date      "fiscal_year_end_date"
-    t.string    "contact_name"
-    t.string    "contact_position"
-    t.string    "contact_phone_number"
-    t.string    "contact_main_office_phone_number"
-    t.string    "contact_office_location"
-    t.boolean   "submitted"
-    t.timestamp "submitted_at"
-    t.integer   "projects_count",                    :default => 0
-    t.integer   "comments_count",                    :default => 0
-    t.integer   "activities_count",                  :default => 0
-    t.integer   "sub_activities_count",              :default => 0
-    t.integer   "activities_without_projects_count", :default => 0
+    t.integer  "data_request_id"
+    t.boolean  "complete",                          :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "organization_id"
+    t.string   "currency"
+    t.date     "fiscal_year_start_date"
+    t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
+    t.boolean  "submitted"
+    t.datetime "submitted_at"
+    t.integer  "projects_count",                    :default => 0
+    t.integer  "comments_count",                    :default => 0
+    t.integer  "activities_count",                  :default => 0
+    t.integer  "sub_activities_count",              :default => 0
+    t.integer  "activities_without_projects_count", :default => 0
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

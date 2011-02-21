@@ -48,16 +48,23 @@ class Activity < ActiveRecord::Base
                             :foreign_key => :activity_id,
                             :dependent => :destroy
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :code_assignments, :dependent => :destroy
   has_many :codes, :through => :code_assignments
-
-  # handy associations - use instead of named_scopes
+  has_many :code_assignments, :dependent => :destroy
+  # specific code_assignments by type
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
+
+  # TODO: rename
+  # budget_coding -> coding_budget_adjusted
+  # budget_cost_category_coding -> budget_cost_category_coding_adjusted
+  # budget_district_coding -> budget_district_coding_adjusted
+  # spend_coding -> spend_coding_adjusted
+  # spend_cost_category_coding -> spend_cost_category_coding_adjusted
+  # spend_district_coding -> spend_district_coding_adjusted
 
   ### Validations
   validate :approved_activity_cannot_be_changed
@@ -123,15 +130,18 @@ class Activity < ActiveRecord::Base
 
   ### Public Instance Methods
 
+  # TODO: remove
   #convenience
   def implementer
     provider
   end
 
+  # TODO: remove
   def start_date
     self.start
   end
 
+  # TODO: remove
   def end_date
     self.end
   end
@@ -150,11 +160,12 @@ class Activity < ActiveRecord::Base
     self.projects.first unless projects.empty?
   end
 
+  # TODO: remove
   def organization_name
     organization.name
   end
 
-  # THIS METHOD NEEDS TO BE RENAMED TO valid_districts
+  # TODO: THIS METHOD NEEDS TO BE RENAMED TO valid_districts
   def districts
     self.projects.collect do |proj|
       proj.locations
@@ -184,10 +195,12 @@ class Activity < ActiveRecord::Base
     self.budget == self.CodingBudgetCostCategorization_amount
   end
 
+  # TODO: deprecate
   def budget_coding
     code_assignments.with_type(CodingBudget.to_s)
   end
 
+  # TODO: deprecate
   def budget_cost_category_coding
     code_assignments.with_type(CodingBudgetCostCategorization.to_s)
   end
@@ -205,10 +218,12 @@ class Activity < ActiveRecord::Base
     self.spend == self.CodingSpendCostCategorization_amount
   end
 
+  # TODO: deprecate
   def spend_coding
     code_assignments.with_type(CodingSpend.to_s)
   end
 
+  # TODO: deprecate
   def spend_cost_category_coding
     code_assignments.with_type(CodingSpendCostCategorization.to_s)
   end
@@ -244,10 +259,12 @@ class Activity < ActiveRecord::Base
   # methods like this are used for reports
   # so the logic for how to return when there is no data
   # is put in the model, thus being shared
+  # TODO: deprecate
   def budget_district_coding
     district_coding(CodingBudgetDistrict, coding_budget_district, budget)
   end
 
+  # TODO: deprecate
   def spend_district_coding
     district_coding(CodingSpendDistrict, coding_spend_district, spend)
   end
@@ -284,6 +301,7 @@ class Activity < ActiveRecord::Base
     self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
   end
 
+  # TODO: refactor
   def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
     assignments = []
     #first find the top level code w strat program
@@ -370,6 +388,7 @@ class Activity < ActiveRecord::Base
       self.send("#{type}_amount=", coding_tree.total)
     end
 
+    # TODO: refactor
     def district_coding(klass, assignments, amount)
      #TODO we will want to be able to override / check against the derived district codings
      if assignments.present?
@@ -393,7 +412,6 @@ class Activity < ActiveRecord::Base
       end
     end
 
-    # TODO: remove this!? -  does sub activities has code assignments?
     def district_codings_from_sub_activities(klass, amount)
       districts_hash = {}
       Location.all.each do |l|
@@ -438,17 +456,18 @@ class Activity < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer         indexed
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer
 #  description                           :text
-#  type                                  :string(255)     indexed
+#  type                                  :string(255)
 #  budget                                :decimal(, )
 #  spend_q1                              :decimal(, )
 #  spend_q2                              :decimal(, )
@@ -461,8 +480,8 @@ end
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
 #  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer         indexed
-#  activity_id                           :integer         indexed
+#  data_response_id                      :integer
+#  activity_id                           :integer
 #  budget_percentage                     :decimal(, )
 #  spend_percentage                      :decimal(, )
 #  approved                              :boolean

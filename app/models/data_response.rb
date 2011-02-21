@@ -135,16 +135,17 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_responses
 #
 #  id                                :integer         not null, primary key
-#  data_request_id                   :integer         indexed
+#  data_request_id                   :integer
 #  complete                          :boolean         default(FALSE)
 #  created_at                        :datetime
 #  updated_at                        :datetime
-#  organization_id                   :integer         indexed
+#  organization_id                   :integer
 #  currency                          :string(255)
 #  fiscal_year_start_date            :date
 #  fiscal_year_end_date              :date

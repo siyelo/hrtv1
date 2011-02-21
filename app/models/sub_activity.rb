@@ -1,4 +1,5 @@
 class SubActivity < Activity
+  extend ActiveSupport::Memoizable
 
   # Associations
   belongs_to :activity, :counter_cache => true
@@ -18,134 +19,69 @@ class SubActivity < Activity
   end
 
   def locations
-    if provider
-      if !provider.locations.empty?
-        provider.locations
-      elsif activity
-        activity.locations
-      else
-        []
-      end
-    elsif activity
-      activity.locations
+    if provider && provider.locations.present?
+      provider.locations
     else
-      []
+      activity.locations
     end
   end
 
   def budget
     if read_attribute(:budget)
-     read_attribute(:budget)
-    elsif budget_percentage && activity
-     activity.budget.try(:*, budget_percentage / 100)
+      read_attribute(:budget)
+    elsif budget_percentage && activity.budget
+      activity.budget * budget_percentage / 100
     else
-     nil
+      nil
     end
   end
 
   def spend
     if read_attribute(:spend)
-     read_attribute(:spend)
-    elsif spend_percentage && activity
-     activity.spend.try(:*, spend_percentage / 100)
+      read_attribute(:spend)
+    elsif spend_percentage && activity.spend
+      activity.spend * spend_percentage / 100
     else
-     nil
+      nil
     end
   end
 
+  # Creates new code_assignments records for sub_activity on the fly
+  def code_assignments
+    budget_coding + budget_cost_category_coding + budget_district_coding +
+    spend_coding + spend_cost_category_coding + spend_district_coding
+  end
+  memoize :code_assignments
 
   def budget_coding
-    code_assignments.select {|ca| ca.type == "CodingBudget"}
+    adjusted_assignments(CodingBudget, budget, activity.budget)
   end
+  memoize :budget_coding
 
   def budget_district_coding
-    code_assignments.select {|ca| ca.type == "CodingBudgetDistrict"}
+    adjusted_district_assignments(CodingBudgetDistrict, budget, activity.budget)
   end
+  memoize :budget_district_coding
 
   def budget_cost_category_coding
-    code_assignments.select {|ca| ca.type == "CodingBudgetCostCategorization"}
+    adjusted_assignments(CodingBudgetCostCategorization, budget, activity.budget)
   end
+  memoize :budget_cost_category_coding
 
   def spend_coding
-    code_assignments.select {|ca| ca.type == "CodingSpend"}
+    adjusted_assignments(CodingSpend, spend, activity.spend)
   end
+  memoize :spend_coding
 
   def spend_district_coding
-    code_assignments.select {|ca| ca.type == "CodingSpendDistrict"}
+    adjusted_district_assignments(CodingSpendDistrict, spend, activity.spend)
   end
+  memoize :spend_district_coding
 
   def spend_cost_category_coding
-    code_assignments.select {|ca| ca.type == "CodingSpendCostCategorization"}
+    adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
-
-  # use to populate the tables with correct values
-  # then comment out and allow correct rows to work their magic
-  # then use SQL to create reports for now
-  def code_assignments
-    # store in a cached variable as well
-    if @code_assignments_cache
-      @code_assignments_cache
-    else
-      unless activity.nil?
-        @code_assignments_cache = []
-        # change amounts to reflect this subactivity
-        budget_district_coding = get_district_coding :budget
-        budget_coding = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudget")
-        budget_coding_categories = get_assignments_w_adjusted_amounts :budget, activity.code_assignments.with_type("CodingBudgetCostCategorization")
-
-        spend_district_coding = get_district_coding :spend
-        spend_coding = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpend")
-        spend_coding_categories = get_assignments_w_adjusted_amounts :spend, activity.code_assignments.with_type("CodingSpendCostCategorization")
-
-        [budget_district_coding, budget_coding, budget_coding_categories,
-         spend_district_coding, spend_coding, spend_coding_categories].each do |cas|
-          @code_assignments_cache << cas
-         end
-         @code_assignments_cache = @code_assignments_cache.flatten
-      end
-    end
-  end
-
-  def get_district_coding type
-    # if the provider is a clinic or hospital it has only one location
-    # so put all the money towards that location
-    coding_type = "Coding#{type.to_s.capitalize}District"
-    if locations.size == 1 && self.send(type) && self.send(type)>0
-      ca=CodeAssignment.new
-      ca.cached_amount = self.send(type)
-      ca.code_id = locations.first.id
-      ca.type = coding_type
-      ca.activity_id = id
-      [ca]
-    else
-      unless activity.nil?
-        cas = activity.code_assignments.with_type(coding_type)
-        get_assignments_w_adjusted_amounts type, cas
-      else
-        []
-      end
-    end
-  end
-
-  def get_assignments_w_adjusted_amounts(amount_method, assignments)
-    sub_activity_amount = self.send(amount_method) || 0
-    activity_amount = activity.send(amount_method) || 0
-    if sub_activity_amount <= 0
-      []
-    else
-      new_assignments = []
-      assignments.each do |ca|
-        new_ca = CodeAssignment.new
-        new_ca.type = ca.type
-        new_ca.code_id = ca.code_id
-        ca_amount = ca.cached_amount || 0
-        new_ca.cached_amount = sub_activity_amount * ca_amount / activity_amount
-        new_ca.activity_id = self.id
-        new_assignments << new_ca
-      end
-      new_assignments
-    end
-  end
+  memoize :spend_cost_category_coding
 
   private
 
@@ -154,30 +90,46 @@ class SubActivity < Activity
       self.data_response.save(false)
     end
 
+    # if the provider is a clinic or hospital it has only one location
+    # so put all the money towards that location
+    def adjusted_district_assignments(klass, sub_activity_amount = 0, activity_amount = 0)
+      if locations.size == 1 && sub_activity_amount > 0
+        [fake_ca(klass, locations.first, sub_activity_amount)]
+      else
+        adjusted_assignments(klass, sub_activity_amount, activity_amount)
+      end
+    end
+
+    def adjusted_assignments(klass, sub_activity_amount = 0, activity_amount = 0)
+      old_assignments = activity.code_assignments.with_type(klass.to_s)
+      new_assignments = []
+
+      if sub_activity_amount > 0
+        old_assignments.each do |ca|
+          cached_amount = sub_activity_amount * (ca.cached_amount || 0) / activity_amount
+          new_assignments << fake_ca(klass, ca.code, cached_amount)
+        end
+      end
+
+      return new_assignments
+    end
+
+    def fake_ca(klass, code, cached_amount)
+      klass.new(:activity => self, :code => code, :cached_amount => cached_amount)
+    end
 end
-
-
-
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
+#  id                                    :integer         primary key
 #  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer         indexed
+#  created_at                            :timestamp
+#  updated_at                            :timestamp
+#  provider_id                           :integer
 #  description                           :text
-#  type                                  :string(255)     indexed
+#  type                                  :string(255)
 #  budget                                :decimal(, )
 #  spend_q1                              :decimal(, )
 #  spend_q2                              :decimal(, )
@@ -190,8 +142,8 @@ end
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
 #  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer         indexed
-#  activity_id                           :integer         indexed
+#  data_response_id                      :integer
+#  activity_id                           :integer
 #  budget_percentage                     :decimal(, )
 #  spend_percentage                      :decimal(, )
 #  approved                              :boolean
@@ -211,4 +163,3 @@ end
 #  spend_in_usd                          :decimal(, )     default(0.0)
 #  budget_in_usd                         :decimal(, )     default(0.0)
 #
-

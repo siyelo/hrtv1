@@ -159,13 +159,16 @@ body.app
       
     thead td
       border-bottom: 1px solid $light-blue
-      color: $mid-blue + #444
+      color: $mid-blue + #333
       font-weight: bold
       padding-bottom: 5px
       +linear-gradient(color-stops(#fff, $lightest-blue))
     tbody td
       border-bottom: 1px solid $lightest-blue
       padding-top: 5px
+      &.title
+        color: $mid-blue
+        font-weight: bold
 
     a
       background: none

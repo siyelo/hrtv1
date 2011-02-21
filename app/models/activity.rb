@@ -2,7 +2,7 @@ require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 
 class Activity < ActiveRecord::Base
-  ### Class constants
+  ### Constants
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
@@ -14,9 +14,11 @@ class Activity < ActiveRecord::Base
   }
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
+    "Across all 3 objectives" => ["1","201","202","203","204","206","207",
+                                  "208","3","4","5","7","11"],
     "b. Prevention and control of diseases" => ['205','9'],
-    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
+    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011",
+                                   "6012","6013","6014","6015","6016"],
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
@@ -48,7 +50,6 @@ class Activity < ActiveRecord::Base
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
-  # specific code_assignments by type
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
@@ -65,6 +66,9 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
+
+  ### Delegates
+  delegate :organization, :to => :data_response
 
   ### Named scopes
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
@@ -87,12 +91,9 @@ class Activity < ActiveRecord::Base
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
 
-  ### Public Class Methods
-
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
   end
-
 
   def self.canonical
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
@@ -152,17 +153,11 @@ class Activity < ActiveRecord::Base
     self.project.nil? ? nil : self.project.currency
   end
 
-  # TODO change this with delegate
-  def organization
-    self.data_response.organization
-  end
-
   # helper until we enforce this in the model association!
   def project
     self.projects.first unless projects.empty?
   end
 
-  # TODO: remove
   def organization_name
     organization.name
   end

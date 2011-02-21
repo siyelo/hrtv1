@@ -1,20 +1,19 @@
 class SubActivity < Activity
   extend ActiveSupport::Memoizable
 
-  # Associations
+  ### Associations
   belongs_to :activity, :counter_cache => true
 
-  # Attributes
+  ### Attributes
   attr_accessible :activity_id, :spend_percentage, :budget_percentage
 
-  # Callbacks
+  ### Callbacks
   after_create  :update_counter_cache
   after_destroy :update_counter_cache
 
-  #TODO: refactor
-  [:projects, :name, :description, :start_date, :end_date,
-   :text_for_beneficiaries, :beneficiaries, :text_for_targets,
-   :approved].each do |method|
+  ### Delegates
+  [:projects, :name, :description, :start_date, :end_date, :approved,
+   :text_for_beneficiaries, :beneficiaries, :text_for_targets].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
 

@@ -3,6 +3,8 @@
 - content_for :sub_nav do
   = render :partial => 'layouts/sub_nav'
 
+%h1 Edit Response
+
 #page_tips
   .nav
     = link_to "Show Page Tips", "#", :id => "page_tips_open"
@@ -15,6 +17,7 @@
 
 = error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-= render 'form'
+- semantic_form_for @data_response, :url => data_responses_path do |f|
+  = render 'form', :f => f
 
 = render 'comments'

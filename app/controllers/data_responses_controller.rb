@@ -4,7 +4,7 @@ class DataResponsesController < ApplicationController
   before_filter :find_response, :only => [:edit, :update, :review, :submit]
   before_filter :find_help, :only => [:edit, :update, :review]
   before_filter :find_review_status, :only => [:review, :submit]
-  before_filter :find_requests, :only => [:new, :create]
+  before_filter :find_requests, :only => [:new, :create, :edit]
 
   def new
     @data_response = DataResponse.new
@@ -63,7 +63,7 @@ class DataResponsesController < ApplicationController
     end
 
     def find_requests
-      @unfulfilled_requests = DataRequest.unfulfilled(current_user.organization)
+      @requests = DataRequest.all
     end
 
     def find_help

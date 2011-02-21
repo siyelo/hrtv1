@@ -23,9 +23,9 @@ class ProjectMover
       else
         @cloned_project.save(false)
       end
-      puts "  ... Project (#{@project.id}) has been moved to New Project with id: #{@cloned_project.id}"
+      Rails.logger.info "  ... Project (#{@project.id}) has been moved to New Project with id: #{@cloned_project.id}"
       raise "could not destroy project" unless @project.destroy
-      puts "    Verify the move with users: #{@target_response.organization.users.collect.map(&:email).join(", ")}"
+      Rails.logger.info "    Verify the move with users: #{@target_response.organization.users.collect.map(&:email).join(", ")}"
       @cloned_project
     end
   end

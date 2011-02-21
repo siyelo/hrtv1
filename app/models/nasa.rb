@@ -1,7 +1,6 @@
 class Nasa < Code
 end
 
-
 # == Schema Information
 #
 # Table name: codes

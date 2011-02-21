@@ -61,6 +61,229 @@ describe Activity do
     end
   end
 
+  describe "coding_budget_classified?" do
+    it "is true when budget is equal to CodingBudget_amount" do
+      activity = Factory.create(:activity, :budget => 100, :CodingBudget_amount => 100)
+      activity.coding_budget_classified?.should be_true
+    end
+
+    it "is not true when budget is not equal to CodingBudget_amount" do
+      activity = Factory.create(:activity, :budget => 100, :CodingBudget_amount => 101)
+      activity.coding_budget_classified?.should be_false
+    end
+  end
+
+  describe "coding_budget_cc_classified?" do
+    it "is true when budget is equal to CodingBudgetCostCategorization_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                :CodingBudgetCostCategorization_amount => 100)
+      activity.coding_budget_cc_classified?.should be_true
+    end
+
+    it "is not true when budget is not equal to CodingBudgetCostCategorization_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                :CodingBudgetCostCategorization_amount => 101)
+      activity.coding_budget_cc_classified?.should be_false
+    end
+  end
+
+  describe "coding_budget_district_classified?" do
+    context "activity does not have locations" do
+      before :each do
+        @activity = Factory.create(:activity, :budget => 100, :locations => [],
+                                   :CodingBudgetDistrict_amount => 100)
+      end
+
+      it "is true" do
+        @activity.coding_budget_district_classified?.should be_true
+      end
+    end
+
+    context "activity does not have locations" do
+      it "is true when budget is equal to CodingBudgetCostCategorization_amount" do
+        activity = Factory.create(:activity, :budget => 100,
+                                   :locations => [Factory.create(:location)],
+                                   :CodingBudgetDistrict_amount => 100)
+        activity.coding_budget_district_classified?.should be_true
+      end
+
+      it "should not be true when budget is not equal to CodingBudgetCostCategorization_amount" do
+        activity = Factory.create(:activity, :budget => 100,
+                                   :locations => [Factory.create(:location)],
+                                   :CodingBudgetDistrict_amount => 101)
+        activity.coding_budget_district_classified?.should be_false
+      end
+    end
+
+  end
+
+  describe "coding_spend_classified?" do
+    it "is true when spend is equal to CodingSpend_amount" do
+      activity = Factory.create(:activity, :spend => 100, :CodingSpend_amount => 100)
+      activity.coding_spend_classified?.should be_true
+    end
+
+    it "is not true when spend is not equal to CodingSpend_amount" do
+      activity = Factory.create(:activity, :spend => 100, :CodingSpend_amount => 101)
+      activity.coding_spend_classified?.should be_false
+    end
+  end
+
+  describe "coding_spend_cc_classified?" do
+    it "is true when spend is equal to CodingSpendCostCategorization_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                :CodingSpendCostCategorization_amount => 100)
+      activity.coding_spend_cc_classified?.should be_true
+    end
+
+    it "is not true when spend is not equal to CodingSpendCostCategorization_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                :CodingSpendCostCategorization_amount => 101)
+      activity.coding_spend_cc_classified?.should be_false
+    end
+  end
+
+  describe "coding_spend_district_classified?" do
+    context "activity does not have locations" do
+      before :each do
+        @activity = Factory.create(:activity, :spend => 100, :locations => [],
+                                   :CodingSpendDistrict_amount => 100)
+      end
+
+      it "is true" do
+        @activity.coding_spend_district_classified?.should be_true
+      end
+    end
+
+    context "activity does not have locations" do
+      it "is true when spend is equal to CodingSpendCostCategorization_amount" do
+        activity = Factory.create(:activity, :spend => 100,
+                                   :locations => [Factory.create(:location)],
+                                   :CodingSpendDistrict_amount => 100)
+        activity.coding_spend_district_classified?.should be_true
+      end
+
+      it "should not be true when spend is not equal to CodingSpendCostCategorization_amount" do
+        activity = Factory.create(:activity, :spend => 100,
+                                   :locations => [Factory.create(:location)],
+                                   :CodingSpendDistrict_amount => 101)
+        activity.coding_spend_district_classified?.should be_false
+      end
+    end
+  end
+
+  describe "budget_classified?" do
+    before :each do
+      @activity = Factory.create(:activity)
+    end
+
+    it "is budget_classified? when classified when all budget codings are classified" do
+      @activity.stub(:coding_budget_classified?) { true }
+      @activity.stub(:coding_budget_district_classified?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.budget_classified?.should be_true
+    end
+
+    it "is not budget_classified? when not coding_budget_classified?" do
+      @activity.stub(:coding_budget_classified?) { false }
+      @activity.stub(:coding_budget_district_classified?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.budget_classified?.should be_false
+    end
+
+    it "is not budget_classified? when not coding_budget_district_classified?" do
+      @activity.stub(:coding_budget_classified?) { true }
+      @activity.stub(:coding_budget_district_classified?) { false }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.budget_classified?.should be_false
+    end
+
+    it "is not budget_classified? when not coding_budget_cc_classified?" do
+      @activity.stub(:coding_budget_classified?) { true }
+      @activity.stub(:coding_budget_district_classified?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.budget_classified?.should be_false
+    end
+
+    it "is not budget_classified? when none of budget is classified" do
+      @activity.stub(:coding_budget_classified?) { false }
+      @activity.stub(:coding_budget_district_classified?) { false }
+      @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.budget_classified?.should be_false
+    end
+  end
+
+  describe "spend_classified?" do
+    before :each do
+      @activity = Factory.create(:activity)
+    end
+
+    it "is spend_classified? when classified when all spend codings are classified" do
+      @activity.stub(:coding_spend_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.spend_classified?.should be_true
+    end
+
+    it "is not spend_classified? when not coding_spend_classified?" do
+      @activity.stub(:coding_spend_classified?) { false }
+      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.spend_classified?.should be_false
+    end
+
+    it "is not spend_classified? when not coding_spend_district_classified?" do
+      @activity.stub(:coding_spend_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { false }
+      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.spend_classified?.should be_false
+    end
+
+    it "is not spend_classified? when not coding_spend_cc_classified?" do
+      @activity.stub(:coding_spend_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.spend_classified?.should be_false
+    end
+
+    it "is not spend_classified? when none of spend is classified" do
+      @activity.stub(:coding_spend_classified?) { false }
+      @activity.stub(:coding_spend_district_classified?) { false }
+      @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.spend_classified?.should be_false
+    end
+  end
+
+  describe "spend_classified?" do
+    before :each do
+      @activity = Factory.create(:activity)
+    end
+
+    it "is classified? when both budget and spend are classified" do
+      @activity.stub(:budget_classified?) { true }
+      @activity.stub(:spend_classified?) { true }
+      @activity.classified?.should be_true
+    end
+
+    it "is not classified? when budget is not classified" do
+      @activity.stub(:budget_classified?) { false }
+      @activity.stub(:spend_classified?) { true }
+      @activity.classified?.should be_false
+    end
+
+    it "is not classified? when spend is not classified" do
+      @activity.stub(:budget_classified?) { true }
+      @activity.stub(:spend_classified?) { false }
+      @activity.classified?.should be_false
+    end
+
+    it "is not classified? when both are not classified" do
+      @activity.stub(:budget_classified?) { false }
+      @activity.stub(:spend_classified?) { false }
+      @activity.classified?.should be_false
+    end
+  end
+
   describe "budget_district_coding_adjusted" do
     before :each do
       @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
@@ -758,14 +981,15 @@ describe Activity do
   end
 end
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer
 #  description                           :text
 #  type                                  :string(255)
@@ -774,8 +998,8 @@ end
 #  spend_q2                              :decimal(, )
 #  spend_q3                              :decimal(, )
 #  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
+#  start_date                            :date
+#  end_date                              :date
 #  spend                                 :decimal(, )
 #  text_for_provider                     :text
 #  text_for_targets                      :text

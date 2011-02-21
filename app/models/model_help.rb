@@ -12,7 +12,6 @@ class ModelHelp < ActiveRecord::Base
   end
 end
 
-
 # == Schema Information
 #
 # Table name: model_helps

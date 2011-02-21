@@ -110,7 +110,7 @@ class Activity < ActiveRecord::Base
   end
 
   def self.unclassified
-    self.find(:all).select {|a| !a.classified}
+    self.find(:all).select {|a| !a.classified?}
   end
 
   def self.jawp_activities
@@ -166,47 +166,44 @@ class Activity < ActiveRecord::Base
     projects.map{|project| project.locations}.flatten.uniq
   end
 
-  def classified
-    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded? &&
-    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
-  end
-
-  def classified?
-    classified
-  end
-
-  def budget_coded?
+  def coding_budget_classified?
     self.budget == self.CodingBudget_amount
   end
 
-  def budget_by_district_coded?
-    return true if self.locations.empty? #TODO: remove when locations are mandatory
-    self.budget == self.CodingBudgetDistrict_amount
-  end
-
-  def budget_by_cost_category_coded?
+  def coding_budget_cc_classified?
     self.budget == self.CodingBudgetCostCategorization_amount
   end
 
-  def spend_coded?
+  def coding_budget_district_classified?
+    self.locations.empty? || self.budget == self.CodingBudgetDistrict_amount
+  end
+
+  def coding_spend_classified?
     self.spend == self.CodingSpend_amount
   end
 
-  def spend_by_district_coded?
-    return true if self.locations.empty? #TODO: remove
-    self.spend == self.CodingSpendDistrict_amount
-  end
-
-  def spend_by_cost_category_coded?
+  def coding_spend_cc_classified?
     self.spend == self.CodingSpendCostCategorization_amount
   end
 
+  def coding_spend_district_classified?
+    self.locations.empty? || self.spend == self.CodingSpendDistrict_amount
+  end
+
   def budget_classified?
-    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded?
+    coding_budget_classified? &&
+    coding_budget_district_classified? &&
+    coding_budget_cc_classified?
   end
 
   def spend_classified?
-    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
+    coding_spend_classified? &&
+    coding_spend_district_classified? &&
+    coding_spend_cc_classified?
+  end
+
+  def classified?
+    budget_classified? && spend_classified?
   end
 
   # Called from migrations
@@ -265,8 +262,8 @@ class Activity < ActiveRecord::Base
   # CodingBudgetCostCategorization -> CodingSpendCostCategorization
   def copy_budget_codings_to_spend(types = BUDGET_CODING_CLASSES)
     types.each do |budget_type|
-      spend_type        = budget_type.gsub(/Budget/, "Spend")
-      spend_type_klass  = spend_type.constantize
+      spend_type = budget_type.gsub(/Budget/, "Spend")
+      klass      = spend_type.constantize
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type])
 
       # copy across the ratio, not just the amount
@@ -280,19 +277,19 @@ class Activity < ActiveRecord::Base
           self.code_assignments << spend_ca
         end
       end
-      self.update_classified_amount_cache(spend_type_klass)
+      self.update_classified_amount_cache(klass)
     end
     true
   end
 
   def coding_progress
     coded = 0
-    coded +=1 if budget_coded?
-    coded +=1 if budget_by_district_coded?
-    coded +=1 if budget_by_cost_category_coded?
-    coded +=1 if spend_coded?
-    coded +=1 if spend_by_district_coded?
-    coded +=1 if spend_by_cost_category_coded?
+    coded += 1 if coding_budget_classified?
+    coded += 1 if coding_budget_district_classified?
+    coded += 1 if coding_budget_cc_classified?
+    coded += 1 if coding_spend_classified?
+    coded += 1 if coding_spend_district_classified?
+    coded += 1 if coding_spend_cc_classified?
     progress = (coded.to_f / 6) * 100
   end
 
@@ -394,16 +391,14 @@ class Activity < ActiveRecord::Base
     end
 end
 
-
-
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer
 #  description                           :text
 #  type                                  :string(255)
@@ -412,8 +407,8 @@ end
 #  spend_q2                              :decimal(, )
 #  spend_q3                              :decimal(, )
 #  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
+#  start_date                            :date
+#  end_date                              :date
 #  spend                                 :decimal(, )
 #  text_for_provider                     :text
 #  text_for_targets                      :text

@@ -32,10 +32,6 @@ class Location < Code
                 :group => "codes.id, codes.short_display, codes.type"
 end
 
-
-
-
-
 # == Schema Information
 #
 # Table name: codes

@@ -4,8 +4,8 @@ class ClassificationsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [ :organization, :description, :budget_coded?, :budget_by_district_coded?, :budget_by_cost_category_coded?,
-                      :spend_coded?, :spend_by_district_coded?, :spend_by_cost_category_coded?, :approved]
+  @@shown_columns = [ :organization, :description, :coding_budget_classified?, :coding_budget_district_classified?, :coding_budget_cc_classified?,
+                      :coding_spend_classified?, :coding_spend_district_classified?, :coding_spend_cc_classified?, :approved]
 
 
   active_scaffold :activity do |config|
@@ -21,18 +21,18 @@ class ClassificationsController < ActiveScaffoldController
     config.columns[:description].inplace_edit           = true
     config.columns[:description].label                  = "Activity Description"
     config.columns[:approved].label                     = "Approved?"
-    config.columns[:budget_coded?].list_ui                    = :checkbox
-    config.columns[:budget_by_cost_category_coded?].list_ui   = :checkbox
-    config.columns[:budget_by_district_coded?].list_ui        = :checkbox
-    config.columns[:spend_coded?].list_ui                     = :checkbox
-    config.columns[:spend_by_cost_category_coded?].list_ui    = :checkbox
-    config.columns[:spend_by_district_coded?].list_ui         = :checkbox
-    config.columns[:budget_coded?].label                      = "Budget by Coding"
-    config.columns[:budget_by_district_coded?].label          = "Budget by District"
-    config.columns[:budget_by_cost_category_coded?].label     = "Budget by Cost Category"
-    config.columns[:spend_coded?].label                       = "Expenditure by Coding"
-    config.columns[:spend_by_district_coded?].label           = "Expenditure by District"
-    config.columns[:spend_by_cost_category_coded?].label      = "Expenditure by Cost Category"
+    config.columns[:coding_budget_classified?].list_ui                    = :checkbox
+    config.columns[:coding_budget_cc_classified?].list_ui   = :checkbox
+    config.columns[:coding_budget_district_classified?].list_ui        = :checkbox
+    config.columns[:coding_spend_classified?].list_ui                     = :checkbox
+    config.columns[:coding_spend_cc_classified?].list_ui    = :checkbox
+    config.columns[:coding_spend_district_classified?].list_ui         = :checkbox
+    config.columns[:coding_budget_classified?].label                      = "Budget by Coding"
+    config.columns[:coding_budget_district_classified?].label          = "Budget by District"
+    config.columns[:coding_budget_cc_classified?].label     = "Budget by Cost Category"
+    config.columns[:coding_spend_classified?].label                       = "Expenditure by Coding"
+    config.columns[:coding_spend_district_classified?].label           = "Expenditure by District"
+    config.columns[:coding_spend_cc_classified?].label      = "Expenditure by Cost Category"
   end
 
   #so other costs dont show up here, need

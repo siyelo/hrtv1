@@ -128,16 +128,17 @@ class CodeAssignmentsController < ApplicationController
     def get_coding_classified_method(klass)
       case klass.to_s
       when 'CodingBudget'
-        :budget_coded?
+        :coding_budget_classified?
       when 'CodingBudgetDistrict'
-        :budget_by_district_coded?
+        :coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
-        :budget_by_cost_category_coded?
+        :coding_budget_cc_classified?
       when 'CodingSpend'
-        :spend_coded?
+        :coding_spend_classified?
       when 'CodingSpendDistrict'
-        :spend_by_district_coded?
+        :coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
-        :spend_by_cost_category_coded?      end
+        :coding_spend_cc_classified?
+      end
     end
 end

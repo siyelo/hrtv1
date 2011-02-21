@@ -130,10 +130,6 @@ class Project < ActiveRecord::Base
 
 end
 
-
-
-
-
 # == Schema Information
 #
 # Table name: projects

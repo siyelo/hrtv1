@@ -21,11 +21,11 @@
           %tr
             %th= activity.name
             %th= activity.description
-            %th= check_box_tag "", "", activity.budget_coded?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.budget_by_district_coded?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.budget_by_cost_category_coded?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend_coded?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend_by_district_coded?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.spend_by_cost_category_coded?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
+            %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
             %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_activity_path(activity)}"
     %hr

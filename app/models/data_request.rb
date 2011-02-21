@@ -22,8 +22,6 @@ class DataRequest < ActiveRecord::Base
   end
 end
 
-
-
 # == Schema Information
 #
 # Table name: data_requests

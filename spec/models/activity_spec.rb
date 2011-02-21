@@ -191,10 +191,9 @@ describe Activity do
       @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
-      Activity::STRAT_PROG_TO_CODES_FOR_TOTALING = {
-        "code1" => ["1", "2"],
-        "code2" => ["3"]
-      }
+      @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
+      Activity.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
+      Activity.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
@@ -219,10 +218,9 @@ describe Activity do
       @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
-      Activity::STRAT_PROG_TO_CODES_FOR_TOTALING = {
-        "code1" => ["1", "2"],
-        "code2" => ["3"]
-      }
+      @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
+      Activity.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
+      Activity.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
@@ -247,10 +245,9 @@ describe Activity do
       @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
-      Activity::STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-        "code1" => ["1", "2"],
-        "code2" => ["3"]
-      }
+      @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
+      Activity.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
+      Activity.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
@@ -275,10 +272,9 @@ describe Activity do
       @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
-      Activity::STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-        "code1" => ["1", "2"],
-        "code2" => ["3"]
-      }
+      @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
+      Activity.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
+      Activity.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do

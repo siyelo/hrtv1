@@ -4,7 +4,7 @@ require 'lib/BudgetSpendHelpers'
 class Activity < ActiveRecord::Base
   ### Class constants
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => [ "6","7","8","9","11"],
+    "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
     "Infrastructure and Equipment" => ["4"],
     "Health Financing" => ["3"],
@@ -126,29 +126,21 @@ class Activity < ActiveRecord::Base
     district_coding(CodingSpendDistrict, coding_spend_district, spend)
   end
 
-  # TODO: refactor
   def budget_stratprog_coding
-    assigns_for_strategic_codes coding_budget, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget
+    virtual_codes(HsspBudget, coding_budget, STRAT_PROG_TO_CODES_FOR_TOTALING)
   end
 
-  # TODO: refactor
   def spend_stratprog_coding
-    assigns_for_strategic_codes coding_spend, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspSpend
+    virtual_codes(HsspSpend, coding_spend, STRAT_PROG_TO_CODES_FOR_TOTALING)
   end
 
-  # TODO: refactor
   def budget_stratobj_coding
-    assigns_for_strategic_codes coding_budget, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspBudget
+    virtual_codes(HsspBudget, coding_budget, STRAT_OBJ_TO_CODES_FOR_TOTALING)
   end
 
-  # TODO: refactor
   def spend_stratobj_coding
-    assigns_for_strategic_codes coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
+    virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
   end
-
-
-
-
 
   # TODO: remove
   #convenience
@@ -272,23 +264,16 @@ class Activity < ActiveRecord::Base
     coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
   end
 
-  # TODO: refactor
-  def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
+  def virtual_codes(klass, code_assignments, code_ids_maping)
     assignments = []
-    #first find the top level code w strat program
-    strat_hash.each do |prog, code_ids|
-      assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
-      amount = 0
-      assigns_in_codes.each do |ca|
-        amount += ca.cached_amount
-      end
-      ca = new_klass.new
-      ca.activity_id = self.id
-      ca.code_id = Code.find_by_short_display(prog).id
-      ca.cached_amount = amount
-      ca.amount = amount
-      assignments << ca
+
+    code_ids_maping.each do |code_name, code_ids|
+      selected = code_assignments.select {|ca| code_ids.include?(ca.code.external_id)}
+      code = Code.find_by_short_display(code_name)
+      amount = selected.sum{|ca| ca.cached_amount}
+      assignments << fake_ca(klass, code, amount)
     end
+
     assignments
   end
 
@@ -373,10 +358,10 @@ class Activity < ActiveRecord::Base
     end
 
     def district_codings_from_sub_activities(klass)
-      sub_activity_code_assignments = sub_activity_distrit_code_assignments(klass)
+      code_assignments = sub_activity_distrit_code_assignments(klass)
 
       location_amounts = {}
-      sub_activity_code_assignments.each do |ca|
+      code_assignments.each do |ca|
         location_amounts[ca.code] = 0 unless location_amounts[ca.code]
         location_amounts[ca.code] += ca.cached_amount
       end

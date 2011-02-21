@@ -1,5 +1,5 @@
 class DataRequest < ActiveRecord::Base
-  attr_accessible :organization_id, :title, :complete, :pending_review
+  attr_accessible :organization_id, :title, :complete, :pending_review, :due_date
 
   belongs_to :organization
 
@@ -7,6 +7,7 @@ class DataRequest < ActiveRecord::Base
 
   validates_presence_of :organization_id
   validates_presence_of :title
+  validates_presence_of :due_date
 
   named_scope :unfulfilled, lambda {|organization|
     return {} unless organization

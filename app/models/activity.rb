@@ -162,15 +162,11 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
-  # TODO: THIS METHOD NEEDS TO BE RENAMED TO valid_districts
   def districts
-    self.projects.collect do |proj|
-      proj.locations
-    end.flatten.uniq
+    projects.map{|project| project.locations}.flatten.uniq
   end
 
   def classified
-    #TODO override in othercosts and sub_activities
     budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded? &&
     spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
   end

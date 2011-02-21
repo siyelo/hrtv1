@@ -47,6 +47,20 @@ describe Activity do
     it { should allow_mass_assignment_of(:spend_q4) }
   end
 
+  describe "districts" do
+    it "returns valid districts" do
+      activity = Factory.create(:activity)
+      location1 = Factory.create(:location, :short_display => "Location1")
+      location2 = Factory.create(:location, :short_display => "Location2")
+      activity.projects << Factory.create(:project, :name => 'Project1',
+                                           :locations => [location1])
+      activity.projects << Factory.create(:project, :name => 'Project2',
+                                           :locations => [location1, location2])
+
+      activity.districts.should == [location1, location2]
+    end
+  end
+
   describe "budget_district_coding_adjusted" do
     before :each do
       @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
@@ -65,8 +79,8 @@ describe Activity do
       it "returns sub_activity budget district code assignments" do
         donor         = Factory.create(:donor, :name => 'Donor')
         ngo           = Factory.create(:ngo, :name => 'Ngo')
-        @location1     = Factory.create(:location, :short_display => 'Location1')
-        @location2     = Factory.create(:location, :short_display => 'Location2')
+        @location1    = Factory.create(:location, :short_display => 'Location1')
+        @location2    = Factory.create(:location, :short_display => 'Location2')
         implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
         implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
         data_request  = Factory.create(:data_request, :organization => donor)
@@ -136,8 +150,8 @@ describe Activity do
       it "returns sub_activity spend district code assignments" do
         donor         = Factory.create(:donor, :name => 'Donor')
         ngo           = Factory.create(:ngo, :name => 'Ngo')
-        @location1     = Factory.create(:location, :short_display => 'Location1')
-        @location2     = Factory.create(:location, :short_display => 'Location2')
+        @location1    = Factory.create(:location, :short_display => 'Location1')
+        @location2    = Factory.create(:location, :short_display => 'Location2')
         implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
         implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
         data_request  = Factory.create(:data_request, :organization => donor)

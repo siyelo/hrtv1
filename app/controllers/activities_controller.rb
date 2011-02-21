@@ -6,8 +6,8 @@ class ActivitiesController < ActiveScaffoldController
   include ActivitiesHelper
 
   @@shown_columns           = [:organization, :projects, :provider, :description, :name, :spend, :budget]
-  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
-  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
+  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start_date, :end_date, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
+  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start_date, :end_date, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
   @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
 
   def self.create_columns
@@ -63,7 +63,7 @@ class ActivitiesController < ActiveScaffoldController
       config.columns[c].inplace_edit = true
     end
 
-    [:start, :end].each do |c|
+    [:start_date, :end_date].each do |c|
       config.columns[c].label = "#{c.to_s.capitalize} Date"
     end
 

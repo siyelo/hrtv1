@@ -35,8 +35,8 @@ describe Activity do
     it { should allow_mass_assignment_of(:text_for_targets) }
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start) }
-    it { should allow_mass_assignment_of(:end) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
@@ -65,10 +65,10 @@ describe Activity do
       it "returns sub_activity budget district code assignments" do
         donor         = Factory.create(:donor, :name => 'Donor')
         ngo           = Factory.create(:ngo, :name => 'Ngo')
-        location1     = Factory.create(:location, :short_display => 'Location1')
-        location2     = Factory.create(:location, :short_display => 'Location2')
-        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [location1])
-        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [location2])
+        @location1     = Factory.create(:location, :short_display => 'Location1')
+        @location2     = Factory.create(:location, :short_display => 'Location2')
+        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
         data_request  = Factory.create(:data_request, :organization => donor)
         data_response = Factory.create(:data_response, :organization => ngo,
                                        :data_request => data_request)
@@ -88,12 +88,14 @@ describe Activity do
                                                   :budget => 40)
 
         @activity.budget_district_coding_adjusted.length.should == 2
-        @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
-        @activity.budget_district_coding_adjusted[0].cached_amount.should == 7
-        @activity.budget_district_coding_adjusted[0].sum_of_children.should == 0
-        @activity.budget_district_coding_adjusted[1].type.should == "CodingBudgetDistrict"
-        @activity.budget_district_coding_adjusted[1].cached_amount.should == 40
-        @activity.budget_district_coding_adjusted[1].sum_of_children.should == 0
+        location1_coding = @activity.budget_district_coding_adjusted.detect{|c| c.code == @location1}
+        location2_coding = @activity.budget_district_coding_adjusted.detect{|c| c.code == @location2}
+        location1_coding.type.should == "CodingBudgetDistrict"
+        location1_coding.cached_amount.should == 7
+        location1_coding.sum_of_children.should == 0
+        location2_coding.type.should == "CodingBudgetDistrict"
+        location2_coding.cached_amount.should == 40
+        location2_coding.sum_of_children.should == 0
       end
 
       context "sub_activities does not have budget district code assignments" do
@@ -134,10 +136,10 @@ describe Activity do
       it "returns sub_activity spend district code assignments" do
         donor         = Factory.create(:donor, :name => 'Donor')
         ngo           = Factory.create(:ngo, :name => 'Ngo')
-        location1     = Factory.create(:location, :short_display => 'Location1')
-        location2     = Factory.create(:location, :short_display => 'Location2')
-        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [location1])
-        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [location2])
+        @location1     = Factory.create(:location, :short_display => 'Location1')
+        @location2     = Factory.create(:location, :short_display => 'Location2')
+        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
         data_request  = Factory.create(:data_request, :organization => donor)
         data_response = Factory.create(:data_response, :organization => ngo,
                                        :data_request => data_request)
@@ -157,12 +159,14 @@ describe Activity do
                                                   :spend => 50)
 
         @activity.spend_district_coding_adjusted.length.should == 2
-        @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
-        @activity.spend_district_coding_adjusted[0].cached_amount.should == 9
-        @activity.spend_district_coding_adjusted[0].sum_of_children.should == 0
-        @activity.spend_district_coding_adjusted[1].type.should == "CodingSpendDistrict"
-        @activity.spend_district_coding_adjusted[1].cached_amount.should == 50
-        @activity.spend_district_coding_adjusted[1].sum_of_children.should == 0
+        location1_coding = @activity.spend_district_coding_adjusted.detect{|c| c.code == @location1}
+        location2_coding = @activity.spend_district_coding_adjusted.detect{|c| c.code == @location2}
+        location1_coding.type.should == "CodingSpendDistrict"
+        location1_coding.cached_amount.should == 9
+        location1_coding.sum_of_children.should == 0
+        location2_coding.type.should == "CodingSpendDistrict"
+        location2_coding.cached_amount.should == 50
+        location2_coding.sum_of_children.should == 0
       end
 
       context "sub_activities does not have spend district code assignments" do

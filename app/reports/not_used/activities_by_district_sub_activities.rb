@@ -48,7 +48,7 @@ class Reports::ActivitiesByDistrictSubActivities
     beneficiaries.each do |ben|
       header << "#{ben}"
     end
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start", "activity.end", "activity.provider"]
+    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start_date", "activity.end_date", "activity.provider"]
     locations.each { |loc| header << "#{loc.short_display}" }
     header << [ "sub_activity.provider", "sub_activity.budget", "sub_activity.budget_percentage", "sub_activity.spend", "sub_activity.spend_percentage" ]
     header.flatten
@@ -64,7 +64,7 @@ class Reports::ActivitiesByDistrictSubActivities
     beneficiaries.each do |ben|
       row << (act_benefs.include?(ben) ? "yes" : " " )
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start_date}", "#{activity.end_date}" ]
     row << (activity.provider.nil? ? " " : "#{h activity.provider.name}" )
 
     # TODO for sub_implementers, need to create code assignment for them when the

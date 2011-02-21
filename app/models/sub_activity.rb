@@ -12,7 +12,7 @@ class SubActivity < Activity
   after_destroy :update_counter_cache
 
   #TODO: refactor
-  [:projects, :name, :description,  :start, :end,
+  [:projects, :name, :description, :start_date, :end_date,
    :text_for_beneficiaries, :beneficiaries, :text_for_targets,
    :approved].each do |method|
     delegate method, :to => :activity, :allow_nil => true

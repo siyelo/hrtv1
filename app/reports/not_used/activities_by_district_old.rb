@@ -41,7 +41,7 @@ class Reports::ActivitiesByDistrictOld
     beneficiaries.each do |ben|
       header << "#{ben}"
     end
-    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start", "activity.end", "activity.provider"]
+    header << ["activity.text_for_beneficiaries", "activity.text_for_targets", "activity.target", "activity.budget", "activity.spend", "currency", "activity.start_date", "activity.end_date", "activity.provider"]
     locations.each { |loc| header << "#{loc.short_display}" }
     header.flatten
   end
@@ -56,7 +56,7 @@ class Reports::ActivitiesByDistrictOld
     beneficiaries.each do |ben|
       row << (act_benefs.include?(ben) ? "yes" : " " )
     end
-    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start}", "#{activity.end}" ]
+    row << ["#{h activity.text_for_beneficiaries}", "#{h activity.text_for_targets}", "#{activity.target}", "#{activity.budget}", "#{activity.spend}", "#{activity.data_response.currency}", "#{activity.start_date}", "#{activity.end_date}" ]
     row << (activity.provider.nil? ? " " : "#{ activity.provider.name}" )
 
     locations.each do |loc|

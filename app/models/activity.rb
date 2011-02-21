@@ -32,7 +32,7 @@ class Activity < ActiveRecord::Base
   ### Attributes
   attr_accessible :projects, :locations, :beneficiaries, :provider,
                   :text_for_provider, :text_for_beneficiaries,
-                  :text_for_targets, :name, :description, :start, :end,
+                  :text_for_targets, :name, :description, :start_date, :end_date,
                   :approved, :budget, :spend, :spend_q4_prev,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4
 
@@ -146,16 +146,6 @@ class Activity < ActiveRecord::Base
   #convenience
   def implementer
     provider
-  end
-
-  # TODO: remove
-  def start_date
-    self.start
-  end
-
-  # TODO: remove
-  def end_date
-    self.end
   end
 
   def currency

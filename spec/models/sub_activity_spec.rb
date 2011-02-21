@@ -51,46 +51,107 @@ describe SubActivity do
 
     end
 
+    describe "budget" do
+      context "budget is not nil" do
+        it "returns sub_activity budget" do
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :budget => 4)
+
+          @sub_activity.budget.should == 4
+        end
+      end
+
+      context "budget is nil" do
+        it "returns proportion of activity budget when activity budget is not nil" do
+          @activity.budget = 10
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :budget => nil, :budget_percentage => 50)
+
+          @sub_activity.budget.should == 5
+        end
+
+        it "returns proportion of activity budget when activity budget is nil" do
+          @activity.budget = nil
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :budget => nil, :budget_percentage => 50)
+
+          @sub_activity.budget.should be_nil
+        end
+      end
+    end
+
+    describe "spend" do
+      context "spend is not nil" do
+        it "returns sub_activity spend" do
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :spend => 3)
+
+          @sub_activity.spend.should == 3
+        end
+      end
+
+      context "spend is nil" do
+        it "returns proportion of activity spend when activity spend is not nil" do
+          @activity.spend = 100
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :spend => nil, :spend_percentage => 50)
+
+          @sub_activity.spend.should == 50
+        end
+
+        it "returns proportion of activity spend when activity spend is nil" do
+          @activity.spend = nil
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :spend => nil, :spend_percentage => 50)
+
+          @sub_activity.spend.should be_nil
+        end
+      end
+    end
+
     describe "locations" do
-      context "there is a provider" do
-        before :each do
+      context "implementer present" do
+        it "returns implementer locations when implementer has locations" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
                                          :data_response => @data_response,
                                          :budget => 4, :spend => 4)
-        end
-
-        it "returns empty array when both provider and activity does not have locations" do
-          @sub_activity.locations.should be_empty
-        end
-
-        it "returns provider locations if provider has locations" do
           @implementer.locations = [Factory.create(:location)]
+
           @sub_activity.locations.should == @implementer.locations
         end
 
-        it "returns activity locations when provider does not have location, but activity has" do
-          @activity.locations = [Factory.create(:location)]
+        it "returns activity locations when implementer does not have locations" do
+          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                         :provider => @implementer,
+                                         :data_response => @data_response,
+                                         :budget => 4, :spend => 4)
+          @implementer.locations = []
+          @activity.locations    = [Factory.create(:location)]
+
           @sub_activity.locations.should == @activity.locations
         end
       end
 
-      context "no provider" do
-        # NOTE: remove this when you ensure the following is not corrent
-        # wrong data in the database and missing dependent destoy callback on
-        # activity has many sub_activities
-        it "returns empty array when there is not activity for that sub_activity" do
-          @sub_activity = Factory.create(:sub_activity,
-                                         :data_response => @data_response,
-                                         :budget => 4, :spend => 4)
-          @sub_activity.locations.should be_empty
-        end
-
-        it "returns activity locations when there is a activity" do
+      context "implementer not present" do
+        it "returns activity locations" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :data_response => @data_response,
                                          :budget => 4, :spend => 4)
           @activity.locations = [Factory.create(:location)]
+
           @sub_activity.locations.should == @activity.locations
         end
       end

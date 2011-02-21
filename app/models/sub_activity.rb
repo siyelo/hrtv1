@@ -19,40 +19,30 @@ class SubActivity < Activity
   end
 
   def locations
-    if provider
-      if !provider.locations.empty?
-        provider.locations
-      elsif activity
-        activity.locations
-      else
-        []
-      end
-    elsif activity
-      activity.locations
+    if provider && provider.locations.present?
+      provider.locations
     else
-      []
+      activity.locations
     end
   end
 
-  # TODO: write spec
   def budget
     if read_attribute(:budget)
-     read_attribute(:budget)
-    elsif budget_percentage && activity
-     activity.budget.try(:*, budget_percentage / 100)
+      read_attribute(:budget)
+    elsif budget_percentage && activity.budget
+      activity.budget * budget_percentage / 100
     else
-     nil
+      nil
     end
   end
 
-  # TODO: write spec
   def spend
     if read_attribute(:spend)
-     read_attribute(:spend)
-    elsif spend_percentage && activity
-     activity.spend.try(:*, spend_percentage / 100)
+      read_attribute(:spend)
+    elsif spend_percentage && activity.spend
+      activity.spend * spend_percentage / 100
     else
-     nil
+      nil
     end
   end
 

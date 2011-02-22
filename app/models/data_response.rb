@@ -132,10 +132,6 @@ class DataResponse < ActiveRecord::Base
   end
 end
 
-
-
-
-
 # == Schema Information
 #
 # Table name: data_responses

@@ -7,9 +7,6 @@ class District < ActiveRecord::Base
   validates_presence_of :name, :population
 end
 
-
-
-
 # == Schema Information
 #
 # Table name: districts

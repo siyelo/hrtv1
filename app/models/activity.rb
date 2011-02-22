@@ -2,9 +2,9 @@ require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 
 class Activity < ActiveRecord::Base
-  ### Class constants
+  ### Constants
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => [ "6","7","8","9","11"],
+    "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
     "Infrastructure and Equipment" => ["4"],
     "Health Financing" => ["3"],
@@ -14,9 +14,11 @@ class Activity < ActiveRecord::Base
   }
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => ["1","201","202","203","204","206","207","208","3","4","5","7","11"],
+    "Across all 3 objectives" => ["1","201","202","203","204","206","207",
+                                  "208","3","4","5","7","11"],
     "b. Prevention and control of diseases" => ['205','9'],
-    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011","6012","6013","6014","6015","6016"],
+    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011",
+                                   "6012","6013","6014","6015","6016"],
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
@@ -30,18 +32,16 @@ class Activity < ActiveRecord::Base
   configure_act_as_data_element
 
   ### Attributes
-  attr_accessible :projects, :locations, :text_for_provider,
-                  :provider, :name, :description,  :start, :end,
-                  :text_for_beneficiaries, :beneficiaries,
-                  :text_for_targets, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :approved
+  attr_accessible :projects, :locations, :beneficiaries, :provider,
+                  :text_for_provider, :text_for_beneficiaries,
+                  :text_for_targets, :name, :description, :start_date, :end_date,
+                  :approved, :budget, :spend, :spend_q4_prev,
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4
 
   ### Associations
+  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
-  belongs_to :provider, :foreign_key => :provider_id,
-                        :class_name => "Organization"
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",
@@ -50,21 +50,12 @@ class Activity < ActiveRecord::Base
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
-  # specific code_assignments by type
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
-
-  # TODO: rename
-  # budget_coding -> coding_budget_adjusted
-  # budget_cost_category_coding -> budget_cost_category_coding_adjusted
-  # budget_district_coding -> budget_district_coding_adjusted
-  # spend_coding -> spend_coding_adjusted
-  # spend_cost_category_coding -> spend_cost_category_coding_adjusted
-  # spend_district_coding -> spend_district_coding_adjusted
 
   ### Validations
   validate :approved_activity_cannot_be_changed
@@ -75,6 +66,9 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
+
+  ### Delegates
+  delegate :organization, :to => :data_response
 
   ### Named scopes
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
@@ -97,12 +91,9 @@ class Activity < ActiveRecord::Base
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
 
-  ### Public Class Methods
-
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
   end
-
 
   def self.canonical
       #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
@@ -119,7 +110,7 @@ class Activity < ActiveRecord::Base
   end
 
   def self.unclassified
-    self.find(:all).select {|a| !a.classified}
+    self.find(:all).select {|a| !a.classified?}
   end
 
   def self.jawp_activities
@@ -128,7 +119,29 @@ class Activity < ActiveRecord::Base
                   :beneficiaries, {:data_response => :organization}])
   end
 
-  ### Public Instance Methods
+  def budget_district_coding_adjusted
+    district_coding_adjusted(CodingBudgetDistrict, coding_budget_district, budget)
+  end
+
+  def spend_district_coding_adjusted
+    district_coding_adjusted(CodingSpendDistrict, coding_spend_district, spend)
+  end
+
+  def budget_stratprog_coding
+    virtual_codes(HsspBudget, coding_budget, STRAT_PROG_TO_CODES_FOR_TOTALING)
+  end
+
+  def spend_stratprog_coding
+    virtual_codes(HsspSpend, coding_spend, STRAT_PROG_TO_CODES_FOR_TOTALING)
+  end
+
+  def budget_stratobj_coding
+    virtual_codes(HsspBudget, coding_budget, STRAT_OBJ_TO_CODES_FOR_TOTALING)
+  end
+
+  def spend_stratobj_coding
+    virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
+  end
 
   # TODO: remove
   #convenience
@@ -136,104 +149,64 @@ class Activity < ActiveRecord::Base
     provider
   end
 
-  # TODO: remove
-  def start_date
-    self.start
-  end
-
-  # TODO: remove
-  def end_date
-    self.end
-  end
-
+  # TODO: spec
   def currency
     self.project.nil? ? nil : self.project.currency
   end
 
-  # TODO change this with delegate
-  def organization
-    self.data_response.organization
-  end
-
+  # TODO: spec
   # helper until we enforce this in the model association!
   def project
     self.projects.first unless projects.empty?
   end
 
-  # TODO: remove
+  # TODO: spec
   def organization_name
     organization.name
   end
 
-  # TODO: THIS METHOD NEEDS TO BE RENAMED TO valid_districts
   def districts
-    self.projects.collect do |proj|
-      proj.locations
-    end.flatten.uniq
+    projects.map{|project| project.locations}.flatten.uniq
   end
 
-  def classified
-    #TODO override in othercosts and sub_activities
-    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded? &&
-    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
-  end
-
-  def classified?
-    classified
-  end
-
-  def budget_coded?
+  def coding_budget_classified?
     self.budget == self.CodingBudget_amount
   end
 
-  def budget_by_district_coded?
-    return true if self.locations.empty? #TODO: remove when locations are mandatory
-    self.budget == self.CodingBudgetDistrict_amount
-  end
-
-  def budget_by_cost_category_coded?
+  def coding_budget_cc_classified?
     self.budget == self.CodingBudgetCostCategorization_amount
   end
 
-  # TODO: deprecate
-  def budget_coding
-    code_assignments.with_type(CodingBudget.to_s)
+  def coding_budget_district_classified?
+    self.locations.empty? || self.budget == self.CodingBudgetDistrict_amount
   end
 
-  # TODO: deprecate
-  def budget_cost_category_coding
-    code_assignments.with_type(CodingBudgetCostCategorization.to_s)
-  end
-
-  def spend_coded?
+  def coding_spend_classified?
     self.spend == self.CodingSpend_amount
   end
 
-  def spend_by_district_coded?
-    return true if self.locations.empty? #TODO: remove
-    self.spend == self.CodingSpendDistrict_amount
-  end
-
-  def spend_by_cost_category_coded?
+  def coding_spend_cc_classified?
     self.spend == self.CodingSpendCostCategorization_amount
   end
 
-  # TODO: deprecate
-  def spend_coding
-    code_assignments.with_type(CodingSpend.to_s)
-  end
-
-  # TODO: deprecate
-  def spend_cost_category_coding
-    code_assignments.with_type(CodingSpendCostCategorization.to_s)
+  def coding_spend_district_classified?
+    self.locations.empty? || self.spend == self.CodingSpendDistrict_amount
   end
 
   def budget_classified?
-    budget_coded? && budget_by_district_coded? && budget_by_cost_category_coded?
+    coding_budget_classified? &&
+    coding_budget_district_classified? &&
+    coding_budget_cc_classified?
   end
 
   def spend_classified?
-    spend_coded? && spend_by_district_coded? && spend_by_cost_category_coded?
+    coding_spend_classified? &&
+    coding_spend_district_classified? &&
+    coding_spend_cc_classified?
+  end
+
+  def classified?
+    budget_classified? && spend_classified?
   end
 
   # Called from migrations
@@ -256,68 +229,36 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  # methods like this are used for reports
-  # so the logic for how to return when there is no data
-  # is put in the model, thus being shared
-  # TODO: deprecate
-  def budget_district_coding
-    district_coding(CodingBudgetDistrict, coding_budget_district, budget)
-  end
-
-  # TODO: deprecate
-  def spend_district_coding
-    district_coding(CodingSpendDistrict, coding_spend_district, spend)
-  end
-
-  def budget_stratprog_coding
-    assigns_for_strategic_codes budget_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspBudget
-  end
-
-  def spend_stratprog_coding
-    assigns_for_strategic_codes spend_coding, STRAT_PROG_TO_CODES_FOR_TOTALING, HsspSpend
-  end
-
-  def budget_stratobj_coding
-    assigns_for_strategic_codes budget_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspBudget
-  end
-
-  def spend_stratobj_coding
-    assigns_for_strategic_codes spend_coding, STRAT_OBJ_TO_CODES_FOR_TOTALING, HsspSpend
-  end
-
-  def spend_coding_sum_in_usd
-    self.spend_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
-  end
-
+  # TODO: spec
   def budget_coding_sum_in_usd
-    self.budget_coding.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+    coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
   end
 
-  def spend_district_coding_sum_in_usd(district)
-    self.code_assignments.with_type(CodingSpendDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
-  end
-
+  # TODO: spec
   def budget_district_coding_sum_in_usd(district)
-    self.code_assignments.with_type(CodingBudgetDistrict.to_s).with_code_id(district).sum(:cached_amount_in_usd)
+    coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
   end
 
-  # TODO: refactor
-  def assigns_for_strategic_codes(assigns, strat_hash, new_klass)
+  # TODO: spec
+  def spend_coding_sum_in_usd
+    coding_spend.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+  end
+
+  # TODO: spec
+  def spend_district_coding_sum_in_usd(district)
+    coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
+  def virtual_codes(klass, code_assignments, code_ids_maping)
     assignments = []
-    #first find the top level code w strat program
-    strat_hash.each do |prog, code_ids|
-      assigns_in_codes = assigns.select { |ca| code_ids.include?(ca.code.external_id)}
-      amount = 0
-      assigns_in_codes.each do |ca|
-        amount += ca.cached_amount
-      end
-      ca = new_klass.new
-      ca.activity_id = self.id
-      ca.code_id = Code.find_by_short_display(prog).id
-      ca.cached_amount = amount
-      ca.amount = amount
-      assignments << ca
+
+    code_ids_maping.each do |code_name, code_ids|
+      selected = code_assignments.select {|ca| code_ids.include?(ca.code.external_id)}
+      code = Code.find_by_short_display(code_name)
+      amount = selected.sum{|ca| ca.cached_amount}
+      assignments << fake_ca(klass, code, amount)
     end
+
     assignments
   end
 
@@ -326,36 +267,55 @@ class Activity < ActiveRecord::Base
   # CodingBudget -> CodingSpend
   # CodingBudgetDistrict -> CodingSpendDistrict
   # CodingBudgetCostCategorization -> CodingSpendCostCategorization
-  def copy_budget_codings_to_spend(types = BUDGET_CODING_CLASSES)
-    types.each do |budget_type|
-      spend_type        = budget_type.gsub(/Budget/, "Spend")
-      spend_type_klass  = spend_type.constantize
-      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type])
+  def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
+    coding_types.each do |budget_coding_type|
+      spend_coding_type = budget_coding_type.gsub(/Budget/, "Spend")
+      klass             = spend_coding_type.constantize
+
+      delete_existing_code_assignments_by_type(spend_coding_type)
 
       # copy across the ratio, not just the amount
-      code_assignments.with_type(budget_type).each do |ca|
-        # TODO: move to code_assignment model as a new method
+      code_assignments.with_type(budget_coding_type).each do |ca|
         if spend && spend > 0
-          spend_ca                = ca.clone
-          spend_ca.type           = spend_type
-          spend_ca.amount         = spend * ca.amount / budget if ca.amount && budget && budget > 0
-          spend_ca.percentage     = ca.percentage
-          self.code_assignments << spend_ca
+          amount = (ca.amount && budget && budget > 0) ?  spend * ca.amount / budget : nil
+          spend_ca = fake_ca(klass, ca.code, amount, ca.percentage)
+          spend_ca.save!
         end
       end
-      self.update_classified_amount_cache(spend_type_klass)
+
+      self.update_classified_amount_cache(klass)
     end
+
     true
+  end
+
+  def derive_classifications_from_sub_implementers!(coding_type)
+    klass = coding_type.constantize
+    location_amounts = {}
+
+    delete_existing_code_assignments_by_type(coding_type)
+
+    sub_activity_district_code_assignments(coding_type).each do |ca|
+      if locations.include?(ca.code)
+        location_amounts[ca.code] = 0 unless location_amounts[ca.code]
+        location_amounts[ca.code] += ca.amount
+      end
+    end
+
+    # create new district assignments
+    location_amounts.each{|location, amount| fake_ca(klass, location, amount).save!}
+
+    self.update_classified_amount_cache(klass)
   end
 
   def coding_progress
     coded = 0
-    coded +=1 if budget_coded?
-    coded +=1 if budget_by_district_coded?
-    coded +=1 if budget_by_cost_category_coded?
-    coded +=1 if spend_coded?
-    coded +=1 if spend_by_district_coded?
-    coded +=1 if spend_by_cost_category_coded?
+    coded += 1 if coding_budget_classified?
+    coded += 1 if coding_budget_district_classified?
+    coded += 1 if coding_budget_cc_classified?
+    coded += 1 if coding_spend_classified?
+    coded += 1 if coding_spend_district_classified?
+    coded += 1 if coding_spend_cc_classified?
     progress = (coded.to_f / 6) * 100
   end
 
@@ -374,6 +334,10 @@ class Activity < ActiveRecord::Base
 
   private
 
+    def delete_existing_code_assignments_by_type(coding_type)
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
+    end
+
     def update_counter_cache
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
@@ -388,41 +352,37 @@ class Activity < ActiveRecord::Base
       self.send("#{type}_amount=", coding_tree.total)
     end
 
-    # TODO: refactor
-    def district_coding(klass, assignments, amount)
-     #TODO we will want to be able to override / check against the derived district codings
-     if assignments.present?
-       return assignments
-     elsif !sub_activities.empty?
-       return district_codings_from_sub_activities(klass, amount)
-     elsif amount
-        #create even split across locations
-        even_split = []
-        locations.each do |l|
-          ca = klass.new
-          ca.activity_id = self.id
-          ca.code_id = l.id
-          ca.cached_amount = amount / locations.size
-          ca.amount = amount / locations.size
-          even_split << ca
-        end
-        even_split
-      else
+    def district_coding_adjusted(klass, assignments, amount)
+      if assignments.present?
         assignments
+      elsif sub_activities.present?
+        district_codings_from_sub_activities(klass)
+      elsif amount
+        locations.map{|location| fake_ca(klass, location, amount / locations.size)}
+      else
+        []
       end
     end
 
-    def district_codings_from_sub_activities(klass, amount)
-      districts_hash = {}
-      Location.all.each do |l|
-        districts_hash[l] = 0
+    def district_codings_from_sub_activities(klass)
+      code_assignments = sub_activity_district_code_assignments(klass.name)
+
+      location_amounts = {}
+      code_assignments.each do |ca|
+        location_amounts[ca.code] = 0 unless location_amounts[ca.code]
+        location_amounts[ca.code] += ca.cached_amount
       end
-      sub_activities.each do |s|
-        s.code_assignments.select{|ca| ca.type == klass.to_s}.each do |ca|
-          districts_hash[ca.code] += ca.cached_amount
-        end
-      end
-      districts_hash.select{|loc,amt| amt > 0}.collect{|loc,amt| klass.new(:code => loc, :cached_amount => amt)}
+
+      location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
+    end
+
+    def sub_activity_district_code_assignments(coding_type)
+      case coding_type
+      when 'CodingBudgetDistrict'
+        sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
+      when 'CodingSpendDistrict'
+        sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
+      end.flatten
     end
 
     # removes code assignments for non-existing locations for this activity
@@ -453,18 +413,22 @@ class Activity < ActiveRecord::Base
       self.budget_in_usd = (self.budget || 0) * rate
       self.spend_in_usd = (self.spend || 0) * rate
     end
+
+    def fake_ca(klass, code, amount, percentage = nil)
+      klass.new(:activity => self, :code => code,
+                :amount => amount, :percentage => percentage,
+                :cached_amount => amount)
+    end
 end
-
-
 
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer
 #  description                           :text
 #  type                                  :string(255)
@@ -473,8 +437,8 @@ end
 #  spend_q2                              :decimal(, )
 #  spend_q3                              :decimal(, )
 #  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
+#  start_date                            :date
+#  end_date                              :date
 #  spend                                 :decimal(, )
 #  text_for_provider                     :text
 #  text_for_targets                      :text

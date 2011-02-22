@@ -80,7 +80,6 @@ class Organization < ActiveRecord::Base
 
 end
 
-
 # == Schema Information
 #
 # Table name: organizations

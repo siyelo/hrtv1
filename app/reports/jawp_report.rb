@@ -40,7 +40,7 @@ class Reports::JawpReport
       amount_q4             = activity.budget_gor_quarter(4)
       amount_total          = activity.budget
       amount_total_in_usd   = activity.budget_in_usd
-      is_national           = (activity.budget_district_coding.empty? ? 'yes' : 'no')
+      is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
     else
       amount_q1             = activity.spend_gor_quarter(1)
       amount_q2             = activity.spend_gor_quarter(2)
@@ -48,7 +48,7 @@ class Reports::JawpReport
       amount_q4             = activity.spend_gor_quarter(4)
       amount_total          = activity.spend
       amount_total_in_usd   = activity.spend_in_usd
-      is_national           = (activity.spend_district_coding.empty? ? 'yes' : 'no')
+      is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
     end
 
     row = []
@@ -84,13 +84,13 @@ class Reports::JawpReport
 
     def build_code_assignment_rows(csv, base_row, activity, amount_total, amount_total_in_usd)
       if @is_budget
-        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_coding)
-        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_district_coding)
-        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_cost_category_coding)
+        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_budget)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_district_coding_adjusted)
+        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_budget_cost_categorization)
       else
-        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_coding)
-        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding)
-        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_cost_category_coding)
+        codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding_adjusted)
+        cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
       funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
       funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)

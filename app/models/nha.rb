@@ -1,7 +1,6 @@
 class Nha < Code
 end
 
-
 # == Schema Information
 #
 # Table name: codes

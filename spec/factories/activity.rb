@@ -6,7 +6,6 @@ Factory.define :activity, :class => Activity do |f|
   f.projects        { [Factory.create(:project), Factory.create(:project)] }
   f.provider        { Factory.create(:provider) }
   f.data_response   { Factory.create(:data_response) }
-  f.sub_activities  { [] }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|

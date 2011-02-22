@@ -1,7 +1,6 @@
 class Ngo < Organization
 end
 
-
 # == Schema Information
 #
 # Table name: organizations

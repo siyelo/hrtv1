@@ -83,8 +83,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :activities,
                 :member => {:approve => :put, :classifications => :get},
                 :active_scaffold => true do |activity|
-                activity.resource :code_assignments, :only => [:show, :update],
-                                  :member => {:copy_budget_to_spend => :put}
+                activity.resource :code_assignments,
+                  :only => [:show, :update],
+                  :member => {:copy_budget_to_spend => :put,
+                  :derive_classifications_from_sub_implementers => :put}
   end
   map.resources :classifications,
                 :member => {:popup_classification => :get},

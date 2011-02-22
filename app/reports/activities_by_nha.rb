@@ -87,7 +87,7 @@ class Reports::ActivitiesByNha
     end
 
     def build_code_assignment_rows(csv, activity, base_row, funding_source_ratio)
-      coding_with_parent_codes = get_coding_with_parent_codes(activity.spend_coding)
+      coding_with_parent_codes = get_coding_with_parent_codes(activity.coding_spend)
 
       coding_with_parent_codes.each do |ca_codes|
         ca        = ca_codes[0]

@@ -148,8 +148,6 @@ class CodeAssignment < ActiveRecord::Base
     end
 end
 
-
-
 # == Schema Information
 #
 # Table name: code_assignments

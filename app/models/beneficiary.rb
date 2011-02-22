@@ -5,10 +5,6 @@ class Beneficiary < Code
 
 end
 
-
-
-
-
 # == Schema Information
 #
 # Table name: codes

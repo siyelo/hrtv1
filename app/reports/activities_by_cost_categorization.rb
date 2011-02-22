@@ -44,8 +44,8 @@ class Reports::ActivitiesByCostCategorization
       row << "activity.budget"
       row << "activity.spend"
       row << "currency"
-      row << "activity.start"
-      row << "activity.end"
+      row << "activity.start_date"
+      row << "activity.end_date"
       row << "activity.provider"
       @codes.each{|code| row << "#{code.to_s_with_external_id}"}
 
@@ -55,9 +55,9 @@ class Reports::ActivitiesByCostCategorization
     def build_row(activity, project_name)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        code_assignments = activity.budget_cost_category_coding.map{|ca| ca.code_id}
+        code_assignments = activity.coding_budget_cost_categorization.map{|ca| ca.code_id}
       else
-        code_assignments = activity.spend_cost_category_coding.map{|ca| ca.code_id}
+        code_assignments = activity.coding_spend_cost_categorization.map{|ca| ca.code_id}
       end
       row = []
 
@@ -74,8 +74,8 @@ class Reports::ActivitiesByCostCategorization
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"
-      row << "#{activity.start}"
-      row << "#{activity.end}"
+      row << "#{activity.start_date}"
+      row << "#{activity.end_date}"
       row << provider_name(activity)
       @code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 

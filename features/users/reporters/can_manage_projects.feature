@@ -1,4 +1,5 @@
-Feature: In order to reduce costs
+Feature: Reporter can manage projects
+  In order to track information
   As a reporter
   I want to be able to manage my projects
 
@@ -22,7 +23,7 @@ Scenario Outline: Edit project dates, see feedback messages for start and end da
   And I press "Create"
   Then I should see "<message>"
   And I should see "<specific_message>"
-  
+
   Examples:
     | start_date | end_date   | message                              | specific_message                      |
     | 2010-01-01 | 2010-01-02 | Created Some Project                 | Created Some Project                  |
@@ -41,7 +42,7 @@ Scenario Outline: Edit project dates, see feedback messages for Total budget and
   And I press "Create"
   Then I should see "<message>"
   And I should see "<specific_message>"
-  
+
   Examples:
     | entire_budget  | budget_gor | message                              | specific_message                                                     |
     | 900            | 800        | Created Some Project                 | Created Some Project                                                 |

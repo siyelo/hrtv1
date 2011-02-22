@@ -1,8 +1,5 @@
-class Donor < Organization 
+class Donor < Organization
 end
-
-
-
 
 # == Schema Information
 #

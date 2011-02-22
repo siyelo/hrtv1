@@ -1,7 +1,6 @@
 class HsspStratObj < Code
 end
 
-
 # == Schema Information
 #
 # Table name: codes

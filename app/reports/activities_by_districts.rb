@@ -44,8 +44,8 @@ class Reports::ActivitiesByDistricts
       row << "activity.budget"
       row << "activity.spend"
       row << "currency"
-      row << "activity.start"
-      row << "activity.end"
+      row << "activity.start_date"
+      row << "activity.end_date"
       row << "activity.provider"
       @codes.each{|code| row << "#{code.short_display}"}
 
@@ -55,9 +55,9 @@ class Reports::ActivitiesByDistricts
     def build_row(activity, project_name)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        code_assignments = activity.budget_district_coding.map(&:code_id)
+        code_assignments = activity.budget_district_coding_adjusted.map(&:code_id)
       else
-        code_assignments = activity.spend_district_coding.map(&:code_id)
+        code_assignments = activity.spend_district_coding_adjusted.map(&:code_id)
       end
       row = []
 
@@ -74,8 +74,8 @@ class Reports::ActivitiesByDistricts
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"
-      row << "#{activity.start}"
-      row << "#{activity.end}"
+      row << "#{activity.start_date}"
+      row << "#{activity.end_date}"
       row << provider_name(activity)
       @code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 

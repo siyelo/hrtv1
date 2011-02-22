@@ -1,7 +1,7 @@
-Feature: NGO/donor can see incoming funding flows for their projects 
-  In order to ?
-  As a NGO/Donor
-  I want to be able to track incoming funding flows
+Feature: Reporter can manage funding sources
+  In order to track information
+  As a reporter
+  I want to be able to manage funding sources
 
 Background:
   Given a basic org + reporter profile, with data response, signed in
@@ -9,22 +9,22 @@ Background:
 @wip
 @reporter_funding_sources
 Scenario: Reporter can see current incoming flows (Funding Sources) for their organization
-  Given the following organizations 
+  Given the following organizations
     | name             |
     | WHO              |
     | UNAIDS           |
     | GoR              |
     | Gates Foundation |
-  Given the following reporters 
+  Given the following reporters
      | name         | organization |
      | who_user     | WHO          |
   Given a data request with title "Req1" from "GoR"
-  Given a data response to "Req1" by "WHO"  
-  Given the following projects 
+  Given a data response to "Req1" by "WHO"
+  Given the following projects
      | name                 | request | organization |
      | TB Treatment Project | Req1    | WHO          |
      | Some other Project   | Req1    | WHO          |
-  Given the following funding flows 
+  Given the following funding flows
      | to     | project              | from             | budget  |
      | WHO    | TB Treatment Project | UNAIDS           | 1000.00 |
      | GoR    | Some other Project   | Gates Foundation | 2000.00 |

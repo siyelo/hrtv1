@@ -56,11 +56,11 @@ module ActivitiesHelper
 
   # Active Scaffold fields override
   def start_form_column(column, options)
-    text_field :record, :start, options.merge({:class => "date_picker"})
+    text_field :record, :start_date, options.merge({:class => "date_picker"})
   end
 
   def end_form_column(column, options)
-    text_field :record, :end, options.merge({:class => "date_picker"})
+    text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
 
   def popup_classify_link_for activity

@@ -4,7 +4,7 @@ Factory.define :organization, :class => Organization do |f|
   f.raw_type        { "" }
 end
 
-Factory.define :provider, :parent => :organization do |f|
+Factory.define :provider, :class => Organization, :parent => :organization do |f|
 end
 
 Factory.define :donor, :class => Donor, :parent => :organization do |f|

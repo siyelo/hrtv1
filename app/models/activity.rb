@@ -267,26 +267,45 @@ class Activity < ActiveRecord::Base
   # CodingBudget -> CodingSpend
   # CodingBudgetDistrict -> CodingSpendDistrict
   # CodingBudgetCostCategorization -> CodingSpendCostCategorization
-  def copy_budget_codings_to_spend(types = BUDGET_CODING_CLASSES)
-    types.each do |budget_type|
-      spend_type = budget_type.gsub(/Budget/, "Spend")
-      klass      = spend_type.constantize
-      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, spend_type])
+  def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
+    coding_types.each do |budget_coding_type|
+      spend_coding_type = budget_coding_type.gsub(/Budget/, "Spend")
+      klass             = spend_coding_type.constantize
+
+      delete_existing_code_assignments_by_type(spend_coding_type)
 
       # copy across the ratio, not just the amount
-      code_assignments.with_type(budget_type).each do |ca|
-        # TODO: move to code_assignment model as a new method
+      code_assignments.with_type(budget_coding_type).each do |ca|
         if spend && spend > 0
-          spend_ca                = ca.clone
-          spend_ca.type           = spend_type
-          spend_ca.amount         = spend * ca.amount / budget if ca.amount && budget && budget > 0
-          spend_ca.percentage     = ca.percentage
-          self.code_assignments << spend_ca
+          amount = (ca.amount && budget && budget > 0) ?  spend * ca.amount / budget : nil
+          spend_ca = fake_ca(klass, ca.code, amount, ca.percentage)
+          spend_ca.save!
         end
       end
+
       self.update_classified_amount_cache(klass)
     end
+
     true
+  end
+
+  def derive_classifications_from_sub_implementers!(coding_type)
+    klass = coding_type.constantize
+    location_amounts = {}
+
+    delete_existing_code_assignments_by_type(coding_type)
+
+    sub_activity_district_code_assignments(coding_type).each do |ca|
+      if locations.include?(ca.code)
+        location_amounts[ca.code] = 0 unless location_amounts[ca.code]
+        location_amounts[ca.code] += ca.amount
+      end
+    end
+
+    # create new district assignments
+    location_amounts.each{|location, amount| fake_ca(klass, location, amount).save!}
+
+    self.update_classified_amount_cache(klass)
   end
 
   def coding_progress
@@ -315,6 +334,10 @@ class Activity < ActiveRecord::Base
 
   private
 
+    def delete_existing_code_assignments_by_type(coding_type)
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
+    end
+
     def update_counter_cache
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
@@ -342,7 +365,7 @@ class Activity < ActiveRecord::Base
     end
 
     def district_codings_from_sub_activities(klass)
-      code_assignments = sub_activity_distrit_code_assignments(klass)
+      code_assignments = sub_activity_district_code_assignments(klass.name)
 
       location_amounts = {}
       code_assignments.each do |ca|
@@ -353,8 +376,8 @@ class Activity < ActiveRecord::Base
       location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
     end
 
-    def sub_activity_distrit_code_assignments(klass)
-      case klass.name
+    def sub_activity_district_code_assignments(coding_type)
+      case coding_type
       when 'CodingBudgetDistrict'
         sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
       when 'CodingSpendDistrict'
@@ -391,9 +414,10 @@ class Activity < ActiveRecord::Base
       self.spend_in_usd = (self.spend || 0) * rate
     end
 
-    def fake_ca(klass, code, amount)
+    def fake_ca(klass, code, amount, percentage = nil)
       klass.new(:activity => self, :code => code,
-                :cached_amount => amount, :amount => amount)
+                :amount => amount, :percentage => percentage,
+                :cached_amount => amount)
     end
 end
 

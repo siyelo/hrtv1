@@ -1,6 +1,7 @@
-Feature: In order to reduce costs
+Feature: Reporter can manage data response
+  In order to track information
   As a reporter
-  I want to be able to manage my data response settings
+  I want to be able to manage data response
 
 Background:
   Given a basic org + reporter profile, with data response, signed in

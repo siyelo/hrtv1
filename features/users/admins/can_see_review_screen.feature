@@ -1,6 +1,6 @@
-Feature: NGO/donor can view review page
+Feature: Admin can see review page
   In order to view all my data
-  As a NGO/Donor
+  As an admin
   I want to be able to see review screen
 
 Background:

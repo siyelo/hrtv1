@@ -1,6 +1,6 @@
-Feature: NGO can see dashboard
-  In order to ?
-  As a NGO
+Feature: Reporter can see dashboard
+  In order to see latest news
+  As a reporter
   I want to be able to see a dashboard for relevant activities
 
 Scenario: "See data requests"

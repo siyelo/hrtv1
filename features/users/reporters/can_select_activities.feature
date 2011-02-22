@@ -1,6 +1,6 @@
-Feature: NGO/donor can enter activities for each project 
+Feature: Reporter can select activities
   In order to increase the quality of information reported
-  As a NGO/Donor
+  As a reporter
   I want to be able to break down projects into activities
 
 Background:

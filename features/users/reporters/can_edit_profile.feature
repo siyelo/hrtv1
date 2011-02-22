@@ -1,6 +1,6 @@
-Feature: User can edit profile
+Feature: Reporter can edit profile
   In order to change my details
-  As a user
+  As a reporter
   I want to be able to change my profile
 
 @reporter_profile

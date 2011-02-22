@@ -1,6 +1,6 @@
 Feature: Policy Maker can view review responses
   In order to view all my data
-  As a NGO/Donor
+  As a policy maker
   I want to be able to see review screen
 
 Background:

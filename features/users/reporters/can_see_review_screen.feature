@@ -1,6 +1,6 @@
-Feature: NGO/donor can view review page
+Feature: Reporter can view review page
   In order to view all my data
-  As a NGO/Donor
+  As a reporter
   I want to be able to see review screen
 
 Background:

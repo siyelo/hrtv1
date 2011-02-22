@@ -1,7 +1,7 @@
-Feature: NGO/donor can see activity breakdowns for each project 
+Feature: Reporter can see activity breakdowns for each project
   In order to increase the quality of information reported
-  As a NGO/Donor
-  I want to be able to break down activities 
+  As a reporter
+  I want to be able to break down activities
 
 Background:
   Given a basic org + reporter profile, with data response, signed in

@@ -1,6 +1,6 @@
-Feature: NGO/donor can manage outgoing funding flows for their projects
-  In order to ?
-  As a NGO/Donor
+Feature: Reporter can manage implementer flows
+  In order to track information
+  As a reporter
   I want to be able to track outgoing funding flows
 
 #BUG This test seems valid, but currently failing - expect its to do with incorrect scoping

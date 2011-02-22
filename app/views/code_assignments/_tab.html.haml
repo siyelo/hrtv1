@@ -5,7 +5,7 @@
       .error
         = @error_message
 
-  - if coding_type =~ /Budget/
+  - if Activity::BUDGET_CODING_CLASSES.include?(coding_type)
     %p= link_to "Click here to copy the budget classifications below to the expenditure #{friendly_name_for_coding_copy(coding_type)} tab", copy_budget_to_spend_activity_code_assignments_path(activity, :coding_type => coding_type), :method => :put, :confirm => "This will overwrite ALL the expenditure codes for the #{friendly_name_for_coding_copy(coding_type)} tab. This operation cannot be undone. Are you sure?"
 
   - form_for activity, :url => activity_code_assignments_path(activity, :coding_type => coding_type), :method => :put, :html => {:id => ''} do |form|

@@ -120,11 +120,11 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_district_coding_adjusted
-    district_coding(CodingBudgetDistrict, coding_budget_district, budget)
+    district_coding_adjusted(CodingBudgetDistrict, coding_budget_district, budget)
   end
 
   def spend_district_coding_adjusted
-    district_coding(CodingSpendDistrict, coding_spend_district, spend)
+    district_coding_adjusted(CodingSpendDistrict, coding_spend_district, spend)
   end
 
   def budget_stratprog_coding
@@ -149,15 +149,18 @@ class Activity < ActiveRecord::Base
     provider
   end
 
+  # TODO: spec
   def currency
     self.project.nil? ? nil : self.project.currency
   end
 
+  # TODO: spec
   # helper until we enforce this in the model association!
   def project
     self.projects.first unless projects.empty?
   end
 
+  # TODO: spec
   def organization_name
     organization.name
   end
@@ -226,18 +229,22 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  # TODO: spec
   def budget_coding_sum_in_usd
     coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
   end
 
+  # TODO: spec
   def budget_district_coding_sum_in_usd(district)
     coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
   end
 
+  # TODO: spec
   def spend_coding_sum_in_usd
     coding_spend.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
   end
 
+  # TODO: spec
   def spend_district_coding_sum_in_usd(district)
     coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
   end
@@ -322,8 +329,7 @@ class Activity < ActiveRecord::Base
       self.send("#{type}_amount=", coding_tree.total)
     end
 
-    def district_coding(klass, assignments, amount)
-      #TODO we will want to be able to override / check against the derived district codings
+    def district_coding_adjusted(klass, assignments, amount)
       if assignments.present?
         assignments
       elsif sub_activities.present?

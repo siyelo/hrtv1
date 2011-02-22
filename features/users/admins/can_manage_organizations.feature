@@ -1,4 +1,4 @@
-Feature: Manage organizations
+Feature: Admin can manage organizations
   In order to have good organizations in the system
   As an admin
   I want to be able to manage organizations

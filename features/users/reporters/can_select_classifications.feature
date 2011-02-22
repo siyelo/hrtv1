@@ -1,6 +1,6 @@
-Feature: NGO/donor can enter a classifications for each activity 
+Feature: Reporter can enter a classifications for each activity
   In order to increase the quality of information reported
-  As a NGO/Donor
+  As a reporter
   I want to be able to see classifications for activities
 
 Background:

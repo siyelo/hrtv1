@@ -23,8 +23,8 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
 
     @charts_loaded  = @code_spent_values && @code_budget_values
 
-    @spent_assignments_sum    = @activity.spend_coding_sum_in_usd
-    @budget_assignments_sum   = @activity.budget_coding_sum_in_usd
+    @spent_assignments_sum    = @activity.coding_budget_sum_in_usd
+    @budget_assignments_sum   = @activity.coding_budget_sum_in_usd
 
     unless @charts_loaded
       flash.now[:warning] = "Sorry, the Organization hasn't yet properly classified this Activity yet, so some of the charts may be missing!"

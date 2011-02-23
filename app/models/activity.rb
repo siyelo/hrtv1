@@ -69,6 +69,7 @@ class Activity < ActiveRecord::Base
 
   ### Delegates
   delegate :organization, :to => :data_response
+  delegate :currency, :to => :project, :allow_nil => true
 
   ### Named scopes
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
@@ -143,24 +144,16 @@ class Activity < ActiveRecord::Base
     virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
   end
 
-  # TODO: remove
-  #convenience
+  # convenience
   def implementer
     provider
   end
 
-  # TODO: spec
-  def currency
-    self.project.nil? ? nil : self.project.currency
-  end
-
-  # TODO: spec
   # helper until we enforce this in the model association!
   def project
-    self.projects.first unless projects.empty?
+    projects.first
   end
 
-  # TODO: spec
   def organization_name
     organization.name
   end
@@ -209,10 +202,9 @@ class Activity < ActiveRecord::Base
     budget_classified? && spend_classified?
   end
 
-  # Called from migrations
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
-    self.save(false) # save the activity with new cached amounts event if it's approved
+    self.save(false) # save the activity even if it's approved
   end
 
   # Updates classified amount caches if budget or spend have been changed
@@ -229,23 +221,19 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  # TODO: spec
-  def budget_coding_sum_in_usd
+  def coding_budget_sum_in_usd
     coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
   end
 
-  # TODO: spec
-  def budget_district_coding_sum_in_usd(district)
-    coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
-  end
-
-  # TODO: spec
-  def spend_coding_sum_in_usd
+  def coding_spend_sum_in_usd
     coding_spend.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
   end
 
-  # TODO: spec
-  def spend_district_coding_sum_in_usd(district)
+  def coding_budget_district_sum_in_usd(district)
+    coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
+  end
+
+  def coding_spend_district_sum_in_usd(district)
     coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
   end
 

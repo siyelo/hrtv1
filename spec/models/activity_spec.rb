@@ -52,6 +52,111 @@ describe Activity do
     it { should allow_mass_assignment_of(:spend_q4) }
   end
 
+  describe "currency" do
+    it "returns nil" do
+      activity = Factory.create(:activity, :projects => [])
+      activity.currency.should be_nil
+    end
+
+    it "returns project current when activity has currency" do
+      activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => 'USD')])
+      activity.currency.should == "USD"
+    end
+  end
+
+  describe "project" do
+    it "returns nil when no projects for activity" do
+      activity = Factory.create(:activity, :projects => [])
+
+      activity.project.should be_nil
+    end
+
+    it "returns first project when activity has projects" do
+      project1 = Factory.create(:project)
+      project2 = Factory.create(:project)
+      activity = Factory.create(:activity, :projects => [project1, project2])
+
+      activity.project.should == project1
+    end
+  end
+
+  describe "organization_name" do
+    it "returns organization nane" do
+      data_response = Factory.create(:data_response, :organization => Factory.create(:organization, :name => "Organization1"))
+      activity = Factory.create(:activity, :data_response => data_response)
+      activity.organization_name.should == "Organization1"
+    end
+  end
+
+  describe "coding_budget_sum_in_usd" do
+    it "returns coding_budget_sum_in_usd" do
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
+      code1 = Factory.create(:code)
+      code2 = Factory.create(:code)
+      Mtef.stub(:roots) { [code1, code2]}
+
+      Factory.create(:coding_budget, :activity => activity, :code => code1,
+                     :amount => 6000, :cached_amount => 6000)
+      Factory.create(:coding_budget, :activity => activity, :code => code2,
+                     :amount => 18000, :cached_amount => 18000)
+
+      activity.coding_budget_sum_in_usd.should == 40
+    end
+  end
+
+  describe "coding_spend_sum_in_usd" do
+    it "returns coding_spend_sum_in_usd" do
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
+      code1 = Factory.create(:code)
+      code2 = Factory.create(:code)
+      Mtef.stub(:roots) { [code1, code2]}
+
+      Factory.create(:coding_spend, :activity => activity, :code => code1,
+                     :amount => 6000, :cached_amount => 6000)
+      Factory.create(:coding_spend, :activity => activity, :code => code2,
+                     :amount => 18000, :cached_amount => 18000)
+
+      activity.coding_spend_sum_in_usd.should == 40
+    end
+  end
+
+  describe "coding_budget_district_sum_in_usd" do
+    it "returns coding_budget_district_sum_in_usd" do
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
+      code1 = Factory.create(:code)
+      code2 = Factory.create(:code)
+
+      Factory.create(:coding_budget_district, :activity => activity, :code => code1,
+                     :amount => 6000, :cached_amount => 6000)
+      Factory.create(:coding_budget_district, :activity => activity, :code => code2,
+                     :amount => 18000, :cached_amount => 18000)
+
+      activity.coding_budget_district_sum_in_usd(code1).should == 10
+      activity.coding_budget_district_sum_in_usd(code2).should == 30
+    end
+  end
+
+  describe "coding_spend_district_sum_in_usd" do
+    it "returns coding_spend_district_sum_in_usd" do
+      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
+      code1 = Factory.create(:code)
+      code2 = Factory.create(:code)
+
+      Factory.create(:coding_spend_district, :activity => activity, :code => code1,
+                     :amount => 6000, :cached_amount => 6000)
+      Factory.create(:coding_spend_district, :activity => activity, :code => code2,
+                     :amount => 18000, :cached_amount => 18000)
+
+      activity.coding_spend_district_sum_in_usd(code1).should == 10
+      activity.coding_spend_district_sum_in_usd(code2).should == 30
+    end
+  end
+
+
   describe "districts" do
     it "returns valid districts" do
       activity = Factory.create(:activity)

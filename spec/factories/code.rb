@@ -8,5 +8,8 @@ end
 Factory.define :mtef_code, :class => Mtef, :parent => :code do |f|
 end
 
+Factory.define :cost_category_code, :class => CostCategory, :parent => :code do |f|
+end
+
 Factory.define :location, :class => Location, :parent => :code do |f|
 end

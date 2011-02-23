@@ -53,7 +53,10 @@ describe CodeAssignment do
 
   describe "keeping USD cached amounts in-sync" do
     before :each do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
+      Factory.create(:currency, :name => "dollar", :symbol => "USD",
+                     :toRWF => "500", :toUSD => "1")
+      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
+                     :toRWF => "1", :toUSD => "0.002")
 
       ### at time of writing, we need the long handed way of creating these objects
       # since the ca factory creates a project whose DR may not == ca.activity.dr
@@ -70,17 +73,13 @@ describe CodeAssignment do
     end
 
     it "should update cached_amount_in_usd on creation" do
-      if ActiveRecord::Base.connection.adapter_name == "SQLite"
-        @ca.cached_amount_in_usd.should == 0.206645463675929 # sqlite precision!
-      else
-        @ca.cached_amount_in_usd.should == 0.2066454636759290257783729494476063499 # pg precision!
-      end
+      @ca.cached_amount_in_usd.should == 0.2469 # sqlite precision!
     end
 
     it "should update cached_amount_in_usd on update" do
       @ca.cached_amount = 456.78
       @ca.save
-      @ca.cached_amount_in_usd.should == 0.76461332440575828590559089387345183076
+      @ca.cached_amount_in_usd.should == 0.91356
     end
 
     it "should set cached amount in USD to 0 if bad data means currency is nil" do

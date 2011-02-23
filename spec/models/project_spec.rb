@@ -193,9 +193,10 @@ describe Project do
 
   describe 'Currency cache update' do
     before :each do
-      Money.add_rate("CHF", "USD", 0.5)
-      Money.add_rate("EUR", "USD", 1.5)
-      @data_response = Factory(:data_response, :currency => 'CHF')
+      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.5")
+      Factory.create(:currency, :name => "eur", :symbol => "EUR", :toUSD => "1.5")
+
+      @data_response = Factory(:data_response, :currency => 'RWF')
       @project       = Factory(:project,
                                 :data_response => @data_response,
                                 :currency => nil)
@@ -205,7 +206,7 @@ describe Project do
     end
 
     it "should return the Data Response currency if no currency overridden" do
-      @project.currency.should == 'CHF'
+      @project.currency.should == 'RWF'
       @project.currency = 'EUR'
       @project.save
       @project.currency.should == 'EUR'

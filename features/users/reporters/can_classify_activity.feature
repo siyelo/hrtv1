@@ -4,98 +4,135 @@ Feature: Reporter can enter a code breakdown for each activity
   I want to be able to break down activities into individual codes
 
 Background:
-  Given a basic org + reporter profile, with data response, signed in
-  And a mtef_code exists with short_display: "Code1"
+  Given an organization exists with name: "Organization1"
+  And a data_request exists with title: "Request"
+  And an organization exists with name: "Organization2"
+  And a data_response exists with data_request: the data_request, organization: the organization
+  And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+  And a project exists with name: "Project", data_response: the data_response
+  And an activity exists with name: "Activity", data_response: the data_response
+  And the project is one of the activity's projects
+  And I am signed in as "reporter"
+
+    #
+    #               / code111
+    #      / code11 - code112
+    # code1
+    #      \ code12 - code121
+    #               \ code122
+    #
+    #               / code211
+    #      / code21 - code212
+    # code2
+    #      \ code22 - code221
+    #               \ code222
+
+
+  # level 1
+  And a mtef_code "mtef1" exists with short_display: "mtef1"
+  And a mtef_code "mtef2" exists with short_display: "mtef2"
+
+  # level 2
+  And a mtef_code "mtef11" exists with short_display: "mtef11", parent: mtef_code "mtef1"
+  And a mtef_code "mtef12" exists with short_display: "mtef12", parent: mtef_code "mtef1"
+  And a mtef_code "mtef21" exists with short_display: "mtef21", parent: mtef_code "mtef2"
+  And a mtef_code "mtef22" exists with short_display: "mtef22", parent: mtef_code "mtef2"
+
+  # level 3
+  And a mtef_code "mtef111" exists with short_display: "mtef111", parent: mtef_code "mtef11"
+  And a mtef_code "mtef112" exists with short_display: "mtef112", parent: mtef_code "mtef11"
+  And a mtef_code "mtef121" exists with short_display: "mtef121", parent: mtef_code "mtef12"
+  And a mtef_code "mtef122" exists with short_display: "mtef122", parent: mtef_code "mtef12"
+  And a mtef_code "mtef211" exists with short_display: "mtef111", parent: mtef_code "mtef21"
+  And a mtef_code "mtef212" exists with short_display: "mtef112", parent: mtef_code "mtef21"
+  And a mtef_code "mtef221" exists with short_display: "mtef121", parent: mtef_code "mtef22"
+  And a mtef_code "mtef222" exists with short_display: "mtef122", parent: mtef_code "mtef22"
+
+  # level 1
+  And a cost_category_code exists with short_display: "cost_category1"
 
 @reporters @classify_activity
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
-  Then I should see "TB Drugs procurement"
+  Then I should see "Activity"
   And I should see "Coding" within the budget coding tab
   And I should see "District" within the budget districts tab
   And I should see "Categorization" within the budget cost categorization tab
   And I should see "Coding" within the expenditure coding tab
   And I should see "District" within the expenditure districts tab
   And I should see "Cost Categorization" within the expenditure cost categorization tab
-  And I should see "Code1"
+  And I should see "mtef1"
 
 @reporters @classify_activity
 Scenario: See both budget for an activity classification
   When I go to the activities page
   And I follow "Classify"
-  Then I should be on the budget classification page for "TB Drugs procurement"
+  Then I should be on the budget classification page for "Activity"
   And I should see "Coding"
   And I should see the "Coding" tab is active
 
 @reporters @classify_activity
 Scenario: enter budget for an activity (don't see flash errors)
-  Given I am on the budget classification page for "TB Drugs procurement"
-  When I fill in "Code1" with "5000000.00"
+  Given I am on the budget classification page for "Activity"
+  When I fill in "mtef1" with "5000000.00"
   And I press "Save"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
-  And the "Code1" field should contain "5,000,000.00"
+  And I should be on the budget classification page for "Activity"
+  And the "mtef1" field should contain "5,000,000.00"
   And I should not see "We're sorry, when we added up"
 
 @reporters @classify_activity
 Scenario: enter budget for an activity (see flash errors)
-  Given I am on the budget classification page for "TB Drugs procurement"
-  When I fill in "Code1" with "1234567.00"
+  Given I am on the budget classification page for "Activity"
+  When I fill in "mtef1" with "1234567.00"
   And I press "Save"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
-  And the "Code1" field should contain "1,234,567.00"
+  And I should be on the budget classification page for "Activity"
+  And the "mtef1" field should contain "1,234,567.00"
   And I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
   And I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .flashes .error"
 
 @reporters @classify_activity @javascript
 Scenario: enter expenditure for an activity
-  Given I am on the budget classification page for "TB Drugs procurement"
+  Given I am on the budget classification page for "Activity"
   And I follow "Coding" within the expenditure coding tab
-  When I fill in "Code1" with "1234567.00" within ".tab4"
+  When I fill in "mtef1" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
-  Then wait a few moments
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "Code1" is visible
-  And the "Code1" field within ".tab4" should contain "1,234,567.00"
+  And I wait until "mtef1" is visible
+  And the "mtef1" field within ".tab4" should contain "1,234,567.00"
 
 @reporters @classify_activity
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed.
-  Given I am on the budget classification page for "TB Drugs procurement"
-  When I fill in "Code1" with "1234567.00"
+  Given I am on the budget classification page for "Activity"
+  When I fill in "mtef1" with "1234567.00"
   And I press "Save"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
-  And the "Code1" field should contain "1,234,567.00"
+  And I should be on the budget classification page for "Activity"
+  And the "mtef1" field should contain "1,234,567.00"
   And I press "Save"
-  Then the "Code1" field should contain "1,234,567.00"
+  Then the "mtef1" field should contain "1,234,567.00"
 
-#TODO: FIX THIS
 @reporters @classify_activity
-@run
 Scenario Outline: enter percentage for an activity budget classification
-  Given I am on the budget classification page for "TB Drugs procurement"
-
-  # $page.find('.tab1 ul.activity_tree li[1] div input[4]').text
-
-  When I fill in ".tab1 ul.activity_tree li[1] div input[4]" with "<amount>"
+  Given I am on the budget classification page for "Activity"
+  When I fill in "mtef1" percentage field with "<amount>"
   And I press "Save"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
-  And the percentage for "Code1" field should equal "<amount2>"
-  And the ".tab1 ul.activity_tree li[1] div input[4]" field should contain "<amount>"
+  And I should be on the budget classification page for "Activity"
+  And the "mtef1" percentage field should contain "<amount2>"
   Examples:
     | amount | amount2 |
     | 25     | 25.0    |
-    #| 50.1   | 50.1    |
-    #| 95.6   | 95.6    |
+    | 50.1   | 50.1    |
+    | 95.6   | 95.6    |
 
 @reporters @classify_activity
 Scenario: Cannot approve an Activity
@@ -105,50 +142,53 @@ Scenario: Cannot approve an Activity
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by district for expenditure by district
-  Given location "Burera" for activity "TB Drugs procurement"
-  And I am on the budget classification page for "TB Drugs procurement"
+  Given a location exists with short_display: "Location1"
+  And the location is one of the activity's locations
+  And I am on the budget classification page for "Activity"
   And I follow "District" within the budget districts tab
-  And I fill in "Burera" with "1234567.00" within ".tab2"
+  And I fill in "Location1" with "1234567.00" within ".tab2"
   When I press "Save" within ".tab2"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I should be on the budget classification page for "Activity"
   When I follow "District" within the budget districts tab
-  Then the "Burera" field within ".tab2" should contain "1,234,567.00"
+  Then the "Location1" field within ".tab2" should contain "1,234,567.00"
   When I confirm the popup dialog
   Then wait a few moments
   And I follow "Click here to copy the budget classifications below to the expenditure District tab"
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "Activity"
   And I follow "District" within the expenditure districts tab
-  And I wait until "Burera" is visible
-  Then the "Burera" field within ".tab5" should contain "1,481,480.40"
+  And I wait until "Location1" is visible
+  Then the "Location1" field within ".tab5" should contain "1,481,480.40"
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by cost categorization for expenditure by cost categorization
-  And I am on the budget classification page for "TB Drugs procurement"
+  Given I am on the budget classification page for "Activity"
   And I follow "Cost Categorization" within the budget cost categorization tab
-  And I fill in "Drugs, Commodities & Consumables" with "1234567.00" within ".tab3"
+  And I fill in "cost_category1" with "1234567.00" within ".tab3"
   When I press "Save" within ".tab3"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I should be on the budget classification page for "Activity"
   When I follow "Cost Categorization" within the budget cost categorization tab
-  And the "Drugs, Commodities & Consumables" field within ".tab3" should contain "1,234,567.00"
+  And the "cost_category1" field within ".tab3" should contain "1,234,567.00"
   And I confirm the popup dialog
   And I follow "Click here to copy the budget classifications below to the expenditure Cost Category tab"
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "Activity"
   And I follow "Cost Categorization" within the expenditure cost categorization tab
-  And I wait until "Drugs, Commodities \& Consumables" is visible
-  Then the "Drugs, Commodities & Consumables" field within ".tab6" should contain "1,481,480.40"
+  And I wait until "cost_category1" is visible
+  Then the "cost_category1" field within ".tab6" should contain "1,481,480.40"
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
-  Given I am on the budget classification page for "TB Drugs procurement"
+  Given I am on the budget classification page for "Activity"
+
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "10" within ".tab1 ul.activity_tree > li:nth-child(1)"
   And I fill in "%" with "5" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)"
   And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+
   And I click element ".tab1 ul.activity_tree > li:nth-child(2) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "10" within ".tab1 ul.activity_tree > li:nth-child(2)"
@@ -156,9 +196,9 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I press "Save"
   Then wait a few moments
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I should be on the budget classification page for "Activity"
+
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
@@ -167,9 +207,9 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   When I confirm the popup dialog
   And I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "Activity"
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
+  And I wait until "mtef1" is visible
   Then the cached field within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
@@ -179,49 +219,49 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
-  Given I am on the budget classification page for "TB Drugs procurement"
+  Given I am on the budget classification page for "Activity"
+
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)"
   And I press "Save"
   Then wait a few moments
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "TB Drugs procurement"
+  And I should be on the budget classification page for "Activity"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
   When I confirm the popup dialog
-  When I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
+  And I go to the budget classification page for "Activity"
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "Providing Technical Assistance, Improving Planning, Building Capacity, Strengthening Systems" is visible
+  And I wait until "mtef1" is visible
   Then the cached field within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
+
   #### change coding and see if budget codings are changed
   When I follow "Coding" within the budget coding tab
   And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I press "Save"
   Then wait a few moments
-  Then wait a few moments
-  Then wait a few moments
   Then I should see "We're sorry, when we added up your Budget Coding classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "Activity"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
+
   ### change  budget and spend for activity
   When I follow "Activities"
   And I follow "Edit"
   And I fill in "Total Budget GOR FY 10-11" with "1000"
   And I fill in "Total Spent GOR FY 09-10" with "2000"
   And I press "Update"
-  And I go to the budget classification page for "TB Drugs procurement"
+  And I go to the budget classification page for "Activity"
   Then the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"

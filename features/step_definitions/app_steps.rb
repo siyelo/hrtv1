@@ -288,14 +288,23 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |fi
   end
 end
 
-# a bit brittle
-When /^I fill in the percentage for "Code1" with "([^"]*)"$/ do |amount|
-  steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
+def field_id(code_name)
+  code = Code.find_by_short_display(code_name)
+  return "activity_updates_#{code.id}_percentage"
 end
 
-Then /^the percentage for "Code1" field should equal "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_updates_1_percentage" field should equal "#{amount}"}
+When /^I fill in "([^"]*)" percentage field with "([^"]*)"$/ do |code_name, value|
+  steps %Q{
+    When I fill in "#{field_id(code_name)}" with "#{value}"
+  }
 end
+
+Then /^the "([^"]*)" percentage field should contain "([^"]*)"$/ do |code_name, value|
+  steps %Q{
+    And the "#{field_id(code_name)}" field should contain "#{value}"
+  }
+end
+
 
 
 # band aid fix

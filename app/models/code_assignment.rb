@@ -1,6 +1,5 @@
 class CodeAssignment < ActiveRecord::Base
   include NumberHelper
-  include MoneyHelper
 
   ### Associations
   belongs_to :activity

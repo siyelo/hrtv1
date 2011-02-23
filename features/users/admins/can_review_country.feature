@@ -4,8 +4,8 @@ Feature: Admin can review country
   I want to be able to see country review screen
 
 Background:
-  Given a mtef_code exists with short_display: "Code A"
-  And currencies exists in database
+  Given currencies exists in database
+  And a mtef_code exists with short_display: "Code A"
   And a mtef_code exists with short_display: "Code B"
   And an organization exists with name: "GoR"
   And a data_request exists with title: "Req1", organization: the organization

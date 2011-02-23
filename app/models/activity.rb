@@ -26,9 +26,8 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include ActAsDataElement
-  include BudgetSpendHelpers #TODO: deprecate with Money methods
+  include BudgetSpendHelpers
   acts_as_commentable
-  include MoneyHelper
   configure_act_as_data_element
 
   ### Attributes

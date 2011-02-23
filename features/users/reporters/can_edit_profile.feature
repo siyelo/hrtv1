@@ -3,7 +3,7 @@ Feature: Reporter can edit profile
   As a reporter
   I want to be able to change my profile
 
-@reporter_profile
+@reporters @profile
 Scenario: User can change credentials and login again
   Given a reporter exists with username: "Frank"
   When I go to the home page
@@ -27,7 +27,7 @@ Scenario: User can change credentials and login again
   And I press "Sign in"
   Then I should see "Successfully signed in."
 
-@reporter_profile
+@reporters @profile
 Scenario: User can change name and email and login again without changing the password
   Given a reporter exists with username: "Frank"
   When I go to the home page

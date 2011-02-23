@@ -147,4 +147,7 @@ module ApplicationHelper
     var.nil? ? "undefined" : var
   end
 
+  def usd_to_rwf
+    Currency.find_by_symbol("USD").try(:toRWF) || 0
+  end
 end

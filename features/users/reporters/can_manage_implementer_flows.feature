@@ -9,7 +9,7 @@ Scenario: List current outgoing flows
 
 Scenario: Create outgoing flow
 
-@wip
+@wip @reporters @implementers
 Scenario: Other organization creates a Funding Source, we see it under our Providers list
   Given the following organizations
     | name   |
@@ -35,6 +35,7 @@ Scenario: Other organization creates a Funding Source, we see it under our Provi
   And I should see "UNDP"
   And I should see "1000.00"
 
+@reporters @implementers
 Scenario: Creates an implementer funding flow
   Given an organization exists with name: "UNAIDS"
   And a data_request exists with title: "Req1", organization: the organization

@@ -90,7 +90,7 @@ describe Activity do
 
   describe "coding_budget_sum_in_usd" do
     it "returns coding_budget_sum_in_usd" do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -101,13 +101,13 @@ describe Activity do
       Factory.create(:coding_budget, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
-      activity.coding_budget_sum_in_usd.should == 40
+      activity.coding_budget_sum_in_usd.should == 48
     end
   end
 
   describe "coding_spend_sum_in_usd" do
     it "returns coding_spend_sum_in_usd" do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -118,13 +118,13 @@ describe Activity do
       Factory.create(:coding_spend, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
-      activity.coding_spend_sum_in_usd.should == 40
+      activity.coding_spend_sum_in_usd.should == 48
     end
   end
 
   describe "coding_budget_district_sum_in_usd" do
     it "returns coding_budget_district_sum_in_usd" do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -134,14 +134,14 @@ describe Activity do
       Factory.create(:coding_budget_district, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
-      activity.coding_budget_district_sum_in_usd(code1).should == 10
-      activity.coding_budget_district_sum_in_usd(code2).should == 30
+      activity.coding_budget_district_sum_in_usd(code1).should == 12
+      activity.coding_budget_district_sum_in_usd(code2).should == 36
     end
   end
 
   describe "coding_spend_district_sum_in_usd" do
     it "returns coding_spend_district_sum_in_usd" do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("600.000"))
+      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -151,8 +151,8 @@ describe Activity do
       Factory.create(:coding_spend_district, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
-      activity.coding_spend_district_sum_in_usd(code1).should == 10
-      activity.coding_spend_district_sum_in_usd(code2).should == 30
+      activity.coding_spend_district_sum_in_usd(code1).should == 12
+      activity.coding_spend_district_sum_in_usd(code2).should == 36
     end
   end
 
@@ -976,7 +976,8 @@ describe Activity do
 
   describe "keeping Money amounts in-sync" do
     before :each do
-      Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
+      Factory.create(:currency, :name => "dollar", :symbol => "USD", :toUSD => "1")
+      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF", :toUSD => "0.002")
       @dr = Factory(:data_response, :currency => 'USD')
       @a        = Factory(:activity, :data_response => @dr,
                           :projects => [Factory(:project,:data_response => @dr)])
@@ -1003,7 +1004,7 @@ describe Activity do
       @a.reload
       @a.spend = 789.10
       @a.save
-      @a.spend_in_usd.should ==  789.10 * (1/597.400)
+      @a.spend_in_usd.should == 1.5782
     end
 
     it "should update spend_in_USD after currency change with a big number" do
@@ -1011,9 +1012,9 @@ describe Activity do
       @p.currency = 'RWF'
       @p.save
       @a.reload
-      @a.spend = 198402000.0
+      @a.spend = 7893.10
       @a.save
-      @a.spend_in_usd.should == 332109.139604954804151322397053900324284
+      @a.spend_in_usd.should == 15.7862
     end
 
     it "should update new_budget on creation" do
@@ -1033,7 +1034,7 @@ describe Activity do
       @a.reload
       @a.budget = 789.10
       @a.save
-      @a.budget_in_usd.should ==  789.10 * (1/597.400)
+      @a.budget_in_usd.should ==  789.10 * 0.002
     end
 
     it "should set cached amounts in USD to 0 if bad data means currency is nil" do

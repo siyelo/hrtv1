@@ -1,10 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Currency do
-  ONE_HUNDRED_BILLION_DOLLARS= 100000000000.00
+  ONE_HUNDRED_BILLION_DOLLARS = 100000000000.00
   before :each do
-    Money.add_rate("USD", "RWF", BigDecimal("597.400"))
-    Money.add_rate("RWF", "USD", BigDecimal("1") / BigDecimal("597.400"))
+    Factory.create(:currency, :name => "dollar", :symbol => "USD",
+                   :toRWF => "500", :toUSD => "1")
+    Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
+                   :toRWF => "1", :toUSD => "0.002")
     @a          = Factory.build(:activity)
     @p          = @a.project
     @p.currency = 'USD'
@@ -14,12 +16,7 @@ describe Currency do
     @a.reload
   end
 
-  ### this works when you use decimals.
-  # Money::Bank.exchange_with() will apply a small rounding, losing precision when 
-  # it stores cents 
-  # Refer also: http://github.com/RubyMoney/money/issues/4#comment_224880
-  #
-  it "should convert large activity amounts back correctly" do   
+  it "should convert large activity amounts back correctly" do
     @a.reload
     @a.save
     @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
@@ -27,7 +24,7 @@ describe Currency do
     @p.save
     @a.reload
     @a.save
-    @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS * (BigDecimal("1") / BigDecimal("597.400"))
+    @a.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
   end
 end
 # == Schema Information

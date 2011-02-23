@@ -22,7 +22,7 @@ Spec::Runner.configure do |config|
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
   config.before :each do
-    DatabaseCleaner.strategy = :truncation, { :except => %w[codes model_helps currencies] }
+    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean
   end
 end

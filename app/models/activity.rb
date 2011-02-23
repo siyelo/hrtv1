@@ -26,9 +26,8 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include ActAsDataElement
-  include BudgetSpendHelpers #TODO: deprecate with Money methods
+  include BudgetSpendHelpers
   acts_as_commentable
-  include MoneyHelper
   configure_act_as_data_element
 
   ### Attributes
@@ -397,9 +396,8 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
-      self.budget_in_usd = (self.budget || 0) * rate
-      self.spend_in_usd = (self.spend || 0) * rate
+      self.budget_in_usd = (budget || 0) * toUSD
+      self.spend_in_usd  = (spend || 0)  * toUSD
     end
 
     def fake_ca(klass, code, amount, percentage = nil)

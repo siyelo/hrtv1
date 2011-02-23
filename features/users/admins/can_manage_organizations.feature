@@ -10,7 +10,7 @@ Background:
   And a reporter exists with username: "who_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
 
-@admin_organizations
+@admins @organizations
 Scenario Outline: Merge duplicate organizations
   Given I am signed in as an admin
   When I go to the organizations page
@@ -25,7 +25,7 @@ Scenario Outline: Merge duplicate organizations
     | UNAIDS    | UNAIDS - 0 users   | Same organizations for duplicate and target selected.    |
     | UNAIDS    | WHO - 1 user       | Organizations successfully merged.                       |
 
-@admin_organizations @javascript
+@admins @organizations @javascript
 Scenario Outline: Merge duplicate organizations (with JS)
   Given I am signed in as an admin
   When I go to the organizations page
@@ -45,7 +45,7 @@ Scenario Outline: Merge duplicate organizations (with JS)
     | UNAIDS    | WHO - 1 user     | UNAIDS        | WHO        | Organizations successfully merged.                       |             |
 
 
-@admin_organizations @javascript
+@admins @organizations @javascript
 Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
   Given I am signed in as an admin
   When I go to the organizations page
@@ -61,7 +61,7 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
     | UNAIDS           | Duplicate organization      | .box[data-type='duplicate'] |
     | UNAIDS - 0 users | Replacement organization    | .box[data-type='target']    |
 
-@admin_organizations @javascript
+@admins @organizations @javascript
 Scenario: Try to delete non-empty organization (with JS)
   Given I am signed in as an admin
   When I go to the organizations page

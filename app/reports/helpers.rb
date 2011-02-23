@@ -252,6 +252,4 @@ module Reports::Helpers
                     [:locations, {:coding_spend_district => :activity}])
     end
   end
-
-  #usd_to_rwf = Money.default_bank.get_rate("USD", "RWF")
 end

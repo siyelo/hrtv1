@@ -6,14 +6,14 @@ Feature: Reporter can manage data response
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
-@reporter_data_response
+@reporters @data_response
 Scenario: Browse to data response edit page
   When I follow "My Data"
   And I follow "Settings"
   Then I should be on the data response page for "Req1"
   And I should see "Currency"
 
-@reporter_data_response
+@reporters @data_response
 Scenario Outline: Edit data response, see feedback messages
   When I follow "My Data"
   When I go to the data response page for "Req1"
@@ -30,7 +30,7 @@ Scenario Outline: Edit data response, see feedback messages
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is an invalid date |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
-@reporter_data_response
+@reporters @data_response
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
   When I go to the data response page for "Req1"
   And I fill in "data_response_fiscal_year_start_date" with ""
@@ -38,7 +38,7 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   And I press "Save"
   Then I should not see "Something went wrong, if this happens repeatedly, contact an administrator."
 
-@reporter_data_response @javascript
+@reporters @data_response @javascript
 Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
   When I go to the data response page for "Req1"
   And I fill in "data_response_fiscal_year_start_date" with ""
@@ -46,7 +46,7 @@ Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DRespons
   And I press "Save"
   Then I should not see "ActionController::InvalidAuthenticityToken"
 
-@reporter_data_response
+@reporters @data_response
 Scenario Outline: Edit data response, see feedback messages
   When I go to the data response page for "Req1"
   And I select "Euro (EUR)" from "data_response_currency"
@@ -62,7 +62,7 @@ Scenario Outline: Edit data response, see feedback messages
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is an invalid date |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
 
-@reporter_data_response
+@reporters @data_response
 Scenario: User can start a data response
   When I follow "Dashboard"
   And I follow "Edit Req1"

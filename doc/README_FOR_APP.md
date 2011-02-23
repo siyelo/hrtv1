@@ -68,9 +68,7 @@ Either ask another developer for their settings.secret.yml, or simply create it 
 Setup test DB
 
   rake db:create RAILS_ENV=test
-  rake db:migrate RAILS_ENV=test
-  rake db:seed RAILS_ENV=test
-  rake db:populate RAILS_ENV=test
+  rake db:schema:load RAILS_ENV=test
 
 Tests/TDD - before every commit, and after every fetch, is your friend.
 

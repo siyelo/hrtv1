@@ -4,7 +4,8 @@ Feature: Admin can review districts
   I want to be able to see district review screen
 
 Background:
-  Given a code exists with short_display: "Code A"
+  Given currencies exists in database
+  And a code exists with short_display: "Code A"
   And a code exists with short_display: "Code B"
   And an organization exists with name: "GoR"
   And a data_request exists with title: "Req1", organization: the organization
@@ -27,7 +28,7 @@ Background:
   And a coding_budget_district exists with activity: the activity, code: the first location
   And a coding_spend_district exists with activity: the activity, code: the first location
 
-@districts_review
+@admin @districts_review
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"

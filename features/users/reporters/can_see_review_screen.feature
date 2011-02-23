@@ -21,8 +21,10 @@ Background:
   When I follow "My Data"
   And I follow "Review"
 
-@reporter_review_screen @javascript
+@reporters @review_screen @javascript
+@run
 Scenario: Manage comments on data responses (with Javascript)
+  Given wait a few moments
   When I click element ".comment_details"
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
@@ -41,7 +43,7 @@ Scenario: Manage comments on data responses (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@reporter_review_screen @javascript
+@reporters @review_screen @javascript
 Scenario: Manage comments on project (with Javascript)
   When I click element "#project_details"
   And I click element ".project .descr"
@@ -63,11 +65,11 @@ Scenario: Manage comments on project (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@reporter_review_screen @javascript
+@reporters @review_screen @javascript
 Scenario: Manage comments on activities (with Javascript)
   Then I can manage the comments
 
-@reporter_review_screen @javascript
+@reporters @review_screen @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
   Then I should see tabs for comments,activities,other costs

@@ -1,14 +1,38 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Code do
-  
+
   describe "creating a record" do
     subject { Factory(:code) }
-    
     it { should be_valid }
-    it { should have_many :comments }
   end
-  
+
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:long_display) }
+    it { should allow_mass_assignment_of(:short_display) }
+    it { should allow_mass_assignment_of(:description) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
+  end
+
+  describe "associations" do
+    it { should have_many :comments }
+    it { should have_many :code_assignments }
+    it { should have_many :activities }
+  end
+
+  describe "named scopes" do
+    it "filter types by code" do
+      mtef     = Factory.create(:mtef_code)
+      location = Factory.create(:location)
+
+      Code.with_type('Mtef').should == [mtef]
+      Code.with_type('Location').should == [location]
+    end
+
+    # TODO: write specs for other named scopes
+  end
+
   describe "counter cache" do
     context "comments cache" do
       before :each do

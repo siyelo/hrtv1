@@ -221,6 +221,7 @@ Given /^the following funding flows$/ do |table|
 end
 
 Then /^debug$/ do
+  $page = page
   debugger
 end
 
@@ -288,11 +289,11 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |fi
 end
 
 # a bit brittle
-When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
+When /^I fill in the percentage for "Code1" with "([^"]*)"$/ do |amount|
   steps %Q{ When I fill in "activity_updates_1_percentage" with "#{amount}"}
 end
 
-Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
+Then /^the percentage for "Code1" field should equal "([^"]*)"$/ do |amount|
   steps %Q{ Then the "activity_updates_1_percentage" field should equal "#{amount}"}
 end
 
@@ -458,8 +459,12 @@ Then /^I should see tabs for comments,sub-activities$/ do
   }
 end
 
-Given /^"([^"]*)" and "([^"]*)" are fake Mtef roots$/ do |arg1, arg2|
-  code1 = Code.find_by_short_display(arg1)
-  code2 = Code.find_by_short_display(arg2)
-  Mtef.stub!(:roots).and_return([code1, code2])
+Given /^currencies exists in database$/ do
+  steps %Q{
+    And a currency exists with toRWF: "580", symbol: "USD", name: "dollar", toUSD: "1"
+    And a currency exists with toRWF: "800", symbol: "EUR", name: "euro", toUSD: "0.72"
+    And a currency exists with toRWF: "1", symbol: "RWF", name: "rwandan franc", toUSD: "0.00172413793103448"
+  }
 end
+
+

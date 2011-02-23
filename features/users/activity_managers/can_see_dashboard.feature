@@ -3,7 +3,7 @@ Feature: Activity Manager can see dashboard
   As an Activity Manager
   I want to be able to see a dashboard for relevant activities
 
-@activity_manager_dashboard
+@activity_managers @dashboard
 Scenario: "See data requests"
   Given an organization exists with name: "Test Org"
   And an activity_manager exists with username: "Frank", organization: the organization
@@ -11,7 +11,7 @@ Scenario: "See data requests"
   When I go to the reporter dashboard page
   Then I should see "Data Requests"
 
-@activity_manager_dashboard @wip
+@activity_managers @dashboard @wip
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given an organization exists with name: "WHO"
   And a data_request exists with title: "Some request", organization: the organization

@@ -6,6 +6,7 @@ Feature: Reporter can enter a classifications for each activity
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
+@reporters @classifications
 Scenario: See a classification page for activities
   When I go to the classifications page
   Then I should see "UNDP"

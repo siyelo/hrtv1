@@ -13,9 +13,10 @@ Background:
   And a project exists with name: "TB Treatment Project", data_response: the data_response
   And an activity exists with name: "TB Drugs procurement", data_response: the data_response
   And the project is one of the activity's projects
+  And mtef_code exists with short_display: "Mtef code"
   And I am signed in as "who_manager"
 
-@activity_manager_approve_activity
+@activity_managers @approve_activity
 Scenario: See a breakdown for an activity
   When I go to the activities page
   And I follow "Classify"
@@ -26,14 +27,14 @@ Scenario: See a breakdown for an activity
   And I should see "Coding" within "#tab4"
   And I should see "District" within "#tab5"
   And I should see "Cost Categorization" within "#tab6"
-  And I should see "Providing Technical Assistance"
+  And I should see "Mtef code"
 
 # note you cant drive this via the normal 'Classify' popup link in Capybara
 # - it wont follow the new browser window
 # The "wait a few moments" between checking the box and going to the next page is to avoid
 # the ERROR Errno::EINVAL: Invalid argument -> webrick/httpresponse.rb:324:in `write'
 # - I think capy just needs time to finish the ajax post request...
-@activity_manager_approve_activity @javascript
+@activity_managers @approve_activity @javascript
 Scenario: Approve an Activity
   When I go to the activity classification page for "TB Drugs procurement"
   Then I should see "Activity Classification"
@@ -43,7 +44,7 @@ Scenario: Approve an Activity
   And I go to the activity classification page for "TB Drugs procurement"
   And the "approve_activity" checkbox should be checked
 
-@activity_manager_approve_activity
+@activity_managers @approve_activity
 Scenario: List approved activities
   When I go to the classifications page
   Then I should see "Approved?"

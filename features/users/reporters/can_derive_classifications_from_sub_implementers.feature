@@ -3,7 +3,7 @@ Feature: Reporter can derive classifications from sub implementers
   As a reporter
   I want to be able to use derived classifications from sub implementers
 
-@classify_activity @javascript
+@reporters @derive_classifications @javascript
 Scenario: Use budget classifications derived from sub implementers
   Given a donor exists with name: "donor"
   And a ngo exists with name: "ngo"
@@ -32,7 +32,7 @@ Scenario: Use budget classifications derived from sub implementers
   And I follow "District" within the budget districts tab
   Then the "Location1" field within ".tab2" should contain "55.00"
 
-@classify_activity @javascript
+@reporters @derive_classifications @javascript
 Scenario: Use spend classifications derived from sub implementers
   Given a donor exists with name: "donor"
   And a ngo exists with name: "ngo"

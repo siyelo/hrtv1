@@ -1,6 +1,4 @@
 class Code < ActiveRecord::Base
-  include NumberHelper
-  extend NumberHelper
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
 
   ### Comments
@@ -9,25 +7,23 @@ class Code < ActiveRecord::Base
   ### Attributes
   attr_accessible :long_display, :short_display, :description, :start_date, :end_date
 
-  ### Relations
-  has_many :code_assignments, :foreign_key => :code_id
-  has_many :activities, :through => :code_assignments
-
-  named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
-  named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
-
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
 
+  ### Associations
+  has_many :code_assignments
+  has_many :activities, :through => :code_assignments
+
+  ### Named scope
+  # TODO: write specs
+  named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
   named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
   named_scope :ordered, :order => 'lft'
 
   ### Public Methods
 
   def self.deepest_nesting
-    #@depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max - 1
-    # TODO: check if this change has broken the other reports
-    # c = Code.find 1434 has 7 parents
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
   end
 
@@ -40,6 +36,7 @@ class Code < ActiveRecord::Base
     end
     a
   end
+
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
   end

@@ -1,5 +1,3 @@
-- usd_to_rwf = Money.default_bank.get_rate("USD", "RWF")
-
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
@@ -31,7 +29,7 @@
         %td
           - if loc.district
             %ul
-              - spent_per_capita =  spent_total / loc.district.population.to_f  
+              - spent_per_capita =  spent_total / loc.district.population.to_f
               %li= n2c(spent_per_capita * usd_to_rwf, 'RWF')
               %li= "(#{n2c(spent_per_capita, '$')})"
         %td
@@ -41,6 +39,6 @@
         %td
           - if loc.district
             %ul
-              - budget_per_capita =  budget_total / loc.district.population.to_f  
+              - budget_per_capita =  budget_total / loc.district.population.to_f
               %li= n2c(budget_per_capita * usd_to_rwf, 'RWF')
               %li= "(#{n2c(budget_per_capita, '$')})"

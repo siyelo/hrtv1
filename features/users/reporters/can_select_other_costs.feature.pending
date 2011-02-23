@@ -3,6 +3,7 @@ Feature: Reporter can enter a other cost breakdown
   As a reporter
   I want to be able to break down other costs into individual codes
 
+@reporters @other_costs
 Scenario: See both budget and expenditure for an activity coding
   Given a project with name "TB Treatment Project"
   Given a cost with name "Salaries" in project "TB Treatment Project"

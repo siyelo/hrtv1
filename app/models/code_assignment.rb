@@ -82,6 +82,7 @@ class CodeAssignment < ActiveRecord::Base
     code.short_display
   end
 
+  # TODO: spec
   def currency
     self.activity.nil? ? nil : self.activity.currency
   end
@@ -133,8 +134,7 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activities' project/DR
     def update_cached_amount_in_usd
-      rate = self.currency ? Money.default_bank.get_rate(self.currency, "USD") : 0
-      self.cached_amount_in_usd = (self.cached_amount || 0) * rate
+      self.cached_amount_in_usd = (cached_amount || 0) * activity.toUSD
     end
 
   private

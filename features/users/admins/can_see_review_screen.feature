@@ -23,7 +23,7 @@ Background:
   And I follow "In Progress"
   And I follow "UNDP"
 
-@admin_review_screen @javascript
+@admins @review_screen @javascript
 Scenario: Manage comments on data responses (with Javascript)
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
@@ -42,7 +42,7 @@ Scenario: Manage comments on data responses (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admin_review_screen @javascript
+@admins @review_screen @javascript
 Scenario: Manage comments on project (with Javascript)
   When wait a few moments
   When I click element "#project_details"
@@ -65,7 +65,7 @@ Scenario: Manage comments on project (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admin_review_screen @javascript
+@admins @review_screen @javascript
 Scenario: Manage comments on activities (with Javascript)
   When wait a few moments
   When I click element "#project_details"
@@ -90,9 +90,8 @@ Scenario: Manage comments on activities (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admin_review_screen @javascript
+@admins @review_screen @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
   Then I should see tabs for comments,activities,other costs
   Then I should see tabs for comments,sub-activities when activities already open
-

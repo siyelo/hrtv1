@@ -4,4 +4,5 @@
   .desc
     %h2 Description
     %span.close= link_to "Close", "#", :id => "page_tips_close"
-    %p= h @model_help.long
+    - if @model_help
+      %p= h @model_help.long

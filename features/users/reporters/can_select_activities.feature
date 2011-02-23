@@ -6,6 +6,7 @@ Feature: Reporter can select activities
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
+@reporters @activities
 Scenario: See list of activities for my project
   When I go to the activities page
   Then I should see "Activities" within "h2"

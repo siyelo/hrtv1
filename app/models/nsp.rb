@@ -1,53 +1,18 @@
 class Nsp < Code
-  include NamedScopes::Roots # redefines 'roots' method from awesome_nested_set
+  include NamedScopes::Roots # overrides 'roots' method from awesome_nested_set
 
-  # NOTE: this method overrides the leaves method from awesome_nested_set
+  # NOTE: this method overrides the 'leaves' method from awesome_nested_set
   # and it returns all Nsp codes which children are not Nsp codes
-  # TODO: spec
   def self.leaves
     find(:all, :include => :children).select{|c| !c.children.map(&:type).include?(self.to_s)}
   end
 
-  # TODO: spec
-  def old_self_and_nsp_ancestors
-    self_and_ancestors.select{|a| a.type == self.type}
-  end
-
-  # Returns the array of all parents and self
-  # TODO: spec
+  # NOTE: original 'self_and_ancestors' method from awesome_nested_set does
+  # not filters codes by 'Nsp' type, but this method returns the wanted parents
   def self_and_nsp_ancestors
     nested_set_scope.scoped :conditions => [
-      "type = ? AND codes.lft <= ? AND codes.rgt >= ?", name, left, right
+      "type = ? AND codes.lft <= ? AND codes.rgt >= ?", self.class.to_s, left, right
     ]
-    #self_and_ancestors.select{|a| a.type == self.type} #old
-  end
-
-  # Returns an array of all parents
-  # TODO: spec
-  def nsp_ancestors
-    without_self self_and_nsp_ancestors
-  end
-
-  #def self.roots_with_level
-    #a = []
-    #Nsp.roots.each do |nsp_root|
-      #Nsp.each_with_level(nsp_root.self_and_descendants) do |code, level|       # each_with_level() is faster than level()
-        #a << [level, code.id]
-      #end
-    #end
-    #a
-  #end
-
-  # TODO: spec
-  def self.leaves_with_level
-    # NSP 'leaves' are sometimes also embedded in other hierarchies, so we override the default awesome_nested_set :leaves
-    a = []
-    Nsp.leaves.each do |nsp|
-      Nsp.each_with_level(nsp.self_and_nsp_ancestors.reverse) do |code, level|
-        a << [level, code.id]
-      end
-    end
-    a
   end
 end
 

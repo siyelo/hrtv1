@@ -1,9 +1,9 @@
 class Mtef < Code
-  # TODO: spec
+
   def self.codes_by_level(level = -1)
     unless level == -1
       codes = []
-      Mtef.each_with_level(Mtef.all){|o, lvl| codes << o if lvl == level}
+      Mtef.each_with_level(Mtef.all){|code, lvl| codes << code if lvl == level}
     else
       codes = Mtef.leaves
     end

@@ -3,7 +3,7 @@ module NamedScopes::Roots
   def self.included(base)
     base.class_eval do
 
-      # redefines 'roots' method from awesome_nested_set
+      # overrides 'roots' method from awesome_nested_set
       # and returns roots by a code type (which can be nested in other code type)
       named_scope :roots,
                   :joins => "INNER JOIN codes AS parents ON codes.parent_id = parents.id",

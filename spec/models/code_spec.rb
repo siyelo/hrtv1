@@ -174,9 +174,11 @@ describe Code do
   describe "sum_of_assignments_for_activities" do
     before :each do
       Factory.create(:currency, :name => "dollar", :symbol => "USD", :toUSD => "1")
-      data_response = Factory.create(:data_response, :currency => "USD")
-      @activity1 = Factory.create(:activity, :data_response => data_response, :projects => [])
-      @activity2 = Factory.create(:activity, :data_response => data_response, :projects => [])
+      data_response = Factory.create(:data_response)
+      @activity1 = Factory.create(:activity, :data_response => data_response,
+                                  :projects => [Factory.create(:project, :currency => "USD")])
+      @activity2 = Factory.create(:activity, :data_response => data_response,
+                                  :projects => [Factory.create(:project, :currency => "USD")])
       @code      = Factory.create(:code, :short_display => 'Code')
 
       Factory.create(:coding_budget, :activity => @activity1, :code => @code,

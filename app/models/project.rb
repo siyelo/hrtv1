@@ -70,7 +70,6 @@ class Project < ActiveRecord::Base
   end
 
   # Returns DR.currency if no project currency specified
-  # TODO: spec
   def currency
     c = read_attribute(:currency)
     return c if new_record?

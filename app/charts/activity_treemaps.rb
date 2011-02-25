@@ -110,7 +110,7 @@ module Charts::ActivityTreemaps
         rows = []
         sum_of_roots = 0
         root_codes.each do |r|
-          s = r.sum_of_assignments_for_activities(type,activities)
+          s = r.sum_of_assignments_for_activities(type, activities)
           #logger.debug("#{r.to_s} - sum is #{s.to_s}")
           sum_of_roots += s
         end

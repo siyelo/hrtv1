@@ -1,3 +1,4 @@
+# http://tuxicity.se/rails/dry/2009/01/04/share-named-scopes-in-rails.html
 module NamedScopes::Roots
   def self.included(base)
     base.class_eval do

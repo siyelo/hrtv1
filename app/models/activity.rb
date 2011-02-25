@@ -68,7 +68,6 @@ class Activity < ActiveRecord::Base
 
   ### Delegates
   delegate :organization, :to => :data_response
-  delegate :currency, :to => :project, :allow_nil => true
 
   ### Named scopes
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
@@ -151,6 +150,10 @@ class Activity < ActiveRecord::Base
   # helper until we enforce this in the model association!
   def project
     projects.first
+  end
+
+  def currency
+    project ? project.currency : data_response.currency
   end
 
   def organization_name

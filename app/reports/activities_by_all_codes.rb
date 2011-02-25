@@ -5,6 +5,7 @@ class Reports::ActivitiesByAllCodes
 
   def initialize(activities, type, show_organization = false)
     @is_budget         = is_budget?(type)
+    @coding_class      = @is_budget ? CodingBudget : CodingSpend
     @activities        = activities
     @show_organization = show_organization
     @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.class.to_s)}
@@ -48,11 +49,7 @@ class Reports::ActivitiesByAllCodes
     end
 
     def add_code_summary_row(csv, code)
-      if @is_budget
-        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
-      else
-        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
-      end
+      code_total = code.sum_of_assignments_for_activities(@coding_class, @activities)
       if code_total > 0
         row = []
         add_all_codes_hierarchy(row, code)
@@ -63,11 +60,7 @@ class Reports::ActivitiesByAllCodes
     end
 
     def add_code_row(csv, code)
-      if @is_budget
-        code_assignments = code.leaf_assigns_for_activities_for_code_set(CodingBudget, @leaves, @activities)
-      else
-        code_assignments = code.leaf_assigns_for_activities_for_code_set(CodingSpend, @leaves, @activities)
-      end
+      code_assignments = code.leaf_assignments_for_activities(@coding_class, @activities)
       code_assignments.each do |assignment|
         if assignment.cached_amount
           activity = assignment.activity

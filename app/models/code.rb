@@ -34,38 +34,35 @@ class Code < ActiveRecord::Base
     a
   end
 
-  # TODO: spec
-  def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
+  def leaf_assignments_for_activities(type, activities)
+    if leaf?
+      code_assignments.with_type(type.to_s).
+                       with_activities(activities).
+                       sort_by_cached_amout.
+                       find(:all, :conditions => ["sum_of_children = 0"])
+    else
+      []
+    end
   end
 
-  # TODO: spec
-  def leaf_assigns_for_activities(type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
+  def sum_of_assignments_for_activities(coding_klass, activities)
+    code_assignments.with_type(coding_klass.to_s).with_activities(activities).sum(:cached_amount_in_usd)
   end
 
-  # TODO: spec
-  def sum_of_assignments_for_activities(type, activities = self.activities)
-    code_assignments.with_type(type.to_s).with_activities(activities).sum(:cached_amount_in_usd)
-  end
-
-  # TODO: rename short_display -> name
   def name
-    to_s
+    short_display
   end
 
-  # TODO: remove
   def to_s
     short_display
   end
 
-  # TODO: refactor
   def to_s_prefer_official
-   official_name ? official_name : to_s
+    official_name || short_display
   end
 
   def to_s_with_external_id
-    to_s + " (" + (external_id.nil? ? 'n/a': external_id) + ")"
+    "#{short_display} (#{external_id || 'n/a'})"
   end
 end
 

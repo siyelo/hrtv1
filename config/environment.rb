@@ -29,9 +29,10 @@ Rails::Initializer.run do |config|
   config.load_paths += %W(
                           #{RAILS_ROOT}/app/charts
                           #{RAILS_ROOT}/app/reports
+                          #{RAILS_ROOT}/app/models/activity
                           #{RAILS_ROOT}/app/models/code
-                          #{RAILS_ROOT}/app/models/organization
                           #{RAILS_ROOT}/app/models/code_assignment
+                          #{RAILS_ROOT}/app/models/organization
                           #{RAILS_ROOT}/lib/named_scopes
                         )
 

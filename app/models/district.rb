@@ -1,3 +1,4 @@
+# TODO: remove this model and move fields to Code model
 class District < ActiveRecord::Base
 
   # Associations

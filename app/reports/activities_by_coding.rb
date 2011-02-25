@@ -5,6 +5,7 @@ class Reports::ActivitiesByCoding
 
   def initialize(type)
     @is_budget    = is_budget?(type)
+    @coding_class = @is_budget ? CodingBudget : CodingSpend
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries
@@ -94,11 +95,7 @@ class Reports::ActivitiesByCoding
 
     def get_code_assignment_value(activity, code_assignments, code_id)
       if code_assignments.include?(code_id)
-        if @is_budget
-          ca = CodingBudget.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        else
-          ca = CodingSpend.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        end
+        ca = @coding_class.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         ca ? ca.cached_amount_in_usd : 0
       else
         nil

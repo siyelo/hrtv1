@@ -4,7 +4,8 @@ class Reports::ActivitiesByCostCategorization
   include Reports::Helpers
 
   def initialize(type)
-    @is_budget    = is_budget?(type)
+    @is_budget     = is_budget?(type)
+    @coding_class  = @is_budget ? CodingBudgetCostCategorization : CodingSpendCostCategorization
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries
@@ -94,11 +95,7 @@ class Reports::ActivitiesByCostCategorization
 
     def get_code_assignment_value(activity, code_assignments, code_id)
       if code_assignments.include?(code_id)
-        if @is_budget
-          ca = CodingBudgetCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        else
-          ca = CodingSpendCostCategorization.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        end
+        ca = @coding_class.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
         ca ? ca.cached_amount_in_usd : 0
       else
         nil

@@ -71,6 +71,66 @@ describe Code do
     end
   end
 
+  describe "deepest_nesting" do
+    it "returns deepest nesting for 1 level" do
+      # first level
+      code1    = Factory.create(:code, :short_display => 'code1')
+
+      Code.deepest_nesting.should == 1
+    end
+
+    it "returns deepest nesting for 2 levels" do
+      # first level
+      code1 = Factory.create(:code, :short_display => 'code1')
+
+      # second level
+      code11 = Factory.create(:code, :short_display => 'code11')
+      code11.move_to_child_of(code1)
+
+      Code.deepest_nesting.should == 2
+    end
+
+    it "returns deepest nesting for 3 level" do
+      # first level
+      code1 = Factory.create(:code, :short_display => 'code1')
+
+      # second level
+      code11 = Factory.create(:code, :short_display => 'code11')
+      code11.move_to_child_of(code1)
+
+      # third level
+      code111 = Factory.create(:code, :short_display => 'code111')
+      code111.move_to_child_of(code11)
+
+      Code.deepest_nesting.should == 3
+    end
+  end
+
+  describe "roots with level" do
+    it "returns roots with level" do
+      # first level
+      mtef = Factory.create(:mtef_code, :short_display => 'mtef')
+
+      # second level
+      nha = Factory.create(:nha_code, :short_display => 'nha')
+      nha.move_to_child_of(mtef)
+
+      # third level
+      nsp = Factory.create(:nsp_code, :short_display => 'nsp')
+      nsp.move_to_child_of(nha)
+
+      # forth level
+      nasa = Factory.create(:nasa_code, :short_display => 'nasa')
+      nasa.move_to_child_of(nsp)
+
+      Code.roots_with_level.should == [[0, mtef.id], [1, nha.id], [2, nsp.id], [3, nasa.id]]
+      Mtef.roots_with_level.should == [[0, mtef.id], [1, nha.id], [2, nsp.id], [3, nasa.id]]
+      Nha.roots_with_level.should == [[1, nha.id], [2, nsp.id], [3, nasa.id]]
+      Nsp.roots_with_level.should == [[1, nsp.id], [2, nasa.id]]
+      Nasa.roots_with_level.should == [[1, nasa.id]]
+    end
+  end
+
   describe "counter cache" do
     context "comments cache" do
       before :each do

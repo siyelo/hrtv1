@@ -1,5 +1,5 @@
 class Mtef < Code
-
+  # TODO: spec
   def self.codes_by_level(level = -1)
     unless level == -1
       codes = []

@@ -34,26 +34,32 @@ class Code < ActiveRecord::Base
     a
   end
 
+  # TODO: spec
   def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
   end
 
+  # TODO: spec
   def leaf_assigns_for_activities(type, activities = self.activities)
     CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
   end
 
+  # TODO: spec
   def sum_of_assignments_for_activities(type, activities = self.activities)
     code_assignments.with_type(type.to_s).with_activities(activities).sum(:cached_amount_in_usd)
   end
 
+  # TODO: rename short_display -> name
   def name
     to_s
   end
 
+  # TODO: remove
   def to_s
     short_display
   end
 
+  # TODO: refactor
   def to_s_prefer_official
    official_name ? official_name : to_s
   end

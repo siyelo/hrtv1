@@ -26,7 +26,11 @@ Rails::Initializer.run do |config|
 
   # tell rails to load files from all subfolders in app/models/
   #config.load_paths += Dir["#{RAILS_ROOT}/app/models/*"].find_all { |f| File.stat(f).directory? }
-  config.load_paths += %W( #{RAILS_ROOT}/app/charts #{RAILS_ROOT}/app/reports)
+  config.load_paths += %W(
+                          #{RAILS_ROOT}/app/charts
+                          #{RAILS_ROOT}/app/reports
+                          #{RAILS_ROOT}/lib/named_scopes
+                        )
 
   # disable spoofing check
   # http://pivotallabs.com/users/jay/blog/articles/1216-standup-4-7-2010-disabling-rails-ip-spoofing-safeguard

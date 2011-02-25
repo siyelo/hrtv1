@@ -15,13 +15,10 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   ### Named scope
-  # TODO: write specs
   named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
   named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
   named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
   named_scope :ordered, :order => 'lft'
-
-  ### Public Methods
 
   def self.deepest_nesting
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1

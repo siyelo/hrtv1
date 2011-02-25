@@ -22,7 +22,7 @@ describe Code do
   end
 
   describe "named scopes" do
-    it "filter types by code" do
+    it "filter codes by type" do
       mtef     = Factory.create(:mtef_code)
       location = Factory.create(:location)
 
@@ -30,7 +30,45 @@ describe Code do
       Code.with_type('Location').should == [location]
     end
 
-    # TODO: write specs for other named scopes
+    it "filter codes by types" do
+      mtef     = Factory.create(:mtef_code)
+      location = Factory.create(:location)
+
+      Code.with_types(['Mtef', 'Location']).should == [mtef, location]
+    end
+
+    it "filter codes by activity root types" do
+      mtef               = Factory.create(:mtef_code)
+      nha_code           = Factory.create(:nha_code)
+      nasa_code          = Factory.create(:nasa_code)
+      nsp_code           = Factory.create(:nsp_code)
+      cost_category_code = Factory.create(:cost_category_code)
+      other_cost_code    = Factory.create(:other_cost_code)
+      location           = Factory.create(:location)
+      beneficiary        = Factory.create(:beneficiary)
+      hssp_strat_prog    = Factory.create(:hssp_strat_prog)
+      hssp_strat_obj     = Factory.create(:hssp_strat_obj)
+
+      Code.for_activities.should == [mtef, nha_code, nasa_code, nsp_code]
+    end
+
+    it "orders codes by lft" do
+      # first level
+      code1    = Factory.create(:code, :short_display => 'code1')
+      code2    = Factory.create(:code, :short_display => 'code2')
+
+      # second level
+      code11    = Factory.create(:code, :short_display => 'code11')
+      code12    = Factory.create(:code, :short_display => 'code12')
+      code21    = Factory.create(:code, :short_display => 'code21')
+      code22    = Factory.create(:code, :short_display => 'code22')
+      code11.move_to_child_of(code1)
+      code12.move_to_child_of(code1)
+      code21.move_to_child_of(code2)
+      code22.move_to_child_of(code2)
+
+      Code.ordered.should == [code1, code11, code12, code2, code21, code22]
+    end
   end
 
   describe "counter cache" do

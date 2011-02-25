@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe CodingBudgetDistrict do
+describe CodingSpendDistrict do
   describe "activity coding" do
     it "removes district code assignments if district is removed from an activity" do
       activity = Factory.create(:activity)
@@ -13,16 +13,16 @@ describe CodingBudgetDistrict do
         loc2.id.to_s => {"amount" => "", "percentage" => "50"}
       }
 
-      CodingBudgetDistrict.count.should == 0
+      CodingSpendDistrict.count.should == 0
 
-      CodingBudgetDistrict.update_codings(params, activity)
-      CodingBudgetDistrict.count.should == 2
+      CodingSpendDistrict.update_codings(params, activity)
+      CodingSpendDistrict.count.should == 2
 
       activity.locations = [loc1]
       activity.save!
 
-      CodingBudgetDistrict.count.should == 1
-      CodingBudgetDistrict.all.map(&:code_id).should include(loc1.id)
+      CodingSpendDistrict.count.should == 1
+      CodingSpendDistrict.all.map(&:code_id).should include(loc1.id)
     end
   end
 
@@ -38,13 +38,13 @@ describe CodingBudgetDistrict do
         loc2.id.to_s => {"amount" => "", "percentage" => "50"}
       }
 
-      CodingBudgetDistrict.update_codings(params, activity)
-      activity.coding_budget_district_classified?.should == true
+      CodingSpendDistrict.update_codings(params, activity)
+      activity.coding_spend_district_classified?.should == true
 
       activity.locations = [loc1]
       activity.save!
 
-      activity.coding_budget_district_classified?.should == false
+      activity.coding_spend_district_classified?.should == false
     end
   end
 end

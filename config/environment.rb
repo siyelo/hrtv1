@@ -31,6 +31,7 @@ Rails::Initializer.run do |config|
                           #{RAILS_ROOT}/app/reports
                           #{RAILS_ROOT}/app/models/code
                           #{RAILS_ROOT}/app/models/organization
+                          #{RAILS_ROOT}/app/models/code_assignment
                           #{RAILS_ROOT}/lib/named_scopes
                         )
 

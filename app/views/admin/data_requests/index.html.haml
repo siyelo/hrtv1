@@ -1,0 +1,32 @@
+%h1.main_heading Data Requests
+
+= link_to 'New', new_admin_data_request_path
+
+%div
+  .simple_table
+    %table
+      %thead
+        %tr
+          %th Organization
+          %th Title
+          %th Complete
+          %th Pending review
+          %th Created at
+          %th Updated at
+          %th.action Manage
+      %tbody
+        - @data_requests.each do |data_request|
+          %tr
+            %td= data_request.organization.try(:name)
+            %td= data_request.title
+            %td= data_request.complete
+            %td= data_request.pending_review
+            %td= data_request.created_at
+            %td= data_request.updated_at
+            %td.action
+              = link_to "Show", admin_data_request_path(data_request)
+              = link_to "Edit", edit_admin_data_request_path(data_request)
+              = link_to "Delete", admin_data_request_path(data_request), :method => :delete, :confirm => "Are you sure?"
+
+
+    = will_paginate @data_requests

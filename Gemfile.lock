@@ -181,7 +181,7 @@ DEPENDENCIES
   heroku
   hirb
   hoptoad_notifier
-  inherited_resources
+  inherited_resources (= 1.0.6)
   interactive_editor
   json_pure
   launchy

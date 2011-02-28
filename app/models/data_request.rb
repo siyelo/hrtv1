@@ -1,7 +1,7 @@
 class DataRequest < ActiveRecord::Base
 
   ### Attributes
-  attr_accessible :title, :complete, :pending_review
+  attr_accessible :organization_id, :title, :complete, :pending_review
 
   ### Associations
   belongs_to :organization

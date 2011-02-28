@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe DataRequest do
 
   describe "attributes" do
+    it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:title) }
     it { should allow_mass_assignment_of(:complete) }
     it { should allow_mass_assignment_of(:pending_review) }

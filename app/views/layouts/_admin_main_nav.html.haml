@@ -1,5 +1,5 @@
 #main-nav
   .wrapper
     %ul
-      - %w(dashboard reports organizations users activities).each do |tab|
+      - %w(dashboard reports organizations users activities data_requests).each do |tab|
         %li= build_admin_nav_tab(tab)

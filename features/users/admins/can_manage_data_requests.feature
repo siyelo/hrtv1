@@ -3,11 +3,11 @@ Feature: Admin can manage data requests
   As a admin
   I want to be able to manage data requests
 
-  @wip
+  @run
 Scenario: Admin can CRUD data requests
   Given an organization exists with name: "Organization"
-  And an admin exists with name "Admin" with organization: the organization
-  And I am signed in as "Admin"
+  And an admin exists with username: "admin", organization: the organization
+  And I am signed in as "admin"
   When I follow "Data requests"
   And I follow "New"
   And I fill in "Title" with "My data response title"

@@ -63,7 +63,7 @@ class DataResponsesController < ApplicationController
     end
 
     def find_requests
-      @unfulfilled_requests = DataRequest.unfulfilled(current_user.organization)
+      @unfulfilled_requests = current_user.organization.unfulfilled_data_requests
     end
 
     def find_help

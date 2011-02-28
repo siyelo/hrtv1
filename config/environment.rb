@@ -29,12 +29,9 @@ Rails::Initializer.run do |config|
   config.load_paths += %W(
                           #{RAILS_ROOT}/app/charts
                           #{RAILS_ROOT}/app/reports
-                          #{RAILS_ROOT}/app/models/activity
-                          #{RAILS_ROOT}/app/models/code
-                          #{RAILS_ROOT}/app/models/code_assignment
-                          #{RAILS_ROOT}/app/models/organization
                           #{RAILS_ROOT}/lib/named_scopes
                         )
+  config.load_paths += Dir["#{RAILS_ROOT}/app/models/**/**"]
 
   # disable spoofing check
   # http://pivotallabs.com/users/jay/blog/articles/1216-standup-4-7-2010-disabling-rails-ip-spoofing-safeguard

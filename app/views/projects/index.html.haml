@@ -6,5 +6,18 @@
 
 %br
 
+%table.standard.rounded.clickable
+  %thead
+    %tr
+      %th Name
+      %th Description
+      %th Total Spent
+      %th Total Budget
+      %th
+
+  %tbody
+    = render :partial => "project", :collection => @projects
+
+
 %ul{ :id => 'position_container', :class => 'image_list' }
-  = render :partial => "/user/albums/album", :collection => @albums
+

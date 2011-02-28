@@ -221,7 +221,31 @@ describe Project do
       @activity.budget_in_usd.should == 1500
       @activity.spend_in_usd.should == 3000
     end
+  end
 
+  describe "currency conversion for big amounts" do
+    it "should convert large activity amounts back correctly" do
+      ONE_HUNDRED_BILLION_DOLLARS = 100000000000.00
+      Factory.create(:currency, :name => "dollar", :symbol => "USD",
+                     :toRWF => "500", :toUSD => "1")
+      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
+                     :toRWF => "1", :toUSD => "0.002")
+      activity = Factory.build(:activity)
+      project  = activity.project
+      project.currency = 'USD'
+      project.save
+      activity.spend = ONE_HUNDRED_BILLION_DOLLARS
+      activity.save
+      activity.reload
+      activity.reload
+      activity.save
+      activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
+      project.currency = 'RWF'
+      project.save
+      activity.reload
+      activity.save
+      activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
+    end
   end
 end
 

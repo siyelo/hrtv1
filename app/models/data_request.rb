@@ -1,22 +1,29 @@
 class DataRequest < ActiveRecord::Base
+
+  ### Attributes
   attr_accessible :organization_id, :title, :complete, :pending_review
 
+  ### Associations
   belongs_to :organization
-
   has_many :data_responses, :dependent => :destroy
 
+  ### Validations
   validates_presence_of :organization_id
   validates_presence_of :title
 
+  ### Named scopes
+  # TODO: spec
   named_scope :unfulfilled, lambda {|organization|
     return {} unless organization
     { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id = ? )", organization.id] }
   }
 
-  def self.find_unfulfill_request organization_id
+  # TODO: spec
+  def self.find_unfulfill_request(organization_id)
     DataRequest.find(:all, :conditions=>["organization_id= ? AND complete = ?", organization_id, false])
   end
 
+  # TODO: spec
   def self.find_all_unfulfill_request
     DataRequest.find(:all, :conditions => ["complete = ?", false])
   end

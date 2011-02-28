@@ -1,5 +1,8 @@
 class CodeAssignment < ActiveRecord::Base
-  include NumberHelper
+
+  ### Attributes
+  attr_accessible :activity, :code, :amount, :percentage,
+                  :sum_of_children, :cached_amount, :cached_amount_in_usd
 
   ### Associations
   belongs_to :activity
@@ -8,11 +11,8 @@ class CodeAssignment < ActiveRecord::Base
   ### Validations
   validates_presence_of :activity_id, :code_id
 
-  ### Attributes
-  attr_accessible :activity, :code, :amount, :percentage, :sum_of_children,
-                  :cached_amount, :cached_amount_in_usd
-
   ### Named scopes
+  # TODO: spec
   named_scope :with_code_ids,
               lambda { |code_ids| { :conditions =>
                 ["code_assignments.code_id IN (?)", code_ids]} }
@@ -32,12 +32,14 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_code_id,
               lambda { |code_id| { :conditions =>
                 ["code_assignments.code_id = ?", code_id]} }
-  named_scope :sort_cached_amt, { :order => "code_assignments.cached_amount DESC"}
   named_scope :with_location,
               lambda { |location_id| { :conditions =>
                 ["code_assignments.code_id = ?", location_id]} }
+  named_scope :sort_by_cached_amout, {
+              :order => "code_assignments.cached_amount DESC" }
   named_scope :select_for_pies,
-              :select => "code_assignments.code_id, SUM(code_assignments.cached_amount_in_usd) AS value",
+              :select => "code_assignments.code_id,
+                          SUM(code_assignments.cached_amount_in_usd) AS value",
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
@@ -52,6 +54,7 @@ class CodeAssignment < ActiveRecord::Base
   #
 
   # assumes a format like "17,798,123.00"
+  # TODO: spec
   def self.currency_to_number(number_string, options ={})
     options.symbolize_keys!
     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :raise => true) rescue {}
@@ -61,8 +64,7 @@ class CodeAssignment < ActiveRecord::Base
     number_string.gsub(delimiter,'')
   end
 
-  ### Instance Methods
-  #
+  # TODO: spec
   def proportion_of_activity
     activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
 
@@ -77,15 +79,12 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  def code_name
-    code.short_display
-  end
-
   # TODO: spec
   def currency
     self.activity.nil? ? nil : self.activity.currency
   end
 
+  # TODO: spec
   def self.sums_by_code_id(code_ids, coding_type, activities)
     CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
       :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount_in_usd) AS value',
@@ -94,6 +93,7 @@ class CodeAssignment < ActiveRecord::Base
     ).group_by{|ca| ca.code_id}
   end
 
+  # TODO: spec
   def self.ratios_by_activity_id(code_id, activity_ids, district_type, activity_value)
     CodeAssignment.with_code_id(code_id).with_type(district_type).with_activities(activity_ids).find(:all,
       :joins => :activity,
@@ -106,6 +106,7 @@ class CodeAssignment < ActiveRecord::Base
     ).group_by{|ca| ca.activity_id}
   end
 
+  # TODO: spec
   def self.update_codings(code_assignments, activity)
     if code_assignments
       code_assignments.delete_if { |key,val| val["amount"].nil? || val["percentage"].nil? }
@@ -129,14 +130,12 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  protected
+  private
 
     # currency is derived from the parent activities' project/DR
     def update_cached_amount_in_usd
       self.cached_amount_in_usd = (cached_amount || 0) * activity.toUSD
     end
-
-  private
 
     # Checks if it's a budget code assignment
     def budget?

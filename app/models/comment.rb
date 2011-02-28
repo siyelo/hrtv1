@@ -5,17 +5,18 @@ class Comment < ActiveRecord::Base
   attr_accessible :title, :comment
 
   ### Validations
-  validates_presence_of :commentable_id, :commentable_type, :title,
-                        :comment, :user_id
+  validates_presence_of :title, :comment, :user_id,
+                        :commentable_id, :commentable_type
 
   ### Associations
-  belongs_to :commentable, :polymorphic => true, :counter_cache => true
   belongs_to :user
+  belongs_to :commentable, :polymorphic => true, :counter_cache => true
 
   ### Scopes
   default_scope :order => 'created_at ASC'
 
   ### Named scopes
+  # TODO: spec
   named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "
   named_scope :on_projects_for, lambda { |organization|
       { :joins => "JOIN projects p ON p.id = comments.commentable_id ",
@@ -64,7 +65,7 @@ class Comment < ActiveRecord::Base
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
 
-  ### public methods
+  # TODO: spec
   def authorized_for_read?
     if current_user
       if current_user.role?(:admin)
@@ -84,13 +85,16 @@ class Comment < ActiveRecord::Base
       false
     end
   end
+
+  # TODO: spec
   def authorized_for_update?
     authorized_for_read?
   end
+
+  # TODO: spec
   def authorized_for_delete?
     authorized_for_read?
   end
-
 end
 
 # == Schema Information

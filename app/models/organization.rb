@@ -29,6 +29,7 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  # TODO: remove!?
   def self.remove_security
     with_exclusive_scope { find(:all) }
   end
@@ -59,14 +60,17 @@ class Organization < ActiveRecord::Base
     ActiveRecord::Base.enable_validation!
   end
 
+  # TODO: write spec
   def to_s
     name
   end
 
+  # TODO: write spec
   def user_email_list_limit_3
     users[0,2].collect{|u| u.email}.join ","
   end
 
+  # TODO: write spec
   def short_name
     #TODO remove district name in (), capitalized, and as below
     n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?

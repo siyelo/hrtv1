@@ -15,13 +15,10 @@ class Code < ActiveRecord::Base
   has_many :activities, :through => :code_assignments
 
   ### Named scope
-  # TODO: write specs
   named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
   named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
   named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
   named_scope :ordered, :order => 'lft'
-
-  ### Public Methods
 
   def self.deepest_nesting
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
@@ -37,20 +34,23 @@ class Code < ActiveRecord::Base
     a
   end
 
-  def leaf_assigns_for_activities_for_code_set(type, leaf_ids, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).find(:all, :conditions => ["sum_of_children = 0 or code_id in (?)", leaf_ids])
+  def leaf_assignments_for_activities(type, activities)
+    if leaf?
+      code_assignments.with_type(type.to_s).
+                       with_activities(activities).
+                       sort_by_cached_amout.
+                       find(:all, :conditions => ["sum_of_children = 0"])
+    else
+      []
+    end
   end
 
-  def leaf_assigns_for_activities(type, activities = self.activities)
-    CodeAssignment.with_code_id(id).with_type(type.to_s).with_activities(activities).sort_cached_amt.find(:all, :conditions => ["(sum_of_children = 0 or code_id in (?))", self.class.leaves.map(&:id)])
-  end
-
-  def sum_of_assignments_for_activities(type, activities = self.activities)
-    code_assignments.with_type(type.to_s).with_activities(activities).sum(:cached_amount_in_usd)
+  def sum_of_assignments_for_activities(coding_klass, activities)
+    code_assignments.with_type(coding_klass.to_s).with_activities(activities).sum(:cached_amount_in_usd)
   end
 
   def name
-    to_s
+    short_display
   end
 
   def to_s
@@ -58,11 +58,11 @@ class Code < ActiveRecord::Base
   end
 
   def to_s_prefer_official
-   official_name ? official_name : to_s
+    official_name || short_display
   end
 
   def to_s_with_external_id
-    to_s + " (" + (external_id.nil? ? 'n/a': external_id) + ")"
+    "#{short_display} (#{external_id || 'n/a'})"
   end
 end
 

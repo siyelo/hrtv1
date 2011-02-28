@@ -2,6 +2,13 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataRequest do
 
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:organization_id) }
+    it { should allow_mass_assignment_of(:title) }
+    it { should allow_mass_assignment_of(:complete) }
+    it { should allow_mass_assignment_of(:pending_review) }
+  end
+
   describe "validations" do
     subject { Factory(:data_request) }
     it { should be_valid }
@@ -10,8 +17,8 @@ describe DataRequest do
   end
 
   describe "associations" do
-    it { should have_many :data_responses }
     it { should belong_to :organization }
+    it { should have_many :data_responses }
   end
 end
 

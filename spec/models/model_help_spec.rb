@@ -1,14 +1,17 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ModelHelp do
-  
-  describe "creating a record" do
+
+  describe "validations" do
     subject { Factory(:model_help) }
-    
     it { should be_valid }
-    it { should have_many :comments }
   end
-  
+
+  describe "associations" do
+    it { should have_many :comments }
+    it { should have_many :field_help }
+  end
+
   describe "counter cache" do
     context "comments cache" do
       before :each do

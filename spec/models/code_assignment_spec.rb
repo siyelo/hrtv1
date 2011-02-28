@@ -5,13 +5,27 @@ describe CodeAssignment do
     @assignment = Factory(:code_assignment)
   end
 
-  describe "creating a record" do
+  describe "validations" do
     subject { @assignment }
     it { should be_valid }
-    it { should belong_to :activity }
-    it { should belong_to :code }
     it { should validate_presence_of :activity_id }
     it { should validate_presence_of :code_id }
+  end
+
+  describe "associations" do
+    it { should belong_to :activity }
+    it { should belong_to :code }
+  end
+
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:activity) }
+    it { should allow_mass_assignment_of(:code) }
+    it { should allow_mass_assignment_of(:amount) }
+    it { should allow_mass_assignment_of(:percentage) }
+    it { should allow_mass_assignment_of(:sum_of_children) }
+    it { should allow_mass_assignment_of(:cached_amount) }
+    it { should allow_mass_assignment_of(:cached_amount_in_usd) }
+
     it { should allow_value(12345).for(:amount) }
     it { should allow_value(12345.00).for(:amount) }
     it { should allow_value(12345.123).for(:amount) }

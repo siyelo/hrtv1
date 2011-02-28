@@ -2,12 +2,17 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataResponse do
 
-  describe "basic validations" do
-    it { should have_many(:projects) }
-    it { should have_many(:activities) }
-    it { should have_many(:funding_flows) }
+  describe "associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
+    it { should have_many(:activities) }
+    it { should have_many(:sub_activities) }
+    it { should have_many(:funding_flows) }
+    it { should have_many(:projects) }
+    it { should have_many(:users_currently_completing) }
+  end
+
+  describe "validations" do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_presence_of(:currency) }

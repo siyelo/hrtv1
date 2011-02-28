@@ -15,7 +15,7 @@
       = display_warnings(@warnings)
 
 %p
-  = link_to "Submit", submit_data_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+  = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
 
 
 = render 'shared/data_entry_help'

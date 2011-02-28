@@ -1,4 +1,4 @@
-class Reporter::DataResponsesController < Reporter::BaseController
+class Reporter::ResponsesController < Reporter::BaseController
 
   def show
     if current_user.admin?

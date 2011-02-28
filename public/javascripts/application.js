@@ -758,7 +758,7 @@ var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
   }
 };
 
-var data_responses_review = {
+var responses_review = {
   run: function () {
     jQuery(".use_budget_codings_for_spend").click(function (e) {
       var checked = jQuery(this).is(':checked');

@@ -31,6 +31,6 @@ class ProjectsController < Reporter::BaseController
   protected
 
     def load_data_response
-      @data_response = DataResponse.find(params[:data_response_id])
+      @data_response = DataResponse.find(params[:response_id])
     end
 end

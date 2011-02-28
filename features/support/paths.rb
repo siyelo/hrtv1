@@ -57,7 +57,7 @@ module NavigationHelpers
 
     when /the data response page for "(.+)"/
       req = DataRequest.find_by_title($1)
-      edit_data_response_path( DataResponse.find_by_data_request_id req.id)
+      edit_response_path( DataResponse.find_by_data_request_id req.id)
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

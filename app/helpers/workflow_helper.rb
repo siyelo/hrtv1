@@ -13,7 +13,7 @@ module WorkflowHelper
     when "activities/index"
       other_costs_path
     when "other_costs/index"
-      review_data_response_path(current_user.current_data_response)
+      review_response_path(current_user.current_data_response)
     else
       root_path
     end

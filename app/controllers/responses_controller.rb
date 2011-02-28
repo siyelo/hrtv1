@@ -1,4 +1,4 @@
-class DataResponsesController < ApplicationController
+class ResponsesController < ApplicationController
   layout 'reporter' #TODO: separate reporter/admin actions
   before_filter :require_user
   before_filter :find_response, :only => [:edit, :update, :review, :submit]

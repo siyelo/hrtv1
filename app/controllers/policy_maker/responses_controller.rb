@@ -1,4 +1,4 @@
-class PolicyMaker::DataResponsesController < ApplicationController
+class PolicyMaker::ResponsesController < ApplicationController
   layout 'admin'
   before_filter :require_admin
   skip_before_filter :load_help

@@ -8,16 +8,8 @@ ActionController::Routing::Routes.draw do |map|
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
   map.resources :password_resets
 
-
   # PROFILE
   map.resource :profile, :only => [:edit, :update]
-
-  map.resources :data_responses,
-                  :member => {:review => :get,
-                              :submit => :put} do |response|
-    response.resources :projects
-  end
-
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   # STATIC PAGES
@@ -40,16 +32,24 @@ ActionController::Routing::Routes.draw do |map|
 
   # POLICY MAKER
   map.namespace :policy_maker do |policy_maker|
-    policy_maker.resources :data_responses, :only => [:show, :index]
+    policy_maker.resources :responses, :only => [:show, :index]
   end
 
-  # REPORTER
+  # REPORTER USER: DATA ENTRY
+  map.resources :responses,
+                :member => {:review => :get,
+                            :submit => :put} do |response|
+    response.resources :projects
+
+  end
+  # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.resources :data_responses, :only => [:show]
+    reporter.resources :responses, :only => [:show]
     reporter.resources :reports, :only => [:index, :show]
     reporter.resources :comments, :member => {:delete => :get}
   end
+
 
   # REPORTS
   map.namespace :reports do |reports|
@@ -75,10 +75,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :funding_sources, :only => [:index]
   map.resources :implementers, :only => [:index]
-  map.resources :projects,
-                :collection => {:browse => :get},
-                :member => {:select => :post},
-                :active_scaffold => true
+
   map.resources :organizations,
                 :collection => {:browse => :get},
                 :member => {:select => :post},

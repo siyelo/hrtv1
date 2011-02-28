@@ -154,4 +154,5 @@ class CodeAssignmentsController < ApplicationController
         :coding_spend_cc_classified?
       end
     end
+
 end

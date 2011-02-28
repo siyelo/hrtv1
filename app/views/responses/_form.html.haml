@@ -1,6 +1,6 @@
 - editing = controller.action_name == 'edit' ? true : false
 - button_text =  editing ? "Update Response" : "Begin Response"
-%h2 Enter general information and start the response
+
 .dashboard_section
   .form_aside
     %h3 What's a (Data) Response?
@@ -16,7 +16,7 @@
     = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
     %li.last
       %h3 Contact Details
-    = f.input :contact_name, :as => :string, :hint =>"a primary contact at your organization that will help the resource tracking team if there are any questions throughout the process."
+    = f.input :contact_name, :as => :string, :hint =>"a primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process."
     = f.input :contact_position, :as => :string
     = f.input :contact_phone_number, :as => :string, :label => "Phone number"
     = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number"

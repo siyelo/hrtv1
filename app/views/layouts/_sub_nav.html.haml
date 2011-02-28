@@ -1,11 +1,10 @@
 #sub-nav
   %ul
-
     %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
       = link_to 'Projects', response_projects_path(@data_response)
 
     %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
-      = link_to 'Funding Sources', funding_sources_path
+      = link_to 'Funding Sources', response_funding_sources_path(@data_response)
 
     %li{ :class => [controller.class.to_s == "ImplementersController" ? "active" : '']}
       = link_to 'Implementers', implementers_path
@@ -19,10 +18,10 @@
     %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
       = link_to 'Other Costs', other_costs_path
 
-      %li{ :class => (controller.class.to_s == "DataResponsesController" && controller.action_name == 'edit' ? "active" : '')}
+      %li{ :class => (controller.class.to_s == "ResponsesController" && controller.action_name == 'edit' ? "active" : '')}
         = link_to 'Settings', edit_response_path(current_user.current_data_response || 1)
 
-    %li{ :class => (controller.class.to_s == "Reporter::DataResponsesController" && controller.action_name == "show" ? "active" : '')}
+    %li{ :class => (controller.class.to_s == "Reporter::ResponsesController" && controller.action_name == "show" ? "active" : '')}
       = link_to 'Review', reporter_response_path(current_user.current_data_response || 1)
 
     %li{ :class => (controller.controller_name == "data_responses" && controller.action_name == "review" ? "active" : '')}

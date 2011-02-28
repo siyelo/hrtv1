@@ -4,6 +4,7 @@ class ActiveScaffoldController < ApplicationController
   before_filter :require_user
   before_filter :load_help
   before_filter :set_defaults
+  before_filter :load_data_response
 
   # right now this only thrown when user tries to update an organization
   rescue_from ActiveScaffold::ActionNotAllowed do |exception|
@@ -16,6 +17,7 @@ class ActiveScaffoldController < ApplicationController
   end
 
   protected
+
     #fixes update - bug https://www.pivotaltracker.com/story/show/7145237
     def before_update_save(record)
       record.comments.each do |comment|
@@ -215,6 +217,10 @@ class ActiveScaffoldController < ApplicationController
       else
         nil # TODO throw error?
       end
+    end
+
+    def load_data_response
+      @data_response = DataResponse.find(params[:response_id])
     end
 
 end

@@ -13,19 +13,18 @@ class ProjectsController < Reporter::BaseController
   # check ownership and redirect to collection path on create instead of show
   def create
     @project = @data_response.projects.new(params[:project])
-    create!
+    create!{ response_projects_url(@data_response) }
   end
 
   # check ownership and redirect to collection path on update instead of show
   def update
     @project = @data_response.projects.find(params[:id])
-    update!
+    update!{ response_projects_url(@data_response) }
   end
 
-  # check ownership
   def destroy
     @project = @data_response.projects.find(params[:id])
-    destroy!
+    destroy! { response_projects_url(@data_response) }
   end
 
   protected

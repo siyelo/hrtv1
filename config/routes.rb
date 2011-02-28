@@ -14,7 +14,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :data_responses,
                   :member => {:review => :get,
-                              :submit => :put}
+                              :submit => :put} do |response|
+    response.resources :projects
+  end
+
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   # STATIC PAGES

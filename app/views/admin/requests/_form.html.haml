@@ -1,0 +1,16 @@
+%table
+  %tbody
+    %tr
+      %td= f.label :organization_id
+      %td= f.collection_select :organization_id, Organization.find(:all), :id, :name, :include_blank => 'Please select an organization'
+    %tr
+      %td= f.label :title
+      %td= f.text_field :title
+    %tr
+      %td= f.label :complete
+      %td= f.check_box :complete
+    %tr
+      %td= f.label :pending_review
+      %td= f.check_box :pending_review
+
+= submit_tag @request.new_record? ? 'Create request' : 'Update request'

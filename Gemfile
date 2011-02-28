@@ -25,7 +25,6 @@ gem 'json_pure'
 
 group :development do
   gem 'annotate'
-  gem 'awesome_print', :require => "ap"
   gem 'heroku'
   gem 'hirb'
   gem 'open_gem'
@@ -33,8 +32,9 @@ group :development do
   gem 'ruby-debug'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
-  gem 'wirble'
   gem 'mongrel'
+  gem 'awesome_print', :require => "ap"
+  gem 'wirble'
   gem 'interactive_editor'
   gem 'sketches'
   gem 'looksee'

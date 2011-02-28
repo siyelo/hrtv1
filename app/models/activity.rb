@@ -71,6 +71,7 @@ class Activity < ActiveRecord::Base
   delegate :currency, :to => :project, :allow_nil => true
 
   ### Named scopes
+  # TODO: spec
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }

@@ -198,7 +198,7 @@ module Charts::DistrictPies
       def prepare_pie_values(code_assignments, ratio)
         values = []
         code_assignments.each do |ca|
-          values << [ca.code_name, (ca.value.to_f * ratio).round(2)]
+          values << [ca.code.short_display, (ca.value.to_f * ratio).round(2)]
         end
 
         {

@@ -3,7 +3,10 @@
 %h2 Enter general information and start the response
 .dashboard_section
   .form_aside
-    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+    %h3 What's a (Data) Response?
+    %p The Government first creates a "Data Request", which is used to gather data in HRT for a certain period of time (e.g. 1 year.).
+    %p When this happens, each organization (like yours) creates their own Response (a.k.a. "Data Response"), in which you can enter all information related to that request.
+
   - f.inputs :class => 'wrap-80 inputs' do
     %li.last
       %h3 Basics
@@ -21,4 +24,4 @@
 
   - f.buttons :class => 'wrap-80 buttons' do
     = f.commit_button button_text, :class => "last"
-  
+

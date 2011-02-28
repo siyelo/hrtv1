@@ -1,0 +1,10 @@
+- title("Projects")
+
+%h1.main_heading Projects
+
+= link_to "+ Create Project", new_response_project_path(@data_response)
+
+%br
+
+%ul{ :id => 'position_container', :class => 'image_list' }
+  = render :partial => "/user/albums/album", :collection => @albums

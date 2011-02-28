@@ -1,7 +1,6 @@
 class DataRequest < ActiveRecord::Base
 
-  ### Attributes
-  attr_accessible :organization_id, :title, :complete, :pending_review
+  attr_accessible :organization_id, :title, :complete, :pending_review, :due_date
 
   ### Associations
   belongs_to :organization
@@ -10,6 +9,7 @@ class DataRequest < ActiveRecord::Base
   ### Validations
   validates_presence_of :organization_id
   validates_presence_of :title
+  validates_presence_of :due_date
 
   ### Named scopes
   # TODO: spec
@@ -27,6 +27,7 @@ class DataRequest < ActiveRecord::Base
   def self.find_all_unfulfill_request
     DataRequest.find(:all, :conditions => ["complete = ?", false])
   end
+
 end
 
 # == Schema Information

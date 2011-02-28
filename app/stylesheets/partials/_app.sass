@@ -18,7 +18,7 @@ body.app
     padding: 0 15px
     position: relative
   #content .wrapper
-    +box-shadow(#eee, 0, 2px, 5px)
+    //+box-shadow(#eee, 0, 2px, 5px)
 
   #header_app
     height: 30px
@@ -581,7 +581,47 @@ ul.group
         opacity: 0.9
       &.regenerate
         opacity: 0.9
-      
+  
+  ol
+    li
+      border-bottom: 1px solid #f3f3f3
+      margin-bottom: 7px
+      padding-bottom: 7px
+      overflow: hidden
+      &.last
+        border: none
+    h3
+      background: #f8f8f8
+      margin-top: 5px
+      padding-left: 10px !important
+      +border-radius(3px)
+    label
+      float: left
+      margin-top: 9px
+      padding-left: 10px
+      width: 15%
+    select, input[type=text]
+      float: left
+      font-size: 12px
+      padding: 5px
+      +border-radius(3px)
+    select
+      padding: 2px
+
+    .inline-hints
+      float: left
+      margin-left: 1%
+      width: 39%
+  .form_aside
+    background: #f8f8f8
+    float: right
+    padding: 20px
+    width: 16%
+    +border-radius(3px)
+    p
+      color: $light-grey
+      font-size: 11px
+      line-height: 1.4
 
 #heading-activity
   background: image_url("icon_reporter.png") no-repeat center left
@@ -590,7 +630,7 @@ ul.group
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
 
-.hint
+.hint, .inline-hints
   color: #666
   display: block
   font-size: 10px
@@ -598,6 +638,20 @@ ul.group
   &.padded
     padding-top: 0
     padding-bottom: 20px
+    
+.inputs
+  li
+    margin-bottom: 20px
+  label
+    color: $mid-blue + #444 !important
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 3px
+  input[type=text], textarea
+    width: 350px
+  select
+    padding: 7px 5px
+    width: 363px
 
 // Pretty Table (with clickable rows)
 

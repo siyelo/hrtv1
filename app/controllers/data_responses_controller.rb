@@ -17,7 +17,7 @@ class DataResponsesController < ApplicationController
 
     respond_to do |format|
       if @data_response.save
-        flash[:notice] = "Your response was successfully created."
+        flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
         format.html { redirect_to edit_data_response_url(@data_response) }
       else
         format.html { render :action => :new }

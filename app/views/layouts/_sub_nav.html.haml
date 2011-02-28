@@ -1,7 +1,5 @@
 #sub-nav
   %ul
-    %li{ :class => (controller.class.to_s == "DataResponsesController" && controller.action_name == 'edit' ? "active" : '')}
-      = link_to 'Settings', edit_data_response_path(current_user.current_data_response || 1)
 
     %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
       = link_to 'Projects', projects_path
@@ -20,6 +18,9 @@
 
     %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
       = link_to 'Other Costs', other_costs_path
+
+      %li{ :class => (controller.class.to_s == "DataResponsesController" && controller.action_name == 'edit' ? "active" : '')}
+        = link_to 'Settings', edit_data_response_path(current_user.current_data_response || 1)
 
     %li{ :class => (controller.class.to_s == "Reporter::DataResponsesController" && controller.action_name == "show" ? "active" : '')}
       = link_to 'Review', reporter_data_response_path(current_user.current_data_response || 1)

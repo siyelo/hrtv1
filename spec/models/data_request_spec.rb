@@ -9,6 +9,8 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:pending_review) }
     it { should allow_mass_assignment_of(:start_date) }
     it { should allow_mass_assignment_of(:end_date) }
+    it { should allow_mass_assignment_of(:budget) }
+    it { should allow_mass_assignment_of(:spend) }
   end
 
   describe "validations" do

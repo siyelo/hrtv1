@@ -39,6 +39,7 @@ class Activity < ActiveRecord::Base
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
+  belongs_to :data_response
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
@@ -56,6 +57,12 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
 
+  ### Delegates
+  delegate :organization, :to => :data_response
+  delegate :currency, :to => :project, :allow_nil => true
+  delegate :data_request, :to => :data_response
+
+
   ### Validations
   validate :approved_activity_cannot_be_changed
 
@@ -65,10 +72,6 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
-
-  ### Delegates
-  delegate :organization, :to => :data_response
-  delegate :currency, :to => :project, :allow_nil => true
 
   ### Named scopes
   # TODO: spec

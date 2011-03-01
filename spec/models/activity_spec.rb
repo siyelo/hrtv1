@@ -14,6 +14,7 @@ describe Activity do
 
   describe "associations" do
     it { should belong_to :provider }
+    it { should belong_to :data_response }
     it { should have_and_belong_to_many :projects }
     it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }

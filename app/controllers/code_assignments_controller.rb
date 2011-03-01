@@ -12,14 +12,10 @@ class CodeAssignmentsController < ApplicationController
     @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
     @error_message       = add_code_assignments_error(@coding_class, @activity)
     if params[:tab].present?
-      # ajax requests for all tabs except the first one
-      render :partial => 'tab', :locals => {:coding_type => @coding_type,
-                                            :activity => @activity,
-                                            :codes => @codes,
-                                            :tab => params[:tab] },
-                                :layout => false
+      render :partial => 'tab', :layout => false,
+             :locals => {:coding_type => @coding_type, :activity => @activity, 
+                         :codes => @codes, :tab => params[:tab] }
     else
-      # show page with first tab loaded
       @model_help = ModelHelp.find_by_model_name 'CodeAssignment'
       render :action => 'show'
     end

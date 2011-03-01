@@ -711,31 +711,29 @@ var code_assignments_show = {
     });
 
     // collapsible checkboxes for tab1
-    addCollabsibleButtons('tab1');
+    //addCollabsibleButtons('tab1');
 
-    // load budget districts
-    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingBudgetDistrict&tab=tab2', function (response) {
-      appendTab('tab2', response);
-    });
+    var tab_codings = [['tab1', 'CodingBudget'], ['tab2', 'CodingBudgetDistrict'],
+     ['tab3', 'CodingBudgetCostCategorization'], ['tab4', 'CodingSpend'],
+     ['tab5', 'CodingSpendDistrict'], ['tab6', 'CodingSpendCostCategorization']]
 
-    // load budget cost categorization
-    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingBudgetCostCategorization&tab=tab3', function (response) {
-      appendTab('tab3', response);
-    });
+    for(var i = 0; i < tab_codings.length; i++) {
+      var tab         = tab_codings[i][0];
+      var coding_type = tab_codings[i][1];
+      var url = '/activities/' + _activity_id + 
+        '/code_assignments?coding_type=' + coding_type + '&tab=' + tab;
 
-    // load expenditure
-    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpend&tab=tab4', function (response) {
-      appendTab('tab4', response);
-    });
+      var element = jQuery("#activity_classification ." + tab);
 
-    // load expenditure districts
-    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpendDistrict&tab=tab5', function (response) {
-      appendTab('tab5', response);
-    });
-    // load expenditure cost categories
-    jQuery.get('/activities/' + _activity_id + '/code_assignments?coding_type=CodingSpendCostCategorization&tab=tab6', function (response) {
-      appendTab('tab6', response);
-    });
+      if (element.length) {
+        // closure to 'catch' the actual tab
+        (function (url, tab) {
+          jQuery.get(url, function (response) {
+            appendTab(tab, response);
+          });
+        })(url, tab);
+      }
+    }
 
     // bind click events for tabs
     jQuery(".nav2 ul li").live('click', function (e) {

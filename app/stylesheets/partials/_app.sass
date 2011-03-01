@@ -58,6 +58,62 @@ body.app
         position: relative
         top: 1px
 
+    &.edit_button
+      background: $light-blue
+      border: 1px solid $light-blue - #222
+      color: $mid-blue
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius
+      +box-shadow(#999, 0, 1px, 3px)
+      +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
+      +text-shadow($lighter-blue + #111, 0, 1px, 0)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: $orange
+        border: 1px solid $orange - #222
+        color: #fff
+        +linear-gradient(color-stops($orange, $orange - #222))
+        +text-shadow($orange - #444, 0, 1px, 0)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+        
+    &.delete_button
+      background: $lightest-blue
+      border: 1px solid $light-blue - #222
+      color: $mid-blue
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius
+      +box-shadow(#999, 0, 1px, 3px)
+      +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
+      +text-shadow(#fff, 0, 1px, 0)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: $red
+        border: 1px solid $red - #222
+        color: #fff
+        +linear-gradient(color-stops($red, $red - #222))
+        +text-shadow($red - #444, 0, 1px, 0)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
   /* overriding the shared logo style*/
   #header_app
     a

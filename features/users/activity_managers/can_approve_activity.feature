@@ -16,19 +16,6 @@ Background:
   And mtef_code exists with short_display: "Mtef code"
   And I am signed in as "who_manager"
 
-@activity_managers @approve_activity
-Scenario: See a breakdown for an activity
-  When I go to the activities page
-  And I follow "Classify"
-  Then I should see "TB Drugs procurement"
-  And I should see "Coding" within "#tab1"
-  And I should see "District" within "#tab2"
-  And I should see "Categorization" within "#tab3"
-  And I should see "Coding" within "#tab4"
-  And I should see "District" within "#tab5"
-  And I should see "Cost Categorization" within "#tab6"
-  And I should see "Mtef code"
-
 # note you cant drive this via the normal 'Classify' popup link in Capybara
 # - it wont follow the new browser window
 # The "wait a few moments" between checking the box and going to the next page is to avoid

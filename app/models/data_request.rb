@@ -3,7 +3,7 @@ class DataRequest < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :organization_id, :title, :complete, :pending_review,
-                  :start_date, :end_date, :due_date
+                  :start_date, :end_date, :due_date, :budget, :spend
 
   ### Associations
   belongs_to :organization

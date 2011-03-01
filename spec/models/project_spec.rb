@@ -15,6 +15,7 @@ describe Project do
     it { should have_many :providers }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
@@ -248,33 +249,3 @@ describe Project do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: projects
-#
-#  id               :integer         primary key
-#  name             :string(255)
-#  description      :text
-#  start_date       :date
-#  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
-#  budget           :decimal(, )
-#  spend            :decimal(, )
-#  entire_budget    :decimal(, )
-#  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
-#  comments_count   :integer         default(0)
-#
-

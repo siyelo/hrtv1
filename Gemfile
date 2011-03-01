@@ -10,6 +10,7 @@ gem 'formtastic', "= 0.9.10"
 gem 'google_currency'
 gem 'haml'
 gem 'hoptoad_notifier'
+gem 'i18n', '=0.4.2'
 gem 'inherited_resources', "=1.0.6"
 gem 'money'
 gem "paperclip", "~> 2.3"

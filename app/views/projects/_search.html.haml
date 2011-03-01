@@ -1,4 +1,3 @@
-
 #search
   - form_tag response_projects_path(@data_response), :method => :get do
     #search_box
@@ -6,8 +5,3 @@
     = hidden_field_tag :direction, params[:direction]
     = hidden_field_tag :sort, params[:sort]
     = submit_tag 'Search', :name => nil
-    
-- if params[:query]
-  %p
-    = "Projects with names containing #{params[:query]}"
-    = link_to "(Back to complete project listing)", response_projects_path(@data_response)

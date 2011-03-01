@@ -3,7 +3,7 @@ class DataRequest < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :organization_id, :title, :complete, :pending_review,
-                  :start_date, :end_date
+                  :start_date, :end_date, :due_date
 
   ### Associations
   belongs_to :organization
@@ -11,6 +11,7 @@ class DataRequest < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :organization_id, :title
+  validates_date :due_date
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."

@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20110301083912) do
     t.date     "end_date"
     t.boolean  "budget",          :default => true
     t.boolean  "spend",           :default => true
+    t.date     "due_date"
   end
 
   create_table "data_responses", :force => true do |t|

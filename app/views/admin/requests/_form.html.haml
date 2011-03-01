@@ -7,6 +7,9 @@
       %td= f.label :title
       %td= f.text_field :title
     %tr
+      %td= f.label :due_date
+      %td= f.text_field :due_date, :class => 'date_picker'
+    %tr
       %td= f.label :start_date
       %td= f.text_field :start_date, :class => 'date_picker'
     %tr

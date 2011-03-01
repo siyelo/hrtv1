@@ -12,6 +12,7 @@ Scenario: Admin can CRUD data requests
   And I follow "New"
   And I select "Organization1" from "Organization"
   And I fill in "Title" with "My data response title"
+  And I fill in "Due date" with "2010-09-01"
   And I fill in "Start date" with "2010-01-01"
   And I fill in "End date" with "2011-01-01"
   And I press "Create request"
@@ -37,14 +38,16 @@ Scenario Outline: See errors when creating data request
   And I fill in "Title" with "<title>"
   And I fill in "Start date" with "<start_date>"
   And I fill in "End date" with "<end_date>"
+  And I fill in "Due date" with "<due_date>"
   And I press "Create request"
   Then I should see "<message>"
   
   Examples:
-       | organization | title | start_date | end_date   | message                               | 
-       | org1         | title | 2010-01-01 | 2011-01-01 | Request was successfully created.     | 
-       |              | title | 2010-01-01 | 2011-01-01 | Organization can't be blank           | 
-       | org1         |       | 2010-01-01 | 2011-01-01 | Title can't be blank                  | 
-       | org1         | title |            | 2011-01-01 | Start date is an invalid date         | 
-       | org1         | title | 2010-01-01 |            | End date is an invalid date           | 
-       | org1         | title | 2011-01-01 | 2010-01-01 | Start date must come before End date. | 
+    | organization | title | due_date   | start_date | end_date   | message                               | 
+    | org1         | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created.     | 
+    |              | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank           | 
+    | org1         |       | 2010-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank                  | 
+    | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date is an invalid date           | 
+    | org1         | title | 2010-09-01 |            | 2011-01-01 | Start date is an invalid date         | 
+    | org1         | title | 2010-09-01 | 2010-01-01 |            | End date is an invalid date           | 
+    | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date. | 

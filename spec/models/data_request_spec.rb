@@ -16,12 +16,18 @@ describe DataRequest do
     it { should be_valid }
     it { should validate_presence_of :organization_id }
     it { should validate_presence_of :title }
+    it { should allow_value('2010-12-01').for(:due_date) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
+    it { should_not allow_value('').for(:due_date) }
     it { should_not allow_value('').for(:start_date) }
     it { should_not allow_value('').for(:end_date) }
+    it { should_not allow_value('2010-13-01').for(:due_date) }
     it { should_not allow_value('2010-13-01').for(:start_date) }
+    it { should_not allow_value('2010-13-01').for(:end_date) }
+    it { should_not allow_value('2010-12-41').for(:due_date) }
     it { should_not allow_value('2010-12-41').for(:start_date) }
+    it { should_not allow_value('2010-12-41').for(:end_date) }
 
     it "accepts start date < end date" do
       dr = Factory.build(:data_request,

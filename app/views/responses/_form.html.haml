@@ -8,7 +8,7 @@
   %p When this happens, each organization (like yours) creates their own Response (a.k.a. "Data Response"), in which you can enter all information related to that request.
 
 - f.inputs :class => 'wrap-80 inputs' do
-    
+
   %li.last
     %h3 Basics
     %ul.dashboard_section
@@ -25,7 +25,6 @@
       = f.input :contact_phone_number, :as => :string, :label => "Phone number"
       = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number"
       = f.input :contact_office_location, :as => :string, :label => "Office location"
-
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button button_text, :class => "last"

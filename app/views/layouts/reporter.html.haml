@@ -19,7 +19,7 @@
             = yield :page_help
             = yield
             .comments
-              = yield :comments
+              -#= yield :comments
           #sidebar
             :javascript
               jQuery('#sidebar').hide()
@@ -30,7 +30,7 @@
           .full-width
             = yield
             .comments
-              = yield :comments
+              -#= yield :comments
 
         = yield(:main)
 

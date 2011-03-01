@@ -23,6 +23,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # ADMIN
   map.namespace :admin do |admin|
+    admin.resources :requests
     admin.resources :responses,
                     :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
                     :member     => {:delete => :get}

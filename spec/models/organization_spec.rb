@@ -2,12 +2,57 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:name) }
+  end
+
+  describe "validations" do
+    subject { Factory(:organization) }
+    it { should be_valid }
+    it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name) }
+  end
+
   describe "associations" do
+    it { should have_and_belong_to_many :activities }
+    it { should have_and_belong_to_many :locations }
     it { should have_many :users }
     it { should have_many :data_requests }
     it { should have_many :data_responses }
-    it { should have_and_belong_to_many :activities }
-    it { should have_and_belong_to_many :locations }
+    it { should have_many :fulfilled_data_requests }
+    it { should have_many :dr_activities }
+    it { should have_many :out_flows }
+    it { should have_many :in_flows }
+    it { should have_many :donor_for }
+    it { should have_many :implementor_for }
+    it { should have_many :provider_for }
+
+    it "returns fulfilled_data_requests" do
+      organization = Factory.create(:organization)
+      data_request1 = Factory.create(:data_request)
+      data_request2 = Factory.create(:data_request)
+      Factory.create(:data_response, :data_request => data_request1,
+                     :organization => organization)
+
+      organization.fulfilled_data_requests.should == [data_request1]
+    end
+  end
+
+  describe "unfulfilled_data_requests" do
+    it "returns empty array when no data requests" do
+      organization = Factory.create(:organization)
+      organization.unfulfilled_data_requests.should == []
+    end
+
+    it "returns empty array when no data requests" do
+      organization = Factory.create(:organization)
+      data_request1 = Factory.create(:data_request)
+      data_request2 = Factory.create(:data_request)
+      Factory.create(:data_response, :data_request => data_request1,
+                     :organization => organization)
+
+      organization.unfulfilled_data_requests.should == [data_request2]
+    end
   end
 
   describe "creating a organization record" do
@@ -16,54 +61,49 @@ describe Organization do
       Factory(:data_response, :organization => @organization)
     end
 
-    subject { @organization }
-    it { should be_valid }
-    it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name) }
-
     it "can have many in_flows" do
-      subject.in_flows.should have(0).items
+      @organization.in_flows.should have(0).items
       Factory(:funding_flow,
-              :to => subject,
-              :data_response => subject.data_responses.first)
-      subject.reload
-      subject.in_flows.should have(1).item
+              :to => @organization,
+              :data_response => @organization.data_responses.first)
+      @organization.reload
+      @organization.in_flows.should have(1).item
     end
 
     it "can have many out_flows" do
-      subject.out_flows.should have(0).items
+      @organization.out_flows.should have(0).items
       Factory(:funding_flow,
-                      :from => subject,
-                      :data_response => subject.data_responses.first)
-      subject.reload
-      subject.out_flows.should have(1).item
+                      :from => @organization,
+                      :data_response => @organization.data_responses.first)
+      @organization.reload
+      @organization.out_flows.should have(1).item
     end
 
     context "flows to/from projects" do
       before :each do
         @project = Factory(:project,
-                           :data_response => subject.data_responses.first)
+                           :data_response => @organization.data_responses.first)
       end
 
       it "can donate to a project" do
-        subject.donor_for.should have(0).items
+        @organization.donor_for.should have(0).items
         Factory(:funding_flow,
-                        :from => subject,
+                        :from => @organization,
                         :project => @project,
-                        :data_response => subject.data_responses.first)
-        subject.reload
-        subject.donor_for.should have(1).item
+                        :data_response => @organization.data_responses.first)
+        @organization.reload
+        @organization.donor_for.should have(1).item
       end
 
       it "can implement a project" do
-        subject.implementor_for.should have(0).items
+        @organization.implementor_for.should have(0).items
         Factory(:funding_flow,
-                        :to => subject,
+                        :to => @organization,
                         :project => @project,
-                        :data_response => subject.data_responses.first)
-        subject.reload
-        subject.implementor_for.should have(1).item
-        subject.implementor_for.first.should == @project
+                        :data_response => @organization.data_responses.first)
+        @organization.reload
+        @organization.implementor_for.should have(1).item
+        @organization.implementor_for.first.should == @project
       end
     end
   end

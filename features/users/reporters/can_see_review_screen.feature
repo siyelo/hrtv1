@@ -22,7 +22,6 @@ Background:
   And I follow "Review"
 
 @reporters @review_screen @javascript
-@run
 Scenario: Manage comments on data responses (with Javascript)
   Given wait a few moments
   When I click element ".comment_details"

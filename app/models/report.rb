@@ -130,6 +130,7 @@ class Report < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: reports
@@ -145,6 +146,6 @@ end
 #  formatted_csv_file_name    :string(255)
 #  formatted_csv_content_type :string(255)
 #  formatted_csv_file_size    :integer
-#  formatted_csv_updated_at   :datetime
+#  formatted_csv_updated_at   :timestamp
 #
 

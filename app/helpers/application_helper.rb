@@ -95,10 +95,8 @@ module ApplicationHelper
 
   # check the request matches the form 'parent/controller'
   def current_controller_with_nesting?(parent_name, controller_name)
-    path    = request.path_parameters[:controller].split('/')
-    current = path.pop
-    parent  = path.pop
-    controller_name == current && parent_name == parent
+    path = request.path_parameters[:controller].split('/')
+    controller_name == path[1] && parent_name == path[0]
   end
 
   def friendly_name(object, truncate_length = 45)

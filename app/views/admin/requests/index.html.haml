@@ -1,0 +1,38 @@
+%h1.main_heading Data Requests
+
+= link_to 'New', new_admin_request_path
+
+%div
+  .simple_table
+    %table
+      %thead
+        %tr
+          %th Organization
+          %th Title
+          %th Complete
+          %th Pending review
+          %th Start date
+          %th End date
+          %th Budget
+          %th Spend
+          %th Created at
+          %th.action Manage
+      %tbody
+        - @requests.each do |request|
+          %tr
+            %td= request.organization.try(:name)
+            %td= request.title
+            %td= request.complete
+            %td= request.pending_review
+            %td= request.start_date
+            %td= request.end_date
+            %td= request.budget
+            %td= request.spend
+            %td= request.created_at
+            %td.action
+              = link_to "Show", admin_request_path(request)
+              = link_to "Edit", edit_admin_request_path(request)
+              = link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+
+
+    = will_paginate @requests

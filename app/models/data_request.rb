@@ -1,33 +1,20 @@
+require 'validators'
 class DataRequest < ActiveRecord::Base
 
-  attr_accessible :organization_id, :title, :complete, :pending_review, :due_date
+  ### Attributes
+  attr_accessible :organization_id, :title, :complete, :pending_review,
+                  :start_date, :end_date, :due_date
 
   ### Associations
   belongs_to :organization
   has_many :data_responses, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :organization_id
-  validates_presence_of :title
-  validates_presence_of :due_date
-
-  ### Named scopes
-  # TODO: spec
-  named_scope :unfulfilled, lambda {|organization|
-    return {} unless organization
-    { :conditions=>[" id NOT IN ( SELECT data_request_id FROM data_responses WHERE data_responses.organization_id = ? )", organization.id] }
-  }
-
-  # TODO: spec
-  def self.find_unfulfill_request(organization_id)
-    DataRequest.find(:all, :conditions=>["organization_id= ? AND complete = ?", organization_id, false])
-  end
-
-  # TODO: spec
-  def self.find_all_unfulfill_request
-    DataRequest.find(:all, :conditions => ["complete = ?", false])
-  end
-
+  validates_presence_of :organization_id, :title
+  validates_date :due_date
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 end
 
 # == Schema Information
@@ -41,5 +28,9 @@ end
 #  pending_review  :boolean         default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  start_date      :date
+#  end_date        :date
+#  budget          :boolean
+#  spent           :boolean
 #
 

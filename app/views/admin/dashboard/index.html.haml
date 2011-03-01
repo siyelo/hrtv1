@@ -6,6 +6,7 @@
     Manage
   .dashboard_section
     %ul.admin_dashboard
+      %li= link_to "Requests", admin_requests_path, :class => 'drill_down'
       %li= link_to "Organizations", admin_organizations_path, :class => 'drill_down'
       %li= link_to "Users", admin_users_path, :class => 'drill_down'
       %li=  link_to "Activities", activities_url, :class => 'drill_down'

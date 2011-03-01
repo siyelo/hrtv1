@@ -18,6 +18,7 @@ gem 'validates_date_time', "= 1.0.0"
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"
 gem 'json_pure'
+gem 'inherited_resources', '= 1.0.6'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

@@ -1,29 +1,26 @@
 require 'validation_disabler'
-
 class Organization < ActiveRecord::Base
 
   ### Comments
   acts_as_commentable
 
+  ### Attributes
+  attr_accessible :name
+
   ### Associations
-  has_many :users # people in this organization
   has_and_belongs_to_many :activities # activities that target / aid this org
+  has_and_belongs_to_many :locations
+  has_many :users # people in this organization
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
+  has_many :fulfilled_data_requests, :through => :data_responses, :source => :data_request
   has_many :dr_activities, :through => :data_responses, :source => :activities
-  has_many :out_flows,
-            :class_name => "FundingFlow",
-            :foreign_key => "organization_id_from"
-  has_many :in_flows,
-            :class_name => "FundingFlow",
-            :foreign_key => "organization_id_to"
+  # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
+  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from"
+  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to"
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
-  has_and_belongs_to_many :locations
-
-  ### Attributes
-  attr_accessible :name
 
   ### Validations
   validates_presence_of :name
@@ -44,6 +41,10 @@ class Organization < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def unfulfilled_data_requests
+    DataRequest.all - fulfilled_data_requests
   end
 
   def self.merge_organizations!(target, duplicate)

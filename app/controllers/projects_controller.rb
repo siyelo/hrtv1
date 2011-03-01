@@ -1,10 +1,19 @@
 class ProjectsController < Reporter::BaseController
+  SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
+
   inherit_resources
   actions :all, :except => :show
   respond_to :html
+  helper_method :sort_column, :sort_direction
 
   before_filter :load_data_response
   before_filter :load_resource, :only => [:edit, :update, :destroy]
+
+  def index
+    #@projects = @data_response.projects.order(sort_column + " " + sort_direction) # rails 3, sigh
+    @projects = @data_response.projects.paginate(:page => params[:page], :order => sort_column + " " + sort_direction) # rails 2
+    index!
+  end
 
   def new
     @project = @data_response.projects.new()
@@ -38,5 +47,13 @@ class ProjectsController < Reporter::BaseController
 
     def load_data_response
       @data_response = DataResponse.find(params[:response_id])
+    end
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
 end

@@ -8,6 +8,9 @@ class Project < ActiveRecord::Base
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
 
+  cattr_reader :per_page
+  @@per_page = 3
+
   acts_as_stripper
   acts_as_commentable
 

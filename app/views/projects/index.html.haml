@@ -9,15 +9,16 @@
 %table.standard.rounded.clickable
   %thead
     %tr
-      %th Name
-      %th Description
-      %th Total Spent
-      %th Total Budget
+      %th= sortable "name"
+      %th= sortable "description"
+      %th= sortable "spend", "Total Spent"
+      %th= sortable "budget", "Total Budget"
       %th
 
   %tbody
     = render :partial => "project", :collection => @projects
 
+= will_paginate @projects
 
 %ul{ :id => 'position_container', :class => 'image_list' }
 

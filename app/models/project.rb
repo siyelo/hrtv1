@@ -40,7 +40,7 @@ class Project < ActiveRecord::Base
   }
 
   ### Validations
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}

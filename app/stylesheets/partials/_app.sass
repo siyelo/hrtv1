@@ -30,7 +30,33 @@ body.app
   p
     line-height: 1.2em
     +clearfix
-
+  a
+    &.create_new
+      background: $orange
+      border: 1px solid $orange - #222
+      color: #fff
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius
+      +box-shadow(#999, 0, 1px, 3px)
+      +linear-gradient(color-stops($orange, $orange - #222))
+      +text-shadow($orange - #444, 0, 1px, 0)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: green
+        border: 1px solid green - #222
+        color: #fff
+        +linear-gradient(color-stops(green, green - #222))
+      &:active
+        outline: none
+        position: relative
+        top: 1px
 
   /* overriding the shared logo style*/
   #header_app
@@ -543,7 +569,7 @@ ul.group
         opacity: 1
   h3
     padding-top: 10px !important
-    
+
   a
     background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
     display: block
@@ -557,7 +583,7 @@ ul.group
       color: #999
     &:hover
       background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
-      
+
   ul.report_actions
     opacity: 0
     position: absolute
@@ -581,45 +607,91 @@ ul.group
         opacity: 0.9
       &.regenerate
         opacity: 0.9
-  
+
+form.data_response, form.project
   ol
     li
-      border-bottom: 1px solid #f3f3f3
+      border-bottom: 1px dashed #f3f3f3
       margin-bottom: 7px
       padding-bottom: 7px
       overflow: hidden
       &.last
         border: none
     h3
-      background: #f8f8f8
+      background: $lightest-blue
       margin-top: 5px
-      padding-left: 10px !important
-      +border-radius(3px)
+      padding: 10px 10px 7px !important
+      +border-top-radius(3px)
     label
       float: left
       margin-top: 9px
-      padding-left: 10px
-      width: 15%
-    select, input[type=text]
+      width: 18%
+    select, input[type=text], textarea
       float: left
       font-size: 12px
       padding: 5px
+      width: 35%
       +border-radius(3px)
     select
       padding: 2px
+      width: 36.5%
 
     .inline-hints
       float: left
       margin-left: 1%
-      width: 39%
+      width: 44%
+
+    .inline-errors
+      color: red
+      float: left
+      font-size: 11px
+      margin-top: 3px
+      margin-left: 15%
+      padding-left: 10px
+      text-transform: uppercase
+      width: 70%
+      
+  .check_boxes
+    fieldset
+      float: left
+      width: 54%
+    legend
+      float: left
+      width: 33%
+      label
+        width: auto
+    ol
+      +pie-clearfix
+      float: left
+      width: 67%
+    li
+      border: none
+      display: inline-block
+      float: left
+      margin-bottom: 0
+      width: 33%
+      label
+        font-size: 11px
+        font-weight: normal
+        margin-top: 0
+        width: auto
+    input[type=checkbox]
+      margin: 0
+      padding: 0
+
   .form_aside
-    background: #f8f8f8
+    background: $lightest-blue
     float: right
-    padding: 20px
+    margin-top: 5px
+    padding: 2%
     width: 16%
     +border-radius(3px)
+    border: 1px solid #E6EDF3
+    h3
+      border-bottom: 1px dashed $mid-blue + #222
+      margin-bottom: 10px
+      padding-top: 0px !important
     p
-      color: $light-grey
       font-size: 11px
       line-height: 1.4
 
@@ -638,7 +710,7 @@ ul.group
   &.padded
     padding-top: 0
     padding-bottom: 20px
-    
+
 .inputs
   li
     margin-bottom: 20px
@@ -648,10 +720,19 @@ ul.group
     font-weight: bold
     margin-bottom: 3px
   input[type=text], textarea
-    width: 350px
+    width: 340px
   select
     padding: 7px 5px
-    width: 363px
+    width: 353px
+
+  li.amounts
+    display: inline-block
+    li
+      float: left
+
+    input[type=text], textarea
+      width: 75px
+
 
 // Pretty Table (with clickable rows)
 
@@ -767,6 +848,6 @@ table.rounded
 
 .half h2
   clear: both
-  
+
 .edit_user label
   margin-right: 10px

@@ -1,7 +1,9 @@
+require 'validators'
 class DataRequest < ActiveRecord::Base
 
   ### Attributes
-  attr_accessible :organization_id, :title, :complete, :pending_review
+  attr_accessible :organization_id, :title, :complete, :pending_review,
+                  :start_date, :end_date
 
   ### Associations
   belongs_to :organization
@@ -9,6 +11,9 @@ class DataRequest < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :organization_id, :title
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 end
 
 # == Schema Information
@@ -22,5 +27,9 @@ end
 #  pending_review  :boolean         default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  start_date      :date
+#  end_date        :date
+#  budget          :boolean
+#  spent           :boolean
 #
 

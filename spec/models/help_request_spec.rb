@@ -6,3 +6,15 @@ describe HelpRequest do
     it { should validate_presence_of(:email) }
   end
 end
+
+# == Schema Information
+#
+# Table name: help_requests
+#
+#  id         :integer         primary key
+#  email      :string(255)
+#  message    :text
+#  created_at :timestamp
+#  updated_at :timestamp
+#
+

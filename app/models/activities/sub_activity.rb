@@ -124,10 +124,10 @@ end
 #
 # Table name: activities
 #
-#  id                                    :integer         primary key
+#  id                                    :integer         not null, primary key
 #  name                                  :string(255)
-#  created_at                            :timestamp
-#  updated_at                            :timestamp
+#  created_at                            :datetime
+#  updated_at                            :datetime
 #  provider_id                           :integer
 #  description                           :text
 #  type                                  :string(255)
@@ -136,8 +136,8 @@ end
 #  spend_q2                              :decimal(, )
 #  spend_q3                              :decimal(, )
 #  spend_q4                              :decimal(, )
-#  start                                 :date
-#  end                                   :date
+#  start_date                            :date
+#  end_date                              :date
 #  spend                                 :decimal(, )
 #  text_for_provider                     :text
 #  text_for_targets                      :text
@@ -164,6 +164,7 @@ end
 #  spend_in_usd                          :decimal(, )     default(0.0)
 #  budget_in_usd                         :decimal(, )     default(0.0)
 #
+
 
 # == Schema Information
 #

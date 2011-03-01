@@ -11,8 +11,11 @@
           %th Title
           %th Complete
           %th Pending review
+          %th Start date
+          %th End date
+          %th Budget
+          %th Spend
           %th Created at
-          %th Updated at
           %th.action Manage
       %tbody
         - @requests.each do |request|
@@ -21,8 +24,11 @@
             %td= request.title
             %td= request.complete
             %td= request.pending_review
+            %td= request.start_date
+            %td= request.end_date
+            %td= request.budget
+            %td= request.spend
             %td= request.created_at
-            %td= request.updated_at
             %td.action
               = link_to "Show", admin_request_path(request)
               = link_to "Edit", edit_admin_request_path(request)

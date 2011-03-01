@@ -7,6 +7,18 @@
       %td= f.label :title
       %td= f.text_field :title
     %tr
+      %td= f.label :start_date
+      %td= f.text_field :start_date, :class => 'date_picker'
+    %tr
+      %td= f.label :end_date
+      %td= f.text_field :end_date, :class => 'date_picker'
+    %tr
+      %td= f.label :budget, "Request budget data?"
+      %td= f.check_box :budget
+    %tr
+      %td= f.label :spend, "Request spend data?"
+      %td= f.check_box :spend
+    %tr
       %td= f.label :complete
       %td= f.check_box :complete
     %tr

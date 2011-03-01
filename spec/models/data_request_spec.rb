@@ -7,6 +7,8 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:title) }
     it { should allow_mass_assignment_of(:complete) }
     it { should allow_mass_assignment_of(:pending_review) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
   end
 
   describe "validations" do
@@ -14,6 +16,33 @@ describe DataRequest do
     it { should be_valid }
     it { should validate_presence_of :organization_id }
     it { should validate_presence_of :title }
+    it { should allow_value('2010-12-01').for(:start_date) }
+    it { should allow_value('2010-12-01').for(:end_date) }
+    it { should_not allow_value('').for(:start_date) }
+    it { should_not allow_value('').for(:end_date) }
+    it { should_not allow_value('2010-13-01').for(:start_date) }
+    it { should_not allow_value('2010-12-41').for(:start_date) }
+
+    it "accepts start date < end date" do
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 01),
+                         :end_date =>   DateTime.new(2010, 01, 02) )
+      dr.should be_valid
+    end
+
+    it "does not accept start date > end date" do
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 02),
+                         :end_date =>   DateTime.new(2010, 01, 01) )
+      dr.should_not be_valid
+    end
+
+    it "does not accept start date = end date" do
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 01),
+                         :end_date =>   DateTime.new(2010, 01, 01) )
+      dr.should_not be_valid
+    end
   end
 
   describe "associations" do
@@ -33,5 +62,9 @@ end
 #  pending_review  :boolean         default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  start_date      :date
+#  end_date        :date
+#  budget          :boolean
+#  spent           :boolean
 #
 

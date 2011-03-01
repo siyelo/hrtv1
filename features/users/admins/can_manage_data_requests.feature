@@ -3,7 +3,6 @@ Feature: Admin can manage data requests
   As a admin
   I want to be able to manage data requests
 
-  @run
 Scenario: Admin can CRUD data requests
   Given an organization exists with name: "Organization1"
   And an organization exists with name: "Organization2"
@@ -13,6 +12,8 @@ Scenario: Admin can CRUD data requests
   And I follow "New"
   And I select "Organization1" from "Organization"
   And I fill in "Title" with "My data response title"
+  And I fill in "Start date" with "2010-01-01"
+  And I fill in "End date" with "2011-01-01"
   And I press "Create request"
   Then I should see "Request was successfully created."
   And I should see "My data response title"
@@ -24,3 +25,26 @@ Scenario: Admin can CRUD data requests
   And I should see "My new data response title"
   When I follow "Delete"
   Then I should see "Request was successfully deleted."
+
+Scenario Outline: See errors when creating data request
+  Given an organization exists with name: "org1"
+  And an organization exists with name: "org2"
+  And an admin exists with username: "admin", organization: the organization
+  And I am signed in as "admin"
+  When I follow "Requests"
+  And I follow "New"
+  And I select "<organization>" from "Organization"
+  And I fill in "Title" with "<title>"
+  And I fill in "Start date" with "<start_date>"
+  And I fill in "End date" with "<end_date>"
+  And I press "Create request"
+  Then I should see "<message>"
+  
+  Examples:
+       | organization | title | start_date | end_date   | message                               | 
+       | org1         | title | 2010-01-01 | 2011-01-01 | Request was successfully created.     | 
+       |              | title | 2010-01-01 | 2011-01-01 | Organization can't be blank           | 
+       | org1         |       | 2010-01-01 | 2011-01-01 | Title can't be blank                  | 
+       | org1         | title |            | 2011-01-01 | Start date is an invalid date         | 
+       | org1         | title | 2010-01-01 |            | End date is an invalid date           | 
+       | org1         | title | 2011-01-01 | 2010-01-01 | Start date must come before End date. | 

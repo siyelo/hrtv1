@@ -136,15 +136,16 @@ describe DataResponse do
   end
 end
 
+
 # == Schema Information
 #
 # Table name: data_responses
 #
-#  id                                :integer         not null, primary key
+#  id                                :integer         primary key
 #  data_request_id                   :integer
 #  complete                          :boolean         default(FALSE)
-#  created_at                        :datetime
-#  updated_at                        :datetime
+#  created_at                        :timestamp
+#  updated_at                        :timestamp
 #  organization_id                   :integer
 #  currency                          :string(255)
 #  fiscal_year_start_date            :date
@@ -155,7 +156,7 @@ end
 #  contact_main_office_phone_number  :string(255)
 #  contact_office_location           :string(255)
 #  submitted                         :boolean
-#  submitted_at                      :datetime
+#  submitted_at                      :timestamp
 #  projects_count                    :integer         default(0)
 #  comments_count                    :integer         default(0)
 #  activities_count                  :integer         default(0)

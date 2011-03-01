@@ -1,10 +1,14 @@
 - title("Projects")
 
-%h1.main_heading Projects
+%h1.main_heading
+  = render 'search'
+  Projects
 %p
   - link_to new_response_project_path(@data_response), :class => "create_new" do
     = image_tag "new_white.png"
     Create Project
+
+
 
 %table.standard.rounded.clickable
   %thead

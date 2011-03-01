@@ -11,8 +11,12 @@ class ProjectsController < Reporter::BaseController
 
   def index
     #@projects = @data_response.projects.order(sort_column + " " + sort_direction) # rails 3, sigh
-    @projects = @data_response.projects.paginate(:page => params[:page], :order => sort_column + " " + sort_direction) # rails 2
-    index!
+    scope = @data_response.projects.scoped({})
+    # search functionality
+    scope = scope.scoped(:conditions => ["name LIKE :q",
+                                         {:q => "%#{params[:query]}%"}]) if params[:query]
+    @projects = scope.paginate(:page => params[:page],
+                               :order => sort_column + " " + sort_direction) # rails 2
   end
 
   def new

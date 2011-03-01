@@ -697,7 +697,7 @@ form.data_response, form.project, form.basic_form
           width: 82%
         input[type=text], textarea
           width: 75px
-      
+
     h3
       background: $lightest-blue
       margin-top: 5px
@@ -731,8 +731,8 @@ form.data_response, form.project, form.basic_form
       padding-left: 10px
       text-transform: uppercase
       width: 70%
-      
-      
+
+
   .check_boxes
     fieldset
       float: left
@@ -859,7 +859,6 @@ table.standard
     a
       font-size: 12px
       font-weight: bold
-      text-transform: uppercase
 
 // Pretty Table with clickable rows
 table.clickable
@@ -934,3 +933,30 @@ table.rounded
 
 .edit_user label
   margin-right: 10px
+
+#search
+  float: right
+
+  #search_box
+    +border-radius
+    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
+    border: 1px solid #DDDDDD
+    float: right
+    font-size: 12px
+    padding: 0 28px 0 5px
+    width: 210px
+
+  input[type='text']
+    -moz-box-shadow: none
+    background: none repeat scroll 0 0 #FFFFFF !important
+    border: 0 none
+    color: #000000
+    font-size: 12px
+    font-weight: normal
+    padding: 5px
+    width: 200px
+    height: 16px
+    line-height: 1.4em
+
+  input[type='submit']
+    display: none

@@ -1,5 +1,9 @@
-%h2= "Data request: #{@request.title}"
-%table
+- title("Data Request: #{@request.title}")
+
+%h1.main_heading= "Data Request: #{@request.title}"
+
+%h2= "Data Response details"
+%table.standard.rounded
   %tr
     %td Title:
     %td= @request.title

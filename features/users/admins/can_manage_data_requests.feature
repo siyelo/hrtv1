@@ -9,7 +9,7 @@ Scenario: Admin can CRUD data requests
   And an admin exists with username: "admin", organization: the organization
   And I am signed in as "admin"
   When I follow "Requests"
-  And I follow "New"
+  And I follow "Create Data Request"
   And I select "Organization1" from "Organization"
   And I fill in "Title" with "My data response title"
   And I fill in "Due date" with "2010-09-01"
@@ -33,7 +33,7 @@ Scenario Outline: See errors when creating data request
   And an admin exists with username: "admin", organization: the organization
   And I am signed in as "admin"
   When I follow "Requests"
-  And I follow "New"
+  And I follow "Create Data Request"
   And I select "<organization>" from "Organization"
   And I fill in "Title" with "<title>"
   And I fill in "Start date" with "<start_date>"

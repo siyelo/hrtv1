@@ -1,8 +1,10 @@
 - title("Projects")
 
 %h1.main_heading Projects
-
-= link_to "+ Create Project", new_response_project_path(@data_response)
+%p
+  - link_to new_response_project_path(@data_response), :class => "create_new" do
+    = image_tag "new_white.png"
+    Create Project
 
 %br
 

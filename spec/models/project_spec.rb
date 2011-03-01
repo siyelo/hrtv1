@@ -238,8 +238,6 @@ describe Project do
       activity.spend = ONE_HUNDRED_BILLION_DOLLARS
       activity.save
       activity.reload
-      activity.reload
-      activity.save
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
       project.currency = 'RWF'
       project.save

@@ -154,7 +154,7 @@ class Activity < ActiveRecord::Base
 
   # helper until we enforce this in the model association!
   def project
-    projects.first
+    @project ||= projects.first
   end
 
   def organization_name

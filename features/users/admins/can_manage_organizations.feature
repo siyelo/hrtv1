@@ -10,7 +10,6 @@ Background:
   And a reporter exists with username: "org2_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
 
-  @run
 Scenario: Admin can CRUD organizations
   Given an admin exists with username: "admin", organization: the organization
   And I am signed in as "admin"
@@ -37,7 +36,7 @@ Scenario: Admin can CRUD organizations
 @admins @organizations
 Scenario Outline: Merge duplicate organizations
   Given I am signed in as an admin
-  When I go to the organizations page
+  When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<duplicate>" from "Duplicate organization"
   And I select "<target>" from "Replacement organization"
@@ -52,7 +51,7 @@ Scenario Outline: Merge duplicate organizations
 @admins @organizations @javascript
 Scenario Outline: Merge duplicate organizations (with JS)
   Given I am signed in as an admin
-  When I go to the organizations page
+  When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<duplicate>" from "Duplicate organization"
   And I should see "Organization: <duplicate_box>" within "#duplicate"
@@ -72,7 +71,7 @@ Scenario Outline: Merge duplicate organizations (with JS)
 @admins @organizations @javascript
 Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
   Given I am signed in as an admin
-  When I go to the organizations page
+  When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<organization>" from "<select_type>"
   And I confirm the popup dialog
@@ -88,7 +87,7 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
 @admins @organizations @javascript
 Scenario: Try to delete non-empty organization (with JS)
   Given I am signed in as an admin
-  When I go to the organizations page
+  When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "org2 - 1 user" from "Replacement organization"
   And I confirm the popup dialog

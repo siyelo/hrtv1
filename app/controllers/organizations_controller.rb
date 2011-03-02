@@ -2,8 +2,8 @@ class OrganizationsController < ActiveScaffoldController
   before_filter :require_user
   authorize_resource
 
-  @@shown_columns           = [:name, :type]
-  @@create_columns          = [:name, :type]
+  @@shown_columns           = [:name]
+  @@create_columns          = [:name]
   @@columns_for_file_upload = @@create_columns.map {|c| c.to_s}
 
   map_fields :create_from_file, @@columns_for_file_upload,
@@ -16,13 +16,8 @@ class OrganizationsController < ActiveScaffoldController
     config.columns[:in_flows].association.reverse  = :to
     config.create.columns                          = @@create_columns
     config.update.columns                          = config.create.columns
-    config.subform.columns                         = [:name, :type]
+    config.subform.columns                         = [:name]
     config.columns[:name].description              = "Before creating a new organization, ensure this organization doesn't already exist by checking the drop down list in the create or add existing form."
-    config.columns[:type].form_ui                  = :select
-    config.columns[:type].options                  = {:options => [
-                                                      ["Donor","Donor"],
-                                                      ["NGO","Ngo"],
-                                                      ["Other", "Organization"] ]}
      config.nested.shallow_delete = true # in nested scaffolds delete just removes the association
   end
 

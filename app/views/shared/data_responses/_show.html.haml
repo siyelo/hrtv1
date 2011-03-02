@@ -41,7 +41,7 @@
     %li= link_to "Activities without a Project (#{@data_response.activities_without_projects_count})", "#", :class => "activity_details"
 
 .tabs
-  .tab1
+  .tab1{:style => 'display: block;'}
     = render 'shared/data_responses/comments', :commentable => @data_response
   .tab2
     = render 'shared/data_responses/projects', :projects => @projects

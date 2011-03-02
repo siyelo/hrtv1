@@ -25,6 +25,7 @@ Background:
 
 @admins @review_screen @javascript
 Scenario: Manage comments on data responses (with Javascript)
+  Given wait a few moments
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
   And I fill in "Comment" with "comment body"

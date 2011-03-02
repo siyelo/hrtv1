@@ -6,7 +6,6 @@ describe Organization do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
-    it { should allow_mass_assignment_of(:type) }
   end
 
   describe "validations" do

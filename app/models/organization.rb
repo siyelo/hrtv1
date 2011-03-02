@@ -1,12 +1,11 @@
 require 'validation_disabler'
 class Organization < ActiveRecord::Base
-  TYPES = ['Donor', 'Ngo']
 
   ### Comments
   acts_as_commentable
 
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid, :type
+  attr_accessible :name, :raw_type, :fosaid
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org

@@ -18,11 +18,11 @@
 
   #activity_classification
     - if @activity.data_request.budget?
-      %div.tab1{:style => 'display: block'}= image_tag ('ajax-loader.gif')
-      %div.tab2= image_tag ('ajax-loader.gif')
-      %div.tab3= image_tag ('ajax-loader.gif')
+      %div.tab1{:style => 'display: block'}= image_tag('ajax-loader.gif')
+      %div.tab2= image_tag('ajax-loader.gif')
+      %div.tab3= image_tag('ajax-loader.gif')
     - if @activity.data_request.spend?
       - spend_style = ((!@activity.data_request.budget? && @activity.data_request.spend?) ? 'display: block' : nil)
-      %div.tab4{:style => spend_style}= image_tag ('ajax-loader.gif')
-      %div.tab5= image_tag ('ajax-loader.gif')
-      %div.tab6= image_tag ('ajax-loader.gif')
+      %div.tab4{:style => spend_style}= image_tag('ajax-loader.gif')
+      %div.tab5= image_tag('ajax-loader.gif')
+      %div.tab6= image_tag('ajax-loader.gif')

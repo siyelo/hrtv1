@@ -1,7 +1,10 @@
-form.data_response, form.project
+form.data_response, .basic_form
+  .dashboard_section
+    background: $filler
+    
   ol
     li
-      border-bottom: 1px dashed #eee
+      border-bottom: 1px solid $lightest-blue
       margin-bottom: 7px
       padding-bottom: 7px
       +pie-clearfix
@@ -33,7 +36,8 @@ form.data_response, form.project
           width: 75px
 
     h3
-      background: $lightest-blue
+      background: image_url("bg-blue.jpg")
+      color: #fff !important
       margin-top: 5px
       padding: 10px 10px 7px !important
       +border-top-radius(3px)
@@ -97,24 +101,26 @@ form.data_response, form.project
       padding: 0
 
   .form_aside
-    background: $lightest-blue
+    background: $filler
+    border: 1px solid $lightest-blue
     float: right
     margin-top: 5px
     padding: 2%
     width: 16%
     +border-radius(3px)
     h3
-      border-bottom: 1px dashed $mid-blue + #222
+      border-bottom: 1px dashed $light-blue
       margin-bottom: 10px
       padding-top: 0px !important
     p
+      color: $mid-blue
       font-size: 11px
       line-height: 1.4
 
 .hint, .inline-hints
-  color: #666
+  color: $mid-blue
   display: block
-  font-size: 10px
+  font-size: 11px
   padding-top: 3px
   &.padded
     padding-top: 0
@@ -124,7 +130,7 @@ form.data_response, form.project
   li
     margin-bottom: 20px
   label
-    color: $mid-blue + #444 !important
+    color: $mid-blue + #222 !important
     font-size: 12px
     font-weight: bold
     margin-bottom: 3px

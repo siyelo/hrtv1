@@ -62,7 +62,6 @@ class Activity < ActiveRecord::Base
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
 
-
   ### Validations
   validate :approved_activity_cannot_be_changed
 

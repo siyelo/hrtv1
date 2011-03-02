@@ -21,7 +21,7 @@ Scenario Outline: Visit protected page, get redirected to login screen
 
 @run
 Scenario Outline: Visit protected page, get redirected to login screen
-  When I go to the <page> page for "UNDP"
+  When I go to the <page> page for response "Req1" org "UNDP" 
   Then I should see "You must be logged in to access this page"
   And I should be on the login page
   Examples:

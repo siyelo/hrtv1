@@ -18,7 +18,7 @@ class ResponsesController < ApplicationController
     respond_to do |format|
       if @data_response.save
         flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
-        format.html { redirect_to edit_data_response_url(@data_response) }
+        format.html { redirect_to edit_response_url(@data_response) }
       else
         format.html { render :action => :new }
       end
@@ -34,7 +34,7 @@ class ResponsesController < ApplicationController
     @data_response.update_attributes params[:data_response]
     if @data_response.save
       flash[:notice] = "Successfully updated."
-      redirect_to edit_data_response_url(@data_response)
+      redirect_to edit_response_url(@data_response)
     else
       render :action => :edit
     end
@@ -49,10 +49,10 @@ class ResponsesController < ApplicationController
       @data_response.submitted_at = Time.now
       @data_response.save
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      redirect_to review_data_response_url(@data_response)
+      redirect_to review_response_url(@data_response)
     else
       flash[:error] = "You cannot submit unless you have coded all your activities and other costs."
-      redirect_to review_data_response_url(@data_response)
+      redirect_to review_response_url(@data_response)
     end
   end
 

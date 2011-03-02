@@ -42,6 +42,7 @@ ActionController::Routing::Routes.draw do |map|
     response.resources :projects
 
   end
+
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
@@ -49,7 +50,6 @@ ActionController::Routing::Routes.draw do |map|
     reporter.resources :reports, :only => [:index, :show]
     reporter.resources :comments, :member => {:delete => :get}
   end
-
 
   # REPORTS
   map.namespace :reports do |reports|

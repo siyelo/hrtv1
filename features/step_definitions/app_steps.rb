@@ -323,6 +323,16 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
 end
 
 
+Given /^a basic org \+ reporter profile, signed in$/ do
+  steps %Q{
+    Given a data_request exists with title: "Req1"
+    And an organization exists with name: "UNDP"
+    And a reporter exists with username: "undp_user", organization: the organization
+    And I am signed in as "undp_user"
+  }
+end
+
+
 Given /^a basic org \+ reporter profile, with data response$/ do
   steps %Q{
     Given an organization exists with name: "GoR"

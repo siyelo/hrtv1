@@ -4,11 +4,37 @@ Feature: Admin can manage organizations
   I want to be able to manage organizations
 
 Background:
-  Given an organization exists with name: "UNAIDS"
+  Given an organization exists with name: "org1"
   And a data_request exists with title: "Req1", organization: the organization
-  And an organization exists with name: "WHO"
-  And a reporter exists with username: "who_user", organization: the organization
+  And an organization exists with name: "org2"
+  And a reporter exists with username: "org2_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
+
+  @run
+Scenario: Admin can CRUD organizations
+  Given an admin exists with username: "admin", organization: the organization
+  And I am signed in as "admin"
+  When I follow "Organizations"
+  And I follow "Create Organization"
+  And I fill in "Name" with "Organization name"
+  And I fill in "Raw type" with "My raw_type"
+  And I fill in "Fosaid" with "My fosaid"
+  And I select "Ngo" from "Type"
+  And I press "Create organization"
+  Then I should see "Organization was successfully created"
+  And I should see "Organization name"
+  And I should see "My raw_type"
+  And I should see "My fosaid"
+  And I should see "Ngo"
+  When I follow "Edit"
+  And I fill in "name" with "My new organization"
+  And I press "Update organization"
+  Then I should see "Organization was successfully updated"
+  And I should see "My new organization"
+  When I follow "Delete"
+  Then I should see "Organization was successfully deleted"
+  And I should not see "Organization name"
+
 
 @admins @organizations
 Scenario Outline: Merge duplicate organizations
@@ -21,9 +47,9 @@ Scenario Outline: Merge duplicate organizations
   Then I should see "<message>"
 
   Examples:
-    | duplicate | target             | message                                                  |
-    | UNAIDS    | UNAIDS - 0 users   | Same organizations for duplicate and target selected.    |
-    | UNAIDS    | WHO - 1 user       | Organizations successfully merged.                       |
+     | duplicate | target         | message                                               | 
+     | org1      | org1 - 0 users | Same organizations for duplicate and target selected. | 
+     | org1      | org2 - 1 user  | Organizations successfully merged.                    | 
 
 @admins @organizations @javascript
 Scenario Outline: Merge duplicate organizations (with JS)
@@ -40,9 +66,9 @@ Scenario Outline: Merge duplicate organizations (with JS)
   And the "Duplicate organization" text should be "<select_text>"
 
   Examples:
-    | duplicate | target           | duplicate_box | target_box | message                                                  | select_text |
-    | UNAIDS    | UNAIDS - 0 users | UNAIDS        | UNAIDS     | Same organizations for duplicate and target selected.    | UNAIDS      |
-    | UNAIDS    | WHO - 1 user     | UNAIDS        | WHO        | Organizations successfully merged.                       |             |
+      | duplicate | target         | duplicate_box | target_box | message                                               | select_text | 
+      | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. | org1        | 
+      | org1      | org2 - 1 user  | org1          | org2       | Organizations successfully merged.                    |             | 
 
 
 @admins @organizations @javascript
@@ -57,18 +83,18 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
   And the "Replacement organization" text should not be "<organization>"
 
   Examples:
-    | organization     | select_type                 | info_block                  |
-    | UNAIDS           | Duplicate organization      | .box[data-type='duplicate'] |
-    | UNAIDS - 0 users | Replacement organization    | .box[data-type='target']    |
+   | organization   | select_type              | info_block                  | 
+   | org1           | Duplicate organization   | .box[data-type='duplicate'] | 
+   | org1 - 0 users | Replacement organization | .box[data-type='target']    | 
 
 @admins @organizations @javascript
 Scenario: Try to delete non-empty organization (with JS)
   Given I am signed in as an admin
   When I go to the organizations page
   And I follow "Fix duplicate organizations"
-  And I select "WHO - 1 user" from "Replacement organization"
+  And I select "org2 - 1 user" from "Replacement organization"
   And I confirm the popup dialog
   And I follow "Delete" within ".box[data-type='target']"
-  # Check that WHO organization is not deleted
-  Then the "Replacement organization" text should match "WHO - 1 user"
+  # Check that org2 organization is not deleted
+  Then the "Replacement organization" text should match "org2 - 1 user"
   And I should see "You cannot delete an organization that has users or data associated with it."

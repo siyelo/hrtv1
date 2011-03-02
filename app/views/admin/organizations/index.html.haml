@@ -1,0 +1,30 @@
+- title("Organization")
+
+%h1.main_heading Organizations
+
+%p
+  - link_to new_admin_organization_path, :class => "create_new" do
+    = image_tag "new_white.png"
+    Create Organization
+
+%table.standard.rounded.clickable
+  %thead
+    %tr
+      %th Name
+      %th Raw type
+      %th Fosaid
+      %th Type
+      %th.action Manage
+  %tbody
+    - @organizations.each do |organization|
+      %tr
+        %td= organization.name
+        %td= organization.raw_type
+        %td= organization.fosaid
+        %td= organization.type
+        %td.action
+          = link_to "Show", admin_organization_path(organization)
+          = link_to "Edit", edit_admin_organization_path(organization)
+          = link_to "Delete", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
+
+= will_paginate @organizations

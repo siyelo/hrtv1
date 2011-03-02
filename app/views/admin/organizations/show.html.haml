@@ -1,0 +1,23 @@
+- title("Organization: #{@organization.name}")
+
+%h1.main_heading= "Organiaztion: #{@organization.name}"
+
+%h2= "Organization details"
+%table.standard.rounded
+  %tr
+    %td Name:
+    %td= @organization.name
+  %tr
+    %td Raw type:
+    %td= @organization.raw_type
+  %tr
+    %td Fosaid:
+    %td= @organization.fosaid
+  %tr
+    %td Type:
+    %td= @organization.type
+
+%br
+
+= link_to 'Edit', edit_admin_organization_path(@organization), :class => 'edit_button'
+= link_to "Delete", admin_organization_path(@organization), :method => :delete, :confirm => "Are you sure?", :class => 'delete_button'

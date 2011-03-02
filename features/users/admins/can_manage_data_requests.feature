@@ -16,16 +16,17 @@ Scenario: Admin can CRUD data requests
   And I fill in "Start date" with "2010-01-01"
   And I fill in "End date" with "2011-01-01"
   And I press "Create request"
-  Then I should see "Request was successfully created."
+  Then I should see "Request was successfully created"
   And I should see "My data response title"
   And I should see "Organization1"
   When I follow "Edit"
   And I fill in "Title" with "My new data response title"
   And I press "Update request"
-  Then I should see "Request was successfully updated."
+  Then I should see "Request was successfully updated"
   And I should see "My new data response title"
   When I follow "Delete"
-  Then I should see "Request was successfully deleted."
+  Then I should see "Request was successfully deleted"
+  And I should not see "My data response title"
 
 Scenario Outline: See errors when creating data request
   Given an organization exists with name: "org1"
@@ -43,11 +44,11 @@ Scenario Outline: See errors when creating data request
   Then I should see "<message>"
   
   Examples:
-    | organization | title | due_date   | start_date | end_date   | message                               | 
-    | org1         | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created.     | 
-    |              | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank           | 
-    | org1         |       | 2010-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank                  | 
-    | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date is an invalid date           | 
-    | org1         | title | 2010-09-01 |            | 2011-01-01 | Start date is an invalid date         | 
-    | org1         | title | 2010-09-01 | 2010-01-01 |            | End date is an invalid date           | 
-    | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date. | 
+    | organization | title | due_date   | start_date | end_date   | message                              | 
+    | org1         | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     | 
+    |              | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank          | 
+    | org1         |       | 2010-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank                 | 
+    | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date is an invalid date          | 
+    | org1         | title | 2010-09-01 |            | 2011-01-01 | Start date is an invalid date        | 
+    | org1         | title | 2010-09-01 | 2010-01-01 |            | End date is an invalid date          | 
+    | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date | 

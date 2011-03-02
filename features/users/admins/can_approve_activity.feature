@@ -15,6 +15,7 @@ Background:
   And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
 
 @admins @approve_activity @javascript
+@run
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1"

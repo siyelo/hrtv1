@@ -4,5 +4,5 @@
 
 %h2 Enter data request information
 .dashboard_section
-  - form_for :request, @request, :url => admin_request_path(@request), :html => {:method => :put} do |f|
+  - semantic_form_for :request, @request, :url => admin_request_path(@request), :html => {:method => :put} do |f|
     = render 'form', :f => f

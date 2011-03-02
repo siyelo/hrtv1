@@ -51,41 +51,21 @@ Background:
   # level 1
   And a cost_category_code exists with short_display: "cost_category1"
 
-@reporters @classify_activity
-Scenario: See a breakdown for an activity
-  When I go to the activities page
-  And I follow "Classify"
-  Then I should see "Activity"
-  And I should see "Coding" within the budget coding tab
-  And I should see "District" within the budget districts tab
-  And I should see "Categorization" within the budget cost categorization tab
-  And I should see "Coding" within the expenditure coding tab
-  And I should see "District" within the expenditure districts tab
-  And I should see "Cost Categorization" within the expenditure cost categorization tab
-  And I should see "mtef1"
-
-@reporters @classify_activity
-Scenario: See both budget for an activity classification
-  When I go to the activities page
-  And I follow "Classify"
-  Then I should be on the budget classification page for "Activity"
-  And I should see "Coding"
-  And I should see the "Coding" tab is active
-
-@reporters @classify_activity
-Scenario: enter budget for an activity (don't see flash errors)
+  # Wait for first tab to be loaded
   Given I am on the budget classification page for "Activity"
+  Then wait a few moments
+
+@reporters @classify_activity @javascript
+Scenario: enter budget for an activity (don't see flash errors)
   When I fill in "mtef1" with "5000000.00"
   And I press "Save"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "5,000,000.00"
-  And I should not see "We're sorry, when we added up"
 
-@reporters @classify_activity
+@reporters @classify_activity @javascript
 Scenario: enter budget for an activity (see flash errors)
-  Given I am on the budget classification page for "Activity"
   When I fill in "mtef1" with "1234567.00"
   And I press "Save"
   Then wait a few moments
@@ -97,19 +77,17 @@ Scenario: enter budget for an activity (see flash errors)
 
 @reporters @classify_activity @javascript
 Scenario: enter expenditure for an activity
-  Given I am on the budget classification page for "Activity"
-  And I follow "Coding" within the expenditure coding tab
-  When I fill in "mtef1" with "1234567.00" within ".tab4"
+  When I follow "Coding" within the expenditure coding tab
+  And I fill in "mtef1" with "1234567.00" within ".tab4"
   And I press "Save" within ".tab4"
   Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "mtef1" is visible
+  Then wait a few moments
   And the "mtef1" field within ".tab4" should contain "1,234,567.00"
 
-@reporters @classify_activity
+@reporters @classify_activity @javascript
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed.
-  Given I am on the budget classification page for "Activity"
   When I fill in "mtef1" with "1234567.00"
   And I press "Save"
   Then wait a few moments
@@ -117,11 +95,11 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "1,234,567.00"
   And I press "Save"
-  Then the "mtef1" field should contain "1,234,567.00"
+  Then wait a few moments
+  And the "mtef1" field should contain "1,234,567.00"
 
-@reporters @classify_activity
+@reporters @classify_activity @javascript
 Scenario Outline: enter percentage for an activity budget classification
-  Given I am on the budget classification page for "Activity"
   When I fill in "mtef1" percentage field with "<amount>"
   And I press "Save"
   Then wait a few moments
@@ -133,12 +111,6 @@ Scenario Outline: enter percentage for an activity budget classification
     | 25     | 25.0    |
     | 50.1   | 50.1    |
     | 95.6   | 95.6    |
-
-@reporters @classify_activity
-Scenario: Cannot approve an Activity
-  When I go to the activities page
-  And I follow "Classify"
-  Then I should not see "Approved?"
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by district for expenditure by district
@@ -158,13 +130,12 @@ Scenario: Use budget by district for expenditure by district
   And I follow "Click here to copy the budget classifications below to the expenditure District tab"
   And I go to the budget classification page for "Activity"
   And I follow "District" within the expenditure districts tab
-  And I wait until "Location1" is visible
+  Then wait a few moments
   Then the "Location1" field within ".tab5" should contain "1,481,480.40"
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by cost categorization for expenditure by cost categorization
-  Given I am on the budget classification page for "Activity"
-  And I follow "Cost Categorization" within the budget cost categorization tab
+  When I follow "Cost Categorization" within the budget cost categorization tab
   And I fill in "cost_category1" with "1234567.00" within ".tab3"
   When I press "Save" within ".tab3"
   Then wait a few moments
@@ -176,13 +147,11 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I follow "Click here to copy the budget classifications below to the expenditure Cost Category tab"
   And I go to the budget classification page for "Activity"
   And I follow "Cost Categorization" within the expenditure cost categorization tab
-  And I wait until "cost_category1" is visible
+  Then wait a few moments
   Then the "cost_category1" field within ".tab6" should contain "1,481,480.40"
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
-  Given I am on the budget classification page for "Activity"
-
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "10" within ".tab1 ul.activity_tree > li:nth-child(1)"
@@ -209,7 +178,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
   And I go to the budget classification page for "Activity"
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "mtef1" is visible
+  Then wait a few moments
   Then the cached field within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
@@ -219,8 +188,6 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
 
 @reporters @classify_activity @javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
-  Given I am on the budget classification page for "Activity"
-
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
   And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
@@ -237,7 +204,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And I follow "Click here to copy the budget classifications below to the expenditure Coding tab"
   And I go to the budget classification page for "Activity"
   And I follow "Coding" within the expenditure coding tab
-  And I wait until "mtef1" is visible
+  Then wait a few moments
   Then the cached field within ".tab4 ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"

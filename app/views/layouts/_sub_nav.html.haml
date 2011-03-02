@@ -4,7 +4,7 @@
       = link_to 'Projects', response_projects_path(@data_response)
 
     %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
-      = link_to 'Funding Sources', response_funding_sources_path(@data_response)
+      = link_to 'Funding Sources', funding_sources_path
 
     %li{ :class => [controller.class.to_s == "ImplementersController" ? "active" : '']}
       = link_to 'Implementers', implementers_path

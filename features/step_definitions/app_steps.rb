@@ -322,7 +322,8 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end
 
-Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+
+Given /^a basic org \+ reporter profile, with data response$/ do
   steps %Q{
     Given an organization exists with name: "GoR"
     And a data_request exists with title: "Req1"
@@ -332,6 +333,12 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response
     And the project is one of the activity's projects
+  }
+end
+
+Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+  steps %Q{
+    Given a basic org + reporter profile, with data response
     And I am signed in as "undp_user"
   }
 end

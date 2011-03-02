@@ -220,7 +220,9 @@ class ActiveScaffoldController < ApplicationController
     end
 
     def load_data_response
-      @data_response = DataResponse.find(params[:response_id])
+      #@data_response = DataResponse.find(params[:response_id])
+      # temp workaround for new routing
+      @data_response = current_user.current_data_response
     end
 
 end

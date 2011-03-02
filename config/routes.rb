@@ -40,8 +40,6 @@ ActionController::Routing::Routes.draw do |map|
                 :member => {:review => :get,
                             :submit => :put} do |response|
     response.resources :projects
-    response.resources :funding_sources, :only => [:index]
-
 
   end
   # REPORTER USER
@@ -75,6 +73,7 @@ ActionController::Routing::Routes.draw do |map|
     map.create_from_file model + "/create_from_file", :controller => model, :action => "create_from_file"
     map.create_from_file_form model + "/create_from_file_form", :controller => model, :action => "create_from_file_form"
   end
+  map.resources :funding_sources, :only => [:index]
   map.resources :implementers, :only => [:index]
 
   map.resources :organizations,

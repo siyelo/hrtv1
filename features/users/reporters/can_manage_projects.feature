@@ -14,6 +14,7 @@ Scenario: Browse to project edit page
   And I should see "Projects" within "div#main"
 
 @reporters @projects
+@run
 Scenario Outline: Edit project dates, see feedback messages for start and end dates
   When I go to the projects page for "Req1"
   And I follow "Create New"
@@ -31,6 +32,7 @@ Scenario Outline: Edit project dates, see feedback messages for start and end da
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
 @reporters @projects
+@run
 Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget GOR
   When I go to the projects page for "Req1"
   And I follow "Create New"

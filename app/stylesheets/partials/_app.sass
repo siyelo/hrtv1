@@ -57,63 +57,6 @@ body.app
         outline: none
         position: relative
         top: 1px
-        
-    &.edit_button
-      background: $light-blue
-      border: 1px solid $light-blue - #222
-      color: $mid-blue
-      display: inline-block
-      font-size: 12px
-      font-weight: bold
-      margin-bottom: 10px
-      padding: 7px 12px 5px
-      text-decoration: none
-      +border-radius
-      +box-shadow(#999, 0, 1px, 3px)
-      +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
-      +text-shadow($lighter-blue + #111, 0, 1px, 0)
-      img
-        position: relative
-        top: 1px
-      &:hover, &:focus
-        background: $orange
-        border: 1px solid $orange - #222
-        color: #fff
-        +linear-gradient(color-stops($orange, $orange - #222))
-        +text-shadow($orange - #444, 0, 1px, 0)
-      &:active
-        outline: none
-        position: relative
-        top: 1px
-        
-    &.delete_button
-      background: $lightest-blue
-      border: 1px solid $light-blue - #222
-      color: $mid-blue
-      display: inline-block
-      font-size: 12px
-      font-weight: bold
-      margin-bottom: 10px
-      padding: 7px 12px 5px
-      text-decoration: none
-      +border-radius
-      +box-shadow(#999, 0, 1px, 3px)
-      +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
-      +text-shadow(#fff, 0, 1px, 0)
-      img
-        position: relative
-        top: 1px
-      &:hover, &:focus
-        background: $red
-        border: 1px solid $red - #222
-        color: #fff
-        +linear-gradient(color-stops($red, $red - #222))
-        +text-shadow($red - #444, 0, 1px, 0)
-      &:active
-        outline: none
-        position: relative
-        top: 1px
-      
 
     &.edit_button
       background: $light-blue
@@ -142,7 +85,64 @@ body.app
         outline: none
         position: relative
         top: 1px
-        
+
+    &.delete_button
+      background: $lightest-blue
+      border: 1px solid $light-blue - #222
+      color: $mid-blue
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius
+      +box-shadow(#999, 0, 1px, 3px)
+      +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
+      +text-shadow(#fff, 0, 1px, 0)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: $red
+        border: 1px solid $red - #222
+        color: #fff
+        +linear-gradient(color-stops($red, $red - #222))
+        +text-shadow($red - #444, 0, 1px, 0)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
+
+    &.edit_button
+      background: $light-blue
+      border: 1px solid $light-blue - #222
+      color: $mid-blue
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius
+      +box-shadow(#999, 0, 1px, 3px)
+      +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
+      +text-shadow($lighter-blue + #111, 0, 1px, 0)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: $orange
+        border: 1px solid $orange - #222
+        color: #fff
+        +linear-gradient(color-stops($orange, $orange - #222))
+        +text-shadow($orange - #444, 0, 1px, 0)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
     &.delete_button
       background: $lightest-blue
       border: 1px solid $light-blue - #222
@@ -841,39 +841,6 @@ form.data_response, form.project, form.basic_form
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
 
-.hint, .inline-hints
-  color: #666
-  display: block
-  font-size: 10px
-  padding-top: 3px
-  &.padded
-    padding-top: 0
-    padding-bottom: 20px
-
-.inputs
-  li
-    margin-bottom: 20px
-  label
-    color: $mid-blue + #444 !important
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 3px
-  input[type=text], textarea
-    width: 340px
-  select
-    padding: 7px 5px
-    width: 353px
-
-
-  li.amounts
-    display: inline-block
-    li
-      float: left
-
-    input[type=text], textarea
-      width: 75px
-
-
 // Pretty Table (with clickable rows)
 
 table.standard
@@ -990,30 +957,3 @@ table.rounded
 
 .edit_user label
   margin-right: 10px
-
-#search
-  float: right
-
-  #search_box
-    +border-radius
-    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
-    border: 1px solid #DDDDDD
-    float: right
-    font-size: 12px
-    padding: 0 28px 0 5px
-    width: 210px
-
-  input[type='text']
-    -moz-box-shadow: none
-    background: none repeat scroll 0 0 #FFFFFF !important
-    border: 0 none
-    color: #000000
-    font-size: 12px
-    font-weight: normal
-    padding: 5px
-    width: 200px
-    height: 16px
-    line-height: 1.4em
-
-  input[type='submit']
-    display: none

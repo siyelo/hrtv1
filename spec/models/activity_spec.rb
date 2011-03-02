@@ -981,7 +981,7 @@ describe Activity do
       Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF", :toUSD => "0.002")
       @dr = Factory(:data_response, :currency => 'USD')
       @a        = Factory(:activity, :data_response => @dr,
-                          :projects => [Factory(:project,:data_response => @dr)])
+                          :projects => [Factory(:project, :data_response => @dr)])
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save
@@ -1043,6 +1043,7 @@ describe Activity do
       d.currency = nil
       d.save(false)
       @a.reload
+      @a.project.data_response.reload #currency is delegated via project
       @a.budget = 789.10
       @a.save
       @a.currency.should == nil

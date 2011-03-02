@@ -14,7 +14,7 @@ GEM
     annotate (2.4.0)
     authlogic (2.1.6)
       activesupport
-    awesome_print (0.3.1)
+    awesome_print (0.3.2)
     aws-s3 (0.6.2)
       builder
       mime-types
@@ -29,7 +29,7 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (>= 0.0.3)
     cgi_multipart_eof_fix (2.5.0)
-    childprocess (0.1.6)
+    childprocess (0.1.7)
       ffi (~> 0.6.3)
     columnize (0.3.2)
     compass (0.10.2)
@@ -45,7 +45,7 @@ GEM
       cucumber (>= 0.8.0)
     culerity (0.2.15)
     daemons (1.1.0)
-    database_cleaner (0.6.1)
+    database_cleaner (0.6.4)
     diff-lcs (1.1.2)
     factory_girl (1.2.4)
     fastercsv (1.5.4)
@@ -58,16 +58,16 @@ GEM
     gem_plugin (0.2.3)
     gherkin (2.3.3)
       json (~> 1.4.6)
-    google_currency (1.0.3)
+    google_currency (1.2.0)
       money (~> 3.5)
     haml (3.0.25)
     has_scope (0.5.0)
-    heroku (1.17.10)
+    heroku (1.17.17)
       json (~> 1.4.6)
       launchy (~> 0.3.2)
       rest-client (>= 1.4.0, < 1.7.0)
-    hirb (0.3.6)
-    hoptoad_notifier (2.4.4)
+    hirb (0.4.0)
+    hoptoad_notifier (2.4.6)
       activesupport
       builder
     i18n (0.4.2)
@@ -84,7 +84,7 @@ GEM
     linecache (0.43)
     looksee (0.2.1)
     mime-types (1.16)
-    money (3.5.5)
+    money (3.6.0)
       i18n (~> 0.4)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
@@ -102,7 +102,7 @@ GEM
       rake
       rspec (>= 1.3)
       yard
-    rack (1.1.0)
+    rack (1.1.1)
     rack-test (0.5.7)
       rack (>= 1.0)
     rails (2.3.8)
@@ -128,7 +128,7 @@ GEM
       linecache (>= 0.3)
     ruby-pg (0.7.9.2008.01.28)
     rubyzip (0.9.4)
-    selenium-webdriver (0.1.2)
+    selenium-webdriver (0.1.3)
       childprocess (~> 0.1.5)
       ffi (~> 0.6.3)
       json_pure

@@ -382,6 +382,7 @@ body.app
         &:hover
           color: #069
           text-decoration: underline
+
     .next, input[type=submit]
       +border-radius
       border: 1px
@@ -407,6 +408,11 @@ body.app
         margin: 10px 0
         padding: 13px 20px 10px 20px
         overflow: hidden
+
+      &.small_submit_button
+        font-size: 12px
+        padding: 5px
+        margin-left: 10px
 
     .next
       margin-top: -5px
@@ -957,3 +963,19 @@ table.rounded
 
 .edit_user label
   margin-right: 10px
+
+#import
+  display: none
+  p
+    font-size: 12px
+
+.horizontal
+  +horizontal-list
+
+#import_csv
+  padding-top: 10px
+  *
+    display: inline-block
+
+  label
+    margin: 5px 0px

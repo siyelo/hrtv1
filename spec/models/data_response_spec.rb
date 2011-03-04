@@ -14,6 +14,15 @@ describe DataResponse do
   end
 
   describe "custom date validations" do
+    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
+    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
     it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
     it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
     it { should_not allow_value('').for(:fiscal_year_start_date) }

@@ -9,7 +9,9 @@ class DataResponse < ActiveRecord::Base
   @@data_associations = %w[activities funding_flows projects]
 
   ### Attributes
-  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id
+  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
+                  :contact_name, :contact_name, :contact_position, :contact_phone_number, 
+                  :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
   belongs_to :organization

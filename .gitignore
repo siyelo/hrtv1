@@ -38,6 +38,9 @@ pull*.dat
 *.tmproj
 .sass-cache
 
+# Slurper config (for pivotal tracker)
+doc/slurper_config.yml
+
 # heroku vars files
 config/settings.secret.yml
 config/settings.loader*

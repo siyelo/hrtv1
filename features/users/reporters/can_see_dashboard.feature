@@ -3,12 +3,14 @@ Feature: Reporter can see dashboard
   As a reporter
   I want to be able to see a dashboard for relevant activities
 
+@reporter_dashboard
 Scenario: "See data requests"
   Given I am signed in as a reporter
   When I go to the reporter dashboard page
   Then I should see "Dashboard"
   And I should see "Data Requests & Responses"
 
+@reporter_dashboard
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
   Given a basic org + reporter profile, with data response, signed in
   When I go to the reporter dashboard page

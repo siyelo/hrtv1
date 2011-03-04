@@ -28,19 +28,20 @@ gem 'inherited_resources', '= 1.0.6'
 
 group :development do
   gem 'annotate'
+  gem 'awesome_print', :require => "ap"
   gem 'heroku'
   gem 'hirb'
+  gem 'interactive_editor'
+  gem 'looksee'
+  gem 'mongrel'
   gem 'open_gem'
   gem 'rails-footnotes'
   gem 'ruby-debug'
+  gem 'sketches'
+  gem 'slurper'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
-  gem 'mongrel'
-  gem 'awesome_print', :require => "ap"
   gem 'wirble'
-  gem 'interactive_editor'
-  gem 'sketches'
-  gem 'looksee'
 end
 
 group :test, :development do
@@ -54,9 +55,9 @@ group :test do
   gem 'cucumber-rails'
   gem 'database_cleaner'
   gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3
-  gem 'ruby-pg'
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'
+  gem 'ruby-pg'
   gem 'shoulda'
   gem 'spork'
 end

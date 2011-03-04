@@ -1,0 +1,15 @@
+==
+story_type:
+  feature
+name:
+  A reporter can split an Activity by "Purpose", in order to Reduce Costs of supporting confused users
+labels:
+  classifications
+description:
+
+  Acceptance
+    * activity split - user defines multiple predefined "Purposes" for an activity (not Codes/Coding)
+    * all references to Code in UI changed to Purpose
+    * all references to Code in URLs changed to Purpose
+    * (Decide whether source code should be refactored to reflect this too)
+

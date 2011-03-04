@@ -20,7 +20,10 @@ class DataResponse < ActiveRecord::Base
   belongs_to  :organization
   belongs_to  :data_request
 
-  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id
+  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
+                  :contact_name, :contact_name, :contact_position, :contact_phone_number, 
+                  :contact_main_office_phone_number, :contact_office_location
+
   ### Validations
   validates_presence_of :data_request_id
   validates_presence_of :organization_id

@@ -38,8 +38,11 @@ class Code < ActiveRecord::Base
     if leaf?
       code_assignments.with_type(type.to_s).
                        with_activities(activities).
-                       sort_by_cached_amout.
-                       find(:all, :conditions => ["sum_of_children = 0"])
+                       cached_amount_desc.
+                       find(:all, 
+                            :conditions => ["sum_of_children = 0"],
+                            :order => "code_assignments.cached_amount DESC"
+                           )
     else
       []
     end

@@ -12,7 +12,9 @@ class CodeAssignment < ActiveRecord::Base
   validates_presence_of :activity_id, :code_id
 
   ### Named scopes
-  # TODO: spec
+  named_scope :with_code_id,
+              lambda { |code_id| { :conditions =>
+                ["code_assignments.code_id = ?", code_id]} }
   named_scope :with_code_ids,
               lambda { |code_ids| { :conditions =>
                 ["code_assignments.code_id IN (?)", code_ids]} }
@@ -22,20 +24,10 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_activities,
               lambda { |activity_ids|{ :conditions =>
                 ["code_assignments.activity_id in (?)", activity_ids]} }
-  named_scope :with_activities_include_implementer,
-              lambda { |activity_ids| {
-                :conditions => ["code_assignments.activity_id in (?)", activity_ids],
-                :joins => [:activity => :provider]} }
   named_scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_assignments.type = ?", type]} }
-  named_scope :with_code_id,
-              lambda { |code_id| { :conditions =>
-                ["code_assignments.code_id = ?", code_id]} }
-  named_scope :with_location,
-              lambda { |location_id| { :conditions =>
-                ["code_assignments.code_id = ?", location_id]} }
-  named_scope :sort_by_cached_amout, {
+  named_scope :cached_amount_desc, {
               :order => "code_assignments.cached_amount DESC" }
   named_scope :select_for_pies,
               :select => "code_assignments.code_id,

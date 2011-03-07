@@ -139,8 +139,6 @@ GEM
     sinatra (1.0)
       rack (>= 1.0)
     sketches (0.1.1)
-    slurper (0.4.3)
-      activeresource (>= 2.3.5)
     spoon (0.0.1)
     spork (0.8.4)
     sqlite3 (1.3.3)
@@ -203,7 +201,6 @@ DEPENDENCIES
   settingslogic
   shoulda
   sketches
-  slurper
   spork
   sqlite3-ruby
   taps

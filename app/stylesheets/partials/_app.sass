@@ -492,9 +492,9 @@ body.app
 
     h2
       +border-top-radius
-      background= !lightest-blue
+      background: image_url("bg-blue.jpg")
       clear: both
-      color= !mid-blue
+      color: #fff
       font-size: 0.8em
       letter-spacing: 0.05em
 
@@ -676,6 +676,8 @@ ul.group
   +clearfix
   .first-half, .second-half
     margin: 0 !important
+  ul
+    margin-bottom: 0 !important
   li
     position: relative
     +transition(hover, 1s, ease, 0)
@@ -686,6 +688,8 @@ ul.group
         +transition(hover, 1s, ease, 0)
       ul.report_actions
         opacity: 1
+    &:last-child a
+      margin-bottom: 0
   h3
     padding-top: 10px !important
 

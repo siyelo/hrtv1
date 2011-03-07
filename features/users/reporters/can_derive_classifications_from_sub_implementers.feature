@@ -24,12 +24,12 @@ Scenario: Use budget classifications derived from sub implementers
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
   And I am signed in as "reporter"
   And I am on the budget classification page for "Activity"
-  And I follow "District" within the budget districts tab
+  And I follow "Locations" within the budget districts tab
   Then wait a few moments
   Given I confirm the popup dialog
   When I follow "Use budget classifications derived from sub implementers"
   And I go to the budget classification page for "Activity"
-  And I follow "District" within the budget districts tab
+  And I follow "Locations" within the budget districts tab
   Then the "Location1" field within ".tab2" should contain "55.00"
 
 @reporters @derive_classifications @javascript
@@ -53,11 +53,11 @@ Scenario: Use spend classifications derived from sub implementers
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
   And I am signed in as "reporter"
   And I am on the budget classification page for "Activity"
-  And I follow "District" within the expenditure districts tab
+  And I follow "Locations" within the expenditure districts tab
   Then wait a few moments
   Given I confirm the popup dialog
   When I follow "Use expenditure classifications derived from sub implementers"
   And I go to the budget classification page for "Activity"
-  And I follow "District" within the expenditure districts tab
+  And I follow "Locations" within the expenditure districts tab
   Then wait a few moments
   Then the "Location1" field within ".tab5" should contain "56.00"

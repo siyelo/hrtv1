@@ -115,17 +115,17 @@ class CodeAssignmentsController < ApplicationController
     def get_coding_name(klass)
       case klass.to_s
       when 'CodingBudget'
-        "Budget Coding"
+        "Budget by Purposes"
       when 'CodingBudgetDistrict'
-        "Budget by District"
+        "Budget by Locations"
       when 'CodingBudgetCostCategorization'
-        "Budget by Cost Category"
+        "Budget by Inputs"
       when 'CodingSpend'
-        "Spent Coding"
+        "Spent by Purposes"
       when 'CodingSpendDistrict'
-        "Spent by District"
+        "Spent by Locations"
       when 'CodingSpendCostCategorization'
-        "Spent by Cost Category"
+        "Spent by Inputs"
       end
     end
 

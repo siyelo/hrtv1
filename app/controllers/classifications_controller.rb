@@ -18,21 +18,21 @@ class ClassificationsController < ActiveScaffoldController
 
     config.action_links.add('Classify', @@classify_popup_link_options)
 
-    config.columns[:description].inplace_edit           = true
-    config.columns[:description].label                  = "Activity Description"
-    config.columns[:approved].label                     = "Approved?"
-    config.columns[:coding_budget_classified?].list_ui                    = :checkbox
-    config.columns[:coding_budget_cc_classified?].list_ui   = :checkbox
-    config.columns[:coding_budget_district_classified?].list_ui        = :checkbox
-    config.columns[:coding_spend_classified?].list_ui                     = :checkbox
-    config.columns[:coding_spend_cc_classified?].list_ui    = :checkbox
-    config.columns[:coding_spend_district_classified?].list_ui         = :checkbox
-    config.columns[:coding_budget_classified?].label                      = "Budget by Coding"
-    config.columns[:coding_budget_district_classified?].label          = "Budget by District"
-    config.columns[:coding_budget_cc_classified?].label     = "Budget by Cost Category"
-    config.columns[:coding_spend_classified?].label                       = "Expenditure by Coding"
-    config.columns[:coding_spend_district_classified?].label           = "Expenditure by District"
-    config.columns[:coding_spend_cc_classified?].label      = "Expenditure by Cost Category"
+    config.columns[:description].inplace_edit                   = true
+    config.columns[:description].label                          = "Activity Description"
+    config.columns[:approved].label                             = "Approved?"
+    config.columns[:coding_budget_classified?].list_ui          = :checkbox
+    config.columns[:coding_budget_cc_classified?].list_ui       = :checkbox
+    config.columns[:coding_budget_district_classified?].list_ui = :checkbox
+    config.columns[:coding_spend_classified?].list_ui           = :checkbox
+    config.columns[:coding_spend_cc_classified?].list_ui        = :checkbox
+    config.columns[:coding_spend_district_classified?].list_ui  = :checkbox
+    config.columns[:coding_budget_classified?].label            = "Budget by Purposes"
+    config.columns[:coding_budget_district_classified?].label   = "Budget by Locations"
+    config.columns[:coding_budget_cc_classified?].label         = "Budget by Inputs"
+    config.columns[:coding_spend_classified?].label             = "Expenditure by Purposes"
+    config.columns[:coding_spend_district_classified?].label    = "Expenditure by Locations"
+    config.columns[:coding_spend_cc_classified?].label          = "Expenditure by Inputs"
   end
 
   #so other costs dont show up here, need

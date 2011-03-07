@@ -10,12 +10,12 @@ Background:
 Scenario: See a classification page for activities
   When I go to the classifications page
   Then I should see "UNDP"
-  And I should see "Budget by Coding"
-  And I should see "Budget by District"
-  And I should see "Budget by Cost Category"
-  And I should see "Expenditure by Coding"
-  And I should see "Expenditure by District"
-  And I should see "Expenditure by Cost Category"
+  And I should see "Budget by Purposes"
+  And I should see "Budget by Locations"
+  And I should see "Budget by Inputs"
+  And I should see "Expenditure by Purposes"
+  And I should see "Expenditure by Locations"
+  And I should see "Expenditure by Inputs"
   And I should see "Classify"
 
 @pending

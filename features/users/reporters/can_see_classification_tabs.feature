@@ -16,12 +16,12 @@ Scenario: See all tabs when data request is for budget and spend
   When I go to the activities page
   And I follow "Classify"
   Then I should see "Activity"
-  And I should see "Coding" within the budget coding tab
-  And I should see "District" within the budget districts tab
-  And I should see "Categorization" within the budget cost categorization tab
-  And I should see "Coding" within the expenditure coding tab
-  And I should see "District" within the expenditure districts tab
-  And I should see "Cost Categorization" within the expenditure cost categorization tab
+  And I should see "Purposes" within the budget coding tab
+  And I should see "Locations" within the budget districts tab
+  And I should see "Inputs" within the budget cost categorization tab
+  And I should see "Purposes" within the expenditure coding tab
+  And I should see "Locations" within the expenditure districts tab
+  And I should see "Inputs" within the expenditure cost categorization tab
 
 Scenario: See all tabs when data request is for budget but not spend
   Given an organization exists with name: "Organization1"
@@ -36,9 +36,9 @@ Scenario: See all tabs when data request is for budget but not spend
   When I go to the activities page
   And I follow "Classify"
   Then I should see "Activity"
-  And I should see "Coding" within the budget coding tab
-  And I should see "District" within the budget districts tab
-  And I should see "Categorization" within the budget cost categorization tab
+  And I should see "Purposes" within the budget coding tab
+  And I should see "Locations" within the budget districts tab
+  And I should see "Inputs" within the budget cost categorization tab
   And page should have css "#tab1"
   And page should have css "#tab2"
   And page should have css "#tab3"
@@ -59,9 +59,9 @@ Scenario: See all tabs when data request is for spend but not budget
   When I go to the activities page
   And I follow "Classify"
   Then I should see "Activity"
-  And I should see "Coding" within the expenditure coding tab
-  And I should see "District" within the expenditure districts tab
-  And I should see "Cost Categorization" within the expenditure cost categorization tab
+  And I should see "Purposes" within the expenditure coding tab
+  And I should see "Locations" within the expenditure districts tab
+  And I should see "Inputs" within the expenditure cost categorization tab
   And page should not have css "#tab1"
   And page should not have css "#tab2"
   And page should not have css "#tab3"

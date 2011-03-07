@@ -6,14 +6,14 @@
     %li Budget:
 
     - style = activity.coding_budget_classified? ? 'selected' : 'selected incomplete'
-    %li{:id => 'tab1', :class => style }= link_to "Coding", "#"
+    %li{:id => 'tab1', :class => style }= link_to "Purposes", "#"
 
     - unless other_costs
       - style = activity.coding_budget_district_classified? ? '' : 'incomplete'
-      %li{:id => 'tab2', :class => style}= link_to "District", "#"
+      %li{:id => 'tab2', :class => style}= link_to "Locations", "#"
 
     - style = activity.coding_budget_cc_classified? ? '' : 'incomplete'
-    %li{:id => 'tab3', :class => style}=   link_to "Cost Categorization", "#"
+    %li{:id => 'tab3', :class => style}=   link_to "Inputs", "#"
 
   - if activity.data_request.spend?
     - spend_class = ((!activity.data_request.budget? && activity.data_request.spend?) ? 'selected' : nil)
@@ -21,11 +21,11 @@
     %li Expenditure:
 
     - style = activity.coding_spend_classified? ? spend_class : 'incomplete'
-    %li{:id => 'tab4', :class => style}=   link_to "Coding", "#"
+    %li{:id => 'tab4', :class => style}=   link_to "Purposes", "#"
 
     - unless other_costs
       - style = activity.coding_spend_district_classified? ? '' : 'incomplete'
-      %li{:id => 'tab5', :class => style}= link_to "District", "#"
+      %li{:id => 'tab5', :class => style}= link_to "Locations", "#"
 
     - style = activity.coding_spend_cc_classified? ? '' : 'incomplete'
-    %li{:id => 'tab6', :class => style}=   link_to "Cost Categorization", "#"
+    %li{:id => 'tab6', :class => style}=   link_to "Inputs", "#"

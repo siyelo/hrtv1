@@ -39,10 +39,7 @@ class Code < ActiveRecord::Base
       code_assignments.with_type(type.to_s).
                        with_activities(activities).
                        cached_amount_desc.
-                       find(:all, 
-                            :conditions => ["sum_of_children = 0"],
-                            :order => "code_assignments.cached_amount DESC"
-                           )
+                       find(:all, :conditions => ["sum_of_children = 0"])
     else
       []
     end

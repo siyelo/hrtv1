@@ -24,6 +24,13 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def destroy
-    destroy!(:notice => "Request was successfully deleted.")
+    data_request = DataRequest.find(params[:id])
+    if data_request.data_responses.count > 0
+      flash[:error] = "You cannot delete request that has responses."
+    else
+      data_request.destroy
+      flash[:notice] = "Request was successfully deleted."
+    end
+    redirect_to admin_requests_url
   end
 end

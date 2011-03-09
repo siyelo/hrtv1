@@ -1,0 +1,6 @@
+%tr{:class => cycle("even", "odd")}
+  %td= link_to "#{h activity.name}", edit_response_activity_path(@data_response, activity)
+  %td= activity.description
+  %td= activity.spend
+  %td= activity.budget
+  %td

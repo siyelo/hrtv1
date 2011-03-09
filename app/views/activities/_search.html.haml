@@ -1,0 +1,7 @@
+#search
+  - form_tag response_projects_path(@data_response), :method => :get do
+    #search_box
+      = text_field_tag 'query', params[:query], {:size => 40}
+    = hidden_field_tag :direction, params[:direction]
+    = hidden_field_tag :sort, params[:sort]
+    = submit_tag 'Search', :name => nil

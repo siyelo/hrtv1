@@ -21,6 +21,7 @@ describe Organization do
     it { should have_many :users }
     it { should have_many :data_requests }
     it { should have_many :data_responses }
+    it { should have_many :projects }
     it { should have_many :fulfilled_data_requests }
     it { should have_many :dr_activities }
     it { should have_many :out_flows }

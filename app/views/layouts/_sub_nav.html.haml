@@ -10,7 +10,7 @@
       = link_to 'Implementers', implementers_path
 
     %li{ :class => [controller.class.to_s == "ActivitiesController" ? "active" : '']}
-      = link_to 'Activities', activities_path
+      = link_to 'Activities', response_activities_path(@data_response)
 
     %li{ :class => [ ["ClassificationsController", "CodeAssignmentsController"].include?(controller.class.to_s) ? "active" : '']}
       = link_to 'Classifications', classifications_path

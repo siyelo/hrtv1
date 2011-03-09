@@ -1,7 +1,7 @@
 
 - content_for :body do
   - full_width_page = false
-  - full_width_page = true if [ "ProjectsController", "CodeAssignmentsController", "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::ResponsesController", "ResponsesController"].include? controller.class.to_s
+  - full_width_page = true if [ "ProjectsController", "ActivitiesController", "CodeAssignmentsController", "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::ResponsesController", "ResponsesController"].include? controller.class.to_s
 
   %body{:id => get_controller_id(controller), :class => "app"}
     = render "layouts/header_app"

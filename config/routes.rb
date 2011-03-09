@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
                 :member => {:review => :get,
                             :submit => :put} do |response|
     response.resources :projects
-
+    response.resources :activities
   end
 
   # REPORTER USER

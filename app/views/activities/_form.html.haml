@@ -1,3 +1,6 @@
+:javascript
+  var _response_id = #{@data_response.id};
+
 .form_aside
   %h3 What's an Activity?
   %p Activity is ...
@@ -17,10 +20,7 @@
       // TODO change default currency for the selected project
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})"
       = f.input :project, :label => "Project", :as => :select, :collection => current_user.organization.projects
-      // TODO display only providers for the selected project
-      -#= f.input :provider, :label => "Implementer", :as => :select, :collection => current_user.organization.providers
-      // TODO display only locations for the selected project
-      -#= f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
+      #project_sub_form
 
   %li.last
     %h3 Past Expenditure

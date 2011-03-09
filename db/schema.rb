@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20110310075326) do
+=======
+ActiveRecord::Schema.define(:version => 20110309154108) do
+>>>>>>> Dependent form fields
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -50,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20110310075326) do
     t.integer  "sub_activities_count",                  :default => 0
     t.decimal  "spend_in_usd",                          :default => 0.0
     t.decimal  "budget_in_usd",                         :default => 0.0
+    t.integer  "project_id"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -302,6 +307,12 @@ ActiveRecord::Schema.define(:version => 20110310075326) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "sqlite_stat1", :id => false, :force => true do |t|
+    t.text "tbl"
+    t.text "idx"
+    t.text "stat"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "email"
@@ -317,8 +328,5 @@ ActiveRecord::Schema.define(:version => 20110310075326) do
     t.string   "full_name"
     t.string   "perishable_token",         :default => "", :null => false
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

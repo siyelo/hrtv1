@@ -1,5 +1,6 @@
 require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
+require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
@@ -32,10 +33,11 @@ class Activity < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :projects, :locations, :beneficiaries, :provider,
-                  :text_for_provider, :text_for_beneficiaries,
+                  :text_for_provider, :text_for_beneficiaries, :project_id,
                   :text_for_targets, :name, :description, :start_date, :end_date,
                   :approved, :budget, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :beneficiary_ids
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, 
+                  :beneficiary_ids, :location_ids
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"

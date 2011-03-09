@@ -26,26 +26,33 @@ describe Activity do
   end
 
   describe "attributes" do
+    it { should allow_mass_assignment_of(:name) }
+    it { should allow_mass_assignment_of(:description) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
+    it { should allow_mass_assignment_of(:project_id) }
+    it { should allow_mass_assignment_of(:budget) }
+    it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:budget_q4_prev) }
+    it { should allow_mass_assignment_of(:budget_q1) }
+    it { should allow_mass_assignment_of(:budget_q2) }
+    it { should allow_mass_assignment_of(:budget_q3) }
+    it { should allow_mass_assignment_of(:budget_q4) }
+    it { should allow_mass_assignment_of(:spend_q4_prev) }
+    it { should allow_mass_assignment_of(:spend_q1) }
+    it { should allow_mass_assignment_of(:spend_q2) }
+    it { should allow_mass_assignment_of(:spend_q3) }
+    it { should allow_mass_assignment_of(:spend_q4) }
     it { should allow_mass_assignment_of(:projects) }
     it { should allow_mass_assignment_of(:locations) }
+    it { should allow_mass_assignment_of(:location_ids) }
     it { should allow_mass_assignment_of(:beneficiaries) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider) }
     it { should allow_mass_assignment_of(:text_for_provider) }
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:text_for_targets) }
-    it { should allow_mass_assignment_of(:name) }
-    it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:approved) }
-    it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:spend_q4_prev) }
-    it { should allow_mass_assignment_of(:spend_q1) }
-    it { should allow_mass_assignment_of(:spend_q2) }
-    it { should allow_mass_assignment_of(:spend_q3) }
-    it { should allow_mass_assignment_of(:spend_q4) }
   end
 
   describe "validations" do

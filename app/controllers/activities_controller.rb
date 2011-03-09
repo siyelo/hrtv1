@@ -25,6 +25,11 @@ class ActivitiesController < Reporter::BaseController
     update!{ response_activities_url(@data_response) }
   end
 
+  def project_sub_form
+    @project = @data_response.projects.find(params[:project_id])
+    render :layout => false
+  end
+
   def beginning_of_chain
     super.available_to current_user
   end

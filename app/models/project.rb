@@ -19,7 +19,6 @@ class Project < ActiveRecord::Base
   has_and_belongs_to_many :locations
 
   belongs_to :data_response, :counter_cache => true
-  has_one :owner, :through => :data_response, :source => :organization
 
   has_many :funding_flows
   has_many :in_flows, :class_name => "FundingFlow",
@@ -57,6 +56,7 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
                   :start_date, :end_date, :currency, :data_response
 
+  # Delegates
   delegate :organization, :to => :data_response
 
   ### Callbacks

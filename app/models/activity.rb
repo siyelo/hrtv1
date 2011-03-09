@@ -35,7 +35,7 @@ class Activity < ActiveRecord::Base
                   :text_for_provider, :text_for_beneficiaries,
                   :text_for_targets, :name, :description, :start_date, :end_date,
                   :approved, :budget, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :beneficiary_ids
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -64,6 +64,13 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
+  validates_uniqueness_of :name, :scope => :data_response_id
+  validates_presence_of :name, :data_response_id
+  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
+  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 
   ### Callbacks
   before_save :update_cached_usd_amounts

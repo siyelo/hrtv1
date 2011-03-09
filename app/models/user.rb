@@ -21,9 +21,6 @@ class User < ActiveRecord::Base
   # Named scopes
   named_scope :with_role, lambda { |role| {:conditions => "roles_mask & #{2**ROLES.index(role.to_s)} > 0 "} }
 
-  # Delegates
-  delegate :projects, :to => :organization
-
   def self.remove_security
     with_exclusive_scope {find(:all)}
   end

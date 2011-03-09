@@ -6,6 +6,8 @@ Factory.define :activity, :class => Activity do |f|
   f.projects        { [Factory.create(:project), Factory.create(:project)] }
   f.provider        { Factory.create(:provider) }
   f.data_response   { Factory.create(:data_response) }
+  f.start_date      { Date.parse("2010-01-01") }
+  f.end_date        { Date.parse("2010-12-31") }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
@@ -17,4 +19,6 @@ Factory.define :sub_activity, :class => SubActivity do |f|
   f.budget          { 5000000.00 }
   f.activity        { Factory.create :activity }
   f.data_response   { Factory.create(:data_response) }
+  f.start_date      { Date.parse("2010-01-01") }
+  f.end_date        { Date.parse("2010-12-31") }
 end

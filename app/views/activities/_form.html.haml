@@ -1,7 +1,6 @@
 .form_aside
-  %h3 What's a Project?
-  %p Projects are high-level health programs that your organization implements.
-  %p A project is generally defined as a contractual agreement with a funding provider or oversight body to support health goals in your country.
+  %h3 What's an Activity?
+  %p Activity is ...
   %br
   %h3 How do I add more detail?
   %p In the Health Resource Tracker, you can break-down your Projects into of several smaller, more detailed, Activities.
@@ -11,12 +10,17 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project, :label => "Project", :as => :select, :collection => current_user.projects
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended "
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
+      // TODO change default currency for the selected project
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})"
+      = f.input :project, :label => "Project", :as => :select, :collection => current_user.organization.projects
+      // TODO display only providers for the selected project
+      -#= f.input :provider, :label => "Implementer", :as => :select, :collection => current_user.organization.providers
+      // TODO display only locations for the selected project
+      -#= f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
 
   %li.last
     %h3 Past Expenditure
@@ -45,8 +49,14 @@
           = f.input :budget_q2     , :label => "Q2 10-11"
           = f.input :budget_q3     , :label => "Q3 10-11"
           = f.input :budget_q4     , :label => "Q4 10-11"
-      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+
+  %li.last
+    %h3 Texts
+    %ul.dashboard_section
+      = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Text for beneficiaries", :as => :text
+      = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Text for targets", :as => :text
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @activity.new_record? ? "Create New Activity" : "Update Activity", :class => "last"

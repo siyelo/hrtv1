@@ -1,6 +1,8 @@
 class ActivitiesController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
 
+  inherit_resources
+  actions :all, :except => :show
   before_filter :load_data_response
   helper_method :sort_column, :sort_direction
 
@@ -12,8 +14,15 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
-  def new
-    @activity = Activity.new
+  def create
+    @project = @data_response.activities.new(params[:activity])
+    create!{ response_activities_url(@data_response) }
+  end
+
+  # check ownership and redirect to collection path on update instead of show
+  def update
+    @project = @data_response.activities.find(params[:id])
+    update!{ response_activities_url(@data_response) }
   end
 
   def beginning_of_chain

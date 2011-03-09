@@ -38,6 +38,7 @@ group :development do
   gem 'rails-footnotes'
   gem 'ruby-debug'
   gem 'sketches'
+  gem 'slurper'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
   gem 'wirble'

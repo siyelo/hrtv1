@@ -979,12 +979,16 @@ jQuery(function () {
   jQuery(".rest_in_place").rest_in_place();
 
   // clickable table rows
-  jQuery('.clickable tbody tr').click(function(e) {
+  jQuery('.clickable tbody tr').click(function (e) {
     e.preventDefault();
-    var href = jQuery(this).find("a").attr("href");
+    var element = jQuery(e.target);
 
-    console.log(jQuery(this));
-    console.log(href);
+    if (element.attr('href')) {
+      var href = element.attr('href');
+    } else {
+      var href = jQuery(this).find("a").attr("href");
+    }
+
     if (href) {
       window.location = href;
     }

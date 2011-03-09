@@ -183,7 +183,7 @@ DEPENDENCIES
   heroku
   hirb
   hoptoad_notifier
-  i18n (= 0.4.2)
+  i18n
   inherited_resources (= 1.0.6)
   interactive_editor
   json_pure

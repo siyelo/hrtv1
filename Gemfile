@@ -10,7 +10,7 @@ gem 'formtastic', "= 0.9.10"
 gem 'google_currency'
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'i18n', '=0.4.2'
+gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
 gem 'inherited_resources', "=1.0.6"
 gem 'money'
 gem "paperclip", "~> 2.3"
@@ -38,7 +38,7 @@ group :development do
   gem 'rails-footnotes'
   gem 'ruby-debug'
   gem 'sketches'
-  gem 'slurper'
+  gem 'slurper', :require => false
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
   gem 'wirble'

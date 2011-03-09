@@ -21,6 +21,10 @@ description:
     * reporter user can enter data aligned to FY 01st July to 30th June
 
 
+
+
+
+
 ==
 story_type:
   feature
@@ -53,6 +57,7 @@ description:
 
   Comments
     * Greg: default it
+
 
 
 
@@ -212,29 +217,6 @@ description:
 
 
 
-==
-story_type:
-  feature
-name:
-  A reporter can specify a Focus area for each activity, in order to Reduce Costs
-labels:
-  aop, k
-description:
-
-  * Focus Area predefined reference list of strategic NHA/NSSP objectives.
-  * much higher/broader level than current coding tree codes
-
-  Acceptance
-    * allow activity to be split by Purpose
-    * Focus Area report by level 1 Purpose codes
-    * level 1 Purpose codes are;
-      * ?
-
-  Comments
-    - we think its just the 1st level of the Purpose tree
-      - and at the highest level (level 0)
-        - Service Delivery
-        - Management Support
 
 
 
@@ -242,20 +224,89 @@ description:
 story_type:
   feature
 name:
-  A reporter can enter commodities for a project, in order to reduce costs
+  A reporter can do something, in order to  Increase Revenue | Reduce Costs | Protect Revenue
 labels:
   labels
 description:
 
   Acceptance
-    * commodity has
-      * description
-      * unit cost
-      * quantity
-      * procurement agency (organization)
-      * distribution agency (organization)
-      * includes distribution costs flag y/n
-      * notes for clarification? (comments?)
-    * does it belong to a project?
-    * does it belong to an activity?
+    * criteria
+    * criteria
+
+
+    DR = validated when submitting the Data Response
+
+    Model = when saving the model
+
+    Basically need only very simple/loose sanity checks on the model, to allow users to save and come back later.  Then we need more business logic and standard checking when submitting the Data Response.
+
+
+
+      - Configure
+        - Fiscal year dates are present
+        - currency not blank
+
+      - Projects
+        - date validations (model)
+        - Total Budget  >= Total Budget GOR FY 10-11 (model)
+        - Either Spend is entered, or at least 1 of the other spending fields is filled. (DR)
+
+      - FFlow
+        - need amount for budget (DR)
+        - dates (model)
+      - Sum of all FFlows for a Project == Project.budget
+
+      - Implementers
+        - as per FFlow
+
+      - Activities
+        - Need to ensure Money flows from FSources to Activities and doesnt disappear
+
+      - Activity
+        - has to have a project
+        - cant start before the project started
+        - implementer req'd
+
+       - (beneficiaries are optional)
+       - Budget/Spend = same logic as Projects
+       - Total Budget/Spend cannot exceed the Project's Budget
+       - Total Budget/Spend of ALL a projects Activities cannot exceed the Project's Budget
+       - Budget cannot exceed Budget specified in Implementer FFlow
+       - Budget of all activities for an implementer cannot exceed Budget specified in Implementer FFlow
+
+      - Classification
+        - Budget / +Cost Cat / +By District
+         - has to match the Activity budget
+       - same for Expenditure (Spend)
+
+      - Other Costs
+        - Has to be >= 1 record (cos everyone has overheads!)
+
+
+
+
+
+==
+story_type:
+  feature
+name:
+  A user role can do something, in order to  Increase Revenue | Reduce Costs | Protect Revenue
+labels:
+  labels
+description:
+   I understand the goal of the implementers page, but since you associate each activity with an implementer at the end of the line, . It's also a burden to have to match up what was put on the implementer's page and what is on the activities page - and I don't think we're using any of the info on the implementers screen for the reports we're doing - the unit of analysis that stakeholders are interested in is the activity. (ok w a review screen listing all and the amounts and making them check there is nothing missing)
+
+  This will require having special ways to select any budget support or other financial transactions, but I think these are best to work out on the activities page in any case.(add things in UI to explicitly create these instead of following norms like if you transfer money, make an activity for them)
+
+
+  Acceptance
+    * criteria
+    * criteria
+
+    Greg Nelson29 Dec 2010, 3:31am
+    we can split this flow into entering the different types of activities, starting with budget support, activities that your own staff undertake such as technical assistance or doing monitoring evaluation visits to a clinic or training, then to prevention health activities such as prevention programs or supplying drugs and consumables for prevention, and finally active health activities that would pay for the staff of doctors or nurses for care and treatment. Additional details will need to be worked out but the ideas to replace the one activities screen with several customized steps that make sense for people; this could be divided either by the direct after the does the work and then to a subcontracting or budget support section that focuses on money given to other organizations
+
+
+
+
 

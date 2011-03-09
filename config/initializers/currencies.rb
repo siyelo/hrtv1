@@ -1,8 +1,9 @@
 require 'money/bank/google_currency'
 
-### set default bank to instance of GoogleCurrency. Use a custom rounding method
-#   for better precision.
-Money.default_bank = Money::Bank::GoogleCurrency.new {|n| n.round(4)}
+Money.default_bank = Money::Bank::VariableExchange.new
+currency_config  = YAML::load(IO.read("#{RAILS_ROOT}/config/currencies.yml"))
+
+Money.default_bank.import_rates(:yaml, currency_config)
 
 case ENV['HRT_COUNTRY']
 when 'kenya'
@@ -20,20 +21,3 @@ Money::Currency::TABLE[:eur][:priority] = 3
 Money::Currency::TABLE[:chf][:priority] = 4
 Money::Currency::TABLE[:aud][:priority] = 11
 Money::Currency::TABLE[:gbp][:priority] = 11
-
-
-#  RWF rates dont seem to be available by default,
-# so grab from our currencies (db) table
-class CurrencyNotFound < StandardError; end
-begin
-  usd = Currency.find_by_symbol("USD")
-  raise CurrencyNotFound, "could not find USD to RWF conversion in Currencies table" unless usd
-  Money.add_rate("USD", "RWF", usd.toRWF)
-  Money.add_rate("RWF", "USD", BigDecimal("1")/usd.toRWF)
-rescue CurrencyNotFound => e
-  puts "WARNING: #{e.message}"
-  # dont rethrow. Just handle the problem later
-rescue ActiveRecord::StatementInvalid => e
-  puts "WARNING: #{e.message}" # table not found. OK to ignore, might just be
-                               # running from a rake task
-end

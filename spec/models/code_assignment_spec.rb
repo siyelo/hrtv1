@@ -134,9 +134,9 @@ describe CodeAssignment do
       code_assignments = CodeAssignment.select_for_pies.all
 
       code_assignments[0].code_id.should == code2.id
-      code_assignments[0].value.should == 23
+      code_assignments[0].value.should == "23.0"
       code_assignments[1].code_id.should == code1.id
-      code_assignments[1].value.should == 3
+      code_assignments[1].value.should == "3.0"
     end
   end
 

@@ -40,6 +40,7 @@ pull*.dat
 
 # Slurper config (for pivotal tracker)
 doc/slurper_config.yml
+slurper_config.yml
 
 # heroku vars files
 config/settings.secret.yml

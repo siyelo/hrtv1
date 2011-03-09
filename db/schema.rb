@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110301083912) do
+ActiveRecord::Schema.define(:version => 20110302135502) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -90,7 +90,6 @@ ActiveRecord::Schema.define(:version => 20110301083912) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -144,11 +143,11 @@ ActiveRecord::Schema.define(:version => 20110301083912) do
     t.boolean  "pending_review",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "budget",          :default => true
     t.boolean  "spend",           :default => true
+    t.date     "due_date"
   end
 
   create_table "data_responses", :force => true do |t|
@@ -250,7 +249,6 @@ ActiveRecord::Schema.define(:version => 20110301083912) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "raw_type"

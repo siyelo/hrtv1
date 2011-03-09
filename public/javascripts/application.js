@@ -979,7 +979,8 @@ jQuery(function () {
   jQuery(".rest_in_place").rest_in_place();
 
   // clickable table rows
-  jQuery('.clickable tr').click(function() {
+  jQuery('.clickable tr').click(function(e) {
+    e.preventDefault();
     var href = jQuery(this).find("a").attr("href");
     if(href) {
         window.location = href;

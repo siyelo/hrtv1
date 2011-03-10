@@ -1,4 +1,0 @@
-- semantic_fields_for "activity" do |f|
-  - f.inputs do
-    = f.input :provider_id, :label => "Implementer", :as => :select, :collection => @project.providers
-    = f.input :location_ids, :as => :check_boxes, :label => "Districts worked in", :hint => "all the districts in which this Activity was implemented", :collection => @project.locations

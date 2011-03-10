@@ -44,9 +44,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:spend_q3) }
     it { should allow_mass_assignment_of(:spend_q4) }
     it { should allow_mass_assignment_of(:projects) }
-    it { should allow_mass_assignment_of(:locations) }
     it { should allow_mass_assignment_of(:location_ids) }
-    it { should allow_mass_assignment_of(:beneficiaries) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider) }
     it { should allow_mass_assignment_of(:text_for_provider) }

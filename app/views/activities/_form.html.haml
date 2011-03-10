@@ -1,5 +1,6 @@
 :javascript
   var _response_id = #{@data_response.id};
+  var _activity_id = #{@activity.id};
 
 .form_aside
   %h3 What's an Activity?
@@ -19,8 +20,10 @@
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
       // TODO change default currency for the selected project
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})"
-      = f.input :project, :label => "Project", :as => :select, :collection => current_user.organization.projects
+      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.organization.projects
       #project_sub_form
+        - if @activity.project
+          = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
 
   %li.last
     %h3 Past Expenditure

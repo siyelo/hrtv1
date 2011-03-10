@@ -15,23 +15,23 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    @project = @data_response.activities.new(params[:activity])
     create!{ response_activities_url(@data_response) }
   end
 
   # check ownership and redirect to collection path on update instead of show
   def update
-    @project = @data_response.activities.find(params[:id])
     update!{ response_activities_url(@data_response) }
   end
 
   def project_sub_form
+    @activity = @data_response.activities.find(params[:id])
     @project = @data_response.projects.find(params[:project_id])
-    render :layout => false
+    render :partial => "project_sub_form", 
+           :locals => {:activity => @activity, :project => @project}
   end
 
   def beginning_of_chain
-    super.available_to current_user
+    @data_response.activities
   end
 
   # TODO refactor

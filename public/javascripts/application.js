@@ -936,11 +936,12 @@ var reports_countries_activities_show = {
 
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
-    jQuery('#activity_project').change(function () {
+    jQuery('#activity_project_id').change(function () {
       var _project_id = jQuery(this).val();
       if (_project_id) {
-        var url = '/responses/' + _response_id + '/activities/project_sub_form?' + 
-        'project_id=' + _project_id;
+        var url = '/responses/' + _response_id + 
+        '/activities/' + _activity_id + 
+        '/project_sub_form?' + 'project_id=' + _project_id;
         jQuery.get(url, function (data) {
           jQuery('#project_sub_form').html(data);
         });

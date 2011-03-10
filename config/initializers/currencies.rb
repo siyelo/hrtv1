@@ -1,8 +1,7 @@
 require 'money/bank/google_currency'
 
-Money.default_bank = Money::Bank::VariableExchange.new
-currency_config  = YAML::load(IO.read("#{RAILS_ROOT}/config/currencies.yml"))
-
+Money.default_bank  = Money::Bank::VariableExchange.new
+currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
 Money.default_bank.import_rates(:yaml, currency_config)
 
 case ENV['HRT_COUNTRY']

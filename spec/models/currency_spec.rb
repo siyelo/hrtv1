@@ -17,7 +17,7 @@ describe Currency do
     it "should update cached spend in USD on creation" do
       @a.spend_in_usd.should == 123.45
     end
-   
+    
     it "should handle a lesser known currency, like Albo Lek" do
       #assume a conversion rate of X
       @project.currency = "DZD"

@@ -46,7 +46,7 @@ describe SubActivity do
       # activities
       @activity      = Factory.create(:activity, :name => 'Activity 1',
                                       :budget => 100, :spend => 100,
-                                      :provider => ngo, :projects => [project])
+                                      :provider => ngo, :project => project)
 
 
     end
@@ -418,7 +418,7 @@ describe SubActivity do
 
         @activity.reload.sub_activities_count.should == 1
         @data_response.reload.sub_activities_count.should == 1
-        Factory.create(:sub_activity, :activity => @activity)
+        Factory.create(:sub_activity, :activity => @activity, :data_response => @data_response)
         @data_response.reload.sub_activities_count.should == 2
         @activity.reload.sub_activities_count.should == 2
       end

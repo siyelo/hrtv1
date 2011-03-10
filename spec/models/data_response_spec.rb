@@ -90,25 +90,12 @@ describe DataResponse do
     it "caches sub activities count" do
       dr = Factory.create(:data_response)
       dr.sub_activities_count.should == 0
-      Factory.create(:sub_activity, :data_response => dr)
+      activity1 = Factory.build(:sub_activity, :data_response => dr)
+      activity1.save(false) # TODO: remove test when all db tests valid
       dr.reload.sub_activities_count.should == 1
-      Factory.create(:sub_activity, :data_response => dr)
+      activity2 = Factory.build(:sub_activity, :data_response => dr)
+      activity2.save(false) # TODO: remove test when all db tests valid
       dr.reload.sub_activities_count.should == 2
-    end
-
-    it "caches activities without projects count" do
-      dr = Factory.create(:data_response)
-      dr.activities_without_projects_count.should == 0
-      # need to create bad data to set up this fixture
-      #Factory.create(:activity, :data_response => dr, :projects => []) # is invalid
-      @project = Factory(:project, :data_response => dr)
-      Factory.create(:activity, :data_response => dr, :projects => [@project]) 
-      @project.destroy
-      dr.reload.activities_without_projects_count.should == 1
-      @project = Factory(:project, :data_response => dr)
-      Factory.create(:activity, :data_response => dr, :projects => [@project]) 
-      @project.destroy
-      dr.reload.activities_without_projects_count.should == 2
     end
   end
 
@@ -132,7 +119,7 @@ describe DataResponse do
       @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)
       @activity  = Factory(:activity, :data_response => @dr,
-                            :projects => [@project],
+                            :project => @project,
                             :budget => 1000, :spend => 2000)
 
     end

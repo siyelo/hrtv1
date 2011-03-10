@@ -15,7 +15,7 @@ class Project < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
-  has_and_belongs_to_many :activities
+  has_many :activities, :dependent => :destroy
   has_and_belongs_to_many :locations
 
   belongs_to :data_response, :counter_cache => true
@@ -54,7 +54,7 @@ class Project < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-                  :start_date, :end_date, :currency, :data_response
+                  :start_date, :end_date, :currency, :data_response, :activities
 
   # Delegates
   delegate :organization, :to => :data_response

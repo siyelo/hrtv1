@@ -117,10 +117,12 @@ describe CodeAssignment do
     it "select_for_pies" do
       Money.default_bank.add_rate(:USD, :RWF, "500")
       dr = Factory.create(:data_response, :currency => 'USD')
-      activity1 = Factory.create(:activity, :budget => 100, :spend => 200, :data_response => dr,
-                                :projects => [Factory(:project, :data_response => dr)])
-      activity2 = Factory.create(:activity, :budget => 100, :spend => 200, :data_response => dr,
-                                :projects => [Factory(:project, :data_response => dr)])
+      activity1 = Factory.create(:activity, :budget => 100, :spend => 200, 
+                                 :data_response => dr,
+                                 :project => Factory(:project, :data_response => dr))
+      activity2 = Factory.create(:activity, :budget => 100, :spend => 200, 
+                                 :data_response => dr,
+                                 :project => Factory(:project, :data_response => dr))
 
       code1      = Factory.create(:code, :short_display => 'code1')
       code2      = Factory.create(:code, :short_display => 'code2')
@@ -133,9 +135,20 @@ describe CodeAssignment do
       code_assignments = CodeAssignment.select_for_pies.all
 
       code_assignments[0].code_id.should == code2.id
-      code_assignments[0].value.should == "23.0"
+
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+        code_assignments[0].value.should == "23.0"
+      else # sqlite3
+        code_assignments[0].value.should == 23.0
+      end
+
       code_assignments[1].code_id.should == code1.id
-      code_assignments[1].value.should == "3.0"
+
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+        code_assignments[1].value.should == "3.0"
+      else # sqlite3
+        code_assignments[1].value.should == 3.0
+      end
     end
   end
 
@@ -181,7 +194,7 @@ describe CodeAssignment do
       # fix when the duplicate activity.dr association is removed.
       @dr = Factory(:data_response, :currency => 'RWF')
       @a  = Factory(:activity, :data_response => @dr,
-                      :projects => [Factory(:project, :data_response => @dr)])
+                    :project => Factory(:project, :data_response => @dr))
       ###
       @ca               = Factory.build(:code_assignment, :activity => @a)
       @ca.amount        = 123.45

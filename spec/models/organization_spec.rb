@@ -29,7 +29,6 @@ describe Organization do
     it { should have_many :donor_for }
     it { should have_many :implementor_for }
     it { should have_many :provider_for }
-    it { should have_many :providers }
 
     it "returns fulfilled_data_requests" do
       organization = Factory.create(:organization)

@@ -5,7 +5,6 @@ describe Project do
   describe "creating a project record" do
     subject { Factory(:project) }
     it { should be_valid }
-    it { should have_and_belong_to_many :activities }
     it { should have_and_belong_to_many :locations }
     it { should have_many :funding_flows }
     it { should have_many :in_flows }
@@ -167,29 +166,28 @@ describe Project do
     before :each do
       @project = Factory(:project)
       @original = @project #for shared examples
-      @a1 = Factory(:activity,
-                     :data_response => @project.data_response,
-                     :projects => [@project])
-      @a2 = Factory(:activity,
-                     :data_response => @project.data_response,
-                     :projects => [@project])
+      @a1 = Factory(:activity, :project => @project,
+                     :data_response => @project.data_response)
+      @a2 = Factory(:activity, :project => @project,
+                     :data_response => @project.data_response)
       save_and_deep_clone
     end
 
     it "should clone associated activities" do
       @clone.activities.count.should == 2
-      @clone.activities.first.projects.count.should == 2 # old project HABTM reference on the cloned activity
+      @clone.activities[0].project.should_not be_nil
+      @clone.activities[1].project.should_not be_nil
     end
 
     it "should have the correct number of activities after the original project is destroyed" do
       @project.destroy
       @clone.reload
       @clone.activities.count.should == 2
-      @clone.activities.first.projects.count.should == 1
+      @clone.activities[0].project.should_not be_nil
+      @clone.activities[1].project.should_not be_nil
     end
 
     it_should_behave_like "location cloner"
-
   end
 
   describe 'Currency cache update' do
@@ -201,7 +199,7 @@ describe Project do
       @project       = Factory(:project,
                                 :data_response => @data_response,
                                 :currency => nil)
-      @activity      = Factory(:activity, :projects => [@project],
+      @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
 
     end

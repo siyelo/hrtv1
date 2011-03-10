@@ -34,14 +34,15 @@ class Activity < ActiveRecord::Base
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
                   :text_for_targets, :name, :description, :start_date, :end_date,
-                  :approved, :budget, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, 
+                  :approved, :budget, :spend,
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
                   :beneficiary_ids, :location_ids, :provider_id
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
-  has_and_belongs_to_many :projects
+  belongs_to :project
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
@@ -65,7 +66,7 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_uniqueness_of :name, :scope => :data_response_id
+  #validates_uniqueness_of :name, :scope => :project_id
   validates_presence_of :name, :data_response_id, :project_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -88,7 +89,7 @@ class Activity < ActiveRecord::Base
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
-  named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
+  named_scope :without_a_project, { :conditions => "project_id IS NULL" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
@@ -159,18 +160,14 @@ class Activity < ActiveRecord::Base
     provider
   end
 
-  # helper until we enforce this in the model association!
-  def project
-    @project ||= projects.first
-  end
-
   def organization_name
     organization.name
   end
 
-  def districts
-    projects.map{|project| project.locations}.flatten.uniq
-  end
+  # TODO remove
+  #def districts
+    #project.locations
+  #end
 
   def coding_budget_classified?
     self.budget == self.CodingBudget_amount
@@ -320,7 +317,7 @@ class Activity < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations projects organizations beneficiaries].each do |assoc|
+    %w[locations organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's

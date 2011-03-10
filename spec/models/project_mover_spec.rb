@@ -11,12 +11,10 @@ describe ProjectMover do
                     :organization => @org2)
 
     @project = Factory(:project, :data_response => @dr1)
-    @a1 = Factory(:activity,
-                  :data_response => @project.data_response,
-                  :projects => [@project])
-    @a2 = Factory(:activity,
-                  :data_response => @project.data_response,
-                  :projects => [@project])
+    @a1 = Factory(:activity, :project => @project,
+                  :data_response => @project.data_response)
+    @a2 = Factory(:activity, :project => @project,
+                  :data_response => @project.data_response)
 
     @dr2.reload #refreshes org.user relation
     @mover = ProjectMover.new(@dr1, @dr2, @project)

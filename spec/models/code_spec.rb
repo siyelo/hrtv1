@@ -176,9 +176,9 @@ describe Code do
       Money.default_bank.add_rate(:USD, :USD, 1)
       data_response = Factory.create(:data_response)
       @activity1 = Factory.create(:activity, :data_response => data_response,
-                                  :projects => [Factory.create(:project, :currency => "USD")])
+                                  :project => Factory.create(:project, :currency => "USD"))
       @activity2 = Factory.create(:activity, :data_response => data_response,
-                                  :projects => [Factory.create(:project, :currency => "USD")])
+                                  :project => Factory.create(:project, :currency => "USD"))
       @code      = Factory.create(:code, :short_display => 'Code')
 
       Factory.create(:coding_budget, :activity => @activity1, :code => @code,

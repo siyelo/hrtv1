@@ -19,15 +19,15 @@ describe Currency do
     end
     
     it "should handle a lesser known currency, like Albo Lek" do
-      #assume a conversion rate of X
+      # this is tricky, since if the seed file changes, then this test fails
+      # we're assuming a conversion rate of X here
       @project.currency = "DZD"
       @project.save
       @a.save
       @a.reload
       @a.spend_in_usd.should == 123.45
     end
-  end    
-  
+  end
 end
 # == Schema Information
 #

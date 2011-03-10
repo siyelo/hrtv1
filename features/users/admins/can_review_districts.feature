@@ -4,7 +4,6 @@ Feature: Admin can review districts
   I want to be able to see district review screen
 
 Background:
-  Given currencies exists in database
   And a code exists with short_display: "Code A"
   And a code exists with short_display: "Code B"
   And an organization exists with name: "GoR"

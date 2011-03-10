@@ -7,14 +7,6 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = activities
-#Activity.only_simple.find(:all,
-                   #:conditions => ["activities.id IN (?)", [1918]], # NOTE: FOR DEBUG ONLY
-                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
-
-#                   :include => [:locations, :provider, :organizations,
-
-#                                :beneficiaries, {:data_response => :organization}])
-
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
@@ -58,10 +50,10 @@ class Reports::JawpReport
     row << amount_q2
     row << amount_q3
     row << amount_q4
-    row << (amount_q1 ? amount_q1 * activity.toUSD : '')
-    row << (amount_q2 ? amount_q2 * activity.toUSD : '')
-    row << (amount_q3 ? amount_q3 * activity.toUSD : '')
-    row << (amount_q4 ? amount_q4 * activity.toUSD : '')
+    row << (amount_q1 ? amount_q1 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+    row << (amount_q2 ? amount_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+    row << (amount_q3 ? amount_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+    row << (amount_q4 ? amount_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
     row << get_locations(activity)
     row << activity.sub_activities_count
     row << get_hc_sub_activity_count(activity)
@@ -115,20 +107,11 @@ class Reports::JawpReport
                 get_ratio(amount_total, district_coding.cached_amount) *
                 get_ratio(amount_total, cost_category_coding.cached_amount) *
                 get_ratio(funding_sources_total, funding_source_amount)
-
-              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s
-
-              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s
-
-              #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
-
-              #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
-
               row << funding_source.from.try(:name)
               row << funding_source.from.try(:type)
               row << amount
               row << get_percentage(amount_total, amount)
-              row << amount * activity.toUSD
+              row << amount * Money.default_bank.get_rate(activity.currency, :USD)
               row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
               row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)

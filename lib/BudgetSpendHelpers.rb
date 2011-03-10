@@ -67,26 +67,14 @@ module BudgetSpendHelpers
     end
   end
 
-  def toRWF
-    toRWF = Currency.find_by_symbol(currency).try(:toRWF)
-    toRWF ? toRWF : 0
-  end
-
-  def toUSD
-    toUSD = Currency.find_by_symbol(currency).try(:toUSD)
-    toUSD ? toUSD : 0
-  end
-
   def spend_RWF
     return 0 if spend.nil?
-    toRWF = Currency.find_by_symbol(currency).try(:toRWF)
-    toRWF ? spend * toRWF : 0
+    spend * Money.default_bank.get_rate(currency, :RWF)
   end
 
   def budget_RWF
     return 0 if budget.nil?
-    toRWF = Currency.find_by_symbol(currency).try(:toRWF)
-    toRWF ? budget * toRWF : 0
+    budget * Money.default_bank.get_rate(currency, :RWF)
   end
 
   protected

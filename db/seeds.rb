@@ -20,6 +20,4 @@ load 'db/seed_files/districts_of_rwanda.rb' # seed new districts
 
 load 'db/seed_files/beneficiaries.rb'
 
-load 'db/seed_files/currencies.rb'
-
 puts "...seeding DONE\n\n"

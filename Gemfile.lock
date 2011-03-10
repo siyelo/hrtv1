@@ -58,8 +58,8 @@ GEM
     gem_plugin (0.2.3)
     gherkin (2.3.3)
       json (~> 1.4.6)
-    google_currency (1.0.2)
-      money (~> 3.1.5)
+    google_currency (1.2.0)
+      money (~> 3.5)
     haml (3.0.25)
     has_scope (0.5.0)
     heroku (1.17.17)
@@ -70,7 +70,7 @@ GEM
     hoptoad_notifier (2.4.6)
       activesupport
       builder
-    i18n (0.3.3)
+    i18n (0.5.0)
     inherited_resources (1.0.6)
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
@@ -84,7 +84,8 @@ GEM
     linecache (0.43)
     looksee (0.2.1)
     mime-types (1.16)
-    money (3.1.5)
+    money (3.6.0)
+      i18n (~> 0.4)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
       daemons (>= 1.0.3)
@@ -177,18 +178,17 @@ DEPENDENCIES
   factory_girl (= 1.2.4)
   fastercsv
   formtastic (= 0.9.10)
-  google_currency
+  google_currency (= 1.2.0)
   haml
   heroku
   hirb
   hoptoad_notifier
-  i18n (= 0.3.3)
   inherited_resources (= 1.0.6)
   interactive_editor
   json_pure
   launchy
   looksee
-  money
+  money (~> 3.5)
   mongrel
   open_gem
   paperclip (~> 2.3)

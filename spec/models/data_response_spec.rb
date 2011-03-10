@@ -120,9 +120,8 @@ describe DataResponse do
 
   describe 'Currency cache update' do
     before :each do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.5")
-      Factory.create(:currency, :name => "eur", :symbol => "EUR", :toUSD => "1.5")
-
+      Money.default_bank.add_rate(:RWF, :USD, 0.5)
+      Money.default_bank.add_rate(:EUR, :USD, 1.5)
       @dr        = Factory(:data_response, :currency => 'RWF')
       @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)

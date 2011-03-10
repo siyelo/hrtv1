@@ -7,9 +7,9 @@ describe Activity do
     it { should be_valid }
   end
 
-  it "should save a null object without complaining" do
+  it "should complain since it has no project (and therefore no currency)" do
     a = Activity.new
-    lambda{a.save(false)}.should_not raise_error
+    lambda{a.save(false)}.should raise_error
   end
 
   describe "associations" do
@@ -54,9 +54,8 @@ describe Activity do
   end
 
   describe "currency" do
-    it "returns nil" do
-      activity = Factory.create(:activity, :projects => [])
-      activity.currency.should be_nil
+    it "complains when you dont have a project (therefore currency)" do
+      lambda{ activity = Factory.create(:activity, :projects => []) }.should raise_error
     end
 
     it "returns project current when activity has currency" do
@@ -66,12 +65,6 @@ describe Activity do
   end
 
   describe "project" do
-    it "returns nil when no projects for activity" do
-      activity = Factory.create(:activity, :projects => [])
-
-      activity.project.should be_nil
-    end
-
     it "returns first project when activity has projects" do
       project1 = Factory.create(:project)
       project2 = Factory.create(:project)
@@ -91,7 +84,7 @@ describe Activity do
 
   describe "coding_budget_sum_in_usd" do
     it "returns coding_budget_sum_in_usd" do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -108,7 +101,7 @@ describe Activity do
 
   describe "coding_spend_sum_in_usd" do
     it "returns coding_spend_sum_in_usd" do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -125,7 +118,7 @@ describe Activity do
 
   describe "coding_budget_district_sum_in_usd" do
     it "returns coding_budget_district_sum_in_usd" do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -142,7 +135,7 @@ describe Activity do
 
   describe "coding_spend_district_sum_in_usd" do
     it "returns coding_spend_district_sum_in_usd" do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => "RWF")])
       code1 = Factory.create(:code)
       code2 = Factory.create(:code)
@@ -977,8 +970,7 @@ describe Activity do
 
   describe "keeping Money amounts in-sync" do
     before :each do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD", :toUSD => "1")
-      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       @dr = Factory(:data_response, :currency => 'USD')
       @a        = Factory(:activity, :data_response => @dr,
                           :projects => [Factory(:project, :data_response => @dr)])
@@ -1037,19 +1029,6 @@ describe Activity do
       @a.save
       @a.budget_in_usd.should ==  789.10 * 0.002
     end
-
-    it "should set cached amounts in USD to 0 if bad data means currency is nil" do
-      d = @a.data_response
-      d.currency = nil
-      d.save(false)
-      @a.reload
-      @a.project.data_response.reload #currency is delegated via project
-      @a.budget = 789.10
-      @a.save
-      @a.currency.should == nil
-      @a.budget_in_usd.should == 0
-    end
-
   end
 
   describe "currency convenience lookups on DR/Project" do

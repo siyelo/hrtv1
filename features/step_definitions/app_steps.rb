@@ -485,14 +485,6 @@ Then /^I should see tabs for comments,sub-activities$/ do
   }
 end
 
-Given /^currencies exists in database$/ do
-  steps %Q{
-    And a currency exists with toRWF: "580", symbol: "USD", name: "dollar", toUSD: "1"
-    And a currency exists with toRWF: "800", symbol: "EUR", name: "euro", toUSD: "0.72"
-    And a currency exists with toRWF: "1", symbol: "RWF", name: "rwandan franc", toUSD: "0.00172413793103448"
-  }
-end
-
 Then /^page should have css "([^"]*)"$/ do |selector|
   page.should have_css(selector)
 end

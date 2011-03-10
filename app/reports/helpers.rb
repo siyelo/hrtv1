@@ -133,19 +133,21 @@ module Reports::Helpers
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
+    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
     funding_sources.each do |fs|
       if is_budget
-        sum += fs.budget * activity.toUSD if fs.budget
+        sum += fs.budget * usd_rate if fs.budget
       else
-        sum += fs.spend * activity.toUSD if fs.spend
+        sum += fs.spend * usd_rate if fs.spend
       end
     end
     sum
   end
 
   def get_funding_source_amount(activity, funding_source, is_budget)
+    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
     amount = is_budget ? funding_source.budget :  funding_source.spend
-    (amount || 0) * activity.toUSD
+    (amount || 0) * usd_rate
   end
 
   def get_ratio(amount_total, amount)

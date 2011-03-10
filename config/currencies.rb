@@ -1,19 +1,19 @@
-# Caches currency conversions in config/currencies.yml
+# Script for caching currency rates in config/currencies.yml
 #
 # Whenever you want to update currencies (currently rarely), use this to
 # grab currencies from Google for as many USD conversions as we can,
-# saving them in a nice YAML format.
+# saving them in a nice YAML format, and avoiding runtime RPCs
 #
-# You can then use this local yaml cache to do all currency lookups,
-# without needing XML RPCs
-#
+# @example
+#   script/runner config/currencies.rb
 
 primary_currencies = [:USD, :RWF, :KES]
 cache = "#{RAILS_ROOT}/config/currencies.yml"
-bank = Money::Bank::GoogleCurrency.new
+Money.default_bank = Money::Bank::GoogleCurrency.new
+bank = Money.default_bank
 
 puts "adding static USD->RWF base rate"
-# we know google doesnt handle RWF, so add arbitrary rate.
+# we know google doesnt handle RWF, so add the arbitrary rate we've been using.
 # we need this to derive RWF rates via USD if (when) the lookups fail.
 bank.add_rate(:USD, :RWF, 580) # 591.164
 bank.add_rate(:RWF, :USD, (BigDecimal.new("1")/bank.get_rate(:USD, :RWF)).round(10))
@@ -21,13 +21,12 @@ bank.add_rate(:RWF, :USD, (BigDecimal.new("1")/bank.get_rate(:USD, :RWF)).round(
 puts "Retrieving USD rates from google"
 
 primary_currencies.each do |primary|
-  #Money::Currency::TABLE.each do |c|
-    #iso = c[1][:iso_code]
-    iso = :TZS
+  Money::Currency::TABLE.each do |c|
+    iso = c[1][:iso_code]
     [[primary, iso], [iso, primary]].each do |from, to|
       begin
         print "Fetching #{from} => #{to} "
-        bank.get_rate(from, to)
+        print "got #{bank.get_rate(from, to)} "
       rescue
         print "- WARN: rate not found "
         unless primary == :USD
@@ -47,7 +46,7 @@ primary_currencies.each do |primary|
       end
       puts
     end
-  #end
+  end
 end
 
 File.open(cache, "w+") do |file|

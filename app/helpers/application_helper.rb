@@ -146,7 +146,7 @@ module ApplicationHelper
   end
 
   def usd_to_rwf
-    Currency.find_by_symbol("USD").try(:toRWF) || 0
+    Money.default_bank.get_rate(:USD, :RWF)
   end
 
   # sortable columns

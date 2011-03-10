@@ -126,7 +126,7 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activities' project/DR
     def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) * activity.toUSD
+      self.cached_amount_in_usd = (cached_amount || 0) * Money.default_bank.get_rate(self.currency, :USD)
     end
 
     # Checks if it's a budget code assignment

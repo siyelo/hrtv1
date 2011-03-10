@@ -115,8 +115,7 @@ describe CodeAssignment do
     end
 
     it "select_for_pies" do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
+      Money.default_bank.add_rate(:USD, :RWF, "500")
       dr = Factory.create(:data_response, :currency => 'USD')
       activity1 = Factory.create(:activity, :budget => 100, :spend => 200, :data_response => dr,
                                 :projects => [Factory(:project, :data_response => dr)])
@@ -174,10 +173,8 @@ describe CodeAssignment do
 
   describe "keeping USD cached amounts in-sync" do
     before :each do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
-      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
-                     :toRWF => "1", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
+      Money.default_bank.add_rate(:USD, :RWF, "500")
 
       ### at time of writing, we need the long handed way of creating these objects
       # since the ca factory creates a project whose DR may not == ca.activity.dr

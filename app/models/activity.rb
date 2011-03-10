@@ -399,8 +399,8 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      self.budget_in_usd = (budget || 0) * toUSD
-      self.spend_in_usd  = (spend || 0)  * toUSD
+      self.budget_in_usd = (budget || 0) * Money.default_bank.get_rate(self.currency, :USD)
+      self.spend_in_usd  = (spend || 0)  * Money.default_bank.get_rate(self.currency, :USD)
     end
 
     def fake_ca(klass, code, amount, percentage = nil)

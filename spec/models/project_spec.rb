@@ -194,8 +194,8 @@ describe Project do
 
   describe 'Currency cache update' do
     before :each do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.5")
-      Factory.create(:currency, :name => "eur", :symbol => "EUR", :toUSD => "1.5")
+      Money.default_bank.add_rate(:RWF, :USD, 0.5)
+      Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
       @data_response = Factory(:data_response, :currency => 'RWF')
       @project       = Factory(:project,
@@ -227,10 +227,8 @@ describe Project do
   describe "currency conversion for big amounts" do
     it "should convert large activity amounts back correctly" do
       ONE_HUNDRED_BILLION_DOLLARS = 100000000000.00
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
-      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
-                     :toRWF => "1", :toUSD => "0.002")
+      Money.default_bank.add_rate(:USD, :RWF, 500)
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.build(:activity)
       project  = activity.project
       project.currency = 'USD'

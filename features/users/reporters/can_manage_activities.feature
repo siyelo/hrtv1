@@ -40,7 +40,24 @@ Scenario: Reporter can CRUD activities
   And I should not see "Activity1"
   And I should not see "Activity2"
 
-Scenario: Reporter can CRUD activities and see errors
+Scenario Outline: Reporter can CRUD activities and see errors
+  When I follow "data_request1"
+  And I follow "Activities"
+  And I follow "Create Activity"
+  And I fill in "Name" with "<name>"
+  And I fill in "Start date" with "<start_date>"
+  And I fill in "End date" with "<end_date>"
+  And I select "<project>" from "Project"
+  And I press "Create New Activity"
+  Then I should see "Oops, we couldn't save your changes."
+  And I should see "<message>"
+
+  Examples:
+     | name | start_date | end_date   | project  | message                       |
+     |      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
+     | a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
+     | a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
+     | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
 Scenario: Reporter can file upload activities
   When I follow "data_request1"

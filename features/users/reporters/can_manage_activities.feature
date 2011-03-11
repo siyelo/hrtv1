@@ -43,6 +43,15 @@ Scenario: Reporter can CRUD activities
 Scenario: Reporter can CRUD activities and see errors
 
 Scenario: Reporter can file upload activities
+  When I follow "data_request1"
+  And I follow "Activities"
+  When I attach the file "spec/fixtures/activities.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Created 4 of 4 activities successfully"
+  And I should see "a1"
+  And I should see "a2"
+  And I should see "a3"
+  And I should see "a4"
 
 Scenario: Reporter can see error if no csv file is not attached for upload
   When I follow "data_request1"

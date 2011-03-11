@@ -18,10 +18,10 @@
     %p Create one or more activitiess from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
   
     #import_csv
-      -form_tag(create_from_file_response_activities_path(@data_response), :multipart => true) do
-        =label_tag :file, "File"
-        =file_field_tag :file
-        =submit_tag "Upload and Import", :class => 'small_submit_button'
+      -form_tag create_from_file_response_activities_path(@data_response), :multipart => true do
+        = label_tag :file, "File"
+        = file_field_tag :file
+        = submit_tag "Upload and Import", :class => 'small_submit_button'
 
 
 

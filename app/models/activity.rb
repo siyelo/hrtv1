@@ -4,7 +4,7 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name, name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
+  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -138,6 +138,19 @@ class Activity < ActiveRecord::Base
     FasterCSV.generate do |csv|
       csv << Activity::FILE_UPLOAD_COLUMNS
     end
+  end
+
+  # TODO: spec
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = Project.find_by_name(attributes.delete('project_name'))
+      attributes.merge!(:project_id => project.id) if project
+      activity = data_response.activities.new(attributes)
+      activity.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
   end
 
   def budget_district_coding_adjusted

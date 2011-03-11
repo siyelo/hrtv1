@@ -1,3 +1,4 @@
+require 'set'
 class ActivitiesController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
 
@@ -58,30 +59,43 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create_from_file
-    attributes = Activity::FILE_UPLOAD_COLUMNS
-    if fields_mapped?
-      saved, errors = [], []
-      mapped_fields.each do |row|
-        model_hash = {}
-        attributes.each do |item| # make record hash from hash from map_fields
-          val =row[attributes.index(item)]
-          model_hash[item] = val if val # map_fields has nil for unmapped fields
-        end
-        a = new_from_hash_w_constraints model_hash, session[:last_data_entry_constraints]
-        a.save ? saved << a : errors << a
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = Activity.create_from_file(doc, @data_response)
+        flash[:notice] = "Created #{saved} of #{saved + errors} activities successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
       end
-      success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
-      logger.debug(success_msg)
-      flash[:notice] = success_msg
     else
-      flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      flash[:error] = 'Please select a file to upload'
     end
-  rescue MapFields::InconsistentStateError
-    flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-  rescue MapFields::MissingFileContentsError
-    flash[:error] = 'Please select a file to upload'
-  ensure
+
     redirect_to :action => :index
+    #attributes = Activity::FILE_UPLOAD_COLUMNS
+    #if fields_mapped?
+      #saved, errors = [], []
+      #mapped_fields.each do |row|
+        #model_hash = {}
+        #attributes.each do |item| # make record hash from hash from map_fields
+          #val =row[attributes.index(item)]
+          #model_hash[item] = val if val # map_fields has nil for unmapped fields
+        #end
+        #a = new_from_hash_w_constraints model_hash, session[:last_data_entry_constraints]
+        #a.save ? saved << a : errors << a
+      #end
+      #success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
+      #logger.debug(success_msg)
+      #flash[:notice] = success_msg
+    #else
+      #flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+    #end
+  #rescue MapFields::InconsistentStateError
+    #flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+  #rescue MapFields::MissingFileContentsError
+    #flash[:error] = 'Please select a file to upload'
+  #ensure
+    #redirect_to :action => :index
   end
 
 

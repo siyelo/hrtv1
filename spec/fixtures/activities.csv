@@ -1,5 +1,5 @@
-"project_name";"name";"description";"start_date";"end_date";"text_for_targets";"text_for_beneficiaries";"text_for_provider";"spend";"spend_q4_prev";"spend_q1";"spend_q2";"spend_q3";"spend_q4";"budget";"budget_q4_prev";"budget_q1";"budget_q2";"budget_q3";"budget_q4"
-"project1";"a1";;"01/01/2011";"12/01/2011";;;;;;;;;;;3;2;;1;
-"project1";"a2";"d2";"01/01/2011";"12/01/2011";"t2";"b2";"p2";1;;;;;;;;;;;2
-"project1";"a3";;"01/01/2011";"12/01/2011";;;;;1;2;;;;"3,000";;;;;
-"project1";"a4";;"01/01/2011";"12/01/2011";;;;;;;3;4;"5,000.00";;;;1;;
+project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4
+project1,a1,,01/01/2011,12/01/2011,,,,,,,,,,,3,2,,1,
+project1,a2,d2,01/01/2011,12/01/2011,t2,b2,p2,1,,,,,,,,,,,2
+project1,a3,,01/01/2011,12/01/2011,,,,,1,2,,,,3,000,,,,,
+project1,a4,,01/01/2011,12/01/2011,,,,,,,3,4,5,000.00,,,,1,,

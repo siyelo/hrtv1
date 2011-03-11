@@ -44,9 +44,15 @@ Scenario: Reporter can CRUD activities and see errors
 
 Scenario: Reporter can file upload activities
 
-@run
-Scenario: Reporter can see error if activitions csv upload file is not attached
+Scenario: Reporter can see error if no csv file is not attached for upload
   When I follow "data_request1"
   And I follow "Activities"
   And I press "Upload and Import"
-  Then I should see "Please upload a file"
+  Then I should see "Please select a file to upload"
+
+Scenario: Reporter can see error when invalid csv file is attached for upload
+  When I follow "data_request1"
+  And I follow "Activities"
+  When I attach the file "spec/fixtures/invalid.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Wrong fields mapping. Please download the CSV template"

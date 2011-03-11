@@ -60,7 +60,6 @@ class ActivitiesController < Reporter::BaseController
   def create_from_file
     attributes = Activity::FILE_UPLOAD_COLUMNS
     if fields_mapped?
-      raise 1.to_yaml
       saved, errors = [], []
       mapped_fields.each do |row|
         model_hash = {}
@@ -74,17 +73,14 @@ class ActivitiesController < Reporter::BaseController
       success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
       logger.debug(success_msg)
       flash[:notice] = success_msg
-      redirect_to :action => :index
     else
-      #user chooses field mapping
-      session[:last_data_entry_constraints] = @constraints #TODO switch to += / make session variable a set
-      render :template => 'shared/create_from_file'
+      flash[:error] = 'Wrong fields mapping. Please download the CSV template'
     end
   rescue MapFields::InconsistentStateError
-    flash[:error] = 'Please try again'
-    redirect_to :action => :index
+    flash[:error] = 'Wrong fields mapping. Please download the CSV template'
   rescue MapFields::MissingFileContentsError
-    flash[:error] = 'Please upload a file'
+    flash[:error] = 'Please select a file to upload'
+  ensure
     redirect_to :action => :index
   end
 

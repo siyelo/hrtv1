@@ -8,7 +8,7 @@ class ActivitiesController < Reporter::BaseController
 
   def index
     scope = @data_response.activities.scoped({})
-    scope = scope.scoped(:conditions => ["name LIKE :q",
+    scope = scope.scoped(:conditions => ["name LIKE :q OR description LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page],
                     :order => "#{sort_column} #{sort_direction}")

@@ -10,8 +10,7 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
   And a project exists with name: "Project", data_response: the data_response
-  And an activity exists with name: "Activity", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "Activity", data_response: the data_response, project: the project
   And I am signed in as "reporter"
 
     #

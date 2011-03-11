@@ -12,8 +12,7 @@ Background:
   And a reporter exists with username: "undp_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
   And a project exists with name: "Project A", data_response: the data_response
-  And an activity exists with name: "Activity A", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "Activity A", data_response: the data_response, project: the project
   And a location exists with short_display: "Location A"
   And a district exists with old_location: the location
   And the location is one of the activity's locations

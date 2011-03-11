@@ -285,4 +285,18 @@ describe "Requesting Activity endpoints as a reporter" do
     it "should delete the activity if it belongs to me" do pending end
     it "should not delete the activity if it does not belong to me " do pending end
   end
+
+  describe "download csv template" do
+    it "downloads csv template" do
+      data_response = mock_model(DataResponse)
+      DataResponse.stub(:find).and_return(data_response)
+      Activity.should_receive(:download_template).and_return('csv')
+
+      get :download_template, :response_id => 1
+
+      response.should be_success
+      response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
+      response.header["Content-Disposition"].should == "attachment; filename=activities_template.csv"
+    end
+  end
 end

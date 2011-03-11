@@ -133,14 +133,12 @@ class Activity < ActiveRecord::Base
                   :beneficiaries, {:data_response => :organization}])
   end
 
-  # TODO: spec
-  def download_template
+  def self.download_template
     FasterCSV.generate do |csv|
       csv << Activity::FILE_UPLOAD_COLUMNS
     end
   end
 
-  # TODO: spec
   def self.create_from_file(doc, data_response)
     saved, errors = 0, 0
     doc.each do |row|

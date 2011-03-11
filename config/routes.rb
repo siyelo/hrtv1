@@ -42,7 +42,8 @@ ActionController::Routing::Routes.draw do |map|
     response.resources :projects
     response.resources :activities, :except => :show,
                          :member => {:project_sub_form => :get},
-                         :collection => {:create_from_file => :post}
+                         :collection => {:create_from_file => :post, 
+                                         :download_template => :get}
   end
 
   # REPORTER USER

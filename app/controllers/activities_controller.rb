@@ -71,31 +71,7 @@ class ActivitiesController < Reporter::BaseController
       flash[:error] = 'Please select a file to upload'
     end
 
-    redirect_to :action => :index
-    #attributes = Activity::FILE_UPLOAD_COLUMNS
-    #if fields_mapped?
-      #saved, errors = [], []
-      #mapped_fields.each do |row|
-        #model_hash = {}
-        #attributes.each do |item| # make record hash from hash from map_fields
-          #val =row[attributes.index(item)]
-          #model_hash[item] = val if val # map_fields has nil for unmapped fields
-        #end
-        #a = new_from_hash_w_constraints model_hash, session[:last_data_entry_constraints]
-        #a.save ? saved << a : errors << a
-      #end
-      #success_msg="Created #{saved.count} of #{errors.count+saved.count} from file successfully"
-      #logger.debug(success_msg)
-      #flash[:notice] = success_msg
-    #else
-      #flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-    #end
-  #rescue MapFields::InconsistentStateError
-    #flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-  #rescue MapFields::MissingFileContentsError
-    #flash[:error] = 'Please select a file to upload'
-  #ensure
-    #redirect_to :action => :index
+    redirect_to response_activities_url(@data_response)
   end
 
 

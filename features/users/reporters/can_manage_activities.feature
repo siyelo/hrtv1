@@ -12,7 +12,6 @@ Background:
   And a project exists with name: "project1", data_response: the data_response
   And I am signed in as "reporter"
 
-@run
 Scenario: Reporter can CRUD activities
   When I follow "data_request1"
   And I follow "Activities"
@@ -40,3 +39,14 @@ Scenario: Reporter can CRUD activities
   Then I should see "Activity was successfully destroyed"
   And I should not see "Activity1"
   And I should not see "Activity2"
+
+Scenario: Reporter can CRUD activities and see errors
+
+Scenario: Reporter can file upload activities
+
+@run
+Scenario: Reporter can see error if activitions csv upload file is not attached
+  When I follow "data_request1"
+  And I follow "Activities"
+  And I press "Upload and Import"
+  Then I should see "Please upload a file"

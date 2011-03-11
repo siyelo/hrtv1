@@ -41,7 +41,8 @@ ActionController::Routing::Routes.draw do |map|
                             :submit => :put} do |response|
     response.resources :projects
     response.resources :activities, :except => :show,
-                         :member => {:project_sub_form => :get}
+                         :member => {:project_sub_form => :get},
+                         :collection => {:create_from_file => :post}
   end
 
   # REPORTER USER

@@ -199,17 +199,6 @@ describe CodeAssignment do
       @ca.save
       @ca.cached_amount_in_usd.should == 0.91356
     end
-
-    it "should set cached amount in USD to 0 if bad data means currency is nil" do
-      d = @ca.data_response
-      d.currency = nil
-      d.save(false)
-      @ca.reload
-      @ca.cached_amount = 789.10
-      @ca.save
-      @ca.currency.should == nil
-      @ca.cached_amount_in_usd.should == 0
-    end
   end
 
 end

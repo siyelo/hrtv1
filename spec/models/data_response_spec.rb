@@ -99,9 +99,15 @@ describe DataResponse do
     it "caches activities without projects count" do
       dr = Factory.create(:data_response)
       dr.activities_without_projects_count.should == 0
-      Factory.create(:activity, :data_response => dr, :projects => [])
+      # need to create bad data to set up this fixture
+      #Factory.create(:activity, :data_response => dr, :projects => []) # is invalid
+      @project = Factory(:project, :data_response => dr)
+      Factory.create(:activity, :data_response => dr, :projects => [@project]) 
+      @project.destroy
       dr.reload.activities_without_projects_count.should == 1
-      Factory.create(:activity, :data_response => dr, :projects => [])
+      @project = Factory(:project, :data_response => dr)
+      Factory.create(:activity, :data_response => dr, :projects => [@project]) 
+      @project.destroy
       dr.reload.activities_without_projects_count.should == 2
     end
   end

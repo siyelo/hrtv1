@@ -407,6 +407,22 @@ describe SubActivity do
         end
       end
     end
+    
+    describe "counter cache" do
+      it "caches sub activities count" do
+        @activity.sub_activities_count.should == 0
+        @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                       :provider => @implementer,
+                                       :data_response => @data_response,
+                                       :budget => 4)
+
+        @activity.reload.sub_activities_count.should == 1
+        @data_response.reload.sub_activities_count.should == 1
+        Factory.create(:sub_activity, :activity => @activity)
+        @data_response.reload.sub_activities_count.should == 2
+        @activity.reload.sub_activities_count.should == 2
+      end
+    end
   end
 end
 

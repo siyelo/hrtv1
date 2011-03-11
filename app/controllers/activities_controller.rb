@@ -18,6 +18,10 @@ class ActivitiesController < Reporter::BaseController
     create!{ response_activities_url(@data_response) }
   end
 
+  def destroy
+    destroy!{ response_activities_url(@data_response) }
+  end
+
   # check ownership and redirect to collection path on update instead of show
   def update
     update!{ response_activities_url(@data_response) }
@@ -28,10 +32,6 @@ class ActivitiesController < Reporter::BaseController
     @project = @data_response.projects.find(params[:project_id])
     render :partial => "project_sub_form", 
            :locals => {:activity => @activity, :project => @project}
-  end
-
-  def beginning_of_chain
-    @data_response.activities
   end
 
   # TODO refactor
@@ -109,5 +109,9 @@ class ActivitiesController < Reporter::BaseController
     # TODO move to application controller
     def load_data_response
       @data_response = DataResponse.find(params[:response_id])
+    end
+
+    def begin_of_association_chain
+      @data_response
     end
 end

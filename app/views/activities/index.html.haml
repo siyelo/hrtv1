@@ -30,7 +30,7 @@
     = "Activities with names or description containing #{params[:query]}"
     = link_to "(Back to complete activity listing)", response_activities_path(@data_response)
 
-%table.standard.rounded.clickable
+%table.standard.rounded
   %thead
     %tr
       %th= sortable "name"

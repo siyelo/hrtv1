@@ -16,5 +16,27 @@ Background:
 Scenario: Reporter can CRUD activities
   When I follow "data_request1"
   And I follow "Activities"
-  Then show me the page
+  And I follow "Create Activity"
+  And I fill in "Name" with "Activity1"
+  And I fill in "Description" with "Activity1 description"
+  And I fill in "Start date" with "2011-01-01"
+  And I fill in "End date" with "2011-12-01"
+  And I select "project1" from "Project"
+  And I press "Create New Activity"
+  Then I should see "Activity was successfully created"
+  And I should see "Activity1"
+  And I should see "Activity1 description"
 
+  When I follow "Edit"
+  And I fill in "Name" with "Activity2"
+  And I fill in "Description" with "Activity2 description"
+  And I press "Update Activity"
+  Then I should see "Activity was successfully updated"
+  Then I should see "Activity2"
+  And I should see "Activity2 description"
+  And I should not see "Activity1"
+
+  When I follow "Delete"
+  Then I should see "Activity was successfully destroyed"
+  And I should not see "Activity1"
+  And I should not see "Activity2"

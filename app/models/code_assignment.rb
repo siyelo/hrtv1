@@ -56,6 +56,18 @@ class CodeAssignment < ActiveRecord::Base
     number_string.gsub(delimiter,'')
   end
 
+  def aggregate_amount
+    cached_amount
+  end
+
+  def amount_not_in_children
+    cached_amount - sum_of_children
+  end
+
+  def has_amount_not_in_children?
+    cached_amount - sum_of_children > 0 ? true : false
+  end
+
   # TODO: spec
   def proportion_of_activity
     activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)

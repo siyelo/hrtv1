@@ -77,6 +77,8 @@ module Reports::Helpers
     return @code_descendants_cache
   end
 
+  # TODO refactor methods having to do with code assignments
+  # traversal, and values, back into the model for them
   def lowest_level_code?(code, coded_codes)
     llcode = true
 

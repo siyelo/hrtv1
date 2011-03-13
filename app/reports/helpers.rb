@@ -55,6 +55,26 @@ module Reports::Helpers
     coding_with_parent_codes
   end
 
+  # replacing method above, leaving above in case referenced elsewhere
+  # and what it returns is what should be used for a report
+  # TODO: refactor methods here into code assignment or coding class
+  def get_coding_only_nodes_with_local_amounts(codings)
+    coding_with_parent_codes = []
+    coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
+
+    real_codings  = codings.select do |ca|
+      code = codes_cache[ca.code_id]
+      (ca.amount.present? || ca.percentage.present?) &&
+      code && ca.has_amount_not_in_children?
+    end
+
+    real_codings.each do |ca|
+      coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
+    end
+
+    coding_with_parent_codes
+  end
+
   def codes_cache
     return @codes_cache if @codes_cache
 

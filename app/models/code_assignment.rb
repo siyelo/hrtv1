@@ -61,7 +61,7 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def amount_not_in_children
-    cached_amount - sum_of_children
+    sum_of_children.nil? ? cached_amount : cached_amount - sum_of_children
   end
 
   def has_amount_not_in_children?

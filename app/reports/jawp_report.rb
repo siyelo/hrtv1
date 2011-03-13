@@ -87,8 +87,8 @@ class Reports::JawpReport
       funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
       funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
 
-      coding_with_parent_codes = get_coding_with_parent_codes(codings)
-      cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
+      coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
+      cost_category_coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(cost_category_codings)
 
       cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
         cost_category_coding = cost_category_ca_coding[0]
@@ -103,9 +103,9 @@ class Reports::JawpReport
               row                   = base_row.dup
               funding_source_amount = get_funding_source_amount(activity, funding_source, @is_budget)
               amount                = (amount_total || 0) *
-                get_ratio(amount_total, ca.cached_amount) *
-                get_ratio(amount_total, district_coding.cached_amount) *
-                get_ratio(amount_total, cost_category_coding.cached_amount) *
+                get_ratio(amount_total, ca.amount_not_in_children) *
+                get_ratio(amount_total, district_coding.amount_not_in_children) *
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children) *
                 get_ratio(funding_sources_total, funding_source_amount)
               row << funding_source.from.try(:name)
               row << funding_source.from.try(:type)

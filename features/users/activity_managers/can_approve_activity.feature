@@ -14,14 +14,13 @@ Background:
   And the project is one of the activity's projects
   And mtef_code exists with short_display: "Mtef code"
   And I am signed in as "who_manager"
-  
 
 # note you cant drive this via the normal 'Classify' popup link in Capybara
 # - it wont follow the new browser window
 # The "wait a few moments" between checking the box and going to the next page is to avoid
 # the ERROR Errno::EINVAL: Invalid argument -> webrick/httpresponse.rb:324:in `write'
 # - I think capy just needs time to finish the ajax post request...
-@activity_managers @approve_activity @javascript @run
+@activity_managers @approve_activity @javascript
 Scenario: Approve an Activity
   When I go to the activity classification page for "TB Drugs procurement"
   Then I should see "Activity Classification"
@@ -31,7 +30,7 @@ Scenario: Approve an Activity
   And I go to the activity classification page for "TB Drugs procurement"
   And the "approve_activity" checkbox should be checked
 
-@activity_managers @approve_activity @run
+@activity_managers @approve_activity
 Scenario: List approved activities
   When I go to the classifications page
   Then I should see "Approved?"

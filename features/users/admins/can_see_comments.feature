@@ -18,7 +18,7 @@ Background:
   And a project exists with name: "Other Project", data_response: the data_response
   And a comment exists with title: "title2", comment: "comment2", commentable: the project
 
-@admins @comments
+@admins @comments @run
 Scenario: See latest comments on dashboard
   Given I am signed in as an admin
   When I follow "Dashboard"

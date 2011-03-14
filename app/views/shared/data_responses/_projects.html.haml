@@ -23,11 +23,11 @@
                   - project.in_flows.each do |flow|
                     = "#{flow.from.try(:name)} (#{flow.budget}),"
             %td= project.activities.count
-            %td= n2c(project.spend, project.currency || project.data_response.currency)
-            %td= n2c(project.budget, project.currency || project.data_response.currency)
+            %td= n2c(project.spend, project.currency || project.response.currency)
+            %td= n2c(project.budget, project.currency || project.response.currency)
             %td.manage
-              = link_to "Edit", edit_project_path(project)
-              = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
+              = link_to "Edit", edit_response_project_path(project.response, project)
+              = link_to "Delete", response_project_path(project.response, project), :method => :delete, :confirm => "Are you sure?"
 
           %tr.project.entry_main.s_border
             %td{:colspan => 100}

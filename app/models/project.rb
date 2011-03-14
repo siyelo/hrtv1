@@ -68,6 +68,10 @@ class Project < ActiveRecord::Base
     providers
   end
 
+  def response
+    self.data_response
+  end
+
   # view helper ??!
   def organization_name
     organization.name

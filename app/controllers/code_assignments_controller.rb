@@ -1,8 +1,7 @@
 class CodeAssignmentsController < ApplicationController
   layout 'reporter'
   authorize_resource
-  before_filter :load_activity
-  before_filter :load_data_response
+  before_filter :load_activity_and_data_response
 
   def show
     authorize! :read, @activity
@@ -87,8 +86,9 @@ class CodeAssignmentsController < ApplicationController
 
   private
 
-    def load_activity
+    def load_activity_and_data_response
       @activity = Activity.available_to(current_user).find(params[:activity_id])
+      @data_response = @activity.data_response
     end
 
     def add_code_assignments_error(coding_class, activity)

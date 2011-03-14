@@ -10,7 +10,7 @@ Scenario: Reporter can start a data resposne
   And a reporter exists with username: "reporter", organization: the organization
   And I am signed in as "reporter"
   When I follow "Dashboard"
-  And I follow "Start a new data request"
+  And I follow "Respond"
   And I select "Request 1" from "Data Request"
   And I fill in "Start of Fiscal Year" with "2011-01-01"
   And I fill in "End of Fiscal Year" with "2012-02-01"

@@ -11,7 +11,8 @@
       .wrapper
         -# need sub nav on most pages, except...
         - unless [ "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::CommentsController"].include? controller.class.to_s
-          = render :partial => 'layouts/sub_nav'
+          - unless controller.controller_name == "responses" && controller.action_name == "new"
+            = render :partial => 'layouts/sub_nav'
         = render 'layouts/flashes'
 
         - unless full_width_page
@@ -38,3 +39,4 @@
   = render :partial => 'layouts/footer'
 
 = render 'layouts/app'
+

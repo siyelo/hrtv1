@@ -9,7 +9,6 @@ class Reports::JawpReport
     @activities = activities
     #@activities = Activity.only_simple.find(:all,
                    #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
-                   #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
                    #:include => [:locations, :provider, :organizations,
                                #:beneficiaries, {:data_response => :organization}])
 
@@ -91,7 +90,15 @@ class Reports::JawpReport
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
       funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
-      funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
+      #funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
+      funding_sources_total = 0
+      funding_sources.each do |fs|
+        if @is_budget
+          funding_sources_total += fs.budget if fs.budget
+        else
+          funding_sources_total += fs.spend if fs.spend
+        end
+      end
 
       coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
       cost_category_coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(cost_category_codings)
@@ -110,7 +117,7 @@ class Reports::JawpReport
               funding_source_amount = get_funding_source_amount(activity, funding_source, @is_budget)
               ratio = get_ratio(amount_total, ca.amount_not_in_children) *
                 get_ratio(amount_total, district_coding.amount_not_in_children) *
-                get_ratio(amount_total, cost_category_coding.amount_not_in_children) *
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children)# *
                 get_ratio(funding_sources_total, funding_source_amount)
 
               amount = (amount_total || 0) * ratio
@@ -127,7 +134,7 @@ class Reports::JawpReport
               row << funding_source.from.try(:type)
               row << amount
               row << ratio
-              row << amount_total_in_usd
+              row << amount_total_in_usd * ratio
               row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
               row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)

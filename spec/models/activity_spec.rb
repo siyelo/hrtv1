@@ -50,6 +50,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:text_for_targets) }
     it { should allow_mass_assignment_of(:approved) }
+    it { should allow_mass_assignment_of(:sub_activities_attributes) }
   end
 
   describe "validations" do

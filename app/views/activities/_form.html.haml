@@ -61,6 +61,12 @@
       = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Text for beneficiaries", :as => :text
       = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Text for targets", :as => :text
 
+  %li.last
+    %h2 Sub activities
+    %ul.dashboard_section
+      - f.semantic_fields_for :sub_activities do |ca|
+        = render "activities/sub_activity_fields", :f => ca
+
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @activity.new_record? ? "Create New Activity" : "Update Activity", :class => "last"
 

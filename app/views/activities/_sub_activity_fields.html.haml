@@ -1,0 +1,10 @@
+.fields
+  = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all
+  = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text
+  %h4 Planned expenditure
+  = f.input :budget, :label => "Budget GOR FY 10-11"
+  = f.input :budget_percentage, :label => "% of Main Activity's Budget"
+  %h4 Past expenditure
+  = f.input :budget, :label => "Spend GOR FY 09-10"
+  = f.input :budget_percentage, :label => "% of Main Activity's Budget"
+  = link_to_remove_fields "remove", f

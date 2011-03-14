@@ -10,7 +10,7 @@ class ActivitiesController < Reporter::BaseController
   map_fields :create_from_file, Activity::FILE_UPLOAD_COLUMNS, :file_field => :file
 
   def index
-    scope = @data_response.activities.scoped({})
+    scope = @data_response.activities.roots.scoped({})
     scope = scope.scoped(:conditions => ["name LIKE :q OR description LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page],

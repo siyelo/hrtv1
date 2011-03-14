@@ -39,7 +39,7 @@ class Activity < ActiveRecord::Base
                   :approved, :budget, :spend,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
-                  :beneficiary_ids, :location_ids, :provider_id
+                  :beneficiary_ids, :location_ids, :provider_id, :sub_activities_attributes
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -60,6 +60,9 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
+
+  # Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
 
   ### Delegates
   delegate :organization, :to => :data_response

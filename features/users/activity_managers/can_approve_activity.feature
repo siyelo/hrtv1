@@ -24,7 +24,6 @@ Background:
 @activity_managers @approve_activity @javascript @run
 Scenario: Approve an Activity
   When I go to the activity classification page for "TB Drugs procurement"
-  Then show me the page
   Then I should see "Activity Classification"
   And I should see "Approved?"
   When I check "approve_activity"

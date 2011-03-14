@@ -14,16 +14,16 @@ ActionController::Routing::Routes.draw do |map|
 
   # STATIC PAGES
   map.static_page ':page', :controller => 'static_page', :action => 'show',
-                   :page => Regexp.new(%w[about contact news user_guide].join('|'))
+    :page => Regexp.new(%w[about contact news user_guide].join('|'))
 
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
     admin.resources :responses,
-                    :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
-                    :member     => {:delete => :get}
+      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
+      :member     => {:delete => :get}
     admin.resources :organizations,
-                    :collection => { :duplicate => :get, :remove_duplicate  => :put}
+      :collection => { :duplicate => :get, :remove_duplicate  => :put}
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users, :active_scaffold => true
     admin.resources :activities, :active_scaffold => true
@@ -77,20 +77,22 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :implementers, :only => [:index]
 
   map.resources :organizations,
-                :collection => {:browse => :get},
-                :member => {:select => :post},
-                :active_scaffold => true
+    :collection => {:browse => :get},
+    :member => {:select => :post},
+    :active_scaffold => true
+
+  # dont need to nest activities under response - can derive response_id from activity
   map.resources :activities,
-                :member => {:approve => :put, :classifications => :get},
-                :active_scaffold => true do |activity|
-                activity.resource :code_assignments,
-                  :only => [:show, :update],
-                  :member => {:copy_budget_to_spend => :put,
-                  :derive_classifications_from_sub_implementers => :put}
+    :member => {:approve => :put, :classifications => :get},
+    :active_scaffold => true do |activity|
+    activity.resource :code_assignments,
+      :only => [:show, :update],
+      :member => {:copy_budget_to_spend => :put,
+      :derive_classifications_from_sub_implementers => :put}
   end
   map.resources :classifications,
-                :member => {:popup_classification => :get},
-                :active_scaffold => true
+    :member => {:popup_classification => :get},
+    :active_scaffold => true
   map.resources :sub_activities, :active_scaffold => true
   map.resources :comments,        :active_scaffold => true
   map.resources :field_helps,     :active_scaffold => true
@@ -98,8 +100,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :funding_flows,   :active_scaffold => true
   map.resources :codes,           :active_scaffold => true
   map.resources :other_costs,
-                :member => {:popup_classification => :get},
-                :active_scaffold => true
+    :member => {:popup_classification => :get},
+    :active_scaffold => true
   #map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
   map.resources :users,           :active_scaffold => true
   map.resources :help_requests,   :active_scaffold => true

@@ -11,7 +11,9 @@ Background:
   And an activity_manager exists with username: "who_manager", organization: the organization, current_data_response: the data_response
   And a project exists with name: "TB Treatment Project", data_response: the data_response
   And an activity exists with name: "TB Drugs procurement", data_response: the data_response
-  
+  And the project is one of the activity's projects
+  And mtef_code exists with short_display: "Mtef code"
+  And I am signed in as "who_manager"
   
 
 # note you cant drive this via the normal 'Classify' popup link in Capybara
@@ -21,10 +23,8 @@ Background:
 # - I think capy just needs time to finish the ajax post request...
 @activity_managers @approve_activity @javascript @run
 Scenario: Approve an Activity
-  And the project is one of the activity's projects
-  And mtef_code exists with short_display: "Mtef code"
-  And I am signed in as "who_manager"
   When I go to the activity classification page for "TB Drugs procurement"
+  Then show me the page
   Then I should see "Activity Classification"
   And I should see "Approved?"
   When I check "approve_activity"
@@ -32,7 +32,7 @@ Scenario: Approve an Activity
   And I go to the activity classification page for "TB Drugs procurement"
   And the "approve_activity" checkbox should be checked
 
-@activity_managers @approve_activity
+@activity_managers @approve_activity @run
 Scenario: List approved activities
   When I go to the classifications page
   Then I should see "Approved?"

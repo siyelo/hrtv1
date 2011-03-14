@@ -2,6 +2,7 @@ class CodeAssignmentsController < ApplicationController
   layout 'reporter'
   authorize_resource
   before_filter :load_activity
+  before_filter :load_data_response
 
   def show
     authorize! :read, @activity
@@ -13,7 +14,7 @@ class CodeAssignmentsController < ApplicationController
     @error_message       = add_code_assignments_error(@coding_class, @activity)
     if params[:tab].present?
       render :partial => 'tab', :layout => false,
-             :locals => {:coding_type => @coding_type, :activity => @activity, 
+             :locals => {:coding_type => @coding_type, :activity => @activity,
                          :codes => @codes, :tab => params[:tab] }
     else
       @model_help = ModelHelp.find_by_model_name 'CodeAssignment'
@@ -153,6 +154,10 @@ class CodeAssignmentsController < ApplicationController
       when 'CodingSpendCostCategorization'
         :coding_spend_cc_classified?
       end
+    end
+
+    def load_data_response
+      @data_response = @activity.data_response
     end
 
 end

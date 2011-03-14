@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110302135502) do
+ActiveRecord::Schema.define(:version => 20110310075326) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(:version => 20110302135502) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -129,13 +130,6 @@ ActiveRecord::Schema.define(:version => 20110302135502) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
-  create_table "currencies", :force => true do |t|
-    t.decimal "toRWF"
-    t.string  "symbol"
-    t.string  "name"
-    t.decimal "toUSD"
-  end
-
   create_table "data_requests", :force => true do |t|
     t.integer  "organization_id"
     t.string   "title"
@@ -143,11 +137,11 @@ ActiveRecord::Schema.define(:version => 20110302135502) do
     t.boolean  "pending_review",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "budget",          :default => true
-    t.boolean  "spend",           :default => true
-    t.date     "due_date"
+    t.boolean  "budget",          :default => true,  :null => false
+    t.boolean  "spend",           :default => true,  :null => false
   end
 
   create_table "data_responses", :force => true do |t|

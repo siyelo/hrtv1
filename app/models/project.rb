@@ -134,17 +134,18 @@ class Project < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: projects
 #
-#  id               :integer         primary key
+#  id               :integer         not null, primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
+#  created_at       :datetime
+#  updated_at       :datetime
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
@@ -154,7 +155,7 @@ end
 #  spend_q3         :decimal(, )
 #  spend_q4         :decimal(, )
 #  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
+#  data_response_id :integer         indexed
 #  budget_q1        :decimal(, )
 #  budget_q2        :decimal(, )
 #  budget_q3        :decimal(, )

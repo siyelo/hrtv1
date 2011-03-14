@@ -131,21 +131,22 @@ class Report < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: reports
 #
-#  id                         :integer         primary key
+#  id                         :integer         not null, primary key
 #  key                        :string(255)
-#  created_at                 :timestamp
-#  updated_at                 :timestamp
+#  created_at                 :datetime
+#  updated_at                 :datetime
 #  csv_file_name              :string(255)
 #  csv_content_type           :string(255)
 #  csv_file_size              :integer
-#  csv_updated_at             :timestamp
+#  csv_updated_at             :datetime
 #  formatted_csv_file_name    :string(255)
 #  formatted_csv_content_type :string(255)
 #  formatted_csv_file_size    :integer
-#  formatted_csv_updated_at   :timestamp
+#  formatted_csv_updated_at   :datetime
 #
 

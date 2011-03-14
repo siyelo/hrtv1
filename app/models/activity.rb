@@ -410,6 +410,8 @@ class Activity < ActiveRecord::Base
     end
 end
 
+
+
 # == Schema Information
 #
 # Table name: activities
@@ -418,9 +420,9 @@ end
 #  name                                  :string(255)
 #  created_at                            :datetime
 #  updated_at                            :datetime
-#  provider_id                           :integer
+#  provider_id                           :integer         indexed
 #  description                           :text
-#  type                                  :string(255)
+#  type                                  :string(255)     indexed
 #  budget                                :decimal(, )
 #  spend_q1                              :decimal(, )
 #  spend_q2                              :decimal(, )
@@ -433,8 +435,8 @@ end
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
 #  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer
-#  activity_id                           :integer
+#  data_response_id                      :integer         indexed
+#  activity_id                           :integer         indexed
 #  budget_percentage                     :decimal(, )
 #  spend_percentage                      :decimal(, )
 #  approved                              :boolean

@@ -953,8 +953,10 @@ var activities_new = activities_create = activities_edit = activities_update = {
       var _project_id = jQuery(this).val();
       if (_project_id) {
         var url = '/responses/' + _response_id + 
-        '/activities/' + _activity_id + 
-        '/project_sub_form?' + 'project_id=' + _project_id;
+        '/activities/project_sub_form?' + 'project_id=' + _project_id;
+        if (_activity_id) {
+          url += '&activity_id=' + _activity_id;
+        }
         jQuery.get(url, function (data) {
           jQuery('#project_sub_form').html(data);
         });

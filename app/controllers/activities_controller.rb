@@ -31,10 +31,10 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def project_sub_form
-    @activity = @data_response.activities.find(params[:id])
+    @activity = @data_response.activities.find_by_id(params[:activity_id])
     @project = @data_response.projects.find(params[:project_id])
     render :partial => "project_sub_form", 
-           :locals => {:activity => @activity, :project => @project}
+           :locals => {:activity => (@activity || :activity), :project => @project}
   end
 
   # TODO refactor

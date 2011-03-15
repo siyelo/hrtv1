@@ -6,12 +6,12 @@ Feature: Reporter can manage projects
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
-@reporters @projects
+@reporters @projects @peter
 Scenario: Browse to project edit page
   When I follow "My Data"
   And I follow "Projects"
   Then I should be on the projects page for response "Req1" org "UNDP"
-  And I should see "Projects" within "div#main"
+  And I should see "Projects" within "div#sub-nav"
 
 @reporters @projects
 Scenario Outline: Edit project dates, see feedback messages for start and end dates

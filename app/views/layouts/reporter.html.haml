@@ -10,7 +10,7 @@
     #content
       .wrapper
         -# need sub nav on most pages, except...
-        - unless [ "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::CommentsController"].include? controller.class.to_s
+        - unless [ "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::CommentsController", "ProfilesController"].include? controller.class.to_s
           - unless controller.controller_name == "responses" && controller.action_name == "new"
             = render :partial => 'layouts/sub_nav'
         = render 'layouts/flashes'

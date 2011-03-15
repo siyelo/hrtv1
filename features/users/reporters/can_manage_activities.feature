@@ -54,9 +54,9 @@ Scenario Outline: Reporter can CRUD activities and see errors
 
   Examples:
      | name | start_date | end_date   | project  | message                       |
-     |      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
-     | a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
-     | a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
+     #|      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
+     #| a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
+     #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
      | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
 Scenario: Reporter can file upload activities
@@ -65,10 +65,10 @@ Scenario: Reporter can file upload activities
   When I attach the file "spec/fixtures/activities.csv" to "File"
   And I press "Upload and Import"
   Then I should see "Created 4 of 4 activities successfully"
-  And I should see "a1"
-  And I should see "a2"
-  And I should see "a3"
-  And I should see "a4"
+  And I should see "a1 description"
+  And I should see "a2 description"
+  And I should see "a3 description"
+  And I should see "a4 description"
 
 Scenario: Reporter can see error if no csv file is not attached for upload
   When I follow "data_request1"

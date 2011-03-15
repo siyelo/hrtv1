@@ -15,7 +15,7 @@ Scenario: Reporter can start a data resposne
   And I fill in "Start of Fiscal Year" with "2011-01-01"
   And I fill in "End of Fiscal Year" with "2012-02-01"
   And I select "Rwandan Franc (RWF)" from "Default Currency"
-  And I press "Create Response"
+  And I press "Begin Response"
   Then I should see "Your response was successfully created."
 
 

@@ -3,8 +3,8 @@ class OtherCostsController < ActiveScaffoldController
 
   before_filter :check_user_has_data_response
 
-  @@shown_columns = [ :projects, :spend, :budget]
-  @@create_columns = [:projects,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
+  @@shown_columns = [ :project, :spend, :budget]
+  @@create_columns = [:project,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
   def self.create_columns
     @@create_columns
   end
@@ -29,8 +29,8 @@ class OtherCostsController < ActiveScaffoldController
     config.columns[:comments].association.reverse = :commentable
     config.create.columns                         = @@create_columns
     config.update.columns                         = @@create_columns
-    config.columns[:projects].inplace_edit        = true
-    config.columns[:projects].form_ui             = :select
+    config.columns[:project].inplace_edit         = true
+    config.columns[:project].form_ui              = :select
     config.columns[:description].inplace_edit     = true
     config.columns[:description].label            = "Description (optional)"
     config.columns[:budget].label                 = "Total Budget GOR FY 10-11"

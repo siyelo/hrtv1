@@ -6,7 +6,7 @@ Feature: Reporter can manage projects
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
-@reporters @projects @peter
+@reporters @projects
 Scenario: Browse to project edit page
   When I follow "My Data"
   And I follow "Projects"

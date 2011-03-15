@@ -9,15 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20110310075326) do
-=======
-ActiveRecord::Schema.define(:version => 20110309154108) do
->>>>>>> Dependent form fields
-=======
 ActiveRecord::Schema.define(:version => 20110310135806) do
->>>>>>> Change relationships between project and activity
 
   create_table "activities", :force => true do |t|
     t.string   "name"

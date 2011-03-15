@@ -103,8 +103,8 @@ module Reports::Helpers
     #TODO fake one if none so works correctly, w name of Not Entered
     #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
     funding_sources = []
-    activity.projects.each do |project|
-      project.in_flows.with_organizations.each do |funding_source|
+    if activity.project
+      activity.project.in_flows.with_organizations.each do |funding_source|
         funding_sources << funding_source
       end
     end
@@ -212,11 +212,6 @@ module Reports::Helpers
       activities[ca.activity][:amount] = ca.cached_amount_in_usd
     end
     activities
-  end
-
-  def first_project_name(activity)
-    project = activity.projects.first
-    project ? "#{h project.name}" : " "
   end
 
   def provider_fosaid(activity)

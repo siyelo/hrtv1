@@ -14,16 +14,7 @@ class Reports::ActivitiesByCostCategorization
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-
-      root_activities.each do |activity|
-        if activity.projects.empty?
-          csv << build_row(activity, " ")
-        else
-          activity.projects.each do |project|
-            csv << build_row(activity, "#{h project.name}")
-          end
-        end
-      end
+      root_activities.each{|activity| csv << build_row(activity)}
     end
   end
 
@@ -53,7 +44,7 @@ class Reports::ActivitiesByCostCategorization
       row
     end
 
-    def build_row(activity, project_name)
+    def build_row(activity)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
         code_assignments = activity.coding_budget_cost_categorization.map{|ca| ca.code_id}
@@ -63,7 +54,7 @@ class Reports::ActivitiesByCostCategorization
       row = []
 
       row << funding_source_name(activity)
-      row << project_name
+      row << activity.project.try(:name)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
       row << "#{activity.id}"

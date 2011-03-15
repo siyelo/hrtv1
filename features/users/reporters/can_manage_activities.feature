@@ -23,7 +23,6 @@ Scenario: Reporter can CRUD activities
   And I select "project1" from "Project"
   And I press "Create New Activity"
   Then I should see "Activity was successfully created"
-  And I should see "Activity1"
   And I should see "Activity1 description"
 
   When I follow "Edit"
@@ -31,7 +30,6 @@ Scenario: Reporter can CRUD activities
   And I fill in "Description" with "Activity2 description"
   And I press "Update Activity"
   Then I should see "Activity was successfully updated"
-  Then I should see "Activity2"
   And I should see "Activity2 description"
   And I should not see "Activity1"
 
@@ -58,6 +56,26 @@ Scenario Outline: Reporter can CRUD activities and see errors
      #| a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
      #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
      | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
+
+Scenario: Reporter can enter 3 year budget projections
+  When I follow "data_request1"
+  And I follow "Activities"
+  And I follow "Create Activity"
+  And I fill in "Name" with "Activity1"
+  And I fill in "Description" with "Activity1 description"
+  And I fill in "Start date" with "2011-01-01"
+  And I fill in "End date" with "2011-12-01"
+  And I select "project1" from "Project"
+  And I fill in "Budget" with "1000"
+  And I fill in "Budget for year + 1" with "2000"
+  And I fill in "Budget for year + 2" with "3000"
+  And I press "Create New Activity"
+  Then I should see "Activity was successfully created"
+  And I should see "Activity1 description"
+  When I follow "Edit"
+  Then the "Budget" field should contain "1000"
+  And the "Budget for year + 1" field should contain "2000"
+  And the "Budget for year + 2" field should contain "3000"
 
 Scenario: Reporter can file upload activities
   When I follow "data_request1"

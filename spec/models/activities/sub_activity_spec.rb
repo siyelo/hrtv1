@@ -46,6 +46,7 @@ describe SubActivity do
       # activities
       @activity      = Factory.create(:activity, :name => 'Activity 1',
                                       :budget => 100, :spend => 100,
+                                      :data_response => @data_response,
                                       :provider => ngo, :project => project)
 
 

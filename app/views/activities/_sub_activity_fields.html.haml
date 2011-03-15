@@ -1,4 +1,5 @@
 .fields
+  = f.input :data_response_id, :as => :hidden, :value => @data_response.id
   = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all
   = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text
   %h4 Planned expenditure

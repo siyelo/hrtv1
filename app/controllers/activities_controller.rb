@@ -37,11 +37,10 @@ class ActivitiesController < Reporter::BaseController
            :locals => {:activity => (@activity || :activity), :project => @project}
   end
 
-  # TODO refactor
   def approve
-    @activity = Activity.available_to(current_user).find(params[:id])
+    @activity = @data_response.activities.find(params[:id])
     authorize! :approve, @activity
-    @activity.update_attributes({ :approved => params[:checked] })
+    @activity.update_attributes({:approved => params[:checked]})
     render :nothing => true
   end
 

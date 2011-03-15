@@ -5,14 +5,14 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessible :activity_id, :spend_percentage, :budget_percentage
+  attr_accessible :activity_id, :spend_percentage, :budget_percentage, :data_response_id
 
   ### Callbacks
   after_create  :update_counter_cache
   after_destroy :update_counter_cache
 
   ### Delegates
-  [:data_response, :projects, :name, :description, :start_date, :end_date, :approved,
+  [:projects, :name, :description, :start_date, :end_date, :approved,
    :text_for_beneficiaries, :beneficiaries, :text_for_targets].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end

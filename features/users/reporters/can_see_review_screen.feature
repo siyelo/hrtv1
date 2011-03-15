@@ -4,18 +4,14 @@ Feature: Reporter can view review page
   I want to be able to see review screen
 
 Background:
-  Given the following organizations
-    | name             |
-    | WHO              |
-    | UNAIDS           |
-  Given the following reporters
-    | name             | organization |
-    | who_user         | WHO          |
-  Given a data request with title "Req1" from "UNAIDS"
-  Given a data response to "Req1" by "WHO"
-  Given a project with name "TB Treatment Project" for request "Req1" and organization "WHO"
-  Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "WHO"
-  Given I am signed in as "who_user"
+  Given an organization exists with name: "UNAIDS"
+  And a data_request exists with title: "Req1", organization: the organization
+  And an organization exists with name: "WHO"
+  And a reporter exists with username: "who_user", organization: the organization
+  And a data_response exists with data_request: the data_request, organization: the organization
+  And a project exists with name: "TB Treatment Project", data_response: the data_response
+  And an activity exists with name: "TB Drugs procurement", project: the project, data_response: the data_response
+  And I am signed in as "who_user"
   When I follow "Dashboard"
   And I follow "Edit"
   When I follow "My Data"

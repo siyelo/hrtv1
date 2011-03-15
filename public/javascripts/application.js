@@ -624,7 +624,7 @@ var admin_responses_show = {
   }
 };
 
-var reporter_data_responses_show = {
+var reporter_responses_show = {
   run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');

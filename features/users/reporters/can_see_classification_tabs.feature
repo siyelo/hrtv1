@@ -12,7 +12,8 @@ Scenario: See all tabs when data request is for budget and spend
   And a project exists with name: "Project", data_response: the data_response
   And an activity exists with name: "Activity", data_response: the data_response, project: the project
   And I am signed in as "reporter"
-  When I go to the activities page
+  And I follow "Request"
+  And I follow "Activities"
   And I follow "Classify"
   Then I should see "Activity"
   And I should see "Purposes" within the budget coding tab
@@ -31,7 +32,8 @@ Scenario: See all tabs when data request is for budget but not spend
   And a project exists with name: "Project", data_response: the data_response
   And an activity exists with name: "Activity", data_response: the data_response, project: the project
   And I am signed in as "reporter"
-  When I go to the activities page
+  And I follow "Request"
+  And I follow "Activities"
   And I follow "Classify"
   Then I should see "Activity"
   And I should see "Purposes" within the budget coding tab
@@ -53,7 +55,8 @@ Scenario: See all tabs when data request is for spend but not budget
   And a project exists with name: "Project", data_response: the data_response
   And an activity exists with name: "Activity", data_response: the data_response, project: the project
   And I am signed in as "reporter"
-  When I go to the activities page
+  And I follow "Request"
+  And I follow "Activities"
   And I follow "Classify"
   Then I should see "Activity"
   And I should see "Purposes" within the expenditure coding tab

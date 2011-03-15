@@ -224,9 +224,9 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   ### change  budget and spend for activity
   When I follow "Activities"
   And I follow "Edit"
-  And I fill in "Total Budget GOR FY 10-11" with "1000"
-  And I fill in "Total Spent GOR FY 09-10" with "2000"
-  And I press "Update"
+  And I fill in "Budget" with "1000"
+  And I fill in "Spent" with "2000"
+  And I press "Update Activity"
   And I go to the budget classification page for "Activity"
   Then the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"

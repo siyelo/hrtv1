@@ -4,3 +4,5 @@
   %td= project.spend
   %td= project.budget
   %td
+    = link_to "Edit", edit_response_project_path(@data_response, project)
+    = link_to "Delete", response_project_path(@data_response, project), :confirm => "Are you sure?", :method => :delete

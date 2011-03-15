@@ -31,7 +31,7 @@
     = "Projects with names containing #{params[:query]}"
     = link_to "(Back to complete project listing)", response_projects_path(@data_response)
 
-%table.standard.rounded.clickable
+%table.standard.rounded
   %thead
     %tr
       %th= sortable "name"

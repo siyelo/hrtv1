@@ -48,7 +48,7 @@ Scenario: Create incoming funding flow
   And I should see "UNDP"
   And I should see "1,000.00"
 
-@reporters @funding_sources @run
+@reporters @funding_sources
 Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
   When I go to the funding sources page
   And I follow "Create New"
@@ -56,5 +56,4 @@ Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
   And I select "GoR" from "From"
   And I fill in "Total Budget GOR FY 10-11" with "1000.00"
   And I press "Create"
-  Then show me the page
   Then I should be on the funding sources page

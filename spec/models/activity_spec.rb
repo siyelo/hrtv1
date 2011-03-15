@@ -1,15 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-
   describe "creating an activity record" do
     subject { Factory(:activity) }
     it { should be_valid }
-  end
-
-  it "should complain since it has no project (and therefore no currency)" do
-    a = Activity.new
-    lambda{a.save(false)}.should raise_error
   end
 
   describe "associations" do
@@ -54,10 +48,6 @@ describe Activity do
   end
 
   describe "currency" do
-    it "complains when you dont have a project (therefore currency)" do
-      lambda{ activity = Factory.create(:activity, :projects => []) }.should raise_error
-    end
-
     it "returns project current when activity has currency" do
       activity = Factory.create(:activity, :projects => [Factory.create(:project, :currency => 'USD')])
       activity.currency.should == "USD"

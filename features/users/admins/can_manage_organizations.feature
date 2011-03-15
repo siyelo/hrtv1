@@ -32,8 +32,6 @@ Scenario: Admin can CRUD organizations
   Then I should see "Organization was successfully deleted"
   And I should not see "Organization name"
 
-
-@admins @organizations
 Scenario Outline: Merge duplicate organizations
   Given I am signed in as an admin
   When I follow "Organizations"
@@ -48,7 +46,7 @@ Scenario Outline: Merge duplicate organizations
      | org1      | org1 - 0 users | Same organizations for duplicate and target selected. | 
      | org1      | org2 - 1 user  | Organizations successfully merged.                    | 
 
-@admins @organizations @javascript
+@javascript
 Scenario Outline: Merge duplicate organizations (with JS)
   Given I am signed in as an admin
   When I follow "Organizations"
@@ -68,7 +66,7 @@ Scenario Outline: Merge duplicate organizations (with JS)
       | org1      | org2 - 1 user  | org1          | org2       | Organizations successfully merged.                    |             | 
 
 
-@admins @organizations @javascript
+@javascript
 Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
   Given I am signed in as an admin
   When I follow "Organizations"
@@ -84,7 +82,7 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
    | org1           | Duplicate organization   | .box[data-type='duplicate'] | 
    | org1 - 0 users | Replacement organization | .box[data-type='target']    | 
 
-@admins @organizations @javascript
+@javascript
 Scenario: Try to delete non-empty organization (with JS)
   Given I am signed in as an admin
   When I follow "Organizations"

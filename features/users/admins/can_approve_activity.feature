@@ -13,7 +13,7 @@ Background:
   And a mtef_code exists with short_display: "Mtef code"
   And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
 
-@admins @approve_activity @javascript
+@javascript
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1"
@@ -22,7 +22,7 @@ Scenario: See a budget coding breakdown
   And I should see "1,000.00"
 
 # NB: this scenario will only work for 1 activity, 1 classification
-@admins @approve_activity @javascript
+@javascript
 Scenario: Approve a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1"

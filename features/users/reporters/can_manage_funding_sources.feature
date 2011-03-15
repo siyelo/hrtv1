@@ -8,7 +8,6 @@ Background:
   Given a basic org + reporter profile, with data response, signed in
 
 @wip
-@reporters @funding_sources
 Scenario: Reporter can see current incoming flows (Funding Sources) for their organization
   Given the following organizations
     | name             |
@@ -36,7 +35,6 @@ Scenario: Reporter can see current incoming flows (Funding Sources) for their or
   Then I should see "TB Treatment Project"
   And I should not see "Some other Project"
 
-@reporters @funding_sources
 Scenario: Create incoming funding flow
   When I go to the funding sources page
   And I follow "Create New"
@@ -48,7 +46,6 @@ Scenario: Create incoming funding flow
   And I should see "UNDP"
   And I should see "1,000.00"
 
-@reporters @funding_sources
 Scenario: BUG: 4335178 Redirected back to Funding Sources index after creation
   When I go to the funding sources page
   And I follow "Create New"

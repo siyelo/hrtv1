@@ -3,7 +3,6 @@ Feature: Reporter can see user guide upon login
   As a reporter
   I want to be able to see user guide after logging in
 
-@reporters @user_guide
 Scenario: Login and see user guide
   Given a reporter exists with username: "Frank", email: "frank@f.com", password: "password"
   When I go to the login page

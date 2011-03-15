@@ -3,7 +3,6 @@ Feature: Reporter can start a data response
   As a reporter
   I want to be able to start a data response
 
-@reporters @data_response
 Scenario: Reporter can start a data resposne
   Given an organization exists with name: "Organization 1"
   And a data_request exists with title: "Request 1"

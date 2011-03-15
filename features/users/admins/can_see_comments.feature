@@ -17,7 +17,6 @@ Background:
   And a project exists with name: "Other Project", data_response: the data_response
   And a comment exists with title: "title2", comment: "comment2", commentable: the project
 
-@admins @comments
 Scenario: See latest comments on dashboard
   Given I am signed in as an admin
   When I follow "Dashboard"
@@ -29,7 +28,6 @@ Scenario: See latest comments on dashboard
   And I should see "on Project: "
   And I should see "Other Project"
 
-@admins @comments
 Scenario: Access comments page from dashboard and edit them
   Given I am signed in as an admin
   When I follow "Dashboard"
@@ -42,7 +40,6 @@ Scenario: Access comments page from dashboard and edit them
   And I press "Update"
   And I should see "comment3"
 
-@admins @comments
 Scenario: Admin can see all comments
   Given I am signed in as an admin
   When I go to the comments page

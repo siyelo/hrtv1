@@ -5,7 +5,6 @@ Feature: Reporter can manage data response
 
 Background:
   
-@reporters @data_response
 Scenario: User can start a data response
   Given a data_request exists with title: "Req1"
   Given a basic org + reporter profile, signed in
@@ -13,14 +12,12 @@ Scenario: User can start a data response
   And I follow "Respond"
   Then I should see "New Response" within "h1"
 
-@reporters @data_response
 Scenario: Browse to data response edit page
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"
   And I follow "Settings"
   And I should see "Response Settings" within "h1"
 
-@reporters @data_response
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
   When I follow "My Data"

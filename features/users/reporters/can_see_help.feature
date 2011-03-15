@@ -7,7 +7,7 @@ Background:
   Given a basic org "UNDP" + reporter profile, with data response to "Req1", signed in
   
 # this spec is for CMS-style help - to be added back once the UI is stabilised. 
-@reporters @help @wip
+@wip
 Scenario Outline: See help sections from the CMS 
   And model help for "<page>" page
   When I go to the <page> page

@@ -3,7 +3,6 @@ Feature: Activity Manager can login
   As an Activity Manager
   I want to be able to login
 
-@activity_managers @login
 Scenario: Login as an activity manager with a username
   Given an activity_manager exists with username: "Frank"
   And I go to the login page

@@ -24,7 +24,6 @@ Background:
   And a coding_budget_district exists with activity: the activity, code: the first location
   And a coding_spend_district exists with activity: the activity, code: the first location
 
-@admins @country_review
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"

@@ -41,9 +41,18 @@ ActionController::Routing::Routes.draw do |map|
                             :submit => :put} do |response|
     response.resources :projects
     response.resources :activities, :except => :show,
+                         :member => {:approve => :put, 
+                                     :classifications => :get},
                          :collection => {:create_from_file => :post, 
                                          :download_template => :get,
                                          :project_sub_form => :get}
+  end
+
+  map.resources :activities do |activity|
+    activity.resource :code_assignments,
+      :only => [:show, :update],
+      :member => {:copy_budget_to_spend => :put,
+      :derive_classifications_from_sub_implementers => :put}
   end
 
   # REPORTER USER
@@ -85,14 +94,6 @@ ActionController::Routing::Routes.draw do |map|
     :active_scaffold => true
 
   # dont need to nest activities under response - can derive response_id from activity
-  map.resources :activities,
-    :member => {:approve => :put, :classifications => :get},
-    :active_scaffold => true do |activity|
-    activity.resource :code_assignments,
-      :only => [:show, :update],
-      :member => {:copy_budget_to_spend => :put,
-      :derive_classifications_from_sub_implementers => :put}
-  end
   map.resources :classifications,
     :member => {:popup_classification => :get},
     :active_scaffold => true

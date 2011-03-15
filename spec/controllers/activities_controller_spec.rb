@@ -11,38 +11,41 @@ describe "Routing shortcuts for Activities (activities/1) should map" do
     get :show, :id => "1"
   end
 
-  it "activities_path to /activities" do
-    activities_path.should == '/activities'
+  it "response_activities_path(1) to /responses/1/activities" do
+    response_activities_path(1).should == '/responses/1/activities'
   end
 
-  it "activity_path to /activities/1" do
-    activity_path.should == '/activities/1'
+  it "response_activity_path(1,2) to /activities/2" do
+    response_activity_path(1,2).should == '/responses/1/activities/2'
   end
 
-  it "activity_path(9) to /activities/9" do
-    activity_path(9).should == '/activities/9'
+  it "response_activity_path(1,9) to /responses/1/activities/9" do
+    response_activity_path(1,9).should == '/responses/1/activities/9'
   end
 
-  it "edit_activity_path to /activities/1/edit" do
-    edit_activity_path.should == '/activities/1/edit'
+  it "edit_response_activity_path to /responses/1/activities/1/edit" do
+    edit_response_activity_path(1,1).should == '/responses/1/activities/1/edit'
   end
 
-  it "edit_activity_path(9) to /activities/9/edit" do
-    edit_activity_path(9).should == '/activities/9/edit'
+  it "edit_response_activity_path(1,9) to /responses/1/activities/9/edit" do
+    edit_response_activity_path(1,9).should == '/responses/1/activities/9/edit'
   end
 
-  it "new_activity_path to /activities/new" do
-    new_activity_path.should == '/activities/new'
+  it "new_response_activity_path to /responses/1/activities/new" do
+    new_response_activity_path(1).should == '/responses/1/activities/new'
   end
 
-  it "approve_activity_path(9) to /activities/9/approve" do
-    approve_activity_path(9).should == '/activities/9/approve'
+  it "approve_response_activity_path(1,9) to /activities/9/approve" do
+    approve_response_activity_path(1,9).should == '/responses/1/activities/9/approve'
   end
 
 end
 
 
 describe "Requesting Activity endpoints as visitor" do
+  before :each do
+    @data_response = Factory.create(:data_response)
+  end
   controller_name :activities
 
   context "RESTful routes" do
@@ -58,16 +61,16 @@ describe "Requesting Activity endpoints as visitor" do
 
     context "Requesting /activities/1 using GET" do
       before do
-        @activity = Factory.create(:activity)
-        get :show, :id => @activity.id
+        @activity = Factory.create(:activity, :data_response => @data_response)
+        get :show, :id => @activity.id, :response_id => @data_response.id
       end
       it_should_behave_like "a protected endpoint"
     end
 
     context "Requesting /activities/1/approve using POST" do
       before do
-        @activity = Factory.create(:activity)
-        post :approve, :id => @activity.id
+        @activity = Factory.create(:activity, :data_response => @data_response)
+        post :approve, :id => @activity.id, :response_id => @data_response.id
       end
       it_should_behave_like "a protected endpoint"
     end
@@ -75,9 +78,9 @@ describe "Requesting Activity endpoints as visitor" do
     context "Requesting /activities using POST" do
       before do
         params = { :name => 'title', :description =>  'descr' }
-        @activity = Factory.create(:activity, params )
+        @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
         @activity.stub!(:save).and_return(true)
-        post :create, :activity =>  params
+        post :create, :activity =>  params, :response_id => @data_response.id
       end
       it_should_behave_like "a protected endpoint"
     end
@@ -85,118 +88,17 @@ describe "Requesting Activity endpoints as visitor" do
     context "Requesting /activities/1 using PUT" do
       before do
         params = { :name => 'title', :description =>  'descr' }
-        @activity = Factory.create(:activity, params )
+        @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
         @activity.stub!(:save).and_return(true)
-        put :update, { :id => @activity.id }.merge(params)
+        put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
       end
       it_should_behave_like "a protected endpoint"
     end
 
     context "Requesting /activities/1 using DELETE" do
       before do
-        @activity = Factory.create(:activity)
-        delete :destroy, :id => @activity.id
-      end
-      it_should_behave_like "a protected endpoint"
-    end
-  end
-
-  context "ActiveScaffold" do
-    context "GET methods" do
-      before :each do
-        @activity = Factory.create(:activity)
-      end
-
-      context "Requesting /activities/show_search using GET" do
-        before do get :show_search, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/edit_associated using GET" do
-        before do get :edit_associated, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/new_existing using GET" do
-        before do get :new_existing, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/list using GET" do
-        before do get :list, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/render_field using GET" do
-        before do get :render_field, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/row using GET" do
-        before do get :row, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/add_association using GET" do
-        before do get :add_association, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/edit_associated using GET" do
-        before do get :edit_associated, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/render_field using GET" do
-        before do get :render_field, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/nested using GET" do
-        before do get :nested, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-
-      context "Requesting /activities/1/delete using GET" do
-        before do get :delete, :id => @activity.id end
-        it_should_behave_like "a protected endpoint"
-      end
-    end
-
-    context "Requesting /activities/mark using PUT" do
-      before do
-        params = { :name => 'title', :description =>  'descr' }
-        @activity = Factory.create(:activity, params )
-        @activity.stub!(:save).and_return(true)
-        put :mark, { :id => @activity.id }.merge(params)
-      end
-      it_should_behave_like "a protected endpoint"
-    end
-
-    context "Requesting /activities/add_existing_activities using POST" do
-      before do
-        params = { :name => 'title', :description =>  'descr' }
-        @activity = Factory.create(:activity, params )
-        @activity.stub!(:save).and_return(true)
-        post :add_existing, :description =>  params
-      end
-      it_should_behave_like "a protected endpoint"
-    end
-
-    context "Requesting /activities/1/update_column using POST" do
-      before do
-        params = { :name => 'title', :description =>  'descr' }
-        @activity = Factory.create(:activity, params )
-        @activity.stub!(:save).and_return(true)
-        post :update_column, :id => @activity.id, :resource => params
-      end
-      it_should_behave_like "a protected endpoint"
-    end
-
-    context "Requesting /activities/1/destroy_existing using DELETE" do
-      before do
-        @activity = Factory.create(:activity)
-        delete :destroy_existing, :id => @activity.id
+        @activity = Factory.create(:activity, :data_response => @data_response)
+        delete :destroy, :id => @activity.id, :response_id => @data_response.id
       end
       it_should_behave_like "a protected endpoint"
     end

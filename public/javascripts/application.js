@@ -610,9 +610,12 @@ var build_data_response_review_screen = function () {
   // Ajax load of classifications for activities
   jQuery.each(jQuery('.activity_classifications'), function (i, element) {
     element = jQuery(element);
-    jQuery.get('/activities/' + element.attr('data-activity_id') + '/classifications?other_costs=' + element.attr('data-other_costs'), function (data) {
-      element.html(data);
-    })
+    var activity_id = element.attr('data-activity_id');
+    var response_id = element.attr('data-response_id');
+    var other_cost = element.attr('data-other_costs');
+    var url =  '/responses/' + response_id + '/activities/' + 
+      activity_id + '/classifications?other_costs=' + other_cost;
+    jQuery.get(url, function (data) {element.html(data)});
   });
 
 };
@@ -639,12 +642,14 @@ var policy_maker_data_responses_show = {
 };
 
 var approve_activity_checkbox = function () {
-  jQuery(".approve_activity").click(function () {
+  jQuery(".approve_activity").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
     //activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
     activity_id = jQuery(this).attr('data-id');
-    jQuery.post( "/activities/" + activity_id + "/approve",
-     { checked: jQuery(this).is(':checked'), "_method": "put" }
-    );
+    response_id = jQuery(this).attr('data-response_id');
+    var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'
+    jQuery.post(url, {checked: jQuery(this).is(':checked'), "_method": "put"});
   })
 };
 

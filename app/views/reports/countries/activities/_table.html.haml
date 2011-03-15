@@ -10,14 +10,13 @@
   %tbody
     - activities.each do |activity|
       %tr{:class => cycle("even", "odd")}
-        - project = activity.projects.first
         %td= link_to "#{friendly_name(activity)}", reports_country_activity_path(activity)
         %td= h activity.org_name
-        %td= h friendly_name(project)
+        %td= h friendly_name(activity.project)
         %td
-          - if project
+          - if activity.project
             %ul
-              - project.funding_sources.map(&:name).uniq.each do |name|
+              - activity.project.funding_sources.map(&:name).uniq.each do |name|
                 %li= name
         - spent_total = activity.spent_sum
         - budget_total = activity.budget_sum

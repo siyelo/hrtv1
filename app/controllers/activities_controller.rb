@@ -15,6 +15,13 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def show
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    show!
+  end
+
   def project_sub_form
     @activity = @data_response.activities.find_by_id(params[:activity_id])
     @project = @data_response.projects.find(params[:project_id])

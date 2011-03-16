@@ -125,3 +125,11 @@
       %li= @activity.organizations.map(&:name).join(', ')
 
 
+%h3 Comments
+%ul
+  - @comments.each do |comment|
+    %li
+      .title= comment.title
+      .comment= comment.comment
+
+  = render 'reporter/comments/form', :comment => @comment

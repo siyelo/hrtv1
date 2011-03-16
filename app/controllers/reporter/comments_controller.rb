@@ -38,8 +38,8 @@ class Reporter::CommentsController < Reporter::BaseController
     if @comment.save
       respond_to do |format|
         format.html do
-          flash[:notice] = "Funding source was successfully created."
-          redirect_to comments_url
+          flash[:notice] = "Comment was successfully created."
+          redirect_to commentable_resource(@comment)
         end
         format.js { render :partial => "row", :locals => {:comment => @comment} }
       end
@@ -58,7 +58,7 @@ class Reporter::CommentsController < Reporter::BaseController
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully updated."
-          redirect_to comments_url
+          redirect_to commentable_resource(@comment)
         end
         format.js { render :partial => "row", :locals => {:comment => @comment } }
         format.json { render :nothing => true }
@@ -98,5 +98,15 @@ class Reporter::CommentsController < Reporter::BaseController
 
   def find_comment
     current_user.role?(:admin) ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
+  end
+
+  def commentable_resource(comment)
+    if comment.commentable_type == "Activity"
+      response_activity_url(comment.commentable.data_response, comment.commentable)
+    elsif comment.commentable_type == "Project"
+      response_project_url(comment.commentable.data_response, comment.commentable)
+    else
+      comments_url
+    end
   end
 end

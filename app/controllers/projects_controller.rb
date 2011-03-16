@@ -1,9 +1,8 @@
+require 'set'
 class ProjectsController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
 
   inherit_resources
-  actions :all, :except => :show
-  respond_to :html
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
 
@@ -13,7 +12,7 @@ class ProjectsController < Reporter::BaseController
     # search functionality
     scope = scope.scoped(:conditions => ["name LIKE :q",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
-    @projects = scope.paginate(:page => params[:page],
+    @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
@@ -27,6 +26,27 @@ class ProjectsController < Reporter::BaseController
 
   def destroy
     destroy! { response_projects_url(@data_response) }
+  end
+
+  def download_template
+    template = Project.download_template
+    send_csv(template, 'projects_template.csv')
+  end
+
+  def create_from_file
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = Project.create_from_file(doc, @data_response)
+        flash[:notice] = "Created #{saved} of #{saved + errors} projects successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      end
+    else
+      flash[:error] = 'Please select a file to upload'
+    end
+
+    redirect_to response_projects_url(@data_response)
   end
 
   protected

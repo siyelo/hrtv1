@@ -24,6 +24,7 @@
         =file_field_tag :file
         =submit_tag "Upload and Import", :class => 'small_submit_button'
 
+      = link_to "Download template", download_template_response_projects_path(@data_response)
 
 
 - if params[:query]

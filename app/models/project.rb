@@ -4,6 +4,12 @@ require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
+  ### Constants
+  FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget 
+                         budget budget_q4_prev budget_q1 budget_q2 budget_q3 
+                         budget_q4 spend spend_q4_prev spend_q1 spend_q2 
+                         spend_q3 spend_q4 start_date end_date]
+
   include ActsAsDateChecker
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
@@ -128,6 +134,22 @@ class Project < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
+  end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Project::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = data_response.projects.new(attributes)
+      project.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
   end
 
   private

@@ -242,4 +242,10 @@ describe Project do
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
   end
+
+  describe "download_template" do
+    it "should generate template" do
+      Project.download_template.should == "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date\n"
+    end
+  end
 end

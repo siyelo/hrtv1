@@ -3,17 +3,14 @@ class ActivitiesController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
 
   inherit_resources
-  actions :all, :except => :show
-  before_filter :load_data_response
   helper_method :sort_column, :sort_direction
-
-  map_fields :create_from_file, Activity::FILE_UPLOAD_COLUMNS, :file_field => :file
+  before_filter :load_data_response
 
   def index
     scope = @data_response.activities.roots.scoped({})
     scope = scope.scoped(:conditions => ["name LIKE :q OR description LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
-    @activities = scope.paginate(:page => params[:page],
+    @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
   end
 
@@ -82,11 +79,6 @@ class ActivitiesController < Reporter::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
-
-    # TODO move to application controller
-    def load_data_response
-      @data_response = DataResponse.find(params[:response_id])
     end
 
     def begin_of_association_chain

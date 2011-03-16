@@ -39,7 +39,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :responses,
                 :member => {:review => :get,
                             :submit => :put} do |response|
-    response.resources :projects
+    response.resources :projects,
+                       :collection => {:create_from_file => :post,
+                                       :download_template => :get}
     response.resources :activities, :except => :show,
                          :member => {:approve => :put, 
                                      :classifications => :get},

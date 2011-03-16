@@ -77,7 +77,7 @@ Scenario: Reporter can enter 3 year budget projections
   And the "Budget for year + 1" field should contain "2000"
   And the "Budget for year + 2" field should contain "3000"
 
-Scenario: Reporter can file upload activities
+Scenario: Reporter can upload activities
   When I follow "data_request1"
   And I follow "Activities"
   When I attach the file "spec/fixtures/activities.csv" to "File"
@@ -94,9 +94,11 @@ Scenario: Reporter can see error if no csv file is not attached for upload
   And I press "Upload and Import"
   Then I should see "Please select a file to upload"
 
-Scenario: Reporter can see error when invalid csv file is attached for upload
+Scenario: Reporter can see error when invalid csv file is attached for upload and download template
   When I follow "data_request1"
   And I follow "Activities"
   When I attach the file "spec/fixtures/invalid.csv" to "File"
   And I press "Upload and Import"
   Then I should see "Wrong fields mapping. Please download the CSV template"
+  When I follow "Download template"
+  Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"

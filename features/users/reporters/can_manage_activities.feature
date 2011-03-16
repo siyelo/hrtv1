@@ -33,7 +33,7 @@ Scenario: Reporter can CRUD activities
   And I should see "Activity2 description"
   And I should not see "Activity1"
 
-  When I follow "Delete"
+  When I follow "X"
   Then I should see "Activity was successfully destroyed"
   And I should not see "Activity1"
   And I should not see "Activity2"

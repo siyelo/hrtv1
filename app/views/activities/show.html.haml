@@ -1,135 +1,138 @@
 - title(truncate(@activity.description, :length => 100))
 
-%h1.main_heading= truncate(@activity.description, :length => 100)
+%h1.main_heading
+  = truncate(@activity.description, :length => 100)
 
-.manage
-  = link_to "Edit", edit_response_activity_path(@data_response, @activity)
-  = link_to "Delete", response_activity_path(@data_response, @activity), :confirm => "Are you sure?", :method => :delete
+  %span
+    %ul.manage_bar.inline
+      %li= link_to "Edit", edit_response_activity_path(@data_response, @activity)
+      %li= link_to "X", response_activity_path(@data_response, @activity), :confirm => "Are you sure?", :method => :delete
 
-%h3 Basics
-%ul
-  %li
-    %ul
-      %li Name
-      %li= @activity.name
-    %ul
-      %li Description
-      %li= @activity.description
-    %ul
-      %li Start date
-      %li= @activity.start_date
-    %ul
-      %li End date
-      %li= @activity.end_date
-    %ul
-      %li Currency
-      %li= @activity.currency
-    %ul
-      %li Project name
-      %li= @activity.project.try(:name)
-    %ul
-      %li Implementer
-      %li= @activity.provider.try(:name)
-    %ul
-      %li Locations
-      %li= @activity.locations.map(&:short_display).join(', ')
-
-%h3 Past Expenditure
-%ul
-  %li
-    %ul
-      %li Spend
-      %li= @activity.spend
-    %ul
-      %li Spend Q4 08-09
-      %li= @activity.spend_q4_prev
-    %ul
-      %li Spend Q1 09-10
-      %li= @activity.spend_q1
-    %ul
-      %li Spend Q2 09-10
-      %li= @activity.spend_q2
-    %ul
-      %li Spend Q3 09-10
-      %li= @activity.spend_q3
-    %ul
-      %li Spend Q4 09-10
-      %li= @activity.spend_q4
-
-%h3 Budget (planned expenditure)
-%ul
-  %li
-    %ul
-      %li Budget
-      %li= @activity.budget
-    %ul
-      %li Budget Q4 08-09
-      %li= @activity.budget_q4_prev
-    %ul
-      %li Budget Q1 09-10
-      %li= @activity.budget_q1
-    %ul
-      %li Budget Q2 09-10
-      %li= @activity.budget_q2
-    %ul
-      %li Budget Q3 09-10
-      %li= @activity.budget_q3
-    %ul
-      %li Budget Q4 09-10
-      %li= @activity.budget_q4
-    %ul
-      %li Beneficiaries
-      %li= @activity.beneficiaries.map(&:short_display).join(', ')
-
-%h3 Texts
-%ul
-  %li
-    %ul
-      %li Text for Implementer
-      %li= @activity.text_for_provider
-    %ul
-      %li Text for beneficiaries
-      %li= @activity.text_for_beneficiaries
-    %ul
-      %li Text for targets
-      %li= @activity.text_for_targets
-
-%h3 Sub Activities
-%ul
-  - @activity.sub_activities.each do |sub_activity|
+.wrap-70
+  %h3.form_heading Basics
+  %ul.dashboard_section
     %li
-      %ul
+      %ul.row
+        %li Name
+        %li= @activity.name
+      %ul.row
+        %li Description
+        %li= @activity.description
+      %ul.row
+        %li Start date
+        %li= @activity.start_date
+      %ul.row
+        %li End date
+        %li= @activity.end_date
+      %ul.row
+        %li Currency
+        %li= @activity.currency
+      %ul.row
+        %li Project name
+        %li= @activity.project.try(:name)
+      %ul.row
         %li Implementer
-        %li= sub_activity.provider.try(:name)
-      %ul
-        %li Text for implementer
-        %li= sub_activity.text_for_provider
-      %ul
-        %li Budget
-        %li= sub_activity.budget
-      %ul
-        %li Budget percentage
-        %li= sub_activity.budget_percentage
-      %ul
-        %li Spend
-        %li= sub_activity.spend
-      %ul
-        %li Spend percentage
-        %li= sub_activity.spend_percentage
+        %li= @activity.provider.try(:name)
+      %ul.row.last
+        %li Locations
+        %li= @activity.locations.map(&:short_display).join(', ')
 
-%h3 Institutions Assisted
-%ul
-  %li
-    %ul
-      %li Institutions assisted
-      %li= @activity.organizations.map(&:name).join(', ')
-
-
-%h3 Comments
-%ul
-  - @comments.each do |comment|
+  %h3.form_heading Basics Past Expenditure
+  %ul.dashboard_section
     %li
-      .title= comment.title
-      .comment= comment.comment
+      %ul.row
+        %li Spend
+        %li= @activity.spend
+      %ul.row
+        %li Spend Q4 08-09
+        %li= @activity.spend_q4_prev
+      %ul.row
+        %li Spend Q1 09-10
+        %li= @activity.spend_q1
+      %ul.row
+        %li Spend Q2 09-10
+        %li= @activity.spend_q2
+      %ul.row
+        %li Spend Q3 09-10
+        %li= @activity.spend_q3
+      %ul.row.last
+        %li Spend Q4 09-10
+        %li= @activity.spend_q4
 
+  %h3.form_heading Basics Budget (planned expenditure)
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget
+        %li= @activity.budget
+      %ul.row
+        %li Budget Q4 08-09
+        %li= @activity.budget_q4_prev
+      %ul.row
+        %li Budget Q1 09-10
+        %li= @activity.budget_q1
+      %ul.row
+        %li Budget Q2 09-10
+        %li= @activity.budget_q2
+      %ul.row
+        %li Budget Q3 09-10
+        %li= @activity.budget_q3
+      %ul.row
+        %li Budget Q4 09-10
+        %li= @activity.budget_q4
+      %ul.row.last
+        %li Beneficiaries
+        %li= @activity.beneficiaries.map(&:short_display).join(', ')
+
+  %h3.form_heading Basics Texts
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Text for Implementer
+        %li= @activity.text_for_provider
+      %ul.row
+        %li Text for beneficiaries
+        %li= @activity.text_for_beneficiaries
+      %ul.row
+        %li Text for targets
+        %li= @activity.text_for_targets
+
+  %h3.form_heading Basics Sub Activities
+  %ul.dashboard_section
+    - @activity.sub_activities.each do |sub_activity|
+      %li
+        %ul.row
+          %li Implementer
+          %li= sub_activity.provider.try(:name)
+        %ul.row
+          %li Text for implementer
+          %li= sub_activity.text_for_provider
+        %ul.row
+          %li Budget
+          %li= sub_activity.budget
+        %ul.row
+          %li Budget percentage
+          %li= sub_activity.budget_percentage
+        %ul.row
+          %li Spend
+          %li= sub_activity.spend
+        %ul.row
+          %li Spend percentage
+          %li= sub_activity.spend_percentage
+
+  %h3.form_heading Basics Institutions Assisted
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Institutions assisted
+        %li= @activity.organizations.map(&:name).join(', ')
+
+.form_aside.wrap-30
+  %h3 Comments
+  %ul
+    - @comments.each do |comment|
+      %li.comment_wrap
+        .title= comment.title
+        .comment= comment.comment
+  %h3 Add new comment
   = render 'reporter/comments/form', :comment => @comment

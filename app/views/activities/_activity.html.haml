@@ -3,7 +3,8 @@
   %td= activity.spend
   %td= activity.budget
   %td
-    = link_to "Classify", activity_code_assignments_url(activity)
-    = link_to "Show", response_activity_path(@data_response, activity)
-    = link_to "Edit", edit_response_activity_path(@data_response, activity)
-    = link_to "Delete", response_activity_path(@data_response, activity), :confirm => "Are you sure?", :method => :delete
+    %ul.manage_bar
+      %li= link_to "Show", response_activity_path(@data_response, activity)
+      %li= link_to "Edit", edit_response_activity_path(@data_response, activity)
+      %li= link_to "Classify", activity_code_assignments_url(activity)
+      %li= link_to "X", response_activity_path(@data_response, activity), :confirm => "Are you sure?", :method => :delete, :class => "right"

@@ -28,6 +28,50 @@ body.app
         margin-bottom: 0
         li:last-child a
           margin-bottom: 0
+      &.manage_bar
+        margin: 0
+        +pie-clearfix
+        &.inline
+          display: inline-block
+          position: relative
+          top: 5px
+        li
+          display: inline
+          float: left
+          &:last-child
+            float: right
+            a
+              &:hover, &:focus
+                background: $red
+                border: 1px solid $red - #111
+                color: #fff
+                +linear-gradient(color-stops($red - #111, $red + #111))
+                +text-shadow(#444, 0, 0, 1px)
+          a
+            background: #eee
+            border: 1px solid $light-blue
+            color: $light-blue - #222
+            display: inline-block
+            font-size: 10px
+            height: auto
+            line-height: 1.4
+            margin-left: 3px
+            padding: 3px 5px 2px
+            text-decoration: none
+            +border-radius(2px)
+            +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+            +text-shadow(#fff, 0, 0, 1px)
+            &:hover, &:focus
+              background: $orange
+              border: 1px solid $orange - #111
+              color: #fff
+              +linear-gradient(color-stops($orange - #111, $orange + #111))
+              +text-shadow(#444, 0, 0, 1px)
+            &:active
+              outline: none
+              position: relative
+              top: 1px
+              
     h2
       background: none
       text-transform: none

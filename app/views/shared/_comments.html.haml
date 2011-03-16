@@ -1,0 +1,9 @@
+.form_aside.wrap-30
+  %h3 Comments
+  %ul
+    - comments.each do |comment|
+      %li.comment_wrap
+        .title= comment.title
+        .comment= comment.comment
+  %h3 Add new comment
+  = render 'reporter/comments/form', :comment => @comment

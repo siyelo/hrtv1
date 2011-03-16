@@ -17,7 +17,6 @@ Scenario Outline: Visit protected page, get redirected to login screen
     | implementers    |
     | activities      |
     | classifications |
-    | other costs     |
 
 Scenario Outline: Visit protected page, get redirected to login screen
   When I go to the <page> page for response "Req1" org "UNDP" 

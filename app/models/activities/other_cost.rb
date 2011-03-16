@@ -1,7 +1,26 @@
 class OtherCost < Activity
+  ### Constants
+  FILE_UPLOAD_COLUMNS = %w[project_name description budget spend 
+                           spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4]
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << OtherCost::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = Project.find_by_name(attributes.delete('project_name'))
+      attributes.merge!(:project_id => project.id) if project
+      other_cost = data_response.other_costs.new(attributes)
+      other_cost.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
 end
-
-
 
 # == Schema Information
 #

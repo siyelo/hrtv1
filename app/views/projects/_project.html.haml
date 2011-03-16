@@ -1,8 +1,10 @@
 %tr{:class => cycle("even", "odd")}
-  %td= link_to "#{h project.name}", edit_response_project_path(@data_response, project)
+  %td= link_to "#{h project.name}", response_project_path(@data_response, project)
   %td= project.description
   %td= project.spend
   %td= project.budget
   %td
-    = link_to "Edit", edit_response_project_path(@data_response, project)
-    = link_to "Delete", response_project_path(@data_response, project), :confirm => "Are you sure?", :method => :delete
+    %ul.manage_bar
+      %li= link_to "Show", response_project_path(@data_response, project)
+      %li= link_to "Edit", edit_response_project_path(@data_response, project)
+      %li= link_to "X", response_project_path(@data_response, project), :confirm => "Are you sure?", :method => :delete, :class => "right"

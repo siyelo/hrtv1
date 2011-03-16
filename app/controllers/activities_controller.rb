@@ -1,10 +1,11 @@
 require 'set'
 class ActivitiesController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['description', 'spend', 'budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  belongs_to :data_response, :route_name => 'response'
 
   def index
     scope = @data_response.activities.roots.scoped({})
@@ -14,17 +15,11 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
-  def create
-    create!{ response_activities_url(@data_response) }
-  end
-
-  def destroy
-    destroy!{ response_activities_url(@data_response) }
-  end
-
-  # check ownership and redirect to collection path on update instead of show
-  def update
-    update!{ response_activities_url(@data_response) }
+  def show
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    show!
   end
 
   def project_sub_form
@@ -79,9 +74,5 @@ class ActivitiesController < Reporter::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
-
-    def begin_of_association_chain
-      @data_response
     end
 end

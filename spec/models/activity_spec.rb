@@ -1203,12 +1203,6 @@ describe Activity do
       end
     end
   end
-
-  describe "download_template" do
-    it "should generate template" do
-      Activity.download_template.should == "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4\n"
-    end
-  end
 end
 
 

@@ -7,7 +7,8 @@ Background:
   Given a basic org + reporter profile, with data response, signed in
 
 Scenario: See a classification page for activities
-  When I go to the classifications page
+  When I follow "My Data" within "div#main-nav"
+  And I follow "Classifications" within "div#sub-nav"
   Then I should see "UNDP"
   And I should see "Budget by Purposes"
   And I should see "Budget by Locations"

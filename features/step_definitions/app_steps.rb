@@ -2,11 +2,6 @@ Given /^a project$/ do
   @project = Factory(:project)
 end
 
-# You shouldn't create project records wihtout a DR/Org !!
-#Given /^a project with name "([^\"]*)"$/ do |name|
-#  @project = Factory(:project, :name => name)
-#end
-
 Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
   @project = Factory(:project,
                     :name          => project_name,
@@ -27,24 +22,6 @@ Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ d
                           :budget        => budget,
                           :to            => Organization.find_by_name(implementer_name),
                           :data_response => @project.data_response)
-end
-
-Given /^an activity with name "([^\"]*)"$/ do |name|
-  @activity = Factory(:activity, :name => name)
-end
-
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory(:activity,
-                       :name => name,
-                       :projects => [Project.find_by_name(project)])
-end
-
-Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
-  @activity = Factory(:activity,
-                       :name          => activity_name,
-                       :data_response => get_data_response(data_request_name, organization_name),
-                       :projects      => [Project.find_by_name(project_name)])
-
 end
 
 Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
@@ -363,27 +340,6 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   }
 end
 
-Given /^organizations, reporters, data request, data responses, projects$/ do
-  steps %Q{
-    Given the following organizations
-      | name   |
-      | UNDP   |
-      | USAID  |
-      | GoR    |
-    Given the following reporters
-       | name         | organization |
-       | undp_user    | UNDP         |
-    Given a data request with title "Req1" from "GoR"
-    Given a data response to "Req1" by "UNDP"
-    Given a data response to "Req1" by "USAID"
-    Given the following projects
-      | name                 | request | organization |
-      | TB Treatment Project | Req1    | UNDP         |
-      | Other Project        | Req1    | USAID        |
-    Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "UNDP"
-  }
-end
-
 Given /^a model help for "([^"]*)"$/ do |model_name|
   Factory(:model_help, :model_name => model_name)
 end
@@ -426,13 +382,13 @@ Then /^I can manage the comments$/ do
     And I follow "+ Add Comment" within ".activity"
     And I fill in "Title" with "comment title"
     And I fill in "Comment" with "comment body"
-    And I press "Create comment"
+    And I press "Create Comment"
     Then I should see "comment title"
     And I should see "comment body"
     When I follow "Edit" within "#projects .activity .resources"
     And I fill in "Title" with "new comment title"
     And I fill in "Comment" with "new comment body"
-    And I press "Update comment"
+    And I press "Update Comment"
     Then I should see "new comment title"
     And I should see "new comment body"
     When I confirm the popup dialog

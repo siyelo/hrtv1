@@ -100,22 +100,26 @@ form.data_response, .basic_form
       margin: 0
       padding: 0
 
-  .form_aside
-    background: $filler
-    border: 1px solid $lightest-blue
-    float: right
-    margin-top: 5px
-    padding: 2%
-    width: 16%
-    +border-radius(3px)
-    h3
-      border-bottom: 1px dashed $light-blue
-      margin-bottom: 10px
-      padding-top: 0px !important
-    p
-      color: $mid-blue
-      font-size: 11px
-      line-height: 1.4
+.form_aside
+  background: $filler
+  border: 1px solid $lightest-blue
+  float: right
+  margin-top: 5px
+  padding: 2%
+  width: 16%
+  +border-radius(3px)
+  h3
+    border-bottom: 1px dashed $light-blue
+    margin-bottom: 10px
+    padding-top: 0px !important
+  p
+    color: $mid-blue
+    font-size: 11px
+    line-height: 1.4
+  input[type=text], textarea
+    width: 92% !important
+  textarea
+    height: 100px
 
 .hint, .inline-hints
   color: $mid-blue
@@ -183,3 +187,41 @@ input[type=text], textarea
     border: 1px solid $light-blue - #222 !important
     +box-shadow($light-blue, 0, 0, 3px)
     
+h3.form_heading
+  background: image_url("bg-blue.jpg")
+  color: #fff !important
+  margin-top: 5px
+  padding: 10px 10px 7px !important
+  +border-top-radius(3px)
+  
+.row
+  border-bottom: 1px dashed $light-blue
+  color: $mid-blue
+  font-size: 12px
+  font-weight: bold
+  margin-top: 5px
+  padding-bottom: 5px
+  width: 100%
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    &:first-child
+      color: $mid-blue + #444
+      width: 18%
+  &.last
+    border: none
+    padding: 0
+    
+.comment_wrap
+  font-size: 12px
+  line-height: 1.4
+  .title
+    color: $mid-blue + #444
+    font-weight: bold
+    margin-bottom: 3px
+  .comment
+    border-bottom: 1px dashed $lighter-blue
+    color: $mid-blue
+    margin-bottom: 5px
+    padding-bottom: 5px

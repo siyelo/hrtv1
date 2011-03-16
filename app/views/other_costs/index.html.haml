@@ -1,0 +1,55 @@
+- title("Other Costs")
+
+%h1.main_heading
+  = render 'search'
+  Other Costs
+%ul.horizontal
+  %li
+    - link_to new_response_other_cost_path(@data_response), :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Other Cost
+  
+  %li
+    = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
+
+#import
+  %h3.title_bar Import a CSV file
+  .dashboard_section
+    %p Create one or more other costs from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+  
+    #import_csv
+      -form_tag create_from_file_response_other_costs_path(@data_response), :multipart => true do
+        = label_tag :file, "File"
+        = file_field_tag :file
+        = submit_tag "Upload and Import", :class => 'small_submit_button'
+
+      = link_to "Download template", download_template_response_other_costs_path(@data_response)
+
+- if params[:query]
+  %p
+    = "Other costs with names or description containing #{params[:query]}"
+    = link_to "(Back to complete other costs listing)", response_other_costs_path(@data_response)
+
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "description"
+      %th= sortable "spend", "Total Spent"
+      %th= sortable "budget", "Total Budget"
+      %th
+
+  %tbody
+    = render :partial => "other_cost", :collection => @other_costs
+
+= will_paginate @other_costs
+
+%ul{ :id => 'position_container', :class => 'image_list' }
+
+
+:javascript
+  jQuery(document).ready(function(){
+    jQuery("#csv_file").click(function() {
+      jQuery("#import").slideToggle();
+    });
+  });
+

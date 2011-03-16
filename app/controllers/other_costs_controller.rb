@@ -1,71 +1,67 @@
 class OtherCostsController < ActiveScaffoldController
-  authorize_resource
+  SORTABLE_COLUMNS = ['description', 'spend', 'budget']
 
-  before_filter :check_user_has_data_response
+  inherit_resources
+  helper_method :sort_column, :sort_direction
+  before_filter :load_data_response
+  belongs_to :data_response, :route_name => 'response'
 
-  @@shown_columns = [ :project, :spend, :budget]
-  @@create_columns = [:project,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
-  def self.create_columns
-    @@create_columns
+  def index
+    scope = @data_response.other_costs.scoped({})
+    scope = scope.scoped(:conditions => ["name LIKE :q OR description LIKE :q",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+    @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
-  @@columns_for_file_upload = %w[budget spend
-    spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 description] # TODO fix bug, projects for instance won't work
 
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+  def show
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    show!
+  end
 
-  active_scaffold :other_costs do |config|
-    config.action_links.add('Detail Cost Areas',
-      :action => "popup_classification",
-      :parameters => { :controller => '/other_costs' },
-      :type => :member,
-      :popup => true,
-      :label => "Detail Cost Areas")
-    config.nested.add_link("Comments", [:comments])
-    config.label                                  = "Other Costs"
-    config.columns                                = @@shown_columns
-    list.sorting                                  = {:budget => 'DESC'} #adding this didn't break in place editing
-    config.columns[:comments].association.reverse = :commentable
-    config.create.columns                         = @@create_columns
-    config.update.columns                         = @@create_columns
-    config.columns[:project].inplace_edit         = true
-    config.columns[:project].form_ui              = :select
-    config.columns[:description].inplace_edit     = true
-    config.columns[:description].label            = "Description (optional)"
-    config.columns[:budget].label                 = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label                  = "Total Spent GOR FY 09-10"
+  def create
+    create!(:notice => 'Other Cost was successfully created')
+  end
 
-    [:spend, :budget].each do |c|
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].inplace_edit = true
-    end
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Spent in Your FY 09-10 "+quarter.capitalize
-    end
-    config.columns[:spend_q4_prev].inplace_edit = true
-    quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Spent in your FY 08-09 Q4"
+  def update
+    update!(:notice => 'Other Cost was successfully updated')
+  end
+
+  def destroy
+    destroy!(:notice => 'Other Cost was successfully destroyed')
+  end
+
+  def download_template
+    template = OtherCost.download_template
+    send_csv(template, 'other_costs_template.csv')
   end
 
   def create_from_file
-    super @@columns_for_file_upload
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = OtherCost.create_from_file(doc, @data_response)
+        flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      end
+    else
+      flash[:error] = 'Please select a file to upload'
+    end
+
+    redirect_to response_other_costs_url(@data_response)
   end
 
-  def beginning_of_chain
-    super.available_to current_user
-  end
 
-  #fixes create
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
+  private
 
-  def popup_classification
-    redirect_to activity_code_assignments_url(params[:id])
-  end
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
 end

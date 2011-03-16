@@ -1,0 +1,13 @@
+- title("Edit Other Cost")
+
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
+%h1.main_heading Edit Other Cost
+
+= error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @other_cost, :url => response_other_cost_path(@data_response, @other_cost), :html => {:class => "basic_form"} do |f|
+  = render 'form', :f => f
+
+-#= render 'comments'

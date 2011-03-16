@@ -37,17 +37,15 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-                :member => {:review => :get,
-                            :submit => :put} do |response|
-    response.resources :projects,
-                       :collection => {:create_from_file => :post,
-                                       :download_template => :get}
-    response.resources :activities,
-                         :member => {:approve => :put, 
-                                     :classifications => :get},
-                         :collection => {:create_from_file => :post, 
-                                         :download_template => :get,
-                                         :project_sub_form => :get}
+    :member => {:review => :get, :submit => :put} do |response|
+      response.resources :projects,
+        :collection => {:create_from_file => :post, :download_template => :get}
+      response.resources :activities,
+        :member => {:approve => :put, :classifications => :get},
+        :collection => {:create_from_file => :post, :download_template => :get,
+                       :project_sub_form => :get}
+      response.resources :other_costs,
+        :collection => {:create_from_file => :post, :download_template => :get}
   end
 
   map.resources :activities do |activity|
@@ -105,10 +103,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :model_helps,     :active_scaffold => true
   map.resources :funding_flows,   :active_scaffold => true
   map.resources :codes,           :active_scaffold => true
-  map.resources :other_costs,
-    :member => {:popup_classification => :get},
-    :active_scaffold => true
-  #map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
   map.resources :users,           :active_scaffold => true
   map.resources :help_requests,   :active_scaffold => true
 end

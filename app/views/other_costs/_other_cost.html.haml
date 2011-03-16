@@ -1,0 +1,9 @@
+%tr{:class => cycle("even", "odd")}
+  %td= link_to other_cost.description, response_other_cost_path(@data_response, other_cost)
+  %td= other_cost.spend
+  %td= other_cost.budget
+  %td
+    = link_to "Show", response_other_cost_path(@data_response, other_cost)
+    = link_to "Edit", edit_response_other_cost_path(@data_response, other_cost)
+    = link_to "Detail Cost Areas", activity_code_assignments_url(other_cost)
+    = link_to "Delete", response_other_cost_path(@data_response, other_cost), :confirm => "Are you sure?", :method => :delete

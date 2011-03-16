@@ -17,6 +17,7 @@ class DataResponse < ActiveRecord::Base
   belongs_to :organization
   belongs_to :data_request
   has_many :activities, :dependent => :destroy
+  has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy

@@ -102,16 +102,6 @@ Scenario: A reporter can create comments for an activity
   And I press "Create Comment"
   Then I should see "Comment title"
   And I should see "Comment body"
-
-Scenario: A reporter can create comments for an activity
-  Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-  When I follow "Activities"
-  And I follow "Activity1 description"
-  And I fill in "Title" with "Comment title"
-  And I fill in "Comment" with "Comment body"
-  And I press "Create Comment"
-  Then I should see "Comment title"
-  And I should see "Comment body"
   And I should see "Activity1 description"
 
 Scenario: A reporter can create comments for an activity and see comment errors

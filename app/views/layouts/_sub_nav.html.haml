@@ -16,7 +16,7 @@
       = link_to 'Classifications', classifications_path
 
     %li{ :class => [controller.class.to_s =="OtherCostsController" ? "active" : '']}
-      = link_to 'Other Costs', other_costs_path
+      = link_to 'Other Costs', response_other_costs_path(@data_response)
 
       %li{ :class => (controller.class.to_s == "ResponsesController" && controller.action_name == 'edit' ? "active" : '')}
         = link_to 'Settings', edit_response_path(current_user.current_data_response || 1)

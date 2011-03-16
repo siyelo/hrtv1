@@ -5,6 +5,7 @@ class ActivitiesController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  belongs_to :data_response, :route_name => 'response'
 
   def index
     scope = @data_response.activities.roots.scoped({})
@@ -12,19 +13,6 @@ class ActivitiesController < Reporter::BaseController
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
-  end
-
-  def create
-    create!{ response_activities_url(@data_response) }
-  end
-
-  def destroy
-    destroy!{ response_activities_url(@data_response) }
-  end
-
-  # check ownership and redirect to collection path on update instead of show
-  def update
-    update!{ response_activities_url(@data_response) }
   end
 
   def project_sub_form
@@ -79,9 +67,5 @@ class ActivitiesController < Reporter::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-    end
-
-    def begin_of_association_chain
-      @data_response
     end
 end

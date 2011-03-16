@@ -29,7 +29,7 @@ Scenario: Reporter can CRUD other costs
   And I should see "OtherCost2 description"
   And I should not see "OtherCost1"
 
-  When I follow "Delete"
+  When I follow "X"
   Then I should see "Other Cost was successfully destroyed"
   And I should not see "OtherCost1"
   And I should not see "OtherCost2"

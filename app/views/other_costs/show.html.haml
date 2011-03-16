@@ -1,56 +1,51 @@
 - title(truncate(@other_cost.description, :length => 100))
 
-%h1.main_heading= truncate(@other_cost.description, :length => 100)
+%h1.main_heading
+  = truncate(@other_cost.description, :length => 100)
 
-.manage
-  = link_to "Edit", edit_response_other_cost_path(@data_response, @other_cost)
-  = link_to "Delete", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure?", :method => :delete
+  %span
+    %ul.manage_bar.inline
+      %li= link_to "Edit", edit_response_other_cost_path(@data_response, @other_cost)
+      %li= link_to "X", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure?", :method => :delete
 
-%h3 Basics
-%ul
-  %li
-    %ul
-      %li Description
-      %li= @other_cost.description
-    %ul
-      %li Project name
-      %li= @other_cost.project.try(:name)
-
-%h3 Past Expenditure
-%ul
-  %li
-    %ul
-      %li Spend
-      %li= @other_cost.spend
-    %ul
-      %li Spend Q4 08-09
-      %li= @other_cost.spend_q4_prev
-    %ul
-      %li Spend Q1 09-10
-      %li= @other_cost.spend_q1
-    %ul
-      %li Spend Q2 09-10
-      %li= @other_cost.spend_q2
-    %ul
-      %li Spend Q3 09-10
-      %li= @other_cost.spend_q3
-    %ul
-      %li Spend Q4 09-10
-      %li= @other_cost.spend_q4
-
-%h3 Budget (planned expenditure)
-%ul
-  %li
-    %ul
-      %li Budget
-      %li= @other_cost.budget
-
-
-%h3 Comments
-%ul
-  - @comments.each do |comment|
+.wrap-70
+  %h3.form_heading Basics
+  %ul.dashboard_section
     %li
-      .title= comment.title
-      .comment= comment.comment
+      %ul.row
+        %li Description
+        %li= @other_cost.description
+      %ul.row
+        %li Project name
+        %li= @other_cost.project.try(:name)
 
-  = render 'reporter/comments/form', :comment => @comment
+  %h3.form_heading Past Expenditure
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Spend
+        %li= @other_cost.spend
+      %ul.row
+        %li Spend Q4 08-09
+        %li= @other_cost.spend_q4_prev
+      %ul.row
+        %li Spend Q1 09-10
+        %li= @other_cost.spend_q1
+      %ul.row
+        %li Spend Q2 09-10
+        %li= @other_cost.spend_q2
+      %ul.row
+        %li Spend Q3 09-10
+        %li= @other_cost.spend_q3
+      %ul.row
+        %li Spend Q4 09-10
+        %li= @other_cost.spend_q4
+
+  %h3.form_heading Budget (planned expenditure)
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget
+        %li= @other_cost.budget
+
+= render :partial => 'shared/comments'

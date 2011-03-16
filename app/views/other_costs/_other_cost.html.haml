@@ -3,7 +3,8 @@
   %td= other_cost.spend
   %td= other_cost.budget
   %td
-    = link_to "Show", response_other_cost_path(@data_response, other_cost)
-    = link_to "Edit", edit_response_other_cost_path(@data_response, other_cost)
-    = link_to "Detail Cost Areas", activity_code_assignments_url(other_cost)
-    = link_to "Delete", response_other_cost_path(@data_response, other_cost), :confirm => "Are you sure?", :method => :delete
+    %ul.manage_bar
+      %li= link_to "Show", response_other_cost_path(@data_response, other_cost)
+      %li= link_to "Edit", edit_response_other_cost_path(@data_response, other_cost)
+      %li= link_to "Detail Cost Areas", activity_code_assignments_url(other_cost)
+      %li= link_to "X", response_other_cost_path(@data_response, other_cost), :confirm => "Are you sure?", :method => :delete, :class => "right"

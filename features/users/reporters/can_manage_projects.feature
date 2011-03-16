@@ -31,7 +31,7 @@ Scenario: Reporter can CRUD projects
   And I should see "Project2"
   And I should not see "Project1"
 
-  When I follow "Delete"
+  When I follow "X"
   Then I should see "Project was successfully destroyed"
   And I should not see "Project1"
   And I should not see "Project2"

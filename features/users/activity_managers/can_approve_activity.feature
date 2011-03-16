@@ -30,5 +30,6 @@ Scenario: Approve an Activity
   And the "approve_activity" checkbox should be checked
 
 Scenario: List approved activities
-  When I go to the classifications page
+  When I follow "Req1"
+  And I follow "Classifications"
   Then I should see "Approved?"

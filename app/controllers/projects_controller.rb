@@ -5,27 +5,21 @@ class ProjectsController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  belongs_to :data_response, :route_name => 'response'
 
   def index
-    #@projects = @data_response.projects.order(sort_column + " " + sort_direction) # rails 3, sigh
     scope = @data_response.projects.scoped({})
-    # search functionality
     scope = scope.scoped(:conditions => ["name LIKE :q",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
-  def create
-    create!{ response_projects_url(@data_response) }
-  end
-
-  def update
-    update!{ response_projects_url(@data_response) }
-  end
-
-  def destroy
-    destroy! { response_projects_url(@data_response) }
+  def show
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    show!
   end
 
   def download_template

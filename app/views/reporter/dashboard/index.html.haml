@@ -26,7 +26,7 @@
     %ul.admin_reports
       - if current_user.current_data_response
         %li
-          %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
+          %a{ :href => reporter_response_path(current_user.current_data_response), :class => "drill_down"}
             Review My Response
             %span.hint Interactive report of your current data response
       %li

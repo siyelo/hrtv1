@@ -1,8 +1,14 @@
 require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
+require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
+  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date 
+                           text_for_targets text_for_beneficiaries text_for_provider 
+                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 
+                           budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
+
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
@@ -31,16 +37,18 @@ class Activity < ActiveRecord::Base
   configure_act_as_data_element
 
   ### Attributes
-  attr_accessible :projects, :locations, :beneficiaries, :provider,
-                  :text_for_provider, :text_for_beneficiaries,
+  attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
                   :text_for_targets, :name, :description, :start_date, :end_date,
-                  :approved, :budget, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4
+                  :approved, :budget, :budget2, :budget3, :spend,
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
+                  :beneficiary_ids, :location_ids, :provider_id, 
+                  :sub_activities_attributes, :organization_ids
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
-  has_and_belongs_to_many :projects
+  belongs_to :project
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
@@ -57,14 +65,23 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
 
+  # Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
+
   ### Delegates
   delegate :organization, :to => :data_response
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
 
-
   ### Validations
   validate :approved_activity_cannot_be_changed
+  #validates_uniqueness_of :name, :scope => :project_id
+  validates_presence_of :data_response_id, :project_id, :unless => Proc.new {|model| model.activity_id}
+  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
+  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
+  #validates_date :start_date, :unless => Proc.new {|model| model.activity_id}
+  #validates_date :end_date, :unless => Proc.new {|model| model.activity_id}
+  #validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new {|model| model.activity_id}
 
   ### Callbacks
   before_save :update_cached_usd_amounts
@@ -81,7 +98,7 @@ class Activity < ActiveRecord::Base
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
-  named_scope :without_a_project, { :conditions => "activities.id NOT IN (SELECT activity_id FROM activities_projects)" }
+  named_scope :without_a_project, { :conditions => "project_id IS NULL" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
@@ -123,6 +140,24 @@ class Activity < ActiveRecord::Base
                   :beneficiaries, {:data_response => :organization}])
   end
 
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Activity::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = Project.find_by_name(attributes.delete('project_name'))
+      attributes.merge!(:project_id => project.id) if project
+      activity = data_response.activities.new(attributes)
+      activity.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
   def budget_district_coding_adjusted
     district_coding_adjusted(CodingBudgetDistrict, coding_budget_district, budget)
   end
@@ -152,18 +187,14 @@ class Activity < ActiveRecord::Base
     provider
   end
 
-  # helper until we enforce this in the model association!
-  def project
-    projects.first
-  end
-
   def organization_name
     organization.name
   end
 
-  def districts
-    projects.map{|project| project.locations}.flatten.uniq
-  end
+  # TODO remove
+  #def districts
+    #project.locations
+  #end
 
   def coding_budget_classified?
     self.budget == self.CodingBudget_amount
@@ -313,7 +344,7 @@ class Activity < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations projects organizations beneficiaries].each do |assoc|
+    %w[locations organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
@@ -400,8 +431,11 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      self.budget_in_usd = (budget || 0) * toUSD
-      self.spend_in_usd  = (spend || 0)  * toUSD
+      if self.currency
+        rate = Money.default_bank.get_rate(self.currency, :USD)
+        self.budget_in_usd = (budget || 0) * rate
+        self.spend_in_usd  = (spend || 0)  * rate
+      end
     end
 
     def fake_ca(klass, code, amount, percentage = nil)
@@ -411,6 +445,8 @@ class Activity < ActiveRecord::Base
     end
 end
 
+
+
 # == Schema Information
 #
 # Table name: activities
@@ -419,9 +455,9 @@ end
 #  name                                  :string(255)
 #  created_at                            :datetime
 #  updated_at                            :datetime
-#  provider_id                           :integer
+#  provider_id                           :integer         indexed
 #  description                           :text
-#  type                                  :string(255)
+#  type                                  :string(255)     indexed
 #  budget                                :decimal(, )
 #  spend_q1                              :decimal(, )
 #  spend_q2                              :decimal(, )
@@ -434,8 +470,8 @@ end
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
 #  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer
-#  activity_id                           :integer
+#  data_response_id                      :integer         indexed
+#  activity_id                           :integer         indexed
 #  budget_percentage                     :decimal(, )
 #  spend_percentage                      :decimal(, )
 #  approved                              :boolean

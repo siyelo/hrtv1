@@ -21,19 +21,20 @@ class Organization < ActiveRecord::Base
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
+  has_many :projects, :through => :data_responses
 
   ### Validations
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  ### Named scopes
+  named_scope :without_users, :conditions => 'users_count = 0'
+  named_scope :ordered, :order => 'name ASC, created_at DESC'
+
   # TODO: remove!?
   def self.remove_security
     with_exclusive_scope { find(:all) }
   end
-
-  ### Named scopes
-  named_scope :without_users, :conditions => 'users_count = 0'
-  named_scope :ordered, :order => 'name ASC, created_at DESC'
 
   def is_empty?
     if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
@@ -85,15 +86,16 @@ class Organization < ActiveRecord::Base
 
 end
 
+
+
 # == Schema Information
 #
 # Table name: organizations
 #
-#  id             :integer         primary key
+#  id             :integer         not null, primary key
 #  name           :string(255)
-#  type           :string(255)
-#  created_at     :timestamp
-#  updated_at     :timestamp
+#  created_at     :datetime
+#  updated_at     :datetime
 #  raw_type       :string(255)
 #  fosaid         :string(255)
 #  users_count    :integer         default(0)

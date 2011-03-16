@@ -7,10 +7,15 @@ gem 'cancan'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
 gem 'formtastic', "= 0.9.10"
-gem 'google_currency'
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'money'
+
+# grr - money 3.5 depends on i18n 0.4+
+# but 0.3.3 seems to solve the {{errors}} issue
+#gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
+
+gem 'inherited_resources', "=1.0.6"
+gem 'money', "~> 3.5"
 gem "paperclip", "~> 2.3"
 gem 'rails', '2.3.8'
 gem 'settingslogic'
@@ -26,19 +31,21 @@ gem 'inherited_resources', '= 1.0.6'
 
 group :development do
   gem 'annotate'
+  gem 'awesome_print', :require => "ap"
+  gem 'google_currency', "=1.2.0" # for currency cacher
   gem 'heroku'
   gem 'hirb'
+  gem 'interactive_editor'
+  gem 'looksee'
+  gem 'mongrel'
   gem 'open_gem'
   gem 'rails-footnotes'
   gem 'ruby-debug'
+  gem 'sketches'
+  gem 'slurper', :require => false
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'taps'
-  gem 'mongrel'
-  gem 'awesome_print', :require => "ap"
   gem 'wirble'
-  gem 'interactive_editor'
-  gem 'sketches'
-  gem 'looksee'
 end
 
 group :test, :development do
@@ -52,9 +59,9 @@ group :test do
   gem 'cucumber-rails'
   gem 'database_cleaner'
   gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3
-  gem 'ruby-pg'
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'
+  gem 'ruby-pg'
   gem 'shoulda'
   gem 'spork'
 end

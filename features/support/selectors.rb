@@ -36,6 +36,9 @@ module HtmlSelectorsHelper
     when /the main nav/
       "#main-nav"
 
+    when /the sub nav/
+      "#sub-nav"
+
     when /the admin nav/
       "#admin"
 

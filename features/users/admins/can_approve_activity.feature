@@ -9,12 +9,11 @@ Background:
   And an organization exists with name: "WHO"
   And a data_response exists with data_request: the data_request, organization: the organization
   And a project exists with name: "TB Treatment Project", data_response: the data_response
-  And an activity exists with name: "TB Drugs procurement", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
   And a mtef_code exists with short_display: "Mtef code"
   And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
 
-@admins @approve_activity @javascript
+@javascript
 Scenario: See a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1"
@@ -23,7 +22,7 @@ Scenario: See a budget coding breakdown
   And I should see "1,000.00"
 
 # NB: this scenario will only work for 1 activity, 1 classification
-@admins @approve_activity @javascript
+@javascript
 Scenario: Approve a budget coding breakdown
   Given I am signed in as an admin
   When I go to the admin review data response page for organization "WHO", request "Req1"

@@ -4,7 +4,6 @@ Feature: Admin can review country
   I want to be able to see country review screen
 
 Background:
-  Given currencies exists in database
   And a mtef_code exists with short_display: "Code A"
   And a mtef_code exists with short_display: "Code B"
   And an organization exists with name: "GoR"
@@ -13,8 +12,7 @@ Background:
   And a reporter exists with username: "undp_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
   And a project exists with name: "Project A", data_response: the data_response
-  And an activity exists with name: "Activity A", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "Activity A", data_response: the data_response, project: the project
   And a location exists with short_display: "Location A"
   And the location is one of the activity's locations
   And a location exists with short_display: "Location B"
@@ -26,7 +24,6 @@ Background:
   And a coding_budget_district exists with activity: the activity, code: the first location
   And a coding_spend_district exists with activity: the activity, code: the first location
 
-@admins @country_review
 Scenario: "Log in as admin, go to district activity detail screen"
   Given I am signed in as an admin
   When I follow "Dashboard"

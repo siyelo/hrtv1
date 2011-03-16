@@ -3,7 +3,7 @@ Feature: Reporter can derive classifications from sub implementers
   As a reporter
   I want to be able to use derived classifications from sub implementers
 
-@reporters @derive_classifications @javascript
+@javascript
 Scenario: Use budget classifications derived from sub implementers
   Given a donor exists with name: "donor"
   And a ngo exists with name: "ngo"
@@ -16,9 +16,8 @@ Scenario: Use budget classifications derived from sub implementers
   And a project exists with data_response: the data_response
   And a funding_flow exists with data_response: the data_response, from: the donor, to: the ngo, budget: "10", spend: "10"
   And a funding_flow exists with data_response: the data_response, from: the ngo, to: the provider, budget: "7", spend: "7"
-  And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response
+  And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response, project: the project
   And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, budget: "55"
-  And the project is one of the activity's projects
   And the location is one of the activity's locations
 
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
@@ -32,7 +31,7 @@ Scenario: Use budget classifications derived from sub implementers
   And I follow "Locations" within the budget districts tab
   Then the "Location1" field within ".tab2" should contain "55.00"
 
-@reporters @derive_classifications @javascript
+@javascript
 Scenario: Use spend classifications derived from sub implementers
   Given a donor exists with name: "donor"
   And a ngo exists with name: "ngo"
@@ -45,9 +44,8 @@ Scenario: Use spend classifications derived from sub implementers
   And a project exists with data_response: the data_response
   And a funding_flow exists with data_response: the data_response, from: the donor, to: the ngo, budget: "10", spend: "10"
   And a funding_flow exists with data_response: the data_response, from: the ngo, to: the provider, budget: "7", spend: "7"
-  And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response
+  And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response, project: the project
   And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, spend: "56"
-  And the project is one of the activity's projects
   And the location is one of the activity's locations
 
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response

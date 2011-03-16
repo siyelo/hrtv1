@@ -75,10 +75,10 @@ class Reports::ActivitiesByNha
         row << activity.spend_q2
         row << activity.spend_q3
         row << activity.spend_q4
-        row << (activity.spend_q1 ? activity.spend_q1 * activity.toUSD : '')
-        row << (activity.spend_q2 ? activity.spend_q2 * activity.toUSD : '')
-        row << (activity.spend_q3 ? activity.spend_q3 * activity.toUSD : '')
-        row << (activity.spend_q4 ? activity.spend_q4 * activity.toUSD : '')
+        row << (activity.spend_q1 ? activity.spend_q1 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+        row << (activity.spend_q2 ? activity.spend_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+        row << (activity.spend_q3 ? activity.spend_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+        row << (activity.spend_q4 ? activity.spend_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
         row << activity.spend
         row << activity.spend_in_usd
 

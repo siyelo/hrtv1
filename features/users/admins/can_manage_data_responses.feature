@@ -11,7 +11,6 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And I am signed in as an admin
 
-@admins @data_responses
 Scenario: Manage data responses
   And I follow "Review Organization Expenditures and Budgets"
   And I follow "Empty"
@@ -21,7 +20,7 @@ Scenario: Manage data responses
   Then I should see "Data response was successfully deleted"
   And I should not see "UNDP"
 
-@admins @data_responses @javascript
+@javascript
 Scenario: Manage data responses (with JS)
   And I follow "Review Organization Expenditures and Budgets"
   When I follow "Empty"

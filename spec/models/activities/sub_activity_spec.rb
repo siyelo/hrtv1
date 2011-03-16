@@ -46,7 +46,8 @@ describe SubActivity do
       # activities
       @activity      = Factory.create(:activity, :name => 'Activity 1',
                                       :budget => 100, :spend => 100,
-                                      :provider => ngo, :projects => [project])
+                                      :data_response => @data_response,
+                                      :provider => ngo, :project => project)
 
 
     end
@@ -405,6 +406,22 @@ describe SubActivity do
             sub_activity.spend_district_coding_adjusted[1].type.should == 'CodingSpendDistrict'
           end
         end
+      end
+    end
+    
+    describe "counter cache" do
+      it "caches sub activities count" do
+        @activity.sub_activities_count.should == 0
+        @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                       :provider => @implementer,
+                                       :data_response => @data_response,
+                                       :budget => 4)
+
+        @activity.reload.sub_activities_count.should == 1
+        @data_response.reload.sub_activities_count.should == 1
+        Factory.create(:sub_activity, :activity => @activity, :data_response => @data_response)
+        @data_response.reload.sub_activities_count.should == 2
+        @activity.reload.sub_activities_count.should == 2
       end
     end
   end

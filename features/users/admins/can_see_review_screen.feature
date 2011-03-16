@@ -11,8 +11,7 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And a project exists with name: "TB Treatment Project", data_response: the data_response
   And a comment exists with title: "title1", comment: "comment1", commentable: the project
-  And an activity exists with name: "TB Drugs procurement", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
   And an organization exists with name: "USAID"
   And a data_response exists with data_request: the data_request, organization: the organization
   And a project exists with name: "Other Project", data_response: the data_response
@@ -23,7 +22,7 @@ Background:
   And I follow "In Progress"
   And I follow "UNDP"
 
-@admins @review_screen @javascript
+@javascript
 Scenario: Manage comments on data responses (with Javascript)
   Given wait a few moments
   And I follow "+ Add Comment"
@@ -43,7 +42,7 @@ Scenario: Manage comments on data responses (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admins @review_screen @javascript
+@javascript
 Scenario: Manage comments on project (with Javascript)
   When wait a few moments
   When I click element "#project_details"
@@ -66,7 +65,7 @@ Scenario: Manage comments on project (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admins @review_screen @javascript
+@javascript
 Scenario: Manage comments on activities (with Javascript)
   When wait a few moments
   When I click element "#project_details"
@@ -91,7 +90,7 @@ Scenario: Manage comments on activities (with Javascript)
   Then I should not see "new comment title"
   And I should not see "new comment body"
 
-@admins @review_screen @javascript
+@javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
   Then I should see tabs for comments,activities,other costs

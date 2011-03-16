@@ -126,7 +126,7 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activities' project/DR
     def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) * activity.toUSD
+      self.cached_amount_in_usd = (cached_amount || 0) * Money.default_bank.get_rate(self.currency, :USD)
     end
 
     # Checks if it's a budget code assignment
@@ -138,20 +138,22 @@ class CodeAssignment < ActiveRecord::Base
     end
 end
 
+
+
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id                   :integer         primary key
+#  id                   :integer         not null, primary key
 #  activity_id          :integer
-#  code_id              :integer
+#  code_id              :integer         indexed
 #  amount               :decimal(, )
 #  type                 :string(255)
 #  percentage           :decimal(, )
 #  cached_amount        :decimal(, )     default(0.0)
 #  sum_of_children      :decimal(, )     default(0.0)
-#  created_at           :timestamp
-#  updated_at           :timestamp
+#  created_at           :datetime
+#  updated_at           :datetime
 #  cached_amount_in_usd :decimal(, )     default(0.0)
 #
 

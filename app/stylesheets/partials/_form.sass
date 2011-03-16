@@ -1,6 +1,185 @@
-// Only apply the blueprint form styles to forms with
-// a class of "bp". This makes it easier to style
-// forms from scratch if you need to.
+form.data_response, .basic_form
+  .dashboard_section
+    background: $filler
+    
+  ol
+    li
+      border-bottom: 1px solid $lightest-blue
+      margin-bottom: 7px
+      padding-bottom: 7px
+      +pie-clearfix
+      &:last-child
+        border: none
+        margin: 0
+      &.last
+        border: none
+        margin: 0
+        padding: 0
+      &.amounts
+        display: block
+        li
+          border: none
+          display: inline
+          float: left
+          margin: 0
+          padding: 0
+          width: 20%
+          label
+            width: 100%
+          input[type=text]
+            width: 85%
+        ul
+          float: left
+          margin: 0
+          width: 82%
+        input[type=text], textarea
+          width: 75px
 
-form.bp
-  +blueprint-form
+    h3
+      background: image_url("bg-blue.jpg")
+      color: #fff !important
+      margin-top: 5px
+      padding: 10px 10px 7px !important
+      +border-top-radius(3px)
+    label
+      float: left
+      margin-top: 9px
+      width: 18%
+    select, input[type=text], textarea
+      float: left
+      font-size: 12px
+      padding: 5px
+      width: 35%
+      +border-radius(3px)
+    select
+      padding: 2px
+      width: 36.5%
+
+    .inline-hints
+      float: left
+      margin-left: 1%
+      width: 44%
+
+    .inline-errors
+      color: red
+      float: left
+      font-size: 11px
+      margin-top: 3px
+      margin-left: 15%
+      padding-left: 10px
+      text-transform: uppercase
+      width: 70%
+
+
+  .check_boxes
+    fieldset
+      float: left
+      width: 54%
+    legend
+      float: left
+      width: 33%
+      label
+        width: auto
+    ol
+      +pie-clearfix
+      float: left
+      width: 67%
+      +border-radius(3px)
+    li
+      border: none
+      display: inline-block
+      float: left
+      margin-bottom: 0
+      width: 33%
+      label
+        font-size: 11px
+        font-weight: normal
+        margin-top: 0
+        width: auto
+    input[type=checkbox]
+      margin: 0
+      padding: 0
+
+  .form_aside
+    background: $filler
+    border: 1px solid $lightest-blue
+    float: right
+    margin-top: 5px
+    padding: 2%
+    width: 16%
+    +border-radius(3px)
+    h3
+      border-bottom: 1px dashed $light-blue
+      margin-bottom: 10px
+      padding-top: 0px !important
+    p
+      color: $mid-blue
+      font-size: 11px
+      line-height: 1.4
+
+.hint, .inline-hints
+  color: $mid-blue
+  display: block
+  font-size: 11px
+  padding-top: 3px
+  &.padded
+    padding-top: 0
+    padding-bottom: 20px
+
+.inputs
+  li
+    margin-bottom: 20px
+  label
+    color: $mid-blue + #222 !important
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 3px
+  input[type=text], textarea
+    width: 340px
+  select
+    padding: 7px 5px
+    width: 353px
+
+
+  li.amounts
+    display: inline-block
+    li
+      float: left
+
+    input[type=text], textarea
+      width: 75px
+
+// SEARCH
+#search
+  float: right
+
+  #search_box
+    +border-radius
+    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
+    border: 1px solid #DDDDDD
+    float: right
+    font-size: 12px
+    padding: 0 28px 0 5px
+    width: 210px
+
+  input[type='text']
+    -moz-box-shadow: none
+    background: none repeat scroll 0 0 #FFFFFF !important
+    border: 0 none
+    color: #000000
+    font-size: 12px
+    font-weight: normal
+    padding: 5px
+    width: 200px
+    height: 16px
+    line-height: 1.4em
+
+  input[type='submit']
+    display: none
+
+
+input[type=text], textarea
+  &:hover, &:focus, &:active
+    border: 1px solid $light-blue - #222 !important
+    +box-shadow($light-blue, 0, 0, 3px)
+    

@@ -7,7 +7,6 @@ Background:
   Given a basic org + reporter profile, with data response, signed in
   And a comment exists with title: "title1", comment: "comment1", commentable: the project
 
-@reporters @comments
 Scenario: See latest comments on dashboard
   When I follow "Dashboard"
   Then I should see "Recent Comments"
@@ -15,7 +14,6 @@ Scenario: See latest comments on dashboard
   And I should see "on Project: "
   And I should see "TB Treatment Project"
 
-@reporters @comments
 Scenario: Access comments page from dashboard and edit them
   When I follow "Dashboard"
   And I follow "all comments"
@@ -27,7 +25,6 @@ Scenario: Access comments page from dashboard and edit them
   And I press "Update"
   Then I should see "comment1 edited"
 
-@reporters @comments
 Scenario: Reporter can see only comments from his organization
   Given a organization exists with name: "USAID"
   And a data_response exists with data_request: the data_request, organization: the organization

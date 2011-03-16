@@ -90,19 +90,12 @@ describe DataResponse do
     it "caches sub activities count" do
       dr = Factory.create(:data_response)
       dr.sub_activities_count.should == 0
-      Factory.create(:sub_activity, :data_response => dr)
+      activity1 = Factory.build(:sub_activity, :data_response => dr)
+      activity1.save(false) # TODO: remove test when all db tests valid
       dr.reload.sub_activities_count.should == 1
-      Factory.create(:sub_activity, :data_response => dr)
+      activity2 = Factory.build(:sub_activity, :data_response => dr)
+      activity2.save(false) # TODO: remove test when all db tests valid
       dr.reload.sub_activities_count.should == 2
-    end
-
-    it "caches activities without projects count" do
-      dr = Factory.create(:data_response)
-      dr.activities_without_projects_count.should == 0
-      Factory.create(:activity, :data_response => dr, :projects => [])
-      dr.reload.activities_without_projects_count.should == 1
-      Factory.create(:activity, :data_response => dr, :projects => [])
-      dr.reload.activities_without_projects_count.should == 2
     end
   end
 
@@ -120,14 +113,13 @@ describe DataResponse do
 
   describe 'Currency cache update' do
     before :each do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.5")
-      Factory.create(:currency, :name => "eur", :symbol => "EUR", :toUSD => "1.5")
-
+      Money.default_bank.add_rate(:RWF, :USD, 0.5)
+      Money.default_bank.add_rate(:EUR, :USD, 1.5)
       @dr        = Factory(:data_response, :currency => 'RWF')
       @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)
       @activity  = Factory(:activity, :data_response => @dr,
-                            :projects => [@project],
+                            :project => @project,
                             :budget => 1000, :spend => 2000)
 
     end

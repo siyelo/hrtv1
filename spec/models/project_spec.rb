@@ -5,7 +5,6 @@ describe Project do
   describe "creating a project record" do
     subject { Factory(:project) }
     it { should be_valid }
-    it { should have_and_belong_to_many :activities }
     it { should have_and_belong_to_many :locations }
     it { should have_many :funding_flows }
     it { should have_many :in_flows }
@@ -15,6 +14,7 @@ describe Project do
     it { should have_many :providers }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
@@ -166,41 +166,40 @@ describe Project do
     before :each do
       @project = Factory(:project)
       @original = @project #for shared examples
-      @a1 = Factory(:activity,
-                     :data_response => @project.data_response,
-                     :projects => [@project])
-      @a2 = Factory(:activity,
-                     :data_response => @project.data_response,
-                     :projects => [@project])
+      @a1 = Factory(:activity, :project => @project,
+                     :data_response => @project.data_response)
+      @a2 = Factory(:activity, :project => @project,
+                     :data_response => @project.data_response)
       save_and_deep_clone
     end
 
     it "should clone associated activities" do
       @clone.activities.count.should == 2
-      @clone.activities.first.projects.count.should == 2 # old project HABTM reference on the cloned activity
+      @clone.activities[0].project.should_not be_nil
+      @clone.activities[1].project.should_not be_nil
     end
 
     it "should have the correct number of activities after the original project is destroyed" do
       @project.destroy
       @clone.reload
       @clone.activities.count.should == 2
-      @clone.activities.first.projects.count.should == 1
+      @clone.activities[0].project.should_not be_nil
+      @clone.activities[1].project.should_not be_nil
     end
 
     it_should_behave_like "location cloner"
-
   end
 
   describe 'Currency cache update' do
     before :each do
-      Factory.create(:currency, :name => "rwf", :symbol => "RWF", :toUSD => "0.5")
-      Factory.create(:currency, :name => "eur", :symbol => "EUR", :toUSD => "1.5")
+      Money.default_bank.add_rate(:RWF, :USD, 0.5)
+      Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
       @data_response = Factory(:data_response, :currency => 'RWF')
       @project       = Factory(:project,
                                 :data_response => @data_response,
                                 :currency => nil)
-      @activity      = Factory(:activity, :projects => [@project],
+      @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
 
     end
@@ -226,10 +225,8 @@ describe Project do
   describe "currency conversion for big amounts" do
     it "should convert large activity amounts back correctly" do
       ONE_HUNDRED_BILLION_DOLLARS = 100000000000.00
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
-      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
-                     :toRWF => "1", :toUSD => "0.002")
+      Money.default_bank.add_rate(:USD, :RWF, 500)
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
       activity = Factory.build(:activity)
       project  = activity.project
       project.currency = 'USD'
@@ -237,8 +234,6 @@ describe Project do
       activity.spend = ONE_HUNDRED_BILLION_DOLLARS
       activity.save
       activity.reload
-      activity.reload
-      activity.save
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
       project.currency = 'RWF'
       project.save
@@ -247,34 +242,10 @@ describe Project do
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
   end
+
+  describe "download_template" do
+    it "should generate template" do
+      Project.download_template.should == "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date\n"
+    end
+  end
 end
-
-# == Schema Information
-#
-# Table name: projects
-#
-#  id               :integer         primary key
-#  name             :string(255)
-#  description      :text
-#  start_date       :date
-#  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
-#  budget           :decimal(, )
-#  spend            :decimal(, )
-#  entire_budget    :decimal(, )
-#  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
-#  comments_count   :integer         default(0)
-#
-

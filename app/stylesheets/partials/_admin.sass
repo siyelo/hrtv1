@@ -21,6 +21,13 @@ body.app
     ul
       margin-bottom: 10px
       +border-bottom-radius
+      &.horizontal
+        +horizontal-list
+        margin-bottom: 0
+      &.admin_reports
+        margin-bottom: 0
+        li:last-child a
+          margin-bottom: 0
     h2
       background: none
       text-transform: none

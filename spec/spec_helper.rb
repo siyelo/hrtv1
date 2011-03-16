@@ -59,6 +59,7 @@ end
 def save_and_deep_clone
   @original.save!
   @clone = @original.deep_clone
+  @clone.data_response = Factory.create(:data_response)
   @clone.save!
   @clone.reload #otherwise seems to cache the old has_many associations
 end

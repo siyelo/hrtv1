@@ -6,8 +6,6 @@ require 'fastercsv'
 
 puts "\n\nLoading seeds..."
 
-load 'db/seed_files/model_help.rb' #don't load model help now that we're in prod
-
 load 'db/seed_files/codes.rb'
 
 load 'db/seed_files/hssp2_codes.rb'
@@ -21,7 +19,5 @@ load 'db/seed_files/districts.rb' # seed old districts
 load 'db/seed_files/districts_of_rwanda.rb' # seed new districts
 
 load 'db/seed_files/beneficiaries.rb'
-
-load 'db/seed_files/currencies.rb'
 
 puts "...seeding DONE\n\n"

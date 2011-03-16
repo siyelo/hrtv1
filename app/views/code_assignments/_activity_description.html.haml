@@ -22,4 +22,4 @@
   - if can? :approve, @activity
     %tr
       %td.title= label_tag :approve_activity, "Approved?"
-      %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id
+      %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id

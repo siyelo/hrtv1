@@ -3,7 +3,6 @@ Feature: Admin can see reports
   As an admin
   I want to be able to see reports
 
-@admins @reports
 Scenario: Navigate to reports page
   Given I am signed in as an admin
   When I follow "Dashboard"

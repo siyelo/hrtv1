@@ -10,8 +10,7 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
   And a project exists with name: "Project", data_response: the data_response
-  And an activity exists with name: "Activity", data_response: the data_response
-  And the project is one of the activity's projects
+  And an activity exists with name: "Activity", data_response: the data_response, project: the project
   And I am signed in as "reporter"
 
     #
@@ -55,7 +54,7 @@ Background:
   Given I am on the budget classification page for "Activity"
   Then wait a few moments
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: enter budget for an activity (don't see flash errors)
   When I fill in "mtef1" with "5000000.00"
   And I press "Save"
@@ -64,7 +63,7 @@ Scenario: enter budget for an activity (don't see flash errors)
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "5,000,000.00"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: enter budget for an activity (see flash errors)
   When I fill in "mtef1" with "1234567.00"
   And I press "Save"
@@ -75,7 +74,7 @@ Scenario: enter budget for an activity (see flash errors)
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .flashes .error"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: enter expenditure for an activity
   When I follow "Purposes" within the expenditure coding tab
   And I fill in "mtef1" with "1234567.00" within ".tab4"
@@ -86,7 +85,7 @@ Scenario: enter expenditure for an activity
   Then wait a few moments
   And the "mtef1" field within ".tab4" should contain "1,234,567.00"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed.
   When I fill in "mtef1" with "1234567.00"
   And I press "Save"
@@ -98,7 +97,7 @@ Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number f
   Then wait a few moments
   And the "mtef1" field should contain "1,234,567.00"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario Outline: enter percentage for an activity budget classification
   When I fill in "mtef1" percentage field with "<amount>"
   And I press "Save"
@@ -112,7 +111,7 @@ Scenario Outline: enter percentage for an activity budget classification
     | 50.1   | 50.1    |
     | 95.6   | 95.6    |
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: Use budget by district for expenditure by district
   Given a location exists with short_display: "Location1"
   And the location is one of the activity's locations
@@ -133,7 +132,7 @@ Scenario: Use budget by district for expenditure by district
   Then wait a few moments
   Then the "Location1" field within ".tab5" should contain "1,481,480.40"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: Use budget by cost categorization for expenditure by cost categorization
   When I follow "Inputs" within the budget cost categorization tab
   And I fill in "cost_category1" with "1234567.00" within ".tab3"
@@ -150,7 +149,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   Then wait a few moments
   Then the "cost_category1" field within ".tab6" should contain "1,481,480.40"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
@@ -186,7 +185,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
   And the cached field within ".tab4 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
-@reporters @classify_activity @javascript
+@javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
   When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
   And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
@@ -225,9 +224,9 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   ### change  budget and spend for activity
   When I follow "Activities"
   And I follow "Edit"
-  And I fill in "Total Budget GOR FY 10-11" with "1000"
-  And I fill in "Total Spent GOR FY 09-10" with "2000"
-  And I press "Update"
+  And I fill in "Budget" with "1000"
+  And I fill in "Spent" with "2000"
+  And I press "Update Activity"
   And I go to the budget classification page for "Activity"
   Then the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
   And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"

@@ -20,7 +20,7 @@
         -# this might break if no response selected
         - path = ''
         - if current_user && current_user.current_data_response
-          - path = edit_data_response_path(current_user.current_data_response)
+          - path = edit_response_path(current_user.current_data_response)
         = link_to 'My Data', path, :class =>  ('active' if workplan_active)
       %li= link_to 'Reports', reporter_reports_path, :class => ('active' if reports_active)
       %li= link_to 'Help', static_page_path(:user_guide), :class => ('active' if help_active)

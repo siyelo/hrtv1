@@ -1,5 +1,5 @@
 Factory.define :project, :class => Project do |f|
-  f.name                { 'project_name' }
+  f.sequence(:name)     { |i| "project_name_#{i}" }
   f.description         { 'project_description' }
   f.budget              { 20000000.00 }
   f.start_date          { Date.parse("2010-01-01") }

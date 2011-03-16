@@ -103,8 +103,8 @@ module Reports::Helpers
     #TODO fake one if none so works correctly, w name of Not Entered
     #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
     funding_sources = []
-    activity.projects.each do |project|
-      project.in_flows.with_organizations.each do |funding_source|
+    if activity.project
+      activity.project.in_flows.with_organizations.each do |funding_source|
         funding_sources << funding_source
       end
     end
@@ -133,19 +133,21 @@ module Reports::Helpers
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
+    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
     funding_sources.each do |fs|
       if is_budget
-        sum += fs.budget * activity.toUSD if fs.budget
+        sum += fs.budget * usd_rate if fs.budget
       else
-        sum += fs.spend * activity.toUSD if fs.spend
+        sum += fs.spend * usd_rate if fs.spend
       end
     end
     sum
   end
 
   def get_funding_source_amount(activity, funding_source, is_budget)
+    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
     amount = is_budget ? funding_source.budget :  funding_source.spend
-    (amount || 0) * activity.toUSD
+    (amount || 0) * usd_rate
   end
 
   def get_ratio(amount_total, amount)
@@ -210,11 +212,6 @@ module Reports::Helpers
       activities[ca.activity][:amount] = ca.cached_amount_in_usd
     end
     activities
-  end
-
-  def first_project_name(activity)
-    project = activity.projects.first
-    project ? "#{h project.name}" : " "
   end
 
   def provider_fosaid(activity)

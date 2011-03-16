@@ -1,0 +1,10 @@
+- title("Edit Data Response")
+
+%h1.main_heading Response Settings
+
+= error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @data_response, :url => response_path(@data_response) do |f|
+  = render 'form', :f => f
+
+= render 'comments'

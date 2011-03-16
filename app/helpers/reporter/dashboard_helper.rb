@@ -2,7 +2,7 @@ module Reporter::DashboardHelper
   def commentable_path(type, commentable, user)
     case type
     when "Project"
-      edit_project_path(commentable.id)
+      edit_response_project_path(commentable.data_response, commentable.id)
     when "FundingFlow"
       edit_funding_flow_path(commentable.id)
     when "Activity"

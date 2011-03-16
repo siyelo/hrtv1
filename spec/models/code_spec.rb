@@ -173,12 +173,12 @@ describe Code do
 
   describe "sum_of_assignments_for_activities" do
     before :each do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD", :toUSD => "1")
+      Money.default_bank.add_rate(:USD, :USD, 1)
       data_response = Factory.create(:data_response)
       @activity1 = Factory.create(:activity, :data_response => data_response,
-                                  :projects => [Factory.create(:project, :currency => "USD")])
+                                  :project => Factory.create(:project, :currency => "USD"))
       @activity2 = Factory.create(:activity, :data_response => data_response,
-                                  :projects => [Factory.create(:project, :currency => "USD")])
+                                  :project => Factory.create(:project, :currency => "USD"))
       @code      = Factory.create(:code, :short_display => 'Code')
 
       Factory.create(:coding_budget, :activity => @activity1, :code => @code,
@@ -202,10 +202,10 @@ describe Code do
 
   describe "leaf_assignments_for_activities" do
     before :each do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD", :toUSD => "1")
+      Money.default_bank.add_rate(:USD, :USD, 1)
       data_response = Factory.create(:data_response, :currency => "USD")
-      @activity1 = Factory.create(:activity, :data_response => data_response, :projects => [])
-      @activity2 = Factory.create(:activity, :data_response => data_response, :projects => [])
+      @activity1 = Factory.create(:activity, :data_response => data_response)
+      @activity2 = Factory.create(:activity, :data_response => data_response)
       @code1     = Factory.create(:code, :short_display => 'code1')
       @code11    = Factory.create(:code, :short_display => 'code11', :parent => @code1)
       @code12    = Factory.create(:code, :short_display => 'code12', :parent => @code1)

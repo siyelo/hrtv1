@@ -322,16 +322,43 @@ When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end
 
-Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+
+Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
-    Given an organization exists with name: "GoR"
-    And a data_request exists with title: "Req1"
+    Given a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
+    And a reporter exists with username: "undp_user", organization: the organization
+    And I am signed in as "undp_user"
+  }
+end
+
+Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)"$/ do |org, request|
+  steps %Q{
+    Given a data_request exists with title: "#{request}"
+    And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
     And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
     And a project exists with name: "TB Treatment Project", data_response: the data_response
-    And an activity exists with name: "TB Drugs procurement", data_response: the data_response
-    And the project is one of the activity's projects
+    And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
+  }
+end
+
+Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
+  steps %Q{
+    Given a basic org "UNDP" + reporter profile, with data response to "Req1"
+    And I am signed in as "undp_user"
+  }
+end
+
+Given /^a basic org \+ reporter profile, with data response$/ do
+  steps %Q{
+    Given a basic org "UNDP" + reporter profile, with data response to "Req1"
+  }
+end
+
+Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+  steps %Q{
+    Given a basic org + reporter profile, with data response
     And I am signed in as "undp_user"
   }
 end
@@ -465,14 +492,6 @@ Then /^I should see tabs for comments,sub-activities$/ do
     Then I should see "Sub-Activities" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
     Then I should see "Comments" within the selected activity sub-tab
-  }
-end
-
-Given /^currencies exists in database$/ do
-  steps %Q{
-    And a currency exists with toRWF: "580", symbol: "USD", name: "dollar", toUSD: "1"
-    And a currency exists with toRWF: "800", symbol: "EUR", name: "euro", toUSD: "0.72"
-    And a currency exists with toRWF: "1", symbol: "RWF", name: "rwandan franc", toUSD: "0.00172413793103448"
   }
 end
 

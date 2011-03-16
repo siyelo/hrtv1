@@ -1,7 +1,7 @@
 
 - content_for :body do
   - full_width_page = false
-  - full_width_page = true if [ "CodeAssignmentsController", "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::DataResponsesController", "DataResponsesController"].include? controller.class.to_s
+  - full_width_page = true if [ "ProjectsController", "ActivitiesController", "CodeAssignmentsController", "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::ResponsesController", "ResponsesController"].include? controller.class.to_s
 
   %body{:id => get_controller_id(controller), :class => "app"}
     = render "layouts/header_app"
@@ -9,7 +9,10 @@
 
     #content
       .wrapper
-        = yield :sub_nav
+        -# need sub nav on most pages, except...
+        - unless [ "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::CommentsController", "ProfilesController"].include? controller.class.to_s
+          - unless controller.controller_name == "responses" && controller.action_name == "new"
+            = render :partial => 'layouts/sub_nav'
         = render 'layouts/flashes'
 
         - unless full_width_page
@@ -17,7 +20,7 @@
             = yield :page_help
             = yield
             .comments
-              = yield :comments
+              -#= yield :comments
           #sidebar
             :javascript
               jQuery('#sidebar').hide()
@@ -28,7 +31,7 @@
           .full-width
             = yield
             .comments
-              = yield :comments
+              -#= yield :comments
 
         = yield(:main)
 
@@ -36,3 +39,4 @@
   = render :partial => 'layouts/footer'
 
 = render 'layouts/app'
+

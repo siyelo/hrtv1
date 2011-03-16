@@ -2,6 +2,19 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
+function remove_fields(link) {
+  jQuery(link).prev("input[type=hidden]").val("1");
+  jQuery(link).closest(".fields").hide();
+  //jQuery(link).parent().next().hide();
+}
+
+function add_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g")
+  jQuery(link).parent().before(content.replace(regexp, new_id));
+}
+
+
 /* Ajax CRUD BEGIN */
 
 var getRowId = function (element) {
@@ -597,9 +610,12 @@ var build_data_response_review_screen = function () {
   // Ajax load of classifications for activities
   jQuery.each(jQuery('.activity_classifications'), function (i, element) {
     element = jQuery(element);
-    jQuery.get('/activities/' + element.attr('data-activity_id') + '/classifications?other_costs=' + element.attr('data-other_costs'), function (data) {
-      element.html(data);
-    })
+    var activity_id = element.attr('data-activity_id');
+    var response_id = element.attr('data-response_id');
+    var other_cost = element.attr('data-other_costs');
+    var url =  '/responses/' + response_id + '/activities/' + 
+      activity_id + '/classifications?other_costs=' + other_cost;
+    jQuery.get(url, function (data) {element.html(data)});
   });
 
 };
@@ -611,7 +627,7 @@ var admin_responses_show = {
   }
 };
 
-var reporter_data_responses_show = {
+var reporter_responses_show = {
   run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
@@ -626,12 +642,14 @@ var policy_maker_data_responses_show = {
 };
 
 var approve_activity_checkbox = function () {
-  jQuery(".approve_activity").click(function () {
+  jQuery(".approve_activity").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
     //activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
     activity_id = jQuery(this).attr('data-id');
-    jQuery.post( "/activities/" + activity_id + "/approve",
-     { checked: jQuery(this).is(':checked'), "_method": "put" }
-    );
+    response_id = jQuery(this).attr('data-response_id');
+    var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'
+    jQuery.post(url, {checked: jQuery(this).is(':checked'), "_method": "put"});
   })
 };
 
@@ -934,6 +952,26 @@ var reports_countries_activities_show = {
   }
 };
 
+var activities_new = activities_create = activities_edit = activities_update = {
+  run: function () {
+    jQuery('#activity_project_id').change(function () {
+      var _project_id = jQuery(this).val();
+      if (_project_id) {
+        var url = '/responses/' + _response_id + 
+        '/activities/project_sub_form?' + 'project_id=' + _project_id;
+        if (_activity_id) {
+          url += '&activity_id=' + _activity_id;
+        }
+        jQuery.get(url, function (data) {
+          jQuery('#project_sub_form').html(data);
+        });
+      } else {
+        jQuery('#project_sub_form').html('');
+      }
+    });
+  }
+}
+
 
 jQuery(function () {
 
@@ -979,11 +1017,20 @@ jQuery(function () {
   jQuery(".rest_in_place").rest_in_place();
 
   // clickable table rows
-  jQuery('.clickable tr').click(function() {
-    var href = jQuery(this).find("a").attr("href");
-    if(href) {
-        window.location = href;
+  jQuery('.clickable tbody tr').click(function (e) {
+    e.preventDefault();
+    var element = jQuery(e.target);
+
+    if (element.attr('href')) {
+      var href = element.attr('href');
+    } else {
+      var href = jQuery(this).find("a").attr("href");
+    }
+
+    if (href) {
+      window.location = href;
     }
   });
 
-})
+});
+

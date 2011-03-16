@@ -110,12 +110,12 @@ class Reports::MapFacilitiesByPartner
 
     def activity_amount(activity)
       amount = (@is_budget ? activity.budget_in_usd : activity.spend_in_usd) || 0
-      amount * activity.toUSD
+      amount * Money.default_bank.get_rate(activity.currency, :USD)
     end
 
     def in_flow_amount(funding_flow)
       amount = (@is_budget ? funding_flow.budget : funding_flow.spend) || 0
-      amount * funding_flow.toUSD
+      amount * Money.default_bank.get_rate(funding_flow.currency, :USD)
     end
 
     def max_partners_length

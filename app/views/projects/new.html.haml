@@ -1,0 +1,8 @@
+- title("New Project")
+
+%h1.main_heading Create New Project
+
+= error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @project, :url => response_projects_path(@data_response), :html => {:class => "basic_form"} do |f|
+  = render 'form', :f => f

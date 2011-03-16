@@ -4,47 +4,96 @@ Feature: Reporter can manage projects
   I want to be able to manage my projects
 
 Background:
-  Given a basic org + reporter profile, with data response, signed in
+  Given an organization exists with name: "organization1"
+  And a data_request exists with title: "data_request1"
+  And an organization exists with name: "organization2"
+  And a data_response exists with data_request: the data_request, organization: the organization
+  And a reporter exists with username: "reporter", organization: the organization
+  And I am signed in as "reporter"
+  And I follow "data_request1"
 
-@reporters @projects
 Scenario: Browse to project edit page
-  When I follow "My Data"
-  And I follow "Projects"
-  Then I should be on the projects page for "Req1"
-  And I should see "Projects" within "div#main"
+  When I follow "Projects"
+  Then I should see "Projects" within "h1"
 
-@reporters @projects
+Scenario: Reporter can CRUD projects
+  When I follow "Projects"
+  And I follow "Create Project"
+  And I fill in "Name" with "Project1"
+  And I fill in "Description" with "Project1 description"
+  And I fill in "Start date" with "2011-01-01"
+  And I fill in "End date" with "2011-12-01"
+  And I press "Create New Project"
+  Then I should see "Project was successfully created"
+  And I should see "Project1"
+
+  When I follow "Edit"
+  And I fill in "Name" with "Project2"
+  And I fill in "Description" with "Project2 description"
+  And I press "Update Project"
+  Then I should see "Project was successfully updated"
+  And I should see "Project2"
+  And I should not see "Project1"
+
+  When I follow "Delete"
+  Then I should see "Project was successfully destroyed"
+  And I should not see "Project1"
+  And I should not see "Project2"
+
 Scenario Outline: Edit project dates, see feedback messages for start and end dates
-  When I go to the projects page for "Req1"
-  And I follow "Create New"
-  And I fill in "record_name_" with "Some Project"
-  And I fill in "record_start_date_" with "<start_date>"
-  And I fill in "record_end_date_" with "<end_date>"
+  When I follow "Projects"
+  And I follow "Create Project"
+  And I fill in "Name" with "Some Project"
+  And I fill in "Start date" with "<start_date>"
+  And I fill in "End date" with "<end_date>"
   And I press "Create"
   Then I should see "<message>"
   And I should see "<specific_message>"
 
   Examples:
     | start_date | end_date   | message                              | specific_message                      |
-    | 2010-01-01 | 2010-01-02 | Created Some Project                 | Created Some Project                  |
+    | 2010-01-01 | 2010-01-02 | Project was successfully created     | Project was successfully created      |
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date is an invalid date         |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
-@reporters @projects
 Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget GOR
-  When I go to the projects page for "Req1"
-  And I follow "Create New"
-  And I fill in "record_name_" with "Some Project"
-  And I fill in "record_start_date_" with "2010-01-01"
-  And I fill in "record_end_date_" with "2010-01-02"
-  And I fill in "record_entire_budget_" with "<entire_budget>"
-  And I fill in "record_budget_" with "<budget_gor>"
+  When I follow "Projects"
+  And I follow "Create Project"
+  And I fill in "Name" with "Some Project"
+  And I fill in "Start date" with "<start_date>"
+  And I fill in "End date" with "<end_date>"
+  And I fill in "Lifetime budget" with "<entire_budget>"
+  And I fill in "Budget" with "<budget_gor>"
   And I press "Create"
   Then I should see "<message>"
   And I should see "<specific_message>"
 
   Examples:
-    | entire_budget  | budget_gor | message                              | specific_message                                                     |
-    | 900            | 800        | Created Some Project                 | Created Some Project                                                 |
-    | 900            | 900        | Created Some Project                 | Created Some Project                                                 |
-    | 900            | 1000       | Oops, we couldn't save your changes. | Total Budget must be less than or equal to Total Budget GOR FY 10-11 |
+    | start_date | end_date   | entire_budget | budget_gor | message                              | specific_message                                                     |
+    | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created                                     |
+    | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
+    | 2010-05-05 | 2010-01-02 | 900           | 1000       | Oops, we couldn't save your changes. | Total Budget must be less than or equal to Total Budget GOR FY 10-11 |
+
+    @run
+Scenario: Reporter can upload projects
+  When I follow "Projects"
+  When I attach the file "spec/fixtures/projects.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Created 4 of 4 projects successfully"
+  And I should see "p1"
+  And I should see "p2"
+  And I should see "p3"
+  And I should see "p4"
+
+Scenario: Reporter can see error if no csv file is not attached for upload
+  When I follow "Projects"
+  And I press "Upload and Import"
+  Then I should see "Please select a file to upload"
+
+Scenario: Reporter can see error when invalid csv file is attached for upload and download template
+  When I follow "Projects"
+  When I attach the file "spec/fixtures/invalid.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Wrong fields mapping. Please download the CSV template"
+  When I follow "Download template"
+  Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"

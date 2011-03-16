@@ -1,0 +1,21 @@
+- content_for :sub_nav do
+  = render :partial => 'layouts/sub_nav'
+
+%h2 Submit
+%p.borderful This page shows what actions you need to take before you can submit your data for review. Use the previous steps to review the data you have entered as well before submitting.
+
+= render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
+= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
+= render 'uncoded_other_cost_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
+= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
+
+- unless @warnings.empty?
+  #flashes.wide
+    #notice
+      = display_warnings(@warnings)
+
+%p
+  = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+
+
+= render 'shared/data_entry_help'

@@ -17,6 +17,8 @@ class DataRequest < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 end
 
+
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -30,7 +32,8 @@ end
 #  updated_at      :datetime
 #  start_date      :date
 #  end_date        :date
-#  budget          :boolean
-#  spent           :boolean
+#  budget          :boolean         default(TRUE)
+#  spend           :boolean         default(TRUE)
+#  due_date        :date
 #
 

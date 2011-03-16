@@ -1,0 +1,8 @@
+%tr{:class => cycle("even", "odd")}
+  %td= activity.description
+  %td= activity.spend
+  %td= activity.budget
+  %td
+    = link_to "Classify", activity_code_assignments_url(activity)
+    = link_to "Edit", edit_response_activity_path(@data_response, activity)
+    = link_to "Delete", response_activity_path(@data_response, activity), :confirm => "Are you sure?", :method => :delete

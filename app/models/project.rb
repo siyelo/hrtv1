@@ -4,19 +4,27 @@ require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
+  ### Constants
+  FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget 
+                         budget budget_q4_prev budget_q1 budget_q2 budget_q3 
+                         budget_q4 spend spend_q4_prev spend_q1 spend_q2 
+                         spend_q3 spend_q4 start_date end_date]
+
   include ActsAsDateChecker
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
+
+  cattr_reader :per_page
+  @@per_page = 3
 
   acts_as_stripper
   acts_as_commentable
 
   ### Associations
-  has_and_belongs_to_many :activities
+  has_many :activities, :dependent => :destroy
   has_and_belongs_to_many :locations
 
   belongs_to :data_response, :counter_cache => true
-  has_one :owner, :through => :data_response, :source => :organization
 
   has_many :funding_flows
   has_many :in_flows, :class_name => "FundingFlow",
@@ -40,6 +48,7 @@ class Project < ActiveRecord::Base
   }
 
   ### Validations
+  validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
@@ -51,8 +60,9 @@ class Project < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :description, :spend, :budget, :entire_budget,
-                  :start_date, :end_date, :currency, :data_response
+                  :start_date, :end_date, :currency, :data_response, :activities
 
+  # Delegates
   delegate :organization, :to => :data_response
 
   ### Callbacks
@@ -62,6 +72,10 @@ class Project < ActiveRecord::Base
   #
   def implementers
     providers
+  end
+
+  def response
+    self.data_response
   end
 
   # view helper ??!
@@ -122,6 +136,22 @@ class Project < ActiveRecord::Base
     clone
   end
 
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Project::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = data_response.projects.new(attributes)
+      project.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
   private
 
     def validate_budgets
@@ -130,17 +160,18 @@ class Project < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: projects
 #
-#  id               :integer         primary key
+#  id               :integer         not null, primary key
 #  name             :string(255)
 #  description      :text
 #  start_date       :date
 #  end_date         :date
-#  created_at       :timestamp
-#  updated_at       :timestamp
+#  created_at       :datetime
+#  updated_at       :datetime
 #  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
@@ -150,7 +181,7 @@ end
 #  spend_q3         :decimal(, )
 #  spend_q4         :decimal(, )
 #  spend_q4_prev    :decimal(, )
-#  data_response_id :integer
+#  data_response_id :integer         indexed
 #  budget_q1        :decimal(, )
 #  budget_q2        :decimal(, )
 #  budget_q3        :decimal(, )

@@ -115,13 +115,14 @@ describe CodeAssignment do
     end
 
     it "select_for_pies" do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
+      Money.default_bank.add_rate(:USD, :RWF, "500")
       dr = Factory.create(:data_response, :currency => 'USD')
-      activity1 = Factory.create(:activity, :budget => 100, :spend => 200, :data_response => dr,
-                                :projects => [Factory(:project, :data_response => dr)])
-      activity2 = Factory.create(:activity, :budget => 100, :spend => 200, :data_response => dr,
-                                :projects => [Factory(:project, :data_response => dr)])
+      activity1 = Factory.create(:activity, :budget => 100, :spend => 200, 
+                                 :data_response => dr,
+                                 :project => Factory(:project, :data_response => dr))
+      activity2 = Factory.create(:activity, :budget => 100, :spend => 200, 
+                                 :data_response => dr,
+                                 :project => Factory(:project, :data_response => dr))
 
       code1      = Factory.create(:code, :short_display => 'code1')
       code2      = Factory.create(:code, :short_display => 'code2')
@@ -134,9 +135,20 @@ describe CodeAssignment do
       code_assignments = CodeAssignment.select_for_pies.all
 
       code_assignments[0].code_id.should == code2.id
-      code_assignments[0].value.should == 23
+
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+        code_assignments[0].value.should == "23.0"
+      else # sqlite3
+        code_assignments[0].value.should == 23.0
+      end
+
       code_assignments[1].code_id.should == code1.id
-      code_assignments[1].value.should == 3
+
+      if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+        code_assignments[1].value.should == "3.0"
+      else # sqlite3
+        code_assignments[1].value.should == 3.0
+      end
     end
   end
 
@@ -174,17 +186,15 @@ describe CodeAssignment do
 
   describe "keeping USD cached amounts in-sync" do
     before :each do
-      Factory.create(:currency, :name => "dollar", :symbol => "USD",
-                     :toRWF => "500", :toUSD => "1")
-      Factory.create(:currency, :name => "rwandan franc", :symbol => "RWF",
-                     :toRWF => "1", :toUSD => "0.002")
+      Money.default_bank.add_rate(:RWF, :USD, 0.002)
+      Money.default_bank.add_rate(:USD, :RWF, "500")
 
       ### at time of writing, we need the long handed way of creating these objects
       # since the ca factory creates a project whose DR may not == ca.activity.dr
       # fix when the duplicate activity.dr association is removed.
       @dr = Factory(:data_response, :currency => 'RWF')
       @a  = Factory(:activity, :data_response => @dr,
-                      :projects => [Factory(:project, :data_response => @dr)])
+                    :project => Factory(:project, :data_response => @dr))
       ###
       @ca               = Factory.build(:code_assignment, :activity => @a)
       @ca.amount        = 123.45
@@ -201,17 +211,6 @@ describe CodeAssignment do
       @ca.cached_amount = 456.78
       @ca.save
       @ca.cached_amount_in_usd.should == 0.91356
-    end
-
-    it "should set cached amount in USD to 0 if bad data means currency is nil" do
-      d = @ca.data_response
-      d.currency = nil
-      d.save(false)
-      @ca.reload
-      @ca.cached_amount = 789.10
-      @ca.save
-      @ca.currency.should == nil
-      @ca.cached_amount_in_usd.should == 0
     end
   end
 

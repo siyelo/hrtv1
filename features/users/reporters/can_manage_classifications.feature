@@ -6,7 +6,6 @@ Feature: Reporter can see activity breakdowns for each project
 Background:
   Given a basic org + reporter profile, with data response, signed in
 
-@reporters @classifications
 Scenario: See list of activities for my project
   When I follow "My Data" within "div#main-nav"
   And I follow "Classifications" within "div#sub-nav"

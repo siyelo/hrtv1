@@ -11,14 +11,22 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
+    when /the data response page for "(.+)"/
+      req = DataRequest.find_by_title($1)
+      edit_response_path( DataResponse.find_by_data_request_id req.id)
+
     when /the reporter dashboard page/
       reporter_dashboard_path
 
-    when /the projects listing page/
-      projects_path
+    when /the projects page for response "(.+)" org "(.+)"/
+      req = DataRequest.find_by_title($1)
+      response = Organization.find_by_name($2).data_responses.find_by_data_request_id(req)
+      response_projects_path(response)
 
-    when /the projects page/
-      projects_path
+    when /the new project page for response "(.+)" org "(.+)"/
+      req = DataRequest.find_by_title($1)
+      response = Organization.find_by_name($2).data_responses.find_by_data_request_id(req)
+      new_response_project_path(response)
 
     when /the activities page/
       activities_path
@@ -54,10 +62,6 @@ module NavigationHelpers
 
     when /the user guide page/
       static_page_path(:user_guide)
-
-    when /the data response page for "(.+)"/
-      req = DataRequest.find_by_title($1)
-      edit_data_response_path( DataResponse.find_by_data_request_id req.id)
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

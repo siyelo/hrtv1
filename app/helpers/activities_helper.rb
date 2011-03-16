@@ -62,8 +62,4 @@ module ActivitiesHelper
   def end_form_column(column, options)
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
-
-  def popup_classify_link_for activity
-    link_to("Classify", popup_classification_classification_url(activity.id))
-  end
 end

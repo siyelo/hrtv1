@@ -2,11 +2,6 @@ Given /^a project$/ do
   @project = Factory(:project)
 end
 
-# You shouldn't create project records wihtout a DR/Org !!
-#Given /^a project with name "([^\"]*)"$/ do |name|
-#  @project = Factory(:project, :name => name)
-#end
-
 Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
   @project = Factory(:project,
                     :name          => project_name,
@@ -27,24 +22,6 @@ Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ d
                           :budget        => budget,
                           :to            => Organization.find_by_name(implementer_name),
                           :data_response => @project.data_response)
-end
-
-Given /^an activity with name "([^\"]*)"$/ do |name|
-  @activity = Factory(:activity, :name => name)
-end
-
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory(:activity,
-                       :name => name,
-                       :projects => [Project.find_by_name(project)])
-end
-
-Given /^an activity with name "([^"]*)" in project "([^"]*)", request "([^"]*)" and organization "([^"]*)"$/ do |activity_name, project_name, data_request_name, organization_name|
-  @activity = Factory(:activity,
-                       :name          => activity_name,
-                       :data_response => get_data_response(data_request_name, organization_name),
-                       :projects      => [Project.find_by_name(project_name)])
-
 end
 
 Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
@@ -360,27 +337,6 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   steps %Q{
     Given a basic org + reporter profile, with data response
     And I am signed in as "undp_user"
-  }
-end
-
-Given /^organizations, reporters, data request, data responses, projects$/ do
-  steps %Q{
-    Given the following organizations
-      | name   |
-      | UNDP   |
-      | USAID  |
-      | GoR    |
-    Given the following reporters
-       | name         | organization |
-       | undp_user    | UNDP         |
-    Given a data request with title "Req1" from "GoR"
-    Given a data response to "Req1" by "UNDP"
-    Given a data response to "Req1" by "USAID"
-    Given the following projects
-      | name                 | request | organization |
-      | TB Treatment Project | Req1    | UNDP         |
-      | Other Project        | Req1    | USAID        |
-    Given an activity with name "TB Drugs procurement" in project "TB Treatment Project", request "Req1" and organization "UNDP"
   }
 end
 

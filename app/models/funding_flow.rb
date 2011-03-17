@@ -8,9 +8,10 @@ class FundingFlow < ActiveRecord::Base
   acts_as_commentable
 
   ### Attributes
-  attr_accessible :budget, :organization_text, :project,
+  attr_accessible :budget, :organization_text, :project_id, :data_response_id,
                   :from, :to, :self_provider_flag, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response_id
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                  :organization_id_from, :organization_id_to
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
@@ -21,7 +22,7 @@ class FundingFlow < ActiveRecord::Base
   ### Validations
   #GN: validations break how users create a new org if that org not in the list
   # sadly they are disabled for now
-  validates_presence_of :project_id#, :organization_id_from, :organization_id_to
+  #validates_presence_of :project_id#, :organization_id_from, :organization_id_to
   validates_presence_of :data_response_id # required for AS/available_to magickery
                                           # consider removing relation and delegating to project
 
@@ -29,31 +30,13 @@ class FundingFlow < ActiveRecord::Base
   delegate :data_response, :to => :project
 
   # Named scopes
-  # TODO: spec
-  named_scope :with_organizations, :conditions => "organization_id_from IS NOT NULL AND organization_id_to IS NOT NULL"
+  named_scope :with_organizations, 
+    :conditions => "organization_id_from IS NOT NULL AND organization_id_to IS NOT NULL"
 
-  def to_s
-    "Flow"
-  end
-
-  # had to add this in to solve some odd AS bug...
-  # TODO: remove
-  def to_label
-    to_s
-  end
-
-  ## TODO: remove
-  def name
-    from.name
-  end
-
-  # TODO: spec
   def currency
     project.try(:currency)
   end
-
 end
-
 
 # == Schema Information
 #

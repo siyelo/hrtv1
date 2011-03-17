@@ -2,9 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Project do
 
-  describe "creating a project record" do
-    subject { Factory(:project) }
-    it { should be_valid }
+  describe "associations" do
     it { should have_and_belong_to_many :locations }
     it { should have_many :funding_flows }
     it { should have_many :in_flows }
@@ -12,6 +10,25 @@ describe Project do
     it { should have_many :comments }
     it { should have_many :funding_sources }
     it { should have_many :providers }
+  end
+
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:name) }
+    it { should allow_mass_assignment_of(:description) }
+    it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:budget) }
+    it { should allow_mass_assignment_of(:entire_budget) }
+    it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:end_date) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:data_response) }
+    it { should allow_mass_assignment_of(:activities) }
+    it { should allow_mass_assignment_of(:funding_flows_attributes) }
+  end
+
+  describe "validations" do
+    subject { Factory(:project) }
+    it { should be_valid }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }

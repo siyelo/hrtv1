@@ -23,20 +23,21 @@ class Project < ActiveRecord::Base
   ### Associations
   has_many :activities, :dependent => :destroy
   has_and_belongs_to_many :locations
-
   belongs_to :data_response, :counter_cache => true
-
   has_many :funding_flows
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
-                            organization_id_to = #{self.organization.id}' ] #note the single quotes !
+                            organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
-                            organization_id_from = #{self.organization.id}' ] #note the single quotes !
+                            organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
            :source => :to
+
+  # Nested attributes
+  accepts_nested_attributes_for :funding_flows, :allow_destroy => true
 
   ### Named scopes
   named_scope :available_to, lambda { |current_user|
@@ -59,10 +60,11 @@ class Project < ActiveRecord::Base
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
   ### Attributes
-  attr_accessible :name, :description, :spend, :budget, :entire_budget,
+  attr_accessible :name, :description, :spend, 
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :budget_q4, :budget_q4_prev, :spend_q1, :spend_q4_prev, :spend_q2,
-                  :location_ids, :spend_q3, :spend_q4, :budget_q1, :budget_q2, :budget_q3
+                  :location_ids, :funding_flows_attributes, :budget, :entire_budget, 
+                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
+                  :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
 
   # Delegates
   delegate :organization, :to => :data_response

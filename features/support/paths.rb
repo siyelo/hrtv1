@@ -43,9 +43,6 @@ module NavigationHelpers
     when /the login page/
       login_path
 
-    when /the funding sources page/
-      funding_sources_path
-
     when /the implementers page/
       implementers_path
 

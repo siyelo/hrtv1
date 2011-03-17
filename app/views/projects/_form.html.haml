@@ -50,6 +50,14 @@
       = f.input :entire_budget, :label => "Lifetime budget", :hint =>"The lifetime budget for this project (for example, if a 5-year project, enter the project ceiling)."
       = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
 
+  %li.last
+    %h2 Funding sources
+    %ul.dashboard_section
+      - f.semantic_fields_for :funding_flows do |ff|
+        = render "projects/funding_flow_fields", :f => ff
+      .add
+        = link_to_add_fields "Add funding source", f, :funding_flows, "projects/"
+
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @project.new_record? ? "Create New Project" : "Update Project", :class => "last"

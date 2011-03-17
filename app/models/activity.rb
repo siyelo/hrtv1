@@ -4,10 +4,10 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date 
-                           text_for_targets text_for_beneficiaries text_for_provider 
-                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 
-                           budget budget2 budget3 budget_q4_prev budget_q1 budget_q2 
+  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date
+                           text_for_targets text_for_beneficiaries text_for_provider
+                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4
+                           budget budget2 budget3 budget_q4_prev budget_q1 budget_q2
                            budget_q3 budget_q4]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
@@ -42,8 +42,8 @@ class Activity < ActiveRecord::Base
                   :text_for_targets, :name, :description, :start_date, :end_date,
                   :approved, :budget, :budget2, :budget3, :spend,
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
-                  :beneficiary_ids, :location_ids, :provider_id, 
+                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
+                  :beneficiary_ids, :location_ids, :provider_id,
                   :sub_activities_attributes, :organization_ids
 
   ### Associations

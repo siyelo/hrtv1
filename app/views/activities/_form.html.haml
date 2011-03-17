@@ -18,21 +18,18 @@
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
-      // TODO change default currency for the selected project
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})"
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects"
       = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.organization.projects
       #project_sub_form
         - if @activity.project
           = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
 
   %li.last
-    %h3 Past Expenditure
+    %h3== Past Expenditure (#{@data_response.currency})
     %ul.dashboard_section
       = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year."
 
       %li.amounts.last
-        %label Quarterly spend*
+        %label== Quarterly spend
         %ul
           = f.input :spend_q4_prev, :label => "Q4 08-09"
           = f.input :spend_q1     , :label => "Q1 09-10"
@@ -41,7 +38,7 @@
           = f.input :spend_q4     , :label => "Q4 09-10"
 
   %li.last
-    %h3 Budget (planned expenditure)
+    %h3 Budget (planned expenditure) (#{@data_response.currency})
     %ul.dashboard_section
 
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year."

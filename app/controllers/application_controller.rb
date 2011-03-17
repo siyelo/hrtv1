@@ -21,7 +21,7 @@ class ApplicationController < AuthlogicController
     # redefined method from SSL requirement plugin
     # This method is redefined in static pages controller for actions: :index, :about, :contact, :news
     def ssl_required?
-      if Rails.env == "production" || Rails.env == "staging"# || Rails.env == "development"
+      if Rails.env == "production" || Rails.env == "staging" # || Rails.env == "development"
         true
       else
         false

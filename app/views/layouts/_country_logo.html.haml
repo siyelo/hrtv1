@@ -1,0 +1,5 @@
+- country = ENV['HRT_COUNTRY'] || 'rwanda'
+        - if ENV['HRT_COUNTRY'] == 'kenya'
+          %a{:href => '/'}
+            = image_tag "#{country}-coat-of-arms-small.png"
+            %h1= country

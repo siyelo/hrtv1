@@ -4,6 +4,9 @@ RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
 require File.join(File.dirname(__FILE__), 'boot')
 
+puts "WARN: $HRT_COUNTRY not set, defaulting to Rwanda" unless ENV['HRT_COUNTRY']
+puts "Loading #{ENV['HRT_COUNTRY'] || "Rwanda"} environment."
+
 require 'yaml'
 require 'erb'
 config_file_path = File.join(RAILS_ROOT, 'config', 'settings.secret.yml')
@@ -20,6 +23,7 @@ else
   APP_CONFIG = {}
   puts "WARN: configuration file #{config_file_path} not found."
 end
+
 
 Rails::Initializer.run do |config|
   config.time_zone = 'UTC'

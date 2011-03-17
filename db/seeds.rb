@@ -3,21 +3,18 @@
 #
 
 require 'fastercsv'
+  puts "\n\nLoading seeds..."
 
-puts "\n\nLoading seeds..."
+  load 'db/seed_files/codes.rb'
 
-load 'db/seed_files/codes.rb'
+  load 'db/seed_files/hssp2_codes.rb'
 
-load 'db/seed_files/hssp2_codes.rb'
+  load 'db/seed_files/cost_categories.rb'
 
-load 'db/seed_files/cost_categories.rb'
+  load 'db/seed_files/other_cost_codes.rb'
+  
+  load 'db/seed_files/districts.rb' #seeds locations and districts for rwanda and kenya
 
-load 'db/seed_files/other_cost_codes.rb'
+  load 'db/seed_files/beneficiaries.rb'
 
-load 'db/seed_files/districts.rb' # seed old districts
-
-load 'db/seed_files/districts_of_rwanda.rb' # seed new districts
-
-load 'db/seed_files/beneficiaries.rb'
-
-puts "...seeding DONE\n\n"
+  puts "...seeding DONE\n\n"

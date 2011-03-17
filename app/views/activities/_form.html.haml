@@ -18,6 +18,7 @@
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects"
       = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.organization.projects
       #project_sub_form
         - if @activity.project

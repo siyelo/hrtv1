@@ -8,7 +8,7 @@ describe FundingFlow do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
-    it { should validate_presence_of(:project_id) }
+    #it { should validate_presence_of(:project_id) }
     #it { should validate_presence_of(:organization_id_to) }
     #it { should validate_presence_of(:organization_id_from) }
     #it { should delegate :organization, :to => :project } #need shmacros
@@ -18,6 +18,28 @@ describe FundingFlow do
     it { should validate_presence_of(:data_response_id) }
   end
 
+  describe "named scopes" do
+    it "returns empty array when funding_flow 'from'/'to' organizations are blank" do
+      Factory.create(:funding_flow, :from => nil, :organization_id_to => nil)
+      FundingFlow.with_organizations.should == []
+    end
+
+    it "returns empty array when funding_flow 'from' organization is blank" do
+      Factory.create(:funding_flow, :from => nil)
+      FundingFlow.with_organizations.should == []
+    end
+
+    it "returns empty array when funding_flow 'to' organization is blank" do
+      Factory.create(:funding_flow, :to => nil)
+      FundingFlow.with_organizations.should == []
+    end
+
+    it "returns empty array when funding_flow 'from'/'to' organizations are not blank" do
+      ff = Factory.create(:funding_flow)
+      FundingFlow.with_organizations.should == [ff]
+    end
+  end
+
   describe "counter cache" do
     context "comments cache" do
       before :each do
@@ -25,6 +47,14 @@ describe FundingFlow do
       end
 
       it_should_behave_like "comments_cacher"
+    end
+  end
+
+  describe "currency" do
+    it "returns project currency" do
+      project = Factory.create(:project, :currency => "RWF")
+      funding_flow = Factory.create(:funding_flow, :project => project)
+      funding_flow.currency.should == "RWF"
     end
   end
         

@@ -14,7 +14,6 @@ Scenario Outline: Visit protected page, get redirected to login screen
   Examples:
     | page            |
     | funding sources |
-    | implementers    |
     | activities      |
     | classifications |
 

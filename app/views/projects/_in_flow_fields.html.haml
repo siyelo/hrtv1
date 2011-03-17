@@ -1,6 +1,5 @@
 .fields
   = f.input :data_response_id, :as => :hidden, :value => @data_response.id
-  = f.input :self_provider_flag, :as => :hidden, :value => 0
   = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id
   = f.input :from, :select => Organization.all, :hint => "The organization funding the project"
   = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year."

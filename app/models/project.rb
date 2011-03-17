@@ -27,10 +27,10 @@ class Project < ActiveRecord::Base
   has_many :funding_flows
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
-                            organization_id_to = #{self.organization.id}' ] #note the single quotes !
+                            organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
-                            organization_id_from = #{self.organization.id}' ] #note the single quotes !
+                            organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -65,7 +65,7 @@ class Project < ActiveRecord::Base
                   :location_ids, :funding_flows_attributes, :budget, :entire_budget, 
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
-                  
+                  :funding_flows_attributes
 
   # Delegates
   delegate :organization, :to => :data_response

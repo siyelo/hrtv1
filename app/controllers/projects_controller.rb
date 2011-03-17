@@ -22,13 +22,6 @@ class ProjectsController < Reporter::BaseController
     show!
   end
 
-  def create
-    # work arround because project.organization.id is used in this relation
-    @project = @data_response.projects.new
-    @project.attributes = params[:project]
-    create!
-  end
-
   def download_template
     template = Project.download_template
     send_csv(template, 'projects_template.csv')

@@ -37,7 +37,7 @@ class Project < ActiveRecord::Base
            :source => :to
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true
+  accepts_nested_attributes_for :funding_flows, :allow_destroy => true
 
   ### Named scopes
   named_scope :available_to, lambda { |current_user|

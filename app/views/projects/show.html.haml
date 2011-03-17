@@ -81,6 +81,7 @@
   %h3.form_heading In flows
   %ul.dashboard_section
     - @project.in_flows.each do |flow|
+      = debug flow
       %li
         %ul.row
           %li From

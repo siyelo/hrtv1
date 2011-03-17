@@ -11,7 +11,10 @@
           Health Resource Tracker
     %ul.left
       %li
-        = render 'layouts/country_logo', :size => 'small'
+        - country = ENV['HRT_COUNTRY'] || 'rwanda'
+        %a{:href => '/'}
+          = image_tag "#{country}-coat-of-arms-small.png"
+          %h2= country
 
       %li
         %a{:href => 'http://www.usaid.gov/', :target => '_blank'}

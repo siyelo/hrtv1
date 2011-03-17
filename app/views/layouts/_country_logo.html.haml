@@ -1,6 +1,9 @@
 - country = ENV['HRT_COUNTRY'] || 'rwanda'
 - size = 'med' unless size
+- no_name = false unless no_name
 
 %a{:href => '/'}
+- country = ENV['HRT_COUNTRY'] || 'rwanda'
   = image_tag "#{country}-coat-of-arms-#{size}.png"
-  %h1= country
+  - unless no_name
+    %h1= country

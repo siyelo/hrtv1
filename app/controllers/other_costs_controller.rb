@@ -58,7 +58,7 @@ class OtherCostsController < ActiveScaffoldController
   private
 
     def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "description"
     end
 
     def sort_direction

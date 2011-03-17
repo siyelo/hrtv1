@@ -9,12 +9,16 @@ Scenario: "See data requests"
   Then I should see "Dashboard"
   And I should see "Data Requests & Responses"
 
-Scenario: See Projects/Implementers/etc tabs when a Data Req is selected
+Scenario: See menu tabs when a Data Req is selected
   Given a basic org + reporter profile, with data response, signed in
   When I go to the reporter dashboard page
   And I follow "Req1"
-  Then I should see "Projects" within the sub nav
-  And I should see "Funding Sources" within the sub nav
+  Then I should see "Settings" within the sub nav
+  And I should see "Projects" within the sub nav
+  And I should see "Activities" within the sub nav
+  And I should see "Other Costs" within the sub nav
+  And I should see "Review" within the sub nav
+  And I should see "Submit" within the sub nav
 
 Scenario: See unfulfilled/current Data Requests listed
   Given an organization exists with name: "WHO"

@@ -81,12 +81,11 @@ ActionController::Routing::Routes.draw do |map|
 
   # ACTIVE SCAFFOLD
   # routes for CSV uploading for various models
-  %w[activities funding_flows projects funding_sources implementers model_helps comments other_costs organizations users sub_activities].each do |model|
+  %w[funding_flows funding_sources model_helps comments organizations users].each do |model|
     map.create_from_file model + "/create_from_file", :controller => model, :action => "create_from_file"
     map.create_from_file_form model + "/create_from_file_form", :controller => model, :action => "create_from_file_form"
   end
   map.resources :funding_sources, :only => [:index]
-  map.resources :implementers, :only => [:index]
 
   map.resources :organizations,
     :collection => {:browse => :get},

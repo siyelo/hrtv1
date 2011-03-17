@@ -10,7 +10,6 @@ ActionController::Routing::Routes.draw do |map|
 
   # PROFILE
   map.resource :profile, :only => [:edit, :update]
-  map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   # STATIC PAGES
   map.static_page ':page', :controller => 'static_page', :action => 'show',
@@ -48,6 +47,7 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get}
   end
 
+
   map.resources :activities do |activity|
     activity.resource :code_assignments,
       :only => [:show, :update],
@@ -64,6 +64,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # REPORTS
+  map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
+
   map.namespace :reports do |reports|
     reports.resources :districts, :only => [:index, :show] do |districts|
       districts.resources :activities, :only => [:index, :show],

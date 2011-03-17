@@ -3,11 +3,10 @@
     = render 'layouts/flashes'
 
     #logo
-      = image_tag('rwanda-coat-of-arms-app.png')
-      %h1
-        Ubu
-        %span zima
-      //%p Mu Rwanda
+      - country = ENV['HRT_COUNTRY'] || 'rwanda'
+      %a{:href => '/'}
+        = image_tag "#{country}-coat-of-arms-med.png"
+        %h1= country.titleize
 
     = render :partial => '/layouts/login_nav'
 

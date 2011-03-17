@@ -23,7 +23,7 @@ describe Project do
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
-    it { should allow_mass_assignment_of(:in_flows_attributes) }
+    it { should allow_mass_assignment_of(:funding_flows_attributes) }
   end
 
   describe "validations" do

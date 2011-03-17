@@ -46,7 +46,7 @@ Database:
 
   cp config/database.yml.sample config/database.yml
 
-Edit config/datbase.yml per your environment.  This file is not tracked by git.
+Edit config/database.yml per your environment.  This file is not tracked by git.
 
   rake db:schema:load
 

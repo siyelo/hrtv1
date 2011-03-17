@@ -8,9 +8,10 @@ class FundingFlow < ActiveRecord::Base
   acts_as_commentable
 
   ### Attributes
-  attr_accessible :budget, :organization_text, :project,
+  attr_accessible :budget, :organization_text, :project, :data_response_id,
                   :from, :to, :self_provider_flag, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response_id
+                  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                  :organization_id_from, :organization_id_to
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

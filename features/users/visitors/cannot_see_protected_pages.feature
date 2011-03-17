@@ -13,7 +13,6 @@ Scenario Outline: Visit protected page, get redirected to login screen
   And I should be on the login page
   Examples:
     | page            |
-    | funding sources |
     | activities      |
 
 Scenario Outline: Visit protected page, get redirected to login screen

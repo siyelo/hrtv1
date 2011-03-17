@@ -6,9 +6,6 @@
     %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
       = link_to 'Projects', response_projects_path(@data_response)
 
-    %li{ :class => [controller.class.to_s == "FundingSourcesController" ? "active" : '']}
-      = link_to 'Funding Sources', funding_sources_path
-
     %li{ :class => (controller.class.to_s == "ActivitiesController" || (controller.class.to_s ==  "CodeAssignmentsController" && @activity.class.to_s == 'Activity')) ? "active" : ''}
       = link_to 'Activities', response_activities_path(@data_response)
 

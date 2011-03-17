@@ -122,3 +122,17 @@ Scenario: A reporter can create comments for an activity and see comment errors
   Then I should see "Comment title"
   And I should see "Comment body"
   And I should see "Activity1 description"
+
+  @run
+Scenario: A reporter can select implementer for an activity
+  When I follow "Create Activity"
+  # check if by default reporter organization is selected
+  Then the "Implementer" field should contain "organization2"
+  When I fill in "Name" with "Activity1"
+  And I fill in "Description" with "Activity1 description"
+  And I select "organization1" from "Implementer"
+  And I select "project1" from "Project"
+  And I press "Create New Activity"
+  Then I should see "Activity was successfully created"
+  And I should see "Activity1 description"
+  And I should see "organization1"

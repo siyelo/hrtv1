@@ -22,6 +22,11 @@ class ActivitiesController < Reporter::BaseController
     show!
   end
 
+  def new
+    @activity = Activity.new
+    @activity.provider = current_user.organization
+  end
+
   def project_sub_form
     @activity = @data_response.activities.find_by_id(params[:activity_id])
     @project = @data_response.projects.find(params[:project_id])

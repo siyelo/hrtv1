@@ -172,4 +172,8 @@ module ApplicationHelper
     link_to_function(name, h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"))
   end
 
+  def b(bool)
+    bool ? 'yes' : 'no'
+  end
+
 end

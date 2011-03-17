@@ -6,6 +6,7 @@
   %span
     %ul.manage_bar.inline
       %li= link_to "Edit", edit_response_activity_path(@data_response, @activity)
+      %li= link_to "Classify", activity_code_assignments_url(@activity)
       %li= link_to "X", response_activity_path(@data_response, @activity), :confirm => "Are you sure?", :method => :delete
 
 .wrap-70
@@ -37,7 +38,7 @@
         %li Locations
         %li= @activity.locations.map(&:short_display).join(', ')
 
-  %h3.form_heading Basics Past Expenditure
+  %h3.form_heading Past Expenditure
   %ul.dashboard_section
     %li
       %ul.row
@@ -59,7 +60,7 @@
         %li Spend Q4 09-10
         %li= @activity.spend_q4
 
-  %h3.form_heading Basics Budget (planned expenditure)
+  %h3.form_heading Budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
@@ -84,7 +85,7 @@
         %li Beneficiaries
         %li= @activity.beneficiaries.map(&:short_display).join(', ')
 
-  %h3.form_heading Basics Texts
+  %h3.form_heading Texts
   %ul.dashboard_section
     %li
       %ul.row
@@ -97,7 +98,7 @@
         %li Text for targets
         %li= @activity.text_for_targets
 
-  %h3.form_heading Basics Sub Activities
+  %h3.form_heading Sub Activities
   %ul.dashboard_section
     - @activity.sub_activities.each do |sub_activity|
       %li
@@ -120,11 +121,33 @@
           %li Spend percentage
           %li= sub_activity.spend_percentage
 
-  %h3.form_heading Basics Institutions Assisted
+  %h3.form_heading Institutions Assisted
   %ul.dashboard_section
     %li
       %ul.row
         %li Institutions assisted
         %li= @activity.organizations.map(&:name).join(', ')
+
+  %h3.form_heading Classifications
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget by Purposes
+        %li= @activity.coding_budget_classified?
+      %ul.row
+        %li Budget by Locations
+        %li= @activity.coding_budget_district_classified?
+      %ul.row
+        %li Budget by Inputs
+        %li= @activity.coding_budget_cc_classified?
+      %ul.row
+        %li Spend by Purposes
+        %li= @activity.coding_spend_classified?
+      %ul.row
+        %li Spend by Locations
+        %li= @activity.coding_spend_district_classified?
+      %ul.row
+        %li Spend by Inputs
+        %li= @activity.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments'

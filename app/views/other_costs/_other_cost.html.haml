@@ -2,6 +2,7 @@
   %td= link_to other_cost.description, response_other_cost_path(@data_response, other_cost)
   %td= other_cost.spend
   %td= other_cost.budget
+  %td= b other_cost.classified?
   %td
     %ul.manage_bar
       %li= link_to "Show", response_other_cost_path(@data_response, other_cost)

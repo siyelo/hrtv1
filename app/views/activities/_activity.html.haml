@@ -2,6 +2,7 @@
   %td= link_to activity.description, response_activity_path(@data_response, activity)
   %td= activity.spend
   %td= activity.budget
+  %td= b activity.classified?
   %td
     %ul.manage_bar
       %li= link_to "Show", response_activity_path(@data_response, activity)

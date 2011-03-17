@@ -28,8 +28,3 @@ Scenario: Approve an Activity
   Then wait a few moments
   And I go to the activity classification page for "TB Drugs procurement"
   And the "approve_activity" checkbox should be checked
-
-Scenario: List approved activities
-  When I follow "Req1"
-  And I follow "Classifications"
-  Then I should see "Approved?"

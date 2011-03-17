@@ -93,9 +93,6 @@ ActionController::Routing::Routes.draw do |map|
     :active_scaffold => true
 
   # dont need to nest activities under response - can derive response_id from activity
-  map.resources :classifications,
-    :member => {:popup_classification => :get},
-    :active_scaffold => true
   map.resources :sub_activities, :active_scaffold => true
   map.resources :comments,        :active_scaffold => true
   map.resources :field_helps,     :active_scaffold => true

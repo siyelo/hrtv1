@@ -6,6 +6,7 @@
   %span
     %ul.manage_bar.inline
       %li= link_to "Edit", edit_response_other_cost_path(@data_response, @other_cost)
+      %li= link_to "Detail Cost Areas", activity_code_assignments_url(@other_cost)
       %li= link_to "X", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure?", :method => :delete
 
 .wrap-70
@@ -47,5 +48,27 @@
       %ul.row
         %li Budget
         %li= @other_cost.budget
+
+  %h3.form_heading Classifications
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget by Purposes
+        %li= @other_cost.coding_budget_classified?
+      %ul.row
+        %li Budget by Locations
+        %li= @other_cost.coding_budget_district_classified?
+      %ul.row
+        %li Budget by Inputs
+        %li= @other_cost.coding_budget_cc_classified?
+      %ul.row
+        %li Spend by Purposes
+        %li= @other_cost.coding_spend_classified?
+      %ul.row
+        %li Spend by Locations
+        %li= @other_cost.coding_spend_district_classified?
+      %ul.row
+        %li Spend by Inputs
+        %li= @other_cost.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments'

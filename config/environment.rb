@@ -7,24 +7,6 @@ require File.join(File.dirname(__FILE__), 'boot')
 puts "WARN: $HRT_COUNTRY not set, defaulting to Rwanda" unless ENV['HRT_COUNTRY']
 puts "Loading #{ENV['HRT_COUNTRY'] || "Rwanda"} environment."
 
-require 'yaml'
-require 'erb'
-config_file_path = File.join(RAILS_ROOT, 'config', 'settings.secret.yml')
-config_file_path = File.join(RAILS_ROOT, 'config', 'settings.yml') if ['production', 'staging'].include?(RAILS_ENV)
-if File.exist?(config_file_path)
-  config = YAML.load(ERB.new(File.read(config_file_path)).result)
-  if config && config.has_key?(RAILS_ENV)
-    APP_CONFIG = config.has_key?(RAILS_ENV) ? config[RAILS_ENV] : {}
-  else
-    APP_CONFIG = {}
-    puts "WARN: config file #{config_file_path} is not valid"
-  end
-else
-  APP_CONFIG = {}
-  puts "WARN: configuration file #{config_file_path} not found."
-end
-
-
 Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
 
@@ -45,4 +27,3 @@ end
 
 require 'array_extensions'
 require 'version'
-require 'lib/array'

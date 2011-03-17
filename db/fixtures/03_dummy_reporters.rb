@@ -1,5 +1,5 @@
 saved = User.find_or_create_by_username('reporter',
-              :email => 'reporter@ubuzima.org',
+              :email => 'reporter@siyelo.com',
               :password => 'password',
               :password_confirmation => 'password',
               :organization => Organization.find_or_create_by_name("internal_for_dev2"),
@@ -8,7 +8,7 @@ saved = User.find_or_create_by_username('reporter',
 print "  WARN: reporter not created" unless saved
 
 saved = User.find_or_create_by_username('reporter2',
-              :email => 'reporter2@ubuzima.org',
+              :email => 'reporter2@siyelo.com',
               :password => 'password',
               :password_confirmation => 'password',
               :organization => Organization.find_or_create_by_name("internal_for_dev3"),
@@ -18,7 +18,7 @@ print "  WARN: reporter2 not created" unless saved
 
 org =  Organization.find_or_create_by_name("internal_for_dev3")
 user = User.find_or_create_by_username('activity_manager',
-              :email => 'activity_manager@ubuzima.org',
+              :email => 'activity_manager@siyelo.com',
               :password => 'password',
               :password_confirmation => 'password',
               :organization => org,

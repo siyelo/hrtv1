@@ -3,11 +3,7 @@
     = render 'layouts/flashes'
 
     #logo
-      = image_tag('rwanda-coat-of-arms-app.png')
-      %h1
-        Ubu
-        %span zima
-      //%p Mu Rwanda
+      = render 'layouts/country_logo', :size => 'med'
 
     = render :partial => '/layouts/login_nav'
 

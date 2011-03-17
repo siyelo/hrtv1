@@ -3,21 +3,24 @@
 %h1.main_heading
   = render 'search'
   Projects
+%p The high-level health programmes that your organization implements.
+%br
+
 %ul.horizontal
   %li
     - link_to new_response_project_path(@data_response), :class => "create_new" do
       = image_tag "new_white.png"
       Create Project
-  
+
   %li
     = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
-    
+
 
 #import
   %h3.title_bar Import a CSV file
   .dashboard_section
     %p Create one or more projects from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
-  
+
     #import_csv
       -form_tag({:action=> :create_from_file}, :multipart => true) do
         =label_tag :file, "File"

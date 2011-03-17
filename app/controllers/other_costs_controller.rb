@@ -1,4 +1,4 @@
-class OtherCostsController < ActiveScaffoldController
+class OtherCostsController < Reporter::BaseController
   SORTABLE_COLUMNS = ['description', 'spend', 'budget']
 
   inherit_resources

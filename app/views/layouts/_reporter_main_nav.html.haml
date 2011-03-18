@@ -1,10 +1,8 @@
 #main-nav
   .wrapper
-    - help_active = reports_active = dashboard_active = false
+    - reports_active = dashboard_active = false
     - if [Reporter::DashboardController].include? controller.class
       - dashboard_active = true
-    - elsif controller.class == StaticPageController
-      - help_active      = true if params[:page] == 'user_guide'
     - elsif [Reporter::ReportsController,
              Reports::DistrictsController,
              Reports::Districts::ActivitiesController,
@@ -12,7 +10,7 @@
       - reports_active   = true
 
     -# will break if more tabs are added!
-    - workplan_active = !dashboard_active && !help_active && !reports_active
+    - workplan_active = !dashboard_active && !reports_active
 
     %ul
       %li= link_to "Dashboard", user_dashboard_path(current_user), :class =>  ('active' if dashboard_active)
@@ -23,4 +21,4 @@
           - path = edit_response_path(current_user.current_data_response)
         = link_to 'My Data', path, :class =>  ('active' if workplan_active)
       %li= link_to 'Reports', reporter_reports_path, :class => ('active' if reports_active)
-      %li= link_to 'Help', static_page_path(:user_guide), :class => ('active' if help_active)
+      %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"

@@ -1,4 +1,5 @@
 defaults: &defaults
+  google_account_id: UA-22139528-1
 
 development:
   <<: *defaults

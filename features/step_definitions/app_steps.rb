@@ -224,10 +224,9 @@ end
 
 Then /^I should see the common footer$/ do
   steps %Q{
-    Then I should see "About" within "div#footer"
     Then I should see "Help" within "div#footer"
-    Then I should see "Contact Us" within "div#footer"
-    Then I should see "News" within "div#footer"
+    Then I should see "Contact" within "div#footer"
+    Then I should see "About" within "div#footer"
   }
 end
 

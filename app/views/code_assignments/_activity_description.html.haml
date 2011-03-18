@@ -8,7 +8,7 @@
     %td.title Activity:
     %td
       = @activity.name.blank? ? "(name was not entered)" : @activity.name
-      %span= link_to "Edit this Activity", edit_activity_path(@activity)
+      %span= link_to "Edit this Activity", edit_response_activity_path(@activity.data_response, @activity)
   %tr
     %td.title Description:
     %td= @activity.description

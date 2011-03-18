@@ -6,7 +6,7 @@ module Reporter::DashboardHelper
     when "FundingFlow"
       edit_funding_flow_path(commentable.id)
     when "Activity"
-      edit_activity_path(commentable.id)
+      edit_response_activity_path(commentable.data_response, commentable)
     when "OtherCost"
       edit_other_cost_path(commentable.id)
     end

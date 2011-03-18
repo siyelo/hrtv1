@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  type: MyString
+  description: MyText
+  unit_cost: 9.99
+  quantity: 1
+  total_cost: 9.99
+  data_response_id: 1
+
+two:
+  type: MyString
+  description: MyText
+  unit_cost: 9.99
+  quantity: 1
+  total_cost: 9.99
+  data_response_id: 1

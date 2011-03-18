@@ -120,6 +120,7 @@ class SubActivity < Activity
     end
 end
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -163,5 +164,8 @@ end
 #  sub_activities_count                  :integer         default(0)
 #  spend_in_usd                          :decimal(, )     default(0.0)
 #  budget_in_usd                         :decimal(, )     default(0.0)
+#  project_id                            :integer
+#  budget2                               :decimal(, )
+#  budget3                               :decimal(, )
 #
 

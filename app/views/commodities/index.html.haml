@@ -5,7 +5,10 @@
   Commodities
 %ul.horizontal
   %li
-    = link_to "Create New", '#', :id => "create_new_commodity", :class => 'create_new'
+    - link_to '#', :id => "create_new_commodity", :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Commodity
+
   
   %li
     = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
@@ -20,7 +23,12 @@
 #import
   %h3.title_bar Import a CSV file
   .dashboard_section
-    %p Create one or more projects from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+    %p To prepare the file, use Excel (or your favorite spreadsheet program), organize your project data into the following 4 columns:
+    %br
+    %p Category Type, Description, Unit Cost, Quantity
+    %br
+    %p All of the fields are required and cannot be blank. The column names and order must match exactly for the import to work properly, and be sure to include the header row. A link to a sample file can be found below.
+
   
     #import_csv
       -form_tag({:action=> :create_from_file}, :multipart => true) do
@@ -39,14 +47,13 @@
 %table.standard.rounded
   %thead
     %tr
-      %th= sortable "type"
+      %th Commodity Type
       %th= sortable "description"
       %th= sortable "unit_cost", "Unit Cost"
       %th= sortable "quantity"
       %th Total Cost
       %th
-      
-
+        
   %tbody
     = render :partial => "commodity", :collection => @commodities
 

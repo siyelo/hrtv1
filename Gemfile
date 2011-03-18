@@ -32,7 +32,7 @@ gem 'inherited_resources', '= 1.0.6'
 group :development do
   gem 'annotate'
   gem 'awesome_print', :require => "ap"
-  gem 'github'
+  #gem 'github' # misbehaving uninitialized constant Text::Format
   gem 'google_currency', "=1.2.0" # for currency cacher
   gem 'heroku'
   gem 'hirb'

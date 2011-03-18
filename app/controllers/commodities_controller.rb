@@ -1,18 +1,17 @@
 class CommoditiesController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['commodity_type', 'description', 'unit_cost', 'quantity', 'total_cost']
+  SORTABLE_COLUMNS = ['commodity_type', 'description', 'unit_cost', 'quantity',
+    'total_cost']
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
   belongs_to :data_response, :route_name => 'response'
 
   def index
-
     scope = @data_response.commodities.scoped({})
     scope = scope.scoped(:conditions => ["description LIKE :q",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @commodities = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => sort_column + " " + sort_direction) # rails 2
-                               
     @commodity = Commodity.new(:data_response_id => @data_response.id)
   end
 
@@ -20,15 +19,15 @@ class CommoditiesController < Reporter::BaseController
     template = Commodity.download_template
     send_csv(template, 'commodities_template.csv')
   end
-  
+
   def create
     create! { response_commodities_path }
   end
-  
+
   def update
     update! { response_commodities_path }
   end
-  
+
   def show
     show! { response_commodities_path }
   end
@@ -48,7 +47,7 @@ class CommoditiesController < Reporter::BaseController
 
     redirect_to response_commodities_path
   end
-  
+
   protected
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "description"

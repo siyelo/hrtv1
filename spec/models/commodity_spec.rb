@@ -18,5 +18,4 @@ describe Commodity do
     it { should validate_presence_of(:commodity_type) }
   end
   
-  
 end

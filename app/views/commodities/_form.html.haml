@@ -4,17 +4,16 @@
 .form_aside
   %h3 What's a Commodity?
   %p Commodities are any expense associated with an activity
-  
+
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :commodity_type, :as => :select, :collection => CostCategory.roots.map(&:short_display), :hint => "Under what does this commodity fall under?"
-      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the commodity."
-      = f.input :unit_cost, :as => :string, :label => "Unit Cost", :hint => "Cost for a given unit of the commodity."
-      = f.input :quantity, :as => :string, :label => "Quantity", :hint => "The amount of the commodity."
-      
-      
+      = f.input :commodity_type, :as => :select, :collection => CostCategory.roots.map(&:short_display), :hint => "The cost category of this commodity"
+      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the commodity."
+      = f.input :unit_cost, :as => :string, :label => "Unit Cost"
+      = f.input :quantity, :as => :string, :label => "Quantity", :hint => "number of units purchased."
+
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @commodity.new_record? ? "Create New Commodity" : "Update Commodity", :class => "last"
 

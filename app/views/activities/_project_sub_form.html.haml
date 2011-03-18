@@ -1,3 +1,9 @@
-- semantic_fields_for activity do |f|
-  - f.inputs do
-    = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint => "all the districts in which this Activity was implemented", :collection => project.locations
+- if project.locations.present?
+  - semantic_fields_for activity do |f|
+    - f.inputs do
+      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint => "all the districts in which this Activity was implemented", :collection => project.locations
+- else
+  %label
+    %p.inline-hints
+      There are no districts for this project.
+      = link_to "Edit project", edit_response_project_path(@data_response, project)

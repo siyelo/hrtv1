@@ -160,7 +160,7 @@ module ApplicationHelper
 
   # Helper for adding remove link to nested form models
   def link_to_remove_fields(name, f)
-    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)")
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => 'remove_nested')
   end
 
   # Helper for adding new nested form models
@@ -169,7 +169,7 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
       render(subfolder + association.to_s.singularize + "_fields", :f => builder)
     end
-    link_to_function(name, h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"))
+    link_to_function(name, h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"), :class => 'add_nested')
   end
 
   def b(bool)

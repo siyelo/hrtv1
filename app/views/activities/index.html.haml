@@ -3,12 +3,16 @@
 %h1.main_heading
   = render 'search'
   Activities
+
+%p Split your Projects into smaller, more detailed parts.
+%br
+
 %ul.horizontal
   %li
     - link_to new_response_activity_path(@data_response), :class => "create_new" do
       = image_tag "new_white.png"
       Create Activity
-  
+
   %li
     = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
 
@@ -16,7 +20,7 @@
   %h3.title_bar Import a CSV file
   .dashboard_section
     %p Create one or more activitiess from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
-  
+
     #import_csv
       -form_tag create_from_file_response_activities_path(@data_response), :multipart => true do
         = label_tag :file, "File"

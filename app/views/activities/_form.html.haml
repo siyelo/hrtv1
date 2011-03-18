@@ -73,7 +73,7 @@
   %li.last
     %h2 Institutions Assisted
     %ul.dashboard_section
-      = f.input :organizations, :as => :select, :collection => Organization.all
+      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If your program uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds (for example, your organization works to improve management of a district hospital). In this case, your organization would be the implementer, and the hospital you are working with would be the institution assisted (and not an implementer or sub-activity)."
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @activity.new_record? ? "Create New Activity" : "Update Activity", :class => "last"

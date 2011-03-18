@@ -21,8 +21,8 @@
 
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended", :required => false
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started.", :required => false
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation.", :required => false
+      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(Format: YYYY-MM-DD) <br />The end date for the project’s implementation.When the Project (and it's related Activities) started.", :required => false
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(Format: YYYY-MM-DD) <br />The end date for the project’s implementation.", :required => false
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects", :required => false
 
   %li.last

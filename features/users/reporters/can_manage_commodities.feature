@@ -15,7 +15,6 @@ Feature: Reporter can manage projects
     And I press "Update Response"
     And I follow "Commodities"
 
-    @run
     Scenario: Reporter can CRUD commodities
       When I follow "Create Commodity"
       And I select "Incentives" from "commodity_commodity_type"

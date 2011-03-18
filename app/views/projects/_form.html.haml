@@ -48,10 +48,11 @@
           = f.input :budget_q3     , :label => "Q3 10-11"
           = f.input :budget_q4     , :label => "Q4 10-11"
       = f.input :entire_budget, :label => "Lifetime budget", :hint =>"The lifetime budget for this project (for example, if a 5-year project, enter the project ceiling)."
-      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
+      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented. If a project is central-level and not focused on particular districts, leave all checkboxes unfilled."
 
   %li.last
     %h2 Funding sources
+    %p.hint The sources from which your organization receives funding for its projects.
     %ul.dashboard_section
       - f.semantic_fields_for :funding_flows do |ff|
         = render "projects/funding_flow_fields", :f => ff

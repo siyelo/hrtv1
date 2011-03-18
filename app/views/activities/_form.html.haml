@@ -15,10 +15,10 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended "
-      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
+      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the activity."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects"
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.organization.projects
       #project_sub_form
         - if @activity.project
@@ -53,7 +53,7 @@
           = f.input :budget_q2     , :label => "Q2 10-11"
           = f.input :budget_q3     , :label => "Q3 10-11"
           = f.input :budget_q4     , :label => "Q4 10-11"
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
 
   %li.last
     %h3 Texts
@@ -64,6 +64,7 @@
 
   %li.last
     %h2 Sub Activities
+    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of districts), that implement identical or very similar activities.
     %ul.dashboard_section
       - f.semantic_fields_for :sub_activities do |ca|
         = render "activities/sub_activity_fields", :f => ca
@@ -73,7 +74,7 @@
   %li.last
     %h2 Institutions Assisted
     %ul.dashboard_section
-      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If your program uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds (for example, your organization works to improve management of a district hospital). In this case, your organization would be the implementer, and the hospital you are working with would be the institution assisted (and not an implementer or sub-activity)."
+      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted."
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @activity.new_record? ? "Create New Activity" : "Update Activity", :class => "last"

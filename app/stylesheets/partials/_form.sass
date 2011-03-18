@@ -1,7 +1,12 @@
 form.data_response, .basic_form
   .dashboard_section
     background: $filler
-    
+  
+  .aligned_with_stuff
+    margin-left: 170px
+    color: #425160
+    font-size: 12px
+  
   ol
     li
       border-bottom: 1px solid $lightest-blue
@@ -15,6 +20,12 @@ form.data_response, .basic_form
         border: none
         margin: 0
         padding: 0
+      &.numeric
+        input[type=text]
+          width: 14%
+      input[type=text]
+        &.date_picker
+          width: 14%
       &.amounts
         display: block
         li
@@ -32,6 +43,7 @@ form.data_response, .basic_form
           float: left
           margin: 0
           width: 82%
+        
         input[type=text], textarea
           width: 75px
 
@@ -56,7 +68,7 @@ form.data_response, .basic_form
       width: 36.5%
 
     .inline-hints
-      float: left
+      float: right
       margin-left: 1%
       width: 44%
 
@@ -74,10 +86,10 @@ form.data_response, .basic_form
   .check_boxes
     fieldset
       float: left
-      width: 54%
+      width: 78%
     legend
       float: left
-      width: 33%
+      width: 170px
       label
         width: auto
     ol

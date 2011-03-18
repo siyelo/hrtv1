@@ -20,8 +20,8 @@
     %ul.dashboard_section
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
+      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(Format: YYYY-MM-DD) <br />When the Project (and it's related Activities) started."
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(Format: YYYY-MM-DD) <br />The end date for the project’s implementation."
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})", :required => false
 
   %li.last

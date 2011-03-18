@@ -955,6 +955,7 @@ var reports_countries_activities_show = {
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
     jQuery('#activity_project_id').change(function () {
+      var element = jQuery('#project_sub_form');
       var _project_id = jQuery(this).val();
       if (_project_id) {
         var url = '/responses/' + _response_id + 
@@ -963,10 +964,11 @@ var activities_new = activities_create = activities_edit = activities_update = {
           url += '&activity_id=' + _activity_id;
         }
         jQuery.get(url, function (data) {
-          jQuery('#project_sub_form').html(data);
+          element.html(data);
+          element.show();
         });
       } else {
-        jQuery('#project_sub_form').html('');
+        element.hide().html('');
       }
     });
   }

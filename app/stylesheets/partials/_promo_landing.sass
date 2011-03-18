@@ -48,7 +48,7 @@ body.landing
     +replace-text("landing_screens.png")
   #content
     background: image_url("landing_grad_dark.png") repeat-x top
-    
+
     .wrapper
       background: image_url("landing_glow.png") no-repeat center top !important
       padding-top: 50px
@@ -95,7 +95,7 @@ body.landing
       font-weight: normal
       margin-bottom: 30px
       text-transform: none
-      
+
     h3
       color: #f9f9f9
       font-size: 12px
@@ -126,23 +126,17 @@ body.landing
       margin-bottom: 7px
       text-transform: none
 
+  /* override footer styles */
   #footer .wrapper
     background: image_url("landing_grad.png") repeat-x !important
     margin-top: 35px
     padding: 30px
     width: 900px
+    color: #fff
 
-  ul.right
-    li
-      color: $light-blue !important
-      float: right !important
-      padding-right: 0 !important
-      h2
-        color: $light-blue - #666
-        font-size: 10px
-        padding-top: 2px
-      a
-        color: $light-blue !important
-        padding-right: 0 !important
-        padding-left: 15px
-        padding-bottom: 10px
+    h2.logo
+      color: $lighter-blue
+      font-size: 13px
+    a
+      color: #fff
+

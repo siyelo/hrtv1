@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # STATIC PAGES
   map.static_page ':page', :controller => 'static_page', :action => 'show',
-    :page => Regexp.new(%w[about contact news user_guide].join('|'))
+    :page => Regexp.new(%w[about user_guide].join('|'))
 
   # ADMIN
   map.namespace :admin do |admin|

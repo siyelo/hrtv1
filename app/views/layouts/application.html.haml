@@ -1,2 +1,20 @@
 -# default layout is the Promotional site (static pages)
-= render 'layouts/promo_inner'
+-# an inner page with a compact header
+- content_for :body do
+  %body.promo.login
+    #header_app
+      .wrapper
+        #tagline
+          %h2= link_to "Health Resource Tracker", root_path
+          %h6 Improving lives through better health policy
+        = render 'layouts/login_nav'
+
+    = render 'layouts/flashes'
+
+    #content
+      .wrapper
+        = yield
+
+    = render 'layouts/footer'
+
+= render 'layouts/app'

@@ -11,7 +11,7 @@
     text-decoration: underline
 
 a.target, a.add_nested, a.remove_nested
-  background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
+  background: image_url("icon_link.png") no-repeat $lightest-blue 10px center
   display: block
   font-size: 12px
   margin-bottom: 5px
@@ -22,7 +22,15 @@ a.target, a.add_nested, a.remove_nested
   &.grayed-out
     color: #999
   &:hover
-    background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+    background: image_url("icon_link_hover.png") no-repeat $light-blue 10px center
+
+a.add_nested
+  width: 150px
+  +pie-clearfix
+
+a.remove_nested
+  width: 80px
+  +pie-clearfix
 
 body.app
   .wrapper

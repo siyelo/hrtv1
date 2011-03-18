@@ -35,8 +35,6 @@ class User < ActiveRecord::Base
     Notifier.deliver_password_reset_instructions(self)
   end
 
-
-
   ROLES = %w[admin reporter activity_manager]
 
   def roles=(roles)
@@ -69,6 +67,9 @@ class User < ActiveRecord::Base
     current_dr.status
   end
 
+  def name
+    full_name.present? ? full_name : username
+  end
 end
 
 

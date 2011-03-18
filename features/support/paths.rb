@@ -46,9 +46,6 @@ module NavigationHelpers
     when /the implementers page/
       implementers_path
 
-    when /the other costs page/
-      other_costs_path
-
     when /the budget classification page for "(.+)"/
       activity = Activity.find_by_name($1)
       activity_code_assignments_path(activity)

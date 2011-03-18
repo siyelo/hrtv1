@@ -1,25 +1,25 @@
 #footer
   .wrapper
-    %ul.right
-      %li
-        - country = ENV['HRT_COUNTRY'] || 'rwanda'
-        %a{:href => '/'}
-          = image_tag "#{country}-coat-of-arms-small.png"
-          %h2= country
-      %li
-        %a{:href => 'http://www.usaid.gov/', :target => '_blank'}
-          = image_tag "usaid.jpg"
-      %li
-        %a{:href => 'http://www.hs2020.org/', :target => '_blank'}
-          = image_tag "hs2020.jpg"
-
-      %li.powered
-        Powered by
-      %li
-        %h2.logo
-          Health Resource Tracker
-      - unless RAILS_ENV == 'production'
-        %li.powered= "v#{Version.current}"
+    - unless controller_name == "static_page"
+      %ul.right
+        %li
+          - country = ENV['HRT_COUNTRY'] || 'rwanda'
+          %a{:href => '/'}
+            = image_tag "#{country}-coat-of-arms-small.png"
+            %h2= country
+        %li
+          %a{:href => 'http://www.usaid.gov/', :target => '_blank'}
+            = image_tag "usaid.jpg"
+        %li
+          %a{:href => 'http://www.hs2020.org/', :target => '_blank'}
+            = image_tag "hs2020.jpg"
+        %li.powered
+          Powered by
+        %li
+          %h2.logo
+            Health Resource Tracker
+        - unless RAILS_ENV == 'production'
+          %li.powered= "v#{Version.current}"
 
     %ul.left
       %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"

@@ -9,7 +9,7 @@
   .dashboard_section
     %ul.admin_reports
       %li
-        %a{ :href => admin_responses_path, :class => "drill_down"}
+        - link_to admin_responses_path, :class => "drill_down target" do
           Review Data Responses
           %span.hint Interactive data response reports
 
@@ -19,7 +19,7 @@
   .dashboard_section
     %ul.admin_reports
       %li
-        %a{ :href => reports_country_path, :class => "drill_down"}
+        - link_to reports_country_path, :class => "drill_down target" do
           Review National Expenditures and Budgets
           %span.hint Interactive reports
 
@@ -29,7 +29,7 @@
   .dashboard_section
     %ul.admin_reports
       %li
-        %a{ :href => reports_districts_path, :class => "drill_down"}
+        - link_to reports_districts_path, :class => "drill_down target" do
           Review District Expenditures and Budgets
           %span.hint Interactive reports
 
@@ -90,14 +90,14 @@
   .dashboard_section
     %ul
       %li
-        - link_to reporter_report_path('purposes') do
+        - link_to reporter_report_path('purposes'), :class => 'target' do
           Purpose (MTEF, NSP, NHA, etc) Codes
           %span.hint from budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('inputs') do
+        - link_to reporter_report_path('inputs'), :class => 'target' do
           Input (Cost Category) Codes
           %span.hint from budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('locations') do
+        - link_to reporter_report_path('locations'), :class => 'target' do
           Location (District) Codes
           %span.hint from budget and expenditure classifications screen

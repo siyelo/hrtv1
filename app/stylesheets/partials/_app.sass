@@ -10,6 +10,20 @@
     color= !mid-blue
     text-decoration: underline
 
+a.target
+  background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
+  display: block
+  font-size: 12px
+  margin-bottom: 5px
+  padding: 10px 8px 8px 28px
+  text-decoration: none
+  +border-radius
+  +transition(hover, 1s, ease, 0)
+  &.grayed-out
+    color: #999
+  &:hover
+    background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
+
 body.app
   .wrapper
     min-width: 960px
@@ -659,7 +673,6 @@ ul.group
     +transition(hover, 1s, ease, 0)
     &:hover
       a
-        background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
         color: $mid-blue
         +transition(hover, 1s, ease, 0)
       ul.report_actions
@@ -668,20 +681,6 @@ ul.group
       margin-bottom: 0
   h3
     padding-top: 10px !important
-
-  a
-    background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
-    display: block
-    font-size: 12px
-    margin-bottom: 5px
-    padding: 10px 8px 8px 28px
-    text-decoration: none
-    +border-radius
-    +transition(hover, 1s, ease, 0)
-    &.grayed-out
-      color: #999
-    &:hover
-      background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
 
   ul.report_actions
     opacity: 0

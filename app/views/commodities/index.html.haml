@@ -42,22 +42,13 @@
 %table.standard.rounded
   %thead
     %tr
-<<<<<<< HEAD
+
       %th Commodity Type
-=======
-      %th= sortable "type"
->>>>>>> A reporter can create, edit update and delete commodities, a reporter can upload bulk commodities using a csv file. cucumber and rspec tests included'
       %th= sortable "description"
       %th= sortable "unit_cost", "Unit Cost"
       %th= sortable "quantity"
       %th Total Cost
       %th
-<<<<<<< HEAD
-        
-=======
-      
-
->>>>>>> A reporter can create, edit update and delete commodities, a reporter can upload bulk commodities using a csv file. cucumber and rspec tests included'
   %tbody
     = render :partial => "commodity", :collection => @commodities
 

@@ -9,7 +9,6 @@ class Commodity < ActiveRecord::Base
   FILE_UPLOAD_COLUMNS = %w[commodity_type description unit_cost quantity]
 
   #Methods
-  
   def calculate_total
     self.unit_cost * self.quantity
   end

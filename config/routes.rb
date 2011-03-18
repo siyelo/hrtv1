@@ -12,8 +12,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :profile, :only => [:edit, :update]
 
   # STATIC PAGES
-  map.static_page ':page', :controller => 'static_page', :action => 'show',
-    :page => Regexp.new(%w[about].join('|'))
+  map.about_page 'about', :controller => 'static_page',
+    :action => 'about'
 
   # ADMIN
   map.namespace :admin do |admin|

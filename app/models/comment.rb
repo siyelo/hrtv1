@@ -16,7 +16,7 @@ class Comment < ActiveRecord::Base
   default_scope :order => 'created_at ASC'
 
   ### Named scopes
-  # TODO: spec
+  # TODO: spec and REFACTOR !!!
   named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "
   named_scope :on_projects_for, lambda { |organization|
       { :joins => "JOIN projects p ON p.id = comments.commentable_id ",

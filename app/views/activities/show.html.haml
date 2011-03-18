@@ -7,7 +7,7 @@
     %ul.manage_bar.inline
       %li= link_to "Edit", edit_response_activity_path(@data_response, @activity)
       %li= link_to "Classify", activity_code_assignments_url(@activity)
-      %li= link_to "X", response_activity_path(@data_response, @activity), :confirm => "Are you sure?", :method => :delete
+      %li= link_to "X", response_activity_path(@data_response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete
 
 .wrap-70
   %h3.form_heading Basics

@@ -176,4 +176,11 @@ module ApplicationHelper
     bool ? 'yes' : 'no'
   end
 
+  def c(amount, currency)
+    if amount.present?
+      "#{amount} <span class='currency'>#{currency}</span>"
+    else
+      ""
+    end
+  end
 end

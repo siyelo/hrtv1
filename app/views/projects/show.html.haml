@@ -33,47 +33,47 @@
     %li
       %ul.row
         %li Spend
-        %li= @project.spend
+        %li= c(@project.spend, @project.currency)
       %ul.row
         %li Spend Q4 08-09
-        %li= @project.spend_q4_prev
+        %li= c(@project.spend_q4_prev, @project.currency)
       %ul.row
         %li Spend Q1 09-10
-        %li= @project.spend_q1
+        %li= c(@project.spend_q1, @project.currency)
       %ul.row
         %li Spend Q2 09-10
-        %li= @project.spend_q2
+        %li= c(@project.spend_q2, @project.currency)
       %ul.row
         %li Spend Q3 09-10
-        %li= @project.spend_q3
+        %li= c(@project.spend_q3, @project.currency)
       %ul.row
         %li Spend Q4 09-10
-        %li= @project.spend_q4
+        %li= c(@project.spend_q4, @project.currency)
 
   %h3.form_heading Budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
         %li Budget
-        %li= @project.budget
+        %li= c(@project.budget, @project.currency)
       %ul.row
         %li Budget Q4 08-09
-        %li= @project.budget_q4_prev
+        %li= c(@project.budget_q4_prev, @project.currency)
       %ul.row
         %li Budget Q1 09-10
-        %li= @project.budget_q1
+        %li= c(@project.budget_q1, @project.currency)
       %ul.row
         %li Budget Q2 09-10
-        %li= @project.budget_q2
+        %li= c(@project.budget_q2, @project.currency)
       %ul.row
         %li Budget Q3 09-10
-        %li= @project.budget_q3
+        %li= c(@project.budget_q3, @project.currency)
       %ul.row
         %li Budget Q4 09-10
-        %li= @project.budget_q4
+        %li= c(@project.budget_q4, @project.currency)
       %ul.row
         %li Entire Budget
-        %li= @project.entire_budget
+        %li= c(@project.entire_budget, @project.currency)
       %ul.row
         %li Locations
         %li= @project.locations.map(&:short_display).join(', ')
@@ -87,25 +87,25 @@
           %li= flow.from.try(:name)
         %ul.row
           %li Budget
-          %li= flow.budget
+          %li= c(flow.budget, flow.currency)
         %ul.row
           %li Spend
-          %li= flow.spend
+          %li= c(flow.spend, flow.currency)
         %ul.row
           %li Spend Q4 08-09
-          %li= flow.spend_q4_prev
+          %li= c(flow.spend_q4_prev, flow.currency)
         %ul.row
           %li Spend Q1 09-10
-          %li= flow.spend_q1
+          %li= c(flow.spend_q1, flow.currency)
         %ul.row
           %li Spend Q2 09-10
-          %li= flow.spend_q2
+          %li= c(flow.spend_q2, flow.currency)
         %ul.row
           %li Spend Q3 09-10
-          %li= flow.spend_q3
+          %li= c(flow.spend_q3, flow.currency)
         %ul.row
           %li Spend Q4 09-10
-          %li= flow.spend_q4
+          %li= c(flow.spend_q4, flow.currency)
 
   %h3.form_heading Out flows
   %ul.dashboard_section
@@ -116,24 +116,24 @@
           %li= flow.from.try(:name)
         %ul.row
           %li Budget
-          %li= flow.budget
+          %li= c(flow.budget, flow.currency)
         %ul.row
           %li Spend
-          %li= flow.spend
+          %li= c(flow.spend, flow.currency)
         %ul.row
           %li Spend Q4 08-09
-          %li= flow.spend_q4_prev
+          %li= c(flow.spend_q4_prev, flow.currency)
         %ul.row
           %li Spend Q1 09-10
-          %li= flow.spend_q1
+          %li= c(flow.spend_q1, flow.currency)
         %ul.row
           %li Spend Q2 09-10
-          %li= flow.spend_q2
+          %li= c(flow.spend_q2, flow.currency)
         %ul.row
           %li Spend Q3 09-10
-          %li= flow.spend_q3
+          %li= c(flow.spend_q3, flow.currency)
         %ul.row
           %li Spend Q4 09-10
-          %li= flow.spend_q4
+          %li= c(flow.spend_q4, flow.currency)
 
 = render :partial => 'shared/comments'

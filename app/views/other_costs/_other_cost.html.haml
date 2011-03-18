@@ -1,8 +1,8 @@
 %tr{:class => cycle("even", "odd")}
   %td= other_cost.project.try(:name)
   %td= link_to other_cost.description.presence || 'No Description Entered', response_other_cost_path(@data_response, other_cost)
-  %td= other_cost.spend
-  %td= other_cost.budget
+  %td= c(other_cost.spend, other_cost.currency)
+  %td= c(other_cost.budget, other_cost.currency)
   %td= b other_cost.classified?
   %td
     %ul.manage_bar

@@ -43,44 +43,44 @@
     %li
       %ul.row
         %li Spend
-        %li= @activity.spend
+        %li= c(@activity.spend, @activity.currency)
       %ul.row
         %li Spend Q4 08-09
-        %li= @activity.spend_q4_prev
+        %li= c(@activity.spend_q4_prev, @activity.currency)
       %ul.row
         %li Spend Q1 09-10
-        %li= @activity.spend_q1
+        %li= c(@activity.spend_q1, @activity.currency)
       %ul.row
         %li Spend Q2 09-10
-        %li= @activity.spend_q2
+        %li= c(@activity.spend_q2, @activity.currency)
       %ul.row
         %li Spend Q3 09-10
-        %li= @activity.spend_q3
+        %li= c(@activity.spend_q4, @activity.currency)
       %ul.row.last
         %li Spend Q4 09-10
-        %li= @activity.spend_q4
+        %li= c(@activity.spend_q4, @activity.currency)
 
   %h3.form_heading Budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
         %li Budget
-        %li= @activity.budget
+        %li= c(@activity.budget, @activity.currency)
       %ul.row
         %li Budget Q4 08-09
-        %li= @activity.budget_q4_prev
+        %li= c(@activity.budget_q4_prev, @activity.currency)
       %ul.row
         %li Budget Q1 09-10
-        %li= @activity.budget_q1
+        %li= c(@activity.budget_q1, @activity.currency)
       %ul.row
         %li Budget Q2 09-10
-        %li= @activity.budget_q2
+        %li= c(@activity.budget_q2, @activity.currency)
       %ul.row
         %li Budget Q3 09-10
-        %li= @activity.budget_q3
+        %li= c(@activity.budget_q3, @activity.currency)
       %ul.row
         %li Budget Q4 09-10
-        %li= @activity.budget_q4
+        %li= c(@activity.budget_q4, @activity.currency)
       %ul.row.last
         %li Beneficiaries
         %li= @activity.beneficiaries.map(&:short_display).join(', ')
@@ -110,16 +110,16 @@
           %li= sub_activity.text_for_provider
         %ul.row
           %li Budget
-          %li= sub_activity.budget
+          %li= c(sub_activity.budget, @activity.currency)
         %ul.row
           %li Budget percentage
-          %li= sub_activity.budget_percentage
+          %li= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
         %ul.row
           %li Spend
-          %li= sub_activity.spend
+          %li= c(sub_activity.spend, @activity.currency)
         %ul.row
           %li Spend percentage
-          %li= sub_activity.spend_percentage
+          %li= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
 
   %h3.form_heading Institutions Assisted
   %ul.dashboard_section
@@ -133,21 +133,21 @@
     %li
       %ul.row
         %li Budget by Purposes
-        %li= @activity.coding_budget_classified?
+        %li= b @activity.coding_budget_classified?
       %ul.row
         %li Budget by Locations
-        %li= @activity.coding_budget_district_classified?
+        %li= b @activity.coding_budget_district_classified?
       %ul.row
         %li Budget by Inputs
-        %li= @activity.coding_budget_cc_classified?
+        %li= b @activity.coding_budget_cc_classified?
       %ul.row
         %li Spend by Purposes
-        %li= @activity.coding_spend_classified?
+        %li= b @activity.coding_spend_classified?
       %ul.row
         %li Spend by Locations
-        %li= @activity.coding_spend_district_classified?
+        %li= b @activity.coding_spend_district_classified?
       %ul.row
         %li Spend by Inputs
-        %li= @activity.coding_spend_cc_classified?
+        %li= b @activity.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments'

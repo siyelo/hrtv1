@@ -1,5 +1,5 @@
 %tr{:class => cycle("even", "odd")}
-  %td= link_to other_cost.description, response_other_cost_path(@data_response, other_cost)
+  %td= link_to (other_cost.description.presence || 'No Description Entered'), response_other_cost_path(@data_response, other_cost)
   %td= other_cost.spend
   %td= other_cost.budget
   %td= b other_cost.classified?

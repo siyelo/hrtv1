@@ -1,6 +1,6 @@
 require 'set'
 class ActivitiesController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
@@ -8,8 +8,8 @@ class ActivitiesController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response'
 
   def index
-    scope = @data_response.activities.roots.scoped({})
-    scope = scope.scoped(:conditions => ["name LIKE :q OR description LIKE :q",
+    scope = @data_response.activities.roots.scoped({:include => :project, :joins => :project})
+    scope = scope.scoped(:conditions => ["projects.name LIKE :q OR activities.name LIKE :q OR activities.description LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
@@ -74,7 +74,7 @@ class ActivitiesController < Reporter::BaseController
   private
 
     def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "description"
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"
     end
 
     def sort_direction

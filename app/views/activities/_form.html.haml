@@ -4,11 +4,14 @@
 
 .form_aside
   %h3 What's an Activity?
-  %p Activity is ...
+  %p Each Activity can describe several details like the Beneficiaries/Implementers (who), the Location/District (where) and the Purpose/Code (what).
   %br
   %h3 How do I add more detail?
-  %p In the Health Resource Tracker, you can break-down your Projects into of several smaller, more detailed, Activities.
-  %p For example if your project is (sub)implemented by multiple entities, you can create one or more Activities to represent this.
+  %p You can break-down your Activities across several dimensions, such as Purpose Codes, Locations, Inputs
+  %br
+  %p
+    Read more on our
+    = link_to "Activity FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=activity", :target => '_blank'
 
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last

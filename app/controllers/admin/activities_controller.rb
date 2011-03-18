@@ -7,9 +7,9 @@ class Admin::ActivitiesController < ActiveScaffoldController
 
   include ActivitiesHelper
 
-  @@shown_columns           = [:organization, :projects, :provider, :description, :name, :spend, :budget]
-  @@create_columns          = [:projects, :locations, :provider, :name, :description, :start_date, :end_date, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
-  @@update_columns          = [:projects, :locations, :text_for_provider, :provider, :name, :description, :start_date, :end_date, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
+  @@shown_columns           = [:organization, :project, :provider, :description, :name, :spend, :budget]
+  @@create_columns          = [:project, :locations, :provider, :name, :description, :start_date, :end_date, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget,:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4]
+  @@update_columns          = [:project, :locations, :text_for_provider, :provider, :name, :description, :start_date, :end_date, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :comments]
   @@columns_for_file_upload = %w[name description text_for_targets text_for_beneficiaries text_for_provider spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget budget_q4_prev budget_q1 budget_q2 budget_q3 budget_q4]
 
   def self.create_columns
@@ -26,15 +26,13 @@ class Admin::ActivitiesController < ActiveScaffoldController
     config.update.columns  = @@update_columns
     list.sorting           = {:name => 'DESC'}
 
-    config.action_links.add('Classify', @@classify_popup_link_options)
-
     config.nested.add_link("Institutions Assisted", [:organizations])
     config.columns[:organizations].association.reverse = :activities
     config.nested.add_link("Sub Implementers", [:sub_activities])
     config.nested.add_link("Comments", [:comments])
     config.columns[:comments].association.reverse = :commentable
     config.columns[:organization].sort_by :method => "organization_name"
-    config.columns[:projects].form_ui             = :select
+    config.columns[:project].form_ui              = :select
     config.columns[:locations].form_ui            = :select
     config.columns[:locations].label              = "Districts Worked In"
     config.columns[:provider].form_ui             = :select

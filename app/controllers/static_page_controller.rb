@@ -3,9 +3,7 @@ class StaticPageController < ApplicationController
     render :layout => 'promo'
   end
 
-  def show
-    render :action => params[:page]
+  def about
   end
-
 end
 

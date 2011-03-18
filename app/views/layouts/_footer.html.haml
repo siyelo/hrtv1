@@ -7,12 +7,8 @@
           %a{:href => '/'}
             = image_tag "#{country}-coat-of-arms-small.png"
             %h2= country
-        %li
-          %a{:href => 'http://www.usaid.gov/', :target => '_blank'}
-            = image_tag "usaid.jpg"
-        %li
-          %a{:href => 'http://www.hs2020.org/', :target => '_blank'}
-            = image_tag "hs2020.jpg"
+        %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
+        %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
         %li.powered
           Powered by
         %li
@@ -24,7 +20,7 @@
     %ul.left
       %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"
       %li= link_to "Contact", "http://hrtapp.tenderapp.com/discussions", :target => "_blank"
-      %li= link_to "About", static_page_url(:about)
+      %li= link_to "About", about_page_path
 
   -# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
   - unless Settings.google_account_id.blank?

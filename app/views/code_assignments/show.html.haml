@@ -3,12 +3,15 @@
 
 = render 'layouts/active_scaffold_js'
 
+%ul.breadcrumb
+  %li= link_to "Activities", response_activities_path(@data_response)
+  %li= link_to @activity.name.first(16), response_activity_path(@data_response, @activity)
+
+%h1 Activity Classification
+
 #classification
 
-  = render '/shared/page_help'
-
   .nav2
-    %h2= "Activity Classification"
     = render 'tab_nav', :activity => @activity
 
   = render 'code_assignments/activity_description', :activity => @activity

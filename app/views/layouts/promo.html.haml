@@ -2,7 +2,7 @@
 
 - content_for :body do
   %body.promo.landing
-    = render "layouts/header"
+    = render "layouts/header", :landing_page => true
     = yield(:tabs)
     #content
       .wrapper

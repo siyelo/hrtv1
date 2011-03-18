@@ -14,41 +14,41 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended "
-      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
+      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
+      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})"
+      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})", :required => false
 
   %li.last
     %h3 Past Expenditure
     %ul.dashboard_section
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year."
+      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
 
       %li.amounts.last
-        %label Quarterly spend*
+        %label Quarterly spend
         %ul
-          = f.input :spend_q4_prev, :label => "Q4 08-09"
-          = f.input :spend_q1     , :label => "Q1 09-10"
-          = f.input :spend_q2     , :label => "Q2 09-10"
-          = f.input :spend_q3     , :label => "Q3 09-10"
-          = f.input :spend_q4     , :label => "Q4 09-10"
+          = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
+          = f.input :spend_q1     , :label => "Q1 09-10", :required => false
+          = f.input :spend_q2     , :label => "Q2 09-10", :required => false
+          = f.input :spend_q3     , :label => "Q3 09-10", :required => false
+          = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
   %li.last
     %h3 Budget (planned expenditure)
     %ul.dashboard_section
 
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year."
+      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
       %li.amounts
-        %label Quarterly budget*
+        %label Quarterly budget
         %ul
-          = f.input :budget_q4_prev, :label => "Q4 09-10"
-          = f.input :budget_q1     , :label => "Q1 10-11"
-          = f.input :budget_q2     , :label => "Q2 10-11"
-          = f.input :budget_q3     , :label => "Q3 10-11"
-          = f.input :budget_q4     , :label => "Q4 10-11"
-      = f.input :entire_budget, :label => "Lifetime budget", :hint =>"The lifetime budget for this project (for example, if a 5-year project, enter the project ceiling)."
-      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented"
+          = f.input :budget_q4_prev, :label => "Q4 09-10", :required => false
+          = f.input :budget_q1     , :label => "Q1 10-11", :required => false
+          = f.input :budget_q2     , :label => "Q2 10-11", :required => false
+          = f.input :budget_q3     , :label => "Q3 10-11", :required => false
+          = f.input :budget_q4     , :label => "Q4 10-11", :required => false
+      = f.input :entire_budget, :label => "Lifetime budget", :hint =>"The lifetime budget for this project (for example, if a 5-year project, enter the project ceiling).", :required => false
+      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint =>"all the districts in which this Project was implemented", :required => false
 
   %li.last
     %h2 Funding sources
@@ -61,4 +61,3 @@
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @project.new_record? ? "Create New Project" : "Update Project", :class => "last"
-

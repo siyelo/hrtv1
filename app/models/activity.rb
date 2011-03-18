@@ -76,8 +76,7 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  #validates_uniqueness_of :name, :scope => :project_id
-  validates_presence_of :data_response_id, :project_id, :unless => Proc.new {|model| model.activity_id}
+  validates_presence_of :data_response_id, :project_id, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
   #validates_date :start_date, :unless => Proc.new {|model| model.activity_id}
@@ -438,9 +437,10 @@ class Activity < ActiveRecord::Base
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
       if self.currency
-        rate = Money.default_bank.get_rate(self.currency, :USD)
-        self.budget_in_usd = (budget || 0) * rate
-        self.spend_in_usd  = (spend || 0)  * rate
+        if (rate = Money.default_bank.get_rate(self.currency, :USD))
+          self.budget_in_usd = (budget || 0) * rate
+          self.spend_in_usd  = (spend || 0)  * rate
+        end
       end
     end
 

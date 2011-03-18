@@ -1,11 +1,11 @@
 .fields
-  = f.input :data_response_id, :as => :hidden, :value => @data_response.id
-  = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all
-  = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text
+  = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
+  = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false
+  = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text, :required => false
   %h4 Planned expenditure
-  = f.input :budget, :label => "Budget GOR FY 10-11"
-  = f.input :budget_percentage, :label => "% of Main Activity's Budget"
+  = f.input :budget, :label => "Budget GOR FY 10-11", :required => false
+  = f.input :budget_percentage, :label => "% of Main Activity's Budget", :required => false
   %h4 Past expenditure
-  = f.input :spend, :label => "Spend GOR FY 09-10"
-  = f.input :spend_percentage, :label => "% of Main Activity's Budget"
+  = f.input :spend, :label => "Spend GOR FY 09-10", :required => false
+  = f.input :spend_percentage, :label => "% of Main Activity's Budget", :required => false
   = link_to_remove_fields "remove", f

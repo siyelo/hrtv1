@@ -19,49 +19,49 @@
         - if @activity.project
           = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
 
-      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended "
-      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project. "
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started."
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation."
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects"
+      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended", :required => false
+      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
+      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "When the Project (and it's related Activities) started.", :required => false
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "The end date for the project’s implementation.", :required => false
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Implement is the organization who implement activities from your organization's projects", :required => false
 
   %li.last
     %h3== Past Expenditure (#{@data_response.currency})
     %ul.dashboard_section
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year."
+      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
 
       %li.amounts.last
         %label== Quarterly spend
         %ul
-          = f.input :spend_q4_prev, :label => "Q4 08-09"
-          = f.input :spend_q1     , :label => "Q1 09-10"
-          = f.input :spend_q2     , :label => "Q2 09-10"
-          = f.input :spend_q3     , :label => "Q3 09-10"
-          = f.input :spend_q4     , :label => "Q4 09-10"
+          = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
+          = f.input :spend_q1     , :label => "Q1 09-10", :required => false
+          = f.input :spend_q2     , :label => "Q2 09-10", :required => false
+          = f.input :spend_q3     , :label => "Q3 09-10", :required => false
+          = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
   %li.last
     %h3 Budget (planned expenditure) (#{@data_response.currency})
     %ul.dashboard_section
 
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year."
-      = f.input :budget2, :label => "Budget for year + 1", :hint => "The total amount that you are planning to spend in the second fiscal year."
-      = f.input :budget3, :label => "Budget for year + 2", :hint => "The total amount that you are planning to spend in the third fiscal year."
+      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+      = f.input :budget2, :label => "Budget for year + 1", :hint => "The total amount that you are planning to spend in the second fiscal year.", :required => false
+      = f.input :budget3, :label => "Budget for year + 2", :hint => "The total amount that you are planning to spend in the third fiscal year.", :required => false
       %li.amounts
-        %label Quarterly budget*
+        %label Quarterly budget
         %ul
-          = f.input :budget_q4_prev, :label => "Q4 09-10"
-          = f.input :budget_q1     , :label => "Q1 10-11"
-          = f.input :budget_q2     , :label => "Q2 10-11"
-          = f.input :budget_q3     , :label => "Q3 10-11"
-          = f.input :budget_q4     , :label => "Q4 10-11"
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+          = f.input :budget_q4_prev, :label => "Q4 09-10", :required => false
+          = f.input :budget_q1     , :label => "Q1 10-11", :required => false
+          = f.input :budget_q2     , :label => "Q2 10-11", :required => false
+          = f.input :budget_q3     , :label => "Q3 10-11", :required => false
+          = f.input :budget_q4     , :label => "Q4 10-11", :required => false
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :required => false
 
   %li.last
     %h3 Texts
     %ul.dashboard_section
-      = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text
-      = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Text for beneficiaries", :as => :text
-      = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Text for targets", :as => :text
+      = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text, :required => false
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Text for beneficiaries", :as => :text, :required => false
+      = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Text for targets", :as => :text, :required => false
 
   %li.last
     %h2 Sub Activities
@@ -74,7 +74,7 @@
   %li.last
     %h2 Institutions Assisted
     %ul.dashboard_section
-      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If your program uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds (for example, your organization works to improve management of a district hospital). In this case, your organization would be the implementer, and the hospital you are working with would be the institution assisted (and not an implementer or sub-activity)."
+      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If your program uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds (for example, your organization works to improve management of a district hospital). In this case, your organization would be the implementer, and the hospital you are working with would be the institution assisted (and not an implementer or sub-activity).", :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @activity.new_record? ? "Create New Activity" : "Update Activity", :class => "last"

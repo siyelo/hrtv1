@@ -1,16 +1,16 @@
 .fields
-  = f.input :data_response_id, :as => :hidden, :value => @data_response.id
-  = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id
-  = f.input :from, :select => Organization.all, :hint => "The organization funding the project"
-  = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year."
-  = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year."
+  = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
+  = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
+  = f.input :from, :select => Organization.all, :hint => "The organization funding the project", :required => false
+  = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+  = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
   %li.amounts.last
-    %label Quarterly spend*
+    %label Quarterly spend
     %ul
-      = f.input :spend_q4_prev, :label => "Q4 08-09"
-      = f.input :spend_q1     , :label => "Q1 09-10"
-      = f.input :spend_q2     , :label => "Q2 09-10"
-      = f.input :spend_q3     , :label => "Q3 09-10"
-      = f.input :spend_q4     , :label => "Q4 09-10"
+      = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
+      = f.input :spend_q1     , :label => "Q1 09-10", :required => false
+      = f.input :spend_q2     , :label => "Q2 09-10", :required => false
+      = f.input :spend_q3     , :label => "Q3 09-10", :required => false
+      = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
   = link_to_remove_fields "remove", f

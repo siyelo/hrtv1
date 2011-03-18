@@ -12,7 +12,7 @@
 - unless @warnings.empty?
   #flashes.wide
     #notice
-      = display_warnings(@warnings)
+      = display_warnings(@warnings, @data_response)
 
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"

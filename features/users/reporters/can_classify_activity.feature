@@ -151,7 +151,6 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   Then the "cost_category1" field within ".tab7" should contain "1,481,480.40"
 
 @javascript
-@run
 Scenario: Use budget by service level for expenditure by service level
   When I follow "Service Level" within the budget service levels tab
   And I fill in "service_level1" with "1234567.00" within ".tab4"

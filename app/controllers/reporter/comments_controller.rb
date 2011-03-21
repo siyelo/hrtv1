@@ -102,7 +102,11 @@ class Reporter::CommentsController < Reporter::BaseController
 
   def commentable_resource(comment)
     if comment.commentable_type == "Activity"
-      response_activity_url(comment.commentable.data_response, comment.commentable)
+      if current_user.admin?
+        admin_activity_url(comment.commentable)
+      else
+        response_activity_url(comment.commentable.data_response, comment.commentable)
+      end
     elsif comment.commentable_type == "Project"
       response_project_url(comment.commentable.data_response, comment.commentable)
     else

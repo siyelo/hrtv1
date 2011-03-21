@@ -11,8 +11,8 @@ Background:
   And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project1", data_response: the data_response
   And I am signed in as "reporter"
-  When I follow "data_request1"
-  When I follow "Activities"
+  And I follow "data_request1"
+  And I follow "Activities"
 
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"

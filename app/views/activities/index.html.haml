@@ -1,7 +1,9 @@
 - title("Activities")
 
 %h1.main_heading
-  = render 'search'
+  #search
+    - form_tag response_activities_path(@data_response), :method => :get do
+      = render 'shared/search_form'
   Activities
 
 %p Split your Projects into smaller, more detailed parts.

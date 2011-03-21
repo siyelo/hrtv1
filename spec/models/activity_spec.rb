@@ -216,6 +216,20 @@ describe Activity do
     end
   end
 
+  describe "service_level_budget_classified?" do
+    it "is true when budget is equal to ServiceLevelBudget_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                :ServiceLevelBudget_amount => 100)
+      activity.service_level_budget_classified?.should be_true
+    end
+
+    it "is not true when budget is not equal to ServiceLevelBudget_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                :ServiceLevelBudget_amount => 101)
+      activity.service_level_budget_classified?.should be_false
+    end
+  end
+
   describe "coding_budget_district_classified?" do
     context "activity does not have locations" do
       before :each do
@@ -229,14 +243,14 @@ describe Activity do
     end
 
     context "activity does not have locations" do
-      it "is true when budget is equal to CodingBudgetCostCategorization_amount" do
+      it "is true when budget is equal to CodingBudgetDistrict_amount" do
         activity = Factory.create(:activity, :budget => 100,
                                    :locations => [Factory.create(:location)],
                                    :CodingBudgetDistrict_amount => 100)
         activity.coding_budget_district_classified?.should be_true
       end
 
-      it "should not be true when budget is not equal to CodingBudgetCostCategorization_amount" do
+      it "should not be true when budget is not equal to CodingBudgetDistrict_amount" do
         activity = Factory.create(:activity, :budget => 100,
                                    :locations => [Factory.create(:location)],
                                    :CodingBudgetDistrict_amount => 101)
@@ -272,6 +286,20 @@ describe Activity do
     end
   end
 
+  describe "service_level_spend_classified?" do
+    it "is true when spend is equal to ServiceLevelSpend_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                :ServiceLevelSpend_amount => 100)
+      activity.service_level_spend_classified?.should be_true
+    end
+
+    it "is not true when spend is not equal to ServiceLevelSpend_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                :ServiceLevelSpend_amount => 101)
+      activity.service_level_spend_classified?.should be_false
+    end
+  end
+
   describe "coding_spend_district_classified?" do
     context "activity does not have locations" do
       before :each do
@@ -285,14 +313,14 @@ describe Activity do
     end
 
     context "activity does not have locations" do
-      it "is true when spend is equal to CodingSpendCostCategorization_amount" do
+      it "is true when spend is equal to CodingSpendDistrict_amount" do
         activity = Factory.create(:activity, :spend => 100,
                                    :locations => [Factory.create(:location)],
                                    :CodingSpendDistrict_amount => 100)
         activity.coding_spend_district_classified?.should be_true
       end
 
-      it "should not be true when spend is not equal to CodingSpendCostCategorization_amount" do
+      it "should not be true when spend is not equal to CodingSpendDistrict_amount" do
         activity = Factory.create(:activity, :spend => 100,
                                    :locations => [Factory.create(:location)],
                                    :CodingSpendDistrict_amount => 101)
@@ -306,38 +334,43 @@ describe Activity do
       @activity = Factory.create(:activity)
     end
 
-    it "is budget_classified? when classified when all budget codings are classified" do
+    it "is budget_classified? when all budgets are classified" do
       @activity.stub(:coding_budget_classified?) { true }
       @activity.stub(:coding_budget_district_classified?) { true }
       @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:service_level_budget_classified?) { true }
       @activity.budget_classified?.should be_true
     end
 
-    it "is not budget_classified? when not coding_budget_classified?" do
+    it "is not budget_classified? when budget is not classified" do
       @activity.stub(:coding_budget_classified?) { false }
       @activity.stub(:coding_budget_district_classified?) { true }
       @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:service_level_budget_classified?) { true }
       @activity.budget_classified?.should be_false
     end
 
-    it "is not budget_classified? when not coding_budget_district_classified?" do
+    it "is not budget_classified? when districts are not classified" do
       @activity.stub(:coding_budget_classified?) { true }
       @activity.stub(:coding_budget_district_classified?) { false }
       @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:service_level_budget_classified?) { true }
       @activity.budget_classified?.should be_false
     end
 
-    it "is not budget_classified? when not coding_budget_cc_classified?" do
+    it "is not budget_classified? when cost categories are not classified" do
       @activity.stub(:coding_budget_classified?) { true }
       @activity.stub(:coding_budget_district_classified?) { true }
       @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.stub(:service_level_budget_classified?) { true }
       @activity.budget_classified?.should be_false
     end
 
-    it "is not budget_classified? when none of budget is classified" do
-      @activity.stub(:coding_budget_classified?) { false }
-      @activity.stub(:coding_budget_district_classified?) { false }
-      @activity.stub(:coding_budget_cc_classified?) { false }
+    it "is not budget_classified? when service levels are not classified" do
+      @activity.stub(:coding_budget_classified?) { true }
+      @activity.stub(:coding_budget_district_classified?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:service_level_budget_classified?) { false }
       @activity.budget_classified?.should be_false
     end
   end
@@ -347,43 +380,48 @@ describe Activity do
       @activity = Factory.create(:activity)
     end
 
-    it "is spend_classified? when classified when all spend codings are classified" do
+    it "is spend_classified? when all spends are classified" do
       @activity.stub(:coding_spend_classified?) { true }
       @activity.stub(:coding_spend_district_classified?) { true }
       @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:service_level_spend_classified?) { true }
       @activity.spend_classified?.should be_true
     end
 
-    it "is not spend_classified? when not coding_spend_classified?" do
+    it "is not spend_classified? when spend is not classified" do
       @activity.stub(:coding_spend_classified?) { false }
       @activity.stub(:coding_spend_district_classified?) { true }
       @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:service_level_spend_classified?) { true }
       @activity.spend_classified?.should be_false
     end
 
-    it "is not spend_classified? when not coding_spend_district_classified?" do
+    it "is not spend_classified? when districts are not classified" do
       @activity.stub(:coding_spend_classified?) { true }
       @activity.stub(:coding_spend_district_classified?) { false }
       @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:service_level_spend_classified?) { true }
       @activity.spend_classified?.should be_false
     end
 
-    it "is not spend_classified? when not coding_spend_cc_classified?" do
+    it "is not spend_classified? when cost categories are not classified" do
       @activity.stub(:coding_spend_classified?) { true }
       @activity.stub(:coding_spend_district_classified?) { true }
       @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.stub(:service_level_spend_classified?) { true }
       @activity.spend_classified?.should be_false
     end
 
-    it "is not spend_classified? when none of spend is classified" do
-      @activity.stub(:coding_spend_classified?) { false }
-      @activity.stub(:coding_spend_district_classified?) { false }
+    it "is not spend_classified? when service levels are not classified" do
+      @activity.stub(:coding_spend_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { true }
       @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.stub(:service_level_spend_classified?) { true }
       @activity.spend_classified?.should be_false
     end
   end
 
-  describe "spend_classified?" do
+  describe "classified?" do
     before :each do
       @activity = Factory.create(:activity)
     end
@@ -754,6 +792,12 @@ describe Activity do
       activity = Factory(:activity)
       Factory(:coding_budget_cost_categorization, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
+    end
+
+    it "copies budget for spent codings for ServiceLevelBudget" do
+      activity = Factory(:activity)
+      Factory(:service_level_budget, :activity => activity)
+      copy_budget_to_expenditure_check(activity, 'ServiceLevelBudget', 'ServiceLevelSpend')
     end
 
     it "does not copy budget to spent when spent is nil" do

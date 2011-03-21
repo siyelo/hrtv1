@@ -79,6 +79,8 @@ class CodingTree
       @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.for_activities.roots
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
+    when 'ServiceLevelBudget', 'ServiceLevelSpend'
+      ServiceLevel.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       @activity.locations
     when 'HsspBudget', 'HsspSpend'
@@ -150,12 +152,12 @@ class CodingTree
 
     def max_value
       case @coding_klass.to_s
-      when "CodingBudget", "CodingBudgetDistrict", "CodingBudgetCostCategorization"
+      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget', 'HsspBudget'
         @activity.budget
-      when "CodingSpend", "CodingSpendDistrict", "CodingSpendCostCategorization"
+      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend', 'HsspSpend'
         @activity.spend
       else
-        raise "Type not specified #{type}".to_yaml
+        raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
       end
     end
 

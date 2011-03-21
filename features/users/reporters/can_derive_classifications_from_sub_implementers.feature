@@ -58,4 +58,4 @@ Scenario: Use spend classifications derived from sub implementers
   And I go to the budget classification page for "Activity"
   And I follow "Locations" within the expenditure districts tab
   Then wait a few moments
-  Then the "Location1" field within ".tab5" should contain "56.00"
+  Then the "Location1" field within ".tab6" should contain "56.00"

@@ -13,7 +13,10 @@
       %li{:id => 'tab2', :class => style}= link_to "Locations", "#"
 
     - style = activity.coding_budget_cc_classified? ? '' : 'incomplete'
-    %li{:id => 'tab3', :class => style}=   link_to "Inputs", "#"
+    %li{:id => 'tab3', :class => style}= link_to "Inputs", "#"
+
+    - style = activity.service_level_budget_classified? ? '' : 'incomplete'
+    %li{:id => 'tab4', :class => style}= link_to "Service Levels", "#"
 
   - if activity.data_request.spend?
     - spend_class = ((!activity.data_request.budget? && activity.data_request.spend?) ? 'selected' : nil)
@@ -21,11 +24,14 @@
     %li Expenditure:
 
     - style = activity.coding_spend_classified? ? spend_class : 'incomplete'
-    %li{:id => 'tab4', :class => style}=   link_to "Purposes", "#"
+    %li{:id => 'tab5', :class => style}=   link_to "Purposes", "#"
 
     - unless other_costs
       - style = activity.coding_spend_district_classified? ? '' : 'incomplete'
-      %li{:id => 'tab5', :class => style}= link_to "Locations", "#"
+      %li{:id => 'tab6', :class => style}= link_to "Locations", "#"
 
     - style = activity.coding_spend_cc_classified? ? '' : 'incomplete'
-    %li{:id => 'tab6', :class => style}=   link_to "Inputs", "#"
+    %li{:id => 'tab7', :class => style}=   link_to "Inputs", "#"
+
+    - style = activity.service_level_spend_classified? ? '' : 'incomplete'
+    %li{:id => 'tab8', :class => style}=   link_to "Service Levels", "#"

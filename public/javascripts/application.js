@@ -731,9 +731,16 @@ var code_assignments_show = {
     // collapsible checkboxes for tab1
     //addCollabsibleButtons('tab1');
 
-    var tab_codings = [['tab1', 'CodingBudget'], ['tab2', 'CodingBudgetDistrict'],
-     ['tab3', 'CodingBudgetCostCategorization'], ['tab4', 'CodingSpend'],
-     ['tab5', 'CodingSpendDistrict'], ['tab6', 'CodingSpendCostCategorization']]
+    var tab_codings = [
+      ['tab1', 'CodingBudget'], 
+      ['tab2', 'CodingBudgetDistrict'],
+      ['tab3', 'CodingBudgetCostCategorization'],
+      ['tab4', 'ServiceLevelBudget'],
+      ['tab5', 'CodingSpend'],
+      ['tab6', 'CodingSpendDistrict'],
+      ['tab7', 'CodingSpendCostCategorization'],
+      ['tab8', 'ServiceLevelSpend']
+    ]
 
     for(var i = 0; i < tab_codings.length; i++) {
       var tab         = tab_codings[i][0];

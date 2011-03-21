@@ -34,3 +34,6 @@ end
 
 Factory.define :hssp_strat_obj, :class => HsspStratObj, :parent => :code do |f|
 end
+
+Factory.define :service_level, :class => ServiceLevel, :parent => :code do |f|
+end

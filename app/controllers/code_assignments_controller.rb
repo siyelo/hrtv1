@@ -116,25 +116,29 @@ class CodeAssignmentsController < ApplicationController
     def get_coding_name(klass)
       case klass.to_s
       when 'CodingBudget'
-        "Budget by Purposes"
+        'Budget by Purposes'
       when 'CodingBudgetDistrict'
-        "Budget by Locations"
+        'Budget by Locations'
       when 'CodingBudgetCostCategorization'
-        "Budget by Inputs"
+        'Budget by Inputs'
+      when 'ServiceLevelBudget'
+        'Budget by Service Level'
       when 'CodingSpend'
-        "Spent by Purposes"
+        'Spent by Purposes'
       when 'CodingSpendDistrict'
-        "Spent by Locations"
+        'Spent by Locations'
       when 'CodingSpendCostCategorization'
-        "Spent by Inputs"
+        'Spent by Inputs'
+      when 'ServiceLevelSpend'
+        'Spend by Service Level'
       end
     end
 
     def get_coding_type(klass)
       case klass.to_s
-      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
+      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
         :budget
-      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
+      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
         :spend
       end
     end
@@ -147,17 +151,20 @@ class CodeAssignmentsController < ApplicationController
         :coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
         :coding_budget_cc_classified?
+      when 'ServiceLevelBudget'
+        :service_level_budget_classified?
       when 'CodingSpend'
         :coding_spend_classified?
       when 'CodingSpendDistrict'
         :coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
         :coding_spend_cc_classified?
+      when 'ServiceLevelSpend'
+        :service_level_spend_classified?
       end
     end
 
     def load_data_response
       @data_response = @activity.data_response
     end
-
 end

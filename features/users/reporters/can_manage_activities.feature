@@ -123,7 +123,6 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I should see "Comment body"
   And I should see "Activity1 description"
 
-  @run
 Scenario: A reporter can select implementer for an activity
   When I follow "Create Activity"
   # check if by default reporter organization is selected

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110315225648) do
+ActiveRecord::Schema.define(:version => 20110321095153) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(:version => 20110315225648) do
     t.integer  "project_id"
     t.decimal  "budget2"
     t.decimal  "budget3"
+    t.decimal  "ServiceLevelBudget_amount",             :default => 0.0
+    t.decimal  "ServiceLevelSpend_amount",              :default => 0.0
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -88,7 +90,6 @@ ActiveRecord::Schema.define(:version => 20110315225648) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -135,11 +136,11 @@ ActiveRecord::Schema.define(:version => 20110315225648) do
     t.boolean  "pending_review",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "budget",          :default => true
     t.boolean  "spend",           :default => true
+    t.date     "due_date"
   end
 
   create_table "data_responses", :force => true do |t|

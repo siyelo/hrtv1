@@ -39,12 +39,15 @@ Scenario: See all tabs when data request is for budget but not spend
   And I should see "Purposes" within the budget coding tab
   And I should see "Locations" within the budget districts tab
   And I should see "Inputs" within the budget cost categorization tab
+  And I should see "Service Levels" within the budget service levels tab
   And page should have css "#tab1"
   And page should have css "#tab2"
   And page should have css "#tab3"
-  And page should not have css "#tab4"
+  And page should have css "#tab4"
   And page should not have css "#tab5"
   And page should not have css "#tab6"
+  And page should not have css "#tab7"
+  And page should not have css "#tab8"
 
 Scenario: See all tabs when data request is for spend but not budget
   Given an organization exists with name: "Organization1"
@@ -65,6 +68,8 @@ Scenario: See all tabs when data request is for spend but not budget
   And page should not have css "#tab1"
   And page should not have css "#tab2"
   And page should not have css "#tab3"
-  And page should have css "#tab4"
+  And page should not have css "#tab4"
   And page should have css "#tab5"
   And page should have css "#tab6"
+  And page should have css "#tab7"
+  And page should have css "#tab8"

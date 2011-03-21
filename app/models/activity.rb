@@ -29,7 +29,14 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
+  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget']
+
+  CLASSIFICATION_MAPPINGS = {
+    'CodingBudget' => 'CodingSpend',
+    'CodingBudgetDistrict' => 'CodingSpendDistrict',
+    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization',
+    'ServiceLevelBudget' => 'ServiceLevelSpend'
+  }
 
   ### Includes
   include ActAsDataElement
@@ -213,6 +220,10 @@ class Activity < ActiveRecord::Base
     self.locations.empty? || self.budget == self.CodingBudgetDistrict_amount
   end
 
+  def service_level_budget_classified?
+    self.budget == self.ServiceLevelBudget_amount
+  end
+
   def coding_spend_classified?
     self.spend == self.CodingSpend_amount
   end
@@ -225,16 +236,22 @@ class Activity < ActiveRecord::Base
     self.locations.empty? || self.spend == self.CodingSpendDistrict_amount
   end
 
+  def service_level_spend_classified?
+    self.spend == self.ServiceLevelSpend_amount
+  end
+
   def budget_classified?
     coding_budget_classified? &&
     coding_budget_district_classified? &&
-    coding_budget_cc_classified?
+    coding_budget_cc_classified? &&
+    service_level_budget_classified?
   end
 
   def spend_classified?
     coding_spend_classified? &&
     coding_spend_district_classified? &&
-    coding_spend_cc_classified?
+    coding_spend_cc_classified? &&
+    service_level_spend_classified?
   end
 
   def classified?
@@ -249,12 +266,14 @@ class Activity < ActiveRecord::Base
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
     if budget_changed?
-      [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+      [CodingBudget, CodingBudgetDistrict, 
+         CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
-      [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
+      [CodingSpend, CodingSpendDistrict, 
+         CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
         set_classified_amount_cache(type)
       end
     end
@@ -289,14 +308,11 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies code assignments when user has chosen to use
-  # budget codings for expenditure: Following code assignments are copied:
-  # CodingBudget -> CodingSpend
-  # CodingBudgetDistrict -> CodingSpendDistrict
-  # CodingBudgetCostCategorization -> CodingSpendCostCategorization
+  # This method copies budget code assignments to spend when user has chosen 
+  # to use budget codings for expenditure: All spend mappings are copied.
   def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
     coding_types.each do |budget_coding_type|
-      spend_coding_type = budget_coding_type.gsub(/Budget/, "Spend")
+      spend_coding_type = CLASSIFICATION_MAPPINGS[budget_coding_type]
       klass             = spend_coding_type.constantize
 
       delete_existing_code_assignments_by_type(spend_coding_type)

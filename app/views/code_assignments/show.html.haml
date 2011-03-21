@@ -5,9 +5,11 @@
 
 %ul.breadcrumb
   %li= link_to "Activities", response_activities_path(@data_response)
-  %li= link_to @activity.name.first(16), response_activity_path(@data_response, @activity)
+  %li= link_to truncate(@activity.name, :length => 16), response_activity_path(@data_response, @activity)
 
-%h1 Activity Classification
+%h1
+  = @activity.class.to_s.humanize
+  Classification
 
 #classification
 
@@ -21,8 +23,10 @@
       %div.tab1{:style => 'display: block'}= image_tag('ajax-loader.gif')
       %div.tab2= image_tag('ajax-loader.gif')
       %div.tab3= image_tag('ajax-loader.gif')
+      %div.tab4= image_tag('ajax-loader.gif')
     - if @activity.data_request.spend?
       - spend_style = ((!@activity.data_request.budget? && @activity.data_request.spend?) ? 'display: block' : nil)
-      %div.tab4{:style => spend_style}= image_tag('ajax-loader.gif')
-      %div.tab5= image_tag('ajax-loader.gif')
+      %div.tab5{:style => spend_style}= image_tag('ajax-loader.gif')
       %div.tab6= image_tag('ajax-loader.gif')
+      %div.tab7= image_tag('ajax-loader.gif')
+      %div.tab8= image_tag('ajax-loader.gif')

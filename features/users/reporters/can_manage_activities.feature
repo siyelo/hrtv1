@@ -11,8 +11,8 @@ Background:
   And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project1", data_response: the data_response
   And I am signed in as "reporter"
-  When I follow "data_request1"
-  When I follow "Activities"
+  And I follow "data_request1"
+  And I follow "Activities"
 
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"
@@ -135,3 +135,35 @@ Scenario: A reporter can select implementer for an activity
   Then I should see "Activity was successfully created"
   And I should see "Activity1 description"
   And I should see "organization1"
+
+Scenario: A reporter can filter activities
+  Given an activity exists with name: "activity2", description: "activity1 description", project: the project, data_response: the data_response
+  And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response
+  When I follow "Activities"
+  Then I should see "activity1 description"
+  And I should see "activity2 description"
+  And I fill in "query" with "activity1"
+  And I press "Search"
+  Then I should see "activity1 description"
+  And I should not see "activity2 description"
+
+  @run
+Scenario Outline: A reporter can sort activities
+  Given an activity exists with name: "activity1", description: "activity1 description", project: the project, data_response: the data_response, spend: 1, budget: 1
+  And a project exists with name: "project2", data_response: the data_response
+  And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
+
+  When I follow "Activities"
+  And I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text1>"
+  And column "<column>" row "2" should have text "<text2>"
+  When I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text2>"
+  And column "<column>" row "2" should have text "<text1>"
+
+    Examples:
+      | column_name  | column | text1                 | text2                 | 
+      | Project      | 1      | project1              | project2              | 
+      | Description  | 2      | activity1 description | activity2 description | 
+      | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               | 
+      | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               | 

@@ -457,3 +457,7 @@ end
 Then /^page should not have css "([^"]*)"$/ do |selector|
   page.should_not have_css(selector)
 end
+
+Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, row, text|
+  page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
+end

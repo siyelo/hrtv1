@@ -25,7 +25,7 @@ class CommentsController < ActiveScaffoldController
   end
 
   def joins_for_collection
-    if current_user.role?(:reporter) || current_user.role?(:activity_manager)
+    if current_user.reporter? || current_user.activity_manager?
       "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
        LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
        LEFT OUTER JOIN funding_flows fs ON fs.id = comments.commentable_id
@@ -36,7 +36,7 @@ class CommentsController < ActiveScaffoldController
   end
 
   def conditions_for_collection
-    if current_user.role?(:reporter) || current_user.role?(:activity_manager)
+    if current_user.reporter? || current_user.activity_manager?
       ["p.data_response_id IN (:drs) OR
         dr.id IN (:drs) OR
         fs.organization_id_to = :org_id AND fs.data_response_id IN (:drs) OR

@@ -68,7 +68,7 @@ class Comment < ActiveRecord::Base
   # TODO: spec
   def authorized_for_read?
     if current_user
-      if current_user.role?(:admin)
+      if current_user.admin?
         return true
       else
         if %w[ModelHelp FieldHelp].include? commentable_type

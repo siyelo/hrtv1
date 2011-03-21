@@ -202,7 +202,7 @@ class ActiveScaffoldController < ApplicationController
     end
 
     def check_user_has_data_response
-      unless current_user.current_data_response || current_user.role?(:admin)
+      unless current_user.current_data_response || current_user.admin?
         flash[:warning] = "Please first click on one of the links underneath \"Data Requests to Fulfill\" to continue. We will remember which data request you were responding to the next time you login, so you won't see this message again."
         #TODO email the file and have someone get back to helping them
         redirect_to user_dashboard_path(current_user)

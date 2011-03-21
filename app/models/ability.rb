@@ -3,9 +3,9 @@ class Ability
 
   def initialize(user)
     user ||= User.new(:roles => []) #guest
-    if user.role? :admin
+    if user.admin?
       can :manage, :all
-    elsif user.role?(:activity_manager)
+    elsif user.activity_manager?
       can :manage, Activity
       can :approve, Activity
       can :manage, [Project, FundingFlow, Organization,
@@ -15,7 +15,7 @@ class Ability
       can :read, Code
       can :read, ModelHelp
       can :read, FieldHelp
-    elsif user.role?(:reporter)
+    elsif user.reporter?
       can :manage, [Project, FundingFlow, Organization,
         Activity, OtherCost, Comment, CodeAssignment]
       # :manage seems to let all non-RESTful actions thru,

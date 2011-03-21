@@ -18,7 +18,7 @@ module ActAsDataElement
       has_one :owner, :through => :data_response, :source => :organization
 
       named_scope :available_to, lambda { |current_user|
-        if current_user.role?(:admin)
+        if current_user.admin?
           {}
         else
           {:conditions=>{:data_response_id =>

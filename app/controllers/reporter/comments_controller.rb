@@ -23,7 +23,7 @@ class Reporter::CommentsController < Reporter::BaseController
   end
 
   def edit
-    @comment = current_user.role?(:admin) ? Comment.find(params[:id]) : current_user.comments.find(params[:id])
+    @comment = current_user.admin? ? Comment.find(params[:id]) : current_user.comments.find(params[:id])
 
     respond_to do |format|
       format.html
@@ -97,7 +97,7 @@ class Reporter::CommentsController < Reporter::BaseController
   end
 
   def find_comment
-    current_user.role?(:admin) ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
+    current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
   end
 
   def commentable_resource(comment)

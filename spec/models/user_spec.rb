@@ -2,12 +2,15 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
 
-  describe "validations" do
-    subject { Factory(:user, :organization => Factory(:organization) ) }
-    it { should be_valid }
-    it { should validate_presence_of(:username) }
-    it { should validate_presence_of(:email) }
-    it { should validate_presence_of(:organization_id) }
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:full_name) }
+    it { should allow_mass_assignment_of(:email) }
+    it { should allow_mass_assignment_of(:username) }
+    it { should allow_mass_assignment_of(:password) }
+    it { should allow_mass_assignment_of(:password_confirmation) }
+    it { should allow_mass_assignment_of(:organization_id) }
+    it { should allow_mass_assignment_of(:organization) }
+    it { should allow_mass_assignment_of(:roles) }
   end
 
   describe "associations" do
@@ -15,6 +18,141 @@ describe User do
     it { should have_many :data_responses }
     it { should belong_to :organization }
     it { should belong_to :current_data_response }
+  end
+
+  describe "validations" do
+    subject { Factory(:user, :organization => Factory(:organization) ) }
+    it { should be_valid }
+    it { should validate_presence_of(:username) }
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:organization_id) }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+    it { should validate_uniqueness_of(:username).case_insensitive }
+  end
+
+  describe "find_by_username_or_email" do
+    it "finds user by username" do
+      user = Factory.create(:user, :username => 'pink.panter')
+      User.find_by_username_or_email('pink.panter').should == user
+    end
+
+    it "finds user by email" do
+      user = Factory.create(:user, :email => 'pink.panter@gmail.com')
+      User.find_by_username_or_email('pink.panter@gmail.com').should == user
+    end
+  end
+
+  describe "roles" do
+    it "is admin when roles_mask = 1" do
+      user = Factory.create(:user, :roles_mask => 1)
+      user.roles.should == ['admin']
+    end
+
+    it "is reporter when roles_mask = 2" do
+      user = Factory.create(:user, :roles_mask => 2)
+      user.roles.should == ['reporter']
+    end
+
+    it "is admin and reporter when roles_mask = 3" do
+      user = Factory.create(:user, :roles_mask => 3)
+      user.roles.should == ['admin', 'reporter']
+    end
+
+    it "is activity_manager when roles_mask = 4" do
+      user = Factory.create(:user, :roles_mask => 4)
+      user.roles.should == ['activity_manager']
+    end
+
+    it "is admin and activity_manager when roles_mask = 5" do
+      user = Factory.create(:user, :roles_mask => 5)
+      user.roles.should == ['admin', 'activity_manager']
+    end
+
+    it "is reporter and activity_manager when roles_mask = 6" do
+      user = Factory.create(:user, :roles_mask => 6)
+      user.roles.should == ['reporter', 'activity_manager']
+    end
+
+    it "is admin, reporter and activity_manager when roles_mask = 7" do
+      user = Factory.create(:user, :roles_mask => 7)
+      user.roles.should == ['admin', 'reporter', 'activity_manager']
+    end
+  end
+
+  describe "roles= can be assigned" do
+    it "can assign 1 role" do
+      user = Factory.create(:user)
+      user.roles = ['admin']
+      user.save
+      user.reload.roles.should == ['admin']
+    end
+
+    it "can assign 3 roles" do
+      user = Factory.create(:user)
+      user.roles = ['admin', 'reporter', 'activity_manager']
+      user.save
+      user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
+    end
+    
+    it "cannot assign unexisting role" do
+      user = Factory.create(:user)
+      user.roles = ['admin123']
+      user.save
+      user.reload.roles.should == []
+    end
+  end
+
+  describe "admin?" do
+    it "is admin when roles_mask is 1" do
+      user = Factory.create(:user, :roles_mask => 1)
+      user.admin?.should be_true
+    end
+
+    it "is not admin when roles_mask is not 1" do
+      user = Factory.create(:user, :roles_mask => 2)
+      user.admin?.should be_false
+    end
+  end
+
+  describe "reporter?" do
+    it "is reporter when roles_mask is 2" do
+      user = Factory.create(:user, :roles_mask => 2)
+      user.reporter?.should be_true
+    end
+
+    it "is not reporter when roles_mask is not 1" do
+      user = Factory.create(:user, :roles_mask => 1)
+      user.reporter?.should be_false
+    end
+  end
+
+  describe "activity_manager?" do
+    it "is activity_manager when roles_mask is 3" do
+      user = Factory.create(:user, :roles_mask => 3)
+      user.reporter?.should be_true
+    end
+
+    it "is not activity_manager when roles_mask is not 3" do
+      user = Factory.create(:user, :roles_mask => 1)
+      user.reporter?.should be_false
+    end
+  end
+
+  describe "name" do
+    it "returns full_name if full name is present" do
+      user = Factory.create(:user, :full_name => "Pink Panter")
+      user.name.should == "Pink Panter"
+    end
+
+    it "returns username if full name is nil" do
+      user = Factory.create(:user, :full_name => nil, :username => 'pink.panter')
+      user.name.should == "pink.panter"
+    end
+
+    it "returns username if full name is blank string" do
+      user = Factory.create(:user, :full_name => '', :username => 'pink.panter')
+      user.name.should == "pink.panter"
+    end
   end
 end
 

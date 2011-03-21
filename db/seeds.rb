@@ -17,4 +17,6 @@ require 'fastercsv'
 
   load 'db/seed_files/beneficiaries.rb'
 
+  load 'db/seed_files/service_levels.rb'
+
   puts "...seeding DONE\n\n"

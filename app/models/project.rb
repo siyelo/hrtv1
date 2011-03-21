@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
 
   ### Named scopes
   named_scope :available_to, lambda { |current_user|
-    if current_user.role?(:admin)
+    if current_user.admin?
       {}
     else
       {:conditions=>{:data_response_id => current_user.current_data_response.try(:id)}}

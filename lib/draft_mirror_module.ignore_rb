@@ -75,7 +75,7 @@ module CreateMirrorsCode
    
    unless @@in_process_of_saving.include? self
     @@in_process_of_saving << self
-    user_was_admin = current_user.role? :admin
+    user_was_admin = current_user.admin?
     current_user.roles << "admin" # elevate priviledges since its really the system doing this
    
     case self.class

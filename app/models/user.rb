@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
+  # TODO: remove
   belongs_to :current_data_response, :class_name => "DataResponse",
               :foreign_key => :data_response_id_current
 
@@ -20,7 +21,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
 
-  # Authlogic
+  # Used by Authlogic's UserSession to find the user by username or by email
   def self.find_by_username_or_email(login)
     self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
   end
@@ -39,18 +40,24 @@ class User < ActiveRecord::Base
     ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
   end
 
-  def role?(role)
-    roles.include? role.to_s
-  end
-
   def admin?
     role?('admin')
   end
 
+  def reporter?
+    role?('reporter')
+  end
+
+  def activity_manager?
+    role?('activity_manager')
+  end
+
+  # TODO: spec or remove
   def to_s
     username
   end
 
+  # TODO: spec or remove
   # Law of Demeter methods
   def organization_status
     return "No Organization" if organization.nil?
@@ -63,6 +70,12 @@ class User < ActiveRecord::Base
   def name
     full_name.present? ? full_name : username
   end
+
+  private
+
+    def role?(role)
+      roles.include?(role.to_s)
+    end
 end
 
 

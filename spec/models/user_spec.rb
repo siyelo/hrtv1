@@ -2,12 +2,15 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
 
-  describe "validations" do
-    subject { Factory(:user, :organization => Factory(:organization) ) }
-    it { should be_valid }
-    it { should validate_presence_of(:username) }
-    it { should validate_presence_of(:email) }
-    it { should validate_presence_of(:organization_id) }
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:full_name) }
+    it { should allow_mass_assignment_of(:email) }
+    it { should allow_mass_assignment_of(:username) }
+    it { should allow_mass_assignment_of(:password) }
+    it { should allow_mass_assignment_of(:password_confirmation) }
+    it { should allow_mass_assignment_of(:organization_id) }
+    it { should allow_mass_assignment_of(:organization) }
+    it { should allow_mass_assignment_of(:roles) }
   end
 
   describe "associations" do
@@ -15,6 +18,16 @@ describe User do
     it { should have_many :data_responses }
     it { should belong_to :organization }
     it { should belong_to :current_data_response }
+  end
+
+  describe "validations" do
+    subject { Factory(:user, :organization => Factory(:organization) ) }
+    it { should be_valid }
+    it { should validate_presence_of(:username) }
+    it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:organization_id) }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+    it { should validate_uniqueness_of(:username).case_insensitive }
   end
 end
 

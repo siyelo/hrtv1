@@ -6,8 +6,7 @@
       = render 'shared/search_form'
   Activities
 
-%p Split your Projects into smaller, more detailed parts.
-%br
+= render 'getting_started'
 
 %ul.horizontal
   %li
@@ -36,26 +35,19 @@
     = "Activities with names or description containing #{params[:query]}"
     = link_to "(Back to complete activity listing)", response_activities_path(@data_response), :class => 'target'
 
-.form_aside
-  %h3 What's an Activity?
-  %p An activity is defined as a functional task that is falls within a project. Once you've entered in a description for an activity, classify the activity using the coding tree provided.
-  %br
-  %p You can also provide cost details which give more information on where spending for activities has or will go.
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "projects.name", "Project"
+      %th= sortable "description"
+      %th= sortable "spend", "Total Spent"
+      %th= sortable "budget", "Total Budget"
+      %th.dummy Classified
+      %th
 
-.wrap-80
-  %table.standard.rounded
-    %thead
-      %tr
-        %th= sortable "projects.name", "Project"
-        %th= sortable "description"
-        %th= sortable "spend", "Total Spent"
-        %th= sortable "budget", "Total Budget"
-        %th.dummy Classified
-        %th
+  %tbody
+    = render :partial => "activity", :collection => @activities
 
-    %tbody
-      = render :partial => "activity", :collection => @activities
-
-  = will_paginate @activities
+= will_paginate @activities
 
 %ul{ :id => 'position_container', :class => 'image_list' }

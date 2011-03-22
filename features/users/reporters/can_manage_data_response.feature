@@ -14,13 +14,13 @@ Scenario: User can start a data response
 
 Scenario: Browse to data response edit page
   Given a basic org + reporter profile, with data response, signed in
-  When I follow "My Data"
+  When I follow "My Response"
   And I follow "Settings"
   And I should see "Response Settings" within "h1"
 
 Scenario Outline: Edit data response, see feedback messages
   Given a basic org + reporter profile, with data response, signed in
-  When I follow "My Data"
+  When I follow "My Response"
   And I follow "Settings"
   And I select "Euro (EUR)" from "data_response_currency"
   And I fill in "data_response_fiscal_year_start_date" with "<start_date>"

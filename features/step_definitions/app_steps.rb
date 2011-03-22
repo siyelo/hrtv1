@@ -233,7 +233,7 @@ end
 Then /^I should see the main nav tabs$/ do
   steps %Q{
     Then I should see "Dashboard" within "div#main-nav"
-    Then I should see "My Data" within "div#main-nav"
+    Then I should see "My Response" within "div#main-nav"
     Then I should see "Reports" within "div#main-nav"
     Then I should see "Help" within "div#main-nav"
   }

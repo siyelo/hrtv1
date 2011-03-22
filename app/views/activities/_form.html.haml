@@ -23,7 +23,7 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District.", :required => false
-      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint => "all the districts in which this Activity was implemented", :required => false
+      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint => "all the districts/provinces in which this Activity was implemented", :required => false
 
   %li.last
     %h3== Past Expenditure (#{@data_response.currency})
@@ -64,8 +64,8 @@
       = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Text for targets", :as => :text, :required => false
 
   %li.last
-    %h2 Sub Activities
-    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of districts), that implement identical or very similar activities.
+    %h3 Sub Activities
+    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar activities.
     %ul.dashboard_section
       - f.semantic_fields_for :sub_activities do |ca|
         = render "activities/sub_activity_fields", :f => ca
@@ -73,7 +73,7 @@
         = link_to_add_fields "Add sub activity", f, :sub_activities, "activities/"
 
   %li.last
-    %h2 Institutions Assisted
+    %h3 Institutions Assisted
     %ul.dashboard_section
       = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
 

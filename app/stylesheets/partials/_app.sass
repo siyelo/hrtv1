@@ -514,14 +514,24 @@ body.app
 
     h2
       padding: 10px
-
-    h2
       +border-top-radius
       background: image_url("bg-blue.jpg")
       clear: both
       color: #fff
       font-size: 0.8em
       letter-spacing: 0.05em
+    #getting_started_title
+      h2
+        //overridden here temporarily since h2 refactoring impacts
+        // admin/reports screens - yep, thats a TODO
+        // Actual styles
+        +border-top-radius
+        background-color: #64B23B
+        padding: 5px 5px 5px 10px
+        // styles needed just to avoid refactoring
+        background-image: none
+
+
 
   #content #map_fields_form
     .map_fields
@@ -890,3 +900,29 @@ table.rounded
   ul li
     list-style-type: disc
     margin-left: 10px
+
+
+#gs_container
+  margin-bottom: 20px
+  width: 100%
+  #getting_started_title
+    //temporarily done under a h2 override
+  .getting_started
+    +clearfix
+    background-color: #F9FEF6
+    border-color: #C1C1C1
+    border-right: 1px solid #C1C1C1
+    border-style: solid
+    border-width: 0 1px 1px
+    +border-bottom-radius
+    -moz-box-shadow: 1px 1px 3px #DDDDDD
+    margin-bottom: 15px
+    padding: 10px
+    .message
+      color: #555555
+      padding: 0
+      display: block
+      float: left
+      font-size: 11px
+      line-height: 14px
+      margin: 0

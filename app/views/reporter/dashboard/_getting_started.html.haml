@@ -1,0 +1,24 @@
+#gs_container
+  #getting_started_title
+    %h2= "Getting started with the Health Resource Tracker"
+  .getting_started
+    .message
+      %p
+        Welcome to the Health Resource Tracker Dashboard. Here you can see all your
+        = link_to "Responses", help_link("response"), :target => "_blank"
+        where you can add details about your Projects & Activities.
+      %ul.bulleted
+        %li
+          Check if there are any outstanding
+          = link_to "Requests", help_link("request"), :target => "_blank"
+          for you to respond to.
+        %li Select a new requests to respond to, or edit a Response you've already started working on.
+        %li In your Response, you can add the Projects and Activities your organization worked on, during the requested time period.
+        %li Review and submit your Response to the organization that created that request.
+        %li The project dashboard gives an overview of all current responses and comments.
+      %p
+        There is great
+        = link_to "online help", help_link, :target => "_blank"
+        in HRT and you can always
+        = link_to "contact the Support Team", contact_link, :target => "_blank"
+        at anytime to ask us a question.

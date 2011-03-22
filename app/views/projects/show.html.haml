@@ -25,7 +25,10 @@
         %li End date
         %li= @project.end_date
       %ul.row
-        %li Currency
+        %li Locations
+        %li= @project.locations.map(&:short_display).join(', ')
+      %ul.row
+        %li Currency override
         %li= @project.currency
 
   %h3.form_heading Past Expenditure
@@ -74,9 +77,6 @@
       %ul.row
         %li Entire Budget
         %li= c(@project.entire_budget, @project.currency)
-      %ul.row
-        %li Locations
-        %li= @project.locations.map(&:short_display).join(', ')
 
   %h3.form_heading In flows
   %ul.dashboard_section

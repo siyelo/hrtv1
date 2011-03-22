@@ -2,6 +2,8 @@
 
 %h1.main_heading New Response
 
+= render 'getting_started'
+
 = error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
 - semantic_form_for @data_response, :url => responses_path, :html => {:method => :post} do |f|

@@ -17,8 +17,8 @@ Background:
 Scenario: Reporter can CRUD other costs
   When I follow "Create Other Cost"
   And I fill in "Description" with "OtherCost1 description"
-  And I select "project1" from "Project"
-  And I press "Create New Other Cost"
+  And I check "project1"
+  And I press "Create Other Cost"
   Then I should see "Other Cost was successfully created"
   And I should see "OtherCost1 description"
 
@@ -34,17 +34,16 @@ Scenario: Reporter can CRUD other costs
   And I should not see "OtherCost1"
   And I should not see "OtherCost2"
 
-Scenario Outline: Reporter can CRUD other costs and see errors
+Scenario Outline: Reporter can create an other costs at an Org level (i.e. without a project)
   When I follow "Create Other"
   And I fill in "Description" with "<description>"
-  And I select "<project>" from "Project"
-  And I press "Create New Other Cost"
-  Then I should see "Oops, we couldn't save your changes."
-  And I should see "<message>"
+  And I check "<project>"
+  And I press "Create Other Cost"
+  Then I should not see "Oops, we couldn't save your changes."
 
   Examples:
-      | description | project | message                | 
-      | d1          |         | Project can't be blank | 
+      | description | project | 
+      | d1          |         |
 
 Scenario: Reporter can upload other costs
   When I attach the file "spec/fixtures/other_costs.csv" to "File"

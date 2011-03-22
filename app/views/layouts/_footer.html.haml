@@ -18,8 +18,8 @@
           %li.powered= "v#{Version.current}"
 
     %ul.left
-      %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"
-      %li= link_to "Contact", "http://hrtapp.tenderapp.com/discussions", :target => "_blank"
+      %li= link_to "Help", help_link, :target => "_blank"
+      %li= link_to "Contact", contact_link, :target => "_blank"
       %li= link_to "About", about_page_path
 
   -# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet

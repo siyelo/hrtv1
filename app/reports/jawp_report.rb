@@ -7,10 +7,10 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = activities
-  #  @activities = Activity.only_simple.find(:all,
-  #                 :conditions => ["activities.id IN (?)", [1941]], # NOTE: FOR DEBUG ONLY
-  #                 :include => [:locations, :provider, :organizations,
-  #                             :beneficiaries, {:data_response => :organization}])
+    @activities = Activity.only_simple.find(:all,
+                   :conditions => ["activities.id IN (?)", [1764]], # NOTE: FOR DEBUG ONLY
+                   :include => [:locations, :provider, :organizations,
+                               :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -55,10 +55,14 @@ class Reports::JawpReport
     row << amount_q2
     row << amount_q3
     row << amount_q4
-    row << (amount_q1 ? amount_q1 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q2 ? amount_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q3 ? amount_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q4 ? amount_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+    #row << # reimplement currency conversion here later (amount_q1 ? amount_q1 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q2 ? amount_q2 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q3 ? amount_q3 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')
+    row << amount_q1
+    row << amount_q2
+    row << amount_q3
+    row << amount_q4
     row << get_locations(activity)
     row << activity.sub_activities_count
     row << get_hc_sub_activity_count(activity)
@@ -99,6 +103,14 @@ class Reports::JawpReport
           funding_sources_total += fs.spend if fs.spend
         end
       end
+      
+      # edge case that handles bad quality data e.g. funding sources
+      # that dont have amounts specified for them
+      # TODO move this into helper in get_funding_sources for all reports!
+      if funding_sources_total == 0
+        funding_sources = fake_one_funding_source_if_none( [] )
+        funding_sources_total = 1
+      end
 
       coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
       cost_category_coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(cost_category_codings)
@@ -120,7 +132,14 @@ class Reports::JawpReport
                 get_ratio(amount_total, district_coding.amount_not_in_children) *
                 get_ratio(amount_total, cost_category_coding.amount_not_in_children) * # why was this commented out before ?
                 get_ratio(funding_sources_total, funding_source_amount)
+<<<<<<< HEAD
 
+=======
+              puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(amount_total, ca.amount_not_in_children)})"
+              puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(amount_total, district_coding.amount_not_in_children)}"
+              puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(amount_total, cost_category_coding.amount_not_in_children)}" 
+              puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
+>>>>>>> add logic to deal with bad funding sources
               amount = (amount_total || 0) * ratio
 
               #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s

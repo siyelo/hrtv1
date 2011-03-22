@@ -124,6 +124,7 @@ module Reports::Helpers
   def get_funding_sources(activity)
     #TODO fake one if none so works correctly, w name of Not Entered
     #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
+    # TODO take logic from jawp report that replaces bad funding sources, marked with a TODO
     funding_sources = []
     if activity.project
       activity.project.in_flows.with_organizations.each do |funding_source|

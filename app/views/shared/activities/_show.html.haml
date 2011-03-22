@@ -100,6 +100,20 @@
           %li Spend percentage
           %li= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
 
+  %h3.form_heading Funding Sources
+  %ul.dashboard_section
+    - @activity.funding_sources.each do |funding_source|
+      %li
+        %ul.row
+          %li Organization
+          %li= funding_source.funding_flow.from.try(:name)
+        %ul.row
+          %li Spent
+          %li= c(funding_source.spend, @activity.currency)
+        %ul.row
+          %li Budget
+          %li= c(funding_source.budget, @activity.currency)
+
   %h3.form_heading Institutions Assisted
   %ul.dashboard_section
     %li

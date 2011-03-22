@@ -15,6 +15,7 @@ describe Activity do
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :sub_activities }
     it { should have_many :sub_implementers }
+    it { should have_many :funding_sources }
     it { should have_many :codes }
     it { should have_many :code_assignments }
     it { should have_many :coding_budget }
@@ -52,6 +53,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
+    it { should allow_mass_assignment_of(:funding_sources_attributes) }
   end
 
   describe "validations" do

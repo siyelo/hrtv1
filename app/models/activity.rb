@@ -51,7 +51,7 @@ class Activity < ActiveRecord::Base
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :beneficiary_ids, :location_ids, :provider_id,
-                  :sub_activities_attributes, :organization_ids, :locations
+                  :sub_activities_attributes, :organization_ids, :funding_sources_attributes
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -64,6 +64,7 @@ class Activity < ActiveRecord::Base
                             :foreign_key => :activity_id,
                             :dependent => :destroy
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
+  has_many :funding_sources
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
   has_many :coding_budget
@@ -73,8 +74,10 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
 
-  # Nested attributes
+  ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
+  accepts_nested_attributes_for :funding_sources, :allow_destroy => true, 
+    :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
 
   ### Delegates
   delegate :organization, :to => :data_response

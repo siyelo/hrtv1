@@ -183,4 +183,15 @@ module ApplicationHelper
       ""
     end
   end
+
+  def help_link(query = nil)
+    link = "kb" #default to hte knowledge base
+    link = "search?t=f&q=#{query}" if query
+    return "http://hrtapp.tenderapp.com/#{link}"
+  end
+
+  def contact_link
+    "http://hrtapp.tenderapp.com/discussions"
+  end
+
 end

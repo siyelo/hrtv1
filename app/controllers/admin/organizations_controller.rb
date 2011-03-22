@@ -1,6 +1,6 @@
 class Admin::OrganizationsController < Admin::BaseController
 
-  # Inherited Resources
+  ### Inherited Resources
   inherit_resources
 
   def index

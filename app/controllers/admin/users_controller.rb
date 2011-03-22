@@ -1,8 +1,13 @@
 require 'set'
 class Admin::UsersController < Admin::BaseController
+
+  ### Constants
   SORTABLE_COLUMNS = ['username', 'email', 'full_name', 'organizations.name']
 
+  ### Inherited Resources
   inherit_resources
+
+  ### Helpers
   helper_method :sort_column, :sort_direction
 
   def index

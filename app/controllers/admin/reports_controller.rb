@@ -1,6 +1,7 @@
 class Admin::ReportsController < Admin::BaseController
   include ReportsControllerHelpers
 
+  ### Filters
   before_filter :find_report, :only => [:show, :edit, :update]
 
   def index

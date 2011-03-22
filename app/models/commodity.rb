@@ -16,7 +16,7 @@ class Commodity < ActiveRecord::Base
   def self.create_from_file(doc, data_response)
     saved, errors = 0, 0
     doc.each do |row|
-      attributes = row.to_hash
+      attributes = row.to_hash if CostCategory.roots.map(&:short_display).include?(row["commodity_type"])
       commodity = data_response.commodities.new(attributes)
       commodity.save ? (saved += 1) : (errors += 1)
     end

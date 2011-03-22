@@ -15,7 +15,6 @@ Feature: Reporter can manage projects
     And I press "Update Response"
     And I follow "Commodities"
 
-    @run
     Scenario: Reporter can CRUD commodities
       When I follow "Create Commodity"
       And I select "Incentives" from "commodity_commodity_type"
@@ -44,6 +43,25 @@ Feature: Reporter can manage projects
       When I follow "X"
       Then I should see "Commodity was successfully destroyed"
       And I should not see "Commodity1"
+      
+      @run
+    Scenario: Reporter can upload commodities
+      When I attach the file "spec/fixtures/commodity.csv" to "File"
+      And I press "Upload and Import"
+      Then wait a few moments
+
+
+    Scenario: Reporter can see error if no csv file is not attached for upload
+      When I press "Upload and Import"
+      Then I should see "Please select a file to upload"
+
+
+    Scenario: Reporter can see error when invalid csv file is attached for upload and download template
+      When I attach the file "spec/fixtures/invalid.csv" to "File"
+      And I press "Upload and Import"
+      Then I should see "Wrong fields mapping. Please download the CSV template"
+      When I follow "Download template"
+      Then I should see "commodity_type,description,unit_cost,quantity"
       
       
       

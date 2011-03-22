@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20110317123051) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -151,8 +152,13 @@ ActiveRecord::Schema.define(:version => 20110317123051) do
     t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
+<<<<<<< HEAD
     t.boolean  "budget",          :default => true,  :null => false
     t.boolean  "spend",           :default => true,  :null => false
+=======
+    t.boolean  "budget",          :default => true
+    t.boolean  "spend",           :default => true
+>>>>>>> changed up commodities to sort by different fields, added the currency and it now checks the commodity type before it will allow it to be added
   end
 
   create_table "data_responses", :force => true do |t|

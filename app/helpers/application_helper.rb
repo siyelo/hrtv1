@@ -144,26 +144,9 @@ module ApplicationHelper
   def js_safe(var)
     var.nil? ? "undefined" : var
   end
-  
+
   def usd_to_local_currency
-    if ENV['HRT_COUNTRY'] == 'kenya'
-      Money.default_bank.get_rate(:USD, :KES)
-    else
-      Money.default_bank.get_rate(:USD, :RWF)
-    end
-  end
-  
-  def display_currency_code
-    if ENV['HRT_COUNTRY'] == 'kenya'
-      "KES"
-    else
-      "RWF"
-    end
-  end
-
-
-  def usd_to_rwf
-    Money.default_bank.get_rate(:USD, :RWF)
+    Money.default_bank.get_rate(:USD, Money.default_currency)
   end
 
   # sortable columns

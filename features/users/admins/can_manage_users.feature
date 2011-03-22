@@ -8,7 +8,6 @@ Background:
   And an admin exists with username: "admin"
   And I am signed in as "admin"
 
-  @run
 Scenario: Admin can CRUD users
   When I follow "Users"
   And I follow "Create User"
@@ -35,4 +34,24 @@ Scenario: Admin can CRUD users
   Then I should see "User was successfully destroyed"
   And I should not see "pink.panter1"
   And I should not see "pink.panter2"
+
+Scenario Outline: Admin can CRUD users and see errors
+  When I follow "Users"
+  When I follow "Create User"
+  And I select "<organization>" from "Organization"
+  And I fill in "Username" with "<username>"
+  And I fill in "Email" with "<email>"
+  And I fill in "Full name" with "<name>"
+  And I select "<roles>" from "Roles"
+  And I fill in "Password" with "<password>"
+  And I fill in "Password confirmation" with "<password_conf>"
+  And I press "Create New User"
+  Then I should see "Oops, we couldn't save your changes."
+  And I should see "<message>"
+
+  Examples:
+     | organization  | username | email         | name | roles    | password | password_conf | message                     | 
+     |               | panter   | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank | 
+     | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     | 
+     | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        | 
 

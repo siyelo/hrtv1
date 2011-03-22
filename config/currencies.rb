@@ -7,6 +7,8 @@
 # @example
 #   script/runner config/currencies.rb
 
+require 'money/bank/google_currency'
+
 primary_currencies = [:USD, :RWF, :KES]
 cache = "#{RAILS_ROOT}/config/currencies.yml"
 Money.default_bank = Money::Bank::GoogleCurrency.new

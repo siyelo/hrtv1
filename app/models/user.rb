@@ -1,7 +1,9 @@
 class User < ActiveRecord::Base
   acts_as_authentic
 
+  ### Constants
   ROLES = %w[admin reporter activity_manager]
+  FILE_UPLOAD_COLUMNS = %w[organization_name username email full_name roles password password_confirmation]
 
   ### Attributes
   attr_accessible :full_name, :email, :username, :organization_id, :organization,
@@ -25,6 +27,25 @@ class User < ActiveRecord::Base
   def self.find_by_username_or_email(login)
     self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
   end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << User::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      organization = Organization.find_by_name(attributes.delete('organization_name'))
+      attributes.merge!(:organization_id => organization.id) if organization
+      user = User.new(attributes)
+      user.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
 
   def deliver_password_reset_instructions!
     reset_perishable_token!

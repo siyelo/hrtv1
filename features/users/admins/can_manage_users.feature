@@ -55,3 +55,26 @@ Scenario Outline: Admin can CRUD users and see errors
      | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     | 
      | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        | 
 
+Scenario: Admin can upload users
+  When I follow "Users"
+  And I attach the file "spec/fixtures/users.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Created 4 of 4 users successfully"
+  And I should see "user1"
+  And I should see "user2"
+  And I should see "user3"
+  And I should see "user4"
+
+Scenario: Admin can see error if no csv file is not attached for upload
+  When I follow "Users"
+  And I press "Upload and Import"
+  Then I should see "Please select a file to upload"
+
+Scenario: Admin can see error when invalid csv file is attached for upload and download template
+  When I follow "Users"
+  And I attach the file "spec/fixtures/invalid.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Wrong fields mapping. Please download the CSV template"
+  When I follow "Download template"
+  Then I should see "organization_name,username,email,full_name,roles,password,password_confirmation"
+

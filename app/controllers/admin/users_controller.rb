@@ -1,3 +1,4 @@
+require 'set'
 class Admin::UsersController < Admin::BaseController
   SORTABLE_COLUMNS = ['username', 'email', 'organizations.name', 'roles']
 
@@ -14,16 +15,16 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def download_template
-    template = Activity.download_template
-    send_csv(template, 'activities_template.csv')
+    template = User.download_template
+    send_csv(template, 'users_template.csv')
   end
 
   def create_from_file
     if params[:file].present?
       doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-      if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
-        saved, errors = Activity.create_from_file(doc, @data_response)
-        flash[:notice] = "Created #{saved} of #{saved + errors} activities successfully"
+      if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = User.create_from_file(doc)
+        flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
       else
         flash[:error] = 'Wrong fields mapping. Please download the CSV template'
       end
@@ -31,7 +32,7 @@ class Admin::UsersController < Admin::BaseController
       flash[:error] = 'Please select a file to upload'
     end
 
-    redirect_to response_activities_url(@data_response)
+    redirect_to admin_users_url
   end
 
 

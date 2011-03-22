@@ -209,35 +209,35 @@ class Activity < ActiveRecord::Base
   #end
 
   def coding_budget_classified?
-    self.budget == self.CodingBudget_amount
+    budget.blank? || budget == self.CodingBudget_amount
   end
 
   def coding_budget_cc_classified?
-    self.budget == self.CodingBudgetCostCategorization_amount
+    budget.blank? || budget == self.CodingBudgetCostCategorization_amount
   end
 
   def coding_budget_district_classified?
-    self.locations.empty? || self.budget == self.CodingBudgetDistrict_amount
+    budget.blank? || locations.empty? || budget == self.CodingBudgetDistrict_amount
   end
 
   def service_level_budget_classified?
-    self.budget == self.ServiceLevelBudget_amount
+    budget.blank? || budget == self.ServiceLevelBudget_amount
   end
 
   def coding_spend_classified?
-    self.spend == self.CodingSpend_amount
+    spend.blank? || spend == self.CodingSpend_amount
   end
 
   def coding_spend_cc_classified?
-    self.spend == self.CodingSpendCostCategorization_amount
+    spend.blank? || spend == self.CodingSpendCostCategorization_amount
   end
 
   def coding_spend_district_classified?
-    self.locations.empty? || self.spend == self.CodingSpendDistrict_amount
+    spend.blank? || locations.empty? || spend == self.CodingSpendDistrict_amount
   end
 
   def service_level_spend_classified?
-    self.spend == self.ServiceLevelSpend_amount
+    spend.blank? || spend == self.ServiceLevelSpend_amount
   end
 
   def budget_classified?

@@ -191,25 +191,35 @@ describe Activity do
   #end
 
   describe "coding_budget_classified?" do
-    it "is true when budget is equal to CodingBudget_amount" do
+    it "is classified when budget is nil" do
+      activity = Factory.create(:activity, :budget => nil, :CodingBudget_amount => 100)
+      activity.coding_budget_classified?.should be_true
+    end
+
+    it "is classified when budget is equal to CodingBudget_amount" do
       activity = Factory.create(:activity, :budget => 100, :CodingBudget_amount => 100)
       activity.coding_budget_classified?.should be_true
     end
 
-    it "is not true when budget is not equal to CodingBudget_amount" do
+    it "is not classified when budget is not equal to CodingBudget_amount" do
       activity = Factory.create(:activity, :budget => 100, :CodingBudget_amount => 101)
       activity.coding_budget_classified?.should be_false
     end
   end
 
   describe "coding_budget_cc_classified?" do
-    it "is true when budget is equal to CodingBudgetCostCategorization_amount" do
+    it "is classified when budget is nil" do
+      activity = Factory.create(:activity, :budget => nil, :CodingBudget_amount => 100)
+      activity.coding_budget_cc_classified?.should be_true
+    end
+
+    it "is classified when budget is equal to CodingBudgetCostCategorization_amount" do
       activity = Factory.create(:activity, :budget => 100,
                                 :CodingBudgetCostCategorization_amount => 100)
       activity.coding_budget_cc_classified?.should be_true
     end
 
-    it "is not true when budget is not equal to CodingBudgetCostCategorization_amount" do
+    it "is not classified when budget is not equal to CodingBudgetCostCategorization_amount" do
       activity = Factory.create(:activity, :budget => 100,
                                 :CodingBudgetCostCategorization_amount => 101)
       activity.coding_budget_cc_classified?.should be_false
@@ -217,13 +227,19 @@ describe Activity do
   end
 
   describe "service_level_budget_classified?" do
-    it "is true when budget is equal to ServiceLevelBudget_amount" do
+    it "is classified when budget is nil" do
+      activity = Factory.create(:activity, :budget => nil,
+                                :ServiceLevelBudget_amount => 100)
+      activity.service_level_budget_classified?.should be_true
+    end
+
+    it "is classified when budget is equal to ServiceLevelBudget_amount" do
       activity = Factory.create(:activity, :budget => 100,
                                 :ServiceLevelBudget_amount => 100)
       activity.service_level_budget_classified?.should be_true
     end
 
-    it "is not true when budget is not equal to ServiceLevelBudget_amount" do
+    it "is not classified when budget is not equal to ServiceLevelBudget_amount" do
       activity = Factory.create(:activity, :budget => 100,
                                 :ServiceLevelBudget_amount => 101)
       activity.service_level_budget_classified?.should be_false
@@ -231,55 +247,65 @@ describe Activity do
   end
 
   describe "coding_budget_district_classified?" do
-    context "activity does not have locations" do
-      before :each do
-        @activity = Factory.create(:activity, :budget => 100, :locations => [],
-                                   :CodingBudgetDistrict_amount => 100)
-      end
-
-      it "is true" do
-        @activity.coding_budget_district_classified?.should be_true
-      end
+    it "is classified when budget is nil" do
+      @activity = Factory.create(:activity, :budget => nil,
+                                 :CodingBudgetDistrict_amount => 100)
+      @activity.coding_budget_district_classified?.should be_true
     end
 
-    context "activity does not have locations" do
-      it "is true when budget is equal to CodingBudgetDistrict_amount" do
-        activity = Factory.create(:activity, :budget => 100,
-                                   :locations => [Factory.create(:location)],
-                                   :CodingBudgetDistrict_amount => 100)
-        activity.coding_budget_district_classified?.should be_true
-      end
 
-      it "should not be true when budget is not equal to CodingBudgetDistrict_amount" do
-        activity = Factory.create(:activity, :budget => 100,
-                                   :locations => [Factory.create(:location)],
-                                   :CodingBudgetDistrict_amount => 101)
-        activity.coding_budget_district_classified?.should be_false
-      end
+    it "is classified when locations are empty" do
+      @activity = Factory.create(:activity, :budget => 100, :locations => [],
+                                 :CodingBudgetDistrict_amount => 100)
+      @activity.coding_budget_district_classified?.should be_true
     end
 
+    it "is classified when budget is equal to CodingBudgetDistrict_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                 :locations => [Factory.create(:location)],
+                                 :CodingBudgetDistrict_amount => 100)
+      activity.coding_budget_district_classified?.should be_true
+    end
+
+    it "is not classified when budget is not equal to CodingBudgetDistrict_amount" do
+      activity = Factory.create(:activity, :budget => 100,
+                                 :locations => [Factory.create(:location)],
+                                 :CodingBudgetDistrict_amount => 101)
+      activity.coding_budget_district_classified?.should be_false
+    end
   end
 
   describe "coding_spend_classified?" do
-    it "is true when spend is equal to CodingSpend_amount" do
+    it "is classified when spend is nil" do
+      activity = Factory.create(:activity, :spend => nil, :CodingSpend_amount => 100)
+      activity.coding_spend_classified?.should be_true
+    end
+
+    it "is classified when spend is equal to CodingSpend_amount" do
       activity = Factory.create(:activity, :spend => 100, :CodingSpend_amount => 100)
       activity.coding_spend_classified?.should be_true
     end
 
-    it "is not true when spend is not equal to CodingSpend_amount" do
+    it "is not classified when spend is not equal to CodingSpend_amount" do
       activity = Factory.create(:activity, :spend => 100, :CodingSpend_amount => 101)
       activity.coding_spend_classified?.should be_false
     end
   end
 
   describe "coding_spend_cc_classified?" do
-    it "is true when spend is equal to CodingSpendCostCategorization_amount" do
+    it "is classified when spend is nil" do
+      activity = Factory.create(:activity, :spend => nil,
+                                :CodingSpendCostCategorization_amount => 100)
+      activity.coding_spend_cc_classified?.should be_true
+    end
+
+    it "is classified when spend is equal to CodingSpendCostCategorization_amount" do
       activity = Factory.create(:activity, :spend => 100,
                                 :CodingSpendCostCategorization_amount => 100)
       activity.coding_spend_cc_classified?.should be_true
     end
 
-    it "is not true when spend is not equal to CodingSpendCostCategorization_amount" do
+    it "is not classified when spend is not equal to CodingSpendCostCategorization_amount" do
       activity = Factory.create(:activity, :spend => 100,
                                 :CodingSpendCostCategorization_amount => 101)
       activity.coding_spend_cc_classified?.should be_false
@@ -287,13 +313,19 @@ describe Activity do
   end
 
   describe "service_level_spend_classified?" do
-    it "is true when spend is equal to ServiceLevelSpend_amount" do
+    it "is classified when spend is nil" do
+      activity = Factory.create(:activity, :spend => nil,
+                                :ServiceLevelSpend_amount => 100)
+      activity.service_level_spend_classified?.should be_true
+    end
+
+    it "is classified when spend is equal to ServiceLevelSpend_amount" do
       activity = Factory.create(:activity, :spend => 100,
                                 :ServiceLevelSpend_amount => 100)
       activity.service_level_spend_classified?.should be_true
     end
 
-    it "is not true when spend is not equal to ServiceLevelSpend_amount" do
+    it "is not classified when spend is not equal to ServiceLevelSpend_amount" do
       activity = Factory.create(:activity, :spend => 100,
                                 :ServiceLevelSpend_amount => 101)
       activity.service_level_spend_classified?.should be_false
@@ -301,31 +333,30 @@ describe Activity do
   end
 
   describe "coding_spend_district_classified?" do
-    context "activity does not have locations" do
-      before :each do
-        @activity = Factory.create(:activity, :spend => 100, :locations => [],
-                                   :CodingSpendDistrict_amount => 100)
-      end
-
-      it "is true" do
-        @activity.coding_spend_district_classified?.should be_true
-      end
+    it "is classified when spend is nil" do
+      activity = Factory.create(:activity, :spend => nil,
+                                 :CodingSpendDistrict_amount => 100)
+      activity.coding_spend_district_classified?.should be_true
     end
 
-    context "activity does not have locations" do
-      it "is true when spend is equal to CodingSpendDistrict_amount" do
-        activity = Factory.create(:activity, :spend => 100,
-                                   :locations => [Factory.create(:location)],
-                                   :CodingSpendDistrict_amount => 100)
-        activity.coding_spend_district_classified?.should be_true
-      end
+    it "is classified when activity has no locations" do
+      @activity = Factory.create(:activity, :spend => 100, :locations => [],
+                                 :CodingSpendDistrict_amount => 100)
+      @activity.coding_spend_district_classified?.should be_true
+    end
 
-      it "should not be true when spend is not equal to CodingSpendDistrict_amount" do
-        activity = Factory.create(:activity, :spend => 100,
-                                   :locations => [Factory.create(:location)],
-                                   :CodingSpendDistrict_amount => 101)
-        activity.coding_spend_district_classified?.should be_false
-      end
+    it "is classified when spend is equal to CodingSpendDistrict_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                 :locations => [Factory.create(:location)],
+                                 :CodingSpendDistrict_amount => 100)
+      activity.coding_spend_district_classified?.should be_true
+    end
+
+    it "is classified when spend is not equal to CodingSpendDistrict_amount" do
+      activity = Factory.create(:activity, :spend => 100,
+                                 :locations => [Factory.create(:location)],
+                                 :CodingSpendDistrict_amount => 101)
+      activity.coding_spend_district_classified?.should be_false
     end
   end
 

@@ -8,7 +8,7 @@ class Admin::UsersController < Admin::BaseController
   def index
     scope  = User.scoped({:joins => :organization, :include => :organization})
     scope  = scope.scoped(:conditions => ["username LIKE :q OR email LIKE :q 
-                                         OR organizations.name LIKE :q",
+                              OR full_name LIKE :q OR organizations.name LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @users = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")

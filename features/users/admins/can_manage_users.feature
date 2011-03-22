@@ -78,3 +78,24 @@ Scenario: Admin can see error when invalid csv file is attached for upload and d
   When I follow "Download template"
   Then I should see "organization_name,username,email,full_name,roles,password,password_confirmation"
 
+Scenario Outline: An admin can filter users
+  Given an organization exists with name: "organization2"
+  And an user exists with username: "user1", full_name: "User 1", full_name: "Full name 1", organization: the organization
+  And an organization exists with name: "organization3"
+  And an user exists with username: "user2", full_name: "User 2", full_name: "Full name 2", organization: the organization
+  When I follow "Users"
+  When I fill in "query" with "<query>"
+  And I press "Search"
+  Then I should see "<see>"
+  And I should not see "<not_see>"
+  Examples:
+     | query         | see           | not_see       | 
+     | user1         | user1         | user2         | 
+     | user2         | user2         | user1         | 
+     | User 1        | User 1        | User 2        | 
+     | User 2        | User 2        | User 1        | 
+     | Full name 1   | Full name 1   | Full name 2   | 
+     | Full name 2   | Full name 2   | Full name 1   | 
+     | organization1 | organization1 | organization2 | 
+     | organization2 | organization2 | organization1 | 
+

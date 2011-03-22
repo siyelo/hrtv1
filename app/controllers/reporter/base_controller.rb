@@ -1,5 +1,9 @@
 class Reporter::BaseController < ApplicationController
+
+  ### Layout
   layout 'reporter'
+
+  ### Filters
   before_filter :require_user
 
   private

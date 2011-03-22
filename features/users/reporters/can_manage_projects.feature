@@ -9,6 +9,8 @@ Background:
   And an organization exists with name: "organization2"
   And a data_response exists with data_request: the data_request, organization: the organization
   And a reporter exists with username: "reporter", organization: the organization
+  And a location exists with short_display: "Location1"
+  And a location exists with short_display: "Location2"
   And I am signed in as "reporter"
   And I follow "data_request1"
   When I follow "Projects"
@@ -19,17 +21,23 @@ Scenario: Reporter can CRUD projects
   And I fill in "Description" with "Project1 description"
   And I fill in "Start date" with "2011-01-01"
   And I fill in "End date" with "2011-12-01"
+  And I check "Location1"
+  And I check "Location2"
   And I press "Create New Project"
   Then I should see "Project was successfully created"
   And I should see "Project1"
+  And I should see "Location1, Location2"
 
   When I follow "Edit"
   And I fill in "Name" with "Project2"
   And I fill in "Description" with "Project2 description"
+  And I uncheck "Location1"
   And I press "Update Project"
   Then I should see "Project was successfully updated"
   And I should see "Project2"
   And I should not see "Project1"
+  And I should see "Location2"
+  And I should not see "Location1"
 
   When I follow "X"
   Then I should see "Project was successfully destroyed"

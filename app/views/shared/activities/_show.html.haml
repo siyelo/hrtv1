@@ -71,7 +71,7 @@
         %li Budget Q4 09-10
         %li= c(@activity.budget_q4, @activity.currency)
       %ul.row.last
-        %li Beneficiaries
+        %li Other Beneficiaries
         %li= @activity.beneficiaries.map(&:short_display).join(', ')
 
   %h3.form_heading Texts

@@ -26,6 +26,15 @@
       %ul.row
         %li Implementer
         %li= @activity.provider.try(:name)
+      %ul.row
+        %li Beneficiaries
+        %li= @activity.beneficiaries.map(&:short_display).join(', ')
+      %ul.row
+        %li Other beneficiaries
+        %li= @activity.text_for_beneficiaries
+      %ul.row.last
+        %li Targets
+        %li= @activity.text_for_targets
 
   %h3.form_heading Past Expenditure
   %ul.dashboard_section
@@ -67,25 +76,9 @@
       %ul.row
         %li Budget Q3 09-10
         %li= c(@activity.budget_q3, @activity.currency)
-      %ul.row
+      %ul.row.last
         %li Budget Q4 09-10
         %li= c(@activity.budget_q4, @activity.currency)
-      %ul.row.last
-        %li Beneficiaries
-        %li= @activity.beneficiaries.map(&:short_display).join(', ')
-
-  %h3.form_heading Texts
-  %ul.dashboard_section
-    %li
-      %ul.row
-        %li Text for Implementer
-        %li= @activity.text_for_provider
-      %ul.row
-        %li Text for beneficiaries
-        %li= @activity.text_for_beneficiaries
-      %ul.row
-        %li Targets
-        %li= @activity.text_for_targets
 
   %h3.form_heading Sub Activities
   %ul.dashboard_section

@@ -27,6 +27,10 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District.", :required => false
+      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint => "all the districts/provinces in which this Activity was implemented", :required => false
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Other beneficiaries", :as => :text, :required => false
+      = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Targets", :as => :text, :required => false
 
   %li.last
     %h3== Past Expenditure (#{@data_response.currency})
@@ -57,14 +61,6 @@
           = f.input :budget_q2     , :label => "Q2 10-11", :required => false
           = f.input :budget_q3     , :label => "Q3 10-11", :required => false
           = f.input :budget_q4     , :label => "Q4 10-11", :required => false
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
-
-  %li.last
-    %h3 Texts
-    %ul.dashboard_section
-      = f.input :text_for_provider, :input_html => { :rows => 3 }, :label => "Text for Implementer", :as => :text, :required => false
-      = f.input :text_for_beneficiaries, :input_html => { :rows => 3 }, :label => "Text for beneficiaries", :as => :text, :required => false
-      = f.input :text_for_targets, :input_html => { :rows => 3 }, :label => "Targets", :as => :text, :required => false
 
   %li.last
     %h2 Sub Activities

@@ -7,10 +7,10 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = activities
-    #@activities = Activity.only_simple.find(:all,
-                   #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
-                   #:include => [:locations, :provider, :organizations,
-                               #:beneficiaries, {:data_response => :organization}])
+  #  @activities = Activity.only_simple.find(:all,
+  #                 :conditions => ["activities.id IN (?)", [1941]], # NOTE: FOR DEBUG ONLY
+  #                 :include => [:locations, :provider, :organizations,
+  #                             :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -114,10 +114,11 @@ class Reports::JawpReport
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount = get_funding_source_amount(activity, funding_source, @is_budget)
+              funding_source_amount =  funding_source.send(@is_budget ? :budget : :spend)
+              funding_source_amount =  0 if funding_source_amount.nil?
               ratio = get_ratio(amount_total, ca.amount_not_in_children) *
                 get_ratio(amount_total, district_coding.amount_not_in_children) *
-                get_ratio(amount_total, cost_category_coding.amount_not_in_children)# *
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children) * # why was this commented out before ?
                 get_ratio(funding_sources_total, funding_source_amount)
 
               amount = (amount_total || 0) * ratio

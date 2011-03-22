@@ -95,9 +95,6 @@
           %li Implementer
           %li= sub_activity.provider.try(:name)
         %ul.row
-          %li Text for implementer
-          %li= sub_activity.text_for_provider
-        %ul.row
           %li Budget
           %li= c(sub_activity.budget, @activity.currency)
         %ul.row

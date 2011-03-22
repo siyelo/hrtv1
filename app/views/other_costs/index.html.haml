@@ -3,7 +3,8 @@
 %h1.main_heading
   = render 'search'
   Other Costs
-%p Other expenses for managing projects and activities at a central level.
+
+= render 'getting_started'
 
 %ul.horizontal
   %li
@@ -32,25 +33,18 @@
     = "Other costs with names or description containing #{params[:query]}"
     = link_to "(Back to complete other costs listing)", response_other_costs_path(@data_response), :class => 'target'
 
-.form_aside
-  %h3 What's an Other Cost?
-  %p Other costs are designed to help you identify where your organization classifies activities other than those that fit into activities that you’ve categorized.
-  %br
-  %p These are designed to illustrate how expenses for managing projects and activities at a central level are structured. 
+%table.standard.rounded
+  %thead
+    %tr.manage_bar
+      %th= sortable "projects.name", "Project"
+      %th= sortable "description"
+      %th= sortable "spend", "Spent"
+      %th= sortable "budget", "Budget"
+      %th Classified
+      %th
 
-.wrap-80
-  %table.standard.rounded
-    %thead
-      %tr.manage_bar
-        %th= sortable "projects.name", "Project"
-        %th= sortable "description"
-        %th= sortable "spend", "Total Spent"
-        %th= sortable "budget", "Total Budget"
-        %th Classified
-        %th
-
-    %tbody
-      = render :partial => "other_cost", :collection => @other_costs
+  %tbody
+    = render :partial => "other_cost", :collection => @other_costs
 
 = will_paginate @other_costs
 

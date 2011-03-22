@@ -147,7 +147,6 @@ Scenario: A reporter can filter activities
   Then I should see "activity1 description"
   And I should not see "activity2 description"
 
-  @run
 Scenario Outline: A reporter can sort activities
   Given an activity exists with name: "activity1", description: "activity1 description", project: the project, data_response: the data_response, spend: 1, budget: 1
   And a project exists with name: "project2", data_response: the data_response

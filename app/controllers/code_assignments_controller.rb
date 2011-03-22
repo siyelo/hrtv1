@@ -1,10 +1,7 @@
-class CodeAssignmentsController < ApplicationController
-  layout 'reporter'
-  authorize_resource
+class CodeAssignmentsController < Reporter::BaseController
   before_filter :load_activity_and_data_response
 
   def show
-    authorize! :read, @activity
     @coding_type         = params[:coding_type] || 'CodingBudget'
     @coding_class        = @coding_type.constantize
     @coding_tree         = CodingTree.new(@activity, @coding_class)
@@ -22,7 +19,6 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def update
-    authorize! :update, @activity
     notice_message = nil
     @coding_class = params[:coding_type].constantize
     if params[:activity].present? && params[:activity][:updates].present?
@@ -51,7 +47,6 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def copy_budget_to_spend
-    authorize! :update, @activity
     respond_to do |format|
       if @activity.copy_budget_codings_to_spend([params[:coding_type]])
         format.html do
@@ -68,7 +63,6 @@ class CodeAssignmentsController < ApplicationController
   end
 
   def derive_classifications_from_sub_implementers
-    authorize! :update, @activity
     respond_to do |format|
       if @activity.derive_classifications_from_sub_implementers!(params[:coding_type])
         format.html do
@@ -87,7 +81,7 @@ class CodeAssignmentsController < ApplicationController
   private
 
     def load_activity_and_data_response
-      @activity = Activity.available_to(current_user).find(params[:activity_id])
+      @activity = current_user.organization.dr_activities.find(params[:activity_id])
       @data_response = @activity.data_response
     end
 

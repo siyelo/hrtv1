@@ -1,7 +1,4 @@
-class PolicyMaker::ResponsesController < ApplicationController
-  layout 'admin'
-  before_filter :require_admin
-  skip_before_filter :load_help
+class PolicyMaker::ResponsesController < PolicyMaker::BaseController
 
   def index
     @submitted_data_responses = DataResponse.available_to(current_user).submitted.all

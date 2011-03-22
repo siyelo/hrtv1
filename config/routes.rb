@@ -24,7 +24,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :organizations,
       :collection => { :duplicate => :get, :remove_duplicate  => :put}
     admin.resources :reports, :member => {:generate => :get}
-    admin.resources :users, :active_scaffold => true
+    admin.resources :users,
+      :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :activities, :active_scaffold => true
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
@@ -83,7 +84,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # ACTIVE SCAFFOLD
   # routes for CSV uploading for various models
-  %w[model_helps comments organizations users].each do |model|
+  %w[model_helps comments organizations].each do |model|
     map.create_from_file model + "/create_from_file", :controller => model, :action => "create_from_file"
     map.create_from_file_form model + "/create_from_file_form", :controller => model, :action => "create_from_file_form"
   end
@@ -97,6 +98,5 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :field_helps,     :active_scaffold => true
   map.resources :model_helps,     :active_scaffold => true
   map.resources :codes,           :active_scaffold => true
-  map.resources :users,           :active_scaffold => true
   map.resources :help_requests,   :active_scaffold => true
 end

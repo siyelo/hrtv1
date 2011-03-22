@@ -1,5 +1,4 @@
-# TODO: move this to /app/controller/comments_controller.rb
-# when AS gets removed
+# TODO: move this to /app/controller/comments_controller.rb when AS gets removed
 class Reporter::CommentsController < Reporter::BaseController
 
   def new

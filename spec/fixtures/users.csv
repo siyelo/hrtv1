@@ -1,0 +1,5 @@
+organization_name,username,email,full_name,roles,password,password_confirmation
+organization1,user1,user1@hrtapp.com,User 1,reporter,password,password
+organization1,user2,user2@hrtapp.com,User 2,admin,password,password
+organization1,user3,user3@hrtapp.com,User 3,activity_manager,password,password
+organization1,user4,user4@hrtapp.com,User 4,reporter,password,password

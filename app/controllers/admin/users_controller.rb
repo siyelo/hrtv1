@@ -1,64 +1,53 @@
-class Admin::UsersController < ActiveScaffoldController
-  layout 'admin'  # duplicated - should inherit from BaseController
+require 'set'
+class Admin::UsersController < Admin::BaseController
 
-  before_filter :require_admin
-  before_filter :translate_roles_for_create, :only => [:create, :update]
+  ### Constants
+  SORTABLE_COLUMNS = ['username', 'email', 'full_name', 'organizations.name']
 
-  load_and_authorize_resource
+  ### Inherited Resources
+  inherit_resources
 
-  @@shown_columns = [:username, :email, :organization,   :password, :password_confirmation, :roles]
-  @@create_columns = [:username, :email,  :organization, :password, :password_confirmation, :roles]
-  @@update_columns = [:username, :email, :password, :password_confirmation]
-  @@columns_for_file_upload = @@update_columns.map {|c| c.to_s}
+  ### Helpers
+  helper_method :sort_column, :sort_direction
 
-
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
-
-  active_scaffold :user do |config|
-    config.columns                                 = @@shown_columns
-    config.create.columns                          = @@create_columns
-    config.update.columns                          = @@update_columns
-    config.list.pagination                         = true
-    config.list.per_page                           = 200
-    list.sorting                                   = { :username => 'DESC' }
-    config.columns[:organization].form_ui          = :select
-    config.columns[:text_for_organization].form_ui = :textarea
-    config.columns[:text_for_organization].options = {:cols => 50, :rows => 3}
-    config.columns[:roles].form_ui                 = :select
-    config.columns[:roles].options                 = { :options => User::ROLES.map { |r| ["#{r.to_s.humanize.titleize}", [r.to_sym]] } }
-    [:password_confirmation, :password].each { |f| config.columns[f].form_ui = :password }
+  def index
+    scope  = User.scoped({:joins => :organization, :include => :organization})
+    scope  = scope.scoped(:conditions => ["username LIKE :q OR email LIKE :q 
+                              OR full_name LIKE :q OR organizations.name LIKE :q",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+    @users = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
 
-  def self.create_columns
-    @@create_columns
+  def download_template
+    template = User.download_template
+    send_csv(template, 'users_template.csv')
   end
-
-  def translate_roles_for_create
-    if params[:record].key? :roles
-      params[:record][:roles]=[params[:record][:roles]]
-    end
-  end
-  #record_select :per_page => 20, :search_on => 'username', :order_by => "username ASC"
 
   def create_from_file
-    super @@columns_for_file_upload
-  end
-
-  def to_label
-    @s="User: "
-    if username.nil? || username.empty?
-      @s+"<No Name>"
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = User.create_from_file(doc)
+        flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      end
     else
-      @s+username
+      flash[:error] = 'Please select a file to upload'
     end
+
+    redirect_to admin_users_url
   end
 
-  # hack to make redirect after edit look like success when
-  # change their password
-  rescue_from CanCan::AccessDenied do |exception|
-      flash[:notice] = "Successfully updated your profile"
-      redirect_to user_dashboard_path(current_user)
-  end
+
+  private
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "username"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
 end

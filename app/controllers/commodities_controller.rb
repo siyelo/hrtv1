@@ -34,12 +34,11 @@ class CommoditiesController < Reporter::BaseController
 
   def create_from_file
     if params[:file].present?
-      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-      if doc.headers.to_set == Commodity::FILE_UPLOAD_COLUMNS.to_set
-        saved, errors = Commodity.create_from_file(doc, @data_response)
-        flash[:notice] = "Created #{saved} of #{saved + errors} commodities successfully"
+      result_hash = Commodity.from_csv(params[:file], @data_response)
+      if result_hash[:result] == true
+        flash[:notice] = result_hash[:message]
       else
-        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        flash[:error] = result_hash[:message]
       end
     else
       flash[:error] = 'Please select a file to upload'

@@ -13,6 +13,16 @@ class Commodity < ActiveRecord::Base
     self.unit_cost * self.quantity
   end
   
+  def self.from_csv(file, data_response)
+    doc = FasterCSV.parse(file.open.read, {:headers => true})
+    if doc.headers.to_set == Commodity::FILE_UPLOAD_COLUMNS.to_set
+      saved, errors = create_from_file(doc, data_response)
+      { :result => true, :message => "Created #{saved} of #{saved + errors} commodities successfully" }
+    else
+      { :result => false, :message => "Wrong fields mapping. Please download the CSV template" }
+    end
+  end
+  
   def self.create_from_file(doc, data_response)
     saved, errors = 0, 0
     doc.each do |row|

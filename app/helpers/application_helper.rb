@@ -145,8 +145,8 @@ module ApplicationHelper
     var.nil? ? "undefined" : var
   end
 
-  def usd_to_rwf
-    Money.default_bank.get_rate(:USD, :RWF)
+  def usd_to_local_currency
+    Money.default_bank.get_rate(:USD, Money.default_currency)
   end
 
   # sortable columns

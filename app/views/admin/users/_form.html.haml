@@ -7,7 +7,7 @@
       = f.input :username, :hint => "Username of the user"
       = f.input :email, :hint => "Email of the user"
       = f.input :full_name, :hint => "Full name of the user", :required => false
-      = f.input :roles, :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
+      = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
 
   %li.last
     %h3 Password

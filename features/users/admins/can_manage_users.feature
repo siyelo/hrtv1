@@ -15,7 +15,7 @@ Scenario: Admin can CRUD users
   And I fill in "Username" with "pink.panter1"
   And I fill in "Email" with "pink.panter1@hrtapp.com"
   And I fill in "Full name" with "Pink Panter"
-  And I select "Reporter" from "Roles"
+  And I select "Reporter" from "Role"
   And I fill in "Password" with "password"
   And I fill in "Password confirmation" with "password"
   And I press "Create New User"
@@ -42,7 +42,7 @@ Scenario Outline: Admin can CRUD users and see errors
   And I fill in "Username" with "<username>"
   And I fill in "Email" with "<email>"
   And I fill in "Full name" with "<name>"
-  And I select "<roles>" from "Roles"
+  And I select "<roles>" from "Role"
   And I fill in "Password" with "<password>"
   And I fill in "Password confirmation" with "<password_conf>"
   And I press "Create New User"
@@ -80,22 +80,58 @@ Scenario: Admin can see error when invalid csv file is attached for upload and d
 
 Scenario Outline: An admin can filter users
   Given an organization exists with name: "organization2"
-  And an user exists with username: "user1", full_name: "User 1", full_name: "Full name 1", organization: the organization
+  And an user exists with username: "user1", email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
   And an organization exists with name: "organization3"
-  And an user exists with username: "user2", full_name: "User 2", full_name: "Full name 2", organization: the organization
-  When I follow "Users"
-  When I fill in "query" with "<query>"
-  And I press "Search"
-  Then I should see "<see>"
-  And I should not see "<not_see>"
-  Examples:
-     | query         | see           | not_see       | 
-     | user1         | user1         | user2         | 
-     | user2         | user2         | user1         | 
-     | User 1        | User 1        | User 2        | 
-     | User 2        | User 2        | User 1        | 
-     | Full name 1   | Full name 1   | Full name 2   | 
-     | Full name 2   | Full name 2   | Full name 1   | 
-     | organization1 | organization1 | organization2 | 
-     | organization2 | organization2 | organization1 | 
+  And an user exists with username: "user2", email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
 
+  When I follow "Users"
+  And I fill in "query" with "<first>"
+  And I press "Search"
+  Then I should see "Users with username, name, email or organiation name containing <first>"
+  Then I should see "<first>"
+  And I should not see "<second>"
+
+  And I fill in "query" with "<second>"
+  And I press "Search"
+  Then I should see "Users with username, name, email or organiation name containing <second>"
+  Then I should see "<second>"
+  And I should not see "<first>"
+
+  Examples:
+     | first            | second           | 
+     | user1            | user2            | 
+     | user2            | user1            | 
+     | user1@hrtapp.com | user2@hrtapp.com | 
+     | user2@hrtapp.com | user1@hrtapp.com | 
+     | Full name 1      | Full name 2      | 
+     | Full name 2      | Full name 1      | 
+     | organization1    | organization2    | 
+     | organization2    | organization1    | 
+
+    @run
+Scenario Outline: An admin can sort users
+  Given an organization exists with name: "organization2"
+  And a reporter exists with username: "user1", email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
+  And an organization exists with name: "organization3"
+  And an activity_manager exists with username: "user2", email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
+
+  When I follow "Users"
+
+  # filter out admin user
+  And I fill in "query" with "user"
+  And I press "Search"
+
+  And I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text1>"
+  And column "<column>" row "2" should have text "<text2>"
+
+  When I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text2>"
+  And column "<column>" row "2" should have text "<text1>"
+
+    Examples:
+        | column_name  | column | text1            | text2            | 
+        | Username     | 1      | user2            | user1            | 
+        | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com | 
+        | Full Name    | 3      | Full name 1      | Full name 2      | 
+        | Organization | 4      | organization2    | organization3    | 

@@ -1,6 +1,6 @@
 require 'set'
 class Admin::UsersController < Admin::BaseController
-  SORTABLE_COLUMNS = ['username', 'email', 'organizations.name', 'roles']
+  SORTABLE_COLUMNS = ['username', 'email', 'full_name', 'organizations.name']
 
   inherit_resources
   helper_method :sort_column, :sort_direction

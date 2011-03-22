@@ -18,15 +18,12 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.organization.projects
-      #project_sub_form{:style => "display: none;"}
-        - if @activity.project
-          = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
-
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended", :required => false
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District.", :required => false
+      = f.input :locations, :as => :check_boxes, :label => "Districts worked in", :hint => "all the districts in which this Activity was implemented", :required => false
 
   %li.last
     %h3== Past Expenditure (#{@data_response.currency})

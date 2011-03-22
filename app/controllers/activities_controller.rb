@@ -27,13 +27,6 @@ class ActivitiesController < Reporter::BaseController
     @activity.provider = current_user.organization
   end
 
-  def project_sub_form
-    @activity = @data_response.activities.find_by_id(params[:activity_id])
-    @project = @data_response.projects.find(params[:project_id])
-    render :partial => "project_sub_form", 
-           :locals => {:activity => (@activity || :activity), :project => @project}
-  end
-
   def approve
     @activity = @data_response.activities.find(params[:id])
     authorize! :approve, @activity

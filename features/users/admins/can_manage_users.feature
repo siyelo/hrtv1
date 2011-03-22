@@ -108,7 +108,6 @@ Scenario Outline: An admin can filter users
      | organization1    | organization2    | 
      | organization2    | organization1    | 
 
-    @run
 Scenario Outline: An admin can sort users
   Given an organization exists with name: "organization2"
   And a reporter exists with username: "user1", email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization

@@ -10,6 +10,8 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project1", data_response: the data_response
+  And a location exists with short_display: "Location1"
+  And a location exists with short_display: "Location2"
   And I am signed in as "reporter"
   And I follow "data_request1"
   And I follow "Activities"
@@ -21,17 +23,23 @@ Scenario: Reporter can CRUD activities
   And I fill in "Start date" with "2011-01-01"
   And I fill in "End date" with "2011-12-01"
   And I select "project1" from "Project"
+  And I check "Location1"
+  And I check "Location2"
   And I press "Create New Activity"
   Then I should see "Activity was successfully created"
   And I should see "Activity1 description"
+  And I should see "Location1, Location2"
 
   When I follow "Edit"
   And I fill in "Name" with "Activity2"
   And I fill in "Description" with "Activity2 description"
+  And I uncheck "Location2"
   And I press "Update Activity"
   Then I should see "Activity was successfully updated"
   And I should see "Activity2 description"
   And I should not see "Activity1"
+  And I should see "Location1"
+  And I should not see "Location2"
 
   When I follow "X"
   Then I should see "Activity was successfully destroyed"

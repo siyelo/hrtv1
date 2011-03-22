@@ -959,29 +959,6 @@ var reports_countries_activities_show = {
   }
 };
 
-var activities_new = activities_create = activities_edit = activities_update = {
-  run: function () {
-    jQuery('#activity_project_id').change(function () {
-      var element = jQuery('#project_sub_form');
-      var _project_id = jQuery(this).val();
-      if (_project_id) {
-        var url = '/responses/' + _response_id + 
-        '/activities/project_sub_form?' + 'project_id=' + _project_id;
-        if (_activity_id) {
-          url += '&activity_id=' + _activity_id;
-        }
-        jQuery.get(url, function (data) {
-          element.html(data);
-          element.show();
-        });
-      } else {
-        element.hide().html('');
-      }
-    });
-  }
-}
-
-
 jQuery(function () {
 
   // tipsy tooltips everywhere!

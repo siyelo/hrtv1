@@ -19,15 +19,15 @@ class CommoditiesController < Reporter::BaseController
     template = Commodity.download_template
     send_csv(template, 'commodities_template.csv')
   end
-
+  
   def create
     create! { response_commodities_path }
   end
-
+  
   def update
     update! { response_commodities_path }
   end
-
+  
   def show
     show! { response_commodities_path }
   end

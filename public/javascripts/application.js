@@ -1018,5 +1018,9 @@ jQuery(function () {
     }
   });
 
+  // CSV file upload
+  jQuery("#csv_file").click(function() {
+    jQuery("#import").slideToggle();
+  });
 });
 

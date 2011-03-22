@@ -34,30 +34,28 @@
 - if params[:query]
   %p
     = "Activities with names or description containing #{params[:query]}"
-    = link_to "(Back to complete activity listing)", response_activities_path(@data_response)
+    = link_to "(Back to complete activity listing)", response_activities_path(@data_response), :class => 'target'
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th= sortable "projects.name", "Project"
-      %th= sortable "description"
-      %th= sortable "spend", "Total Spent"
-      %th= sortable "budget", "Total Budget"
-      %th.dummy Classified
-      %th
+.form_aside
+  %h3 What's an Activity?
+  %p An activity is defined as a functional task that is falls within a project. Once you've entered in a description for an activity, classify the activity using the coding tree provided.
+  %br
+  %p You can also provide cost details which give more information on where spending for activities has or will go.
 
-  %tbody
-    = render :partial => "activity", :collection => @activities
+.wrap-80
+  %table.standard.rounded
+    %thead
+      %tr
+        %th= sortable "projects.name", "Project"
+        %th= sortable "description"
+        %th= sortable "spend", "Total Spent"
+        %th= sortable "budget", "Total Budget"
+        %th.dummy Classified
+        %th
 
-= will_paginate @activities
+    %tbody
+      = render :partial => "activity", :collection => @activities
+
+  = will_paginate @activities
 
 %ul{ :id => 'position_container', :class => 'image_list' }
-
-
-:javascript
-  jQuery(document).ready(function(){
-    jQuery("#csv_file").click(function() {
-      jQuery("#import").slideToggle();
-    });
-  });
-

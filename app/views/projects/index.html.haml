@@ -27,7 +27,7 @@
         =file_field_tag :file
         =submit_tag "Upload and Import", :class => 'small_submit_button'
 
-      = link_to "Download template", download_template_response_projects_path(@data_response)
+      = link_to "Download template", download_template_response_projects_path(@data_response), :class => 'target'
 
 
 - if params[:query]
@@ -35,31 +35,25 @@
     = "Projects with names containing #{params[:query]}"
     = link_to "(Back to complete project listing)", response_projects_path(@data_response)
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th= sortable "name"
-      %th= sortable "description"
-      %th= sortable "spend", "Total Spent"
-      %th= sortable "budget", "Total Budget"
-      %th
+.form_aside
+  %h3 What's a Project?
+  %p A project is defined as a contractual agreement with a funding provider or oversight body to support health goals in the country.
+  %br
+  %p A project can be implemented by multiple entities or take place in multiple districts - these will be specified on the following pages.
 
-  %tbody
-    = render :partial => "project", :collection => @projects
+.wrap-80
+  %table.standard.rounded
+    %thead
+      %tr
+        %th= sortable "name"
+        %th= sortable "description"
+        %th= sortable "spend", "Total Spent"
+        %th= sortable "budget", "Total Budget"
+        %th
 
-= will_paginate @projects
+    %tbody
+      = render :partial => "project", :collection => @projects
+
+  = will_paginate @projects
 
 %ul{ :id => 'position_container', :class => 'image_list' }
-
-
-:javascript
-  jQuery(document).ready(function(){
-    jQuery("#csv_file").click(function() {
-      jQuery("#import").slideToggle();
-    });
-  });
-
-
-
-
-

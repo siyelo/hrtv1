@@ -5,7 +5,7 @@
       %ul.row
         %li Project name
         %li= @activity.project.try(:name)
-      %ul.row.last
+      %ul.row
         %li Locations
         %li= @activity.locations.map(&:short_display).join(', ')
       %ul.row
@@ -23,7 +23,7 @@
       %ul.row
         %li Currency
         %li= @activity.currency
-      %ul.row
+      %ul.row.last
         %li Implementer
         %li= @activity.provider.try(:name)
 
@@ -71,7 +71,7 @@
         %li Budget Q4 09-10
         %li= c(@activity.budget_q4, @activity.currency)
       %ul.row.last
-        %li Beneficiaries
+        %li Other Beneficiaries
         %li= @activity.beneficiaries.map(&:short_display).join(', ')
 
   %h3.form_heading Texts

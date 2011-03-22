@@ -168,16 +168,16 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_coded?
-    self.budget == self.CodingBudget_amount
+    budget.blank? || self.budget == self.CodingBudget_amount
   end
 
   def budget_by_district_coded?
     return true if self.locations.empty? #TODO: remove when locations are mandatory
-    self.budget == self.CodingBudgetDistrict_amount
+    budget.blank? || self.budget == self.CodingBudgetDistrict_amount
   end
 
   def budget_by_cost_category_coded?
-    self.budget == self.CodingBudgetCostCategorization_amount
+    budget.blank? || self.budget == self.CodingBudgetCostCategorization_amount
   end
 
   def budget_coding
@@ -189,16 +189,16 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_coded?
-    self.spend == self.CodingSpend_amount
+    spend.blank? || self.spend == self.CodingSpend_amount
   end
 
   def spend_by_district_coded?
     return true if self.locations.empty? #TODO: remove
-    self.spend == self.CodingSpendDistrict_amount
+    spend.blank? || self.spend == self.CodingSpendDistrict_amount
   end
 
   def spend_by_cost_category_coded?
-    self.spend == self.CodingSpendCostCategorization_amount
+    spend.blank? || self.spend == self.CodingSpendCostCategorization_amount
   end
 
   def spend_coding

@@ -42,7 +42,8 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :activities,
         :member => {:approve => :put, :classifications => :get},
-        :collection => {:create_from_file => :post, :download_template => :get}
+        :collection => {:create_from_file => :post, :download_template => :get,
+                        :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
   end

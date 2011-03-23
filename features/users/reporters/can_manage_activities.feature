@@ -11,11 +11,15 @@ Background:
   And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project1", data_response: the data_response
   And a location exists with short_display: "Location1"
+  And the location is one of the project's locations
   And a location exists with short_display: "Location2"
+  And the location is one of the project's locations
   And I am signed in as "reporter"
   And I follow "data_request1"
   And I follow "Activities"
 
+  @javascript
+  @run
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"
   And I fill in "Name" with "Activity1"
@@ -41,7 +45,8 @@ Scenario: Reporter can CRUD activities
   And I should see "Location1"
   And I should not see "Location2"
 
-  When I follow "X"
+  When I confirm the popup dialog
+  And I follow "X"
   Then I should see "Activity was successfully destroyed"
   And I should not see "Activity1"
   And I should not see "Activity2"

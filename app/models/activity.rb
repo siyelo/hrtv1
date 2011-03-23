@@ -51,7 +51,7 @@ class Activity < ActiveRecord::Base
                   :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :beneficiary_ids, :location_ids, :provider_id,
-                  :sub_activities_attributes, :organization_ids
+                  :sub_activities_attributes, :organization_ids, :locations
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"

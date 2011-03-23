@@ -12,9 +12,11 @@ class Location < Code
                   (SELECT COUNT(*) FROM projects
                     INNER JOIN locations_projects ON projects.id = locations_projects.project_id
                     WHERE locations_projects.location_id = codes.id) AS projects_count,
-                  (SELECT COUNT(*) FROM organizations
-                    INNER JOIN locations_organizations ON organizations.id = locations_organizations.organization_id
-                    WHERE locations_organizations.location_id = codes.id) AS organizations_count,
+                  (SELECT COUNT(DISTINCT(organizations.id)) FROM organizations
+                    INNER JOIN data_responses ON organizations.id = data_responses.organization_id
+                    INNER JOIN activities ON data_responses.id = activities.data_response_id
+                    INNER JOIN code_assignments on activities.id = code_assignments.activity_id
+                    WHERE code_assignments.code_id = codes.id) AS organizations_count,
                   (SELECT COUNT(*) FROM activities
                     INNER JOIN activities_locations ON activities.id = activities_locations.activity_id
                     WHERE activities_locations.location_id = codes.id) AS activities_count,

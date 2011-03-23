@@ -106,3 +106,12 @@ Scenario Outline: An admin can sort organizations
       | Name        | 1      | org2  | org1  | 
       | Raw Type    | 2      | Donor | Ngo   | 
       | Fosaid      | 3      | type1 | type2 | 
+
+Scenario: An admin can filter organization
+  When I follow "Organizations"
+  Then I should see "org1"
+  And I should see "org2"
+  And I fill in "query" with "org1"
+  And I press "Search"
+  Then I should see "org1"
+  And I should not see "org2"

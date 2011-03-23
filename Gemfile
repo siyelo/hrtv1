@@ -65,4 +65,6 @@ group :test do
   gem 'ruby-pg'
   gem 'shoulda'
   gem 'spork'
+  gem 'email_spec'
+  
 end

@@ -47,6 +47,7 @@ GEM
     daemons (1.1.0)
     database_cleaner (0.6.5)
     diff-lcs (1.1.2)
+    email_spec (1.0.0)
     factory_girl (1.2.4)
     fastercsv (1.5.4)
     fastthread (1.0.7)
@@ -175,6 +176,7 @@ DEPENDENCIES
   cucumber
   cucumber-rails
   database_cleaner
+  email_spec
   factory_girl (= 1.2.4)
   fastercsv
   formtastic (= 0.9.10)

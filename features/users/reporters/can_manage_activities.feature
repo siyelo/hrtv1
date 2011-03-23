@@ -18,6 +18,7 @@ Background:
   And I follow "data_request1"
   And I follow "Activities"
 
+
 @javascript
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"

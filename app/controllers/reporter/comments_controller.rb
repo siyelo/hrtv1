@@ -35,6 +35,7 @@ class Reporter::CommentsController < Reporter::BaseController
     @comment.commentable = find_commentable
 
     if @comment.save
+      @comment.email_the_organisation_users(@comment) if current_user.admin?
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."

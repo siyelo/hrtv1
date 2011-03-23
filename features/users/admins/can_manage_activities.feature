@@ -60,6 +60,18 @@ Scenario: An admin can filter activities
   And I press "Search"
   Then I should see "activity1 description"
   And I should not see "activity2 description"
+  
+Scenario: Sends email to users when a comment is made by an admin
+  When I follow "Activities"
+  And I follow "activity1 description"
+  And I fill in "Title" with "Comment title"
+  And I fill in "Comment" with "Comment body"
+  And I press "CREATE COMMENT"
+  And I should receive an email
+  When I open the email
+  Then I should see "Hello" in the email
+
+
 
 Scenario Outline: An admin can sort activities
   Given I follow "Activities"

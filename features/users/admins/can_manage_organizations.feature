@@ -23,12 +23,14 @@ Scenario: Admin can CRUD organizations
   And I should see "Organization name"
   And I should see "My raw_type"
   And I should see "My fosaid"
+
   When I follow "Edit"
   And I fill in "Name" with "My new organization"
   And I press "Update organization"
   Then I should see "Organization was successfully updated"
   And I should see "My new organization"
-  When I follow "Delete"
+
+  When I follow "X"
   Then I should see "Organization was successfully deleted"
   And I should not see "Organization name"
 

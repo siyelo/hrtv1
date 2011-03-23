@@ -1,11 +1,19 @@
 class Admin::OrganizationsController < Admin::BaseController
+  SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
 
   ### Inherited Resources
   inherit_resources
 
+  helper_method :sort_column, :sort_direction
+
   def index
-    @organizations = Organization.ordered.
-      paginate :per_page => 20, :page => params[:page]
+    scope = Organization.scoped({})
+    scope = scope.scoped(:conditions => ["name LIKE :q OR raw_type LIKE :q 
+                                          OR fosaid LIKE :q",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+
+    @organizations = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
 
   def show
@@ -74,5 +82,13 @@ class Admin::OrganizationsController < Admin::BaseController
           render :json => {:message => message}.to_json
         end
       end
+    end
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 end

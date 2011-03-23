@@ -1,5 +1,7 @@
 require 'validation_disabler'
 class Organization < ActiveRecord::Base
+  ### Constants
+  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
   ### Comments
   acts_as_commentable
@@ -82,6 +84,22 @@ class Organization < ActiveRecord::Base
     n = n.gsub("Health Post", "HP")
     n = n.gsub("Dispensary", "Disp")
     n
+  end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Organization::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      organization = Organization.new(attributes)
+      organization.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
   end
 
 end

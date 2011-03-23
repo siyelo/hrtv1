@@ -1,11 +1,20 @@
+require 'set'
 class Admin::OrganizationsController < Admin::BaseController
+  SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
 
   ### Inherited Resources
   inherit_resources
 
+  helper_method :sort_column, :sort_direction
+
   def index
-    @organizations = Organization.ordered.
-      paginate :per_page => 20, :page => params[:page]
+    scope = Organization.scoped({})
+    scope = scope.scoped(:conditions => ["name LIKE :q OR raw_type LIKE :q 
+                                          OR fosaid LIKE :q",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+
+    @organizations = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
 
   def show
@@ -50,6 +59,27 @@ class Admin::OrganizationsController < Admin::BaseController
     end
   end
 
+  def download_template
+    template = Organization.download_template
+    send_csv(template, 'organization_template.csv')
+  end
+
+  def create_from_file
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == Organization::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = Organization.create_from_file(doc)
+        flash[:notice] = "Created #{saved} of #{saved + errors} organizations successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      end
+    else
+      flash[:error] = 'Please select a file to upload'
+    end
+
+    redirect_to admin_organizations_url
+  end
+
   private
 
     def render_error(message, path)
@@ -74,5 +104,13 @@ class Admin::OrganizationsController < Admin::BaseController
           render :json => {:message => message}.to_json
         end
       end
+    end
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 end

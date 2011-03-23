@@ -22,7 +22,8 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
       :member     => {:delete => :get}
     admin.resources :organizations,
-      :collection => { :duplicate => :get, :remove_duplicate  => :put}
+      :collection => {:duplicate => :get, :remove_duplicate  => :put, 
+                      :download_template => :get, :create_from_file => :post}
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}

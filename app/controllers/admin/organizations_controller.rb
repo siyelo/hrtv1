@@ -1,3 +1,4 @@
+require 'set'
 class Admin::OrganizationsController < Admin::BaseController
   SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
 
@@ -56,6 +57,27 @@ class Admin::OrganizationsController < Admin::BaseController
         render_notice("Organizations successfully merged.", duplicate_admin_organizations_path)
       end
     end
+  end
+
+  def download_template
+    template = Organization.download_template
+    send_csv(template, 'organization_template.csv')
+  end
+
+  def create_from_file
+    if params[:file].present?
+      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+      if doc.headers.to_set == Organization::FILE_UPLOAD_COLUMNS.to_set
+        saved, errors = Organization.create_from_file(doc)
+        flash[:notice] = "Created #{saved} of #{saved + errors} organizations successfully"
+      else
+        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+      end
+    else
+      flash[:error] = 'Please select a file to upload'
+    end
+
+    redirect_to admin_organizations_url
   end
 
   private

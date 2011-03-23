@@ -48,7 +48,7 @@ class Reports::OrganizationReport
     })
 
 
-    if type = 'district'
+    if type == 'district'
       organizations = Organization.find(:all, 
                         :select => 'DISTINCT(organizations.id)', 
                         :joins => {:data_responses => {:activities => :code_assignments}}, 

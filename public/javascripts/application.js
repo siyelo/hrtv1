@@ -961,13 +961,13 @@ var reports_countries_activities_show = {
 
 var update_funding_source_selects = function () {
   var project_id = jQuery('#activity_project_id').val();
+  var fs_selects = jQuery('.funding_source');
   if (project_id) {
     var options = ['<option value=""></option>'];
     jQuery.each(_funding_sources[project_id], function (i) {
       options.push('<option value="' + this[1] + '">' + this[0] + '</option>');
     });
     var options_string = options.join('\n');
-    var fs_selects = jQuery('.funding_source');
 
     jQuery.each(fs_selects, function (i) {
       var element = jQuery(this);
@@ -977,6 +977,11 @@ var update_funding_source_selects = function () {
         element.val(value);
       }
     });
+  } else {
+    jQuery.each(fs_selects, function (i) {
+      var element = jQuery(this);
+      jQuery(this).html('<option value=""></option>');
+    })
   }
 };
 

@@ -4,15 +4,15 @@ Feature: Admin can manage organizations
   I want to be able to manage organizations
 
 Background:
-  Given an organization exists with name: "org1"
+  Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "type1"
+  And an admin exists with username: "admin", organization: the organization
   And a data_request exists with title: "Req1", organization: the organization
-  And an organization exists with name: "org2"
+  And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "type2"
   And a reporter exists with username: "org2_user", organization: the organization
   And a data_response exists with data_request: the data_request, organization: the organization
+  And I am signed in as "admin"
 
 Scenario: Admin can CRUD organizations
-  Given an admin exists with username: "admin", organization: the organization
-  And I am signed in as "admin"
   When I follow "Organizations"
   And I follow "Create Organization"
   And I fill in "Name" with "Organization name"
@@ -35,7 +35,6 @@ Scenario: Admin can CRUD organizations
   And I should not see "Organization name"
 
 Scenario Outline: Merge duplicate organizations
-  Given I am signed in as an admin
   When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<duplicate>" from "Duplicate organization"
@@ -50,7 +49,6 @@ Scenario Outline: Merge duplicate organizations
 
 @javascript
 Scenario Outline: Merge duplicate organizations (with JS)
-  Given I am signed in as an admin
   When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<duplicate>" from "Duplicate organization"
@@ -70,7 +68,6 @@ Scenario Outline: Merge duplicate organizations (with JS)
 
 @javascript
 Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
-  Given I am signed in as an admin
   When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "<organization>" from "<select_type>"
@@ -86,7 +83,6 @@ Scenario Outline: Delete organization on merge duplicate organizations screen (w
 
 @javascript
 Scenario: Try to delete non-empty organization (with JS)
-  Given I am signed in as an admin
   When I follow "Organizations"
   And I follow "Fix duplicate organizations"
   And I select "org2 - 1 user" from "Replacement organization"
@@ -95,3 +91,18 @@ Scenario: Try to delete non-empty organization (with JS)
   # Check that org2 organization is not deleted
   Then the "Replacement organization" text should match "org2 - 1 user"
   And I should see "You cannot delete an organization that has users or data associated with it."
+
+Scenario Outline: An admin can sort organizations
+  When I follow "Organizations"
+  And I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text1>"
+  And column "<column>" row "2" should have text "<text2>"
+  When I follow "<column_name>"
+  Then column "<column>" row "1" should have text "<text2>"
+  And column "<column>" row "2" should have text "<text1>"
+
+    Examples:
+    | column_name | column | text1 | text2 | 
+      | Name        | 1      | org2  | org1  | 
+      | Raw Type    | 2      | Donor | Ngo   | 
+      | Fosaid      | 3      | type1 | type2 | 

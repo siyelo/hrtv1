@@ -19,6 +19,7 @@ Background:
   And I follow "Activities"
 
 
+
 @javascript
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"

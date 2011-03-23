@@ -216,3 +216,9 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+When /^I go into debug mode$/ do
+  require 'ruby-debug'
+  debugger
+  1
+end

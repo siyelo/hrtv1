@@ -11,3 +11,4 @@ end
 
 Factory.define :ngo, :class => Organization, :parent => :organization do |f|
 end
+

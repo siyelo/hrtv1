@@ -97,7 +97,7 @@ class Comment < ActiveRecord::Base
   end
   
   def email_the_organisation_users(comment)
-    emails = self.commentable.organizations.map { |o| o.users.map {|u| u.email } }.flatten
+    emails = self.commentable.data_response.organization.users.map{ |u| u.email }
     Notifier.deliver_email_organisation_users(comment, emails)
   end
   

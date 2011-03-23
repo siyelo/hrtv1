@@ -136,6 +136,19 @@ Scenario: A reporter can create comments for an activity and see comment errors
   Then I should see "Comment title"
   And I should see "Comment body"
   And I should see "Activity1 description"
+  
+  @run
+Scenario: Does not email users when a comment is made by a reporter
+  Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
+  And no emails have been sent
+  And I follow "Activities"
+  And I follow "Activity1 description"
+  When I fill in "Comment" with "Comment body"  
+  And I fill in "Title" with "Comment title"
+  And I fill in "Comment" with "Comment body"
+  And I press "Create Comment"
+  And "reporter_1@example.com" should not receive an email
+  
 
 Scenario: A reporter can select implementer for an activity
   When I follow "Create Activity"

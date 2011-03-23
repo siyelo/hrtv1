@@ -65,6 +65,6 @@ group :test do
   gem 'ruby-pg'
   gem 'shoulda'
   gem 'spork'
-  gem 'email_spec'
+  gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
   
 end

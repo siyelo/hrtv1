@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/bmabey/email-spec.git
+  revision: 551fbb610cd0fa64abb56d6522ce6cc995eac06b
+  branch: 0.6-rails2-compat
+  specs:
+    email_spec (0.6.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -47,7 +54,6 @@ GEM
     daemons (1.1.0)
     database_cleaner (0.6.5)
     diff-lcs (1.1.2)
-    email_spec (1.0.0)
     factory_girl (1.2.4)
     fastercsv (1.5.4)
     fastthread (1.0.7)
@@ -176,7 +182,7 @@ DEPENDENCIES
   cucumber
   cucumber-rails
   database_cleaner
-  email_spec
+  email_spec!
   factory_girl (= 1.2.4)
   fastercsv
   formtastic (= 0.9.10)

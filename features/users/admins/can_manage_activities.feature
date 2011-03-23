@@ -5,12 +5,12 @@ Feature: Reporter can manage activities
 
 Background:
   Given an organization exists with name: "organization1"
+  And an user exists with username: "user1", email: "email@siyelo.com", roles: "admin", organization: the organization
   And a data_request exists with title: "data_request1"
-  And an organization exists with name: "organization2"
   And a data_response exists with data_request: the data_request, organization: the organization
-  And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project1", data_response: the data_response
   And an activity exists with name: "activity1", description: "activity1 description", project: the project, data_response: the data_response, spend: 1, budget: 1
+  And a reporter exists with username: "reporter", organization: the organization
   And a project exists with name: "project2", data_response: the data_response
   And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
   And an admin exists with username: "admin"
@@ -62,16 +62,13 @@ Scenario: An admin can filter activities
   And I should not see "activity2 description"
   
 Scenario: Sends email to users when a comment is made by an admin
+  Given no emails have been sent
   When I follow "Activities"
   And I follow "activity1 description"
   And I fill in "Title" with "Comment title"
   And I fill in "Comment" with "Comment body"
-  And I press "CREATE COMMENT"
-  And I should receive an email
-  When I open the email
-  Then I should see "Hello" in the email
-
-
+  And I press "Create Comment"
+  And "email@siyelo.com" should receive an email
 
 Scenario Outline: An admin can sort activities
   Given I follow "Activities"

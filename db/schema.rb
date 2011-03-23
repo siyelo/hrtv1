@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110321095153) do
+ActiveRecord::Schema.define(:version => 20110322145249) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -213,6 +213,15 @@ ActiveRecord::Schema.define(:version => 20110321095153) do
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
+
+  create_table "funding_sources", :force => true do |t|
+    t.integer  "activity_id"
+    t.integer  "funding_flow_id"
+    t.decimal  "spend"
+    t.decimal  "budget"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "help_requests", :force => true do |t|
     t.string   "email"

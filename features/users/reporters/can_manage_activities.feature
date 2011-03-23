@@ -6,9 +6,9 @@ Feature: Reporter can manage activities
 Background:
   Given an organization exists with name: "organization1"
   And a data_request exists with title: "data_request1"
-  And an organization exists with name: "organization2"
-  And a data_response exists with data_request: the data_request, organization: the organization
-  And a reporter exists with username: "reporter", organization: the organization
+  And an organization "my_organization" exists with name: "organization2"
+  And a data_response exists with data_request: the data_request, organization: organization "my_organization"
+  And a reporter exists with username: "reporter", organization: organization "my_organization"
   And a project exists with name: "project1", data_response: the data_response
   And a location exists with short_display: "Location1"
   And the location is one of the project's locations
@@ -18,8 +18,7 @@ Background:
   And I follow "data_request1"
   And I follow "Activities"
 
-  @javascript
-  @run
+@javascript
 Scenario: Reporter can CRUD activities
   When I follow "Create Activity"
   And I fill in "Name" with "Activity1"
@@ -179,3 +178,38 @@ Scenario Outline: A reporter can sort activities
       | Description  | 2      | activity1 description | activity2 description | 
       | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               | 
       | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               | 
+
+@javascript
+Scenario: A reporter can create funding sources for an activity
+  Given an organization "funding_organization1" exists with name: "funding_organization1"
+  And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response
+  And an organization "funding_organization2" exists with name: "funding_organization2"
+  And a funding_flow exists with from: organization "funding_organization2", to: organization "my_organization", project: the project, data_response: the data_response
+
+  When I follow "Create Activity"
+  And I fill in "Name" with "Activity1"
+  And I fill in "Description" with "Activity1 description"
+  And I select "project1" from "Project"
+  And I follow "Add funding source"
+  And I select "funding_organization1" from "Organization" within ".fields"
+  And I fill in "Spent" with "111" within ".fields"
+  And I fill in "Budget" with "222" within ".fields"
+  And I press "Create New Activity"
+  Then I should see "Activity was successfully created"
+  And I should see "Activity1 description"
+  And I should see "Activity1 description"
+  And I should see "funding_organization1"
+  And I should not see "funding_organization2"
+  And I should see "111.0 RWF"
+  And I should see "222.0 RWF"
+
+  When I follow "Edit"
+  And I select "funding_organization2" from "Organization" within ".fields"
+  And I fill in "Spent" with "333" within ".fields"
+  And I fill in "Budget" with "444" within ".fields"
+  And I press "Update Activity"
+  Then I should see "Activity was successfully updated"
+  And I should see "funding_organization2"
+  And I should not see "funding_organization1"
+  And I should see "333.0 RWF"
+  And I should see "444.0 RWF"

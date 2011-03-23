@@ -44,9 +44,19 @@ class Reports::OrganizationReport
         ) ca2 ON activities.id = ca2.activity_id",
       :group => "organizations.id,
                  organizations.name",
-      :order => SortOrder.get_sort_order(sort),
-      :conditions => "ca_spent_sum > 0 OR ca_budget_sum > 0"
+      :order => SortOrder.get_sort_order(sort)
     })
+
+
+    if type = 'district'
+      organizations = Organization.find(:all, 
+                        :select => 'DISTINCT(organizations.id)', 
+                        :joins => {:data_responses => {:activities => :code_assignments}}, 
+                        :conditions => ['code_assignments.code_id = ?', options[:code_ids].first])
+      scope = scope.scoped(:conditions => ["organizations.id IN (?)", organizations.map(&:id)])
+    else
+      scope = scope.scoped(:conditions => "ca_spent_sum > 0 OR ca_budget_sum > 0")
+    end
 
     results = scope.paginate :all, :per_page => per_page, :page => page
     # Dynamic instance methods that convert the aggregate columns to the correct type

@@ -60,6 +60,7 @@ describe Activity do
     #it { should validate_presence_of(:name) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
+    it { should validate_presence_of(:description) }
     #it { should validate_uniqueness_of(:name).scoped_to(:project_id) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }

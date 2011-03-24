@@ -136,11 +136,11 @@ ActiveRecord::Schema.define(:version => 20110322145249) do
     t.boolean  "pending_review",  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "budget",          :default => true
-    t.boolean  "spend",           :default => true
-    t.date     "due_date"
+    t.boolean  "budget",          :default => true,  :null => false
+    t.boolean  "spend",           :default => true,  :null => false
   end
 
   create_table "data_responses", :force => true do |t|
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(:version => 20110322145249) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
+    t.string   "old_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "raw_type"

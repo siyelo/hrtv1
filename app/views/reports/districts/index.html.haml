@@ -24,21 +24,21 @@
         - budget_total = @budget_codings[loc.id] || 0
         %td
           %ul
-            %li= n2c(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= report_n2c(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
             %li= "(#{n2c(spent_total, '$')})"
         %td
           - if loc.district
             %ul
               - spent_per_capita =  spent_total / loc.district.population.to_f
-              %li= n2c(spent_per_capita * usd_to_local_currency, Money.default_currency.iso_code)
+              %li= report_n2c(spent_per_capita * usd_to_local_currency, Money.default_currency.iso_code)
               %li= "(#{n2c(spent_per_capita, '$')})"
         %td
           %ul
-            %li= n2c(budget_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= report_n2c(budget_total * usd_to_local_currency, Money.default_currency.iso_code)
             %li= "(#{n2c(budget_total, '$')})"
         %td
           - if loc.district
             %ul
               - budget_per_capita =  budget_total / loc.district.population.to_f
-              %li= n2c(budget_per_capita * usd_to_local_currency, Money.default_currency.iso_code)
+              %li= report_n2c(budget_per_capita * usd_to_local_currency, Money.default_currency.iso_code)
               %li= "(#{n2c(budget_per_capita, '$')})"

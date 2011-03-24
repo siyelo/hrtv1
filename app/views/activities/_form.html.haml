@@ -25,8 +25,6 @@
         #project_sub_form_fields
           - if @activity.project
             = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
-        #project_sub_form_hint
-          = render 'project_sub_form_hint', :hint => '(please select a project first)'
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended", :required => false
       = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false

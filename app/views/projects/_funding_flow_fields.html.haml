@@ -2,8 +2,8 @@
   = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
   = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
   = f.input :from, :select => Organization.all, :hint => "The organization funding the project", :required => false
-  = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
   = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
+  = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
   %li.amounts.last
     %label Quarterly spend
     %ul

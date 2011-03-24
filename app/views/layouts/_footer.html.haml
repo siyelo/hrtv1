@@ -5,8 +5,8 @@
         %li
           - country = ENV['HRT_COUNTRY'] || 'rwanda'
           %a{:href => '/'}
-            = image_tag "#{country}-coat-of-arms-small.png"
-            %h2= country
+            = image_tag "#{country}-coat-of-arms-small.png", :class => "left"
+            %h2.left= country
         %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
         %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
         %li.powered

@@ -65,7 +65,7 @@ form.data_response, .basic_form
     .inline-hints
       float: right
       margin-left: 1%
-      width: 44%
+      width: 42%
 
     .inline-errors
       color: red
@@ -80,12 +80,14 @@ form.data_response, .basic_form
   .check_boxes
     fieldset
       float: left
-      width: 78%
+      width: 55%
     legend
       float: left
       width: 170px
       label
         width: auto
+    .label
+      width: 33%
     ol
       +pie-clearfix
       float: left
@@ -105,6 +107,9 @@ form.data_response, .basic_form
     input[type=checkbox]
       margin: 0
       padding: 0
+      
+.checkbox_push
+  float: left
 
 .form_aside
   background: $filler
@@ -128,13 +133,13 @@ form.data_response, .basic_form
     height: 100px
 
 .hint, .inline-hints
+  background: image_url("hint.png") no-repeat left center
   color: $mid-blue
   display: block
   font-size: 11px
-  padding-top: 3px
+  padding: 3px 0 0 16px
   &.padded
-    padding-top: 0
-    padding-bottom: 20px
+    padding: 0 0 20px
 
 .inputs
   li
@@ -150,12 +155,10 @@ form.data_response, .basic_form
     padding: 7px 5px
     width: 353px
 
-
   li.amounts
     display: inline-block
     li
       float: left
-
     input[type=text], textarea
       width: 75px
 

@@ -56,12 +56,12 @@
 
   %li.last
     %h2 Funding sources
-    %p.hint The sources from which your organization receives funding for its projects.
     %ul.dashboard_section
       - f.semantic_fields_for :funding_flows do |ff|
         = render "projects/funding_flow_fields", :f => ff
       .add
         = link_to_add_fields "Add funding source", f, :funding_flows, "projects/"
+        %p.hint The sources from which your organization receives funding for its projects.
 
 
 - f.buttons :class => 'wrap-80 buttons' do

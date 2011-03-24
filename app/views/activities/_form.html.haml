@@ -70,21 +70,21 @@
 
   %li.last
     %h3 Sub Activities
-    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar activities.
     %ul.dashboard_section
       - f.semantic_fields_for :sub_activities do |ca|
         = render "activities/sub_activity_fields", :f => ca
       .add
         = link_to_add_fields "Add sub activity", f, :sub_activities, "activities/"
+        %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar activities.
 
   %li.last
     %h3 Funding sources
-    %p.hint The sources from which your organization receives funding for this activity.
     %ul.dashboard_section
       - f.semantic_fields_for :funding_sources do |fs|
         = render "activities/funding_source_fields", :f => fs
       .add
         = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
+        %p.hint The sources from which your organization receives funding for this activity.
 
   %li.last
     %h3 Institutions Assisted

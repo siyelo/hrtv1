@@ -248,3 +248,92 @@ h3.form_heading
   border-bottom: 1px solid #E6EDF3
   ol
     padding-top: 5px
+
+.funding_flows
+  .fields
+    overflow: hidden
+    border-bottom: 4px solid $lightest-blue
+    margin-bottom: 10px
+    padding: 10px 0
+
+    .preview_block
+      ul
+        +horizontal-list
+
+        > li
+          width: 10%
+
+          &:first-child
+            width: 20%
+
+          &:last-child
+            width: 50%
+
+            ul
+              border-left: 3px solid $lightest-blue
+              padding-left: 15px
+
+              li
+                width: 17%
+
+        li
+          border: none
+          color: $mid-blue
+          font-size: 12px
+          font-weight: bold
+
+
+          span
+            display: block
+            margin-bottom: 3px
+            font-size: 9px
+            font-weight: normal
+            color: $mid-blue + #333
+
+
+    .edit_block, .preview_block
+      width: 90%
+      float: left
+
+    .manage_block
+      float: right
+      text-align: right
+      width: 10%
+
+      a.edit, a.delete
+        background: #eee
+        border: 1px solid $light-blue
+        color: $dark-grey
+        display: inline-block
+        font-size: 10px
+        height: auto
+        line-height: 1.4
+        margin-left: 3px
+        padding: 3px 5px 2px
+        text-decoration: none
+        +border-radius(2px)
+        +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+        +text-shadow(#fff, 0, 0, 1px)
+        &:hover, &:focus
+          background: $orange
+          border: 1px solid $orange - #111
+          color: #fff
+          +linear-gradient(color-stops($orange - #111, $orange + #111))
+          +text-shadow(#444, 0, 0, 1px)
+        &:active
+          outline: none
+          position: relative
+          top: 1px
+
+      a.delete
+        &:hover, &:focus
+          background: $red
+          border: 1px solid $red - #111
+          color: #fff
+          +linear-gradient(color-stops($red - #111, $red + #111))
+          +text-shadow(#444, 0, 0, 1px)
+
+  .add
+    a
+      
+      

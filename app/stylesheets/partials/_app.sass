@@ -83,6 +83,34 @@ body.app
         position: relative
         top: 1px
 
+    &.create_alt
+      background: #eee
+      border: 1px solid $light-blue
+      color: $mid-blue
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      margin-bottom: 10px
+      padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius(2px)
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +text-shadow(#fff, 0, 0, 1px)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: green
+        border: 1px solid green - #222
+        color: #fff
+        +linear-gradient(color-stops(green, green - #222))
+        +text-shadow(green - #222, 0, 0, 1px)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
     &.edit_button
       background: $light-blue
       border: 1px solid $light-blue - #222

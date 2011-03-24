@@ -1,16 +1,19 @@
 .fields
-  = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
-  = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
-  = f.input :from, :select => Organization.all, :hint => "The organization funding the project", :required => false
-  = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
-  = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
-  %li.amounts.last
-    %label Quarterly spend
-    %ul
-      = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
-      = f.input :spend_q1     , :label => "Q1 09-10", :required => false
-      = f.input :spend_q2     , :label => "Q2 09-10", :required => false
-      = f.input :spend_q3     , :label => "Q3 09-10", :required => false
-      = f.input :spend_q4     , :label => "Q4 09-10", :required => false
+  .edit_block
+    = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
+    = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
+    = f.input :from, :select => Organization.all, :hint => "The organization funding the project", :required => false, :input_html => {:class => 'ff_from'}
+    = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false, :input_html => {:class => 'ff_spend'}
+    = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false, :input_html => {:class => 'ff_budget'}
+    %li.amounts.last
+      %label Quarterly spend
+      %ul
+        = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false, :input_html => {:class => 'ff_spend_q4_prev'}
+        = f.input :spend_q1     , :label => "Q1 09-10", :required => false, :input_html => {:class => 'ff_spend_q1'}
+        = f.input :spend_q2     , :label => "Q2 09-10", :required => false, :input_html => {:class => 'ff_spend_q2'}
+        = f.input :spend_q3     , :label => "Q3 09-10", :required => false, :input_html => {:class => 'ff_spend_q3'}
+        = f.input :spend_q4     , :label => "Q4 09-10", :required => false, :input_html => {:class => 'ff_spend_q4'}
+  .preview_block{:style => "display: none;"}
 
-  = link_to_remove_fields "remove", f
+  .manage_block
+    = link_to_remove_fields "X", f, :class => 'delete'

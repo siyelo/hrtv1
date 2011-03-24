@@ -154,6 +154,7 @@ Scenario: A reporter can create in flows for a project
   And I should see "777"
   And I should see "Project1"
   When I follow "Edit"
+  And I follow "Edit" within ".funding_flows"
   And I fill in "Q4 09-10" with "7778" within ".fields"
   And I press "Update Project"
   And I should see "7778"

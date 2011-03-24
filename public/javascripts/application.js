@@ -2,18 +2,97 @@
 // This file is automatically included by javascript_include_tag :defaults
 jQuery.noConflict()
 
+/* Nested model forms BEGIN */
+
 function remove_fields(link) {
   jQuery(link).prev("input[type=hidden]").val("1");
   jQuery(link).closest(".fields").hide();
   //jQuery(link).parent().next().hide();
-}
+};
 
 function add_fields(link, association, content) {
+  // before callback
+  before_add_fields_callback(association);
+
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
   jQuery(link).parent().before(content.replace(regexp, new_id));
-}
+};
 
+var close_funding_flow_fields = function (fields) {
+  jQuery.each(fields, function () {
+    var element = jQuery(this);
+    var edit_block = element.find('.edit_block');
+    var preview_block = element.find('.preview_block');
+    var manage_block = element.find('.manage_block');
+
+    var organization     = edit_block.find('.ff_from option:selected').text();
+    var spend            = edit_block.find('.ff_spend').val();
+    var budget           = edit_block.find('.ff_budget').val();
+    var spend_q4_prev    = edit_block.find('.ff_spend_q4_prev').val();
+    var spend_q1         = edit_block.find('.ff_spend_q1').val();
+    var spend_q2         = edit_block.find('.ff_spend_q2').val();
+    var spend_q3         = edit_block.find('.ff_spend_q3').val();
+    var spend_q4         = edit_block.find('.ff_spend_q4').val();
+
+
+
+    edit_block.hide();
+    preview_block.html(
+      jQuery('<ul/>').append(
+        jQuery('<li/>').append(
+          jQuery('<span/>').text('Funder'),
+          organization || 'N/A'
+        ),
+        jQuery('<li/>').append(
+          jQuery('<span/>').text('Spend'),
+          spend || 'N/A'
+        ),
+        jQuery('<li/>').append(
+          jQuery('<span/>').text('Budget'),
+          budget || 'N/A'
+        ),
+        jQuery('<li/>').append(
+          jQuery('<ul/>').append(
+            jQuery('<li/>').append(
+              jQuery('<span/>').text('Q4 08-09'),
+              spend_q4_prev || 'N/A'
+            ),
+            jQuery('<li/>').append(
+              jQuery('<span/>').text('Q1 09-10'),
+              spend_q1 || 'N/A'
+            ),
+            jQuery('<li/>').append(
+              jQuery('<span/>').text('Q2 09-10'),
+              spend_q2 || 'N/A'
+            ),
+            jQuery('<li/>').append(
+              jQuery('<span/>').text('Q3 09-10'),
+              spend_q3 || 'N/A'
+            ),
+            jQuery('<li/>').append(
+              jQuery('<span/>').text('Q4 09-10'),
+              spend_q4 || 'N/A'
+            )
+          )
+        )
+      )
+    ).show();
+
+    manage_block.find('.edit').remove();
+    manage_block.prepend(
+      jQuery('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+    )
+  });
+};
+
+var before_add_fields_callback = function (association) {
+  if (association === 'funding_flows') {
+    close_funding_flow_fields(jQuery('.funding_flows .fields'));
+  }
+};
+
+/* Nested model forms END */
 
 /* Ajax CRUD BEGIN */
 
@@ -989,6 +1068,22 @@ var update_funding_source_selects = function () {
     })
   }
 };
+
+var projects_new = projects_create = projects_edit = projects_update = {
+  run: function () {
+    jQuery('.edit').live('click', function (e) {
+      e.preventDefault();
+      var element = jQuery(this).parents('.fields');
+      var fields = jQuery.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+      element.find('.edit_block').show();
+      element.find('.preview_block').hide();
+      close_funding_flow_fields(fields);
+    });
+
+    close_funding_flow_fields(jQuery('.funding_flows .fields'));
+  }
+}
 
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {

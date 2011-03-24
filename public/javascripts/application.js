@@ -691,7 +691,7 @@ var build_data_response_review_screen = function () {
     var activity_id = element.attr('data-activity_id');
     var response_id = element.attr('data-response_id');
     var other_cost = element.attr('data-other_costs');
-    var url =  '/responses/' + response_id + '/activities/' + 
+    var url =  '/responses/' + response_id + '/activities/' +
       activity_id + '/classifications?other_costs=' + other_cost;
     $.get(url, function (data) {element.html(data)});
   });
@@ -991,7 +991,7 @@ var activities_new = activities_create = activities_edit = activities_update = {
       var element = $('#project_sub_form');
       var _project_id = $(this).val();
       if (_project_id) {
-        var url = '/responses/' + _response_id + 
+        var url = '/responses/' + _response_id +
         '/activities/project_sub_form?' + 'project_id=' + _project_id;
         if (_activity_id) {
           url += '&activity_id=' + _activity_id;
@@ -1013,6 +1013,9 @@ $(function () {
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: 'w', live: true});
+
+  //jquery tools overlays
+  $(".overlay").overlay();
 
   var id = $('body').attr("id");
   if (id) {

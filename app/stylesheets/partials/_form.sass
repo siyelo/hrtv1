@@ -1,7 +1,7 @@
 form.data_response, .basic_form
   .dashboard_section
     background: $filler
-    
+
   ol
     li
       border-bottom: 1px solid $lightest-blue
@@ -38,7 +38,7 @@ form.data_response, .basic_form
           float: left
           margin: 0
           width: 82%
-        
+
         input[type=text], textarea
           width: 75px
 
@@ -106,7 +106,7 @@ form.data_response, .basic_form
     input[type=checkbox]
       margin: 0
       padding: 0
-      
+
 .checkbox_push
   float: left
 
@@ -115,9 +115,13 @@ form.data_response, .basic_form
   border: 1px solid $lightest-blue
   float: right
   margin-top: 5px
-  padding: 2% 2% 1%
+  padding: 1% 2% 1%
   width: 16%
   +border-radius(3px)
+
+  .warn
+    color: $warm-red
+
   h3
     border-bottom: 1px dashed $light-blue
     margin-bottom: 10px
@@ -193,14 +197,14 @@ input[type=text], textarea
   &:hover, &:focus, &:active
     border: 1px solid $light-blue - #222 !important
     +box-shadow($light-blue, 0, 0, 3px)
-    
+
 h3.form_heading
   background: image_url("bg-blue.jpg")
   color: #fff !important
   margin-top: 5px
   padding: 10px 10px 7px !important
   +border-top-radius(3px)
-  
+
 .row
   border-bottom: 1px dashed $light-blue
   color: $mid-blue
@@ -219,7 +223,7 @@ h3.form_heading
   &.last
     border: none
     padding: 0
-    
+
 .comment_wrap
   font-size: 12px
   line-height: 1.4
@@ -334,5 +338,5 @@ h3.form_heading
 
   .add
     a
-      
-      
+
+

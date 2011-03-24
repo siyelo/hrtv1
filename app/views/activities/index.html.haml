@@ -12,7 +12,7 @@
   %li
     - link_to new_response_activity_path(@data_response), :class => "create_new" do
       = image_tag "new_white.png"
-      Create Activity
+      Add Activity
 
   %li
     = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
@@ -35,19 +35,9 @@
     = "Activities with names or description containing #{params[:query]}"
     = link_to "(Back to complete activity listing)", response_activities_path(@data_response), :class => 'target'
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th= sortable "projects.name", "Project"
-      %th= sortable "description"
-      %th= sortable "spend", "Total Spent"
-      %th= sortable "budget", "Total Budget"
-      %th.dummy Classified
-      %th
+= render 'list', :activities => @activities
 
-  %tbody
-    = render :partial => "activity", :collection => @activities
-
-= will_paginate @activities
+= will_paginate activities
 
 %ul{ :id => 'position_container', :class => 'image_list' }
+

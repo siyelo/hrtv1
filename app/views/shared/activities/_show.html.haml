@@ -65,20 +65,17 @@
         %li Budget
         %li= c(@activity.budget, @activity.currency)
       %ul.row
-        %li Budget Q4 08-09
-        %li= c(@activity.budget_q4_prev, @activity.currency)
+        %li Year + 2
+        %li= c(@activity.budget2, @activity.currency)
       %ul.row
-        %li Budget Q1 09-10
-        %li= c(@activity.budget_q1, @activity.currency)
+        %li Year + 3
+        %li= c(@activity.budget3, @activity.currency)
       %ul.row
-        %li Budget Q2 09-10
-        %li= c(@activity.budget_q2, @activity.currency)
-      %ul.row
-        %li Budget Q3 09-10
-        %li= c(@activity.budget_q3, @activity.currency)
+        %li Year + 4
+        %li= c(@activity.budget4, @activity.currency)
       %ul.row.last
-        %li Budget Q4 09-10
-        %li= c(@activity.budget_q4, @activity.currency)
+        %li Year + 5
+        %li= c(@activity.budget5, @activity.currency)
 
   %h3.form_heading Sub Activities
   %ul.dashboard_section

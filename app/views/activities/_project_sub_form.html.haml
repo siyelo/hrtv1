@@ -1,6 +1,6 @@
 - if project.locations.present?
   - semantic_fields_for activity do |f|
     - f.inputs do
-      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "all the districts/provinces in which this Activity was implemented", :collection => project.locations, :required => false
+      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "all the places where this Activity was implemented", :collection => project.locations, :required => false
 - else
-  = render 'project_sub_form_hint', :hint => "There are no districts for this project. #{link_to("Edit project", edit_response_project_path(@data_response, project))}"
+  = render 'project_sub_form_hint', :hint => "This project has no locations yet. #{link_to("Edit project", edit_response_project_path(@data_response, project))}"

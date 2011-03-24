@@ -182,7 +182,7 @@ module ApplicationHelper
     if amount.present?
       "#{amount} <span class='currency'>#{currency}</span>"
     else
-      ""
+      "0.00 <span class='currency'>#{currency}</span>"
     end
   end
 
@@ -194,6 +194,17 @@ module ApplicationHelper
 
   def contact_link
     "http://hrtapp.tenderapp.com/discussions"
+  end
+
+  # given a project or activity, render a nice name from either
+  # the name() or description()
+  def nice_name(object, length=16)
+    descr = '(no name)'
+    unless object.nil?
+      descr = object.description unless object.description.blank?
+      descr = object.name unless object.name.blank?
+    end
+    truncate(descr, :length => length)
   end
 
 end

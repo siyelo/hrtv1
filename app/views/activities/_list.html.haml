@@ -1,0 +1,12 @@
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "activity"
+      %th= sortable "spend", "Total Spent"
+      %th= sortable "budget", "Total Budget"
+      %th.dummy Classified
+      %th
+
+  %tbody
+    - activities.each do |activity|
+      = render "activities/activity", :activity => activity

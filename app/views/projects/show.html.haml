@@ -60,23 +60,17 @@
         %li Budget
         %li= c(@project.budget, @project.currency)
       %ul.row
-        %li Budget Q4 08-09
-        %li= c(@project.budget_q4_prev, @project.currency)
+        %li Year + 2
+        %li= c(@project.budget2, @project.currency)
       %ul.row
-        %li Budget Q1 09-10
-        %li= c(@project.budget_q1, @project.currency)
+        %li Year + 3
+        %li= c(@project.budget3, @project.currency)
       %ul.row
-        %li Budget Q2 09-10
-        %li= c(@project.budget_q2, @project.currency)
-      %ul.row
-        %li Budget Q3 09-10
-        %li= c(@project.budget_q3, @project.currency)
-      %ul.row
-        %li Budget Q4 09-10
-        %li= c(@project.budget_q4, @project.currency)
-      %ul.row
-        %li Entire Budget
-        %li= c(@project.entire_budget, @project.currency)
+        %li Year + 4
+        %li= c(@project.budget4, @project.currency)
+      %ul.row.last
+        %li Year + 5
+        %li= c(@project.budget5, @project.currency)
 
   %h3.form_heading In flows
   %ul.dashboard_section

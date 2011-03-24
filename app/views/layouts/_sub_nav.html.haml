@@ -3,14 +3,8 @@
     %li{ :class => (controller.class.to_s == "ResponsesController" && controller.action_name == 'edit' ? "active" : '')}
       = link_to 'Settings', edit_response_path(current_user.current_data_response || 1)
 
-    %li{ :class => [controller.class.to_s == "ProjectsController" ? "active" : '']}
+    %li{ :class => [["ProjectsController", "ActivitiesController"].include?(controller.class.to_s) ? "active" : '']}
       = link_to 'Projects', response_projects_path(@data_response)
-
-    %li{ :class => (controller.class.to_s == "ActivitiesController" || (controller.class.to_s ==  "CodeAssignmentsController" && @activity.class.to_s == 'Activity')) ? "active" : ''}
-      = link_to 'Activities', response_activities_path(@data_response)
-      
-    %li{ :class => [controller.class.to_s == "CommoditiesController" ? "active" : '']}
-      = link_to 'Commodities', response_commodities_path(@data_response)
 
     %li{ :class => (controller.class.to_s == "OtherCostsController" || @activity.class.to_s == 'OtherCost') ? "active" : ''}
       = link_to 'Other Costs', response_other_costs_path(@data_response)

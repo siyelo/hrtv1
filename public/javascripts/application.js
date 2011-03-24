@@ -772,6 +772,11 @@ var code_assignments_show = {
       }
     });
     approve_activity_checkbox();
+
+    // prevent going to top on click on tool
+    jQuery('.tooltip').live('click', function (e) {
+      e.preventDefault();
+    });
   }
 };
 
@@ -1015,7 +1020,7 @@ var activities_new = activities_create = activities_edit = activities_update = {
 jQuery(function () {
 
   // tipsy tooltips everywhere!
-  jQuery('.tooltip').tipsy({gravity: 'w'});
+  jQuery('.tooltip').tipsy({gravity: 'w', live: true});
 
   var id = jQuery('body').attr("id");
   if (id) {

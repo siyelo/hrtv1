@@ -1,6 +1,6 @@
 %tr{:class => cycle("even", "odd")}
   %td= activity.project.try(:name)
-  %td= link_to activity.description.presence || 'No Description Entered', response_activity_path(activity.data_response, activity)
+  %td= link_to activity.description.presence || 'No Description Entered', admin_activity_path(activity)
   %td= c(activity.spend, activity.currency)
   %td= c(activity.budget, activity.currency)
   %td= b activity.classified?

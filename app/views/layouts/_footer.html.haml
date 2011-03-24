@@ -9,18 +9,18 @@
             %h2.left= country
         %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
         %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
-        %li.powered
-          Powered by
-        %li
-          %h2.logo
-            Health Resource Tracker
         - unless RAILS_ENV == 'production'
-          %li.powered= "v#{Version.current}"
+          %li.version= "v#{Version.current}"
 
     %ul.left
       %li= link_to "Help", help_link, :target => "_blank"
       %li= link_to "Contact", contact_link, :target => "_blank"
       %li= link_to "About", about_page_path
+      %li.powered
+        Powered by
+      %li
+        %h2.logo
+          Health Resource Tracker
 
   -# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
   - unless Settings.google_account_id.blank?

@@ -2,10 +2,9 @@
   var _activity_id = "#{@activity.id}";
 
 = render 'layouts/active_scaffold_js'
-
 %ul.breadcrumb
   %li= link_to "Activities", response_activities_path(@data_response)
-  %li= link_to truncate(@activity.name, :length => 16), response_activity_path(@data_response, @activity)
+  %li= link_to truncate(@activity.name ? @activity.name : @activity.description, :length => 16), response_activity_path(@data_response, @activity)
 
 %h1
   = @activity.class.to_s.humanize

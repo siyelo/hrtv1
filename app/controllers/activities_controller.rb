@@ -16,7 +16,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def show
-    raise 1.to_yaml
     @comment = Comment.new
     @comment.commentable = resource
     @comments = resource.comments.find(:all, :order => 'created_at DESC')

@@ -1,5 +1,15 @@
 class CommentsController < Reporter::BaseController
 
+  def index
+    if current_user.admin?
+      @comments = Comment.paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
+    else
+      @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
+    end
+
+    render :layout => 'admin'
+  end
+
   def new
     @comment = Comment.new
     @comment.commentable = find_commentable
@@ -23,7 +33,8 @@ class CommentsController < Reporter::BaseController
   end
 
   def edit
-    @comment = current_user.admin? ? Comment.find(params[:id]) : current_user.comments.find(params[:id])
+    @comment = current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id])
+    @data_response = @comment.commentable.data_response
 
     respond_to do |format|
       format.html

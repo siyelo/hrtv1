@@ -15,5 +15,3 @@
       - codes.each do |code|
         = render 'code_row', { :code => code, :form => form, :tab => tab }
     = submit_tag 'Save', :class => 'submit_btn'
-
-= render 'shared/data_entry_help', :record_type => CodeAssignment

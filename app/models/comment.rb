@@ -97,10 +97,10 @@ class Comment < ActiveRecord::Base
   end
   
   def email_the_organisation_users(comment)
-    emails = self.commentable.data_response.organization.users.map{ |u| u.email }
+    data_response = commentable.is_a?(DataResponse) ? commentable : commentable.data_response
+    emails = data_response.organization.users.map{ |u| u.email }
     Notifier.deliver_email_organisation_users(comment, emails)
   end
-  
 end
 
 

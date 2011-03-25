@@ -87,7 +87,6 @@ Scenario Outline: An admin can filter codes
       | Nha        | Mtef       | 
       | Mtef       | Nha        | 
 
-  @run
 Scenario Outline: An admin can sort codes
   Given a mtef_code exists with short_display: "code1", description: "code1 desc"
   And a nha_code exists with short_display: "code2", description: "code2 desc"

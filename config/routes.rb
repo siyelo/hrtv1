@@ -96,5 +96,4 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :field_helps,     :active_scaffold => true
   map.resources :model_helps,     :active_scaffold => true
   map.resources :codes,           :active_scaffold => true
-  map.resources :help_requests,   :active_scaffold => true
 end

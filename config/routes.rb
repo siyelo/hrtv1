@@ -84,16 +84,4 @@ ActionController::Routing::Routes.draw do |map|
         :controller => "countries/organizations"
     end
   end
-
-  # ACTIVE SCAFFOLD
-  # routes for CSV uploading for various models
-  %w[model_helps].each do |model|
-    map.create_from_file model + "/create_from_file", :controller => model, :action => "create_from_file"
-    map.create_from_file_form model + "/create_from_file_form", :controller => model, :action => "create_from_file_form"
-  end
-
-  # dont need to nest activities under response - can derive response_id from activity
-  map.resources :field_helps,     :active_scaffold => true
-  map.resources :model_helps,     :active_scaffold => true
-  map.resources :codes,           :active_scaffold => true
 end

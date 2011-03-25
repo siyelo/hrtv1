@@ -104,17 +104,18 @@ class Comment < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: comments
 #
-#  id               :integer         not null, primary key
+#  id               :integer         primary key
 #  title            :string(50)      default("")
 #  comment          :text            default("")
 #  commentable_id   :integer         indexed
 #  commentable_type :string(255)     indexed
 #  user_id          :integer         indexed
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :timestamp
+#  updated_at       :timestamp
 #
 

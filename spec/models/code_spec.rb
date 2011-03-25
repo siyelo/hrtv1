@@ -8,11 +8,20 @@ describe Code do
   end
 
   describe "attributes" do
-    it { should allow_mass_assignment_of(:long_display) }
     it { should allow_mass_assignment_of(:short_display) }
+    it { should allow_mass_assignment_of(:long_display) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
+    it { should allow_mass_assignment_of(:type_string) }
+    it { should allow_mass_assignment_of(:parent_id) }
+    it { should allow_mass_assignment_of(:type) }
+    it { should allow_mass_assignment_of(:hssp2_stratprog_val) }
+    it { should allow_mass_assignment_of(:hssp2_stratobj_val) }
+    it { should allow_mass_assignment_of(:sub_account) }
+    it { should allow_mass_assignment_of(:nasa_code) }
+    it { should allow_mass_assignment_of(:nha_code) }
+    it { should allow_mass_assignment_of(:type_string) }
+    it { should allow_mass_assignment_of(:parent_id) }
+    it { should allow_mass_assignment_of(:official_name) }
   end
 
   describe "associations" do

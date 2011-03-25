@@ -1,0 +1,11 @@
+- title("Edit Code")
+
+%ul.breadcrumb
+  %li= link_to "Codes", admin_codes_path
+
+%h1.main_heading Edit Code
+
+= error_messages_for :code,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for :code, @code, :url => admin_code_path(@code), :html => {:method => :put, :class => "basic_form"} do |f|
+  = render 'form', :f => f

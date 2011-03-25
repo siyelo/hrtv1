@@ -16,6 +16,7 @@ class Nsp < Code
   end
 end
 
+
 # == Schema Information
 #
 # Table name: codes
@@ -29,9 +30,6 @@ end
 #  description         :text
 #  created_at          :datetime
 #  updated_at          :datetime
-#  start_date          :date
-#  end_date            :date
-#  replacement_code_id :integer
 #  type                :string(255)
 #  external_id         :string(255)
 #  hssp2_stratprog_val :string(255)

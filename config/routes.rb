@@ -30,6 +30,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :activities
+    admin.resources :codes,
+      :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 

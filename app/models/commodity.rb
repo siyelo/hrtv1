@@ -41,12 +41,13 @@ class Commodity < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: commodities
 #
 #  id               :integer         not null, primary key
-#  type             :string(255)
+#  commodity_type   :string(255)
 #  description      :text
 #  unit_cost        :decimal(, )     default(0.0)
 #  quantity         :integer

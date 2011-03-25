@@ -121,6 +121,7 @@ class SubActivity < Activity
 end
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -167,5 +168,7 @@ end
 #  project_id                            :integer
 #  budget2                               :decimal(, )
 #  budget3                               :decimal(, )
+#  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
+#  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
 #
 

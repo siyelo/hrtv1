@@ -132,21 +132,22 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: reports
 #
-#  id                         :integer         not null, primary key
+#  id                         :integer         primary key
 #  key                        :string(255)
-#  created_at                 :datetime
-#  updated_at                 :datetime
+#  created_at                 :timestamp
+#  updated_at                 :timestamp
 #  csv_file_name              :string(255)
 #  csv_content_type           :string(255)
 #  csv_file_size              :integer
-#  csv_updated_at             :datetime
+#  csv_updated_at             :timestamp
 #  formatted_csv_file_name    :string(255)
 #  formatted_csv_content_type :string(255)
 #  formatted_csv_file_size    :integer
-#  formatted_csv_updated_at   :datetime
+#  formatted_csv_updated_at   :timestamp
 #
 

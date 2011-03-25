@@ -20,6 +20,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -34,7 +35,7 @@ end
 #  due_date        :date
 #  start_date      :date
 #  end_date        :date
-#  budget          :boolean         default(TRUE)
-#  spend           :boolean         default(TRUE)
+#  budget          :boolean         default(TRUE), not null
+#  spend           :boolean         default(TRUE), not null
 #
 

@@ -97,24 +97,25 @@ class Comment < ActiveRecord::Base
   end
   
   def email_the_organisation_users(comment)
-    emails = self.commentable.data_response.organization.users.map{ |u| u.email }
+    data_response = commentable.is_a?(DataResponse) ? commentable : commentable.data_response
+    emails = data_response.organization.users.map{ |u| u.email }
     Notifier.deliver_email_organisation_users(comment, emails)
   end
-  
 end
+
 
 
 # == Schema Information
 #
 # Table name: comments
 #
-#  id               :integer         not null, primary key
+#  id               :integer         primary key
 #  title            :string(50)      default("")
 #  comment          :text            default("")
 #  commentable_id   :integer         indexed
 #  commentable_type :string(255)     indexed
 #  user_id          :integer         indexed
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :timestamp
+#  updated_at       :timestamp
 #
 

@@ -15,6 +15,8 @@ ActionController::Routing::Routes.draw do |map|
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
 
+  map.resources :comments, :member => {:delete => :get}
+
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
@@ -27,7 +29,9 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :activities, :active_scaffold => true
+    admin.resources :activities
+    admin.resources :codes,
+      :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 
@@ -63,7 +67,6 @@ ActionController::Routing::Routes.draw do |map|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     reporter.resources :responses, :only => [:show]
     reporter.resources :reports, :only => [:index, :show]
-    reporter.resources :comments, :member => {:delete => :get}
   end
 
   # REPORTS
@@ -83,18 +86,4 @@ ActionController::Routing::Routes.draw do |map|
         :controller => "countries/organizations"
     end
   end
-
-  # ACTIVE SCAFFOLD
-  # routes for CSV uploading for various models
-  %w[model_helps comments].each do |model|
-    map.create_from_file model + "/create_from_file", :controller => model, :action => "create_from_file"
-    map.create_from_file_form model + "/create_from_file_form", :controller => model, :action => "create_from_file_form"
-  end
-
-  # dont need to nest activities under response - can derive response_id from activity
-  map.resources :comments,        :active_scaffold => true
-  map.resources :field_helps,     :active_scaffold => true
-  map.resources :model_helps,     :active_scaffold => true
-  map.resources :codes,           :active_scaffold => true
-  map.resources :help_requests,   :active_scaffold => true
 end

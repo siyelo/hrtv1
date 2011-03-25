@@ -1,7 +1,7 @@
 Feature: Admin can manage users
   In order to track information
   As an admin
-  I want to be able to crete users
+  I want to be able to manage users
 
 Background:
   Given an organization exists with name: "organization1"

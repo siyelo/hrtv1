@@ -44,7 +44,6 @@ Feature: Reporter can manage projects
       Then I should see "Commodity was successfully destroyed"
       And I should not see "Commodity1"
       
-      @run
     Scenario: Reporter can upload commodities
       When I attach the file "spec/fixtures/commodity.csv" to "File"
       And I press "Upload and Import"

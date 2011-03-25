@@ -141,11 +141,12 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: code_assignments
 #
-#  id                   :integer         not null, primary key
+#  id                   :integer         primary key
 #  activity_id          :integer         indexed => [code_id, type]
 #  code_id              :integer         indexed, indexed => [activity_id, type]
 #  amount               :decimal(, )
@@ -153,8 +154,8 @@ end
 #  percentage           :decimal(, )
 #  cached_amount        :decimal(, )     default(0.0)
 #  sum_of_children      :decimal(, )     default(0.0)
-#  created_at           :datetime
-#  updated_at           :datetime
+#  created_at           :timestamp
+#  updated_at           :timestamp
 #  cached_amount_in_usd :decimal(, )     default(0.0)
 #
 

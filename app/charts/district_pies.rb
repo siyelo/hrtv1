@@ -192,7 +192,8 @@ module Charts::DistrictPies
         total_in_district = district_klass.sum(:cached_amount,
                                                :conditions => ["code_id = ?", location.id])
         total_in_all_districts = district_klass.sum(:cached_amount)
-        return total_in_district / total_in_all_districts
+
+        total_in_all_districts > 0 ? total_in_district / total_in_all_districts : 0
       end
 
       def prepare_pie_values(code_assignments, ratio)

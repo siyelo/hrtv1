@@ -1,0 +1,20 @@
+.form_aside
+- f.inputs :class => 'wrap-80 inputs' do
+  %li.last
+    %h3 Code details
+    %ul.dashboard_section
+      = f.input :type_string, :collection => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType'], :as => :select, :label => 'Type', :required => false
+      = f.input :parent, :collection => Code.all, :as => :select, :required => false
+      = f.input :short_display, :required => false
+      = f.input :long_display, :required => false
+      = f.input :description, :required => false
+      = f.input :official_name, :required => false
+      = f.input :hssp2_stratprog_val, :required => false
+      = f.input :hssp2_stratobj_val, :required => false
+      = f.input :sub_account, :required => false
+      = f.input :nasa_code, :required => false
+      = f.input :nha_code, :required => false
+
+- f.buttons :class => 'wrap-80 buttons' do
+  = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :class => "last"
+

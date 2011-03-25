@@ -8,4 +8,4 @@
         .author= "Posted by #{comment.user.try(:name)} #{time_ago_in_words(comment.created_at)} ago"
 .form_aside.wrap-30
   %h3 Add new comment
-  = render 'reporter/comments/form', :comment => @comment
+  = render 'comments/form', :comment => @comment

@@ -1,11 +1,24 @@
 class Code < ActiveRecord::Base
+
+  ### Constants
   ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
+  FILE_UPLOAD_COLUMNS = %w[short_display long_display description type external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val official_name sub_account nha_code nasa_code]
 
   ### Comments
   acts_as_commentable
 
   ### Attributes
-  attr_accessible :long_display, :short_display, :description, :start_date, :end_date
+  attr_writer   :type_string
+  attr_accessible :short_display, :long_display, :description, :official_name,
+                  :hssp2_stratprog_val, :hssp2_stratobj_val, :sub_account,
+                  :nasa_code, :nha_code, :type_string, :parent_id, :type
+
+  def type_string
+    @type_string || self[:type]
+  end
+
+  ### Callbacks
+  before_save :assign_type
 
   # don't move acts_as_nested_set up, it creates attr_protected/accessible conflicts
   acts_as_nested_set
@@ -64,7 +77,32 @@ class Code < ActiveRecord::Base
   def to_s_with_external_id
     "#{short_display} (#{external_id || 'n/a'})"
   end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Code::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      parent_short_display = attributes.delete('parent_short_display')
+      parent = parent_short_display ? Code.find_by_short_display(attributes.delete('short_display')) : nil
+      attributes.merge!(:parent_id => parent.id) if parent
+      code = Code.new(attributes)
+      code.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
+  private
+    def assign_type
+      self[:type] = type_string
+    end
 end
+
 
 
 # == Schema Information
@@ -80,9 +118,6 @@ end
 #  description         :text
 #  created_at          :datetime
 #  updated_at          :datetime
-#  start_date          :date
-#  end_date            :date
-#  replacement_code_id :integer
 #  type                :string(255)
 #  external_id         :string(255)
 #  hssp2_stratprog_val :string(255)

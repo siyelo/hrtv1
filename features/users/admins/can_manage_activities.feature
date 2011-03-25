@@ -61,6 +61,7 @@ Scenario: An admin can filter activities
   Then I should see "activity1 description"
   And I should not see "activity2 description"
   
+  @run
 Scenario: Sends email to users when a comment is made by an admin
   Given no emails have been sent
   When I follow "Activities"

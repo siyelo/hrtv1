@@ -12,9 +12,9 @@
         - budget_total = organization.budget_sum
         %td
           %ul
-            %li= n2c(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= n2crs(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
             %li= "(#{n2c(spent_total, '$')})"
         %td
           %ul
-            %li= n2c(budget_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= n2crs(budget_total * usd_to_local_currency, Money.default_currency.iso_code)
             %li= "(#{n2c(budget_total, '$')})"

@@ -25,7 +25,7 @@
     %tr
       %td Total Budget
       %td
-        = n2c(@activity.budget,  @activity.currency.to_s)
+        = n2crs(@activity.budget,  @activity.currency.to_s)
         %p== (Coding Total#{" (District)" if @location}: #{n2c(@budget_assignments_sum, "USD")})
 
     %tr

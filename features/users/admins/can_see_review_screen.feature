@@ -93,5 +93,5 @@ Scenario: Manage comments on activities (with Javascript)
 @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
-  Then I should see tabs for comments,activities,other costs
-  Then I should see tabs for comments,sub-activities when activities already open
+  And I should see tabs for comments,activities,other costs
+  And I should see tabs for comments,sub-activities when activities already open

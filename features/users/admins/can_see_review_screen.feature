@@ -25,12 +25,14 @@ Background:
 @javascript
 Scenario: Manage comments on data responses (with Javascript)
   Given wait a few moments
+    Then show me the page
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
   And I fill in "Comment" with "comment body"
+  Then show me the page
   And I press "Create Comment"
   Then I should see "comment title"
-  And I should see "comment body"
+  Then I should see "comment body"
   When I follow "Edit" within ".comments"
   And I fill in "Title" with "new comment title"
   And I fill in "Comment" with "new comment body"

@@ -2,9 +2,6 @@
   var _activity_id = "#{@activity.id}";
 
 = render 'layouts/active_scaffold_js'
-= puts "--------------------------------"
-= puts @activity.description
-= puts "--------------------------------"
 %ul.breadcrumb
   %li= link_to "Activities", response_activities_path(@data_response)
   %li= link_to truncate(@activity.name ? @activity.name : @activity.description, :length => 16), response_activity_path(@data_response, @activity)

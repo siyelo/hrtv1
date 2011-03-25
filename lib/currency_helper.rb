@@ -7,7 +7,11 @@
 # => [ :aed, :afn, all, ... ]
 
 module CurrencyHelper
-  OTHER_PRIORITIES = [:rwf] #RWF is a prio currency
+  if ENV['HRT_COUNTRY'] = 'kenya'
+    OTHER_PRIORITIES = [:jpy, :dkk, :gbp] #Priority currencies for kenya
+  else
+    OTHER_PRIORITIES = [:rwf] #Priority currencies for kenya
+  end
   PRIORITY_CUTOFF = 5
 
   ### jump through hoops to include this in the ActiveScaffold controllers

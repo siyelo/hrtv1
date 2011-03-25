@@ -95,6 +95,12 @@ class Comment < ActiveRecord::Base
   def authorized_for_delete?
     authorized_for_read?
   end
+  
+  def email_the_organisation_users(comment)
+    emails = self.commentable.data_response.organization.users.map{ |u| u.email }
+    Notifier.deliver_email_organisation_users(comment, emails)
+  end
+  
 end
 
 

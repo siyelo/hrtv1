@@ -8,6 +8,8 @@ require 'factory_girl'
 require 'shoulda'
 require 'authlogic/test_case'
 require 'database_cleaner'
+require 'email_spec'
+
 
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))].each {|f| require f}
 # Dir[File.expand_path(File.join(File.dirname(__FILE__),'spec','factories','**','*.rb'))].each {|f| require f} # from irb

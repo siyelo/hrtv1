@@ -25,14 +25,12 @@ Background:
 @javascript
 Scenario: Manage comments on data responses (with Javascript)
   Given wait a few moments
-    Then show me the page
   And I follow "+ Add Comment"
   And I fill in "Title" with "comment title"
   And I fill in "Comment" with "comment body"
-  Then show me the page
   And I press "Create Comment"
   Then I should see "comment title"
-  Then I should see "comment body"
+  And I should see "comment body"
   When I follow "Edit" within ".comments"
   And I fill in "Title" with "new comment title"
   And I fill in "Comment" with "new comment body"
@@ -95,5 +93,5 @@ Scenario: Manage comments on activities (with Javascript)
 @javascript
 Scenario: See all the nested sub-tabs (with Javascript)
   Then I should see tabs for comments,projects,non-project activites
-  Then I should see tabs for comments,activities,other costs
-  Then I should see tabs for comments,sub-activities when activities already open
+  And I should see tabs for comments,activities,other costs
+  And I should see tabs for comments,sub-activities when activities already open

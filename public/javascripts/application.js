@@ -1,13 +1,9 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
-jQuery.noConflict()
-
 /* Nested model forms BEGIN */
 
 function remove_fields(link) {
-  jQuery(link).prev("input[type=hidden]").val("1");
-  jQuery(link).closest(".fields").hide();
-  //jQuery(link).parent().next().hide();
+  $(link).prev("input[type=hidden]").val("1");
+  $(link).closest(".fields").hide();
+  //$(link).parent().next().hide();
 };
 
 function add_fields(link, association, content) {
@@ -16,12 +12,12 @@ function add_fields(link, association, content) {
 
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
-  jQuery(link).parent().before(content.replace(regexp, new_id));
+  $(link).parent().before(content.replace(regexp, new_id));
 };
 
 var close_funding_flow_fields = function (fields) {
-  jQuery.each(fields, function () {
-    var element = jQuery(this);
+  $.each(fields, function () {
+    var element = $(this);
     var edit_block = element.find('.edit_block');
     var preview_block = element.find('.preview_block');
     var manage_block = element.find('.manage_block');
@@ -39,39 +35,39 @@ var close_funding_flow_fields = function (fields) {
 
     edit_block.hide();
     preview_block.html(
-      jQuery('<ul/>').append(
-        jQuery('<li/>').append(
-          jQuery('<span/>').text('Funder'),
+      $('<ul/>').append(
+        $('<li/>').append(
+          $('<span/>').text('Funder'),
           organization || 'N/A'
         ),
-        jQuery('<li/>').append(
-          jQuery('<span/>').text('Spend'),
+        $('<li/>').append(
+          $('<span/>').text('Spend'),
           spend || 'N/A'
         ),
-        jQuery('<li/>').append(
-          jQuery('<span/>').text('Budget'),
+        $('<li/>').append(
+          $('<span/>').text('Budget'),
           budget || 'N/A'
         ),
-        jQuery('<li/>').append(
-          jQuery('<ul/>').append(
-            jQuery('<li/>').append(
-              jQuery('<span/>').text('Q4 08-09'),
+        $('<li/>').append(
+          $('<ul/>').append(
+            $('<li/>').append(
+              $('<span/>').text('Q4 08-09'),
               spend_q4_prev || 'N/A'
             ),
-            jQuery('<li/>').append(
-              jQuery('<span/>').text('Q1 09-10'),
+            $('<li/>').append(
+              $('<span/>').text('Q1 09-10'),
               spend_q1 || 'N/A'
             ),
-            jQuery('<li/>').append(
-              jQuery('<span/>').text('Q2 09-10'),
+            $('<li/>').append(
+              $('<span/>').text('Q2 09-10'),
               spend_q2 || 'N/A'
             ),
-            jQuery('<li/>').append(
-              jQuery('<span/>').text('Q3 09-10'),
+            $('<li/>').append(
+              $('<span/>').text('Q3 09-10'),
               spend_q3 || 'N/A'
             ),
-            jQuery('<li/>').append(
-              jQuery('<span/>').text('Q4 09-10'),
+            $('<li/>').append(
+              $('<span/>').text('Q4 09-10'),
               spend_q4 || 'N/A'
             )
           )
@@ -81,14 +77,14 @@ var close_funding_flow_fields = function (fields) {
 
     manage_block.find('.edit').remove();
     manage_block.prepend(
-      jQuery('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
     )
   });
 };
 
 var before_add_fields_callback = function (association) {
   if (association === 'funding_flows') {
-    close_funding_flow_fields(jQuery('.funding_flows .fields'));
+    close_funding_flow_fields($('.funding_flows .fields'));
   }
 };
 
@@ -117,7 +113,7 @@ var addNewForm = function (resources, data) {
 };
 
 var addEditForm = function (rowId, data) {
-  jQuery('#' + rowId).html('<td colspan="100">' + data + '</td>').addClass("edit_row");
+  $('#' + rowId).html('<td colspan="100">' + data + '</td>').addClass("edit_row");
 };
 
 var updateCount = function (resources) {
@@ -129,14 +125,14 @@ var addNewRow = function (resources, data) {
   resources.find('tbody').prepend(data);
   enableElement(resources.find('.new_btn'));
   updateCount(resources);
-  var newRow = jQuery(resources.find('tbody tr')[0]);
+  var newRow = $(resources.find('tbody tr')[0]);
   newRow.find(".rest_in_place").rest_in_place(); // inplace edit
 };
 
 var addExistingRow = function (rowId, data) {
-  var row = jQuery('#' + rowId);
+  var row = $('#' + rowId);
   row.replaceWith(data)
-  var newRow = jQuery('#' + rowId);
+  var newRow = $('#' + rowId);
   newRow.find(".rest_in_place").rest_in_place(); // inplace edit
 };
 
@@ -144,8 +140,8 @@ var addSearchForm = function (element) {
   if (element.hasClass('enabled')) {
     disableElement(element);
     var resourceName = getResourceName(element);
-    jQuery.get(resourceName + '/search.js', function (data) {
-      jQuery('#placer').prepend(data);
+    $.get(resourceName + '/search.js', function (data) {
+      $('#placer').prepend(data);
     });
   }
 }
@@ -179,15 +175,15 @@ var newResource = function (element) {
   if (element.hasClass('enabled')) {
     var resources = getResources(element);
     disableElement(element);
-    jQuery.get(buildUrl(element.attr('href')), function (data) {
+    $.get(buildUrl(element.attr('href')), function (data) {
       addNewForm(resources, data);
     });
   }
 };
 
 var replaceTable = function (data) {
-  jQuery("#main_table").replaceWith(data);
-  jQuery("#main_table").find(".rest_in_place").rest_in_place(); // inplace edit
+  $("#main_table").replaceWith(data);
+  $("#main_table").find(".rest_in_place").rest_in_place(); // inplace edit
 };
 
 var searchResources = function (element, type) {
@@ -195,18 +191,18 @@ var searchResources = function (element, type) {
   var form = getForm(element);
   var q = (type === "reset") ? '' : form.find("#s_q").val();
 
-  jQuery.get(resourceName + '.js?q=' + q, function (data) {
+  $.get(resourceName + '.js?q=' + q, function (data) {
     replaceTable(data);
     if (type === "reset") {
      closeForm(element);
-     enableElement(jQuery(".search_btn"));
+     enableElement($(".search_btn"));
     }
   });
 };
 
 var editResource = function (element) {
   var rowId = getRowId(element);
-  jQuery.get(buildUrl(element.attr('href')), function (data) {
+  $.get(buildUrl(element.attr('href')), function (data) {
     addEditForm(rowId, data);
   });
 };
@@ -214,7 +210,7 @@ var editResource = function (element) {
 var updateResource = function (element) {
   var rowId = getRowId(element);
   var form = getForm(element);
-  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+  $.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
     closeForm(element);
     response.status === 206 ? addEditForm(rowId, data) : addExistingRow(rowId, data);
   });
@@ -223,7 +219,7 @@ var updateResource = function (element) {
 var createResource = function (element) {
   var form = getForm(element);
   var resources = getResources(element);
-  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+  $.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
     closeForm(element);
     response.status === 206 ? addNewForm(resources, data) : addNewRow(resources, data);
   });
@@ -232,7 +228,7 @@ var createResource = function (element) {
 var showResource = function (element) {
   var rowId = getRowId(element);
   var resourceId = getResourceId(element)
-  jQuery.get(element.attr('href') + '/' + resourceId + '.js', function (data) {
+  $.get(element.attr('href') + '/' + resourceId + '.js', function (data) {
     closeForm(element);
     addExistingRow(rowId, data);
   });
@@ -241,7 +237,7 @@ var showResource = function (element) {
 var destroyResource = function (element) {
   var rowId = getRowId(element);
   var resources = getResources(element);
-  jQuery.post(element.attr('href').replace('/delete', '') + '.js', {'_method': 'delete'}, function (data) {
+  $.post(element.attr('href').replace('/delete', '') + '.js', {'_method': 'delete'}, function (data) {
     removeRow(resources, rowId);
   });
 };
@@ -250,7 +246,7 @@ var sortResources = function (element) {
   var link = element.find('a');
   var resourceName = getResourceName(element);
   var url = resourceName + '.js?' + link.attr('href').replace(/.*\?/, '');
-  jQuery.get(url, function (data) {
+  $.get(url, function (data) {
     replaceTable(data);
   });
 }
@@ -261,7 +257,7 @@ var getFormType = function (element) {
 }
 
 var ajaxifyResources = function (resources) {
-  var block = jQuery(".resources[data-resources='" + resources + "']");
+  var block = $(".resources[data-resources='" + resources + "']");
   var newBtn = block.find(".new_btn");
   var editBtn = block.find(".edit_btn");
   var cancelBtn = block.find(".cancel_btn");
@@ -272,21 +268,21 @@ var ajaxifyResources = function (resources) {
   // new
   newBtn.live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     newResource(element);
   });
 
   // edit
   editBtn.live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     editResource(element);
   });
 
   // cancel
   cancelBtn.live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     var formType = getFormType(element);
 
     if (formType === "new") {
@@ -305,7 +301,7 @@ var ajaxifyResources = function (resources) {
   // submit
   submitBtn.live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     var formType = getFormType(element);
 
     if (formType === "new") {
@@ -322,7 +318,7 @@ var ajaxifyResources = function (resources) {
   // destroy
   destroyBtn.live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     if (confirm('Are you sure?')) {
       destroyResource(element);
     }
@@ -340,8 +336,8 @@ var collapse_expand = function (e, element, type) {
 
   var next_element = element.next('.' + type + '.entry_main');
   var next_element_visible = next_element.is(':visible');
-  jQuery('.' + type + '.entry_main').hide();
-  jQuery('.' + type + '.entry_header').removeClass('active');
+  $('.' + type + '.entry_main').hide();
+  $('.' + type + '.entry_header').removeClass('active');
   if (next_element_visible) {
     next_element.hide();
   } else {
@@ -370,9 +366,9 @@ var removeRow = function (resources, rowId) {
 var admin_responses_index = {
   run: function () {
     // destroy
-    jQuery(".destroy_btn").live('click', function (e) {
+    $(".destroy_btn").live('click', function (e) {
       e.preventDefault();
-      var element = jQuery(this);
+      var element = $(this);
       if (confirm('Are you sure?')) {
         destroyResource(element);
       }
@@ -383,9 +379,9 @@ var admin_responses_index = {
 var admin_responses_empty = {
   run: function () {
     // destroy
-    jQuery(".destroy_btn").live('click', function (e) {
+    $(".destroy_btn").live('click', function (e) {
       e.preventDefault();
-      var element = jQuery(this);
+      var element = $(this);
       if (confirm('Are you sure?')) {
         destroyResource(element);
       }
@@ -394,27 +390,27 @@ var admin_responses_empty = {
 };
 
 var getOrganizationInfo = function (organization_id, box) {
-  jQuery.get(organization_id + '.js', function (data) {
+  $.get(organization_id + '.js', function (data) {
     box.find('.placer').html(data);
   });
 };
 
 var displayFlashForReplaceOrganization = function (type, message) {
-  jQuery('#content .wrapper').prepend(
-    jQuery('<div/>').attr({id: 'flashes'}).append(
-      jQuery('<div/>').attr({id: type}).text(message)
+  $('#content .wrapper').prepend(
+    $('<div/>').attr({id: 'flashes'}).append(
+      $('<div/>').attr({id: type}).text(message)
     )
   );
 
   // fade out flash message
-  jQuery("#" + type).delay(5000).fadeOut(3000, function () {
-    jQuery("#flashes").remove();
+  $("#" + type).delay(5000).fadeOut(3000, function () {
+    $("#flashes").remove();
   });
 }
 
 var removeOrganizationFromLists = function (duplicate_id, box_type) {
-  jQuery.each(['duplicate', 'target'], function (i, name) {
-    var select_element = jQuery("#" + name + "_organization_id");
+  $.each(['duplicate', 'target'], function (i, name) {
+    var select_element = $("#" + name + "_organization_id");
     var current_option = select_element.find("option[value='" + duplicate_id + "']");
 
     // remove element from page
@@ -425,7 +421,7 @@ var removeOrganizationFromLists = function (duplicate_id, box_type) {
       }
 
       // update info block
-      getOrganizationInfo(select_element.val(), jQuery('#' + name));
+      getOrganizationInfo(select_element.val(), $('#' + name));
     }
 
     current_option.remove();
@@ -442,48 +438,48 @@ var ReplaceOrganizationErrorCallback = function (message) {
 }
 
 var replaceOrganization = function (form) {
-  var duplicate_id = jQuery("#duplicate_organization_id").val();
-  jQuery.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
-    var data = jQuery.parseJSON(data)
+  var duplicate_id = $("#duplicate_organization_id").val();
+  $.post(buildUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+    var data = $.parseJSON(data)
     response.status === 206 ? ReplaceOrganizationErrorCallback(data.message) : ReplaceOrganizationSuccessCallback(data.message, duplicate_id);
   });
 };
 
 var destroyOrganization = function (organization_id, type) {
-  jQuery.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
-    var data = jQuery.parseJSON(data)
+  $.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
+    var data = $.parseJSON(data)
     response.status === 206 ? displayFlashForReplaceOrganization('error', data.message) : removeOrganizationFromLists(organization_id, type);
   });
 }
 
 var admin_organizations_duplicate = {
   run: function () {
-    jQuery("#duplicate_organization_id, #target_organization_id").change(function() {
-      var organization_id = jQuery(this).val();
-      var type = jQuery(this).parents('.box').attr('data-type');
-      var box = jQuery('#' + type); // type = duplicate; target
+    $("#duplicate_organization_id, #target_organization_id").change(function() {
+      var organization_id = $(this).val();
+      var type = $(this).parents('.box').attr('data-type');
+      var box = $('#' + type); // type = duplicate; target
       getOrganizationInfo(organization_id, box);
     });
 
-    getOrganizationInfo(jQuery("#duplicate_organization_id").val(), jQuery('#duplicate'));
-    getOrganizationInfo(jQuery("#target_organization_id").val(), jQuery('#target'));
+    getOrganizationInfo($("#duplicate_organization_id").val(), $('#duplicate'));
+    getOrganizationInfo($("#target_organization_id").val(), $('#target'));
 
-    jQuery("#replace_organization").click(function (e) {
+    $("#replace_organization").click(function (e) {
       e.preventDefault();
-      var element = jQuery(this);
+      var element = $(this);
       var form = element.parents('form')
       if (confirm('Are you sure?')) {
         replaceOrganization(form);
       }
     });
 
-    jQuery(".destroy_btn").click(function (e) {
+    $(".destroy_btn").click(function (e) {
       e.preventDefault();
-      var element = jQuery(this);
+      var element = $(this);
       var type = element.parents('.box').attr('data-type');
       var select_element;
 
-      select_element = (type === 'duplicate') ? jQuery("#duplicate_organization_id") : jQuery("#target_organization_id");
+      select_element = (type === 'duplicate') ? $("#duplicate_organization_id") : $("#target_organization_id");
 
       if (confirm('Are you sure you want to delete "' + select_element.find('option:selected').text() + '"?')) {
         destroyOrganization(select_element.val(), type);
@@ -527,7 +523,7 @@ var get_treemap_chart_element_endpoint = function (element_type, chart_type, id)
 
 var drawTreemap = function (element_type, element_id, chart_type, chart_element) {
   var urlEndpoint = get_treemap_chart_element_endpoint(element_type, chart_type, element_id);
-  jQuery.getJSON(urlEndpoint, function (response) {
+  $.getJSON(urlEndpoint, function (response) {
     var data_rows = response;
 
     // Create and populate the data table.
@@ -569,31 +565,31 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 
 var build_data_response_review_screen = function () {
 
-  jQuery('.tooltip').tipsy({gravity: 'w'});
-  jQuery('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
-  jQuery('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
+  $('.tooltip').tipsy({gravity: 'w'});
+  $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
+  $('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
-  jQuery('.project.entry_header').click(function (e) {
-    collapse_expand(e, jQuery(this), 'project');
+  $('.project.entry_header').click(function (e) {
+    collapse_expand(e, $(this), 'project');
   });
 
-  jQuery('.activity.entry_header').click(function (e) {
-    collapse_expand(e, jQuery(this), 'activity');
+  $('.activity.entry_header').click(function (e) {
+    collapse_expand(e, $(this), 'activity');
   });
 
-  jQuery('.sub_activity.entry_header').click(function (e) {
-    collapse_expand(e, jQuery(this), 'sub_activity');
+  $('.sub_activity.entry_header').click(function (e) {
+    collapse_expand(e, $(this), 'sub_activity');
   });
 
   // bind click events for tabs
-  jQuery(".classifications ul li").live('click', function (e) {
+  $(".classifications ul li").live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     if (element.attr("id")) {
-      jQuery(".classifications ul li").removeClass('selected');
+      $(".classifications ul li").removeClass('selected');
       element.addClass('selected');
-      jQuery("#activity_classification > div").hide();
-      jQuery('#activity_classification > div.' + element.attr("id")).show();
+      $("#activity_classification > div").hide();
+      $('#activity_classification > div.' + element.attr("id")).show();
     }
   });
 
@@ -605,9 +601,9 @@ var build_data_response_review_screen = function () {
   //  .tabs > .tab1, .tab2, .tab3
   // BUT if you supply an id (e.g. tab1), it will use that
   // (useful if tab nav has non-clickable items in the list)
-  jQuery(".tabs_nav ul li").live('click', function (e) {
+  $(".tabs_nav ul li").live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     var target_tab = 'tab1'
 
     if (element.attr("id")) {
@@ -623,9 +619,9 @@ var build_data_response_review_screen = function () {
   });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
-  jQuery(".tabs ul.inline_tab li").live('click', function (e) {
+  $(".tabs ul.inline_tab li").live('click', function (e) {
     e.preventDefault();
-    var element = jQuery(this);
+    var element = $(this);
     if (element) {
       element.parents('.inline_tab').find('li').removeClass('selected');
       element.addClass('selected');
@@ -671,7 +667,7 @@ var build_data_response_review_screen = function () {
   //createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
 
   // Project charts
-  jQuery.each(_projects, function (i, id) {
+  $.each(_projects, function (i, id) {
     createPieChart("project", {id: id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
     createPieChart("project", {id: id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
     createPieChart("project", {id: id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
@@ -687,14 +683,14 @@ var build_data_response_review_screen = function () {
   approve_activity_checkbox();
 
   // Ajax load of classifications for activities
-  jQuery.each(jQuery('.activity_classifications'), function (i, element) {
-    element = jQuery(element);
+  $.each($('.activity_classifications'), function (i, element) {
+    element = $(element);
     var activity_id = element.attr('data-activity_id');
     var response_id = element.attr('data-response_id');
     var other_cost = element.attr('data-other_costs');
     var url =  '/responses/' + response_id + '/activities/' + 
       activity_id + '/classifications?other_costs=' + other_cost;
-    jQuery.get(url, function (data) {element.html(data)});
+    $.get(url, function (data) {element.html(data)});
   });
 
 };
@@ -721,14 +717,14 @@ var policy_maker_data_responses_show = {
 };
 
 var approve_activity_checkbox = function () {
-  jQuery(".approve_activity").click(function (e) {
+  $(".approve_activity").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
-    //activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
-    activity_id = jQuery(this).attr('data-id');
-    response_id = jQuery(this).attr('data-response_id');
+    //activity_id = Number($(this).attr('id').match(/\d+/)[0], 10);
+    activity_id = $(this).attr('data-id');
+    response_id = $(this).attr('data-response_id');
     var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'
-    jQuery.post(url, {checked: jQuery(this).is(':checked'), "_method": "put"});
+    $.post(url, {checked: $(this).is(':checked'), "_method": "put"});
   })
 };
 
@@ -741,8 +737,8 @@ var code_assignments_show = {
      *
      */
     var addCollabsibleButtons = function (tab) {
-      jQuery('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
-      jQuery('.' + tab + ' ul.activity_tree').validateClassificationTree();
+      $('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
+      $('.' + tab + ' ul.activity_tree').validateClassificationTree();
     };
 
     /*
@@ -752,57 +748,57 @@ var code_assignments_show = {
      *
      */
     var appendTab = function (tab, response) {
-      jQuery("#activity_classification ." + tab).html(response);
+      $("#activity_classification ." + tab).html(response);
       addCollabsibleButtons(tab);
     };
 
-    jQuery('.submit_btn').live('click', function (e) {
+    $('.submit_btn').live('click', function (e) {
       e.preventDefault();
 
-      var element = jQuery(this);
+      var element = $(this);
       var form = getForm(element);
-      var tab = jQuery("#activity_classification > div:visible");
+      var tab = $("#activity_classification > div:visible");
 
       // add ajax loader image
-      element.after(jQuery('<img/>').attr({id: 'ajax-loader', src: '/images/ajax-loader.gif'}));
+      element.after($('<img/>').attr({id: 'ajax-loader', src: '/images/ajax-loader.gif'}));
 
-      jQuery.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
+      $.post(buildUrl(form.attr('action')) + '&tab=' + tab.attr('class'), form.serialize(), function (data, status, response) {
 
         // replace tab form
         tab.html('');
         appendTab(tab.attr('class'), data.tab);
 
         // replace nav
-        jQuery(".inline_tab").replaceWith(data.tab_nav);
-        jQuery('#' + tab.attr('class')).click(); // click the current tab
+        $(".inline_tab").replaceWith(data.tab_nav);
+        $('#' + tab.attr('class')).click(); // click the current tab
 
         // replace activity description
-        jQuery("#activity_description").replaceWith(data.activity_description);
+        $("#activity_description").replaceWith(data.activity_description);
 
         // flash messages
-        jQuery('#flashes').remove();
-        var flashes = jQuery('<div/>').attr({id: 'flashes'});
-        jQuery('#content .wrapper').prepend(flashes);
+        $('#flashes').remove();
+        var flashes = $('<div/>').attr({id: 'flashes'});
+        $('#content .wrapper').prepend(flashes);
         flashes.delay(5000).fadeOut(3000, function () {
-          jQuery(this).remove();
+          $(this).remove();
         });
 
         // bottom flash message in tab
-        var coding_flash_below = jQuery('<div/>').attr({'class': 'coding_flash'});
+        var coding_flash_below = $('<div/>').attr({'class': 'coding_flash'});
 
         if (data.message.notice) {
-          flashes.append(jQuery('<div/>').attr({id: 'notice'}).text(data.message.notice));
-          coding_flash_below.append(jQuery('<div/>').attr({'class': 'notice'}).text(data.message.notice));
+          flashes.append($('<div/>').attr({id: 'notice'}).text(data.message.notice));
+          coding_flash_below.append($('<div/>').attr({'class': 'notice'}).text(data.message.notice));
         }
 
         if (data.message.error) {
-          flashes.append(jQuery('<div/>').attr({id: 'error'}).text(data.message.error));
-          coding_flash_below.append(jQuery('<div/>').attr({'class': 'error'}).text(data.message.error));
+          flashes.append($('<div/>').attr({id: 'error'}).text(data.message.error));
+          coding_flash_below.append($('<div/>').attr({'class': 'error'}).text(data.message.error));
         }
 
         tab.append(coding_flash_below);
         coding_flash_below.delay(5000).fadeOut(3000, function (element) {
-          jQuery(this).remove();
+          $(this).remove();
         });
       });
     });
@@ -827,12 +823,12 @@ var code_assignments_show = {
       var url = '/activities/' + _activity_id + 
         '/code_assignments?coding_type=' + coding_type + '&tab=' + tab;
 
-      var element = jQuery("#activity_classification ." + tab);
+      var element = $("#activity_classification ." + tab);
 
       if (element.length) {
         // closure to 'catch' the actual tab
         (function (url, tab) {
-          jQuery.get(url, function (response) {
+          $.get(url, function (response) {
             appendTab(tab, response);
           });
         })(url, tab);
@@ -840,20 +836,20 @@ var code_assignments_show = {
     }
 
     // bind click events for tabs
-    jQuery(".nav2 ul li").live('click', function (e) {
+    $(".nav2 ul li").live('click', function (e) {
       e.preventDefault();
-      var element = jQuery(this);
+      var element = $(this);
       if (element.attr("id")) {
-        jQuery(".nav2 ul li").removeClass('selected');
+        $(".nav2 ul li").removeClass('selected');
         element.addClass('selected');
-        jQuery("#activity_classification > div").hide();
-        jQuery('#activity_classification > div.' + element.attr("id")).show();
+        $("#activity_classification > div").hide();
+        $('#activity_classification > div.' + element.attr("id")).show();
       }
     });
     approve_activity_checkbox();
 
     // prevent going to top on click on tool
-    jQuery('.tooltip').live('click', function (e) {
+    $('.tooltip').live('click', function (e) {
       e.preventDefault();
     });
   }
@@ -861,7 +857,7 @@ var code_assignments_show = {
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
   if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
-    jQuery.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
+    $.post( "/activities/" + activity_id + "/use_budget_codings_for_spend", { checked: checked, "_method": "put" });
   } else {
     e.preventDefault();
   }
@@ -869,9 +865,9 @@ var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
 
 var data_responses_review = {
   run: function () {
-    jQuery(".use_budget_codings_for_spend").click(function (e) {
-      var checked = jQuery(this).is(':checked');
-      activity_id = Number(jQuery(this).attr('id').match(/\d+/)[0], 10);
+    $(".use_budget_codings_for_spend").click(function (e) {
+      var checked = $(this).is(':checked');
+      activity_id = Number($(this).attr('id').match(/\d+/)[0], 10);
       update_use_budget_codings_for_spend(e, activity_id, checked);
     })
   }
@@ -900,7 +896,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
     return;
   }
 
-  var chart_element = jQuery("#" + id);
+  var chart_element = $("#" + id);
   chart_element.css({width: "450px", height: "300px"});
 
   var data = new google.visualization.DataTable();
@@ -1044,17 +1040,17 @@ var reports_countries_activities_show = {
 };
 
 var update_funding_source_selects = function () {
-  var project_id = jQuery('#activity_project_id').val();
-  var fs_selects = jQuery('.funding_source');
+  var project_id = $('#activity_project_id').val();
+  var fs_selects = $('.funding_source');
   if (project_id) {
     var options = ['<option value=""></option>'];
-    jQuery.each(_funding_sources[project_id], function (i) {
+    $.each(_funding_sources[project_id], function (i) {
       options.push('<option value="' + this[1] + '">' + this[0] + '</option>');
     });
     var options_string = options.join('\n');
 
-    jQuery.each(fs_selects, function (i) {
-      var element = jQuery(this);
+    $.each(fs_selects, function (i) {
+      var element = $(this);
       if (element.html() !== options_string) {
         var value = element.val();
         element.html(options_string);
@@ -1062,62 +1058,62 @@ var update_funding_source_selects = function () {
       }
     });
   } else {
-    jQuery.each(fs_selects, function (i) {
-      var element = jQuery(this);
-      jQuery(this).html('<option value=""></option>');
+    $.each(fs_selects, function (i) {
+      var element = $(this);
+      $(this).html('<option value=""></option>');
     })
   }
 };
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    jQuery('.edit').live('click', function (e) {
+    $('.edit').live('click', function (e) {
       e.preventDefault();
-      var element = jQuery(this).parents('.fields');
-      var fields = jQuery.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+      var element = $(this).parents('.fields');
+      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
 
       element.find('.edit_block').show();
       element.find('.preview_block').hide();
       close_funding_flow_fields(fields);
     });
 
-    close_funding_flow_fields(jQuery('.funding_flows .fields'));
+    close_funding_flow_fields($('.funding_flows .fields'));
   }
 }
 
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
 
-    jQuery('#activity_project_id').change(update_funding_source_selects);
+    $('#activity_project_id').change(update_funding_source_selects);
 
-    jQuery('#activity_project_id').change(function () {
-      var element = jQuery('#project_sub_form');
-      var _project_id = jQuery(this).val();
+    $('#activity_project_id').change(function () {
+      var element = $('#project_sub_form');
+      var _project_id = $(this).val();
       if (_project_id) {
         var url = '/responses/' + _response_id + 
         '/activities/project_sub_form?' + 'project_id=' + _project_id;
         if (_activity_id) {
           url += '&activity_id=' + _activity_id;
         }
-        jQuery.get(url, function (data) {
-          jQuery('#project_sub_form_fields').html(data)
-          jQuery('#project_sub_form_fields').show();
-          jQuery('#project_sub_form_hint').hide();
+        $.get(url, function (data) {
+          $('#project_sub_form_fields').html(data)
+          $('#project_sub_form_fields').show();
+          $('#project_sub_form_hint').hide();
         });
       } else {
-        jQuery('#project_sub_form_fields').hide();
-        jQuery('#project_sub_form_hint').show();
+        $('#project_sub_form_fields').hide();
+        $('#project_sub_form_hint').show();
       }
     });
   }
 };
 
-jQuery(function () {
+$(function () {
 
   // tipsy tooltips everywhere!
-  jQuery('.tooltip').tipsy({gravity: 'w', live: true});
+  $('.tooltip').tipsy({gravity: 'w', live: true});
 
-  var id = jQuery('body').attr("id");
+  var id = $('body').attr("id");
   if (id) {
     controller_action = id;
     if (typeof(window[controller_action]) !== 'undefined' && typeof(window[controller_action]['run']) === 'function') {
@@ -1125,26 +1121,26 @@ jQuery(function () {
     }
   }
 
-  jQuery("#closeFlash").click(function(){
-    jQuery("#flashes").fadeOut("slow");
+  $("#closeFlash").click(function(){
+    $("#flashes").fadeOut("slow");
   });
 
-  jQuery('#page_tips_open').click(function (e) {
+  $('#page_tips_open').click(function (e) {
     e.preventDefault();
-    jQuery('#page_tips .desc').toggle();
-    jQuery('#page_tips .nav').toggle();
+    $('#page_tips .desc').toggle();
+    $('#page_tips .nav').toggle();
   });
 
-  jQuery('#page_tips_close').click(function (e) {
+  $('#page_tips_close').click(function (e) {
     e.preventDefault();
-    jQuery('#page_tips .desc').toggle();
-    jQuery('#page_tips .nav').toggle();
-    jQuery("#page_tips_open_link").effect("highlight", {}, 1500);
+    $('#page_tips .desc').toggle();
+    $('#page_tips .nav').toggle();
+    $("#page_tips_open_link").effect("highlight", {}, 1500);
   });
 
   // Date picker
-  jQuery('.date_picker').live('click', function () {
-    jQuery(this).datepicker('destroy').datepicker({
+  $('.date_picker').live('click', function () {
+    $(this).datepicker('destroy').datepicker({
       changeMonth: true,
       changeYear: true,
       yearRange: '2000:2025',
@@ -1153,17 +1149,17 @@ jQuery(function () {
   });
 
   // Inplace edit
-  jQuery(".rest_in_place").rest_in_place();
+  $(".rest_in_place").rest_in_place();
 
   // clickable table rows
-  jQuery('.clickable tbody tr').click(function (e) {
+  $('.clickable tbody tr').click(function (e) {
     e.preventDefault();
-    var element = jQuery(e.target);
+    var element = $(e.target);
 
     if (element.attr('href')) {
       var href = element.attr('href');
     } else {
-      var href = jQuery(this).find("a").attr("href");
+      var href = $(this).find("a").attr("href");
     }
 
     if (href) {
@@ -1172,8 +1168,8 @@ jQuery(function () {
   });
 
   // CSV file upload
-  jQuery("#csv_file").click(function() {
-    jQuery("#import").slideToggle();
+  $("#csv_file").click(function() {
+    $("#import").slideToggle();
   });
 });
 

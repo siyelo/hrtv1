@@ -12,8 +12,8 @@
             %th Author
             %th.manage Manage
         %tbody
-          = render :partial => 'reporter/comments/row', :collection => commentable.comments, :as => :comment
+          = render :partial => 'comments/row', :collection => commentable.comments, :as => :comment
     .placer
     %ul.actions
       / js event: .new_btn, .enabled
-      %li= link_to "+ Add Comment", new_reporter_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"
+      %li= link_to "+ Add Comment", new_comment_path(:commentable_type => commentable.class.name, :commentable_id => commentable.id), :class => "new_btn enabled"

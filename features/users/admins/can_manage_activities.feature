@@ -34,6 +34,7 @@ Scenario: An admin can create comments for an activity
   And I should see "Comment body"
   And I should see "activity1 description"
 
+  @run
 Scenario: An admin can create comments for an activity and see comment errors
   When I follow "Activities"
   And I follow "activity1 description"
@@ -61,7 +62,6 @@ Scenario: An admin can filter activities
   Then I should see "activity1 description"
   And I should not see "activity2 description"
   
-  @run
 Scenario: Sends email to users when a comment is made by an admin
   Given no emails have been sent
   When I follow "Activities"

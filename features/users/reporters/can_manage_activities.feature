@@ -137,7 +137,6 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I should see "Comment body"
   And I should see "Activity1 description"
   
-  @run
 Scenario: Does not email users when a comment is made by a reporter
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
   And no emails have been sent

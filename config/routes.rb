@@ -15,6 +15,8 @@ ActionController::Routing::Routes.draw do |map|
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
 
+  map.resources :comments, :member => {:delete => :get}
+
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
@@ -63,7 +65,6 @@ ActionController::Routing::Routes.draw do |map|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     reporter.resources :responses, :only => [:show]
     reporter.resources :reports, :only => [:index, :show]
-    reporter.resources :comments, :member => {:delete => :get}
   end
 
   # REPORTS

@@ -2,8 +2,8 @@
 %div{:class => "form_box #{(@comment.new_record? ? 'new_form' : 'edit_form')}"}
   / js event: .cancel_btn
   - if request.format == "text/javascript"
-    = link_to "Close", reporter_comments_path, :class => "cancel_btn close"
-  - semantic_form_for @comment, :url => @comment.new_record? ? reporter_comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) : reporter_comment_path(comment) do |f|
+    = link_to "Close", comments_path, :class => "cancel_btn close"
+  - semantic_form_for @comment, :url => @comment.new_record? ? comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) : comment_path(comment) do |f|
     = f.semantic_errors :state
     - f.inputs do
       - f.inputs "", :id => "basic", :class => "collapsible" do

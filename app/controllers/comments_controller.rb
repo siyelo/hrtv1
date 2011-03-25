@@ -1,9 +1,9 @@
-# TODO: move this to /app/controller/comments_controller.rb when AS gets removed
-class Reporter::CommentsController < Reporter::BaseController
+class CommentsController < Reporter::BaseController
 
   def new
     @comment = Comment.new
     @comment.commentable = find_commentable
+    @data_response = @comment.commentable.data_response
 
     respond_to do |format|
       format.html
@@ -13,6 +13,7 @@ class Reporter::CommentsController < Reporter::BaseController
 
   def show
     @comment = find_comment
+    @data_response = @comment.commentable.data_response
 
     respond_to do |format|
       format.html
@@ -33,6 +34,7 @@ class Reporter::CommentsController < Reporter::BaseController
   def create
     @comment = current_user.comments.new(params[:comment])
     @comment.commentable = find_commentable
+    @data_response = @comment.commentable.data_response
 
     if @comment.save
       @comment.email_the_organisation_users(@comment) if current_user.admin?
@@ -53,6 +55,7 @@ class Reporter::CommentsController < Reporter::BaseController
 
   def update
     @comment = find_comment
+    @data_response = @comment.commentable.data_response
 
     if @comment.update_attributes(params[:comment])
       respond_to do |format|
@@ -88,29 +91,30 @@ class Reporter::CommentsController < Reporter::BaseController
 
   def delete
     @comment = find_comment
+    @data_response = @comment.commentable.data_response
   end
 
   protected
-  def find_commentable
-    klass = params[:commentable_type].constantize
-    klass.find(params[:commentable_id])
-  end
-
-  def find_comment
-    current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
-  end
-
-  def commentable_resource(comment)
-    if comment.commentable_type == "Activity"
-      if current_user.admin?
-        admin_activity_url(comment.commentable)
-      else
-        response_activity_url(comment.commentable.data_response, comment.commentable)
-      end
-    elsif comment.commentable_type == "Project"
-      response_project_url(comment.commentable.data_response, comment.commentable)
-    else
-      comments_url
+    def find_commentable
+      klass = params[:commentable_type].constantize
+      klass.find(params[:commentable_id])
     end
-  end
+
+    def find_comment
+      current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
+    end
+
+    def commentable_resource(comment)
+      if comment.commentable_type == "Activity"
+        if current_user.admin?
+          admin_activity_url(comment.commentable)
+        else
+          response_activity_url(comment.commentable.data_response, comment.commentable)
+        end
+      elsif comment.commentable_type == "Project"
+        response_project_url(comment.commentable.data_response, comment.commentable)
+      else
+        comments_url
+      end
+    end
 end

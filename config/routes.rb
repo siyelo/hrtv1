@@ -29,7 +29,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :activities, :active_scaffold => true
+    admin.resources :activities
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 

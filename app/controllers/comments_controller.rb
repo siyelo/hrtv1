@@ -13,7 +13,7 @@ class CommentsController < Reporter::BaseController
   def new
     @comment = Comment.new
     @comment.commentable = find_commentable
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
 
     respond_to do |format|
       format.html
@@ -23,7 +23,7 @@ class CommentsController < Reporter::BaseController
 
   def show
     @comment = find_comment
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
 
     respond_to do |format|
       format.html
@@ -34,7 +34,7 @@ class CommentsController < Reporter::BaseController
 
   def edit
     @comment = current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id])
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
 
     respond_to do |format|
       format.html
@@ -45,7 +45,7 @@ class CommentsController < Reporter::BaseController
   def create
     @comment = current_user.comments.new(params[:comment])
     @comment.commentable = find_commentable
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
 
     if @comment.save
       @comment.email_the_organisation_users(@comment) if current_user.admin?
@@ -66,7 +66,7 @@ class CommentsController < Reporter::BaseController
 
   def update
     @comment = find_comment
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
 
     if @comment.update_attributes(params[:comment])
       respond_to do |format|
@@ -102,7 +102,7 @@ class CommentsController < Reporter::BaseController
 
   def delete
     @comment = find_comment
-    @data_response = @comment.commentable.data_response
+    load_data_response(@comment)
   end
 
   protected
@@ -126,6 +126,14 @@ class CommentsController < Reporter::BaseController
         response_project_url(comment.commentable.data_response, comment.commentable)
       else
         comments_url
+      end
+    end
+
+    def load_data_response(comment)
+      if comment.commentable.is_a?(DataResponse)
+        @data_response = comment.commentable
+      else
+        @data_response = comment.commentable.data_response
       end
     end
 end

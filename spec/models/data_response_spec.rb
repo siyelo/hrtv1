@@ -9,6 +9,7 @@ describe DataResponse do
     it { should have_many(:sub_activities) }
     it { should have_many(:funding_flows) }
     it { should have_many(:projects) }
+    it { should have_many(:commodities) }
     it { should have_many(:users_currently_completing) }
   end
 

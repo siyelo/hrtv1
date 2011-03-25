@@ -8,6 +8,9 @@
 
     %li{ :class => (controller.class.to_s == "ActivitiesController" || (controller.class.to_s ==  "CodeAssignmentsController" && @activity.class.to_s == 'Activity')) ? "active" : ''}
       = link_to 'Activities', response_activities_path(@data_response)
+      
+    %li{ :class => [controller.class.to_s == "CommoditiesController" ? "active" : '']}
+      = link_to 'Commodities', response_commodities_path(@data_response)
 
     %li{ :class => (controller.class.to_s == "OtherCostsController" || @activity.class.to_s == 'OtherCost') ? "active" : ''}
       = link_to 'Other Costs', response_other_costs_path(@data_response)

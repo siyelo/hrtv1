@@ -50,14 +50,14 @@ group :development do
 end
 
 group :test, :development do
-  gem 'rspec', '1.3.1'
+  gem 'rspec', '1.3.1', :require => 'spec'
   gem 'rspec-rails', '1.3.3'  # RSpec 1 (1.3.x) is for Rails 2.3.x
 end
 
 group :test do
   gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
   gem 'cucumber'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'
   gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3
   gem 'launchy'               # So you can do 'Then show me the page'
@@ -66,5 +66,4 @@ group :test do
   gem 'shoulda'
   gem 'spork'
   gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
-  
 end

@@ -39,6 +39,8 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
     :member => {:review => :get, :submit => :put} do |response|
+      response.resources :commodities,
+        :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :projects,
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :activities,

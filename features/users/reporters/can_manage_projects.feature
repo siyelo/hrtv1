@@ -126,6 +126,7 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I should see "Comment body"
   And I should see "project1"
 
+
 @javascript
 Scenario: A reporter can create in flows for a project
   When I follow "Create Project"

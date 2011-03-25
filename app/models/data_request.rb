@@ -19,6 +19,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -30,10 +31,10 @@ end
 #  pending_review  :boolean         default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  due_date        :date
 #  start_date      :date
 #  end_date        :date
 #  budget          :boolean         default(TRUE)
 #  spend           :boolean         default(TRUE)
-#  due_date        :date
 #
 

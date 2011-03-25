@@ -1,0 +1,5 @@
+commodity_type,description,unit_cost,quantity
+Vehicles,somevehicle1,200000,2
+Vehicles,somevehicle2,500000,4
+Vehicles,somevehicle3,30,9
+Vehicles,somevehicle4,70,17

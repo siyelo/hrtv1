@@ -21,6 +21,7 @@ class DataResponse < ActiveRecord::Base
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
+  has_many :commodities, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
            :foreign_key => :data_response_id_current

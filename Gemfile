@@ -37,7 +37,7 @@ group :development do
   gem 'heroku'
   gem 'hirb'
   gem 'interactive_editor'
-  gem 'looksee'
+  #gem 'looksee' # prevents inherited_resource to assign instance variables !!
   gem 'mongrel'
   gem 'open_gem'
   gem 'rails-footnotes'

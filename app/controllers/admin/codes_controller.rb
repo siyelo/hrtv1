@@ -19,10 +19,6 @@ class Admin::CodesController < Admin::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
-  def edit
-    @code = Code.find(params[:id])
-  end
-
   def create
     create!(:notice => "Code was successfully created")
   end

@@ -15,8 +15,8 @@
     %li{ :class => (controller.class.to_s == "OtherCostsController" || @activity.class.to_s == 'OtherCost') ? "active" : ''}
       = link_to 'Other Costs', response_other_costs_path(@data_response)
 
-    %li{ :class => (controller.class.to_s == "Reporter::ResponsesController" && controller.action_name == "show" ? "active" : '')}
-      = link_to 'Review', reporter_response_path(current_user.current_data_response || 1)
+    %li{ :class => (controller.class.to_s == "ResponsesController" && controller.action_name == "show" ? "active" : '')}
+      = link_to 'Review', response_path(current_user.current_data_response || 1)
 
-    %li{ :class => (controller.controller_name == "data_responses" && controller.action_name == "review" ? "active" : '')}
+    %li{ :class => (controller.class.to_s == "ResponsesController" && controller.action_name == "review" ? "active" : '')}
       = link_to 'Submit', review_response_path(current_user.current_data_response || 1)

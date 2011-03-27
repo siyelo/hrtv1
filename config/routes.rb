@@ -9,7 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
 
   # PROFILE
-  map.resource :profile, :only => [:edit, :update]
+  map.resource :profile, :only => [:edit, :update, :disable_tips], 
+    :member => {:disable_tips => :put}
 
   # STATIC PAGES
   map.about_page 'about', :controller => 'static_page',
@@ -65,7 +66,6 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.resources :responses, :only => [:show]
     reporter.resources :reports, :only => [:index, :show]
   end
 

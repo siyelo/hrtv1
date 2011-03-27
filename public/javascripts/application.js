@@ -705,7 +705,7 @@ var admin_responses_show = {
   }
 };
 
-var reporter_responses_show = {
+var responses_show = {
   run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
@@ -1071,6 +1071,12 @@ $(function () {
   // CSV file upload
   $("#csv_file").click(function() {
     $("#import").slideToggle();
+  });
+
+  // Show/hide getting started tips
+  $('#tips_hide').click(function () {
+    $('#gs_container').remove();
+    $.post('/profile/disable_tips', { "_method": "put" });
   });
 });
 

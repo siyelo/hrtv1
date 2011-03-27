@@ -548,16 +548,6 @@ body.app
       color: #fff
       font-size: 0.8em
       letter-spacing: 0.05em
-    #getting_started_title
-      h2
-        //overridden here temporarily since h2 refactoring impacts
-        // admin/reports screens - yep, thats a TODO
-        // Actual styles
-        +border-top-radius
-        background-color: #64B23B
-        padding: 5px 5px 5px 10px
-        // styles needed just to avoid refactoring
-        background-image: none
 
 
 
@@ -942,7 +932,40 @@ table.rounded
   margin-bottom: 20px
   width: 100%
   #getting_started_title
-    //temporarily done under a h2 override
+    overflow: hidden
+    +border-top-radius
+    background-color: #64B23B
+
+    h2
+      padding: 5px 5px 5px 10px
+      background-image: none
+      float: left
+
+    em
+      background: image_url("tips_close.png") no-repeat right
+      cursor: pointer
+      float: right
+      height: 16px
+      margin: -2px 0 0 10px
+      width: 17px
+
+    a
+      margin: 5px 5px 0 0
+      text-decoration: none
+      font-size: 11px
+      float: right
+      color: #FFF
+      span
+        visibility: hidden
+        color: #D4EF74
+        margin-right: 5px
+
+    &:hover
+      span
+        visibility: visible
+
+
+
   .getting_started
     +clearfix
     background-color: #F9FEF6

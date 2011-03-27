@@ -4,7 +4,8 @@
   = render 'search'
   Other Costs
 
-= render 'getting_started'
+- if current_user.tips_shown
+  = render 'getting_started'
 
 %ul.horizontal
   %li

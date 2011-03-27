@@ -4,19 +4,14 @@
 
 %h2 Enter your personal information
 .dashboard_section
-  - form_for @user, :url => profile_path do |f|
-    %table
-      %tbody
-        %tr
-          %td= f.label :username
-          %td= f.text_field :username
-        %tr
-          %td= f.label :email
-          %td= f.text_field :email
-        %tr
-          %td= f.label :password
-          %td= f.text_field :password
-        %tr
-          %td= f.label :password_confirmation
-          %td= f.text_field :password_confirmation
-    = submit_tag 'Save'
+  - semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
+    - f.inputs :class => 'wrap-80 inputs' do
+      %ul.dashboard_section
+        = f.input :username
+        = f.input :email
+        = f.input :password
+        = f.input :password_confirmation
+        = f.input :tips_shown
+
+    - f.buttons :class => 'wrap-80 buttons' do
+      = f.commit_button "Save", :class => "last"

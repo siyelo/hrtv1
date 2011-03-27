@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :full_name, :email, :username, :organization_id, :organization,
-                  :password, :password_confirmation, :roles
+                  :password, :password_confirmation, :roles, :tips_shown
 
   ### Associations
   has_many :comments

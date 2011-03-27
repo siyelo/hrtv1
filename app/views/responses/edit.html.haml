@@ -2,7 +2,8 @@
 
 %h1.main_heading Response Settings
 
-= render 'getting_started'
+- if current_user.tips_shown
+  = render 'getting_started'
 
 = error_messages_for :data_response,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

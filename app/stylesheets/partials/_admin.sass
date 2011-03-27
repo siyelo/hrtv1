@@ -221,10 +221,10 @@ body.app
       color: $mid-blue + #333
       font-weight: bold
       padding-bottom: 5px
-      +linear-gradient(color-stops(#fff, $lightest-blue))
+      +linear-gradient(color-stops($filler, $lightest-blue))
     tbody td
       border-bottom: 1px solid $lightest-blue
-      padding-top: 5px
+      padding: 5px 0
       &.title
         color: $mid-blue
         font-weight: bold
@@ -234,6 +234,8 @@ body.app
       display: inline-block
       font-size: 11px
       padding: 0
+      text-decoration: none
+      +border-radius
       &.title
         color: $orange
         font-size: 12px
@@ -244,7 +246,7 @@ body.app
         float: right
         font-size: 9px
         font-weight: bold
-        padding: 7px 10px 3px
+        padding: 7px 10px 4px
         text-transform: uppercase
         &:hover, &:focus
           background: orange

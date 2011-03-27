@@ -744,6 +744,8 @@ var code_assignments_show = {
     //collapsible checkboxes for tab1
     addCollabsibleButtons('tab1');
 
+    approve_activity_checkbox();
+
     // prevent going to top on click on tool
     $('.tooltip').live('click', function (e) {
       e.preventDefault();

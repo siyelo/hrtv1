@@ -12,16 +12,17 @@ Background:
   And a project exists with name: "project1", data_response: the data_response
   And an activity exists with name: "activity1", data_response: the data_response, project: the project
   And mtef_code exists with short_display: "mtef1"
-  And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
-  And I am signed in as "reporter"
+  And an activity_manager exists with username: "activity_manager", organization: the organization, current_data_response: the data_response
+  And I am signed in as "activity_manager"
   And I follow "data_request1"
   And I follow "Activities"
 
-@run
+@javascript
 Scenario: Approve an Activity
   Given I follow "Show"
   When I follow "Budget"
   And I should see "Approved?"
   When I check "approve_activity"
+  And wait a few moments
   And I follow "Budget"
   Then the "approve_activity" checkbox should be checked

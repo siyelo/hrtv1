@@ -1,6 +1,7 @@
 class CodeAssignmentsController < Reporter::BaseController
+  include CodeAssignmentsHelper
+
   before_filter :load_activity_and_data_response
-  helper_method :get_coding_type
 
   def show
     @coding_type         = params[:coding_type] || 'CodingBudget'
@@ -96,15 +97,6 @@ class CodeAssignmentsController < Reporter::BaseController
         'Spent by Inputs'
       when 'ServiceLevelSpend'
         'Spend by Service Level'
-      end
-    end
-
-    def get_coding_type(klass)
-      case klass.to_s
-      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
-        :budget
-      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
-        :spend
       end
     end
 

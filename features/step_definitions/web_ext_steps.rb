@@ -23,11 +23,11 @@ Then /^the cached field "([^"]*)" should contain "([^"]*)"$/ do |selector, value
 end
 
 Then /^the cached field within "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
-  field = "div input:nth-child(6)"
+  field = ".subtotal"
   #$page = page
   #debugger
   within(selector) do
-    find(field).value.should == value
+    find(field).text.should == value
   end
 end
 

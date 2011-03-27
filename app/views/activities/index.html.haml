@@ -6,7 +6,8 @@
       = render 'shared/search_form'
   Activities
 
-= render 'getting_started'
+- if current_user.tips_shown
+  = render 'getting_started'
 
 %ul.horizontal
   %li

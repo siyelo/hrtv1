@@ -1,5 +1,5 @@
 .fields
-  = f.input :funding_flow_id, :required => false, :label => 'Organization', :collection => @activity.new_record? ? [] : funding_sources_options(@activity.project.in_flows), :input_html => {:class => 'funding_source'}, :hint => "If list is empty that mean you either don't have selected project or the selected project does not have in flows"
+  = f.input :funding_flow_id, :required => false, :label => 'Organization', :collection => @activity.project ? funding_sources_options(@activity.project.in_flows) : [], :input_html => {:class => 'funding_source'}, :hint => "If list is empty that mean you either don't have selected project or the selected project does not have in flows"
   = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
   = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
 

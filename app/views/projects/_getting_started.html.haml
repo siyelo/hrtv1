@@ -1,6 +1,7 @@
 #gs_container
   #getting_started_title
     %h2= "Getting started with #{yield(:title)}"
+    = render :partial => 'shared/tips_hide'
   .getting_started
     .message
       %p Use Projects for the high-level health programmes that your organization implements. A project is generally defined as a contractual agreement with a funding provider or oversight body to support health goals in the country.

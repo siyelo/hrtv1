@@ -1,6 +1,7 @@
 #gs_container
   #getting_started_title
     %h2= "Getting started with #{yield(:title)}"
+    = render :partial => 'shared/tips_hide'
   .getting_started
     .message
       %p Use Activities for all the functional tasks that fall within a Project.

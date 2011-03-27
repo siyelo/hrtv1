@@ -390,9 +390,11 @@ var admin_responses_empty = {
 };
 
 var getOrganizationInfo = function (organization_id, box) {
-  $.get(organization_id + '.js', function (data) {
-    box.find('.placer').html(data);
-  });
+  if (organization_id) {
+    $.get(organization_id + '.js', function (data) {
+      box.find('.placer').html(data);
+    });
+  }
 };
 
 var displayFlashForReplaceOrganization = function (type, message) {
@@ -418,10 +420,11 @@ var removeOrganizationFromLists = function (duplicate_id, box_type) {
       var next_option = current_option.next().val();
       if (next_option) {
         select_element.val(next_option);
+        // update info block
+        getOrganizationInfo(select_element.val(), $('#' + name));
+      } else {
+        $('#' + name).html('')
       }
-
-      // update info block
-      getOrganizationInfo(select_element.val(), $('#' + name));
     }
 
     current_option.remove();

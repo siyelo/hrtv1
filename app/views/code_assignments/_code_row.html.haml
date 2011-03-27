@@ -10,12 +10,13 @@
     = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
     = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
     = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
-    = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", n2c(amount), :size => 8
-    .greyed or
-    = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
-    = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
-    - cached_label = cached_amount.blank? ? "" : "subtotal: #{n2c(cached_amount)}"
-    = label_tag "activity[#{updater_field}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"
+    .right
+      = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", n2c(amount), :size => 8
+      .greyed or
+      = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
+      = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
+      - cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
+      = label_tag "activity[#{updater_field}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"
 
     - if invalid_class
       = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise.", :class => "tooltip invalid_node"

@@ -39,15 +39,20 @@ body #content #main .activity_tree a
       color: white
 
 ul.activity_tree
-  border-bottom: $lighter-blue unquote(" 1px solid ")
+  border-bottom: $filler 4px solid
   font-size: 12px
+  ul
+    border-left: 1px dotted $lightest-blue
+    border-right: 1px dotted $lightest-blue
+    margin-bottom: 5px !important
+    padding: 0 5px
   li
-    border-top: $lighter-blue unquote(" 1px solid ")
+    border-top: $filler 4px solid
     font-size: 12px
     list-style: none
-    padding: 4px 0
+    padding: 5px 0
     &:hover
-      background: #f9f9f9
+      background: $filler + #030303
     div.invalid
       background: #FFE9E0
       +border-radius
@@ -59,7 +64,7 @@ ul.activity_tree
       float: left
     input, textarea
       background: white
-      margin-bottom: 2px
+      margin-bottom: 6px
       padding: 3px
     .greyed
       color: $light_grey
@@ -73,11 +78,22 @@ ul.activity_tree
       &.collapsed
         color: green
     ul
-      margin-left: 30px
+      margin: 0 15px
       li
         margin-top: 4px
         padding-bottom: 0
         border-top: $lightest-blue unquote(" 1px dashed ")
+        
+  .subtotal
+    background: $lightest-blue
+    display: inline-block !important
+    float: right
+    height: 12px
+    margin-left: 3px
+    padding: 5px
+    width: 60px
+    +border-radius
+    
   .hide
     display: none
   span

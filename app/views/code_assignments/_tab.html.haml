@@ -1,3 +1,4 @@
+
 - if @activity.sub_activities.present? && ['CodingBudgetDistrict', 'CodingSpendDistrict'].include?(@coding_type)
   %p= link_to "Use #{spend_or_budget(@coding_type)} classifications derived from sub implementers", derive_classifications_from_sub_implementers_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL current classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?"
 
@@ -11,6 +12,10 @@
         = @error_message
 
   - form_for @activity, :url => activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :html => {:id => ''} do |form|
+    
+    %p#expl
+      %span Amount (#{@activity.currency} or %)
+      %span Subtotal
     %ul.activity_tree
       - @codes.each do |code|
         = render 'code_row', { :code => code, :form => form, :tab => tab }

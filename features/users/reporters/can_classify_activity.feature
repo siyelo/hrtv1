@@ -4,31 +4,22 @@ Feature: Reporter can enter a code breakdown for each activity
   I want to be able to break down activities into individual codes
 
 Background:
-  Given an organization exists with name: "Organization1"
-  And a data_request exists with title: "Request"
-  And an organization exists with name: "Organization2"
-  And a data_response exists with data_request: the data_request, organization: the organization
-  And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
-  And a project exists with name: "Project", data_response: the data_response
-  And an activity exists with name: "Activity", data_response: the data_response, project: the project
-  And I am signed in as "reporter"
-
-    #
-    #               / code111
-    #      / code11 - code112
-    # code1
-    #      \ code12 - code121
-    #               \ code122
-    #
-    #               / code211
-    #      / code21 - code212
-    # code2
-    #      \ code22 - code221
-    #               \ code222
-
+  # Given the following code structure
+  #
+  #               / code111
+  #      / code11 - code112
+  # code1
+  #      \ code12 - code121
+  #               \ code122
+  #
+  #               / code211
+  #      / code21 - code212
+  # code2
+  #      \ code22 - code221
+  #               \ code222
 
   # level 1
-  And a mtef_code "mtef1" exists with short_display: "mtef1"
+  Given a mtef_code "mtef1" exists with short_display: "mtef1"
   And a mtef_code "mtef2" exists with short_display: "mtef2"
 
   # level 2
@@ -51,60 +42,46 @@ Background:
   And a cost_category_code exists with short_display: "cost_category1"
   And a service_level exists with short_display: "service_level1"
 
-  # Wait for first tab to be loaded
-  Given I am on the budget classification page for "Activity"
-  Then wait a few moments
+  And an organization exists with name: "organization1"
+  And a data_request exists with title: "data_request1"
+  And an organization exists with name: "organization2"
+  And a data_response exists with data_request: the data_request, organization: the organization
+  And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+  And a project exists with name: "Project", data_response: the data_response
+  And an activity exists with name: "Activity", data_response: the data_response, project: the project
+  And I am signed in as "reporter"
+  And I follow "data_request1"
+  And I follow "Activities"
 
-@javascript
 Scenario: enter budget for an activity (don't see flash errors)
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Purposes"
   When I fill in "mtef1" with "5000000.00"
   And I press "Save"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "5,000,000.00"
 
-@javascript
 Scenario: enter budget for an activity (see flash errors)
-  When I fill in "mtef1" with "1234567.00"
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Purposes"
+  And I fill in "mtef1" with "1234567.00"
   And I press "Save"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "1,234,567.00"
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .flashes .error"
 
-@javascript
-Scenario: enter expenditure for an activity
-  When I follow "Purposes" within the expenditure coding tab
-  And I fill in "mtef1" with "1234567.00" within ".tab5"
-  And I press "Save" within ".tab5"
-  Then wait a few moments
-  Then I should see "Activity classification was successfully updated."
-  And I follow "Purposes" within the expenditure coding tab
-  Then wait a few moments
-  And the "mtef1" field within ".tab5" should contain "1,234,567.00"
-
-@javascript
-Scenario: Bug: enter budget for an activity, save, shown with xx,xxx.yy number formatting, save again, ensure number is not nerfed.
-  When I fill in "mtef1" with "1234567.00"
-  And I press "Save"
-  Then wait a few moments
-  Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "Activity"
-  And the "mtef1" field should contain "1,234,567.00"
-  And I press "Save"
-  Then wait a few moments
-  And the "mtef1" field should contain "1,234,567.00"
-
-@javascript
 Scenario Outline: enter percentage for an activity budget classification
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Purposes"
   When I fill in "mtef1" percentage field with "<amount>"
   And I press "Save"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "Activity"
   And the "mtef1" percentage field should contain "<amount2>"
   Examples:
     | amount | amount2 |
@@ -112,143 +89,134 @@ Scenario Outline: enter percentage for an activity budget classification
     | 50.1   | 50.1    |
     | 95.6   | 95.6    |
 
-@javascript
+Scenario: enter expenditure for an activity
+  When I follow "Show"
+  And I follow "Spend"
+  And I follow "Purposes"
+  And I fill in "mtef1" with "1234567.00"
+  And I press "Save"
+  Then I should see "Activity classification was successfully updated."
+  And the "mtef1" field should contain "1,234,567.00"
+
 Scenario: Use budget by district for expenditure by district
   Given a location exists with short_display: "Location1"
   And the location is one of the activity's locations
-  And I am on the budget classification page for "Activity"
-  And I follow "Locations" within the budget districts tab
-  And I fill in "Location1" with "1234567.00" within ".tab2"
-  When I press "Save" within ".tab2"
-  Then wait a few moments
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Locations"
+  And I fill in "Location1" with "1234567.00"
+  When I press "Save"
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "Activity"
-  When I follow "Locations" within the budget districts tab
-  Then the "Location1" field within ".tab2" should contain "1,234,567.00"
-  When I confirm the popup dialog
-  Then wait a few moments
-  And I follow "Click here to copy the budget classifications below to the expenditure Locations tab"
-  And I go to the budget classification page for "Activity"
-  And I follow "Locations" within the expenditure districts tab
-  Then wait a few moments
-  Then the "Location1" field within ".tab6" should contain "1,481,480.40"
+  And the "Location1" field should contain "1,234,567.00"
+  When I follow "Click here to copy the budget classifications below to the expenditure Locations tab"
+  And I follow "Spend"
+  And I follow "Locations"
+  Then the "Location1" field should contain "1,481,480.40"
 
-@javascript
 Scenario: Use budget by cost categorization for expenditure by cost categorization
-  When I follow "Inputs" within the budget cost categorization tab
-  And I fill in "cost_category1" with "1234567.00" within ".tab3"
-  When I press "Save" within ".tab3"
-  Then wait a few moments
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Inputs"
+  And I fill in "cost_category1" with "1234567.00"
+  And I press "Save"
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "Activity"
-  When I follow "Inputs" within the budget cost categorization tab
-  And the "cost_category1" field within ".tab3" should contain "1,234,567.00"
-  And I confirm the popup dialog
-  And I follow "Click here to copy the budget classifications below to the expenditure Inputs tab"
-  And I go to the budget classification page for "Activity"
-  And I follow "Inputs" within the expenditure cost categorization tab
-  Then wait a few moments
-  Then the "cost_category1" field within ".tab7" should contain "1,481,480.40"
+  And the "cost_category1" field should contain "1,234,567.00"
+  When I follow "Click here to copy the budget classifications below to the expenditure Inputs tab"
+  And I follow "Spend"
+  And I follow "Inputs"
+  Then the "cost_category1" field should contain "1,481,480.40"
 
-@javascript
 Scenario: Use budget by service level for expenditure by service level
-  When I follow "Service Level" within the budget service levels tab
-  And I fill in "service_level1" with "1234567.00" within ".tab4"
-  When I press "Save" within ".tab4"
-  Then wait a few moments
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Service Levels"
+  And I fill in "service_level1" with "1234567.00"
+  And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
-  When I follow "Service Level" within the budget service levels tab
-  Then the "service_level1" field within ".tab4" should contain "1,234,567.00"
-  When I confirm the popup dialog
-  And I follow "Click here to copy the budget classifications below to the expenditure Service Levels tab"
-  And I go to the budget classification page for "Activity"
-  And I follow "Service Levels" within the expenditure service levels tab
-  Then wait a few moments
-  Then the "service_level1" field within ".tab8" should contain "1,481,480.40"
+  And the "service_level1" field should contain "1,234,567.00"
+  When I follow "Click here to copy the budget classifications below to the expenditure Service Levels tab"
+  And I follow "Spend"
+  And I follow "Inputs"
+  And I follow "Service Levels"
+  Then the "service_level1" field should contain "1,481,480.40"
 
-
-@javascript
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
-  When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
-  And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
-  And I fill in "%" with "10" within ".tab1 ul.activity_tree > li:nth-child(1)"
-  And I fill in "%" with "5" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)"
-  And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Purposes"
 
-  And I click element ".tab1 ul.activity_tree > li:nth-child(2) > .collapsed"
-  And I click element ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > .collapsed"
-  And I fill in "%" with "10" within ".tab1 ul.activity_tree > li:nth-child(2)"
-  And I fill in "%" with "5" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)"
-  And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+  When I fill in "%" with "10" within "ul.activity_tree > li:nth-child(1)"
+  And I fill in "%" with "5" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)"
+  And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+
+  And I fill in "%" with "10" within "ul.activity_tree > li:nth-child(2)"
+  And I fill in "%" with "5" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)"
+  And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+
   And I press "Save"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
 
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  When I confirm the popup dialog
-  And I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
-  And I go to the budget classification page for "Activity"
-  And I follow "Purposes" within the expenditure coding tab
-  Then wait a few moments
-  Then the cached field within ".tab5 ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(2)" should contain "600,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2)" should contain "500,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
 
-@javascript
+  When I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
+  And I follow "Spend"
+  And I follow "Purposes"
+  Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2)" should contain "600,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
+
 Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
-  When I click element ".tab1 ul.activity_tree > li:nth-child(1) > .collapsed"
-  And I click element ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > .collapsed"
-  And I fill in "%" with "1" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
-  And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)"
+  When I follow "Show"
+  And I follow "Budget"
+  And I follow "Purposes"
+
+  And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+  And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)"
   And I press "Save"
-  Then wait a few moments
   Then I should see "Activity classification was successfully updated."
-  And I should be on the budget classification page for "Activity"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
-  When I confirm the popup dialog
-  And I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
-  And I go to the budget classification page for "Activity"
-  And I follow "Purposes" within the expenditure coding tab
-  Then wait a few moments
-  Then the cached field within ".tab5 ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-  And the cached field within ".tab5 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
+
+  When I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
+  And I follow "Spend"
+  And I follow "Purposes"
+  Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
 
   #### change coding and see if budget codings are changed
-  When I follow "Purposes" within the budget coding tab
-  And I fill in "%" with "2" within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+  When I follow "Budget"
+  And I follow "Purposes"
+  And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
   And I press "Save"
-  Then wait a few moments
   Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
-  And I go to the budget classification page for "Activity"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
-  ### change  budget and spend for activity
+  ### change budget and spend for activity
   When I follow "Activities"
   And I follow "Edit"
   And I fill in "Budget" with "1000"
   And I fill in "Spent" with "2000"
   And I press "Update Activity"
-  And I go to the budget classification page for "Activity"
-  Then the cached field within ".tab1 ul.activity_tree > li:nth-child(1)" should contain "40.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"
-  And the cached field within ".tab1 ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "20.00"
-
+  And I follow "Budget"
+  And I follow "Purposes"
+  Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "40.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"
+  And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "20.00"

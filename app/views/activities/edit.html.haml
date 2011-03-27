@@ -1,9 +1,13 @@
 - title("Edit Activity")
 
-- content_for :sub_nav do
-  = render :partial => 'layouts/sub_nav'
+= render 'tab_nav'
 
-%h1.main_heading Edit Activity
+%h1.main_heading
+  Edit Activity
+  %span
+    %ul.manage_bar.inline
+      %li= link_to "Cancel", response_activity_path(@data_response, @activity)
+
 
 = error_messages_for :activity,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

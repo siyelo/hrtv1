@@ -2,34 +2,6 @@
   a
     font-weight: normal
     font-size: 12px
-  .nav2
-    +border-top-radius
-    background: $lightest-blue
-    border-bottom: 1px solid $lighter-blue
-    color: $mid-blue
-    padding-left: 5px
-    display: block
-    ul
-      +horizontal-list
-      margin-bottom: -1px
-      padding-top: 4px
-      li
-        display: inline
-        float: left
-        font-size: 12px
-        padding: 5px 9px 2px
-        white-space: nowrap
-        //override
-        &:first-child, &:last-child
-          padding: 5px 9px 2px
-        &.selected
-          background: none repeat scroll 0 0 white
-          border-color: $lighter-blue $lighter-blue unquote(" -moz-use-text-color")
-          border-style: solid solid none
-          border-bottom: none
-          border-width: 1px 1px 0
-          color: $mid-blue
-          font-weight: bold
   table#activity_description
     margin-top: 15px
     padding: 10px
@@ -156,3 +128,32 @@ ul.inline_tab
   li.incomplete
     a
       color: #973030
+
+.nav2
+  +border-top-radius
+  background: $lightest-blue
+  border-bottom: 1px solid $lighter-blue
+  color: $mid-blue
+  padding-left: 5px
+  display: block
+  ul
+    +horizontal-list
+    margin-bottom: -1px
+    padding-top: 4px
+    li
+      display: inline
+      float: left
+      font-size: 12px
+      padding: 5px 9px 2px
+      white-space: nowrap
+      //override
+      &:first-child, &:last-child
+        padding: 5px 9px 2px
+      &.selected
+        background: none repeat scroll 0 0 white
+        border-color: $lighter-blue $lighter-blue unquote(" -moz-use-text-color")
+        border-style: solid solid none
+        border-bottom: none
+        border-width: 1px 1px 0
+        color: $mid-blue
+        font-weight: bold

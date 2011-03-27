@@ -1,30 +1,14 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
-%ul.breadcrumb
-  %li= link_to "Activities", response_activities_path(@data_response)
-  %li= link_to truncate(@activity.name ? @activity.name : @activity.description, :length => 16), response_activity_path(@data_response, @activity)
-
-%h1
-  = @activity.class.to_s.humanize
-  Classification
+= render 'activities/tab_nav'
 
 #classification
-
   .nav2
     = render 'tab_nav', :activity => @activity
 
   = render 'code_assignments/activity_description', :activity => @activity
 
   #activity_classification
-    - if @activity.data_request.budget?
-      %div.tab1{:style => 'display: block'}= image_tag('ajax-loader.gif')
-      %div.tab2= image_tag('ajax-loader.gif')
-      %div.tab3= image_tag('ajax-loader.gif')
-      %div.tab4= image_tag('ajax-loader.gif')
-    - if @activity.data_request.spend?
-      - spend_style = ((!@activity.data_request.budget? && @activity.data_request.spend?) ? 'display: block' : nil)
-      %div.tab5{:style => spend_style}= image_tag('ajax-loader.gif')
-      %div.tab6= image_tag('ajax-loader.gif')
-      %div.tab7= image_tag('ajax-loader.gif')
-      %div.tab8= image_tag('ajax-loader.gif')
+    %div.tab1{:style => 'display: block'}
+      = render 'tab'

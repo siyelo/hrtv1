@@ -1,9 +1,12 @@
 - title("Edit Other Cost")
 
-- content_for :sub_nav do
-  = render :partial => 'layouts/sub_nav'
+= render 'activities/tab_nav', :activity => @other_cost
 
-%h1.main_heading Edit Other Cost
+%h1.main_heading
+  Edit Other Cost
+  %span
+    %ul.manage_bar.inline
+      %li= link_to "Cancel", response_activity_path(@data_response, @activity)
 
 = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

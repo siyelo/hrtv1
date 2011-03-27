@@ -20,4 +20,12 @@ module CodeAssignmentsHelper
       "expenditure"
     end
   end
+
+
+  def tab_class(activity, coding_type)
+    classes = []
+    classes << 'incomplete' unless activity.classified_by_type?(coding_type)
+    classes << 'selected' if params[:coding_type] == coding_type
+    classes.join(' ')
+  end
 end

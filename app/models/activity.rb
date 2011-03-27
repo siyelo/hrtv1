@@ -262,6 +262,30 @@ class Activity < ActiveRecord::Base
     budget_classified? && spend_classified?
   end
 
+  # TODO: spec
+  def classified_by_type?(coding_type)
+    case coding_type
+    when 'CodingBudget'
+      coding_budget_classified?
+    when 'CodingBudgetDistrict'
+      coding_budget_district_classified?
+    when 'CodingBudgetCostCategorization'
+      coding_budget_cc_classified?
+    when 'ServiceLevelBudget'
+      service_level_budget_classified?
+    when 'CodingSpend'
+      coding_spend_classified?
+    when 'CodingSpendDistrict'
+      coding_spend_district_classified?
+    when 'CodingSpendCostCategorization'
+      coding_spend_cc_classified?
+    when 'ServiceLevelSpend'
+      service_level_spend_classified?
+    else
+      raise "Unknown type #{coding_type}".to_yaml
+    end
+  end
+
   def update_classified_amount_cache(type)
     set_classified_amount_cache(type)
     self.save(false) # save the activity even if it's approved

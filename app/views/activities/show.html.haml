@@ -1,12 +1,13 @@
 - title(truncate(@activity.description, :length => 100))
 
+= render 'tab_nav'
+
 %h1.main_heading
   = truncate(@activity.description, :length => 100)
 
   %span
     %ul.manage_bar.inline
       %li= link_to "Edit", edit_response_activity_path(@data_response, @activity)
-      %li= link_to "Classify", activity_code_assignments_url(@activity)
       %li= link_to "X", response_activity_path(@data_response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete
 
 = render 'shared/activities/show'

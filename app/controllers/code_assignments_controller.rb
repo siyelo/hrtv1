@@ -26,19 +26,13 @@ class CodeAssignmentsController < Reporter::BaseController
   end
 
   def copy_budget_to_spend
-    respond_to do |format|
-      if @activity.copy_budget_codings_to_spend([params[:coding_type]])
-        format.html do
-          flash[:notice] = "Budget classifications were successfully copied across."
-          redirect_to activity_code_assignments_url(@activity)
-        end
-      else
-        format.html do
-          flash[:error] = "We could not copy your budget classifications across."
-          redirect_to activity_code_assignments_url(@activity)
-        end
-      end
+    if @activity.copy_budget_codings_to_spend([params[:coding_type]])
+      flash[:notice] = "Budget classifications were successfully copied across."
+    else
+      flash[:error] = "We could not copy your budget classifications across."
     end
+
+    redirect_to activity_code_assignments_url(@activity, :coding_type => Activity::CLASSIFICATION_MAPPINGS[params[:coding_type]])
   end
 
   def derive_classifications_from_sub_implementers

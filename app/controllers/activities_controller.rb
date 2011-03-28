@@ -16,11 +16,11 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    create! {response_projects_url(@data_response)}
+    create! {activity_code_assignments_path(@activity, :coding_type => 'CodingSpend')}
   end
 
   def update
-    update! {response_projects_url(@data_response)}
+    update! {activity_code_assignments_path(@activity, :coding_type => 'CodingSpend')}
   end
 
   def show

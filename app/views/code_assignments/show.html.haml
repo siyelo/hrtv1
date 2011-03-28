@@ -4,19 +4,33 @@
 = render 'breadcrumb', :response => @data_response, :activity => @activity
 
 - type = 'Spend'
-- type = 'Budget' if @coding_type == "CodingBudget"
+- if @coding_type == "CodingBudget"
+  - type = 'Budget'
 
-%h1.main_heading= "Activity #{type}"
+%h1.main_heading= "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
 
 = render 'help'
 
 = render 'activities/tab_nav', :activity => @activity
 
 #classification
+  %table#activity_description
+    = render  '/code_assignments/progress_bar', :activity => @activity
+
+    - amount = @activity.spend
+    - amount = @activity.budget if @coding_type == "CodingBudget"
+    %tr
+      %td= "#{type} Amount:"
+      %td= c(amount, @activity.currency)
+
+
+    - if can? :approve, @activity
+      %tr
+        %td.title= label_tag :approve_activity, "Approved?"
+        %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
+
   .nav2
     = render 'tab_nav', :activity => @activity
-
-  = render 'code_assignments/activity_description', :activity => @activity
 
   #activity_classification
     %div.tab1{:style => 'display: block'}

@@ -1,13 +1,7 @@
-.form_aside
-  %h3 What's an Other Cost?
-  %p Other Costs are designed to help you identify where your organization classifies activities other than those that fit into activities that you’ve categorized. E.g. expenses for managing projects at a central level.
-  %br
-  %h3 How do I add more detail?
-  %p To detail the expenses for one or more projects, create a new flow, and select the number of projects the detail applies to.  Once you have created a flow, click on the "detail cost areas" link and classify/split these costs.
-  %br
-  %p
-    Read more on our
-    = link_to "Other Costs FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=other", :target => '_blank'
+- unless @other_cost.new_record?
+  .form_aside
+    %p= link_to "Remove this Other Cost", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure you want to delete this other cost?", :method => :delete, :class => "warn"
+
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last
     %h3 Basics
@@ -36,4 +30,4 @@
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button @other_cost.new_record? ? "Create Other Cost" : "Update Other Cost", :class => "last"
+  = f.commit_button "Save & Next", :class => "last"

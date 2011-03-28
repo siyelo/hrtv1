@@ -7,10 +7,10 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = activities
-    @activities = Activity.only_simple.find(:all,
-                   :conditions => ["activities.id IN (?)", [1764]], # NOTE: FOR DEBUG ONLY
-                   :include => [:locations, :provider, :organizations,
-                               :beneficiaries, {:data_response => :organization}])
+#    @activities = Activity.only_simple.find(:all,
+#                   :conditions => ["activities.id IN (?)", [1764]], # NOTE: FOR DEBUG ONLY
+#                   :include => [:locations, :provider, :organizations,
+#                               :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -69,6 +69,7 @@ class Reports::JawpReport
     row << get_sub_implementers(activity)
     row << activity.organization.try(:name)
     row << activity.provider.try(:name) || "No Implementer Specified"
+    row << activity.provider.try(:raw_type) || "No Implementer Specified"
     row << get_institutions_assisted(activity)
     row << get_beneficiaries(activity)
     row << activity.id
@@ -195,6 +196,7 @@ class Reports::JawpReport
       row << "Sub-implementers"
       row << "Data Source"
       row << "Implementer"
+      row << "Implementer Type"
       row << "Institutions Assisted"
       row << "Beneficiaries"
       row << "ID"

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110327214754) do
+ActiveRecord::Schema.define(:version => 20110327173347) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -149,8 +149,8 @@ ActiveRecord::Schema.define(:version => 20110327214754) do
     t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "budget",          :default => true
-    t.boolean  "spend",           :default => true
+    t.boolean  "budget",          :default => true,  :null => false
+    t.boolean  "spend",           :default => true,  :null => false
   end
 
   create_table "data_responses", :force => true do |t|
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20110327214754) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
+    t.string   "old_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "raw_type"
@@ -337,8 +338,7 @@ ActiveRecord::Schema.define(:version => 20110327214754) do
     t.integer  "data_response_id_current"
     t.text     "text_for_organization"
     t.string   "full_name"
-    t.string   "perishable_token",         :default => "",   :null => false
-    t.boolean  "tips_shown",               :default => true
+    t.string   "perishable_token",         :default => "", :null => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

@@ -1,14 +1,15 @@
+
 - showing_other_cost = false
 - showing_other_cost = true if heading == "Other Costs"
 
-%tr.activity
+%tr.sub-head
   %td{:colspan => 100}
-    %h3== #{heading}
-    %ul.horizontal
-      %li
+    %h4
+      == #{heading}
+      %span
         - path = (showing_other_cost) ? new_response_other_cost_path(response) : new_response_activity_path(response)
-        - link_to path, :class => "create_new" do
-          = image_tag "new_white.png"
+        - link_to path, :class => "create_inline" do
+          = image_tag "new.png"
           Add
 
 - unless activities.empty?
@@ -18,12 +19,12 @@
     - else
       = render "other_costs/other_cost", :other_cost => activity
 - else
-  %tr.activity
+  %tr.none
     %td{:colspan => 100}
       - unless showing_other_cost
-        No activities found
+        No activities found.
         - path = new_response_activity_path(@data_response)
       - else
-        No other costs found
+        No other costs found.
         - path = new_response_other_cost_path(@data_response)
       = link_to "Add one now.", path

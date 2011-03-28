@@ -51,6 +51,8 @@ body.app
   h1
     font: bold 24px/30px Arial,sans-serif
     color: $mid-blue
+    a
+      text-decoration: none
 
   p
     line-height: 1.2em
@@ -92,6 +94,35 @@ body.app
       font-weight: bold
       margin-bottom: 10px
       padding: 7px 12px 5px
+      text-decoration: none
+      +border-radius(2px)
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +text-shadow(#fff, 0, 0, 1px)
+      img
+        position: relative
+        top: 1px
+      &:hover, &:focus
+        background: green
+        border: 1px solid green - #222
+        color: #fff
+        +linear-gradient(color-stops(green, green - #222))
+        +text-shadow(green - #222, 0, 0, 1px)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+        
+    &.create_inline
+      background: #eee
+      border: 1px solid $light-blue
+      color: $mid-blue + #444
+      display: inline-block
+      font-size: 9px
+      font-weight: bold
+      line-height: 1 !important
+      margin: 0 0 0 3px
+      padding: 2px 6px 1px
       text-decoration: none
       +border-radius(2px)
       +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
@@ -776,6 +807,9 @@ table.standard
     font-size: 11px
     font-weight: normal
     padding: 5px 10px 5px
+    
+  &.alt
+    
 
 table.standard
   color: $mid-blue
@@ -818,7 +852,10 @@ table.standard
     border-bottom: 1px dashed !light_blue
     padding: 9px 7px 9px
     vertical-align: middle
-
+    &.alt
+      border: none
+    &.padding
+      padding-top: 0
 // Pretty Table with clickable rows
 table.clickable
 
@@ -841,6 +878,66 @@ table.rounded
     +border-top-left-radius
   th:last-child
     +border-top-right-radius
+    
+    
+table.sum
+  width: 100%
+  
+  td:first-child, th:first-child
+    width: 60%
+  
+  tbody tr:last-child td
+    border: none
+    padding-bottom: 20px
+    
+  h1 a
+    color: $mid-blue
+    font-family: Avenir, sans-serif
+    font-size: 16px
+    font-weight: normal !important
+    line-height: 1
+    
+  thead tr
+    background: $mid-blue - #111
+    
+  thead th
+    a
+      background: $mid-blue - #111
+      color: $lightest-blue
+      display: block
+      font-size: 11px
+      font-weight: bold
+      padding: 10px 12px 7px 12px
+      text-decoration: none
+      text-transform: uppercase
+      &:hover
+        background: $mid-blue - #222
+        color: #FFF
+    &:first-child a
+      +border-top-left-radius
+    &:last-child a
+      +border-top-right-radius
+  
+  tbody td:first-child
+    a
+      font-weight: bold
+      line-height: 1.4
+      text-decoration: none
+      
+  tr.head td
+    background: $lightest-blue
+    font-weight: bold
+    padding: 2px 12px 0px 12px
+  tr.sub-head td
+    padding: 15px 12px 4px 12px
+  tr td
+    border-bottom: 1px solid $lightest-blue
+    color: $mid-blue
+    font-size: 12px
+    padding: 4px 12px 2px 12px
+    
+  tr.none td
+    border: none
 
 .breadcrumb
   +border-radius

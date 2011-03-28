@@ -28,7 +28,6 @@
         =label_tag :file, "File"
         =file_field_tag :file
         =submit_tag "Upload and Import", :class => 'small_submit_button'
-
       = link_to "Download template", download_template_response_projects_path(@data_response), :class => 'target'
 
 - if params[:query]
@@ -36,13 +35,12 @@
     = "Projects with names containing #{params[:query]}"
     = link_to "(Back to complete project listing)", response_projects_path(@data_response)
 
-%table.standard.rounded
+%table.sum.rounded
   %thead
     %tr
       %th= sortable "project"
       %th= sortable "spend", "Total Spent"
       %th= sortable "budget", "Total Budget"
-      %th
 
   %tbody
     - unless @projects.empty?

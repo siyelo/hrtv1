@@ -1,5 +1,4 @@
-%tr.activity{:class => cycle("even", "odd")}
+%tr
   %td= link_to other_cost.description.presence || '(no description)', edit_response_other_cost_path(@data_response, other_cost)
   %td= c(other_cost.spend, other_cost.currency)
   %td= c(other_cost.budget, other_cost.currency)
-  %td

@@ -1,10 +1,8 @@
-%tr.project{:class => cycle("even", "odd")}
-  %td= link_to "#{h project.name}", edit_response_project_path(@data_response, project)
-  %td= c(project.spend, project.currency)
-  %td= c(project.budget, project.currency)
-  %td
-
-= render 'activities', :heading => "Activities", :response => @data_response, :project => project, :activities => project.normal_activities
-= render 'activities', :heading => "Other Costs", :response => @data_response, :project => project, :activities => project.other_costs
-
-
+%tbody
+  %tr.head
+    %td
+      %h1= link_to "#{h project.name}", edit_response_project_path(@data_response, project)
+    %td= c(project.spend, project.currency)
+    %td= c(project.budget, project.currency)
+  = render 'activities', :heading => "Activities", :response => @data_response, :project => project, :activities => project.normal_activities
+  = render 'activities', :heading => "Other Costs", :response => @data_response, :project => project, :activities => project.other_costs

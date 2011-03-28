@@ -1,5 +1,7 @@
 - title(truncate(@activity.description, :length => 100))
 
+= render :partial => 'projects/sub_nav'
+
 = render 'activities/tab_nav', :activity => @activity
 
 %h1.main_heading

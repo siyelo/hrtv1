@@ -1,5 +1,7 @@
 - title("Other Costs")
 
+= render :partial => 'projects/sub_nav'
+
 %h1.main_heading
   = render 'search'
   Other Costs
@@ -36,7 +38,6 @@
 %table.standard.rounded
   %thead
     %tr.manage_bar
-      %th= sortable "projects.name", "Project"
       %th= sortable "description"
       %th= sortable "spend", "Spent"
       %th= sortable "budget", "Budget"

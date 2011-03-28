@@ -4,9 +4,9 @@
   %body{:id => get_controller_id(controller), :class => "app"}
     = render 'layouts/header_app'
     - if current_user.admin?
-      = render 'layouts/admin_main_nav'
+      = render 'layouts/admin/main_nav'
     - else
-      = render "layouts/reporter_main_nav"
+      = render 'layouts/reporter/main_nav'
 
     #content
       .wrapper

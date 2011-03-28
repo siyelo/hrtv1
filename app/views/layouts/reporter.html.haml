@@ -6,14 +6,10 @@
   = render 'layouts/head'
   %body{:id => get_controller_id(controller), :class => "app"}
     = render "layouts/header_app"
-    = render "layouts/reporter_main_nav"
+    = render "layouts/reporter/main_nav"
 
     #content
       .wrapper
-        -# need sub nav on most pages, except...
-        - unless [ "Reporter::DashboardController", "Reporter::ReportsController", "Reporter::CommentsController", "ProfilesController"].include? controller.class.to_s
-          - unless controller.controller_name == "responses" && controller.action_name == "new"
-            = render 'layouts/sub_nav'
         = render 'layouts/flashes'
 
         - unless full_width_page

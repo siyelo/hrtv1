@@ -1,0 +1,8 @@
+#main-nav
+  .wrapper
+    %ul
+      %li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
+      %li= link_to 'Projects', response_projects_path(current_user.current_data_response), :class => ([ProjectsController, ActivitiesController, OtherCostsController].include?(controller.class) || (controller.class == ResponsesController && ['show', 'review'].include?(controller.action_name)) ? "active" : nil)
+      %li= link_to 'Settings', edit_response_path(current_user.current_data_response), :class => (controller.class == ResponsesController && controller.action_name == 'edit' ? "active" : nil)
+      %li= link_to 'Reports', reporter_reports_path, :class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController].include?(controller.class) ? 'active' : nil)
+      %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"

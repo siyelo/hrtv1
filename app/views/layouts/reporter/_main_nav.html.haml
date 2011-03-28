@@ -5,7 +5,7 @@
   .wrapper
     %ul
       %li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
-      %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController].include?(controller.class) ? "active" : nil)
+      %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController].include?(controller.class) ? "active" : nil)
       %li= link_to 'Settings', hacked_edit_response_url, :class => (controller.class == ResponsesController && controller.action_name == 'edit' ? "active" : nil)
       %li= link_to 'Review', response_path(current_user.current_data_response || 1),{ :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')}
       %li= link_to 'Submit', review_response_path(current_user.current_data_response || 1),{ :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')}

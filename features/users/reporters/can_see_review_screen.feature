@@ -14,7 +14,6 @@ Background:
   And I am signed in as "who_user"
   When I follow "Dashboard"
   And I follow "Edit"
-  When I follow "My Response"
   And I follow "Review"
 
 @javascript

@@ -13,12 +13,13 @@ Scenario: See menu tabs when a Data Req is selected
   Given a basic org + reporter profile, with data response, signed in
   When I go to the reporter dashboard page
   And I follow "Req1"
-  Then I should see "Settings" within the sub nav
-  And I should see "Projects" within the sub nav
-  And I should see "Activities" within the sub nav
-  And I should see "Other Costs" within the sub nav
-  And I should see "Review" within the sub nav
-  And I should see "Submit" within the sub nav
+  Then I should see "Home" within the main nav
+  And I should see "Projects" within the main nav
+  Then I should see "Settings" within the main nav
+  And I should see "Review" within the main nav
+  And I should see "Submit" within the main nav
+  And I should see "Reports" within the main nav
+  And I should see "Help" within the main nav
 
 Scenario: See unfulfilled/current Data Requests listed
   Given an organization exists with name: "WHO"

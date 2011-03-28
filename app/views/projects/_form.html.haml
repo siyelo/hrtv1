@@ -1,18 +1,9 @@
 - editing     = controller.action_name == 'edit' ? true : false
 - button_text = editing ? "Update Project" : "Create New Project"
 
-.form_aside
-  %h3 What's a Project?
-  %p Projects are high-level health programs that your organization implements.
-  %p A project is generally defined as a contractual agreement with a funding provider or oversight body to support health goals in your country.
-  %br
-  %h3 How do I add more detail?
-  %p You can break-down your Projects into several Activities, adding more detail as you go.
-  %p E.g.if your Project is (sub)implemented by multiple entities, you can create one or more Activities to represent this.
-  %br
-  %p
-    Read more on our
-    = link_to "Project FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=project", :target => '_blank'
+- unless @project.new_record?
+  .form_aside
+    %p= link_to "Remove this Project", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => "warn"
 
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last

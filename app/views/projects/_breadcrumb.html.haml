@@ -1,6 +1,5 @@
 %ul.breadcrumb
-  %li= link_to "Projects", response_projects_path(response)
   - unless project.new_record?
-    %li= link_to nice_name(project), edit_response_project_path(response, project)
+    %li.last= link_to nice_name(project), edit_response_project_path(response, project)
   - else
     %li.last New

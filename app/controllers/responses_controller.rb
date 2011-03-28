@@ -28,6 +28,7 @@ class ResponsesController < ApplicationController
   def create
     @data_response  = DataResponse.new(params[:data_response])
     @data_response.organization = current_user.organization
+    current_user.current_data_response = @data_response
 
     respond_to do |format|
       if @data_response.save
@@ -40,8 +41,6 @@ class ResponsesController < ApplicationController
   end
 
   def edit
-    current_user.current_data_response = @data_response
-    current_user.save
   end
 
   def update

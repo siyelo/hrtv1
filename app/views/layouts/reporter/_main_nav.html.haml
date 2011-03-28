@@ -1,13 +1,15 @@
 - hacked_projects_url = current_user.current_data_response ? response_projects_path(current_user.current_data_response) : new_response_path
 - hacked_edit_response_url = current_user.current_data_response ? edit_response_path(current_user.current_data_response) : new_response_path
+- hacked_response_url = current_user.current_data_response ? response_path(current_user.current_data_response) : new_response_path
+- hacked_review_response_url = current_user.current_data_response ? review_response_path(current_user.current_data_response) : new_response_path
 
 #main-nav
   .wrapper
     %ul
       %li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
+      %li= link_to 'Settings', hacked_edit_response_url, :class => (controller.class == ResponsesController && ['new', 'edit'].include?(controller.action_name) ? "active" : nil)
       %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController].include?(controller.class) ? "active" : nil)
-      %li= link_to 'Settings', hacked_edit_response_url, :class => (controller.class == ResponsesController && controller.action_name == 'edit' ? "active" : nil)
-      %li= link_to 'Review', response_path(current_user.current_data_response || 1),{ :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')}
-      %li= link_to 'Submit', review_response_path(current_user.current_data_response || 1),{ :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')}
+      %li= link_to 'Review', hacked_response_url, :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')
+      %li= link_to 'Submit', hacked_review_response_url, :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')
       %li= link_to 'Reports', reporter_reports_path, :class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController].include?(controller.class) ? 'active' : nil)
       %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"

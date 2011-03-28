@@ -17,7 +17,7 @@ class ProfilesController < ApplicationController
 
   def disable_tips
     @user.tips_shown = false
-    @user.save!
+    @user.save
     render :nothing => true
   end
 

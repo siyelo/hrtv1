@@ -1,24 +1,25 @@
-#gs_container
-  #getting_started_title
-    %h2= "Getting started with #{yield(:title)}"
-    = render :partial => 'shared/tips_hide'
-  .getting_started
-    .message
-      %p Use Projects for the high-level health programmes that your organization implements. A project is generally defined as a contractual agreement with a funding provider or oversight body to support health goals in the country.
-      %ul.bulleted
-        %li Add a new project for each programme/project you have, or use the bulk csv upload.
-        %li Select the location(s) that the project takes place in.
-        %li Show where the funding came from (you can have multiple funding sources)
-        %li Indicate the Spend and/or Budget for the entire project
-        %li
-          Add
-          = link_to "Activities", response_activities_path(@response)
-          for each Project
-        %li If the project is implemented by multiple entities/partners, add these to the relevant Activities.
-        %li The project dashboard gives an overview of all current projects
-      %p
-        There is great
-        = link_to "online help", help_link, :target => "_blank"
-        in HRT and you can always
-        = link_to "contact the Support Team", contact_link, :target => "_blank"
-        at anytime to ask us a question.
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with #{yield(:title)}"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Use Projects for the high-level health programmes that your organization implements. A project is generally defined as a contractual agreement with a funding provider or oversight body to support health goals in the country.
+        %ul.bulleted
+          %li Add a new project for each programme/project you have, or use the bulk csv upload.
+          %li Select the location(s) that the project takes place in.
+          %li Show where the funding came from (you can have multiple funding sources)
+          %li Indicate the Spend and/or Budget for the entire project
+          %li
+            Add
+            = link_to "Activities", response_activities_path(@response)
+            for each Project
+          %li If the project is implemented by multiple entities/partners, add these to the relevant Activities.
+          %li The project dashboard gives an overview of all current projects
+        %p
+          There is great
+          = link_to "online help", help_link, :target => "_blank"
+          in HRT and you can always
+          = link_to "contact the Support Team", contact_link, :target => "_blank"
+          at anytime to ask us a question.

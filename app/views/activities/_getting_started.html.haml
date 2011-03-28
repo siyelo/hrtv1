@@ -1,29 +1,30 @@
-#gs_container
-  #getting_started_title
-    %h2= "Getting started with #{yield(:title)}"
-    = render :partial => 'shared/tips_hide'
-  .getting_started
-    .message
-      %p Use Activities for all the functional tasks that fall within a Project.
-      %ul.bulleted
-        %li Add a new activity for each different part of your Project, or use the bulk csv upload.
-        %li Show where the funding came from (you can have multiple funding sources)
-        %li Indicate the Spend and/or Budget
-        %li
-          Split the Activity across several
-          = link_to "Inputs", help_link("input"), :target => "_blank"
-          ,
-          = link_to "Purposes", help_link("purpose"), :target => "_blank"
-          and
-          = link_to "Locations", help_link("location"), :target => "_blank"
-          on the Classification screen.
-        %li
-          If you fund a large number of partners, use
-          = link_to "Sub-Activities", "https://hrtapp.tenderapp.com/kb/faq/what-are-sub-activities-for", :target => "_blank"
-          to represent them.
-      %p
-        Don't forget to check out our
-        = link_to "online help", help_link, :target => "_blank"
-        and you can
-        = link_to "contact the Support Team", contact_link, :target => "_blank"
-        anytime to start a discussion.
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with #{yield(:title)}"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Use Activities for all the functional tasks that fall within a Project.
+        %ul.bulleted
+          %li Add a new activity for each different part of your Project, or use the bulk csv upload.
+          %li Show where the funding came from (you can have multiple funding sources)
+          %li Indicate the Spend and/or Budget
+          %li
+            Split the Activity across several
+            = link_to "Inputs", help_link("input"), :target => "_blank"
+            ,
+            = link_to "Purposes", help_link("purpose"), :target => "_blank"
+            and
+            = link_to "Locations", help_link("location"), :target => "_blank"
+            on the Classification screen.
+          %li
+            If you fund a large number of partners, use
+            = link_to "Sub-Activities", "https://hrtapp.tenderapp.com/kb/faq/what-are-sub-activities-for", :target => "_blank"
+            to represent them.
+        %p
+          Don't forget to check out our
+          = link_to "online help", help_link, :target => "_blank"
+          and you can
+          = link_to "contact the Support Team", contact_link, :target => "_blank"
+          anytime to start a discussion.

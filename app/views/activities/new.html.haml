@@ -1,9 +1,10 @@
 - title("New Activity")
 
-%ul.breadcrumb
-  %li= link_to "Activities", response_activities_path(@data_response)
+= render 'breadcrumb', :response => @data_response, :activity => @activity
 
-%h1.main_heading Create New Activity
+%h1.main_heading New Activity
+
+= render 'help'
 
 = error_messages_for :activity,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

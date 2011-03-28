@@ -13,7 +13,7 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :project_id, :label => "Project", :as => :check_boxes, :collection => current_user.organization.projects
-      = f.input :description, :input_html => { :rows => 3 }, :required => false
+      = f.input :description, :input_html => { :rows => 2 }, :required => false
 
   %li.last
     %h3 Past Expenditure

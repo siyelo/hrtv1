@@ -1,17 +1,15 @@
 - title("Edit Activity")
 
+= render 'breadcrumb', :response => @data_response, :activity => @activity
+
+%h1.main_heading Edit Activity
+
+= render 'help'
+
 = render 'activities/tab_nav', :activity => @activity
 
-%h1.main_heading
-  Edit Activity
-  %span
-    %ul.manage_bar.inline
-      %li= link_to "Cancel", response_activity_path(@data_response, @activity)
-
-
-= error_messages_for :activity,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+= error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
 - semantic_form_for @activity, :url => response_activity_path(@data_response, @activity), :html => {:class => "basic_form"} do |f|
   = render 'form', :f => f
 
--#= render 'comments'

@@ -1,11 +1,9 @@
-- name = activity.is_a?(OtherCost) ? "Other cost" : "Activity"
-
 .nav2
   %ul.inline_tab
-    %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}= link_to name, response_activity_path(activity.data_response, activity)
+    %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}= link_to "1. Details", edit_response_activity_path(activity.data_response, activity)
 
     - if activity.data_request.spend?
-      %li{:class => (params[:coding_type].present? && get_coding_type(params[:coding_type]) == :spend ? 'selected' : nil)}= link_to "Spend", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
+      %li{:class => (params[:coding_type].present? && get_coding_type(params[:coding_type]) == :spend ? 'selected' : nil)}= link_to "2. Spend", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
     - if activity.data_request.budget?
-      %li{:class => (params[:coding_type].present? && get_coding_type(params[:coding_type]) == :budget ? 'selected' : nil)}= link_to "Budget", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
+      %li{:class => (params[:coding_type].present? && get_coding_type(params[:coding_type]) == :budget ? 'selected' : nil)}= link_to "3. Budget", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')

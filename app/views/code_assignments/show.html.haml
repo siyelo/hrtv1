@@ -1,6 +1,15 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
+= render 'breadcrumb', :response => @data_response, :activity => @activity
+
+- type = 'Spend'
+- type = 'Budget' if @coding_type == "CodingBudget"
+
+%h1.main_heading= "Activity #{type}"
+
+= render 'help'
+
 = render 'activities/tab_nav', :activity => @activity
 
 #classification

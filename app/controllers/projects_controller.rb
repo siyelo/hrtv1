@@ -15,6 +15,14 @@ class ProjectsController < Reporter::BaseController
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
+  def create
+    create! {response_projects_url(@data_response)}
+  end
+
+  def update
+    update! {response_projects_url(@data_response)}
+  end
+
   def show
     @comment = Comment.new
     @comment.commentable = resource

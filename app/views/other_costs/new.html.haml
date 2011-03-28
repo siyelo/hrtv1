@@ -2,6 +2,8 @@
 
 %h1.main_heading Create Other Cost
 
+= render 'getting_started'
+
 = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
 - semantic_form_for @other_cost, :url => response_other_costs_path(@data_response), :html => {:class => "basic_form"} do |f|

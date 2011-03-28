@@ -22,6 +22,9 @@ class Project < ActiveRecord::Base
 
   ### Associations
   has_many :activities, :dependent => :destroy
+  has_many :other_costs, :dependent => :destroy
+  has_many :normal_activities, :class_name => "Activity",
+           :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_and_belongs_to_many :locations
   belongs_to :data_response, :counter_cache => true
   has_many :funding_flows
@@ -60,10 +63,10 @@ class Project < ActiveRecord::Base
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
   ### Attributes
-  attr_accessible :name, :description, :spend, 
+  attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :funding_flows_attributes, :budget, :entire_budget, 
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev, 
+                  :location_ids, :funding_flows_attributes, :budget, :entire_budget,
+                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
 
   # Delegates

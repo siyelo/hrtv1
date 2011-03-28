@@ -1,10 +1,10 @@
-%tr{:class => cycle("even", "odd")}
-  %td= link_to "#{h project.name}", response_project_path(@data_response, project)
-  %td= project.description
+%tr.project{:class => cycle("even", "odd")}
+  %td= link_to "#{h project.name}", edit_response_project_path(@data_response, project)
   %td= c(project.spend, project.currency)
   %td= c(project.budget, project.currency)
   %td
-    %ul.manage_bar
-      %li= link_to "Show", response_project_path(@data_response, project)
-      %li= link_to "Edit", edit_response_project_path(@data_response, project)
-      %li= link_to "X", response_project_path(@data_response, project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => "right"
+
+= render 'activities', :heading => "Activities", :response => @data_response, :project => project, :activities => project.normal_activities
+= render 'activities', :heading => "Other Costs", :response => @data_response, :project => project, :activities => project.other_costs
+
+

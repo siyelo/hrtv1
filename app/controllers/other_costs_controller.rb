@@ -22,15 +22,15 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
-    create!(:notice => 'Other Cost was successfully created')
+    create!(:notice => 'Other Cost was successfully created'){response_projects_url(@data_response)}
   end
 
   def update
-    update!(:notice => 'Other Cost was successfully updated')
+    update!(:notice => 'Other Cost was successfully updated'){response_projects_url(@data_response)}
   end
 
   def destroy
-    destroy!(:notice => 'Other Cost was successfully destroyed')
+    destroy!(:notice => 'Other Cost was successfully destroyed'){response_projects_url(@data_response)}
   end
 
   def download_template

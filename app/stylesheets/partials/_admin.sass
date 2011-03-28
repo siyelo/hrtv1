@@ -45,16 +45,7 @@ body.app
           top: 5px
         li
           display: inline
-          float: left
-          &:last-child
-            float: right
-            a
-              &:hover, &:focus
-                background: $red
-                border: 1px solid $red - #111
-                color: #fff
-                +linear-gradient(color-stops($red - #111, $red + #111))
-                +text-shadow(#444, 0, 0, 1px)
+          float: right
           a
             background: #eee
             border: 1px solid $light-blue

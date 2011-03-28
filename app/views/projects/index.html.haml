@@ -22,13 +22,12 @@
     %p Create one or more projects from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
 
     #import_csv
-      -form_tag({:action=> :create_from_file}, :multipart => true) do
+      - form_tag({:action=> :create_from_file}, :multipart => true) do
         =label_tag :file, "File"
         =file_field_tag :file
         =submit_tag "Upload and Import", :class => 'small_submit_button'
 
       = link_to "Download template", download_template_response_projects_path(@data_response), :class => 'target'
-
 
 - if params[:query]
   %p
@@ -38,14 +37,20 @@
 %table.standard.rounded
   %thead
     %tr
-      %th= sortable "name"
-      %th= sortable "description"
+      %th= sortable "project"
       %th= sortable "spend", "Total Spent"
       %th= sortable "budget", "Total Budget"
       %th
 
   %tbody
-    = render :partial => "project", :collection => @projects
+    - unless @projects.empty?
+      - @projects.each do |project|
+        = render "project", :project => project
+    - else
+      %tr
+        %td{:colspan => 100}
+          You have no projects yet.
+          = link_to "Add your first project now.", new_response_project_path(@data_response)
 
 = will_paginate @projects
 

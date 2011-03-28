@@ -1,6 +1,10 @@
 - title("New Project")
 
-%h1.main_heading Create New Project
+= render 'breadcrumb', :response => @data_response, :project => @project
+
+%h1.main_heading New Project
+
+= render 'help'
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

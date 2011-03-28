@@ -19,16 +19,14 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
-      = f.input :description, :input_html => { :rows => 3 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
+      = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation."
-      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint =>"all the districts/provinces in which this Project was implemented. If a project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})", :required => false
 
   %li.last
-    %h3 Past Expenditure
+    %h3 Past Project Expenditure
     %ul.dashboard_section
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
+      = f.input :spend, :label => "Spend", :hint => "Total amount spent in the past fiscal year.", :required => false
 
       %li.amounts.last
         %label Quarterly spend
@@ -40,28 +38,35 @@
           = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
   %li.last
-    %h3 Budget (planned expenditure)
+    %h3 Project Budget
     %ul.dashboard_section
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+      %br
+      = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year.", :required => false
       %li.amounts
-        %label Quarterly budget
+        %label Long-term
         %ul
-          = f.input :budget_q4_prev, :label => "Q4 09-10", :required => false
-          = f.input :budget_q1     , :label => "Q1 10-11", :required => false
-          = f.input :budget_q2     , :label => "Q2 10-11", :required => false
-          = f.input :budget_q3     , :label => "Q3 10-11", :required => false
-          = f.input :budget_q4     , :label => "Q4 10-11", :required => false
-      = f.input :entire_budget, :label => "Lifetime budget", :hint =>"The lifetime budget for this project (for example, if a 5-year project, enter the project ceiling).", :required => false
+          = f.input :budget2, :label => "Year + 2", :required => false
+          = f.input :budget3, :label => "Year + 3", :required => false
+          = f.input :budget4, :label => "Year + 4", :required => false
+          = f.input :budget5, :label => "Year + 5", :required => false
 
   %li.last
-    %h2 Funding sources
+    %h2 Project Funding Sources
     %ul.dashboard_section
+      %p.hint The sources from which your organization receives funding for its projects.
+      %br
+
       .funding_flows
         - f.semantic_fields_for :funding_flows do |ff|
           = render "projects/funding_flow_fields", :f => ff
         .add
           = link_to_add_fields "Add funding source", f, :funding_flows, "projects/", :class => 'create_alt'
-          %p.hint The sources from which your organization receives funding for its projects.
+
+  %li.last
+    %h3 Other
+    %ul.dashboard_section
+      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})", :required => false
+      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint =>"all the districts/provinces in which this Project was implemented. If a project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button @project.new_record? ? "Create New Project" : "Update Project", :class => "last"
+  = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"

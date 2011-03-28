@@ -630,11 +630,10 @@ body#static_page_submit #content .wrapper #main
         background: #f9f9f9
 
     thead
-      background: !mid-blue
       border-bottom: 1px solid white
       color: white
       &:hover
-        background: $mid-blue
+        background: $lightest-blue
 
 // Grouping tab styles
 
@@ -755,33 +754,56 @@ ul.group
 // Pretty Table (with clickable rows)
 
 table.standard
+  tr.activity
+    td
+      padding-left: 20px
+    td:first-child
+      border-left: 3px solid $light-blue
+    td:last-child
+      border-right: 3px solid $light-blue
+    h3
+      padding: 4px 4px
+  tr.project
+    td
+      border-top: 3px solid $light-blue
+      font-size: 1.2em !important
+    td:first-child
+      border-left: 3px solid $light-blue
+    td:last-child
+      border-right: 3px solid $light-blue
+
+  a.create_new
+    font-size: 11px
+    font-weight: normal
+    padding: 5px 10px 5px
+
+table.standard
   color: $mid-blue
   font-size: 11px
   line-height: 14px
   width: 100%
 
   thead
-    color: $lightest-blue
-    font-weight: bold
+    color: $mid-blue
 
     th
+      background-color: #F7F7F7
       &.dummy
         padding: 9px 7px 7px
       a
-        color: $lightest-blue
+        color: $mid-blue
         display: block
         padding: 9px 7px 7px
         text-decoration: none
+
         &:hover, &:focus, &:active
-          color: #fff
-          background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #111
-          font-weight: bold
+          color: $orange
+          background: image_url("active_scaffold/default/arrow_up.gif") no-repeat right center !lightest-blue
         &.asc
-          background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #111
-          font-weight: bold
+          background: image_url("active_scaffold/default/arrow_up.gif") no-repeat right center !lightest-blue
         &.desc
-          background: image_url("arrow_down.gif") no-repeat right center $mid-blue - #111
-          font-weight: bold
+          background: image_url("active_scaffold/default/arrow_down.gif") no-repeat right center !lightest-blue
+
   tbody tr
     border-spacing: 0
 
@@ -796,9 +818,6 @@ table.standard
     border-bottom: 1px dashed !light_blue
     padding: 9px 7px 9px
     vertical-align: middle
-    a
-      font-size: 12px
-      font-weight: bold
 
 // Pretty Table with clickable rows
 table.clickable
@@ -819,10 +838,8 @@ table.clickable
 // use it when there is no additional heading (for ex. h2)
 table.rounded
   th:first-child
-    background: $mid-blue !important
     +border-top-left-radius
   th:last-child
-    background: $mid-blue !important
     +border-top-right-radius
 
 .breadcrumb
@@ -880,7 +897,7 @@ table.rounded
     background: $filler
   p
     font-size: 12px
-  
+
 
 #import
   display: none
@@ -985,3 +1002,32 @@ table.rounded
       font-size: 11px
       line-height: 14px
       margin: 0
+
+
+// "whats this?" styles
+.overlay
+  font-size: 12px
+  margin-bottom: 10px
+  display: inline-block
+
+// overlayed element
+#simple_overlay
+  display: none
+  background-color: #F7F7F7
+  width: 640px
+  min-height: 200px
+  padding: 35px
+  z-index: 10000
+  border: 1px solid #666
+  -moz-box-shadow: 0 0 90px 5px #000
+  -webkit-box-shadow: 0 0 90px #000
+  font-size: 12px
+
+#simple_overlay .close
+  background-image= image_url("overlay/close.png")
+  position: absolute
+  right: -15px
+  top: -15px
+  cursor: pointer
+  height: 35px
+  width: 35px

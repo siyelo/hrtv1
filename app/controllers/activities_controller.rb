@@ -15,6 +15,14 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def create
+    create! {response_projects_url(@data_response)}
+  end
+
+  def update
+    update! {response_projects_url(@data_response)}
+  end
+
   def show
     @comment = Comment.new
     @comment.commentable = resource
@@ -45,7 +53,7 @@ class ActivitiesController < Reporter::BaseController
   def project_sub_form
     @activity = @data_response.activities.find_by_id(params[:activity_id])
     @project = @data_response.projects.find(params[:project_id])
-    render :partial => "project_sub_form", 
+    render :partial => "project_sub_form",
            :locals => {:activity => (@activity || :activity), :project => @project}
   end
 

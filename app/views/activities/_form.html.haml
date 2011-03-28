@@ -68,7 +68,8 @@
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => hint, :required => false
 
-      %h4 Sub Activities
+    %li.last
+      %h3 Sub Activities
       %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar activities.
       - f.semantic_fields_for :sub_activities do |ca|
         = render "activities/sub_activity_fields", :f => ca

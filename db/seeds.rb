@@ -16,6 +16,8 @@ require 'fastercsv'
   load 'db/seed_files/districts.rb' #seeds locations and districts for rwanda and kenya
 
   load 'db/seed_files/beneficiaries.rb'
+  
+  load 'db/seed_files/organizations.rb'
 
   load 'db/seed_files/service_levels.rb'
 

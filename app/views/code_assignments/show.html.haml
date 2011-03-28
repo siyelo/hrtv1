@@ -7,9 +7,10 @@
 - if @coding_type == "CodingBudget"
   - type = 'Budget'
 
-%h1.main_heading= "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
+%h1.main_heading
+  = "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
 
-= render 'help'
+  %span= render 'help'
 
 = render 'activities/tab_nav', :activity => @activity
 
@@ -29,8 +30,8 @@
         %td.title= label_tag :approve_activity, "Approved?"
         %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
 
-  .nav2
-    = render 'tab_nav', :activity => @activity
+
+  = render 'tab_nav', :activity => @activity
 
   #activity_classification
     %div.tab1{:style => 'display: block'}

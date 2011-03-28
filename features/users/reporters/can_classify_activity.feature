@@ -48,14 +48,14 @@ Background:
   And a data_response exists with data_request: the data_request, organization: the organization
   And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
   And a project exists with name: "Project", data_response: the data_response
-  And an activity exists with name: "Activity", data_response: the data_response, project: the project
+  And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description"
   And I am signed in as "reporter"
   And I follow "data_request1"
-  And I follow "Activities"
+  And I follow "Projects"
+  And I follow "Activity description"
 
 Scenario: enter budget for an activity (don't see flash errors)
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Purposes"
   When I fill in "mtef1" with "5000000.00"
   And I press "Save"
@@ -64,8 +64,7 @@ Scenario: enter budget for an activity (don't see flash errors)
   And the "mtef1" field should contain "5,000,000.00"
 
 Scenario: enter budget for an activity (see flash errors)
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Purposes"
   And I fill in "mtef1" with "1234567.00"
   And I press "Save"
@@ -76,8 +75,7 @@ Scenario: enter budget for an activity (see flash errors)
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .flashes .error"
 
 Scenario Outline: enter percentage for an activity budget classification
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Purposes"
   When I fill in "mtef1" percentage field with "<amount>"
   And I press "Save"
@@ -90,8 +88,7 @@ Scenario Outline: enter percentage for an activity budget classification
     | 95.6   | 95.6    |
 
 Scenario: enter expenditure for an activity
-  When I follow "Show"
-  And I follow "Spend"
+  When I follow "Spend"
   And I follow "Purposes"
   And I fill in "mtef1" with "1234567.00"
   And I press "Save"
@@ -101,7 +98,6 @@ Scenario: enter expenditure for an activity
 Scenario: Use budget by district for expenditure by district
   Given a location exists with short_display: "Location1"
   And the location is one of the activity's locations
-  When I follow "Show"
   And I follow "Budget"
   And I follow "Locations"
   And I fill in "Location1" with "1234567.00"
@@ -114,8 +110,7 @@ Scenario: Use budget by district for expenditure by district
   Then the "Location1" field should contain "1,481,480.40"
 
 Scenario: Use budget by cost categorization for expenditure by cost categorization
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Inputs"
   And I fill in "cost_category1" with "1234567.00"
   And I press "Save"
@@ -127,8 +122,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   Then the "cost_category1" field should contain "1,481,480.40"
 
 Scenario: Use budget by service level for expenditure by service level
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Service Levels"
   And I fill in "service_level1" with "1234567.00"
   And I press "Save"
@@ -142,8 +136,7 @@ Scenario: Use budget by service level for expenditure by service level
   Then the "service_level1" field should contain "1,481,480.40"
 
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
-  When I follow "Show"
-  And I follow "Budget"
+  When I follow "Budget"
   And I follow "Purposes"
 
   When I fill in "%" with "10" within "ul.activity_tree > li:nth-child(1)"

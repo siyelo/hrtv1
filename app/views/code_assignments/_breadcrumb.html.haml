@@ -1,6 +1,6 @@
 %ul.breadcrumb
   %li= link_to nice_name(activity.project), edit_response_project_path(response, activity.project)
-  %li== #{activity.class.to_s.underscore.humanize.titleize}
+  %li== #{activity.class.to_s.underscore.humanize.pluralize.titleize}
   %li= link_to nice_name(activity), edit_response_activity_path(response, activity)
   - type = 'Spend'
   - type = 'Budget' if @coding_type == "CodingBudget"

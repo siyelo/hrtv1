@@ -27,7 +27,7 @@ class Organization < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :name
-  # validates_uniqueness_of :name 
+  validates_uniqueness_of :name 
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'

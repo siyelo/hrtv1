@@ -20,7 +20,7 @@ describe CurrencyHelper do
   
   describe "major currencies" do
     it "should return major currencies" do
-      if ENV['HRT_COUNTRY'].downcase == 'kenya'
+      if ENV['HRT_COUNTRY'] == 'kenya'
         @foo.major_currencies(Money::Currency::TABLE).should == [:kes, :usd, :eur, :chf]
       else
         @foo.major_currencies(Money::Currency::TABLE).should == [:rwf, :usd, :eur, :chf]
@@ -36,7 +36,7 @@ describe CurrencyHelper do
   describe "no _to_usd exchange rate" do
     it "should not return a major currency" do
       Money.default_bank.set_rate(:CHF, :USD, nil)
-      if ENV['HRT_COUNTRY'].downcase == 'kenya'
+      if ENV['HRT_COUNTRY'] == 'kenya'
         @foo.major_currencies(Money::Currency::TABLE).should == [:kes, :usd, :eur]
       else
         @foo.major_currencies(Money::Currency::TABLE).should == [:rwf, :usd, :eur]
@@ -45,7 +45,7 @@ describe CurrencyHelper do
     
     it "should exclude USD if its not specfied (edge case)" do
       Money.default_bank.set_rate(:USD, :USD, nil)
-      if ENV['HRT_COUNTRY'].downcase == 'kenya'
+      if ENV['HRT_COUNTRY'] == 'kenya'
         @foo.major_currencies(Money::Currency::TABLE).should == [:kes, :eur, :chf]
       else
         @foo.major_currencies(Money::Currency::TABLE).should == [:rwf, :eur, :chf]

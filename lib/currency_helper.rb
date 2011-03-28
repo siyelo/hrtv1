@@ -7,10 +7,10 @@
 # => [ :aed, :afn, all, ... ]
 
 module CurrencyHelper
-  if ENV['HRT_COUNTRY'] = 'kenya'
-    OTHER_PRIORITIES = [:jpy, :dkk, :gbp] #Priority currencies for kenya
+  if ENV['HRT_COUNTRY'] == 'kenya'
+    OTHER_PRIORITIES = [:jpy, :dkk, :gbp] # Priority currencies for kenya
   else
-    OTHER_PRIORITIES = [:rwf] #Priority currencies for kenya
+    OTHER_PRIORITIES = [:rwf] # Priority currencies for kenya
   end
   PRIORITY_CUTOFF = 5
 

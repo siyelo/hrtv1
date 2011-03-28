@@ -1,10 +1,1 @@
-#sub-nav
-  %ul
-    %li{ :class => ([ProjectsController, ActivitiesController, OtherCostsController].include?(controller.class)) ? "active" : ''}
-      = link_to 'Overview', response_projects_path(@data_response)
 
-    %li{ :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')}
-      = link_to 'Review', response_path(current_user.current_data_response || 1)
-
-    %li{ :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')}
-      = link_to 'Submit', review_response_path(current_user.current_data_response || 1)

@@ -780,14 +780,6 @@ describe Activity do
     a.save.should == false
   end
 
-  describe "finding total spend for strategic objective codes" do
-    it "return nothing if no codes assigned to HSSP spend" do
-      pending #https://www.pivotaltracker.com/story/show/6115671
-      activity     = Factory(:activity)
-      activity.spend_stratobj_coding.should == []
-    end
-  end
-
   describe "use budget for spent codings" do
     def copy_budget_to_expenditure_check(activity, actual_type, expected_type)
       activity.copy_budget_codings_to_spend([actual_type])

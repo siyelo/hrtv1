@@ -29,14 +29,13 @@ class ResponsesController < ApplicationController
     @data_response  = DataResponse.new(params[:data_response])
     @data_response.organization = current_user.organization
 
-    respond_to do |format|
-      if @data_response.save
-        current_user.current_data_response = @data_response
-        flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
-        format.html { redirect_to response_projects_path(@data_response) }
-      else
-        format.html { render :action => :new }
-      end
+    if @data_response.save
+      current_user.current_data_response = @data_response
+      current_user.save
+      flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
+      redirect_to response_projects_path(@data_response)
+    else
+      render :action => :new
     end
   end
 

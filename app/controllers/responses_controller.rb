@@ -40,6 +40,8 @@ class ResponsesController < ApplicationController
   end
 
   def edit
+    current_user.current_data_response = @data_response
+    current_user.save
   end
 
   def update

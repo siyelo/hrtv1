@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -16,7 +15,7 @@ Background:
   And I follow "data_request1"
   When I follow "Projects"
 
-  @run
+
 Scenario: Reporter can CRUD projects
   When I follow "Create Project"
   And I fill in "Name" with "Project1"
@@ -62,7 +61,7 @@ Scenario Outline: Edit project dates, see feedback messages for start and end da
     |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date is an invalid date         |
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
-  @run
+
 Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget GOR
   When I follow "Create Project"
   And I fill in "Name" with "Some Project"

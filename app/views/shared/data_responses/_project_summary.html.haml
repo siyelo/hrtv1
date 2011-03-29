@@ -39,7 +39,7 @@
 = render '/shared/data_responses/chart_nav'
 
 .tabs.two-thirds
-  .tab1{:"data-chart_type" => "project", :"data-id" => project.id}
+  .tab1{:"data-chart_type" => "project", :"data-id" => project.id, :style => "display: block;"}
     = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => project, :element_type => 'project'
 
   .tab2{:"data-chart_type" => "project", :"data-id" => project.id}

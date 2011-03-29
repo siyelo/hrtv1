@@ -23,11 +23,11 @@ class OtherCostsController < Reporter::BaseController
 
 
   def create
-    create!(:notice => 'Other Cost was successfully created'){other_cost_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
+    create!(:notice => 'Other Cost was successfully created'){activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
   end
 
   def update
-    update!(:notice => 'Other Cost was successfully updated'){other_cost_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
+    update!(:notice => 'Other Cost was successfully updated'){activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
   end
 
   def destroy

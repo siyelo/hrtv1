@@ -10,7 +10,8 @@
 %h1.main_heading
   = "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
 
-  %span= render 'help'
+.main_heading
+  = render 'help'
 
 = render 'activities/tab_nav', :activity => @activity
 

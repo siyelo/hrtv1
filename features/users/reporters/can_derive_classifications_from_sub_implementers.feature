@@ -22,17 +22,18 @@ Background:
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
   And I am signed in as "reporter"
   And I follow "data_request1"
-  And I follow "Activities"
+  And I follow "Projects"
+  And I follow "activity_description"
 
 Scenario: Use budget classifications derived from sub implementers
-  Given I follow "Show"
+  Then I press "Save & Next"
   And I follow "Budget"
   And I follow "Locations"
   When I follow "Use budget classifications derived from sub implementers"
   Then the "Location1" field should contain "55.00"
 
 Scenario: Use spend classifications derived from sub implementers
-  Given I follow "Show"
+  Then I press "Save & Next"
   And I follow "Spend"
   And I follow "Locations"
   When I follow "Use expenditure classifications derived from sub implementers"

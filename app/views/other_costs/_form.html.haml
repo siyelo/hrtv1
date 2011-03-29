@@ -6,7 +6,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :check_boxes, :collection => current_user.organization.projects
+      = f.input :project_id, :label => "Project", :collection => current_user.organization.projects
       = f.input :description, :input_html => { :rows => 2 }, :required => false
 
   %li.last

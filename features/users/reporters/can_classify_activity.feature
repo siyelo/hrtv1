@@ -95,6 +95,7 @@ Scenario: enter expenditure for an activity
   Then I should see "Activity classification was successfully updated."
   And the "mtef1" field should contain "1,234,567.00"
 
+
 Scenario: Use budget by district for expenditure by district
   Given a location exists with short_display: "Location1"
   And the location is one of the activity's locations
@@ -104,7 +105,7 @@ Scenario: Use budget by district for expenditure by district
   When I press "Save"
   Then I should see "Activity classification was successfully updated."
   And the "Location1" field should contain "1,234,567.00"
-  When I follow "Click here to copy the budget classifications below to the expenditure Locations tab"
+  When I follow "Click here to copy the Budget splits below to the Spend Locations tab"
   And I follow "Spend"
   And I follow "Locations"
   Then the "Location1" field should contain "1,481,480.40"
@@ -116,7 +117,7 @@ Scenario: Use budget by cost categorization for expenditure by cost categorizati
   And I press "Save"
   Then I should see "Activity classification was successfully updated."
   And the "cost_category1" field should contain "1,234,567.00"
-  When I follow "Click here to copy the budget classifications below to the expenditure Inputs tab"
+  When I follow "Click here to copy the Budget splits below to the Spend Inputs tab"
   And I follow "Spend"
   And I follow "Inputs"
   Then the "cost_category1" field should contain "1,481,480.40"
@@ -129,10 +130,7 @@ Scenario: Use budget by service level for expenditure by service level
   Then I should see "Activity classification was successfully updated."
   And I should be on the budget classification page for "Activity"
   And the "service_level1" field should contain "1,234,567.00"
-  When I follow "Click here to copy the budget classifications below to the expenditure Service Levels tab"
-  And I follow "Spend"
-  And I follow "Inputs"
-  And I follow "Service Levels"
+  When I follow "Click here to copy the Budget splits below to the Spend Service Levels tab"
   Then the "service_level1" field should contain "1,481,480.40"
 
 Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
@@ -158,7 +156,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
   And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
 
-  When I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
+  When I follow "Click here to copy the Budget splits below to the Spend Purposes tab"
   And I follow "Spend"
   And I follow "Purposes"
   Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
@@ -169,7 +167,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in differe
   And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
 Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
-  When I follow "Show"
+  And I press "Save & Next"
   And I follow "Budget"
   And I follow "Purposes"
 
@@ -181,8 +179,7 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
   And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
   And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
-
-  When I follow "Click here to copy the budget classifications below to the expenditure Purposes tab"
+  When I follow "Click here to copy the Budget splits below to the Spend Purposes tab"
   And I follow "Spend"
   And I follow "Purposes"
   Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
@@ -202,11 +199,10 @@ Scenario: Use budget by coding for expenditure by coding (deep coding in same ro
   And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
   ### change budget and spend for activity
-  When I follow "Activities"
-  And I follow "Edit"
+  When I follow "Activity"
   And I fill in "Budget" with "1000"
   And I fill in "Spent" with "2000"
-  And I press "Update Activity"
+  And I press "Save & Next"
   And I follow "Budget"
   And I follow "Purposes"
   Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "40.00"

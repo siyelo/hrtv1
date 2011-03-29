@@ -14,13 +14,11 @@ Background:
   When I follow "data_request1"
   And I follow "Projects"
 
-@run
 Scenario: Reporter can CRUD other costs
   When I follow "Add Other Costs now"
   Then I should see "Create Other Cost"
   When I fill in "Description" with "other_cost1"
   And I select "project1" from "Project"
-  Then show me the page
   And I press "Save & Next"
   Then I should see "Other Cost was successfully created"
 
@@ -43,6 +41,7 @@ Scenario: Reporter can create an other costs at an Org level (i.e. without a pro
   And I press "Save & Next"
   Then I should see "Other Cost was successfully created"
 
+@wip
 Scenario: Reporter can upload other costs
   When I attach the file "spec/fixtures/other_costs.csv" to "File"
   And I press "Upload and Import"
@@ -52,10 +51,12 @@ Scenario: Reporter can upload other costs
   And I should see "oc3 description"
   And I should see "oc4 description"
 
+@wip
 Scenario: Reporter can see error if no csv file is not attached for upload
   When I press "Upload and Import"
   Then I should see "Please select a file to upload"
 
+@wip
 Scenario: Reporter can see error when invalid csv file is attached for upload and download template
   When I attach the file "spec/fixtures/invalid.csv" to "File"
   And I press "Upload and Import"
@@ -63,10 +64,12 @@ Scenario: Reporter can see error when invalid csv file is attached for upload an
   When I follow "Download template"
   Then I should see "project_name,description,budget,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4"
 
+@wip
 Scenario: A reporter can create comments for an other cost
-  Given an other_cost exists with project: the project, description: "OtherCost1 description", data_response: the data_response
-  When I follow "Other Costs"
-  And I follow "OtherCost1 description"
+  Given an other_cost exists with project: the project, description: "other_cost1", data_response: the data_response
+  When I follow "Projects"
+  And I follow "project1"
+  And I follow "other_cost1"
   And I fill in "Title" with "Comment title"
   And I fill in "Comment" with "Comment body"
   And I press "Create Comment"
@@ -74,6 +77,7 @@ Scenario: A reporter can create comments for an other cost
   And I should see "Comment body"
   And I should see "OtherCost1 description"
 
+@wip
 Scenario: A reporter can create comments for an other cost and see comment errors
   Given an other cost exists with project: the project, description: "OtherCost1 description", data_response: the data_response
   When I follow "Other Costs"

@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can see classification tabs
   In order to enter data
   As a reporter

@@ -51,7 +51,7 @@ Scenario: Reporter can CRUD activities
   #And I should not see "activity1"
   #And I should not see "activity2"<D-s>
 
-  @wip
+@wip
 Scenario Outline: Reporter can CRUD activities and see errors
   When In follow "Add" within ".sub-head:nth-child(2)"
   And I fill in "Name" with "<name>"
@@ -70,10 +70,8 @@ Scenario Outline: Reporter can CRUD activities and see errors
      #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
      | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
-     #I'm not sure about this, i think this has been removed
-   @wip
-Scenario: Reporter can enter 3 year budget projections
-    When I follow "Add" within ".sub-head:nth-child(2)"
+Scenario: Reporter can enter 5 year budget projections
+  When I follow "Add" within ".sub-head:nth-child(2)"
   And I fill in "Name" with "Activity1"
   And I fill in "Description" with "Activity1 description"
   And I fill in "Start date" with "2011-01-01"
@@ -82,16 +80,18 @@ Scenario: Reporter can enter 3 year budget projections
   And I fill in "Budget" with "1000"
   And I fill in "activity_budget2" with "2000"
   And I fill in "activity_budget3" with "3000"
+  And I fill in "activity_budget4" with "4000"
+  And I fill in "activity_budget5" with "5000"
   And I press "Save & Next"
   Then I should see "Activity was successfully created"
-  And I should see "Activity1 description"
-  When I follow "Edit"
+  When I follow "Activity1"
   Then the "Budget" field should contain "1000"
   And the "activity_budget2" field should contain "2000"
   And the "activity_budget3" field should contain "3000"
+  And the "activity_budget4" field should contain "4000"
+  And the "activity_budget5" field should contain "5000"
 
-  #no longer comment box
-  @wip
+@wip
 Scenario: A reporter can create comments for an activity
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
   When I follow "Activities"
@@ -103,8 +103,7 @@ Scenario: A reporter can create comments for an activity
   And I should see "Comment body"
   And I should see "Activity1 description"
 
-  #no longer comment box
-  @wip 
+@wip 
 Scenario: A reporter can create comments for an activity and see comment errors
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
   When I follow "Activities"
@@ -124,8 +123,7 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I should see "Comment body"
   And I should see "Activity1 description"
 
-  #no longer comment box
-   @wip
+@wip
 Scenario: Does not email users when a comment is made by a reporter
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
   And no emails have been sent
@@ -137,7 +135,6 @@ Scenario: Does not email users when a comment is made by a reporter
   And I press "Create Comment"
   And "reporter_1@example.com" should not receive an email
   
-
 @wip
 Scenario: A reporter can select implementer for an activity
   When I follow "Add" within ".sub-head:nth-child(2)"
@@ -152,7 +149,7 @@ Scenario: A reporter can select implementer for an activity
   And I should see "Activity1 description"
   And I should see "organization1"
 
-  @wip
+@wip
 Scenario: A reporter can filter activities
   Given an activity exists with name: "activity2", description: "activity1 description", project: the project, data_response: the data_response
   And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response
@@ -164,7 +161,7 @@ Scenario: A reporter can filter activities
   Then I should see "activity1 description"
   And I should not see "activity2 description"
 
-  @wip
+@wip
 Scenario Outline: A reporter can sort activities
   Given an activity exists with name: "activity1", description: "activity1 description", project: the project, data_response: the data_response, spend: 1, budget: 1
   And a project exists with name: "project2", data_response: the data_response
@@ -185,8 +182,7 @@ Scenario Outline: A reporter can sort activities
       | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               | 
       | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               | 
 
-      #display for funding sources not yet implemented
-  @javascript
+@javascript
 Scenario: A reporter can create funding sources for an activity
   Given an organization "funding_organization1" exists with name: "funding_organization1"
   And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response

@@ -14,40 +14,34 @@ Background:
   When I follow "data_request1"
   And I follow "Projects"
 
-
-
 @run
 Scenario: Reporter can CRUD other costs
-  And I follow "Add Other Costs now"
+  When I follow "Add Other Costs now"
   Then I should see "Create Other Cost"
-  And I fill in "Description" with "OtherCost1 description"
-  And I check "project1"
+  When I fill in "Description" with "other_cost1"
+  And I select "project1" from "Project"
+  Then show me the page
   And I press "Save & Next"
   Then I should see "Other Cost was successfully created"
-  And I should see "OtherCost1 description"
 
-  When I follow "Edit"
-  And I fill in "Description" with "OtherCost2 description"
-  And I press "Update Other Cost"
+  When I follow "other_cost1"
+  And I fill in "Description" with "other_cost2"
+  And I press "Save & Next"
   Then I should see "Other Cost was successfully updated"
-  And I should see "OtherCost2 description"
-  And I should not see "OtherCost1"
+  And I should see "other_cost2"
+  And I should not see "other_cost1"
 
-  When I follow "X"
+  When I follow "other_cost2"
+  And I follow "Remove this Other Cost"
   Then I should see "Other Cost was successfully destroyed"
-  And I should not see "OtherCost1"
-  And I should not see "OtherCost2"
+  And I should not see "other_cost1"
+  And I should not see "other_cost2"
 
-Scenario Outline: Reporter can create an other costs at an Org level (i.e. without a project)
-  When I follow "Create Other"
-  And I fill in "Description" with "<description>"
-  And I check "<project>"
-  And I press "Create Other Cost"
-  Then I should not see "Oops, we couldn't save your changes."
-
-  Examples:
-      | description | project | 
-      | d1          |         |
+Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
+  When I follow "Add Other Costs now"
+  And I fill in "Description" with "other_cost1"
+  And I press "Save & Next"
+  Then I should see "Other Cost was successfully created"
 
 Scenario: Reporter can upload other costs
   When I attach the file "spec/fixtures/other_costs.csv" to "File"

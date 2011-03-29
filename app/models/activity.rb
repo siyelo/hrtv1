@@ -87,7 +87,7 @@ class Activity < ActiveRecord::Base
   ### Validations
   validate :approved_activity_cannot_be_changed
   validates_presence_of :description
-  validates_presence_of :data_response_id, :project_id, :unless => Proc.new {|model| model.class.to_s == 'SubActivity' || model.class.to_s == 'OtherCost'}
+  validates_presence_of :data_response_id, :project_id, :if => Proc.new {|model| model.class.to_s == 'Activity'}
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
   #validates_date :start_date, :unless => Proc.new {|model| model.activity_id}
@@ -206,11 +206,6 @@ class Activity < ActiveRecord::Base
   def organization_name
     organization.name
   end
-
-  # TODO remove
-  #def districts
-    #project.locations
-  #end
 
   def coding_budget_classified?
     budget.blank? || budget == self.CodingBudget_amount

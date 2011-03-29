@@ -7,7 +7,7 @@ class OtherCostsController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response'
 
   def index
-    scope = @data_response.other_costs.scoped({:include => :project})
+    scope = @data_response.other_costs.scoped()
     scope = scope.scoped(:conditions => ["activities.name LIKE :q OR activities.description LIKE :q",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
@@ -22,6 +22,13 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
+    #@other_cost = OtherCost.new(params[:other_cost])
+    #raise params[:other_cost].to_yaml
+    #@other_cost.save
+    #flash[:notice] = 'Other Cost was successfully created'
+    #redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+
+
     create! do |success, failure|
       success.html do
         flash[:notice] = 'Other Cost was successfully created'
@@ -72,7 +79,7 @@ class OtherCostsController < Reporter::BaseController
 
   private
     def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
     end
 
     def sort_direction

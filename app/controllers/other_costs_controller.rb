@@ -21,17 +21,31 @@ class OtherCostsController < Reporter::BaseController
     show!
   end
 
-
   def create
-    create!(:notice => 'Other Cost was successfully created'){activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = 'Other Cost was successfully created'
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+      end
+    end
   end
 
   def update
-    update!(:notice => 'Other Cost was successfully updated'){activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')}
+    update! do |success, failure|
+      success.html do
+        flash[:notice] = 'Other Cost was successfully updated'
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+      end
+    end
   end
 
   def destroy
-    destroy!(:notice => 'Other Cost was successfully destroyed'){response_projects_url(@data_response)}
+    destroy! do |success, failure|
+      success.html do
+        flash[:notice] = 'Other Cost was successfully destroyed'
+        redirect_to response_projects_url(@data_response)
+      end
+    end
   end
 
   def download_template

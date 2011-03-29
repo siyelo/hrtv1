@@ -16,11 +16,15 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    create! {activity_code_assignments_path(@activity, :coding_type => 'CodingSpend')}
+    create! do |success, failure|
+      success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }
+    end
   end
 
   def update
-    update! {activity_code_assignments_path(@activity, :coding_type => 'CodingSpend')}
+    update! do |success, failure|
+      success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }
+    end
   end
 
   def show
@@ -77,7 +81,6 @@ class ActivitiesController < Reporter::BaseController
 
     redirect_to response_activities_url(@data_response)
   end
-
 
   private
 

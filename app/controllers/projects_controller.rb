@@ -16,11 +16,15 @@ class ProjectsController < Reporter::BaseController
   end
 
   def create
-    create! {response_projects_url(@data_response)}
+    create! do |success, failure|
+      success.html { redirect_to response_projects_url(@data_response) }
+    end
   end
 
   def update
-    update! {response_projects_url(@data_response)}
+    update! do |success, failure|
+      success.html { redirect_to response_projects_url(@data_response) }
+    end
   end
 
   def show

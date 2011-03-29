@@ -180,7 +180,8 @@ form.data_response, .basic_form
   input[type='text']
     -moz-box-shadow: none
     background: none repeat scroll 0 0 #FFFFFF !important
-    border: 0 none
+    border: none
+    left: 10px
     color: #000000
     font-size: 12px
     font-weight: normal
@@ -188,6 +189,10 @@ form.data_response, .basic_form
     width: 200px
     height: 16px
     line-height: 1.4em
+  input[type=text], textarea
+    &:hover, &:focus, &:active
+      border: none !important
+
 
   input[type='submit']
     display: none

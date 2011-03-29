@@ -12,13 +12,17 @@ Background:
   And a project exists with name: "project1", data_response: the data_response
   And I am signed in as "reporter"
   When I follow "data_request1"
-  When I follow "Other Costs"
+  And I follow "Projects"
 
+
+
+@run
 Scenario: Reporter can CRUD other costs
-  When I follow "Create Other Cost"
+  And I follow "Add Other Costs now"
+  Then I should see "Create Other Cost"
   And I fill in "Description" with "OtherCost1 description"
   And I check "project1"
-  And I press "Create Other Cost"
+  And I press "Save & Next"
   Then I should see "Other Cost was successfully created"
   And I should see "OtherCost1 description"
 

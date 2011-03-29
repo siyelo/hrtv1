@@ -49,7 +49,7 @@ Scenario: Reporter can CRUD activities
   And I follow "Remove this activity"
   Then I should see "Activity was successfully destroyed"
   #And I should not see "activity1"
-  #And I should not see "activity2"<D-s>
+  #And I should not see "activity2"
 
 @wip
 Scenario Outline: Reporter can CRUD activities and see errors
@@ -102,6 +102,29 @@ Scenario: A reporter can create comments for an activity
   Then I should see "Comment title"
   And I should see "Comment body"
   And I should see "Activity1 description"
+
+@wip
+Scenario: Reporter can upload activities
+When I attach the file "spec/fixtures/activities.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Created 4 of 4 activities successfully"
+  And I should see "a1 description"
+  And I should see "a2 description"
+  And I should see "a3 description"
+  And I should see "a4 description"
+
+@wip
+Scenario: Reporter can see error if no csv file is not attached for upload
+  When I press "Upload and Import"
+  Then I should see "Please select a file to upload"
+
+@wip
+Scenario: Reporter can see error when invalid csv file is attached for upload and download template
+When I attach the file "spec/fixtures/invalid.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Wrong fields mapping. Please download the CSV template"
+  When I follow "Download template"
+  Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget2,budget3,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"
 
 @wip 
 Scenario: A reporter can create comments for an activity and see comment errors

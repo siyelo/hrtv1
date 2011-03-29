@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can see classification tabs
   In order to enter data
   As a reporter
@@ -15,8 +16,8 @@ Scenario: See budget and spend tabs when data request is for budget and spend
   And I follow "Request"
   And I follow "Projects"
   And I follow "activity1 description"
-  Then I should see "Spend" within ".nav2"
-  And I should see "Budget" within ".nav2"
+  Then I should see "Spend" within ".inline_tab"
+  And I should see "Budget" within ".inline_tab"
 
 Scenario: See only budget tab when data request is for budget but not spend
   Given an organization exists with name: "Organization1"
@@ -30,8 +31,8 @@ Scenario: See only budget tab when data request is for budget but not spend
   And I follow "Request"
   And I follow "Projects"
   And I follow "activity1 description"
-  Then I should see "Budget" within ".nav2"
-  And I should not see "Spend" within ".nav2"
+  Then I should see "Budget" within ".inline_tab"
+  And I should not see "Spend" within ".inline_tab"
 
 Scenario: See spend tab when data request is for spend but not budget
   Given an organization exists with name: "Organization1"
@@ -45,5 +46,5 @@ Scenario: See spend tab when data request is for spend but not budget
   And I follow "Request"
   And I follow "Projects"
   And I follow "activity1 description"
-  Then I should see "Spend" within ".nav2"
-  And I should not see "Budget" within ".nav2"
+  Then I should see "Spend" within ".inline_tab"
+  And I should not see "Budget" within ".inline_tab"

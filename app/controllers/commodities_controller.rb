@@ -33,18 +33,23 @@ class CommoditiesController < Reporter::BaseController
   end
 
   def create_from_file
-    if params[:file].present?
-      result_hash = Commodity.from_csv(params[:file], @data_response)
-      if result_hash[:result] == true
-        flash[:notice] = result_hash[:message]
+    begin
+      if params[:file].present?
+        result_hash = Commodity.from_csv(params[:file], @data_response)
+        if result_hash[:result] == true
+          flash[:notice] = result_hash[:message]
+        else
+          flash[:error] = result_hash[:message]
+        end
       else
-        flash[:error] = result_hash[:message]
+        flash[:error] = 'Please select a file to upload'
       end
-    else
-      flash[:error] = 'Please select a file to upload'
-    end
 
-    redirect_to response_commodities_path
+      redirect_to response_commodities_path
+    rescue
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      redirect_to response_commodities_path(@data_response)
+    end
   end
 
   protected

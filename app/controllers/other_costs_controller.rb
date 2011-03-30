@@ -61,19 +61,24 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create_from_file
-    if params[:file].present?
-      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-      if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
-        saved, errors = OtherCost.create_from_file(doc, @data_response)
-        flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
+          saved, errors = OtherCost.create_from_file(doc, @data_response)
+          flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
+        else
+          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        end
       else
-        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        flash[:error] = 'Please select a file to upload'
       end
-    else
-      flash[:error] = 'Please select a file to upload'
-    end
 
-    redirect_to response_other_costs_url(@data_response)
+      redirect_to response_other_costs_url(@data_response)
+    rescue
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      redirect_to response_other_costs_url(@data_response)
+    end
   end
 
 

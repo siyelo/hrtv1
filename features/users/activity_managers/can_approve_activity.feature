@@ -18,7 +18,6 @@ Background:
   And I follow "Projects"
 
 @javascript
-@run
 Scenario: Approve an Activity
   Given I follow "a1 description"
   And I follow "Budget"

@@ -44,7 +44,13 @@ Feature: Reporter can manage projects
       When I follow "X"
       Then I should see "Commodity was successfully destroyed"
       And I should not see "Commodity1"
-      
+
+
+    Scenario: Adding malformed CSV file doesn't throw exception
+      When I attach the file "spec/fixtures/malformed.csv" to "File"
+      And I press "Upload and Import"
+      Then I should see "Your CSV file does not seem to be properly formatted"
+
     Scenario: Reporter can upload commodities
       When I attach the file "spec/fixtures/commodity.csv" to "File"
       And I press "Upload and Import"

@@ -721,9 +721,6 @@ var policy_maker_data_responses_show = {
 
 var approve_activity_checkbox = function () {
   $(".approve_activity").click(function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    //activity_id = Number($(this).attr('id').match(/\d+/)[0], 10);
     activity_id = $(this).attr('data-id');
     response_id = $(this).attr('data-response_id');
     var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'

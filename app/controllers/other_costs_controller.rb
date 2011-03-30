@@ -77,7 +77,7 @@ class OtherCostsController < Reporter::BaseController
       redirect_to response_other_costs_url(@data_response)
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_projects_path(@data_response)
+      redirect_to response_other_costs_url(@data_response)
     end
   end
 

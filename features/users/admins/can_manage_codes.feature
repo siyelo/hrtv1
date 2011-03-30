@@ -39,6 +39,7 @@ Scenario: Admin can CRUD codes
   And I should not see "code2"
 
 Scenario: Adding malformed CSV file doesn't throw exception
+  When I follow "Codes"
   When I attach the file "spec/fixtures/malformed.csv" to "File"
   And I press "Upload and Import"
   Then I should see "Your CSV file does not seem to be properly formatted"

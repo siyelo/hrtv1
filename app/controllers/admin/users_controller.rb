@@ -41,7 +41,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to admin_users_url
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_projects_path(@data_response)
+      redirect_to admin_users_url
     end
   end
 

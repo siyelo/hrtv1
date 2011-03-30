@@ -117,6 +117,7 @@ Scenario: An admin can filter organization
   And I should not see "org2" within "table"
 
 Scenario: Adding malformed CSV file doesn't throw exception
+  When I follow "Organizations"
   When I attach the file "spec/fixtures/malformed.csv" to "File"
   And I press "Upload and Import"
   Then I should see "Your CSV file does not seem to be properly formatted"

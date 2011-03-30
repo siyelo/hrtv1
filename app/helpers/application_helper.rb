@@ -62,7 +62,7 @@ module ApplicationHelper
       elsif current_user.reporter?
         reporter_reports_path
       else
-        raise 'user role not found'
+        reporter_reports_path
       end
     end
   end

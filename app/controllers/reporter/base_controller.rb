@@ -9,6 +9,6 @@ class Reporter::BaseController < ApplicationController
   private
 
     def load_data_response
-      @data_response = DataResponse.find(params[:response_id])
+      @data_response = current_user.organization.data_responses.find(params[:response_id])
     end
 end

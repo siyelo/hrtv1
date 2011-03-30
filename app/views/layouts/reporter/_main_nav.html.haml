@@ -1,7 +1,9 @@
-- hacked_projects_url = current_user.current_data_response ? response_projects_path(current_user.current_data_response) : new_response_path
-- hacked_edit_response_url = current_user.current_data_response ? edit_response_path(current_user.current_data_response) : new_response_path
-- hacked_response_url = current_user.current_data_response ? response_path(current_user.current_data_response) : new_response_path
-- hacked_review_response_url = current_user.current_data_response ? review_response_path(current_user.current_data_response) : new_response_path
+- data_response = current_user.organization.data_responses.last
+- hacked_response_path = data_response ? edit_response_path(data_response) : new_response_path
+- hacked_projects_url = current_user.current_data_response ? response_projects_path(current_user.current_data_response) : hacked_response_path
+- hacked_edit_response_url = current_user.current_data_response ? edit_response_path(current_user.current_data_response) : hacked_response_path
+- hacked_response_url = current_user.current_data_response ? response_path(current_user.current_data_response) : hacked_response_path
+- hacked_review_response_url = current_user.current_data_response ? review_response_path(current_user.current_data_response) : hacked_response_path
 
 #main-nav
   .wrapper

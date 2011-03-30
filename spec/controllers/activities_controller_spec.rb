@@ -117,7 +117,7 @@ describe "Requesting Activity endpoints as a reporter" do
 
   context "Requesting /activities/1/approve using POST" do
     it "requres admin to approve an activity" do
-      data_response = Factory.create(:data_response)
+      data_response = Factory.create(:data_response, :organization => @user.organization)
       @activity = Factory.create(:activity, :data_response => data_response)
       post :approve, :id => @activity.id, :response_id => data_response.id
       flash[:error].should == "You are not authorized to do that"

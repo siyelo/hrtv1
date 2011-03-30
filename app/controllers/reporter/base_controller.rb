@@ -9,6 +9,11 @@ class Reporter::BaseController < ApplicationController
   private
 
     def load_data_response
-      @data_response = current_user.organization.data_responses.find(params[:response_id])
+      if current_user.admin?
+        # work-arround until all admin actions are moved to admin controllers
+        @data_response = DataResponse.find(params[:response_id])
+      else
+        @data_response = current_user.organization.data_responses.find(params[:response_id])
+      end
     end
 end

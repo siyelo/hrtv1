@@ -116,6 +116,11 @@ Scenario: An admin can filter organization
   Then I should see "org1" within "table"
   And I should not see "org2" within "table"
 
+Scenario: Adding malformed CSV file doesn't throw exception
+  When I attach the file "spec/fixtures/malformed.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Your CSV file does not seem to be properly formatted"
+
 Scenario: Reporter can upload activities
   When I follow "Organizations"
   And I attach the file "spec/fixtures/organizations.csv" to "File"

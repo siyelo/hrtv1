@@ -42,6 +42,12 @@ Scenario: Reporter can create an other costs at an Org level (i.e. without a pro
   Then I should see "Other Cost was successfully created"
 
 @wip
+Scenario: Adding malformed CSV file doesn't throw exception
+  When I attach the file "spec/fixtures/malformed.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Your CSV file does not seem to be properly formatted"
+
+@wip
 Scenario: Reporter can upload other costs
   When I attach the file "spec/fixtures/other_costs.csv" to "File"
   And I press "Upload and Import"

@@ -78,6 +78,13 @@ Scenario Outline: Edit project dates, see feedback messages for Total budget and
     | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created                                     |
     | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
 
+    @run
+Scenario: Adding malformed CSV file doesn't throw exception
+  When I attach the file "spec/fixtures/malformed.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Your CSV file does not seem to be properly formatted"
+
+
 Scenario: Reporter can upload projects
   When I attach the file "spec/fixtures/projects.csv" to "File"
   And I press "Upload and Import"

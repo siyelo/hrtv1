@@ -118,6 +118,15 @@ Scenario: Reporter can see error if no csv file is not attached for upload
   When I press "Upload and Import"
   Then I should see "Please select a file to upload"
 
+
+@wip
+Scenario: Adding malformed CSV file doesn't throw exception
+  When I attach the file "spec/fixtures/malformed.csv" to "File"
+  And I press "Upload and Import"
+  Then I should see "Your CSV file does not seem to be properly formatted"
+
+
+
 @wip
 Scenario: Reporter can see error when invalid csv file is attached for upload and download template
 When I attach the file "spec/fixtures/invalid.csv" to "File"

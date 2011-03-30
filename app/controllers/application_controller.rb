@@ -3,14 +3,14 @@
 
 class ApplicationController < AuthlogicController
   helper :all # include all helpers, all the time
-  #protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  protect_from_forgery :only => [:create, :update, :destroy] # Active Scaffold fix
+  protect_from_forgery
   filter_parameter_logging :password, :password_confirmation
 
   include ApplicationHelper
   include SslRequirement
 
-  rescue_from CanCan::AccessDenied do |exception|
+  class AccessDenied < StandardError; end
+  rescue_from AccessDenied do |exception|
     flash[:error] = "You are not authorized to do that"
     redirect_to login_url
   end
@@ -41,5 +41,4 @@ class ApplicationController < AuthlogicController
                 :type => 'text/csv; charset=iso-8859-1; header=present',
                 :disposition => "attachment; filename=#{filename}"
     end
-
 end

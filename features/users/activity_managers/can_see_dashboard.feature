@@ -9,6 +9,7 @@ Scenario: "See data requests"
   And I am signed in as "Frank"
   When I go to the reporter dashboard page
   Then I should see "Data Requests"
+  Then show me the page
 
 @wip
 Scenario: See Projects/Implementers/etc tabs when a Data Req is selected

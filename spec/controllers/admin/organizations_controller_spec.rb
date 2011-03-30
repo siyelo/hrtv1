@@ -6,8 +6,6 @@ describe Admin::OrganizationsController do
     before :each do
       login(Factory.create(:admin))
       @mock_object = mock_model(Organization)
-      @mock_object.stub!(:authorized_for?).and_return(true)
-      @mock_object.stub!(:no_errors_in_associated?).and_return(true)
       Organization.stub!(:find).with("1").and_return(@mock_object)
     end
 
@@ -26,7 +24,6 @@ describe Admin::OrganizationsController do
       before :each do
         @mock_object = mock_model(Organization, 
                                   :is_empty? => true, 
-                                  :authorized_for? => true,
                                   :to_label => 'org label',
                                   :destroy => true)
         Organization.stub!(:find).with("1").and_return(@mock_object)
@@ -72,7 +69,6 @@ describe Admin::OrganizationsController do
       before :each do
         @mock_object = mock_model(Organization, 
                                   :is_empty? => false, 
-                                  :authorized_for? => true,
                                   :to_label => 'org label',
                                   :destroy => true)
         Organization.stub!(:find).with("1").and_return(@mock_object)

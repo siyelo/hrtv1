@@ -3,7 +3,6 @@ source 'http://rubygems.org'
 
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
-gem 'cancan'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
 gem 'formtastic', "= 0.9.10"

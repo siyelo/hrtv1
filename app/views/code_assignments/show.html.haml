@@ -26,7 +26,7 @@
       %td= c(amount, @activity.currency)
 
 
-    - if can? :approve, @activity
+    - if current_user.admin? || current_user.activity_manager?
       %tr
         %td.title= label_tag :approve_activity, "Approved?"
         %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id

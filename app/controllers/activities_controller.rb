@@ -39,11 +39,15 @@ class ActivitiesController < Reporter::BaseController
     @activity.provider = current_user.organization
   end
 
+  # called only via Ajax
   def approve
-    @activity = @data_response.activities.find(params[:id])
-    authorize! :approve, @activity
-    @activity.update_attributes({:approved => params[:checked]})
-    render :nothing => true
+    if current_user.admin? || current_user.activity_manager?
+      @activity = @data_response.activities.find(params[:id])
+      @activity.update_attributes({:approved => params[:checked]})
+      render :nothing => true
+    else
+      raise AccessDenied
+    end
   end
 
   # TODO refactor

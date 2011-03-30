@@ -65,44 +65,12 @@ class Comment < ActiveRecord::Base
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
 
-  # TODO: spec
-  def authorized_for_read?
-    if current_user
-      if current_user.admin?
-        return true
-      else
-        if %w[ModelHelp FieldHelp].include? commentable_type
-          return true
-        else
-          if commentable == nil
-            return false
-          else
-          commentable.data_response == current_user.current_data_response
-          end
-        end
-      end
-    else
-      false
-    end
-  end
-
-  # TODO: spec
-  def authorized_for_update?
-    authorized_for_read?
-  end
-
-  # TODO: spec
-  def authorized_for_delete?
-    authorized_for_read?
-  end
-  
   def email_the_organisation_users(comment)
     data_response = commentable.is_a?(DataResponse) ? commentable : commentable.data_response
     emails = data_response.organization.users.map{ |u| u.email }
     Notifier.deliver_email_organisation_users(comment, emails)
   end
 end
-
 
 
 # == Schema Information

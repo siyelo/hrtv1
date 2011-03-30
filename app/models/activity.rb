@@ -208,7 +208,8 @@ class Activity < ActiveRecord::Base
   end
 
   def coding_budget_classified?
-    budget.blank? || budget == self.CodingBudget_amount
+    #budget.blank? || budget == self.CodingBudget_amount
+    budget.blank? || CodingTree.new(self, CodingBudget).valid?
   end
 
   def coding_budget_cc_classified?

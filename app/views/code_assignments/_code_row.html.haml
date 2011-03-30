@@ -19,7 +19,10 @@
       = label_tag "activity[#{updater_field}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"
 
     - if invalid_class
-      = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise.", :class => "tooltip invalid_node"
+      - if code.root?
+        = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}) or sum or sum of all roots does not match the activity amount.", :class => "tooltip invalid_node"
+      - else 
+        = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise.", :class => "tooltip invalid_node"
 
 
 

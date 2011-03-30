@@ -398,6 +398,17 @@ class Activity < ActiveRecord::Base
     clone
   end
 
+  def classification_amount(classification_type)
+    case classification_type.to_s
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
+      budget
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
+      spend
+    else
+      raise "Invalid coding_klass #{classification_type}".to_yaml
+    end
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

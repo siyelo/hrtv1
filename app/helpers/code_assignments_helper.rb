@@ -34,7 +34,8 @@ module CodeAssignmentsHelper
       :budget
     when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
       :spend
+    else
+      raise "Invalid coding_klass #{klass.to_s}".to_yaml
     end
   end
-
 end

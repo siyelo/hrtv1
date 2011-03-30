@@ -13,5 +13,5 @@
       %span Subtotal
     %ul.activity_tree
       - @codes.each do |code|
-        = render 'code_row', { :code => code, :form => form, :tab => tab }
+        = render 'code_row', { :code => code, :form => form, :tab => tab, :level => 1 }
     = submit_tag 'Save', :class => 'submit_btn'

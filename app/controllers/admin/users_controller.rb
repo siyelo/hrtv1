@@ -25,19 +25,24 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create_from_file
-    if params[:file].present?
-      doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-      if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
-        saved, errors = User.create_from_file(doc)
-        flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
+          saved, errors = User.create_from_file(doc)
+          flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
+        else
+          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        end
       else
-        flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        flash[:error] = 'Please select a file to upload'
       end
-    else
-      flash[:error] = 'Please select a file to upload'
-    end
 
-    redirect_to admin_users_url
+      redirect_to admin_users_url
+    rescue
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      redirect_to response_projects_path(@data_response)
+    end
   end
 
 

@@ -837,12 +837,12 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
 var reports_districts_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
+    if (_pie) {
       drawPieChart('code_spent', _code_spent_values);
       drawPieChart('code_budget', _code_budget_values);
+    } else {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
     }
   }
 };
@@ -851,12 +851,12 @@ var reports_districts_activities_show = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values);
     drawPieChart('budget_pie', _budget_pie_values);
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
+    if (_pie) {
       drawPieChart('code_spent', _code_spent_values);
       drawPieChart('code_budget', _code_budget_values);
+    } else {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
     }
   }
 };
@@ -889,12 +889,12 @@ var reports_districts_organizations_show = {
 
 var reports_countries_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
+    if (_pie) {
       drawPieChart('code_spent', _code_spent_values);
       drawPieChart('code_budget', _code_budget_values);
+    } else {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
     }
   }
 }
@@ -927,12 +927,12 @@ var reports_countries_activities_index = {
 
 var reports_countries_activities_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
+    if (_pie) {
       drawPieChart('code_spent', _code_spent_values);
       drawPieChart('code_budget', _code_budget_values);
+    } else {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
     }
   }
 };

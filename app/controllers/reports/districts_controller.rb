@@ -14,17 +14,16 @@ class Reports::DistrictsController < Reports::BaseController
 
   def show
     @location = Location.find(params[:id])
-    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
+    @pie      = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type = get_code_type_and_initialize(params[:code_type])
 
-    if @treemap
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
-    else
+    if @pie
       @code_spent_values   = Charts::DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
       @code_budget_values  = Charts::DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
+    else
+      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
+      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
     end
-
 
     @top_activities    = Reports::ActivityReport.top_by_spent({
                          :limit => 5, :code_ids => [@location.id], :type => 'district'})

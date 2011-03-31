@@ -13,15 +13,15 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     @activity          = Activity.find(params[:id])
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity)
     @budget_pie_values = Charts::DistrictPies::activity_budget_ratio(@location, @activity)
-    @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
+    @pie               = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type          = get_code_type_and_initialize(params[:code_type])
 
-    if @treemap
-      @code_spent_values  = Charts::DistrictTreemaps::treemap(@location, code_type, [@activity], true)
-      @code_budget_values = Charts::DistrictTreemaps::treemap(@location, code_type, [@activity], false)
-    else
+    if @pie
       @code_spent_values  = Charts::DistrictPies::activity_pie(@location, @activity, code_type, true)
       @code_budget_values = Charts::DistrictPies::activity_pie(@location, @activity, code_type, false)
+    else
+      @code_spent_values  = Charts::DistrictTreemaps::treemap(@location, code_type, [@activity], true)
+      @code_budget_values = Charts::DistrictTreemaps::treemap(@location, code_type, [@activity], false)
     end
 
     @charts_loaded  = @spent_pie_values && @budget_pie_values &&

@@ -1,8 +1,7 @@
 - other_costs = false unless other_costs
 
 %ul.inline_tab
-
-  - if get_coding_type(params[:coding_type]) == :budget
+  - if params[:controller] == 'activities' || get_coding_type(params[:coding_type]) == :budget
     %li{:class => tab_class(activity, 'CodingBudget')}
       = link_to "Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
 
@@ -16,7 +15,7 @@
     %li{:class => tab_class(activity, 'ServiceLevelBudget')}
       = link_to "Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
-  - if get_coding_type(params[:coding_type]) == :spend
+  - if params[:controller] == 'activities' || get_coding_type(params[:coding_type]) == :spend
     %li{:class => tab_class(activity, 'CodingSpend')}
       = link_to "Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 

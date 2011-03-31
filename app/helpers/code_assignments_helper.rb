@@ -38,4 +38,16 @@ module CodeAssignmentsHelper
       raise "Invalid coding_klass #{klass.to_s}".to_yaml
     end
   end
+
+  def node_error(code, assignment)
+    if code.root?
+      errors = ["Sum of all roots does not match the activity #{get_coding_type(assignment.class.to_s)} amount"]
+      if assignment.cached_amount != assignment.sum_of_children && code.children.present?
+        errors << "amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children})."
+      end
+      errors.join(' or ')
+    else
+      "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise."
+    end
+  end
 end

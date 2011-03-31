@@ -105,8 +105,8 @@ describe CodingTree do
 
   describe "coding tree" do
     it "is valid when there are only roots" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
-      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
+      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
+      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
@@ -480,6 +480,16 @@ describe CodingTree do
       ct.reload!
 
       ct.total.should == 20
+    end
+  end
+
+  describe "cached_children" do
+    it "returns cached children" do
+      ct    = CodingTree.new(@activity, CodingBudget)
+      ct.cached_children(@code1).should == [@code11, @code12]
+      ct.cached_children(@code2).should == [@code21, @code22]
+      ct.cached_children(@code11).should == [@code111, @code112]
+      ct.cached_children(@code12).should == [@code121, @code122]
     end
   end
 end

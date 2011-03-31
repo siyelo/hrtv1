@@ -48,13 +48,8 @@ class CodingTree
     #   - cached_amount and sum_of_children have same amount,
     #     except for the leaf code assignments
     def valid_node?
-      ## TODO: spec this case
-      #if code.parent_id.nil?
-        #code.parent_id.nil? && ca.cached_amount == ca.activity.classification_amount(ca.type)
-      #else
-        (ca.cached_amount >= ca.sum_of_children) ||
-          (ca.sum_of_children == 0 && children.empty?)
-      #end
+      (ca.cached_amount >= ca.sum_of_children) ||
+        (ca.sum_of_children == 0 && children.empty?)
     end
 
     def valid_children?
@@ -75,7 +70,6 @@ class CodingTree
   #   - if all root assignments are valid
   #   - if sum of children is same as activity classification amount
   def valid?
-    # TODO: spec new condition
     children_sum = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
     inner_root.valid_children? && 
       children_sum == @activity.classification_amount(@coding_klass.to_s)
@@ -115,7 +109,6 @@ class CodingTree
     roots.inject(0){|total, root| total + root.ca.cached_amount}
   end
 
-  # TODO: spec
   def cached_children(code)
     all_codes.select{|c| c.parent_id == code.id}
   end
@@ -213,7 +206,6 @@ class CodingTree
       @inner_root = build_tree
     end
 
-    # TODO: spec
     def all_codes
       @all_codes ||= case @coding_klass.to_s
       when 'CodingBudget', 'CodingSpend'

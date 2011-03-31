@@ -22,18 +22,17 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
-    #@other_cost = OtherCost.new(params[:other_cost])
-    #raise params[:other_cost].to_yaml
-    #@other_cost.save
-    #flash[:notice] = 'Other Cost was successfully created'
-    #redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
-
-
     create! do |success, failure|
       success.html do
         flash[:notice] = 'Other Cost was successfully created'
         redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
       end
+    end
+  end
+
+  def destroy
+    destroy! do |success, failure|
+      success.html { redirect_to response_projects_url(@data_response) }
     end
   end
 

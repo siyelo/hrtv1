@@ -93,6 +93,12 @@ class ActivitiesController < Reporter::BaseController
     end
   end
 
+  def destroy
+    destroy! do |success, failure|
+      success.html { redirect_to response_projects_url(@data_response) }
+    end
+  end
+
   private
 
     def sort_column

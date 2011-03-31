@@ -30,7 +30,8 @@ class DataResponse < ActiveRecord::Base
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
   validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location
+                        :contact_office_location, :contact_phone_number, 
+                        :contact_main_office_phone_number
                         
                         
   validates_numericality_of :contact_phone_number, :contact_main_office_phone_number

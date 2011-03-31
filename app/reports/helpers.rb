@@ -156,13 +156,7 @@ module Reports::Helpers
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
-    if activity.currency.present?
-      usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
-    else
-      # Workarround for reports not to raise an exception
-      # TODO: remove when all activities have a currency
-      usd_rate = 1
-    end
+    usd_rate = get_usd_rate(activity)
     funding_sources.each do |fs|
       if is_budget
         sum += fs.budget * usd_rate if fs.budget
@@ -174,7 +168,7 @@ module Reports::Helpers
   end
 
   def get_funding_source_amount(activity, funding_source, is_budget)
-    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
+    usd_rate = get_usd_rate(activity)
     amount = is_budget ? funding_source.budget :  funding_source.spend
     (amount || 0) * usd_rate
   end
@@ -276,6 +270,16 @@ module Reports::Helpers
     else
       Activity.send(:preload_associations, activities,
                     [:locations, {:coding_spend_district => :activity}])
+    end
+  end
+
+  def get_usd_rate(activity)
+    if activity.currency.present?
+      Money.default_bank.get_rate(activity.currency, :USD)
+    else
+      # Workarround for reports not to raise an exception
+      # TODO: remove when all activities have a currency
+      1
     end
   end
 end

@@ -1,10 +1,11 @@
 class Reports::CountriesController < Reports::BaseController
 
   def show
-    @treemap = params[:chart_type] == "treemap" || params[:chart_type].blank?
+    @treemap = params[:chart_type] == "treemap"
+    @pie = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type = get_code_type_and_initialize(params[:code_type])
 
-    if @treemap
+    if !@pie
       @code_spent_values   = Charts::CountryTreemaps::treemap(code_type, :all, true)
       @code_budget_values  = Charts::CountryTreemaps::treemap(code_type, :all, false)
     else

@@ -24,8 +24,8 @@
   %li= link_to "Cost Category", reports_country_activity_path(@activity, :code_type => "cost_category"), active_if(@cost_category)
 
 %ul.group
-  %li= link_to "Treemap", reports_country_activity_path(@activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(@treemap)
-  %li= link_to "Pie", reports_country_activity_path(@activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(!@treemap)
+  %li= link_to "Treemap", reports_country_activity_path(@activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
+  %li= link_to "Pie", reports_country_activity_path(@activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
 
 - if @mtef
   - type = 'MTEF'

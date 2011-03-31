@@ -12,16 +12,17 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
 
   def show
     @organization      = Organization.find(params[:id])
-    @treemap           = params[:chart_type] == "treemap" || params[:chart_type].blank?
-    code_type          = get_code_type_and_initialize(params[:code_type])
+    @treemap = params[:chart_type] == "treemap"
+    @pie = params[:chart_type] == "pie" || params[:chart_type].blank?
+    code_type = get_code_type_and_initialize(params[:code_type])
     activities         = @organization.dr_activities
 
     if @treemap
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
-    else
       @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
       @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
+    else
+      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
     end
   end
 

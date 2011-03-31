@@ -133,7 +133,13 @@ module Reports::Helpers
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
-    usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
+    if activity.currency.present?
+      usd_rate = Money.default_bank.get_rate(activity.currency, :USD)
+    else
+      # Workarround for reports not to raise an exception
+      # TODO: remove when all activities have a currency
+      usd_rate = 1
+    end
     funding_sources.each do |fs|
       if is_budget
         sum += fs.budget * usd_rate if fs.budget

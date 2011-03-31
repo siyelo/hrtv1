@@ -119,7 +119,8 @@ class Reports::MapFacilitiesByPartner
     end
 
     def max_partners_length
-      @districts_hash.map{|k,v| v[:partners]}.map{|partner| partner.size}.max - 1
+      partner_sizes = @districts_hash.map{|k,v| v[:partners]}.map{|partner| partner.size}
+      partner_sizes.present? ? partner_sizes.max - 1 : 0
     end
 
     def sort_partners(partners)

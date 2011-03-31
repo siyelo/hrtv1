@@ -70,6 +70,4 @@ group :test do
   gem 'guard-cucumber'
   gem 'guard-bundler'
   gem 'guard-spork'
-  # gem 'libnotify'
-  gem 'growl'
 end

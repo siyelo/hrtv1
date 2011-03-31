@@ -66,7 +66,6 @@ GEM
       json (>= 1.4.6)
     google_currency (1.2.0)
       money (~> 3.5)
-    growl (1.0.3)
     guard (0.3.0)
       open_gem (~> 1.4.2)
       thor (~> 0.14.6)
@@ -198,7 +197,6 @@ DEPENDENCIES
   fastercsv
   formtastic (= 0.9.10)
   google_currency (= 1.2.0)
-  growl
   guard
   guard-bundler
   guard-cucumber

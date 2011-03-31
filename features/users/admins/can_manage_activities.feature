@@ -78,6 +78,9 @@ Scenario: Sends email to users when a comment is made by an admin
   And I fill in "Comment" with "Comment body"
   And I press "Create Comment"
   And "email@siyelo.com" should receive an email
+  When I open the email
+  Then I should see "Comment body" in the email body
+  
 
 Scenario Outline: An admin can sort activities
   Given I follow "Activities"

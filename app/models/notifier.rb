@@ -10,11 +10,14 @@ class Notifier < ActionMailer::Base
     body          :password_reset_url => edit_password_reset_url(user.perishable_token)
   end
   
-  def email_organisation_users(comment, emails)
+  def email_organisation_users(comment, commenter,emails)
     subject       "[Health Resource Tracker] A Comment Has Been Made"
     from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
     recipients    emails
     sent_on       Time.now
-    body          :comment => admin_activity_url(comment.commentable)
+    body          :comment_address => response_activity_url(comment.commentable.data_response_id, comment.commentable), 
+                  :comment => comment.comment, 
+                  :comment_activity_name => comment.commentable.name,
+                  :commenter => commenter
   end
 end

@@ -1,30 +1,30 @@
 - other_costs = false unless other_costs
 
 %ul.inline_tab
-  - if params[:controller] == 'activities' || get_coding_type(params[:coding_type]) == :budget
-    %li{:class => tab_class(activity, 'CodingBudget')}
+  - if params[:controller] == 'activities' || get_coding_type(@coding_type) == :budget
+    %li{:class => tab_class(activity, @coding_type, 'CodingBudget')}
       = link_to "Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
 
     - unless other_costs
-      %li{:class => tab_class(activity, 'CodingBudgetDistrict')}
+      %li{:class => tab_class(activity, @coding_type, 'CodingBudgetDistrict')}
         = link_to "Locations", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetDistrict')
 
-    %li{:class => tab_class(activity, 'CodingBudgetCostCategorization')}
+    %li{:class => tab_class(activity, @coding_type, 'CodingBudgetCostCategorization')}
       = link_to "Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetCostCategorization')
 
-    %li{:class => tab_class(activity, 'ServiceLevelBudget')}
+    %li{:class => tab_class(activity, @coding_type, 'ServiceLevelBudget')}
       = link_to "Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
-  - if params[:controller] == 'activities' || get_coding_type(params[:coding_type]) == :spend
-    %li{:class => tab_class(activity, 'CodingSpend')}
+  - if params[:controller] == 'activities' || get_coding_type(@coding_type) == :spend
+    %li{:class => tab_class(activity, @coding_type, 'CodingSpend')}
       = link_to "Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
     - unless other_costs
-      %li{:class => tab_class(activity, 'CodingSpendDistrict')}
+      %li{:class => tab_class(activity, @coding_type, 'CodingSpendDistrict')}
         = link_to "Locations", activity_code_assignments_path(activity, :coding_type => 'CodingSpendDistrict')
 
-    %li{:class => tab_class(activity, 'CodingSpendCostCategorization')}
+    %li{:class => tab_class(activity, @coding_type, 'CodingSpendCostCategorization')}
       = link_to "Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingSpendCostCategorization')
 
-    %li{:class => tab_class(activity, 'ServiceLevelSpend')}
+    %li{:class => tab_class(activity, @coding_type, 'ServiceLevelSpend')}
       = link_to "Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelSpend')

@@ -63,6 +63,12 @@ group :test do
   gem 'pickle', '~> 0.4.4'
   gem 'ruby-pg'
   gem 'shoulda'
-  gem 'spork'
+  gem 'spork', '~> 0.8'
   gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
+  gem 'guard-bundler'
+  gem 'guard-spork'
+  gem 'libnotify'
 end

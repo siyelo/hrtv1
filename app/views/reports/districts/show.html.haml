@@ -30,7 +30,7 @@
 %ul.group
   %li= link_to "NSP", reports_district_path(@location, :code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_district_path(@location, :code_type => "mtef"), active_if(@mtef)
-  %li= link_to "Cost Category", reports_district_path(@location, :code_type => "cost_category"), active_if(@cost_category)
+  %li= link_to "Inputs", reports_district_path(@location, :code_type => "cost_category"), active_if(@cost_category)
 
 %ul.group
   %li= link_to "Pie", reports_district_path(@location, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
@@ -39,7 +39,7 @@
 - if @mtef
   - type = 'MTEF'
 - elsif @cost_category
-  - type = 'Cost Category'
+  - type = 'Inputs'
 - else
   - type = 'NSP'
 

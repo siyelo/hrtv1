@@ -219,7 +219,7 @@ class Reports::JawpReport
       row << "Code nha code"
       row << "Code nasa code"
       row << "District"
-      CostCategory.deepest_nesting.times{ row << "Cost Category" }
+      CostCategory.deepest_nesting.times{ row << "Input" }
 
       row
     end

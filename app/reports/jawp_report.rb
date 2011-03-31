@@ -7,6 +7,11 @@ class Reports::JawpReport
     @is_budget         = is_budget?(type)
 
     @activities = activities
+#    @activities = Activity.only_simple.find(:all,
+#                   :conditions => ["activities.id IN (?)", [1764]], # NOTE: FOR DEBUG ONLY
+#                   :include => [:locations, :provider, :organizations,
+#                               :beneficiaries, {:data_response => :organization}])
+
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
@@ -50,16 +55,21 @@ class Reports::JawpReport
     row << amount_q2
     row << amount_q3
     row << amount_q4
-    row << (amount_q1 ? amount_q1 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q2 ? amount_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q3 ? amount_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-    row << (amount_q4 ? amount_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
+    #row << # reimplement currency conversion here later (amount_q1 ? amount_q1 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q2 ? amount_q2 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q3 ? amount_q3 * activity.toUSD : '')
+   # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')
+    row << amount_q1
+    row << amount_q2
+    row << amount_q3
+    row << amount_q4
     row << get_locations(activity)
     row << activity.sub_activities_count
     row << get_hc_sub_activity_count(activity)
     row << get_sub_implementers(activity)
     row << activity.organization.try(:name)
     row << activity.provider.try(:name) || "No Implementer Specified"
+    row << activity.provider.try(:raw_type) || "No Implementer Specified"
     row << get_institutions_assisted(activity)
     row << get_beneficiaries(activity)
     row << activity.id
@@ -85,10 +95,26 @@ class Reports::JawpReport
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
       funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
-      funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
+      #funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
+      funding_sources_total = 0
+      funding_sources.each do |fs|
+        if @is_budget
+          funding_sources_total += fs.budget if fs.budget
+        else
+          funding_sources_total += fs.spend if fs.spend
+        end
+      end
+      
+      # edge case that handles bad quality data e.g. funding sources
+      # that dont have amounts specified for them
+      # TODO move this into helper in get_funding_sources for all reports!
+      if funding_sources_total == 0
+        funding_sources = fake_one_funding_source_if_none( [] )
+        funding_sources_total = 1
+      end
 
-      coding_with_parent_codes = get_coding_with_parent_codes(codings)
-      cost_category_coding_with_parent_codes = get_coding_with_parent_codes(cost_category_codings)
+      coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
+      cost_category_coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(cost_category_codings)
 
       cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
         cost_category_coding = cost_category_ca_coding[0]
@@ -101,17 +127,35 @@ class Reports::JawpReport
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount = get_funding_source_amount(activity, funding_source, @is_budget)
-              amount                = (amount_total || 0) *
-                get_ratio(amount_total, ca.cached_amount) *
-                get_ratio(amount_total, district_coding.cached_amount) *
-                get_ratio(amount_total, cost_category_coding.cached_amount) *
+              funding_source_amount =  funding_source.send(@is_budget ? :budget : :spend)
+              funding_source_amount =  0 if funding_source_amount.nil?
+              ratio = get_ratio(amount_total, ca.amount_not_in_children) *
+                get_ratio(amount_total, district_coding.amount_not_in_children) *
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children) * # why was this commented out before ?
                 get_ratio(funding_sources_total, funding_source_amount)
+<<<<<<< HEAD
+
+=======
+              puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(amount_total, ca.amount_not_in_children)})"
+              puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(amount_total, district_coding.amount_not_in_children)}"
+              puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(amount_total, cost_category_coding.amount_not_in_children)}" 
+              puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
+>>>>>>> add logic to deal with bad funding sources
+              amount = (amount_total || 0) * ratio
+
+              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s
+
+              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s
+
+              #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
+
+              #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
+
               row << funding_source.from.try(:name)
               row << funding_source.from.try(:type)
               row << amount
-              row << get_percentage(amount_total, amount)
-              row << amount * Money.default_bank.get_rate(activity.currency, :USD)
+              row << ratio
+              row << amount_total_in_usd * ratio
               row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
               row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
@@ -152,6 +196,7 @@ class Reports::JawpReport
       row << "Sub-implementers"
       row << "Data Source"
       row << "Implementer"
+      row << "Implementer Type"
       row << "Institutions Assisted"
       row << "Beneficiaries"
       row << "ID"
@@ -203,10 +248,6 @@ class Reports::JawpReport
       else
         funding_sources
       end
-    end
-
-    def get_percentage(amount_total, amount)
-      amount_total && amount_total > 0 ? amount / amount_total : 0
     end
 
     def get_institutions_assisted(activity)

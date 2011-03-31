@@ -29,7 +29,11 @@ class DataResponse < ActiveRecord::Base
   ### Validations
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
-  validates_presence_of :currency
+  validates_presence_of :currency, :contact_name, :contact_position,
+                        :contact_office_location
+                        
+                        
+  validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
   validates_date :fiscal_year_start_date
   validates_date :fiscal_year_end_date

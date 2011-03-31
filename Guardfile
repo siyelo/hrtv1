@@ -1,5 +1,14 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
+#
+
+if RUBY_PLATFORM.downcase.include?("linux")
+  require 'rubygems'
+  require 'libnotify'
+elsif RUBY_PLATFORM.downcase.include?("darwin")
+  require 'growl'
+#elsif RUBY_PLATFORM.downcase.include?("mswin")
+end
 
 guard 'spork' do
   #watch('config/application.rb')

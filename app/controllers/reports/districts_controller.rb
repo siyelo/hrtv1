@@ -14,8 +14,7 @@ class Reports::DistrictsController < Reports::BaseController
 
   def show
     @location = Location.find(params[:id])
-    @treemap = params[:chart_type] == "treemap"
-    @pie = params[:chart_type] == "pie" || params[:chart_type].blank?
+    @pie      = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type = get_code_type_and_initialize(params[:code_type])
 
     if @pie

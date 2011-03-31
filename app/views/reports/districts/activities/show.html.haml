@@ -3,7 +3,7 @@
 
 :javascript
   google.load("visualization", "1", {packages:["corechart", "treemap"]});
-  var _treemap = #{@treemap.to_json};
+  var _pie = #{@pie.to_json};
   var _spent_pie_values   = #{js_safe(@spent_pie_values)};
   var _budget_pie_values  = #{js_safe(@budget_pie_values)};
   var _code_spent_values  = #{js_safe(@code_spent_values)};
@@ -37,8 +37,8 @@
   %li= link_to "Cost Category", reports_district_activity_path(@location, @activity, :code_type => "cost_category"), active_if(@cost_category)
 
 %ul.group
-  %li= link_to "Treemap", reports_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
   %li= link_to "Pie", reports_district_activity_path(@location, @activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
+  %li= link_to "Treemap", reports_district_activity_path(@location, @activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
 
 - if @mtef
   - type = 'MTEF'

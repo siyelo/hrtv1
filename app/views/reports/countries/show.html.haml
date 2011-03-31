@@ -2,8 +2,8 @@
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 :javascript
-  var _treemap = #{@treemap.to_json};
-  var packages = _treemap ? ["treemap"] : ["corechart"];
+  var _pie = #{@pie.to_json};
+  var packages = _pie ? ["corechart"] : ["treemap"];
   google.load("visualization", "1", {packages: packages});
   var _code_spent_values  = #{js_safe(@code_spent_values)};
   var _code_budget_values = #{js_safe(@code_budget_values)};

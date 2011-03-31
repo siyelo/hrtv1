@@ -13,10 +13,8 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     @activity          = Activity.find(params[:id])
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity)
     @budget_pie_values = Charts::DistrictPies::activity_budget_ratio(@location, @activity)
-    @treemap           = params[:chart_type] == "treemap"
     @pie               = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type          = get_code_type_and_initialize(params[:code_type])
-
 
     if @pie
       @code_spent_values  = Charts::DistrictPies::activity_pie(@location, @activity, code_type, true)

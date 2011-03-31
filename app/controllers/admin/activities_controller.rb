@@ -12,7 +12,9 @@ class Admin::ActivitiesController < Admin::BaseController
 
   def index
     scope = Activity.roots.scoped({:include => :project, :joins => :project})
-    scope = scope.scoped(:conditions => ["projects.name LIKE :q OR activities.name LIKE :q OR activities.description LIKE :q",
+    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR 
+                                         UPPER(activities.name) LIKE UPPER(:q) OR 
+                                         UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")

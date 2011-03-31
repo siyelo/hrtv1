@@ -9,9 +9,10 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def index
     scope = Organization.scoped({})
-    scope = scope.scoped(:conditions => ["name LIKE :q OR raw_type LIKE :q 
-                                          OR fosaid LIKE :q",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
+    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q) OR 
+                                         UPPER(raw_type) LIKE UPPER(:q) OR 
+                                         UPPER(fosaid) LIKE UPPER(:q)",
+                         {:q => "%#{params[:query]}%"}]) if params[:query]
 
     @organizations = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")

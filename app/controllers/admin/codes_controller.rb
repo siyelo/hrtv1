@@ -12,9 +12,10 @@ class Admin::CodesController < Admin::BaseController
 
   def index
     scope  = Code.scoped({})
-    scope  = scope.scoped(:conditions => ["short_display LIKE :q OR type LIKE :q 
-                              OR description LIKE :q",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
+    scope  = scope.scoped(:conditions => ["UPPER(short_display) LIKE UPPER(:q) OR 
+                                          UPPER(type) LIKE UPPER(:q) OR 
+                                          UPPER(description) LIKE UPPER(:q)",
+                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @codes = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
   end

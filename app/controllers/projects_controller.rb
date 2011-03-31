@@ -9,7 +9,7 @@ class ProjectsController < Reporter::BaseController
 
   def index
     scope = @data_response.projects.scoped({})
-    scope = scope.scoped(:conditions => ["name LIKE :q",
+    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => sort_column + " " + sort_direction) # rails 2

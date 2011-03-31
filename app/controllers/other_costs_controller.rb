@@ -8,7 +8,7 @@ class OtherCostsController < Reporter::BaseController
 
   def index
     scope = @data_response.other_costs.scoped()
-    scope = scope.scoped(:conditions => ["activities.name LIKE :q OR activities.description LIKE :q",
+    scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")

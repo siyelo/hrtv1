@@ -66,6 +66,7 @@ GEM
       json (>= 1.4.6)
     google_currency (1.2.0)
       money (~> 3.5)
+    growl (1.0.3)
     guard (0.3.0)
       open_gem (~> 1.4.2)
       thor (~> 0.14.6)
@@ -101,8 +102,6 @@ GEM
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
-    libnotify (0.3.0)
-      ffi (>= 0.6.2)
     linecache (0.43)
     mime-types (1.16)
     money (3.6.1)
@@ -199,6 +198,7 @@ DEPENDENCIES
   fastercsv
   formtastic (= 0.9.10)
   google_currency (= 1.2.0)
+  growl
   guard
   guard-bundler
   guard-cucumber
@@ -212,7 +212,6 @@ DEPENDENCIES
   interactive_editor
   json_pure
   launchy
-  libnotify
   money (~> 3.5)
   mongrel
   open_gem

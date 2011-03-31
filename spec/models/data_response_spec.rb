@@ -17,13 +17,17 @@ describe DataResponse do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_presence_of(:currency) }
+    it { should validate_presence_of(:contact_name) }
+    it { should validate_presence_of(:contact_position) }
+    it { should validate_presence_of(:contact_phone_number) }
+    it { should validate_presence_of(:contact_main_office_phone_number) }
+    it { should validate_presence_of(:contact_office_location)}  
   end
 
   describe "custom date validations" do
     it { should allow_mass_assignment_of(:fiscal_year_start_date) }
     it { should allow_mass_assignment_of(:fiscal_year_end_date) }
     it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_position) }
     it { should allow_mass_assignment_of(:contact_phone_number) }

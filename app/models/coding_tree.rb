@@ -36,14 +36,17 @@ class CodingTree
       @object[:ca]
     end
 
-    # Node is valid if:
-    #   - cached_amount and sum_of_children have same amount,
-    #     except for the leaf code assignments
-    #   - all children nodes are valid
+    # Tree is valid if:
+    #   - node is valid
+    #   - all children of the node are valid
     def valid?
       valid_node? && valid_children?
     end
 
+    # Node is valid if:
+    #   - cached_amount is equal to activity if root code
+    #   - cached_amount and sum_of_children have same amount,
+    #     except for the leaf code assignments
     def valid_node?
       (ca.cached_amount >= ca.sum_of_children) ||
         (ca.sum_of_children == 0 && children.empty?)
@@ -63,9 +66,13 @@ class CodingTree
     inner_root.children
   end
 
-  # CodingTree is valid if all root assignments are valid
+  # CodingTree is valid:
+  #   - if all root assignments are valid
+  #   - if sum of children is same as activity classification amount
   def valid?
-    inner_root.valid_children?
+    children_sum = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
+    inner_root.valid_children? && 
+      children_sum == @activity.classification_amount(@coding_klass.to_s)
   end
 
   def valid_ca?(code_assignment)
@@ -91,7 +98,7 @@ class CodingTree
   end
 
   def set_cached_amounts!
-    codings_sum(root_codes, @activity, max_value)
+    codings_sum(root_codes, @activity, @activity.classification_amount(@coding_klass.to_s))
   end
 
   def reload!
@@ -100,6 +107,10 @@ class CodingTree
 
   def total
     roots.inject(0){|total, root| total + root.ca.cached_amount}
+  end
+
+  def cached_children(code)
+    all_codes.select{|c| c.parent_id == code.id}
   end
 
   protected
@@ -111,7 +122,7 @@ class CodingTree
 
       root_codes.each do |code|
         ca = @coding_klass.with_activity(activity).with_code_id(code.id).first
-        children = code.children
+        children = cached_children(code)
         if ca
           if ca.amount.present? && ca.amount > 0
             cached_amount = ca.amount
@@ -150,17 +161,6 @@ class CodingTree
 
   private
 
-    def max_value
-      case @coding_klass.to_s
-      when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget', 'HsspBudget'
-        @activity.budget
-      when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend', 'HsspSpend'
-        @activity.spend
-      else
-        raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
-      end
-    end
-
     def inner_root
       @inner_root ||= build_tree
     end
@@ -181,7 +181,7 @@ class CodingTree
         if code_assignment
           node = Tree.new({:ca => code_assignment, :code => code})
           root.children << node
-          build_subtree(node, code.children) unless code.leaf?
+          build_subtree(node, cached_children(code)) unless code.leaf?
         end
       end
     end
@@ -204,5 +204,22 @@ class CodingTree
 
     def rebuild_tree!
       @inner_root = build_tree
+    end
+
+    def all_codes
+      @all_codes ||= case @coding_klass.to_s
+      when 'CodingBudget', 'CodingSpend'
+        @activity.class.to_s == "OtherCost" ? OtherCostCode.all : Code.all
+      when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
+        CostCategory.all
+      when 'ServiceLevelBudget', 'ServiceLevelSpend'
+        ServiceLevel.all
+      when 'CodingBudgetDistrict', 'CodingSpendDistrict'
+        @activity.locations
+      when 'HsspBudget', 'HsspSpend'
+        @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
+      else
+        raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+      end
     end
 end

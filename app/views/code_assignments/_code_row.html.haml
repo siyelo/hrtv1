@@ -3,7 +3,7 @@
 - amount     = assignment.nil? ? '' : assignment.amount
 - percentage = assignment.nil? ? '' : assignment.percentage
 - cached_amount = assignment.nil? ? '' : assignment.cached_amount
-- invalid_class = assignment && !@coding_tree.valid_ca?(assignment) ? 'invalid' : nil
+- invalid_class = assignment && ((code.root? && !@coding_tree.valid?) || !@coding_tree.valid_ca?(assignment)) ? 'invalid' : nil
 
 %li
   %div{:class => invalid_class}
@@ -19,11 +19,9 @@
       = label_tag "activity[#{updater_field}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"
 
     - if invalid_class
-      = link_to "!", "#" , :title => "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children}). Delete this amount if children amounts are correct or fix the amounts of children otherwise.", :class => "tooltip invalid_node"
-
-
+      = link_to "!", "#" , :title => node_error(code, assignment), :class => "tooltip invalid_node"
 
   - unless code.leaf?
-    %ul{:id => code.external_id, :class => "lvl#{code.level + 1}"}
-      - code.children.each do |child|
-        = render '/code_assignments/code_row', :code => child, :tab => tab
+    %ul{:id => code.external_id, :class => "lvl#{level}"}
+      - @coding_tree.cached_children(code).each do |child|
+        = render '/code_assignments/code_row', :code => child, :tab => tab, :level => level + 1

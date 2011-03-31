@@ -72,7 +72,6 @@ Scenario: enter budget for an activity (see flash errors)
   And I should be on the budget classification page for "Activity"
   And the "mtef1" field should contain "1,234,567.00"
   And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
-  And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within ".tab1 .flashes .error"
 
 Scenario Outline: enter percentage for an activity budget classification
   When I follow "Budget"

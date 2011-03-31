@@ -1,5 +1,6 @@
 class CodeAssignmentsController < Reporter::BaseController
   include CodeAssignmentsHelper
+  include NumberHelper
 
   before_filter :load_activity_and_data_response
 

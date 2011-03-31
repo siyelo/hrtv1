@@ -208,35 +208,43 @@ class Activity < ActiveRecord::Base
   end
 
   def coding_budget_classified?
-    budget.blank? || budget == self.CodingBudget_amount
+    #budget.blank? || budget == self.CodingBudget_amount
+    budget.blank? || CodingTree.new(self, CodingBudget).valid?
   end
 
   def coding_budget_cc_classified?
-    budget.blank? || budget == self.CodingBudgetCostCategorization_amount
+    #budget.blank? || budget == self.CodingBudgetCostCategorization_amount
+    budget.blank? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
   end
 
   def coding_budget_district_classified?
-    budget.blank? || locations.empty? || budget == self.CodingBudgetDistrict_amount
+    #budget.blank? || locations.empty? || budget == self.CodingBudgetDistrict_amount
+    budget.blank? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
   end
 
   def service_level_budget_classified?
-    budget.blank? || budget == self.ServiceLevelBudget_amount
+    #budget.blank? || budget == self.ServiceLevelBudget_amount
+    budget.blank? || CodingTree.new(self, ServiceLevelBudget).valid?
   end
 
   def coding_spend_classified?
-    spend.blank? || spend == self.CodingSpend_amount
+    #spend.blank? || spend == self.CodingSpend_amount
+    spend.blank? || CodingTree.new(self, CodingSpend).valid?
   end
 
   def coding_spend_cc_classified?
-    spend.blank? || spend == self.CodingSpendCostCategorization_amount
+    #spend.blank? || spend == self.CodingSpendCostCategorization_amount
+    spend.blank? || CodingTree.new(self, CodingSpendCostCategorization).valid?
   end
 
   def coding_spend_district_classified?
-    spend.blank? || locations.empty? || spend == self.CodingSpendDistrict_amount
+    #spend.blank? || locations.empty? || spend == self.CodingSpendDistrict_amount
+    spend.blank? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
   end
 
   def service_level_spend_classified?
-    spend.blank? || spend == self.ServiceLevelSpend_amount
+    #spend.blank? || spend == self.ServiceLevelSpend_amount
+    spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
   end
 
   def budget_classified?
@@ -396,6 +404,17 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
+  end
+
+  def classification_amount(classification_type)
+    case classification_type.to_s
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
+      budget
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
+      spend
+    else
+      raise "Invalid coding_klass #{classification_type}".to_yaml
+    end
   end
 
   private

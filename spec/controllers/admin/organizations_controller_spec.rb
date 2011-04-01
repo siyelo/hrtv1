@@ -46,6 +46,7 @@ describe Admin::OrganizationsController do
         end
 
         it "redirects to the duplicate_admin_organizations_path" do
+          request.env['HTTP_REFERER'] = 'http://localhost:3000/admin/organizations/duplicate'
           delete :destroy, :id => "1"
           response.should redirect_to(duplicate_admin_organizations_path)
         end
@@ -91,6 +92,7 @@ describe Admin::OrganizationsController do
         end
 
         it "redirects to the duplicate_admin_organizations_path" do
+          request.env['HTTP_REFERER'] = 'http://localhost:3000/admin/organizations/duplicate'
           delete :destroy, :id => "1"
           response.should redirect_to(duplicate_admin_organizations_path)
         end

@@ -29,11 +29,16 @@ class Admin::OrganizationsController < Admin::BaseController
   def destroy
     @organization = Organization.find(params[:id])
 
+    # when on fix duplicate organizations page then redirect to :back
+    # otherwise redirect to admin organizatoins index  page
+    url = request.env['HTTP_REFERER'].to_s.match(/duplicate/) ? 
+      duplicate_admin_organizations_url : admin_organizations_url
+
     if @organization.is_empty?
       @organization.destroy
-      render_notice("Organization was successfully deleted.", duplicate_admin_organizations_path)
+      render_notice("Organization was successfully deleted.", url)
     else
-      render_error("You cannot delete an organization that has users or data associated with it.", duplicate_admin_organizations_path)
+      render_error("You cannot delete an organization that has users or data associated with it.", url)
     end
   end
 

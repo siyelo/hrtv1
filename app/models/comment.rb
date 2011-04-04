@@ -65,10 +65,10 @@ class Comment < ActiveRecord::Base
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
 
-  def email_the_organisation_users(comment)
+  def email_the_organisation_users(comment, commenter)
     data_response = commentable.is_a?(DataResponse) ? commentable : commentable.data_response
     emails = data_response.organization.users.map{ |u| u.email }
-    Notifier.deliver_email_organisation_users(comment, emails)
+    Notifier.deliver_email_organisation_users(comment, commenter, emails)
   end
 end
 

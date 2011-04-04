@@ -972,32 +972,42 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
     close_funding_flow_fields($('.funding_flows .fields'));
   }
-}
+};
+
+var activity_form = function () {
+  $('#activity_project_id').change(function () {
+    update_funding_source_selects
+
+    var element = $('#project_sub_form');
+    var _project_id = $(this).val();
+    if (_project_id) {
+      var url = '/responses/' + _response_id +
+      '/activities/project_sub_form?' + 'project_id=' + _project_id;
+      if (_activity_id) {
+        url += '&activity_id=' + _activity_id;
+      }
+      $.get(url, function (data) {
+        $('#project_sub_form_fields').html(data)
+        $('#project_sub_form_fields').show();
+        $('#project_sub_form_hint').hide();
+      });
+    } else {
+      $('#project_sub_form_fields').hide();
+      $('#project_sub_form_hint').show();
+    }
+  });
+};
+
+
+var admin_activities_edit = admin_activities_update = {
+  run: function () {
+    activity_form();
+  }
+};
 
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
-
-    $('#activity_project_id').change(update_funding_source_selects);
-
-    $('#activity_project_id').change(function () {
-      var element = $('#project_sub_form');
-      var _project_id = $(this).val();
-      if (_project_id) {
-        var url = '/responses/' + _response_id +
-        '/activities/project_sub_form?' + 'project_id=' + _project_id;
-        if (_activity_id) {
-          url += '&activity_id=' + _activity_id;
-        }
-        $.get(url, function (data) {
-          $('#project_sub_form_fields').html(data)
-          $('#project_sub_form_fields').show();
-          $('#project_sub_form_hint').hide();
-        });
-      } else {
-        $('#project_sub_form_fields').hide();
-        $('#project_sub_form_hint').show();
-      }
-    });
+    activity_form();
   }
 };
 

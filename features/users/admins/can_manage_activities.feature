@@ -24,6 +24,15 @@ Scenario: An admin can review activities
   When I follow "X"
   Then I should not see "activity1 description"
 
+  @run
+Scenario: An admin can edit activity
+  When I follow "Activities"
+  And I follow "Edit"
+  And I fill in "Description" with "activity2 description"
+  And I press "Update"
+  Then I should see "activity2 description"
+  And I should not see "activity1 description"
+
 Scenario: An admin can create comments for an activity
   When I follow "Activities"
   And I follow "activity1 description"

@@ -55,15 +55,12 @@ Scenario Outline: Admin can CRUD users and see errors
      | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     | 
      | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        | 
 
-@run
 Scenario: Adding malformed CSV file doesn't throw exception
   When I follow "Users"
   And I attach the file "spec/fixtures/malformed.csv" to "File"
   And I press "Upload and Import"
   Then I should see "Your CSV file does not seem to be properly formatted."
 
-
-   @run
 Scenario: Admin can upload users
   When I follow "Users"
   And I attach the file "spec/fixtures/users.csv" to "File"

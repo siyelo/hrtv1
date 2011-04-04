@@ -1,22 +1,24 @@
+- @data_response = @activity.data_response
+
 :javascript
   var _response_id = "#{@data_response.id}";
   var _activity_id = "#{@activity.id}";
-  var _funding_sources = #{get_funding_sources(current_user.organization.projects)}
+  var _funding_sources = #{get_funding_sources(@data_response.organization.projects)}
 
 - unless @activity.new_record?
   .form_aside
-    %p= link_to "Remove this activity", response_activity_path(@data_response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "warn"
+    %p= link_to "Remove this activity", admin_activity_path(@activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "warn"
 
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response.projects
+      = f.input :project_id, :label => "Project", :as => :select, :collection => @data_response.projects
 
       #project_sub_form
         #project_sub_form_fields
           - if @activity.project
-            = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
+            = render 'activities/project_sub_form', {:activity => @activity, :project => @activity.project}
       = f.input :name, :required => false
       = f.input :description, :input_html => { :rows => 2 }, :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
@@ -90,5 +92,5 @@
       = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button "Save & Next", :class => "last"
+  = f.commit_button "Update", :class => "last"
 

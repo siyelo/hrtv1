@@ -62,6 +62,10 @@ class DataResponse < ActiveRecord::Base
     self.find(:all, :include => [:organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
   end
 
+  def name
+    data_request.title
+  end
+
   # TODO: remove
   def self.remove_security
     with_exclusive_scope {find(:all)}

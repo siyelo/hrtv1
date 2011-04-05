@@ -162,7 +162,7 @@ class Project < ActiveRecord::Base
   private
 
     def validate_budgets
-      errors.add(:base, "Total Budget must be less than or equal to Total Budget GOR FY 10-11") if budget > entire_budget
+      errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 
 end

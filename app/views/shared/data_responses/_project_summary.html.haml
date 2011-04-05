@@ -7,10 +7,10 @@
       %td Total Budget:
       %td= n2c(project.entire_budget, project.currency || @data_response.currency)
     %tr
-      %td Total Budget (current GOR FY):
+      %td Total Budget (current FY):
       %td= n2c(project.budget, project.currency || @data_response.currency)
     %tr
-      %td Total Spent (past GOR FY):
+      %td Total Spent (past FY):
       %td= n2c(project.spend, project.currency || @data_response.currency)
     - unless @policy_maker
       %tr

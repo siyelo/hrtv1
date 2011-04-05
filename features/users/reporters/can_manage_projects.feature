@@ -62,7 +62,7 @@ Scenario Outline: Edit project dates, see feedback messages for start and end da
     | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
 
-Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget GOR
+Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget
   When I follow "Create Project"
   And I fill in "Name" with "Some Project"
   And I fill in "Start date" with "<start_date>"

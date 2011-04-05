@@ -127,7 +127,7 @@ describe Project do
       p.should_not be_valid
     end
 
-    it "accepts Total Budget >= Total Budget GOR" do
+    it "accepts Total Budget >= Total Budget" do
       p = Factory.build(:project,
                         :start_date => DateTime.new(2010, 01, 01),
                         :end_date =>   DateTime.new(2010, 01, 02),
@@ -136,7 +136,7 @@ describe Project do
       p.should be_valid
     end
 
-    it "accepts Total Budget = Total Budget GOR" do
+    it "accepts Total Budget = Total Budget" do
       p = Factory.build(:project,
                       :start_date => DateTime.new(2010, 01, 01),
                       :end_date =>   DateTime.new(2010, 01, 02),
@@ -145,7 +145,7 @@ describe Project do
       p.should be_valid
     end
 
-    it "does not accept Total Budget < Total Budget GOR" do
+    it "does not accept Total Budget < Total Budget" do
       p = Factory.build(:project,
                         :start_date => DateTime.new(2010, 01, 01),
                         :end_date =>   DateTime.new(2010, 01, 02),

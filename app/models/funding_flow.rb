@@ -7,10 +7,10 @@ class FundingFlow < ActiveRecord::Base
   configure_act_as_data_element
 
   ### Attributes
-  attr_accessible :budget, :organization_text, :project_id, :data_response_id,
-                  :from, :to, :self_provider_flag, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :organization_id_from, :organization_id_to
+  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to, 
+                  :self_provider_flag, :organization_id_from, :organization_id_to,
+                  :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

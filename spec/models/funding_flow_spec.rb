@@ -1,6 +1,28 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FundingFlow do
+
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:organization_text) }
+    it { should allow_mass_assignment_of(:project_id) }
+    it { should allow_mass_assignment_of(:data_response_id) }
+    it { should allow_mass_assignment_of(:from) }
+    it { should allow_mass_assignment_of(:to) }
+    it { should allow_mass_assignment_of(:self_provider_flag) }
+    it { should allow_mass_assignment_of(:organization_id_from) }
+    it { should allow_mass_assignment_of(:organization_id_to) }
+    it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:spend_q4_prev) }
+    it { should allow_mass_assignment_of(:spend_q1) }
+    it { should allow_mass_assignment_of(:spend_q2) }
+    it { should allow_mass_assignment_of(:spend_q3) }
+    it { should allow_mass_assignment_of(:spend_q4) }
+    it { should allow_mass_assignment_of(:budget_q4_prev) }
+    it { should allow_mass_assignment_of(:budget_q1) }
+    it { should allow_mass_assignment_of(:budget_q2) }
+    it { should allow_mass_assignment_of(:budget_q3) }
+    it { should allow_mass_assignment_of(:budget_q4) }
+  end
   
   describe "creating a project record" do
     subject { Factory(:funding_flow) }

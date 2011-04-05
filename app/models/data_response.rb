@@ -63,7 +63,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def name
-    data_request.title
+    data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
 
   # TODO: remove

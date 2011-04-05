@@ -15,6 +15,58 @@ function add_fields(link, association, content) {
   $(link).parent().before(content.replace(regexp, new_id));
 };
 
+var build_funding_source_row = function (edit_block, type, type_name, organization) {
+  var value            = edit_block.find('.ff_' + type).val();
+  var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
+  var value_q1         = edit_block.find('.ff_' + type + '_q1').val();
+  var value_q2         = edit_block.find('.ff_' + type + '_q2').val();
+  var value_q3         = edit_block.find('.ff_' + type + '_q3').val();
+  var value_q4         = edit_block.find('.ff_' + type + '_q4').val();
+
+  if (type === 'spend') {
+    var organization = edit_block.find('.ff_from option:selected').text();
+    var funder = $('<li/>').append(
+      $('<span/>').text('Funder'),
+      organization || 'N/A'
+    );
+  } else {
+    var funder = $('<li/>');
+  }
+
+  return $('<ul/>').append(
+    funder,
+    $('<li/>').append(
+      $('<span/>').text(type_name),
+      value || 'N/A'
+    ),
+    $('<li/>').append(
+      $('<ul/>').append(
+        $('<li/>').append(
+          $('<span/>').text('Q4 08-09'),
+          value_q4_prev || 'N/A'
+        ),
+        $('<li/>').append(
+          $('<span/>').text('Q1 09-10'),
+          value_q1 || 'N/A'
+        ),
+        $('<li/>').append(
+          $('<span/>').text('Q2 09-10'),
+          value_q2 || 'N/A'
+        ),
+        $('<li/>').append(
+          $('<span/>').text('Q3 09-10'),
+          value_q3 || 'N/A'
+        ),
+        $('<li/>').append(
+          $('<span/>').text('Q4 09-10'),
+          value_q4 || 'N/A'
+        )
+      )
+    )
+  )
+};
+
+
 var close_funding_flow_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
@@ -22,58 +74,11 @@ var close_funding_flow_fields = function (fields) {
     var preview_block = element.find('.preview_block');
     var manage_block = element.find('.manage_block');
 
-    var organization     = edit_block.find('.ff_from option:selected').text();
-    var spend            = edit_block.find('.ff_spend').val();
-    var budget           = edit_block.find('.ff_budget').val();
-    var spend_q4_prev    = edit_block.find('.ff_spend_q4_prev').val();
-    var spend_q1         = edit_block.find('.ff_spend_q1').val();
-    var spend_q2         = edit_block.find('.ff_spend_q2').val();
-    var spend_q3         = edit_block.find('.ff_spend_q3').val();
-    var spend_q4         = edit_block.find('.ff_spend_q4').val();
-
-
-
     edit_block.hide();
-    preview_block.html(
-      $('<ul/>').append(
-        $('<li/>').append(
-          $('<span/>').text('Funder'),
-          organization || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Spend'),
-          spend || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Budget'),
-          budget || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<ul/>').append(
-            $('<li/>').append(
-              $('<span/>').text('Q4 08-09'),
-              spend_q4_prev || 'N/A'
-            ),
-            $('<li/>').append(
-              $('<span/>').text('Q1 09-10'),
-              spend_q1 || 'N/A'
-            ),
-            $('<li/>').append(
-              $('<span/>').text('Q2 09-10'),
-              spend_q2 || 'N/A'
-            ),
-            $('<li/>').append(
-              $('<span/>').text('Q3 09-10'),
-              spend_q3 || 'N/A'
-            ),
-            $('<li/>').append(
-              $('<span/>').text('Q4 09-10'),
-              spend_q4 || 'N/A'
-            )
-          )
-        )
-      )
-    ).show();
+    preview_block.html('');
+    preview_block.append(build_funding_source_row(edit_block, 'spend', 'Spend'))
+    preview_block.append(build_funding_source_row(edit_block, 'budget', 'Budget'))
+    preview_block.show();
 
     manage_block.find('.edit').remove();
     manage_block.prepend(

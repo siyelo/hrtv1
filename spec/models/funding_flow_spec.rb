@@ -58,6 +58,14 @@ describe FundingFlow do
     end
   end
         
+  describe "#name" do
+    it "returns from and to organizations in the name" do
+      from = Factory.create(:organization, :name => 'Organization 1')
+      to   = Factory.create(:organization, :name => 'Organization 2')
+      funding_flow = Factory.create(:funding_flow, :from => from, :to => to)
+      funding_flow.name.should == "From: #{from} - To: #{to}"
+    end
+  end
 end
 
 # == Schema Information

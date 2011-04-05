@@ -21,6 +21,13 @@ describe ModelHelp do
       it_should_behave_like "comments_cacher"
     end
   end
+
+  describe "#name" do
+    it "returns model_name" do
+      model_help = Factory.create(:model_help, :model_name => 'Model Name')
+      model_help.name.should == 'Model Name'
+    end
+  end
 end
 
 # == Schema Information

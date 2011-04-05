@@ -142,10 +142,10 @@ describe Code do
     end
   end
 
-  describe "name" do
+  describe "#name" do
     it "returns short_display as name" do
-      code = Factory.create(:code, :short_display => 'short_display')
-      code.name.should == 'short_display'
+      code = Factory.create(:code, :short_display => 'Code name')
+      code.name.should == 'Code name'
     end
   end
 

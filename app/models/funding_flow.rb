@@ -5,7 +5,6 @@ class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
 
   configure_act_as_data_element
-  acts_as_commentable
 
   ### Attributes
   attr_accessible :budget, :organization_text, :project_id, :data_response_id,
@@ -35,6 +34,10 @@ class FundingFlow < ActiveRecord::Base
 
   def currency
     project.try(:currency)
+  end
+
+  def name
+    "From: #{from.name} - To: #{to.name}"
   end
 end
 

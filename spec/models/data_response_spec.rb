@@ -140,6 +140,14 @@ describe DataResponse do
       @activity.spend_in_usd.should == 3000
     end
   end
+
+  describe "#name" do
+    it "returns data_response name" do
+      data_request  = Factory.create(:data_request, :title => 'Data Request 1')
+      data_response = Factory.create(:data_response, :data_request => data_request)
+      data_response.name.should == 'Data Request 1'
+    end
+  end
 end
 
 

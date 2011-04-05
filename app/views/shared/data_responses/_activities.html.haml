@@ -38,8 +38,8 @@
             %td= activity.approved
             - unless other_costs
               %td= activity.sub_activities.size
-            %td= n2c(activity.spend, activity.currency)
-            %td= n2c(activity.budget, activity.currency)
+            %td= n2cnds(activity.spend, activity.currency)
+            %td= n2cnds(activity.budget, activity.currency)
             %td.manage
               %ul
                 %li= link_to "Edit", edit_response_activity_path(activity.data_response, activity)

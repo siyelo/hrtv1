@@ -19,7 +19,7 @@ Scenario: See a budget coding breakdown
   When I go to the admin review data response page for organization "WHO", request "Req1"
   And wait a few moments
   Then I should see "Mtef code"
-  And I should see "1,000.00"
+  And I should see "1,000"
 
 # NB: this scenario will only work for 1 activity, 1 classification
 @javascript

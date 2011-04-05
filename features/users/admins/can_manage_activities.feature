@@ -94,5 +94,5 @@ Scenario Outline: An admin can sort activities
       | column_name  | column | text1                 | text2                 | 
       | Project      | 1      | project1              | project2              | 
       | Description  | 2      | activity1 description | activity2 description | 
-      | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               | 
-      | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               | 
+      | Total Spent  | 3      | 1 RWF               | 2 RWF               | 
+      | Total Budget | 4      | 1 RWF               | 2 RWF               | 

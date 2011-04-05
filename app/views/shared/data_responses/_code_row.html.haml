@@ -1,7 +1,7 @@
 - if assignments.has_key?(code.id)
   %li
     = code.short_display
-    = n2c(assignments[code.id].cached_amount, activity.currency)
+    = n2cnds(assignments[code.id].cached_amount, activity.currency)
     - unless code.leaf?
       %ul
         - code.children.each do |child|

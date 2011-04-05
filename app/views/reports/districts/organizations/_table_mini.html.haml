@@ -12,4 +12,4 @@
           - spent_total = organization.spent_sum
           %ul
             %li= n2crs(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
-            %li= "(#{n2c(spent_total, '$')})"
+            %li= "(#{n2cnds(spent_total, '$')})"

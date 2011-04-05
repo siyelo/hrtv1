@@ -9,3 +9,4 @@
     .comment_entry
       .title= comment.title
       .comment= comment.comment
+      .author== sent by #{comment.user.try(:name)}

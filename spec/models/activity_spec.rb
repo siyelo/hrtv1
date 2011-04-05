@@ -958,9 +958,10 @@ describe Activity do
 
         @activity.code_assignments.length.should == 2
         @activity.code_assignments[0].type.should == 'CodingBudgetDistrict'
-        @activity.code_assignments[0].cached_amount.should == 2
         @activity.code_assignments[1].type.should == 'CodingBudgetDistrict'
-        @activity.code_assignments[1].cached_amount.should == 3
+        cached_amounts = @activity.code_assignments.map(&:cached_amount)
+        cached_amounts.should include(2)
+        cached_amounts.should include(3)
       end
 
       it "sums derived classifications when 2 sub implementers in same location" do
@@ -996,9 +997,10 @@ describe Activity do
 
         @activity.code_assignments.length.should == 2
         @activity.code_assignments[0].type.should == 'CodingSpendDistrict'
-        @activity.code_assignments[0].cached_amount.should == 2
         @activity.code_assignments[1].type.should == 'CodingSpendDistrict'
-        @activity.code_assignments[1].cached_amount.should == 3
+        cached_amounts = @activity.code_assignments.map(&:cached_amount)
+        cached_amounts.should include(2)
+        cached_amounts.should include(3)
       end
 
       it "sums derived classifications when 2 sub implementers in same location" do

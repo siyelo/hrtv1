@@ -945,25 +945,25 @@ describe Activity do
         @activity.code_assignments.reload.length.should == 0
       end
 
-      it "derives nothing when activity does not have locations" do
+      it "derives nothing when no implementers has no locations" do
         @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
         @activity.code_assignments.length.should == 0
       end
 
-      it "derives only classifications for the locations in which is this activity" do
-        @activity.locations << @location1
+      it "derives only classifications for the locations of the implementers" do
         @implementer1.locations << @location1
         @implementer2.locations << @location2
 
         @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
 
-        @activity.code_assignments.length.should == 1
+        @activity.code_assignments.length.should == 2
         @activity.code_assignments[0].type.should == 'CodingBudgetDistrict'
         @activity.code_assignments[0].cached_amount.should == 2
+        @activity.code_assignments[1].type.should == 'CodingBudgetDistrict'
+        @activity.code_assignments[1].cached_amount.should == 3
       end
 
-      it "sums derived classifications when sub implementers in sam location" do
-        @activity.locations << @location1
+      it "sums derived classifications when 2 sub implementers in same location" do
         @implementer1.locations << @location1
         @implementer2.locations << @location1
 
@@ -989,19 +989,19 @@ describe Activity do
       end
 
       it "derives only classifications for the locations in which is this activity" do
-        @activity.locations << @location1
         @implementer1.locations << @location1
         @implementer2.locations << @location2
 
         @activity.derive_classifications_from_sub_implementers!('CodingSpendDistrict')
 
-        @activity.code_assignments.length.should == 1
+        @activity.code_assignments.length.should == 2
         @activity.code_assignments[0].type.should == 'CodingSpendDistrict'
         @activity.code_assignments[0].cached_amount.should == 2
+        @activity.code_assignments[1].type.should == 'CodingSpendDistrict'
+        @activity.code_assignments[1].cached_amount.should == 3
       end
 
-      it "sums derived classifications when sub implementers in sam location" do
-        @activity.locations << @location1
+      it "sums derived classifications when 2 sub implementers in same location" do
         @implementer1.locations << @location1
         @implementer2.locations << @location1
 

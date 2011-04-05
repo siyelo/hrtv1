@@ -17,7 +17,7 @@ Background:
   And a funding_flow exists with data_response: the data_response, from: the ngo, to: the provider, budget: "7", spend: "7"
   And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response, project: the project
   And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, budget: "55", spend: "55"
-  And the location is one of the activity's locations
+  #And the location is one of the activity's locations
 
   And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
   And I am signed in as "reporter"

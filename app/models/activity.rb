@@ -368,16 +368,17 @@ class Activity < ActiveRecord::Base
     location_amounts = {}
 
     delete_existing_code_assignments_by_type(coding_type)
+    self.locations = [] # delete all locations
 
     sub_activity_district_code_assignments(coding_type).each do |ca|
-      if locations.include?(ca.code)
-        location_amounts[ca.code] = 0 unless location_amounts[ca.code]
-        location_amounts[ca.code] += ca.amount
-      end
+      location_amounts[ca.code] ||= 0
+      location_amounts[ca.code] += ca.amount
     end
 
-    # create new district assignments
-    location_amounts.each{|location, amount| fake_ca(klass, location, amount).save!}
+    location_amounts.each do |location, amount| 
+      self.locations << location
+      fake_ca(klass, location, amount).save!
+    end
 
     self.update_classified_amount_cache(klass)
   end

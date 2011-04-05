@@ -264,5 +264,3 @@ Feature: Reporter can manage activities
       When I follow "Add" within ".sub-head:nth-child(2)"
       Then I should not see "Budget (planned expenditure)"
       And  I should see "Past Activity Expenditure"
-
-

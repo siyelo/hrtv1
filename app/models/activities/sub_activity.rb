@@ -13,7 +13,7 @@ class SubActivity < Activity
 
   ### Delegates
   [:projects, :name, :description, :start_date, :end_date, :approved,
-   :text_for_beneficiaries, :beneficiaries, :text_for_targets].each do |method|
+   :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
 

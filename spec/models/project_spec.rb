@@ -207,6 +207,26 @@ describe Project do
     it_should_behave_like "location cloner"
   end
 
+
+  describe 'Currency override default' do 
+     before :each do
+       @project       = Factory(:project, :data_response => Factory(:data_response, :currency => "RWF"))
+     end
+     it "should return the Data Response currency if no currency overridden" do
+       @project.currency.should == 'RWF'
+       @project.currency = 'EUR'
+       @project.save
+       @project.currency.should == 'EUR'
+     end
+    
+    it "should not return blank" do
+      @project1       = Factory.build(:project, :data_response => Factory(:data_response, :currency => "GBP"))
+      @project1.save
+      @project1.currency.should == "GBP"
+    end
+    
+  end
+
   describe 'Currency cache update' do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
@@ -219,13 +239,6 @@ describe Project do
       @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
 
-    end
-
-    it "should return the Data Response currency if no currency overridden" do
-      @project.currency.should == 'RWF'
-      @project.currency = 'EUR'
-      @project.save
-      @project.currency.should == 'EUR'
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -258,5 +271,5 @@ describe Project do
       activity.save
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
-  end
+  end  
 end

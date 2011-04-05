@@ -62,8 +62,9 @@
                var sumPercentage = 0;
                parent            = $("input[type='text'][id$=percentage]:first", $(this).closest("li").closest("ul").closest("li"));
                parent_percentage = $.trim( parent.val() );
-               sibling_percents  = ($(this).closest("li").closest("ul")).find("> li > div > input[type='text'][id$=_percentage]");
+               sibling_percents  = ($(this).closest("li").closest("ul")).find("> li > div > div > input[type='text'][id$=_percentage]");
                sibling_percents.each(function(index) {
+
                  val = parseFloat( $.trim( $(this).val() ) )
                  if ( !isNaN(val) )
                    sumPercentage += val;

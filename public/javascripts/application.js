@@ -1079,7 +1079,8 @@ $(function () {
   });
 
   // CSV file upload
-  $("#csv_file").click(function() {
+  $("#csv_file").click( function(e) {
+    e.preventDefault();
     $("#import").slideToggle();
   });
 

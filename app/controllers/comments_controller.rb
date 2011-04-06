@@ -123,7 +123,11 @@ class CommentsController < Reporter::BaseController
           response_activity_url(comment.commentable.data_response, comment.commentable)
         end
       elsif comment.commentable_type == "Project"
-        response_project_url(comment.commentable.data_response, comment.commentable)
+        if current_user.admin?
+          response_project_url(comment.commentable.data_response, comment.commentable)
+        else
+          edit_response_project_url(comment.commentable.data_response, comment.commentable)
+        end
       else
         comments_url
       end

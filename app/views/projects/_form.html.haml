@@ -2,10 +2,10 @@
 - button_text = editing ? "Update Project" : "Create New Project"
 
 - unless @project.new_record?
-  .form_aside
-    %p= link_to "Remove this Project", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => "warn"
+  .delete_aside
+    = link_to "X", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => "delete_btn", :title => 'Remove this Project'
 
-- f.inputs :class => 'wrap-80 inputs' do
+- f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
     %ul.dashboard_section

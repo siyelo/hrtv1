@@ -15,6 +15,13 @@ class ProjectsController < Reporter::BaseController
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
+  def edit
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    edit!
+  end
+
   def create
     create! do |success, failure|
       success.html { redirect_to response_projects_url(@data_response) }

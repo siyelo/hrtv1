@@ -105,7 +105,6 @@ Scenario: Reporter can see error when invalid csv file is attached for upload an
   When I follow "Download template"
   Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
-  @wip
 Scenario: A reporter can create comments for a project
   Given a project exists with name: "project1", data_response: the data_response
   When I follow "Projects"
@@ -115,9 +114,7 @@ Scenario: A reporter can create comments for a project
   And I press "Create Comment"
   Then I should see "Comment title"
   And I should see "Comment body"
-  And I should see "project1"
 
-  @wip
 Scenario: A reporter can create comments for an activity and see comment errors
   Given a project exists with name: "project1", data_response: the data_response
   When I follow "Projects"
@@ -135,10 +132,8 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I press "Create Comment"
   Then I should see "Comment title"
   And I should see "Comment body"
-  And I should see "project1"
 
-
-@javascript @wip
+@javascript
 Scenario: A reporter can create in flows for a project
   When I follow "Create Project"
   And I fill in "Name" with "Project1"
@@ -147,26 +142,40 @@ Scenario: A reporter can create in flows for a project
   And I fill in "End date" with "2011-12-01"
   And I follow "Add funding source"
   And I select "organization1" from "From" within ".fields"
-  And I fill in "Budget" with "111" within ".fields"
-  And I fill in "Spent" with "222" within ".fields"
-  And I fill in "Q4 08-09" with "333" within ".fields"
-  And I fill in "Q1 09-10" with "444" within ".fields"
-  And I fill in "Q2 09-10" with "555" within ".fields"
-  And I fill in "Q3 09-10" with "666" within ".fields"
-  And I fill in "Q4 09-10" with "777" within ".fields"
+
+  And I fill in "Spent" with "11" within ".fields"
+  And I fill in "Q4 08-09" with "22" within ".fields .spend"
+  And I fill in "Q1 09-10" with "33" within ".fields .spend"
+  And I fill in "Q2 09-10" with "44" within ".fields .spend"
+  And I fill in "Q3 09-10" with "55" within ".fields .spend"
+  And I fill in "Q4 09-10" with "66" within ".fields .spend"
+
+  And I fill in "Budget" with "11" within ".fields"
+  And I fill in "Q4 08-09" with "22" within ".fields .budget"
+  And I fill in "Q1 09-10" with "33" within ".fields .budget"
+  And I fill in "Q2 09-10" with "44" within ".fields .budget"
+  And I fill in "Q3 09-10" with "55" within ".fields .budget"
+  And I fill in "Q4 09-10" with "66" within ".fields .budget"
   And I press "Create Project"
   Then I should see "Project was successfully created"
-  # And I should see "organization1"
-  And I should see "111"
-  And I should see "222"
-  And I should see "333"
-  And I should see "444"
-  And I should see "555"
-  And I should see "666"
-  And I should see "777"
-  And I should see "Project1"
-  When I follow "Edit"
-  And I follow "Edit" within ".funding_flows"
-  And I fill in "Q4 09-10" with "7778" within ".fields"
+
+  When I follow "Project1"
+  Then the "Spent" field within ".fields" should contain "11"
+  And the "Q4 08-09" field within ".fields .spend" should contain "22"
+  And the "Q1 09-10" field within ".fields .spend" should contain "33"
+  And the "Q2 09-10" field within ".fields .spend" should contain "44"
+  And the "Q3 09-10" field within ".fields .spend" should contain "55"
+  And the "Q4 09-10" field within ".fields .spend" should contain "66"
+
+  And the "Budget" field within ".fields" should contain "11"
+  And the "Q4 08-09" field within ".fields .budget" should contain "22"
+  And the "Q1 09-10" field within ".fields .budget" should contain "33"
+  And the "Q2 09-10" field within ".fields .budget" should contain "44"
+  And the "Q3 09-10" field within ".fields .budget" should contain "55"
+  And the "Q4 09-10" field within ".fields .budget" should contain "66"
+
+  When I follow "Edit" within ".funding_flows"
+  And I fill in "Budget" with "7778" within ".fields"
   And I press "Update Project"
-  And I should see "7778"
+  And I follow "Project1"
+  Then the "Budget" field within ".fields" should contain "7778"

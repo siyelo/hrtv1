@@ -14,6 +14,13 @@ class OtherCostsController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def edit
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    edit!
+  end
+
   def show
     @comment = Comment.new
     @comment.commentable = resource

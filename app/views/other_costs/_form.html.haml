@@ -1,8 +1,8 @@
 - unless @other_cost.new_record?
-  .form_aside
-    %p= link_to "Remove this Other Cost", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure you want to delete this other cost?", :method => :delete, :class => "warn"
+  .delete_aside
+    = link_to "X", response_other_cost_path(@data_response, @other_cost), :confirm => "Are you sure you want to delete this other cost?", :method => :delete, :class => "delete_btn", :title => 'Remove this Other Cost'
 
-- f.inputs :class => 'wrap-80 inputs' do
+- f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
     %ul.dashboard_section

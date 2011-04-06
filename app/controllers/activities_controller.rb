@@ -17,6 +17,13 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def edit
+    @comment = Comment.new
+    @comment.commentable = resource
+    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    edit!
+  end
+
   def create
     create! do |success, failure|
       success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }

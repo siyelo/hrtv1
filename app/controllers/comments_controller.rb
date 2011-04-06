@@ -120,7 +120,7 @@ class CommentsController < Reporter::BaseController
         if current_user.admin?
           admin_activity_url(comment.commentable)
         else
-          response_activity_url(comment.commentable.data_response, comment.commentable)
+          edit_response_activity_url(comment.commentable.data_response, comment.commentable)
         end
       elsif comment.commentable_type == "Project"
         if current_user.admin?

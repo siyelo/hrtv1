@@ -51,9 +51,8 @@ Scenario: Reporter can CRUD activities
   #And I should not see "activity1"
   #And I should not see "activity2"
 
-@wip
 Scenario Outline: Reporter can CRUD activities and see errors
-  When In follow "Add" within ".sub-head:nth-child(2)"
+  When I follow "Add" within ".sub-head:nth-child(2)"
   And I fill in "Name" with "<name>"
   And I fill in "Description" with "activity description"
   And I fill in "Start date" with "<start_date>"
@@ -91,17 +90,15 @@ Scenario: Reporter can enter 5 year budget projections
   And the "activity_budget4" field should contain "4000"
   And the "activity_budget5" field should contain "5000"
 
-@wip
 Scenario: A reporter can create comments for an activity
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-  When I follow "Activities"
-  And I follow "Activity1 description"
+  When I follow "Projects"
+  When I follow "Activity1 description"
   And I fill in "Title" with "Comment title"
   And I fill in "Comment" with "Comment body"
   And I press "Create Comment"
   Then I should see "Comment title"
   And I should see "Comment body"
-  And I should see "Activity1 description"
 
 @wip
 Scenario: Reporter can upload activities
@@ -126,7 +123,6 @@ Scenario: Adding malformed CSV file doesn't throw exception
   Then I should see "Your CSV file does not seem to be properly formatted"
 
 
-
 @wip
 Scenario: Reporter can see error when invalid csv file is attached for upload and download template
 When I attach the file "spec/fixtures/invalid.csv" to "File"
@@ -135,11 +131,11 @@ When I attach the file "spec/fixtures/invalid.csv" to "File"
   When I follow "Download template"
   Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget2,budget3,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"
 
-@wip 
+@run
 Scenario: A reporter can create comments for an activity and see comment errors
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-  When I follow "Activities"
-  And I follow "Activity1 description"
+  When I follow "Projects"
+  When I follow "Activity1 description"
   And I press "Create Comment"
   Then I should see "can't be blank" within "#comment_title_input"
   And I should see "can't be blank" within "#comment_comment_input"
@@ -153,9 +149,7 @@ Scenario: A reporter can create comments for an activity and see comment errors
   And I press "Create Comment"
   Then I should see "Comment title"
   And I should see "Comment body"
-  And I should see "Activity1 description"
 
-@wip
 Scenario: Does not email users when a comment is made by a reporter
   Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
   And no emails have been sent
@@ -167,7 +161,6 @@ Scenario: Does not email users when a comment is made by a reporter
   And I press "Create Comment"
   And "reporter_1@example.com" should not receive an email
   
-@wip
 Scenario: A reporter can select implementer for an activity
   When I follow "Add" within ".sub-head:nth-child(2)"
   # check if by default reporter organization is selected
@@ -176,10 +169,10 @@ Scenario: A reporter can select implementer for an activity
   And I fill in "Description" with "Activity1 description"
   And I select "organization1" from "Implementer"
   And I select "project1" from "Project"
-  And I press "Create New Activity"
+  And I press "Save & Next"
   Then I should see "Activity was successfully created"
-  And I should see "Activity1 description"
-  And I should see "organization1"
+  When I follow "Details"
+  Then the "Implementer" field should contain "organization1"
 
 @wip
 Scenario: A reporter can filter activities

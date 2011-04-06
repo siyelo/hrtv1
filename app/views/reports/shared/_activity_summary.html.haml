@@ -20,13 +20,13 @@
     %tr
       %td Total Spend
       %td
-        = n2c(@activity.spend,  @activity.currency.to_s) || 0
-        %p== (Coding Total#{" (District)" if @location}: #{n2c(@spent_assignments_sum, "USD")})
+        = n2cnds(@activity.spend,  @activity.currency.to_s) || 0
+        %p== (Coding Total#{" (District)" if @location}: #{n2cnds(@spent_assignments_sum, "USD")})
     %tr
       %td Total Budget
       %td
-        = n2crs(@activity.budget,  @activity.currency.to_s)
-        %p== (Coding Total#{" (District)" if @location}: #{n2c(@budget_assignments_sum, "USD")})
+        = n2cndrs(@activity.budget,  @activity.currency.to_s)
+        %p== (Coding Total#{" (District)" if @location}: #{n2cnds(@budget_assignments_sum, "USD")})
 
     %tr
       %td

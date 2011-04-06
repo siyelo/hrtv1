@@ -5,29 +5,29 @@
       %td= "#{project.start_date} to #{project.end_date}"
     %tr
       %td Total Budget:
-      %td= n2c(project.entire_budget, project.currency || @data_response.currency)
+      %td= n2cnds(project.entire_budget, project.currency || @data_response.currency)
     %tr
       %td Total Budget (current FY):
-      %td= n2c(project.budget, project.currency || @data_response.currency)
+      %td= n2cnds(project.budget, project.currency || @data_response.currency)
     %tr
       %td Total Spent (past FY):
-      %td= n2c(project.spend, project.currency || @data_response.currency)
+      %td= n2cnds(project.spend, project.currency || @data_response.currency)
     - unless @policy_maker
       %tr
         %td Spent Q1:
-        %td=  n2c(project.spend_q1, project.currency || @data_response.currency)
+        %td=  n2cnds(project.spend_q1, project.currency || @data_response.currency)
 
       %tr
         %td Spent Q2:
-        %td=  n2c(project.spend_q2, project.currency || @data_response.currency)
+        %td=  n2cnds(project.spend_q2, project.currency || @data_response.currency)
 
       %tr
         %td Spent Q3:
-        %td=  n2c(project.spend_q3, project.currency || @data_response.currency)
+        %td=  n2cnds(project.spend_q3, project.currency || @data_response.currency)
 
       %tr
         %td Spent Q4:
-        %td=  n2c(project.spend_q4, project.currency || @data_response.currency)
+        %td=  n2cnds(project.spend_q4, project.currency || @data_response.currency)
 
     %tr
       %td== Districts (#{project.locations.count}/#{Location.count}):

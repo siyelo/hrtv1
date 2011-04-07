@@ -1,10 +1,6 @@
 - editing     = controller.action_name == 'edit' ? true : false
 - button_text = editing ? "Update Project" : "Create New Project"
 
-- unless @project.new_record?
-  .delete_aside
-    = link_to "X", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => "delete_btn", :title => 'Remove this Project'
-
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
@@ -59,5 +55,12 @@
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this project only. (Your default is #{@data_response.currency})", :required => false
       = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint =>"all the districts/provinces in which this Project was implemented. If a project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
 
-- f.buttons :class => 'wrap-80 buttons' do
+- f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"
+
+- unless @project.new_record?
+  .delete_section
+    = link_to "Delete this Project", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete, :class => 'delete_action'
+    %p
+      %strong Warning:
+      Once you delete a project, you will lose all data associated with it, and there is no undo.

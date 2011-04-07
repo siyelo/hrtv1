@@ -42,7 +42,7 @@ Feature: Reporter can manage projects
         #And I should not see "Location1"
 
       When I follow "Project2"
-        And I follow "Remove this Project"
+        And I follow "Delete this Project"
       Then I should see "Project was successfully destroyed"
         #And I should not see "Project1"
         #And I should not see "Project2"

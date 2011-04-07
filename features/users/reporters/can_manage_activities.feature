@@ -48,7 +48,7 @@ Feature: Reporter can manage activities
 
       When I follow "activity2"
         And I confirm the popup dialog
-        And I follow "Remove this Activity"
+        And I follow "Delete this Activity"
       Then I should see "Activity was successfully destroyed"
         #And I should not see "activity1"
         #And I should not see "activity2"

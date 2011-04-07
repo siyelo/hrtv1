@@ -33,7 +33,7 @@ Feature: Reporter can manage other costs
         And I should not see "other_cost1"
 
       When I follow "other_cost2"
-        And I follow "Remove this Other Cost"
+        And I follow "Delete this Other Cost"
       Then I should see "Other Cost was successfully destroyed"
         And I should not see "other_cost1"
         And I should not see "other_cost2"

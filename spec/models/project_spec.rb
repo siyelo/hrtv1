@@ -393,6 +393,7 @@ describe Project do
       @proj4.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
     end
     
+<<<<<<< HEAD
     it "returns funder as UFS when funder does not have any in flows" do
       Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2)
       ultimate_funding_sources = @proj2.ultimate_funding_sources

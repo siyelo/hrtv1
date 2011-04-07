@@ -159,12 +159,36 @@ class Project < ActiveRecord::Base
     return saved, errors
   end
 
+  def ultimate_funding_sources
+    trace_ultimate_funding_source(funding_flows.map(&:from))
+  end
+
   private
 
     def validate_budgets
       errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 
+    def trace_ultimate_funding_source(organizations, traced=[])
+      funding_sources = []
+
+      organizations.each do |organization|
+        in_flows_amount  = organization.in_flows.map(&:budget).sum
+        out_flows_amount = organization.out_flows.map(&:budget).sum
+
+        # if more out flows than in flows it's a funding source
+        if out_flows_amount > in_flows_amount
+          funding_sources << organization
+        end
+
+        if organization.in_flows.present? && !traced.include?(organization)
+          traced << organization
+          funding_sources.concat(trace_ultimate_funding_source(organization.in_flows.map(&:from), traced))
+        end
+      end
+
+      funding_sources.uniq
+    end
 end
 
 

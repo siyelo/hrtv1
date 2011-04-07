@@ -273,8 +273,6 @@ describe Project do
     end
   end
 
-
-
   describe "#ultimate_funding_sources" do
 
     before :each do

@@ -174,11 +174,13 @@ class Project < ActiveRecord::Base
       funding_sources = []
 
       organizations.each do |organization|
+        self_funded = organization.in_flows.map(&:from).include?(organization)
+
         in_flows_amount  = organization.in_flows.map{|ff| ff.budget || 0}.sum
         out_flows_amount = organization.out_flows.map{|ff| ff.budget || 0}.sum
 
         # if more out flows than in flows it's a funding source
-        if out_flows_amount > in_flows_amount
+        if out_flows_amount > in_flows_amount || self_funded
           funding_sources << organization
         end
 

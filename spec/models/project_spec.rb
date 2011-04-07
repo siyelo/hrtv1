@@ -458,6 +458,8 @@ describe Project do
     end
     
     it "returns funder and intermediate as UFSs when funder does not have any in flows and intermediate has more out flows than in flows" do
+      # lets have it log an error / inconsistency in data and continue as if data is okay
+      # NOT adding the intermediary in but just using it's UFS
       Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2,
         :budget => 50)
       Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
@@ -467,6 +469,8 @@ describe Project do
       ultimate_funding_sources.count.should == 2
       ultimate_funding_sources.should include(@org1)
       ultimate_funding_sources.should include(@org2)
+      @proj3.ultimate_funding_sources.should == [@org1]
+      # TEST that error was logged
     end
 
     it "returns USF by activity implementer" do

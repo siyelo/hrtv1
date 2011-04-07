@@ -160,7 +160,8 @@ class Project < ActiveRecord::Base
   end
 
   def ultimate_funding_sources
-    trace_ultimate_funding_source(funding_flows.map(&:from))
+    funders = funding_flows.map(&:from).reject{|f| f.nil?}
+    trace_ultimate_funding_source(funders)
   end
 
   private
@@ -173,8 +174,8 @@ class Project < ActiveRecord::Base
       funding_sources = []
 
       organizations.each do |organization|
-        in_flows_amount  = organization.in_flows.map(&:budget).sum
-        out_flows_amount = organization.out_flows.map(&:budget).sum
+        in_flows_amount  = organization.in_flows.map{|ff| ff.budget || 0}.sum
+        out_flows_amount = organization.out_flows.map{|ff| ff.budget || 0}.sum
 
         # if more out flows than in flows it's a funding source
         if out_flows_amount > in_flows_amount
@@ -183,7 +184,8 @@ class Project < ActiveRecord::Base
 
         if organization.in_flows.present? && !traced.include?(organization)
           traced << organization
-          funding_sources.concat(trace_ultimate_funding_source(organization.in_flows.map(&:from), traced))
+          funders = organization.in_flows.map(&:from).reject{|f| f.nil?}
+          funding_sources.concat(trace_ultimate_funding_source(funders, traced))
         end
       end
 

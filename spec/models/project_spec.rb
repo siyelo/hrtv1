@@ -295,13 +295,13 @@ describe Project do
       @org2 = Factory(:organization)
       @org3 = Factory(:organization)
       @org4 = Factory(:organization)
-      response1 = Factory(:data_response, :organization => @org1,
+      @response1 = Factory(:data_response, :organization => @org1,
                           :data_request => request)
-      response2 = Factory(:data_response, :organization => @org2,
+      @response2 = Factory(:data_response, :organization => @org2,
                           :data_request => request)
-      response3 = Factory(:data_response, :organization => @org3,
+      @response3 = Factory(:data_response, :organization => @org3,
                           :data_request => request)
-      response4 = Factory(:data_response, :organization => @org4,
+      @response4 = Factory(:data_response, :organization => @org4,
                           :data_request => request)
       
       @proj1 =  Factory(:project, :data_response => response1)
@@ -358,6 +358,10 @@ describe Project do
       @proj2 = Factory(:project, :data_response => response2)
       @proj3 = Factory(:project, :data_response => response3)
       @proj4 = Factory(:project, :data_response => response4)
+      @proj1 = Factory(:project, :data_response => @response1)
+      @proj2 = Factory(:project, :data_response => @response2)
+      @proj3 = Factory(:project, :data_response => @response3)
+      @proj4 = Factory(:project, :data_response => @response4)
     end
     
     it "returns no UFS if project has no funder" do
@@ -393,7 +397,6 @@ describe Project do
       @proj4.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
     end
     
-<<<<<<< HEAD
     it "returns funder as UFS when funder does not have any in flows" do
       Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2)
       ultimate_funding_sources = @proj2.ultimate_funding_sources
@@ -430,6 +433,23 @@ describe Project do
       ultimate_funding_sources.count.should == 2
       ultimate_funding_sources.should include(@org1)
       ultimate_funding_sources.should include(@org2)
+    end
+
+    it "returns USF by activity implementer" do
+      @proj21 = Factory(:project, :data_response => @response2)
+      @proj22 = Factory(:project, :data_response => @response2)
+
+      Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj21, 
+              :budget => 50)
+      Factory(:funding_flow, :from => @org2, :to => @org2, :project => @proj21, 
+              :budget => 50)
+
+      activity = Factory.create(:activity, :project => @proj21, :provider => @org3,
+                                :data_response => @response2)
+
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3, 
+              :budget => 50)
+      @proj3.ultimate_funding_sources.should == [@org1]
     end
   end
 end

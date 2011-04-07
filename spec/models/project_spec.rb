@@ -65,7 +65,7 @@ describe Project do
     end
 
     it " should NOT create workflow records after save" do
-      proj  = Factory.create(:project)
+      proj  = Factory(:project)
       proj.funding_flows.should have(0).items
     end
   end
@@ -172,7 +172,7 @@ describe Project do
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory.create(:project)
+        @commentable = Factory(:project)
       end
 
       it_should_behave_like "comments_cacher"
@@ -273,6 +273,8 @@ describe Project do
     end
   end
 
+
+
   describe "#ultimate_funding_sources" do
 
     before :each do
@@ -288,6 +290,7 @@ describe Project do
                           :data_request => request)
       @proj0 = @proj_with_no_funding_sources = Factory(:project, :data_response => response0)
 
+      request = Factory(:data_request)
       @org1 = Factory(:organization)
       @org2 = Factory(:organization)
       @org3 = Factory(:organization)
@@ -351,6 +354,50 @@ describe Project do
       proj_funded_by(@proj1, @org0)
       proj_funded_by(@proj2, @org1)
       @proj2.ultimate_funding_sources.should == [@org_with_empty_data_response]
+      @proj1 = Factory(:project, :data_response => response1)
+      @proj2 = Factory(:project, :data_response => response2)
+      @proj3 = Factory(:project, :data_response => response3)
+      @proj4 = Factory(:project, :data_response => response4)
+    end
+    
+    it "returns no UFS if project has no funder" do
+      @proj1.ultimate_funding_sources.should == []
+    end
+    
+    it "returns self as the UFS if project was self-funded" do
+      Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1)
+      @proj1.ultimate_funding_sources.should == [@org1]
+    end
+    
+    it "returns n-1 (upstream) funder as the UFS" do
+      Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2)
+      @proj2.ultimate_funding_sources.should == [@org1]
+    end
+    
+    it "returns both n-1 upstream sources for a single project" do
+      Factory(:funding_flow, :from => @org1, :to => @org3, :project => @proj3)
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3)
+      @proj3.ultimate_funding_sources.sort_by{ |e| e.id }.should == [@org1, @org2]
+    end
+    
+    it "returns the n-2 upstream funder as the UFS" do
+      Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2)
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3)
+      @proj3.ultimate_funding_sources.should == [@org1]
+    end    
+    
+    it "returns both n-2 upstream funders as the UFS's" do
+      Factory(:funding_flow, :from => @org1, :to => @org3, :project => @proj3)
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3)
+      Factory(:funding_flow, :from => @org3, :to => @org4, :project => @proj4)
+      @proj4.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
+    end
+    
+    it "returns funder as UFS when funder does not have any in flows" do
+      Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2)
+      ultimate_funding_sources = @proj2.ultimate_funding_sources
+      ultimate_funding_sources.count.should == 1
+      ultimate_funding_sources.should include(@org1)
     end
 
     it "returns both n-1 upstream sources for a single project" do
@@ -378,6 +425,10 @@ describe Project do
       Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
         :budget => 75)
       @proj3.ultimate_funding_sources.sort_by{ |e| e.id }.should == [@org1, @org2]
+      ultimate_funding_sources = @proj3.ultimate_funding_sources
+      ultimate_funding_sources.count.should == 2
+      ultimate_funding_sources.should include(@org1)
+      ultimate_funding_sources.should include(@org2)
     end
   end
 end

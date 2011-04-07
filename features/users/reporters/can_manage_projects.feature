@@ -141,6 +141,7 @@ Feature: Reporter can manage projects
         And I should see "Comment body"
 
 
+
     @javascript
     Scenario: A reporter can create in flows for a project
       When I follow "Create Project"
@@ -185,3 +186,22 @@ Feature: Reporter can manage projects
         And I press "Update Project"
         And I follow "Project1"
       Then the "Budget" field within ".fields" should contain "7778"
+
+
+
+  Scenario: If the data_request spend is not checked, spend should not show up in the project screen
+      Given I follow "Sign Out"
+      And an organization exists with name: "organization5"
+      And a data_request exists with title: "data_request2", spend: false
+      And a data_response exists with data_request: the data_request, organization: the organization
+      And a reporter exists with username: "reporter2", organization: the organization
+      And a location exists with short_display: "Location1"
+      And a location exists with short_display: "Location2"
+      And I am signed in as "reporter2"
+      And I follow "data_request2"
+      And I follow "Projects"
+
+      When I follow "Create Project"
+      Then I should not see "Past Project Expenditure"
+      And I should not see "Quarterly Spend"
+      And I should see "Budget"

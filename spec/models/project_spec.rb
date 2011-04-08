@@ -352,13 +352,13 @@ describe Project do
       @proj1.ultimate_funding_sources.should == [@org_with_empty_data_response]
     end
 
-    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" 
+    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" do
       proj_funded_by(@proj1, @org_with_empty_data_response)
       proj_funded_by(@proj2, @org1)
       @proj2.ultimate_funding_sources.should == [@org_with_empty_data_response]
     end
 
-    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with no dr" 
+    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with no dr" do
       proj_funded_by(@proj1, @org_with_no_data_response)
       proj_funded_by(@proj2, @org1)
       @proj2.ultimate_funding_sources.should == [@org_with_no_data_response]

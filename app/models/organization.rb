@@ -102,6 +102,9 @@ class Organization < ActiveRecord::Base
     return saved, errors
   end
 
+  def has_provider?(organization)
+    projects.map(&:activities).flatten.map(&:provider).include?(organization)
+  end
 end
 
 

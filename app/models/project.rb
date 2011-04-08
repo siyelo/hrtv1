@@ -161,7 +161,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = funding_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(funders)
+    trace_ultimate_funding_source(organization, funders)
   end
 
   private
@@ -170,28 +170,40 @@ class Project < ActiveRecord::Base
       errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 
-    def trace_ultimate_funding_source(organizations, traced=[])
+    def trace_ultimate_funding_source(organization, funders)
       funding_sources = []
 
-      organizations.each do |organization|
-        self_funded = organization.in_flows.map(&:from).include?(organization)
+      funders.each do |funder|
+        self_flows = funder.in_flows.select{|f| f.from == funder}
+        parent_flows = funder.in_flows.select{|f| f.from != funder}
 
-        in_flows_amount  = organization.in_flows.map{|ff| ff.budget || 0}.sum
-        out_flows_amount = organization.out_flows.map{|ff| ff.budget || 0}.sum
-
-        # if more out flows than in flows it's a funding source
-        if out_flows_amount > in_flows_amount || self_funded
-          funding_sources << organization
+        # real UFS - self funded organization that funds other organizations
+        # i.e. has activity(ies) with the organization as implementer
+        if implementer_in_flows?(organization, self_flows)
+          funding_sources << funder
         end
 
-        if organization.in_flows.present? && !traced.include?(organization)
-          traced << organization
-          funders = organization.in_flows.map(&:from).reject{|f| f.nil?}
-          funding_sources.concat(trace_ultimate_funding_source(funders, traced))
+        # potential UFS - parent funded organization that funds other organizations
+        # i.e. does not have any activity(ies) with organization as implementer
+        unless implementer_in_flows?(organization, parent_flows)
+          self_funded = funder.in_flows.map(&:from).include?(funder)
+
+          if self_funded
+            funding_sources << funder
+          elsif funder.in_flows.empty? # when funder has blank data response
+            funding_sources << funder
+          end
         end
+
+        # keep looking in parent funders
+        funding_sources.concat(trace_ultimate_funding_source(funder, parent_flows.map(&:from)))
       end
 
       funding_sources.uniq
+    end
+
+    def implementer_in_flows?(organization, flows)
+      flows.map(&:project).map(&:activities).flatten.map(&:provider).include?(organization)
     end
 end
 

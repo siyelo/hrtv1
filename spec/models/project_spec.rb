@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+require 'set'
 
 describe Project do
 
@@ -295,6 +296,14 @@ describe Project do
       @org2 = Factory(:organization)
       @org3 = Factory(:organization)
       @org4 = Factory(:organization)
+
+      @org_with_no_data_response    = Factory(:organization)
+      @org_with_empty_data_response = Factory(:organization)
+      request   = Factory(:data_request)
+
+      Factory(:data_response, :organization => @org_with_empty_data_response,
+              :data_request => request)
+      @response0 = Factory(:data_response, :organization => @org0, :data_request => request)
       @response1 = Factory(:data_response, :organization => @org1,
                           :data_request => request)
       @response2 = Factory(:data_response, :organization => @org2,
@@ -445,6 +454,21 @@ describe Project do
       should_be_org_regardless_of_activities_when_up_has_one_ufs(@org0)
     end
 
+#    potentially meaningful edge case
+#    it "detects flows that organizations did not self report but donor did" do 
+#      proj_funded_by(@proj1, @org1)
+#      Factory.create(:activity, :project => @proj1, :provider => @org2,
+#                                :data_response => @proj1.data_response)
+#      #proj2 has no activities or funders
+#      @proj2.ultimate_funding_sources.should == [@org1]
+#    end
+
+#    it "does not detects flows that implementer reported but donor did not when implementer reported funding sources for a project" do
+#      proj_funded_by(@proj2, @org1)
+#      proj_funded_by(@proj1, @org0)
+#      @proj2.ultimate_funding_sources.should == [@org1]
+#    end
+
     it "returns both n-1 upstream sources for a single project" do
       proj_funded_by(@proj3, @org1) 
       proj_funded_by(@proj3, @org2) 
@@ -471,13 +495,26 @@ describe Project do
       @proj3.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
     end
 
-    it "uses activities in projects of n-1 upstream for UFS" do
+    it "disambiguates funders with activities in projects of n-1 upstream for UFS" do
+      self_funded(@proj1)
       proj_funded_by(@proj11, @org1)
       proj_funded_by(@proj12, @org2)
       proj_funded_by(@proj3, @org1)
       Factory.create(:activity, :project => @proj12, :provider => @org3,
                                 :data_response => @proj12.data_response)
       @proj3.ultimate_funding_sources.should == [@org2]
+    end
+
+    it "uses activities in projects of n-1 upstream for UFS as it goes up" do
+      proj_funded_by(@proj11, @org1)
+      proj_funded_by(@proj12, @org2)
+      proj_funded_by(@proj2, @org0) #UFS of org2 is org0
+      proj_funded_by(@proj3, @org1)
+      @proj31 = Factory(:project, :data_response => @response3)
+      
+      Factory.create(:activity, :project => @proj12, :provider => @org3,
+                                :data_response => @proj12.data_response)
+      @proj3.ultimate_funding_sources.should == [@org0]
     end
 
     it "returns funder and intermediate as UFSs when funder does not have any in flows and intermediate has more out flows than in flows" do

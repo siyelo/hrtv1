@@ -452,6 +452,12 @@ describe Project do
       should_be_org_regardless_of_activities_when_up_has_one_ufs(@org0)
     end
 
+    it "returns only self when project self-funded even if org has many other projs with other funders" do 
+      proj_funded_by(@proj1, @org1)
+      proj_funded_by(@proj12, @org0)
+      proj_funded_by(@proj11, @org2)
+      @proj1.ultimate_funding_sources.should == [@org1]
+    end
 #    potentially meaningful edge case
 #    it "detects flows that organizations did not self report but donor did" do 
 #      proj_funded_by(@proj1, @org1)

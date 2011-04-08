@@ -1,12 +1,12 @@
 require 'fastercsv'
 
-projects = Project.find(:all, :limit => 5)
+projects = Project.find(:all, :limit => 100)
 #projects = Project.all
 total = projects.length
 
 csv = FasterCSV.generate do |csv|
   # header
-  row = ['Project ID', 'Project name', 'Ultimate funding sources']
+  row = ['Project ID', 'Project name', 'Funding Sources', 'Ultimate funding sources']
   csv << row
 
   # data
@@ -16,6 +16,7 @@ csv = FasterCSV.generate do |csv|
     row = []
     row << project.id
     row << project.name
+    row << project.in_flows.map(&:from).join(";")
     row << project.ultimate_funding_sources.map(&:name).join(', ')
     csv << row
   end

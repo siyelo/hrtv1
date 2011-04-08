@@ -1,6 +1,7 @@
 require 'fastercsv'
 
 projects = Project.find(:all, :limit => 5)
+#projects = Project.all
 total = projects.length
 
 csv = FasterCSV.generate do |csv|

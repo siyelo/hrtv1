@@ -312,6 +312,13 @@ describe Project do
 
     it "returns no UFS if project has no funder" do
       @proj0.ultimate_funding_sources.should == []
+      @proj0 = Factory(:project, :data_response => @response0)
+      @proj1 = Factory(:project, :data_response => @response1)
+      @proj11 = Factory(:project, :data_response => @response1)
+      @proj12 = Factory(:project, :data_response => @response1)
+      @proj2 = Factory(:project, :data_response => @response2)
+      @proj3 = Factory(:project, :data_response => @response3)
+      @proj4 = Factory(:project, :data_response => @response4)
     end
 
     def proj_funded_by(proj, funder)
@@ -457,6 +464,22 @@ describe Project do
       @proj4.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
     end
     
+    it "cant disambiguate funders without activities in projects of n-1 upstream for UFS" do
+      proj_funded_by(@proj11, @org1)
+      proj_funded_by(@proj12, @org2)
+      proj_funded_by(@proj3, @org1) 
+      @proj3.ultimate_funding_sources{ |e| e.id }.should == [@org1, @org2]
+    end
+
+    it "uses activities in projects of n-1 upstream for UFS" do
+      proj_funded_by(@proj11, @org1)
+      proj_funded_by(@proj12, @org2)
+      proj_funded_by(@proj3, @org1)
+      Factory.create(:activity, :project => @proj12, :provider => @org3,
+                                :data_response => @proj12.data_response)
+      @proj3.ultimate_funding_sources.should == [@org2]
+    end
+
     it "returns funder and intermediate as UFSs when funder does not have any in flows and intermediate has more out flows than in flows" do
       # lets have it log an error / inconsistency in data and continue as if data is okay
       # NOT adding the intermediary in but just using it's UFS

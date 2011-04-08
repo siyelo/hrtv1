@@ -161,7 +161,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = funding_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders)
+    trace_ultimate_funding_source(organization, funders, [])
   end
 
   private
@@ -170,7 +170,7 @@ class Project < ActiveRecord::Base
       errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 
-    def trace_ultimate_funding_source(organization, funders)
+    def trace_ultimate_funding_source(organization, funders, traced = [])
       funding_sources = []
 
       funders.each do |funder|
@@ -196,14 +196,19 @@ class Project < ActiveRecord::Base
         end
 
         # keep looking in parent funders
-        funding_sources.concat(trace_ultimate_funding_source(funder, parent_flows.map(&:from)))
+        unless traced.include?(funder)
+          traced << funder
+          parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced))
+        end
       end
 
       funding_sources.uniq
     end
 
     def implementer_in_flows?(organization, flows)
-      flows.map(&:project).map(&:activities).flatten.map(&:provider).include?(organization)
+      flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
+        map(&:provider).include?(organization)
     end
 end
 

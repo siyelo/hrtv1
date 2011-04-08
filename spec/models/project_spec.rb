@@ -333,6 +333,26 @@ describe Project do
     def self_funded(proj)
       proj_funded_by(proj, proj.data_response.organization)
     end
+
+    # helper for next tests; change activities and same conditions hold
+    def should_be_org_regardless_of_activities_when_up_has_one_ufs(org)
+      @proj2.ultimate_funding_sources.should == [org]
+      
+      funder_project = org.projects.first
+      Factory(:activity, :project => funder_project, :provider => @org_with_empty_data_response,
+                                :data_response => funder_project.data_response)
+      @proj2.ultimate_funding_sources.should == [org]
+
+      funder_project.activities.delete
+      Factory(:activity, :project => funder_project, :provider => @org1,
+                                :data_response => funder_project.data_response)
+      @proj2.ultimate_funding_sources.should == [org]
+
+      funder_project.activities.delete
+      Factory(:activity, :project => funder_project, :provider => @org2,
+                                :data_response => funder_project.data_response)
+      @proj2.ultimate_funding_sources.should == [org]
+    end
     
     it "returns no UFS if project has no funder" do
       @proj0.ultimate_funding_sources.should == []
@@ -369,26 +389,6 @@ describe Project do
       proj_funded_by(@proj1, @org_with_no_data_response)
       proj_funded_by(@proj2, @org1)
       @proj2.ultimate_funding_sources.should == [@org_with_no_data_response]
-    end
-
-    # helper for next tests; change activities and same conditions hold
-    def should_be_org_regardless_of_activities_when_up_has_one_ufs(org)
-      @proj2.ultimate_funding_sources.should == [org]
-      
-      funder_project = org.projects.first
-      Factory.create(:activity, :project => funder_project, :provider => @org_with_empty_data_response,
-                                :data_response => funder_project.data_response)
-      @proj2.ultimate_funding_sources.should == [org]
-
-      funder_project.activities.delete
-      Factory.create(:activity, :project => funder_project, :provider => @org1,
-                                :data_response => funder_project.data_response)
-      @proj2.ultimate_funding_sources.should == [org]
-
-      funder_project.activities.delete
-      Factory.create(:activity, :project => funder_project, :provider => @org2,
-                                :data_response => funder_project.data_response)
-      @proj2.ultimate_funding_sources.should == [org]
     end
 
     it "returns n-1 (upstream=up) funder as the UFS if up is self-funded regardless of up's activities" do
@@ -531,14 +531,14 @@ describe Project do
       # TEST that error was logged
     end
 
-    it "returns UFS by activity implementer" do
+    it "returns real UFS if it's implementer of an activity of funded organization" do
       @proj21 = Factory(:project, :data_response => @response2)
       @proj22 = Factory(:project, :data_response => @response2)
 
       # organization 1
       Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1, 
               :budget => 50)
-      Factory.create(:activity, :project => @proj1, :provider => @org2,
+      Factory(:activity, :project => @proj1, :provider => @org2,
                      :data_response => @response1)
 
       # organization 2
@@ -546,7 +546,7 @@ describe Project do
               :budget => 50)
       Factory(:funding_flow, :from => @org2, :to => @org2, :project => @proj22, 
               :budget => 50)
-      Factory.create(:activity, :project => @proj21, :provider => @org3,
+      Factory(:activity, :project => @proj21, :provider => @org3,
                      :data_response => @response2)
 
       # organization 3
@@ -556,11 +556,11 @@ describe Project do
       @proj3.ultimate_funding_sources.should == [@org1]
     end
 
-    it "returns UFS for an organization when UFS is self funded and organization is a provider of any of its activities" do
+    it "returns real UFS if it's implementer of an activity of self-funded organization" do
       # organization 2
       Factory(:funding_flow, :from => @org2, :to => @org2, :project => @proj2, 
               :budget => 50)
-      activity = Factory.create(:activity, :project => @proj2, :provider => @org3,
+      activity = Factory(:activity, :project => @proj2, :provider => @org3,
                                 :data_response => @response2)
 
       # organization 3

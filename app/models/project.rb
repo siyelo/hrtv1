@@ -161,7 +161,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders, [])
+    trace_ultimate_funding_source(organization, funders, [self.data_response.organization])
   end
 
   private

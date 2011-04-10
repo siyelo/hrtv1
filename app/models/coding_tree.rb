@@ -149,6 +149,7 @@ class CodingTree
             @coding_klass.create!(:activity => activity, :code => code,
                                   :cached_amount => cached_amount,
                                   :sum_of_children => sum_of_children)
+            descendants = true
           end
         end
 
@@ -156,6 +157,9 @@ class CodingTree
       end
 
       # return total and if there were descendant code assignments
+      #puts "about to return from #{root_codes.map(&:name).join(',')}"
+      #puts "total of #{total}"
+      #puts "descendants of #{descendants}"
       {:amount => total, :descendants => descendants}
     end
 

@@ -140,9 +140,10 @@ describe CodingTree do
     # looks like the amount from a child is only bubbling up 3 levels
     # something happens as moves up from 3 to 4 that it loses amounts
     it "is valid when there is one 4 levels down coding of 100% (4 level)" do
-      ca1221 = Factory.create(:coding_budget, :activity => @activity, :code => @code1221, :cached_amount => 100)
+      ca1221 = Factory.create(:coding_budget, :activity => @activity, :code => @code1221, :amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+      ct.set_cached_amounts!
       ct.valid?.should == true
     end
 

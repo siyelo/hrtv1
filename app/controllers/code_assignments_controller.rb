@@ -50,8 +50,13 @@ class CodeAssignmentsController < Reporter::BaseController
   private
 
     def load_activity_and_data_response
-      @activity = current_user.organization.dr_activities.find(params[:activity_id])
-      @data_response = @activity.data_response
+      unless current_user.admin?
+        @activity = current_user.organization.dr_activities.find(params[:activity_id])
+        @data_response = @activity.data_response
+      else
+        @activity = Activity.find(params[:activity_id])
+        @data_response = @activity.data_response
+      end
     end
 
     def add_code_assignments_error(coding_class, activity)

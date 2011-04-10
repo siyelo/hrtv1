@@ -7,7 +7,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response.projects
+      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [@activity.try(:project).try(:data_response).try(:projects)].flatten
 
       #project_sub_form
         #project_sub_form_fields

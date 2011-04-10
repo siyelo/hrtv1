@@ -167,6 +167,7 @@ class Project < ActiveRecord::Base
   private
 
     def validate_budgets
+      #TODO FY is explicitly ref'd, should come from data request
       errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 

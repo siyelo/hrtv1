@@ -458,6 +458,14 @@ describe Project do
       proj_funded_by(@proj11, @org2)
       @proj1.ultimate_funding_sources.should == [@org1]
     end
+#    some donors didn't self fund themselves so show up as both a funding source and the funder they put for their own activities (CDC gives CDC + USG/PEPFAR) for proj 108    
+#    it "returns the donor as funder if donor does not have any activities for the downstream" do 
+#      proj_funded_by(@proj1, @org1)
+#      proj_funded_by(@proj12, @org0)
+#      proj_funded_by(@proj11, @org2)
+#      @proj1.ultimate_funding_sources.should == [@org1]
+#    end
+
 #    potentially meaningful edge case
 #    it "detects flows that organizations did not self report but donor did" do 
 #      proj_funded_by(@proj1, @org1)

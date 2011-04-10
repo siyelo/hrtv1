@@ -6,7 +6,7 @@ total = projects.length
 
 csv = FasterCSV.generate do |csv|
   # header
-  row = ['Project ID', 'Project name', 'Funding Sources', 'Ultimate funding sources']
+  row = ['Data Source', 'Project ID', 'Project name', 'Funding Sources', 'Ultimate funding sources']
   csv << row
 
   # data
@@ -14,6 +14,7 @@ csv = FasterCSV.generate do |csv|
     puts "Checking UFS for project with id: #{project.id} | #{index + 1}/#{total}"
 
     row = []
+    row << project.data_response.organization.name
     row << project.id
     row << project.name
     row << project.in_flows.map(&:from).join(";")

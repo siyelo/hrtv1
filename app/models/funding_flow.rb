@@ -26,7 +26,11 @@ class FundingFlow < ActiveRecord::Base
                                           # consider removing relation and delegating to project
 
   delegate :organization, :to => :project
-  delegate :data_response, :to => :project
+  #delegate :data_response, :to => :project # some Funding Sources have no project
+  def data_response
+    return project.data_response unless project.nil?
+    return read_attribute(:data_response)
+  end
 
   # Named scopes
   named_scope :with_organizations, 

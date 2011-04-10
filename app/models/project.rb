@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_and_belongs_to_many :locations
   belongs_to :data_response, :counter_cache => true
-  has_many :funding_flows
+  has_many :funding_flows, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
                             organization_id_to = #{organization.id}' ] #note the single quotes !
@@ -174,8 +174,17 @@ class Project < ActiveRecord::Base
       funding_sources = []
 
       funders.each do |funder|
-        self_flows = funder.in_flows.select{|f| f.from == funder}
-        parent_flows = funder.in_flows.select{|f| f.from != funder}
+
+        funder_reported_flows = funder.in_flows.select{|f| f.data_response.organization == funder}
+        # check if org in any of funders self-reported projects
+        # if so, only traverse up / consider flows in those projects
+        if implementer_in_flows?(organization, funder_reported_flows)
+          self_flows = funder_reported_flows.select{|f| f.from == funder}
+          parent_flows = funder_reported_flows.select{|f| f.from != funder}
+        else
+          self_flows = funder.in_flows.select{|f| f.from == funder}
+          parent_flows = funder.in_flows.select{|f| f.from != funder}
+        end
 
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer

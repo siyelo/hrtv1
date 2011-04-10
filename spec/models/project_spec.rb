@@ -157,16 +157,15 @@ describe Project do
   end
 
   context "on delete" do
-    it "should nullify funding flows on delete" do
+    it "should destroy funding flows on delete" do
       project = Factory(:project)
       flow    = Factory(:funding_flow,
                         :organization_id_from => project.organization,
                         :project => project,
                         :data_response => project.data_response)
-      f = project.funding_flows.first
+      f_id = project.funding_flows.first.id
       project.destroy
-      f.reload
-      f.project.should == nil
+      FundingFlow.exists?(f_id).should == false
     end
   end
 

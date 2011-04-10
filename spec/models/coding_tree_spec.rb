@@ -9,12 +9,14 @@ describe CodingTree do
     # code1
     #      \ code12 - code121
     #               \ code122
+    #                   - code1221
     #
     #               / code211
     #      / code21 - code212
     # code2
     #      \ code22 - code221
     #               \ code222
+    #                   - code2221
 
     # first level
     @code1    = Factory.create(:code, :short_display => 'code1')
@@ -48,6 +50,12 @@ describe CodingTree do
     @code221.move_to_child_of(@code22)
     @code222.move_to_child_of(@code22)
 
+    # fourth level
+    @code1221   = Factory.create(:code, :short_display => 'code1221')
+    @code1221.move_to_child_of(@code122)
+    @code2221   = Factory.create(:code, :short_display => 'code2221')
+    @code2221.move_to_child_of(@code222)
+ 
     @activity = Factory.create(:activity, :budget => 100, :spend => 200)
 
   end
@@ -124,6 +132,15 @@ describe CodingTree do
       ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
       ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
       ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
+      ct    = CodingTree.new(@activity, CodingBudget)
+      ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+      ct.valid?.should == true
+    end
+
+    # looks like the amount from a child is only bubbling up 3 levels
+    # something happens as moves up from 3 to 4 that it loses amounts
+    it "is valid when there is one 4 levels down coding of 100% (4 level)" do
+      ca1221 = Factory.create(:coding_budget, :activity => @activity, :code => @code1221, :cached_amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true

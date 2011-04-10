@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-projects = Project.find(:all, :limit => 100)
+projects = Project.find(:all)#, :limit => 100)
 #projects = Project.all
 total = projects.length
 

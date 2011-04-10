@@ -179,13 +179,13 @@ class Project < ActiveRecord::Base
         funder_reported_flows = funder.in_flows.select{|f| f.data_response.organization == funder}
         # check if org in any of funders self-reported projects
         # if so, only traverse up / consider flows in those projects
-        if implementer_in_flows?(organization, funder_reported_flows)
+        #if implementer_in_flows?(organization, funder_reported_flows)
           self_flows = funder_reported_flows.select{|f| f.from == funder}
           parent_flows = funder_reported_flows.select{|f| f.from != funder}
-        else
-          self_flows = funder.in_flows.select{|f| f.from == funder}
-          parent_flows = funder.in_flows.select{|f| f.from != funder}
-        end
+       # else
+       #   self_flows = funder.in_flows.select{|f| f.from == funder}
+       #   parent_flows = funder.in_flows.select{|f| f.from != funder}
+       # end
 
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer

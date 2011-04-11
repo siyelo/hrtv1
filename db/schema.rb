@@ -11,6 +11,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20110405092537) do
 =======
 ActiveRecord::Schema.define(:version => 20110410111013) do
@@ -18,6 +19,9 @@ ActiveRecord::Schema.define(:version => 20110410111013) do
 =======
 ActiveRecord::Schema.define(:version => 20110411110813) do
 >>>>>>> Remove invalid funding flows, validations, bugfixes
+=======
+ActiveRecord::Schema.define(:version => 20110410111013) do
+>>>>>>> schema update
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -88,16 +92,16 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "code_assignments", :force => true do |t|
-    t.integer  "activity_id"
-    t.integer  "code_id"
-    t.decimal  "amount"
-    t.string   "type"
-    t.decimal  "percentage"
-    t.decimal  "cached_amount",        :default => 0.0
-    t.decimal  "sum_of_children",      :default => 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "cached_amount_in_usd", :default => 0.0
+    t.integer   "activity_id"
+    t.integer   "code_id"
+    t.decimal   "amount"
+    t.string    "type"
+    t.decimal   "percentage"
+    t.decimal   "cached_amount",        :default => 0.0
+    t.decimal   "sum_of_children",      :default => 0.0
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.decimal   "cached_amount_in_usd", :default => 0.0
   end
 
   add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
@@ -124,13 +128,13 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "comments", :force => true do |t|
-    t.string   "title",            :limit => 50, :default => ""
-    t.text     "comment",                        :default => ""
-    t.integer  "commentable_id"
-    t.string   "commentable_type"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "title",            :limit => 50, :default => ""
+    t.text      "comment",                        :default => ""
+    t.integer   "commentable_id"
+    t.string    "commentable_type"
+    t.integer   "user_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
@@ -162,70 +166,70 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "data_responses", :force => true do |t|
-    t.integer  "data_request_id"
-    t.boolean  "complete",                          :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "organization_id"
-    t.string   "currency"
-    t.date     "fiscal_year_start_date"
-    t.date     "fiscal_year_end_date"
-    t.string   "contact_name"
-    t.string   "contact_position"
-    t.string   "contact_phone_number"
-    t.string   "contact_main_office_phone_number"
-    t.string   "contact_office_location"
-    t.boolean  "submitted"
-    t.datetime "submitted_at"
-    t.integer  "projects_count",                    :default => 0
-    t.integer  "comments_count",                    :default => 0
-    t.integer  "activities_count",                  :default => 0
-    t.integer  "sub_activities_count",              :default => 0
-    t.integer  "activities_without_projects_count", :default => 0
+    t.integer   "data_request_id"
+    t.boolean   "complete",                          :default => false
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "organization_id"
+    t.string    "currency"
+    t.date      "fiscal_year_start_date"
+    t.date      "fiscal_year_end_date"
+    t.string    "contact_name"
+    t.string    "contact_position"
+    t.string    "contact_phone_number"
+    t.string    "contact_main_office_phone_number"
+    t.string    "contact_office_location"
+    t.boolean   "submitted"
+    t.timestamp "submitted_at"
+    t.integer   "projects_count",                    :default => 0
+    t.integer   "comments_count",                    :default => 0
+    t.integer   "activities_count",                  :default => 0
+    t.integer   "sub_activities_count",              :default => 0
+    t.integer   "activities_without_projects_count", :default => 0
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
   add_index "data_responses", ["organization_id"], :name => "index_data_responses_on_organization_id"
 
   create_table "districts", :force => true do |t|
-    t.string   "name"
-    t.integer  "population"
-    t.integer  "old_location_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "name"
+    t.integer   "population"
+    t.integer   "old_location_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "attribute_name"
+    t.string    "short"
+    t.text      "long"
+    t.integer   "model_help_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "funding_flows", :force => true do |t|
-    t.integer  "organization_id_from"
-    t.integer  "organization_id_to"
-    t.integer  "project_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
-    t.text     "organization_text"
-    t.integer  "self_provider_flag",   :default => 0
-    t.decimal  "spend"
-    t.decimal  "spend_q4_prev"
-    t.integer  "data_response_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",       :default => 0
+    t.integer   "organization_id_from"
+    t.integer   "organization_id_to"
+    t.integer   "project_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.decimal   "budget"
+    t.decimal   "spend_q1"
+    t.decimal   "spend_q2"
+    t.decimal   "spend_q3"
+    t.decimal   "spend_q4"
+    t.text      "organization_text"
+    t.integer   "self_provider_flag",   :default => 0
+    t.decimal   "spend"
+    t.decimal   "spend_q4_prev"
+    t.integer   "data_response_id"
+    t.decimal   "budget_q1"
+    t.decimal   "budget_q2"
+    t.decimal   "budget_q3"
+    t.decimal   "budget_q4"
+    t.decimal   "budget_q4_prev"
+    t.integer   "comments_count",       :default => 0
   end
 
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
@@ -242,10 +246,10 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "help_requests", :force => true do |t|
-    t.string   "email"
-    t.text     "message"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "email"
+    t.text      "message"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "locations_organizations", :id => false, :force => true do |t|
@@ -259,12 +263,12 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "comments_count", :default => 0
+    t.string    "model_name"
+    t.string    "short"
+    t.text      "long"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|
@@ -279,6 +283,7 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
   end
 
   create_table "projects", :force => true do |t|
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -313,6 +318,8 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
     t.decimal  "spend_in_usd"
     t.decimal  "budget_in_usd"
 =======
+=======
+>>>>>>> schema update
     t.string    "name"
     t.text      "description"
     t.date      "start_date"
@@ -339,58 +346,55 @@ ActiveRecord::Schema.define(:version => 20110411110813) do
     t.decimal   "budget3"
     t.decimal   "budget4"
     t.decimal   "budget5"
+<<<<<<< HEAD
 >>>>>>> fix hanging funding flow objects; check all have proj later
 =======
 >>>>>>> Remove invalid funding flows, validations, bugfixes
+=======
+>>>>>>> schema update
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
 
   create_table "reports", :force => true do |t|
-    t.string   "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "csv_file_name"
-    t.string   "csv_content_type"
-    t.integer  "csv_file_size"
-    t.datetime "csv_updated_at"
-    t.string   "formatted_csv_file_name"
-    t.string   "formatted_csv_content_type"
-    t.integer  "formatted_csv_file_size"
-    t.datetime "formatted_csv_updated_at"
+    t.string    "key"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.string    "csv_file_name"
+    t.string    "csv_content_type"
+    t.integer   "csv_file_size"
+    t.timestamp "csv_updated_at"
+    t.string    "formatted_csv_file_name"
+    t.string    "formatted_csv_content_type"
+    t.integer   "formatted_csv_file_size"
+    t.timestamp "formatted_csv_updated_at"
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "session_id", :null => false
+    t.text      "data"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
-  create_table "sqlite_stat1", :id => false, :force => true do |t|
-    t.text "tbl"
-    t.text "idx"
-    t.text "stat"
-  end
-
   create_table "users", :force => true do |t|
-    t.string   "username"
-    t.string   "email"
-    t.string   "crypted_password"
-    t.string   "password_salt"
-    t.string   "persistence_token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "roles_mask"
-    t.integer  "organization_id"
-    t.integer  "data_response_id_current"
-    t.text     "text_for_organization"
-    t.string   "full_name"
-    t.string   "perishable_token",         :default => "",   :null => false
-    t.boolean  "tips_shown",               :default => true
+    t.string    "username"
+    t.string    "email"
+    t.string    "crypted_password"
+    t.string    "password_salt"
+    t.string    "persistence_token"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "roles_mask"
+    t.integer   "organization_id"
+    t.integer   "data_response_id_current"
+    t.text      "text_for_organization"
+    t.string    "full_name"
+    t.string    "perishable_token",         :default => "",   :null => false
+    t.boolean   "tips_shown",               :default => true
   end
 
 end

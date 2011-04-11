@@ -14,4 +14,4 @@
       %li= link_to 'Review', hacked_response_url, :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')
       %li= link_to 'Submit', hacked_review_response_url, :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')
       %li= link_to 'Reports', reporter_reports_path, :class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController].include?(controller.class) ? 'active' : nil)
-      %li= link_to "Help", "http://hrtapp.tenderapp.com/kb", :target => "_blank"
+      %li= link_to "Help", "http://hrtapp.tenderapp.com/", :target => "_blank"

@@ -127,7 +127,7 @@ module Reports::Helpers
     # TODO take logic from jawp report that replaces bad funding sources, marked with a TODO
     funding_sources = []
     if activity.project
-      activity.project.in_flows.with_organizations.each do |funding_source|
+      activity.project.in_flows.each do |funding_source|
         funding_sources << funding_source
       end
     end

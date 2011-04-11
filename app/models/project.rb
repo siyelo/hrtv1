@@ -21,13 +21,13 @@ class Project < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
+  belongs_to :data_response, :counter_cache => true
+  has_and_belongs_to_many :locations
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
-  has_and_belongs_to_many :locations
-  belongs_to :data_response, :counter_cache => true
-  has_many :funding_flows
+  has_many :funding_flows, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
                             organization_id_to = #{organization.id}' ] #note the single quotes !
@@ -41,6 +41,7 @@ class Project < ActiveRecord::Base
 
   # Nested attributes
   accepts_nested_attributes_for :funding_flows, :allow_destroy => true
+  before_validation_on_create :assign_project_to_funding_flows
 
   ### Named scopes
   named_scope :available_to, lambda { |current_user|
@@ -70,6 +71,7 @@ class Project < ActiveRecord::Base
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
 
   # Delegates
+  # TODO pull all this DR related stuff to module and mix in
   delegate :organization, :to => :data_response
 
   ### Callbacks
@@ -159,12 +161,77 @@ class Project < ActiveRecord::Base
     return saved, errors
   end
 
+  def ultimate_funding_sources
+    funders = in_flows.map(&:from).reject{|f| f.nil?}
+    trace_ultimate_funding_source(organization, funders, [organization])
+  end
+
   private
 
     def validate_budgets
+      #TODO FY is explicitly ref'd, should come from data request
       errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
     end
 
+    def trace_ultimate_funding_source(organization, funders, traced = [])
+      funding_sources = []
+
+      funders.each do |funder|
+
+        funder_reported_flows = funder.in_flows.select{|f| f.organization == funder}
+        # check if org in any of funders self-reported projects
+        # if so, only traverse up / consider flows in those projects
+        #if implementer_in_flows?(organization, funder_reported_flows)
+          self_flows = funder_reported_flows.select{|f| f.from == funder}
+          parent_flows = funder_reported_flows.select{|f| f.from != funder}
+       # else
+       #   self_flows = funder.in_flows.select{|f| f.from == funder}
+       #   parent_flows = funder.in_flows.select{|f| f.from != funder}
+       # end
+
+        # real UFS - self funded organization that funds other organizations
+        # i.e. has activity(ies) with the organization as implementer
+        if implementer_in_flows?(organization, self_flows)
+          funding_sources << funder
+        end
+
+        # potential UFS - parent funded organization that funds other organizations
+        # i.e. does not have any activity(ies) with organization as implementer
+        unless implementer_in_flows?(organization, parent_flows)
+          self_funded = funder.in_flows.map(&:from).include?(funder)
+
+          if self_funded
+            funding_sources << funder
+          elsif funder.in_flows.empty? # when funder has blank data response
+            funding_sources << funder
+          end
+        end
+
+        # keep looking in parent funders
+        unless traced.include?(funder)
+          traced << funder
+          parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced))
+        end
+      end
+
+      funding_sources.uniq
+    end
+
+    def implementer_in_flows?(organization, flows)
+      flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
+        map(&:provider).include?(organization)
+    end
+
+    # GN: Do we need to remove this or it has no side effects?
+    # Definitely enable assign_project_to_funding_flows when finishing PT: 12144777
+
+    # work arround for validates_presence_of :project issue
+    # children relation can do only validation by :project, not :project_id
+    # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
+    def assign_project_to_funding_flows
+      funding_flows.each {|ff| ff.project = self}
+    end
 end
 
 

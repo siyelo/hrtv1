@@ -19,18 +19,13 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :data_response #TODO: deprecate in favour of: delegate :data_response, :to => :project
 
   ### Validations
-  #GN: validations break how users create a new org if that org not in the list
-  # sadly they are disabled for now
-  #validates_presence_of :project_id#, :organization_id_from, :organization_id_to
-  validates_presence_of :data_response_id # required for AS/available_to magickery
-                                          # consider removing relation and delegating to project
+  # GN: Removed until UI shows these well
+  # PT: 12144777
+  #validates_presence_of :project
+  #validates_presence_of :data_response_id
+  #validates_presence_of :organization_id_from, :organization_id_to
 
   delegate :organization, :to => :project
-  delegate :data_response, :to => :project
-
-  # Named scopes
-  named_scope :with_organizations, 
-    :conditions => "organization_id_from IS NOT NULL AND organization_id_to IS NOT NULL"
 
   def currency
     project.try(:currency)

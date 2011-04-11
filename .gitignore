@@ -13,6 +13,7 @@ db/*.gz
 db/*.db
 db/*.tgz
 db/*pgdump*
+db/reports/*.csv
 config/database.yml
 log/*.log
 tmp/*
@@ -52,3 +53,4 @@ ___*
 .amazon_keys
 slurper
 slurper_config.yml
+

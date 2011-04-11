@@ -18,9 +18,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def edit
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     edit!
   end
 
@@ -33,13 +31,15 @@ class ActivitiesController < Reporter::BaseController
   def update
     update! do |success, failure|
       success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }
+      failure.html do
+        load_comment_resources(resource)
+        render :action => 'edit'
+      end
     end
   end
 
   def show
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     show!
   end
 

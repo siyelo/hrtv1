@@ -5,11 +5,12 @@ describe DataResponse do
   describe "associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
-    it { should have_many(:activities) }
-    it { should have_many(:sub_activities) }
-    it { should have_many(:funding_flows) }
-    it { should have_many(:projects) }
-    it { should have_many(:commodities) }
+    it { should have_many(:activities).dependent(:destroy) }
+    it { should have_many(:other_costs).dependent(:destroy) }
+    it { should have_many(:sub_activities).dependent(:destroy) }
+    it { should have_many(:funding_flows).dependent(:destroy) }
+    it { should have_many(:projects).dependent(:destroy) }
+    it { should have_many(:commodities).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
   end
 

@@ -15,16 +15,12 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def edit
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     edit!
   end
 
   def show
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     show!
   end
 
@@ -37,17 +33,15 @@ class OtherCostsController < Reporter::BaseController
     end
   end
 
-  def destroy
-    destroy! do |success, failure|
-      success.html { redirect_to response_projects_url(@data_response) }
-    end
-  end
-
   def update
     update! do |success, failure|
       success.html do
         flash[:notice] = 'Other Cost was successfully updated'
         redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+      end
+      failure.html do
+        load_comment_resources(resource)
+        render :action => 'edit'
       end
     end
   end

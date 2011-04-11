@@ -16,19 +16,19 @@ describe Organization do
   end
 
   describe "associations" do
-    it { should have_and_belong_to_many :activities }
-    it { should have_and_belong_to_many :locations }
-    it { should have_many :users }
-    it { should have_many :data_requests }
-    it { should have_many :data_responses }
-    it { should have_many :projects }
-    it { should have_many :fulfilled_data_requests }
-    it { should have_many :dr_activities }
-    it { should have_many :out_flows }
-    it { should have_many :in_flows }
-    it { should have_many :donor_for }
-    it { should have_many :implementor_for }
-    it { should have_many :provider_for }
+    it { should have_and_belong_to_many(:activities) }
+    it { should have_and_belong_to_many(:locations) }
+    it { should have_many(:users) }
+    it { should have_many(:data_requests) }
+    it { should have_many(:data_responses) }
+    it { should have_many(:projects) }
+    it { should have_many(:fulfilled_data_requests) }
+    it { should have_many(:dr_activities) }
+    it { should have_many(:out_flows).dependent(:destroy) }
+    it { should have_many(:in_flows).dependent(:destroy) }
+    it { should have_many(:donor_for) }
+    it { should have_many(:implementor_for) }
+    it { should have_many(:provider_for) }
 
     it "returns fulfilled_data_requests" do
       organization = Factory.create(:organization)
@@ -304,6 +304,35 @@ describe Organization do
 
         Organization.ordered.should == [org2, org1]
       end
+    end
+  end
+
+  describe "#has_provider?" do
+    before :each do
+      @request = Factory.create(:data_request)
+
+      @org1 = Factory.create(:organization)
+      @org2 = Factory.create(:organization)
+
+      @response1 = Factory.create(:data_response, :data_request => @request, 
+                                 :organization => @org1)
+      @response2 = Factory.create(:data_response, :data_request => @request, 
+                                 :organization => @org2)
+
+
+    end
+
+    it "has X as provider when any of its activities has it as provider" do
+      project1  = Factory.create(:project, :data_response => @response1)
+      activity1 = Factory.create(:activity, :project => project1, :provider => @org2,
+                                :data_response => @response1)
+
+      @org1.has_provider?(@org2).should be_true
+    end
+
+    it "does not have X as provider when all of its activities does not have it as provider" do
+      project1  = Factory.create(:project, :data_response => @response1)
+      @org1.has_provider?(@org2).should be_false
     end
   end
 end

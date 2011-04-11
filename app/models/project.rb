@@ -61,7 +61,7 @@ class Project < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
-
+ 
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,

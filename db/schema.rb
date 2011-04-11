@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110327214754) do
+ActiveRecord::Schema.define(:version => 20110405092537) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -296,6 +296,8 @@ ActiveRecord::Schema.define(:version => 20110327214754) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.decimal  "spend_in_usd"
+    t.decimal  "budget_in_usd"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

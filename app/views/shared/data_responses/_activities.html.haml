@@ -37,9 +37,9 @@
             %td= activity.classified? ? "Yes" : "No"
             %td= activity.approved
             - unless other_costs
-              %td= activity.sub_activities.size
-            %td= n2cnds(activity.spend, activity.currency)
-            %td= n2cnds(activity.budget, activity.currency)
+              %td= activity.sub_activities.size              
+            %td= universal_currency_converter(activity.spend, activity.currency, activity.data_response.currency)
+            %td= universal_currency_converter(activity.budget, activity.currency, activity.data_response.currency)
             %td.manage
               %ul
                 %li= link_to "Edit", edit_response_activity_path(activity.data_response, activity)

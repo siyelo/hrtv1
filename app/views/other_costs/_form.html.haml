@@ -5,25 +5,27 @@
       = f.input :project_id, :label => "Project", :collection => current_user.current_data_response.projects
       = f.input :description, :input_html => { :rows => 2 }, :required => false
 
-  %li.last
-    %h3 Past Expenditure
-    %ul.dashboard_section
+  -if @data_response.data_request.spend?
+    %li.last
+      %h3 Past Expenditure
+      %ul.dashboard_section
 
-      = f.input :spend, :label => "Spend", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
+        = f.input :spend, :label => "Spend", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
 
-      %li.amounts.last
-        %label Quarterly spend
-        %ul
-          = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
-          = f.input :spend_q1     , :label => "Q1 09-10", :required => false
-          = f.input :spend_q2     , :label => "Q2 09-10", :required => false
-          = f.input :spend_q3     , :label => "Q3 09-10", :required => false
-          = f.input :spend_q4     , :label => "Q4 09-10", :required => false
+        %li.amounts.last
+          %label Quarterly spend
+          %ul
+            = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
+            = f.input :spend_q1     , :label => "Q1 09-10", :required => false
+            = f.input :spend_q2     , :label => "Q2 09-10", :required => false
+            = f.input :spend_q3     , :label => "Q3 09-10", :required => false
+            = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
-  %li.last
-    %h3 Budget (planned expenditure)
-    %ul.dashboard_section
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+  - if @data_response.data_request.budget?
+    %li.last
+      %h3 Budget (planned expenditure)
+      %ul.dashboard_section
+        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
 
 - f.buttons :class => 'buttons' do
   = f.commit_button "Save & Next", :class => "last"

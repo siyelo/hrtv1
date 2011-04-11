@@ -140,8 +140,6 @@ Feature: Reporter can manage activities
       When I follow "Download template"
       Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget2,budget3,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"
 
-
-    @run
     Scenario: A reporter can create comments for an activity and see comment errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
@@ -249,7 +247,22 @@ Feature: Reporter can manage activities
         And I fill in "Budget" with "444" within ".fields"
         And I press "Save & Next"
       Then I should see "Activity was successfully updated"
-        # And I should see "funding_organization2"
-        # And I should not see "funding_organization1"
-        # And I should see "333.0 RWF"
-        # And I should see "444.0 RWF"
+
+
+  Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
+      Given I follow "Sign Out"
+      And an organization exists with name: "organization5"
+      And a data_request exists with title: "data_request2", budget: false
+      And a data_response exists with data_request: the data_request, organization: the organization
+      And a reporter exists with username: "reporter2", organization: the organization
+      And a location exists with short_display: "Location1"
+      And a location exists with short_display: "Location2"
+      And I am signed in as "reporter2"
+      And I follow "data_request2"
+      And a project exists with name: "project1", data_response: the data_response
+      And I follow "Projects"
+      When I follow "Add" within ".sub-head:nth-child(2)"
+      Then I should not see "Budget (planned expenditure)"
+      And  I should see "Past Activity Expenditure"
+
+

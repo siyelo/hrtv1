@@ -19,9 +19,11 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :data_response #TODO: deprecate in favour of: delegate :data_response, :to => :project
 
   ### Validations
-  validates_presence_of :project
-  validates_presence_of :data_response_id
-  validates_presence_of :organization_id_from, :organization_id_to
+  # GN: Removed until UI shows these well
+  # PT: 12144777
+  #validates_presence_of :project
+  #validates_presence_of :data_response_id
+  #validates_presence_of :organization_id_from, :organization_id_to
 
   delegate :organization, :to => :project
 

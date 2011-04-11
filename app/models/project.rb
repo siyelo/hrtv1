@@ -71,6 +71,7 @@ class Project < ActiveRecord::Base
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
 
   # Delegates
+  # TODO pull all this DR related stuff to module and mix in
   delegate :organization, :to => :data_response
 
   ### Callbacks
@@ -221,6 +222,9 @@ class Project < ActiveRecord::Base
       flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
         map(&:provider).include?(organization)
     end
+
+    # GN: Do we need to remove this or it has no side effects?
+    # Definitely enable assign_project_to_funding_flows when finishing PT: 12144777
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id

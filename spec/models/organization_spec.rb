@@ -16,19 +16,19 @@ describe Organization do
   end
 
   describe "associations" do
-    it { should have_and_belong_to_many :activities }
-    it { should have_and_belong_to_many :locations }
-    it { should have_many :users }
-    it { should have_many :data_requests }
-    it { should have_many :data_responses }
-    it { should have_many :projects }
-    it { should have_many :fulfilled_data_requests }
-    it { should have_many :dr_activities }
-    it { should have_many :out_flows }
-    it { should have_many :in_flows }
-    it { should have_many :donor_for }
-    it { should have_many :implementor_for }
-    it { should have_many :provider_for }
+    it { should have_and_belong_to_many(:activities) }
+    it { should have_and_belong_to_many(:locations) }
+    it { should have_many(:users) }
+    it { should have_many(:data_requests) }
+    it { should have_many(:data_responses) }
+    it { should have_many(:projects) }
+    it { should have_many(:fulfilled_data_requests) }
+    it { should have_many(:dr_activities) }
+    it { should have_many(:out_flows).dependent(:destroy) }
+    it { should have_many(:in_flows).dependent(:destroy) }
+    it { should have_many(:donor_for) }
+    it { should have_many(:implementor_for) }
+    it { should have_many(:provider_for) }
 
     it "returns fulfilled_data_requests" do
       organization = Factory.create(:organization)

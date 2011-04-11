@@ -16,9 +16,7 @@ class ProjectsController < Reporter::BaseController
   end
 
   def edit
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     edit!
   end
 
@@ -31,13 +29,15 @@ class ProjectsController < Reporter::BaseController
   def update
     update! do |success, failure|
       success.html { redirect_to response_projects_url(@data_response) }
+      failure.html do
+        load_comment_resources(resource)
+        render :action => 'edit'
+      end
     end
   end
 
   def show
-    @comment = Comment.new
-    @comment.commentable = resource
-    @comments = resource.comments.find(:all, :order => 'created_at DESC')
+    load_comment_resources(resource)
     show!
   end
 

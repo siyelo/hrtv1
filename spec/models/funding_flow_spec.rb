@@ -23,43 +23,21 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:budget_q3) }
     it { should allow_mass_assignment_of(:budget_q4) }
   end
-  
-  describe "creating a project record" do
-    subject { Factory(:funding_flow) }
-    it { should be_valid }
+
+  describe "associations" do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
-    #it { should validate_presence_of(:project_id) }
-    #it { should validate_presence_of(:organization_id_to) }
-    #it { should validate_presence_of(:organization_id_from) }
-    #it { should delegate :organization, :to => :project } #need shmacros
-    
-    # TODO: deprecate in favour of delegate to project
-    it { should belong_to :data_response }  #it { should delegate :data_response, :to => :project } #need shmacros
-    it { should validate_presence_of(:data_response_id) }
+    it { should belong_to :data_response }
   end
-
-  describe "named scopes" do
-    it "returns empty array when funding_flow 'from'/'to' organizations are blank" do
-      Factory.create(:funding_flow, :from => nil, :organization_id_to => nil)
-      FundingFlow.with_organizations.should == []
-    end
-
-    it "returns empty array when funding_flow 'from' organization is blank" do
-      Factory.create(:funding_flow, :from => nil)
-      FundingFlow.with_organizations.should == []
-    end
-
-    it "returns empty array when funding_flow 'to' organization is blank" do
-      Factory.create(:funding_flow, :to => nil)
-      FundingFlow.with_organizations.should == []
-    end
-
-    it "returns empty array when funding_flow 'from'/'to' organizations are not blank" do
-      ff = Factory.create(:funding_flow)
-      FundingFlow.with_organizations.should == [ff]
-    end
+  
+  describe "validations" do
+    subject { Factory(:funding_flow) }
+    it { should be_valid }
+    it { should validate_presence_of(:project) }
+    it { should validate_presence_of(:data_response_id) }
+    it { should validate_presence_of(:organization_id_to) }
+    it { should validate_presence_of(:organization_id_from) }
   end
 
   describe "counter cache" do

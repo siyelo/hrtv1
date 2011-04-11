@@ -21,12 +21,12 @@ class Project < ActiveRecord::Base
   acts_as_commentable
 
   ### Associations
+  belongs_to :data_response, :counter_cache => true
+  has_and_belongs_to_many :locations
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
-  has_and_belongs_to_many :locations
-  belongs_to :data_response, :counter_cache => true
   has_many :funding_flows, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
@@ -41,6 +41,7 @@ class Project < ActiveRecord::Base
 
   # Nested attributes
   accepts_nested_attributes_for :funding_flows, :allow_destroy => true
+  before_validation_on_create :assign_project_to_funding_flows
 
   ### Named scopes
   named_scope :available_to, lambda { |current_user|
@@ -161,7 +162,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders, [self.data_response.organization])
+    trace_ultimate_funding_source(organization, funders, [organization])
   end
 
   private
@@ -176,7 +177,7 @@ class Project < ActiveRecord::Base
 
       funders.each do |funder|
 
-        funder_reported_flows = funder.in_flows.select{|f| f.data_response.organization == funder}
+        funder_reported_flows = funder.in_flows.select{|f| f.organization == funder}
         # check if org in any of funders self-reported projects
         # if so, only traverse up / consider flows in those projects
         #if implementer_in_flows?(organization, funder_reported_flows)
@@ -219,6 +220,13 @@ class Project < ActiveRecord::Base
     def implementer_in_flows?(organization, flows)
       flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
         map(&:provider).include?(organization)
+    end
+
+    # work arround for validates_presence_of :project issue
+    # children relation can do only validation by :project, not :project_id
+    # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
+    def assign_project_to_funding_flows
+      funding_flows.each {|ff| ff.project = self}
     end
 end
 

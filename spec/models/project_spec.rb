@@ -4,13 +4,17 @@ require 'set'
 describe Project do
 
   describe "associations" do
-    it { should have_and_belong_to_many :locations }
-    it { should have_many :funding_flows }
-    it { should have_many :in_flows }
-    it { should have_many :out_flows }
-    it { should have_many :comments }
-    it { should have_many :funding_sources }
-    it { should have_many :providers }
+    it { should belong_to(:data_response) }
+    it { should have_and_belong_to_many(:locations) }
+    it { should have_many(:activities).dependent(:destroy) }
+    it { should have_many(:other_costs).dependent(:destroy) }
+    it { should have_many(:normal_activities).dependent(:destroy) }
+    it { should have_many(:funding_flows).dependent(:destroy) }
+    it { should have_many(:in_flows) }
+    it { should have_many(:out_flows) }
+    it { should have_many(:comments) }
+    it { should have_many(:funding_sources) }
+    it { should have_many(:providers) }
   end
 
   describe "attributes" do
@@ -159,13 +163,18 @@ describe Project do
   context "on delete" do
     it "should destroy funding flows on delete" do
       project = Factory(:project)
-      flow    = Factory(:funding_flow,
-                        :organization_id_from => project.organization,
-                        :project => project,
-                        :data_response => project.data_response)
-      f_id = project.funding_flows.first.id
+      Factory(:funding_flow,
+              :organization_id_from => project.organization,
+              :organization_id_to => project.organization,
+              :project => project,
+              :data_response => project.data_response)
+
+      project.reload # reload project object to be aware of his new funding_flows
+
+      FundingFlow.count.should == 1
+
       project.destroy
-      FundingFlow.exists?(f_id).should == false
+      FundingFlow.count.should == 0
     end
   end
 

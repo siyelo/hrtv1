@@ -18,8 +18,8 @@ class Organization < ActiveRecord::Base
   has_many :fulfilled_data_requests, :through => :data_responses, :source => :data_request
   has_many :dr_activities, :through => :data_responses, :source => :activities
   # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from"
-  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to"
+  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :destroy
+  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :destroy
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id

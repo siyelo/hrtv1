@@ -68,8 +68,6 @@ class Reports::JawpReport
     row << get_hc_sub_activity_count(activity)
     row << get_sub_implementers(activity)
     row << activity.organization.try(:name)
-    row << activity.provider.try(:name) || "No Implementer Specified"
-    row << activity.provider.try(:raw_type) || "No Implementer Specified"
     row << get_institutions_assisted(activity)
     row << get_beneficiaries(activity)
     row << activity.id
@@ -149,8 +147,10 @@ class Reports::JawpReport
 
               #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
 
+              row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
+              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
               row << funding_source.from.try(:name)
-              row << funding_source.from.try(:type)
+              row << funding_source.from.try(:raw_type)
               row << amount
               row << ratio
               row << amount_total_in_usd * ratio
@@ -193,12 +193,14 @@ class Reports::JawpReport
       row << "# of facilities implementing"
       row << "Sub-implementers"
       row << "Data Source"
-      row << "Implementer"
-      row << "Implementer Type"
       row << "Institutions Assisted"
       row << "Beneficiaries"
       row << "ID"
       row << "Currency"
+   
+      # values below given through build_code_assignment_rows
+      row << "Implementer"
+      row << "Implementer Type"
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"

@@ -11,7 +11,7 @@
       %li
         - link_to admin_responses_path, :class => "drill_down target" do
           Review Data Responses
-          %span.hint Interactive data response reports
+          %span.hint Data entry progress and interactive summaries for each organization
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
@@ -21,7 +21,7 @@
       %li
         - link_to reports_country_path, :class => "drill_down target" do
           Review National Expenditures and Budgets
-          %span.hint Interactive reports
+          %span.hint Interactive reports summarizing data at national level
 
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
@@ -31,7 +31,7 @@
       %li
         - link_to reports_districts_path, :class => "drill_down target" do
           Review District Expenditures and Budgets
-          %span.hint Interactive reports
+          %span.hint Interactive reports comparing districts and summarizing data at district level
 
       %li= render 'report_row', :title => 'By Nsp', :key => 'districts_by_nsp_budget'
 
@@ -70,7 +70,9 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li= render 'report_row', :title => "Summary", :key => 'activities_summary'
+      %li= render 'report_row', :title => "Joint Annual Workplan By Budget (beta)", :key => 'jawp_report_budget'
+      %li= render 'report_row', :title => "Joint Annual Workplan By Expenditure (beta)", :key => 'jawp_report_spent'
+      %li= render 'report_row', :title => "Simple Workplan", :key => 'activities_summary'
       %li= render 'report_row', :title => "By District", :key => 'activities_by_district'
       %li= render 'report_row', :title => "One Row Per District", :key => 'activities_one_row_per_district'
       %li= render 'report_row', :title => "By Budget Coding (beta)", :key => 'activities_by_budget_coding'
@@ -79,8 +81,6 @@
       %li= render 'report_row', :title => "By Expenditure Coding (beta)", :key => 'activities_by_expenditure_coding'
       %li= render 'report_row', :title => "By Expenditure Cost Categorization (beta)", :key => 'activities_by_expenditure_cost_categorization'
       %li= render 'report_row', :title => "By Expenditure Districts (beta)", :key => 'activities_by_expenditure_districts'
-      %li= render 'report_row', :title => "Joint annual workplan report By Budget (beta)", :key => 'jawp_report_budget'
-      %li= render 'report_row', :title => "Joint annual workplan report By Expenditure (beta)", :key => 'jawp_report_spent'
       %li= render 'report_row', :title => "By NSP", :key => 'activities_by_nsp_budget'
       %li= render 'report_row', :title => "By NHA/NASA", :key => 'activities_by_nha'
       %li= render 'report_row', :title => "By All Codes", :key => 'activities_by_all_codes_budget'

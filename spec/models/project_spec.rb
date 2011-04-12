@@ -474,6 +474,15 @@ describe Project do
       @proj4.ultimate_funding_sources{ |e| e.id }.should == [[@org1, @org3], [@org2, @org3]]
     end
     
+    it "returns both n-2 upstream funders as the UFS's" do
+      @proj3.spend = @proj3.budget = 1000
+      @proj4.spend = @proj4.budget = 100
+      proj_funded_by(@proj3, @org1, 250, 500)
+      proj_funded_by(@proj3, @org2, 750, 500)
+      proj_funded_by(@proj4, @org3, 100, 100)
+      @proj4.ultimate_funding_sources{ |e| e.id }.should == [[@org1, @org3, bud_spend_ret(25,50)], [@org2, @org3, bud_spend_ret(75, 50)]]
+    end
+
     it "cant disambiguate funders without activities in projects of n-1 upstream for UFS" do
       proj_funded_by(@proj11, @org1)
       proj_funded_by(@proj12, @org2)

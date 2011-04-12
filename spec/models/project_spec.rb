@@ -547,24 +547,24 @@ describe Project do
 
       # organization 1
       Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1,
-              :budget => 10, :spend => 20)
+              :budget => 100, :spend => 100)
       Factory(:activity, :project => @proj1, :provider => @org2,
                      :data_response => @response1)
 
       # organization 2
       Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj21,
-              :budget => 1, :spend => 2)
+              :budget => 30, :spend => 30)
       Factory(:funding_flow, :from => @org2, :to => @org2, :project => @proj22,
-              :budget => 50)
+              :budget => 70, :spend => 70)
       Factory(:activity, :project => @proj21, :provider => @org3,
                      :data_response => @response2)
 
       # organization 3
       Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
-              :budget => 50)
+              :budget => 30, :spend => 30)
 
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
+      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
     end
 
     it "returns real UFS if it's implementer of an activity of self-funded organization" do

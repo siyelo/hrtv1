@@ -194,7 +194,10 @@ class Project < ActiveRecord::Base
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
-          budget, spend = get_budget_and_spend(funder.id, organization.id, self.id)
+          ffs = organization.in_flows.select{|ff| ff.from == funder}
+          budget = ffs.reject{|ff| ff.budget.nil?}.sum(&:budget)
+          spend  = ffs.reject{|ff| ff.spend.nil?}.sum(&:spend)
+
           funding_sources << {:ufs => funder, :fa => traced.last, 
                               :budget => budget, :spend => spend}
         else

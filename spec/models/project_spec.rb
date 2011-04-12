@@ -453,6 +453,13 @@ describe Project do
       @proj3.ultimate_funding_sources.sort_by{ |e| e[0].id }.should == [[@org1, @org3], [@org2, @org3]]
     end
     
+    it "returns both n-1 upstream sources with different amts for a single project" do
+      @proj3.spend = @proj3.budget = 100
+      proj_funded_by(@proj3, @org1, 50, 75)
+      proj_funded_by(@proj3, @org2, 50, 25)
+      @proj3.ultimate_funding_sources.sort_by{ |e| e[0].id }.should == [[@org1, @org3, bud_spend_ret(50, 75)], [@org2, @org3, bud_spend_ret(50,25)]]
+    end
+
     it "returns the n-2 upstream funder as the UFS" do
       proj_funded_by(@proj2, @org1)
       proj_funded_by(@proj3, @org2)

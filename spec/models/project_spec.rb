@@ -564,11 +564,7 @@ describe Project do
               :budget => 50)
 
       ufs = @proj3.ultimate_funding_sources
-      p ufs[0][:budget].to_s
-      p ufs[0][:spend].to_s
-      p ufs[1][:budget].to_s
-      p ufs[1][:spend].to_s
-      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 10, :spend => 20}]
+      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
     end
 
     it "returns real UFS if it's implementer of an activity of self-funded organization" do

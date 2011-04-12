@@ -197,26 +197,28 @@ class Project < ActiveRecord::Base
           budget, spend = get_budget_and_spend(funder.id, organization.id, self.id)
           funding_sources << {:ufs => funder, :fa => traced.last, 
                               :budget => budget, :spend => spend}
-        end
+        else
 
-        # potential UFS - parent funded organization that funds other organizations
-        # i.e. does not have any activity(ies) with organization as implementer
-        unless implementer_in_flows?(organization, parent_flows)
-          self_funded = funder.in_flows.map(&:from).include?(funder)
+          # potential UFS - parent funded organization that funds other organizations
+          # i.e. does not have any activity(ies) with organization as implementer
+          unless implementer_in_flows?(organization, parent_flows)
+            self_funded = funder.in_flows.map(&:from).include?(funder)
 
-          if self_funded
-            self_in_flows = funder.in_flows.select{|ff| ff.from == funder}
-            budget = self_in_flows.reject{|ff| ff.budget.nil? }.sum(&:budget)
-            spend  = self_in_flows.reject{|ff| ff.spend.nil?  }.sum(&:spend)
+            if self_funded
+              self_in_flows = funder.in_flows.select{|ff| ff.from == funder}
+              budget = self_in_flows.reject{|ff| ff.budget.nil? }.sum(&:budget)
+              spend  = self_in_flows.reject{|ff| ff.spend.nil?  }.sum(&:spend)
 
-            funding_sources << {:ufs => funder, :fa => traced.last, 
-                                :budget => budget, :spend => spend}
-          elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
-            budget, spend = get_budget_and_spend(funder.id, organization.id)
-            funding_sources << {:ufs => funder, :fa => traced.last, 
-                                :budget => budget, :spend => spend}
+              funding_sources << {:ufs => funder, :fa => traced.last, 
+                                  :budget => budget, :spend => spend}
+            elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
+              budget, spend = get_budget_and_spend(funder.id, organization.id)
+              funding_sources << {:ufs => funder, :fa => traced.last, 
+                                  :budget => budget, :spend => spend}
+            end
           end
         end
+
 
         # keep looking in parent funders
         unless traced.include?(funder)
@@ -226,7 +228,7 @@ class Project < ActiveRecord::Base
         end
       end
 
-      funding_sources.uniq
+      funding_sources#.uniq
     end
 
     # TODO: optimize this method

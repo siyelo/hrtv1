@@ -194,7 +194,9 @@ class Project < ActiveRecord::Base
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
-          funding_sources << {:ufs => funder, :fa => traced.last}
+          budget, spend = get_budget_and_spend(funder.id, organization.id, self.id)
+          funding_sources << {:ufs => funder, :fa => traced.last, 
+                              :budget => budget, :spend => spend}
         end
 
         # potential UFS - parent funded organization that funds other organizations
@@ -203,9 +205,16 @@ class Project < ActiveRecord::Base
           self_funded = funder.in_flows.map(&:from).include?(funder)
 
           if self_funded
-            funding_sources << {:ufs => funder, :fa => traced.last}
+            self_in_flows = funder.in_flows.select{|ff| ff.from == funder}
+            budget = self_in_flows.reject{|ff| ff.budget.nil? }.sum(&:budget)
+            spend  = self_in_flows.reject{|ff| ff.spend.nil?  }.sum(&:spend)
+
+            funding_sources << {:ufs => funder, :fa => traced.last, 
+                                :budget => budget, :spend => spend}
           elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
-            funding_sources << {:ufs => funder, :fa => traced.last}
+            budget, spend = get_budget_and_spend(funder.id, organization.id)
+            funding_sources << {:ufs => funder, :fa => traced.last, 
+                                :budget => budget, :spend => spend}
           end
         end
 
@@ -239,6 +248,20 @@ class Project < ActiveRecord::Base
     def implementer_in_flows?(organization, flows)
       flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
         map(&:provider).include?(organization)
+    end
+
+    def get_budget_and_spend(from_id, to_id, project_id = nil)
+      scope = FundingFlow.scoped({})
+      scope = scope.scoped(:conditions => ["organization_id_from = ? 
+                                            AND organization_id_to = ?", 
+                                            from_id, to_id])
+      scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
+      ffs = scope.all
+      
+      budget = ffs.reject{|ff| ff.budget.nil? }.sum(&:budget)
+      spend  = ffs.reject{|ff| ff.spend.nil? }.sum(&:spend)
+
+      [budget, spend]
     end
 
     # GN: Do we need to remove this or it has no side effects?

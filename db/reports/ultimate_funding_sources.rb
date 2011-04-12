@@ -18,7 +18,7 @@ csv = FasterCSV.generate do |csv|
     row << project.id
     row << project.name
     row << project.in_flows.map(&:from).join(";")
-    row << project.ultimate_funding_sources.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name})"}.join(', ')
+    row << project.ultimate_funding_sources.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name}) - Budget: #{fs[:budget]} - Spent: #{fs[:spend]}"}.join('; ')
     csv << row
   end
 end

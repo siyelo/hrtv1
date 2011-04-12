@@ -319,9 +319,10 @@ describe Project do
       @proj4 = Factory(:project, :data_response => @response4)
     end
 
-    def proj_funded_by(proj, funder)
+    def proj_funded_by(proj, funder, budget = 50, spend = 50)
       to = proj.data_response.organization
-      Factory(:funding_flow, :from => funder, :to => to, :project => proj)
+      Factory(:funding_flow, :from => funder, :to => to, :project => proj,
+               :budget => budget, :spend => spend)
       proj
     end
 
@@ -517,6 +518,34 @@ describe Project do
               :budget => 50)
       activity = Factory(:activity, :project => @proj2, :provider => @org3,
                                 :data_response => @response2)
+
+      # organization 3
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
+              :budget => 50)
+
+      @proj3.ultimate_funding_sources.should == [[@org2, @org3]]
+    end
+    
+    it "walks up donor as usual if matching activity is found for it in donor data response" do
+      # organization 2 is donor
+      @org2.raw_type = "Donor"; @org2.save
+      Factory(:funding_flow, :from => @org0, :to => @org2, :project => @proj2,
+              :budget => 50)
+      activity = Factory(:activity, :project => @proj2, :provider => @org3,
+                         :budget => 50, :data_response => @response2)
+
+      # organization 3
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
+              :budget => 50)
+
+      @proj3.ultimate_funding_sources.should == [[@org0, @org2]]
+    end
+
+    it "gives donor as real UFS if no matching activity is found for it in donor data response" do
+      # organization 2 is donor
+      @org2.raw_type = "Donor"; @org2.save
+      Factory(:funding_flow, :from => @org0, :to => @org2, :project => @proj2,
+              :budget => 50)
 
       # organization 3
       Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,

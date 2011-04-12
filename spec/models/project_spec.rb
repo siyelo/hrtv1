@@ -329,6 +329,10 @@ describe Project do
     def self_funded(proj, budget = 50, spend = 50)
       proj_funded_by(proj, proj.data_response.organization, budget, spend)
     end
+   
+    def bud_spend_ret(budget, spend)
+      {:budget => budget, :spend => spend}
+    end
 
     # helper for next tests; change activities and same conditions hold
     def should_be_org_regardless_of_activities_when_up_has_one_ufs(org, fa)
@@ -361,7 +365,7 @@ describe Project do
 
     it "returns self as the UFS if project was self-funded" do
       ufs = self_funded(@proj1).ultimate_funding_sources
-      ufs.should == [[@org1, @org1, {:budget => 50, :spend => 50}]]
+      ufs.should == [[@org1, @org1, bud_spend_ret(50,50)]]
     end
 
 # rewrite when we get to amounts with correct amounts

@@ -163,7 +163,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders, [organization])
+    trace_ultimate_funding_source(organization, funders)
   end
 
   private
@@ -174,6 +174,8 @@ class Project < ActiveRecord::Base
     end
 
     def trace_ultimate_funding_source(organization, funders, traced = [])
+      traced = traced.dup
+      traced << organization
       funding_sources = []
 
       funders.each do |funder|
@@ -192,7 +194,7 @@ class Project < ActiveRecord::Base
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
-          funding_sources << funder
+          funding_sources << [funder, traced.last]
         end
 
         # potential UFS - parent funded organization that funds other organizations
@@ -201,17 +203,16 @@ class Project < ActiveRecord::Base
           self_funded = funder.in_flows.map(&:from).include?(funder)
 
           if self_funded
-            funding_sources << funder
-          elsif funder.in_flows.empty? # when funder has blank data response
-            funding_sources << funder
+            funding_sources << [funder, traced.last]
+          elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
+            funding_sources << [funder, traced.last]
           end
         end
 
         # keep looking in parent funders
         unless traced.include?(funder)
-          traced << funder
           parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced))
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced)) unless funder.raw_type == "Donor"
         end
       end
 

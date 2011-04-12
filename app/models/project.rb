@@ -194,7 +194,7 @@ class Project < ActiveRecord::Base
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
-          funding_sources << [funder, traced.last]
+          funding_sources << {:ufs => funder, :fa => traced.last}
         end
 
         # potential UFS - parent funded organization that funds other organizations
@@ -203,9 +203,9 @@ class Project < ActiveRecord::Base
           self_funded = funder.in_flows.map(&:from).include?(funder)
 
           if self_funded
-            funding_sources << [funder, traced.last]
+            funding_sources << {:ufs => funder, :fa => traced.last}
           elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
-            funding_sources << [funder, traced.last]
+            funding_sources << {:ufs => funder, :fa => traced.last}
           end
         end
 
@@ -220,6 +220,7 @@ class Project < ActiveRecord::Base
       funding_sources.uniq
     end
 
+    # TODO: optimize this method
     def remove_not_funded_donors(funder, parent_funders)
       activities = funder.projects.map(&:activities).flatten.compact
       activities_funders = activities.map(&:project).map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}

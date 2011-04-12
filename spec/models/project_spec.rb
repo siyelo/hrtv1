@@ -361,7 +361,7 @@ describe Project do
 
     it "returns self as the UFS if project was self-funded" do
       ufs = self_funded(@proj1).ultimate_funding_sources
-      ufs.should == [[@org1, @org1]]
+      ufs.should == [[@org1, @org1, {:budget => 50, :spend => 50}]]
     end
 
 # rewrite when we get to amounts with correct amounts

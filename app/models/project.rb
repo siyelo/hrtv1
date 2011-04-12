@@ -212,11 +212,27 @@ class Project < ActiveRecord::Base
         # keep looking in parent funders
         unless traced.include?(funder)
           parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced)) unless funder.raw_type == "Donor"
+          parent_funders = remove_not_funded_donors(funder, parent_funders)
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced)) 
         end
       end
 
       funding_sources.uniq
+    end
+
+    def remove_not_funded_donors(funder, parent_funders)
+      activities = funder.projects.map(&:activities).flatten.compact
+      activities_funders = activities.map(&:project).map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}
+
+      real_funders = []
+
+      parent_funders.each do |parent_funder|
+        unless (funder.raw_type == "Donor" && !activities_funders.include?(parent_funder))
+          real_funders << parent_funder
+        end
+      end
+
+      real_funders
     end
 
     def implementer_in_flows?(organization, flows)

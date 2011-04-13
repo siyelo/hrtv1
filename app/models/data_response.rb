@@ -89,7 +89,7 @@ class DataResponse < ActiveRecord::Base
     drs = self.find(:all, options_hash_for_empty)#, :include => {:organization => :users})
     #GN: commented out optimization, this broke the method, returned too many records
     drs.select do |dr|
-      (["Agencies", "Govt Agencies", "Donors", "Donor", "NGO", "Implementer", "Implementers", "International NGO"]).include?(dr.organization.raw_type)
+      (["Agencies", "Govt Agency", "Donors", "Donor", "NGO", "Implementer", "Implementers", "International NGO"]).include?(dr.organization.raw_type)
     end
   end
 

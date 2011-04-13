@@ -28,6 +28,7 @@ class Project < ActiveRecord::Base
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
+  has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
                             organization_id_to = #{organization.id}' ] #note the single quotes !
@@ -166,8 +167,19 @@ class Project < ActiveRecord::Base
     trace_ultimate_funding_source(organization, funders)
   end
 
-  def funding_streams
-    ultimate_funding_sources
+  def cached_ultimate_funding_sources
+    ufs = []
+    funding_streams.each do |fs|
+      # NOTE: db relations problems: selecting only in flows from UFS or FA
+      # can't select in flows if other organization is intermediate in the flows
+      ufs_in_flows = in_flows.select{|ff| ff.from == fs.ufs || ff.fa}
+
+      budget = ufs_in_flows.reject{|ff| ff.budget.nil?}.sum(&:budget)
+      spend  = ufs_in_flows.reject{|ff| ff.spend.nil?}.sum(&:spend)
+
+      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
+    end
+    ufs
   end
 
   private

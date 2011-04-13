@@ -1,6 +1,8 @@
 require 'fastercsv'
 
-projects = Project.find(:all)#, :limit => 100)
+FundingStream.delete_all
+
+projects = Project.find(:all, :limit => 5)
 #projects = Project.all
 total = projects.length
 
@@ -11,7 +13,13 @@ csv = FasterCSV.generate do |csv|
 
   # data
   projects.each_with_index do |project, index|
+    ultimate_funding_sources = project.ultimate_funding_sources
     puts "Checking UFS for project with id: #{project.id} | #{index + 1}/#{total}"
+
+    # create values in db
+    ultimate_funding_sources.each do |fs|
+      project.funding_stream.create(:ufs => fs[:ufs], :fa => fs[:fa])
+    end
 
     row = []
     row << project.data_response.organization.name
@@ -20,7 +28,7 @@ csv = FasterCSV.generate do |csv|
     row << project.spend
     row << project.name
     row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.budget}|#{f.spend}"}.join(";")
-    row << project.ultimate_funding_sources.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name}) - Budget: #{fs[:budget]} - Spent: #{fs[:spend]}"}.join('; ')
+    row << ultimate_funding_sources.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name}) - Budget: #{fs[:budget]} - Spent: #{fs[:spend]}"}.join('; ')
     csv << row
   end
 end

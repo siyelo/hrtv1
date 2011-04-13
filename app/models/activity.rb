@@ -420,7 +420,7 @@ class Activity < ActiveRecord::Base
 
   def funding_streams
     return [] if project.nil?
-    project.funding_streams
+    project.cached_ultimate_funding_sources
 #  TODO scale to this activity amounts
 #    h=project.funding_streams
 #    h.each do |stream|

@@ -2,9 +2,8 @@ require 'fastercsv'
 
 FundingStream.delete_all
 
-#projects = Project.find(:all, :limit => 5)
-projects = Project.all
-#projects = [Project.find(290)]
+projects = Project.find(:all, :limit => 5)
+#projects = Project.all
 total = projects.length
 
 csv = FasterCSV.generate do |csv|
@@ -19,8 +18,7 @@ csv = FasterCSV.generate do |csv|
 
     # create values in db
     ultimate_funding_sources.each do |fs|
-      project.funding_streams.create(:ufs => fs[:ufs], :fa => fs[:fa], 
-                                     :budget => fs[:budget], :spend => fs[:spend])
+      project.funding_stream.create(:ufs => fs[:ufs], :fa => fs[:fa])
     end
 
     row = []
@@ -35,9 +33,7 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-# generate csv only in dev env
-if Rails.env == 'development'
-  File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
-    file.puts csv
-  end
+File.open(File.join(Rails.root, 'db', 'reports', 'ultimate_funding_sources.csv'), 'w') do |file|
+  file.puts csv
 end
+

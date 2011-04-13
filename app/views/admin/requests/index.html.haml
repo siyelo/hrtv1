@@ -12,8 +12,7 @@
     %tr
       %th Organization
       %th Title
-      %th Complete
-      %th Pending review
+      %th Final review
       %th Start date
       %th End date
       %th Budget
@@ -24,8 +23,7 @@
       %tr
         %td= request.organization.try(:name)
         %td= request.title
-        %td= request.complete
-        %td= request.pending_review
+        %td= request.final_review
         %td= request.start_date
         %td= request.end_date
         %td= request.budget

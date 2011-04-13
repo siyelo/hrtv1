@@ -2,7 +2,7 @@ require 'validators'
 class DataRequest < ActiveRecord::Base
 
   ### Attributes
-  attr_accessible :organization_id, :title, :complete, :pending_review,
+  attr_accessible :organization_id, :title, :final_review,
                   :start_date, :end_date, :due_date, :budget, :spend
 
   ### Associations

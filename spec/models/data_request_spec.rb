@@ -5,12 +5,11 @@ describe DataRequest do
   describe "attributes" do
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:title) }
-    it { should allow_mass_assignment_of(:complete) }
-    it { should allow_mass_assignment_of(:pending_review) }
     it { should allow_mass_assignment_of(:start_date) }
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:final_review) }
   end
 
   describe "validations" do

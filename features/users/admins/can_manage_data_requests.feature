@@ -4,17 +4,15 @@ Feature: Admin can manage data requests
   I want to be able to manage data requests
 
   Background:
-
-
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And an admin exists with username: "admin", organization: the organization
+    And I am signed in as "admin"
 
     Scenario: Admin can CRUD data requests
-      Given an organization exists with name: "Organization1"
-        And an organization exists with name: "Organization2"
-        And an admin exists with username: "admin", organization: the organization
-        And I am signed in as "admin"
       When I follow "Requests"
         And I follow "Create Data Request"
-        And I select "Organization1" from "Organization"
+        And I select "org1" from "Organization"
         And I fill in "Title" with "My data response title"
         And I fill in "Due date" with "2010-09-01"
         And I fill in "Start date" with "2010-01-01"
@@ -22,7 +20,7 @@ Feature: Admin can manage data requests
         And I press "Create request"
       Then I should see "Request was successfully created"
         And I should see "My data response title"
-        And I should see "Organization1"
+        And I should see "org1"
 
       When I follow "Edit"
         And I fill in "Title" with "My new data response title"
@@ -36,10 +34,6 @@ Feature: Admin can manage data requests
 
 
     Scenario Outline: See errors when creating data request
-      Given an organization exists with name: "org1"
-        And an organization exists with name: "org2"
-        And an admin exists with username: "admin", organization: the organization
-        And I am signed in as "admin"
       When I follow "Requests"
         And I follow "Create Data Request"
         And I select "<organization>" from "Organization"
@@ -59,3 +53,11 @@ Feature: Admin can manage data requests
         | org1         | title | 2010-09-01 |            | 2011-01-01 | Start date is an invalid date        | 
         | org1         | title | 2010-09-01 | 2010-01-01 |            | End date is an invalid date          | 
         | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date | 
+
+    Scenario: To expedite the review process, an Admin can change a Request to "Final Review" status
+      When I follow "Requests"
+      And I follow "Edit"
+      And I check "Final review"
+      And I press "Update request"
+      Then I should see "Request was successfully updated."
+    

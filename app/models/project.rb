@@ -161,6 +161,7 @@ END
     funding_streams.each do |fs|
       ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
     end
+
     ufs
   end
 

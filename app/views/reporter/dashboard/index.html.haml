@@ -4,6 +4,10 @@
 
 = render 'getting_started'
 
+- @data_responses.each do |dr|
+  %p= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, please re-check, then-submit your response."
+
+
 .first-half
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"

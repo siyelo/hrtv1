@@ -514,6 +514,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -562,5 +563,7 @@ end
 #  budget3                               :decimal(, )
 #  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
+#  budget4                               :decimal(, )
+#  budget5                               :decimal(, )
 #
 

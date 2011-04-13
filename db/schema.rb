@@ -295,8 +295,6 @@ ActiveRecord::Schema.define(:version => 20110413105521) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
-    t.decimal  "spend_in_usd"
-    t.decimal  "budget_in_usd"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

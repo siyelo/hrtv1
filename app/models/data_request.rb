@@ -19,8 +19,6 @@ end
 
 
 
-
-
 # == Schema Information
 #
 # Table name: data_requests
@@ -28,8 +26,6 @@ end
 #  id              :integer         not null, primary key
 #  organization_id :integer
 #  title           :string(255)
-#  complete        :boolean         default(FALSE)
-#  pending_review  :boolean         default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
 #  due_date        :date
@@ -37,5 +33,6 @@ end
 #  end_date        :date
 #  budget          :boolean         default(TRUE), not null
 #  spend           :boolean         default(TRUE), not null
+#  final_review    :boolean         default(FALSE)
 #
 

@@ -6,6 +6,8 @@ body.landing
     height: 580px
     #admin
       margin-top: 42px
+      position: relative
+      z-index: 5
       span
         color: $dark-blue
         +text-shadow(#ddd, 0, 1px, 1px)
@@ -17,7 +19,10 @@ body.landing
         color: $dark-orange
         font-family: 'Avenir'
         font-size: 24px
+        font-weight: normal
+        position: relative
         text-transform: none
+        z-index: 5
         +text-shadow(#ddd, 0, 1px, 1px)
         span
           color: $dark-blue
@@ -31,7 +36,8 @@ body.landing
       position: relative
   #headline
     height: 145px
-    margin-top: 162px
+    position: absolute
+    top: 162px
     width: 960px
     +replace-text("landing_headline.png")
   #kids
@@ -141,4 +147,3 @@ body.landing
       font-size: 13px
     a
       color: #fff
-

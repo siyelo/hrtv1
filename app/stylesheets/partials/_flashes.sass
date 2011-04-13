@@ -2,6 +2,8 @@
   font-size: 11px
   //Hack to make the flashes push down the content less. Inconsistent placement of flashes prevents using this hack.
   //margin-bottom: -20px
+  margin-top: 10px
+  position: relative
   text-align: center
 
   &.wide
@@ -13,27 +15,28 @@
     a
       font-size: 0.8em
 
-  .notify-close a
-    background: rgba(0, 0, 0, 0.3)
-    color: #fff
-    font-size: 8px
-    float: right
-    display: block
-    cursor: pointer
-    line-height: 1
-    margin-left: 10px
-    padding: 2px 4px 2px
-    text-decoration: none
-    +border-radius(10px)
-    &:hover
-      background: rgba(0, 0, 0, 0.5)
-      color: #fff !important
+  .notify-close
+    margin: -6px 0 0 10px
+    position: absolute
+    right: 10px
+    top: 50%
+    a
+      display: block
+      cursor: pointer
+      height: 12px
+      opacity: 0.5
+      width: 12px
+      +replace_text("icon_close_flash.png")
+      &:hover
+        opacity: 1
 
   #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-    padding: 10px 10px 8px 10px
+    padding: 10px 25px 8px 15px
     background-position: 15px 7px
     background-repeat: no-repeat
     display: inline-block
+    position: relative
+    text-align: left
     +border-radius(5px)
     +box-shadow($very-light-grey, 0, 2px, 5px)
     +text-shadow($filler, 0, 1px, 1px)
@@ -121,3 +124,22 @@ ul.response-notice li
   &:last-child
     margin: 0
     +border-bottom-radius
+      
+// Landing Page flashes override
+body.landing
+  #flashes
+    clear: both
+    position: absolute
+    top: 60px
+    width: 100%
+    z-index: 0
+    #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
+      +box-shadow($light-blue - #333, 0, 1px, 5px)
+      
+// Login Pages flashes styles
+body.login
+  #flashes
+    margin: 15px auto -10px
+    width: 560px
+    #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
+      width: 520px

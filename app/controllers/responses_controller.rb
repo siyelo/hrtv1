@@ -3,7 +3,6 @@ class ResponsesController < ApplicationController
   before_filter :require_user
   before_filter :find_response, :only => [:edit, :update, :review, :submit]
   before_filter :find_help, :only => [:edit, :update, :review]
-  before_filter :find_review_status, :only => [:review, :submit]
   before_filter :find_requests, :only => [:new, :create, :edit]
 
   def new
@@ -58,15 +57,11 @@ class ResponsesController < ApplicationController
   end
 
   def submit
-    if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-      @data_response.submitted = true
-      @data_response.submitted_at = Time.now
-      @data_response.save
+    if @data_response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@data_response)
     else
-      flash[:error] = "You cannot submit unless you have coded all your activities and other costs."
-      redirect_to review_response_url(@data_response)
+      render :review
     end
   end
 
@@ -74,6 +69,7 @@ class ResponsesController < ApplicationController
 
     def find_response
       @data_response = DataResponse.available_to(current_user).find params[:id]
+      @response = @data_response # TODO refactor all @data_response to @response
     end
 
     def find_requests
@@ -82,15 +78,5 @@ class ResponsesController < ApplicationController
 
     def find_help
       @model_help = ModelHelp.find_by_model_name 'DataResponseReview'
-    end
-
-    def find_review_status
-      @uncoded_activities     = @data_response.uncoded_activities
-      @uncoded_other_costs    = @data_response.uncoded_other_costs
-      @budget_activities      = @data_response.coded_activities
-      @budget_other_costs     = @data_response.coded_other_costs
-      @warnings               = []
-      @warnings               << :other_costs_missing unless @data_response.other_costs_entered?
-      @warnings               << :activities_missing  unless @data_response.activities_entered?
     end
 end

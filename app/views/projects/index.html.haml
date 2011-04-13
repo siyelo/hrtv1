@@ -49,8 +49,8 @@
     - else
       %tr
         %td{:colspan => 100}
-          You have no projects yet.
-          = link_to "Add your first project now.", new_response_project_path(@data_response)
+          = render 'no_projects_yet'
+
 
 = will_paginate @projects
 

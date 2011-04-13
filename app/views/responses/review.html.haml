@@ -6,22 +6,105 @@
 
 = render 'getting_started_submit'
 
-#flashes
-  
-  #notice 
-    Please make sure your response is complete before submitting.
-    %span.notify-close= link_to_function 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'
+= error_messages_for :response, :header_message => "", :message => ""
 
-%h3.ready Projects Entered
-= render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
-= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
-= render 'uncoded_other_cost_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
-= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
+- ready_class = @response.projects_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Projects Entered
+  - unless @response.projects_entered?
+    %span.info
+      = render 'projects/no_projects_yet'
 
-- unless @warnings.empty?
-  #flashes.wide
-    #notice
-      = display_warnings(@warnings, @data_response)
+- ready_class = @response.projects_linked? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Projects Linked to the Funder Projects
+  - unless @response.projects_linked?
+    %span.info
+      Please
+      = link_to "link your projects", "#"
+      to the respective projects of your Funder(s).
+
+- ready_class = @response.activities_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Activities Entered
+  - unless @response.activities_entered?
+    %span.info
+      - unless @response.projects_entered?
+        = render 'projects/no_projects_yet'
+        then you can start adding Activities.
+      - else
+        You have project(s), but no activities yet.
+        = link_to "Start by adding your first activity now.", response_projects_path(@data_response)
+
+- ready_class = @response.activities_coded? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Activities Classified
+  %span.info
+    - unless @response.activities_coded?
+      - unless @data_response.uncoded_activities.empty?
+        Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. Refreshing this page will remove rows you have corrected.
+      - else
+        Start by adding a few Activities first (see above), then you can start classifying them.
+- unless @response.activities_coded?
+  - unless @data_response.uncoded_activities.empty?
+    = render 'uncoded_table', :activities => @data_response.uncoded_activities
+    %p.guide
+
+-#= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
+
+- ready_class = @response.other_costs_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Other Costs Entered
+  - unless @response.other_costs_entered?
+    %span.info
+      - unless @response.projects_entered?
+        = render 'projects/no_projects_yet'
+        then you can start adding Other Costs.
+      - else
+        Other Costs help you include any financial information at the central level and/or administrative expenses.
+        = link_to "Start by adding your first cost now.", response_projects_path(@data_response)
+
+- ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Other Costs Classified
+  %span.info
+    - unless @response.other_costs_coded?
+      - unless @data_response.uncoded_other_costs.empty?
+        Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+      - else
+        Start by adding a few Other Costs first (see above), then you can start classifying them.
+
+- unless @response.other_costs_coded?
+  - unless @data_response.uncoded_other_costs.empty?
+    = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
+
+- unless @response.other_costs_coded?
+  - unless @data_response.uncoded_other_costs.empty?
+    = render 'uncoded_other_cost_table', :activities => @uncoded_other_costs
+
+-#= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
+
+
+- ready_class = @response.submitted ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Response submitted for Initial Review
+  - unless @response.submitted
+    %span.info
+      You have not yet submitted your Response for the initial review.
+  - else
+    = "Your response was submitted on #{@response.submitted_at.to_s(:long)}"
+
+
+- ready_class = @response.submitted_for_final_review ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Response submitted for Final Review
+  %span.info
+    - unless @response.submitted_for_final_review
+      You have not yet submitted your Response for the final review.
+    - else
+      = "Your response was submitted on #{@response.submitted_for_final_review_at.to_s(:long)}"
+
+
 %hr.divider
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"

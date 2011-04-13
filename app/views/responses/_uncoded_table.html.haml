@@ -1,32 +1,25 @@
-- if activities.empty?
-  %h3.ready= "All #{type} have been coded."
-- else
-  %h3.not-ready
-    = "Uncoded #{type.capitalize}"
-    %span.info Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. Refreshing this page will remove rows you have corrected.
-  
-  .simple_table.push
-    %table
-      %thead
+.simple_table.push
+  %table
+    %thead
+      %tr
+        %td Name
+        %td Description
+        %td Budget by Purposes
+        %td Budget by Locations
+        %td Budget by Inputs
+        %td Expenditure by Purposes
+        %td Expenditure by Locations
+        %td Expenditure by Inputs
+        %td.manage Manage
+    %tbody
+      - activities.each do |activity|
         %tr
-          %td Name
-          %td Description
-          %td Budget by Purposes
-          %td Budget by Locations
-          %td Budget by Inputs
-          %td Expenditure by Purposes
-          %td Expenditure by Locations
-          %td Expenditure by Inputs
-          %td.manage Manage
-      %tbody
-        - activities.each do |activity|
-          %tr
-            %th= activity.name
-            %th= activity.description
-            %th= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
-            %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
-            %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_response_activity_path(activity.data_response, activity)}"
+          %th= activity.name
+          %th= activity.description
+          %th= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
+          %th= link_to 'Classify', activity_code_assignments_path(activity)

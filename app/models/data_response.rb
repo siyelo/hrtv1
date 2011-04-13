@@ -165,8 +165,28 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  def submit!
+    if ready_to_submit?
+      self.submitted = true
+      self.submitted_at = Time.now
+      return self.save
+    else
+      self.errors.add_to_base("Your activites are not yet coded.") if !activities_coded?
+      self.errors.add_to_base("Your other costs are not yet coded.") if !other_costs_coded?
+      return false
+    end
+  end
+
   def ready_to_submit?
     activities_coded? && other_costs_coded?
+  end
+
+  def projects_entered?
+    !self.projects.empty?
+  end
+
+  def projects_linked?
+    false #TODO
   end
 
   def activities_entered?
@@ -201,6 +221,13 @@ class DataResponse < ActiveRecord::Base
     other_costs_entered? && uncoded_other_costs.empty?
   end
 
+  def submitted_for_final_review
+    false #TODO
+  end
+
+  def submitted_for_final_review_at
+    nil #Time.now #TODO
+  end
 end
 
 

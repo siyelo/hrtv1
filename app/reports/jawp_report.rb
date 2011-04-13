@@ -8,7 +8,7 @@ class Reports::JawpReport
 
     @activities = activities
     #@activities = Activity.only_simple.find(:all,
-                  ##:conditions => ["activities.id IN (?)", [889, 890, 4348]], # NOTE: FOR DEBUG ONLY
+                  #:conditions => ["activities.id IN (?)", [889, 890, 4348]], # NOTE: FOR DEBUG ONLY
                   #:include => [:locations, :provider, :organizations,
                               #:beneficiaries, {:data_response => :organization}])
 
@@ -204,12 +204,12 @@ class Reports::JawpReport
       row << "Currency"
    
       # values below given through build_code_assignment_rows
-      row << "Implementer"
-      row << "Implementer Type"
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
       row << "Possible Duplicate?"
+      row << "Implementer"
+      row << "Implementer Type"
       row << 'Funding Source'
       row << 'Funding Source Type'
       row << 'Financing Agent'

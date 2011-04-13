@@ -6,11 +6,11 @@ class Reports::JawpReport
   def initialize(type, activities)
     @is_budget  = is_budget?(type)
 
-    @activities = activities
-    #@activities = Activity.only_simple.find(:all,
-                  #:conditions => ["activities.id IN (?)", [889, 890, 4348]], # NOTE: FOR DEBUG ONLY
-                  #:include => [:locations, :provider, :organizations,
-                              #:beneficiaries, {:data_response => :organization}])
+    #@activities = activities
+    @activities = Activity.only_simple.find(:all,
+                  :conditions => ["activities.id IN (?)", [ 3219]], # NOTE: FOR DEBUG ONLY
+                  :include => [:locations, :provider, :organizations,
+                              :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -75,7 +75,7 @@ class Reports::JawpReport
     row << amount_total
     row << amount_total_in_usd
     row << is_national
-    row << Activity.only_simple.canonical_with_scope.find(:first, :conditions => {:id => activity.id}).nil?
+    row << activity.possible_duplicate?
 
     build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
   end
@@ -140,6 +140,13 @@ class Reports::JawpReport
               puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(amount_total, district_coding.amount_not_in_children)}"
               puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(amount_total, cost_category_coding.amount_not_in_children)}" 
               puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
+
+              # adjust ratio with subactivity % or amount
+              # if activity.sub_activities.empty?
+              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(....)
+              # else 
+              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, some_logic_for_dup(activity.organization, sa.implementer))}
+              # end
               amount = (amount_total || 0) * ratio
 
               #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s

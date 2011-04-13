@@ -604,6 +604,34 @@ describe Activity do
         location2_coding.cached_amount.should == 40
         location2_coding.sum_of_children.should == 0
       end
+      
+      it "returns empty array unless all sub implementers have locations" do
+        donor         = Factory.create(:donor, :name => 'Donor')
+        ngo           = Factory.create(:ngo, :name => 'Ngo')
+        @location1    = Factory.create(:location, :short_display => 'Location1')
+        @location2    = Factory.create(:location, :short_display => 'Location2')
+        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory.create(:ngo, :name => 'Implementer2')# , :locations => [@location2])
+        data_request  = Factory.create(:data_request, :organization => donor)
+        data_response = Factory.create(:data_response, :organization => ngo,
+                                       :data_request => data_request)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :budget => 4)
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer1,
+                                                  :data_response => data_response,
+                                                  :budget => 3)
+
+        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                  :provider => implementer2,
+                                                  :data_response => data_response,
+                                                  :budget => 40)
+
+        @activity.budget_district_coding_adjusted.should be_empty
+      end
 
       context "sub_activities does not have budget district code assignments" do
         it "returns even split on activity locations when activity has locations" do

@@ -541,7 +541,7 @@ class Activity < ActiveRecord::Base
     end
 
     def district_codings_from_sub_activities(klass)
-      code_assignments = sub_activity_district_code_assignments(klass.name)
+      code_assignments = sub_activity_district_code_assignments_if_complete(klass.name)
 
       location_amounts = {}
       code_assignments.each do |ca|
@@ -550,6 +550,17 @@ class Activity < ActiveRecord::Base
       end
 
       location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
+    end
+
+    def sub_activity_district_code_assignments_if_complete(coding_type)
+      case coding_type
+      when 'CodingBudgetDistrict'
+        cas = sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
+      when 'CodingSpendDistrict'
+        cas = sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
+      end
+      return [] if cas.include?([])
+      cas.flatten
     end
 
     def sub_activity_district_code_assignments(coding_type)

@@ -94,9 +94,9 @@ class Report < ActiveRecord::Base
         when 'activities_by_expenditure_districts'
           Reports::ActivitiesByDistricts.new(:spent)
         when 'jawp_report_budget'
-          Reports::JawpReport.new(:budget)
+          Reports::JawpReport.new(:budget, Activity.jawp_activities)
         when 'jawp_report_spent'
-          Reports::JawpReport.new(:spent)
+          Reports::JawpReport.new(:spent, Activity.jawp_activities)
         when 'activities_by_nsp_budget'
           Reports::ActivitiesByNsp.new(Activity.only_simple.canonical, :budget, true)
         when 'activities_by_nha'

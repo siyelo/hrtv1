@@ -150,6 +150,12 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified?}
   end
 
+  def self.jawp_activities
+    Activity.only_simple.find(:all,
+      :include => [:locations, :provider, :organizations,
+                  :beneficiaries, {:data_response => :organization}])
+  end
+
   def self.download_template
     FasterCSV.generate do |csv|
       csv << Activity::FILE_UPLOAD_COLUMNS

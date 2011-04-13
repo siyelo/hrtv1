@@ -11,11 +11,8 @@
     %td Organization:
     %td= @request.organization.try(:name)
   %tr
-    %td Complete:
-    %td= @request.complete
-  %tr
-    %td Pending review:
-    %td= @request.pending_review
+    %td Final review:
+    %td= @request.final_review
   %tr
     %td Start date:
     %td= @request.start_date

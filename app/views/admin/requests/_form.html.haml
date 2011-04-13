@@ -6,8 +6,7 @@
   = f.input :end_date, :as => :string, :label => 'End date', :input_html => {:class => 'date_picker'}, :hint => 'What is the end date of period for which data is requested?'
   = f.input :budget, :as => :boolean, :label => 'Enter budget?', :hint => 'Should users enter budget?'
   = f.input :spend, :as => :boolean, :label => 'Enter expenditure?', :hint => 'Should users enter expenditure?'
-  = f.input :complete, :as => :boolean, :label => 'Complete', :hint => 'Is this data request completed?'
-  = f.input :pending_review, :as => :boolean, :label => 'Pending review', :hint => 'Is this data request pending review?'
+  = f.input :final_review, :as => :boolean, :label => 'Final review', :hint => 'Is this data request in the final review stage?'
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button((@request.new_record? ? 'Create request' : 'Update request'), :class => 'last')

@@ -8,7 +8,7 @@ Feature: Admin can manage data requests
     And a data_request exists with organization: the organization
     And an admin exists with username: "admin", organization: the organization
     And I am signed in as "admin"
-
+    
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
         And I follow "Create Data Request"

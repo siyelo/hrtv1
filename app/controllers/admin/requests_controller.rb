@@ -16,11 +16,11 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Request was successfully created.")
+    create!(:notice => "Request was successfully created.") { admin_requests_url }
   end
 
   def update
-    update!(:notice => "Request was successfully updated.")
+    update!(:notice => "Request was successfully updated.") { admin_requests_url }
   end
 
   def destroy

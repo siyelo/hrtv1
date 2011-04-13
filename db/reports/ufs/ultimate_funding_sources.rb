@@ -4,6 +4,7 @@ FundingStream.delete_all
 
 #projects = Project.find(:all, :limit => 5)
 projects = Project.all
+#projects = [Project.find(290)]
 total = projects.length
 
 csv = FasterCSV.generate do |csv|

@@ -1,6 +1,7 @@
 class RemoveStrangeData < ActiveRecord::Migration
   def self.up
-    Project.find(278).delete
+    p = Project.find_by_id(278)
+    p.delete if p
   end
 
   def self.down

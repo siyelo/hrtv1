@@ -564,6 +564,7 @@ describe Project do
               :budget => 30, :spend => 30)
 
       ufs = @proj3.ultimate_funding_sources
+      p ufs[0][:budget].to_s
       ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
     end
 

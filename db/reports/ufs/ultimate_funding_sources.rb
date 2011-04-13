@@ -18,7 +18,8 @@ csv = FasterCSV.generate do |csv|
 
     # create values in db
     ultimate_funding_sources.each do |fs|
-      project.funding_streams.create(:ufs => fs[:ufs], :fa => fs[:fa])
+      project.funding_streams.create(:ufs => fs[:ufs], :fa => fs[:fa], 
+                                     :budget => fs[:budget], :spend => fs[:spend])
     end
 
     row = []

@@ -169,12 +169,11 @@ class Project < ActiveRecord::Base
 
   def cached_ultimate_funding_sources
     ufs = []
-    streams = funding_streams
-    streams.each do |fs|
-      # NOTE: db relations problems: selecting only in flows from UFS or FA
-      # can't select in flows if other organization is intermediate in the flows
+
+    funding_streams.each do |fs|
       ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
     end
+
     ufs
   end
 

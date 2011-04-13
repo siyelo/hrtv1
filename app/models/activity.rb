@@ -424,10 +424,14 @@ class Activity < ActiveRecord::Base
     budget_ratio = budget && project.budget ? budget / project.budget : 0
     spend_ratio  = spend && project.spend ? spend / project.spend : 0
 
-    project.cached_ultimate_funding_sources.each do |fs|
+    ufs = project.cached_ultimate_funding_sources
+
+    ufs.each do |fs|
       fs[:budget] = fs[:budget] * budget_ratio if fs[:budget]
       fs[:spend]  = fs[:spend] * spend_ratio if fs[:spend]
     end
+
+    ufs
   end
 
   private

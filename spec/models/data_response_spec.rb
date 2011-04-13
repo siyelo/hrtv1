@@ -150,23 +150,45 @@ describe DataResponse do
     end
   end
   
-  describe "completed" do
+  describe "ready to submit" do
     before :each do
       @request  = Factory.create(:data_request, :title => 'Data Request 1')
       @response = Factory.create(:data_response, :data_request => @request)
-      #project = Factory(:project, :data_response => response)
+      @project = Factory(:project, :data_response => @response)
+    end
+
+    it "returns false if there are no activities" do
+      @response.activities_coded?.should == false
+      @response.ready_to_submit?.should == false
     end
     
     it "returns false if there are uncoded activities" do
-      @response.complete.should == false
+      @activity = Factory(:activity, :data_response => @response, :project => @project)
+      @response.activities_coded?.should == false
+      @response.ready_to_submit?.should == false
+    end
+            
+    it "returns true if all activities are coded" do
+      classify_the_activity       #has side effects on @request, @response, @project !!      
+      classify_the_other_cost
+      @response.ready_to_submit?.should == true
     end
     
-    it "returns false if there are uncoded other costs" do 
-      @request  = Factory.create(:data_request, :title => 'Data Request 1')
-      @response = Factory.create(:data_response, :data_request => @request)
+    it "returns false if there are uncoded other costs" do
+      @response.other_costs_coded?.should == false
+      @response.ready_to_submit?.should == false
     end
+    
+    it "returns true if other costs are coded" do
+      classify_the_other_cost
+      classify_the_activity
+      @response.other_costs_coded?.should == true
+      @response.ready_to_submit?.should == true
+    end
+    
+    
   end
-  
+
 end
 
 

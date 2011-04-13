@@ -10,13 +10,17 @@ class DataResponse < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
-                  :contact_name, :contact_name, :contact_position, :contact_phone_number, 
+                  :contact_name, :contact_name, :contact_position, :contact_phone_number,
                   :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
   belongs_to :organization
   belongs_to :data_request
   has_many :activities, :dependent => :destroy
+  # until we get rid of sub-activities, we refer to 'real' activities like this
+  # normal_activities deprecates self.activities.roots
+  has_many :normal_activities, :class_name => "Activity",
+           :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
@@ -30,10 +34,10 @@ class DataResponse < ActiveRecord::Base
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
   validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location, :contact_phone_number, 
+                        :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number
-                        
-                        
+
+
   validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
   validates_date :fiscal_year_start_date
@@ -160,10 +164,44 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
+
+  def ready_to_submit?
+    activities_coded? && other_costs_coded?
+  end
+
+  def activities_entered?
+    !self.normal_activities.empty?
+  end
+
+  def other_costs_entered?
+    !self.activities.with_type("OtherCost").empty?
+  end
+
+  def uncoded_activities
+    self.normal_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+  end
+
+  def coded_activities
+    self.normal_activities.select{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+  end
+
+  def uncoded_other_costs
+    self.activities.with_type("OtherCost").reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+  end
+
+  def coded_other_costs
+    self.activities.with_type("OtherCost").select{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+  end
+
+  def activities_coded?
+    activities_entered? && uncoded_activities.empty?
+  end
+
+  def other_costs_coded?
+    other_costs_entered? && uncoded_other_costs.empty?
+  end
+
 end
-
-
-
 
 
 # == Schema Information

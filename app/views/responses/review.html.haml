@@ -6,6 +6,13 @@
 
 = render 'getting_started_submit'
 
+#flashes
+  
+  #notice 
+    Please make sure your response is complete before submitting.
+    %span.notify-close= link_to_function 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'
+
+%h3.ready Projects Entered
 = render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
 = render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
 = render 'uncoded_other_cost_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
@@ -15,6 +22,6 @@
   #flashes.wide
     #notice
       = display_warnings(@warnings, @data_response)
-
+%hr.divider
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"

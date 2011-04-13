@@ -79,6 +79,18 @@ body.app
       font-size: 0.9em
       padding: 20px 0 10px
       text-transform: none
+      &.ready
+        background: image_url("tick_32.png") no-repeat 5px top
+        padding: 8px 0 20px 40px
+      &.not-ready
+        background: image_url("delete_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
+        .info
+          display: block
+          font-size: 11px
+          font-weight: normal
+          line-height: 1.4
+          padding-top: 5px
     h4
       font-size: 12px
     > .summary
@@ -244,6 +256,8 @@ body.app
   .simple_table
     +pie-clearfix
     /* a hack, but the padding interferes with .third
+    &.push
+      margin: 0 0 15px 40px
     hr
       background: none
       border: none

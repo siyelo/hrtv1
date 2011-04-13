@@ -76,7 +76,7 @@ class Activity < ActiveRecord::Base
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
-  accepts_nested_attributes_for :funding_sources, :allow_destroy => true, 
+  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
 
   ### Delegates
@@ -297,13 +297,13 @@ class Activity < ActiveRecord::Base
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
     if budget_changed?
-      [CodingBudget, CodingBudgetDistrict, 
+      [CodingBudget, CodingBudgetDistrict,
          CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
-      [CodingSpend, CodingSpendDistrict, 
+      [CodingSpend, CodingSpendDistrict,
          CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
         set_classified_amount_cache(type)
       end
@@ -339,7 +339,7 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies budget code assignments to spend when user has chosen 
+  # This method copies budget code assignments to spend when user has chosen
   # to use budget codings for expenditure: All spend mappings are copied.
   def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
     coding_types.each do |budget_coding_type|
@@ -375,7 +375,7 @@ class Activity < ActiveRecord::Base
       location_amounts[ca.code] += ca.amount
     end
 
-    location_amounts.each do |location, amount| 
+    location_amounts.each do |location, amount|
       self.locations << location
       fake_ca(klass, location, amount).save!
     end

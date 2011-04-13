@@ -85,16 +85,12 @@ class ResponsesController < ApplicationController
     end
 
     def find_review_status
-      @data_response || find_response
-      root_activities         = @data_response.activities.roots
-      other_cost_activities   = @data_response.activities.with_type("OtherCost")
-      @uncoded_activities     = root_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
-      @uncoded_other_costs    = other_cost_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)}
-      @budget_activities      = root_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
-      @budget_other_costs     = other_cost_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
+      @uncoded_activities     = @data_response.uncoded_activities
+      @uncoded_other_costs    = @data_response.uncoded_other_costs
+      @budget_activities      = @data_response.coded_activities
+      @budget_other_costs     = @data_response.coded_other_costs
       @warnings               = []
-      @warnings               << :other_costs_missing if other_cost_activities.empty?
-      @warnings               << :activities_missing  if root_activities.empty?
+      @warnings               << :other_costs_missing unless @data_response.other_costs_entered?
+      @warnings               << :activities_missing  unless @data_response.activities_entered?
     end
-
 end

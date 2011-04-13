@@ -1,33 +1,68 @@
 #flashes, .flashes
-  +border-radius(5px)
-  +box-shadow($very-light-grey, 0, 2px, 5px)
-  margin: 0 auto
-  padding-bottom: 5px
+  font-size: 11px
+  //Hack to make the flashes push down the content less. Inconsistent placement of flashes prevents using this hack.
+  //margin-bottom: -20px
+  text-align: center
+
+  &.wide
+    +border-radius(0)
+    font-size: 0.8em
+    margin-left: 10px
+    margin-top: 5px
+    width: auto
+    a
+      font-size: 0.8em
+
+  .notify-close a
+    background: rgba(0, 0, 0, 0.3)
+    color: #fff
+    font-size: 8px
+    float: right
+    display: block
+    cursor: pointer
+    line-height: 1
+    margin-left: 10px
+    padding: 2px 4px 2px
+    text-decoration: none
+    +border-radius(10px)
+    &:hover
+      background: rgba(0, 0, 0, 0.5)
+      color: #fff !important
+
   #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-    padding: 15px 10px 15px 25px
+    padding: 10px 10px 8px 10px
     background-position: 15px 7px
     background-repeat: no-repeat
-    margin-bottom: 5px
+    display: inline-block
+    +border-radius(5px)
+    +box-shadow($very-light-grey, 0, 2px, 5px)
+    +text-shadow($filler, 0, 1px, 1px)
+
   #success, #info, .success, .info
     border-color: #99cc99
     color: #4f8a10
+    //background-image: url(/images/alertsuccess_icon.png)
     background-color: #dff2bf
   #notice, .notice
     border-color: #99cc99
     color: #00529b
     background-color: #bde5f8
+    //background-image: url(/images/alertinfo_icon.png)
   #warning, .warning
     border-color: #99cc99
     color: #9f6000
     background-color: #feefb3
+    //background-image: url(/images/alertwarning_icon.png)
   #validation_error, .validation_error
     border-color: #cc9999
     color: #d63301
     background-color: #ffccba
+    //background-image: url(/images/alertvalidation_error_icon.png)
   #error, .error
     border-color: #cc9999
     color: #d8000c
     background-color: #ffbaba
+    //background-image: url(/images/alerterror_icon.png)
   a:hover
     color: $dark-blue !important
 
@@ -45,10 +80,12 @@
     margin-bottom: 5px
     &.error
       background-color: #ffbaba
+      //background-image: url(/images/alerterror_icon.png)
       border-color: #cc9999
       color: #d8000c
     &.notice
       background-color: #bde5f8
+      //background-image: url(/images/alertinfo_icon.png)
       border-color: #99cc99
       color: #00529b
 

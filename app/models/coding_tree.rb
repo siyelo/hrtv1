@@ -57,6 +57,8 @@ class CodingTree
     end
   end
 
+  attr_reader :activity, :coding_klass
+
   def initialize(activity, coding_klass)
     @activity     = activity
     @coding_klass = coding_klass
@@ -71,7 +73,7 @@ class CodingTree
   #   - if sum of children is same as activity classification amount
   def valid?
     children_sum = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
-    inner_root.valid_children? && 
+    inner_root.valid_children? &&
       children_sum == @activity.classification_amount(@coding_klass.to_s)
   end
 

@@ -1,8 +1,9 @@
 - if activities.empty?
 - else
-  %p.guide Click the classify link at the end of each row to classify each other cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. You may click the "Use Budget codings for Expenditure" box to use the classifications as for the budget if they are roughly similar. Refreshing this page will remove rows you have corrected.
-  %h3= "Uncoded #{type.capitalize}"
-  .simple_table
+  %h3.not-ready
+    = "Uncoded #{type.capitalize}"
+    %span.info Click the classify link at the end of each row to classify each other cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount. You may click the "Use Budget codings for Expenditure" box to use the classifications as for the budget if they are roughly similar. Refreshing this page will remove rows you have corrected.
+  .simple_table.push
     %table
       %thead
         %tr
@@ -20,4 +21,3 @@
             %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
             %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
             %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_response_other_cost_path(activity.data_response, activity)}"
-    %hr

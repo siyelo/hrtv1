@@ -418,6 +418,15 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def funding_streams
+    return [] if project.nil?
+    project.funding_streams
+#  TODO scale to this activity amounts
+#    h=project.funding_streams
+#    h.each do |stream|
+#      stream[:budget]=
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

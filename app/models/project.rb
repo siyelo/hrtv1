@@ -166,6 +166,10 @@ class Project < ActiveRecord::Base
     trace_ultimate_funding_source(organization, funders)
   end
 
+  def funding_streams
+    ultimate_funding_sources
+  end
+
   private
 
     def validate_budgets

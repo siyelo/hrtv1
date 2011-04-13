@@ -34,7 +34,7 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-File.open(File.join(Rails.root, 'db', 'reports', 'ultimate_funding_sources.csv'), 'w') do |file|
+File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
   file.puts csv
 end
 

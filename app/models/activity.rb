@@ -420,11 +420,14 @@ class Activity < ActiveRecord::Base
 
   def funding_streams
     return [] if project.nil?
-    project.cached_ultimate_funding_sources
-#  TODO scale to this activity amounts
-#    h=project.funding_streams
-#    h.each do |stream|
-#      stream[:budget]=
+
+    budget_ratio = budget && project.budget ? budget / project.budget : 0
+    spend_ratio  = spend && project.spend ? spend / project.spend : 0
+
+    project.cached_ultimate_funding_sources.each do |fs|
+      fs[:budget] = fs[:budget] * budget_ratio
+      fs[:spend]  = fs[:spend] * spend_ratio
+    end
   end
 
   private

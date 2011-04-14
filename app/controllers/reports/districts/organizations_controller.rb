@@ -18,11 +18,11 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
     activities         = @organization.dr_activities
 
     if @treemap
-      @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
-      @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
-    else
       @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
       @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
+    else
+      @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
+      @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
     end
   end
 

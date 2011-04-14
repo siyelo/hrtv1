@@ -19,7 +19,60 @@ module Charts::DistrictPies
                  organizations.name",
       :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
+    end
+
+    def ultimate_funding_sources(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_ufs_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def financing_agents(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_fa_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def implementers(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN organizations ON activities.provider_id = organizations.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
     end
 
     ### admin/district/:id/activities
@@ -112,25 +165,6 @@ module Charts::DistrictPies
             values << [friendly_name(ca.activity), ca.value.to_f.round(2)] #value is the aggregate column from the sql
           else
             other += ca.value.to_f
-          end
-        end
-
-        values << ['Other', other.round(2)]
-
-        {
-          :values => values,
-          :names => {:column1 => 'Activity', :column2 => 'Amount'}
-        }.to_json
-      end
-
-      def prepare_organizations_pie_values(organizations)
-        values = []
-        other = 0.0
-        organizations.each_with_index do |organization, index|
-          if index < 5
-            values << [organization.name, organization.value.to_f.round(2)]
-          else
-            other += organization.value.to_f
           end
         end
 

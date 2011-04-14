@@ -13,6 +13,7 @@ class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
+  include NumberHelper
 
   cattr_reader :per_page
   @@per_page = 3
@@ -28,6 +29,7 @@ class Project < ActiveRecord::Base
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
+  has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
                             organization_id_to = #{organization.id}' ] #note the single quotes !
@@ -163,7 +165,17 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders, [organization])
+    trace_ultimate_funding_source(organization, funders)
+  end
+
+  def cached_ultimate_funding_sources
+    ufs = []
+
+    funding_streams.each do |fs|
+      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
+    end
+
+    ufs
   end
 
   private
@@ -174,48 +186,69 @@ class Project < ActiveRecord::Base
     end
 
     def trace_ultimate_funding_source(organization, funders, traced = [])
+      traced = traced.dup
+      traced << organization
       funding_sources = []
 
       funders.each do |funder|
 
         funder_reported_flows = funder.in_flows.select{|f| f.organization == funder}
-        # check if org in any of funders self-reported projects
-        # if so, only traverse up / consider flows in those projects
-        #if implementer_in_flows?(organization, funder_reported_flows)
-          self_flows = funder_reported_flows.select{|f| f.from == funder}
-          parent_flows = funder_reported_flows.select{|f| f.from != funder}
-       # else
-       #   self_flows = funder.in_flows.select{|f| f.from == funder}
-       #   parent_flows = funder.in_flows.select{|f| f.from != funder}
-       # end
+        self_flows = funder_reported_flows.select{|f| f.from == funder}
+        parent_flows = funder_reported_flows.select{|f| f.from != funder}
 
         # real UFS - self funded organization that funds other organizations
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
-          funding_sources << funder
-        end
+          ffs = organization.in_flows.select{|ff| ff.from == funder}
 
-        # potential UFS - parent funded organization that funds other organizations
-        # i.e. does not have any activity(ies) with organization as implementer
-        unless implementer_in_flows?(organization, parent_flows)
-          self_funded = funder.in_flows.map(&:from).include?(funder)
+          funding_sources << {:ufs => funder, :fa => traced.last, 
+                              :budget => get_budget(ffs), :spend => get_spend(ffs)}
+        else
 
-          if self_funded
-            funding_sources << funder
-          elsif funder.in_flows.empty? # when funder has blank data response
-            funding_sources << funder
+          # potential UFS - parent funded organization that funds other organizations
+          # i.e. does not have any activity(ies) with organization as implementer
+          unless implementer_in_flows?(organization, parent_flows)
+            self_funded = funder.in_flows.map(&:from).include?(funder)
+
+            if self_funded
+              ffs = funder.in_flows.select{|ff| ff.from == funder}
+              funding_sources << {:ufs => funder, :fa => traced.last, 
+                                  :budget => get_budget(ffs), :spend => get_spend(ffs)}
+            elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
+              budget, spend = get_budget_and_spend(funder.id, organization.id)
+              funding_sources << {:ufs => funder, :fa => traced.last, 
+                                  :budget => budget, :spend => spend}
+            end
           end
         end
 
+
         # keep looking in parent funders
         unless traced.include?(funder)
-          traced << funder
           parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced))
+          parent_funders = remove_not_funded_donors(funder, parent_funders)
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced)) 
         end
       end
 
-      funding_sources.uniq
+      funding_sources
+    end
+
+    # TODO: optimize this method
+    def remove_not_funded_donors(funder, parent_funders)
+      activities = funder.projects.map(&:activities).flatten.compact
+      activities_funders = activities.map(&:project).
+        map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}
+
+      real_funders = []
+
+      parent_funders.each do |parent_funder|
+        unless (funder.raw_type == "Donor" && !activities_funders.include?(parent_funder))
+          real_funders << parent_funder
+        end
+      end
+
+      real_funders
     end
 
     def implementer_in_flows?(organization, flows)
@@ -223,8 +256,34 @@ class Project < ActiveRecord::Base
         map(&:provider).include?(organization)
     end
 
-    # GN: Do we need to remove this or it has no side effects?
-    # Definitely enable assign_project_to_funding_flows when finishing PT: 12144777
+    def get_budget_and_spend(from_id, to_id, project_id = nil)
+      scope = FundingFlow.scoped({})
+      scope = scope.scoped(:conditions => ["organization_id_from = ? 
+                                            AND organization_id_to = ?", 
+                                            from_id, to_id])
+      scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
+      ffs = scope.all
+
+      [get_budget(ffs), get_spend(ffs)]
+    end
+
+    def get_budget(funding_sources)
+      amount = 0
+      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
+        budget = fss.reject{|ff| ff.budget.nil?}.sum(&:budget)
+        amount += budget * currency_rate(project.currency, 'USD')
+      end
+      amount
+    end
+
+    def get_spend(funding_sources)
+      amount = 0
+      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
+        spend = fss.reject{|ff| ff.spend.nil?}.sum(&:spend)
+        amount += spend * currency_rate(project.currency, 'USD')
+      end
+      amount
+    end
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id

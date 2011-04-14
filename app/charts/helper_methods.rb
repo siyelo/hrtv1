@@ -101,4 +101,26 @@ module Charts::HelperMethods
     end
     codes
   end
+
+  private
+
+    def prepare_pie_values_json(records)
+      values = []
+      other = 0.0
+
+      records.each_with_index do |record, index|
+        if index < 10
+          values << [record.name, record.value.to_f.round(2)]
+        else
+          other += record.value.to_f
+        end
+      end
+
+      values << ['Other', other.round(2)]
+
+      {
+        :values => values,
+        :names => {:column1 => 'Name', :column2 => 'Amount'}
+      }.to_json
+    end
 end

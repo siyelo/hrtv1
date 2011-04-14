@@ -418,6 +418,22 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def funding_streams
+    return [] if project.nil?
+
+    budget_ratio = budget && project.budget ? budget / project.budget : 0
+    spend_ratio  = spend && project.spend ? spend / project.spend : 0
+
+    ufs = project.cached_ultimate_funding_sources
+
+    ufs.each do |fs|
+      fs[:budget] = fs[:budget] * budget_ratio if fs[:budget]
+      fs[:spend]  = fs[:spend] * spend_ratio if fs[:spend]
+    end
+
+    ufs
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

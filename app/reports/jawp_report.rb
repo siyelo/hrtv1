@@ -4,13 +4,13 @@ class Reports::JawpReport
   include Reports::Helpers
 
   def initialize(type, activities)
-    @is_budget         = is_budget?(type)
+    @is_budget  = is_budget?(type)
 
     @activities = activities
-#    @activities = Activity.only_simple.find(:all,
-#                   :conditions => ["activities.id IN (?)", [1764]], # NOTE: FOR DEBUG ONLY
-#                   :include => [:locations, :provider, :organizations,
-#                               :beneficiaries, {:data_response => :organization}])
+    #@activities = Activity.only_simple.find(:all,
+                  #:conditions => ["activities.id IN (?)", [889, 890, 4348]], # NOTE: FOR DEBUG ONLY
+                  #:include => [:locations, :provider, :organizations,
+                              #:beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -92,14 +92,15 @@ class Reports::JawpReport
         district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding_adjusted)
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
-      funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
+      funding_sources = activity.funding_streams
+      #funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
       #funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
       funding_sources_total = 0
       funding_sources.each do |fs|
         if @is_budget
-          funding_sources_total += fs.budget if fs.budget
+          funding_sources_total += fs[:budget] if fs[:budget]
         else
-          funding_sources_total += fs.spend if fs.spend
+          funding_sources_total += fs[:spend] if fs[:spend]
         end
       end
       
@@ -107,7 +108,8 @@ class Reports::JawpReport
       # that dont have amounts specified for them
       # TODO move this into helper in get_funding_sources for all reports!
       if funding_sources_total == 0
-        funding_sources = fake_one_funding_source_if_none( [] )
+        funding_sources = [{:ufs => nil, :fa => nil, :spend => 1, :budget => 1}]
+        #funding_sources = fake_one_funding_source_if_none( [] )
         funding_sources_total = 1
       end
 
@@ -125,13 +127,14 @@ class Reports::JawpReport
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount =  funding_source.send(@is_budget ? :budget : :spend)
+              funding_source_amount =  @is_budget ? 
+                funding_source[:budget] : funding_source[:spend]
+
               funding_source_amount =  0 if funding_source_amount.nil?
               ratio = get_ratio(amount_total, ca.amount_not_in_children) *
                 get_ratio(amount_total, district_coding.amount_not_in_children) *
-                get_ratio(amount_total, cost_category_coding.amount_not_in_children) * # why was this commented out before ?
-
-              get_ratio(funding_sources_total, funding_source_amount)
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children) *
+                get_ratio(funding_sources_total, funding_source_amount)
 
               puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(amount_total, ca.amount_not_in_children)})"
               puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(amount_total, district_coding.amount_not_in_children)}"
@@ -149,8 +152,10 @@ class Reports::JawpReport
 
               row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
               row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
-              row << funding_source.from.try(:name)
-              row << funding_source.from.try(:raw_type)
+              row << funding_source[:ufs].try(:name)
+              row << funding_source[:ufs].try(:raw_type)
+              row << funding_source[:fa].try(:name)
+              row << funding_source[:fa].try(:raw_type)
               row << amount
               row << ratio
               row << amount_total_in_usd * ratio
@@ -199,14 +204,16 @@ class Reports::JawpReport
       row << "Currency"
    
       # values below given through build_code_assignment_rows
-      row << "Implementer"
-      row << "Implementer Type"
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
       row << "Possible Duplicate?"
+      row << "Implementer"
+      row << "Implementer Type"
       row << 'Funding Source'
       row << 'Funding Source Type'
+      row << 'Financing Agent'
+      row << 'Financing Agent Type'
       row << "Classified #{amount_type}"
       row << "Classified #{amount_type} Percentage"
       row << "Converted Classified #{amount_type} (USD)"

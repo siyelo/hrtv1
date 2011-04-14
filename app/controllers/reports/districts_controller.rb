@@ -26,8 +26,16 @@ class Reports::DistrictsController < Reports::BaseController
     end
 
     @top_activities    = Reports::ActivityReport.top_by_spent({
-                         :limit => 5, :code_ids => [@location.id], :type => 'district'})
+                         :limit => 10, :code_ids => [@location.id], :type => 'district'})
     @top_organizations = Reports::OrganizationReport.top_by_spent({
-                         :limit => 5, :code_ids => [@location.id], :type => 'district'})
+                         :limit => 10, :code_ids => [@location.id], :type => 'district'})
+
+
+    @budget_ufs_values = Charts::DistrictPies::ultimate_funding_sources(@location, 'budget')
+    @budget_fa_values  = Charts::DistrictPies::financing_agents(@location, 'budget')
+    @budget_i_values   = Charts::DistrictPies::implementers(@location, 'budget')
+    @spend_ufs_values  = Charts::DistrictPies::ultimate_funding_sources(@location, 'spend')
+    @spend_fa_values   = Charts::DistrictPies::financing_agents(@location, 'spend')
+    @spend_i_values    = Charts::DistrictPies::implementers(@location, 'spend')
   end
 end

@@ -122,8 +122,8 @@ class Reports::JawpReport
         cost_category_codes  = cost_category_ca_coding[1]
 
         funding_sources.each do |funding_source|
-          district_codings.each do |district_coding|
-            coding_with_parent_codes.each do |ca_codes|
+          coding_with_parent_codes.each do |ca_codes|
+            district_codings.each do |district_coding|
               ca                    = ca_codes[0]
               codes                 = ca_codes[1]
               last_code             = codes.last
@@ -200,10 +200,6 @@ class Reports::JawpReport
           end
         end
       end
-    end
-
-    def add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,ratio, ufs, fa, implementer, poss_dup)
-      
     end
 
     def build_header

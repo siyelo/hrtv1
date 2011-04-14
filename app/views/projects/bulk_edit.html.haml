@@ -9,17 +9,15 @@
         %th Funder Project
         %th Budget
         %th Spend
-      - @projects.each do |p|
-        %tbody
+    %tbody
+      - @projects.each do |project|
+        - project.in_flows.each do |in_flow|
           %tr
-            %td= p.name
-            %td
-              - p.in_flows.map(&:from).each do |fs|
-                FUNDING SOURCE NAME
-            %td
-              = select_tag p.id, options_for_select(p.organization.projects.map{|op| [op.name, op.id] if op.id != p.id})
-            %td= p.budget
-            %td= p.spend
+            %td= project.name
+            %td= in_flow.from.try(:name)
+            %td= select_tag "funding_flows[#{in_flow.id}]", options_for_select(funding_flows_select(project), in_flow.project_from_id)
+            %td= project.budget
+            %td= project.spend
   
   %br
   =submit_tag "Update", :class => 'small_submit_button'

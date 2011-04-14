@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
     "Human Resources for Health" => ["2"],
     "Governance" => ["101","103"],
     "Planning and M&E" => ["102","104","105","106"]
-  }
+  }  
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
     "Across all 3 objectives" => ["1","201","202","203","204","206","207",

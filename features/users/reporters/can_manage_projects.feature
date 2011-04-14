@@ -195,22 +195,16 @@ Feature: Reporter can manage projects
        And I should not see "Quarterly Spend"
        And I should see "Budget"
 
-       @run
-  Scenario: A Reporter can link their projects to those from other organizations
-    Given an organization exists with name: "organization7"
-     And a data_response exists with data_request: the data_request, organization: the organization
-     And a project exists with name: "org7project", data_response: the data_response
-    When I follow "Create Project"
-     And I fill in "Name" with "Project1"
-     And I fill in "Description" with "Project1 description"
-     And I fill in "Start date" with "2011-01-01"
-     And I fill in "End date" with "2011-12-01"
-     And I check "Location1"
-     And I check "Location2"
-     And I press "Create Project"
-    Then I should see "Project was successfully created"
-     And I should see "Project1"
-    Given I follow "Bulk Project Edit"
-    Then I should see "Project1"
-     And I select "org7project" from "Funder Project"
+
+  # 
+  # Scenario: A Reporter can link their projects to those from other organizations
+  #   Given an organization exists with name: "organization7"
+  #    And a data_response exists with data_request: the data_request, organization: the organization
+  #    And a project exists with name: "org7project", data_response: the data_response
+  #    And a project exists with name: "Project1", data_response: the data_response
+  #   Given I follow "Bulk Edit"
+  #   Then show me the page
+  #   Then I should see "org7project"
+  #    And I select "org7project" from "Funder Project"
+
     

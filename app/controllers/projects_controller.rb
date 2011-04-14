@@ -40,6 +40,15 @@ class ProjectsController < Reporter::BaseController
     load_comment_resources(resource)
     show!
   end
+  
+  def bulk_edit
+    @projects = @data_response.projects
+  end
+  
+  def bulk_update
+    raise params.inspect
+    redirect_to response_projects_url
+  end
 
   def download_template
     template = Project.download_template
@@ -69,6 +78,10 @@ class ProjectsController < Reporter::BaseController
   end
 
   protected
+  
+    def sort_bulk_updates
+      
+    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"

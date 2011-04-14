@@ -97,19 +97,19 @@ class Reports::JawpReport
       parent_activity = activity
       parent_amount_total = amount_total
       parent_amount_total_in_usd = amount_total_in_usd
-#      if activity.sub_activities.empty?
+      if activity.sub_activities.empty?
         sub_activities = [activity]
         use_sub_activity_district_coding = false
-#      else
-#        sub_activities = activity.sub_activities 
-#         if @is_budget
-#           use_sub_activity_district_coding =
-#              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
-#         else
-#           use_sub_activity_district_coding =
-#              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
-#         end
-#      end
+      else
+        sub_activities = activity.sub_activities 
+         if @is_budget
+           use_sub_activity_district_coding =
+              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
+         else
+           use_sub_activity_district_coding =
+              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
+         end
+      end
 
       funding_sources = activity.funding_streams
       #funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
@@ -141,12 +141,16 @@ class Reports::JawpReport
             if @is_budget #to get budget or spend district codings and check this sub_activity has nonzero budget or spend
               if activity.budget?
                 district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
+                amount_total = activity.budget
+                amount_total_in_usd = parent_amount_total_in_usd * activity.budget / parent_activity.budget
               else
                 break_out = true
               end
             else
               if activity.spend?
                 district_codings = activity.spend_district_coding_adjusted if use_sub_activity_district_coding
+                amount_total = activity.spend
+                amount_total_in_usd = parent_amount_total_in_usd * activity.spend / parent_activity.spend
               else
                 break_out = true
               end

@@ -369,13 +369,6 @@ body.app
     a
       padding: 5px 10px !important
 
-    //ul li
-    //  &:first-child a
-    //    +border-bottom-left-radius
-    //  &:last-child a
-    //    +border-bottom-right-radius
-  /* end */
-
   /* sub-nav styles */
   #sub-nav
     +box-shadow(#f0f0f0, 0, 2px, 7px)
@@ -504,7 +497,6 @@ body.app
       &.small_submit_button
         font-size: 12px
         padding: 5px
-        margin-left: 10px
 
     .next
       margin-top: -5px
@@ -787,163 +779,6 @@ ul.group
   background: image_url("icon_map.png") no-repeat center left
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
-
-// Pretty Table (with clickable rows)
-
-table.standard
-  tr.activity
-    td
-      padding-left: 20px
-    td:first-child
-      border-left: 3px solid $light-blue
-    td:last-child
-      border-right: 3px solid $light-blue
-    h3
-      padding: 4px 4px
-  tr.project
-    td
-      border-top: 3px solid $light-blue
-      font-size: 1.2em !important
-    td:first-child
-      border-left: 3px solid $light-blue
-    td:last-child
-      border-right: 3px solid $light-blue
-
-  a.create_new
-    font-size: 11px
-    font-weight: normal
-    padding: 5px 10px 5px
-    
-  &.alt
-    
-
-table.standard
-  color: $mid-blue
-  font-size: 11px
-  line-height: 14px
-  width: 100%
-
-  thead
-    color: $mid-blue
-
-    th
-      background-color: #F7F7F7
-      &.dummy
-        padding: 9px 7px 7px
-      a
-        color: $mid-blue
-        display: block
-        padding: 9px 7px 7px
-        text-decoration: none
-
-        &:hover, &:focus, &:active
-          color: $orange
-          background: image_url("arrow_up.gif") no-repeat right center !lightest-blue
-        &.asc
-          background: image_url("arrow_up.gif") no-repeat right center !lightest-blue
-        &.desc
-          background: image_url("arrow_down.gif") no-repeat right center !lightest-blue
-
-  tbody tr
-    border-spacing: 0
-
-    &.odd
-      background: $lightest-blue + #090909
-      +linear-gradient(color-stops(white, $lightest-blue + #090909))
-
-  th, td
-    min-width: 100px
-
-  td
-    border-bottom: 1px dashed !light_blue
-    padding: 9px 7px 9px
-    vertical-align: middle
-    &.alt
-      border: none
-    &.padding
-      padding-top: 0
-// Pretty Table with clickable rows
-table.clickable
-
-  tbody tr
-
-    &:hover
-      background: $lightest-blue
-      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
-      color: $dark-blue
-      td
-        border-bottom: 1px solid !light_blue
-
-  td:hover
-    cursor: pointer
-
-// Pretty Table with rounded thead
-// use it when there is no additional heading (for ex. h2)
-table.rounded
-  th:first-child
-    +border-top-left-radius
-  th:last-child
-    +border-top-right-radius
-    
-    
-table.sum
-  width: 100%
-  
-  td:first-child, th:first-child
-    width: 60%
-  
-  tbody tr:last-child td
-    border: none
-    padding-bottom: 20px
-    
-  h1 a
-    color: $mid-blue
-    font-family: Avenir, sans-serif
-    font-size: 16px
-    font-weight: normal !important
-    line-height: 1
-    
-  thead tr
-    background: $mid-blue - #111
-    
-  thead th
-    a
-      background: $mid-blue - #111
-      color: $lightest-blue
-      display: block
-      font-size: 11px
-      font-weight: bold
-      padding: 10px 12px 7px 12px
-      text-decoration: none
-      text-transform: uppercase
-      &:hover
-        background: $mid-blue - #222
-        color: #FFF
-    &:first-child a
-      +border-top-left-radius
-    &:last-child a
-      +border-top-right-radius
-  
-  tbody td:first-child
-    a
-      font-weight: bold
-      line-height: 1.4
-      text-decoration: none
-      
-  tr.head td
-    background: $lightest-blue
-    font-weight: bold
-    padding: 2px 12px 0px 12px
-  tr.sub-head td
-    padding: 15px 12px 4px 12px
-  tr td
-    border-bottom: 1px solid $lightest-blue
-    color: $mid-blue
-    font-size: 12px
-    padding: 4px 12px 2px 12px
-    
-  tr.none td
-    border: none
 
 .breadcrumb
   background: $filler

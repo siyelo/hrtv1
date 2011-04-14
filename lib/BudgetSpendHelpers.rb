@@ -5,11 +5,11 @@ module BudgetSpendHelpers
   USG_START_MONTH = 10 # 7 is July
 
   def spend?
-    !spend.nil? AND spend > 0
+    !spend.nil? and spend > 0
   end
 
   def budget?
-    !budget.nil? AND budget > 0
+    !budget.nil? and budget > 0
   end
 
   # add spend_gor_qX methods here

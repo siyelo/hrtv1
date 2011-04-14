@@ -504,6 +504,8 @@ class Activity < ActiveRecord::Base
                     
     return false
   end
+  def sub_activities_each_have_defined_districts?(coding_type)
+    !sub_activity_district_code_assignments_if_complete(coding_type).empty?
 
   private
 
@@ -563,6 +565,7 @@ class Activity < ActiveRecord::Base
       when 'CodingSpendDistrict'
         cas = sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
       end
+      puts id if cas == nil
       return [] if cas.include?([])
       cas.flatten
     end

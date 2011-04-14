@@ -104,10 +104,10 @@ class Reports::JawpReport
         sub_activities = activity.sub_activities 
          if @is_budget
            use_sub_activity_district_coding =
-              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
+              parent_activity.sub_activities_each_have_defined_districts?("CodingBudgetDistrict")
          else
            use_sub_activity_district_coding =
-              !parent_activity.sub_activity_district_code_assignments_if_complete.empty?
+              parent_activity.sub_activities_each_have_defined_districts?("CodingSpendDistrict")
          end
       end
 

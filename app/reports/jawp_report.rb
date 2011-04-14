@@ -144,9 +144,10 @@ class Reports::JawpReport
 
               # adjust ratio with subactivity % or amount
               # if activity.sub_activities.empty?
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(...., activity.possible_duplicate?)
+              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
               # else 
-              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? || activity.possible_duplicate? )}
+              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
+              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? )}
               # end
               amount = (amount_total || 0) * ratio
 
@@ -199,6 +200,10 @@ class Reports::JawpReport
           end
         end
       end
+    end
+
+    def add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,ratio, ufs, fa, implementer, poss_dup)
+      
     end
 
     def build_header

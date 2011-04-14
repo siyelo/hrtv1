@@ -22,6 +22,59 @@ module Charts::DistrictPies
       prepare_organizations_pie_values(records)
     end
 
+    def ultimate_funding_sources(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_ufs_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_organizations_pie_values(records)
+    end
+
+    def financing_agents(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_fa_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_organizations_pie_values(records)
+    end
+
+    def implementers(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN organizations ON activities.provider_id = organizations.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_organizations_pie_values(records)
+    end
+
     ### admin/district/:id/activities
     def activities(location, coding_type)
       spent_codings = location.code_assignments.with_type(coding_type).find(:all,

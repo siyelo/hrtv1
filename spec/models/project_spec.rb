@@ -300,23 +300,24 @@ describe Project do
 
       Factory(:data_response, :organization => @org_with_empty_data_response,
               :data_request => request)
-      @response0 = Factory(:data_response, :organization => @org0, :data_request => request)
+      @response0 = Factory(:data_response, :organization => @org0, 
+                           :data_request => request, :currency => 'USD')
       @response1 = Factory(:data_response, :organization => @org1,
-                          :data_request => request)
+                          :data_request => request, :currency => 'USD')
       @response2 = Factory(:data_response, :organization => @org2,
-                          :data_request => request)
+                          :data_request => request, :currency => 'USD')
       @response3 = Factory(:data_response, :organization => @org3,
-                          :data_request => request)
+                          :data_request => request, :currency => 'USD')
       @response4 = Factory(:data_response, :organization => @org4,
-                          :data_request => request)
+                          :data_request => request, :currency => 'USD')
 
-      @proj0 = Factory(:project, :data_response => @response0)
-      @proj1 = Factory(:project, :data_response => @response1)
-      @proj11 = Factory(:project, :data_response => @response1)
-      @proj12 = Factory(:project, :data_response => @response1)
-      @proj2 = Factory(:project, :data_response => @response2)
-      @proj3 = Factory(:project, :data_response => @response3)
-      @proj4 = Factory(:project, :data_response => @response4)
+      @proj0 = Factory(:project, :data_response => @response0, :currency => "USD")
+      @proj1 = Factory(:project, :data_response => @response1, :currency => "USD")
+      @proj11 = Factory(:project, :data_response => @response1, :currency => "USD")
+      @proj12 = Factory(:project, :data_response => @response1, :currency => "USD")
+      @proj2 = Factory(:project, :data_response => @response2, :currency => "USD")
+      @proj3 = Factory(:project, :data_response => @response3, :currency => "USD")
+      @proj4 = Factory(:project, :data_response => @response4, :currency => "USD")
     end
 
     def proj_funded_by(proj, funder, budget = 50, spend = 50)
@@ -521,7 +522,7 @@ describe Project do
       proj_funded_by(@proj12, @org2)
       proj_funded_by(@proj2, @org0, 1, 2) #UFS of org2 is org0
       proj_funded_by(@proj3, @org1)
-      @proj31 = Factory(:project, :data_response => @response3)
+      @proj31 = Factory(:project, :data_response => @response3, :currency => "USD")
       
       Factory.create(:activity, :project => @proj12, :provider => @org3,
                                 :data_response => @proj12.data_response)
@@ -542,8 +543,8 @@ describe Project do
     end
 
     it "returns real UFS if it's implementer of an activity of funded organization" do
-      @proj21 = Factory(:project, :data_response => @response2)
-      @proj22 = Factory(:project, :data_response => @response2)
+      @proj21 = Factory(:project, :data_response => @response2, :currency => "USD")
+      @proj22 = Factory(:project, :data_response => @response2, :currency => "USD")
 
       # organization 1
       Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1,
@@ -564,7 +565,6 @@ describe Project do
               :budget => 30, :spend => 30)
 
       ufs = @proj3.ultimate_funding_sources
-      p ufs[0][:budget].to_s
       ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
     end
 

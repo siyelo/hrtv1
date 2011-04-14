@@ -129,12 +129,12 @@ class Reports::JawpReport
               row                   = base_row.dup
               funding_source_amount =  @is_budget ? 
                 funding_source[:budget] : funding_source[:spend]
+
               funding_source_amount =  0 if funding_source_amount.nil?
               ratio = get_ratio(amount_total, ca.amount_not_in_children) *
                 get_ratio(amount_total, district_coding.amount_not_in_children) *
-                get_ratio(amount_total, cost_category_coding.amount_not_in_children) * # why was this commented out before ?
-
-              get_ratio(funding_sources_total, funding_source_amount)
+                get_ratio(amount_total, cost_category_coding.amount_not_in_children) *
+                get_ratio(funding_sources_total, funding_source_amount)
 
               puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(amount_total, ca.amount_not_in_children)})"
               puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(amount_total, district_coding.amount_not_in_children)}"

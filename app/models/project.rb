@@ -13,6 +13,7 @@ class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
+  include NumberHelper
 
   cattr_reader :per_page
   @@per_page = 3
@@ -199,11 +200,9 @@ class Project < ActiveRecord::Base
         # i.e. has activity(ies) with the organization as implementer
         if implementer_in_flows?(organization, self_flows)
           ffs = organization.in_flows.select{|ff| ff.from == funder}
-          budget = ffs.reject{|ff| ff.budget.nil?}.sum(&:budget)
-          spend  = ffs.reject{|ff| ff.spend.nil?}.sum(&:spend)
 
           funding_sources << {:ufs => funder, :fa => traced.last, 
-                              :budget => budget, :spend => spend}
+                              :budget => get_budget(ffs), :spend => get_spend(ffs)}
         else
 
           # potential UFS - parent funded organization that funds other organizations
@@ -212,12 +211,9 @@ class Project < ActiveRecord::Base
             self_funded = funder.in_flows.map(&:from).include?(funder)
 
             if self_funded
-              self_in_flows = funder.in_flows.select{|ff| ff.from == funder}
-              budget = self_in_flows.reject{|ff| ff.budget.nil? }.sum(&:budget)
-              spend  = self_in_flows.reject{|ff| ff.spend.nil?  }.sum(&:spend)
-
+              ffs = funder.in_flows.select{|ff| ff.from == funder}
               funding_sources << {:ufs => funder, :fa => traced.last, 
-                                  :budget => budget, :spend => spend}
+                                  :budget => get_budget(ffs), :spend => get_spend(ffs)}
             elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
               budget, spend = get_budget_and_spend(funder.id, organization.id)
               funding_sources << {:ufs => funder, :fa => traced.last, 
@@ -241,7 +237,8 @@ class Project < ActiveRecord::Base
     # TODO: optimize this method
     def remove_not_funded_donors(funder, parent_funders)
       activities = funder.projects.map(&:activities).flatten.compact
-      activities_funders = activities.map(&:project).map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}
+      activities_funders = activities.map(&:project).
+        map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}
 
       real_funders = []
 
@@ -266,15 +263,27 @@ class Project < ActiveRecord::Base
                                             from_id, to_id])
       scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
       ffs = scope.all
-      
-      budget = ffs.reject{|ff| ff.budget.nil? }.sum(&:budget)
-      spend  = ffs.reject{|ff| ff.spend.nil? }.sum(&:spend)
 
-      [budget, spend]
+      [get_budget(ffs), get_spend(ffs)]
     end
 
-    # GN: Do we need to remove this or it has no side effects?
-    # Definitely enable assign_project_to_funding_flows when finishing PT: 12144777
+    def get_budget(funding_sources)
+      amount = 0
+      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
+        budget = fss.reject{|ff| ff.budget.nil?}.sum(&:budget)
+        amount += budget * currency_rate(project.currency, 'USD')
+      end
+      amount
+    end
+
+    def get_spend(funding_sources)
+      amount = 0
+      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
+        spend = fss.reject{|ff| ff.spend.nil?}.sum(&:spend)
+        amount += spend * currency_rate(project.currency, 'USD')
+      end
+      amount
+    end
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id

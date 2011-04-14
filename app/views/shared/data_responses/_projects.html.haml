@@ -23,8 +23,8 @@
                   - project.in_flows.each do |flow|
                     = "#{flow.from.try(:name)} (#{flow.budget}),"
             %td= project.activities.count
-            %td= universal_currency_converter(project.spend, project.currency, project.response.currency)
-            %td= universal_currency_converter(project.budget, project.currency, project.response.currency)
+            %td= n2cnds(universal_currency_converter(project.spend, project.currency, project.response.currency), project.response.currency)
+            %td= n2cnds(universal_currency_converter(project.budget, project.currency, project.response.currency), project.response.currency)
             %td.manage
               = link_to "Edit", edit_response_project_path(project.response, project)
               = link_to "Delete", response_project_path(project.response, project), :method => :delete, :confirm => "Are you sure you want to delete this project?"

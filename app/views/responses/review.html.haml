@@ -4,6 +4,9 @@
 
 %h1.main_heading Submit Response
 
+%ul
+  %li= "Request: #{@response.request.title}"
+
 = render 'getting_started_submit'
 
 = error_messages_for :response, :header_message => "", :message => ""
@@ -61,7 +64,8 @@
         = render 'projects/no_projects_yet'
         then you can start adding Other Costs.
     - else
-      %span.info Other Costs help you include any financial information at the central level and/or administrative expenses.
+      %span.info
+        Other Costs help you include any financial information at the central level and/or administrative expenses.
         = link_to "Start adding your Other Costs now.", response_projects_path(@data_response)
 
 - ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
@@ -85,13 +89,13 @@
   - else
     %span.info= "Your response was submitted on #{@response.submitted_at.to_s(:long)}"
 
-- ready_class = @response.submitted_for_final_review ? "ready" : "not-ready"
+- ready_class = @response.submitted_for_final ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Response submitted for Final Review
-  - unless @response.submitted_for_final_review
+  - unless @response.submitted_for_final
     %span.info You have not yet submitted your Response for the final review.
   - else
-      %span.info= "Your response was submitted on #{@response.submitted_for_final_review_at.to_s(:long)}"
+    %span.info= "Your response was submitted on #{@response.submitted_for_final_at.to_s(:long)}"
 
 %hr.divider
 %p

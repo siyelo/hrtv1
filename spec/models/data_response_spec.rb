@@ -169,9 +169,29 @@ describe DataResponse do
     end
             
     it "returns true if all activities are coded" do
-      classify_the_activity       #has side effects on @request, @response, @project !!      
+      classify_the_activity       #has side effects on @request, @response, @project @activity!!      
       classify_the_other_cost
       @response.ready_to_submit?.should == true
+    end 
+    
+    it "returns true if all activities are coded" do
+      classify_the_activity       #has side effects on @request, @response, @project @activity!!
+      @activity.classified?.should == true   
+      classify_the_other_cost
+      @response.ready_to_submit?.should == true
+    end 
+    
+    it "returns true if all activities are coded" do
+      classify_the_other_cost
+      classify_the_activity       #has side effects on @request, @response, @project @activity!!
+      @cs.cached_amount = 0
+      @cs.amount = 0
+      @cs.save!
+      @activity.reload
+      @activity.classified?.should == false
+      debugger
+      @response.activities_coded?.should == false
+      @response.ready_to_submit?.should == false
     end
     
     it "returns false if there are uncoded other costs" do

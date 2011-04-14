@@ -1,25 +1,41 @@
+- other_costs = false
+- other_costs = true if activities.first.class == OtherCost
+- colspan = 4
+- colspan = 3 if other_costs
+
 .simple_table.push
   %table
     %thead
       %tr
-        %td Name
-        %td Description
-        %td Budget by Purposes
-        %td Budget by Locations
-        %td Budget by Inputs
-        %td Expenditure by Purposes
-        %td Expenditure by Locations
-        %td Expenditure by Inputs
-        %td.manage Manage
+        %th Name
+        %th{:colspan => colspan} Budget
+        %th{:colspan => colspan} Spend
+        %th.manage Manage
+      %tr
+        %th
+        %th Purposes
+        - unless other_costs
+          %th Locations
+        %th Inputs
+        %th Service Level
+        %th Purposes
+        - unless other_costs
+          %th Locations
+        %th Inputs
+        %th Service Level
+        %th
     %tbody
       - activities.each do |activity|
         %tr
-          %th= activity.name
-          %th= activity.description
-          %th= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
-          %th= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
-          %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
-          %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
-          %th= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
-          %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
-          %th= link_to 'Classify', activity_code_assignments_path(activity)
+          %td= nice_name(activity)
+          %td= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
+          - unless other_costs
+            %td= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.service_level_budget_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
+          - unless other_costs
+            %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.service_level_spend_classified?, {:disabled => "disabled"}
+          %td= link_to 'Classify', activity_code_assignments_path(activity)

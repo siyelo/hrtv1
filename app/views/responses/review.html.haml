@@ -50,8 +50,6 @@
     = render 'uncoded_table', :activities => @data_response.uncoded_activities
     %p.guide
 
--#= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
-
 - ready_class = @response.other_costs_entered? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Other Costs Entered
@@ -62,7 +60,7 @@
         then you can start adding Other Costs.
       - else
         Other Costs help you include any financial information at the central level and/or administrative expenses.
-        = link_to "Start by adding your first cost now.", response_projects_path(@data_response)
+        = link_to "Start adding your Other Costs now.", response_projects_path(@data_response)
 
 - ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -77,13 +75,6 @@
 - unless @response.other_costs_coded?
   - unless @data_response.uncoded_other_costs.empty?
     = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
-
-- unless @response.other_costs_coded?
-  - unless @data_response.uncoded_other_costs.empty?
-    = render 'uncoded_other_cost_table', :activities => @uncoded_other_costs
-
--#= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
-
 
 - ready_class = @response.submitted ? "ready" : "not-ready"
 %h3{:class => ready_class}

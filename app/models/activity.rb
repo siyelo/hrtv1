@@ -260,7 +260,11 @@ class Activity < ActiveRecord::Base
     coding_spend_cc_classified? &&
     service_level_spend_classified?
   end
-
+  
+  def budget_classified_but_spend_not?
+    budget_classified? && !spend_classified?
+  end
+  
   def classified?
     budget_classified? && spend_classified?
   end

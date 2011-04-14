@@ -197,20 +197,21 @@ class DataResponse < ActiveRecord::Base
     !self.activities.with_type("OtherCost").empty?
   end
 
+  #
   def uncoded_activities
-    self.normal_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+    self.normal_activities.reject{ |a| a.classified? || a.budget_classified_but_spend_not? }
   end
 
   def coded_activities
-    self.normal_activities.select{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+    self.normal_activities.select{ |a| a.classified? || a.budget_classified_but_spend_not?  }
   end
 
   def uncoded_other_costs
-    self.activities.with_type("OtherCost").reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+    self.activities.with_type("OtherCost").reject{ |a| a.classified? || a.budget_classified_but_spend_not?  }
   end
 
   def coded_other_costs
-    self.activities.with_type("OtherCost").select{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
+    self.activities.with_type("OtherCost").select{ |a| a.classified? || a.budget_classified_but_spend_not?  }
   end
 
   def activities_coded?

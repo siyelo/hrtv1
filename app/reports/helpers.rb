@@ -144,12 +144,18 @@ module Reports::Helpers
   end
 
   def add_codes_to_row(row, codes, deepest_nesting, attr)
+    last_code_found = 0
     deepest_nesting.times do |i|
       code = codes[i]
       if code
         row << codes_cache[code.id].try(attr)
+        last_code_found = i
       else
-        row << nil
+        if last_code_found == i - 1
+          row << "Not Disaggregated Further"
+        else
+          row << "At Level Above"
+        end
       end
     end
   end

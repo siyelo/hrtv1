@@ -6,11 +6,11 @@ class Reports::JawpReport
   def initialize(type, activities)
     @is_budget  = is_budget?(type)
 
-    #@activities = activities
-    @activities = Activity.only_simple.find(:all,
-                  :conditions => ["activities.id IN (?)", [ 3219]], # NOTE: FOR DEBUG ONLY
-                  :include => [:locations, :provider, :organizations,
-                              :beneficiaries, {:data_response => :organization}])
+    @activities = activities
+    #@activities = Activity.only_simple.find(:all,
+    #              :conditions => ["activities.id IN (?)", [ 3219]], # NOTE: FOR DEBUG ONLY
+    #              :include => [:locations, :provider, :organizations,
+    #                          :beneficiaries, {:data_response => :organization}])
 
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
@@ -75,7 +75,6 @@ class Reports::JawpReport
     row << amount_total
     row << amount_total_in_usd
     row << is_national
-    row << activity.possible_duplicate?
 
     build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
   end
@@ -143,9 +142,9 @@ class Reports::JawpReport
 
               # adjust ratio with subactivity % or amount
               # if activity.sub_activities.empty?
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(....)
+              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(...., activity.possible_duplicate?)
               # else 
-              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, some_logic_for_dup(activity.organization, sa.implementer))}
+              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? || activity.possible_duplicate? )}
               # end
               amount = (amount_total || 0) * ratio
 
@@ -157,6 +156,7 @@ class Reports::JawpReport
 
               #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
 
+              row << activity.possible_duplicate?
               row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
               row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
               row << funding_source[:ufs].try(:name)

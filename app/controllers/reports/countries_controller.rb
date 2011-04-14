@@ -14,8 +14,15 @@ class Reports::CountriesController < Reports::BaseController
 
     code_ids               = Mtef.roots.map(&:id)
     @top_activities        = Reports::ActivityReport.top_by_spent({
-                              :limit => 5, :code_ids => code_ids, :type => 'country'})
+                              :limit => 10, :code_ids => code_ids, :type => 'country'})
     @top_organizations     = Reports::OrganizationReport.top_by_spent({
-                              :limit => 5, :code_ids => code_ids, :type => 'country'})
+                              :limit => 10, :code_ids => code_ids, :type => 'country'})
+
+    @budget_ufs_values = Charts::CountryPies::ultimate_funding_sources('budget')
+    @budget_fa_values  = Charts::CountryPies::financing_agents('budget')
+    @budget_i_values   = Charts::CountryPies::implementers('budget')
+    @spend_ufs_values  = Charts::CountryPies::ultimate_funding_sources('spend')
+    @spend_fa_values   = Charts::CountryPies::financing_agents('spend')
+    @spend_i_values    = Charts::CountryPies::implementers('spend')
   end
 end

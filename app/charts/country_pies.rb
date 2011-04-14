@@ -6,7 +6,7 @@ module Charts::CountryPies
     def organizations_pie(code_type)
       records = Organization.find :all,
         :select => "organizations.id,
-                    organizations.name as my_name,
+                    organizations.name as name,
                     SUM(ca1.cached_amount_in_usd) as value",
       :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id
         INNER JOIN activities a1 ON dr1.id = a1.data_response_id
@@ -16,23 +16,66 @@ module Charts::CountryPies
                  organizations.name",
       :order => "value DESC"
 
-      prepare_pie_values(records)
+      prepare_pie_values_json(records)
+    end
+
+    def ultimate_funding_sources(amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_ufs_id = organizations.id",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def financing_agents(amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_fa_id = organizations.id",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def implementers(amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}) as value",
+        :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN organizations ON activities.provider_id = organizations.id",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
     end
 
     def activities_pie(coding_type)
       code_assignments = CodeAssignment.with_type(coding_type).find(:all,
         :select => "code_assignments.id,
                     code_assignments.activity_id,
-                    COALESCE(activities.name, activities.description) AS my_name,
+                    COALESCE(activities.name, activities.description) AS name,
                     SUM(code_assignments.cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.id,
                    code_assignments.activity_id,
-                   my_name',
+                   name',
         :order => 'value DESC')
 
-      prepare_pie_values(code_assignments)
+      prepare_pie_values_json(code_assignments)
     end
 
     def codes_for_country_pie(code_type, is_spent)
@@ -41,14 +84,14 @@ module Charts::CountryPies
 
       code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).find(:all,
               :select => "code_assignments.code_id,
-                codes.short_display as my_name,
+                codes.short_display as name,
                 SUM(code_assignments.cached_amount_in_usd) AS value",
               :joins => :code,
               :group => 'code_assignments.code_id,
                          codes.short_display',
               :order => 'value DESC')
 
-      prepare_pie_values(code_assignments)
+      prepare_pie_values_json(code_assignments)
     end
 
     def codes_for_activities_pie(code_type, activities, is_spent)
@@ -58,7 +101,7 @@ module Charts::CountryPies
       code_assignments = CodeAssignment.find(:all,
         :select => "codes.id as code_id,
                     codes.parent_id as parent_id,
-                    codes.short_display AS my_name,
+                    codes.short_display AS name,
                     SUM(code_assignments.cached_amount) AS value",
         :conditions => ["codes.type = ?
           AND code_assignments.type = ?
@@ -74,29 +117,7 @@ module Charts::CountryPies
       # remove cached (parent) code assignments
       code_assignments = code_assignments.reject{|ca| parent_ids.include?(ca.code_id)}
 
-      prepare_pie_values(code_assignments)
+      prepare_pie_values_json(code_assignments)
     end
-
-    private
-
-      def prepare_pie_values(code_assignments)
-        values = []
-        other = 0.0
-
-        code_assignments.each_with_index do |ca, index|
-          if index < 10
-            values << [ca.my_name, ca.value.to_f.round(2)]
-          else
-            other += ca.value.to_f
-          end
-        end
-
-        values << ['Other', other.round(2)]
-
-        {
-          :values => values,
-          :names => {:column1 => 'Name', :column2 => 'Amount'}
-        }.to_json
-      end
   end
 end

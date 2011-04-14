@@ -19,7 +19,7 @@ module Charts::DistrictPies
                  organizations.name",
       :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
     end
 
     def ultimate_funding_sources(location, amount_type)
@@ -37,7 +37,7 @@ module Charts::DistrictPies
                    organizations.name",
         :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
     end
 
     def financing_agents(location, amount_type)
@@ -55,7 +55,7 @@ module Charts::DistrictPies
                    organizations.name",
         :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
     end
 
     def implementers(location, amount_type)
@@ -72,7 +72,7 @@ module Charts::DistrictPies
                    organizations.name",
         :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
     end
 
     ### admin/district/:id/activities
@@ -165,25 +165,6 @@ module Charts::DistrictPies
             values << [friendly_name(ca.activity), ca.value.to_f.round(2)] #value is the aggregate column from the sql
           else
             other += ca.value.to_f
-          end
-        end
-
-        values << ['Other', other.round(2)]
-
-        {
-          :values => values,
-          :names => {:column1 => 'Activity', :column2 => 'Amount'}
-        }.to_json
-      end
-
-      def prepare_organizations_pie_values(organizations)
-        values = []
-        other = 0.0
-        organizations.each_with_index do |organization, index|
-          if index < 5
-            values << [organization.name, organization.value.to_f.round(2)]
-          else
-            other += organization.value.to_f
           end
         end
 

@@ -236,12 +236,14 @@ describe DataResponse do
       end
             
       it "returns true if all activities are coded" do
+        #TODO :link projects
         classify_the_activity       #has side effects on @request, @response, @project @activity!!      
         classify_the_other_cost
         @response.ready_to_submit?.should == true
       end 
     
       it "returns true if all activities are coded" do
+        #TODO :link projects
         classify_the_activity       #has side effects on @request, @response, @project @activity!!
         @activity.classified?.should == true   
         classify_the_other_cost
@@ -267,6 +269,7 @@ describe DataResponse do
       end
     
       it "returns true if other costs are coded" do
+        #TODO :link projects
         classify_the_other_cost
         classify_the_activity
         @response.other_costs_coded?.should == true
@@ -286,10 +289,8 @@ describe DataResponse do
         classify_the_activity
         @response.submit!.should == true
       end
-      
     end
   end
-
 end
 
 

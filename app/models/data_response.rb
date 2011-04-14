@@ -192,10 +192,10 @@ class DataResponse < ActiveRecord::Base
       end
       return self.save
     else
-      self.errors.add_to_base("Your projects are not yet entered.") if !projects_entered?
-      self.errors.add_to_base("Your projects are not yet linked.") if !projects_linked?
-      self.errors.add_to_base("Your activites are not yet coded.") if !activities_coded?
-      self.errors.add_to_base("Your other costs are not yet coded.") if !other_costs_coded?
+      self.errors.add_to_base("Projects are not yet entered.") if !projects_entered?
+      self.errors.add_to_base("Projects are not yet linked.") if !projects_linked?
+      self.errors.add_to_base("Activites are not yet coded.") if !activities_coded?
+      self.errors.add_to_base("Other Costs are not yet coded.") if !other_costs_coded?
       return false
     end
   end

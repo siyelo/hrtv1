@@ -1,0 +1,22 @@
+-form_tag(bulk_update_response_projects_path, :method => :put) do
+  %table
+    %thead
+      %tr
+        %th Name
+        %th Funder
+        %th Funder Project
+        %th Budget
+        %th Spend
+      - @projects.each do |p|
+        %tbody
+          %tr
+            %td= p.name
+            %td
+              - p.in_flows.map(&:from).each do |fs|
+                =fs.name
+            %td
+              = select_tag p.id, options_for_select(p.organization.projects.map{|op| [op.name, op.id] if op.id != p.id})
+            %td= p.budget
+            %td= p.spend
+  
+  =submit_tag "Update", :class => 'small_submit_button'

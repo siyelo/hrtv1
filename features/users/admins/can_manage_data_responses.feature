@@ -11,23 +11,20 @@ Feature: Admin can manage data responses
       And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as an admin
 
-
-
     Scenario: Manage data responses
       When I follow "Review Organization Expenditures and Budgets"
-        And I follow "Empty"
+       And I follow "Empty"
       Then I should see "UNDP"
 
       When I follow "Delete"
-        And I press "Delete"
+      And I press "Delete"
       Then I should see "Data response was successfully deleted"
-        And I should not see "UNDP"
-
+      And I should not see "UNDP"
 
     @javascript
     Scenario: Manage data responses (with JS)
       When I follow "Review Organization Expenditures and Budgets"
-        And I follow "Empty"
-        And I confirm the popup dialog
-        And I follow "Delete"
+       And I follow "Empty"
+       And I confirm the popup dialog
+       And I follow "Delete"
       Then I should not see "UNDP"

@@ -45,4 +45,4 @@
                 .tab2
                   = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first.find(:all, :include => {:sub_activities => :provider})
                 .tab3
-                  = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+                  = render 'shared/data_responses/activities', :activities => project.other_costs, :other_costs => true

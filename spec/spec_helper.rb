@@ -97,25 +97,65 @@ def save_and_deep_clone
   @clone.reload #otherwise seems to cache the old has_many associations
 end
 
-def classify_the_activity
+def create_activity
   @activity = Factory(:activity, :data_response => @response, :project => @project, :budget => 1000, :spend => 1000)
+end
+
+def create_other_cost
+  @activity = Factory(:other_cost, :data_response => @response, :project => @project, :budget => 1000, :spend => 1000)
+end
+
+def classify_the_activity
+  create_activity
   do_common_classification
   @cb        = Factory(:coding_budget, :activity => @activity, :cached_amount => 1000)
   @cs        = Factory(:coding_spend, :activity => @activity, :cached_amount => 1000)
 end
 
+def classify_the_activity_budget
+  create_activity
+  do_common_budget_classifications
+  @cb        = Factory(:coding_budget, :activity => @activity, :cached_amount => 1000)
+end
+
+def classify_the_activity_spend
+  create_activity
+  do_common_spend_classifications
+  @cs        = Factory(:coding_spend, :activity => @activity, :cached_amount => 1000)
+end
+
 def classify_the_other_cost
-  @activity = Factory(:other_cost, :data_response => @response, :project => @project, :budget => 1000, :spend => 1000)
+  create_other_cost
   do_common_classification
   @cb        = Factory(:coding_budget_other_cost, :activity => @activity, :cached_amount => 1000)
   @cs        = Factory(:coding_spend_other_cost, :activity => @activity, :cached_amount => 1000)
 end
 
-# performs the classifications that are common between Activities and Other Costs
+def classify_the_other_cost_budget
+  create_other_cost
+  do_common_budget_classifications
+  @cb        = Factory(:coding_budget_other_cost, :activity => @activity, :cached_amount => 1000)
+end
+
+def classify_the_other_cost_spend
+  create_other_cost
+  do_common_spend_classifications
+  @cs        = Factory(:coding_spend_other_cost, :activity => @activity, :cached_amount => 1000)
+end
+
 def do_common_classification
+  do_common_budget_classifications
+  do_common_spend_classifications
+end
+
+# performs the classifications that are common between Activities and Other Costs
+def do_common_budget_classifications
   @cbd       = Factory(:coding_budget_district, :activity => @activity, :cached_amount => 1000)
   @cbcc      = Factory(:coding_budget_cost_categorization, :activity => @activity, :cached_amount => 1000)
   @cbsl      = Factory(:service_level_budget, :activity => @activity, :cached_amount => 1000)
+end
+
+def do_common_spend_classifications
   @csd       = Factory(:coding_spend_district, :activity => @activity, :cached_amount => 1000)
   @cscc      = Factory(:coding_spend_cost_categorization, :activity => @activity, :cached_amount => 1000)
   @cssl      = Factory(:service_level_spend, :activity => @activity, :cached_amount => 1000)

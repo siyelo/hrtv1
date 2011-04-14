@@ -28,22 +28,24 @@
 %h3{:class => ready_class}
   Activities Entered
   - unless @response.activities_entered?
-    %span.info
-      - unless @response.projects_entered?
+    - unless @response.projects_entered?
+      %span.info
         = render 'projects/no_projects_yet'
         then you can start adding Activities.
-      - else
+    - else
+      %span.info
         You have project(s), but no activities yet.
         = link_to "Start by adding your first activity now.", response_projects_path(@data_response)
 
 - ready_class = @response.activities_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Activities Classified
-  %span.info
-    - unless @response.activities_coded?
-      - unless @data_response.uncoded_activities.empty?
+  - unless @response.activities_coded?
+    - unless @data_response.uncoded_activities.empty?
+      %span.info
         Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
-      - else
+    - else
+      %span.info
         Start by adding a few Activities first (see above), then you can start classifying them.
 - unless @response.activities_coded?
   - unless @data_response.uncoded_activities.empty?
@@ -54,23 +56,22 @@
 %h3{:class => ready_class}
   Other Costs Entered
   - unless @response.other_costs_entered?
-    %span.info
-      - unless @response.projects_entered?
+    - unless @response.projects_entered?
+      %span.info
         = render 'projects/no_projects_yet'
         then you can start adding Other Costs.
-      - else
-        Other Costs help you include any financial information at the central level and/or administrative expenses.
+    - else
+      %span.info Other Costs help you include any financial information at the central level and/or administrative expenses.
         = link_to "Start adding your Other Costs now.", response_projects_path(@data_response)
 
 - ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Other Costs Classified
-  %span.info
-    - unless @response.other_costs_coded?
-      - unless @data_response.uncoded_other_costs.empty?
-        Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
-      - else
-        Start by adding a few Other Costs first (see above), then you can start classifying them.
+  - unless @response.other_costs_coded?
+    - unless @data_response.uncoded_other_costs.empty?
+      %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+    - else
+      %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
 
 - unless @response.other_costs_coded?
   - unless @data_response.uncoded_other_costs.empty?
@@ -80,21 +81,17 @@
 %h3{:class => ready_class}
   Response submitted for Initial Review
   - unless @response.submitted
-    %span.info
-      You have not yet submitted your Response for the initial review.
+    %span.info You have not yet submitted your Response for the initial review.
   - else
-    = "Your response was submitted on #{@response.submitted_at.to_s(:long)}"
-
+    %span.info= "Your response was submitted on #{@response.submitted_at.to_s(:long)}"
 
 - ready_class = @response.submitted_for_final_review ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Response submitted for Final Review
-  %span.info
-    - unless @response.submitted_for_final_review
-      You have not yet submitted your Response for the final review.
-    - else
-      = "Your response was submitted on #{@response.submitted_for_final_review_at.to_s(:long)}"
-
+  - unless @response.submitted_for_final_review
+    %span.info You have not yet submitted your Response for the final review.
+  - else
+      %span.info= "Your response was submitted on #{@response.submitted_for_final_review_at.to_s(:long)}"
 
 %hr.divider
 %p

@@ -3,14 +3,8 @@
 
 :javascript
   google.load("visualization", "1", {packages:["corechart"]});
-  //var _spent_pie_values       = #{js_safe(@spent_pie_values)};
-  //var _budget_pie_values      = #{js_safe(@budget_pie_values)};
-  var _budget_ufs_values      = #{js_safe(@budget_ufs_values)};
-  var _budget_fa_values       = #{js_safe(@budget_fa_values)};
-  var _budget_i_values        = #{js_safe(@budget_i_values)};
-  var _spend_ufs_values       = #{js_safe(@spend_ufs_values)};
-  var _spend_fa_values        = #{js_safe(@spend_fa_values)};
-  var _spend_i_values         = #{js_safe(@spend_i_values)};
+  var _spent_pie_values       = #{js_safe(@spent_pie_values)};
+  var _budget_pie_values      = #{js_safe(@budget_pie_values)};
 
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
@@ -20,39 +14,13 @@
 %h1.main_heading Organizations
 
 .full
-  .third
-    %h2 Ultimate Funding Source (Budget)
-    #budget_ufs_pie.bordered
+  .first-half
+    %h2 Spent
+    #spent_pie.bordered
 
-  .third
-    %h2 Financing Agent (Budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Budget)
-    #budget_i_pie.bordered
-
-.full
-  .third
-    %h2 Ultimate Funding Source (Spent)
-    #spend_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Spent)
-    #spend_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Spent)
-    #spend_i_pie.bordered
-
--#.full
-  -#.first-half
-    -#%h2 Spent
-    -##spent_pie.bordered
-
-  -#.second-half
-    -#%h2 Budget
-    -##budget_pie.bordered
+  .second-half
+    %h2 Budget
+    #budget_pie.bordered
 
 %h2= "Organizations (#{short_page_entries_info(@organizations)})"
 

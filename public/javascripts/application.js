@@ -837,6 +837,12 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
 var reports_districts_show = {
   run: function () {
+    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
+    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
+    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
+    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
+    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
+    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
     if (_pie) {
       drawPieChart('code_spent', _code_spent_values, 450, 300);
       drawPieChart('code_budget', _code_budget_values, 450, 300);
@@ -870,14 +876,8 @@ var reports_districts_activities_index = {
 
 var reports_districts_organizations_index = {
   run: function () {
-    //drawPieChart('spent_pie', _spent_pie_values);
-    //drawPieChart('budget_pie', _budget_pie_values);
-    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
-    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
-    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
-    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
+    drawPieChart('spent_pie', _spent_pie_values, 450, 300);
+    drawPieChart('budget_pie', _budget_pie_values, 450, 300);
   }
 };
 

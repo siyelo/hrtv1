@@ -3,10 +3,15 @@
 
 :javascript
   var _pie = #{@pie.to_json};
-  var packages = _pie ? ["corechart"] : ["treemap"];
-  google.load("visualization", "1", {packages: packages});
-  var _code_spent_values  = #{js_safe(@code_spent_values)};
-  var _code_budget_values = #{js_safe(@code_budget_values)};
+  google.load("visualization", "1", {packages: ["corechart", "treemap"]});
+  var _budget_ufs_values      = #{js_safe(@budget_ufs_values)};
+  var _budget_fa_values       = #{js_safe(@budget_fa_values)};
+  var _budget_i_values        = #{js_safe(@budget_i_values)};
+  var _spend_ufs_values       = #{js_safe(@spend_ufs_values)};
+  var _spend_fa_values        = #{js_safe(@spend_fa_values)};
+  var _spend_i_values         = #{js_safe(@spend_i_values)};
+  var _code_spent_values      = #{js_safe(@code_spent_values)};
+  var _code_budget_values     = #{js_safe(@code_budget_values)};
 
 
 %ul.breadcrumb
@@ -15,16 +20,32 @@
 
 %h1.main_heading= h @location.name
 
-.full
-  .first-half
-    %h2 Top Organizations by Expenditure
-    = render 'reports/districts/organizations/table_mini', :top_organizations => @top_organizations, :location => @location
-    %p.bordered= link_to "View all Organizations", reports_district_organizations_path(@location), :class => "right"
 
-  .second-half
-    %h2 Top Activities by Expenditure
-    = render 'reports/districts/activities/table_mini', :top_activities => @top_activities, :location => @location
-    %p= link_to "View all Activities", reports_district_activities_path(@location), :class => "right"
+.full
+  .third
+    %h2 Ultimate Funding Source (Budget)
+    #budget_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Budget)
+    #budget_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Budget)
+    #budget_i_pie.bordered
+
+.full
+  .third
+    %h2 Ultimate Funding Source (Spent)
+    #spend_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Spent)
+    #spend_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Spent)
+    #spend_i_pie.bordered
 
 
 %ul.group
@@ -51,4 +72,17 @@
   .second-half
     %h2= "#{type} Budget"
     #code_budget.bordered
+
+
+
+.full
+  .first-half
+    %h2 Top Organizations by Expenditure
+    = render 'reports/districts/organizations/table_mini', :top_organizations => @top_organizations, :location => @location
+    %p.bordered= link_to "View all Organizations", reports_district_organizations_path(@location), :class => "right"
+
+  .second-half
+    %h2 Top Activities by Expenditure
+    = render 'reports/districts/activities/table_mini', :top_activities => @top_activities, :location => @location
+    %p= link_to "View all Activities", reports_district_activities_path(@location), :class => "right"
 

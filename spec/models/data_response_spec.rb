@@ -149,6 +149,24 @@ describe DataResponse do
       data_response.name.should == 'Data Request 1'
     end
   end
+  
+  describe "completed" do
+    before :each do
+      @request  = Factory.create(:data_request, :title => 'Data Request 1')
+      @response = Factory.create(:data_response, :data_request => request)
+      #project = Factory(:project, :data_response => response)
+    end
+    
+    it "returns false if there are uncoded activities" do
+      response.complete.should == false
+    end
+    
+    it "returns false if there are uncoded other costs" do 
+      request  = Factory.create(:data_request, :title => 'Data Request 1')
+      response = Factory.create(:data_response, :data_request => request)
+    end
+  end
+  
 end
 
 

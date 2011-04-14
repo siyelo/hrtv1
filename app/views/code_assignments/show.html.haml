@@ -17,7 +17,7 @@
 
 #classification
   %table#activity_description
-    = render  '/code_assignments/progress_bar', :activity => @activity
+
 
     - amount = @activity.spend
     - amount = @activity.budget if @coding_type == "CodingBudget"
@@ -25,6 +25,7 @@
       %td= "#{type} Amount:"
       %td= c(amount, @activity.currency)
 
+    = render  '/code_assignments/progress_bar', :activity => @activity
 
     - if current_user.admin? || current_user.activity_manager?
       %tr

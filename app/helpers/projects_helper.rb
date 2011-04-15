@@ -10,7 +10,7 @@ module ProjectsHelper
   end
   
   def funding_flows_select(project)
-    flows = [["", nil]]
+    flows = [["Project Missing/Unknown", "-1"]]
     flow = []
     project.in_flows.each do |in_flow|
       flow = in_flow.from.projects.map{|op| [op.name, op.id]}

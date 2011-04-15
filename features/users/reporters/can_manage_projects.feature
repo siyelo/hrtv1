@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -228,5 +227,20 @@ Feature: Reporter can manage projects
    Given I follow "Project5"
    And I select "" from "funding_flows_3"
    And I press "Update Project"
-   Then I should see "Project was successfully updated"  
+   Then I should see "Project was successfully updated"
+
+   Scenario: A Reporter select project missing or project unknown for their FS from the edit page
+    Then I should see "Project5"
+    Given I follow "Project5"
+    And I select "Project Missing/Unknown" from "funding_flows_3"
+    And I press "Update Project"
+    Then I should see "Project was successfully updated"
     
+    
+    Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
+     Then I should see "Project5"
+     Given I follow "Bulk Edit"
+     Then I should see "Project5"
+     Then select "Project Missing/Unknown" from "funding_flows_3"
+     And I press "Update"
+     Then I should see "Your projects have been successfully updated"

@@ -24,7 +24,7 @@
   - unless @response.projects_linked?
     %span.info
       Please
-      = link_to "link your projects", "#"
+      = link_to "link your projects", bulk_edit_response_projects_path(@response)
       to the respective projects of your Funder(s).
 
 - ready_class = @response.activities_entered? ? "ready" : "not-ready"

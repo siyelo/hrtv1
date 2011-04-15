@@ -1,4 +1,31 @@
-%h1.main_heading Bulk Edit
+%h1.main_heading Link to Funders' Projects
+
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Linking Projects"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Linking your Projects to those of your Funder improves the quality of your Response, and of your Funders' Response too.
+
+        %ul.bulleted
+          %li Add Funding organizations for all your Projects
+          %li Select the Projects from each Funder that you think corresponds to your Project.
+          %li
+
+%a{:href => "#", :class => 'overlay', :rel => "#simple_overlay"}
+  Whats this?
+  = image_tag 'overlay.png'
+
+#simple_overlay
+  %h3 What is Linking to Funders' Projects?
+  %p Linking Funder's Projects is the process of matching each of your Projects to a Project that your Funder has.
+  %p Linking your Project to a Funder, and to a specific Project of theirs, greatly improves the ability of the HRT to derive accurate information from your Response.
+  %br
+  %p
+    Read more on our
+    = link_to "Project FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=project", :target => '_blank'
 
 -form_tag(bulk_update_response_projects_path, :method => :put) do
   %table.standard.rounded

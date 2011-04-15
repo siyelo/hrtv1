@@ -40,11 +40,7 @@ class FundingFlow < ActiveRecord::Base
       params[:funding_flows].each_pair do |flow_id, project_id|
         ff = self.find(flow_id)
         ff.project_from_id = project_id
-        if ff.save
-          return true
-        else
-          return false
-        end
+        ff.save
       end
     end
   end

@@ -40,6 +40,8 @@
     +border-radius(5px)
     +box-shadow($very-light-grey, 0, 2px, 5px)
     +text-shadow($filler, 0, 1px, 1px)
+    max-width: 60%
+    margin: 0 auto
 
   #success, #info, .success, .info
     border-color: #99cc99
@@ -65,6 +67,7 @@
     border-color: #cc9999
     color: #d8000c
     background-color: #ffbaba
+    font-size: 12px
     //background-image: url(/images/alerterror_icon.png)
   a:hover
     color: $dark-blue !important
@@ -124,7 +127,7 @@ ul.response-notice li
   &:last-child
     margin: 0
     +border-bottom-radius
-      
+
 // Landing Page flashes override
 body.landing
   #flashes
@@ -135,7 +138,7 @@ body.landing
     z-index: 0
     #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
       +box-shadow($light-blue - #333, 0, 1px, 5px)
-      
+
 // Login Pages flashes styles
 body.login
   #flashes

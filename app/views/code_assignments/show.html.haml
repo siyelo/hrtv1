@@ -1,11 +1,12 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
-= render 'breadcrumb', :response => @data_response, :activity => @activity
-
 - type = 'Spend'
-- if @coding_type == "CodingBudget"
+- if @coding_type =~ /Budget/
   - type = 'Budget'
+
+= render 'breadcrumb', :response => @data_response, :activity => @activity, :type => type
+
 
 %h1.main_heading
   = "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"

@@ -18,9 +18,7 @@ class CodeAssignmentsController < Reporter::BaseController
     @coding_class  = @coding_type.constantize
     if params[:activity].present? && params[:activity][:updates].present?
       @coding_class.update_codings(params[:activity][:updates], @activity)
-      notice_message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
-    else
-      notice_message = nil
+      message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
     @error_message = add_code_assignments_error(@coding_class, @activity)
     flash[:error]  = @error_message if @error_message
@@ -76,8 +74,7 @@ class CodeAssignmentsController < Reporter::BaseController
                classifications, they equaled #{coding_amount} but the #{coding_type}
                is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount}
                = #{difference}, which is ~#{percent_diff}%). The total classified
-               should add up to #{coding_type_amount}. You need to classify the total
-               amount 3 times, in the coding, districts, and cost categories tabs."
+               should add up to #{coding_type_amount}."
       end
     end
 

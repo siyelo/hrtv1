@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110413143411) do
+ActiveRecord::Schema.define(:version => 20110414212252) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -172,6 +172,8 @@ ActiveRecord::Schema.define(:version => 20110413143411) do
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
+    t.datetime "submitted_for_final_at"
+    t.boolean  "submitted_for_final"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"

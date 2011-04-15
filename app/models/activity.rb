@@ -202,7 +202,7 @@ class Activity < ActiveRecord::Base
   end
 
   def possible_duplicate?
-    self.class.only_simple.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
+    self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
   end
 
   def budget_district_coding_adjusted

@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can see dashboard
   In order to improve data quality
   A reporter can see prompt to review data, when Request is in final review stage

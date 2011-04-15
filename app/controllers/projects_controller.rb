@@ -27,8 +27,12 @@ class ProjectsController < Reporter::BaseController
   end
 
   def update
+    success = FundingFlow.create_flows(params)
     update! do |success, failure|
-      success.html { redirect_to response_projects_url(@data_response) }
+      success.html { 
+        flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
+        redirect_to response_projects_url(@data_response)
+      }
       failure.html do
         load_comment_resources(resource)
         render :action => 'edit'
@@ -39,6 +43,16 @@ class ProjectsController < Reporter::BaseController
   def show
     load_comment_resources(resource)
     show!
+  end
+  
+  def bulk_edit
+    @projects = @data_response.projects
+  end
+  
+  def bulk_update
+    success = FundingFlow.create_flows(params)
+    flash[:notice] = "Your projects have been successfully updated"
+    redirect_to response_projects_url
   end
 
   def download_template

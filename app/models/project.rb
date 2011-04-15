@@ -292,7 +292,9 @@ class Project < ActiveRecord::Base
     def assign_project_to_funding_flows
       funding_flows.each {|ff| ff.project = self}
     end
+    
 end
+
 
 
 
@@ -328,5 +330,7 @@ end
 #  budget3          :decimal(, )
 #  budget4          :decimal(, )
 #  budget5          :decimal(, )
+#  spend_in_usd     :decimal(, )
+#  budget_in_usd    :decimal(, )
 #
 

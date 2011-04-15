@@ -9,6 +9,14 @@
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation."
+      - unless @project.new_record?
+        %li.string.required
+          %label{:for => "funding_flows_select"}
+            Select Funding Flows
+          - @project.in_flows.each do |in_flow|
+            = select_tag "funding_flows[#{in_flow.id}]", options_for_select(funding_flows_select(@project), in_flow.project_from_id), :class => "icecream"
+          %p.inline-hints
+            Select the parent project from the organization
   
   - if @data_response.data_request.spend?
     %li.last

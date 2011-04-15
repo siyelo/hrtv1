@@ -34,7 +34,19 @@ class FundingFlow < ActiveRecord::Base
   def name
     "From: #{from.name} - To: #{to.name}"
   end
+  
+  def self.create_flows(params)
+    unless params[:funding_flows].blank?
+      params[:funding_flows].each_pair do |flow_id, project_id|
+        ff = self.find(flow_id)
+        ff.project_from_id = project_id
+        ff.save
+      end
+    end
+  end
 end
+
+
 
 
 
@@ -64,5 +76,7 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  comments_count       :integer         default(0)
+#  project_from         :integer
+#  project_from_id      :integer
 #
 

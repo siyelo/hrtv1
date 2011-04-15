@@ -217,6 +217,10 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
+Then /^"([^"]*)" should be selected for "([^"]*)"$/ do |value, field|
+  field_labeled(field).element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
+end
+
 When /^I go into debug mode$/ do
   require 'ruby-debug'
   debugger

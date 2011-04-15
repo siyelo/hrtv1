@@ -165,7 +165,7 @@ class Project < ActiveRecord::Base
 
   def ultimate_funding_sources
     funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders)
+    trace_ultimate_funding_source(organization, funders.uniq)
   end
 
   def cached_ultimate_funding_sources
@@ -186,6 +186,8 @@ class Project < ActiveRecord::Base
     end
 
     def trace_ultimate_funding_source(organization, funders, traced = [])
+      #spacing = '   ' * traced.length                 # DEBUG
+      #puts "#{spacing}tracing #{organization.name}"   # DEBUG
       traced = traced.dup
       traced << organization
       funding_sources = []
@@ -204,7 +206,6 @@ class Project < ActiveRecord::Base
           funding_sources << {:ufs => funder, :fa => traced.last, 
                               :budget => get_budget(ffs), :spend => get_spend(ffs)}
         else
-
           # potential UFS - parent funded organization that funds other organizations
           # i.e. does not have any activity(ies) with organization as implementer
           unless implementer_in_flows?(organization, parent_flows)
@@ -227,7 +228,7 @@ class Project < ActiveRecord::Base
         unless traced.include?(funder)
           parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
           parent_funders = remove_not_funded_donors(funder, parent_funders)
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders, traced)) 
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders.uniq, traced)) 
         end
       end
 

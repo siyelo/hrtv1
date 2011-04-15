@@ -153,17 +153,17 @@ describe DataResponse do
   describe "completed" do
     before :each do
       @request  = Factory.create(:data_request, :title => 'Data Request 1')
-      @response = Factory.create(:data_response, :data_request => request)
+      @response = Factory.create(:data_response, :data_request => @request)
       #project = Factory(:project, :data_response => response)
     end
     
     it "returns false if there are uncoded activities" do
-      response.complete.should == false
+      @response.complete.should == false
     end
     
     it "returns false if there are uncoded other costs" do 
-      request  = Factory.create(:data_request, :title => 'Data Request 1')
-      response = Factory.create(:data_response, :data_request => request)
+      @request  = Factory.create(:data_request, :title => 'Data Request 1')
+      @response = Factory.create(:data_response, :data_request => @request)
     end
   end
   

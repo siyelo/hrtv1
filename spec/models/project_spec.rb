@@ -587,7 +587,7 @@ describe Project do
       # organization 2 is donor
       @org2.raw_type = "Donor"; @org2.save
       Factory(:funding_flow, :from => @org0, :to => @org2, :project => @proj2,
-              :budget => 1, :spend => 2)
+              :budget => 50, :spend => 50)
       activity = Factory(:activity, :project => @proj2, :provider => @org3,
                          :budget => 50, :data_response => @response2)
 
@@ -596,7 +596,26 @@ describe Project do
               :budget => 50, :spend => 50)
 
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 1, :spend => 2}]
+      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 50, :spend => 50}]
+    end
+
+    # budfix spec
+    it "doesn't duplicates organizations when same from-to flows reported" do
+      # organization 2 is donor
+      @org2.raw_type = "Donor"; @org2.save
+      Factory(:funding_flow, :from => @org0, :to => @org2, :project => @proj2,
+              :budget => 100, :spend => 100)
+      activity = Factory(:activity, :project => @proj2, :provider => @org3,
+                         :budget => 50, :data_response => @response2)
+
+      # organization 3
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
+              :budget => 50, :spend => 50)
+      Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
+              :budget => 50, :spend => 50)
+
+      ufs = @proj3.ultimate_funding_sources
+      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 100, :spend => 100}]
     end
 
     it "gives donor as real UFS if no matching activity is found for it in donor data response" do

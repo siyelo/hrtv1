@@ -11,6 +11,7 @@ Factory.define :activity, :class => Activity do |f|
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
+  f.sequence(:name) { |i| "other_cost_name_#{i}" }
 end
 
 Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
@@ -51,15 +52,15 @@ Factory.define :activity_fully_coded, :class => Activity, :parent => :activity_w
   f.after_create { |a| Factory(:service_level_budget, :cached_amount => 50, :activity => a) }
 end
 
-Factory.define :other_cost_w_spend_coding, :class => Activity, :parent => :_spend_coded  do |f|
+Factory.define :other_cost_w_spend_coding, :class => OtherCost, :parent => :_spend_coded  do |f|
   f.after_create { |a| Factory(:coding_spend_other_cost, :cached_amount => 40, :activity => a) }
 end
 
-Factory.define :other_cost_w_budget_coding, :class => Activity, :parent => :_budget_coded  do |f|
+Factory.define :other_cost_w_budget_coding, :class => OtherCost, :parent => :_budget_coded  do |f|
   f.after_create { |a| Factory(:coding_budget_other_cost, :cached_amount => 50, :activity => a) }
 end
 
-Factory.define :other_cost_fully_coded, :class => Activity, :parent => :activity_w_spend_coding  do |f|
+Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_cost_w_spend_coding  do |f|
   # Not DRY. Need to figure out how to mix two factories together
   f.after_create { |a| Factory(:coding_budget_other_cost, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }

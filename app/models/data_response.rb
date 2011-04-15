@@ -263,9 +263,7 @@ class DataResponse < ActiveRecord::Base
     def select_coded(activities)
       activities.select{ |a| a.classified? }
     end
-
 end
-
 
 # == Schema Information
 #
@@ -292,5 +290,7 @@ end
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)
 #  activities_without_projects_count :integer         default(0)
+#  submitted_for_final_at            :datetime
+#  submitted_for_final               :boolean
 #
 

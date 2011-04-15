@@ -71,18 +71,19 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Purposes"
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "1,234,567.00"
         And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
-
 
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
         And I follow "Purposes"
         And I fill in "mtef1" percentage field with "<amount>"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+        Then I should not see "Activity classification was successfully updated."
+        And I should see "We're sorry, when we added up your Budget by Purposes classifications"
+
         And the "mtef1" percentage field should contain "<amount2>"
 
         Examples:
@@ -97,7 +98,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Purposes"
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+        Then I should not see "Activity classification was successfully updated."
         And the "mtef1" field should contain "1,234,567.00"
 
 
@@ -108,7 +109,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Locations"
         And I fill in "Location1" with "1234567.00"
       When I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And the "Location1" field should contain "1,234,567.00"
 
       When I follow "Click here to copy the Budget splits below to the Spend Locations tab"
@@ -122,7 +123,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Inputs"
         And I fill in "cost_category1" with "1234567.00"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And the "cost_category1" field should contain "1,234,567.00"
 
       When I follow "Click here to copy the Budget splits below to the Spend Inputs tab"
@@ -136,7 +137,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Service Levels"
         And I fill in "service_level1" with "1234567.00"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "service_level1" field should contain "1,234,567.00"
 
@@ -155,7 +156,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "%" with "5" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)"
         And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
@@ -183,7 +184,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)"
         And I press "Save"
-      Then I should see "Activity classification was successfully updated."
+      Then I should not see "Activity classification was successfully updated."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "150,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"

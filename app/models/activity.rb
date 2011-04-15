@@ -46,12 +46,12 @@ class Activity < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-                  :text_for_targets, :name, :description, :start_date, :end_date,
-                  :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-                  :beneficiary_ids, :location_ids, :provider_id,
-                  :sub_activities_attributes, :organization_ids, :funding_sources_attributes
+    :text_for_targets, :name, :description, :start_date, :end_date,
+    :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
+    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
+    :beneficiary_ids, :location_ids, :provider_id,
+    :sub_activities_attributes, :organization_ids, :funding_sources_attributes
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -70,9 +70,11 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
+  has_many :service_level_budget
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
+  has_many :service_level_spend
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true

@@ -21,7 +21,7 @@
 
 
     - amount = @activity.spend
-    - amount = @activity.budget if @coding_type == "CodingBudget"
+    - amount = @activity.budget if @coding_type =~ /Budget/
     %tr
       %td= "#{type} Amount:"
       %td= c(amount, @activity.currency)

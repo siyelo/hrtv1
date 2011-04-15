@@ -8,14 +8,13 @@ module ProjectsHelper
   def end_date_form_column(column, options)
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
-  
+
   def funding_flows_select(project)
-    flows = [["Project Missing/Unknown", "-1"]]
-    flow = []
+    flows = []
     project.in_flows.each do |in_flow|
-      flow = in_flow.from.projects.map{|op| [op.name, op.id]}
+      flows = in_flow.from.projects.map{|op| [op.name, op.id]}
     end
-    flows = flows | flow
+    flows
   end
 
   # this disallows adding existing comments

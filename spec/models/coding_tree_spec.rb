@@ -162,6 +162,22 @@ describe CodingTree do
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == false
     end
+
+    it "is valid when root children has no amounts and type is CodingBudgetDistrict" do
+      ca1  = Factory.create(:coding_budget_district, :activity => @activity, :code => @code1, :cached_amount => 50, :sum_of_children => 0)
+      ca2  = Factory.create(:coding_budget_district, :activity => @activity, :code => @code2, :cached_amount => 50, :sum_of_children => 0)
+      ct   = CodingTree.new(@activity, CodingBudgetDistrict)
+      ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+      ct.valid?.should == true
+    end
+
+    it "is valid when root children has no amounts and type is CodingSpendDistrict" do
+      ca1  = Factory.create(:coding_spend_district, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 0)
+      ca2  = Factory.create(:coding_spend_district, :activity => @activity, :code => @code2, :cached_amount => 100, :sum_of_children => 0)
+      ct   = CodingTree.new(@activity, CodingSpendDistrict)
+      ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+      ct.valid?.should == true
+    end
   end
 
   describe "code assignment" do

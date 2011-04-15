@@ -694,9 +694,6 @@ ul.group
       padding: 8px 15px 5px
       text-decoration: none
 
-      &:hover, &:focus
-        text-decoration: underline
-
       &.active
         background: white
         border-top: 1px solid $light-blue
@@ -948,22 +945,26 @@ table.sum
     border: none
 
 .breadcrumb
-  +border-radius
-  +clearfix
-  +horizontal-list
-  border: 1px dotted $lightest-blue
+  background: $filler
+  border: 1px solid $lightest-blue
   font-size: 11px
   margin-top: 7px
-  margin-bottom: 4px !important
-  padding: 5px
-
+  margin-bottom: 10px !important
+  +border-radius
+  +pie-clearfix
+  
   li
-    background: image_url("icon_mark.png") no-repeat right center
-    padding-right: 10px
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 15px 5px 10px
 
     &.last
       background: none
       padding-right: 10px
+    
+    a
+      text-decoration: none
 
 .bordered
   border: 1px solid $lightest-blue

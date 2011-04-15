@@ -49,6 +49,8 @@ class Reports::JawpReport
     end
 
     row = []
+    row << activity.project.try(:name)
+    row << activity.project.try(:description)
     row << activity.name
     row << activity.description
     row << amount_q1
@@ -190,6 +192,8 @@ class Reports::JawpReport
       amount_type = @is_budget ? 'Budget' : 'Spent'
 
       row = []
+      row << "Project Name"
+      row << "Project Description"
       row << "Activity Name"
       row << "Activity Description"
       row << "Q1"

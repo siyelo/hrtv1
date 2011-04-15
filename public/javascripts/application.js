@@ -995,7 +995,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 var activity_form = function () {
   $('#activity_project_id').change(function () {
-    update_funding_source_selects
+    update_funding_source_selects();
 
     var element = $('#project_sub_form');
     var _project_id = $(this).val();

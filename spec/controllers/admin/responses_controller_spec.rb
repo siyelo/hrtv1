@@ -46,9 +46,9 @@ describe Admin::ResponsesController do
   
     it "GET/1 should find a response" do
       (@codes = [Factory(:code)])
-      Code.stub_chain(:for_activities, :roots).and_return(@codes)
+      Code.stub_chain(:purposes, :roots).and_return(@codes)
       DataResponse.should_receive(:find).with('1').and_return(@data_response)
-      Code.should_receive(:for_activities)
+      Code.should_receive(:purposes)
       CostCategory.should_receive(:roots)
       OtherCostCode.should_receive(:roots)
       get :show, :id => 1

@@ -58,7 +58,7 @@ describe Code do
       hssp_strat_prog    = Factory.create(:hssp_strat_prog)
       hssp_strat_obj     = Factory.create(:hssp_strat_obj)
 
-      Code.for_activities.should == [mtef, nha_code, nasa_code, nsp_code]
+      Code.purposes.should == [mtef, nha_code, nasa_code, nsp_code]
     end
 
     it "orders codes by lft" do

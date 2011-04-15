@@ -194,7 +194,7 @@ describe CodingTree do
     end
 
     it "returns codes for simple activity and 'CodingBudget' type" do
-      Code.stub_chain(:for_activities, :roots).and_return(@fake_codes)
+      Code.stub_chain(:purposes, :roots).and_return(@fake_codes)
 
       activity = Factory.create(:activity)
       ct       = CodingTree.new(activity, CodingBudget)
@@ -276,7 +276,7 @@ describe CodingTree do
     end
 
     it "returns codes for simple activity and 'CodingSpend' type" do
-      Code.stub_chain(:for_activities, :roots).and_return(@fake_codes)
+      Code.stub_chain(:purposes, :roots).and_return(@fake_codes)
 
       activity = Factory.create(:activity)
       ct       = CodingTree.new(activity, CodingSpend)

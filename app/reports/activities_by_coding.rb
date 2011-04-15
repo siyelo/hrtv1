@@ -76,7 +76,7 @@ class Reports::ActivitiesByCoding
 
     def get_codes
       codes = []
-      Code.for_activities.roots.ordered.each do |code|
+      Code.purposes.roots.ordered.each do |code|
         code.self_and_descendants.each do |code2|
           codes << code2
         end

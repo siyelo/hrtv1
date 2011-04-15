@@ -1,7 +1,7 @@
 class Code < ActiveRecord::Base
 
   ### Constants
-  ACTIVITY_ROOT_TYPES   = %w[Mtef Nha Nasa Nsp]
+  PURPOSES            = %w[Mtef Nha Nasa Nsp]
   FILE_UPLOAD_COLUMNS = %w[short_display long_display description type external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val official_name sub_account nha_code nasa_code]
 
   ### Comments
@@ -30,7 +30,7 @@ class Code < ActiveRecord::Base
   ### Named scope
   named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
   named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
-  named_scope :for_activities, :conditions => ["codes.type in (?)", ACTIVITY_ROOT_TYPES]
+  named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
   named_scope :ordered, :order => 'lft'
 
   def self.deepest_nesting

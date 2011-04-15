@@ -83,7 +83,7 @@ class CodingTree
   def root_codes
     case @coding_klass.to_s
     when 'CodingBudget', 'CodingSpend'
-      @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.for_activities.roots
+      @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
     when 'ServiceLevelBudget', 'ServiceLevelSpend'

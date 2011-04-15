@@ -21,7 +21,7 @@ class Admin::ResponsesController < Admin::BaseController
     @data_response               = DataResponse.find(params[:id])
     @projects                    = @data_response.projects.find(:all, :order => "name ASC")
     @activities_without_projects = @data_response.activities.roots.without_a_project
-    @code_roots                  = Code.for_activities.roots
+    @code_roots                  = Code.purposes.roots
     @cost_cat_roots              = CostCategory.roots
     @other_cost_roots            = OtherCostCode.roots
   end

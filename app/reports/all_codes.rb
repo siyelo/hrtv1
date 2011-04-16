@@ -25,7 +25,9 @@ class Reports::AllCodes
       row << "Description"
       row << "Type (MTEF, NSP, etc)"
       row << "HSSP2 Strategic Objective"
+      row << "HSSP2 Strategic Program"
       row << "Official (long) name"
+      row << "Internal Database ID"
 
       row
     end
@@ -40,7 +42,9 @@ class Reports::AllCodes
       row << code.description
       row << code.type
       row << code.hssp2_stratobj_val
+      row << code.hssp2_stratprog_val
       row << code.official_name
+      row << code.id
 
       csv << row
 

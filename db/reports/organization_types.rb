@@ -10,8 +10,8 @@ csv = FasterCSV.generate do |csv|
 
   # data
   orgs.each do |org|
-    row = [org.organization.id,
-           org.organization.name,
+    row = [org.id,
+           org.name,
            org.raw_type
           ]
     csv << row

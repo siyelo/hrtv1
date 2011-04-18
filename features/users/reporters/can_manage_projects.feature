@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -76,12 +75,11 @@ Feature: Reporter can manage projects
           | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created                                     |
           | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
 
-      
+    
     Scenario: Adding malformed CSV file doesn't throw exception
      When I attach the file "spec/fixtures/malformed.csv" to "File"
       And I press "Upload and Import"
      Then I should see "Your CSV file does not seem to be properly formatted."
-
 
     Scenario: Reporter can upload projects
      When I attach the file "spec/fixtures/projects.csv" to "File"
@@ -134,7 +132,6 @@ Feature: Reporter can manage projects
       And I press "Create Comment"
      Then I should see "Comment title"
       And I should see "Comment body"
-
 
 
     @javascript 

@@ -9,8 +9,8 @@ class ActivitiesController < Reporter::BaseController
 
   def index
     scope = @data_response.activities.roots.scoped({:include => :project})
-    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR 
-                                         UPPER(activities.name) LIKE UPPER(:q) OR 
+    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
+                                         UPPER(activities.name) LIKE UPPER(:q) OR
                                          UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
@@ -80,7 +80,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create_from_file
-    begin
+#    begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
@@ -94,10 +94,10 @@ class ActivitiesController < Reporter::BaseController
       end
 
     redirect_to response_activities_url(@data_response)
-    rescue
-      flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_activities_url(@data_response)
-    end
+#    rescue
+#      flash[:error] = "Your CSV file does not seem to be properly formatted."
+#      redirect_to response_activities_url(@data_response)
+#    end
   end
 
   def destroy

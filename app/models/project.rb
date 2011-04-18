@@ -177,6 +177,15 @@ class Project < ActiveRecord::Base
 
     ufs
   end
+  
+  def linked?
+    projects = []
+    self.in_flows.each do |in_flow|
+      projects << in_flow.project_from_id
+    end
+    return false if projects.include?(nil)
+    return true
+  end
 
   private
 
@@ -285,6 +294,8 @@ class Project < ActiveRecord::Base
       end
       amount
     end
+    
+
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id

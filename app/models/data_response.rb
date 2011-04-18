@@ -219,7 +219,14 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_linked?
-    false #TODO
+    projects_from = []
+    self.projects.each do |project|
+      project.in_flows.each do |in_flow|
+        projects_from << in_flow.project_from_id
+      end
+    end
+    return false if projects_from.include?(nil) || projects_from.include?(0)
+    return true
   end
 
   def activities_entered?

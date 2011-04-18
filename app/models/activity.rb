@@ -448,6 +448,7 @@ class Activity < ActiveRecord::Base
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
         dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
+        dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count
         dr.save(false)
       end
     end

@@ -21,25 +21,21 @@ describe Admin::ResponsesController do
     end
       
     it "/index should find the submitted responses" do
-      controller.should_receive(:find_submitted)
       get :index
       response.should be_success
     end
     
     it "/submitted should find the submitted responses" do
-      controller.should_receive(:find_submitted)
       get :submitted
       response.should be_success
     end
 
     it "/in_progress should find the in_progress responses" do
-      DataResponse.should_receive(:in_progress)
       get :in_progress
       response.should be_success
     end 
     
     it "/empty should find the empty responses" do
-      DataResponse.should_receive(:empty)
       get :empty
       response.should be_success
     end

@@ -1,19 +1,21 @@
 class Admin::ResponsesController < Admin::BaseController
 
+  before_filter :load_counters, :only => [:index, :in_progress, :empty, :submitted]
+
   def index
-    self.find_submitted
+    find_submitted
   end
 
   def in_progress
-    @in_progress_responses = DataResponse.available_to(current_user).in_progress
+    find_in_progress
   end
 
   def empty
-    @empty_responses       = DataResponse.available_to(current_user).empty
+    find_empty
   end
 
   def submitted
-    self.find_submitted
+    find_submitted
     render :index
   end
 
@@ -53,6 +55,20 @@ class Admin::ResponsesController < Admin::BaseController
   protected
 
     def find_submitted
-      @submitted_responses   = DataResponse.available_to(current_user).submitted.find(:all, :include => :organization)
+      @submitted_responses ||= DataResponse.submitted.find(:all, :include => :organization)
+    end
+
+    def find_in_progress
+      @in_progress_responses ||= DataResponse.in_progress
+    end
+
+    def find_empty
+      @empty_responses ||= DataResponse.empty
+    end
+
+    def load_counters
+      @submitted_total = find_submitted.count
+      @in_progress_total = find_in_progress.count
+      @empty_total = find_empty.count
     end
 end

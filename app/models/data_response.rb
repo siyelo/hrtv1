@@ -6,8 +6,6 @@ class DataResponse < ActiveRecord::Base
   include CurrencyCacheHelpers
   acts_as_commentable
 
-  @@data_associations = %w[activities funding_flows projects]
-
   ### Attributes
 
   attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
@@ -67,12 +65,16 @@ class DataResponse < ActiveRecord::Base
 
   after_save :update_cached_currency_amounts
 
-  ### Class Methods
-
   def self.in_progress
-    self.find(:all, :include => [:organization, :projects],
-      :conditions => ["submitted = ? or submitted is NULL", false]).select{ |dr|
-        dr.projects.size > 0 or dr.activities.size > 0}
+    self.find :all,
+              :select => 'data_responses.*, 
+                          (SELECT COUNT(*) AS projects_count FROM projects 
+                            WHERE projects.data_response_id = data_responses.id)
+                          (SELECT COUNT(*) AS activities_count FROM activities
+                            WHERE activities.data_response_id = data_responses.id)',
+              :include => [:organization, :projects], 
+              :conditions => ["(submitted = ? OR submitted is NULL) AND
+                               (projects_count > 0 OR activities_count > 0)", false]
   end
 
   # TODO: remove
@@ -80,26 +82,22 @@ class DataResponse < ActiveRecord::Base
     with_exclusive_scope {find(:all)}
   end
 
-  # TODO: refactor
-  def self.options_hash_for_empty
-    h = {}
-    h[:joins] = @@data_associations.collect do |assoc|
-      "LEFT JOIN #{assoc} ON data_responses.id = #{assoc}.data_response_id"
-    end
-    h[:conditions] = @@data_associations.collect do |assoc|
-      "#{assoc}.data_response_id IS NULL"
-    end.join(" AND ")
-    h
-  end
-
-  #named_scope :empty, options_hash_for_empty
   # TODO: spec
   def self.empty
-    drs = self.find(:all, options_hash_for_empty)#, :include => {:organization => :users})
-    #GN: commented out optimization, this broke the method, returned too many records
-    drs.select do |dr|
-      (["Agencies", "Govt Agency", "Donors", "Donor", "NGO", "Implementer", "Implementers", "International NGO"]).include?(dr.organization.raw_type)
-    end
+    self.find :all,
+      :select => 'data_responses.*, organizations.raw_type',
+      :joins => "LEFT JOIN activities ON data_responses.id = activities.data_response_id
+                 LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
+                 LEFT JOIN projects ON data_responses.id = projects.data_response_id
+                 LEFT OUTER JOIN organizations ON organizations.id = data_responses.organization_id",
+      :conditions => ["activities.data_response_id IS NULL AND
+                      funding_flows.data_response_id IS NULL AND
+                      projects.data_response_id IS NULL AND
+                      organizations.raw_type IN (?)", 
+                      ["Agencies", "Govt Agency", "Donors", "Donor", 
+                       "NGO", "Implementer", "Implementers", "International NGO"]],
+      :include => {:organization => :users},
+      :from => 'data_responses'
   end
 
   ### Instance Methods
@@ -142,11 +140,6 @@ class DataResponse < ActiveRecord::Base
   # TODO: spec
   def total_project_spend_RWF
     projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
-  end
-
-  # TODO: spec
-  def unclassified_activities_count
-    activities.only_simple.unclassified.count
   end
 
   # TODO: spec

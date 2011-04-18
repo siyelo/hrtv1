@@ -10,12 +10,16 @@ module Charts::ActivityTreemaps
         districts_treemap(activity.coding_budget_district, activity.budget)
       when 'budget_cost_categorization'
         coding_treemap(activity, CodingBudgetCostCategorization, activity.budget)
+      when 'budget_service_level'
+        coding_treemap(activity, ServiceLevelBudget, activity.budget)
       when 'spend_coding'
         coding_treemap(activity, CodingSpend, activity.spend)
       when 'spend_districts'
         districts_treemap(activity.coding_spend_district, activity.spend)
       when 'spend_cost_categorization'
         coding_treemap(activity, CodingSpendCostCategorization, activity.spend)
+      when 'spend_service_level'
+        coding_treemap(activity, ServiceLevelSpend, activity.spend)
       else
         raise "Wrong chart type".to_yaml
       end

@@ -32,7 +32,7 @@
         %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
 
 
-  = render 'tab_nav', :activity => @activity
+  = render 'tab_nav', :activity => @activity, :coding_type => @coding_type
 
   #activity_classification
     %div.tab1{:style => 'display: block'}

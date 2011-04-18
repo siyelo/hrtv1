@@ -593,12 +593,11 @@ var build_data_response_review_screen = function () {
   $(".classifications ul li").live('click', function (e) {
     e.preventDefault();
     var element = $(this);
-    if (element.attr("id")) {
-      $(".classifications ul li").removeClass('selected');
-      element.addClass('selected');
-      $("#activity_classification > div").hide();
-      $('#activity_classification > div.' + element.attr("id")).show();
-    }
+    var root = element.parents('.activity_classifications');
+    root.find(".classifications ul li").removeClass('selected');
+    element.addClass('selected');
+    root.find(".activity_classification > div").hide();
+    root.find('.activity_classification > div.tab' + String(element.index() + 1)).show();
   });
 
   // bind click events for tabs

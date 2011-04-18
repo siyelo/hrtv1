@@ -60,7 +60,7 @@ class CodeAssignmentsController < Reporter::BaseController
     end
 
     def add_code_assignments_error(coding_class, activity)
-      if !activity.send(get_coding_classified_method(coding_class))
+      if !activity_classified?(activity, coding_class)
         coding_type        = get_coding_type(coding_class)
         coding_type_amount = activity.send(coding_type) || 0
         coding_amount      = activity.send("#{coding_class}_amount")
@@ -72,12 +72,14 @@ class CodeAssignmentsController < Reporter::BaseController
         difference         = n2c(difference)
         percent_diff       = n2c(percent_diff)
 
-        return "We're sorry, when we added up your #{get_coding_name(coding_class)}
-               classifications, they equaled #{coding_amount} but the #{coding_type}
-               is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount}
-               = #{difference}, which is ~#{percent_diff}%). The total classified
-               should add up to #{coding_type_amount}. You need to classify the total
-               amount 3 times, in the coding, districts, and cost categories tabs."
+        if coding_amount != coding_type_amount
+          "We're sorry, when we added up your #{get_coding_name(coding_class)}
+           classifications, they equaled #{coding_amount} but the #{coding_type}
+           is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount}
+           = #{difference}, which is ~#{percent_diff}%). The total classified
+           should add up to #{coding_type_amount}. You need to classify the total
+           amount 3 times, in the coding, districts, and cost categories tabs."
+        end
       end
     end
 
@@ -102,24 +104,24 @@ class CodeAssignmentsController < Reporter::BaseController
       end
     end
 
-    def get_coding_classified_method(klass)
+    def activity_classified?(activity, klass)
       case klass.to_s
       when 'CodingBudget'
-        :coding_budget_classified?
+        activity.coding_budget_classified?
       when 'CodingBudgetDistrict'
-        :coding_budget_district_classified?
+        activity.coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
-        :coding_budget_cc_classified?
+        activity.coding_budget_cc_classified?
       when 'ServiceLevelBudget'
-        :service_level_budget_classified?
+        activity.service_level_budget_classified?
       when 'CodingSpend'
-        :coding_spend_classified?
+        activity.coding_spend_classified?
       when 'CodingSpendDistrict'
-        :coding_spend_district_classified?
+        activity.coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
-        :coding_spend_cc_classified?
+        activity.coding_spend_cc_classified?
       when 'ServiceLevelSpend'
-        :service_level_spend_classified?
+        activity.service_level_spend_classified?
       end
     end
 

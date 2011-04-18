@@ -22,7 +22,8 @@ a.target, a.add_nested, a.remove_nested
   &.grayed-out
     color: #999
   &:hover
-    background: image_url("icon_link_hover.png") no-repeat $light-blue 10px center
+    background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+    +box-shadow($light-blue, 0, 0, 5px)
 
 a.add_nested
   width: 150px
@@ -197,7 +198,6 @@ body.app
         outline: none
         position: relative
         top: 1px
-
 
     &.edit_button
       background: $light-blue
@@ -780,6 +780,28 @@ ul.group
         opacity: 0.9
       &.regenerate
         opacity: 0.9
+      &.sml_btn
+        background: $light-blue
+        border: 1px solid $light-blue
+        color: $mid-blue
+        display: inline-block
+        float: right
+        font-size: 9px
+        line-height: 1
+        margin-right: 5px
+        opacity: 1
+        padding: 4px 6px 2px
+        text-decoration: none
+        text-transform: uppercase
+        +border-radius
+        +linear-gradient(color-stops($light-blue + #111, $light-blue))
+        +text-shadow($lightest-blue, 0, 1px, 0)
+        &:hover
+          background: $mid-blue
+          border: 1px solid $mid-blue
+          color: #fff
+          +linear-gradient(color-stops($mid-blue, $mid-blue - #111))
+          +text-shadow(#000, 0, 1px, 0)
 
 #heading-activity
   background: image_url("icon_reporter.png") no-repeat center left

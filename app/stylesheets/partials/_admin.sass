@@ -34,6 +34,10 @@ body.app
         margin: 0
       &.admin_reports
         margin-bottom: 0
+        > li
+          &:hover > a
+            background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+            +box-shadow($light-blue, 0, 0, 5px)
         li:last-child a
           margin-bottom: 0
       &.manage_bar

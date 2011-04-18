@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
   has_many :funding_flows, :dependent => :destroy
   has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
-           :conditions => [ 'self_provider_flag = 0 AND
+           :conditions => [ 'self_provider_flag = 0 and
                             organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 AND
@@ -42,7 +42,7 @@ class Project < ActiveRecord::Base
            :source => :to
 
   # Nested attributes
-  accepts_nested_attributes_for :funding_flows, :allow_destroy => true
+  accepts_nested_attributes_for :in_flows, :allow_destroy => true
   before_validation_on_create :assign_project_to_funding_flows
 
   ### Named scopes
@@ -68,7 +68,7 @@ class Project < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :funding_flows_attributes, :budget, :entire_budget,
+                  :location_ids, :in_flows_attributes, :budget, :entire_budget,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4
 

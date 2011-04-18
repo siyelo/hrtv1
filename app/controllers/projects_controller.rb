@@ -21,6 +21,7 @@ class ProjectsController < Reporter::BaseController
   end
 
   def create
+    @project = Project.new(params[:project].merge(:data_response => @data_response))
     create! do |success, failure|
       success.html { redirect_to response_projects_url(@data_response) }
     end

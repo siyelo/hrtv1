@@ -88,7 +88,7 @@ var close_funding_flow_fields = function (fields) {
 };
 
 var before_add_fields_callback = function (association) {
-  if (association === 'funding_flows') {
+  if (association === 'in_flows') {
     close_funding_flow_fields($('.funding_flows .fields'));
   }
 };

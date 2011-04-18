@@ -2,7 +2,7 @@
   .edit_block
     = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
     = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
-    = f.input :from, :select => Organization.all, :hint => "The organization funding the project", :required => false, :input_html => {:class => 'ff_from'}
+    = f.input :from, :collection => Organization.all, :hint => "The organization funding the project", :required => false, :input_html => {:class => 'ff_from'}, :as => :select
     = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false, :input_html => {:class => 'ff_spend'}
     %li.amounts.spend
       %label Quarterly spend

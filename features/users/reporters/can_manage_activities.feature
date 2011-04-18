@@ -234,7 +234,6 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "Activity1 description"
         And I select "project1" from "Project"
         And I follow "Add funding source"
-        Then show me the page
         And I select "funding_organization1" from "Organization" within ".fields"
         And I fill in "Spent" with "111" within ".fields"
         And I fill in "Budget" with "222" within ".fields"

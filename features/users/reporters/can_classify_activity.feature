@@ -172,7 +172,6 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
-
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
       When I press "Classify Spend & Budget"
         And I follow "Budget"
@@ -200,7 +199,8 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Purposes"
         And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
-      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. You need to classify the total amount 3 times, in the coding, districts, and cost categories tabs."
+      Then show me the page
+      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"

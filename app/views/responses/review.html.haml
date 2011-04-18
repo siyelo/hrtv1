@@ -4,10 +4,16 @@
 
 %h1.main_heading Submit Response
 
-%ul
-  %li= "Request: #{@response.request.title}"
-  %li= "Status: #{@response.request.status}"
-  %li= "Last Submitted: #{l(@response.last_submitted_at, :format => :short) || 'never'}"
+%ul.status
+  %li
+    %span Request:
+    = @response.request.title
+  %li
+    %span Status:
+    = @response.request.status
+  %li
+    %span Last Submitted:
+    = l(@response.last_submitted_at, :format => :short) || 'never'
 
 = render 'getting_started_submit'
 

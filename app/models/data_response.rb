@@ -9,14 +9,20 @@ class DataResponse < ActiveRecord::Base
   @@data_associations = %w[activities funding_flows projects]
 
   ### Attributes
+
   attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
-                  :contact_name, :contact_name, :contact_position, :contact_phone_number, 
+                  :contact_name, :contact_name, :contact_position, :contact_phone_number,
                   :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
+
   belongs_to :organization
   belongs_to :data_request
   has_many :activities, :dependent => :destroy
+  # until we get rid of sub-activities, we refer to 'real' activities like this
+  # normal_activities deprecates self.activities.roots
+  has_many :normal_activities, :class_name => "Activity",
+           :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
@@ -27,13 +33,14 @@ class DataResponse < ActiveRecord::Base
            :foreign_key => :data_response_id_current
 
   ### Validations
+
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
   validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location, :contact_phone_number, 
+                        :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number
-                        
-                        
+
+
   validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
   validates_date :fiscal_year_start_date
@@ -42,6 +49,7 @@ class DataResponse < ActiveRecord::Base
     :message => "Start date must come before End date."
 
   ### Named scopes
+
   # TODO: spec
   named_scope :available_to, lambda { |current_user|
     if current_user.nil?
@@ -56,14 +64,15 @@ class DataResponse < ActiveRecord::Base
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
   ### Callbacks
+
   after_save :update_cached_currency_amounts
 
-  def self.in_progress
-    self.find(:all, :include => [:organization, :projects], :conditions => ["submitted = ? or submitted is NULL", false]).select{|dr| dr.projects.size > 0 or dr.activities.size > 0}
-  end
+  ### Class Methods
 
-  def name
-    data_request.try(:title) # some responses does not have data_requst (bug was on staging)
+  def self.in_progress
+    self.find(:all, :include => [:organization, :projects],
+      :conditions => ["submitted = ? or submitted is NULL", false]).select{ |dr|
+        dr.projects.size > 0 or dr.activities.size > 0}
   end
 
   # TODO: remove
@@ -91,6 +100,16 @@ class DataResponse < ActiveRecord::Base
     drs.select do |dr|
       (["Agencies", "Govt Agency", "Donors", "Donor", "NGO", "Implementer", "Implementers", "International NGO"]).include?(dr.organization.raw_type)
     end
+  end
+
+  ### Instance Methods
+
+  def request
+    self.data_request
+  end
+
+  def name
+    data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
 
   # TODO: spec
@@ -160,11 +179,107 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
+
+  # Checks if the response is "valid" and marks as Submitted.
+  def submit!
+    if ready_to_submit?
+      if request.final_review?
+        self.submitted_for_final    = true
+        self.submitted_for_final_at = Time.now
+      else # first time submission, or resubmission for initial review
+        self.submitted = true
+        self.submitted_at = Time.now
+      end
+      return self.save
+    else
+      self.errors.add_to_base("Projects are not yet entered.") if !projects_entered?
+      self.errors.add_to_base("Projects are not yet linked.") if !projects_linked?
+      self.errors.add_to_base("Activites are not yet coded.") if !activities_coded?
+      self.errors.add_to_base("Other Costs are not yet coded.") if !other_costs_coded?
+      return false
+    end
+  end
+
+  def last_submitted_at
+    return submitted_for_final_at if request.final_review?
+    return submitted_at
+  end
+
+  ### Submission Validations
+
+  def basics_done?
+    projects_entered? &&
+    activities_coded? &&
+    other_costs_coded?
+  end
+
+  def ready_to_submit?
+    if request.final_review?
+      basics_done? && projects_linked?
+    else
+      basics_done?
+    end
+  end
+
+  def projects_entered?
+    !self.projects.empty?
+  end
+
+  def projects_linked?
+    return false unless projects_entered?
+    self.projects.each do |project|
+      return false unless project.linked?
+    end
+    true
+  end
+
+  def activities_entered?
+    !self.normal_activities.empty?
+  end
+
+  def other_costs_entered?
+    !self.other_costs.empty?
+  end
+
+  def uncoded_activities
+    reject_uncoded(self.normal_activities)
+  end
+
+  def coded_activities
+    select_coded(self.normal_activities)
+  end
+
+  def uncoded_other_costs
+    reject_uncoded(self.other_costs)
+  end
+
+  def coded_other_costs
+    select_coded(self.other_costs)
+  end
+
+  def activities_coded?
+    activities_entered? && uncoded_activities.empty?
+  end
+
+  def other_costs_coded?
+    other_costs_entered? && uncoded_other_costs.empty?
+  end
+
+  private
+    # Find all incomplete Activities, ignoring missing codings if the
+    # Request doesnt ask for that info.
+    def reject_uncoded(activities)
+      uncoded = []
+      uncoded << activities.reject{ |a| a.budget_classified? } if self.request.budget?
+      uncoded << activities.reject{ |a| a.spend_classified? } if self.request.spend?
+      uncoded.flatten
+    end
+
+    # Find all complete Activities
+    def select_coded(activities)
+      activities.select{ |a| a.classified? }
+    end
 end
-
-
-
-
 
 # == Schema Information
 #
@@ -191,5 +306,7 @@ end
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)
 #  activities_without_projects_count :integer         default(0)
+#  submitted_for_final_at            :datetime
+#  submitted_for_final               :boolean
 #
 

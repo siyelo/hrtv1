@@ -1,11 +1,12 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
-= render 'breadcrumb', :response => @data_response, :activity => @activity
-
 - type = 'Spend'
-- if @coding_type == "CodingBudget"
+- if @coding_type =~ /Budget/
   - type = 'Budget'
+
+= render 'breadcrumb', :response => @data_response, :activity => @activity, :type => type
+
 
 %h1.main_heading
   = "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
@@ -17,14 +18,15 @@
 
 #classification
   %table#activity_description
-    = render  '/code_assignments/progress_bar', :activity => @activity
+
 
     - amount = @activity.spend
-    - amount = @activity.budget if @coding_type == "CodingBudget"
+    - amount = @activity.budget if @coding_type =~ /Budget/
     %tr
       %td= "#{type} Amount:"
       %td= c(amount, @activity.currency)
 
+    = render  '/code_assignments/progress_bar', :activity => @activity
 
     - if current_user.admin? || current_user.activity_manager?
       %tr

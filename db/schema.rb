@@ -9,8 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110413143411) do
-
+ActiveRecord::Schema.define(:version => 20110414143130) do
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -217,6 +216,8 @@ ActiveRecord::Schema.define(:version => 20110413143411) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",       :default => 0
+    t.integer  "project_from"
+    t.integer  "project_from_id"
   end
 
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
@@ -306,6 +307,8 @@ ActiveRecord::Schema.define(:version => 20110413143411) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.decimal  "spend_in_usd"
+    t.decimal  "budget_in_usd"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

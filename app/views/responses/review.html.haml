@@ -4,17 +4,93 @@
 
 %h1.main_heading Submit Response
 
+%ul.status
+  %li
+    %span Request:
+    = @response.request.title
+  %li
+    %span Status:
+    = @response.request.status
+  %li
+    %span Last Submitted:
+    = l(@response.last_submitted_at, :format => :short) || 'never'
+
 = render 'getting_started_submit'
 
-= render 'uncoded_table', :activities => @uncoded_activities,  :type => "activities" unless @warnings.include?(:activities_missing)
-= render 'uncoded_spend_table', :activities => @budget_activities,   :type => "activities with budget but no expenditure codings" unless @budget_activities.empty?
-= render 'uncoded_other_cost_table', :activities => @uncoded_other_costs, :type => "other costs" unless @warnings.include?(:other_costs_missing)
-= render 'uncoded_other_cost_spend_table', :activities => @budget_other_costs,  :type => "other costs with budget but no expenditure codings" unless @budget_other_costs.empty?
+= error_messages_for :response, :header_message => "", :message => ""
 
-- unless @warnings.empty?
-  #flashes.wide
-    #notice
-      = display_warnings(@warnings, @data_response)
+- ready_class = @response.projects_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Projects Entered
+  - unless @response.projects_entered?
+    %span.info
+      = render 'projects/no_projects_yet'
 
+- ready_class = @response.activities_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Activities Entered
+  - unless @response.activities_entered?
+    - unless @response.projects_entered?
+      %span.info
+        = render 'projects/no_projects_yet'
+        then you can start adding Activities.
+    - else
+      %span.info
+        You have project(s), but no activities yet.
+        = link_to "Start by adding your first activity now.", response_projects_path(@data_response)
+
+- ready_class = @response.activities_coded? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Activities Classified
+  - unless @response.activities_coded?
+    - unless @data_response.uncoded_activities.empty?
+      %span.info
+        Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+    - else
+      %span.info
+        Start by adding a few Activities first (see above), then you can start classifying them.
+- unless @response.activities_coded?
+  - unless @data_response.uncoded_activities.empty?
+    = render 'uncoded_table', :activities => @data_response.uncoded_activities
+
+- ready_class = @response.other_costs_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Other Costs Entered
+  - unless @response.other_costs_entered?
+    - unless @response.projects_entered?
+      %span.info
+        = render 'projects/no_projects_yet'
+        then you can start adding Other Costs.
+    - else
+      %span.info
+        Other Costs help you include any financial information at the central level and/or administrative expenses.
+        = link_to "Start adding your Other Costs now.", response_projects_path(@data_response)
+
+- ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Other Costs Classified
+  - unless @response.other_costs_coded?
+    - unless @data_response.uncoded_other_costs.empty?
+      %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+    - else
+      %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
+
+- unless @response.other_costs_coded?
+  - unless @data_response.uncoded_other_costs.empty?
+    = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
+
+- if @response.request.final_review?
+  - ready_class = @response.projects_linked? ? "ready" : "not-ready"
+- else
+  - ready_class = @response.projects_linked? ? "ready" : "info"
+%h3{:class => ready_class}
+  Projects Linked to the Funder Projects
+  - unless @response.projects_linked?
+    %span.info
+      Once your Funder's have added all their projects too, please
+      = link_to "link your projects", bulk_edit_response_projects_path(@response)
+      to each Funder project respectively.
+
+%hr.divider
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"

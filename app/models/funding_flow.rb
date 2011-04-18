@@ -7,7 +7,7 @@ class FundingFlow < ActiveRecord::Base
   configure_act_as_data_element
 
   ### Attributes
-  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to, 
+  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
@@ -16,9 +16,17 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
+  belongs_to :project_from # funder's project
   belongs_to :data_response #TODO: deprecate in favour of: delegate :data_response, :to => :project
 
   ### Validations
+
+  # if project from id == nil => then the user hasnt linked them
+  # if project from id == 0 => then the user can't find Funder project in a list
+  # if project from id > 0 => user has selected a Funder project
+  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0,
+    :unless => lambda {|fs| fs["project_from_id"].blank? }
+
   # GN: Removed until UI shows these well
   # PT: 12144777
   #validates_presence_of :project
@@ -34,7 +42,20 @@ class FundingFlow < ActiveRecord::Base
   def name
     "From: #{from.name} - To: #{to.name}"
   end
+
+  def self.create_flows(params)
+    unless params[:funding_flows].blank?
+      params[:funding_flows].each_pair do |flow_id, project_id|
+        ff = self.find(flow_id)
+        ff.project_from_id = project_id
+        ff.save
+      end
+    end
+  end
 end
+
+
+
 
 
 
@@ -64,5 +85,6 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  comments_count       :integer         default(0)
+#  project_from_id      :integer
 #
 

@@ -4,6 +4,15 @@
 en:
   hello: "Hello world"
 
+
+  date:
+    formats:
+      short: "%d %b '%y"
+
+  time:
+    formats:
+      short: "%d %b '%y, %H:%M"
+
   flash:
     actions:
       create:

@@ -17,6 +17,8 @@
   %li
     = link_to "CSV Import", '#', :id => "csv_file", :class => 'create_new'
 
+  %li
+    = link_to "Link Projects", bulk_edit_response_projects_path, :class => 'create_new'
 
 #import
   %h3.title_bar Import a CSV file
@@ -49,8 +51,8 @@
     - else
       %tr
         %td{:colspan => 100}
-          You have no projects yet.
-          = link_to "Add your first project now.", new_response_project_path(@data_response)
+          = render 'no_projects_yet'
+
 
 = will_paginate @projects
 

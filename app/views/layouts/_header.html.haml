@@ -1,7 +1,7 @@
 - landing_page = false unless landing_page
 #header
   .wrapper
-    = render 'layouts/flashes'
+    
 
     #logo
       - country = ENV['HRT_COUNTRY'] || 'rwanda'
@@ -10,6 +10,7 @@
         %h1= country.titleize
 
     = render :partial => '/layouts/login_nav'
+    
     - if landing_page
       %h2#headline
         Health Resource Tracker
@@ -18,3 +19,5 @@
         Improve lives
       %h2#screens
         Our application
+        
+= render 'layouts/flashes'

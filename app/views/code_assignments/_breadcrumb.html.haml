@@ -4,6 +4,4 @@
     %li= link_to nice_name(activity.project), edit_response_project_path(response, activity.project)
   %li== #{activity.class.to_s.underscore.humanize.pluralize.titleize}
   %li= link_to nice_name(activity), link
-  - type = 'Spend'
-  - type = 'Budget' if @coding_type == "CodingBudget"
   %li.last== #{type}

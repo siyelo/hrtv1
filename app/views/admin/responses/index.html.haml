@@ -14,7 +14,8 @@
           %th Projects
           %th Activities
           %th Sub Activities
-          %th Date/time submitted
+          %th Submitted for Review
+          %th Submitted for Final Review
       %tbody
         - @submitted_responses.each do |data_response|
           %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
@@ -23,3 +24,4 @@
             %td= data_response.activities_count
             %td= data_response.sub_activities_count
             %td= data_response.submitted_at
+            %td= data_response.submitted_for_final_at

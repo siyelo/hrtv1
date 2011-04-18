@@ -3,7 +3,6 @@ class ResponsesController < ApplicationController
   before_filter :require_user
   before_filter :find_response, :only => [:edit, :update, :review, :submit]
   before_filter :find_help, :only => [:edit, :update, :review]
-  before_filter :find_review_status, :only => [:review, :submit]
   before_filter :find_requests, :only => [:new, :create, :edit]
 
   def new
@@ -58,15 +57,11 @@ class ResponsesController < ApplicationController
   end
 
   def submit
-    if @uncoded_activities.empty? && @uncoded_other_costs.empty?
-      @data_response.submitted = true
-      @data_response.submitted_at = Time.now
-      @data_response.save
+    if @data_response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@data_response)
     else
-      flash[:error] = "You cannot submit unless you have coded all your activities and other costs."
-      redirect_to review_response_url(@data_response)
+      render :review
     end
   end
 
@@ -74,6 +69,7 @@ class ResponsesController < ApplicationController
 
     def find_response
       @data_response = DataResponse.available_to(current_user).find params[:id]
+      @response = @data_response # TODO refactor all @data_response to @response
     end
 
     def find_requests
@@ -83,18 +79,4 @@ class ResponsesController < ApplicationController
     def find_help
       @model_help = ModelHelp.find_by_model_name 'DataResponseReview'
     end
-
-    def find_review_status
-      @data_response || find_response
-      root_activities         = @data_response.activities.roots
-      other_cost_activities   = @data_response.activities.with_type("OtherCost")
-      @uncoded_activities     = root_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)  }
-      @uncoded_other_costs    = other_cost_activities.reject{ |a| a.classified? || (a.budget_classified? && !a.spend_classified?)}
-      @budget_activities      = root_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
-      @budget_other_costs     = other_cost_activities.select{ |a| a.budget_classified? && !a.spend_classified? }
-      @warnings               = []
-      @warnings               << :other_costs_missing if other_cost_activities.empty?
-      @warnings               << :activities_missing  if root_activities.empty?
-    end
-
 end

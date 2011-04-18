@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
     "Human Resources for Health" => ["2"],
     "Governance" => ["101","103"],
     "Planning and M&E" => ["102","104","105","106"]
-  }
+  }  
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
     "Across all 3 objectives" => ["1","201","202","203","204","206","207",
@@ -46,12 +46,12 @@ class Activity < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-                  :text_for_targets, :name, :description, :start_date, :end_date,
-                  :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-                  :beneficiary_ids, :location_ids, :provider_id,
-                  :sub_activities_attributes, :organization_ids, :funding_sources_attributes
+    :text_for_targets, :name, :description, :start_date, :end_date,
+    :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
+    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
+    :beneficiary_ids, :location_ids, :provider_id,
+    :sub_activities_attributes, :organization_ids, :funding_sources_attributes
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -70,13 +70,15 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district
+  has_many :service_level_budget
   has_many :coding_spend
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
+  has_many :service_level_spend
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
-  accepts_nested_attributes_for :funding_sources, :allow_destroy => true, 
+  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
 
   ### Delegates
@@ -297,13 +299,13 @@ class Activity < ActiveRecord::Base
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
     if budget_changed?
-      [CodingBudget, CodingBudgetDistrict, 
+      [CodingBudget, CodingBudgetDistrict,
          CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
-      [CodingSpend, CodingSpendDistrict, 
+      [CodingSpend, CodingSpendDistrict,
          CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
         set_classified_amount_cache(type)
       end
@@ -339,7 +341,7 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies budget code assignments to spend when user has chosen 
+  # This method copies budget code assignments to spend when user has chosen
   # to use budget codings for expenditure: All spend mappings are copied.
   def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
     coding_types.each do |budget_coding_type|
@@ -375,7 +377,7 @@ class Activity < ActiveRecord::Base
       location_amounts[ca.code] += ca.amount
     end
 
-    location_amounts.each do |location, amount| 
+    location_amounts.each do |location, amount|
       self.locations << location
       fake_ca(klass, location, amount).save!
     end
@@ -388,10 +390,12 @@ class Activity < ActiveRecord::Base
     coded += 1 if coding_budget_classified?
     coded += 1 if coding_budget_district_classified?
     coded += 1 if coding_budget_cc_classified?
+    coded += 1 if service_level_budget_classified?
     coded += 1 if coding_spend_classified?
     coded += 1 if coding_spend_district_classified?
     coded += 1 if coding_spend_cc_classified?
-    progress = (coded.to_f / 6) * 100
+    coded += 1 if service_level_spend_classified?
+    progress = ((coded.to_f / 8) * 100).to_i # dont need decimal places
   end
 
   def deep_clone

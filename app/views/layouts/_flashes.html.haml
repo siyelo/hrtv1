@@ -1,6 +1,8 @@
 - unless flash.empty?
   #flashes
-    %span.notify-close= link_to_function 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'
+    
     - flash.each do |key, value|
       %div{:id => key.to_s}
+        
         = h value
+        %span.notify-close= link_to_function 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'

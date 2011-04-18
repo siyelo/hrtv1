@@ -466,11 +466,24 @@ describe Activity do
     end
   end
 
-  describe "classified?" do
+  describe "classified? (with factories)" do
     before :each do
-      @activity = Factory.create(:activity)
+      @request  = Factory.create(:data_request, :title => 'Data Request 1')
+      @response = Factory.create(:data_response, :data_request => @request)
+      @project = Factory(:project, :data_response => @response)
+      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
     end
 
+    it "is classified? when both budget and spend are classified" do      
+      @activity.classified?.should be_true
+    end
+  end
+  
+  describe "classified?" do
+    before :each do
+      @activity = Factory(:activity)
+    end
+        
     it "is classified? when both budget and spend are classified" do
       @activity.stub(:budget_classified?) { true }
       @activity.stub(:spend_classified?) { true }
@@ -495,7 +508,9 @@ describe Activity do
       @activity.classified?.should be_false
     end
   end
-
+  
+  
+  
   describe "budget_district_coding_adjusted" do
     before :each do
       @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)

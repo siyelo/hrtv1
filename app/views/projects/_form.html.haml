@@ -9,7 +9,7 @@
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation."
-  
+
   - if @data_response.data_request.spend?
     %li.last
       %h3 Past Project Expenditure

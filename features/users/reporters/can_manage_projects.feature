@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -17,7 +18,7 @@ Feature: Reporter can manage projects
     And I follow "data_request1"
     And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
     And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
-    And a project "Project6" exists with name: "Project6", data_response: data_response
+    And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
 
     Scenario: Reporter can CRUD projects
@@ -200,7 +201,7 @@ Feature: Reporter can manage projects
 
   Scenario: A Reporter can bulk link their projects to those from other organizations
    Then I should see "Project5"
-   Given I follow "Bulk Edit"
+   Given I follow "Link Projects"
    Then I should see "Project5"
    Then select "Project6" from "funding_flows_3"
    And I press "Update"
@@ -208,39 +209,39 @@ Feature: Reporter can manage projects
    
  Scenario: A Reporter can bulk unlink their projects to those from other organizations
   Then I should see "Project5"
-  Given I follow "Bulk Edit"
+  Given I follow "Link Projects"
   Then I should see "Project5"
   Then select "" from "funding_flows_3"
   And I press "Update"
   Then I should see "Your projects have been successfully updated"
-   
 
-   Scenario: A Reporter can link their projects to those from other organizations from the edit page
-    Then I should see "Project5"
-    Given I follow "Project5"
-    And I select "Project6" from "funding_flows_3"
-    And I press "Update Project"
-    Then I should see "Project was successfully updated"
-    
-  Scenario: A Reporter can unlink their projects to those from other organizations from the edit page
+  Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
    Then I should see "Project5"
-   Given I follow "Project5"
-   And I select "" from "funding_flows_3"
-   And I press "Update Project"
-   Then I should see "Project was successfully updated"
-
-   Scenario: A Reporter select project missing or project unknown for their FS from the edit page
-    Then I should see "Project5"
-    Given I follow "Project5"
-    And I select "Project Missing/Unknown" from "funding_flows_3"
-    And I press "Update Project"
-    Then I should see "Project was successfully updated"
+   Given I follow "Link Projects"
+   Then I should see "Project5"
+   Then select "<Project not listed or unknown>" from "funding_flows_3"
+   And I press "Update"
+   Then I should see "Your projects have been successfully updated"
+   
+  #  Scenario: A Reporter can link their projects to those from other organizations from the edit page
+  #   Then I should see "Project5"
+  #   Given I follow "Project5"
+  #   And I select "Project6" from "funding_flows_3"
+  #   And I press "Update Project"
+  #   Then I should see "Project was successfully updated"
+  #   
+  # Scenario: A Reporter can unlink their projects to those from other organizations from the edit page
+  #  Then I should see "Project5"
+  #  Given I follow "Project5"
+  #  And I select "" from "funding_flows_3"
+  #  And I press "Update Project"
+  #  Then I should see "Project was successfully updated"
+  # 
+  #  Scenario: A Reporter select project missing or project unknown for their FS from the edit page
+  #   Then I should see "Project5"
+  #   Given I follow "Project5"
+  #   And I select "Project Missing/Unknown" from "funding_flows_3"
+  #   And I press "Update Project"
+  #   Then I should see "Project was successfully updated"
     
     
-    Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
-     Then I should see "Project5"
-     Given I follow "Bulk Edit"
-     Then I should see "Project5"
-     Then select "Project Missing/Unknown" from "funding_flows_3"
-     And I press "Update"
-     Then I should see "Your projects have been successfully updated"

@@ -281,6 +281,39 @@ describe Project do
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
   end
+  
+  describe "It checks to see if the project has a funding source specified" do
+    before :each do
+      @data_request = Factory(:data_request)
+      @data_request1 = Factory(:data_request)
+      @organization = Factory(:organization)
+      @organization1 = Factory(:organization)
+      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+      @data_response1 = Factory(:data_response, :data_request => @data_request1, :organization => @organization1)
+      @project = Factory(:project, :data_response => @data_response)
+      
+    end
+    it "returns false if a project is not linked to a parent project" do
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
+                              :data_response => @data_response)
+      @project = @funding_flow.project
+      @project.linked?.should == false
+    end
+    
+    it "returns true if a project is linked to a parent project" do
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
+                              :data_response => @data_response, :project_from_id => @project.id)
+      @project = @funding_flow.project
+      @project.linked?.should == true
+    end
+    
+    it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
+                              :data_response => @data_response, :project_from_id => -1)
+      @project = @funding_flow.project
+      @project.linked?.should == true
+    end
+  end
 
   describe "#ultimate_funding_sources" do
 
@@ -358,6 +391,7 @@ describe Project do
       ufs = @proj2.ultimate_funding_sources
       ufs.should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
     end
+    
     
     it "returns no UFS if project has no funder" do
       ufs = @proj0.ultimate_funding_sources

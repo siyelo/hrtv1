@@ -471,11 +471,10 @@ describe Activity do
       @request  = Factory.create(:data_request, :title => 'Data Request 1')
       @response = Factory.create(:data_response, :data_request => @request)
       @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:activity)
+      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
     end
 
-    it "is classified? when both budget and spend are classified" do
-      classify_the_activity
+    it "is classified? when both budget and spend are classified" do      
       @activity.classified?.should be_true
     end
   end

@@ -64,7 +64,7 @@ class Project < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
- 
+
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
@@ -170,21 +170,18 @@ class Project < ActiveRecord::Base
 
   def cached_ultimate_funding_sources
     ufs = []
-
     funding_streams.each do |fs|
       ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
     end
-
     ufs
   end
-  
+
   def linked?
-    projects = []
+    return false if self.in_flows.empty?
     self.in_flows.each do |in_flow|
-      projects << in_flow.project_from_id
+      return false unless in_flow.project_from_id
     end
-    return false if projects.include?(nil)
-    return true
+    true
   end
 
   private
@@ -212,7 +209,7 @@ class Project < ActiveRecord::Base
         if implementer_in_flows?(organization, self_flows)
           ffs = organization.in_flows.select{|ff| ff.from == funder}
 
-          funding_sources << {:ufs => funder, :fa => traced.last, 
+          funding_sources << {:ufs => funder, :fa => traced.last,
                               :budget => get_budget(ffs), :spend => get_spend(ffs)}
         else
           # potential UFS - parent funded organization that funds other organizations
@@ -222,11 +219,11 @@ class Project < ActiveRecord::Base
 
             if self_funded
               ffs = funder.in_flows.select{|ff| ff.from == funder}
-              funding_sources << {:ufs => funder, :fa => traced.last, 
+              funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => get_budget(ffs), :spend => get_spend(ffs)}
             elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
               budget, spend = get_budget_and_spend(funder.id, organization.id)
-              funding_sources << {:ufs => funder, :fa => traced.last, 
+              funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => budget, :spend => spend}
             end
           end
@@ -237,7 +234,7 @@ class Project < ActiveRecord::Base
         unless traced.include?(funder)
           parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
           parent_funders = remove_not_funded_donors(funder, parent_funders)
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders.uniq, traced)) 
+          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders.uniq, traced))
         end
       end
 
@@ -268,8 +265,8 @@ class Project < ActiveRecord::Base
 
     def get_budget_and_spend(from_id, to_id, project_id = nil)
       scope = FundingFlow.scoped({})
-      scope = scope.scoped(:conditions => ["organization_id_from = ? 
-                                            AND organization_id_to = ?", 
+      scope = scope.scoped(:conditions => ["organization_id_from = ?
+                                            AND organization_id_to = ?",
                                             from_id, to_id])
       scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
       ffs = scope.all
@@ -294,8 +291,6 @@ class Project < ActiveRecord::Base
       end
       amount
     end
-    
-
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id
@@ -303,7 +298,7 @@ class Project < ActiveRecord::Base
     def assign_project_to_funding_flows
       funding_flows.each {|ff| ff.project = self}
     end
-    
+
 end
 
 

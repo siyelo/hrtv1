@@ -247,7 +247,6 @@ describe Project do
                                 :currency => nil)
       @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
-
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -282,7 +281,7 @@ describe Project do
     end
   end
   
-  describe "It checks to see if the project has a funding source specified" do
+  describe "linking to funding source project" do
     before :each do
       @data_request = Factory(:data_request)
       @data_request1 = Factory(:data_request)
@@ -291,14 +290,11 @@ describe Project do
       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
       @data_response1 = Factory(:data_response, :data_request => @data_request1, :organization => @organization1)
       @project = Factory(:project, :data_response => @data_response)
-      
     end
+    
     it "returns false if a project is not linked to a parent project" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
-                              :data_response => @data_response)
-      @project = @funding_flow.project
       @project.linked?.should == false
-    end
+    end    
     
     it "returns true if a project is linked to a parent project" do
       @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
@@ -308,23 +304,20 @@ describe Project do
     end
     
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
-                              :data_response => @data_response, :project_from_id => -1)
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, 
+        :project => @project, :data_response => @data_response, :project_from_id => 0)
       @project = @funding_flow.project
       @project.linked?.should == true
     end
   end
-
+  
   describe "#ultimate_funding_sources" do
-
     before :each do
-
       @org0 = Factory(:organization, :name => 'org0')
       @org1 = Factory(:organization, :name => 'org1')
       @org2 = Factory(:organization, :name => 'org2')
       @org3 = Factory(:organization, :name => 'org3')
       @org4 = Factory(:organization, :name => 'org4')
-
       @org_with_no_data_response = Factory(:organization, 
                                            :name => 'org_with_no_data_response')
       @org_with_empty_data_response = Factory(:organization, 

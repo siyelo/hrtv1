@@ -207,11 +207,18 @@ class DataResponse < ActiveRecord::Base
 
   ### Submission Validations
 
-  def ready_to_submit?
+  def basics_done?
     projects_entered? &&
-    projects_linked? &&
     activities_coded? &&
     other_costs_coded?
+  end
+
+  def ready_to_submit?
+    if request.final_review?
+      basics_done? && projects_linked?
+    else
+      basics_done?
+    end
   end
 
   def projects_entered?
@@ -219,14 +226,11 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_linked?
-    projects_from = []
+    return false unless projects_entered?
     self.projects.each do |project|
-      project.in_flows.each do |in_flow|
-        projects_from << in_flow.project_from_id
-      end
+      return false unless project.linked?
     end
-    return false if projects_from.include?(nil) || projects_from.include?(0)
-    return true
+    true
   end
 
   def activities_entered?

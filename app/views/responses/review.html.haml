@@ -7,7 +7,7 @@
 %ul
   %li= "Request: #{@response.request.title}"
   %li= "Status: #{@response.request.status}"
-  %li= "Last Submitted: #{@response.last_submitted_at || 'never'}"
+  %li= "Last Submitted: #{l(@response.last_submitted_at, :format => :short) || 'never'}"
 
 = render 'getting_started_submit'
 
@@ -74,9 +74,9 @@
     = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
 
 - if @response.request.final_review?
-  - ready_class = @response.projects_linked? ? "ready" : "info"
-- else
   - ready_class = @response.projects_linked? ? "ready" : "not-ready"
+- else
+  - ready_class = @response.projects_linked? ? "ready" : "info"
 %h3{:class => ready_class}
   Projects Linked to the Funder Projects
   - unless @response.projects_linked?

@@ -75,25 +75,49 @@ describe DataResponse do #validations
   end
 
   describe "project linking" do
+    it "succeeds if projects are linked" do
+      #TODO link the projects
+      funder_response = Factory.create(:data_response, :data_request => @request)
+      funder_project = Factory(:project, :data_response => funder_response)
+      funder = Factory(:funding_source, :to => @project.organization, 
+        :project => @project, 
+        :from => funder_response.organization,
+        :project_from_id => funder_project,
+        :data_response => @response )
+      
+      @response.projects_linked?.should == true
+    end
+    
     it "fails if projects not linked" do
       @response.projects_linked?.should == false
-      @response.ready_to_submit?.should == false
-    end
-    it "succeeds if projects are linked" do
-      @response.projects_linked?.should == true
     end
   end
 
   describe "ready to submit" do
     it "succeeds if everything is coded" do
-      #TODO :link projects
+      #TODO link the project.
       activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
       other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
       @response.activities_coded?.should == true
       @response.other_costs_coded?.should == true
       @response.ready_to_submit?.should == true
     end
-
+    
+    context "projects not linked" do
+      it "succeeds if request not in final review" do
+        @request.final_review = false
+        @request.save
+        @response.reload
+        @response.ready_to_submit?.should == true
+      end
+      it "fails if in final review " do
+        @request.final_review = true
+        @request.save
+        @response.reload
+        @response.ready_to_submit?.should == false
+      end
+    end
+    
     it "fails if there are no activities" do
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false

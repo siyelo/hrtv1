@@ -82,10 +82,13 @@ body.app
       &.ready
         background: image_url("tick_32.png") no-repeat 5px top
         padding: 8px 0 20px 40px
+      &.info
+        background: image_url("info_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
       &.not-ready
         background: image_url("delete_32.png") no-repeat 5px top
         padding: 10px 0 10px 40px
-      &.not-ready, &.ready
+      &.not-ready, &.ready, &.info
         .info
           display: block
           font-size: 12px

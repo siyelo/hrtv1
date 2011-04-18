@@ -299,6 +299,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -330,7 +331,5 @@ end
 #  budget3          :decimal(, )
 #  budget4          :decimal(, )
 #  budget5          :decimal(, )
-#  spend_in_usd     :decimal(, )
-#  budget_in_usd    :decimal(, )
 #
 

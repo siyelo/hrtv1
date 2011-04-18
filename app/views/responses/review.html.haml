@@ -6,6 +6,8 @@
 
 %ul
   %li= "Request: #{@response.request.title}"
+  %li= "Status: #{@response.request.status}"
+  %li= "Last Submitted: #{@response.last_submitted_at || 'never'}"
 
 = render 'getting_started_submit'
 
@@ -17,15 +19,6 @@
   - unless @response.projects_entered?
     %span.info
       = render 'projects/no_projects_yet'
-
-- ready_class = @response.projects_linked? ? "ready" : "not-ready"
-%h3{:class => ready_class}
-  Projects Linked to the Funder Projects
-  - unless @response.projects_linked?
-    %span.info
-      Please
-      = link_to "link your projects", bulk_edit_response_projects_path(@response)
-      to the respective projects of your Funder(s).
 
 - ready_class = @response.activities_entered? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -53,7 +46,6 @@
 - unless @response.activities_coded?
   - unless @data_response.uncoded_activities.empty?
     = render 'uncoded_table', :activities => @data_response.uncoded_activities
-    %p.guide
 
 - ready_class = @response.other_costs_entered? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -81,21 +73,17 @@
   - unless @data_response.uncoded_other_costs.empty?
     = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
 
-- ready_class = @response.submitted ? "ready" : "not-ready"
+- if @response.request.final_review?
+  - ready_class = @response.projects_linked? ? "ready" : "info"
+- else
+  - ready_class = @response.projects_linked? ? "ready" : "not-ready"
 %h3{:class => ready_class}
-  Response submitted for Initial Review
-  - unless @response.submitted
-    %span.info You have not yet submitted your Response for the initial review.
-  - else
-    %span.info= "Your response was submitted on #{@response.submitted_at.to_s(:long)}"
-
-- ready_class = @response.submitted_for_final ? "ready" : "not-ready"
-%h3{:class => ready_class}
-  Response submitted for Final Review
-  - unless @response.submitted_for_final
-    %span.info You have not yet submitted your Response for the final review.
-  - else
-    %span.info= "Your response was submitted on #{@response.submitted_for_final_at.to_s(:long)}"
+  Projects Linked to the Funder Projects
+  - unless @response.projects_linked?
+    %span.info
+      Once your Funder's have added all their projects too, please
+      = link_to "link your projects", bulk_edit_response_projects_path(@response)
+      to each Funder project respectively.
 
 %hr.divider
 %p

@@ -200,6 +200,11 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  def last_submitted_at
+    return submitted_for_final_at if request.final_review?
+    return submitted_at
+  end
+
   ### Submission Validations
 
   def ready_to_submit?

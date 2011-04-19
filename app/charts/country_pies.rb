@@ -24,7 +24,7 @@ module Charts::CountryPies
         :select => "organizations.id,
           organizations.name,
           SUM(funding_streams.#{amount_type}) as value",
-        :joins => "INNER JOIN organizations ON 
+        :joins => "INNER JOIN organizations ON
                     funding_streams.organization_ufs_id = organizations.id",
         :group => "organizations.id,
                    organizations.name",
@@ -38,7 +38,7 @@ module Charts::CountryPies
         :select => "organizations.id,
           organizations.name,
           SUM(funding_streams.#{amount_type}) as value",
-        :joins => "INNER JOIN organizations ON 
+        :joins => "INNER JOIN organizations ON
                     funding_streams.organization_fa_id = organizations.id",
         :group => "organizations.id,
                    organizations.name",
@@ -66,13 +66,13 @@ module Charts::CountryPies
       code_assignments = CodeAssignment.with_type(coding_type).find(:all,
         :select => "code_assignments.id,
                     code_assignments.activity_id,
-                    COALESCE(activities.name, activities.description) AS name,
+                    COALESCE(activities.name, activities.description) AS name_or_descr,
                     SUM(code_assignments.cached_amount_in_usd) AS value",
         :joins => :activity,
         :include => :activity,
         :group => 'code_assignments.id,
                    code_assignments.activity_id,
-                   name',
+                   name_or_descr',
         :order => 'value DESC')
 
       prepare_pie_values_json(code_assignments)

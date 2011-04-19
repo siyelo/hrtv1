@@ -110,17 +110,24 @@ module Charts::HelperMethods
 
       records.each_with_index do |record, index|
         if index < 10
-          values << [record.name, record.value.to_f.round(2)]
+          values << [safe_sql_name_alias(record), record.value.to_f.round(2)]
         else
           other += record.value.to_f
         end
       end
 
       values << ['Other', other.round(2)]
-
       {
         :values => values,
         :names => {:column1 => 'Name', :column2 => 'Amount'}
       }.to_json
+    end
+
+    # In postgres, you can't sql alias something if its also a
+    # column - Group By will fail.. But we still want to use
+    # AR convenient alias 'methods' on the result set objects.
+    # So for those columns,  we use a different alias
+    def safe_sql_name_alias(record)
+      name = record.respond_to?(:name) ? record.name : record.name_or_descr
     end
 end

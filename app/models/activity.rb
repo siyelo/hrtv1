@@ -444,11 +444,16 @@ class Activity < ActiveRecord::Base
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
     end
 
+    # NOTE: respond_to? is used on some fields because 
+    # some previous data fixes use this method and at that point
+    # some counter cache fields didn't existed
+    # TODO: remove the respond_to? when data fixes
+    # gets removed from the migrations folder
     def update_counter_cache
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
         dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
-        dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count
+        dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count if dr.respond_to?(:unclassified_activities_count)
         dr.save(false)
       end
     end

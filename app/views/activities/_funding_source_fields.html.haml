@@ -1,6 +1,6 @@
 .fields
   .edit_block
-    = f.input :funding_flow_id, :required => false, :label => 'Organization', :collection => @activity.project ? funding_sources_options(@activity.project.in_flows) : [], :input_html => {:class => 'funding_source'}, :hint => "If empty, please select a project first, and/or check the selected project has funding sources.", :input_html => {:class => 'ff_organization'}
+    = f.input :funding_flow_id, :required => false, :label => 'Organization', :collection => @activity.project ? funding_sources_options(@activity.project.in_flows) : [], :hint => "If empty, please select a project first, and/or check the selected project has funding sources.", :input_html => {:class => 'ff_organization'}
     - if @data_response.data_request.spend?
       = f.input :spend, :label => "Spent", :hint => "The total amount, from this source, that you have spent in the past fiscal year, on this activity.", :required => false, :input_html => {:class => 'ff_spend'}
     - if @data_response.data_request.budget?

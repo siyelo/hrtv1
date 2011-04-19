@@ -15,12 +15,13 @@ class ResponsesController < ApplicationController
     else
       @data_response = current_user.data_responses.find(params[:id])
     end
-    @projects                    = @data_response.projects.find(:all, :order => "name ASC")
-    @activities_without_projects = @data_response.activities.roots.without_a_project
-    @code_roots                  = Code.purposes.roots
-    @cost_cat_roots              = CostCategory.roots
-    @other_cost_roots            = OtherCostCode.roots
-    @policy_maker                = true #view helper
+    @projects                     = @data_response.projects.find(:all, :order => "name ASC")
+    @activities_without_projects  = @data_response.activities.roots.without_a_project
+    @other_costs_without_projects = @data_response.other_costs.without_a_project
+    @code_roots                   = Code.purposes.roots
+    @cost_cat_roots               = CostCategory.roots
+    @other_cost_roots             = OtherCostCode.roots
+    @policy_maker                 = true #view helper
   end
 
   # POST /data_responses

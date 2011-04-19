@@ -43,6 +43,7 @@
     %li{:class => 'selected' }= link_to "Comments (#{@data_response.comments.size})", "#", :class => "comment_details"
     %li= link_to "Projects (#{@projects.count})", "#", :id => "project_details"
     %li= link_to "Activities without a Project (#{@data_response.activities_without_projects_count})", "#", :class => "activity_details"
+    %li= link_to "Other Costs without a Project (#{@other_costs_without_projects.count})", "#", :class => "activity_details"
 
 .tabs
   .tab1{:style => 'display: block;'}
@@ -51,4 +52,6 @@
     = render 'shared/data_responses/projects', :projects => @projects
   .tab3
     = render 'shared/data_responses/activities', :activities => @activities_without_projects, :non_linked => true
+  .tab4
+    = render 'shared/data_responses/activities', :activities => @other_costs_without_projects, :non_linked => true, :other_costs => true
 

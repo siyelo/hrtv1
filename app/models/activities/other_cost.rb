@@ -1,4 +1,5 @@
 class OtherCost < Activity
+
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[project_name description budget spend 
                            spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4]
@@ -7,6 +8,13 @@ class OtherCost < Activity
     FasterCSV.generate do |csv|
       csv << OtherCost::FILE_UPLOAD_COLUMNS
     end
+  end
+
+  # Overrides activity currency deletage method
+  # some other costs does not have a project and
+  # then we use the currency of the data response
+  def currency
+    project ? project.currency : data_response.currency
   end
 
   def self.create_from_file(doc, data_response)

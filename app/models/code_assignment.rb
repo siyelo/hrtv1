@@ -41,6 +41,7 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Delegates
   delegate :data_response, :to => :activity
+  delegate :currency, :to => :activity, :allow_nil => true
 
   ### Class Methods
   #
@@ -81,11 +82,6 @@ class CodeAssignment < ActiveRecord::Base
         0
       end
     end
-  end
-
-  # TODO: spec
-  def currency
-    self.activity.nil? ? nil : self.activity.currency
   end
 
   # TODO: spec
@@ -136,9 +132,10 @@ class CodeAssignment < ActiveRecord::Base
 
   private
 
-    # currency is derived from the parent activities' project/DR
+    # currency is derived from the parent activity/project/DR
     def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) * Money.default_bank.get_rate(self.currency, :USD)
+      self.cached_amount_in_usd = (cached_amount || 0) * 
+        Money.default_bank.get_rate(currency, :USD)
     end
 
     # Checks if it's a budget code assignment

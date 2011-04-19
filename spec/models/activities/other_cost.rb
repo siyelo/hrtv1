@@ -30,5 +30,23 @@ describe OtherCost do
       @activity.stub(:spend_classified?) { true }
       @activity.classified?.should be_true
     end
+
+    def currency
+      project ? project.currency : data_response.currency
+    end
+
+    describe "currency" do
+      it "returns data response currency if other cost without a project" do
+        dr = Factory.create(:data_response, :currency => 'EUR')
+        oc = Factory.create(:other_cost, :project => nil, :data_response => dr)
+        oc.currency.should == 'EUR'
+      end
+
+      it "returns project currency if other cost has a project" do
+        pr = Factory.create(:project, :currency => 'USD')
+        oc = Factory.create(:other_cost, :project => pr)
+        oc.currency.should == 'USD'
+      end
+    end
   end
 end

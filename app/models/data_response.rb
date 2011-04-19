@@ -274,6 +274,7 @@ class DataResponse < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: data_responses
@@ -301,5 +302,6 @@ end
 #  activities_without_projects_count :integer         default(0)
 #  submitted_for_final_at            :datetime
 #  submitted_for_final               :boolean
+#  unclassified_activities_count     :integer         default(0)
 #
 

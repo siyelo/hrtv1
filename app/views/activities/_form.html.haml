@@ -49,11 +49,12 @@
   %li.last
     %h3 Activity Funding Sources
     %ul.dashboard_section
-      - f.semantic_fields_for :funding_sources do |fs|
-        = render "activities/funding_source_fields", :f => fs
-      .add
-        = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
-        %p.hint The sources from which your organization receives funding for this activity.
+      .funding_sources
+        - f.semantic_fields_for :funding_sources do |fs|
+          = render "activities/funding_source_fields", :f => fs
+        .add
+          = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
+          %p.hint The sources from which your organization receives funding for this activity.
 
   %li.last
     %h3== Implementers

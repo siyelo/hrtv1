@@ -15,7 +15,7 @@ function add_fields(link, association, content) {
   $(link).parent().before(content.replace(regexp, new_id));
 };
 
-var build_funding_source_row = function (edit_block, type, type_name, organization) {
+var build_project_in_flow_row = function (edit_block, type, type_name, organization) {
   var value            = edit_block.find('.ff_' + type).val();
   var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
   var value_q1         = edit_block.find('.ff_' + type + '_q1').val();
@@ -66,8 +66,30 @@ var build_funding_source_row = function (edit_block, type, type_name, organizati
   )
 };
 
+var build_activity_funding_source_row = function (edit_block) {
+  var organization = edit_block.find('.ff_organization option:selected').text();
+  var spend        = edit_block.find('.ff_spend').val();
+  var budget       = edit_block.find('.ff_spend').val();
 
-var close_funding_flow_fields = function (fields) {
+  return $('<ul/>').append(
+    $('<li/>').append(
+      $('<span/>').text('Funder'),
+      organization || 'N/A'
+    ),
+    $('<li/>').append(
+      $('<span/>').text('Spend'),
+      spend || 'N/A'
+    ),
+    $('<li/>').append(
+      $('<span/>').text('Budget'),
+      budget || 'N/A'
+    )
+  )
+};
+
+
+
+var close_project_in_flow_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
     var edit_block = element.find('.edit_block');
@@ -76,8 +98,27 @@ var close_funding_flow_fields = function (fields) {
 
     edit_block.hide();
     preview_block.html('');
-    preview_block.append(build_funding_source_row(edit_block, 'spend', 'Spend'))
-    preview_block.append(build_funding_source_row(edit_block, 'budget', 'Budget'))
+    preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend'))
+    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget'))
+    preview_block.show();
+
+    manage_block.find('.edit').remove();
+    manage_block.prepend(
+      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+    )
+  });
+};
+
+var close_activity_funding_sources_fields = function (fields) {
+  $.each(fields, function () {
+    var element = $(this);
+    var edit_block = element.find('.edit_block');
+    var preview_block = element.find('.preview_block');
+    var manage_block = element.find('.manage_block');
+
+    edit_block.hide();
+    preview_block.html('');
+    preview_block.append(build_activity_funding_source_row(edit_block))
     preview_block.show();
 
     manage_block.find('.edit').remove();
@@ -89,7 +130,10 @@ var close_funding_flow_fields = function (fields) {
 
 var before_add_fields_callback = function (association) {
   if (association === 'in_flows') {
-    close_funding_flow_fields($('.funding_flows .fields'));
+    close_project_in_flow_fields($('.funding_flows .fields'));
+  }
+  if (association === 'funding_sources') {
+    close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
 };
 
@@ -952,7 +996,7 @@ var reports_countries_activities_show = {
 
 var update_funding_source_selects = function () {
   var project_id = $('#activity_project_id').val();
-  var fs_selects = $('.funding_source');
+  var fs_selects = $('.ff_organization');
   if (project_id) {
     var options = ['<option value=""></option>'];
     $.each(_funding_sources[project_id], function (i) {
@@ -985,10 +1029,10 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
       element.find('.edit_block').show();
       element.find('.preview_block').hide();
-      close_funding_flow_fields(fields);
+      close_project_in_flow_fields(fields);
     });
 
-    close_funding_flow_fields($('.funding_flows .fields'));
+    close_project_in_flow_fields($('.funding_flows .fields'));
   }
 };
 
@@ -1014,6 +1058,19 @@ var activity_form = function () {
       $('#project_sub_form_hint').show();
     }
   });
+
+  $('.edit').live('click', function (e) {
+    e.preventDefault();
+    var element = $(this).parents('.fields');
+    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+    element.find('.edit_block').show();
+    element.find('.preview_block').hide();
+    close_activity_funding_sources_fields(fields);
+
+  });
+
+  close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
 

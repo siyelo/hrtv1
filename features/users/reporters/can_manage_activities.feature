@@ -242,6 +242,7 @@ Feature: Reporter can manage activities
         And I follow "Projects"
 
       When I follow "Activity1 description"
+        And I follow "Edit" within ".fields"
         And I select "funding_organization2" from "Organization" within ".fields"
         And I fill in "Spent" with "333" within ".fields"
         And I fill in "Budget" with "444" within ".fields"

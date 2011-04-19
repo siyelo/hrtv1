@@ -158,9 +158,20 @@ class Reports::JawpReport
 
               #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
 
+              if activity.class == OtherCost
+                prov = "Administration - #{activity.data_response.organization.raw_type}"
+                prov_type = "Admin"
+              elsif activity.provider.nil?
+                prov = "Unspecified"
+                prov_type = "Unspecified"
+              else
+                prov = activity.provider.name
+                prov_type = activity.provider.raw_type
+              end
+
               row << activity.possible_duplicate?
-              row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
-              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
+              row << prov
+              row << prov_type
               row << funding_source[:ufs].try(:name)
               row << funding_source[:ufs].try(:raw_type)
               row << funding_source[:fa].try(:name)

@@ -7,7 +7,7 @@ require 'fastercsv'
 
   load 'db/seed_files/codes.rb'
 
-  load 'db/seed_files/hssp2_codes.rb'
+#  load 'db/seed_files/hssp2_codes.rb' # no longer are codes in db, just vals in codes table
 
   load 'db/seed_files/cost_categories.rb'
 

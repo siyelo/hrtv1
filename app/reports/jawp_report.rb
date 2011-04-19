@@ -179,8 +179,10 @@ class Reports::JawpReport
               row << amount
               row << ratio
               row << amount_total_in_usd * ratio
-              row << codes_cache[ca.code_id].try(:hssp2_stratobj_val)
-              row << codes_cache[ca.code_id].try(:hssp2_stratprog_val)
+              obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val); obj = "Too Vague" if obj.nil? or obj.blank?
+              prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val); prog = "Too Vague" if prog.nil? or prog.blank?
+              row << obj
+              row << prog
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
               add_codes_to_row(row, codes, Code.deepest_nesting, :official_name)
               row << last_code.try(:short_display)

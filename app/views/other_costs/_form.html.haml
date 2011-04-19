@@ -3,9 +3,12 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :project_id, :label => "Project", :collection => current_user.current_data_response.projects
+      = f.input :name, :required => false
       = f.input :description, :input_html => { :rows => 2 }, :required => false
+      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
 
-  -if @data_response.data_request.spend?
+  - if @data_response.data_request.spend?
     %li.last
       %h3 Past Expenditure
       %ul.dashboard_section
@@ -26,7 +29,36 @@
       %h3 Budget (planned expenditure)
       %ul.dashboard_section
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
-
+        
+        %li.amounts.last
+          %label Quarterly spend
+          %ul
+            = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
+            = f.input :spend_q1     , :label => "Q1 09-10", :required => false
+            = f.input :spend_q2     , :label => "Q2 09-10", :required => false
+            = f.input :spend_q3     , :label => "Q3 09-10", :required => false
+            = f.input :spend_q4     , :label => "Q4 09-10", :required => false
+            
+  %li.last
+    %h3== Implementers
+    %ul.dashboard_section
+      %p.hint Service Providers and partners you work with
+      - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
+      - hint = hint + "<br>NOTE: You uploaded \"#{@other_cost.text_for_provider}\"" if !@other_cost.text_for_provider.blank? && @activity.provider.nil?
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => hint, :required => false
+      
+  %li.last
+    %h3== Other
+    %ul.dashboard_section
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
+      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
+      
+  %li.last
+    %h3 Institutions Assisted
+    %ul.dashboard_section
+      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
+        
 - f.buttons :class => 'buttons' do
   = f.commit_button "Save & Next", :class => "last"
 

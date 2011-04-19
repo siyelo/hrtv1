@@ -1,282 +1,1015 @@
-"org id","Organization","Type",
-,"AABB","NGO",
-,"American Society for Microbiology","NGO",
-,"CARE","NGO",
-,"CLSI","NGO",
-,"Compassion International Rwanda","NGO",
-,"PROJET UBUZIMA","Govt Agency",
-,"WESTERN ONTARIO UNIVERSITY","NGO",
-,"USG","Donor",
-,"Donor","Donor",
-,"Chen Yet-Sen Family Foundation","Donor",
-,"GREAT LAKES HIV/AIDS INITIATIVE (GLIA)","Donor",
-,"MINECOFIN","Govt Agency",
-,"Brothers of Charity","Donor",
-,"European Commission","Donor",
-,"Reproductive Health Trust Fund","Donor",
-,"Sturback Coffee Company","Donor",
-,"EDCTP","Donor",
-,"IMT","Donor",
-,"MIDA","Donor",
-,"Rockefeller Foundation","Donor",
-,"UNFEM","Donor",
-,"Scottish Government","Donor",
-,"Anne Duffey Community Foundation of New Jersey","Donor",
-,"Durham Technical Community College (DTCC)","Donor",
-,"International Resources Group (IRG)","NGO",
-,"USG - PEPFAR","Donor",
-,"PACKARD FOUNDATION","Donor",
-,"BRITISH COUNCIL","Donor",
-,"NEPAD","Donor",
-,"WESTERN ONTARIO UNIVERSITY","Donor",
-,"Gouvernement Basque","Donor",
-,"International Partnership for Microbicide","Donor",
-,"AMERICAN RED CROSS","Donor",
-,"CROIX ROUGE DE BELGIQUE - FRANCOPHONE","Donor",
-,"CROIX ROUGE DE BELGIQUE / FLANDRES","Donor",
-,"DANISH RED CROSS","Donor",
-,"FINNISH RED CROSS","Donor",
-,"INTERNATIONAL FEDERATION OF RC/RC","Donor",
-,"NORWEGIAN RED CROSS","Donor",
-,"saddleback valley community church","Donor",
-,"Fulwood Initiative","Donor",
-,"internal_for_dev",,
-,"internal_for_dev2",,
-,"Admin",,
-,"New  NGO","NGO",
-,"New Donor","Donor",
-,"Private Sources","NGO",
-,"A new implementer","NGO",
-,"Food and Agriculture Organization of the United Nations (FAO)","Donor",
-,"UNESCO","Donor",
-,"International Labor Organization (ILO)","Donor",
-,"PATH","NGO",
-,"Rwanda Biomedical Center","Govt Agency",
-,"AEE","NGO",
-,"ADEPR","NGO",
-,"CARITAS","NGO",
-,"DUHAMIC","NGO",
-,"WIF","NGO",
-,"WE-ACTx for HOPE","NGO",
-,"URUNANA","NGO",
-,"SWAA","NGO",
-,"RWAMREC","NGO",
-,"RRP+","NGO",
-,"PAMASOR","NGO",
-,"ICYUZUZO","NGO",
-,"HAGURUKA","NGO",
-,"EPR","NGO",
-,"ARCT RUHUKA","NGO",
-,"Ministry of Health","Govt Agency",
-,"IRC","NGO",
-,"Concern Worldwide","Donor",
-,"Concern Worldwide Rwanda, International Rescue Committee (IRC), World Relief ","Donor",
-,"Education Development Center (EDC)","NGO",
-,"Janja Health Center/Gakenke","Health Center",
-,"NURFOM","NGO",
-,"Kigali Health Institute","NGO",
-,"Kigali Institute of Science and Technology","NGO",
-,"Wyman Worldwide Health Partners (WWHPS)","Donor",
-,"Technical Assistants/CDLS","Govt Agency",
-,"German Cooperation (kfw)","Donor",
-,"HRSA/PEPFAR","Donor",
-,"All districts","District",
-,"German Cooperation (DED)","Donor",
-,"German Cooperation (GTZ)","Donor",
-,"Bamporeze","NGO","Local"
-,"ARBEF","NGO","Local"
-,"CARREFOUR","Health Center","Private Clinic"
-,"National Nursing Association (in Rwanda)","NGO","local"
-,"National Nursing Unit (in Rwanda)","NGO","local"
-,"National Nursing Council (MOH Rwanda)","NGO","local"
-,"Nursing Schools (MOH / MINEDUC Rwanda)","Govt Agency",
-,"Health Facilities","Health Center",
-,"All District Hospitals and Health Centers","District Hospital",
-,"2 National referral hospitals, 1 neuropsychiatric hospital, 9 district hospitals, 44 health centers, 3 local NGOs and 1 central level institution ( UPDC)","National Hospital","crap"
-,"TRAC Plus / HAS","Govt Agency",
-,"German Cooperation (GTZ, DED)","Donor",
-,"ATRACO","NGO","Private"
-,"RECO-RWASCO","Govt Agency","parastatal"
-,"INTERSEC","NGO","private"
-,"Rwanda Health Communication Center (RHCC)","Govt Agency",
-,"GF TB NSA","Donor",
-,"BIT STEP","NGO",
-,"RECETTES SCPS","Govt Agency",
-,"FAWE Project","NGO","local"
-,"Rwanda Women Network/UNIFEM","Donor","donor/local"
-,"German Cooperation (DED, CIM)","Donor",
-,"Rwanda Women Network","NGO","local"
-,"American Association of Blood Banks","NGO",
-,"ACDI/VOCA","NGO",
-,"CS-VCTI-ARV's","Govt Agency",
-,"HC-HOSPITALS","Health Center",
-,"MOH-UPDC","Govt Agency",
-,"PEV","Govt Agency",
-,"MIGEPROF","Govt Agency",
-,"MOH-CAAC","Govt Agency",
-,"PR","Govt Agency",
-,"RALGA","Govt Agency",
-,"MOH-COMMUN","Govt Agency",
-,"MOH-M E","Govt Agency",
-,"MOH-PHARMACIE","Govt Agency",
-,"MOH-INTEGRATION","Govt Agency",
-,"CHD-MOH","Govt Agency",
-,"CNJR","Govt Agency",
-,"PBF-MOH","District Hospital",
-,"DH-HC","District Hospital",
-,"Nyanza District (Health Unit and District Pharmacy)","District",
-,"Vision Jeunesse Nouvelle","NGO",
-,"St Francois Rusizi Health Center (HC)","Health Center",
-,"Solidarity Center","NGO",
-,"Ngobokadufatanye Cooperative ","NGO",
-,"Rusizi PLHIV Cluster","NGO",
-,"Rusizi Health Post","Health Post",
-,"Rusizi Low Income Women (LIW) Cluster","NGO",
-,"Cooperative des Femmes de Mururu (COFEM) ","NGO",
-4206,"Coop¨¦rative de D¨¦veloppement de la P¨ºche au Lac Kivu (CODEPEK) ","NGO",
-,"Rusizi Fishers Cluster","NGO",
-,"Rubaya Health Center (HC)","Health Center",
-4209,"Programme R¨¦gional de Formation et d¡¯Echanges pour le D¨¦veloppement (PREFED)","NGO",
-,"North Star Foundation","Donor",
-,"Gihundwe Health Center (HC)","Health Center",
-4213,"Association des D¨¦mobilis¨¦s pour le D¨¦veloppement, la lutte contre le SIDA et la Promotion de la Culture Rwandaise (ADSPCR) ","NGO","many around here local"
-4214,"Association de Solidarit¨¦ des Femmes Rwandaises (ASOFERWA) ","NGO",
-,"To be determined (local association/cooperative)","NGO",
-,"Ruhango District (Health Unit)","District",
-,"Ihoreremunyarwanda Association","NGO",
-,"Howard University","NGO",
-,"Gikongoro Central Prison","Prison Clinic",
-4220,"Cooperative des P¨ºcheurs du Lac Kivu (COOPELAK) ","NGO",
-,"Gisenyi Health Center (HC)","Health Center",
-,"Tuvuge Ibyayo Cooperative","NGO",
-,"Kanombe Military Hospital","Military Hospital",
-,"Byumba Diocese","District",
-,"Gihogwe Health Center (HC)","Health Center",
-4227,"Coop¨¦rative de Production du Riz de Bugarama (COODIPRIB) ","NGO",
-,"Abishyizehamwe Association","NGO",
-,"Rusizi District (Health Unit)","District",
-,"Association des Chauffeurs des Poids Lourds au Rwanda (ACPLRWA)","NGO",
-4231,"Association pour l'Esp¨¦rance des Taxis Moto au Rwanda (ASSETAMORWA)","NGO",
-,"Bugarama Islamic Health Center (HC)","Health Center",
-,"Projet San Francisco (PSF)","NGO",
-,"Kigali Low Income Women (LIW) cluster","NGO",
-,"Gisenyi PLHIV Cluster","NGO",
-,"Gisenyi Fisher's Cluster","NGO",
-,"Gikondo Health Post","Health Post",
-,"Gatuna Churches cluster","NGO",
-,"Gatsata Health Post","Health Post",
-,"Rwanda Development Board (RBD)/ORTPN","Govt Agency",
-,"DAI","NGO",
-,"Nyamagabe District (Health Unit)","District",
-,"Bugarama PLHIV cluster","NGO",
-,"Bugarama Low Income Women (LIW) cluster","NGO",
-,"Biryogo Socio-Medical Center (SMC)","Health Center",
-,"Coordinated Procurement and Distribution System","NGO",
-,"Busanza Health Center (HC)","Health Center",
-,"Pharmacy Task Force","Govt Agency",
-,"Districts-All","District",
-,"Johns Hopkins University (JHU)","NGO",
-,"MOH - HMIS","Govt Agency",
-,"MOH-CBHI","Govt Agency",
-,"MOH-HR","Govt Agency",
-,"National Medical Council of Rwanda","Govt Agency","parastatal"
-,"Civil Society Organizations","NGO",
-,"MINILOC-NDIS","Govt Agency",
-,"TracPlus - PNLP Malaria","Govt Agency",
-,"Kigali Youth Cluster","NGO",
-,"Muhari Health Post","Health Post",
-,"UPDC-MOH","Govt Agency",
-,"MININTER-PRISONS","Govt Agency",
-,"HOP-CS","NGO","?"
-,"PMU-","Govt Agency",
-,"CTAMS-MOH","Govt Agency",
-4275,"Centre de R¨¦habilitation et de R¨¦int¨¦gration des handicap¨¦s de Muhanga","NGO",
-,"USS-DS","Donor",
-,"ESP-UNR-","Donor",
-,"CCM","Govt Agency","not really, something made for global fund proposal"
-,"HOP-HC","NGO",
-,"Cellule d'Approche Contractuelle (CAAC)","Govt Agency",
-,"Partners In Health","NGO",
-,"globalislocal","Donor",
-,"Dorris Duke Charitable Trust","Donor",
-,"Hickey Family Foundation","Donor",
-,"Izumi Foundation","Donor",
-,"Medtronic Foundation","Donor",
-,"Ashwin Fund","Donor",
-,"Reusing and Cole Family Charitable Trust","Donor",
-,"Ronald McDonald House Charities","Donor",
-,"Rwanda Oki Group","Donor",
-,"Salem","Donor",
-,"Alderman","Donor",
-,"Trinity Church","Donor",
-,"AHA","NGO",
-,"Association of Public Health Laboratories","NGO",
-,"Muhanga Clininc","Health Center",
-,"Huye Clinic","Health Center",
-,"Rusizi","District",
-,"Ngarama military rehabilitation centre","Prison Clinic",
-,"CTB OLD PROJECT","Donor",
-,"CTB PAPSDSK","Donor",
-,"Gisakura Health Center (HC)","Health Center",
-,"Rutobwe Health Center (HC)","Health Center",
-,"Gikondo Socio-Medical Center (SMC)","Health Center",
-,"Gasagara Health Center (HC)","Health Center",
-,"ordinary budget","Govt Agency",
-,"jembi","NGO",
-,"MINEDUC","Govt Agency",
-,"COAG","Govt Agency",
-,"Karongi District","District",
-,"Rutsiro District","District",
-,"Luxembourg","Donor",
-,"DFID and CIDA","Donor",
-,"TRAC PLUS INFLUENZA","Govt Agency",
-,"SUN FRANCISCO","Donor",
-,"ABASIRWA","NGO",
-,"HIV NGO FORUM","NGO",
-,"MINADEF","Govt Agency",
-,"MINAGRI","Govt Agency",
-,"MINICOM","Govt Agency",
-,"MINIJUST","Govt Agency",
-,"MININTER","Govt Agency",
-,"MINIYOUTH","Govt Agency",
-,"MOH/METF","Govt Agency",
-,"MOH/PEV","Govt Agency",
-,"NGO/R7","NGO",
-,"NGOs/NSA","NGO",
-,"NGOs/R6","NGO",
-,"POLICE","Govt Agency",
-,"PTF","Govt Agency",
-,"RCLS","Govt Agency",
-,"RHs/DHs&HCs","Health Center",
-,"UPHLS","NGO",
-,"UNFPA, UNFEM, UNICEF","Donor",
-,"Gasabo District H.U","District",
-,"Emoc-General Suppliers","NGO",
-,"WORLD VISION CANADA","Donor",
-,"Gakenke Health District","District",
-,"Rwamagana Health District","District",
-,"Ngoma Health District","District",
-,"Musanze Health District","District",
-,"Bugesera Health District","District",
-,"Nyabihu Health District","District",
-,"World Vision  Canada,USA,New Zealand, Taiwan,Korea,Australia","Donor",
-,"Collectif TUBAKUNDE","NGO",
-,"Swiss TPH (Tropical Public Health)","Donor",
-,"Internally Generated Revenue","Govt Agency",
-,"Same as above","NGO",
-,"PR-SRs","Govt Agency",
-,"Hollywood","Donor",
-,"Justin Timberlake's Agency","Donor",
-,"AVVAIS & RRP+","NGO",
-,"RWANDA RED CROSS","NGO",
-,"Kabere Health Centre","Health Center",
-,"Kabere Health Centre | Musanze","Health Center",
-,"Rwanda PDM/PEACE Plan","NGO",
-,"PR/SRs","Govt Agency",
-,"Central Africa Health Organization (CAHO)","Donor",
-,"UNFEM/CNLS Project","Donor",
-,"193 Local churches","NGO",
-,"193 local churches","NGO",
-,"USAID Admin",,
-,"EGPAFReviewer",,
-,"Ministry of Health ","Govt Agency",
+"organization_id","organization_name","new type"
+3041,"CAMERWA - Central d'achat des medicaments du Rwanda / Central Drug Purchasing Agency for Rwanda","Parastatal"
+3042,"ACM - Atelier Central de Maintenance  / Central Maintenance Workshop","Government"
+3043,"KHI - Kigali Health Institute","Government"
+3044,"LABOPHAR - Laboratoire Pharmaceutique du Rwanda / Pharmaceutical Laboratory of Rwanda","Government"
+3045,"CNLS - Commission National de Lutte contre le VIH-SIDA / National AIDS Commission","MoH"
+3046,"CNTS - Centre National de Transfusion Sanguine / National Blood Transfusion Centre","MoH"
+3047,"LNR - Laboratoire National de Reference / National Reference Laboratory","Government"
+3048,"NUR - National University of Rwanda","Government"
+3049,"CCPS - Centre de Consultation Psychosociale / Psychosocial Consultation Centre","MoH"
+3050,"HCC - Health Communication Centre","MoH"
+3051,"RITA - Rwanda Information Technology Agency","Government"
+3052,"RAMA - La Rwandaise d'Assurance Maladie / Rwanda Medical Insurance Agency","Govt Insurance"
+3054,"TRAC+ - HIV","MoH"
+3055,"University Teaching and Referral Hospitals /CHUK, CHUB, KFH, Kanombe, Ndera, and Police Hospitals","National Hospital"
+3056,"African Development Bank (AfDB)","Multilateral"
+3057,"Belgian Government","Bilateral"
+3058,"Chinese Mission","Bilateral"
+3059,"Clinton Foundation","NGO"
+3060,"GAVI","Multilateral"
+3061,"German Government","Bilateral"
+3062,"Global Fund for AIDS, TB and Malaria","Multilateral"
+3063,"Lux development","Bilateral"
+3064,"Swiss development cooperation (SDC)","Bilateral"
+3065,"UK Department for International Development (DFID)","Bilateral"
+3066,"UNAIDS","Multilateral"
+3067,"UNDP","Multilateral"
+3068,"UNFPA","Multilateral"
+3069,"UNICEF","Multilateral"
+3070,"US Government/USAID","Bilateral"
+3071,"US Government/PMI","Bilateral"
+3072,"US Government/RH","Bilateral"
+3073,"US Government/CDC","Bilateral"
+3074,"US Government/DoD","Bilateral"
+3075,"US Government/Peace Corps","Bilateral"
+3076,"WHO","Multilateral"
+3077,"World Bank","Multilateral"
+3078,"World Food Programme","Multilateral"
+3079,"Biryogo Health Center | Nyarugenge","Health Center"
+3080,"Butamwa Health Center | Nyarugenge","Health Center"
+3081,"CHK/CHUK National Hospital | Nyarugenge","National Hospital"
+3082,"Cor-Unum Health Center | Nyarugenge","Health Center"
+3083,"Gitega Health Center | Nyarugenge","Health Center"
+3084,"Kabusunzu Health Center | Nyarugenge","Health Center"
+3085,"Muhima Dispensary | Nyarugenge","Dispensary"
+3086,"Muhima HD District Hospital | Nyarugenge","District Hospital"
+3087,"Mwendo Health Center | Nyarugenge","Health Center"
+3088,"PCK/Gitega Prison Clinic | Nyarugenge","Prison Clinic"
+3089,"Rugarama Health Center | Nyarugenge","Health Center"
+3090,"TRAC Clinic Health Center | Nyarugenge","Health Center"
+3091,"AVEGA Kigali Health Center | Gasabo","Health Center"
+3092,"CARAES Ndera National Hospital | Gasabo","National Hospital"
+3093,"Bumbogo Health Center | Gasabo","Health Center"
+3094,"Jali Health Center | Gasabo","Health Center"
+3095,"Kabuye Health Center | Gasabo","Health Center"
+3096,"Kacyiru Health Center | Gasabo","Health Center"
+3097,"Kacyiru Police Hospital Military Hospital | Gasabo","Military Hospital"
+3098,"Kagugu Health Center | Gasabo","Health Center"
+3099,"Kayanga Health Center | Gasabo","Health Center"
+3100,"Kibagabaga HD District Hospital | Gasabo","District Hospital"
+3101,"Kimironko Health Center | Gasabo","Health Center"
+3102,"King Faisal Hospital National Hospital | Gasabo","National Hospital"
+3103,"Kinyinya Health Center | Gasabo","Health Center"
+3104,"Nyacyonga Health Center | Gasabo","Health Center"
+3105,"Prison Kimironko Prison Clinic | Gasabo","Prison Clinic"
+3106,"Rubungo Health Center | Gasabo","Health Center"
+3107,"Bethsaida  Health Center | Kicukiro","Health Center"
+3108,"Busanza Health Center | Kicukiro","Health Center"
+3109,"Gahanga Health Center | Kicukiro","Health Center"
+3110,"Gikondo Health Center | Kicukiro","Health Center"
+3111,"Kabuga Health Center | Kicukiro","Health Center"
+3112,"Kanombe HM Military Hospital | Kicukiro","Military Hospital"
+3113,"Kicukiro Health Center | Kicukiro","Health Center"
+3114,"Masaka Health Center | Kicukiro","Health Center"
+3115,"Busoro Health Center | Nyanza","Health Center"
+3116,"Cyaratsi Health Center | Nyanza","Health Center"
+3117,"Gatagara Health Center | Nyanza","Health Center"
+3119,"Kibilizi Health Center | Nyanza","Health Center"
+3120,"Kirambi Health Center | Nyanza","Health Center"
+3121,"Mucubira Health Center | Nyanza","Health Center"
+3122,"Mweya Health Center | Nyanza","Health Center"
+3123,"Ntyazo Health Center | Nyanza","Health Center"
+3124,"Nyamiyaga Health Center | Nyanza","Health Center"
+3125,"Nyamure Health Center | Nyanza","Health Center"
+3126,"Nyanza Health Center | Nyanza","Health Center"
+3127,"Nyanza HD District Hospital | Nyanza","District Hospital"
+3128,"Prison Mpanga Prison Clinic | Nyanza","Prison Clinic"
+3129,"Prison Nyanza Prison Clinic | Nyanza","Prison Clinic"
+3130,"Ruyenzi Health Center | Nyanza","Health Center"
+3131,"Gakoma Health Center | Gisagara","Health Center"
+3132,"Gakoma HD District Hospital | Gisagara","District Hospital"
+3133,"Gikonko Health Center | Gisagara","Health Center"
+3134,"Gikore Health Center | Gisagara","Health Center"
+3135,"Gisagara Health Center | Gisagara","Health Center"
+3136,"Kansi Health Center | Gisagara","Health Center"
+3137,"Kibayi Health Center | Gisagara","Health Center"
+3138,"Kibilizi Health Center | Gisagara","Health Center"
+3139,"Kibilizi HD District Hospital | Gisagara","District Hospital"
+3140,"Kigembe Health Center | Gisagara","Health Center"
+3141,"Kirarambogo Health Center | Gisagara","Health Center"
+3142,"Mugombwa Health Center | Gisagara","Health Center"
+3143,"Musha Health Center | Gisagara","Health Center"
+3144,"Save Health Center | Gisagara","Health Center"
+3145,"Coko Health Center | Nyaruguru","Health Center"
+3146,"Cyahinda Health Center | Nyaruguru","Health Center"
+3147,"Kabilizi Health Center | Nyaruguru","Health Center"
+3148,"Kibeho Health Center | Nyaruguru","Health Center"
+3149,"Maraba (NYARUGURU) Health Center | Nyaruguru","Health Center"
+3150,"Muganza Health Center | Nyaruguru","Health Center"
+3151,"Munini (NYARUGURU) Health Center | Nyaruguru","Health Center"
+3152,"Munini HD District Hospital | Nyaruguru","District Hospital"
+3153,"Nyabimata Health Center | Nyaruguru","Health Center"
+3154,"Nyamyumba Health Center | Nyaruguru","Health Center"
+3155,"Nyantanga Health Center | Nyaruguru","Health Center"
+3156,"Ruheru Health Center | Nyaruguru","Health Center"
+3157,"Runyombyi Health Center | Nyaruguru","Health Center"
+3158,"Ruramba Health Center | Nyaruguru","Health Center"
+3159,"Busoro-Gishamvu Health Center | Huye","Health Center"
+3160,"BUTARE CHU National Hospital | Huye","National Hospital"
+3161,"CUSP Butare Health Center | Huye","Health Center"
+3162,"Huye Police Health Center | Huye","Health Center"
+3163,"Kabutare HD District Hospital | Huye","District Hospital"
+3164,"Karama Health Center | Huye","Health Center"
+3165,"Kinyamakara Health Center | Huye","Health Center"
+3166,"Matyazo Health Center | Huye","Health Center"
+3167,"Mbazi Health Center | Huye","Health Center"
+3168,"Prison Karubanda Prison Clinic | Huye","Prison Clinic"
+3169,"Rango Health Center | Huye","Health Center"
+3170,"Rubona Health Center | Huye","Health Center"
+3171,"Ruhashya-Rwaniro Health Center | Huye","Health Center"
+3172,"Rusatira-Kinazi Health Center | Huye","Health Center"
+3173,"Rwaniro Health Center | Huye","Health Center"
+3174,"Simbi Health Center | Huye","Health Center"
+3175,"Sovu Health Center | Huye","Health Center"
+3176,"Cyanika (NYAMAGABE) Health Center | Nyamagabe","Health Center"
+3177,"Jenda Health Center | Nyamagabe","Health Center"
+3178,"Kaduha Health Center | Nyamagabe","Health Center"
+3179,"Kaduha HD District Hospital | Nyamagabe","District Hospital"
+3180,"Kigeme Health Center | Nyamagabe","Health Center"
+3181,"Kigeme HD District Hospital | Nyamagabe","District Hospital"
+3182,"Kitabi Health Center | Nyamagabe","Health Center"
+3183,"Mbuga Health Center | Nyamagabe","Health Center"
+3184,"Musebeya Health Center | Nyamagabe","Health Center"
+3185,"Mushubi Health Center | Nyamagabe","Health Center"
+3186,"Ngara Health Center | Nyamagabe","Health Center"
+3187,"Nyamagabe Health Center | Nyamagabe","Health Center"
+3188,"Nyarusiza Health Center | Nyamagabe","Health Center"
+3189,"Nyarwungo Health Center | Nyamagabe","Health Center"
+3190,"Rugege Health Center | Nyamagabe","Health Center"
+3191,"Byimana Health Center | Ruhango","Health Center"
+3192,"Gishweru Health Center | Ruhango","Health Center"
+3193,"Gitwe Health Center | Ruhango","Health Center"
+3194,"Gitwe HD District Hospital | Ruhango","District Hospital"
+3195,"Karambi Health Center | Ruhango","Health Center"
+3196,"Kigoma Health Center | Ruhango","Health Center"
+3197,"Kinazi Health Center | Ruhango","Health Center"
+3198,"Kizibere Health Center | Ruhango","Health Center"
+3199,"Mbuye Health Center | Ruhango","Health Center"
+3200,"Mukoma Health Center | Ruhango","Health Center"
+3201,"Muremure Health Center | Ruhango","Health Center"
+3202,"Muyunzwe Health Center | Ruhango","Health Center"
+3203,"Nyarurama Health Center | Ruhango","Health Center"
+3204,"Ruhango Health Center | Ruhango","Health Center"
+3205,"Birehe Health Center | Muhanga","Health Center"
+3206,"Buramba Health Center | Muhanga","Health Center"
+3207,"Gasovu Health Center | Muhanga","Health Center"
+3208,"Gitarama Health Center | Muhanga","Health Center"
+3209,"Gitega Health Center | Muhanga","Health Center"
+3210,"Kabgayi Health Center | Muhanga","Health Center"
+3211,"Kabgayi HD District Hospital | Muhanga","District Hospital"
+3212,"Kivumu Health Center | Muhanga","Health Center"
+3213,"Mushishiro Health Center | Muhanga","Health Center"
+3214,"Nyabikenke Health Center | Muhanga","Health Center"
+3215,"Nyabinoni Health Center | Muhanga","Health Center"
+3216,"Nyarusange (MUHANGA) Health Center | Muhanga","Health Center"
+3217,"Prison Gitarama Prison Clinic | Muhanga","Prison Clinic"
+3218,"Rutobwe Dispensary | Muhanga","Dispensary"
+3219,"Shyogwe Health Center | Muhanga","Health Center"
+3220,"Cyeru Health Center | Kamonyi","Health Center"
+3221,"Gihara Health Center | Kamonyi","Health Center"
+3222,"Kabuga Health Center | Kamonyi","Health Center"
+3223,"Kamonyi Health Center | Kamonyi","Health Center"
+3224,"Karangara Health Center | Kamonyi","Health Center"
+3225,"Kayenzi Health Center | Kamonyi","Health Center"
+3226,"Kigese Health Center | Kamonyi","Health Center"
+3227,"Mugina Health Center | Kamonyi","Health Center"
+3228,"Musambira Health Center | Kamonyi","Health Center"
+3229,"Nyagihamba Health Center | Kamonyi","Health Center"
+3230,"Remera Rukoma Health Center | Kamonyi","Health Center"
+3231,"Remera Rukoma HD District Hospital | Kamonyi","District Hospital"
+3232,"Biguhu Health Center | Karongi","Health Center"
+3233,"Birambo Health Center | Karongi","Health Center"
+3234,"Bubazi Health Center | Karongi","Health Center"
+3235,"Gatare Health Center | Karongi","Health Center"
+3236,"Gisovu Health Center | Karongi","Health Center"
+3237,"Karongi (Gisunzu) Police Health Center | Karongi","Health Center"
+3238,"Karora Health Center | Karongi","Health Center"
+3239,"Kibuye Dispensary | Karongi","Dispensary"
+3240,"Kibuye HD District Hospital | Karongi","District Hospital"
+3241,"Kirambo Health Center | Karongi","Health Center"
+3242,"Kirinda Dispensary | Karongi","Dispensary"
+3243,"Kirinda HD District Hospital | Karongi","District Hospital"
+3244,"Mpembe Health Center | Karongi","Health Center"
+3245,"Mubuga Health Center | Karongi","Health Center"
+3246,"Mugonero Dispensary | Karongi","Dispensary"
+3247,"Mugonero HD District Hospital | Karongi","District Hospital"
+3248,"Mukungu Health Center | Karongi","Health Center"
+3249,"Munzanga Health Center | Karongi","Health Center"
+3250,"Musango Health Center | Karongi","Health Center"
+3251,"Mwendo Health Center | Karongi","Health Center"
+3252,"Rubengera Health Center | Karongi","Health Center"
+3253,"Rufungo Health Center | Karongi","Health Center"
+3254,"Rugabano Health Center | Karongi","Health Center"
+3255,"Biruyi Health Center | Rutsiro","Health Center"
+3256,"Bitenga  Health Center | Rutsiro","Health Center"
+3257,"Crete Congo Nil Health Center | Rutsiro","Health Center"
+3258,"Cyimbili Health Center | Rutsiro","Health Center"
+3259,"Kabona Health Center | Rutsiro","Health Center"
+3260,"Karumbi Health Center | Rutsiro","Health Center"
+3261,"Kayove Health Center | Rutsiro","Health Center"
+3262,"Kibingo (Rutsiro) Health Center | Rutsiro","Health Center"
+3263,"Kinihira Health Center | Rutsiro","Health Center"
+3264,"Kinunu Health Center | Rutsiro","Health Center"
+3265,"Kivumu Health Center | Rutsiro","Health Center"
+3266,"Mukura Health Center | Rutsiro","Health Center"
+3267,"Murunda Health Center | Rutsiro","Health Center"
+3268,"Murunda HD District Hospital | Rutsiro","District Hospital"
+3269,"Musasa Health Center | Rutsiro","Health Center"
+3270,"Mushubati Health Center | Rutsiro","Health Center"
+3271,"Nyabirasi Health Center | Rutsiro","Health Center"
+3272,"Rutsiro Dispensary | Rutsiro","Dispensary"
+3273,"Busasamana Health Center | Rubavu","Health Center"
+3274,"Byahi Health Center | Rubavu","Health Center"
+3275,"Gacuba II Health Center | Rubavu","Health Center"
+3276,"Gisenyi Health Center | Rubavu","Health Center"
+3277,"Gisenyi HD District Hospital | Rubavu","District Hospital"
+3278,"Karambo Health Center | Rubavu","Health Center"
+3279,"Kigufi Health Center | Rubavu","Health Center"
+3280,"Mudende Health Center | Rubavu","Health Center"
+3281,"Murara Health Center | Rubavu","Health Center"
+3282,"Nyundo Health Center | Rubavu","Health Center"
+3283,"Prison Gisenyi Prison Clinic | Rubavu","Prison Clinic"
+3284,"Arusha Health Center | Nyabihu","Health Center"
+3285,"Bigogwe Health Center | Nyabihu","Health Center"
+3286,"Birembo Health Center | Nyabihu","Health Center"
+3287,"Gakamba Health Center | Nyabihu","Health Center"
+3288,"Jomba Health Center | Nyabihu","Health Center"
+3289,"Kabari Health Center | Nyabihu","Health Center"
+3290,"Kabatwa Health Center | Nyabihu","Health Center"
+3291,"Kareba Health Center | Nyabihu","Health Center"
+3292,"Kora Health Center | Nyabihu","Health Center"
+3293,"Mwiyanike Health Center | Nyabihu","Health Center"
+3294,"Nyakigezi Health Center | Nyabihu","Health Center"
+3295,"Nyakiliba Health Center | Nyabihu","Health Center"
+3296,"Rambura Health Center | Nyabihu","Health Center"
+3297,"Rurembo Health Center | Nyabihu","Health Center"
+3298,"Rwankeri Health Center | Nyabihu","Health Center"
+3299,"Shyira Health Center | Nyabihu","Health Center"
+3300,"Shyira HD District Hospital | Nyabihu","District Hospital"
+3301,"Gashubi Health Center | Ngororero","Health Center"
+3302,"Kabaya Health Center | Ngororero","Health Center"
+3303,"Kabaya HD District Hospital | Ngororero","District Hospital"
+3304,"Muhororo Health Center | Ngororero","Health Center"
+3305,"Muhororo HD District Hospital | Ngororero","District Hospital"
+3306,"Muramba Health Center | Ngororero","Health Center"
+3307,"Ntaganzwa Health Center | Ngororero","Health Center"
+3308,"Ntobwe  Health Center | Ngororero","Health Center"
+3309,"Nyange A Health Center | Ngororero","Health Center"
+3310,"Nyange B Health Center | Ngororero","Health Center"
+3311,"Ramba Health Center | Ngororero","Health Center"
+3312,"Rubaya Health Center | Ngororero","Health Center"
+3313,"Rubona Health Center | Ngororero","Health Center"
+3314,"Rususa Health Center | Ngororero","Health Center"
+3315,"Bugarama Health Center | Rusizi","Health Center"
+3316,"Bweyeye Health Center | Rusizi","Health Center"
+3317,"Cimerwa Health Center | Rusizi","Health Center"
+3318,"Gihundwe Health Center | Rusizi","Health Center"
+3319,"Gihundwe HD District Hospital | Rusizi","District Hospital"
+3320,"Islamic  Health Center | Rusizi","Health Center"
+3321,"Mashesha Health Center | Rusizi","Health Center"
+3322,"Mibilizi Health Center | Rusizi","Health Center"
+3323,"Mibilizi HD District Hospital | Rusizi","District Hospital"
+3324,"Mushaka Health Center | Rusizi","Health Center"
+3325,"Nkanka Health Center | Rusizi","Health Center"
+3326,"Nkombo Health Center | Rusizi","Health Center"
+3327,"Nkungu Health Center | Rusizi","Health Center"
+3328,"Nyabitimbo Health Center | Rusizi","Health Center"
+3329,"Rusizi Health Center | Rusizi","Health Center"
+3330,"Bushenge Health Center | Nyamasheke","Health Center"
+3331,"Bushenge HD District Hospital | Nyamasheke","District Hospital"
+3332,"Gatare Health Center | Nyamasheke","Health Center"
+3333,"Gisakura Health Center | Nyamasheke","Health Center"
+3334,"Hanika (NYAMASHEKE) Health Center | Nyamasheke","Health Center"
+3335,"Kamonyi Health Center | Nyamasheke","Health Center"
+3336,"Karambi Health Center | Nyamasheke","Health Center"
+3337,"Karengera Health Center | Nyamasheke","Health Center"
+3338,"Kibingo Health Center | Nyamasheke","Health Center"
+3339,"Kibogora Health Center | Nyamasheke","Health Center"
+3340,"Kibogora HD District Hospital | Nyamasheke","District Hospital"
+3341,"Mugera Health Center | Nyamasheke","Health Center"
+3342,"Mukoma Health Center | Nyamasheke","Health Center"
+3343,"Muyange Health Center | Nyamasheke","Health Center"
+3344,"Mwezi Health Center | Nyamasheke","Health Center"
+3345,"Nyamasheke Health Center | Nyamasheke","Health Center"
+3346,"Rangiro Health Center | Nyamasheke","Health Center"
+3347,"Ruheru Health Center | Nyamasheke","Health Center"
+3348,"Yove Health Center | Nyamasheke","Health Center"
+3349,"Buyoga Health Center | Rulindo","Health Center"
+3350,"Kajevuba Health Center | Rulindo","Health Center"
+3351,"Kinihira Health Center | Rulindo","Health Center"
+3352,"Kiyanza Health Center | Rulindo","Health Center"
+3353,"Masoro Health Center | Rulindo","Health Center"
+3354,"Murambi Health Center | Rulindo","Health Center"
+3355,"Muyanza Health Center | Rulindo","Health Center"
+3356,"Remera-Mbogo Health Center | Rulindo","Health Center"
+3357,"Rukozo Health Center | Rulindo","Health Center"
+3358,"Rulindo Health Center | Rulindo","Health Center"
+3359,"Rutonde Health Center | Rulindo","Health Center"
+3360,"Rutongo HD District Hospital | Rulindo","District Hospital"
+3361,"Rwahi Health Center | Rulindo","Health Center"
+3362,"Shyorongi Health Center | Rulindo","Health Center"
+3363,"Tare Health Center | Rulindo","Health Center"
+3364,"Tumba Health Center | Rulindo","Health Center"
+3365,"Busengo Health Center | Gakenke","Health Center"
+3366,"Bushoka Health Center | Gakenke","Health Center"
+3367,"Coko (Ruli) Health Center | Gakenke","Health Center"
+3368,"Cyabingo Health Center | Gakenke","Health Center"
+3369,"Gatonde Health Center | Gakenke","Health Center"
+3370,"Janja Health Center | Gakenke","Health Center"
+3371,"Karambo Health Center | Gakenke","Health Center"
+3372,"Mataba Health Center | Gakenke","Health Center"
+3373,"Muhondo Health Center | Gakenke","Health Center"
+3374,"Nemba Dispensary | Gakenke","Dispensary"
+3375,"Nemba HD District Hospital | Gakenke","District Hospital"
+3376,"Nyange (Ruli) Health Center | Gakenke","Health Center"
+3377,"Nyundo Health Center | Gakenke","Health Center"
+3378,"Rukura Health Center | Gakenke","Health Center"
+3379,"Ruli Health Center | Gakenke","Health Center"
+3380,"Ruli HD District Hospital | Gakenke","District Hospital"
+3381,"Rushashi Health Center | Gakenke","Health Center"
+3382,"Rusoro Health Center | Gakenke","Health Center"
+3383,"Rutake Health Center | Gakenke","Health Center"
+3384,"Rutenderi Health Center | Gakenke","Health Center"
+3385,"Rwankuba Health Center | Gakenke","Health Center"
+3386,"Bisate Health Center | Musanze","Health Center"
+3387,"Busogo Health Center | Musanze","Health Center"
+3388,"Gasiza Health Center | Musanze","Health Center"
+3389,"Kabere Dispensary | Musanze","Dispensary"
+3390,"Karwasa Health Center | Musanze","Health Center"
+3391,"Kinigi Health Center | Musanze","Health Center"
+3392,"Murandi Health Center | Musanze","Health Center"
+3393,"Nyakinama Health Center | Musanze","Health Center"
+3394,"Ruhengeri Dispensary | Musanze","Dispensary"
+3395,"Ruhengeri HD District Hospital | Musanze","District Hospital"
+3396,"Rwaza Health Center | Musanze","Health Center"
+3397,"Shingiro Health Center | Musanze","Health Center"
+3398,"Bungwe Health Center | Burera","Health Center"
+3399,"Butaro Health Center | Burera","Health Center"
+3400,"Butaro HD District Hospital | Burera","District Hospital"
+3401,"Gitare Health Center | Burera","Health Center"
+3402,"Kinoni Health Center | Burera","Health Center"
+3403,"Kinyababa Health Center | Burera","Health Center"
+3404,"Kirambo Health Center | Burera","Health Center"
+3405,"Kivuye Health Center | Burera","Health Center"
+3406,"Mucaca Health Center | Burera","Health Center"
+3407,"Ntaruka Health Center | Burera","Health Center"
+3408,"Nyamugali Health Center | Burera","Health Center"
+3409,"Ruhunde Health Center | Burera","Health Center"
+3410,"Rusasa Health Center | Burera","Health Center"
+3411,"Bushara Health Center | Gicumbi","Health Center"
+3412,"Bwisige Health Center | Gicumbi","Health Center"
+3413,"Byumba Health Center | Gicumbi","Health Center"
+3414,"Byumba HD District Hospital | Gicumbi","District Hospital"
+3415,"Gisiza Health Center | Gicumbi","Health Center"
+3416,"Giti Health Center | Gicumbi","Health Center"
+3417,"Kigogo Health Center | Gicumbi","Health Center"
+3418,"Manyagiro Health Center | Gicumbi","Health Center"
+3419,"Miyove Health Center | Gicumbi","Health Center"
+3420,"Muhondo Health Center | Gicumbi","Health Center"
+3421,"Muko Health Center | Gicumbi","Health Center"
+3422,"Mukono Health Center | Gicumbi","Health Center"
+3423,"Mulindi Health Center | Gicumbi","Health Center"
+3424,"Munyinya Health Center | Gicumbi","Health Center"
+3425,"Musenyi Health Center | Gicumbi","Health Center"
+3426,"Rubaya Health Center | Gicumbi","Health Center"
+3427,"Ruhenda Health Center | Gicumbi","Health Center"
+3428,"Rushaki Health Center | Gicumbi","Health Center"
+3429,"Rutare (Gicumbi) Health Center | Gicumbi","Health Center"
+3430,"Rwesero Health Center | Gicumbi","Health Center"
+3431,"Tanda Health Center | Gicumbi","Health Center"
+3432,"Gishari/ Police Dispensary | Rwamagana","Dispensary"
+3433,"Karenge Health Center | Rwamagana","Health Center"
+3434,"Munyaga Health Center | Rwamagana","Health Center"
+3435,"Musha Health Center | Rwamagana","Health Center"
+3436,"Muyumbu Health Center | Rwamagana","Health Center"
+3437,"Nyagasambu Health Center | Rwamagana","Health Center"
+3438,"Nyakaliro Health Center | Rwamagana","Health Center"
+3439,"Nzige Health Center | Rwamagana","Health Center"
+3440,"Rubona Health Center | Rwamagana","Health Center"
+3441,"Ruhunda Health Center | Rwamagana","Health Center"
+3442,"Rwamagana Health Center | Rwamagana","Health Center"
+3443,"Rwamagana HD District Hospital | Rwamagana","District Hospital"
+3444,"Bugaragara Health Center | Nyagatare","Health Center"
+3445,"Cyabayaga Health Center | Nyagatare","Health Center"
+3446,"Cyondo Health Center | Nyagatare","Health Center"
+3447,"Kabuga Health Center | Nyagatare","Health Center"
+3448,"Kagitumba Health Center | Nyagatare","Health Center"
+3449,"Karangazi Health Center | Nyagatare","Health Center"
+3450,"Katabagemu Health Center | Nyagatare","Health Center"
+3451,"Matimba Health Center | Nyagatare","Health Center"
+3452,"Mimuri Health Center | Nyagatare","Health Center"
+3453,"Muhambo Health Center | Nyagatare","Health Center"
+3454,"Ntoma Health Center | Nyagatare","Health Center"
+3455,"Nyabwishongwezi Health Center | Nyagatare","Health Center"
+3456,"Nyagahita Health Center | Nyagatare","Health Center"
+3457,"Nyagatare Health Center | Nyagatare","Health Center"
+3458,"Nyagatare HD District Hospital | Nyagatare","District Hospital"
+3459,"Nyarurema Health Center | Nyagatare","Health Center"
+3460,"Rukomo Health Center | Nyagatare","Health Center"
+3461,"Rurenge Health Center | Nyagatare","Health Center"
+3462,"Rwempasha Health Center | Nyagatare","Health Center"
+3463,"Tabagwe Health Center | Nyagatare","Health Center"
+3464,"Bugarura Health Center | Gatsibo","Health Center"
+3465,"Gakenke Health Center | Gatsibo","Health Center"
+3466,"Gasange Health Center | Gatsibo","Health Center"
+3467,"Gituza Health Center | Gatsibo","Health Center"
+3468,"Humure Health Center | Gatsibo","Health Center"
+3469,"Kabarore Health Center | Gatsibo","Health Center"
+3470,"Kageyo Health Center | Gatsibo","Health Center"
+3471,"Kibondo Health Center | Gatsibo","Health Center"
+3472,"Kiziguro Health Center | Gatsibo","Health Center"
+3473,"Kiziguro HD District Hospital | Gatsibo","District Hospital"
+3474,"Muhura Health Center | Gatsibo","Health Center"
+3475,"Ngarama Health Center | Gatsibo","Health Center"
+3476,"Ngarama HD District Hospital | Gatsibo","District Hospital"
+3477,"Nyagahanga Health Center | Gatsibo","Health Center"
+3478,"Nyagihanga Health Center | Gatsibo","Health Center"
+3479,"Rugarama Health Center | Gatsibo","Health Center"
+3480,"Rwembogo Health Center | Gatsibo","Health Center"
+3481,"Rwimitereri Health Center | Gatsibo","Health Center"
+3482,"Cyarubare Health Center | Kayonza","Health Center"
+3483,"Gahini Health Center | Kayonza","Health Center"
+3484,"Gahini HD District Hospital | Kayonza","District Hospital"
+3485,"Kabarondo Health Center | Kayonza","Health Center"
+3486,"Karama Health Center | Kayonza","Health Center"
+3487,"Mukarange Health Center | Kayonza","Health Center"
+3488,"Ndego Health Center | Kayonza","Health Center"
+3489,"Nyakabungo Health Center | Kayonza","Health Center"
+3490,"Nyamirama Health Center | Kayonza","Health Center"
+3491,"Rukara Health Center | Kayonza","Health Center"
+3492,"Ruramira Health Center | Kayonza","Health Center"
+3493,"Rutare Health Center | Kayonza","Health Center"
+3494,"Rwinkwavu Health Center | Kayonza","Health Center"
+3495,"Rwinkwavu HD District Hospital | Kayonza","District Hospital"
+3496,"Ryamanyoni Health Center | Kayonza","Health Center"
+3497,"Bukora Health Center | Kirehe","Health Center"
+3498,"Gahara Health Center | Kirehe","Health Center"
+3499,"Gashongora Health Center | Kirehe","Health Center"
+3500,"Kabuye (Kirehe) Dispensary | Kirehe","Dispensary"
+3501,"Kirehe Health Center | Kirehe","Health Center"
+3502,"Kirehe HD District Hospital | Kirehe","District Hospital"
+3503,"Mulindi Health Center | Kirehe","Health Center"
+3504,"Musaza Health Center | Kirehe","Health Center"
+3505,"Mushikiri Dispensary | Kirehe","Dispensary"
+3506,"Nasho Health Center | Kirehe","Health Center"
+3507,"Ntaruka Health Center | Kirehe","Health Center"
+3508,"Nyabitare Health Center | Kirehe","Health Center"
+3509,"Nyarubuye (KIREHE) Health Center | Kirehe","Health Center"
+3510,"Rusumo Health Center | Kirehe","Health Center"
+3511,"Gituku Health Center | Ngoma","Health Center"
+3512,"Jarama Health Center | Ngoma","Health Center"
+3513,"Kibungo Health Center | Ngoma","Health Center"
+3514,"Kibungo HD District Hospital | Ngoma","District Hospital"
+3515,"Kirwa Health Center | Ngoma","Health Center"
+3516,"Mutenderi Health Center | Ngoma","Health Center"
+3517,"Nyange Health Center | Ngoma","Health Center"
+3518,"Remera Health Center | Ngoma","Health Center"
+3519,"Rukira Health Center | Ngoma","Health Center"
+3520,"Rukoma Sake Health Center | Ngoma","Health Center"
+3521,"Rukumberi Health Center | Ngoma","Health Center"
+3522,"Sangaza Health Center | Ngoma","Health Center"
+3523,"Zaza Health Center | Ngoma","Health Center"
+3524,"Gakurazo Health Center | Bugesera","Health Center"
+3525,"Gashora Health Center | Bugesera","Health Center"
+3526,"Gihinga Health Center | Bugesera","Health Center"
+3527,"Kamabuye Health Center | Bugesera","Health Center"
+3528,"Mareba Health Center | Bugesera","Health Center"
+3529,"Mayange (BUGESERA) Health Center | Bugesera","Health Center"
+3530,"Mwogo Health Center | Bugesera","Health Center"
+3531,"Nyamata Health Center | Bugesera","Health Center"
+3532,"Nyamata HD District Hospital | Bugesera","District Hospital"
+3533,"Nzangwa Health Center | Bugesera","Health Center"
+3534,"Prison Rilima (via CS) Prison Clinic | Bugesera","Prison Clinic"
+3535,"Rilima Health Center | Bugesera","Health Center"
+3536,"Ruhuha Health Center | Bugesera","Health Center"
+3537,"Camp Gihembe Health Center | Gicumbi","Health Center"
+3538,"Kiziba Camp Health Center | Karongi","Health Center"
+3539,"Camp Nyabiheke Health Center | Gatsibo","Health Center"
+3540,"CMedicoSocial Dispensary | Nyarugenge","Dispensary"
+3541,"Croix du Sud Clinic/Cabinet Medical | Nyarugenge","Clinic/Cabinet Medical"
+3542,"Prison Gasaka Prison Clinic | Nyamagabe","Prison Clinic"
+3543,"Gashonyi Dispensary | Ngororero","Dispensary"
+3544,"Gasiza Dispensary | Ngororero","Dispensary"
+3545,"Hindiro Dispensary | Ngororero","Dispensary"
+3546,"Mabuye Dispensary | Ngororero","Dispensary"
+3547,"Rugari Dispensary | Ngororero","Dispensary"
+3548,"Kamubuga Health Post | Gakenke","Health Post"
+3549,"Prison Gikongoro Prison Clinic | Nyamagabe","Prison Clinic"
+3550,"Prison Rwandex Prison Clinic | Huye","Prison Clinic"
+3551,"Bugarama Health Post | Nyamagabe","Health Post"
+3552,"Buhabwa Health Post | Kayonza","Health Post"
+3553,"Gahengeri Health Center | Rwamagana","Health Center"
+3554,"Kageyo (Kayonza) Health Post | Kayonza","Health Post"
+3555,"Ruhinga Health Post | Gakenke","Health Post"
+3556,"Rwerere Health Center | Burera","Health Center"
+3557,"Gihogwe Health Center | Gasabo","Health Center"
+3558,"Kisaro Health Center | Rulindo","Health Center"
+3559,"Marembo Health Center | Rulindo","Health Center"
+3560,"Mushongi Health Center | Rulindo","Health Center"
+3561,"KIDOMO Health Post | Gakenke","Health Post"
+3562,"MUGUNGA Health Post | Gakenke","Health Post"
+3563,"SERERI Health Post | Gakenke","Health Post"
+3564,"AMIZERO Dispensary | Kamonyi","Dispensary"
+3565,"ANUPHIL Dispensary | Kamonyi","Dispensary"
+3566,"KAMONYI Dispensary | Kamonyi","Dispensary"
+3567,"GACURABWENGE Dispensary | Kamonyi","Dispensary"
+3568,"IWACU Dispensary | Kamonyi","Dispensary"
+3569,"INSHUTI NZIZA  Dispensary | Kamonyi","Dispensary"
+3570,"UBUZIMA BWIZA Dispensary | Kamonyi","Dispensary"
+3571,"KAYONZA Dispensary | Kayonza","Dispensary"
+3572,"KABARONDO (PRIVE) Dispensary | Kayonza","Dispensary"
+3573,"SEVER Dispensary | Kayonza","Dispensary"
+3574,"UBUMWE Dispensary | Kayonza","Dispensary"
+3575,"INFIRMERIE ACADEMY  Dispensary | Musanze","Dispensary"
+3576,"PRISON RUHENGERI Dispensary | Musanze","Dispensary"
+3577,"SHEMA Dispensary | Nyabihu","Dispensary"
+3578,"KIBUMBWE Health Center | Nyamagabe","Health Center"
+3579,"MAHEMBE Health Post | Nyamasheke","Health Post"
+3580,"AVEGA RWAMAGANA Clinic/Cabinet Medical | Rwamagana","Clinic/Cabinet Medical"
+3581,"DUFASHANYE Dispensary | Rwamagana","Dispensary"
+3582,"LA CONFIANCE Dispensary | Rwamagana","Dispensary"
+3583,"PRISON Nsinda Prison Clinic | Rwamagana","Prison Clinic"
+3584,"Nduba Health Center | Gasabo","Health Center"
+3585,"Gikomero Health Center | Gasabo","Health Center"
+3586,"Nyarugunga Health Center | Kicukiro","Health Center"
+3587,"Gitoki Health Center | Gatsibo","Health Center"
+3588,"MUGANO Health Center | Nyamagabe","Health Center"
+3589,"Kavumu Health Center | Nyamagabe","Health Center"
+3590,"Ngange Health Center | Nyamasheke","Health Center"
+3591,"Prison Cyangugu Prison Clinic | Rusizi","Prison Clinic"
+3592,"Murambi Health Center | Rwamagana","Health Center"
+3593,"Gahunga Health Center | Burera","Health Center"
+3594,"Ngoma Health Center | Nyaruguru","Health Center"
+3595,"Kivu Health Center | Nyaruguru","Health Center"
+3596,"Nyarusange (NYANZA) Health Center | Nyanza","Health Center"
+3597,"Kageyo (Kayonza) Health Center | Kayonza","Health Center"
+3598,"Prison Nyagatare Prison Clinic | Nyagatare","Prison Clinic"
+3599,"Prison Kibungo Prison Clinic | Ngoma","Prison Clinic"
+3600,"Prison Butare Prison Clinic | Huye","Prison Clinic"
+3601,"Gahombo Health Center | Nyanza","Health Center"
+3602,"Hanika (NYANZA) Health Center | Nyanza","Health Center"
+3603,"GASHAKI Health Center | Musanze","Health Center"
+3604,"Juru Health Center | Bugesera","Health Center"
+3605,"NGERUKA Health Center | Bugesera","Health Center"
+3606,"Cyanika (BURERA) Health Center | Burera","Health Center"
+3607,"Gatsibo Health Center | Gatsibo","Health Center"
+3608,"Mayange (GATSIBO) Health Post | Gatsibo","Health Post"
+3609,"Mbogo Health Post | Gatsibo","Health Post"
+3610,"Munini (GATSIBO) Health Post | Gatsibo","Health Post"
+3611,"Nyabiheke Health Center | Gatsibo","Health Center"
+3612,"Nyabisindu Health Post | Gatsibo","Health Post"
+3613,"Gishubi Health Center | Gisagara","Health Center"
+3614,"Muzenga Communal FOSA | Gisagara","Communal FOSA"
+3615,"BUKOMEYE (MUKURA) Communal FOSA | Huye","Communal FOSA"
+3616,"GITOVU (KINAZI) Communal FOSA | Huye","Communal FOSA"
+3617,"Maraba (HUYE) Health Center | Huye","Health Center"
+3618,"Bisesero Health Center | Karongi","Health Center"
+3619,"Kabarondo Dispensaire Prive Dispensary | Kayonza","Dispensary"
+3620,"Kabare Health Post | Kayonza","Health Post"
+3621,"Kabura Health Post | Kayonza","Health Post"
+3622,"Gasakuza Health Post | Musanze","Health Post"
+3623,"Kimonyi Dispensary Dispensary | Musanze","Dispensary"
+3624,"Muhoza Health Center | Musanze","Health Center"
+3625,"Nyarubuye (MUSANZE) Health Post | Musanze","Health Post"
+3626,"Gatseta Health Post | Ngoma","Health Post"
+3627,"Muhurire Health Post | Ngoma","Health Post"
+3628,"Nyagasozi Health Post | Ngoma","Health Post"
+3629,"District of Bugesera","District"
+3630,"District of Burera","District"
+3631,"District of Gakenke","District"
+3632,"District of Gasabo","District"
+3633,"District of Gatsibo","District"
+3634,"District of Gicumbi","District"
+3635,"District of Gisagara","District"
+3636,"District of Huye","District"
+3637,"District of Kamonyi","District"
+3638,"District of Karongi","District"
+3639,"District of Kayonza","District"
+3640,"District of Kicukiro","District"
+3641,"District of Kirehe","District"
+3642,"District of Muhanga","District"
+3643,"District of Musanze","District"
+3644,"District of Ngoma","District"
+3645,"District of Ngororero","District"
+3646,"District of Nyabihu","District"
+3647,"District of Nyagatare","District"
+3648,"District of Nyamagabe","District"
+3649,"District of Nyamasheke","District"
+3650,"District of Nyanza","District"
+3651,"District of Nyarugenge","District"
+3652,"District of Nyaruguru","District"
+3653,"District of Rubavu","District"
+3654,"District of Ruhango","District"
+3655,"District of Rulindo","District"
+3656,"District of Rusizi","District"
+3657,"District of Rutsiro","District"
+3658,"District of Rwamagana","District"
+3659,"Abt Associates","NGO"
+3660,"Access Project","NGO"
+3661,"AFRICARE","NGO"
+3662,"AIDS Healthcare Foundation","NGO"
+3663,"American Refugee Committee","NGO"
+3664,"American Society for Clinical Pathology","NGO"
+3665,"APHL","NGO"
+3666,"ASM","NGO"
+3667,"Avocat sans Frontiers","NGO"
+3668,"AVSI","NGO"
+3669,"BUFMAR","NGO"
+3670,"BTC/CTB","Bilateral"
+3671,"Care","NGO"
+3672,"CCHIPs","NGO"
+3673,"Catholic Blinden Mission","NGO"
+3674,"CHF","NGO"
+3675,"Compassion Int'l","NGO"
+3676,"Concern","NGO"
+3677,"Catholic Federation","NGO"
+3678,"Clinton Health Access Initiative (CHAI)","NGO"
+3679,"Protestant Federation","NGO"
+3680,"Catholic Relief Services (CRS)","NGO"
+3681,"Diane Fossey Gorilla Fund","NGO"
+3682,"Drew Cares","NGO"
+3683,"Educational Development Center","NGO"
+3684,"EGPAF","NGO"
+3685,"Engender Health","NGO"
+3686,"EIP","NGO"
+3687,"Family Health International (FHI)","NGO"
+3688,"Futures Group","NGO"
+3689,"Global Health Fellows Program","NGO"
+3690,"Geneva global","NGO"
+3691,"German cooperation (GTZ, KfW, DED, CIM, InWent)","Bilateral"
+3692,"HDP (ex Memisa Cordaid)","NGO"
+3693,"Handicap International","NGO"
+3694,"Health Unlimited","NGO"
+3695,"ICAP","NGO"
+3696,"ICF MACRO","NGO"
+3697,"IHV","NGO"
+3698,"Imbuto Foundation/PACFA","NGO"
+3699,"International Rescue Committee (IRC)","NGO"
+3700,"Interchurch","NGO"
+3701,"Intrahealth","NGO"
+3702,"Johanitter Unfall Hilfe","NGO"
+3703,"JHPIEGO","NGO"
+3704,"JSI","NGO"
+3705,"Krankenhaus Rwanda","NGO"
+3706,"Land O' Lakes","NGO"
+3707,"Manos Unidas","NGO"
+3708,"Medicus Mundi","NGO"
+3709,"Millennium Villages Project","NGO"
+3710,"Management Sciences for Health (MSH)","NGO"
+3711,"NYS AIDS Institute/HRI","NGO"
+3712,"Partners in Health (PIH)","NGO"
+3713,"ProFemme Twese Hamwe","NGO"
+3714,"Projet San Francisco","NGO"
+3715,"Population Services International (PSI)","NGO"
+3716,"Red Cross Rwanda","NGO"
+3717,"Rwanda Purpose Driven Ministries/PEACE Plan","NGO"
+3718,"RTI","NGO"
+3719,"Save the Children UK","NGO"
+3720,"SCMS","NGO"
+3721,"Swiss Development Cooperation","Bilateral"
+3722,"Social & Scientific Systems Inc./MEMS Project","NGO"
+3723,"SPREAD","NGO"
+3724,"Tulane University","NGO"
+3725,"UK FRIENDS","NGO"
+3726,"University of Colorado","NGO"
+3727,"USP Drug Quality Institute","NGO"
+3728,"Wageningen University Netherlands","NGO"
+3729,"World Relief","NGO"
+3730,"World Vision","NGO"
+3731,"FXB International","NGO"
+3732,"University of Western Ontario","NGO"
+3733,"Vision for a Nation","NGO"
+3734,"Voxiva","NGO"
+3901,"UNHCR","Multilateral"
+3902,"Africa Humanitarian Action (AHA)","NGO"
+3908,"Clinical and Laboratory Standards Institute (CLSI)","NGO"
+3909,"Adaptive Eyewear","NGO"
+3910,"Food and Agriculture Organization of the United Nations (FAO)","Multilateral"
+3911,"UNESCO","Multilateral"
+3912,"International Labor Organization (ILO)","Multilateral"
+3913,"AABB","NGO"
+3914,"PACKARD FOUNDATION","NGO"
+3918,"CLSI","NGO"
+3920,"PATH","NGO"
+3923,"MINECOFIN","Central Govt Revenue"
+3924,"Rwanda Biomedical Center","Parastatal"
+3929,"Catholic Relief Services (CRS)","NGO"
+3930,"CARE","NGO"
+3932,"AEE","NGO"
+3933,"ADEPR","NGO"
+3935,"CARITAS","NGO"
+3936,"DUHAMIC","NGO"
+3938,"WIF","NGO"
+3939,"WE-ACTx for HOPE","NGO"
+3940,"URUNANA","NGO"
+3941,"SWAA","NGO"
+3942,"RWAMREC","NGO"
+3943,"RRP+","NGO"
+3944,"PAMASOR","NGO"
+3945,"ICYUZUZO","NGO"
+3946,"HAGURUKA","NGO"
+3948,"EPR","NGO"
+3951,"ARCT RUHUKA","NGO"
+3954,"Ministry of Health","MoH"
+3969,"Scottish Government","Bilateral"
+3973,"IRC","NGO"
+3977,"Concern Worldwide","NGO"
+3978,"Concern Worldwide Rwanda, International Rescue Committee (IRC), World Relief ","NGO"
+3980,"Chen Yet-Sen Family Foundation","NGO"
+3981,"Education Development Center (EDC)","NGO"
+3984,"Janja Health Center/Gakenke","Health Center"
+3985,"NURFOM","NGO"
+3986,"Kigali Health Institute","Government"
+3987,"Kigali Institute of Science and Technology","Government"
+3994,"Wyman Worldwide Health Partners (WWHPS)","NGO"
+4003,"USG - PEPFAR","Bilateral"
+4011,"Technical Assistants/CDLS","Government"
+4013,"German Cooperation (kfw)","Bilateral"
+4014,"District of Bugesera - Administration Office","District"
+4015,"District of Burera - Administration Office","District"
+4016,"District of Gakenke - Administration Office","District"
+4017,"District of Gasabo - Administration Office","District"
+4018,"District of Gatsibo - Administration Office","District"
+4019,"District of Gicumbi - Administration Office","District"
+4020,"District of Gisagara - Administration Office","District"
+4021,"District of Huye - Administration Office","District"
+4022,"District of Kamonyi - Administration Office","District"
+4023,"District of Karongi - Administration Office","District"
+4024,"District of Kayonza - Administration Office","District"
+4025,"District of Kicukiro - Administration Office","District"
+4026,"District of Kirehe - Administration Office","District"
+4027,"District of Muhanga - Administration Office","District"
+4028,"District of Musanze - Administration Office","District"
+4029,"District of Ngoma - Administration Office","District"
+4030,"District of Ngororero - Administration Office","District"
+4031,"District of Nyabihu - Administration Office","District"
+4032,"District of Nyagatare - Administration Office","District"
+4033,"District of Nyamagabe - Administration Office","District"
+4034,"District of Nyamasheke - Administration Office","District"
+4035,"District of Nyanza - Administration Office","District"
+4036,"District of Nyarugenge - Administration Office","District"
+4037,"District of Nyaruguru - Administration Office","District"
+4038,"District of Rubavu - Administration Office","District"
+4039,"District of Ruhango - Administration Office","District"
+4040,"District of Rulindo - Administration Office","District"
+4041,"District of Rusizi - Administration Office","District"
+4042,"District of Rutsiro - Administration Office","District"
+4043,"District of Rwamagana - Administration Office","District"
+4045,"HRSA/PEPFAR","Bilateral"
+4047,"All districts","District"
+4049,"German Cooperation (DED)","Bilateral"
+4051,"German Cooperation (GTZ)","Bilateral"
+4053,"Bamporeze","NGO"
+4054,"ARBEF","NGO"
+4055,"CARREFOUR","NGO"
+4056,"PROJET UBUZIMA","NGO"
+4059,"National Nursing Association (in Rwanda)","Government"
+4060,"National Nursing Unit (in Rwanda)","Government"
+4061,"National Nursing Council (MOH Rwanda)","Government"
+4062,"Nursing Schools (MOH / MINEDUC Rwanda)","Government"
+4063,"Health Facilities","Health Center"
+4065,"All District Hospitals and Health Centers","District Hospital"
+4069,"2 National referral hospitals, 1 neuropsychiatric hospital, 9 district hospitals, 44 health centers, 3 local NGOs and 1 central level institution ( UPDC)","National Hospital"
+4076,"TRAC Plus / HAS","MoH"
+4093,"USG","Bilateral"
+4101,"Rockefeller Foundation","NGO"
+4103,"German Cooperation (GTZ, DED)","Bilateral"
+4106,"ATRACO","NGO"
+4107,"RECO-RWASCO","Government"
+4108,"INTERSEC","NGO"
+4109,"Rwanda Health Communication Center (RHCC)","Government"
+4111,"GF TB NSA","Multilateral"
+4118,"BIT STEP","NGO"
+4121,,"Bilateral"
+4122,"RECETTES SCPS","MoH"
+4134,"Brothers of Charity","NGO"
+4140,"FAWE Project","NGO"
+4142,"Rwanda Women Network/UNIFEM","Multilateral"
+4145,"German Cooperation (DED, CIM)","Bilateral"
+4150,"Reproductive Health Trust Fund","NGO"
+4151,"Sturback Coffee Company","NGO"
+4152,"European Commission","Multilateral"
+4153,"Rwanda Women Network","NGO"
+4158,"International Resources Group (IRG)","NGO"
+4159,"Durham Technical Community College (DTCC)","NGO"
+4161,"Anne Duffey Community Foundation of New Jersey","NGO"
+4163,"American Society for Microbiology","NGO"
+4164,"American Association of Blood Banks","NGO"
+4166,"ACDI/VOCA","NGO"
+4169,"CS-VCTI-ARV's","Government"
+4171,"HC-HOSPITALS","Health Center"
+4173,"MOH-UPDC","MoH"
+4174,"PEV","Government"
+4175,"MIGEPROF","Other ministries"
+4180,"MOH-CAAC","MoH"
+4182,"PR","MoH"
+4184,"RALGA","Government"
+4187,"MOH-COMMUN","MoH"
+4188,"MOH-M E","MoH"
+4189,"MOH-PHARMACIE","MoH"
+4190,"MOH-INTEGRATION","MoH"
+4192,"CHD-MOH","MoH"
+4193,"CNJR","Government"
+4194,"PBF-MOH","MoH"
+4195,"DH-HC","District Hospital"
+4196,"Nyanza District (Health Unit and District Pharmacy)","District"
+4197,"Vision Jeunesse Nouvelle","NGO"
+4199,"St Francois Rusizi Health Center (HC)","Health Center"
+4200,"Solidarity Center","NGO"
+4201,"Ngobokadufatanye Cooperative ","NGO"
+4202,"Rusizi PLHIV Cluster","NGO"
+4203,"Rusizi Health Post","Health Post"
+4204,"Rusizi Low Income Women (LIW) Cluster","NGO"
+4205,"Cooperative des Femmes de Mururu (COFEM) ","NGO"
+4206,"CoopÃƒÂ©rative de DÃƒÂ©veloppement de la PÃƒÂªche au Lac Kivu (CODEPEK) ","NGO"
+4207,"Rusizi Fishers Cluster","NGO"
+4208,"Rubaya Health Center (HC)","Health Center"
+4209,"Programme RÃƒÂ©gional de Formation et d??changes pour le DÃƒÂ©veloppement (PREFED)","NGO"
+4210,"North Star Foundation","NGO"
+4211,"Gihundwe Health Center (HC)","Health Center"
+4213,"Association des DÃƒÂ©mobilisÃƒÂ©s pour le DÃƒÂ©veloppement, la lutte contre le SIDA et la Promotion de la Culture Rwandaise (ADSPCR) ","NGO"
+4214,"Association de SolidaritÃƒÂ© des Femmes Rwandaises (ASOFERWA) ","NGO"
+4215,"To be determined (local association/cooperative)","NGO"
+4216,"Ruhango District (Health Unit)","District"
+4217,"Ihoreremunyarwanda Association","NGO"
+4218,"Howard University","NGO"
+4219,"Gikongoro Central Prison","Prison Clinic"
+4220,"Cooperative des PÃƒÂªcheurs du Lac Kivu (COOPELAK) ","NGO"
+4221,"Gisenyi Health Center (HC)","Health Center"
+4222,"Tuvuge Ibyayo Cooperative","NGO"
+4223,"Kanombe Military Hospital","Military Hospital"
+4224,"Byumba Diocese","District"
+4225,"Gihogwe Health Center (HC)","Health Center"
+4227,"CoopÃƒÂ©rative de Production du Riz de Bugarama (COODIPRIB) ","NGO"
+4228,"Abishyizehamwe Association","NGO"
+4229,"Rusizi District (Health Unit)","District"
+4230,"Association des Chauffeurs des Poids Lourds au Rwanda (ACPLRWA)","NGO"
+4231,"Association pour l'EspÃƒÂ©rance des Taxis Moto au Rwanda (ASSETAMORWA)","NGO"
+4232,"Bugarama Islamic Health Center (HC)","Health Center"
+4234,"Projet San Francisco (PSF)","NGO"
+4236,"Kigali Low Income Women (LIW) cluster","NGO"
+4237,"Gisenyi PLHIV Cluster","NGO"
+4238,"Gisenyi Fisher's Cluster","NGO"
+4239,"Gikondo Health Post","Health Post"
+4240,"Gatuna Churches cluster","NGO"
+4241,"Gatsata Health Post","Health Post"
+4242,"Rwanda Development Board (RBD)/ORTPN","Government"
+4243,"DAI","NGO"
+4244,"Nyamagabe District (Health Unit)","District"
+4245,"Bugarama PLHIV cluster","NGO"
+4246,"Bugarama Low Income Women (LIW) cluster","NGO"
+4247,"Biryogo Socio-Medical Center (SMC)","Health Center"
+4248,"Coordinated Procurement and Distribution System","NGO"
+4249,"Busanza Health Center (HC)","Health Center"
+4250,"Pharmacy Task Force","MoH"
+4251,"Districts-All","District"
+4252,"Johns Hopkins University (JHU)","NGO"
+4254,"MOH - HMIS","MoH"
+4255,"MOH-CBHI","MoH"
+4256,"MOH-HR","MoH"
+4257,"National Medical Council of Rwanda","Government"
+4258,"Civil Society Organizations","NGO"
+4259,"MINILOC-NDIS","Other ministries"
+4260,"TracPlus - PNLP Malaria","MoH"
+4263,"Kigali Youth Cluster","NGO"
+4265,"Muhari Health Post","Health Post"
+4266,"UPDC-MOH","MoH"
+4267,"MININTER-PRISONS","Other ministries"
+4272,"HOP-CS","NGO"
+4273,"PMU-","Government"
+4274,"CTAMS-MOH","MoH"
+4275,"Centre de RÃƒÂ©habilitation et de RÃƒÂ©intÃƒÂ©gration des handicapÃƒÂ©s de Muhanga","NGO"
+4276,"USS-DS","Bilateral"
+4279,"ESP-UNR-","Multilateral"
+4282,"CCM","Government"
+4284,"HOP-HC","NGO"
+4286,"Cellule d'Approche Contractuelle (CAAC)","MoH"
+4287,"Partners In Health","NGO"
+4288,"globalislocal","NGO"
+4289,"Dorris Duke Charitable Trust","NGO"
+4290,"Hickey Family Foundation","NGO"
+4291,"Izumi Foundation","NGO"
+4292,"Medtronic Foundation","NGO"
+4293,"Ashwin Fund","NGO"
+4296,"Reusing and Cole Family Charitable Trust","NGO"
+4298,"Ronald McDonald House Charities","NGO"
+4299,"Rwanda Oki Group","NGO"
+4300,"Salem","NGO"
+4301,"Alderman","NGO"
+4302,"Trinity Church","NGO"
+4303,"AHA","NGO"
+4307,"Association of Public Health Laboratories","NGO"
+4312,"Muhanga Clininc","Health Center"
+4313,"Huye Clinic","Health Center"
+4315,"Rusizi","District"
+4316,"Ngarama military rehabilitation centre","Prison Clinic"
+4317,"CTB OLD PROJECT","Bilateral"
+4318,"COMMUNITY HEALTH/MOH","MoH"
+4319,"M&E Task Force Global Fund Projects","Government"
+4320,"MCH (MATERNAL AND CHILD HEALTH)/MOH","MoH"
+4321,"SAMU-EMERGENCY MEDICAL ASSISTANCE SERVICE/MOH ","MoH"
+4322,"CTAMS -THE TECHNICAL SUPPORT CELL TO HEALTH SCHEMES (MUTUELLES DE SANTE)/MOH","MoH"
+4323,"CAAC(THE CONTRACTUAL APPROACH SUPPORT CELL)/MOH","MoH"
+4324,"Psychosocial Consultation Centre (SCPS)/MOH","MoH"
+4326,"CTB PAPSDSK","Bilateral"
+4327,"IMT","NGO"
+4328,"MIDA","NGO"
+4329,"EDCTP","NGO"
+4330,"Gisakura Health Center (HC)","Health Center"
+4331,"Rutobwe Health Center (HC)","Health Center"
+4332,"Gikondo Socio-Medical Center (SMC)","Health Center"
+4333,"Gasagara Health Center (HC)","Health Center"
+4334,"ordinary budget","Government"
+4337,"jembi","NGO"
+4340,"BRITISH COUNCIL","Bilateral"
+4341,"WESTERN ONTARIO UNIVERSITY","NGO"
+4342,"NEPAD","NGO"
+4343,"MINEDUC","Other ministries"
+4345,"COAG","Bilateral"
+4346,"Karongi District","District"
+4347,"Rutsiro District","District"
+4348,"Luxembourg","Bilateral"
+4350,"DFID and CIDA","Bilateral"
+4351,"TRAC PLUS INFLUENZA","MoH"
+4352,"SUN FRANCISCO","NGO"
+4353,"ABASIRWA","NGO"
+4354,"HIV NGO FORUM","NGO"
+4355,"MINADEF","Other ministries"
+4356,"MINAGRI","Other ministries"
+4357,"MINICOM","Other ministries"
+4358,"MINIJUST","Other ministries"
+4359,"MININTER","Other ministries"
+4360,"MINIYOUTH","Other ministries"
+4361,"MOH/METF","MoH"
+4362,"MOH/PEV","MoH"
+4363,"NGO/R7","NGO"
+4364,"NGOs/NSA","NGO"
+4365,"NGOs/R6","NGO"
+4366,"POLICE","Government"
+4368,"PTF","Government"
+4369,"RCLS","Government"
+4370,"RHs/DHs&HCs","Health Center"
+4375,"UPHLS","NGO"
+4376,"Gouvernement Basque","Bilateral"
+4377,"TRAC+ - Malaria","MoH"
+4378,"TRAC+ - TB","MoH"
+4380,"UNFPA, UNFEM, UNICEF","Multilateral"
+4385,"Gasabo District H.U","District"
+4387,"GREAT LAKES HIV/AIDS INITIATIVE (GLIA)","Multilateral"
+4388,"Emoc-General Suppliers","NGO"
+4389,"WORLD VISION CANADA","NGO"
+4390,"Gakenke Health District","District"
+4391,"Rwamagana Health District","District"
+4392,"Ngoma Health District","District"
+4393,"Musanze Health District","District"
+4394,"Bugesera Health District","District"
+4395,"Nyabihu Health District","District"
+4396,"World Vision  Canada,USA,New Zealand, Taiwan,Korea,Australia","NGO"
+4399,"Collectif TUBAKUNDE","NGO"
+4400,"Swiss TPH (Tropical Public Health)","Bilateral"
+4401,"Internally Generated Revenue","Government"
+4403,"Same as above","NGO"
+4404,"PR-SRs","Government"
+4407,"AVVAIS & RRP+","NGO"
+4408,"saddleback valley community church","NGO"
+4410,"Donor","Multilateral"
+4411,"RWANDA RED CROSS","NGO"
+4412,"NORWEGIAN RED CROSS","NGO"
+4413,"CROIX ROUGE DE BELGIQUE / FLANDRES","NGO"
+4414,"DANISH RED CROSS","NGO"
+4415,"FINNISH RED CROSS","NGO"
+4416,"AMERICAN RED CROSS","NGO"
+4418,"CROIX ROUGE DE BELGIQUE - FRANCOPHONE","NGO"
+4421,"Kabere Health Centre","Health Center"
+4422,"Kabere Health Centre | Musanze","Health Center"
+4423,"TRAC+ - Treatment and Research Centre on HIV/AIDS, TB, Malaria and other epidemics","MoH"
+4424,"Rwanda PDM/PEACE Plan","NGO"
+4426,"Fulwood Initiative","NGO"
+4427,"INTERNATIONAL FEDERATION OF RC/RC","NGO"
+4428,"Compassion International Rwanda","NGO"
+4429,"PR/SRs","Government"
+4431,"Central Africa Health Organization (CAHO)","Multilateral"
+4432,"UNFEM/CNLS Project","Multilateral"
+4433,"UNFEM","Multilateral"
+4434,"193 Local churches","NGO"
+4435,"193 local churches","NGO"
+4438,"International Partnership for Microbicide","NGO"
+4439,"Ministry of Health ","MoH"
+4440,"Damian Foundation","NGO"
+4441,"Columbia University","NGO"
+4410,"Donor","Bilateral"
+3887,"New Donor","Bilateral"
+4121,,"Bilateral"
+4276,,"Bilateral"
+4279,,"Multilateral"

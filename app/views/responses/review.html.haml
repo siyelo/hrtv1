@@ -26,6 +26,16 @@
     %span.info
       = render 'projects/no_projects_yet'
 
+- ready_class = @response.projects_spend_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Projects: Expenditures Entered
+  - unless @response.projects_spend_entered?
+    - if @response.projects_entered?
+      %span.info Enter the Expenditure (Spend) for all of your projects.
+    - else
+      %span.info
+        = render 'projects/no_projects_yet'
+
 - ready_class = @response.projects_have_activities? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Activities Entered

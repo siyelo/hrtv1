@@ -54,12 +54,12 @@ class DataResponse < ActiveRecord::Base
 
   def self.in_progress
     self.find :all,
-              :select => 'data_responses.*, 
-                          (SELECT COUNT(*) AS projects_count FROM projects 
+              :select => 'data_responses.*,
+                          (SELECT COUNT(*) AS projects_count FROM projects
                             WHERE projects.data_response_id = data_responses.id)
                           (SELECT COUNT(*) AS activities_count FROM activities
                             WHERE activities.data_response_id = data_responses.id)',
-              :include => [:organization, :projects], 
+              :include => [:organization, :projects],
               :conditions => ["(submitted = ? OR submitted is NULL) AND
                                (projects_count > 0 OR activities_count > 0)", false]
   end
@@ -80,8 +80,8 @@ class DataResponse < ActiveRecord::Base
       :conditions => ["activities.data_response_id IS NULL AND
                       funding_flows.data_response_id IS NULL AND
                       projects.data_response_id IS NULL AND
-                      organizations.raw_type IN (?)", 
-                      ["Agencies", "Govt Agency", "Donors", "Donor", 
+                      organizations.raw_type IN (?)",
+                      ["Agencies", "Govt Agency", "Donors", "Donor",
                        "NGO", "Implementer", "Implementers", "International NGO"]],
       :include => {:organization => :users},
       :from => 'data_responses'
@@ -189,6 +189,7 @@ class DataResponse < ActiveRecord::Base
 
   def basics_done?
     projects_entered? &&
+    projects_spend_complete? &&
     activities_coded? &&
     other_costs_coded?
   end
@@ -203,6 +204,19 @@ class DataResponse < ActiveRecord::Base
 
   def projects_entered?
     !self.projects.empty?
+  end
+
+  def projects_spend_entered?
+    return false unless projects_entered?
+    self.projects.each do |project|
+      return false unless project.spend_entered?
+    end
+    true
+  end
+
+  def projects_spend_complete?
+    return true if self.request.spend? && projects_spend_entered?
+    false
   end
 
   def projects_linked?

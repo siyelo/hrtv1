@@ -25,7 +25,7 @@ class ActivitiesController < Reporter::BaseController
   def create
     create! do |success, failure|
       success.html { 
-        if params[:commit] == "Classify Spend & Budget >"
+        if params[:commit] == "Save & Go to Classify >"
           redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') 
         else
           redirect_to response_projects_path(@activity.project.response)
@@ -37,7 +37,7 @@ class ActivitiesController < Reporter::BaseController
   def update
     update! do |success, failure|
       success.html { 
-        if params[:commit] == "Classify Spend & Budget >"
+        if params[:commit] == "Save & Go to Classify >"
           redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') 
         else
           redirect_to response_projects_path(@activity.project.response)

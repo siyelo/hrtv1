@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -19,27 +18,6 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-    @javascript @run
-    Scenario: Reporter can add an activity and use the save button instead of the classify spend & budget button
-      When I follow "Add" within ".sub-head:nth-child(2)"
-        And I fill in "Name" with "activity1"
-        And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
-        And I select "project1" from "Project"
-        And I check "Location1"
-        And I check "Location2"
-        And I press "Save"
-      Then I should see "Activity was successfully created"
-      
-      When I should see "Projects"
-        And I follow "1ctivity1 description"
-        And I fill in "Name" with "activity2"
-        And I fill in "Description" with "activity2 description"
-        And I uncheck "Location2"
-        And I press "Classify Spend & Budget"
-      Then I should see "Activity was successfully updated"
-
 
     @javascript
     Scenario: Reporter can CRUD activities
@@ -51,7 +29,7 @@ Feature: Reporter can manage activities
         And I select "project1" from "Project"
         And I check "Location1"
         And I check "Location2"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully created"
         #And I should see "activity1"
         #And I should see "Location1, Location2"
@@ -60,7 +38,7 @@ Feature: Reporter can manage activities
         And I fill in "Name" with "activity2"
         And I fill in "Description" with "activity2 description"
         And I uncheck "Location2"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully updated"
         #And I should see "activity2"
         #And I should not see "activity1"
@@ -82,7 +60,7 @@ Feature: Reporter can manage activities
         And I fill in "Start date" with "<start_date>"
         And I fill in "End date" with "<end_date>"
         And I select "<project>" from "Project"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Oops, we couldn't save your changes."
         And I should see "<message>"
 
@@ -106,7 +84,7 @@ Feature: Reporter can manage activities
         And I fill in "activity_budget3" with "3000"
         And I fill in "activity_budget4" with "4000"
         And I fill in "activity_budget5" with "5000"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully created"
 
       When I follow "Activity1"
@@ -201,7 +179,7 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "Activity1 description"
         And I select "organization1" from "Implementer"
         And I select "project1" from "Project"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully created"
 
       When I follow "Details"
@@ -258,7 +236,7 @@ Feature: Reporter can manage activities
         And I select "funding_organization1" from "Organization" within ".fields"
         And I fill in "Spent" with "111" within ".fields"
         And I fill in "Budget" with "222" within ".fields"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully created"
         And I follow "Projects"
 
@@ -267,7 +245,7 @@ Feature: Reporter can manage activities
         And I select "funding_organization2" from "Organization" within ".fields"
         And I fill in "Spent" with "333" within ".fields"
         And I fill in "Budget" with "444" within ".fields"
-        And I press "Classify Spend & Budget"
+        And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully updated"
 
 

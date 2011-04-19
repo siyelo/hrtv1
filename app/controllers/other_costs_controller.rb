@@ -26,19 +26,25 @@ class OtherCostsController < Reporter::BaseController
 
   def create
     create! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully created'
-        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
-      end
+      success.html { 
+        if params[:commit] == "Save & Go to Classify >"
+          redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+        else
+          redirect_to response_projects_path(@other_cost.project.response)
+        end
+      }
     end
   end
 
   def update
     update! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully updated'
-        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
-      end
+      success.html { 
+        if params[:commit] == "Save & Go to Classify >"
+          redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+        else
+          redirect_to response_projects_path(@other_cost.project.response)
+        end
+      }
       failure.html do
         load_comment_resources(resource)
         render :action => 'edit'

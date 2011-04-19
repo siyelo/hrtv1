@@ -31,13 +31,13 @@
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
         
         %li.amounts.last
-          %label Quarterly spend
+          %label Quarterly budget
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
-            = f.input :spend_q1     , :label => "Q1 09-10", :required => false
-            = f.input :spend_q2     , :label => "Q2 09-10", :required => false
-            = f.input :spend_q3     , :label => "Q3 09-10", :required => false
-            = f.input :spend_q4     , :label => "Q4 09-10", :required => false
+            = f.input :budget_q4_prev, :label => "Q4 08-09", :required => false
+            = f.input :budget_q1     , :label => "Q1 09-10", :required => false
+            = f.input :budget_q2     , :label => "Q2 09-10", :required => false
+            = f.input :budget_q3     , :label => "Q3 09-10", :required => false
+            = f.input :budget_q4     , :label => "Q4 09-10", :required => false
             
   %li.last
     %h3== Implementers
@@ -59,8 +59,11 @@
     %ul.dashboard_section
       = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
         
-- f.buttons :class => 'buttons' do
-  = f.commit_button "Save & Next", :class => "last"
+  %li
+    %ul.horizontal
+      - f.buttons :class => 'buttons' do
+        = f.commit_button "Save", :class => "last"
+        = f.commit_button "Save & Go to Classify >", :class => "last"
 
 - unless @other_cost.new_record?
   .delete_section

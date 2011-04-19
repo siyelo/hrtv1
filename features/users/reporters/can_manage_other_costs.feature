@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage other costs
   In order to track information
   As a reporter
@@ -14,24 +15,19 @@ Feature: Reporter can manage other costs
       And I follow "data_request1"
       And I follow "Projects"
 
-
-
     Scenario: Reporter can CRUD other costs
       When I follow "Add Other Costs now"
       Then I should see "Create Other Cost"
-
       When I fill in "Description" with "other_cost1"
         And I select "project1" from "Project"
-        And I press "Save & Next"
-      Then I should see "Other Cost was successfully created"
-
+        And I press "Save & Go to Classify >"
+      Then I should see "Othercost was successfully created"
       When I follow "other_cost1"
         And I fill in "Description" with "other_cost2"
-        And I press "Save & Next"
-      Then I should see "Other Cost was successfully updated"
+        And I press "Save & Go to Classify >"
+      Then I should see "Othercost was successfully updated"
         And I should see "other_cost2"
         And I should not see "other_cost1"
-
       When I follow "other_cost2"
         And I follow "Delete this Other Cost"
       Then I should see "Other Cost was successfully destroyed"
@@ -42,8 +38,8 @@ Feature: Reporter can manage other costs
     Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
       When I follow "Add Other Costs now"
         And I fill in "Description" with "other_cost1"
-        And I press "Save & Next"
-      Then I should see "Other Cost was successfully created"
+        And I press "Save & Go to Classify >"
+      Then I should see "Othercost was successfully created"
 
 
     @wip

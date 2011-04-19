@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -18,6 +19,26 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
+    @javascript @run
+    Scenario: Reporter can add an activity and use the save button instead of the classify spend & budget button
+      When I follow "Add" within ".sub-head:nth-child(2)"
+        And I fill in "Name" with "activity1"
+        And I fill in "Description" with "1ctivity1 description"
+        And I fill in "Start date" with "2011-01-01"
+        And I fill in "End date" with "2011-12-01"
+        And I select "project1" from "Project"
+        And I check "Location1"
+        And I check "Location2"
+        And I press "Save"
+      Then I should see "Activity was successfully created"
+      
+      When I should see "Projects"
+        And I follow "1ctivity1 description"
+        And I fill in "Name" with "activity2"
+        And I fill in "Description" with "activity2 description"
+        And I uncheck "Location2"
+        And I press "Classify Spend & Budget"
+      Then I should see "Activity was successfully updated"
 
 
     @javascript

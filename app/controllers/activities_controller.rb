@@ -24,13 +24,25 @@ class ActivitiesController < Reporter::BaseController
 
   def create
     create! do |success, failure|
-      success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }
+      success.html { 
+        if params[:commit] == "Classify Spend & Budget >"
+          redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') 
+        else
+          redirect_to response_projects_path(@activity.project.response)
+        end
+      }
     end
   end
 
   def update
     update! do |success, failure|
-      success.html { redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') }
+      success.html { 
+        if params[:commit] == "Classify Spend & Budget >"
+          redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') 
+        else
+          redirect_to response_projects_path(@activity.project.response)
+        end
+      }
       failure.html do
         load_comment_resources(resource)
         render :action => 'edit'

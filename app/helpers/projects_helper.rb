@@ -9,12 +9,11 @@ module ProjectsHelper
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
 
-  def funding_flows_select(project)
+  def funder_projects_select(from_org)
     flows = []
-    project.in_flows.each do |in_flow|
-      flows = in_flow.from.projects.map{|op| [op.name, op.id]}
-    end
-    flows
+    funder_projects = from_org.projects.map{|op| [op.name, op.id]}
+    [["Please select a project...",""]] +
+      funder_projects + [["<Project not listed or unknown>", 0]]
   end
 
   # this disallows adding existing comments

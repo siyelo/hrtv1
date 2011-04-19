@@ -42,7 +42,7 @@
           %tr
             %td= project.name
             %td= in_flow.from.try(:name)
-            %td= select_tag "funding_flows[#{in_flow.id}]", options_for_select([["Please select a project...",""]] + funding_flows_select(project) + [["<Project not listed or unknown>", 0]], in_flow.project_from_id)
+            %td= select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from), in_flow.project_from_id)
             %td= project.budget
             %td= project.spend
 

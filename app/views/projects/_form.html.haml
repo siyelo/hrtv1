@@ -1,6 +1,10 @@
 - editing     = controller.action_name == 'edit' ? true : false
 - button_text = editing ? "Update Project" : "Create New Project"
 
+:javascript
+  var _budget = #{@data_response.data_request.budget.to_json};
+  var _spend = #{@data_response.data_request.spend.to_json};
+
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics

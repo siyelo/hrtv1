@@ -15,7 +15,7 @@ function add_fields(link, association, content) {
   $(link).parent().before(content.replace(regexp, new_id));
 };
 
-var build_project_in_flow_row = function (edit_block, type, type_name, organization) {
+var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
   var value            = edit_block.find('.ff_' + type).val();
   var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
   var value_q1         = edit_block.find('.ff_' + type + '_q1').val();
@@ -23,7 +23,7 @@ var build_project_in_flow_row = function (edit_block, type, type_name, organizat
   var value_q3         = edit_block.find('.ff_' + type + '_q3').val();
   var value_q4         = edit_block.find('.ff_' + type + '_q4').val();
 
-  if (type === 'spend') {
+  if (display_funder) {
     var organization = edit_block.find('.ff_from option:selected').text();
     var funder = $('<li/>').append(
       $('<span/>').text('Funder'),
@@ -68,22 +68,30 @@ var build_project_in_flow_row = function (edit_block, type, type_name, organizat
 
 var build_activity_funding_source_row = function (edit_block) {
   var organization = edit_block.find('.ff_organization option:selected').text();
-  var spend        = edit_block.find('.ff_spend').val();
-  var budget       = edit_block.find('.ff_spend').val();
+  var spend = '';
+  var budget = '';
+
+  if (_spend) {
+    spend = $('<li/>').append(
+      $('<span/>').text('Spend'),
+      edit_block.find('.ff_spend').val() || 'N/A'
+    )
+  }
+
+  if (_budget) {
+    budget = $('<li/>').append(
+      $('<span/>').text('Budget'),
+      edit_block.find('.ff_budget').val() || 'N/A'
+    )
+  }
 
   return $('<ul/>').append(
     $('<li/>').append(
       $('<span/>').text('Funder'),
       organization || 'N/A'
     ),
-    $('<li/>').append(
-      $('<span/>').text('Spend'),
-      spend || 'N/A'
-    ),
-    $('<li/>').append(
-      $('<span/>').text('Budget'),
-      budget || 'N/A'
-    )
+    spend,
+    budget
   )
 };
 
@@ -98,8 +106,16 @@ var close_project_in_flow_fields = function (fields) {
 
     edit_block.hide();
     preview_block.html('');
-    preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend'))
-    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget'))
+
+    if (_budget && _spend) {
+      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
+      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
+    } else if (_spend) {
+      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
+    } else if (_budget) {
+      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', true))
+    }
+
     preview_block.show();
 
     manage_block.find('.edit').remove();

@@ -90,7 +90,7 @@
   .tab8{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_service_level', :link_name => 'Codings'
     .pie
-      %h4 Spend Service Levels
+      %h4 Expenditure Service Levels
       %ul
         - cost_cat_assignments = ServiceLevelSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - cost_cat_roots.each do |code|

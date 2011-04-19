@@ -641,7 +641,9 @@ var build_data_response_review_screen = function () {
     root.find(".classifications ul li").removeClass('selected');
     element.addClass('selected');
     root.find(".activity_classification > div").hide();
-    root.find('.activity_classification > div.tab' + String(element.index() + 1)).show();
+    root.find(".activity_classification > div:eq(" + element.index() + ")").show();
+    // same as previous
+    //root.find(".activity_classification > div::nth-child(" + (element.index() + 1) + ")").show();
   });
 
   // bind click events for tabs

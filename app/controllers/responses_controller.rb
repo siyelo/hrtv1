@@ -50,9 +50,11 @@ class ResponsesController < ApplicationController
   end
 
   def review
+    @response = @data_response = find_response(params[:id])
   end
 
   def submit
+    @response = @data_response = find_response(params[:id])
     if @data_response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@data_response)

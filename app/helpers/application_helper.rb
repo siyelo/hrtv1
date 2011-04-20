@@ -216,5 +216,4 @@ module ApplicationHelper
     style = "background: red" if progress < 30
     style = style + "; width: #{progress}%"
   end
-
 end

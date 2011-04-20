@@ -1,9 +1,9 @@
 class PolicyMaker::ResponsesController < PolicyMaker::BaseController
 
   def index
-    @submitted_data_responses = DataResponse.available_to(current_user).submitted.all
-    @in_progress_data_responses = DataResponse.available_to(current_user).in_progress
-    @empty_data_responses = DataResponse.available_to(current_user).empty
+    @submitted_data_responses = DataResponse.submitted.all
+    @in_progress_data_responses = DataResponse.in_progress
+    @empty_data_responses = DataResponse.empty
   end
 
   def show

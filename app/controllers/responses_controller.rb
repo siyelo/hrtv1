@@ -1,13 +1,13 @@
 class ResponsesController < ApplicationController
   layout 'reporter' #TODO: separate reporter/admin actions
   before_filter :require_user
-  before_filter :find_response, :only => [:show, :edit, :update, :review, :submit]
 
   def new
     @data_response = DataResponse.new
   end
 
   def show
+    @response = @data_response    = find_response(params[:id])
     @projects                     = @data_response.projects.find(:all, :order => "name ASC")
     @activities_without_projects  = @data_response.activities.roots.without_a_project
     @other_costs_without_projects = @data_response.other_costs.without_a_project
@@ -33,11 +33,13 @@ class ResponsesController < ApplicationController
   end
 
   def edit
+    @data_response = find_response(params[:id])
     current_user.current_data_response = @data_response
     current_user.save
   end
 
   def update
+    @data_response = find_response(params[:id])
     @data_response.update_attributes(params[:data_response])
     if @data_response.save
       flash[:notice] = "Successfully updated."
@@ -58,16 +60,4 @@ class ResponsesController < ApplicationController
       render :review
     end
   end
-
-  protected
-
-    def find_response
-      if current_user.admin?
-        # work-arround until all admin actions are moved to admin controllers
-        @data_response = DataResponse.find(params[:id])
-      else
-        @data_response = current_user.data_responses.find(params[:id])
-      end
-      @response = @data_response # TODO refactor all @data_response to @response
-    end
 end

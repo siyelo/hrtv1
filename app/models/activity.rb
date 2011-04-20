@@ -1,4 +1,3 @@
-require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 require 'validators'
 
@@ -39,10 +38,8 @@ class Activity < ActiveRecord::Base
   }
 
   ### Includes
-  include ActAsDataElement
   include BudgetSpendHelpers
   acts_as_commentable
-  configure_act_as_data_element
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,

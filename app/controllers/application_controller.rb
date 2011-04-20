@@ -91,4 +91,21 @@ class ApplicationController < ActionController::Base
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
     end
+
+    def find_response(response_id)
+      if current_user.admin?
+        # work-arround until all admin actions are moved to admin controllers
+        DataResponse.find(response_id)
+      else
+        current_user.data_responses.find(response_id)
+      end
+    end
+
+    def find_project(project_id)
+      if current_user.admin?
+        Project.find(project_id)
+      else
+        current_user.current_data_response.projects.find(project_id)
+      end
+    end
 end

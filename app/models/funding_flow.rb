@@ -1,10 +1,6 @@
-require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
-  include ActAsDataElement
   include BudgetSpendHelpers
-
-  configure_act_as_data_element
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
@@ -17,7 +13,7 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
   belongs_to :project_from # funder's project
-  belongs_to :data_response #TODO: deprecate in favour of: delegate :data_response, :to => :project
+  belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
 
   ### Validations
 

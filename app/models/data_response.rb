@@ -1,4 +1,3 @@
-require 'lib/ActAsDataElement'
 require 'validators'
 
 class DataResponse < ActiveRecord::Base
@@ -47,22 +46,10 @@ class DataResponse < ActiveRecord::Base
     :message => "Start date must come before End date."
 
   ### Named scopes
-
-  # TODO: spec
-  named_scope :available_to, lambda { |current_user|
-    if current_user.nil?
-      {:conditions => {:id => -1}} #return no records
-    elsif current_user.admin?
-      {}
-    else
-      {:conditions=>{:organization_id => current_user.organization.id}}
-    end
-  }
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
   ### Callbacks
-
   after_save :update_cached_currency_amounts
 
   def self.in_progress

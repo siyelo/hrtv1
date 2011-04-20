@@ -1,5 +1,4 @@
 require 'lib/acts_as_stripper' #TODO move
-require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 require 'validators'
 
@@ -44,15 +43,6 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true
   before_validation_on_create :assign_project_to_funding_flows
-
-  ### Named scopes
-  named_scope :available_to, lambda { |current_user|
-    if current_user.admin?
-      {}
-    else
-      {:conditions=>{:data_response_id => current_user.current_data_response.try(:id)}}
-    end
-  }
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id

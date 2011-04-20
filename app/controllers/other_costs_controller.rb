@@ -29,7 +29,8 @@ class OtherCostsController < Reporter::BaseController
     create! do |success, failure|
       success.html { 
         if params[:commit] == "Save & Go to Classify >"
-          redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+          return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @data_response.data_request.spend?
+          return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @data_response.data_request.budget?
         else
           redirect_to response_projects_path(@other_cost.project.response)
         end
@@ -41,7 +42,8 @@ class OtherCostsController < Reporter::BaseController
     update! do |success, failure|
       success.html { 
         if params[:commit] == "Save & Go to Classify >"
-          redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+          return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @data_response.data_request.spend?
+          return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @data_response.data_request.budget?
         else
           redirect_to response_projects_path(@other_cost.project.response)
         end

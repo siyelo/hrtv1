@@ -172,10 +172,11 @@ class DataResponse < ActiveRecord::Base
       end
       return self.save
     else
-      self.errors.add_to_base("Projects are not yet entered.") if !projects_entered?
-      self.errors.add_to_base("Projects are not yet linked.") if !projects_linked?
-      self.errors.add_to_base("Activites are not yet coded.") if !activities_coded?
-      self.errors.add_to_base("Other Costs are not yet coded.") if !other_costs_coded?
+      self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
+      self.errors.add_to_base("Project expenditures are not yet entered.") unless projects_spend_complete?
+      self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
+      self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
+      self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
       return false
     end
   end
@@ -214,7 +215,9 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
+  # if the request asks for spend, check if the spends were entered
   def projects_spend_complete?
+    return true if !self.request.spend?
     return true if self.request.spend? && projects_spend_entered?
     false
   end

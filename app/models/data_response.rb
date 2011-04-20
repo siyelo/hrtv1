@@ -229,9 +229,25 @@ class DataResponse < ActiveRecord::Base
   def activities_entered?
     !self.normal_activities.empty?
   end
+  
+  def projects_have_activities?
+    return false unless activities_entered?
+    self.projects.each do |project|
+      return false unless project.has_activities?
+    end
+    true
+  end
 
   def other_costs_entered?
     !self.other_costs.empty?
+  end
+  
+  def projects_have_other_costs?
+    return false unless other_costs_entered?
+    self.projects.each do |project|
+      return false unless project.has_other_costs?
+    end
+    true
   end
 
   def uncoded_activities

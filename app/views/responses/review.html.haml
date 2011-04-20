@@ -13,7 +13,7 @@
     = @response.request.status
   %li
     %span Last Submitted:
-    = l(@response.last_submitted_at, :format => :short) || 'never'
+    = !@response.last_submitted_at.nil? ? l(@response.last_submitted_at, :format => :short) : 'never'
 
 = render 'getting_started_submit'
 
@@ -26,18 +26,18 @@
     %span.info
       = render 'projects/no_projects_yet'
 
-- ready_class = @response.activities_entered? ? "ready" : "not-ready"
+- ready_class = @response.projects_have_activities? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Activities Entered
-  - unless @response.activities_entered?
+  - unless @response.projects_have_activities?
     - unless @response.projects_entered?
       %span.info
         = render 'projects/no_projects_yet'
         then you can start adding Activities.
     - else
       %span.info
-        You have project(s), but no activities yet.
-        = link_to "Start by adding your first activity now.", response_projects_path(@data_response)
+        You have project(s), but not all have activities yet.
+        = link_to "Start by adding your activities here.", response_projects_path(@data_response)
 
 - ready_class = @response.activities_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -53,10 +53,10 @@
   - unless @data_response.uncoded_activities.empty?
     = render 'uncoded_table', :activities => @data_response.uncoded_activities
 
-- ready_class = @response.other_costs_entered? ? "ready" : "not-ready"
+- ready_class = @response.projects_have_other_costs? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Other Costs Entered
-  - unless @response.other_costs_entered?
+  - unless @response.projects_have_other_costs?
     - unless @response.projects_entered?
       %span.info
         = render 'projects/no_projects_yet'

@@ -183,6 +183,14 @@ class Project < ActiveRecord::Base
     end
     true
   end
+   
+  def has_activities?
+    !self.normal_activities.empty?
+  end
+  
+  def has_other_costs?
+    !self.activities.with_type("OtherCost").empty?
+  end
 
   private
 

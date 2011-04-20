@@ -74,6 +74,45 @@ describe Project do
       proj.funding_flows.should have(0).items
     end
   end
+  
+  context "Submit page: " do
+    before(:each) do
+      @our_org       = Factory(:organization)
+      @data_response = Factory(:data_response,
+                                :organization => @our_org)
+      @other_org     = Factory(:organization)
+      @project       = Factory(:project,
+                                :data_response => @data_response )
+    end
+    
+    it "checks whether a project has an activity" do
+      @activity = Factory(:activity, :project => @project)
+      @project.has_activities?.should == true
+    end
+    
+    it "checks whether a project has an activity when it does not" do
+      @project.has_activities?.should == false
+    end
+    
+    it "checks whether a project has an other cost" do
+      @activity = Factory(:other_cost, :project => @project)
+      @project.has_other_costs?.should == true
+    end
+    
+    it "checks whether a project has an other cost when it does not" do
+      @project.has_other_costs?.should == false
+    end
+    
+    it "checks whether a project has an activity when an other cost is present" do
+      @activity = Factory(:other_cost, :project => @project)
+      @project.has_activities?.should == false
+    end
+    
+    it "checks whether a project has an other cost when an activity is present" do
+      @activity = Factory(:activity, :project => @project)
+      @project.has_other_costs?.should == false
+    end    
+  end
 
   context "Funding flows: " do
     before(:each) do

@@ -8,6 +8,7 @@ gem 'fastercsv'
 gem 'formtastic', "= 0.9.10"
 gem 'haml'
 gem 'hoptoad_notifier'
+gem 'acts_as_commentable'
 
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue

@@ -1,20 +1,13 @@
 class ResponsesController < ApplicationController
   layout 'reporter' #TODO: separate reporter/admin actions
   before_filter :require_user
-  before_filter :find_response, :only => [:edit, :update, :review, :submit]
-  before_filter :find_help, :only => [:edit, :update, :review]
-  before_filter :find_requests, :only => [:new, :create, :edit]
+  before_filter :find_response, :only => [:show, :edit, :update, :review, :submit]
 
   def new
     @data_response = DataResponse.new
   end
 
   def show
-    if current_user.admin?
-      @data_response = DataResponse.find(params[:id])
-    else
-      @data_response = current_user.data_responses.find(params[:id])
-    end
     @projects                     = @data_response.projects.find(:all, :order => "name ASC")
     @activities_without_projects  = @data_response.activities.roots.without_a_project
     @other_costs_without_projects = @data_response.other_costs.without_a_project
@@ -45,7 +38,7 @@ class ResponsesController < ApplicationController
   end
 
   def update
-    @data_response.update_attributes params[:data_response]
+    @data_response.update_attributes(params[:data_response])
     if @data_response.save
       flash[:notice] = "Successfully updated."
       redirect_to edit_response_url(@data_response)
@@ -69,15 +62,12 @@ class ResponsesController < ApplicationController
   protected
 
     def find_response
-      @data_response = DataResponse.available_to(current_user).find params[:id]
+      if current_user.admin?
+        # work-arround until all admin actions are moved to admin controllers
+        @data_response = DataResponse.find(params[:id])
+      else
+        @data_response = current_user.data_responses.find(params[:id])
+      end
       @response = @data_response # TODO refactor all @data_response to @response
-    end
-
-    def find_requests
-      @requests = DataRequest.all
-    end
-
-    def find_help
-      @model_help = ModelHelp.find_by_model_name 'DataResponseReview'
     end
 end

@@ -13,7 +13,7 @@ class Reporter::BaseController < ApplicationController
         # work-arround until all admin actions are moved to admin controllers
         @data_response = DataResponse.find(params[:response_id])
       else
-        @data_response = current_user.organization.data_responses.find(params[:response_id])
+        @data_response = current_user.data_responses.find(params[:response_id])
       end
     end
 

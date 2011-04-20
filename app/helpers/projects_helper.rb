@@ -9,9 +9,9 @@ module ProjectsHelper
     text_field :record, :end_date, options.merge({:class => "date_picker"})
   end
 
-  def funder_projects_select(from_org)
+  def funder_projects_select(from_org, project_id)
     flows = []
-    funder_projects = from_org.projects.map{|op| [op.name, op.id]}
+    funder_projects = from_org.projects.map{|op| [op.name, op.id] if op.id != project_id}.compact
     [["Please select a project...",""]] +
       funder_projects + [["<Project not listed or unknown>", 0]]
   end

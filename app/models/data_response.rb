@@ -208,11 +208,12 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_spend_entered?
-    return false unless projects_entered?
-    self.projects.each do |project|
-      return false unless project.spend_entered?
-    end
-    true
+    projects_without_spend.empty?
+  end
+
+  def projects_without_spend
+    return [] unless projects_entered?
+    self.projects.select{ |p| !p.spend_entered? && self.request.spend? }
   end
 
   # if the request asks for spend, check if the spends were entered
@@ -233,7 +234,7 @@ class DataResponse < ActiveRecord::Base
   def activities_entered?
     !self.normal_activities.empty?
   end
-  
+
   def projects_have_activities?
     return false unless activities_entered?
     self.projects.each do |project|
@@ -245,7 +246,7 @@ class DataResponse < ActiveRecord::Base
   def other_costs_entered?
     !self.other_costs.empty?
   end
-  
+
   def projects_have_other_costs?
     return false unless other_costs_entered?
     self.projects.each do |project|
@@ -298,10 +299,9 @@ class DataResponse < ActiveRecord::Base
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
     def reject_uncoded(activities)
-      uncoded = []
-      uncoded << activities.reject{ |a| a.budget_classified? } if self.request.budget?
-      uncoded << activities.reject{ |a| a.spend_classified? } if self.request.spend?
-      uncoded.flatten
+      activities.select{ |a|
+        (!a.budget_classified? && self.request.budget?) ||
+        (!a.spend_classified?  && self.request.spend?) }
     end
 
     # Find all complete Activities

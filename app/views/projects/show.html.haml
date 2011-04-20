@@ -7,8 +7,8 @@
 
   %span
     %ul.manage_bar.inline
-      %li= link_to "Edit", edit_response_project_path(@data_response, @project)
-      %li= link_to "X", response_project_path(@data_response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete
+      %li= link_to "Edit", edit_response_project_path(@response, @project)
+      %li= link_to "X", response_project_path(@response, @project), :confirm => "Are you sure you want to delete this project?", :method => :delete
 
 .wrap-70
   %h3.form_heading Basics

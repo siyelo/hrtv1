@@ -1,9 +1,9 @@
 :javascript
-  var _response_id = "#{@data_response.id}";
+  var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
   var _funding_sources = #{get_funding_sources(current_user.organization.projects)}
-  var _budget = #{@data_response.data_request.budget.to_json};
-  var _spend = #{@data_response.data_request.spend.to_json};
+  var _budget = #{@response.data_request.budget.to_json};
+  var _spend = #{@response.data_request.spend.to_json};
 
 - f.inputs :class => 'inputs' do
   %li.last
@@ -21,9 +21,9 @@
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
 
 
-  - if @data_response.data_request.spend?
+  - if @response.data_request.spend?
     %li.last
-      %h3== Past Activity Expenditure (#{@data_response.currency})
+      %h3== Past Activity Expenditure (#{@response.currency})
       %ul.dashboard_section
         = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
         %li.amounts.last
@@ -35,9 +35,9 @@
             = f.input :spend_q3     , :label => "Q3 09-10", :required => false
             = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
-  - if @data_response.data_request.budget?
+  - if @response.data_request.budget?
     %li.last
-      %h3 Budget (planned expenditure) (#{@data_response.currency})
+      %h3 Budget (planned expenditure) (#{@response.currency})
       %ul.dashboard_section
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
         %li.amounts
@@ -95,7 +95,7 @@
 
 - unless @activity.new_record?
   .delete_section
-    = link_to "Delete this Activity", response_activity_path(@data_response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "delete_btn", :class => 'delete_action'
+    = link_to "Delete this Activity", response_activity_path(@response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "delete_btn", :class => 'delete_action'
     %p
       %strong Warning:
       Once you delete an activity, you will lose all data associated with it, and there is no undo.

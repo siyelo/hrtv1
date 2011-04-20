@@ -4,7 +4,7 @@
 
 %h1.main_heading
   #search
-    - form_tag response_activities_path(@data_response), :method => :get do
+    - form_tag response_activities_path(@response), :method => :get do
       = render 'shared/search_form'
   Activities
 
@@ -12,7 +12,7 @@
 
 %ul.horizontal
   %li
-    - link_to new_response_activity_path(@data_response), :class => "create_new" do
+    - link_to new_response_activity_path(@response), :class => "create_new" do
       = image_tag "new_white.png"
       Add Activity
 
@@ -25,17 +25,17 @@
     %p Create one or more activitiess from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
 
     #import_csv
-      -form_tag create_from_file_response_activities_path(@data_response), :multipart => true do
+      -form_tag create_from_file_response_activities_path(@response), :multipart => true do
         = label_tag :file, "File"
         = file_field_tag :file
         = submit_tag "Upload and Import", :class => 'small_submit_button'
 
-      = link_to "Download template", download_template_response_activities_path(@data_response)
+      = link_to "Download template", download_template_response_activities_path(@response)
 
 - if params[:query]
   %p
     = "Activities with names or description containing #{params[:query]}"
-    = link_to "(Back to complete activity listing)", response_activities_path(@data_response), :class => 'target'
+    = link_to "(Back to complete activity listing)", response_activities_path(@response), :class => 'target'
 
 = render 'list', :activities => @activities
 

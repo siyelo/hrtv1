@@ -4,8 +4,8 @@ class ChartsController < ApplicationController
   before_filter :require_user
 
   def data_response_pie
-    @data_response = find_response(params[:id])
-    @assignments   = Charts::DataResponsePies.data_response_pie(@data_response, params[:codings_type], params[:code_type])
+    @response    = find_response(params[:id])
+    @assignments = Charts::DataResponsePies.data_response_pie(@response, params[:codings_type], params[:code_type])
 
     #/charts/data_response_pie?id=6586&codings_type=CodingBudget&code_type=CostCategory
     send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')

@@ -4,11 +4,12 @@ class OtherCostsController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
-  belongs_to :data_response, :route_name => 'response'
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @data_response.other_costs.scoped()
-    scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR UPPER(activities.description) LIKE UPPER(:q)",
+    scope = @response.other_costs.scoped()
+    scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR
+                                         UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
@@ -56,7 +57,7 @@ class OtherCostsController < Reporter::BaseController
     destroy! do |success, failure|
       success.html do
         flash[:notice] = 'Other Cost was successfully destroyed'
-        redirect_to response_projects_url(@data_response)
+        redirect_to response_projects_url(@response)
       end
     end
   end
@@ -71,7 +72,7 @@ class OtherCostsController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = OtherCost.create_from_file(doc, @data_response)
+          saved, errors = OtherCost.create_from_file(doc, @response)
           flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
         else
           flash[:error] = 'Wrong fields mapping. Please download the CSV template'
@@ -80,10 +81,10 @@ class OtherCostsController < Reporter::BaseController
         flash[:error] = 'Please select a file to upload'
       end
 
-      redirect_to response_other_costs_url(@data_response)
+      redirect_to response_other_costs_url(@response)
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_other_costs_url(@data_response)
+      redirect_to response_other_costs_url(@response)
     end
   end
 

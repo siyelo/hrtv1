@@ -2,7 +2,7 @@ class Reporter::ReportsController < Reporter::BaseController
   include ReportsControllerHelpers
 
   def index
-    @data_responses = current_user.data_responses
+    @responses = current_user.data_responses
   end
 
   def show

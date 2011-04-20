@@ -37,21 +37,21 @@
     - else
       %span.info
         You have project(s), but not all have activities yet.
-        = link_to "Start by adding your activities here.", response_projects_path(@data_response)
+        = link_to "Start by adding your activities here.", response_projects_path(@response)
 
 - ready_class = @response.activities_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Activities Classified
   - unless @response.activities_coded?
-    - unless @data_response.uncoded_activities.empty?
+    - unless @response.uncoded_activities.empty?
       %span.info
         Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
     - else
       %span.info
         Start by adding a few Activities first (see above), then you can start classifying them.
 - unless @response.activities_coded?
-  - unless @data_response.uncoded_activities.empty?
-    = render 'uncoded_table', :activities => @data_response.uncoded_activities
+  - unless @response.uncoded_activities.empty?
+    = render 'uncoded_table', :activities => @response.uncoded_activities
 
 - ready_class = @response.projects_have_other_costs? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -64,20 +64,20 @@
     - else
       %span.info
         Other Costs help you include any financial information at the central level and/or administrative expenses.
-        = link_to "Start adding your Other Costs now.", response_projects_path(@data_response)
+        = link_to "Start adding your Other Costs now.", response_projects_path(@response)
 
 - ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Other Costs Classified
   - unless @response.other_costs_coded?
-    - unless @data_response.uncoded_other_costs.empty?
+    - unless @response.uncoded_other_costs.empty?
       %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
     - else
       %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
 
 - unless @response.other_costs_coded?
-  - unless @data_response.uncoded_other_costs.empty?
-    = render 'uncoded_table', :activities => @data_response.uncoded_other_costs
+  - unless @response.uncoded_other_costs.empty?
+    = render 'uncoded_table', :activities => @response.uncoded_other_costs
 
 - if @response.request.final_review?
   - ready_class = @response.projects_linked? ? "ready" : "not-ready"

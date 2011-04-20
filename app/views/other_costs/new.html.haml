@@ -2,7 +2,7 @@
 
 = render :partial => 'projects/sub_nav'
 
-= render 'breadcrumb', :response => @data_response, :activity => @other_cost
+= render 'breadcrumb', :response => @response, :activity => @other_cost
 
 %h1.main_heading Create Other Cost
 
@@ -14,5 +14,5 @@
 .wrap-70
   = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-  - semantic_form_for @other_cost, :url => response_other_costs_path(@data_response), :html => {:class => "basic_form"} do |f|
+  - semantic_form_for @other_cost, :url => response_other_costs_path(@response), :html => {:class => "basic_form"} do |f|
     = render 'form', :f => f

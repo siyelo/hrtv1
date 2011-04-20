@@ -10,7 +10,7 @@
 
 %ul.horizontal
   %li
-    - link_to new_response_project_path(@data_response), :class => "create_new" do
+    - link_to new_response_project_path(@response), :class => "create_new" do
       = image_tag "new_white.png"
       Create Project
 
@@ -30,12 +30,12 @@
         =label_tag :file, "File"
         =file_field_tag :file
         =submit_tag "Upload and Import", :class => 'small_submit_button'
-      = link_to "Download template", download_template_response_projects_path(@data_response), :class => 'target'
+      = link_to "Download template", download_template_response_projects_path(@response), :class => 'target'
 
 - if params[:query]
   %p
     = "Projects with names containing #{params[:query]}"
-    = link_to "(Back to complete project listing)", response_projects_path(@data_response)
+    = link_to "(Back to complete project listing)", response_projects_path(@response)
 
 %table.sum.rounded
   %thead

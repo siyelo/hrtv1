@@ -5,10 +5,10 @@ class ProjectsController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
-  belongs_to :data_response, :route_name => 'response'
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @data_response.projects.scoped({})
+    scope = @response.projects.scoped({})
     scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
@@ -21,9 +21,9 @@ class ProjectsController < Reporter::BaseController
   end
 
   def create
-    @project = Project.new(params[:project].merge(:data_response => @data_response))
+    @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
-      success.html { redirect_to response_projects_url(@data_response) }
+      success.html { redirect_to response_projects_url(@response) }
     end
   end
 
@@ -32,7 +32,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to response_projects_url(@data_response)
+        redirect_to response_projects_url(@response)
       }
       failure.html do
         load_comment_resources(resource)
@@ -47,7 +47,7 @@ class ProjectsController < Reporter::BaseController
   end
 
   def bulk_edit
-    @projects = @data_response.projects
+    @projects = @response.projects
   end
 
   def bulk_update
@@ -66,7 +66,7 @@ class ProjectsController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Project.create_from_file(doc, @data_response)
+          saved, errors = Project.create_from_file(doc, @response)
           flash[:notice] = "Created #{saved} of #{saved + errors} projects successfully"
         else
           flash[:error] = 'Wrong fields mapping. Please download the CSV template'
@@ -75,10 +75,10 @@ class ProjectsController < Reporter::BaseController
         flash[:error] = 'Please select a file to upload'
       end
 
-      redirect_to response_projects_url(@data_response)
+      redirect_to response_projects_url(@response)
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_projects_path(@data_response)
+      redirect_to response_projects_path(@response)
     end
   end
 
@@ -93,6 +93,6 @@ class ProjectsController < Reporter::BaseController
     end
 
     def begin_of_association_chain
-      @data_response
+      @response
     end
 end

@@ -49,10 +49,10 @@ class CodeAssignmentsController < Reporter::BaseController
     def load_activity_and_data_response
       unless current_user.admin?
         @activity = current_user.organization.dr_activities.find(params[:activity_id])
-        @data_response = @activity.data_response
+        @response = @activity.data_response
       else
         @activity = Activity.find(params[:activity_id])
-        @data_response = @activity.data_response
+        @response = @activity.data_response
       end
     end
 
@@ -122,6 +122,6 @@ class CodeAssignmentsController < Reporter::BaseController
     end
 
     def load_data_response
-      @data_response = @activity.data_response
+      @response = @activity.data_response
     end
 end

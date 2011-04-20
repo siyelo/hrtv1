@@ -3,22 +3,22 @@
     %tbody
       %tr
         %td Point of Contact:
-        %td= @data_response.contact_name
+        %td= @response.contact_name
       %tr
         %td Phone:
-        %td= @data_response.contact_phone_number
+        %td= @response.contact_phone_number
       %tr
         %td Office Phone
-        %td= @data_response.contact_main_office_phone_number
+        %td= @response.contact_main_office_phone_number
       %tr
         %td Currency
-        %td= @data_response.currency
+        %td= @response.currency
       %tr
         %td Start of Fiscal Year:
-        %td= @data_response.fiscal_year_start_date
+        %td= @response.fiscal_year_start_date
       %tr
         %td End of Fiscal Year:
-        %td= @data_response.fiscal_year_end_date
+        %td= @response.fiscal_year_end_date
       - unless @policy_maker
         %tr
-          %td{:colspan => 2}= link_to 'Edit Response Settings', edit_response_path(@data_response)
+          %td{:colspan => 2}= link_to 'Edit Response Settings', edit_response_path(@response)

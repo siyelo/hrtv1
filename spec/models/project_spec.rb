@@ -78,11 +78,11 @@ describe Project do
   context "Submit page: " do
     before(:each) do
       @our_org       = Factory(:organization)
-      @data_response = Factory(:data_response,
-                                :organization => @our_org)
+      @response      = Factory(:data_response,
+                               :organization => @our_org)
       @other_org     = Factory(:organization)
       @project       = Factory(:project,
-                                :data_response => @data_response )
+                               :data_response => @response )
     end
     
     it "checks whether a project has an activity" do
@@ -117,11 +117,11 @@ describe Project do
   context "Funding flows: " do
     before(:each) do
       @our_org       = Factory(:organization)
-      @data_response = Factory(:data_response,
-                                :organization => @our_org)
+      @response      = Factory(:data_response,
+                               :organization => @our_org)
       @other_org     = Factory(:organization)
       @project       = Factory(:project,
-                                :data_response => @data_response )
+                               :data_response => @response )
     end
 
     it "assigns and returns a sole funding source" do
@@ -280,9 +280,9 @@ describe Project do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
-      @data_response = Factory(:data_response, :currency => 'RWF')
+      @response      = Factory(:data_response, :currency => 'RWF')
       @project       = Factory(:project,
-                                :data_response => @data_response,
+                                :data_response => @response,
                                 :currency => nil)
       @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
@@ -326,9 +326,11 @@ describe Project do
       @data_request1 = Factory(:data_request)
       @organization = Factory(:organization)
       @organization1 = Factory(:organization)
-      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-      @data_response1 = Factory(:data_response, :data_request => @data_request1, :organization => @organization1)
-      @project = Factory(:project, :data_response => @data_response)
+      @response      = Factory(:data_response, :data_request => @data_request, 
+                               :organization => @organization)
+      @response1 = Factory(:data_response, :data_request => @data_request1, 
+                                :organization => @organization1)
+      @project = Factory(:project, :data_response => @response)
     end
     
     it "returns false if a project is not linked to a parent project" do
@@ -337,14 +339,14 @@ describe Project do
     
     it "returns true if a project is linked to a parent project" do
       @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
-                              :data_response => @data_response, :project_from_id => @project.id)
+                              :data_response => @response, :project_from_id => @project.id)
       @project = @funding_flow.project
       @project.linked?.should == true
     end
     
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
       @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, 
-        :project => @project, :data_response => @data_response, :project_from_id => 0)
+        :project => @project, :data_response => @response, :project_from_id => 0)
       @project = @funding_flow.project
       @project.linked?.should == true
     end

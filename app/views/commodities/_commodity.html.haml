@@ -6,5 +6,5 @@
   %td= calculate_total(commodity.unit_cost, commodity.quantity)
   %td
     %ul.manage_bar
-      %li= link_to "Edit", edit_response_commodity_path(@data_response, commodity)
-      %li= link_to "X", response_commodity_path(@data_response, commodity), :confirm => "Are you sure?", :method => :delete, :class => "right"
+      %li= link_to "Edit", edit_response_commodity_path(@response, commodity)
+      %li= link_to "X", response_commodity_path(@response, commodity), :confirm => "Are you sure?", :method => :delete, :class => "right"

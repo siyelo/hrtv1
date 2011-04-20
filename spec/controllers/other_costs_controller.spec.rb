@@ -6,8 +6,8 @@ describe OtherCostsController do
        @data_request = Factory.create(:data_request)
        @organization = Factory.create(:organization)
        @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
+       @response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory.create(:project, :data_response => @response)
        login @user
      end
     
@@ -16,8 +16,8 @@ describe OtherCostsController do
         :description => "some description",
         :project_id => @project.id
       },
-      :commit => 'Save', :response_id => @data_response.id
-      response.should redirect_to(response_projects_url(@data_response.id))
+      :commit => 'Save', :response_id => @response.id
+      response.should redirect_to(response_projects_url(@response.id))
     end
     
     it "redircts to the projects index page when Save & Go to Classify > is clicked" do 
@@ -25,7 +25,7 @@ describe OtherCostsController do
         :description => "some description",
         :project_id => @project.id
       },
-      :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+      :commit => 'Save & Go to Classify >', :response_id => @response.id
       response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
     end
   end

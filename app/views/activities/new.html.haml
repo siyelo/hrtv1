@@ -2,7 +2,7 @@
 
 = render :partial => 'projects/sub_nav'
 
-= render 'breadcrumb', :response => @data_response, :activity => @activity
+= render 'breadcrumb', :response => @response, :activity => @activity
 
 %h1.main_heading New Activity
 
@@ -14,5 +14,5 @@
 .wrap-70
   = error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-  - semantic_form_for @activity, :url => response_activities_path(@data_response), :html => {:class => "basic_form"} do |f|
+  - semantic_form_for @activity, :url => response_activities_path(@response), :html => {:class => "basic_form"} do |f|
     = render 'form', :f => f

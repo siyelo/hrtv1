@@ -922,17 +922,17 @@ describe Activity do
 
       # requests, responses
       @data_request   = Factory.create(:data_request, :organization => donor)
-      @data_response  = Factory.create(:data_response, :organization => ngo,
+      @response  = Factory.create(:data_response, :organization => ngo,
                                       :data_request => @data_request)
 
       # project
-      project        = Factory.create(:project, :data_response => @data_response)
+      project        = Factory.create(:project, :data_response => @response)
 
       # funding flows
-      in_flow        = Factory.create(:funding_flow, :data_response => @data_response,
+      in_flow        = Factory.create(:funding_flow, :data_response => @response,
                                :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory.create(:funding_flow, :data_response => @data_response,
+      out_flow       = Factory.create(:funding_flow, :data_response => @response,
                                :from => ngo, :to => @implementer1,
                                :budget => 7, :spend => 7)
 
@@ -943,12 +943,12 @@ describe Activity do
 
       @sub_activity1 = Factory.create(:sub_activity, :activity => @activity,
                                      :provider => @implementer1,
-                                     :data_response => @data_response,
+                                     :data_response => @response,
                                      :budget => 2, :spend => 2)
 
       @sub_activity2 = Factory.create(:sub_activity, :activity => @activity,
                                      :provider => @implementer2,
-                                     :data_response => @data_response,
+                                     :data_response => @response,
                                      :budget => 3, :spend => 3)
     end
 
@@ -1183,52 +1183,52 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @response)
         activity.budget_gor_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
         activity.budget_gor_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
         activity.budget_gor_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
         activity.budget_gor_quarter(4).should == 123
       end
     end
 
     context "Goverment of Rwanda" do
       before :each do
-        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
         activity.budget_gor_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
         activity.budget_gor_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
         activity.budget_gor_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @response)
         activity.budget_gor_quarter(4).should == 123
       end
     end
@@ -1251,52 +1251,52 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @response)
         activity.spend_gor_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
         activity.spend_gor_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
         activity.spend_gor_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
         activity.spend_gor_quarter(4).should == 123
       end
     end
 
     context "Goverment of Rwanda" do
       before :each do
-        @data_response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
         activity.spend_gor_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
         activity.spend_gor_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
         activity.spend_gor_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @data_response)
+        activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @response)
         activity.spend_gor_quarter(4).should == 123
       end
     end

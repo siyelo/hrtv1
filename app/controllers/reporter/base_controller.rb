@@ -11,9 +11,9 @@ class Reporter::BaseController < ApplicationController
     def load_data_response
       if current_user.admin?
         # work-arround until all admin actions are moved to admin controllers
-        @data_response = DataResponse.find(params[:response_id])
+        @response = DataResponse.find(params[:response_id])
       else
-        @data_response = current_user.data_responses.find(params[:response_id])
+        @response = current_user.data_responses.find(params[:response_id])
       end
     end
 

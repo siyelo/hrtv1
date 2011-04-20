@@ -5,13 +5,13 @@ class ActivitiesController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
-  belongs_to :data_response, :route_name => 'response'
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @data_response.activities.roots.scoped({:include => :project})
+    scope = @response.activities.roots.scoped({:include => :project})
     scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
-                                         UPPER(activities.name) LIKE UPPER(:q) OR
-                                         UPPER(activities.description) LIKE UPPER(:q)",
+                                          UPPER(activities.name) LIKE UPPER(:q) OR
+   i                                      UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
@@ -63,7 +63,7 @@ class ActivitiesController < Reporter::BaseController
   # called only via Ajax
   def approve
     if current_user.admin? || current_user.activity_manager?
-      @activity = @data_response.activities.find(params[:id])
+      @activity = @response.activities.find(params[:id])
       @activity.update_attributes({:approved => params[:checked]})
       render :nothing => true
     else
@@ -80,8 +80,8 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def project_sub_form
-    @activity = @data_response.activities.find_by_id(params[:activity_id])
-    @project = @data_response.projects.find(params[:project_id])
+    @activity = @response.activities.find_by_id(params[:activity_id])
+    @project  = @response.projects.find(params[:project_id])
     render :partial => "project_sub_form",
            :locals => {:activity => (@activity || :activity), :project => @project}
   end
@@ -96,7 +96,7 @@ class ActivitiesController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Activity.create_from_file(doc, @data_response)
+          saved, errors = Activity.create_from_file(doc, @response)
           flash[:notice] = "Created #{saved} of #{saved + errors} activities successfully"
         else
           flash[:error] = 'Wrong fields mapping. Please download the CSV template'
@@ -105,16 +105,16 @@ class ActivitiesController < Reporter::BaseController
         flash[:error] = 'Please select a file to upload'
       end
 
-    redirect_to response_activities_url(@data_response)
+    redirect_to response_activities_url(@response)
 #    rescue
 #      flash[:error] = "Your CSV file does not seem to be properly formatted."
-#      redirect_to response_activities_url(@data_response)
+#      redirect_to response_activities_url(@response)
 #    end
   end
 
   def destroy
     destroy! do |success, failure|
-      success.html { redirect_to response_projects_url(@data_response) }
+      success.html { redirect_to response_projects_url(@response) }
     end
   end
 

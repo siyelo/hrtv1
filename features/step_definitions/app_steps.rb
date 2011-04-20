@@ -285,9 +285,9 @@ end
 
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
-  @data_response = Factory(:data_response,
-                            :data_request => DataRequest.find_by_title(request),
-                            :organization => Organization.find_by_name(org))
+  @response = Factory(:data_response,
+                      :data_request => DataRequest.find_by_title(request),
+                      :organization => Organization.find_by_name(org))
 end
 
 Then /^wait a few moments$/ do

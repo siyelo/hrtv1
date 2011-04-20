@@ -23,8 +23,8 @@
     %td{:colspan => 100}
       - unless showing_other_cost
         No activities found.
-        - path = new_response_activity_path(@data_response)
+        - path = new_response_activity_path(@response)
       - else
         No other costs found.
-        - path = new_response_other_cost_path(@data_response)
+        - path = new_response_other_cost_path(@response)
       = link_to "Add #{heading} now.", path

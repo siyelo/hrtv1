@@ -139,9 +139,9 @@ class CommentsController < Reporter::BaseController
 
     def load_data_response(comment)
       if comment.commentable.is_a?(DataResponse)
-        @data_response = comment.commentable
+        @response = comment.commentable
       else
-        @data_response = comment.commentable.data_response
+        @response = comment.commentable.data_response
       end
     end
 end

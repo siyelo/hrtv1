@@ -1,10 +1,10 @@
 .fields
   .edit_block
-    = f.input :data_response_id, :as => :hidden, :value => @data_response.id, :required => false
-    = f.input :organization_id_to, :as => :hidden, :value => @data_response.organization.id, :required => false
+    = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
+    = f.input :organization_id_to, :as => :hidden, :value => @response.organization.id, :required => false
     = f.input :from, :collection => Organization.all, :hint => "The organization funding the project", :required => false, :input_html => {:class => 'ff_from'}, :as => :select
 
-    - if @data_response.data_request.spend?
+    - if @response.data_request.spend?
       = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false, :input_html => {:class => 'ff_spend'}
       %li.amounts.spend
         %label Quarterly spend
@@ -15,7 +15,7 @@
           = f.input :spend_q3     , :label => "Q3 09-10", :required => false, :input_html => {:class => 'ff_spend_q3'}
           = f.input :spend_q4     , :label => "Q4 09-10", :required => false, :input_html => {:class => 'ff_spend_q4'}
 
-    - if @data_response.data_request.budget?
+    - if @response.data_request.budget?
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false, :input_html => {:class => 'ff_budget'}
       %li.amounts.budget
         %label Quarterly budget

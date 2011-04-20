@@ -1,8 +1,8 @@
 %tbody
   %tr.head
     %td
-      %h1= link_to "#{h project.name}", edit_response_project_path(@data_response, project)
+      %h1= link_to "#{h project.name}", edit_response_project_path(@response, project)
     %td= n2cndrs(project.spend, project.currency)
     %td= n2cndrs(project.budget, project.currency)
-  = render 'activities', :heading => "Activities", :response => @data_response, :project => project, :activities => project.normal_activities
-  = render 'activities', :heading => "Other Costs", :response => @data_response, :project => project, :activities => project.other_costs
+  = render 'activities', :heading => "Activities", :response => @response, :project => project, :activities => project.normal_activities
+  = render 'activities', :heading => "Other Costs", :response => @response, :project => project, :activities => project.other_costs

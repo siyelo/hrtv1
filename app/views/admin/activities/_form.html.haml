@@ -1,9 +1,9 @@
-- @data_response = @activity.data_response
+- @response = @activity.data_response
 
 :javascript
-  var _response_id = "#{@data_response.id}";
+  var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
-  var _funding_sources = #{get_funding_sources(@data_response.organization.projects)}
+  var _funding_sources = #{get_funding_sources(@response.organization.projects)}
 
 - unless @activity.new_record?
   .form_aside
@@ -13,7 +13,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => @data_response.projects
+      = f.input :project_id, :label => "Project", :as => :select, :collection => @response.projects
 
       #project_sub_form
         #project_sub_form_fields
@@ -26,7 +26,7 @@
 
 
   %li.last
-    %h3== Past Activity Expenditure (#{@data_response.currency})
+    %h3== Past Activity Expenditure (#{@response.currency})
     %ul.dashboard_section
       = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
       %li.amounts.last
@@ -39,7 +39,7 @@
           = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
   %li.last
-    %h3 Budget (planned expenditure) (#{@data_response.currency})
+    %h3 Budget (planned expenditure) (#{@response.currency})
     %ul.dashboard_section
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
       %li.amounts

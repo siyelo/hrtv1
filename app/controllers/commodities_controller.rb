@@ -4,15 +4,15 @@ class CommoditiesController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
-  belongs_to :data_response, :route_name => 'response'
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @data_response.commodities.scoped({})
+    scope = @response.commodities.scoped({})
     scope = scope.scoped(:conditions => ["UPPER(description) LIKE UPPER(:q)",
                                          {:q => "%#{params[:query]}%"}]) if params[:query]
     @commodities = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => sort_column + " " + sort_direction) # rails 2
-    @commodity = Commodity.new(:data_response_id => @data_response.id)
+    @commodity = Commodity.new(:data_response_id => @response.id)
   end
 
   def download_template
@@ -35,7 +35,7 @@ class CommoditiesController < Reporter::BaseController
   def create_from_file
     begin
       if params[:file].present?
-        result_hash = Commodity.from_csv(params[:file], @data_response)
+        result_hash = Commodity.from_csv(params[:file], @response)
         if result_hash[:result] == true
           flash[:notice] = result_hash[:message]
         else
@@ -48,7 +48,7 @@ class CommoditiesController < Reporter::BaseController
       redirect_to response_commodities_path
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
-      redirect_to response_commodities_path(@data_response)
+      redirect_to response_commodities_path(@response)
     end
   end
 

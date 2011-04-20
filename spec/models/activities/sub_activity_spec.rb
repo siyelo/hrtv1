@@ -29,24 +29,24 @@ describe SubActivity do
 
       # requests, responses
       @data_request   = Factory.create(:data_request, :organization => donor)
-      @data_response  = Factory.create(:data_response, :organization => ngo,
+      @response  = Factory.create(:data_response, :organization => ngo,
                                       :data_request => @data_request)
 
       # project
-      project        = Factory.create(:project, :data_response => @data_response)
+      project        = Factory.create(:project, :data_response => @response)
 
       # funding flows
-      in_flow        = Factory.create(:funding_flow, :data_response => @data_response,
+      in_flow        = Factory.create(:funding_flow, :data_response => @response,
                                :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory.create(:funding_flow, :data_response => @data_response,
+      out_flow       = Factory.create(:funding_flow, :data_response => @response,
                                :from => ngo, :to => @implementer,
                                :budget => 7, :spend => 7)
 
       # activities
       @activity      = Factory.create(:activity, :name => 'Activity 1',
                                       :budget => 100, :spend => 100,
-                                      :data_response => @data_response,
+                                      :data_response => @response,
                                       :provider => ngo, :project => project)
 
 
@@ -57,7 +57,7 @@ describe SubActivity do
         it "returns sub_activity budget" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => 4)
 
           @sub_activity.budget.should == 4
@@ -69,7 +69,7 @@ describe SubActivity do
           @activity.budget = 10
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => nil, :budget_percentage => 50)
 
           @sub_activity.budget.should == 5
@@ -79,7 +79,7 @@ describe SubActivity do
           @activity.budget = nil
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => nil, :budget_percentage => 50)
 
           @sub_activity.budget.should be_nil
@@ -92,7 +92,7 @@ describe SubActivity do
         it "returns sub_activity spend" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :spend => 3)
 
           @sub_activity.spend.should == 3
@@ -104,7 +104,7 @@ describe SubActivity do
           @activity.spend = 100
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :spend => nil, :spend_percentage => 50)
 
           @sub_activity.spend.should == 50
@@ -114,7 +114,7 @@ describe SubActivity do
           @activity.spend = nil
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :spend => nil, :spend_percentage => 50)
 
           @sub_activity.spend.should be_nil
@@ -127,7 +127,7 @@ describe SubActivity do
         it "returns implementer locations when implementer has locations" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => 4, :spend => 4)
           @implementer.locations = [Factory.create(:location)]
 
@@ -137,7 +137,7 @@ describe SubActivity do
         it "returns activity locations when implementer does not have locations" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                          :provider => @implementer,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => 4, :spend => 4)
           @implementer.locations = []
           @activity.locations    = [Factory.create(:location)]
@@ -149,7 +149,7 @@ describe SubActivity do
       context "implementer not present" do
         it "returns activity locations" do
           @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :data_response => @data_response,
+                                         :data_response => @response,
                                          :budget => 4, :spend => 4)
           @activity.locations = [Factory.create(:location)]
 
@@ -174,7 +174,7 @@ describe SubActivity do
 
         sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                       :provider => @implementer,
-                                      :data_response => @data_response,
+                                      :data_response => @response,
                                       :budget => 4, :spend => 5)
 
         sub_activity.code_assignments[0].cached_amount.should == 0.4
@@ -198,7 +198,7 @@ describe SubActivity do
                        :amount => 10, :cached_amount => 10)
         sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                        :provider => @implementer,
-                                       :data_response => @data_response,
+                                       :data_response => @response,
                                        :budget => 6)
 
         sub_activity.coding_budget.length.should == 1
@@ -214,7 +214,7 @@ describe SubActivity do
                        :amount => 10, :cached_amount => 10)
         sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                        :provider => @implementer,
-                                       :data_response => @data_response,
+                                       :data_response => @response,
                                        :budget => 6)
 
         sub_activity.coding_budget_cost_categorization.length.should == 1
@@ -236,7 +236,7 @@ describe SubActivity do
           it "returns code assignments" do
             sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                           :provider => @implementer,
-                                          :data_response => @data_response,
+                                          :data_response => @response,
                                           :budget => 4)
             sub_activity.budget_district_coding_adjusted.length.should == 1
             ca = sub_activity.budget_district_coding_adjusted[0]
@@ -264,7 +264,7 @@ describe SubActivity do
           it "returns adjusted activity code_assignments" do
             sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                            :provider => @implementer,
-                                           :data_response => @data_response,
+                                           :data_response => @response,
                                            :budget => 6)
 
             sub_activity.budget_district_coding_adjusted.length.should == 1
@@ -286,7 +286,7 @@ describe SubActivity do
           it "returns adjusted activity code_assignments" do
             sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                            :provider => @implementer,
-                                           :data_response => @data_response,
+                                           :data_response => @response,
                                            :budget => 6)
 
             sub_activity.budget_district_coding_adjusted.length.should == 2
@@ -307,7 +307,7 @@ describe SubActivity do
                        :amount => 10, :cached_amount => 10)
         sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                        :provider => @implementer,
-                                       :data_response => @data_response,
+                                       :data_response => @response,
                                        :spend => 6)
 
         sub_activity.coding_spend.length.should == 1
@@ -323,7 +323,7 @@ describe SubActivity do
                        :amount => 10, :cached_amount => 10)
         sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                        :provider => @implementer,
-                                       :data_response => @data_response,
+                                       :data_response => @response,
                                        :spend => 6)
 
         sub_activity.coding_spend_cost_categorization.length.should == 1
@@ -344,7 +344,7 @@ describe SubActivity do
           it "returns code assignments" do
             sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                           :provider => @implementer,
-                                          :data_response => @data_response,
+                                          :data_response => @response,
                                           :spend => 4)
             sub_activity.spend_district_coding_adjusted.length.should == 1
             ca = sub_activity.spend_district_coding_adjusted[0]
@@ -372,7 +372,7 @@ describe SubActivity do
           it "returns adjusted activity code_assignments" do
             sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                            :provider => @implementer,
-                                           :data_response => @data_response,
+                                           :data_response => @response,
                                            :spend => 6)
 
             sub_activity.spend_district_coding_adjusted.length.should == 1
@@ -394,7 +394,7 @@ describe SubActivity do
           it "returns adjusted activity code_assignments" do
             sub_activity  = Factory.create(:sub_activity, :activity => @activity,
                                            :provider => @implementer,
-                                           :data_response => @data_response,
+                                           :data_response => @response,
                                            :spend => 6)
 
             sub_activity.spend_district_coding_adjusted.length.should == 2
@@ -414,13 +414,13 @@ describe SubActivity do
         @activity.sub_activities_count.should == 0
         @sub_activity = Factory.create(:sub_activity, :activity => @activity,
                                        :provider => @implementer,
-                                       :data_response => @data_response,
+                                       :data_response => @response,
                                        :budget => 4)
 
         @activity.reload.sub_activities_count.should == 1
-        @data_response.reload.sub_activities_count.should == 1
-        Factory.create(:sub_activity, :activity => @activity, :data_response => @data_response)
-        @data_response.reload.sub_activities_count.should == 2
+        @response.reload.sub_activities_count.should == 1
+        Factory.create(:sub_activity, :activity => @activity, :data_response => @response)
+        @response.reload.sub_activities_count.should == 2
         @activity.reload.sub_activities_count.should == 2
       end
     end

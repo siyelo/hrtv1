@@ -1121,7 +1121,7 @@ $(function () {
   }
 
   $("#closeFlash").click(function(){
-    $("#flashes").fadeOut("slow");
+    $("#flash_holder").fadeOut("slow");
   });
 
   $('#page_tips_open').click(function (e) {

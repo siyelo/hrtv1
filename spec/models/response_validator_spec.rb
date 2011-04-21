@@ -187,4 +187,62 @@ describe DataResponse do #validations
     end
   end
 
+  describe "#projects_have_correct_budgets_for_funding_sources?" do
+    before :each do
+      @funder1 = Factory.create(:organization)
+      @funder2 = Factory.create(:organization)
+      @implementer = Factory.create(:organization)
+      @response    = Factory.create(:data_response, :organization => @implementer)
+      @project = Factory.create(:project, :data_response => @response, :budget => 10)
+    end
+
+    it "is true when budget in flow equals to project budget" do
+      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 10)
+
+      @response.projects_have_correct_budgets_for_funding_sources?.should == true
+    end
+
+    it "is true when sum of budget in flows is equals to funder budget" do
+      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 5)
+      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 5)
+
+      @response.projects_have_correct_budgets_for_funding_sources?.should == true
+    end
+
+    it "is false when sum of budget in flows are greated than funder budget" do
+      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 5)
+      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 6)
+
+      @response.projects_have_correct_budgets_for_funding_sources?.should == false
+    end
+
+    it "is false when sum of budget in flows are less than funder budget" do
+      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 5)
+      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
+                     :data_response => @response, :project => @project, :budget => 6)
+
+      @response.projects_have_correct_budgets_for_funding_sources?.should == false
+    end
+  end
+
+
+
+#Scenario: Two Funders, amounts exceed
+#And I enter a Funder1 with Budget $5
+#And I enter Funder2 with Budget $10
+#Then I can save the Project
+#And I can NOT submit the response
+
+#Scenario: Two Funders, amounts less than budget 
+#And I enter a Funder1 with Budget $5
+#And I enter Funder2 with Budget $2
+#Then I can save the Project
+#And I can NOT submit the response
+
 end

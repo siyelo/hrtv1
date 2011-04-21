@@ -11,7 +11,7 @@ class ActivitiesController < Reporter::BaseController
     scope = @response.activities.roots.scoped({:include => :project})
     scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
                                           UPPER(activities.name) LIKE UPPER(:q) OR
-   i                                      UPPER(activities.description) LIKE UPPER(:q)",
+                                          UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
@@ -26,8 +26,8 @@ class ActivitiesController < Reporter::BaseController
     create! do |success, failure|
       success.html { 
         if params[:commit] == "Save & Go to Classify >"
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @data_response.data_request.spend?
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @data_response.data_request.budget?
+          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
         else
           redirect_to response_projects_path(@activity.project.response)
         end
@@ -39,8 +39,8 @@ class ActivitiesController < Reporter::BaseController
     update! do |success, failure|
       success.html { 
         if params[:commit] == "Save & Go to Classify >"
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @data_response.data_request.spend?
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @data_response.data_request.budget?
+          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
         else
           redirect_to response_projects_path(@activity.project.response)
         end

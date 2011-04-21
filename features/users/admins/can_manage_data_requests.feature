@@ -8,7 +8,7 @@ Feature: Admin can manage data requests
     And a data_request exists with organization: the organization
     And an admin exists with username: "admin", organization: the organization
     And I am signed in as "admin"
-    
+
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
        And I follow "Create Data Request"
@@ -43,7 +43,7 @@ Feature: Admin can manage data requests
        And I fill in "Due date" with "<due_date>"
        And I press "Create request"
       Then I should see "<message>"
-      
+
       Examples:
         | organization | title | due_date   | start_date | end_date   | message                              | 
         | org1         | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     | 
@@ -60,4 +60,3 @@ Feature: Admin can manage data requests
        And I check "Final review"
        And I press "Update request"
       Then I should see "Request was successfully updated."
-    

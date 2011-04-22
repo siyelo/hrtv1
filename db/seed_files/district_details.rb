@@ -6,7 +6,7 @@ print "\nloading districts "
 population_col = 2
 district_col   = 7
 
-FasterCSV.foreach("db/seed_files/districts_of_rwanda.csv", :headers => true) do |row|
+FasterCSV.foreach("db/seed_files/district_details.csv", :headers => true) do |row|
   begin
     print '.'
     name = row[district_col].capitalize

@@ -13,10 +13,11 @@ when 'kenya'
     print "."
   end
 else
+  # TODO move files to rwanda directory like kenya above
   print "\n Seeding districts for rwanda"
   FasterCSV.foreach("db/seed_files/districts.csv", :headers=>true) do |row|
     Location.create!(:short_display => row[0].strip)
     print "."
   end
-  load 'db/seed_files/districts_of_rwanda.rb'
+  load 'db/seed_files/district_details.rb'
 end

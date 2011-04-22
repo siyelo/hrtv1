@@ -11,5 +11,7 @@ when 'kenya'
   end
   print "\n Finished Seeding organizations for kenya"
 else
-   print "\n Seeding organizations for rwanda"
+   print "\n Seeding organizations for any other country"
+   # TODO actually seed something
+   # TODO standardize org types in different seed files
 end

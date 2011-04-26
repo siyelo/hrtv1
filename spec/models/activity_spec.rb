@@ -85,6 +85,50 @@ describe Activity do
       #a.should_not be_valid
     #end
   end
+  
+  describe "checking activities budget/spend against projects validations" do
+  
+    it "returns false when the activitys spend is greater than that of the projects" do
+      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000), 
+                                 :spend => 11000, :budget => 9000)
+      @activity.check_projects_budget_and_spend?.should be_false
+    end
+    
+    it "returns false when the activitys budget is greater than that of the projects" do
+      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000), 
+                                 :spend => 10000, :budget => 19000)
+      @activity.check_projects_budget_and_spend?.should be_false
+    end
+    
+    it "returns true when the activitys spend and budget is less than that of the projects" do
+      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000), 
+                                 :spend => 1000, :budget => 1000)
+
+      @activity.check_projects_budget_and_spend?.should be_true
+    end
+    
+    it "returns true when the activitys quarterly spend and budget is less than that of the projects" do
+      @activity = Factory.create(:activity, 
+                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
+                                 :spend_q1 => 1300, :spend_q2 => 1400, :spend_q3 => 1500, :spend_q4 => 1233,
+                                 :budget_q1 => 1200,:budget_q2 => 1300,:budget_q3 => 1500,:budget_q4 => 1100),
+                                 
+                                 :spend_q1 => 1100, :spend_q2 => 1200, :spend_q3 => 1300, :spend_q4 => nil,
+                                 :budget_q1 => 1100,:budget_q2 => 1100,:budget_q3 => 1100,:budget_q4 => 1100)
+      @activity.check_projects_budget_and_spend?.should be_true
+    end
+    
+    it "returns false when the activitys quarterly spend and budget is less than that of the projects" do
+      @activity = Factory.create(:activity, 
+                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
+                                 :spend_q1 => 10, :spend_q2 => 10, :spend_q3 => 10, :spend_q4 => 1233,
+                                 :budget_q1 => 1200,:budget_q1 => 1300,:budget_q1 => 1500,:budget_q1 => 1100),
+                                 
+                                 :spend_q1 => 1100, :spend_q2 => 1200, :spend_q3 => 1300, :spend_q4 => nil,
+                                 :budget_q1 => 1100,:budget_q2 => 1100,:budget_q3 => 1100,:budget_q4 => 1100)
+      @activity.check_projects_budget_and_spend?.should be_false
+    end
+  end
 
   describe "currency" do
     it "complains when you dont have a project (therefore currency)" do

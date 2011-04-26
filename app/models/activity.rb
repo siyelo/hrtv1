@@ -435,7 +435,42 @@ class Activity < ActiveRecord::Base
     ufs
   end
 
+  def check_projects_budget_and_spend?
+    return true if self.budget.nil? && self.spend.nil?
+    return true if self.actual_budget <= self.project.budget && 
+                   self.actual_spend <= self.project.spend && 
+                   self.actual_quarterly_spend_check? && 
+                   self.actual_quarterly_budget_check?
+    return false
+  end
+  
+  def actual_spend
+    (self.spend || 0 )
+  end
+  
+  def actual_budget
+    (self.budget || 0 )
+  end
+  
+  def actual_quarterly_spend_check?
+    return true if (self.spend_q1 || 0) <= (self.project.spend_q1 || 0) && 
+                   (self.spend_q2 || 0) <= (self.project.spend_q2 || 0) && 
+                   (self.spend_q3 || 0) <= (self.project.spend_q3 || 0) && 
+                   (self.spend_q4 || 0) <= (self.project.spend_q1 || 0)
+    return false
+  end
+  
+  def actual_quarterly_budget_check?
+    return true if (self.budget_q1 || 0) <= (self.project.budget_q1 || 0) && 
+                   (self.budget_q2 || 0) <= (self.project.budget_q2 || 0) && 
+                   (self.budget_q3 || 0) <= (self.project.budget_q3 || 0) && 
+                   (self.budget_q4 || 0) <= (self.project.budget_q4 || 0)
+                    
+    return false
+  end
+
   private
+
 
     def delete_existing_code_assignments_by_type(coding_type)
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])

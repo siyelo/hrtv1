@@ -147,27 +147,57 @@ describe ActivitiesController do
        @organization = Factory.create(:organization)
        @user = Factory.create(:reporter, :organization => @organization)
        @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
        login @user
      end
     
     it "redircts to the projects index page when save is clicked" do 
+      @project = Factory.create(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
-        :project_id => @project.id
+        :project_id => @project.id,
+        :budget => 9000,
+        :spend => 8000
       },
       :commit => 'Save', :response_id => @data_response.id
       response.should redirect_to(response_projects_url(@data_response.id))
     end
     
     it "redircts to the projects index page when Save & Go to Classify is clicked" do 
+      @project = Factory.create(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
-        :project_id => @project.id
+        :project_id => @project.id,
+        :budget => 9000,
+        :spend => 8000
       },
       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
     end
+    
+    it "returns true if the activitys budget and spend is less than that of the projects" do 
+      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
+      post :create, :activity => {
+        :description => "some description",
+        :project_id => @project.id,
+        :budget => 9000,
+        :spend => 8000
+      }, :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+      flash[:notice].should == "Activity was successfully created"
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+    end
+    
+    it "returns false if the activitys budget and spend is more than that of the projects using save button" do 
+      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
+      post :create, :activity => {
+        :description => "some description",
+        :project_id => @project.id,
+        :budget => 19000,
+        :spend => 81000
+      }, :commit => 'Save', :response_id => @data_response.id
+      flash[:error].should == "Please be aware that your activities spend/budget exceeded that of your projects"
+      response.should redirect_to(response_projects_path(@data_response))
+    end
+    
   end
   
   describe "Redirects to budget or spend depending on datarequest" do
@@ -184,6 +214,23 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+     end
+     
+     it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do 
+       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
+       @organization = Factory.create(:organization)
+       @user = Factory.create(:reporter, :organization => @organization)
+       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000)
+       login @user
+       post :create, :activity => {
+         :description => "some description",
+         :project_id => @project.id,
+         :budget => 11000
+       },
+       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       flash[:error].should == "Please be aware that your activities spend/budget exceeded that of your projects"
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
      

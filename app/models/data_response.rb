@@ -3,6 +3,7 @@ require 'validators'
 class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
+  extend ActiveSupport::Memoizable
   acts_as_commentable
 
   ### Attributes
@@ -176,11 +177,13 @@ class DataResponse < ActiveRecord::Base
       self.errors.add_to_base("Project expenditures are not yet entered.") unless projects_spend_entered?
       self.errors.add_to_base("Project budgets are not yet entered.") unless projects_budget_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
+      self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
+      self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
 
-      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_have_correct_budgets_for_funding_sources?
-      self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_have_correct_spends_for_funding_sources?
+      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_budgets?
+      self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
 
       return false
     end
@@ -237,10 +240,12 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
+  memoize :projects_linked?
 
   def activities_entered?
     !self.normal_activities.empty?
   end
+  memoize :activities_entered?
 
   def projects_have_activities?
     return false unless activities_entered?
@@ -249,10 +254,12 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
+  memoize :projects_have_activities?
 
   def other_costs_entered?
     !self.other_costs.empty?
   end
+  memoize :other_costs_entered?
 
   def projects_have_other_costs?
     return false unless other_costs_entered?
@@ -261,22 +268,45 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
+  memoize :projects_have_other_costs?
 
-  def projects_have_correct_budgets_for_funding_sources?
+  def projects_and_funding_sources_have_correct_budgets?
     projects.each do |project|
       total = project.in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
       return false if project.budget != total
     end
     true
   end
+  memoize :projects_and_funding_sources_have_correct_budgets?
 
-  def projects_have_correct_spends_for_funding_sources?
+  def projects_and_funding_sources_have_correct_spends?
     projects.each do |project|
       total = project.in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
       return false if project.spend != total
     end
     true
   end
+  memoize :projects_and_funding_sources_have_correct_spends?
+
+  def projects_and_activities_have_correct_budgets?
+    projects.each do |project|
+      activities_total = project.activities.roots.reject{|fs| fs.budget.nil?}.sum(&:budget)
+      other_costs_total = project.other_costs.reject{|fs| fs.budget.nil?}.sum(&:budget)
+      return false if project.budget != (activities_total + other_costs_total)
+    end
+    true
+  end
+  memoize :projects_and_activities_have_correct_budgets?
+
+  def projects_and_activities_have_correct_spends?
+    projects.each do |project|
+      activities_total = project.activities.roots.reject{|fs| fs.spend.nil?}.sum(&:spend)
+      other_costs_total = project.other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
+      return false if project.spend != (activities_total + other_costs_total)
+    end
+    true
+  end
+  memoize :projects_and_activities_have_correct_spends?
 
   def uncoded_activities
     reject_uncoded(self.normal_activities)

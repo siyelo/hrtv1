@@ -123,6 +123,25 @@ describe DataResponse do #validations
     end
   end
 
+  describe "project budget check" do    
+    it "succeeds if budget is entered" do
+      @response.projects_budget_entered?.should == true
+    end
+    
+    it "succeeds if budget not entered but a quarter budget is" do
+      @project.budget = nil
+      @project.budget_q1 = 10
+      @project.save
+      @response.projects_budget_entered?.should == true
+    end
+    
+    it "fails if budget is not entered and no quarter budgets are" do
+      @project.budget = nil
+      @project.save
+      @response.projects_budget_entered?.should == false
+    end
+  end
+
   describe "ready to submit" do
     before :each do
       @activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
@@ -140,7 +159,7 @@ describe DataResponse do #validations
       it "validates OK if everything is entered" do
         @response.projects_entered?.should == true
         @response.projects_spend_entered?.should == true
-        #TODO budget entered
+        @response.projects_budget_entered?.should == true
         @response.projects_linked?.should == true
         @response.activities_coded?.should == true
         @response.other_costs_coded?.should == true

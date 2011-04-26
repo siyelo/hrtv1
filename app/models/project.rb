@@ -167,13 +167,13 @@ class Project < ActiveRecord::Base
   end
 
   def spend_entered?
-    return true if spend ||
-      spend_q1 ||
-      spend_q2 ||
-      spend_q3 ||
-      spend_q4 ||
-      spend_q4_prev
-    false
+    spend.present? || spend_q1.present? || spend_q2.present? || 
+      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+  end
+
+  def budget_entered?
+    budget.present? || budget_q1.present? || budget_q2.present? || 
+      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
 
   def linked?

@@ -174,9 +174,14 @@ class DataResponse < ActiveRecord::Base
     else
       self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
       self.errors.add_to_base("Project expenditures are not yet entered.") unless projects_spend_entered?
+      self.errors.add_to_base("Project budgets are not yet entered.") unless projects_budget_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
+
+      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_have_correct_budgets_for_funding_sources?
+      self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_have_correct_spends_for_funding_sources?
+
       return false
     end
   end
@@ -191,6 +196,7 @@ class DataResponse < ActiveRecord::Base
   def basics_done?
     projects_entered? &&
     projects_spend_entered? &&
+    projects_budget_entered? &&
     activities_coded? &&
     other_costs_coded?
   end
@@ -209,12 +215,19 @@ class DataResponse < ActiveRecord::Base
 
   # if the request asks for spend, check if the spends were entered
   def projects_spend_entered?
-    return true if !request.spend?
-    projects_without_spend.empty?
+    !request.spend? || projects_without_spend.empty?
+  end
+
+  def projects_budget_entered?
+    !request.budget? || projects_without_budget.empty?
   end
 
   def projects_without_spend
     self.projects.select{ |p| !p.spend_entered? }
+  end
+
+  def projects_without_budget
+    self.projects.select{ |p| !p.budget_entered? }
   end
 
   def projects_linked?

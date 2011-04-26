@@ -91,6 +91,29 @@
       = link_to "link your projects", bulk_edit_response_projects_path(@response)
       to each Funder project respectively.
 
+
+
+- ready_class = @response.projects_have_correct_budgets_for_funding_sources? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Correct Budget amounts for Projects & Funding Sources
+  - unless @response.projects_have_correct_budgets_for_funding_sources?
+    %span.info
+      Project Budget amounts are not equal to sum of Funding Source Budget amounts, please 
+      = link_to "edit your projects", response_projects_path(@response)
+      and enter correct amounts.
+
+
+- ready_class = @response.projects_have_correct_spends_for_funding_sources? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Correct Expenditure amounts for Projects & Funding Sources
+  - unless @response.projects_have_correct_spends_for_funding_sources?
+    %span.info
+      Project Expenditure amounts are not equal to sum of Funding Source Expenditure amounts, please 
+      = link_to "edit your projects", response_projects_path(@response)
+      and enter correct amounts.
+
+
+
 %hr.divider
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"

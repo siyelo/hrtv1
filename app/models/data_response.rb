@@ -245,6 +245,14 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
+  def projects_have_correct_spends_for_funding_sources?
+    projects.each do |project|
+      total = project.in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
+      return false if project.spend != total
+    end
+    true
+  end
+
   def uncoded_activities
     reject_uncoded(self.normal_activities)
   end

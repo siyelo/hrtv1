@@ -36,6 +36,16 @@
       %span.info
         = render 'projects/no_projects_yet'
 
+- ready_class = @response.projects_budget_entered? ? "ready" : "not-ready"
+%h3{:class => ready_class}
+  Projects: Budgets Entered
+  - unless @response.projects_budget_entered?
+    - if @response.projects_entered?
+      %span.info Enter the Budget for all of your projects.
+    - else
+      %span.info
+        = render 'projects/no_projects_yet'
+
 - if @response.projects_without_spend
   %ul.push
     - @response.projects_without_spend.each do |p|

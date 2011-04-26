@@ -342,6 +342,29 @@ describe Project do
       @project.spend_entered?.should == false
     end
   end
+
+  describe "project budget check" do
+    before :each do
+      @project = Factory(:project, :budget => 20)
+    end
+
+    it "succeeds if budget is entered" do
+      @project.budget_entered?.should == true
+    end
+    
+    it "succeeds if budget not entered but a quarter budget is" do
+      @project.budget = nil
+      @project.budget_q1 = 10
+      @project.save
+      @project.budget_entered?.should == true
+    end
+    
+    it "fails if budget is not entered and no quarter budgets are" do
+      @project.budget = nil
+      @project.save
+      @project.budget_entered?.should == false
+    end
+  end
   
   describe "linking to funding source project" do
     before :each do

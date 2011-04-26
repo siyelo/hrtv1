@@ -1,0 +1,18 @@
+.simple_table.push
+  %table
+    %thead
+      %tr
+        %th Project
+        %th Project Budget
+        %th Funding Sources Total
+        %th Diff
+        %th.manage Manage
+    %tbody
+      - response.projects.each do |project|
+        - if project.in_flows_budget_total != project.budget
+          %tr
+            %td= project.name
+            %td= project.budget
+            %td= project.in_flows_budget_total
+            %td= project.budget - project.in_flows_budget_total
+            %td= link_to "Edit", edit_response_project_path(response, project)

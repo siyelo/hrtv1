@@ -122,20 +122,56 @@
 %h3{:class => ready_class}
   Correct Budget amounts for Projects & Funding Sources
   - unless @response.projects_and_funding_sources_have_correct_budgets?
-    %span.info
-      Project Budget amounts are not equal to sum of Funding Source Budget amounts, please 
-      = link_to "edit your projects", response_projects_path(@response)
-      and enter correct amounts.
+    %span.info Project Budget amounts are not equal to sum of Funding Source Budget amounts, please edit your projects and enter correct amounts.
+
+- unless @response.projects_and_funding_sources_have_correct_budgets?
+  .simple_table.push
+    %table
+      %thead
+        %tr
+          %th Project
+          %th Project Budget
+          %th Funding Sources Budget Total
+          %th Diff
+          %th.manage Manage
+      %tbody
+        - @response.projects.each do |project|
+          - if project.in_flows_budget_total != project.budget
+            %tr
+              %td= project.name
+              %td= project.budget
+              %td= project.in_flows_budget_total
+              %td= project.budget - project.in_flows_budget_total
+              %td= link_to "Edit", edit_response_project_path(@response, project)
 
 
 - ready_class = @response.projects_and_funding_sources_have_correct_spends? ? "ready" : "not-ready"
 %h3{:class => ready_class}
   Correct Expenditure amounts for Projects & Funding Sources
   - unless @response.projects_and_funding_sources_have_correct_spends?
-    %span.info
-      Project Expenditure amounts are not equal to sum of Funding Source Expenditure amounts, please 
-      = link_to "edit your projects", response_projects_path(@response)
-      and enter correct amounts.
+    %span.info Project Expenditure amounts are not equal to sum of Funding Source Expenditure amounts, please edit your projects and enter correct amounts.
+
+- unless @response.projects_and_funding_sources_have_correct_spends?
+  .simple_table.push
+    %table
+      %thead
+        %tr
+          %th Project
+          %th Project Expenditure
+          %th Funding Sources Expenditure Total
+          %th Diff
+          %th.manage Manage
+      %tbody
+        - @response.projects.each do |project|
+          - if project.in_flows_spend_total != project.spend
+            %tr
+              %td= project.name
+              %td= project.spend
+              %td= project.in_flows_spend_total
+              %td= project.spend - project.in_flows_spend_total
+              %td= link_to "Edit", edit_response_project_path(@response, project)
+
+
 
 - ready_class = @response.projects_and_activities_have_correct_budgets? ? "ready" : "not-ready"
 %h3{:class => ready_class}

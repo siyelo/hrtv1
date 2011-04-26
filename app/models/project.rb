@@ -192,6 +192,14 @@ class Project < ActiveRecord::Base
     !self.activities.with_type("OtherCost").empty?
   end
 
+  def in_flows_budget_total
+    in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
+  end
+
+  def in_flows_spend_total
+    in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
+  end
+
   private
 
     def validate_budgets

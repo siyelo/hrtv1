@@ -272,8 +272,7 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_funding_sources_have_correct_budgets?
     projects.each do |project|
-      total = project.in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
-      return false if project.budget != total
+      return false if project.budget != project.in_flows_budget_total
     end
     true
   end
@@ -281,8 +280,7 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_funding_sources_have_correct_spends?
     projects.each do |project|
-      total = project.in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
-      return false if project.spend != total
+      return false if project.spend != project.in_flows_spend_total
     end
     true
   end

@@ -42,12 +42,12 @@ class DataResponse < ActiveRecord::Base
   # TODO: spec
   validates_date :fiscal_year_start_date
   validates_date :fiscal_year_end_date
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date."
+  #validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
+    #:message => "Start date must come before End date."
 
   ### Named scopes
-  named_scope :unfulfilled, :conditions => ["complete = ?", false]
-  named_scope :submitted,   :conditions => ["submitted = ?", true]
+  scope :unfulfilled, :conditions => ["complete = ?", false]
+  scope :submitted,   :conditions => ["submitted = ?", true]
 
   ### Callbacks
   after_save :update_cached_currency_amounts

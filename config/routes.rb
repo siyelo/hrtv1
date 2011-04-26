@@ -1,90 +1,141 @@
-ActionController::Routing::Routes.draw do |map|
+ResourceTracking::Application.routes.draw do
   # ROOT
-  map.root :controller => 'static_page', :action => 'index'
+  match '/' => 'static_page#index'
 
   # LOGIN/LOGOUT
-  map.resource  :user_session
-  map.login     'login', :controller => 'user_sessions', :action => 'new'
-  map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
-  map.resources :password_resets
+  resource :user_session
+  match 'login' => 'user_sessions#new', :as => :login
+  match 'logout' => 'user_sessions#destroy', :as => :logout
+  resources :password_resets
 
   # PROFILE
-  map.resource :profile, :only => [:edit, :update, :disable_tips], 
-    :member => {:disable_tips => :put}
+  resource :profile, :only => [:edit, :update, :disable_tips] do
+    member do
+      put :disable_tips
+    end
+  end
 
   # STATIC PAGES
-  map.about_page 'about', :controller => 'static_page',
-    :action => 'about'
+  match 'about' => 'static_page#about', :as => :about_page
 
-  map.resources :comments, :member => {:delete => :get}
+  resources :comments do
+    member do
+      get :delete
+    end
+  end
+
 
   # ADMIN
-  map.namespace :admin do |admin|
-    admin.resources :requests
-    admin.resources :responses,
-      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
-      :member     => {:delete => :get}
-    admin.resources :organizations,
-      :collection => {:duplicate => :get, :remove_duplicate  => :put, 
-                      :download_template => :get, :create_from_file => :post}
-    admin.resources :reports, :member => {:generate => :get}
-    admin.resources :users,
-      :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :activities
-    admin.resources :codes,
-      :collection => {:create_from_file => :post, :download_template => :get}
-    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+  namespace :admin do
+    resources :requests
+    resources :responses do
+      collection do
+        get :in_progress
+        get :submitted
+        get :empty
+      end
+      member do
+        get :delete
+      end
+    end
+    resources :organizations do
+      collection do
+        get :download_template
+        post :create_from_file
+        get :duplicate
+        put :remove_duplicate
+      end
+    end
+    resources :reports do
+      member do
+        get :generate
+      end
+    end
+    resources :users do
+      collection do
+        get :download_template
+        post :create_from_file
+      end
+    end
+    resources :activities
+    resources :codes do
+      collection do
+        get :download_template
+        post :create_from_file
+      end
+    end
+    match 'dashboard' => 'dashboard#index', :as => :dashboard
   end
 
   # POLICY MAKER
-  map.namespace :policy_maker do |policy_maker|
-    policy_maker.resources :responses, :only => [:show, :index]
+  namespace :policy_maker do
+    resources :responses, :only => [:show, :index]
   end
 
   # REPORTER USER: DATA ENTRY
-  map.resources :responses,
-    :member => {:review => :get, :submit => :put} do |response|
-      response.resources :commodities,
-        :collection => {:create_from_file => :post, :download_template => :get}
-      response.resources :projects,
-        :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
-      response.resources :activities,
-        :member => {:approve => :put, :classifications => :get},
-        :collection => {:bulk_create => :post, :download_template => :get, 
-                        :project_sub_form => :get}
-      response.resources :other_costs,
-        :collection => {:create_from_file => :post, :download_template => :get}
+  resources :responses do
+    resources :commodities do
+      collection do
+        get :download_template
+        post :create_from_file
+      end
+    end
+    resources :projects do
+      collection do
+        get :download_template
+        get :bulk_edit
+        post :create_from_file
+        put :bulk_update
+      end
+    end
+    resources :activities do
+      collection do
+        get :download_template
+        post :create_from_file
+        get :project_sub_form
+        put :bulk_create
+      end
+      member do
+        put :approve
+        get :classifications
+      end
+
+    end
+    resources :other_costs do
+      collection do
+        get :download_template
+        post :create_from_file
+      end
+    end
   end
 
-  map.resources :activities do |activity|
-    activity.resource :code_assignments,
-      :only => [:show, :update],
-      :member => {:copy_budget_to_spend => :put,
-      :derive_classifications_from_sub_implementers => :put},
-      :collection => {:bulk_create => :put, :download_template => :get}
+  resources :activities do
+    resource :code_assignments, :only => [:show, :update] do
+      member do
+        put :copy_budget_to_spend
+        put :derive_classifications_from_sub_implementers
+      end
+    end
+>>>>>>> Initial migration to rails3
   end
 
   # REPORTER USER
-  map.namespace :reporter do |reporter|
-    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.resources :reports, :only => [:index, :show]
+  namespace :reporter do
+    match 'dashboard' => 'dashboard#index', :as => :dashboard
+    resources :reports, :only => [:index, :show]
   end
 
   # REPORTS
-  map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
+  match 'charts/:action' => 'charts#index', :as => :charts
 
-  map.namespace :reports do |reports|
-    reports.resources :districts, :only => [:index, :show] do |districts|
-      districts.resources :activities, :only => [:index, :show],
-        :controller => "districts/activities"
-      districts.resources :organizations, :only => [:index, :show],
-        :controller => "districts/organizations"
+  namespace :reports do
+    resources :districts do
+      resources :activities, :only => [:index, :show]
+      resources :organizations, :only => [:index, :show]
     end
-    reports.resource :country do |country|
-      country.resources :activities, :only => [:index, :show],
-        :controller => "countries/activities"
-      country.resources :organizations, :only => [:index, :show],
-        :controller => "countries/organizations"
+    resource :country do
+      resources :activities, :only => [:index, :show]
+      resources :organizations, :only => [:index, :show]
     end
   end
 end

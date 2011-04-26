@@ -14,7 +14,7 @@ class DataRequest < ActiveRecord::Base
   validates_date :due_date
   validates_date :start_date
   validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
+  #validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 
   def status
     return 'Final review' if final_review?

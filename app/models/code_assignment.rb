@@ -14,29 +14,29 @@ class CodeAssignment < ActiveRecord::Base
   validates_presence_of :activity_id, :code_id
 
   ### Named scopes
-  named_scope :with_code_id,
-              lambda { |code_id| { :conditions =>
-                ["code_assignments.code_id = ?", code_id]} }
-  named_scope :with_code_ids,
-              lambda { |code_ids| { :conditions =>
-                ["code_assignments.code_id IN (?)", code_ids]} }
-  named_scope :with_activity,
-              lambda { |activity_id| { :conditions =>
-                ["code_assignments.activity_id = ?", activity_id]} }
-  named_scope :with_activities,
-              lambda { |activity_ids|{ :conditions =>
-                ["code_assignments.activity_id in (?)", activity_ids]} }
-  named_scope :with_type,
-              lambda { |type| { :conditions =>
-                ["code_assignments.type = ?", type]} }
-  named_scope :cached_amount_desc, {
-              :order => "code_assignments.cached_amount DESC" }
-  named_scope :select_for_pies,
-              :select => "code_assignments.code_id,
-                          SUM(code_assignments.cached_amount_in_usd) AS value",
-              :include => :code,
-              :group => 'code_assignments.code_id',
-              :order => 'value DESC'
+  scope :with_code_id,
+        lambda { |code_id| { :conditions =>
+          ["code_assignments.code_id = ?", code_id]} }
+  scope :with_code_ids,
+        lambda { |code_ids| { :conditions =>
+          ["code_assignments.code_id IN (?)", code_ids]} }
+  scope :with_activity,
+        lambda { |activity_id| { :conditions =>
+          ["code_assignments.activity_id = ?", activity_id]} }
+  scope :with_activities,
+        lambda { |activity_ids|{ :conditions =>
+          ["code_assignments.activity_id in (?)", activity_ids]} }
+  scope :with_type,
+        lambda { |type| { :conditions =>
+          ["code_assignments.type = ?", type]} }
+  scope :cached_amount_desc, {
+        :order => "code_assignments.cached_amount DESC" }
+  scope :select_for_pies,
+        :select => "code_assignments.code_id,
+                    SUM(code_assignments.cached_amount_in_usd) AS value",
+        :include => :code,
+        :group => 'code_assignments.code_id',
+        :order => 'value DESC'
 
   ### Callbacks
   before_save :update_cached_amount_in_usd

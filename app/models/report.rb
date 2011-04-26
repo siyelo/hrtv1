@@ -113,7 +113,7 @@ class Report < ActiveRecord::Base
     end
 
     def create_tmp_csv
-      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{get_date()}.csv"
+      self.temp_file_name = "#{Rails.root}/tmp/#{self.key}_#{get_date()}.csv"
       File.open(self.temp_file_name, 'w')  {|f| f.write(self.raw_csv) }
     end
 

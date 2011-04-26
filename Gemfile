@@ -1,11 +1,12 @@
 source 'http://rubygems.org'
 #source "http://gems.github.com"
 
+gem 'rails'
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
-gem 'compass', '=0.10.2'
+gem 'compass'
 gem 'fastercsv'
-gem 'formtastic', "= 1.2.3"
+gem 'formtastic'
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'ar_strip_commas'
@@ -15,17 +16,15 @@ gem 'ar_strip_commas'
 # but 0.3.3 seems to solve the {{errors}} issue
 #gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
 
-gem 'inherited_resources', "=1.0.6"
-gem 'money', "~> 3.5"
-gem "paperclip", "~> 2.3"
-gem 'rails', '2.3.8'
+gem 'inherited_resources'
+gem 'money'
+gem "paperclip"
 gem 'settingslogic'
-gem 'validates_timeliness', '~> 2.3'
-
+gem 'validates_timeliness'#, '~> 2.3'
 gem 'version'
-gem 'will_paginate', "~> 2.3.11"
+#gem 'will_paginate' # use rails 3 gem
 gem 'json_pure'
-gem 'inherited_resources', '= 1.0.6'
+gem 'hassle', :git => 'git://github.com/koppen/hassle.git'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -35,7 +34,7 @@ group :development do
   gem 'annotate'
   gem 'awesome_print', :require => "ap"
   #gem 'github' # misbehaving uninitialized constant Text::Format
-  gem 'google_currency', "=1.2.0" # for currency cacher
+  gem 'google_currency' # for currency cacher
   gem 'heroku'
   gem 'hirb'
   gem 'interactive_editor'
@@ -52,24 +51,23 @@ group :development do
 end
 
 group :test, :development do
-  # gem 'mysql'
-  gem 'rspec', '1.3.1', :require => 'spec'
-  gem 'rspec-rails', '1.3.3'  # RSpec 1 (1.3.x) is for Rails 2.3.x
+  gem 'rspec'
+  gem 'rspec-rails'
   gem 'rcov'
 end
 
 group :test do
-  gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
+  gem 'capybara'
   gem 'cucumber'
-  gem 'cucumber-rails', '0.3.2'
+  gem 'cucumber-rails'
   gem 'database_cleaner'
-  gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3
+  gem 'factory_girl'
   gem 'launchy'               # So you can do 'Then show me the page'
-  gem 'pickle', '~> 0.4.4'
+  gem 'pickle'
   gem 'ruby-pg'
   gem 'shoulda'
-  gem 'spork', '~> 0.8'
-  gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
+  gem 'spork'
+  gem 'email_spec'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-cucumber'

@@ -1,4 +1,4 @@
-if ['staging', 'production'].include? RAILS_ENV
+if ['staging', 'production'].include? Rails.env
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
     :port           => "25",

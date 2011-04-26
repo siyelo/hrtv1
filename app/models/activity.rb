@@ -102,15 +102,15 @@ class Activity < ActiveRecord::Base
 
   ### Named scopes
   # TODO: spec
-  named_scope :roots,             {:conditions => "activities.type IS NULL" }
-  named_scope :greatest_first,    {:order => "activities.budget DESC" }
-  named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
-  named_scope :only_simple,       { :conditions => ["activities.type IS NULL
-                                    OR activities.type IN (?)", ["OtherCost"]] }
-  named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
-  named_scope :without_a_project, { :conditions => "project_id IS NULL" }
-  named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
-  named_scope :canonical_with_scope, {
+  scope :roots,             {:conditions => "activities.type IS NULL" }
+  scope :greatest_first,    {:order => "activities.budget DESC" }
+  scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
+  scope :only_simple,       { :conditions => ["activities.type IS NULL
+                              OR activities.type IN (?)", ["OtherCost"]] }
+  scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
+  scope :without_a_project, { :conditions => "project_id IS NULL" }
+  scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
+  scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
     :joins =>
       "INNER JOIN data_responses

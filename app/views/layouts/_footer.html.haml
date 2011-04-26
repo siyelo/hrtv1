@@ -9,7 +9,7 @@
             %h2.left= country
         %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
         %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
-        - unless RAILS_ENV == 'production'
+        - unless Rails.env == 'production'
           %li.version= "v#{Version.current}"
 
     %ul.left

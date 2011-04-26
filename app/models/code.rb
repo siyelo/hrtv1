@@ -26,10 +26,10 @@ class Code < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Named scope
-  named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
-  named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
-  named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
-  named_scope :ordered, :order => 'lft'
+  scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }
+  scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
+  scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
+  scope :ordered, :order => 'lft'
 
   def self.deepest_nesting
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1

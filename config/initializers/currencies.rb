@@ -1,5 +1,5 @@
 Money.default_bank  = Money::Bank::VariableExchange.new
-currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
+currency_config     = IO.read("#{Rails.root}/config/currencies.yml")
 Money.default_bank.import_rates(:yaml, currency_config)
 
 case ENV['HRT_COUNTRY']

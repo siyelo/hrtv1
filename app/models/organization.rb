@@ -28,8 +28,8 @@ class Organization < ActiveRecord::Base
   validates_uniqueness_of :name 
 
   ### Named scopes
-  named_scope :without_users, :conditions => 'users_count = 0'
-  named_scope :ordered, :order => 'name ASC, created_at DESC'
+  scope :without_users, :conditions => 'users_count = 0'
+  scope :ordered, :order => 'name ASC, created_at DESC'
 
   def is_empty?
     if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size

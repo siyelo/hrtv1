@@ -4,6 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-
-# TODO - MOVE THIS FROM THE CODEBASE TO AN ENV VARIABLE (or untracked file)
-ActionController::Base.cookie_verifier_secret = '0cf70cf1c875a9942dab90096a415174255046e4dcc2a5337076662c49a731795b395e9044ec7456c3e4c25ba1bc7c8fb032de961f37505c2ba4fdd94f98e829';
+ResourceTracking::Application.config.secret_token = '4db4fdd4fa568baeb6dafb71d14c1297d0acfce64879b4dcb16fce56bf9a7d62a262c2f3c66754cdd3388638103905e285de397d8cf16a6f76a7a4cd6880e6b8'

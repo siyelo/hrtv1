@@ -288,9 +288,8 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_activities_have_correct_budgets?
     projects.each do |project|
-      activities_total = project.activities.roots.reject{|fs| fs.budget.nil?}.sum(&:budget)
-      other_costs_total = project.other_costs.reject{|fs| fs.budget.nil?}.sum(&:budget)
-      return false if project.budget != (activities_total + other_costs_total)
+      return false if project.budget != (project.activities_budget_total + 
+                                         project.other_costs_budget_total)
     end
     true
   end
@@ -298,9 +297,8 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_activities_have_correct_spends?
     projects.each do |project|
-      activities_total = project.activities.roots.reject{|fs| fs.spend.nil?}.sum(&:spend)
-      other_costs_total = project.other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
-      return false if project.spend != (activities_total + other_costs_total)
+      return false if project.spend != (project.activities_spend_total + 
+                                        project.other_costs_spend_total)
     end
     true
   end

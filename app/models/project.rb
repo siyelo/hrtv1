@@ -200,6 +200,22 @@ class Project < ActiveRecord::Base
     in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
 
+  def activities_budget_total
+    activities.roots.reject{|fs| fs.budget.nil?}.sum(&:budget)
+  end
+
+  def other_costs_budget_total
+    other_costs.reject{|fs| fs.budget.nil?}.sum(&:budget)
+  end
+
+  def activities_spend_total
+    activities.roots.reject{|fs| fs.spend.nil?}.sum(&:spend)
+  end
+
+  def other_costs_spend_total
+    other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
+  end
+
   private
 
     def validate_budgets

@@ -166,6 +166,16 @@ class Project < ActiveRecord::Base
     ufs
   end
 
+  def spend_entered?
+    return true if spend ||
+      spend_q1 ||
+      spend_q2 ||
+      spend_q3 ||
+      spend_q4 ||
+      spend_q4_prev
+    false
+  end
+
   def linked?
     return false if self.in_flows.empty?
     self.in_flows.each do |in_flow|

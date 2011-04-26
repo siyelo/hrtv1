@@ -320,6 +320,29 @@ describe Project do
     end
   end
   
+  describe "project spend check" do
+    before :each do
+      @project = Factory(:project, :spend => 20)
+    end
+
+    it "succeeds if spend is entered" do
+      @project.spend_entered?.should == true
+    end
+    
+    it "succeeds if spend not entered but a quarter spend is" do
+      @project.spend = nil
+      @project.spend_q1 = 10
+      @project.save
+      @project.spend_entered?.should == true
+    end
+    
+    it "fails if spend is not entered and no quarter spends are" do
+      @project.spend = nil
+      @project.save
+      @project.spend_entered?.should == false
+    end
+  end
+  
   describe "linking to funding source project" do
     before :each do
       @data_request = Factory(:data_request)

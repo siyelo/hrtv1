@@ -6,7 +6,7 @@ describe DataResponse do #validations
     @request  = Factory.create(:data_request, :title => 'Data Request 1',
       :budget => true, :spend => true)
     @response = Factory.create(:data_response, :data_request => @request)
-    @project = Factory(:project, :data_response => @response)
+    @project = Factory(:project, :data_response => @response, :spend => 2)
     @response.reload
   end
 
@@ -103,38 +103,59 @@ describe DataResponse do #validations
       @response.projects_linked?.should == false
     end
   end
+  
+  describe "project spend check" do    
+    it "succeeds if spend is entered" do
+      @response.projects_spend_entered?.should == true
+    end
+    
+    it "succeeds if spend not entered but a quarter spend is" do
+      @project.spend = nil
+      @project.spend_q1 = 10
+      @project.save
+      @response.projects_spend_entered?.should == true
+    end
+    
+    it "fails if spend is not entered and no quarter spends are" do
+      @project.spend = nil
+      @project.save
+      @response.projects_spend_entered?.should == false
+    end
+  end
 
   describe "ready to submit" do
+    before :each do
+      @activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
+      @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
+      @funder_response = Factory.create(:data_response, :data_request => @request)
+      @funder_project = Factory(:project, :data_response => @funder_response)
+      @funder = Factory(:funding_source, :to => @project.organization, 
+        :project => @project, 
+        :from => @funder_response.organization,
+        :project_from_id => @funder_project.id,
+        :data_response => @response )
+    end
+    
     context "response is complete" do
-      before :each do
-        activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-        other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
-        @funder_response = Factory.create(:data_response, :data_request => @request)
-        @funder_project = Factory(:project, :data_response => @funder_response)
-        funder = Factory(:funding_source, :to => @project.organization, 
-          :project => @project, 
-          :from => @funder_response.organization,
-          :project_from_id => @funder_project.id,
-          :data_response => @response )
-      end
-
-      it "validates OK if everything is coded" do
+      it "validates OK if everything is entered" do
         @response.projects_entered?.should == true
+        @response.projects_spend_entered?.should == true
+        #TODO budget entered
         @response.projects_linked?.should == true
         @response.activities_coded?.should == true
         @response.other_costs_coded?.should == true
         @response.ready_to_submit?.should == true
-      end      
+      end
       
       it "submits if everything is coded" do
         @response.submit!.should == true
       end
+      
     end
     
     context "projects not linked" do
       before :each do
-        activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-        other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
+        @funder.destroy
       end
       
       it "succeeds if request not in final review" do
@@ -153,35 +174,58 @@ describe DataResponse do #validations
     end
     
     it "disallows submit! if not complete" do
+      @activity.destroy
       @response.submit!.should == false
     end
     
+    it "fails if project spends are not entered" do
+      @project.spend = nil
+      @project.save
+      @response.projects_spend_entered?.should == false
+      @response.ready_to_submit?.should == false
+    end
+    
+    it "fails if project spends are not entered, even if request doesnt ask for them" do
+      @request.spend = false
+      @request.save
+      @response.reload
+      @project.spend = nil
+      @project.save
+      @response.projects_spend_entered?.should == true
+      @response.ready_to_submit?.should == true
+    end
+    
     it "fails if there are no activities" do
+      @activity.destroy
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
     end
 
     it "fails if there are uncoded activities" do
-      activity = Factory(:activity, :data_response => @response, :project => @project)
+      activity2 = Factory(:activity, :data_response => @response, :project => @project)
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
     end
 
     it "fails if an activity is missing a coding split" do
-      activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-      other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
-      cs = activity.coding_spend.first
+      cs = @activity.coding_spend.first
       cs.cached_amount = 0
       cs.amount = 0
       cs.save!
-      activity.reload
-      activity.classified?.should == false
+      @activity.reload
+      @activity.classified?.should == false
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
     end
 
     it "fails if there are uncoded other costs" do
+      cs = @other_cost.coding_spend.first
+      cs.cached_amount = 0
+      cs.amount = 0
+      cs.save!
+      @other_cost.reload
+      @other_cost.classified?.should == false
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end

@@ -54,12 +54,12 @@ class DataResponse < ActiveRecord::Base
 
   def self.in_progress
     self.find :all,
-              :select => 'data_responses.*, 
-                          (SELECT COUNT(*) AS projects_count FROM projects 
+              :select => 'data_responses.*,
+                          (SELECT COUNT(*) AS projects_count FROM projects
                             WHERE projects.data_response_id = data_responses.id)
                           (SELECT COUNT(*) AS activities_count FROM activities
                             WHERE activities.data_response_id = data_responses.id)',
-              :include => [:organization, :projects], 
+              :include => [:organization, :projects],
               :conditions => ["(submitted = ? OR submitted is NULL) AND
                                (projects_count > 0 OR activities_count > 0)", false]
   end
@@ -80,8 +80,8 @@ class DataResponse < ActiveRecord::Base
       :conditions => ["activities.data_response_id IS NULL AND
                       funding_flows.data_response_id IS NULL AND
                       projects.data_response_id IS NULL AND
-                      organizations.raw_type IN (?)", 
-                      ["Agencies", "Govt Agency", "Donors", "Donor", 
+                      organizations.raw_type IN (?)",
+                      ["Agencies", "Govt Agency", "Donors", "Donor",
                        "NGO", "Implementer", "Implementers", "International NGO"]],
       :include => {:organization => :users},
       :from => 'data_responses'
@@ -172,10 +172,11 @@ class DataResponse < ActiveRecord::Base
       end
       return self.save
     else
-      self.errors.add_to_base("Projects are not yet entered.") if !projects_entered?
-      self.errors.add_to_base("Projects are not yet linked.") if !projects_linked?
-      self.errors.add_to_base("Activites are not yet coded.") if !activities_coded?
-      self.errors.add_to_base("Other Costs are not yet coded.") if !other_costs_coded?
+      self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
+      self.errors.add_to_base("Project expenditures are not yet entered.") unless projects_spend_entered?
+      self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
+      self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
+      self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
       return false
     end
   end
@@ -189,6 +190,7 @@ class DataResponse < ActiveRecord::Base
 
   def basics_done?
     projects_entered? &&
+    projects_spend_entered? &&
     activities_coded? &&
     other_costs_coded?
   end
@@ -202,7 +204,17 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_entered?
-    !self.projects.empty?
+    !projects.empty?
+  end
+
+  # if the request asks for spend, check if the spends were entered
+  def projects_spend_entered?
+    return true if !request.spend?
+    projects_without_spend.empty?
+  end
+
+  def projects_without_spend
+    self.projects.select{ |p| !p.spend_entered? }
   end
 
   def projects_linked?
@@ -216,7 +228,7 @@ class DataResponse < ActiveRecord::Base
   def activities_entered?
     !self.normal_activities.empty?
   end
-  
+
   def projects_have_activities?
     return false unless activities_entered?
     self.projects.each do |project|
@@ -228,7 +240,7 @@ class DataResponse < ActiveRecord::Base
   def other_costs_entered?
     !self.other_costs.empty?
   end
-  
+
   def projects_have_other_costs?
     return false unless other_costs_entered?
     self.projects.each do |project|
@@ -281,10 +293,9 @@ class DataResponse < ActiveRecord::Base
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
     def reject_uncoded(activities)
-      uncoded = []
-      uncoded << activities.reject{ |a| a.budget_classified? } if self.request.budget?
-      uncoded << activities.reject{ |a| a.spend_classified? } if self.request.spend?
-      uncoded.flatten
+      activities.select{ |a|
+        (!a.budget_classified? && self.request.budget?) ||
+        (!a.spend_classified?  && self.request.spend?) }
     end
 
     # Find all complete Activities

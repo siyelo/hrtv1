@@ -108,4 +108,19 @@ class ApplicationController < ActionController::Base
         current_user.current_data_response.projects.find(project_id)
       end
     end
+
+    # Render detailed diagnostics for unhandled exceptions rescued from
+    # a controller action.
+    def rescue_action_locally(exception)
+      class << RESCUES_TEMPLATE_PATH
+        def [](path)
+          if Rails.root.join("app/views", path).exist?
+            ActionView::Template::EagerPath.new_and_loaded(Rails.root.join("app/views").to_s)[path]
+          else
+            super
+          end
+        end
+      end
+      super
+    end
 end

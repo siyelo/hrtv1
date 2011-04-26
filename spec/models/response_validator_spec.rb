@@ -185,13 +185,13 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == false
     end
     
-    it "succeeds if project spends are not entered, but request doesnt ask for them" do
+    it "fails if project spends are not entered, even if request doesnt ask for them" do
       @request.spend = false
       @request.save
       @response.reload
       @project.spend = nil
       @project.save
-      @response.projects_spend_entered?.should == false
+      @response.projects_spend_entered?.should == true
       @response.ready_to_submit?.should == true
     end
     

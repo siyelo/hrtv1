@@ -181,17 +181,16 @@ class DataResponse < ActiveRecord::Base
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-
       self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_budgets?
       self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-
+      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_correct_budgets?
+      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_correct_spends?
       return false
     end
   end
 
   def last_submitted_at
-    return submitted_for_final_at if request.final_review?
-    return submitted_at
+    request.final_review? ? submitted_for_final_at : submitted_at
   end
 
   ### Submission Validations
@@ -201,7 +200,13 @@ class DataResponse < ActiveRecord::Base
     projects_spend_entered? &&
     projects_budget_entered? &&
     activities_coded? &&
-    other_costs_coded?
+    other_costs_coded? &&
+    projects_have_activities? &&
+    projects_have_other_costs? &&
+    projects_and_funding_sources_have_correct_budgets? &&
+    projects_and_funding_sources_have_correct_spends? &&
+    projects_and_activities_have_correct_budgets? &&
+    projects_and_activities_have_correct_spends?
   end
 
   def ready_to_submit?

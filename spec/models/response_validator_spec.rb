@@ -6,7 +6,7 @@ describe DataResponse do #validations
     @request  = Factory.create(:data_request, :title => 'Data Request 1',
       :budget => true, :spend => true)
     @response = Factory.create(:data_response, :data_request => @request)
-    @project = Factory(:project, :data_response => @response, :spend => 2)
+    @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
     @response.reload
   end
 
@@ -144,15 +144,19 @@ describe DataResponse do #validations
 
   describe "ready to submit" do
     before :each do
-      @activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-      @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
+      @activity   = Factory(:activity_fully_coded, :data_response => @response, 
+                            :project => @project)
+      @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, 
+                            :project => @project)
       @funder_response = Factory.create(:data_response, :data_request => @request)
-      @funder_project = Factory(:project, :data_response => @funder_response)
-      @funder = Factory(:funding_source, :to => @project.organization, 
+      @funder_project = Factory(:project, :data_response => @funder_response, 
+                                :budget => 100, :spend => 80)
+      @funder = Factory(:funding_flow, :to => @project.organization, 
         :project => @project, 
         :from => @funder_response.organization,
         :project_from_id => @funder_project.id,
-        :data_response => @response )
+        :data_response => @response,
+        :budget => 100, :spend => 80)
     end
     
     context "response is complete" do
@@ -163,6 +167,14 @@ describe DataResponse do #validations
         @response.projects_linked?.should == true
         @response.activities_coded?.should == true
         @response.other_costs_coded?.should == true
+
+        @response.projects_have_activities?.should == true
+        @response.projects_have_other_costs?.should == true
+        @response.projects_and_funding_sources_have_correct_budgets?.should == true
+        @response.projects_and_funding_sources_have_correct_spends?.should == true
+        @response.projects_and_activities_have_correct_budgets?.should == true
+        @response.projects_and_activities_have_correct_spends?.should == true
+
         @response.ready_to_submit?.should == true
       end
       
@@ -174,7 +186,8 @@ describe DataResponse do #validations
     
     context "projects not linked" do
       before :each do
-        @funder.destroy
+        @funder.project_from_id = nil
+        @funder.save
       end
       
       it "succeeds if request not in final review" do
@@ -204,15 +217,15 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == false
     end
     
-    it "fails if project spends are not entered, even if request doesnt ask for them" do
-      @request.spend = false
-      @request.save
-      @response.reload
-      @project.spend = nil
-      @project.save
-      @response.projects_spend_entered?.should == true
-      @response.ready_to_submit?.should == true
-    end
+    #it "fails if project spends are not entered, even if request doesnt ask for them" do
+      #@request.spend = false
+      #@request.save
+      #@response.reload
+      #@project.spend = nil
+      #@project.save
+      #@response.projects_spend_entered?.should == true
+      #@response.ready_to_submit?.should == true
+    #end
     
     it "fails if there are no activities" do
       @activity.destroy

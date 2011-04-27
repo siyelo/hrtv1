@@ -804,6 +804,8 @@ ul.group
 .breadcrumb
   background: $filler
   border: 1px solid $lightest-blue
+  border-right: none
+  float: left
   font-size: 11px
   margin-top: 7px
   margin-bottom: 10px !important
@@ -814,11 +816,10 @@ ul.group
     background: image_url("breadcrumb.png") no-repeat right center
     display: inline-block
     float: left
-    padding: 5px 15px 5px 10px
+    padding: 5px 18px 5px 10px
 
-    &.last
-      background: none
-      padding-right: 10px
+    &:last-child
+      background: image_url("breadcrumb-last.png") no-repeat right center
 
     a
       text-decoration: none

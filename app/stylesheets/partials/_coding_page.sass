@@ -61,16 +61,22 @@ ul.activity_tree
     border-top: $filler 4px solid
     font-size: 12px
     list-style: none
-    padding: 5px 0
+    //padding: 5px 0
     &:hover
       background: $filler + #030303
+    > div
+      padding: 5px 0
     div.invalid
-      background: #FFE9E0
-      +border-radius
+      background: #f7eeec
+      .subtotal
+        background: $lighter-blue
     a.invalid_node
       background: #FF0000
       color: #FFF
       font-weight: bold
+      text-align: center
+      width: 8px
+      +border-radius(30px)
     > span
       float: left
     input, textarea
@@ -86,8 +92,10 @@ ul.activity_tree
       font-weight: bold
       &.expanded
         color: red
+        padding-top: 7px
       &.collapsed
         color: green
+        padding-top: 7px
     ul
       margin: 0 15px
       li

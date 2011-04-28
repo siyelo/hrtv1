@@ -1,19 +1,20 @@
 .header
   = activity.name
-  = namespace
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
-  - semantic_form_for activity, :namespace => namespace, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
+  - semantic_form_for activity, :namespace => "f#{activity.object_id}", :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
     =  f.input :csv_project_name, :as => :hidden
     =  f.input :csv_provider, :as => :hidden
     =  f.input :csv_districts, :as => :hidden
     =  f.input :csv_beneficiaries, :as => :hidden
-    =  f.input :csv_outputs_targets, :as => :hidden
     
     - f.inputs :class => 'inputs' do
       %li
         %ul.clearfix
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
+          - unless f.object.project
+            .suggestion
+              == We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
 
           %li.project_sub_form
             .project_sub_form_fields
@@ -55,13 +56,19 @@
         %ul
           %p.hint Service Providers and partners you work with
           = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false
+          - unless f.object.provider
+            .suggestion
+              == We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
 
       %li
         %ul
           = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+          - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
+            .suggestion
+              == We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
+
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
-
 
       %li
         %ul
@@ -70,5 +77,5 @@
     %li
       %ul
         - f.buttons :class => 'buttons' do
-          = f.commit_button "Save", :class => "last, save_btn"
+          = f.commit_button "Save", :wrapper_html => {:class => "save_btn"}
           = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

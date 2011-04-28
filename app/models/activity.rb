@@ -45,11 +45,9 @@ class Activity < ActiveRecord::Base
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, 
-    :csv_beneficiaries, :csv_outputs_targets
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts, 
-                :csv_beneficiaries, :csv_outputs_targets
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -184,7 +182,7 @@ class Activity < ActiveRecord::Base
     activity.csv_provider        = row['Provider']
     activity.csv_districts       = row['Districts']
     activity.csv_beneficiaries   = row['Beneficiaries']
-    activity.csv_outputs_targets = row['Outputs / Targets'] # TODO: save this
+    activity.text_for_targets     = row['Outputs / Targets']
 
     # associations
     project                      = Project.find_by_name(activity.csv_project_name)

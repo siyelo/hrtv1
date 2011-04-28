@@ -58,7 +58,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:csv_provider) }
     it { should allow_mass_assignment_of(:csv_districts) }
     it { should allow_mass_assignment_of(:csv_beneficiaries) }
-    it { should allow_mass_assignment_of(:csv_outputs_targets) }
   end
 
   describe "validations" do

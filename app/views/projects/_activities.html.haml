@@ -12,6 +12,24 @@
           = image_tag "new.png"
           Add
 
+        - link_to "#", :class => "create_inline activities_upload_btn" do
+          = image_tag "new.png"
+          Upload
+
+    .activities_upload_box
+      %h3.title_bar Upload a CSV file for Activities
+      .dashboard_section
+        %p Create one or more activities from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+
+        - form_tag({:action=> :create_from_file}, :multipart => true) do
+          = label_tag :file, "File"
+          = file_field_tag :file
+          = submit_tag "Upload", :class => 'small_submit_button'
+
+        = link_to "Download template", download_template_response_activities_path(@response), :class => 'target'
+
+
+
 - unless activities.empty?
   - activities.each do |activity|
     - unless showing_other_cost

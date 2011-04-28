@@ -3,11 +3,7 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date
-                           text_for_targets text_for_beneficiaries text_for_provider
-                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4
-                           budget budget2 budget3 budget4 budget5 budget_q4_prev
-                           budget_q1 budget_q2 budget_q3 budget_q4]
+  FILE_UPLOAD_COLUMNS = ["Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date", "Funding Source(s)"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],

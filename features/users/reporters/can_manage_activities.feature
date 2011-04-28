@@ -131,14 +131,11 @@ Feature: Reporter can manage activities
       Then I should see "Your CSV file does not seem to be properly formatted"
 
 
-    @wip
-    Scenario: Reporter can see error when invalid csv file is attached for upload and download template
-      When I attach the file "spec/fixtures/invalid.csv" to "File"
-        And I press "Upload and Import"
-      Then I should see "Wrong fields mapping. Please download the CSV template"
+    @run
+    Scenario: Reporter can download Activities CSV template
+      When I follow "Download template" within ".activities_upload_box"
+      Then I should see "Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,Funding Source(s)"
 
-      When I follow "Download template"
-      Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget2,budget3,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"
 
     Scenario: A reporter can create comments for an activity and see comment errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response

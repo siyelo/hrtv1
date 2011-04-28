@@ -2,34 +2,34 @@
   = activity.name
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
-  - semantic_form_for activity, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "basic_form"} do |f|
+  - semantic_form_for activity, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
     =  f.input :csv_project_name, :as => :hidden
     =  f.input :csv_provider, :as => :hidden
     =  f.input :csv_districts, :as => :hidden
     =  f.input :csv_beneficiaries, :as => :hidden
     =  f.input :csv_outputs_targets, :as => :hidden
-
+    
     - f.inputs :class => 'inputs' do
-      %li.last
-        %ul
+      %li
+        %ul.clearfix
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
 
-          .project_sub_form
+          %li.project_sub_form
             .project_sub_form_fields
               - if activity.project
                 = render 'project_sub_form', {:activity => activity, :project => activity.project}
-
+        %ul
           = f.input :name, :required => false
           = f.input :description, :input_html => { :rows => 2 }, :required => false
-          = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
-          = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
+          = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :required => false
+          = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :required => false
 
 
       - if @response.data_request.spend?
-        %li.last
+        %li
           %ul
-            = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
-            %li.amounts.last
+            = f.input :spend, :label => "Spent", :required => false
+            %li
               %label== Quarterly spend
               %ul
                 = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
@@ -39,10 +39,10 @@
                 = f.input :spend_q4     , :label => "Q4 09-10", :required => false
 
       - if @response.data_request.budget?
-        %li.last
+        %li
           %ul
-            = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
-            %li.amounts
+            = f.input :budget, :label => "Budget", :required => false
+            %li
               %label Long-term
               %ul
                 = f.input :budget2, :label => "Year + 2", :required => false
@@ -50,24 +50,24 @@
                 = f.input :budget4, :label => "Year + 4", :required => false
                 = f.input :budget5, :label => "Year + 5", :required => false
 
-      %li.last
+      %li
         %ul
           %p.hint Service Providers and partners you work with
-          = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => 'Implementer of this activity', :required => false
+          = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false
 
-      %li.last
+      %li
         %ul
-          = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
+          = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
 
 
-      %li.last
+      %li
         %ul
-          = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
+          = f.input :organizations, :as => :select, :collection => Organization.all, :required => false
 
     %li
-      %ul.horizontal
+      %ul
         - f.buttons :class => 'buttons' do
           = f.commit_button "Save", :class => "last, save_btn"
           = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

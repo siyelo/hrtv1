@@ -3,7 +3,7 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date", "Funding Source(s)"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -44,10 +44,12 @@ class Activity < ActiveRecord::Base
     :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
-    :sub_activities_attributes, :organization_ids, :funding_sources_attributes
+    :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
+    :csv_project_name, :csv_provider, :csv_districts, 
+    :csv_beneficiaries, :csv_outputs_targets
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, 
-                :csv_beneficiaries, :csv_outputs_targets, :csv_funding_sources
+                :csv_beneficiaries, :csv_outputs_targets
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -182,16 +184,19 @@ class Activity < ActiveRecord::Base
     activity.csv_provider        = row['Provider']
     activity.csv_districts       = row['Districts']
     activity.csv_beneficiaries   = row['Beneficiaries']
-    activity.csv_outputs_targets = row['Outputs / Targets']
-    activity.csv_funding_sources = row['Funding Source(s)']
+    activity.csv_outputs_targets = row['Outputs / Targets'] # TODO: save this
 
     # associations
     project                      = Project.find_by_name(activity.csv_project_name)
     if project
       activity.project           = project
+      activity.locations         = activity.csv_districts.to_s.split(',').
+                                    map{|l| Location.find_by_short_display(l.strip)}.compact
     end
     provider                     = Organization.find_by_name(activity.csv_provider)
     activity.provider            = provider if provider
+    activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
+                                    map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
 
     activity.save
     activity

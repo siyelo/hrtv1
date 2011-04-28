@@ -127,7 +127,7 @@ Feature: Reporter can manage activities
 
     Scenario: Reporter can download Activities CSV template
       When I follow "Download template" within ".activities_upload_box"
-      Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,Funding Source(s)"
+      Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
 
     Scenario: A reporter can create comments for an activity and see comment errors

@@ -1,12 +1,12 @@
 .header
   = activity.name
-.main{:style => activity.valid? ? 'display: none;' : nil}
+  
+.main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
   - semantic_form_for activity, :url => response_activities_path(response), :html => {:class => "basic_form"} do |f|
 
     - f.inputs :class => 'inputs' do
       %li.last
-        %h3 Basics
-        %ul.dashboard_section
+        %ul
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
 
           .project_sub_form
@@ -22,8 +22,7 @@
 
       - if @response.data_request.spend?
         %li.last
-          %h3== Past Activity Expenditure (#{@response.currency})
-          %ul.dashboard_section
+          %ul
             = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
             %li.amounts.last
               %label== Quarterly spend
@@ -36,8 +35,7 @@
 
       - if @response.data_request.budget?
         %li.last
-          %h3 Budget (planned expenditure) (#{@response.currency})
-          %ul.dashboard_section
+          %ul
             = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
             %li.amounts
               %label Long-term
@@ -48,22 +46,19 @@
                 = f.input :budget5, :label => "Year + 5", :required => false
 
       %li.last
-        %h3== Implementers
-        %ul.dashboard_section
+        %ul
           %p.hint Service Providers and partners you work with
           = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => 'Implementer of this activity', :required => false
 
       %li.last
-        %h3== Other
-        %ul.dashboard_section
+        %ul
           = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
 
 
       %li.last
-        %h3 Institutions Assisted
-        %ul.dashboard_section
+        %ul
           = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
 
     %li

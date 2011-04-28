@@ -10,7 +10,4 @@
 
 - @activities.each do |activity|
   .activity_box
-    .header
-      = activity.name
-    .main{:style => 'display: none;'}
-      = render 'bulk_edit', :activity => activity
+    = render 'bulk_edit', :activity => activity, :response => @response

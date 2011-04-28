@@ -152,9 +152,9 @@ Feature: Reporter can manage activities
     Scenario: Does not email users when a comment is made by a reporter
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
         And no emails have been sent
-        And I follow "Activities"
+      When I follow "Projects"
         And I follow "Activity1 description"
-      When I fill in "Comment" with "Comment body"  
+        And I fill in "Comment" with "Comment body"  
         And I fill in "Title" with "Comment title"
         And I fill in "Comment" with "Comment body"
         And I press "Create Comment"

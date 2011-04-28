@@ -1065,10 +1065,54 @@ var projects_index = {
 
 var activities_bulk_create = {
   run: function () {
-    $('.activity_box .header').click(function (e) {
+    $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
-      $(this).parents('.activity_box').find('.main').show();
+      $(this).parents('.activity_box').find('.main').toggle();
     });
+
+    $('.save_btn').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('form');
+      var ajaxLoader = element.next('.ajax-loader');
+      var activityBox = element.parents('.activity_box');
+
+      ajaxLoader.show();
+
+      console.log(form.attr('action'))
+      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        activityBox.html(data);
+      });
+    });
+
+
+    $('.activity_project_id').change(function () {
+      var element = $(this);
+      var _project_id = element.val();
+      var form = element.parents('form');
+      var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
+      var activityBox = element.parents('.activity_box');
+      _response_id = matches[1];
+      _activity_id = matches[2];
+
+      if (_project_id) {
+        var url = '/responses/' + _response_id +
+        '/activities/project_sub_form?' + 'project_id=' + _project_id;
+        if (_activity_id) {
+          url += '&activity_id=' + _activity_id;
+        }
+        $.get(url, function (data) {
+          activityBox.find('.project_sub_form_fields').html(data)
+          activityBox.find('.project_sub_form_fields').show();
+          activityBox.find('.project_sub_form_hint').hide();
+        });
+      } else {
+        activityBox.find('.project_sub_form_fields').hide();
+        activityBox.find('.project_sub_form_hint').show();
+      }
+    });
+
+
   }
 }
 
@@ -1103,7 +1147,6 @@ var activity_form = function () {
     element.find('.edit_block').show();
     element.find('.preview_block').hide();
     close_activity_funding_sources_fields(fields);
-
   });
 
   close_activity_funding_sources_fields($('.funding_sources .fields'));

@@ -23,25 +23,34 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html { 
-        valid = @activity.check_projects_budget_and_spend?
-        if params[:commit] == "Save & Go to Classify >"
+    @activity = @response.activities.new(params[:activity])
+
+    if @activity.save
+      respond_to do |format|
+        format.html do
+          valid = @activity.check_projects_budget_and_spend?
           if valid
+            flash[:notice] = 'Activity was successfully created'
+          else
+            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+          end
+
+          if params[:commit] == "Save & Go to Classify >"
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
           else
-            flash.delete(:notice)
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+            redirect_to response_projects_path(@activity.project.response)
           end
-        else
-          flash.delete(:notice) unless valid
-          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
-          redirect_to response_projects_path(@activity.project.response)
         end
-      }
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => 'new' }
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
+      end
     end
   end
 

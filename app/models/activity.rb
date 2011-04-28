@@ -183,14 +183,17 @@ class Activity < ActiveRecord::Base
     activity.csv_districts       = row['Districts']
     activity.csv_beneficiaries   = row['Beneficiaries']
     activity.csv_outputs_targets = row['Outputs / Targets']
-    activity.csv_funding_sources     = row['Funding Source(s)']
+    activity.csv_funding_sources = row['Funding Source(s)']
 
     # associations
     project                      = Project.find_by_name(activity.csv_project_name)
-    activity.project             = project if project
+    if project
+      activity.project           = project
+    end
     provider                     = Organization.find_by_name(activity.csv_provider)
     activity.provider            = provider if provider
 
+    activity.save
     activity
   end
 

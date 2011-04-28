@@ -25,10 +25,20 @@ class ActivitiesController < Reporter::BaseController
   def create
     create! do |success, failure|
       success.html { 
+        valid = @activity.check_projects_budget_and_spend?
         if params[:commit] == "Save & Go to Classify >"
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          if valid
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          else
+            flash.delete(:notice)
+            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          end
         else
+          flash.delete(:notice) unless valid
+          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
           redirect_to response_projects_path(@activity.project.response)
         end
       }
@@ -38,10 +48,20 @@ class ActivitiesController < Reporter::BaseController
   def update
     update! do |success, failure|
       success.html { 
+        valid = @activity.check_projects_budget_and_spend?
         if params[:commit] == "Save & Go to Classify >"
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-          return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          if valid
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          else
+            flash.delete(:notice)
+            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
+            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          end
         else
+          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
+          flash.delete(:notice) unless valid
           redirect_to response_projects_path(@activity.project.response)
         end
       }
@@ -94,7 +114,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create_from_file
-#    begin
+   begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
@@ -108,10 +128,10 @@ class ActivitiesController < Reporter::BaseController
       end
 
     redirect_to response_activities_url(@response)
-#    rescue
-#      flash[:error] = "Your CSV file does not seem to be properly formatted."
-#      redirect_to response_activities_url(@response)
-#    end
+   rescue
+     flash[:error] = "Your CSV file does not seem to be properly formatted."
+     redirect_to response_activities_url(@response)
+   end
   end
 
   def destroy

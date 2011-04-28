@@ -191,6 +191,7 @@ class Project < ActiveRecord::Base
   def has_other_costs?
     !self.activities.with_type("OtherCost").empty?
   end
+      
 
   def in_flows_budget_total
     in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
@@ -330,7 +331,7 @@ class Project < ActiveRecord::Base
     def assign_project_to_funding_flows
       funding_flows.each {|ff| ff.project = self}
     end
-
+    
 end
 
 

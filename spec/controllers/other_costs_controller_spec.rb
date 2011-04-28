@@ -1,36 +1,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe OtherCostsController do
-  describe "create" do
-    before :each do
-       @data_request = Factory.create(:data_request)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @response)
-       login @user
-     end
+  describe "Redirects to budget or spend depending on datarequest" do
     
     it "redircts to the projects index page when save is clicked" do 
-      post :create, :other_cost => {
-        :description => "some description",
-        :project_id => @project.id
-      },
-      :commit => 'Save', :response_id => @response.id
-      response.should redirect_to(response_projects_url(@response.id))
-    end
-    
-    it "redircts to the projects index page when Save & Go to Classify > is clicked" do 
-      post :create, :other_cost => {
-        :description => "some description",
-        :project_id => @project.id
-      },
-      :commit => 'Save & Go to Classify >', :response_id => @response.id
-      response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
-    end
-  end
-  
-  describe "Redirects to budget or spend depending on datarequest" do
+       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
+       @organization = Factory.create(:organization)
+       @user = Factory.create(:reporter, :organization => @organization)
+       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory.create(:project, :data_response => @data_response)
+       login @user
+       post :create, :other_cost => {
+         :description => "some description",
+         :project_id => @project.id
+       },
+       :commit => 'Save', :response_id => @data_response.id
+       response.should redirect_to(response_projects_url(@data_response.id))
+     end
   
      it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
        @data_request = Factory.create(:data_request, :spend => false, :budget => true)

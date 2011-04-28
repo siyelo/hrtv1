@@ -1058,7 +1058,7 @@ var projects_index = {
   run: function () {
     $('.activities_upload_btn').click(function (e) {
       e.preventDefault();
-      $(this).parents('td').find('.activities_upload_box').show();
+      $(this).parents('td').find('.activities_upload_box').toggle();
     });
   }
 };

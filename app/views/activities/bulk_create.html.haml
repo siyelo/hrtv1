@@ -8,6 +8,6 @@
 
 %h1.main_heading Activities Bulk Create
 
-- @activities.each do |activity|
+- @activities.each_with_index do |activity, index|
   .activity_box
-    = render 'bulk_edit', :activity => activity, :response => @response
+    = render 'bulk_edit', :activity => activity, :response => @response, :namespace => "f#{index}"

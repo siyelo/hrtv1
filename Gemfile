@@ -5,7 +5,7 @@ gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
-gem 'formtastic', "= 0.9.10"
+gem 'formtastic', "= 1.2.3"
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'acts_as_commentable'

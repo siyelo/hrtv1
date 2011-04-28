@@ -1,8 +1,9 @@
 .header
   = activity.name
+  = namespace
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
-  - semantic_form_for activity, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
+  - semantic_form_for activity, :namespace => namespace, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
     =  f.input :csv_project_name, :as => :hidden
     =  f.input :csv_provider, :as => :hidden
     =  f.input :csv_districts, :as => :hidden
@@ -12,7 +13,7 @@
     - f.inputs :class => 'inputs' do
       %li
         %ul.clearfix
-          = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
+          = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
 
           %li.project_sub_form
             .project_sub_form_fields

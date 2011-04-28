@@ -1,4 +1,5 @@
-"Activity Name","Activity Description","Provider","Spend","Q1 Spend","Q2 Spend","Q3 Spend","Q4 Spend","Budget","Q1 Budget","Q2 Budget","Q3 Budget","Q4 Budget","Districts","Beneficiaries","Outputs / Targets","Start Date","End Date","Funding Source(s)"
-"My First Activity","Providing a package of services to health centers mainly focused on HIV / AIDS and including PMTCT, ARV, and Opportunistic Infection treatment","MSH",40000,,,"20,000","20,000",40000,,,"20,000","20,000","Huye and Gasabo","Women","400 individuals on ART; 2000 people tested",,,"USAID"
-"My Second Activity","Distributing bednets","Family Health International (FHI)","10,000",,,,,"10,000",,,,,,,,,,
+"Project Name","Activity Name","Activity Description","Provider","Spend","Q1 Spend","Q2 Spend","Q3 Spend","Q4 Spend","Budget","Q1 Budget","Q2 Budget","Q3 Budget","Q4 Budget","Districts","Beneficiaries","Outputs / Targets","Start Date","End Date","Funding Source(s)"
+"project1","My First Activity","Providing a package of services to health centers mainly focused on HIV / AIDS and including PMTCT, ARV, and Opportunistic Infection treatment","MSH",40000,,,"20,000","20,000",40000,,,"20,000","20,000","Huye and Gasabo","Women","400 individuals on ART; 2000 people tested",,,"USAID"
+"project1","My Second Activity","Distributing bednets","Family Health International (FHI)","10,000",,,,,"10,000",,,,,,,,,,
 ,"Marketing to increase condom use (and an activity with no name)","some new provider",,781.36,"9,218.64",,,,781.36,"9,218.64",,,"Rwamananagana (Mispelled)","Everyone",,3/2/2011,"16/3/2011","PEPFAR,PMI"
+"project1","My Third Activity","","MSH",40000,,,"20,000","20,000",40000,,,"20,000","20,000","Huye and Gasabo","Women","400 individuals on ART; 2000 people tested",,,"USAID"

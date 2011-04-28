@@ -113,25 +113,20 @@ class ActivitiesController < Reporter::BaseController
     send_csv(template, 'activities_template.csv')
   end
 
-  def create_from_file
-   begin
+  def bulk_create
+    begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Activity.create_from_file(doc, @response)
-          flash[:notice] = "Created #{saved} of #{saved + errors} activities successfully"
-        else
-          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-        end
+        @activities = []
+        doc.each{|row| @activities << Activity.initialize_from_file(@response, row)}
       else
-        flash[:error] = 'Please select a file to upload'
+        flash[:error] = 'Please select a file to upload activities'
+        redirect_to response_projects_path(@response)
       end
-
-    redirect_to response_activities_url(@response)
-   rescue
-     flash[:error] = "Your CSV file does not seem to be properly formatted."
-     redirect_to response_activities_url(@response)
-   end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      redirect_to response_projects_path(@response)
+    end
   end
 
   def destroy

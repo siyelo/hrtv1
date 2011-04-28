@@ -1,0 +1,16 @@
+- title("Activities Bulk Create")
+
+= render :partial => 'projects/sub_nav'
+
+%ul.breadcrumb
+  %li= Activities
+  %li.last Bulk Create
+
+%h1.main_heading Activities Bulk Create
+
+- @activities.each do |activity|
+  .activity_box
+    .header
+      = activity.name
+    .main{:style => 'display: none;'}
+      = render 'bulk_edit', :activity => activity

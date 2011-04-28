@@ -107,34 +107,27 @@ Feature: Reporter can manage activities
        And I should see "Comment body"
 
 
-    @wip
+    @run
     Scenario: Reporter can upload activities
-     When I attach the file "spec/fixtures/activities.csv" to "File"
-      And I press "Upload and Import"
-     Then I should see "Created 4 of 4 activities successfully"
-       And I should see "a1 description"
-       And I should see "a2 description"
-       And I should see "a3 description"
-       And I should see "a4 description"
+      When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
+        And I press "Upload" within ".activities_upload_box"
+      Then I should see "Activities Bulk Create"
 
 
-    @wip
     Scenario: Reporter can see error if no csv file is not attached for upload
-      When I press "Upload and Import"
-      Then I should see "Please select a file to upload"
+      When I press "Upload" within ".activities_upload_box"
+      Then I should see "Please select a file to upload activities"
 
 
-    @wip
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Upload and Import"
       Then I should see "Your CSV file does not seem to be properly formatted"
 
 
-    @run
     Scenario: Reporter can download Activities CSV template
       When I follow "Download template" within ".activities_upload_box"
-      Then I should see "Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,Funding Source(s)"
+      Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,Funding Source(s)"
 
 
     Scenario: A reporter can create comments for an activity and see comment errors

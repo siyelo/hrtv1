@@ -3,7 +3,7 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date", "Funding Source(s)"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date", "Funding Source(s)"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -45,6 +45,9 @@ class Activity < ActiveRecord::Base
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes
+
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, 
+                :csv_beneficiaries, :csv_outputs_targets, :csv_funding_sources
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -157,16 +160,38 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = Project.find_by_name(attributes.delete('project_name'))
-      attributes.merge!(:project_id => project.id) if project
-      activity = data_response.activities.new(attributes)
-      activity.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
+  def self.initialize_from_file(response, row)
+    activity                     = response.activities.new
+    activity.name                = row['Activity Name']
+    activity.description         = row['Activity Description']
+    activity.spend               = row['Spend']
+    activity.spend_q1            = row['Q1 Spend']
+    activity.spend_q2            = row['Q2 Spend']
+    activity.spend_q3            = row['Q3 Spend']
+    activity.spend_q4            = row['Q4 Spend']
+    activity.budget              = row['Budget']
+    activity.budget_q1           = row['Q1 Budget']
+    activity.budget_q2           = row['Q2 Budget']
+    activity.budget_q3           = row['Q3 Budget']
+    activity.budget_q4           = row['Q4 Budget']
+    activity.start_date          = row['Start Date']
+    activity.end_date            = row['End Date']
+
+    # virtual attributes
+    activity.csv_project_name    = row['Project Name']
+    activity.csv_provider        = row['Provider']
+    activity.csv_districts       = row['Districts']
+    activity.csv_beneficiaries   = row['Beneficiaries']
+    activity.csv_outputs_targets = row['Outputs / Targets']
+    activity.csv_funding_sources     = row['Funding Source(s)']
+
+    # associations
+    project                      = Project.find_by_name(activity.csv_project_name)
+    activity.project             = project if project
+    provider                     = Organization.find_by_name(activity.csv_provider)
+    activity.provider            = provider if provider
+
+    activity
   end
 
   def budget_district_coding_adjusted

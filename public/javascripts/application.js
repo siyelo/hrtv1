@@ -1063,6 +1063,15 @@ var projects_index = {
   }
 };
 
+var activities_bulk_create = {
+  run: function () {
+    $('.activity_box .header').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.activity_box').find('.main').show();
+    });
+  }
+}
+
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();

@@ -1,14 +1,13 @@
 .header
   = activity.name
-  
+
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
-  - semantic_form_for activity, :url => response_activities_path(response), :html => {:class => "basic_form"} do |f|
+  - semantic_form_for activity, :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "basic_form"} do |f|
     =  f.input :csv_project_name, :as => :hidden
     =  f.input :csv_provider, :as => :hidden
     =  f.input :csv_districts, :as => :hidden
     =  f.input :csv_beneficiaries, :as => :hidden
     =  f.input :csv_outputs_targets, :as => :hidden
-    =  f.input :csv_funding_sources, :as => :hidden
 
     - f.inputs :class => 'inputs' do
       %li.last

@@ -1,5 +1,5 @@
 - title("Edit Activity")
-
+  
 = render :partial => 'projects/sub_nav'
 
 = render 'breadcrumb', :response => @response, :activity => @activity
@@ -9,7 +9,23 @@
 .main_heading
   = render 'help'
 
+%ul.response-notice
+  - if @response.data_request.spend?
+    - if !@activity.spend?
+      %li= "Enter the Expenditure (Spend) for this activity."
+    - else
+      %li= "Please classify the Expenditure (Spend) for this activity." if !@activity.spend_classified?
+
+  - if @response.data_request.budget?
+    - if !@activity.budget?
+      %li= "Enter the Budget for this activity."
+    - else
+      %li= "Please classify the Budget for this activity." if !@activity.budget_classified?
+      
+  
+
 = render 'activities/tab_nav', :activity => @activity
+
 
 .wrap-70 
   = error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."

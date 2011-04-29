@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -9,7 +10,7 @@ Feature: Reporter can manage activities
     And an organization "my_organization" exists with name: "organization2"
     And a data_response exists with data_request: the data_request, organization: organization "my_organization"
     And a reporter exists with username: "reporter", organization: organization "my_organization"
-    And a project exists with name: "project1", data_response: the data_response
+    And a project exists with name: "project1", budget: "20000", data_response: the data_response
     And a location exists with short_display: "Location1"
     And the location is one of the project's locations
     And a location exists with short_display: "Location2"
@@ -71,24 +72,24 @@ Feature: Reporter can manage activities
            #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
            | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
-
+           @run
     Scenario: Reporter can enter 5 year budget projections
-      When I follow "Add" within ".sub-head:nth-child(2)"
-        And I fill in "Name" with "Activity1"
-        And I fill in "Description" with "Activity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
-        And I select "project1" from "Project"
-        And I fill in "Budget" with "1000"
-        And I fill in "activity_budget2" with "2000"
-        And I fill in "activity_budget3" with "3000"
-        And I fill in "activity_budget4" with "4000"
-        And I fill in "activity_budget5" with "5000"
-        And I press "Save & Go to Classify >"
-      Then I should see "Activity was successfully created"
+     When I follow "Add" within ".sub-head:nth-child(2)"
+      And I fill in "Name" with "Activity1"
+      And I fill in "Description" with "Activity1 description"
+      And I fill in "Start date" with "2011-01-01"
+      And I fill in "End date" with "2011-12-01"
+      And I select "project1" from "Project"
+      And I fill in "Budget" with "10000"
+      And I fill in "activity_budget2" with "2000"
+      And I fill in "activity_budget3" with "3000"
+      And I fill in "activity_budget4" with "4000"
+      And I fill in "activity_budget5" with "5000"
+      And I press "Save & Go to Classify >"
+     Then I should see "Activity was successfully created"
 
       When I follow "Activity1"
-      Then the "Budget" field should contain "1000"
+       Then the "Budget" field should contain "1000"
         And the "activity_budget2" field should contain "2000"
         And the "activity_budget3" field should contain "3000"
         And the "activity_budget4" field should contain "4000"
@@ -98,23 +99,23 @@ Feature: Reporter can manage activities
     Scenario: A reporter can create comments for an activity
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
-        And I follow "Activity1 description"
-        And I fill in "Title" with "Comment title"
-        And I fill in "Comment" with "Comment body"
-        And I press "Create Comment"
+       And I follow "Activity1 description"
+       And I fill in "Title" with "Comment title"
+       And I fill in "Comment" with "Comment body"
+       And I press "Create Comment"
       Then I should see "Comment title"
-        And I should see "Comment body"
+       And I should see "Comment body"
 
 
     @wip
     Scenario: Reporter can upload activities
-      When I attach the file "spec/fixtures/activities.csv" to "File"
-        And I press "Upload and Import"
-      Then I should see "Created 4 of 4 activities successfully"
-        And I should see "a1 description"
-        And I should see "a2 description"
-        And I should see "a3 description"
-        And I should see "a4 description"
+     When I attach the file "spec/fixtures/activities.csv" to "File"
+      And I press "Upload and Import"
+     Then I should see "Created 4 of 4 activities successfully"
+       And I should see "a1 description"
+       And I should see "a2 description"
+       And I should see "a3 description"
+       And I should see "a4 description"
 
 
     @wip

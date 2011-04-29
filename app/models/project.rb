@@ -47,14 +47,14 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}
+  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?} 
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validate :validate_budgets, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
-
+  validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
+  
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
@@ -68,7 +68,7 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-
+  
   ### Public methods
   #
   def implementers
@@ -191,12 +191,20 @@ class Project < ActiveRecord::Base
   def has_other_costs?
     !self.activities.with_type("OtherCost").empty?
   end
-      
 
+  def budget_matches_funders?
+     self.in_flows.empty? || (self.budget == self.in_flows_budget_total)
+  end
+  
   def in_flows_budget_total
+    return 0 if self.funding_sources.empty?
     in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
   end
 
+  def spend_matches_funders?
+    self.spend == self.in_flows_spend_total 
+  end
+  
   def in_flows_spend_total
     in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
@@ -218,12 +226,15 @@ class Project < ActiveRecord::Base
   end
 
   private
-
-    def validate_budgets
-      #TODO FY is explicitly ref'd, should come from data request
-      errors.add(:base, "Total Budget must be less than or equal to Total Budget FY 10-11") if budget > entire_budget
+  
+    ### Validations
+    
+    def validate_total_budget_not_exceeded
+      errors.add(:base, "Budget must be less than or equal to the Total Budget") if budget > entire_budget
     end
-
+    
+    ### Misc
+    
     def trace_ultimate_funding_source(organization, funders, traced = [])
       #spacing = '   ' * traced.length                 # DEBUG
       #puts "#{spacing}tracing #{organization.name}"   # DEBUG
@@ -331,7 +342,6 @@ class Project < ActiveRecord::Base
     def assign_project_to_funding_flows
       funding_flows.each {|ff| ff.project = self}
     end
-    
 end
 
 

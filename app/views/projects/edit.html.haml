@@ -6,7 +6,21 @@
 
 .main_heading
   = render 'help'
+  
+%ul.response-notice
+  - if @response.data_request.spend?
+    - if !@project.spend?
+      %li= "Enter the Expenditure (Spend) for this Project."
+    - else
+      %li= "The Project Expenditure (Spend) amounts do not match their Funding Source budget amounts" unless @project.spend_matches_funders?
 
+  - if @response.data_request.budget?
+    - if !@project.budget?
+      %li= "Enter the Budget for this Project."
+    - else
+      %li= "The Project budget amounts do not match their Funding Source budget amounts" unless @project.budget_matches_funders?
+
+    
 .wrap-70
   = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

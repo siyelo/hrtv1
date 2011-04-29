@@ -133,11 +133,6 @@ describe Activity do
   describe "currency" do
     it "complains when you dont have a project (therefore currency)" do
       lambda{ activity = Factory.create(:activity, :projects => []) }.should raise_error
-    #it "returns nil" do
-      #activity = Factory.build(:activity, :project => nil)
-      #activity.save(false) # TODO: remove test when all db tests valid
-      #activity.currency.should be_nil
-#>>>>>>> Change relationships between project and activity
     end
 
     it "returns project currency when activity has currency" do
@@ -515,10 +510,10 @@ describe Activity do
       @request  = Factory.create(:data_request, :title => 'Data Request 1')
       @response = Factory.create(:data_response, :data_request => @request)
       @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
     end
 
     it "is classified? when both budget and spend are classified" do      
+      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
       @activity.classified?.should be_true
     end
   end
@@ -537,13 +532,13 @@ describe Activity do
     it "is not classified? when budget is not classified" do
       @activity.stub(:budget_classified?) { false }
       @activity.stub(:spend_classified?) { true }
-      @activity.classified?.should be_false
+      @activity.classified?.should be_true
     end
 
     it "is not classified? when spend is not classified" do
       @activity.stub(:budget_classified?) { true }
       @activity.stub(:spend_classified?) { false }
-      @activity.classified?.should be_false
+      @activity.classified?.should be_true
     end
 
     it "is not classified? when both are not classified" do

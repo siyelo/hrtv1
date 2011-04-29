@@ -217,16 +217,6 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == false
     end
     
-    #it "fails if project spends are not entered, even if request doesnt ask for them" do
-      #@request.spend = false
-      #@request.save
-      #@response.reload
-      #@project.spend = nil
-      #@project.save
-      #@response.projects_spend_entered?.should == true
-      #@response.ready_to_submit?.should == true
-    #end
-    
     it "fails if there are no activities" do
       @activity.destroy
       @response.activities_coded?.should == false
@@ -245,7 +235,6 @@ describe DataResponse do #validations
       cs.amount = 0
       cs.save!
       @activity.reload
-      @activity.classified?.should == false
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
@@ -257,7 +246,6 @@ describe DataResponse do #validations
       cs.amount = 0
       cs.save!
       @other_cost.reload
-      @other_cost.classified?.should == false
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end
@@ -270,6 +258,10 @@ describe DataResponse do #validations
       @implementer = Factory.create(:organization)
       @response    = Factory.create(:data_response, :organization => @implementer)
       @project = Factory.create(:project, :data_response => @response, :budget => 10)
+    end
+    
+    it "succeeds if no projects entered" do
+      @response.projects_and_funding_sources_have_correct_budgets?.should == true
     end
 
     it "is true when budget in flow equals to project budget" do

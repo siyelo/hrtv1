@@ -206,6 +206,7 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
+
   def coding_budget_classified?
     #budget.blank? || budget == self.CodingBudget_amount
     budget.blank? || CodingTree.new(self, CodingBudget).valid?
@@ -247,6 +248,7 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_classified?
+    return true if self.budget.blank?
     coding_budget_classified? &&
     coding_budget_district_classified? &&
     coding_budget_cc_classified? &&
@@ -254,14 +256,16 @@ class Activity < ActiveRecord::Base
   end
 
   def spend_classified?
+    return true if self.spend.blank?
     coding_spend_classified? &&
     coding_spend_district_classified? &&
     coding_spend_cc_classified? &&
     service_level_spend_classified?
   end
-
+  
+  # An activity can be considered classified if at least one of these are populated.
   def classified?
-    budget_classified? && spend_classified?
+    (budget_classified? && !budget.blank?) || (spend_classified? && !spend.blank?)
   end
 
   # TODO: spec
@@ -437,8 +441,8 @@ class Activity < ActiveRecord::Base
 
   def check_projects_budget_and_spend?
     return true if self.budget.nil? && self.spend.nil?
-    return true if self.actual_budget <= self.project.budget && 
-                   self.actual_spend <= self.project.spend && 
+    return true if self.actual_budget <= (self.project.budget || 0) && 
+                   self.actual_spend <= (self.project.spend || 0) && 
                    self.actual_quarterly_spend_check? && 
                    self.actual_quarterly_budget_check?
     return false

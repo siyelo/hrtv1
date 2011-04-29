@@ -2,7 +2,7 @@
   = activity.name
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
-  - semantic_form_for activity, :namespace => "f#{activity.object_id}", :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
+  - semantic_form_for activity, :namespace => form_namespace(activity), :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
     =  f.input :csv_project_name, :as => :hidden
     =  f.input :csv_provider, :as => :hidden
     =  f.input :csv_districts, :as => :hidden

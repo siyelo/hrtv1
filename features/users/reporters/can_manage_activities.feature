@@ -89,11 +89,11 @@ Feature: Reporter can manage activities
      Then I should see "Activity was successfully created"
 
       When I follow "Activity1"
-       Then the "Budget" field should contain "1000"
-        And the "activity_budget2" field should contain "2000"
-        And the "activity_budget3" field should contain "3000"
-        And the "activity_budget4" field should contain "4000"
-        And the "activity_budget5" field should contain "5000"
+      Then the "Budget" field should contain "1000"
+        And the "Year + 2" field should contain "2000"
+        And the "Year + 3" field should contain "3000"
+        And the "Year + 4" field should contain "4000"
+        And the "Year + 5" field should contain "5000"
 
 
     Scenario: A reporter can create comments for an activity

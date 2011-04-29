@@ -1079,7 +1079,6 @@ var activities_bulk_create = {
 
       ajaxLoader.show();
 
-      console.log(form.attr('action'))
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         activityBox.html(data);
       });

@@ -1065,10 +1065,49 @@ var projects_index = {
 
 var activities_bulk_create = {
   run: function () {
+    var initDemoText = function (elements) {
+      elements.each(function(){
+        var element = $(this);
+        var demo_text = element.attr('data-hint');
+
+        if (demo_text != null) {
+          if (element.val() == '' || element.val() == demo_text) {
+            element.val( demo_text );
+            element.addClass('input_hint');
+          }
+        }
+      });
+    };
+
+    initDemoText($('*[data-hint]'));
+
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       $(this).parents('.activity_box').find('.main').toggle();
     });
+
+    $('*[data-hint]').live('focus', function(){
+      var element = $(this);
+      var demo_text = element.attr('data-hint');
+      if (demo_text != null) {
+        if (element.val() == demo_text) {
+          element.val('');
+          element.removeClass('input_hint');
+        }
+      }
+    });
+
+    $('*[data-hint]').live('blur', function(){
+      var element = $(this);
+      var demo_text = element.attr('data-hint');
+      if (demo_text != null) {
+        if (element.val() == '') {
+          element.val( demo_text );
+          element.addClass('input_hint');
+        }
+      }
+    });
+
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
@@ -1077,10 +1116,21 @@ var activities_bulk_create = {
       var ajaxLoader = element.next('.ajax-loader');
       var activityBox = element.parents('.activity_box');
 
+      // reset input values before submit !!
+      form.find('*[data-hint]').each(function() {
+        var input = $(this);
+        var demo_text = input.attr('data-hint');
+
+        if (input.val() == demo_text) {
+          input.val('');
+        }
+      });
+
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         activityBox.html(data);
+        initDemoText(activityBox.find('*[data-hint]'));
       });
     });
 

@@ -44,39 +44,47 @@
         %ul
           = f.input :name, :required => false, :wrapper_html => {:class => 'grid-30'}
           = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
-          = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
-          = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
+          = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
+          = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
         
       %li
         - if @response.data_request.spend?
           %ul.first-half
-            = f.input :spend, :label => "Spent", :required => false, :wrapper_html => {:class => 'grid-20'}
+            = f.input :spend, :required => false, :wrapper_html => {:class => 'grid-20'}
             %li
-              %label== Quarterly spend
+              %label Quarterly spend
               %ul
-                = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :spend_q1     , :label => "Q1 09-10", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :spend_q2     , :label => "Q2 09-10", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :spend_q3     , :label => "Q3 09-10", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :spend_q4     , :label => "Q4 09-10", :required => false, :wrapper_html => {:class => 'grid-15'}
+                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
+                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
+                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
+                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
+                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
 
         - if @response.data_request.budget?
           %ul.second-half 
             = f.input :budget, :label => "Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
             %li
+              %label Quarterly budget
+              %ul
+                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
+                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
+                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
+                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
+                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
               %label Long-term
               %ul
-                = f.input :budget2, :label => "Year + 2", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :budget3, :label => "Year + 3", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :budget4, :label => "Year + 4", :required => false, :wrapper_html => {:class => 'grid-15'}
-                = f.input :budget5, :label => "Year + 5", :required => false, :wrapper_html => {:class => 'grid-15'}
+                = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
+                = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
+                = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
+                = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
+
 
       %li
         %ul
           = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
           = f.input :organizations, :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
-          = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}
-          = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}
+          = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Other beneficiaries"
+          = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
 
       %li.borderless.marginless

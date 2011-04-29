@@ -27,6 +27,18 @@ describe DataResponse do #validations
     end
   end
 
+  describe "partial activities - that began or ended during a response period" do
+    before :each do
+      @activity   = Factory(:activity_w_only_budget_coding, :data_response => @response,
+        :project => @project)
+    end
+
+    it "accepts activities with at least one of budget or spend set" do
+      @response.uncoded_activities.should be_empty
+      @response.activities_coded?.should == true
+    end
+  end
+
   describe "Request for only budget" do
     before :each do
       @request.spend = false
@@ -76,46 +88,46 @@ describe DataResponse do #validations
   end
 
   describe "project linking" do
-    before :each do 
+    before :each do
       @funder_response = Factory.create(:data_response, :data_request => @request)
       @funder_project = Factory(:project, :data_response => @funder_response)
     end
-    
+
     it "succeeds if projects are linked" do
       #TODO link the projects
-      funder = Factory(:funding_source, :to => @project.organization, 
-        :project => @project, 
+      funder = Factory(:funding_source, :to => @project.organization,
+        :project => @project,
         :from => @funder_response.organization,
         :project_from_id => @funder_project.id,
         :data_response => @response )
       @response.projects_linked?.should == true
     end
-    
+
     it "fails if no projects exist to link" do
       @response.projects_linked?.should == false
     end
-    
+
     it "fails if projects not linked" do
-      funder = Factory(:funding_source, :to => @project.organization, 
-        :project => @project, 
+      funder = Factory(:funding_source, :to => @project.organization,
+        :project => @project,
         :from => @funder_response.organization,
         :data_response => @response )
       @response.projects_linked?.should == false
     end
   end
-  
-  describe "project spend check" do    
+
+  describe "project spend check" do
     it "succeeds if spend is entered" do
       @response.projects_spend_entered?.should == true
     end
-    
+
     it "succeeds if spend not entered but a quarter spend is" do
       @project.spend = nil
       @project.spend_q1 = 10
       @project.save
       @response.projects_spend_entered?.should == true
     end
-    
+
     it "fails if spend is not entered and no quarter spends are" do
       @project.spend = nil
       @project.save
@@ -123,18 +135,18 @@ describe DataResponse do #validations
     end
   end
 
-  describe "project budget check" do    
+  describe "project budget check" do
     it "succeeds if budget is entered" do
       @response.projects_budget_entered?.should == true
     end
-    
+
     it "succeeds if budget not entered but a quarter budget is" do
       @project.budget = nil
       @project.budget_q1 = 10
       @project.save
       @response.projects_budget_entered?.should == true
     end
-    
+
     it "fails if budget is not entered and no quarter budgets are" do
       @project.budget = nil
       @project.save
@@ -144,21 +156,21 @@ describe DataResponse do #validations
 
   describe "ready to submit" do
     before :each do
-      @activity   = Factory(:activity_fully_coded, :data_response => @response, 
+      @activity   = Factory(:activity_fully_coded, :data_response => @response,
                             :project => @project)
-      @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, 
+      @other_cost = Factory(:other_cost_fully_coded, :data_response => @response,
                             :project => @project)
       @funder_response = Factory.create(:data_response, :data_request => @request)
-      @funder_project = Factory(:project, :data_response => @funder_response, 
+      @funder_project = Factory(:project, :data_response => @funder_response,
                                 :budget => 100, :spend => 80)
-      @funder = Factory(:funding_flow, :to => @project.organization, 
-        :project => @project, 
+      @funder = Factory(:funding_flow, :to => @project.organization,
+        :project => @project,
         :from => @funder_response.organization,
         :project_from_id => @funder_project.id,
         :data_response => @response,
         :budget => 100, :spend => 80)
     end
-    
+
     context "response is complete" do
       it "validates OK if everything is entered" do
         @response.projects_entered?.should == true
@@ -177,26 +189,26 @@ describe DataResponse do #validations
 
         @response.ready_to_submit?.should == true
       end
-      
+
       it "submits if everything is coded" do
         @response.submit!.should == true
       end
-      
+
     end
-    
+
     context "projects not linked" do
       before :each do
         @funder.project_from_id = nil
         @funder.save
       end
-      
+
       it "succeeds if request not in final review" do
         @request.final_review = false
         @request.save
         @response.reload
         @response.ready_to_submit?.should == true
       end
-      
+
       it "fails if in final review " do
         @request.final_review = true
         @request.save
@@ -204,19 +216,19 @@ describe DataResponse do #validations
         @response.ready_to_submit?.should == false
       end
     end
-    
+
     it "disallows submit! if not complete" do
       @activity.destroy
       @response.submit!.should == false
     end
-    
+
     it "fails if project spends are not entered" do
       @project.spend = nil
       @project.save
       @response.projects_spend_entered?.should == false
       @response.ready_to_submit?.should == false
     end
-    
+
     it "fails if there are no activities" do
       @activity.destroy
       @response.activities_coded?.should == false
@@ -259,7 +271,7 @@ describe DataResponse do #validations
       @response    = Factory.create(:data_response, :organization => @implementer)
       @project = Factory.create(:project, :data_response => @response, :budget => 10)
     end
-    
+
     it "succeeds if no projects entered" do
       @response.projects_and_funding_sources_have_correct_budgets?.should == true
     end

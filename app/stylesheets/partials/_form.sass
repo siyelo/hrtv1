@@ -441,6 +441,8 @@ a.delete_btn
 
 .activity_box
   margin: 0 !important
+  .dashboard_section
+    margin-bottom: 0
   
   .header
     background: $mid-blue
@@ -473,6 +475,17 @@ a.delete_btn
     display: inline-block
     padding: 5px
     width: 96%
+    
+  .inline-errors
+    background: $lightest-blue
+    border: 1px solid $lighter-blue
+    color: red
+    float: left
+    font-size: 11px
+    margin-top: -5px
+    padding: 6px 8px 2px
+    +border-bottom-radius
+    //+box-shadow($lighter-blue, 0, 1px, 0)
   
   .grid-10
     float: left

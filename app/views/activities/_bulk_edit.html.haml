@@ -79,8 +79,9 @@
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
 
-    %li
-      %ul
-        - f.buttons :class => 'buttons' do
-          = f.commit_button "Save", :wrapper_html => {:class => "save_btn"}
-          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+      %li.borderless.marginless
+        %br
+        %ul
+          - f.buttons :class => 'buttons' do
+            = f.commit_button "Save", :wrapper_html => {:class => "save_btn"}
+            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

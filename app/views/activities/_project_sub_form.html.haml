@@ -2,7 +2,7 @@
   - semantic_fields_for activity do |f|
     - f.inputs do
       = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "all the places where this Activity was implemented", :collection => project.locations, :required => false
-      - if activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
+      - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
         .suggestion
           == We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
 - else

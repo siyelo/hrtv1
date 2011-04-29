@@ -26,30 +26,33 @@
     %span.info
       = render 'projects/no_projects_yet'
 
-- ready_class = @response.projects_spend_entered? ? "ready" : "not-ready"
-%h3{:class => ready_class}
-  Projects: Expenditures Entered
-  - unless @response.projects_spend_entered?
-    - if @response.projects_entered?
-      %span.info Enter the Expenditure (Spend) for all of your projects.
-    - else
-      %span.info
-        = render 'projects/no_projects_yet'
+- if @response.data_request.spend?
+  - ready_class = @response.projects_spend_entered? ? "ready" : "not-ready"
+  %h3{:class => ready_class}
+    Projects: Expenditures Entered
+    - unless @response.projects_spend_entered?
+      - if @response.projects_entered?
+        %span.info Enter the Expenditure (Spend) for all of your projects.
+      - else
+        %span.info
+          = render 'projects/no_projects_yet'
 
-- ready_class = @response.projects_budget_entered? ? "ready" : "not-ready"
-%h3{:class => ready_class}
-  Projects: Budgets Entered
-  - unless @response.projects_budget_entered?
-    - if @response.projects_entered?
-      %span.info Enter the Budget for all of your projects.
-    - else
-      %span.info
-        = render 'projects/no_projects_yet'
+- if @response.data_request.budget?
+  - ready_class = @response.projects_budget_entered? ? "ready" : "not-ready"
+  %h3{:class => ready_class}
+    Projects: Budgets Entered
+    - unless @response.projects_budget_entered?
+      - if @response.projects_entered?
+        %span.info Enter the Budget for all of your projects.
+      - else
+        %span.info
+          = render 'projects/no_projects_yet'
 
-- if @response.projects_without_spend
-  %ul.push
-    - @response.projects_without_spend.each do |p|
-      %li= link_to friendly_name(p), edit_response_project_path(@response, p)
+- if @response.data_request.spend?
+  - if @response.projects_without_spend
+    %ul.push
+      - @response.projects_without_spend.each do |p|
+        %li= link_to friendly_name(p), edit_response_project_path(@response, p)
 
 - ready_class = @response.projects_have_activities? ? "ready" : "not-ready"
 %h3{:class => ready_class}
@@ -122,7 +125,7 @@
 %h3{:class => ready_class}
   Correct Budget amounts for Projects & Funding Sources
   - unless @response.projects_and_funding_sources_have_correct_budgets?
-    %span.info Project Budget amounts are not equal to sum of Funding Source Budget amounts, please edit your projects or funding sources and enter correct amounts.
+    %span.info "The Project budget amounts do not match their Funding Source budget amount(s). Please update your projects and/or funding sources."
 
 - unless @response.projects_and_funding_sources_have_correct_budgets?
   .simple_table.push
@@ -149,7 +152,7 @@
 %h3{:class => ready_class}
   Correct Expenditure amounts for Projects & Funding Sources
   - unless @response.projects_and_funding_sources_have_correct_spends?
-    %span.info Project Expenditure amounts are not equal to sum of Funding Source Expenditure amounts, please edit your projects or funding sources and enter correct amounts.
+    %span.info The Project spend amounts do not match their Funding Source spend amount(s). Please update your projects and/or funding sources.
 
 - unless @response.projects_and_funding_sources_have_correct_spends?
   .simple_table.push
@@ -178,8 +181,8 @@
   Correct Budget amounts for Projects, Activities & Other Costs
   - unless @response.projects_and_activities_have_correct_budgets?
     %span.info
-      Project Budget amounts are not equal to sum of Activities and Other Costs Budget amounts, please edit your projects or activities / other costs and enter correct amounts.
-
+      The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+      
 - unless @response.projects_and_activities_have_correct_budgets?
   .simple_table.push
     %table
@@ -213,7 +216,7 @@
   Correct Expenditure amounts for Projects, Activities & Other Costs
   - unless @response.projects_and_activities_have_correct_spends?
     %span.info
-      Project Expenditure amounts are not equal to sum of Activities and Other Costs Expenditure amounts, please edit your projects or activities / other costs and enter correct amounts.
+      The Project expenditure should match the total expenditures for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
 
 - unless @response.projects_and_activities_have_correct_spends?

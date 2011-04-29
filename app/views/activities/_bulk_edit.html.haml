@@ -6,22 +6,30 @@
     
     - f.inputs :class => 'inputs_condensed' do
       %li
-        - unless f.object.project
-          .suggestion
-            == We didnt find the project "#{activity.csv_project_name}" in the list, please select the correct one
-        - unless f.object.provider
-          .suggestion
-            == We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
-        - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
-          .suggestion
-            == We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
-      
-      %li.marginless
         %ul
           =  f.input :csv_project_name, :as => :hidden
           =  f.input :csv_provider, :as => :hidden
           =  f.input :csv_districts, :as => :hidden
           =  f.input :csv_beneficiaries, :as => :hidden
+      %li.borderless
+        %ul.response-notice
+          - unless f.object.project
+            %li
+              .suggestion
+                == We didnt find the project "#{activity.csv_project_name}" in the list, please select the correct one
+          - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
+            %li
+              .suggestion
+                == We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
+
+          - unless f.object.provider
+            %li
+              .suggestion
+                == We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
+          - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
+            %li
+              .suggestion
+                == We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
           
       %li
         %ul.clearfix

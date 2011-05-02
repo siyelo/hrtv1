@@ -50,6 +50,13 @@ class Reports::ActivitiesByNhaSubimps
     end
 
     row = []
+    dr = activity.data_response
+    row << dr.contact_name
+    row << dr.contact_position
+    row << dr.contact_phone_number
+    row << dr.contact_main_office_phone_number
+    row << dr.contact_office_location
+
     row << activity.project.try(:name)
     row << activity.project.try(:description)
     row << activity.name
@@ -216,6 +223,11 @@ class Reports::ActivitiesByNhaSubimps
       amount_type = @is_budget ? 'Budget' : 'Spent'
 
       row = []
+      row << "contact name"
+      row << "contact position"
+      row << "contact phone number"
+      row << "contact main office phone number"
+      row << "contact office location"
       row << "Project Name"
       row << "Project Description"
       row << "Activity Name"

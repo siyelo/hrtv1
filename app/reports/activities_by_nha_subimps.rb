@@ -134,11 +134,11 @@ class Reports::ActivitiesByNhaSubimps
       # edge case that handles bad quality data e.g. funding sources
       # that dont have amounts specified for them
       # TODO move this into helper in get_funding_sources for all reports!
-      #if funding_sources_total == 0
+      if funding_sources_total == 0
         funding_sources = [{:ufs => nil, :fa => nil, :spend => 1, :budget => 1}]
         #funding_sources = fake_one_funding_source_if_none( [] )
         funding_sources_total = 1
-      #end
+      end
 
       coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
 

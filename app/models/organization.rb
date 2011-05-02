@@ -41,6 +41,14 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def referenced?
+    if in_flows.empty? && out_flows.empty? && provider_for.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+      false
+    else
+      true
+    end
+  end
+
   def unfulfilled_data_requests
     DataRequest.all - fulfilled_data_requests
   end

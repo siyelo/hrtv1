@@ -8,8 +8,8 @@ FasterCSV.foreach("db/reports/ufs/funding_streams.csv", :headers=>true) do |row|
   FundingStream.create!(:project_id => row[0], 
                         :organization_ufs_id => ufs.id,
                         :organization_fa_id => fa.id,
-                        :budget => row[3],
-                        :spend => row[4])
+                        :budget => Project.find(row[0]).budget,
+                        :spend => Project.find(row[0]).spend)
   puts "#{ufs} - #{fa}"
   print "."
   puts

@@ -59,6 +59,10 @@ module Reports::Helpers
   # and what it returns is what should be used for a report
   # TODO: refactor methods here into code assignment or coding class
   def get_coding_only_nodes_with_local_amounts(codings)
+    if codings.size == 1 && codings.first.code_id.nil?
+      #coding was faked, just return this correctly
+      #return [[codings.first, ["No Code Specified"]]]
+    end 
     coding_with_parent_codes = []
     coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
 
@@ -72,6 +76,9 @@ module Reports::Helpers
       coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
     end
 
+    # TODO FIX BUG, sometimes this returns an [] when codings is non-empty
+    # should NEVER have code assignments which have no real codings
+    # raise codings.to_yaml if coding_with_parent_codes.size == 0
     coding_with_parent_codes
   end
 

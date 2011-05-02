@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::NhaReportWSubimps
+class Reports::ActivitiesByNhaSubimps
   include Reports::Helpers
 
   def initialize(type, activities)

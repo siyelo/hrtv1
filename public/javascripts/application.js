@@ -1120,8 +1120,11 @@ $(function () {
     }
   }
 
-  $("#closeFlash").click(function(){
-    $("#flash_holder").fadeOut("slow");
+  $("#closeFlash").click(function (e) {
+    e.preventDefault();
+    $("#flash_holder").fadeOut("slow", function() {
+      $(this).show().css({visibility: "hidden"});
+    });
   });
 
   $('#page_tips_open').click(function (e) {

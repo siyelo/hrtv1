@@ -411,3 +411,163 @@ a.delete_btn
 
   //a:hover, a:link, a:active, a:visited
     //outline: medium none
+
+.condensed_form
+.inputs_condensed
+  > ol
+    > li
+      border-bottom: 4px solid $lightest-blue
+      margin-bottom: 10px
+      padding-bottom: 10px
+      +pie-clearfix
+      &:first-child
+        display: none
+        
+  .check_boxes
+    margin-bottom: 0
+    .label
+      padding-bottom: 5px
+    ol li
+      display: inline
+      float: left
+      margin: 0 10px 0 0
+      +pie-clearfix
+    label
+      font-size: 11px
+      font-weight: normal
+        
+.activities_upload_box
+  display: none
+  .dashboard_section
+    padding-bottom: 0
+.activity_box
+  margin: 0 !important
+
+  .dashboard_section
+    margin-bottom: 0
+    
+  .left
+    float: left
+    
+  .ajax-loader
+    margin: 10px
+  
+  .header
+    background: $mid-blue
+    color: $lightest-blue
+    font-size: 12px
+    font-weight: bold
+    padding: 10px
+    text-transform: none
+    +linear-gradient(color-stops($mid-blue + #111, $mid-blue))
+    cursor: pointer
+    
+    span
+      background: $mid-blue
+      color: $light-blue - #111
+      font-size: 10px
+      padding: 3px 5px
+      +border-radius
+    
+    img
+      margin-right: 5px
+    ul
+      font-size: 11px
+      font-weight: normal
+      margin-bottom: 0 !important
+      li
+        background: $mid-blue
+        display: inline
+        float: left
+        margin-left: 5px
+        padding: 3px 5px
+        +border-radius
+        
+  .activity_project
+    float: left
+    width: 20%
+  
+  select
+    padding: 2px
+    width: 100%
+    
+  .project_sub_form
+    float: left
+    margin-left: 5%
+    margin-bottom: 0
+    width: 75%
+    .inline-hints
+      display: none
+
+.inputs_condensed
+  input[type=text], textarea
+    display: inline-block
+    padding: 5px
+    width: 96%
+
+  label
+    margin-bottom: 2px
+    
+  .inline-errors
+    background: $lightest-blue
+    border: 1px solid $lighter-blue
+    color: red
+    float: left
+    font-size: 11px
+    margin-top: -5px
+    padding: 6px 8px 2px
+    +border-bottom-radius
+    //+box-shadow($lighter-blue, 0, 1px, 0)
+    
+  .second-half > li
+    &:first-child
+      height: 100px
+    &.grid-80
+      margin-bottom: 10px
+  
+  .grid-10
+    float: left
+    margin-right: 1%
+    width: 9%
+  .grid-15
+    float: left
+    margin-right: 3%
+    width: 12%
+  .grid-20
+    float: left
+    margin-right: 4%
+    width: 16%
+  .grid-30
+    float: left
+    margin-right: 2%
+    width: 28%
+  .grid-40
+    float: left
+    margin-right: 2%
+    width: 38%
+  .grid-50
+    float: left
+    width: 50%
+  .grid-60
+    float: left
+    width: 60%
+  .grid-80
+    float: left
+    width: 80%
+  .grid-100
+    float: left
+    width: 100%
+
+.upbox
+  background: $light-blue
+  border: 1px solid $light-blue - #111
+  float: left
+  margin-right: 5px
+  padding: 5px 5px 4px
+  +border-radius
+  label
+    display: inline !important
+
+.input_hint
+  font-style: italic
+  color: gray

@@ -50,7 +50,7 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,
         :member => {:approve => :put, :classifications => :get},
-        :collection => {:create_from_file => :post, :download_template => :get,
+        :collection => {:bulk_create => :post, :download_template => :get, 
                         :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}

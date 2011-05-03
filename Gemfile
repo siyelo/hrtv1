@@ -5,10 +5,11 @@ gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
-gem 'formtastic', "= 0.9.10"
+gem 'formtastic', "= 1.2.3"
 gem 'haml'
 gem 'hoptoad_notifier'
 gem 'acts_as_commentable'
+gem 'ar_strip_commas'
 
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue

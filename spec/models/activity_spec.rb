@@ -54,6 +54,10 @@ describe Activity do
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:funding_sources_attributes) }
+    it { should allow_mass_assignment_of(:csv_project_name) }
+    it { should allow_mass_assignment_of(:csv_provider) }
+    it { should allow_mass_assignment_of(:csv_districts) }
+    it { should allow_mass_assignment_of(:csv_beneficiaries) }
   end
 
   describe "validations" do

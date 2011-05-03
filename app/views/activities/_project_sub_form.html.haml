@@ -1,5 +1,5 @@
 - if project.locations.present?
-  - semantic_fields_for activity do |f|
+  - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
     - f.inputs do
       = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "all the places where this Activity was implemented", :collection => project.locations, :required => false
 - else

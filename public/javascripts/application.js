@@ -1054,6 +1054,122 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 };
 
+var projects_index = {
+  run: function () {
+    $('.activities_upload_btn').click(function (e) {
+      e.preventDefault();
+      $(this).parents('td').find('.activities_upload_box').toggle();
+    });
+  }
+};
+
+var activities_bulk_create = {
+  run: function () {
+    var initDemoText = function (elements) {
+      elements.each(function(){
+        var element = $(this);
+        var demo_text = element.attr('data-hint');
+
+        if (demo_text != null) {
+          if (element.val() == '' || element.val() == demo_text) {
+            element.val( demo_text );
+            element.addClass('input_hint');
+          }
+        }
+      });
+    };
+
+    initDemoText($('*[data-hint]'));
+
+    $('.activity_box .header').live('click', function (e) {
+      e.preventDefault();
+      var activity_box = $(this).parents('.activity_box');
+
+      $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
+        $(this).find('.main').hide();
+      });
+      activity_box.find('.main').toggle();
+    });
+
+    $('*[data-hint]').live('focus', function(){
+      var element = $(this);
+      var demo_text = element.attr('data-hint');
+      if (demo_text != null) {
+        if (element.val() == demo_text) {
+          element.val('');
+          element.removeClass('input_hint');
+        }
+      }
+    });
+
+    $('*[data-hint]').live('blur', function(){
+      var element = $(this);
+      var demo_text = element.attr('data-hint');
+      if (demo_text != null) {
+        if (element.val() == '') {
+          element.val( demo_text );
+          element.addClass('input_hint');
+        }
+      }
+    });
+
+
+    $('.save_btn').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('form');
+      var ajaxLoader = element.next('.ajax-loader');
+      var activityBox = element.parents('.activity_box');
+
+      // reset input values before submit !!
+      form.find('*[data-hint]').each(function() {
+        var input = $(this);
+        var demo_text = input.attr('data-hint');
+
+        if (input.val() == demo_text) {
+          input.val('');
+        }
+      });
+
+      ajaxLoader.show();
+
+      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        activityBox.html(data);
+        initDemoText(activityBox.find('*[data-hint]'));
+      });
+    });
+
+
+    $('.activity_project_id').live('change', function () {
+      var element = $(this);
+      var _project_id = element.val();
+      var form = element.parents('form');
+      var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
+      var activityBox = element.parents('.activity_box');
+      _response_id = matches[1];
+      _activity_id = matches[2];
+
+      if (_project_id) {
+        var url = '/responses/' + _response_id +
+        '/activities/project_sub_form?' + 'project_id=' + _project_id;
+        if (_activity_id) {
+          url += '&activity_id=' + _activity_id;
+        }
+        $.get(url, function (data) {
+          activityBox.find('.project_sub_form_fields').html(data)
+          activityBox.find('.project_sub_form_fields').show();
+          activityBox.find('.project_sub_form_hint').hide();
+        });
+      } else {
+        activityBox.find('.project_sub_form_fields').hide();
+        activityBox.find('.project_sub_form_hint').show();
+      }
+    });
+
+
+  }
+}
+
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
@@ -1085,7 +1201,6 @@ var activity_form = function () {
     element.find('.edit_block').show();
     element.find('.preview_block').hide();
     close_activity_funding_sources_fields(fields);
-
   });
 
   close_activity_funding_sources_fields($('.funding_sources .fields'));

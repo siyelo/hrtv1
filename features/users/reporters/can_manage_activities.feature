@@ -89,11 +89,11 @@ Feature: Reporter can manage activities
      Then I should see "Activity was successfully created"
 
       When I follow "Activity1"
-       Then the "Budget" field should contain "1000"
-        And the "activity_budget2" field should contain "2000"
-        And the "activity_budget3" field should contain "3000"
-        And the "activity_budget4" field should contain "4000"
-        And the "activity_budget5" field should contain "5000"
+      Then the "Budget" field should contain "1000"
+        And the "Year + 2" field should contain "2000"
+        And the "Year + 3" field should contain "3000"
+        And the "Year + 4" field should contain "4000"
+        And the "Year + 5" field should contain "5000"
 
 
     Scenario: A reporter can create comments for an activity
@@ -107,38 +107,28 @@ Feature: Reporter can manage activities
        And I should see "Comment body"
 
 
-    @wip
+    @run
     Scenario: Reporter can upload activities
-     When I attach the file "spec/fixtures/activities.csv" to "File"
-      And I press "Upload and Import"
-     Then I should see "Created 4 of 4 activities successfully"
-       And I should see "a1 description"
-       And I should see "a2 description"
-       And I should see "a3 description"
-       And I should see "a4 description"
+      When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
+        And I press "Upload" within ".activities_upload_box"
+      Then I should see "Activities Bulk Create"
 
 
-    @wip
     Scenario: Reporter can see error if no csv file is not attached for upload
-      When I press "Upload and Import"
-      Then I should see "Please select a file to upload"
+      When I press "Upload" within ".activities_upload_box"
+      Then I should see "Please select a file to upload activities"
 
 
-    @wip
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Upload and Import"
       Then I should see "Your CSV file does not seem to be properly formatted"
 
 
-    @wip
-    Scenario: Reporter can see error when invalid csv file is attached for upload and download template
-      When I attach the file "spec/fixtures/invalid.csv" to "File"
-        And I press "Upload and Import"
-      Then I should see "Wrong fields mapping. Please download the CSV template"
+    Scenario: Reporter can download Activities CSV template
+      When I follow "Download template" within ".activities_upload_box"
+      Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
-      When I follow "Download template"
-      Then I should see "project_name,name,description,start_date,end_date,text_for_targets,text_for_beneficiaries,text_for_provider,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,budget,budget2,budget3,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4"
 
     Scenario: A reporter can create comments for an activity and see comment errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
@@ -162,9 +152,9 @@ Feature: Reporter can manage activities
     Scenario: Does not email users when a comment is made by a reporter
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
         And no emails have been sent
-        And I follow "Activities"
+      When I follow "Projects"
         And I follow "Activity1 description"
-      When I fill in "Comment" with "Comment body"  
+        And I fill in "Comment" with "Comment body"  
         And I fill in "Title" with "Comment title"
         And I fill in "Comment" with "Comment body"
         And I press "Create Comment"

@@ -15,6 +15,7 @@
         #project_sub_form_fields
           - if @activity.project
             = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
+
       = f.input :name, :required => false
       = f.input :description, :input_html => { :rows => 2 }, :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
@@ -40,6 +41,14 @@
       %h3 Budget (planned expenditure) (#{@response.currency})
       %ul.dashboard_section
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+        %li.amounts.last
+          %label== Quarterly budget
+          %ul
+            = f.input :budget_q4_prev, :label => "Q4 08-09", :required => false
+            = f.input :budget_q1     , :label => "Q1 09-10", :required => false
+            = f.input :budget_q2     , :label => "Q2 09-10", :required => false
+            = f.input :budget_q3     , :label => "Q3 09-10", :required => false
+            = f.input :budget_q4     , :label => "Q4 09-10", :required => false
         %li.amounts
           %label Long-term
           %ul

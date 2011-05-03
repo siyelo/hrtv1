@@ -3,11 +3,7 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name name description start_date end_date
-                           text_for_targets text_for_beneficiaries text_for_provider
-                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4
-                           budget budget2 budget3 budget4 budget5 budget_q4_prev
-                           budget_q1 budget_q2 budget_q3 budget_q4]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -40,6 +36,7 @@ class Activity < ActiveRecord::Base
   ### Includes
   include BudgetSpendHelpers
   acts_as_commentable
+  strip_commas_from_all_numbers
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
@@ -48,7 +45,10 @@ class Activity < ActiveRecord::Base
     :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
-    :sub_activities_attributes, :organization_ids, :funding_sources_attributes
+    :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -161,16 +161,44 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = Project.find_by_name(attributes.delete('project_name'))
-      attributes.merge!(:project_id => project.id) if project
-      activity = data_response.activities.new(attributes)
-      activity.save ? (saved += 1) : (errors += 1)
+  def self.initialize_from_file(response, row)
+    activity                     = response.activities.new
+    activity.name                = row['Activity Name']
+    activity.description         = row['Activity Description']
+    activity.spend               = row['Spend']
+    activity.spend_q1            = row['Q1 Spend']
+    activity.spend_q2            = row['Q2 Spend']
+    activity.spend_q3            = row['Q3 Spend']
+    activity.spend_q4            = row['Q4 Spend']
+    activity.budget              = row['Budget']
+    activity.budget_q1           = row['Q1 Budget']
+    activity.budget_q2           = row['Q2 Budget']
+    activity.budget_q3           = row['Q3 Budget']
+    activity.budget_q4           = row['Q4 Budget']
+    activity.start_date          = row['Start Date']
+    activity.end_date            = row['End Date']
+
+    # virtual attributes
+    activity.csv_project_name    = row['Project Name']
+    activity.csv_provider        = row['Provider']
+    activity.csv_districts       = row['Districts']
+    activity.csv_beneficiaries   = row['Beneficiaries']
+    activity.text_for_targets     = row['Outputs / Targets']
+
+    # associations
+    project                      = Project.find_by_name(activity.csv_project_name)
+    if project
+      activity.project           = project
+      activity.locations         = activity.csv_districts.to_s.split(',').
+                                    map{|l| Location.find_by_short_display(l.strip)}.compact
     end
-    return saved, errors
+    provider                     = Organization.find_by_name(activity.csv_provider)
+    activity.provider            = provider if provider
+    activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
+                                    map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+
+    activity.save
+    activity
   end
 
   def budget_district_coding_adjusted

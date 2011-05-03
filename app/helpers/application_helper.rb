@@ -216,4 +216,8 @@ module ApplicationHelper
     style = "background: red" if progress < 30
     style = style + "; width: #{progress}%"
   end
+
+  def form_namespace(object)
+    "f#{object.object_id}"
+  end
 end

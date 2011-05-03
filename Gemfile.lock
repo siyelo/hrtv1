@@ -21,6 +21,7 @@ GEM
     activesupport (2.3.8)
     acts_as_commentable (3.0.1)
     annotate (2.4.0)
+    ar_strip_commas (0.1.0)
     authlogic (2.1.6)
       activesupport
     awesome_print (0.3.2)
@@ -60,9 +61,10 @@ GEM
     fastthread (1.0.7)
     ffi (1.0.7)
       rake (>= 0.8.7)
-    formtastic (0.9.10)
-      actionpack (>= 2.3.0)
-      activesupport (>= 2.3.0)
+    formtastic (1.2.3)
+      actionpack (>= 2.3.7)
+      activesupport (>= 2.3.7)
+      i18n (~> 0.4)
     gem_plugin (0.2.3)
     gherkin (2.3.5)
       json (>= 1.4.6)
@@ -188,6 +190,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_commentable
   annotate
+  ar_strip_commas
   authlogic
   awesome_print
   aws-s3
@@ -199,7 +202,7 @@ DEPENDENCIES
   email_spec!
   factory_girl (= 1.2.4)
   fastercsv
-  formtastic (= 0.9.10)
+  formtastic (= 1.2.3)
   google_currency (= 1.2.0)
   growl
   guard

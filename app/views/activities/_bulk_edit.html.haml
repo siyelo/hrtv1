@@ -1,0 +1,115 @@
+.header
+  - if activity.new_record?
+    = image_tag "delete_16.png"
+    = activity.name
+  - else
+    = image_tag "tick_12.png"
+    = activity.name
+
+    %span.project= activity.project.try(:name)
+    %ul.right
+      - if activity.start_date.present? && activity.end_date.present?
+        %li
+          %span Period:
+          = activity.start_date.strftime("%d.%m.%Y")
+          -
+          = activity.end_date.strftime("%d.%m.%Y")
+      %li 
+        %span Spent:
+        = "#{activity.spend} #{activity.currency}"
+      %li
+        %span Budget:
+        = "#{activity.budget} #{activity.currency}"
+
+.main.dashboard_section{:style => (activity.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
+  - semantic_form_for activity, :namespace => form_namespace(activity), :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
+    
+    - f.inputs :class => 'inputs_condensed' do
+      %li
+        %ul
+          =  f.input :csv_project_name, :as => :hidden
+          =  f.input :csv_provider, :as => :hidden
+          =  f.input :csv_districts, :as => :hidden
+          =  f.input :csv_beneficiaries, :as => :hidden
+      %li.borderless
+        %ul.response-notice
+          - unless f.object.project
+            %li
+              .suggestion
+                == We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
+          - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
+            %li
+              .suggestion
+                == We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
+
+          - unless f.object.provider
+            %li
+              .suggestion
+                == We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
+          - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
+            %li
+              .suggestion
+                == We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
+          
+      %li
+        %ul.clearfix
+          = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
+          
+          %li.project_sub_form
+            .project_sub_form_fields
+              - if activity.project
+                = render 'project_sub_form', {:activity => activity, :project => activity.project}
+
+      %li
+        %ul
+          = f.input :name, :required => false, :wrapper_html => {:class => 'grid-30'}
+          = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
+          = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
+          = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
+        
+      %li
+        - if @response.data_request.spend?
+          %ul.first-half
+            = f.input :spend, :required => false, :wrapper_html => {:class => 'grid-20'}
+            %li
+              %label Quarterly spend
+              %ul
+                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
+                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
+                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
+                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
+                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+
+        - if @response.data_request.budget?
+          %ul.second-half
+            = f.input :budget, :label => "Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
+            %li.grid-80
+              %label Quarterly budget
+              %ul
+                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
+                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
+                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
+                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
+                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+            %li.grid-80
+              %label Long-term
+              %ul
+                = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
+                = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
+                = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
+                = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
+
+
+      %li
+        %ul
+          = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
+          = f.input :organizations, :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
+          = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Other beneficiaries"
+          = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+
+      %li.borderless.marginless
+        %br
+        - f.buttons :class => 'buttons' do
+          = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

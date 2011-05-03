@@ -23,51 +23,66 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html { 
-        valid = @activity.check_projects_budget_and_spend?
-        if params[:commit] == "Save & Go to Classify >"
-          if valid
+    @activity = @response.activities.new(params[:activity])
+
+    if @activity.save
+      flash[:notice] = 'Activity was successfully created'
+      respond_to do |format|
+        format.html do
+          valid = @activity.check_projects_budget_and_spend?
+          unless valid
+            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+          end
+
+          if params[:commit] == "Save & Go to Classify >"
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
           else
-            flash.delete(:notice)
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+            redirect_to response_projects_path(@activity.project.response)
           end
-        else
-          flash.delete(:notice) unless valid
-          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
-          redirect_to response_projects_path(@activity.project.response)
         end
-      }
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => 'new' }
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
+      end
     end
   end
 
   def update
-    update! do |success, failure|
-      success.html { 
-        valid = @activity.check_projects_budget_and_spend?
-        if params[:commit] == "Save & Go to Classify >"
-          if valid
+    @activity = Activity.find(params[:id])
+
+    if @activity.update_attributes(params[:activity])
+      flash[:notice] = 'Activity was successfully updated'
+      respond_to do |format|
+        format.html do
+          valid = @activity.check_projects_budget_and_spend?
+          unless valid
+            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+          end
+
+          if params[:commit] == "Save & Go to Classify >"
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
             return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
           else
-            flash.delete(:notice)
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+            redirect_to response_projects_path(@activity.project.response)
           end
-        else
-          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
-          flash.delete(:notice) unless valid
-          redirect_to response_projects_path(@activity.project.response)
         end
-      }
-      failure.html do
-        load_comment_resources(resource)
-        render :action => 'edit'
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
+      end
+    else
+      respond_to do |format|
+        format.html do
+          load_comment_resources(resource)
+          render :action => 'edit'
+        end
+        format.js { render :partial => 'bulk_edit', :layout => false, 
+                    :locals => {:activity => @activity, :response => @response} }
       end
     end
   end
@@ -113,25 +128,20 @@ class ActivitiesController < Reporter::BaseController
     send_csv(template, 'activities_template.csv')
   end
 
-  def create_from_file
-   begin
+  def bulk_create
+    begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        if doc.headers.to_set == Activity::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Activity.create_from_file(doc, @response)
-          flash[:notice] = "Created #{saved} of #{saved + errors} activities successfully"
-        else
-          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-        end
+        @activities = []
+        doc.each{|row| @activities << Activity.initialize_from_file(@response, row)}
       else
-        flash[:error] = 'Please select a file to upload'
+        flash[:error] = 'Please select a file to upload activities'
+        redirect_to response_projects_path(@response)
       end
-
-    redirect_to response_activities_url(@response)
-   rescue
-     flash[:error] = "Your CSV file does not seem to be properly formatted."
-     redirect_to response_activities_url(@response)
-   end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      redirect_to response_projects_path(@response)
+    end
   end
 
   def destroy

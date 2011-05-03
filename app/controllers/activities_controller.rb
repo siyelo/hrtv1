@@ -26,12 +26,11 @@ class ActivitiesController < Reporter::BaseController
     @activity = @response.activities.new(params[:activity])
 
     if @activity.save
+      flash[:notice] = 'Activity was successfully created'
       respond_to do |format|
         format.html do
           valid = @activity.check_projects_budget_and_spend?
-          if valid
-            flash[:notice] = 'Activity was successfully created'
-          else
+          unless valid
             flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
           end
 
@@ -58,12 +57,11 @@ class ActivitiesController < Reporter::BaseController
     @activity = Activity.find(params[:id])
 
     if @activity.update_attributes(params[:activity])
+      flash[:notice] = 'Activity was successfully updated'
       respond_to do |format|
         format.html do
           valid = @activity.check_projects_budget_and_spend?
-          if valid
-            flash[:notice] = 'Activity was successfully created'
-          else
+          unless valid
             flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
           end
 

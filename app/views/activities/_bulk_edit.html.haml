@@ -11,9 +11,9 @@
       - if activity.start_date.present? && activity.end_date.present?
         %li
           %span Period:
-          = activity.start_date.strftime("%M.%d.%Y")
+          = activity.start_date.strftime("%d.%m.%Y")
           -
-          = activity.end_date.strftime("%M.%d.%Y")
+          = activity.end_date.strftime("%d.%m.%Y")
       %li 
         %span Spent:
         = "#{activity.spend} #{activity.currency}"
@@ -21,7 +21,7 @@
         %span Budget:
         = "#{activity.budget} #{activity.currency}"
 
-.main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
+.main.dashboard_section{:style => (activity.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
   - semantic_form_for activity, :namespace => form_namespace(activity), :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
     
     - f.inputs :class => 'inputs_condensed' do

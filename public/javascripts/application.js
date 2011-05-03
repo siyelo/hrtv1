@@ -1140,7 +1140,7 @@ var activities_bulk_create = {
     });
 
 
-    $('.activity_project_id').change(function () {
+    $('.activity_project_id').live('change', function () {
       var element = $(this);
       var _project_id = element.val();
       var form = element.parents('form');

@@ -2,7 +2,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :collection => current_user.current_data_response.projects
+      = f.input :project_id, :label => "Project",:as => :select, :collection => current_user.current_data_response.projects
       = f.input :name, :required => false
       = f.input :description, :input_html => { :rows => 2 }, :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false

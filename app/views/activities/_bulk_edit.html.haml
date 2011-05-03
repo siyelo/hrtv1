@@ -110,7 +110,6 @@
 
       %li.borderless.marginless
         %br
-        %ul
-          - f.buttons :class => 'buttons' do
-            = f.commit_button "Save", :wrapper_html => {:class => "save_btn"}
-            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+        - f.buttons :class => 'buttons' do
+          = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

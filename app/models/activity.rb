@@ -36,6 +36,7 @@ class Activity < ActiveRecord::Base
   ### Includes
   include BudgetSpendHelpers
   acts_as_commentable
+  strip_commas_from_all_numbers
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,

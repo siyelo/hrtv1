@@ -21,6 +21,7 @@ GEM
     activesupport (2.3.8)
     acts_as_commentable (3.0.1)
     annotate (2.4.0)
+    ar_strip_commas (0.1.0)
     authlogic (2.1.6)
       activesupport
     awesome_print (0.3.2)
@@ -189,6 +190,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_commentable
   annotate
+  ar_strip_commas
   authlogic
   awesome_print
   aws-s3

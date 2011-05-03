@@ -1083,8 +1083,12 @@ var activities_bulk_create = {
 
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
-      $('.activity_box .main').hide();
-      $(this).parents('.activity_box').find('.main').toggle();
+      var activity_box = $(this).parents('.activity_box');
+
+      $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
+        $(this).find('.main').hide();
+      });
+      activity_box.find('.main').toggle();
     });
 
     $('*[data-hint]').live('focus', function(){

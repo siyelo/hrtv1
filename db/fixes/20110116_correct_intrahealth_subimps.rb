@@ -49,7 +49,7 @@ def create_sub_activity(activity, organization, item)
   puts b.to_s + " - " + s.to_s
   activity.sub_activities.create!(
     :data_response => activity.data_response,
-    :provider => organization,
+    :provider_id => organization.id,
     :budget => b,
     :spend => s
   ) if b > 0 or s > 0

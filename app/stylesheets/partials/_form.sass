@@ -454,6 +454,26 @@ a.delete_btn
     +linear-gradient(color-stops($mid-blue + #111, $mid-blue))
     cursor: pointer
     
+    span
+      background: $mid-blue
+      color: $light-blue - #111
+      font-size: 10px
+      padding: 3px 5px
+      +border-radius
+    
+    img
+      margin-right: 5px
+    ul
+      font-size: 11px
+      font-weight: normal
+      li
+        background: $mid-blue
+        display: inline
+        float: left
+        margin-left: 5px
+        padding: 3px 5px
+        +border-radius
+        
   .activity_project
     float: left
     width: 20%
@@ -476,6 +496,9 @@ a.delete_btn
     padding: 5px
     width: 96%
     
+  label
+    margin-bottom: 2px
+    
   .inline-errors
     background: $lightest-blue
     border: 1px solid $lighter-blue
@@ -486,6 +509,12 @@ a.delete_btn
     padding: 6px 8px 2px
     +border-bottom-radius
     //+box-shadow($lighter-blue, 0, 1px, 0)
+    
+  .second-half > li
+    &:first-child
+      height: 100px
+    &.grid-80
+      margin-bottom: 10px
   
   .grid-10
     float: left
@@ -493,22 +522,32 @@ a.delete_btn
     width: 9%
   .grid-15
     float: left
-    margin-right: 2%
-    width: 13%
+    margin-right: 3%
+    width: 12%
   .grid-20
     float: left
-    margin-right: 2%
-    width: 18%
+    margin-right: 4%
+    width: 16%
   .grid-30
     float: left
-    width: 30%
+    margin-right: 2%
+    width: 28%
   .grid-40
     float: left
-    width: 40%
+    margin-right: 2%
+    width: 38%
   .grid-50
     float: left
     width: 50%
-
+  .grid-60
+    float: left
+    width: 60%
+  .grid-80
+    float: left
+    width: 80%
+  .grid-100
+    float: left
+    width: 100%
 .input_hint
   font-style: italic
   color: gray

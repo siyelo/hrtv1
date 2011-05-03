@@ -1,4 +1,5 @@
 .header
+  = image_tag "delete_16.png"
   = activity.name
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
@@ -16,7 +17,7 @@
           - unless f.object.project
             %li
               .suggestion
-                == We didnt find the project "#{activity.csv_project_name}" in the list, please select the correct one
+                == We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
           - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
             %li
               .suggestion
@@ -44,8 +45,8 @@
         %ul
           = f.input :name, :required => false, :wrapper_html => {:class => 'grid-30'}
           = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
-          = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
-          = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-10'}
+          = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
+          = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
         
       %li
         - if @response.data_request.spend?
@@ -61,22 +62,23 @@
                 = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
 
         - if @response.data_request.budget?
-          %ul.second-half 
+          %ul.second-half
             = f.input :budget, :label => "Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
-            %li
+            %li.grid-80
               %label Quarterly budget
               %ul
-                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
-                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
-                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
-                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
-                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
+                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
+                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
+                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
+                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+            %li.grid-80
               %label Long-term
               %ul
-                = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
-                = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
-                = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
-                = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
+                = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
+                = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
+                = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
+                = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
 
 
       %li

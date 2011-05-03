@@ -21,12 +21,18 @@ class Reports::ActivitiesByNha
   private
     def build_header
       row = []
-      row << 'Funding Source'
+      row << "contact name"
+      row << "contact position"
+      row << "contact phone number"
+      row << "contact main office phone number"
+      row << "contact office location"
+      row << 'Funding Source(s)'
       row << 'Org type'
       row << 'Data Source'
       row << 'Implementer'
       row << 'District'
       row << 'Sub-implementer'
+      row << 'Activity ID'
       row << 'Activity name'
       row << 'Activity description'
       row << 'Activity currency'
@@ -62,12 +68,25 @@ class Reports::ActivitiesByNha
         funding_source_ratio  = get_ratio(funding_sources_total, funding_source_amount)
 
         row = []
-        row << funding_source_name(activity)
+        dr = activity.data_response
+        row << dr.contact_name
+        row << dr.contact_position
+        row << dr.contact_phone_number
+        row << dr.contact_main_office_phone_number
+        row << dr.contact_office_location
+
+        project = activity.project
+        unless project.nil?
+          row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.spend})"}.join(";")
+        else
+          row << "No FS info; project was not entered"
+        end
         row << activity.organization.try(:raw_type)
         row << activity.organization.try(:name)
         row << activity.provider.try(:name)
         row << get_locations(activity)
         row << get_sub_implementers(activity)
+        row << activity.id
         row << activity.name
         row << activity.description
         row << activity.currency

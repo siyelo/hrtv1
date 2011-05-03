@@ -21,13 +21,15 @@
         %h3.title_bar Upload a CSV file for Activities
         .dashboard_section
           %p Create one or more activities from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
-
+          %br
           - form_tag(bulk_create_response_activities_path(@response), :multipart => true) do
-            = label_tag :file, "File"
-            = file_field_tag :file
+            
+            .upbox
+              = label_tag :file, "File"
+              = file_field_tag :file
             = submit_tag "Upload", :class => 'small_submit_button'
 
-          = link_to "Download template", download_template_response_activities_path(@response), :class => 'target'
+            = link_to "Download template", download_template_response_activities_path(@response), :class => "create_alt right"
 
 
 

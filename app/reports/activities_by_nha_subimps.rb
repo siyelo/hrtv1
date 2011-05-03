@@ -196,6 +196,7 @@ class Reports::ActivitiesByNhaSubimps
               amount = (amount_total || 0) * ratio
 
               row << activity.possible_duplicate?
+              row << activity.id
               row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
               row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
               row << funding_source[:ufs].try(:name)
@@ -253,6 +254,7 @@ class Reports::ActivitiesByNhaSubimps
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
+      row << "SubActivity ID"
       row << "Possible Duplicate?"
       row << "Implementer"
       row << "Implementer Type"

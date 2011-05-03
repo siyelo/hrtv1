@@ -1083,6 +1083,7 @@ var activities_bulk_create = {
 
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
+      $('.activity_box .main').hide();
       $(this).parents('.activity_box').find('.main').toggle();
     });
 

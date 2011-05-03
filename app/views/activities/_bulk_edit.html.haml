@@ -1,6 +1,25 @@
 .header
-  = image_tag "delete_16.png"
-  = activity.name
+  - if activity.new_record?
+    = image_tag "delete_16.png"
+    = activity.name
+  - else
+    = image_tag "tick_12.png"
+    = activity.name
+
+    %span.project= activity.project.try(:name)
+    %ul.right
+      - if activity.start_date.present? && activity.end_date.present?
+        %li
+          %span Period:
+          = activity.start_date.strftime("%M.%d.%Y")
+          -
+          = activity.end_date.strftime("%M.%d.%Y")
+      %li 
+        %span Spent:
+        = "#{activity.spend} #{activity.currency}"
+      %li
+        %span Budget:
+        = "#{activity.budget} #{activity.currency}"
 
 .main.dashboard_section{:style => activity.valid? ? 'display: none;' : nil}
   - semantic_form_for activity, :namespace => form_namespace(activity), :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|

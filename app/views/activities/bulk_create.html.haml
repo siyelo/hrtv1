@@ -7,21 +7,6 @@
   %li.last Bulk Create
 
 %h1.main_heading Activities Bulk Create
-.activity_box
-  .header
-    = image_tag "tick_12.png"
-    activity0
-    %span.project projectx
-    %ul.right
-      %li
-        %span Period:
-        08.02.2011 - 11.06.2011
-      %li 
-        %span Spent:
-        100000USD
-      %li
-        %span Budget:
-        100000USD
 - @activities.each_with_index do |activity, index|
   .activity_box
     = render 'bulk_edit', :activity => activity, :response => @response

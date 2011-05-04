@@ -19,6 +19,7 @@ class Project < ActiveRecord::Base
 
   acts_as_stripper
   acts_as_commentable
+  strip_commas_from_all_numbers
 
   ### Associations
   belongs_to :data_response, :counter_cache => true

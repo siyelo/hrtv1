@@ -55,7 +55,8 @@ Feature: Reporter can manage projects
         Examples:
           | start_date | end_date   | message                              | specific_message                      |
           | 2010-01-01 | 2010-01-02 | Project was successfully created     | Project was successfully created      |
-          |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date is an invalid date         |
+          |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date can't be blank            |
+          | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Start date is not a valid date        |
           | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
 

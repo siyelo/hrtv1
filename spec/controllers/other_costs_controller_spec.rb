@@ -12,6 +12,7 @@ describe OtherCostsController do
        login @user
        post :create, :other_cost => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save', :response_id => @data_response.id
@@ -27,6 +28,7 @@ describe OtherCostsController do
        login @user
        post :create, :other_cost => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
@@ -42,6 +44,7 @@ describe OtherCostsController do
        login @user
        post :create, :other_cost => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
@@ -57,6 +60,7 @@ describe OtherCostsController do
        login @user
        post :create, :other_cost => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        }, 
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id

@@ -19,6 +19,8 @@ Feature: Reporter can manage other costs
       Then I should see "Create Other Cost"
       When I fill in "Description" with "other_cost1"
         And I select "project1" from "Project"
+        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "End date" with "2011-03-01"
         And I press "Save & Go to Classify >"
       Then I should see "Othercost was successfully created"
       When I follow "other_cost1"
@@ -37,6 +39,8 @@ Feature: Reporter can manage other costs
     Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
       When I follow "Add Other Costs now"
         And I fill in "Description" with "other_cost1"
+        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "End date" with "2011-03-01"
         And I press "Save & Go to Classify >"
       Then I should see "Othercost was successfully created"
 

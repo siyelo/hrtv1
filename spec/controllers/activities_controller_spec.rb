@@ -154,6 +154,7 @@ describe ActivitiesController do
       @project = Factory.create(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
+        :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -166,6 +167,7 @@ describe ActivitiesController do
       @project = Factory.create(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
+        :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -178,6 +180,7 @@ describe ActivitiesController do
       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
+        :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -190,19 +193,19 @@ describe ActivitiesController do
       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
+        :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
         :budget => 19000,
         :spend => 81000
       }, :commit => 'Save', :response_id => @data_response.id
-      flash[:error].should == "Please be aware that your activities spend/budget exceeded that of your projects"
+      flash[:notice].should == "Activity was successfully created"
       response.should redirect_to(response_projects_path(@data_response))
     end
     
   end
   
   describe "Redirects to budget or spend depending on datarequest" do
-  
-     it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
+     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
        @data_request = Factory.create(:data_request, :spend => false, :budget => true)
        @organization = Factory.create(:organization)
        @user = Factory.create(:reporter, :organization => @organization)
@@ -211,6 +214,8 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
@@ -226,11 +231,12 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id,
          :budget => 11000
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
-       flash[:error].should == "Please be aware that your activities spend/budget exceeded that of your projects"
+       flash[:notice].should == "Activity was successfully created"
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
      
@@ -243,6 +249,7 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id
@@ -258,6 +265,7 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Go to Classify >', :response_id => @data_response.id

@@ -1230,7 +1230,13 @@ var activity_form = function () {
     close_activity_funding_sources_fields(fields);
   });
 
-  validateDates($('#activity_start_date'), $('#activity_end_date'));
+  if (typeof(namespace) === 'undefined') {
+    validateDates($('#activity_start_date'), $('#activity_end_date'));
+  } else {
+    // namespace is from project_sub_form, 
+    // it injects the namespace in the activity form !?
+    validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
+  }
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 

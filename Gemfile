@@ -20,7 +20,8 @@ gem 'money', "~> 3.5"
 gem "paperclip", "~> 2.3"
 gem 'rails', '2.3.8'
 gem 'settingslogic'
-gem 'validates_date_time', "= 1.0.0"
+gem 'validates_timeliness', '~> 2.3'
+
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"
 gem 'json_pure'

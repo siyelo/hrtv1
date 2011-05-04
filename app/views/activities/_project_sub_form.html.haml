@@ -1,3 +1,6 @@
+:javascript
+  var namespace = "#{form_namespace(project)}";
+
 - if project.locations.present?
   - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
     - f.inputs do

@@ -27,52 +27,15 @@ class OtherCostsController < Reporter::BaseController
   
   def create
     create! do |success, failure|
-      success.html { 
-        valid = @other_cost.check_projects_budget_and_spend?
-        if params[:commit] == "Save & Go to Classify >"
-          if valid
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @response.data_request.budget?
-          else
-            flash.delete(:notice)
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @response.data_request.budget?
-          end
-        else
-          flash.delete(:notice) unless valid
-          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
-          redirect_to response_projects_path(@other_cost.project.response)
-        end
-      }
+      success.html { html_redirect }
     end
   end
   
   
   def update
     update! do |success, failure|
-      success.html { 
-        valid = @other_cost.check_projects_budget_and_spend?
-        if params[:commit] == "Save & Go to Classify >"
-          if valid
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @response.data_request.budget?
-          else
-            flash.delete(:notice)
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingBudget') if @response.data_request.budget?
-          end
-        else
-          flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects" unless valid
-          flash.delete(:notice) unless valid
-          redirect_to response_projects_path(@other_cost.project.response)
-        end
-      }
-      failure.html do
-        load_comment_resources(resource)
-        render :action => 'edit'
-      end
+      success.html { html_redirect }
+      failure.html { load_comment_resources(resource); render :action => 'edit'}
     end
   end
 
@@ -119,5 +82,19 @@ class OtherCostsController < Reporter::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
+
+    def html_redirect
+      unless @other_cost.check_projects_budget_and_spend?
+        flash.delete(:notice)
+        flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+      end
+
+      if params[:commit] == "Save & Go to Classify >"
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type) 
+      else
+        redirect_to response_projects_path(@other_cost.project.response)
+      end
     end
 end

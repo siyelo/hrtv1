@@ -26,29 +26,14 @@ class ActivitiesController < Reporter::BaseController
     @activity = @response.activities.new(params[:activity])
 
     if @activity.save
-      flash[:notice] = 'Activity was successfully created'
       respond_to do |format|
-        format.html do
-          valid = @activity.check_projects_budget_and_spend?
-          unless valid
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-          end
-
-          if params[:commit] == "Save & Go to Classify >"
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
-          else
-            redirect_to response_projects_path(@activity.project.response)
-          end
-        end
-        format.js { render :partial => 'bulk_edit', :layout => false, 
-                    :locals => {:activity => @activity, :response => @response} }
+        format.html { flash[:notice] = 'Activity was successfully created'; html_redirect }
+        format.js   { js_redirect }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
-        format.js { render :partial => 'bulk_edit', :layout => false, 
-                    :locals => {:activity => @activity, :response => @response} }
+        format.js   { js_redirect }
       end
     end
   end
@@ -57,32 +42,21 @@ class ActivitiesController < Reporter::BaseController
     @activity = Activity.find(params[:id])
 
     if @activity.update_attributes(params[:activity])
-      flash[:notice] = 'Activity was successfully updated'
       respond_to do |format|
         format.html do
-          valid = @activity.check_projects_budget_and_spend?
-          unless valid
-            flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
-          end
-
-          if params[:commit] == "Save & Go to Classify >"
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') if @response.data_request.spend?
-            return redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingBudget') if @response.data_request.budget?
+          if @activity.check_projects_budget_and_spend?
+            flash[:notice] = 'Activity was successfully updated'
           else
-            redirect_to response_projects_path(@activity.project.response)
+            flash[:error] = 'Please be aware that your activities spend/budget exceeded that of your projects'
           end
+          html_redirect
         end
-        format.js { render :partial => 'bulk_edit', :layout => false, 
-                    :locals => {:activity => @activity, :response => @response} }
+        format.js   { js_redirect }
       end
     else
       respond_to do |format|
-        format.html do
-          load_comment_resources(resource)
-          render :action => 'edit'
-        end
-        format.js { render :partial => 'bulk_edit', :layout => false, 
-                    :locals => {:activity => @activity, :response => @response} }
+        format.html { load_comment_resources(resource); render :action => 'edit'}
+        format.js   { js_redirect }
       end
     end
   end
@@ -158,5 +132,19 @@ class ActivitiesController < Reporter::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
+
+    def html_redirect
+      if params[:commit] == "Save & Go to Classify >"
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type) 
+      else
+        redirect_to response_projects_path(@activity.project.response)
+      end
+    end
+
+    def js_redirect
+      render :partial => 'bulk_edit', :layout => false, 
+        :locals => {:activity => @activity, :response => @response}
     end
 end

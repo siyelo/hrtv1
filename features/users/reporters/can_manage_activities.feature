@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -72,7 +71,6 @@ Feature: Reporter can manage activities
            #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
            | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
-           @run
     Scenario: Reporter can enter 5 year budget projections
      When I follow "Add" within ".sub-head:nth-child(2)"
       And I fill in "Name" with "Activity1"
@@ -107,7 +105,6 @@ Feature: Reporter can manage activities
        And I should see "Comment body"
 
 
-    @run
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Upload" within ".activities_upload_box"
@@ -170,6 +167,8 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "Activity1 description"
         And I select "organization1" from "Implementer"
         And I select "project1" from "Project"
+        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "End date" with "2011-03-01"
         And I press "Save & Go to Classify >"
       Then I should see "Activity was successfully created"
 
@@ -222,6 +221,8 @@ Feature: Reporter can manage activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
+        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "End date" with "2011-03-01"
         And I select "project1" from "Project"
         And I follow "Add funding source"
         And I select "funding_organization1" from "Organization" within ".fields"

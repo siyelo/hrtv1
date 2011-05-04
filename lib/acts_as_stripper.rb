@@ -12,7 +12,7 @@ module ActsAsStripper
   module InstanceMethods
     def strip_non_decimal(number)
       return number if number.is_a?(Float) || number.is_a?(Fixnum)
-      number.to_s.gsub(/[^\d\.]/, '')
+      number.to_s.gsub(/[^\w\.]/, '')
     end
   end
 end

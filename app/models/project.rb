@@ -47,13 +47,14 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?} 
-  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}
+  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?} 
+  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
+  
   
   ### Attributes
   attr_accessible :name, :description, :spend,
@@ -92,21 +93,16 @@ class Project < ActiveRecord::Base
     return c unless c.blank?
     return data_response.currency
   end
-
-  # if these are needed to fix saving, then they are missing
-  # in activity
-  # if not, then they are superfluous
-  def spend=(amount)
-    super(strip_non_decimal(amount))
-  end
-
-  def budget=(amount)
-    super(strip_non_decimal(amount))
-  end
-
-  def entire_budget=(amount)
-    super(strip_non_decimal(amount))
-  end
+  
+  
+  #Methods correctly strip the non-word characters from the following fields
+  CURRENCY_FIELDS = [:budget, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4,  :entire_budget]
+    Project.class_eval CURRENCY_FIELDS.each.inject("") {|s,field| s += <<END}
+      def #{field}=(amount)
+        super(strip_non_decimal(amount))
+      end
+END
+#do not indent the above end
 
   def to_s
     result = ''

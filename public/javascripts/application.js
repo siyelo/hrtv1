@@ -1038,6 +1038,32 @@ var update_funding_source_selects = function () {
   }
 };
 
+var validateDates = function (startDate, endDate) {
+  var checkDates = function (e) {
+    var element = $(e.target);
+    var d1 = new Date(startDate.val());
+    var d2 = new Date(endDate.val());
+
+    // remove old errors
+    startDate.parent('li').find('.inline-errors').remove();
+    endDate.parent('li').find('.inline-errors').remove();
+
+    if (startDate.length && endDate.length && d1 >= d2) {
+      if (startDate.attr('id') == element.attr('id')) {
+        message = "Start date must come before End date.";
+      } else {
+        message = "End date must come after Start date.";
+      }
+      element.parent('li').append(
+        $('<p/>').attr({"class": "inline-errors"}).text(message)
+      );
+    }
+  };
+
+  startDate.live('change', checkDates);
+  endDate.live('change', checkDates);
+};
+
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
     $('.edit').live('click', function (e) {
@@ -1050,6 +1076,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
       close_project_in_flow_fields(fields);
     });
 
+    validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
 };
@@ -1203,6 +1230,7 @@ var activity_form = function () {
     close_activity_funding_sources_fields(fields);
   });
 
+  validateDates($('#activity_start_date'), $('#activity_end_date'));
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
@@ -1216,6 +1244,12 @@ var admin_activities_edit = admin_activities_update = {
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
     activity_form();
+  }
+};
+
+var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
+  run: function () {
+    validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
   }
 };
 

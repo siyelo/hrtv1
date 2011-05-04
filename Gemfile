@@ -51,7 +51,7 @@ group :development do
 end
 
 group :test, :development do
-  gem 'mysql'
+  # gem 'mysql'
   gem 'rspec', '1.3.1', :require => 'spec'
   gem 'rspec-rails', '1.3.3'  # RSpec 1 (1.3.x) is for Rails 2.3.x
 end

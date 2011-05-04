@@ -1031,3 +1031,25 @@ ul.push
   font-size: 12px
   margin: 0 0 15px 65px
   list-style: disc
+
+ul.status
+  background: image_url("flag_48.png") no-repeat 15px center $lightest-blue
+  border: 1px solid $lighter-blue
+  padding: 15px 15px 15px 75px
+  +border-radius
+  
+  li
+    color: $mid-blue
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 4px
+    &:last-child
+      margin-bottom: 0
+      
+    span
+      color: $light-blue - #333
+      font-weight: normal
+      text-transform: lowercase
+
+ul.review
+  margin-left: 35px

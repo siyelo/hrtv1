@@ -114,7 +114,6 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
-    mysql (2.8.1)
     nokogiri (1.4.4)
     open_gem (1.4.2)
       launchy (~> 0.3.5)
@@ -220,7 +219,6 @@ DEPENDENCIES
   launchy
   money (~> 3.5)
   mongrel
-  mysql
   open_gem
   paperclip (~> 2.3)
   pickle (~> 0.4.4)

@@ -53,6 +53,7 @@ describe Project do
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
+    it { should allow_value('12,323.32').for(:spend) } 
     it { should allow_value(123.45).for(:entire_budget) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
@@ -62,7 +63,9 @@ describe Project do
     it { should_not allow_value('2010-12-41').for(:start_date) }
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
-    
+    it { should_not allow_value('abcd').for(:budget) }
+    it { should_not allow_value('abcd').for(:spend) } 
+
     it "should have a valid data_response " do
       project = Factory(:project)
       project.data_response.should_not be_nil
@@ -79,25 +82,31 @@ describe Project do
     end
   end
   
-  describe "removes commas from decimal fields" do
-    before :each do
-      @project = Factory(:project)
-      @project.spend = "10,783,000.32"
-      @project.budget = "10,783,000.32"
-      @project.entire_budget = "10,783,000.32"
-      @project.save
-    end
-
-    it "for #spend" do
-      @project.spend.to_s.should == "10783000.32"
-    end
-    
-    it "for #budget" do
-      @project.budget.to_s.should == "10783000.32"
-    end
-
-    it "for #entire_budget" do
-      @project.entire_budget.to_s.should == "10783000.32"
+  
+  describe "cleans currency formats" do
+    FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
+    TESTS = [
+              ["10,783.32",     "10783.32",  "clean commas"],
+              ["$10,783.32",    "10783.32",   "ignore currency symbols and commas"],
+              ["$10783.32",     "10783.32",   "ignore currency symbols"],
+              ["10783,32",      "1078332.0",  "ingore commas as decimal separator"],
+              ["10.783,32",     "10.78332",   "ignore decimals as thousands separators"],
+              ["21.100.783,32", "21.1",       "ignore multiple decimals as thousands separators"]
+            ]
+    FIELDS.each do |field|
+      context "for field: #{field}" do
+        before :each do
+          @project = Factory(:project)
+        end
+        
+        TESTS.each do |test|
+          it "should #{test[2]}" do
+            @project.send(field.to_s + "=", test[0])
+            @project.save
+            @project.send(field).to_s.should == test[1]
+          end
+        end
+      end  
     end
   end
   

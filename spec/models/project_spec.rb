@@ -29,6 +29,19 @@ describe Project do
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
     it { should allow_mass_assignment_of(:in_flows_attributes) }
+    it { should allow_mass_assignment_of(:budget2) }
+    it { should allow_mass_assignment_of(:budget3) }
+    it { should allow_mass_assignment_of(:budget4) }
+    it { should allow_mass_assignment_of(:budget5) }
+    it { should allow_mass_assignment_of(:budget_q1) }
+    it { should allow_mass_assignment_of(:budget_q2) }
+    it { should allow_mass_assignment_of(:budget_q3) }
+    it { should allow_mass_assignment_of(:budget_q4) }
+    it { should allow_mass_assignment_of(:spend_q1) }
+    it { should allow_mass_assignment_of(:spend_q2) }
+    it { should allow_mass_assignment_of(:spend_q3) }
+    it { should allow_mass_assignment_of(:spend_q4) }
+    it { should allow_mass_assignment_of(:spend_q4_prev) }
   end
 
   describe "validations" do

@@ -50,6 +50,7 @@ class CodeAssignmentsController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         CodeAssignment.create_from_file(doc, @activity, params[:coding_type])
+        flash[:notice] = "Activity classification was successfully uploaded."
       else
         flash[:error] = 'Please select a file to upload classifications'
       end

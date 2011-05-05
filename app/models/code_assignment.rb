@@ -1,5 +1,7 @@
 class CodeAssignment < ActiveRecord::Base
 
+  strip_commas_from_all_numbers
+
   ### Attributes
   attr_accessible :activity, :code, :amount, :percentage,
                   :sum_of_children, :cached_amount, :cached_amount_in_usd
@@ -54,13 +56,13 @@ class CodeAssignment < ActiveRecord::Base
     currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
     defaults  = defaults.merge(currency)
     delimiter = options[:delimiter] || defaults[:delimiter]
-    number_string.gsub(delimiter,'')
+    number_string.to_s.gsub(delimiter,'')
   end
 
   def self.download_template(klass)
     max_level = klass.deepest_nesting
     FasterCSV.generate do |csv|
-      csv << (['Code'] * max_level).concat(['Percent', 'Amount', 'Code', 'Description'])
+      csv << (['Code'] * max_level).concat(['Percentage', 'Amount', 'Code', 'Description'])
       klass.roots.each{|code| add_rows(csv, code, max_level, 0)}
     end
   end
@@ -68,9 +70,16 @@ class CodeAssignment < ActiveRecord::Base
   def self.create_from_file(doc, activity, coding_type)
     updates = HashWithIndifferentAccess.new
     doc.each do |row| 
-      if (code = Code.find_by_short_display(row['Code']))
-        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => row['Amount'], 
-                                                                :percentage => row['Percentage']})
+      percentage    = row[row.length - 4]
+      amount        = row[row.length - 3]
+      short_display = row[row.length - 2]
+      #description = row[row.length - 1]
+      
+      code = Code.find_by_short_display(short_display)
+
+      if (code && (amount.present? || percentage.present?))
+        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount, 
+                                                               :percentage => percentage})
       end
     end
 

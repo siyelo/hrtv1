@@ -17,22 +17,22 @@
 = render 'activities/tab_nav', :activity => @activity
 
 #classification
-  %table#activity_description
+  %ul#activity_description.status
 
-    %tr
-      %td= "#{type} Amount:"
-      %td= c(@activity.send(get_coding_type(@coding_type)), @activity.currency)
+    %li
+      %span= "#{type} Amount:"
+      = c(@activity.send(get_coding_type(@coding_type)), @activity.currency)
 
     = render  '/code_assignments/progress_bar', :activity => @activity
 
     - if current_user.admin? || current_user.activity_manager?
-      %tr
-      %td.title= label_tag :approve_activity, "Approved?"
-      %td= check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
+      %li
+        %span= label_tag :approve_activity, "Approved?"
+        = check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
 
 
   .upload
-    - link_to "#", :class => "create_inline upload_btn" do
+    - link_to "#", :class => "create_new upload_btn" do
       = image_tag "new.png"
       Upload
 

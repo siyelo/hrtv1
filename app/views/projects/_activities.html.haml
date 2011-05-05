@@ -23,7 +23,7 @@
           %p Create one or more activities from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
           %br
           - form_tag(bulk_create_response_activities_path(@response), :multipart => true) do
-            
+
             .upbox
               = label_tag :file, "File"
               = file_field_tag :file

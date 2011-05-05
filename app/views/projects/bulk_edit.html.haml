@@ -40,9 +40,13 @@
       - @projects.each do |project|
         - project.in_flows.each do |in_flow|
           %tr
-            %td= project.name
-            %td= in_flow.from.try(:name)
-            %td= select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from, project.id), in_flow.project_from_id)
+            %td
+              = project.name
+              = link_to "(Edit)", edit_response_project_path(project.response, project)
+            %td= !in_flow.from.blank? ? in_flow.from.try(:name) : "Funder Missing: Edit Project then return here to link"
+            %td
+              - unless in_flow.from.nil?
+                = select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from, project.id), in_flow.project_from_id)
             %td= project.budget
             %td= project.spend
 

@@ -814,7 +814,7 @@ var code_assignments_show = {
 
     $('.upload_btn').click(function (e) {
       e.preventDefault();
-      $(this).parent('.upload').find('.upload_box').toggle();
+      $(this).parents('.upload').find('.upload_box').toggle();
     });
   }
 };

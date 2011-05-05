@@ -9,22 +9,22 @@
     -if dr.data_request.final_review?
       %li= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, #{link_to "please re-check, then (re)submit", review_response_path(dr) } your response."
 
-  %h2
-    =image_tag "icon_reporter.png", :class => "heading_icon"
-    Data Requests & Responses
-  .dashboard_section
-    %table.modern_table
-      %thead
-        %tr
-          %td Request
-          %td Requested By
-          %td Due
-          %td Valid
-          %td Status
-          %td
-      %tbody
-        = render :partial => 'request', :collection => @requests
-        = render :partial => 'response', :collection => @responses
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Data Requests & Responses
+.dashboard_section
+  %table.modern_table
+    %thead
+      %tr
+        %td Request
+        %td Requested By
+        %td Due
+        %td Valid
+        %td Status
+        %td
+    %tbody
+      = render :partial => 'request', :collection => @requests
+      = render :partial => 'response', :collection => @responses
 
 .first-half
   %h2

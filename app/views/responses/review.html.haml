@@ -1,10 +1,12 @@
 - title("Submit Response")
+- your_projects = @response.projects_entered? && @response.projects_spend_entered? && @response.projects_budget_entered? && @response.projects_have_activities? && @response.projects_have_other_costs? ? "ready" : "not-ready"
 - projects_entered = @response.projects_entered? ? "ready" : "not-ready"
 - projects_spend_entered = @response.projects_spend_entered? ? "ready" : "not-ready"
 - projects_budget_entered = @response.projects_budget_entered? ? "ready" : "not-ready"
 - projects_have_activities = @response.projects_have_activities? ? "ready" : "not-ready"
+- projects_have_other_costs = @response.projects_have_other_costs? ? "ready" : "not-ready"
+- detailed_classification = @response.activities_coded? && @response.other_costs_coded? ? "ready" : "not-ready"
 - activities_coded = @response.activities_coded? ? "ready" : "not-ready"
-- projects_have_other_costs = @response.projects_have_other_costs?
 - final_review = @response.request.final_review?
 - projects_linked = @response.projects_linked?
 - if final_review
@@ -12,7 +14,8 @@
 - else
   - projects_linked_class = projects_linked ? "ready" : "info"
 - other_costs_coded = @response.other_costs_coded? ? "ready" : "not-ready"
-- projects_funding_sources_budgets_ok = @response.projects_and_funding_sources_have_correct_budgets?
+- data_verification = @response.projects_and_funding_sources_have_correct_budgets? && @response.projects_and_funding_sources_have_correct_spends? && @response.projects_and_activities_have_correct_budgets? && @response.projects_and_activities_have_correct_spends? && projects_linked_class ? "ready" : "not-ready"
+- projects_funding_sources_budgets_ok = @response.projects_and_funding_sources_have_correct_budgets? 
 - projects_funding_sources_spends_ok = @response.projects_and_funding_sources_have_correct_spends?
 - projects_activities_budgets_ok = @response.projects_and_activities_have_correct_budgets?
 - projects_activities_spends_ok = @response.projects_and_activities_have_correct_spends?
@@ -37,225 +40,245 @@
 = error_messages_for :response, :header_message => "", :message => ""
 
 %ul.review
-  %li
-    %h3{:class => (projects_entered ? "ready" : "not-ready")}
-      Projects Entered
-      - unless projects_entered
-        %span.info
-          = render 'projects/no_projects_yet'
-  %li
-    - if @response.data_request.spend?
-      %h3{:class => (projects_spend_entered ? "ready" : "not-ready")}
-        Projects: Expenditures Entered
-        - unless projects_spend_entered
-          - if projects_entered
-            %span.info Enter the Expenditure (Spend) for all of your projects.
-          - else
-            %span.info
-              = render 'projects/no_projects_yet'
-  %li
-    - if @response.data_request.budget?
-      %h3{:class => (projects_budget_entered ? "ready" : "not-ready")}
-        Projects: Budgets Entered
-        - unless projects_budget_entered
-          - if projects_entered
-            %span.info Enter the Budget for all of your projects.
-          - else
+  %li.alt
+    %h2 Projects
+  %li.dashboard_section
+    %h3{:class => (your_projects)}
+      Your Projects
+
+    %ul.review
+      %li
+        %h3{:class => (projects_entered)}
+          Projects Entered
+          - unless projects_entered
             %span.info
               = render 'projects/no_projects_yet'
               
-    - if @response.data_request.spend?
-      - if @response.projects_without_spend
-        %ul.push
-          - @response.projects_without_spend.each do |p|
-            %li= link_to friendly_name(p), edit_response_project_path(@response, p)
+        %ul.review
+          %li
+            - if @response.data_request.spend?
+              %h3{:class => (projects_spend_entered)}
+                Project Expenditures
+                - unless projects_spend_entered
+                  - if projects_entered
+                    %span.info Enter the Expenditure (Spend) for all of your projects.
+                  - else
+                    %span.info
+                      = render 'projects/no_projects_yet'
+          %li
+            - if @response.data_request.budget?
+              %h3{:class => (projects_budget_entered)}
+                Project Budgets
+                - unless projects_budget_entered
+                  - if projects_entered
+                    %span.info Enter the Budget for all of your projects.
+                  - else
+                    %span.info
+                      = render 'projects/no_projects_yet'
+              
+            - if @response.data_request.spend?
+              - if @response.projects_without_spend
+                %ul.push
+                  - @response.projects_without_spend.each do |p|
+                    %li= link_to friendly_name(p), edit_response_project_path(@response, p)
 
-  %li
-    %h3{:class => (projects_have_activities ? "ready" : "not-ready")}
-      Activities Entered
-      - unless projects_have_activities
-        - unless projects_entered
-          %span.info
-            = render 'projects/no_projects_yet'
-            then you can start adding Activities.
-        - else
-          %span.info
-            You have project(s), but not all have activities yet.
-            = link_to "Start by adding your activities here.", response_projects_path(@response)
+      %li
+        %h3{:class => (projects_have_activities)}
+          Activities Entered
+          - unless projects_have_activities
+            - unless projects_entered
+              %span.info
+                = render 'projects/no_projects_yet'
+                then you can start adding Activities.
+            - else
+              %span.info
+                You have project(s), but not all have activities yet.
+                = link_to "Start by adding your activities here.", response_projects_path(@response)
             
-  %li
-    %h3{:class => (activities_coded ? "ready" : "not-ready")}
-      Activities Classified
-      - unless activities_coded
-        - unless @response.uncoded_activities.empty?
-          %span.info
-            Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
-        - else
-          %span.info
-            Start by adding a few Activities first (see above), then you can start classifying them.
-    - unless activities_coded
-      - unless @response.uncoded_activities.empty?
-        = render 'uncoded_table', :activities => @response.uncoded_activities
-        
-  %li
-    %h3{:class => (projects_have_other_costs ? "ready" : "not-ready")}
-      Other Costs Entered
-      - unless projects_have_other_costs
-        - unless projects_entered
-          %span.info
-            = render 'projects/no_projects_yet'
-            then you can start adding Other Costs.
-        - else
-          %span.info
-            Other Costs help you include any financial information at the central level and/or administrative expenses.
-            = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+      %li
+        %h3{:class => (projects_have_other_costs)}
+          Other Costs Entered
+          - unless projects_have_other_costs
+            - unless projects_entered
+              %span.info
+                = render 'projects/no_projects_yet'
+                then you can start adding Other Costs.
+            - else
+              %span.info
+                Other Costs help you include any financial information at the central level and/or administrative expenses.
+                = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+  
+  %li.alt
+    %h2 Classifications
+  %li.dashboard_section
+    %h3{:class => detailed_classification}
+      Detailed Classifications
             
-  %li
-    %h3{:class => (other_costs_coded ? "ready" : "not-ready")}
-      Other Costs Classified
-      - unless other_costs_coded
-        - unless @response.uncoded_other_costs.empty?
-          %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
-        - else
-          %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
-
-    - unless other_costs_coded
-      - unless @response.uncoded_other_costs.empty?
-        = render 'uncoded_table', :activities => @response.uncoded_other_costs
+    %ul.review
+      %li
+        %h3{:class => (activities_coded)}
+          Activities Classified
+          - unless activities_coded
+            - unless @response.uncoded_activities.empty?
+              %span.info
+                Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info
+                Start by adding a few Activities first (see above), then you can start classifying them.
+        - unless activities_coded
+          - unless @response.uncoded_activities.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_activities
         
-  %li
-    %h3{:class => projects_linked_class}
-      Projects Linked to the Funder Projects
-      - unless projects_linked
-        %span.info
-          Once your Funder's have added all their projects too, please
-          = link_to "link your projects", bulk_edit_response_projects_path(@response)
-          to each Funder project respectively.
+  
+            
+      %li
+        %h3{:class => (other_costs_coded)}
+          Other Costs Classified
+          - unless other_costs_coded
+            - unless @response.uncoded_other_costs.empty?
+              %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
 
+        - unless other_costs_coded
+          - unless @response.uncoded_other_costs.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_other_costs
+  %li.alt
+    %h2 Data entry
+  %li.dashboard_section
+    %h3{:class => (data_verification ? "ready" : "not-ready")}
+      Data Verification
+    %ul.review
+      %li
+        %h3{:class => projects_linked_class}
+          Projects Linked to the Funder Projects
+          - unless projects_linked
+            %span.info
+              Once your Funder's have added all their projects too, please
+              = link_to "link your projects", bulk_edit_response_projects_path(@response)
+              to each Funder project respectively.
 
-  %li
-    %h3{:class => (projects_funding_sources_budgets_ok ? "ready" : "not-ready")}
-      Correct Budget amounts for Projects & Funding Sources
-      - unless projects_funding_sources_budgets_ok
-        %span.info "The Project budget amounts do not match their Funding Source budget amount(s). Please update your projects and/or funding sources."
+      %li
+        %h3{:class => (projects_funding_sources_budgets_ok ? "ready" : "not-ready")}
+          Correct Budget amounts for Projects & Funding Sources
+          - unless projects_funding_sources_budgets_ok
+            %span.info "The Project budget amounts do not match their Funding Source budget amount(s). Please update your projects and/or funding sources."
 
-    - unless projects_funding_sources_budgets_ok
-      .simple_table.push
-        %table
-          %thead
-            %tr
-              %th Project
-              %th Project Budget
-              %th Funding Sources Budget Total
-              %th Diff
-              %th.manage Manage
-          %tbody
-            - @response.projects.each do |project|
-              - if project.in_flows_budget_total != project.budget
+        - unless projects_funding_sources_budgets_ok
+          .simple_table.push
+            %table
+              %thead
                 %tr
-                  %td= project.name
-                  %td= project.budget
-                  %td= project.in_flows_budget_total
-                  %td= (project.budget || 0) - project.in_flows_budget_total
-                  %td= link_to "Edit", edit_response_project_path(@response, project)
+                  %th Project
+                  %th Project Budget
+                  %th Funding Sources Budget Total
+                  %th Diff
+                  %th.manage Manage
+              %tbody
+                - @response.projects.each do |project|
+                  - if project.in_flows_budget_total != project.budget
+                    %tr
+                      %td= project.name
+                      %td= project.budget
+                      %td= project.in_flows_budget_total
+                      %td= (project.budget || 0) - project.in_flows_budget_total
+                      %td= link_to "Edit", edit_response_project_path(@response, project)
+                  
 
-  %li
-    %h3{:class => (projects_funding_sources_spends_ok ? "ready" : "not-ready")}
-      Correct Expenditure amounts for Projects & Funding Sources
-      - unless projects_funding_sources_spends_ok
-        %span.info The Project spend amounts do not match their Funding Source spend amount(s). Please update your projects and/or funding sources.
+      %li
+        %h3{:class => (projects_activities_budgets_ok ? "ready" : "not-ready")}
+          Correct Budget amounts for Projects, Activities & Other Costs
+          - unless projects_activities_budgets_ok
+            %span.info
+              The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
-    - unless projects_funding_sources_spends_ok
-      .simple_table.push
-        %table
-          %thead
-            %tr
-              %th Project
-              %th Project Expenditure
-              %th Funding Sources Expenditure Total
-              %th Diff
-              %th.manage Manage
-          %tbody
-            - @response.projects.each do |project|
-              - if project.in_flows_spend_total != project.spend
+        - unless projects_activities_budgets_ok
+          .simple_table.push.review
+            %table
+              %thead
                 %tr
-                  %td= project.name
-                  %td= project.spend
-                  %td= project.in_flows_spend_total
-                  %td= (project.spend || 0) - project.in_flows_spend_total
-                  %td= link_to "Edit", edit_response_project_path(@response, project)
+                  %th= "Project/Activity"
+                  %th= "Activity/Other Costs Budget Total (#{@response.currency})"
+                  %th= "Project Budget Total (#{@response.currency})"
+                  %th= "Diff (#{@response.currency})"
+                %tbody
+                  - @response.projects.each do |project|
+                    - if project.budget != (project.activities_budget_total + project.other_costs_budget_total)
+                      %tr{:class => "#{dom_id(project)}"}
+                        %td.first
+                          = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
+                          = link_to project.name, edit_response_project_path(@response, project)
+                        %td.first= universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
+                        %td.first= universal_currency_converter(project.budget, project.currency, @response.currency)
+                        %td.first= universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
+                        - project.activities.each do |activity|
+                          %tr{:class => "#{dom_id(project)}_budget"}
+                            %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity) 
+                            %td.activity= universal_currency_converter(activity.budget, activity.currency, @response.currency)
 
-  %li
-    %h3{:class => (projects_activities_budgets_ok ? "ready" : "not-ready")}
-      Correct Budget amounts for Projects, Activities & Other Costs
-      - unless projects_activities_budgets_ok
-        %span.info
-          The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
-      
-    - unless projects_activities_budgets_ok
-      .simple_table.push
-        %table
-          %thead
-            %tr
-              %th Project
-              %th Project Budget
-              %th Activities Budget Total
-              %th Other Costs Budget Total
-              %th Diff
-              %th.manage Manage
-          %tbody
-            - @response.projects.each do |project|
-              - if project.budget != (project.activities_budget_total + project.other_costs_budget_total)
+
+      %li
+        %h3{:class => (projects_funding_sources_spends_ok ? "ready" : "not-ready")}
+          Correct Expenditure amounts for Projects & Funding Sources
+          - unless projects_funding_sources_spends_ok
+            %span.info The Project spend amounts do not match their Funding Source spend amount(s). Please update your projects and/or funding sources.
+
+        - unless projects_funding_sources_spends_ok
+          .simple_table.push
+            %table
+              %thead
                 %tr
-                  %td= project.name
-                  %td= project.budget
-                  %td
-                    = project.activities_budget_total
-                    - unless project.activities.roots.empty?
-                      = "(#{project.activities.roots.map{|a| "#{nice_name(a)} = #{a.budget} #{link_to('edit', edit_response_activity_path(@response, a))}"}.join('; ')})"
-                  %td
-                    = project.other_costs_budget_total
-                    - unless project.other_costs.empty?
-                      = "(#{project.other_costs.map{|oc| "#{nice_name(oc)} = #{oc.budget} #{link_to('edit', edit_response_other_cost_path(@response, oc))}"}.join('; ')})"
-                  %td= (project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total)
-                  %td= link_to "Edit", edit_response_project_path(@response, project)
+                  %th Project
+                  %th Project Expenditure
+                  %th Funding Sources Expenditure Total
+                  %th Diff
+                  %th.manage Manage
+              %tbody
+                - @response.projects.each do |project|
+                  - if project.in_flows_spend_total != project.spend
+                    %tr
+                      %td= project.name
+                      %td= project.spend
+                      %td= project.in_flows_spend_total
+                      %td= (project.spend || 0) - project.in_flows_spend_total
+                      %td= link_to "Edit", edit_response_project_path(@response, project)
 
 
-  %li
-    %h3{:class => (projects_activities_spends_ok ? "ready" : "not-ready")}
-      Correct Expenditure amounts for Projects, Activities & Other Costs
-      - unless projects_activities_spends_ok
-        %span.info
-          The Project expenditure should match the total expenditures for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+      %li
+        %h3{:class =>  projects_activities_spends_ok ? "ready" : "not-ready"}
+          Correct Expenditure amounts for Projects, Activities & Other Costs
+          - unless projects_activities_spends_ok
+            %span.info
+              The Project expenditure should match the total expenditures for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
-    - unless projects_activities_spends_ok
-      .simple_table.push
-        %table
-          %thead
-            %tr
-              %th Project
-              %th Project Spend
-              %th Activities Spend Total
-              %th Other Costs Spend Total
-              %th Diff
-              %th.manage Manage
-          %tbody
-            - @response.projects.each do |project|
-              - if project.spend != (project.activities_spend_total + project.other_costs_spend_total)
+        - unless projects_activities_spends_ok
+          .simple_table.push.review
+            %table
+              %thead
                 %tr
-                  %td= project.name
-                  %td= project.spend
-                  %td
-                    = project.activities_spend_total
-                    - unless project.activities.roots.empty?
-                      = "(#{project.activities.roots.map{|a| "#{nice_name(a)} = #{a.spend} #{link_to('edit', edit_response_activity_path(@response, a))}"}.join('; ')})"
-                  %td
-                    = project.other_costs_spend_total
-                    - unless project.other_costs.empty?
-                      = "(#{project.other_costs.map{|oc| "#{nice_name(oc)} = #{oc.spend} #{link_to('edit', edit_response_other_cost_path(@response, oc))}"}.join('; ')})"
-                  %td= (project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total)
-                  %td= link_to "Edit", edit_response_project_path(@response, project)
-
-%hr.divider
+                  %th= "Project/Activity"
+                  %th= "Activity/Other Costs Expenditure (Spend) Total (#{@response.currency})"
+                  %th= "Project Expenditure (Spend) Total (#{@response.currency})"
+                  %th= "Diff (#{@response.currency})"
+              %tbody
+                - @response.projects.each do |project|
+                  - if project.spend != (project.activities_spend_total + project.other_costs_spend_total)
+                    %tr
+                      %td.first
+                        = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"
+                        = link_to project.name, edit_response_project_path(@response, project)
+                      %td.first= universal_currency_converter((project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency)
+                      %td.first= universal_currency_converter(project.spend, project.currency, @response.currency)
+                      %td.first= universal_currency_converter((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency)
+                      - project.activities.each do |activity|
+                        %tr{:class => "#{dom_id(project)}_spend"}
+                          %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity) 
+                          %td.activity= universal_currency_converter(activity.spend, activity.currency, @response.currency)
+                        
+//%hr.divider
 %p
   = link_to "Submit", submit_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+  
+
+
+

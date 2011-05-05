@@ -86,10 +86,18 @@ body.app
       &.ready
         background: image_url("tick_32.png") no-repeat 5px top
         padding: 8px 0 20px 40px
+      &.ready-sub
+        font-size: 14px
+        background: image_url("tick_32.png") no-repeat 5px top
+        padding: 8px 0 20px 40px
       &.info
         background: image_url("info_32.png") no-repeat 5px top
         padding: 10px 0 10px 40px
       &.not-ready
+        background: image_url("delete_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
+      &.not-ready
+        font-size: 14px
         background: image_url("delete_32.png") no-repeat 5px top
         padding: 10px 0 10px 40px
       &.not-ready, &.ready, &.info
@@ -260,11 +268,19 @@ body.app
         text-transform: uppercase
         &:hover, &:focus
           background: orange
+          
   .simple_table
     +pie-clearfix
     /* a hack, but the padding interferes with .third
     &.push
       margin: 0 0 15px 40px
+    &.review
+      td.first
+        font-weight: bold
+      td.activity
+        padding-left: 40px
+        font-size: 12px
+
     hr
       background: none
       border: none

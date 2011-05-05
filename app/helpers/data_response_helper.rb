@@ -1,2 +1,0 @@
-module DataResponseHelper
-end

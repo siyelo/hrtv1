@@ -1,4 +1,21 @@
 - title("Submit Response")
+- projects_entered = @response.projects_entered? ? "ready" : "not-ready"
+- projects_spend_entered = @response.projects_spend_entered? ? "ready" : "not-ready"
+- projects_budget_entered = @response.projects_budget_entered? ? "ready" : "not-ready"
+- projects_have_activities = @response.projects_have_activities? ? "ready" : "not-ready"
+- activities_coded = @response.activities_coded? ? "ready" : "not-ready"
+- projects_have_other_costs = @response.projects_have_other_costs?
+- final_review = @response.request.final_review?
+- projects_linked = @response.projects_linked?
+- if final_review
+  - projects_linked_class = projects_linked ? "ready" : "not-ready"
+- else
+  - projects_linked_class = projects_linked ? "ready" : "info"
+- other_costs_coded = @response.other_costs_coded? ? "ready" : "not-ready"
+- projects_funding_sources_budgets_ok = @response.projects_and_funding_sources_have_correct_budgets?
+- projects_funding_sources_spends_ok = @response.projects_and_funding_sources_have_correct_spends?
+- projects_activities_budgets_ok = @response.projects_and_activities_have_correct_budgets?
+- projects_activities_spends_ok = @response.projects_and_activities_have_correct_spends?
 
 = render :partial => 'projects/sub_nav'
 
@@ -21,30 +38,27 @@
 
 %ul.review
   %li
-    - ready_class = @response.projects_entered? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_entered ? "ready" : "not-ready")}
       Projects Entered
-      - unless @response.projects_entered?
+      - unless projects_entered
         %span.info
           = render 'projects/no_projects_yet'
   %li
     - if @response.data_request.spend?
-      - ready_class = @response.projects_spend_entered? ? "ready" : "not-ready"
-      %h3{:class => ready_class}
+      %h3{:class => (projects_spend_entered ? "ready" : "not-ready")}
         Projects: Expenditures Entered
-        - unless @response.projects_spend_entered?
-          - if @response.projects_entered?
+        - unless projects_spend_entered
+          - if projects_entered
             %span.info Enter the Expenditure (Spend) for all of your projects.
           - else
             %span.info
               = render 'projects/no_projects_yet'
   %li
     - if @response.data_request.budget?
-      - ready_class = @response.projects_budget_entered? ? "ready" : "not-ready"
-      %h3{:class => ready_class}
+      %h3{:class => (projects_budget_entered ? "ready" : "not-ready")}
         Projects: Budgets Entered
-        - unless @response.projects_budget_entered?
-          - if @response.projects_entered?
+        - unless projects_budget_entered
+          - if projects_entered
             %span.info Enter the Budget for all of your projects.
           - else
             %span.info
@@ -57,11 +71,10 @@
             %li= link_to friendly_name(p), edit_response_project_path(@response, p)
 
   %li
-    - ready_class = @response.projects_have_activities? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_have_activities ? "ready" : "not-ready")}
       Activities Entered
-      - unless @response.projects_have_activities?
-        - unless @response.projects_entered?
+      - unless projects_have_activities
+        - unless projects_entered
           %span.info
             = render 'projects/no_projects_yet'
             then you can start adding Activities.
@@ -71,26 +84,24 @@
             = link_to "Start by adding your activities here.", response_projects_path(@response)
             
   %li
-    - ready_class = @response.activities_coded? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (activities_coded ? "ready" : "not-ready")}
       Activities Classified
-      - unless @response.activities_coded?
+      - unless activities_coded
         - unless @response.uncoded_activities.empty?
           %span.info
             Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
         - else
           %span.info
             Start by adding a few Activities first (see above), then you can start classifying them.
-    - unless @response.activities_coded?
+    - unless activities_coded
       - unless @response.uncoded_activities.empty?
         = render 'uncoded_table', :activities => @response.uncoded_activities
         
   %li
-    - ready_class = @response.projects_have_other_costs? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_have_other_costs ? "ready" : "not-ready")}
       Other Costs Entered
-      - unless @response.projects_have_other_costs?
-        - unless @response.projects_entered?
+      - unless projects_have_other_costs
+        - unless projects_entered
           %span.info
             = render 'projects/no_projects_yet'
             then you can start adding Other Costs.
@@ -100,27 +111,22 @@
             = link_to "Start adding your Other Costs now.", response_projects_path(@response)
             
   %li
-    - ready_class = @response.other_costs_coded? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (other_costs_coded ? "ready" : "not-ready")}
       Other Costs Classified
-      - unless @response.other_costs_coded?
+      - unless other_costs_coded
         - unless @response.uncoded_other_costs.empty?
           %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
         - else
           %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
 
-    - unless @response.other_costs_coded?
+    - unless other_costs_coded
       - unless @response.uncoded_other_costs.empty?
         = render 'uncoded_table', :activities => @response.uncoded_other_costs
         
   %li
-    - if @response.request.final_review?
-      - ready_class = @response.projects_linked? ? "ready" : "not-ready"
-    - else
-      - ready_class = @response.projects_linked? ? "ready" : "info"
-    %h3{:class => ready_class}
+    %h3{:class => projects_linked_class}
       Projects Linked to the Funder Projects
-      - unless @response.projects_linked?
+      - unless projects_linked
         %span.info
           Once your Funder's have added all their projects too, please
           = link_to "link your projects", bulk_edit_response_projects_path(@response)
@@ -128,13 +134,12 @@
 
 
   %li
-    - ready_class = @response.projects_and_funding_sources_have_correct_budgets? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_funding_sources_budgets_ok ? "ready" : "not-ready")}
       Correct Budget amounts for Projects & Funding Sources
-      - unless @response.projects_and_funding_sources_have_correct_budgets?
+      - unless projects_funding_sources_budgets_ok
         %span.info "The Project budget amounts do not match their Funding Source budget amount(s). Please update your projects and/or funding sources."
 
-    - unless @response.projects_and_funding_sources_have_correct_budgets?
+    - unless projects_funding_sources_budgets_ok
       .simple_table.push
         %table
           %thead
@@ -155,13 +160,12 @@
                   %td= link_to "Edit", edit_response_project_path(@response, project)
 
   %li
-    - ready_class = @response.projects_and_funding_sources_have_correct_spends? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_funding_sources_spends_ok ? "ready" : "not-ready")}
       Correct Expenditure amounts for Projects & Funding Sources
-      - unless @response.projects_and_funding_sources_have_correct_spends?
+      - unless projects_funding_sources_spends_ok
         %span.info The Project spend amounts do not match their Funding Source spend amount(s). Please update your projects and/or funding sources.
 
-    - unless @response.projects_and_funding_sources_have_correct_spends?
+    - unless projects_funding_sources_spends_ok
       .simple_table.push
         %table
           %thead
@@ -182,14 +186,13 @@
                   %td= link_to "Edit", edit_response_project_path(@response, project)
 
   %li
-    - ready_class = @response.projects_and_activities_have_correct_budgets? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_activities_budgets_ok ? "ready" : "not-ready")}
       Correct Budget amounts for Projects, Activities & Other Costs
-      - unless @response.projects_and_activities_have_correct_budgets?
+      - unless projects_activities_budgets_ok
         %span.info
           The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
       
-    - unless @response.projects_and_activities_have_correct_budgets?
+    - unless projects_activities_budgets_ok
       .simple_table.push
         %table
           %thead
@@ -217,14 +220,13 @@
 
 
   %li
-    - ready_class = @response.projects_and_activities_have_correct_spends? ? "ready" : "not-ready"
-    %h3{:class => ready_class}
+    %h3{:class => (projects_activities_spends_ok ? "ready" : "not-ready")}
       Correct Expenditure amounts for Projects, Activities & Other Costs
-      - unless @response.projects_and_activities_have_correct_spends?
+      - unless projects_activities_spends_ok
         %span.info
           The Project expenditure should match the total expenditures for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
-    - unless @response.projects_and_activities_have_correct_spends?
+    - unless projects_activities_spends_ok
       .simple_table.push
         %table
           %thead

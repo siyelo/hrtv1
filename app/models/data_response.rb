@@ -3,7 +3,6 @@ require 'validators'
 class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
-  extend ActiveSupport::Memoizable
   acts_as_commentable
 
   ### Attributes
@@ -245,12 +244,10 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_linked?
 
   def activities_entered?
     !self.normal_activities.empty?
   end
-  memoize :activities_entered?
 
   def projects_have_activities?
     return false unless activities_entered?
@@ -259,12 +256,10 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_have_activities?
 
   def other_costs_entered?
     !self.other_costs.empty?
   end
-  memoize :other_costs_entered?
 
   def projects_have_other_costs?
     return false unless other_costs_entered?
@@ -273,7 +268,6 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_correct_budgets?
     
@@ -282,7 +276,6 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_and_funding_sources_have_correct_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
     self.projects.each do |project|
@@ -290,7 +283,6 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_and_funding_sources_have_correct_spends?
 
   def projects_and_activities_have_correct_budgets?
     projects.each do |project|
@@ -299,7 +291,6 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_and_activities_have_correct_budgets?
 
   def projects_and_activities_have_correct_spends?
     projects.each do |project|
@@ -308,7 +299,6 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
-  memoize :projects_and_activities_have_correct_spends?
 
   def uncoded_activities
     reject_uncoded(self.normal_activities)

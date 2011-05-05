@@ -16,7 +16,7 @@ class Reporter::ReportsController < Reporter::BaseController
       when 'users_in_my_organization'
         Reports::UsersByOrganization.new(current_user)
       when 'purposes'
-        Reports::AllCodes.new
+        Reports::AllCodes.new(Mtef)
       when 'inputs'
         Reports::AllCodes.new(CostCategory)
       when 'locations'

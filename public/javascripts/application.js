@@ -811,6 +811,11 @@ var code_assignments_show = {
     $('.tooltip').live('click', function (e) {
       e.preventDefault();
     });
+
+    $('.upload_btn').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.upload').find('.upload_box').toggle();
+    });
   }
 };
 
@@ -1083,9 +1088,9 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 var projects_index = {
   run: function () {
-    $('.activities_upload_btn').click(function (e) {
+    $('.upload_btn').click(function (e) {
       e.preventDefault();
-      $(this).parents('td').find('.activities_upload_box').toggle();
+      $(this).parents('td').find('.upload_box').toggle();
     });
   }
 };

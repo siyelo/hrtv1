@@ -3,7 +3,7 @@
 - amount     = assignment.nil? ? '' : assignment.amount
 - percentage = assignment.nil? ? '' : assignment.percentage
 - cached_amount = assignment.nil? ? '' : assignment.cached_amount
-- invalid_class = assignment && ((code.root? && !@coding_tree.valid?) || !@coding_tree.valid_ca?(assignment)) ? 'invalid' : nil
+- invalid_class = assignment && !@coding_tree.valid_ca?(assignment) ? 'invalid' : nil
 
 %li
   %div{:class => invalid_class}

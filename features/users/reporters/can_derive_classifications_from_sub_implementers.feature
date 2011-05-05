@@ -30,7 +30,8 @@ Feature: Reporter can derive classifications from sub implementers
       When I press "Save & Go to Classify >"
         And I follow "Budget"
         And I follow "Locations"
-        And I follow "Use budget classifications derived from sub implementers"
+        #And I follow "Use budget classifications derived from sub implementers"
+        And I follow "Derive classification"
       Then the "Location1" field should contain "55.00"
 
 
@@ -38,5 +39,6 @@ Feature: Reporter can derive classifications from sub implementers
       When I press "Save & Go to Classify >"
         And I follow "Spend"
         And I follow "Locations"
-        And I follow "Use expenditure classifications derived from sub implementers"
+        #And I follow "Use expenditure classifications derived from sub implementers"
+        And I follow "Derive classification"
       Then the "Location1" field should contain "55.00"

@@ -57,6 +57,43 @@ class CodeAssignment < ActiveRecord::Base
     number_string.gsub(delimiter,'')
   end
 
+  def self.download_template(klass)
+    max_level = klass.deepest_nesting
+    FasterCSV.generate do |csv|
+      csv << (['Code'] * max_level).concat(['Percent', 'Amount', 'Code', 'Description'])
+      klass.roots.each{|code| add_rows(csv, code, max_level, 0)}
+    end
+  end
+
+  def self.create_from_file(doc, activity, coding_type)
+    updates = HashWithIndifferentAccess.new
+    doc.each do |row| 
+      if (code = Code.find_by_short_display(row['Code']))
+        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => row['Amount'], 
+                                                                :percentage => row['Percentage']})
+      end
+    end
+
+    klass = coding_type.constantize
+    klass.update_codings(updates, activity)
+  end
+
+  def self.add_rows(csv, code, max_level, current_level)
+    row = []
+
+    current_level.times{|i| row << '' }
+    row << code.short_display
+    (max_level - (current_level + 1)).times{ |i| row << '' }
+    row << ''
+    row << ''
+    row << code.short_display
+    row << code.description
+
+    csv << row
+
+    code.children.each{|code| add_rows(csv, code, max_level, current_level + 1)}
+  end
+
   def aggregate_amount
     cached_amount
   end
@@ -109,8 +146,7 @@ class CodeAssignment < ActiveRecord::Base
   # TODO: spec
   def self.update_codings(code_assignments, activity)
     if code_assignments
-      code_assignments.delete_if { |key,val| val["amount"].nil? || val["percentage"].nil? }
-      code_assignments.delete_if { |key,val| val["amount"].empty? && val["percentage"].empty? }
+      code_assignments.delete_if { |key,val| val["amount"].blank? && val["percentage"].blank? }
       selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
       self.with_activity(activity.id).delete_all
       # if there are any codes, then save them!

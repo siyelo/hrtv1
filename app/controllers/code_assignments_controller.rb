@@ -41,7 +41,29 @@ class CodeAssignmentsController < Reporter::BaseController
     else
       flash[:error] = "We could not derive classification from sub implementers."
     end
-      redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+
+    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+  end
+
+  def bulk_create
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        CodeAssignment.create_from_file(doc, @activity, params[:coding_type])
+      else
+        flash[:error] = 'Please select a file to upload classifications'
+      end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "Your CSV file does not seem to be properly formatted."
+    end
+
+    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+  end
+
+  def download_template
+    klass, name = get_klass_and_name_from_coding_type(params[:coding_type])
+    template = CodeAssignment.download_template(klass)
+    send_csv(template, "#{name}_template.csv")
   end
 
   private
@@ -123,5 +145,18 @@ class CodeAssignmentsController < Reporter::BaseController
 
     def load_data_response
       @response = @activity.data_response
+    end
+
+    def get_klass_and_name_from_coding_type(coding_type)
+      case coding_type
+      when 'CodingBudget', 'CodingSpend'
+        [Mtef, 'purposes']
+      when 'CodingBudgetDistrict', 'CodingSpendDistrict'
+        [Location, 'locations']
+      when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
+        [CostCategory, 'inputs']
+      when 'ServiceLevelBudget', 'ServiceLevelSpend'
+        [ServiceLevel, 'service_levels']
+      end
     end
 end

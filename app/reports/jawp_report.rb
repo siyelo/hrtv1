@@ -3,7 +3,8 @@ require 'fastercsv'
 class Reports::JawpReport
   include Reports::Helpers
 
-  def initialize(type, activities)
+  def initialize(type, activities, include_subs = false)
+    @include_subs = include_subs
     @is_budget  = is_budget?(type)
 
     @activities = activities
@@ -97,7 +98,7 @@ class Reports::JawpReport
       parent_activity = activity
       parent_amount_total = amount_total
       parent_amount_total_in_usd = amount_total_in_usd
-      if activity.sub_activities.empty?
+      if activity.sub_activities.empty? or !@include_subs
         sub_activities = [activity]
         use_sub_activity_district_coding = false
       else

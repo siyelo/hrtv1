@@ -1,7 +1,13 @@
 %tbody
   %tr.head
     %td
-      %h1= link_to "#{h project.name}", edit_response_project_path(@response, project)
+      %h1
+        = link_to "#{h project.name}", edit_response_project_path(@response, project)
+
+        - project_errors = get_project_errors(project)
+        - if project_errors.present?
+          = image_tag "warning_12.png", :title => project_errors, :class => 'tooltip'
+
     %td= n2cndrs(project.spend, project.currency)
     %td= n2cndrs(project.budget, project.currency)
     %td.wrap-10

@@ -1268,7 +1268,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 $(function () {
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', live: true});
+  $('.tooltip').tipsy({gravity: 'w', live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

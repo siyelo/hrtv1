@@ -504,8 +504,10 @@ class Activity < ActiveRecord::Base
                     
     return false
   end
+
   def sub_activities_each_have_defined_districts?(coding_type)
     !sub_activity_district_code_assignments_if_complete(coding_type).empty?
+  end
 
   private
 

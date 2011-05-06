@@ -202,6 +202,10 @@ class Activity < ActiveRecord::Base
     activity
   end
 
+  def possible_duplicate?
+    self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
+  end
+
   def budget_district_coding_adjusted
     district_coding_adjusted(CodingBudgetDistrict, coding_budget_district, budget)
   end
@@ -502,6 +506,10 @@ class Activity < ActiveRecord::Base
     return false
   end
 
+  def sub_activities_each_have_defined_districts?(coding_type)
+    !sub_activity_district_code_assignments_if_complete(coding_type).empty?
+  end
+
   private
 
 
@@ -542,7 +550,7 @@ class Activity < ActiveRecord::Base
     end
 
     def district_codings_from_sub_activities(klass)
-      code_assignments = sub_activity_district_code_assignments(klass.name)
+      code_assignments = sub_activity_district_code_assignments_if_complete(klass.name)
 
       location_amounts = {}
       code_assignments.each do |ca|
@@ -551,6 +559,18 @@ class Activity < ActiveRecord::Base
       end
 
       location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
+    end
+
+    def sub_activity_district_code_assignments_if_complete(coding_type)
+      case coding_type
+      when 'CodingBudgetDistrict'
+        cas = sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
+      when 'CodingSpendDistrict'
+        cas = sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
+      end
+      puts id if cas == nil
+      return [] if cas.include?([])
+      cas.flatten
     end
 
     def sub_activity_district_code_assignments(coding_type)

@@ -25,6 +25,7 @@ class Report < ActiveRecord::Base
     'jawp_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
+    'activities_by_nha_subimps',
     'activities_by_all_codes_budget'
   ]
 
@@ -101,6 +102,8 @@ class Report < ActiveRecord::Base
           Reports::ActivitiesByNsp.new(Activity.only_simple.canonical, :budget, true)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(Activity.only_simple.canonical)
+        when 'activities_by_nha_subimps'
+          Reports::ActivitiesByNhaSubimps.new(:spent, Activity.jawp_activities)
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(Activity.only_simple.canonical, :budget, true)
         else

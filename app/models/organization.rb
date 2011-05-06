@@ -33,16 +33,19 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'name ASC, created_at DESC'
 
-  # TODO: remove!?
-  def self.remove_security
-    with_exclusive_scope { find(:all) }
-  end
-
   def is_empty?
     if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false
+    end
+  end
+
+  def referenced?
+    if in_flows.empty? && out_flows.empty? && provider_for.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+      false
+    else
+      true
     end
   end
 

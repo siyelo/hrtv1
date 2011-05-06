@@ -17,4 +17,3 @@ end
 #  budget              :decimal(, )     default(0.0)
 #  spend               :decimal(, )     default(0.0)
 #
-

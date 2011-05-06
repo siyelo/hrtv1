@@ -4,6 +4,14 @@ module BudgetSpendHelpers
   GOR_QUARTERS = [:q1, :q2, :q3, :q4]
   USG_START_MONTH = 10 # 7 is July
 
+  def spend?
+    !spend.nil? and spend > 0
+  end
+
+  def budget?
+    !budget.nil? and budget > 0
+  end
+
   # add spend_gor_qX methods here
   def spend
     if total_quarterly_spending_w_shift

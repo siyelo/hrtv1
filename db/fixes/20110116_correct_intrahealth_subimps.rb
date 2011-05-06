@@ -44,12 +44,15 @@ FasterCSV.foreach("db/fixes/intrahealth_spent.csv", :headers => false) do |row|
 end
 
 def create_sub_activity(activity, organization, item)
+  b = BigDecimal.new(item[:budget].to_s.gsub(',', ''))
+  s = BigDecimal.new(item[:spend].to_s.gsub(',', ''))
+  puts b.to_s + " - " + s.to_s
   activity.sub_activities.create!(
     :data_response => activity.data_response,
-    :provider => organization,
-    :budget => item[:budget].to_s.gsub(',', '.').to_f,
-    :spend => item[:spend].to_s.gsub(',', '.').to_f
-  )
+    :provider_id => organization.id,
+    :budget => b,
+    :spend => s
+  ) if b > 0 or s > 0
 end
 
 Activity.transaction do

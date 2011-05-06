@@ -35,9 +35,7 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-# generate csv only in dev env
-if Rails.env == 'development'
-  File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
-    file.puts csv
-  end
+File.open(File.join(Rails.root, 'db', 'reports', 'ultimate_funding_sources.csv'), 'w') do |file|
+  file.puts csv
 end
+

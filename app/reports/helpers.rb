@@ -59,6 +59,10 @@ module Reports::Helpers
   # and what it returns is what should be used for a report
   # TODO: refactor methods here into code assignment or coding class
   def get_coding_only_nodes_with_local_amounts(codings)
+    if codings.size == 1 && codings.first.code_id.nil?
+      #coding was faked, just return this correctly
+      #return [[codings.first, ["No Code Specified"]]]
+    end 
     coding_with_parent_codes = []
     coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
 
@@ -72,6 +76,9 @@ module Reports::Helpers
       coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
     end
 
+    # TODO FIX BUG, sometimes this returns an [] when codings is non-empty
+    # should NEVER have code assignments which have no real codings
+    # raise codings.to_yaml if coding_with_parent_codes.size == 0
     coding_with_parent_codes
   end
 
@@ -144,12 +151,18 @@ module Reports::Helpers
   end
 
   def add_codes_to_row(row, codes, deepest_nesting, attr)
+    last_code_found = 0
     deepest_nesting.times do |i|
       code = codes[i]
       if code
         row << codes_cache[code.id].try(attr)
+        last_code_found = i
       else
-        row << nil
+        if last_code_found == i - 1
+          row << "Not Disaggregated Further"
+        else
+          row << "At Level Above"
+        end
       end
     end
   end

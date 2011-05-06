@@ -52,12 +52,12 @@ class Comment < ActiveRecord::Base
                 LEFT OUTER JOIN funding_flows i ON i.id = comments.commentable_id
                 LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
                 LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-     :conditions => ["p.data_response_id IN (:drs) OR
-                      dr.id IN (:drs) OR
-                      fs.organization_id_to = :org_id AND fs.data_response_id IN (:drs) OR
-                      i.organization_id_from = :org_id AND i.data_response_id IN (:drs) OR
-                      a.type is null AND a.data_response_id IN (:drs) OR
-                      oc.type = 'OtherCost' AND oc.data_response_id IN (:drs)",
+     :conditions => ["(comments.commentable_type ='Project' and p.data_response_id IN (:drs)) OR
+                      (comments.commentable_type ='DataResponse' and dr.id IN (:drs)) OR
+                      (comments.commentable_type ='FundingFlow' and fs.organization_id_to = :org_id AND fs.data_response_id IN (:drs)) OR
+                      (comments.commentable_type ='FundingFlow' and i.organization_id_from = :org_id AND i.data_response_id IN (:drs)) OR
+                      (comments.commentable_type = 'Activity' and a.type is null AND a.data_response_id IN (:drs)) OR
+                      (comments.commentable_type = 'Activity' and oc.type = 'OtherCost' AND oc.data_response_id IN (:drs))",
                       {:org_id => organization.id, :drs => organization.data_responses.map(&:id)} ],
     :order => "created_at DESC"}
   }
@@ -76,7 +76,11 @@ class Comment < ActiveRecord::Base
           if commentable == nil
             return false
           else
-          commentable.data_response == current_user.current_data_response
+            if commentable == current_user.current_data_response
+              return true
+            else
+              commentable.data_response == current_user.current_data_response
+            end
           end
         end
       end

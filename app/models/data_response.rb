@@ -133,6 +133,10 @@ class DataResponse < ActiveRecord::Base
       end
     end
   end
+  
+  def to_s
+    "Data Response"    
+  end
 end
 
 

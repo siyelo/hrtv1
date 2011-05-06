@@ -3,9 +3,6 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
-  ### Comments
-  acts_as_commentable
-
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid
 
@@ -24,6 +21,7 @@ class Organization < ActiveRecord::Base
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
   has_many :projects, :through => :data_responses
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
   validates_presence_of :name

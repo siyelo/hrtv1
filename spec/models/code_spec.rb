@@ -25,9 +25,9 @@ describe Code do
   end
 
   describe "associations" do
-    it { should have_many :comments }
-    it { should have_many :code_assignments }
-    it { should have_many :activities }
+    it { should have_many(:code_assignments) }
+    it { should have_many(:activities) }
+    it { should have_many(:comments) }
   end
 
   describe "named scopes" do

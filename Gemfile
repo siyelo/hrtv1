@@ -8,7 +8,6 @@ gem 'fastercsv'
 gem 'formtastic', "= 1.2.3"
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'acts_as_commentable'
 gem 'ar_strip_commas'
 
 # grr - money 3.5 depends on i18n 0.4+

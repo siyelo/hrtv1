@@ -1,10 +1,8 @@
 class ModelHelp < ActiveRecord::Base
 
-  ### Comments
-  acts_as_commentable
-
   ### Associations
   has_many :field_help
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   # for active scaffold labels & drop downs
   def name

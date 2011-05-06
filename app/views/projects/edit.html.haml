@@ -10,9 +10,9 @@
 %ul.response-notice
   - if @response.data_request.spend?
     - if !@project.spend?
-      %li= "Enter the Expenditure (Spend) for this Project."
+      %li= "Enter the Expenditure (Spent) for this Project."
     - else
-      %li= "The Project Expenditure (Spend) amounts do not match their Funding Source budget amounts" unless @project.spend_matches_funders?
+      %li= "The Project Expenditure (Spent) amounts do not match their Funding Source budget amounts" unless @project.spend_matches_funders?
 
   - if @response.data_request.budget?
     - if !@project.budget?

@@ -4,9 +4,6 @@ class Code < ActiveRecord::Base
   PURPOSES            = %w[Mtef Nha Nasa Nsp]
   FILE_UPLOAD_COLUMNS = %w[short_display long_display description type external_id parent_short_display hssp2_stratprog_val hssp2_stratobj_val official_name sub_account nha_code nasa_code]
 
-  ### Comments
-  acts_as_commentable
-
   ### Attributes
   attr_writer   :type_string
   attr_accessible :short_display, :long_display, :description, :official_name,
@@ -26,6 +23,7 @@ class Code < ActiveRecord::Base
   ### Associations
   has_many :code_assignments
   has_many :activities, :through => :code_assignments
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Named scope
   named_scope :with_type,  lambda { |type| {:conditions => ["codes.type = ?", type]} }

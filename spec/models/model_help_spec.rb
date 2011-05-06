@@ -8,8 +8,8 @@ describe ModelHelp do
   end
 
   describe "associations" do
-    it { should have_many :comments }
-    it { should have_many :field_help }
+    it { should have_many(:field_help) }
+    it { should have_many(:comments) }
   end
 
   describe "counter cache" do

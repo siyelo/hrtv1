@@ -3,7 +3,6 @@ require 'validators'
 class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
-  acts_as_commentable
 
   ### Attributes
 
@@ -28,6 +27,7 @@ class DataResponse < ActiveRecord::Base
   has_many :users_currently_completing,
            :class_name => "User",
            :foreign_key => :data_response_id_current
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
 

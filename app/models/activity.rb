@@ -35,7 +35,6 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include BudgetSpendHelpers
-  acts_as_commentable
   strip_commas_from_all_numbers
 
   ### Attributes
@@ -64,6 +63,7 @@ class Activity < ActiveRecord::Base
   has_many :funding_sources
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
+  has_many :comments, :as => :commentable, :dependent => :destroy
   has_many :coding_budget
   has_many :coding_budget_cost_categorization
   has_many :coding_budget_district

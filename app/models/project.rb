@@ -18,7 +18,6 @@ class Project < ActiveRecord::Base
   @@per_page = 3
 
   acts_as_stripper
-  acts_as_commentable
   strip_commas_from_all_numbers
 
   ### Associations
@@ -40,6 +39,7 @@ class Project < ActiveRecord::Base
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
            :source => :to
+  has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true

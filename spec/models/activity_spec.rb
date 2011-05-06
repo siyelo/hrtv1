@@ -18,6 +18,7 @@ describe Activity do
     it { should have_many :funding_sources }
     it { should have_many :codes }
     it { should have_many :code_assignments }
+    it { should have_many :comments }
     it { should have_many :coding_budget }
     it { should have_many :coding_budget_cost_categorization }
     it { should have_many :coding_budget_district }

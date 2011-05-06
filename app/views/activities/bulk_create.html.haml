@@ -10,3 +10,7 @@
 - @activities.each_with_index do |activity, index|
   .activity_box
     = render 'bulk_edit', :activity => activity, :response => @response
+
+%br
+
+= link_to "Finish and Continue", response_projects_path(@response), :class => 'create_new', :confirm => "Please check if all activities are saved. Are you sure you want to leave this page?"

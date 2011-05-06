@@ -1,6 +1,6 @@
 .header
   - if activity.new_record?
-    = image_tag "delete_16.png"
+    = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
     = activity.name
   - else
     = image_tag "tick_12.png"
@@ -31,27 +31,18 @@
           =  f.input :csv_provider, :as => :hidden
           =  f.input :csv_districts, :as => :hidden
           =  f.input :csv_beneficiaries, :as => :hidden
-      %li.borderless
-        %ul.response-notice
-          - unless f.object.project
-            %li
-              .suggestion
-                == We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
-          - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
-            %li
-              .suggestion
-                == We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
-
-          - unless f.object.provider
-            %li
-              .suggestion
-                == We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
-          - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
-            %li
-              .suggestion
-                == We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
-          
       %li
+        - unless f.object.project
+          %ul.response-notice
+            %li== We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
+            %br
+
+        - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
+          %ul.response-notice
+            %li== We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
+            %br
+
+
         %ul.clearfix
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
           
@@ -70,9 +61,9 @@
       %li
         - if @response.data_request.spend?
           %ul.first-half
-            = f.input :spend, :required => false, :wrapper_html => {:class => 'grid-20'}
+            = f.input :spend, :required => false, :label => 'Spent', :wrapper_html => {:class => 'grid-20'}
             %li
-              %label Quarterly spend
+              %label Quarterly spent
               %ul
                 = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
                 = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
@@ -101,12 +92,23 @@
 
 
       %li
+        - unless f.object.provider
+          %ul.response-notice
+            %li== We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
+            %br
+
+
+        - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
+          %ul.response-notice
+            %li== We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
+            %br
+
+
         %ul
           = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
-          = f.input :organizations, :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
-          = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Other beneficiaries"
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+          = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Beneficiary details / Other beneficiaries"
+          = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
 
       %li.borderless.marginless
         %br

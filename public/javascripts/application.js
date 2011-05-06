@@ -1103,6 +1103,7 @@ var activities_bulk_create = {
         var demo_text = element.attr('data-hint');
 
         if (demo_text != null) {
+          element.attr('title', demo_text);
           if (element.val() == '' || element.val() == demo_text) {
             element.val( demo_text );
             element.addClass('input_hint');

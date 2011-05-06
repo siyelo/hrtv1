@@ -86,15 +86,9 @@
   %li.last
     %h3== Other
     %ul.dashboard_section
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiary details / Other beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
       = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
       = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
-
-
-  %li.last
-    %h3 Institutions Assisted
-    %ul.dashboard_section
-      = f.input :organizations, :as => :select, :collection => Organization.all, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
 
   %li
     %ul.horizontal

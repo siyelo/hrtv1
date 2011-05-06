@@ -9,7 +9,7 @@
   %div{:class => invalid_class}
     = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
     = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
-    = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
+    = link_to "?", "#", :title => code.description, :class => "tooltip info" if code.description
     .values.right
       = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", n2c(amount), :size => 8
       .greyed or
@@ -19,7 +19,7 @@
       = label_tag "activity[#{updater_field}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"
 
     - if invalid_class
-      = link_to "!", "#" , :title => node_error(code, assignment), :class => "tooltip invalid_node"
+      = link_to "!", "#" , :title => node_error(code, assignment), :class => "tooltip info invalid_node"
 
   - unless code.leaf?
     %ul{:id => code.external_id, :class => "lvl#{level}"}

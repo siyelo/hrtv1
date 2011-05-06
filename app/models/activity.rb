@@ -162,28 +162,29 @@ class Activity < ActiveRecord::Base
   end
 
   def self.initialize_from_file(response, row)
-    activity                     = response.activities.new
-    activity.name                = row['Activity Name']
-    activity.description         = row['Activity Description']
-    activity.spend               = row['Spend']
-    activity.spend_q1            = row['Q1 Spend']
-    activity.spend_q2            = row['Q2 Spend']
-    activity.spend_q3            = row['Q3 Spend']
-    activity.spend_q4            = row['Q4 Spend']
-    activity.budget              = row['Budget']
-    activity.budget_q1           = row['Q1 Budget']
-    activity.budget_q2           = row['Q2 Budget']
-    activity.budget_q3           = row['Q3 Budget']
-    activity.budget_q4           = row['Q4 Budget']
-    activity.start_date          = row['Start Date']
-    activity.end_date            = row['End Date']
+    activity                         = response.activities.new
+    activity.name                    = row['Activity Name']
+    activity.description             = row['Activity Description']
+    activity.spend                   = row['Spend']
+    activity.spend_q1                = row['Q1 Spend']
+    activity.spend_q2                = row['Q2 Spend']
+    activity.spend_q3                = row['Q3 Spend']
+    activity.spend_q4                = row['Q4 Spend']
+    activity.budget                  = row['Budget']
+    activity.budget_q1               = row['Q1 Budget']
+    activity.budget_q2               = row['Q2 Budget']
+    activity.budget_q3               = row['Q3 Budget']
+    activity.budget_q4               = row['Q4 Budget']
+    activity.start_date              = row['Start Date']
+    activity.end_date                = row['End Date']
+    activity.text_for_beneficiaries  = row['Beneficiaries']
 
     # virtual attributes
     activity.csv_project_name    = row['Project Name']
     activity.csv_provider        = row['Provider']
     activity.csv_districts       = row['Districts']
     activity.csv_beneficiaries   = row['Beneficiaries']
-    activity.text_for_targets     = row['Outputs / Targets']
+    activity.text_for_targets    = row['Outputs / Targets']
 
     # associations
     project                      = Project.find_by_name(activity.csv_project_name)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418145908) do
+ActiveRecord::Schema.define(:version => 20110502112955) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20110418145908) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -172,12 +173,9 @@ ActiveRecord::Schema.define(:version => 20110418145908) do
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
-<<<<<<< HEAD
     t.datetime "submitted_for_final_at"
     t.boolean  "submitted_for_final"
     t.integer  "unclassified_activities_count",     :default => 0
-=======
->>>>>>> Fixed migrations for work on empty db
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -222,10 +220,7 @@ ActiveRecord::Schema.define(:version => 20110418145908) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",       :default => 0
-<<<<<<< HEAD
     t.integer  "project_from_id"
-=======
->>>>>>> Fixed migrations for work on empty db
   end
 
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"

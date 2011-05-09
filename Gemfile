@@ -10,6 +10,7 @@ gem 'haml'
 gem 'hoptoad_notifier'
 gem 'ar_strip_commas'
 
+
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue
 #gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
@@ -54,6 +55,7 @@ group :test, :development do
   # gem 'mysql'
   gem 'rspec', '1.3.1', :require => 'spec'
   gem 'rspec-rails', '1.3.3'  # RSpec 1 (1.3.x) is for Rails 2.3.x
+  gem 'rcov'
 end
 
 group :test do

@@ -220,4 +220,25 @@ module ApplicationHelper
   def form_namespace(object)
     "f#{object.object_id}"
   end
+
+  def fiscal_year_prev(data_response)
+    year1 = data_response.fiscal_year_start_date.present? ? 
+      data_response.fiscal_year_start_date.strftime('%y') : 'xx'
+    year2 = data_response.fiscal_year_end_date.present? ?
+      data_response.fiscal_year_end_date.strftime('%y') : 'xx'
+
+    "#{year1}-#{year2}" 
+  end
+
+  def fiscal_year(data_response)
+    if data_response.fiscal_year_end_date.present?
+      year1 = data_response.fiscal_year_end_date.strftime('%y')
+      year2 = (data_response.fiscal_year_end_date + 1.year).strftime('%y')
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}" 
+  end
 end

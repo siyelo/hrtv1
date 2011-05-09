@@ -1,3 +1,6 @@
+- fiscal_year_prev = fiscal_year_prev(response)
+- fiscal_year = fiscal_year(response)
+
 .header
   - if activity.new_record?
     = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
@@ -59,29 +62,29 @@
           = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
         
       %li
-        - if @response.data_request.spend?
+        - if response.data_request.spend?
           %ul.first-half
             = f.input :spend, :required => false, :label => 'Spent', :wrapper_html => {:class => 'grid-20'}
             %li
               %label Quarterly spent
               %ul
-                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
-                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
-                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
-                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
-                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{fiscal_year_prev}"}, :label => false
+                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{fiscal_year}"}, :label => false
+                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q2 #{fiscal_year}"}, :label => false
+                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q3 #{fiscal_year}"}, :label => false
+                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{fiscal_year}"}, :label => false
 
-        - if @response.data_request.budget?
+        - if response.data_request.budget?
           %ul.second-half
             = f.input :budget, :label => "Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
             %li.grid-80
               %label Quarterly budget
               %ul
-                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 08-09'}, :label => false
-                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q1 09-10'}, :label => false
-                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q2 09-10'}, :label => false
-                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q3 09-10'}, :label => false
-                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Q4 09-10 '}, :label => false
+                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q4 #{fiscal_year_prev}"}, :label => false
+                = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q1 #{fiscal_year}"}, :label => false
+                = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q2 #{fiscal_year}"}, :label => false
+                = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q3 #{fiscal_year}"}, :label => false
+                = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q4 #{fiscal_year}"}, :label => false
             %li.grid-80
               %label Long-term
               %ul

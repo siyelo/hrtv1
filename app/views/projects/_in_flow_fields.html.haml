@@ -1,3 +1,6 @@
+- fiscal_year_prev = fiscal_year_prev(@response)
+- fiscal_year = fiscal_year(@response)
+
 .fields
   .edit_block
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
@@ -10,22 +13,22 @@
       %li.amounts.spend
         %label Quarterly spend
         %ul
-          = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false, :input_html => {:class => 'ff_spend_q4_prev'}
-          = f.input :spend_q1     , :label => "Q1 09-10", :required => false, :input_html => {:class => 'ff_spend_q1'}
-          = f.input :spend_q2     , :label => "Q2 09-10", :required => false, :input_html => {:class => 'ff_spend_q2'}
-          = f.input :spend_q3     , :label => "Q3 09-10", :required => false, :input_html => {:class => 'ff_spend_q3'}
-          = f.input :spend_q4     , :label => "Q4 09-10", :required => false, :input_html => {:class => 'ff_spend_q4'}
+          = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false, :input_html => {:class => 'ff_spend_q4_prev'}
+          = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q1'}
+          = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q2'}
+          = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q3'}
+          = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q4'}
 
     - if @response.data_request.budget?
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false, :input_html => {:class => 'ff_budget'}
       %li.amounts.budget
         %label Quarterly budget
         %ul
-          = f.input :budget_q4_prev, :label => "Q4 08-09", :required => false, :input_html => {:class => 'ff_budget_q4_prev'}
-          = f.input :budget_q1     , :label => "Q1 09-10", :required => false, :input_html => {:class => 'ff_budget_q1'}
-          = f.input :budget_q2     , :label => "Q2 09-10", :required => false, :input_html => {:class => 'ff_budget_q2'}
-          = f.input :budget_q3     , :label => "Q3 09-10", :required => false, :input_html => {:class => 'ff_budget_q3'}
-          = f.input :budget_q4     , :label => "Q4 09-10", :required => false, :input_html => {:class => 'ff_budget_q4'}
+          = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false, :input_html => {:class => 'ff_budget_q4_prev'}
+          = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q1'}
+          = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q2'}
+          = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q3'}
+          = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q4'}
 
   .preview_block{:style => "display: none;"}
 

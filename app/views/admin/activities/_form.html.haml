@@ -1,4 +1,6 @@
 - @response = @activity.data_response
+- fiscal_year_prev = fiscal_year_prev(@response)
+- fiscal_year = fiscal_year(@response)
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -32,17 +34,25 @@
       %li.amounts.last
         %label== Quarterly spend
         %ul
-          = f.input :spend_q4_prev, :label => "Q4 08-09", :required => false
-          = f.input :spend_q1     , :label => "Q1 09-10", :required => false
-          = f.input :spend_q2     , :label => "Q2 09-10", :required => false
-          = f.input :spend_q3     , :label => "Q3 09-10", :required => false
-          = f.input :spend_q4     , :label => "Q4 09-10", :required => false
+          = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
+          = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false
+          = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false
+          = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false
+          = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false
 
   %li.last
     %h3 Budget (planned expenditure) (#{@response.currency})
     %ul.dashboard_section
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
       %li.amounts
+        %label== Quarterly budget
+        %ul
+          = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
+          = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
+          = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
+          = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
+          = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
+      %li.amounts.last
         %label Long-term
         %ul
           = f.input :budget2, :label => "Year + 2", :required => false

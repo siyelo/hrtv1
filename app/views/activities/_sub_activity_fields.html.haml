@@ -5,12 +5,12 @@
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :label => "Budget FY 10-11", :required => false
+        = f.input :budget, :required => false
         = f.input :budget_percentage, :label => "% of Main Activity's Budget", :required => false
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :spend, :label => "Spend FY 09-10", :required => false
+        = f.input :spend, :required => false
         = f.input :spend_percentage, :label => "% of Main Activity's Spend", :required => false
 
     = link_to_remove_fields "remove", f

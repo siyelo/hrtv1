@@ -1,3 +1,6 @@
+- fiscal_year_prev = fiscal_year_prev(@activity.data_response)
+- fiscal_year = fiscal_year(@activity.data_response)
+
 .wrap-70
   %h3.form_heading Basics
   %ul.dashboard_section
@@ -43,20 +46,42 @@
         %li Spend
         %li= c(@activity.spend, @activity.currency)
       %ul.row
-        %li Spend Q4 08-09
+        %li= "Spend Q4 #{fiscal_year_prev}"
         %li= c(@activity.spend_q4_prev, @activity.currency)
       %ul.row
-        %li Spend Q1 09-10
+        %li= "Spend Q1 #{fiscal_year}"
         %li= c(@activity.spend_q1, @activity.currency)
       %ul.row
-        %li Spend Q2 09-10
+        %li= "Spend Q2 #{fiscal_year}"
         %li= c(@activity.spend_q2, @activity.currency)
       %ul.row
-        %li Spend Q3 09-10
+        %li= "Spend Q3 #{fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
       %ul.row.last
-        %li Spend Q4 09-10
+        %li= "Spend Q4 #{fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
+
+  %h3.form_heading Budget
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Quarterly Budget
+        %li= c(@activity.budget, @activity.currency)
+      %ul.row
+        %li= "Budget Q4 #{fiscal_year_prev}"
+        %li= c(@activity.budget_q4_prev, @activity.currency)
+      %ul.row
+        %li= "Budget Q1 #{fiscal_year}"
+        %li= c(@activity.budget_q1, @activity.currency)
+      %ul.row
+        %li= "Budget Q2 #{fiscal_year}"
+        %li= c(@activity.budget_q2, @activity.currency)
+      %ul.row
+        %li= "Budget Q3 #{fiscal_year}"
+        %li= c(@activity.budget_q4, @activity.currency)
+      %ul.row.last
+        %li= "Budget Q4 #{fiscal_year}"
+        %li= c(@activity.budget_q4, @activity.currency)
 
   %h3.form_heading Budget (planned expenditure)
   %ul.dashboard_section

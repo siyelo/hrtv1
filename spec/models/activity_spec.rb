@@ -1255,7 +1255,9 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+        @response = Factory.create(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
+                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1281,7 +1283,9 @@ describe Activity do
 
     context "Goverment of Rwanda" do
       before :each do
-        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+        @response = Factory.create(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
+                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1323,7 +1327,9 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-10-01"))
+        @response = Factory.create(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
+                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1349,7 +1355,9 @@ describe Activity do
 
     context "Goverment of Rwanda" do
       before :each do
-        @response = Factory.create(:data_response, :fiscal_year_start_date => Date.parse("2010-01-01"))
+        @response = Factory.create(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
+                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do

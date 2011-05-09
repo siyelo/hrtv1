@@ -8,7 +8,7 @@
 
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2010.02
+rvm use ree-1.8.7-2011.03
 rvm gemset use hrt
 rvm gemset import hrt
 
@@ -19,28 +19,28 @@ cp $WORKSPACE/config/settings.secret.example.yml $WORKSPACE/config/settings.secr
 #3
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2010.02@hrt
+rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=test
 rake setup_quick --trace
 
 #4
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2010.02@hrt
+rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=test
 rake test:units
 
 #5
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2010.02@hrt
+rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=test
 spec spec
 
 #6
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2010.02@hrt
+rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=cucumber
 # http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/
 # and http://markgandolfo.com/2010/07/01/hudson-ci-server-running-cucumber-in-headless-mode-xvfb

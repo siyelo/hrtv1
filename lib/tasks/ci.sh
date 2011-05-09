@@ -4,40 +4,34 @@
 #   rvm gemset create hrt
 #   rvm gemset import hrt
 
-#1
-
 #!/bin/bash
+cp .rvmrc_ree .rvmrc
 source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2011.03
-rvm gemset use hrt
-rvm gemset import hrt
+rvm use ree-1.8.7-2011.03@hrt
+bundle install
 
-#2
-cp $WORKSPACE/config/database.yml.sample $WORKSPACE/config/database.yml
-cp $WORKSPACE/config/settings.secret.example.yml $WORKSPACE/config/settings.secret.yml
 
-#3
+cp $WORKSPACE/config/database.yml.sample.sqlite3 $WORKSPACE/config/database.yml
+
+
+
 #!/bin/bash
+cp .rvmrc_ree .rvmrc
 source /var/lib/jenkins/.rvm/scripts/rvm
 rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=test
 rake setup_quick --trace
 
-#4
-#!/bin/bash
-source /var/lib/jenkins/.rvm/scripts/rvm
-rvm use ree-1.8.7-2011.03@hrt
-export RAILS_ENV=test
-rake test:units
 
-#5
+
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
 rvm use ree-1.8.7-2011.03@hrt
 export RAILS_ENV=test
 spec spec
 
-#6
+
+
 #!/bin/bash
 source /var/lib/jenkins/.rvm/scripts/rvm
 rvm use ree-1.8.7-2011.03@hrt

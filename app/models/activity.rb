@@ -35,7 +35,7 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include BudgetSpendHelpers
-  strip_commas_from_all_numbers
+  #strip_commas_from_all_numbers
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
@@ -89,8 +89,8 @@ class Activity < ActiveRecord::Base
   validates_presence_of :data_response_id, :project_id, :if => Proc.new {|model| model.class.to_s == 'Activity'}
   validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
   validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
-  validates_date :start_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
-  validates_date :end_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
+  #validates_date :start_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
+  #validates_date :end_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   #validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
 
   ### Callbacks

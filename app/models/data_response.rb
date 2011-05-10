@@ -40,8 +40,8 @@ class DataResponse < ActiveRecord::Base
 
   validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
-  validates_date :fiscal_year_start_date
-  validates_date :fiscal_year_end_date
+  #validates_date :fiscal_year_start_date
+  #validates_date :fiscal_year_end_date
   #validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
     #:message => "Start date must come before End date."
 

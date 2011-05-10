@@ -1,6 +1,6 @@
 class CodeAssignment < ActiveRecord::Base
 
-  strip_commas_from_all_numbers
+  #strip_commas_from_all_numbers
 
   ### Attributes
   attr_accessible :activity, :code, :amount, :percentage,

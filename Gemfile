@@ -1,16 +1,14 @@
 source 'http://rubygems.org'
 #source "http://gems.github.com"
 
-gem 'rails', '3.0.7'
+gem 'rails'
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass'
 gem 'fastercsv'
-gem 'formtastic'
+gem 'formtastic', '1.2.3'
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'ar_strip_commas'
-
 
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue
@@ -20,7 +18,7 @@ gem 'inherited_resources'
 gem 'money'
 gem "paperclip"
 gem 'settingslogic'
-gem 'validates_timeliness'#, '~> 2.3'
+gem 'validates_date_time'
 gem 'version'
 #gem 'will_paginate' # use rails 3 gem
 gem 'json_pure'
@@ -53,7 +51,6 @@ end
 group :test, :development do
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'rcov'
 end
 
 group :test do

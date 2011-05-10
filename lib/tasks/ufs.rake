@@ -3,6 +3,6 @@
 namespace :ufs do
   desc "Generates UFS"
   task :generate => :environment do |t|
-    load 'db/reports/ufs/ultimate_funding_sources.rb'
+    load 'db/reports/ufs/funding_streams.rb'
   end
 end

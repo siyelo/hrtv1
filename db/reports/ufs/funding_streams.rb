@@ -1,8 +1,10 @@
+include NumberHelper
+
 puts "Loading funding streams"
 
 FundingStream.delete_all
 
-FasterCSV.foreach("db/reports/ufs/funding_streams.csv", :headers=>true) do |row|
+FasterCSV.foreach("db/reports/ufs/funding_streams.csv", :headers => true) do |row|
   project = Project.find_by_id(row[0])
   if project.nil?
     puts "Could not find project with id #{row[0]}"
@@ -12,11 +14,14 @@ FasterCSV.foreach("db/reports/ufs/funding_streams.csv", :headers=>true) do |row|
     fa = Organization.find_by_name(row[2])
     puts "Could not find fa with name #{row[2]}" if fa.nil?
 
+    rate = currency_rate(project.currency, 'USD')
     FundingStream.create!(:project_id => row[0], 
                           :organization_ufs_id => ufs.id,
                           :organization_fa_id => fa.id,
                           :budget => project.budget,
-                          :spend => project.spend)
+                          :budget_in_usd => (project.budget || 0) * rate,
+                          :spend => project.spend,
+                          :spend_in_usd => (project.spend || 0) * rate)
     #puts "#{ufs} - #{fa}"
     print "."
   end

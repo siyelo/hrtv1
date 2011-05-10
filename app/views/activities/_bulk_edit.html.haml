@@ -97,13 +97,13 @@
       %li
         - unless f.object.provider
           %ul.response-notice
-            %li== We didn't find the implementer "#{activity.csv_provider}" in the list, please select the correct one
+            %li= "We couldn't find the implementer #{activity.csv_provider} in the list, please select the correct one"
             %br
 
 
         - if f.object.csv_beneficiaries.present? && f.object.beneficiaries.length != f.object.csv_beneficiaries.to_s.split(',').length
           %ul.response-notice
-            %li== We didn't find all the beneficiaries "#{activity.csv_beneficiaries}" in the list, please check the correct ones
+            %li= "We didn't find all the beneficiaries #{activity.csv_beneficiaries} in the list, please check the correct ones"
             %br
 
 
@@ -111,7 +111,7 @@
           = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false, :wrapper_html => {:class => 'fourth'}
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Beneficiary details / Other beneficiaries"
-          = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries"
+          = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :wrapper_html => {:class => 'fourth'}
 
       %li.borderless.marginless
         %br

@@ -1032,10 +1032,14 @@ ul.push
   list-style: disc
 
 .status
-  background: image_url("flag_48.png") no-repeat 15px center $lightest-blue
   border: 1px solid $lighter-blue
   padding: 15px 15px 15px 75px
   +border-radius
+  
+  &.go
+    background: image_url("flag_48_green.png") no-repeat 15px center $lightest-blue
+  &.stop
+    background: image_url("flag_48_red.png") no-repeat 15px center $lightest-blue
   
   li
     color: $mid-blue

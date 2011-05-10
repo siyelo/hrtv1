@@ -17,6 +17,9 @@ class CodeAssignmentsController < Reporter::BaseController
     @coding_type   = params[:coding_type] || 'CodingBudget'
     @coding_class  = @coding_type.constantize
     if params[:activity].present? && params[:activity][:updates].present?
+      params[:activity][:updates].each do |assignment|
+        assignment[1]["percentage"] = nil if assignment[1]["amount"].present?
+      end
       @coding_class.update_codings(params[:activity][:updates], @activity)
       message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end

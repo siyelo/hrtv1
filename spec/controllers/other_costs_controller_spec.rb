@@ -31,7 +31,7 @@ describe OtherCostsController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingBudget'))
      end
      
@@ -47,7 +47,7 @@ describe OtherCostsController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
      end
      
@@ -63,7 +63,7 @@ describe OtherCostsController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        }, 
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
      end
    end

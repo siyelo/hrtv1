@@ -186,38 +186,6 @@
                   
 
       %li
-        %h3{:class => (projects_activities_budgets_ok ? "ready" : "not-ready")}
-          Correct Budget amounts for Projects, Activities & Other Costs
-          - unless projects_activities_budgets_ok
-            %span.info
-              The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
-
-        - unless projects_activities_budgets_ok
-          .simple_table.push.review
-            %table
-              %thead
-                %tr
-                  %th= "Project/Activity"
-                  %th= "Activity/Other Costs Budget Total (#{@response.currency})"
-                  %th= "Project Budget Total (#{@response.currency})"
-                  %th= "Diff (#{@response.currency})"
-                %tbody
-                  - @response.projects.each do |project|
-                    - if project.budget != (project.activities_budget_total + project.other_costs_budget_total)
-                      %tr{:class => "#{dom_id(project)}"}
-                        %td.first
-                          = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
-                          = link_to project.name, edit_response_project_path(@response, project)
-                        %td.first= universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
-                        %td.first= universal_currency_converter(project.budget, project.currency, @response.currency)
-                        %td.first= universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
-                        - project.activities.each do |activity|
-                          %tr{:class => "#{dom_id(project)}_budget"}
-                            %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity) 
-                            %td.activity= universal_currency_converter(activity.budget, activity.currency, @response.currency)
-
-
-      %li
         %h3{:class => (projects_funding_sources_spends_ok ? "ready" : "not-ready")}
           Correct Expenditure amounts for Projects & Funding Sources
           - unless projects_funding_sources_spends_ok
@@ -274,6 +242,38 @@
                         %tr{:class => "#{dom_id(project)}_spend"}
                           %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity) 
                           %td.activity= universal_currency_converter(activity.spend, activity.currency, @response.currency)
+                          
+                          
+      %li
+        %h3{:class => (projects_activities_budgets_ok ? "ready" : "not-ready")}
+          Correct Budget amounts for Projects, Activities & Other Costs
+          - unless projects_activities_budgets_ok
+            %span.info
+              The Project budget should match the total budget for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+
+        - unless projects_activities_budgets_ok
+          .simple_table.push.review
+            %table
+              %thead
+                %tr
+                  %th= "Project/Activity"
+                  %th= "Activity/Other Costs Budget Total (#{@response.currency})"
+                  %th= "Project Budget Total (#{@response.currency})"
+                  %th= "Diff (#{@response.currency})"
+                %tbody
+                  - @response.projects.each do |project|
+                    - if project.budget != (project.activities_budget_total + project.other_costs_budget_total)
+                      %tr{:class => "#{dom_id(project)}"}
+                        %td.first
+                          = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
+                          = link_to project.name, edit_response_project_path(@response, project)
+                        %td.first= universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
+                        %td.first= universal_currency_converter(project.budget, project.currency, @response.currency)
+                        %td.first= universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency)
+                        - project.activities.each do |activity|
+                          %tr{:class => "#{dom_id(project)}_budget"}
+                            %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity) 
+                            %td.activity= universal_currency_converter(activity.budget, activity.currency, @response.currency)
                         
 //%hr.divider
 %p

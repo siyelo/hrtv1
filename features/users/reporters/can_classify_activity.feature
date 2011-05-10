@@ -173,7 +173,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
-      When I press "Save & Go to Classify >"
+      When I press "Save & Classify >"
         And I follow "Budget"
         And I follow "Purposes"
 
@@ -209,7 +209,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Activity"
         And I fill in "Budget" with "1000"
         And I fill in "Spent" with "2000"
-        And I press "Save & Go to Classify >"
+        And I press "Save & Classify >"
         And I follow "Budget"
         And I follow "Purposes"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "40.00"

@@ -18,11 +18,11 @@ class Reports::DistrictsController < Reports::BaseController
     code_type = get_code_type_and_initialize(params[:code_type])
 
     if @pie
-      @code_spent_values   = Charts::DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
-      @code_budget_values  = Charts::DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
+      @code_spent_values   = DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
+      @code_budget_values  = DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
     else
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
+      @code_spent_values   = DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
+      @code_budget_values  = DistrictTreemaps::treemap(@location, code_type, @location.activities, false)
     end
 
     @top_activities    = Reports::ActivityReport.top_by_spent({
@@ -31,11 +31,11 @@ class Reports::DistrictsController < Reports::BaseController
                          :limit => 10, :code_ids => [@location.id], :type => 'district'})
 
 
-    @budget_ufs_values = Charts::DistrictPies::ultimate_funding_sources(@location, 'budget')
-    @budget_fa_values  = Charts::DistrictPies::financing_agents(@location, 'budget')
-    @budget_i_values   = Charts::DistrictPies::implementers(@location, 'budget')
-    @spend_ufs_values  = Charts::DistrictPies::ultimate_funding_sources(@location, 'spend')
-    @spend_fa_values   = Charts::DistrictPies::financing_agents(@location, 'spend')
-    @spend_i_values    = Charts::DistrictPies::implementers(@location, 'spend')
+    @budget_ufs_values = DistrictPies::ultimate_funding_sources(@location, 'budget')
+    @budget_fa_values  = DistrictPies::financing_agents(@location, 'budget')
+    @budget_i_values   = DistrictPies::implementers(@location, 'budget')
+    @spend_ufs_values  = DistrictPies::ultimate_funding_sources(@location, 'spend')
+    @spend_fa_values   = DistrictPies::financing_agents(@location, 'spend')
+    @spend_i_values    = DistrictPies::implementers(@location, 'spend')
   end
 end

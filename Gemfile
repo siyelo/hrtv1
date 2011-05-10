@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 #source "http://gems.github.com"
 
-gem 'rails'
+gem 'rails', '3.0.7'
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass'

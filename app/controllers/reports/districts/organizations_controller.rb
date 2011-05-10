@@ -6,8 +6,8 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
     @organizations     = Reports::OrganizationReport.top_by_spent_and_budget({
                          :per_page => 25, :page => params[:page], :sort => params[:sort],
                          :code_ids => [@location.id], :type => 'district'})
-    @spent_pie_values  = Charts::DistrictPies::organizations(@location, "CodingSpendDistrict")
-    @budget_pie_values = Charts::DistrictPies::organizations(@location, "CodingBudgetDistrict")
+    @spent_pie_values  = DistrictPies::organizations(@location, "CodingSpendDistrict")
+    @budget_pie_values = DistrictPies::organizations(@location, "CodingBudgetDistrict")
   end
 
   def show
@@ -18,11 +18,11 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
     activities         = @organization.dr_activities
 
     if @treemap
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
+      @code_spent_values   = DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = DistrictTreemaps::treemap(@location, code_type, activities, false)
     else
-      @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
-      @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
+      @code_spent_values  = DistrictPies::organization_pie(@location, activities, code_type, true)
+      @code_budget_values = DistrictPies::organization_pie(@location, activities, code_type, false)
     end
   end
 

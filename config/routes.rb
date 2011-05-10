@@ -1,6 +1,6 @@
 ResourceTracking::Application.routes.draw do
   # ROOT
-  match '/' => 'static_page#index'
+  match '/' => 'static_page#index', :as => 'root'
 
   # LOGIN/LOGOUT
   resource :user_session
@@ -74,6 +74,9 @@ ResourceTracking::Application.routes.draw do
 
   # REPORTER USER: DATA ENTRY
   resources :responses do
+    member do
+      get :review
+    end
     resources :commodities do
       collection do
         get :download_template
@@ -116,7 +119,6 @@ ResourceTracking::Application.routes.draw do
         put :derive_classifications_from_sub_implementers
       end
     end
->>>>>>> Initial migration to rails3
   end
 
   # REPORTER USER

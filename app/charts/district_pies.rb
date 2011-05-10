@@ -1,6 +1,6 @@
-module Charts::DistrictPies
+module DistrictPies
   extend ApplicationHelper
-  extend Charts::HelperMethods
+  extend ChartHelpers
 
   class << self
 
@@ -26,7 +26,7 @@ module Charts::DistrictPies
       records = FundingStream.find :all,
         :select => "organizations.id,
           organizations.name,
-          SUM(funding_streams.#{amount_type}) as value",
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
         :joins => "INNER JOIN organizations ON 
                     funding_streams.organization_ufs_id = organizations.id
                    INNER JOIN projects ON projects.id = funding_streams.project_id
@@ -44,7 +44,7 @@ module Charts::DistrictPies
       records = FundingStream.find :all,
         :select => "organizations.id,
           organizations.name,
-          SUM(funding_streams.#{amount_type}) as value",
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
         :joins => "INNER JOIN organizations ON 
                     funding_streams.organization_fa_id = organizations.id
                    INNER JOIN projects ON projects.id = funding_streams.project_id
@@ -62,7 +62,7 @@ module Charts::DistrictPies
       records = FundingStream.find :all,
         :select => "organizations.id,
           organizations.name,
-          SUM(funding_streams.#{amount_type}) as value",
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
         :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
                    INNER JOIN activities ON activities.project_id = projects.id
                    INNER JOIN organizations ON activities.provider_id = organizations.id

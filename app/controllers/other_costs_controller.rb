@@ -90,7 +90,7 @@ class OtherCostsController < Reporter::BaseController
         flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
       end
 
-      if params[:commit] == "Save & Go to Classify >"
+      if params[:commit] == "Save & Classify >"
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
         redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type) 
       else

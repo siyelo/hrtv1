@@ -172,7 +172,7 @@ describe ActivitiesController do
         :budget => 9000,
         :spend => 8000
       },
-      :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+      :commit => 'Save & Classify >', :response_id => @data_response.id
       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
     end
     
@@ -184,7 +184,7 @@ describe ActivitiesController do
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
-      }, :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+      }, :commit => 'Save & Classify >', :response_id => @data_response.id
       flash[:notice].should == "Activity was successfully created"
       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
     end
@@ -218,7 +218,7 @@ describe ActivitiesController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
      
@@ -235,7 +235,7 @@ describe ActivitiesController do
          :project_id => @project.id,
          :budget => 11000
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        flash[:notice].should == "Activity was successfully created"
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
@@ -252,7 +252,7 @@ describe ActivitiesController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
      
@@ -268,7 +268,7 @@ describe ActivitiesController do
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
-       :commit => 'Save & Go to Classify >', :response_id => @data_response.id
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
    end  

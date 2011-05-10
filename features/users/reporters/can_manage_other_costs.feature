@@ -21,11 +21,11 @@ Feature: Reporter can manage other costs
         And I select "project1" from "Project"
         And I fill in "Start date" with "2011-01-01" 
         And I fill in "End date" with "2011-03-01"
-        And I press "Save & Go to Classify >"
+        And I press "Save & Classify >"
       Then I should see "Othercost was successfully created"
       When I follow "other_cost1"
         And I fill in "Description" with "other_cost2"
-        And I press "Save & Go to Classify >"
+        And I press "Save & Classify >"
       Then I should see "Othercost was successfully updated"
         And I should see "other_cost2"
         And I should not see "other_cost1"
@@ -41,7 +41,7 @@ Feature: Reporter can manage other costs
         And I fill in "Description" with "other_cost1"
         And I fill in "Start date" with "2011-01-01" 
         And I fill in "End date" with "2011-03-01"
-        And I press "Save & Go to Classify >"
+        And I press "Save & Classify >"
       Then I should see "Othercost was successfully created"
 
 
@@ -140,4 +140,4 @@ Feature: Reporter can manage other costs
       And I fill in "End date" with "2011-12-01"
       And I select "project1" from "Project"
     Then I should see "Save" button
-    And I should not see "Save & Go to Classify >" button
+    And I should not see "Save & Classify >" button

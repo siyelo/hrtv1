@@ -98,7 +98,7 @@
       - f.buttons :class => 'buttons' do
         = f.commit_button "Save", :class => "last"
         - if @response.data_request.spend? || @response.data_request.budget?
-          = f.commit_button "Save & Go to Classify >", :class => "last"
+          = f.commit_button "Save & Classify >", :class => "last"
 
 - unless @activity.new_record?
   .delete_section

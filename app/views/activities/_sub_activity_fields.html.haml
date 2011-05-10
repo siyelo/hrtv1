@@ -1,16 +1,16 @@
 .fields
   %ul.dashboard_section
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
-    = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false
+    = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :required => false, :hint => "The name of the organization that implemented this Sub-Activity"
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :required => false
-        = f.input :budget_percentage, :label => "% of Main Activity's Budget", :required => false
+        = f.input :budget, :required => false, :hint => "The total amount that you are planning to spend in the upcoming fiscal year."
+        = f.input :budget_percentage, :label => "% of Main Activity's Budget", :required => false, :hint => "The percentage amount allocated to this Sub-Activity from the main Activity's Spend"
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :spend, :required => false
-        = f.input :spend_percentage, :label => "% of Main Activity's Spend", :required => false
+        = f.input :spend, :required => false, :hint => "The total amount that you have spent in the past fiscal year."
+        = f.input :spend_percentage, :label => "% of Main Activity's Spend", :required => false, :hint => "The percentage amount allocated to this Sub-Activity from the main Activity's Spend"
 
     = link_to_remove_fields "remove", f

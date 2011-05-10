@@ -21,8 +21,8 @@
         #project_sub_form_fields
           - if @activity.project
             = render 'activities/project_sub_form', {:activity => @activity, :project => @activity.project}
-      = f.input :name, :required => false
-      = f.input :description, :input_html => { :rows => 2 }, :required => false
+      = f.input :name, :required => false, :hint => "The name of this activity."
+      = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this activity."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
 
@@ -30,7 +30,7 @@
   %li.last
     %h3== Past Activity Expenditure (#{@response.currency})
     %ul.dashboard_section
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year.", :required => false
+      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
       %li.amounts.last
         %label== Quarterly spend
         %ul
@@ -43,7 +43,7 @@
   %li.last
     %h3 Budget (planned expenditure) (#{@response.currency})
     %ul.dashboard_section
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year.", :required => false
+      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
       %li.amounts
         %label== Quarterly budget
         %ul
@@ -92,8 +92,8 @@
     %h3== Other
     %ul.dashboard_section
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
-      = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false
-      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your activity that are not listed above."
+      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this activity."
 
 
   %li.last

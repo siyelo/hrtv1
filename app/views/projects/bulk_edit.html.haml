@@ -32,6 +32,7 @@
     %thead.static
       %tr
         %th Name
+        %th Description
         %th Funder
         %th Funder Project
         %th Budget
@@ -43,6 +44,7 @@
             %td
               = project.name
               = link_to "(Edit)", edit_response_project_path(project.response, project)
+            %td= project.description
             %td= !in_flow.from.blank? ? in_flow.from.try(:name) : "Funder Missing: Edit Project then return here to link"
             %td
               - unless in_flow.from.nil?

@@ -240,46 +240,38 @@ class Activity < ActiveRecord::Base
   end
 
 
-  def coding_budget_classified?
-    #budget.blank? || budget == self.CodingBudget_amount
-    budget.blank? || CodingTree.new(self, CodingBudget).valid?
+  def coding_budget_classified? #purposes
+    !data_response.request.purposes? || budget.blank? || CodingTree.new(self, CodingBudget).valid?
   end
 
-  def coding_budget_cc_classified?
-    #budget.blank? || budget == self.CodingBudgetCostCategorization_amount
-    budget.blank? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
+  def coding_budget_cc_classified? #inputs
+    !data_response.request.inputs? || budget.blank? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
   end
 
-  def coding_budget_district_classified?
-    #budget.blank? || locations.empty? || budget == self.CodingBudgetDistrict_amount
-    budget.blank? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
+  def coding_budget_district_classified? #locations
+    !data_response.request.locations? || budget.blank? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
   end
 
-  def service_level_budget_classified?
-    #budget.blank? || budget == self.ServiceLevelBudget_amount
-    budget.blank? || CodingTree.new(self, ServiceLevelBudget).valid?
+  def service_level_budget_classified? #service levels
+    !data_response.request.service_levels? || budget.blank? || CodingTree.new(self, ServiceLevelBudget).valid?
   end
 
   def coding_spend_classified?
-    #spend.blank? || spend == self.CodingSpend_amount
-    spend.blank? || CodingTree.new(self, CodingSpend).valid?
+    !data_response.request.purposes? || spend.blank? || CodingTree.new(self, CodingSpend).valid?
   end
 
   def coding_spend_cc_classified?
-    #spend.blank? || spend == self.CodingSpendCostCategorization_amount
-    spend.blank? || CodingTree.new(self, CodingSpendCostCategorization).valid?
+    !data_response.request.inputs? || spend.blank? || CodingTree.new(self, CodingSpendCostCategorization).valid?
   end
 
   def coding_spend_district_classified?
-    #spend.blank? || locations.empty? || spend == self.CodingSpendDistrict_amount
-    spend.blank? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
+    !data_response.request.locations? || spend.blank? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
   end
 
   def service_level_spend_classified?
-    #spend.blank? || spend == self.ServiceLevelSpend_amount
-    spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
+    !data_response.request.service_levels? || spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
   end
-
+  
   def budget_classified?
     return true if self.budget.blank?
     coding_budget_classified? &&

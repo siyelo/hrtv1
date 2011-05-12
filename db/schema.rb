@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110510075127) do
+ActiveRecord::Schema.define(:version => 20110512135551) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -150,6 +150,10 @@ ActiveRecord::Schema.define(:version => 20110510075127) do
     t.boolean  "budget",          :default => true,  :null => false
     t.boolean  "spend",           :default => true,  :null => false
     t.boolean  "final_review",    :default => false
+    t.boolean  "year_q2",         :default => true
+    t.boolean  "year_q3",         :default => true
+    t.boolean  "year_q4",         :default => true
+    t.boolean  "year_q5",         :default => true
   end
 
   create_table "data_responses", :force => true do |t|

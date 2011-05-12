@@ -55,10 +55,10 @@
       %li.amounts.last
         %label Long-term
         %ul
-          = f.input :budget2, :label => "Year + 2", :required => false
-          = f.input :budget3, :label => "Year + 3", :required => false
-          = f.input :budget4, :label => "Year + 4", :required => false
-          = f.input :budget5, :label => "Year + 5", :required => false
+          = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_q2?
+          = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_q3?
+          = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_q4?
+          = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_q5?
 
   %li.last
     %h3 Activity Funding Sources

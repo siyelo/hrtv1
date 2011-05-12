@@ -2,29 +2,33 @@
 
 %ul.inline_tab
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
-    %li{:class => tab_class(activity, coding_type, 'CodingBudget')}
-      = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
+    - if @response.request.purposes?
+      %li{:class => tab_class(activity, coding_type, 'CodingBudget')}
+        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
 
     - unless other_costs
-      %li{:class => tab_class(activity, coding_type, 'CodingBudgetDistrict')}
-        = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetDistrict')
-
-    %li{:class => tab_class(activity, coding_type, 'CodingBudgetCostCategorization')}
-      = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetCostCategorization')
-
-    %li{:class => tab_class(activity, coding_type, 'ServiceLevelBudget')}
-      = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
+      - if @response.request.locations?
+        %li{:class => tab_class(activity, coding_type, 'CodingBudgetDistrict')}
+          = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetDistrict')
+    - if @response.request.inputs?
+      %li{:class => tab_class(activity, coding_type, 'CodingBudgetCostCategorization')}
+        = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetCostCategorization')
+    - if @response.request.service_levels?
+      %li{:class => tab_class(activity, coding_type, 'ServiceLevelBudget')}
+        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :spend
-    %li{:class => tab_class(activity, coding_type, 'CodingSpend')}
-      = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
+    - if @response.request.purposes?
+      %li{:class => tab_class(activity, coding_type, 'CodingSpend')}
+        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
     - unless other_costs
-      %li{:class => tab_class(activity, coding_type, 'CodingSpendDistrict')}
-        = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingSpendDistrict')
-
-    %li{:class => tab_class(activity, coding_type, 'CodingSpendCostCategorization')}
-      = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingSpendCostCategorization')
-
-    %li{:class => tab_class(activity, coding_type, 'ServiceLevelSpend')}
-      = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelSpend')
+      - if @response.request.locations?
+        %li{:class => tab_class(activity, coding_type, 'CodingSpendDistrict')}
+          = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingSpendDistrict')
+    - if @response.request.inputs?
+      %li{:class => tab_class(activity, coding_type, 'CodingSpendCostCategorization')}
+        = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingSpendCostCategorization')
+    - if @response.request.service_levels?
+      %li{:class => tab_class(activity, coding_type, 'ServiceLevelSpend')}
+        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelSpend')

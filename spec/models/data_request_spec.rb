@@ -13,6 +13,10 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:year_q3) }
     it { should allow_mass_assignment_of(:year_q4) }
     it { should allow_mass_assignment_of(:year_q5) }
+    it { should allow_mass_assignment_of(:purposes) }
+    it { should allow_mass_assignment_of(:locations) }
+    it { should allow_mass_assignment_of(:inputs) }
+    it { should allow_mass_assignment_of(:service_levels) }
     it { should allow_mass_assignment_of(:final_review) }
   end
 

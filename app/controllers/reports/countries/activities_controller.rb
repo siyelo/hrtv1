@@ -14,8 +14,13 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
     code_type     = get_code_type_and_initialize(params[:code_type])
 
     if @pie
-      @code_spent_values    = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], true)
-      @code_budget_values   = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], false)
+      if @hssp2_strat_prog || @hssp2_strat_obj
+        @code_spent_values  = Charts::CountryPies::hssp2_strat_activities_pie(code_type, true, [@activity])
+        @code_budget_values = Charts::CountryPies::hssp2_strat_activities_pie(code_type, false, [@activity])
+      else
+        @code_spent_values    = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], true)
+        @code_budget_values   = Charts::CountryPies::codes_for_activities_pie(code_type, [@activity], false)
+      end
     else
       @code_spent_values    = Charts::CountryTreemaps::treemap(code_type, [@activity], true)
       @code_budget_values   = Charts::CountryTreemaps::treemap(code_type, [@activity], false)

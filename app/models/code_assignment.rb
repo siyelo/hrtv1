@@ -29,6 +29,9 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_type,
               lambda { |type| { :conditions =>
                 ["code_assignments.type = ?", type]} }
+  named_scope :with_types,
+              lambda { |types| { :conditions =>
+                ["code_assignments.type IN (?)", types]} }
   named_scope :cached_amount_desc, {
               :order => "code_assignments.cached_amount DESC" }
   named_scope :select_for_pies,

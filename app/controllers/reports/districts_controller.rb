@@ -18,8 +18,13 @@ class Reports::DistrictsController < Reports::BaseController
     code_type = get_code_type_and_initialize(params[:code_type])
 
     if @pie
-      @code_spent_values   = Charts::DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
-      @code_budget_values  = Charts::DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
+      if @hssp2_strat_prog || @hssp2_strat_obj
+        @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, true)
+        @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, false)
+      else
+        @code_spent_values   = Charts::DistrictPies::pie(@location, code_type, true, MTEF_CODE_LEVEL)
+        @code_budget_values  = Charts::DistrictPies::pie(@location, code_type, false, MTEF_CODE_LEVEL)
+      end
     else
       @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, true)
       @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, @location.activities, false)

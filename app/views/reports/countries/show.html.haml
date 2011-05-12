@@ -51,10 +51,13 @@
   %li= link_to "NSP", reports_country_path(:code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_country_path(:code_type => "mtef"), active_if(@mtef)
   %li= link_to "Inputs", reports_country_path(:code_type => "cost_category"), active_if(@cost_category)
+  %li= link_to "HSSP2 Strat Prog", reports_country_path(:code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
+  %li= link_to "HSSP2 Strat Obj", reports_country_path(:code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
 
 %ul.group
   %li= link_to "Pie", reports_country_path(:chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
-  %li= link_to "Treemap", reports_country_path(:chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
+  - if !@hssp2_strat_prog && !@hssp2_strat_obj
+    %li= link_to "Treemap", reports_country_path(:chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
 
 - if @mtef
   - type = 'MTEF'

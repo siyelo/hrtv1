@@ -111,13 +111,34 @@ module Charts::CountryPies
         :group => "codes.short_display, codes.id, codes.parent_id",
         :order => 'value DESC')
 
-      parent_ids = code_assignments.collect{|n| n.parent_id} - [nil]
-      parent_ids.uniq!
-
-      # remove cached (parent) code assignments
-      code_assignments = code_assignments.reject{|ca| parent_ids.include?(ca.code_id)}
-
+      code_assignments = remove_parent_code_assignments(code_assignments)
       prepare_pie_values_json(code_assignments)
+    end
+
+    def hssp2_strat_activities_pie(code_type, is_spent, activities = nil)
+      column_name = get_hssp2_column_name(code_type)
+      coding_type = get_hssp2_coding_type(is_spent)
+
+      scope = CodeAssignment.scoped(
+        :select => "codes.id as code_id,
+                    codes.parent_id as parent_id,
+                    codes.short_display,
+                    codes.#{column_name} AS name,
+                    SUM(code_assignments.cached_amount) AS value",
+        :conditions => ["code_assignments.type = ?", coding_type],
+        :joins => [:activity, :code],
+        :group => "codes.short_display, codes.id, codes.parent_id, codes.#{column_name}",
+        :order => 'value DESC')
+
+
+      # when activities is not nil filter by activities
+      if activities
+        scope = scope.scoped(:conditions => ["activities.id IN (?)", activities.map(&:id)])
+      end
+
+      code_assignments = scope.all
+      code_assignments = remove_parent_code_assignments(code_assignments)
+      build_pie_values_json(get_summed_code_assignments(code_assignments))
     end
   end
 end

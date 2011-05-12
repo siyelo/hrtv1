@@ -11,18 +11,23 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
   end
 
   def show
-    @organization      = Organization.find(params[:id])
-    @treemap = params[:chart_type] == "treemap"
-    @pie = params[:chart_type] == "pie" || params[:chart_type].blank?
-    code_type = get_code_type_and_initialize(params[:code_type])
-    activities         = @organization.dr_activities
+    @organization = Organization.find(params[:id])
+    @treemap      = params[:chart_type] == "treemap"
+    @pie          = params[:chart_type] == "pie" || params[:chart_type].blank?
+    code_type     = get_code_type_and_initialize(params[:code_type])
+    activities    = @organization.dr_activities
 
-    if @treemap
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
+    if @pie
+      if @hssp2_strat_prog || @hssp2_strat_obj
+        @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, true, activities)
+        @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, false, activities)
+      else
+        @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
+        @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
+      end
     else
-      @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
-      @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
+    @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
     end
   end
 

@@ -100,6 +100,38 @@ module Charts::DistrictPies
       load_pie(codes, district_klass, coding_type, location)
     end
 
+    def hssp2_strat_activities_pie(location, code_type, is_spent, activities = nil)
+      column_name = get_hssp2_column_name(code_type)
+      coding_type = get_hssp2_coding_type(is_spent)
+      district_klass = is_spent ? CodingSpendDistrict : CodingBudgetDistrict
+
+      if activities == nil
+        # district all activities
+        activity_ids = location.code_assignments.find(:all, 
+                         :select => 'DISTINCT("activity_id")').map(&:activity_id)
+      else
+        # district selected activities
+        activity_ids = activities.map(&:id)
+      end
+
+      code_assignments = CodeAssignment.find(:all,
+        :select => "codes.id as code_id,
+                    codes.parent_id as parent_id,
+                    codes.short_display,
+                    codes.#{column_name} AS name,
+                    SUM(code_assignments.cached_amount) AS value",
+        :conditions => ["code_assignments.type = ?
+                        AND activities.id IN (?)", 
+                        coding_type, activity_ids],
+        :joins => [:activity, :code],
+        :group => "codes.short_display, codes.id, codes.parent_id, codes.#{column_name}",
+        :order => 'value DESC')
+
+      code_assignments = remove_parent_code_assignments(code_assignments)
+      district_ratio   = calculate_district_ratio(district_klass, location)
+      build_pie_values_json(get_summed_code_assignments(code_assignments, district_ratio))
+    end
+
     def activity_pie(location, activity, code_type, is_spent)
       code_klass_string = get_code_klass_string(code_type)
       coding_type       = get_coding_type(code_type, is_spent)

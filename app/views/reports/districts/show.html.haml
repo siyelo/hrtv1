@@ -52,10 +52,13 @@
   %li= link_to "NSP", reports_district_path(@location, :code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_district_path(@location, :code_type => "mtef"), active_if(@mtef)
   %li= link_to "Inputs", reports_district_path(@location, :code_type => "cost_category"), active_if(@cost_category)
+  %li= link_to "HSSP2 Strat Prog", reports_district_path(@location, :code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
+  %li= link_to "HSSP2 Strat Obj", reports_district_path(@location, :code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
 
 %ul.group
   %li= link_to "Pie", reports_district_path(@location, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
-  %li= link_to "Treemap", reports_district_path(@location, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
+  - if !@hssp2_strat_prog && !@hssp2_strat_obj
+    %li= link_to "Treemap", reports_district_path(@location, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
 
 - if @mtef
   - type = 'MTEF'

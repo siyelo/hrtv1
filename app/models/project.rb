@@ -262,7 +262,7 @@ END
               ffs = funder.in_flows.select{|ff| ff.from == funder}
               funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => get_budget(ffs), :spend => get_spend(ffs)}
-            elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
+            elsif funder.in_flows.empty? || ["Multilateral", "Bilateral", "Donor"].include?(funder.raw_type) || funder.name == "Ministry of Health" # when funder has blank data response
               budget, spend = get_budget_and_spend(funder.id, organization.id)
               funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => budget, :spend => spend}
@@ -291,7 +291,8 @@ END
       real_funders = []
 
       parent_funders.each do |parent_funder|
-        unless (funder.raw_type == "Donor" && !activities_funders.include?(parent_funder))
+        unless ((funder.raw_type == "Donor" || funder.name == "Ministry of Health") && 
+                !activities_funders.include?(parent_funder))
           real_funders << parent_funder
         end
       end

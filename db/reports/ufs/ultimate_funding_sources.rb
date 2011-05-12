@@ -2,7 +2,8 @@ require 'fastercsv'
 
 #projects = Project.find(:all, :limit => 5)
 projects = Project.all
-#projects = [Project.find(290)]
+#projects = [Project.find(111), Project.find(114), Project.find(127), Project.find(290), Project.find(401)]
+#projects = [Project.find(127)]
 total = projects.length
 
 csv = FasterCSV.generate do |csv|
@@ -33,7 +34,7 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-File.open(File.join(Rails.root, 'db', 'reports', 'ultimate_funding_sources.csv'), 'w') do |file|
+File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
   file.puts csv
 end
 

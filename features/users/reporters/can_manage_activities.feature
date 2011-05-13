@@ -79,10 +79,10 @@ Feature: Reporter can manage activities
       And I fill in "End date" with "2011-12-01"
       And I select "project1" from "Project"
       And I fill in "Budget" with "10000"
-      And I fill in "activity_budget2" with "2000"
-      And I fill in "activity_budget3" with "3000"
-      And I fill in "activity_budget4" with "4000"
-      And I fill in "activity_budget5" with "5000"
+      And I fill in "Year + 2" with "2000"
+      And I fill in "Year + 3" with "3000"
+      And I fill in "Year + 4" with "4000"
+      And I fill in "Year + 5" with "5000"
       And I press "Save & Classify >"
      Then I should see "Activity was successfully created"
 
@@ -107,30 +107,31 @@ Feature: Reporter can manage activities
 
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
-        And I press "Upload" within ".activities_upload_box"
+        And I press "Import" within ".activities_upload_box"
       Then I should see "Activities Bulk Create"
 
 
     Scenario: Reporter can see error if no csv file is not attached for upload
-      When I press "Upload" within ".activities_upload_box"
+      When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload activities"
 
 
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
-        And I press "Upload and Import"
+        And I press "Import"
       Then I should see "Your CSV file does not seem to be properly formatted"
 
 
     Scenario: Reporter can download Activities CSV template
-      When I follow "Download template" within ".activities_upload_box"
+      When I follow "Get Template" within ".activities_upload_box"
       Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
 
       @run
-    Scenario: Reporter can download Activities for a project
+    Scenario: Reporter can download Activities
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-      When I follow "Download existing"
+      When I follow "Projects"
+        And I follow "Export" within ".upload_box"
       Then I should see "Activity1"
         And I should see "Activity1 description"
 

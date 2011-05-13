@@ -77,6 +77,7 @@ Feature: Reporter can manage projects
           | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
 
     
+      @wip
     Scenario: Adding malformed CSV file doesn't throw exception
      When I attach the file "spec/fixtures/malformed.csv" to "File"
       And I press "Upload and Import"

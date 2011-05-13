@@ -54,10 +54,10 @@ class FundingFlow < ActiveRecord::Base
       { :org_chain => [from, to], :ufs => from, :fa => to,
         :budget => budget, :spend => spend}
     else
+      # without a linked project, need some heuristic logic
+      # to figure out which projects from the from organization
+      # to get the ultimate funding sources from
       chains = find_fuzzy_linked_projects
-        #without a linked , need all kinds of heuristic logic
-        # to figure out which projects from the from organization
-        # to get the ultimate funding sources from
       chains.each do |c|
         c[:fa] = c[:org_chain].last # the funding agent is always the penultimate org
         c[:org_chain] << to  # add our org to the end of the chain to show entire flow

@@ -96,3 +96,17 @@ def save_and_deep_clone
   @clone.save!
   @clone.reload #otherwise seems to cache the old has_many associations
 end
+
+
+
+def proj_funded_by(proj, funder, budget = 50, spend = 50)
+  to = proj.data_response.organization
+  Factory(:funding_flow, :from => funder, :to => to, :project => proj,
+           :budget => budget, :spend => spend)
+  proj.reload
+  proj
+end
+
+def self_funded(proj, budget = 50, spend = 50)
+  proj_funded_by(proj, proj.data_response.organization, budget, spend)
+end

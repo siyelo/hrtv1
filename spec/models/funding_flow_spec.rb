@@ -67,14 +67,41 @@ describe FundingFlow do
     end
   end
 
-
   describe "#funding_chains" do
+    before :each do
+      request = Factory(:data_request)
+      @org1 = Factory(:organization, :name => 'org1')
+      @org2 = Factory(:organization, :name => 'org2')
+      @response1 = Factory(:data_response, :organization => @org1,
+        :data_request => request, :currency => 'USD')
+      @proj1 = Factory(:project, :data_response => @response1, :currency => "USD")
+    end
+
+    it "returns no UFS if project has no funder" do
+      flow.funding_chains.should == []
+    end
+
     it "returns self for self funded" do
-      pending
+      flow = Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1,
+        :budget => 50, :spend => 50)
+      flow.funding_chains.should == {:org_chain => [@org1, @org1], :ufs => @org1,
+        :fa => @org1, :budget => bd(50), :spend => bd(50)}
     end
-    it "returns self for donor funded" do
-      pending
+
+    ["Donor",  "Multilateral", "Bilateral"].each do |donor_type|
+      it "returns self for #{donor_type} funded" do
+        @org2.raw_type = donor_type; @org2.save
+        flow = Factory(:funding_flow, :from => @org2, :to => @org1, :project => @proj1,
+          :budget => 10, :spend => 10)
+        chain = flow.funding_chains
+        chain[:org_chain].should == [@org2, @org1]
+        chain[:ufs].should == @org2
+        chain[:fa].should == @org2 #financing agent is the Donor ??
+        chain[:budget].should == bd(50)
+        chain[:spend].should == bd(50)
+      end
     end
+
   end
 
   describe "#adjust_to_total" do
@@ -118,8 +145,9 @@ describe FundingFlow do
     end
   end
 
-
-
+  def bd(integer)
+    BigDecimal.new(integer.to_s)
+  end
 end
 
 # == Schema Information

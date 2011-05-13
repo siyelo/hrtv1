@@ -132,7 +132,7 @@ describe ActivitiesController do
         DataResponse.stub(:find).and_return(data_response)
         Activity.should_receive(:download_template).and_return('csv')
 
-        get :download_template, :response_id => 1
+        get :template, :response_id => 1
 
         response.should be_success
         response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"

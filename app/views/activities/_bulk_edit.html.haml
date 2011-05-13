@@ -2,11 +2,11 @@
 - fiscal_year = fiscal_year(response)
 
 .header
-  - if activity.new_record?
-    = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
+  - if activity.valid?
+    = image_tag "tick_12.png"
     = activity.name
   - else
-    = image_tag "tick_12.png"
+    = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
     = activity.name
 
     %span.project= activity.project.try(:name)

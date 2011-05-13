@@ -15,6 +15,11 @@ class OtherCostsController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def new
+    @other_cost = OtherCost.new
+    @other_cost.project = @response.projects.find_by_id(params[:project_id])
+  end
+
   def edit
     load_comment_resources(resource)
     edit!

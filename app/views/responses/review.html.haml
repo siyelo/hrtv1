@@ -125,7 +125,7 @@
             - else
               %span.info
                 Start by adding a few Activities first (see above), then you can start classifying them.
-        - unless activities_coded
+        - unless @response.activities_coded?
           - unless @response.uncoded_activities.empty?
             = render 'uncoded_table', :activities => @response.uncoded_activities
         
@@ -140,7 +140,7 @@
             - else
               %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
 
-        - unless other_costs_coded
+        - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?
             = render 'uncoded_table', :activities => @response.uncoded_other_costs
   %li.alt

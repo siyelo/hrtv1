@@ -216,8 +216,8 @@ describe Project do
       @proj22.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      #ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
-      ufs_pretty_should_equal(ufs,[{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}])
+      ufs_pretty_should_equal(ufs, [{:ufs => @org1, :fa => @org2, :budget => 30,
+        :spend => 30}])
     end
 
     it "returns real UFS if it's implementer of an activity of self-funded organization" do
@@ -297,15 +297,13 @@ describe Project do
     if ufs.size == 1 and ufs.size == target.size
       ufs = ufs.first; target = target.first
       # simple case, can do pretty compare
-
-      ufs[:ufs].should == first[:ufs]
-      ufs[:fa].should == first[:fa]
-      ufs[:budget].should == first[:budget]
-      ufs[:spend].should == first[:spend]
+      ufs[:ufs].should == target[:ufs]
+      ufs[:fa].should == target[:fa]
+      ufs[:budget].should == target[:budget]
+      ufs[:spend].should == target[:spend]
       # chain[:org_chain].should == target's after we add chains to test
     else
       ufs.should == target
     end
-
   end
 end

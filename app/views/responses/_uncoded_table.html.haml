@@ -1,8 +1,7 @@
 - other_costs = false
 - other_costs = true if activities.first.class == OtherCost
-- colspan = 4
-- colspan = 3 if other_costs
-
+- other_costs ? colspan = 3 : colspan = 4
+- @data_request = activities.first.data_response.data_request
 .simple_table.push
   %table
     %thead
@@ -28,14 +27,14 @@
       - activities.each do |activity|
         %tr
           %td= nice_name(activity)
-          %td= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
+          %td= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"} if @data_request.purposes?
           - unless other_costs
-            %td= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"}
-          %td= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
-          %td= check_box_tag "", "", activity.service_level_budget_classified?, {:disabled => "disabled"}
-          %td= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
+            %td= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          %td= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+          %td= check_box_tag "", "", activity.service_level_budget_classified?, {:disabled => "disabled"} if @data_request.service_levels?
+          %td= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"} if @data_request.purposes?
           - unless other_costs
-            %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"}
-          %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
-          %td= check_box_tag "", "", activity.service_level_spend_classified?, {:disabled => "disabled"}
+            %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+          %td= check_box_tag "", "", activity.service_level_spend_classified?, {:disabled => "disabled"} if @data_request.service_levels?
           %td= link_to 'Classify', activity_code_assignments_path(activity)

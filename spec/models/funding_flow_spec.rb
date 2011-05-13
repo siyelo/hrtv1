@@ -30,7 +30,7 @@ describe FundingFlow do
     it { should belong_to :project }
     it { should belong_to :data_response }
   end
-  
+
   describe "validations" do
     subject { Factory(:funding_flow) }
     it { should be_valid }
@@ -57,7 +57,7 @@ describe FundingFlow do
       funding_flow.currency.should == "RWF"
     end
   end
-        
+
   describe "#name" do
     it "returns from and to organizations in the name" do
       from = Factory.create(:organization, :name => 'Organization 1')
@@ -66,6 +66,60 @@ describe FundingFlow do
       funding_flow.name.should == "From: #{from} - To: #{to}"
     end
   end
+
+
+  describe "#funding_chains" do
+    it "returns self for self funded" do
+      pending
+    end
+    it "returns self for donor funded" do
+      pending
+    end
+  end
+
+  describe "#adjust_to_total" do
+    before :each do
+      @flow = Factory(:funding_flow)
+      @target = 10
+      @amount_key = :budget
+    end
+
+    it "does nothing when total already ok" do
+      collection = [{:budget => 10}]
+      @flow.adjust_to_total(collection, @target, @amount_key).should == collection
+    end
+
+    it "does nothing when total already ok with multiple items" do
+      collection = [{:budget => 6}, {:budget => 4}]
+      @flow.adjust_to_total(collection, @target, @amount_key).should == collection
+    end
+
+    it "adjusts to target amount with one unmatching item" do
+      collection = [{:budget => 100}]
+      @flow.adjust_to_total(collection, @target, @amount_key).should == [{:budget => 10}]
+    end
+
+    it "adjusts to target amount with several unmatching integer items" do
+      collection = [{:budget => 10}, {:budget => 20}, {:budget => 30}]
+      item_total = 60
+      @flow.adjust_to_total(collection, @target, @amount_key).should ==
+        [{:budget => 10/item_total*@target},
+          {:budget => 20/item_total*@target},
+          {:budget => 30/item_total*@target}]
+    end
+
+    it "adjusts to target amount with several unmatching float items" do
+      collection = [{:budget => 10.to_f}, {:budget => 20.to_f}, {:budget => 30.to_f}]
+      item_total = 60.to_f
+      @flow.adjust_to_total(collection, @target, @amount_key).should ==
+        [{:budget => 10.to_f/item_total*@target},
+          {:budget => 20.to_f/item_total*@target},
+          {:budget => 30.to_f/item_total*@target}]
+    end
+  end
+
+
+
 end
 
 # == Schema Information

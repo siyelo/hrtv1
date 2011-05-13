@@ -152,16 +152,16 @@ END
   end
 
   def ultimate_funding_sources
-    funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders.uniq)
+    ufs = in_flows.map(&:funding_chains)
+    ufs
   end
 
   def cached_ultimate_funding_sources
     ufs = []
     funding_streams.each do |fs|
+      # fa = financing agent - the last link in the chain before the actual implementer
       ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
     end
-
     ufs
   end
   
@@ -171,6 +171,16 @@ END
       return false unless in_flow.organization_id_from
     end
     true
+  end
+
+  def spend_entered?
+    spend.present? || spend_q1.present? || spend_q2.present? ||
+      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+  end
+
+  def budget_entered?
+    budget.present? || budget_q1.present? || budget_q2.present? ||
+      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
 
   def linked?
@@ -291,7 +301,7 @@ END
       real_funders = []
 
       parent_funders.each do |parent_funder|
-        unless ((funder.raw_type == "Donor" || funder.name == "Ministry of Health") && 
+        unless ((funder.raw_type == "Donor" || funder.name == "Ministry of Health") &&
                 !activities_funders.include?(parent_funder))
           real_funders << parent_funder
         end

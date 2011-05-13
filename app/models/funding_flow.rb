@@ -48,6 +48,80 @@ class FundingFlow < ActiveRecord::Base
       end
     end
   end
+
+  def funding_chains
+    if self_funded? or donor_funded?
+      { :org_chain => [from, to], :ufs => from, :fa => to,
+        :budget => budget, :spend => spend}
+    else
+      chains = find_fuzzy_linked_projects
+        #without a linked , need all kinds of heuristic logic
+        # to figure out which projects from the from organization
+        # to get the ultimate funding sources from
+      chains.each do |c|
+        c[:fa] = c[:org_chain].last # the funding agent is always the penultimate org
+        c[:org_chain] << to  # add our org to the end of the chain to show entire flow
+      end
+      adjust_to_total(chains, budget, :budget)
+      adjust_to_total(chains, budget, :spend)
+
+      chains
+    end
+  end
+
+  def find_fuzzy_linked_projects
+    if project_from #if the project is linked to funders project
+      chains = project_from.ultimate_funding_sources
+    else
+      # find all possible projects we may have been funded by
+      candidates = from.projects.select{|p| p.response.data_request == self.response.data_request}
+
+      #look in the activities, total all amounts where we were a provider
+      to_provider_totals = candidates.collect do |p|
+        b_total = p.activities.sum{|a| a.amount_for_provider(to, :budget)}
+        s_total = p.activities.sum{|a| a.amount_for_provider(to, :spend)}
+        if b_total > 0 or s_total > 0
+          {:p => p, :budget => b_total, :spend => s_total}
+        else
+          []
+        end
+      end.reject{|r| r==[]}
+
+      # adjust so the funding chain total matches our activity total
+      #
+      chains = to_provider_totals.map do |t|
+        adjust_to_total(t.ultimate_funding_sources, t[:budget], :budget)
+        adjust_to_total(t.ultimate_funding_sources, t[:spend], :spend)
+      end
+
+      # if no activites found for us in our funders projects
+      # then take all of our funders' funding sources
+      if chains.nil? or chains.size == 0
+        chains = candidates.map(&:ultimate_funding_sources)
+      end
+    end
+    chains.flatten
+  end
+
+  def self_funded?
+    from == to
+  end
+
+  def donor_funded?
+    ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
+  end
+
+
+  # helper
+  def adjust_to_total(collection, target_total, amount_key)
+    collection = collection.dup
+    collection_total = collection.sum{|e| e[amount_key]}
+    collection.each do |e|
+      e[amount_key] = (e[amount_key] * target_total) / collection_total
+    end
+    collection
+  end
+
 end
 
 

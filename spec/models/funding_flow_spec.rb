@@ -69,37 +69,63 @@ describe FundingFlow do
 
   describe "#funding_chains" do
     before :each do
-      request = Factory(:data_request)
-      @org1 = Factory(:organization, :name => 'org1')
-      @org2 = Factory(:organization, :name => 'org2')
-      @response1 = Factory(:data_response, :organization => @org1,
-        :data_request => request, :currency => 'USD')
-      @proj1 = Factory(:project, :data_response => @response1, :currency => "USD")
+      ufs_test_setup
     end
 
-    it "returns no UFS if project has no funder" do
-      flow.funding_chains.should == []
-    end
+    #it "returns no UFS if project has no funder" do
+    # is an invalid test case since now flow will exist.
 
     it "returns self for self funded" do
       flow = Factory(:funding_flow, :from => @org1, :to => @org1, :project => @proj1,
-        :budget => 50, :spend => 50)
+        :budget => 10, :spend => 20)
       flow.funding_chains.should == {:org_chain => [@org1, @org1], :ufs => @org1,
-        :fa => @org1, :budget => bd(50), :spend => bd(50)}
+        :fa => @org1, :budget => bd(10), :spend => bd(20)}
     end
 
     ["Donor",  "Multilateral", "Bilateral"].each do |donor_type|
       it "returns self for #{donor_type} funded" do
         @org2.raw_type = donor_type; @org2.save
         flow = Factory(:funding_flow, :from => @org2, :to => @org1, :project => @proj1,
-          :budget => 10, :spend => 10)
+          :budget => 10, :spend => 20)
         chain = flow.funding_chains
         chain[:org_chain].should == [@org2, @org1]
         chain[:ufs].should == @org2
-        chain[:fa].should == @org2 #financing agent is the Donor ??
-        chain[:budget].should == bd(50)
-        chain[:spend].should == bd(50)
+        chain[:fa].should == @org1 #financing agent is self
+        chain[:budget].should == bd(10)
+        chain[:spend].should == bd(20)
       end
+    end
+
+    it "returns funder as the UFS if has one, non-self funder with no data response" do
+      flow = Factory(:funding_flow, :from => @org_with_no_data_response, :to => @org1,
+        :project => @proj1, :budget => 1, :spend => 2)
+      chain = flow.funding_chains
+      chain.should_not be_empty
+      chain[:org_chain].should == [@org_with_no_data_response, @org1]
+      chain[:ufs].should == @org_with_no_data_response
+      chain[:fa].should == @org1 #financing agent is self
+      chain[:budget].should == bd(1)
+      chain[:spend].should == bd(2)
+    end
+
+    it "returns funder as the UFS if has one, non-self funder with emtpy data response" do
+      flow = Factory(:funding_flow, :from => @org_with_empty_data_response, :to => @org1,
+        :project => @proj1, :budget => 1, :spend => 2)
+      chain = flow.funding_chains
+      chain.should_not be_empty
+      chain[:org_chain].should == [@org_with_empty_data_response, @org1]
+      chain[:ufs].should == @org_with_empty_data_response
+      chain[:fa].should == @org1 #financing agent is self
+      chain[:budget].should == bd(1)
+      chain[:spend].should == bd(2)
+    end
+
+    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" do
+      proj_funded_by(@proj1, @org_with_empty_data_response, 1, 2)
+      proj_funded_by(@proj2, @org1)
+      ufs = @proj2.ultimate_funding_sources
+      ufs.should == [{:ufs => @org_with_empty_data_response, :fa => @org1,
+                      :budget => 1, :spend => 2}]
     end
 
   end
@@ -145,9 +171,6 @@ describe FundingFlow do
     end
   end
 
-  def bd(integer)
-    BigDecimal.new(integer.to_s)
-  end
 end
 
 # == Schema Information

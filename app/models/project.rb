@@ -152,7 +152,7 @@ END
   end
 
   def ultimate_funding_sources
-    ufs = in_flows.map(&:funding_chains)
+    ufs = in_flows.map(&:funding_chains).flatten
     ufs
   end
 

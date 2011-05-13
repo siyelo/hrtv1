@@ -15,6 +15,9 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :project_from # funder's project
   belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
 
+  alias :response :data_response
+  alias :response= :data_response=
+
   ### Validations
 
   # if project from id == nil => then the user hasnt linked them
@@ -50,7 +53,7 @@ class FundingFlow < ActiveRecord::Base
   end
 
   def funding_chains
-    if self_funded? or donor_funded?
+    if self_funded? or donor_funded? or candidates_empty?
       { :org_chain => [from, to], :ufs => from, :fa => to,
         :budget => budget, :spend => spend}
     else
@@ -63,7 +66,7 @@ class FundingFlow < ActiveRecord::Base
         c[:org_chain] << to  # add our org to the end of the chain to show entire flow
       end
       adjust_to_total(chains, budget, :budget)
-      adjust_to_total(chains, budget, :spend)
+      adjust_to_total(chains, spend, :spend)
 
       chains
     end
@@ -74,22 +77,10 @@ class FundingFlow < ActiveRecord::Base
       chains = project_from.ultimate_funding_sources
     else
       # find all possible projects we may have been funded by
-      candidates = from.projects.select{|p| p.response.data_request == self.response.data_request}
-
-      #look in the activities, total all amounts where we were a provider
-      to_provider_totals = candidates.collect do |p|
-        b_total = p.activities.sum{|a| a.amount_for_provider(to, :budget)}
-        s_total = p.activities.sum{|a| a.amount_for_provider(to, :spend)}
-        if b_total > 0 or s_total > 0
-          {:p => p, :budget => b_total, :spend => s_total}
-        else
-          []
-        end
-      end.reject{|r| r==[]}
+      candidates = candidate_projects
 
       # adjust so the funding chain total matches our activity total
-      #
-      chains = to_provider_totals.map do |t|
+      chains = to_provider_totals(candidates).map do |t|
         adjust_to_total(t.ultimate_funding_sources, t[:budget], :budget)
         adjust_to_total(t.ultimate_funding_sources, t[:spend], :spend)
       end
@@ -103,6 +94,20 @@ class FundingFlow < ActiveRecord::Base
     chains.flatten
   end
 
+  # look in the activities, total all amounts where we were a provider
+  def to_provider_totals(candidates)
+    total = candidates.collect do |p|
+      b_total = p.activities.inject(0){|a,sum| sum += a.amount_for_provider(to, :budget)}
+      s_total = p.activities.inject(0){|a,sum| sum += a.amount_for_provider(to, :spend)}
+      if b_total > 0 or s_total > 0
+        {:p => p, :budget => b_total, :spend => s_total}
+      else
+        []
+      end
+    end
+    total.reject{|r| r==[]}
+  end
+
   def self_funded?
     from == to
   end
@@ -111,6 +116,16 @@ class FundingFlow < ActiveRecord::Base
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
 
+  def candidate_projects
+    # find all possible projects we may have been funded by
+    candidates = from.projects.select do |p|
+      p.response.data_request == self.response.data_request
+    end
+  end
+
+  def candidates_empty?
+    candidate_projects.empty?
+  end
 
   # helper
   def adjust_to_total(collection, target_total, amount_key)

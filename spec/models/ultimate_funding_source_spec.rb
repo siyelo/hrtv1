@@ -5,72 +5,42 @@ describe Project do
 
   describe "#ultimate_funding_sources" do
     before :each do
-      @org0 = Factory(:organization, :name => 'org0')
-      @org1 = Factory(:organization, :name => 'org1')
-      @org2 = Factory(:organization, :name => 'org2')
-      @org3 = Factory(:organization, :name => 'org3')
-      @org4 = Factory(:organization, :name => 'org4')
-      @org_with_no_data_response = Factory(:organization,
-                                           :name => 'org_with_no_data_response')
-      @org_with_empty_data_response = Factory(:organization,
-                                              :name => 'org_with_empty_data_response')
-      request = Factory(:data_request)
-
-      Factory(:data_response, :organization => @org_with_empty_data_response,
-              :data_request => request)
-      @response0 = Factory(:data_response, :organization => @org0,
-                           :data_request => request, :currency => 'USD')
-      @response1 = Factory(:data_response, :organization => @org1,
-                          :data_request => request, :currency => 'USD')
-      @response2 = Factory(:data_response, :organization => @org2,
-                          :data_request => request, :currency => 'USD')
-      @response3 = Factory(:data_response, :organization => @org3,
-                          :data_request => request, :currency => 'USD')
-      @response4 = Factory(:data_response, :organization => @org4,
-                          :data_request => request, :currency => 'USD')
-
-      @proj0 = Factory(:project, :data_response => @response0, :currency => "USD")
-      @proj1 = Factory(:project, :data_response => @response1, :currency => "USD")
-      @proj11 = Factory(:project, :data_response => @response1, :currency => "USD")
-      @proj12 = Factory(:project, :data_response => @response1, :currency => "USD")
-      @proj2 = Factory(:project, :data_response => @response2, :currency => "USD")
-      @proj3 = Factory(:project, :data_response => @response3, :currency => "USD")
-      @proj4 = Factory(:project, :data_response => @response4, :currency => "USD")
+      ufs_test_setup
     end
 
     # helper for next tests; change activities and same conditions hold
     def should_be_org_regardless_of_activities_when_up_has_one_ufs(org, fa)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
 
       funder_project = org.projects.first
       Factory(:activity, :project => funder_project, :provider => @org_with_empty_data_response,
                                 :data_response => funder_project.data_response)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
 
       funder_project.activities.delete
       Factory(:activity, :project => funder_project, :provider => @org1,
                                 :data_response => funder_project.data_response)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
 
       funder_project.activities.delete
       Factory(:activity, :project => funder_project, :provider => @org2,
                                 :data_response => funder_project.data_response)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => org, :fa => fa, :budget => 50, :spend => 50}]
     end
 
 
     it "returns no UFS if project has no funder" do
       ufs = @proj0.ultimate_funding_sources
-      ufs.should == []
+      ufs_without_chains(ufs).should == []
     end
 
     it "returns self as the UFS if project was self-funded" do
       ufs = self_funded(@proj1).ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org1, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org1, :budget => 50, :spend => 50}]
     end
 
 # rewrite when we get to amounts with correct amounts
@@ -78,37 +48,37 @@ describe Project do
 # it "returns self as the UFS if project was self-funded mistakenly twice" do
 # self_funded(@proj1)
 # ufs =self_funded( @proj1).ultimate_funding_sources
-# ufs.should == [@org1]
+# ufs_without_chains(ufs).should == [@org1]
 # end
 
     it "returns funder as the UFS if has one, non-self funder with no data response" do
       proj_funded_by(@proj1, @org_with_no_data_response, 1, 2)
       ufs = @proj1.ultimate_funding_sources
-      ufs.should == [{:ufs => @org_with_no_data_response, :fa => @org1,
-                      :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org_with_no_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "returns funder as the UFS if has one, non-self funder with emtpy data response" do
       proj_funded_by(@proj1, @org_with_empty_data_response, 1, 2)
       ufs = @proj1.ultimate_funding_sources
-      ufs.should == [{:ufs => @org_with_empty_data_response, :fa => @org1,
-                      :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org_with_empty_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" do
       proj_funded_by(@proj1, @org_with_empty_data_response, 1, 2)
-      proj_funded_by(@proj2, @org1)
+      proj_funded_by(@proj2, @org1, 1, 2)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => @org_with_empty_data_response, :fa => @org1,
-                      :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org_with_empty_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "returns n-1 (upstream) funder as the UFS if upstream has one funder with no dr" do
       proj_funded_by(@proj1, @org_with_no_data_response, 1, 2)
       proj_funded_by(@proj2, @org1)
       ufs = @proj2.ultimate_funding_sources
-      ufs.should == [{:ufs => @org_with_no_data_response, :fa => @org1,
-                      :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org_with_no_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "returns n-1 (upstream=up) funder as the UFS if up is self-funded regardless of up's activities" do
@@ -128,7 +98,7 @@ describe Project do
       proj_funded_by(@proj12, @org0)
       proj_funded_by(@proj11, @org2)
       ufs = @proj1.ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org1, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "returns both n-1 upstream sources for a single project" do
@@ -153,7 +123,7 @@ describe Project do
       proj_funded_by(@proj2, @org1, 1, 2)
       proj_funded_by(@proj3, @org2)
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
     end
 
     it "returns both n-2 upstream funders as the UFS's" do
@@ -193,7 +163,7 @@ describe Project do
       Factory.create(:activity, :project => @proj12, :provider => @org3,
                                 :data_response => @proj12.data_response)
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org2, :fa => @org1, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org2, :fa => @org1, :budget => 1, :spend => 2}]
     end
 
     it "uses activities in projects of n-1 upstream for UFS as it goes up" do
@@ -205,7 +175,7 @@ describe Project do
       Factory(:activity, :project => @proj12, :provider => @org3,
         :data_response => @proj12.data_response)
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org0, :fa => @org2, :budget => 1, :spend => 2}]
     end
 
     it "returns funder and intermediate as UFSs when funder does not have any in flows and intermediate has more out flows than in flows" do
@@ -218,7 +188,7 @@ describe Project do
       @proj2.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org2, :budget => 1, :spend => 2}]
       # TEST that error was logged
     end
 
@@ -246,7 +216,8 @@ describe Project do
       @proj22.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
+      #ufs_without_chains(ufs).should == [{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}]
+      ufs_pretty_should_equal(ufs,[{:ufs => @org1, :fa => @org2, :budget => 30, :spend => 30}])
     end
 
     it "returns real UFS if it's implementer of an activity of self-funded organization" do
@@ -261,7 +232,7 @@ describe Project do
       @proj2.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org2, :fa => @org3, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org2, :fa => @org3, :budget => 1, :spend => 2}]
     end
 
     it "walks up donor as usual if matching activity is found for it in donor data response" do
@@ -278,7 +249,7 @@ describe Project do
       @proj2.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 50, :spend => 50}]
+      ufs_without_chains(ufs).should == [{:ufs => @org0, :fa => @org2, :budget => 50, :spend => 50}]
     end
 
     # bugfix spec
@@ -298,7 +269,7 @@ describe Project do
       @proj2.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org0, :fa => @org2, :budget => 100, :spend => 100}]
+      ufs_without_chains(ufs).should == [{:ufs => @org0, :fa => @org2, :budget => 100, :spend => 100}]
     end
 
     it "gives donor as real UFS if no matching activity is found for it in donor data response" do
@@ -313,7 +284,28 @@ describe Project do
       @proj2.reload
       @proj3.reload
       ufs = @proj3.ultimate_funding_sources
-      ufs.should == [{:ufs => @org2, :fa => @org3, :budget => 1, :spend => 2}]
+      ufs_without_chains(ufs).should == [{:ufs => @org2, :fa => @org3, :budget => 1, :spend => 2}]
     end
+  end
+
+  def ufs_without_chains(ufs)
+    ufs.each{|fs| fs.delete(:org_chain)}
+  end
+
+  def ufs_pretty_should_equal(ufs, target)
+    ufs.each{|fs| fs.delete(:org_chain)}
+    if ufs.size == 1 and ufs.size == target.size
+      ufs = ufs.first; target = target.first
+      # simple case, can do pretty compare
+
+      ufs[:ufs].should == first[:ufs]
+      ufs[:fa].should == first[:fa]
+      ufs[:budget].should == first[:budget]
+      ufs[:spend].should == first[:spend]
+      # chain[:org_chain].should == target's after we add chains to test
+    else
+      ufs.should == target
+    end
+
   end
 end

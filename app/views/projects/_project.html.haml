@@ -14,5 +14,5 @@
       - link_to edit_response_project_path(@response, project), :class => 'create_inline right' do
         = image_tag "pencil_10.png"
         edit
-  = render 'activities', :heading => "Activities", :response => @response, :project => project, :activities => project.normal_activities
-  = render 'activities', :heading => "Other Costs", :response => @response, :project => project, :activities => project.other_costs
+  = render 'activities', :response => @response, :project => project, :activities => project.normal_activities
+  = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs

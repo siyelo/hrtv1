@@ -155,51 +155,109 @@ class Activity < ActiveRecord::Base
                   :beneficiaries, {:data_response => :organization}])
   end
 
-  def self.download_template
+  def self.download_template(activities = [])
     FasterCSV.generate do |csv|
-      csv << Activity::FILE_UPLOAD_COLUMNS
+      header_row = Activity::FILE_UPLOAD_COLUMNS
+      (20 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+
+      csv << header_row
+
+      activities.each do |activity|
+        row = []
+        row << activity.project.try(:name)
+        row << activity.name
+        row << activity.description
+        row << activity.provider.try(:name)
+        row << activity.spend
+        row << activity.spend_q1
+        row << activity.spend_q2
+        row << activity.spend_q3
+        row << activity.spend_q4
+        row << activity.budget
+        row << activity.budget_q1
+        row << activity.budget_q2
+        row << activity.budget_q3
+        row << activity.budget_q4
+        row << activity.locations.map{|l| l.short_display}.join(',')
+        row << activity.beneficiaries.map{|l| l.short_display}.join(',')
+        row << ''
+        row << activity.start_date
+        row << activity.end_date
+
+        (20 - row.length).times{ row << nil}
+        row << activity.id
+
+        csv << row
+      end
     end
   end
 
-  def self.initialize_from_file(response, row)
-    activity                         = response.activities.new
-    activity.name                    = row['Activity Name']
-    activity.description             = row['Activity Description']
-    activity.spend                   = row['Spend']
-    activity.spend_q1                = row['Q1 Spend']
-    activity.spend_q2                = row['Q2 Spend']
-    activity.spend_q3                = row['Q3 Spend']
-    activity.spend_q4                = row['Q4 Spend']
-    activity.budget                  = row['Budget']
-    activity.budget_q1               = row['Q1 Budget']
-    activity.budget_q2               = row['Q2 Budget']
-    activity.budget_q3               = row['Q3 Budget']
-    activity.budget_q4               = row['Q4 Budget']
-    activity.start_date              = row['Start Date']
-    activity.end_date                = row['End Date']
-    activity.text_for_beneficiaries  = row['Beneficiaries']
+  def self.find_or_initialize_from_file(response, doc)
+    activities = []
 
-    # virtual attributes
-    activity.csv_project_name    = row['Project Name']
-    activity.csv_provider        = row['Provider']
-    activity.csv_districts       = row['Districts']
-    activity.csv_beneficiaries   = row['Beneficiaries']
-    activity.text_for_targets    = row['Outputs / Targets']
+    doc.each do |row| 
+      activity_id = row['Id']
 
-    # associations
-    project                      = Project.find_by_name(activity.csv_project_name)
-    if project
-      activity.project           = project
-      activity.locations         = activity.csv_districts.to_s.split(',').
-                                    map{|l| Location.find_by_short_display(l.strip)}.compact
+      if activity_id.present?
+        # reset the activity id if it is already found in previous rows
+        # this can happen when user edits existing activities but copies 
+        # the whole row (then the activity id is also copied)
+        if activities.map(&:id).include?(activity_id.to_i)
+          activity = response.activities.new
+        else
+          activity = response.activities.find(activity_id)
+        end
+      else
+        activity = response.activities.new
+      end
+
+
+      activity.name                    = row['Activity Name']
+      activity.description             = row['Activity Description']
+      activity.spend                   = row['Spend']
+      activity.spend_q1                = row['Q1 Spend']
+      activity.spend_q2                = row['Q2 Spend']
+      activity.spend_q3                = row['Q3 Spend']
+      activity.spend_q4                = row['Q4 Spend']
+      activity.budget                  = row['Budget']
+      activity.budget_q1               = row['Q1 Budget']
+      activity.budget_q2               = row['Q2 Budget']
+      activity.budget_q3               = row['Q3 Budget']
+      activity.budget_q4               = row['Q4 Budget']
+      activity.start_date              = row['Start Date']
+      activity.end_date                = row['End Date']
+      activity.text_for_beneficiaries  = row['Beneficiaries']
+
+      # virtual attributes
+      activity.csv_project_name    = row['Project Name']
+      activity.csv_provider        = row['Provider']
+      activity.csv_districts       = row['Districts']
+      activity.csv_beneficiaries   = row['Beneficiaries']
+      activity.text_for_targets    = row['Outputs / Targets']
+
+      # associations
+      if activity.csv_project_name.present?
+        project = Project.find_by_name(activity.csv_project_name)
+      else
+        project = project_id.present? ? Project.find_by_id(project_id) : nil
+      end
+      if project
+        activity.project           = project
+        activity.locations         = activity.csv_districts.to_s.split(',').
+                                      map{|l| Location.find_by_short_display(l.strip)}.compact
+      end
+      provider                     = Organization.find_by_name(activity.csv_provider)
+      activity.provider            = provider if provider
+      activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
+                                      map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+
+      activity.save
+
+      activities << activity
     end
-    provider                     = Organization.find_by_name(activity.csv_provider)
-    activity.provider            = provider if provider
-    activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
-                                    map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
 
-    activity.save
-    activity
+    activities
   end
 
   def possible_duplicate?

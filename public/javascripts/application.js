@@ -1110,7 +1110,12 @@ var projects_index = {
   run: function () {
     $('.upload_btn').click(function (e) {
       e.preventDefault();
-      $(this).parents('td').find('.upload_box').toggle();
+      $(this).parents('td').find('.upload_box').slideToggle();
+    });
+
+    $('#import_export').click(function (e) {
+      e.preventDefault();
+      $('#import_export_box .upload_box').slideToggle();
     });
   }
 };

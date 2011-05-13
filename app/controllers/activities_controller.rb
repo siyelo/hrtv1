@@ -17,6 +17,12 @@ class ActivitiesController < Reporter::BaseController
                     :order => "#{sort_column} #{sort_direction}")
   end
 
+  def new
+    @activity = Activity.new
+    @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity.provider = current_user.organization
+  end
+
   def edit
     load_comment_resources(resource)
     edit!
@@ -66,11 +72,6 @@ class ActivitiesController < Reporter::BaseController
     show!
   end
 
-  def new
-    @activity = Activity.new
-    @activity.provider = current_user.organization
-  end
-
   # called only via Ajax
   def approve
     if current_user.admin? || current_user.activity_manager?
@@ -97,17 +98,23 @@ class ActivitiesController < Reporter::BaseController
            :locals => {:activity => (@activity || :activity), :project => @project}
   end
 
-  def download_template
+  def template
     template = Activity.download_template
     send_csv(template, 'activities_template.csv')
+  end
+
+  def export
+    activities = params[:project_id].present? ? 
+      @response.projects.find(params[:project_id]).activities : @response.activities
+    template = Activity.download_template(activities)
+    send_csv(template, 'activities_existing.csv')
   end
 
   def bulk_create
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        @activities = []
-        doc.each{|row| @activities << Activity.initialize_from_file(@response, row)}
+        @activities = Activity.find_or_initialize_from_file(@response, doc)
       else
         flash[:error] = 'Please select a file to upload activities'
         redirect_to response_projects_path(@response)

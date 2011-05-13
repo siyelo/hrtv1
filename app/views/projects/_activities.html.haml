@@ -1,49 +1,23 @@
-- showing_other_cost = false
-- showing_other_cost = true if heading == "Other Costs"
-
 %tr.sub-head
   %td{:colspan => 100}
     %h4
-      == #{heading}
+      Activities
       %span
-        - path = (showing_other_cost) ? new_response_other_cost_path(response) : new_response_activity_path(response)
-        - link_to path, :class => "create_inline" do
+        - link_to new_response_activity_path(response, :project_id => project.id), :class => "create_inline" do
           = image_tag "new.png"
           Add
 
-        - unless showing_other_cost
-          - link_to "#", :class => "create_inline upload_btn" do
-            = image_tag "new.png"
-            Upload
+        - link_to "#", :class => "create_inline upload_btn" do
+          = image_tag "new.png"
+          Import / Export
 
-    - unless showing_other_cost
-      .upload_box.activities_upload_box
-        %h3.title_bar Upload a CSV file for Activities
-        .dashboard_section
-          %p Create one or more activities from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
-          %br
-          - form_tag(bulk_create_response_activities_path(@response), :multipart => true) do
+    = render 'activities_import', :project => project, :can_export => project.activities.present?
 
-            .upbox
-              = label_tag :file, "File"
-              = file_field_tag :file
-            = submit_tag "Upload", :class => 'small_submit_button'
-
-            = link_to "Download template", download_template_response_activities_path(@response), :class => "create_alt right"
-
-- unless activities.empty?
+- if activities.present?
   - activities.each do |activity|
-    - unless showing_other_cost
-      = render "activities/activity", :activity => activity
-    - else
-      = render "other_costs/other_cost", :other_cost => activity
+    = render "activities/activity", :activity => activity
 - else
   %tr.none
     %td{:colspan => 100}
-      - unless showing_other_cost
-        No activities found.
-        - path = new_response_activity_path(@response)
-      - else
-        No other costs found.
-        - path = new_response_other_cost_path(@response)
-      = link_to "Add #{heading} now.", path
+      No activities found.
+      = link_to "Add Activities now.", new_response_activity_path(response, :project_id => project.id)

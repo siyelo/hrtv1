@@ -210,7 +210,7 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   haml
-  heroku
+  heroku (>= 2.1.2)
   hirb
   hoptoad_notifier
   inherited_resources (= 1.0.6)

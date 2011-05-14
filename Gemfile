@@ -36,7 +36,7 @@ group :development do
   gem 'awesome_print', :require => "ap"
   #gem 'github' # misbehaving uninitialized constant Text::Format
   gem 'google_currency', "=1.2.0" # for currency cacher
-  gem 'heroku' '>=2.1.2'
+  gem 'heroku', '>= 2.1.2'
   gem 'hirb'
   gem 'interactive_editor'
   #gem 'looksee' # prevents inherited_resource to assign instance variables !!

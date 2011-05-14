@@ -82,6 +82,10 @@ class Project < ActiveRecord::Base
     self.data_response
   end
 
+  def organization
+    response.organization
+  end
+
   # view helper ??!
   def organization_name
     organization.name
@@ -153,6 +157,10 @@ END
 
   def ultimate_funding_sources
     ufs = in_flows.map(&:funding_chains).flatten
+    if ufs.empty? #we should always return a UFS, i.e. if data bad, assume self-funded
+      ufs = [{:org_chain => [organization, organization], :ufs => organization,
+        :fa => organization, :budget => budget, :spend => spend}]
+    end
     ufs
   end
 

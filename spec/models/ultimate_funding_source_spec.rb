@@ -148,12 +148,15 @@ describe Project do
     end
 
     it "cant disambiguate funders without activities in projects of n-1 upstream for UFS" do
-      proj_funded_by(@proj11, @org1, 1, 2)
-      proj_funded_by(@proj12, @org2, 10, 20)
-      proj_funded_by(@proj3, @org1)
-      @proj3.ultimate_funding_sources{ |e| e[0].id }.should == [
-        {:ufs => @org1, :fa => @org3, :budget => 1, :spend => 2},
-        {:ufs => @org2, :fa => @org1, :budget => 10, :spend => 20}]
+      #       org1                org2
+      #     /     \               /
+      # proj3      proj11      proj12
+      proj_funded_by(@proj11, @org1, 100, 400)
+      proj_funded_by(@proj12, @org2, 400, 400)
+      proj_funded_by(@proj3, @org1, 50, 50)
+      ufs = @proj3.ultimate_funding_sources
+      ufs_equality([ufs[1]], [{:ufs => @org1, :fa => @org3, :budget => 12.5, :spend => 25}])
+      ufs_equality([ufs[0]], [{:ufs => @org2, :fa => @org1, :budget => 37.5, :spend => 25}])
     end
 
     it "disambiguates funders with activities in projects of n-1 upstream for UFS" do

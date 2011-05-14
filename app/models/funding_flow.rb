@@ -88,28 +88,28 @@ class FundingFlow < ActiveRecord::Base
       chains = project_from.ultimate_funding_sources
     else
       # find all possible projects we may have been funded by
-      candidates = candidate_projects
+      projects = candidate_projects
 
       # adjust so the funding chain total matches our activity total
-      chains = to_provider_totals(candidates).map do |t|
-        adjust_to_total(t.ultimate_funding_sources, t[:budget], :budget)
-        adjust_to_total(t.ultimate_funding_sources, t[:spend], :spend)
+      chains = to_provider_totals(projects).map do |t|
+        adjust_to_total(t[:p].ultimate_funding_sources, t[:budget], :budget)
+        adjust_to_total(t[:p].ultimate_funding_sources, t[:spend], :spend)
       end
 
       # if no activites found for us in our funders projects
       # then take all of our funders' funding sources
       if chains.nil? or chains.size == 0
-        chains = candidates.map(&:ultimate_funding_sources)
+        chains = projects.map(&:ultimate_funding_sources)
       end
     end
     chains.flatten
   end
 
   # look in the activities, total all amounts where we were a provider
-  def to_provider_totals(candidates)
-    total = candidates.collect do |p|
-      b_total = p.activities.inject(0){|a,sum| sum += a.amount_for_provider(to, :budget)}
-      s_total = p.activities.inject(0){|a,sum| sum += a.amount_for_provider(to, :spend)}
+  def to_provider_totals(projects)
+    total = projects.collect do |p|
+      b_total = p.activities.inject(0){|sum, a| sum += a.amount_for_provider(to, :budget)}
+      s_total = p.activities.inject(0){|sum, a| sum += a.amount_for_provider(to, :spend)}
       if b_total > 0 or s_total > 0
         {:p => p, :budget => b_total, :spend => s_total}
       else

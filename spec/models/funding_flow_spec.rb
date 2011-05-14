@@ -156,20 +156,54 @@ describe FundingFlow do
       collection = [{:budget => 10}, {:budget => 20}, {:budget => 30}]
       item_total = 60
       @flow.adjust_to_total(collection, @target, @amount_key).should ==
-        [{:budget => 10/item_total*@target},
-          {:budget => 20/item_total*@target},
-          {:budget => 30/item_total*@target}]
+        [{:budget => 10/item_total * @target},
+          {:budget => 20/item_total * @target},
+          {:budget => 30/item_total * @target}]
     end
 
     it "adjusts to target amount with several unmatching float items" do
       collection = [{:budget => 10.to_f}, {:budget => 20.to_f}, {:budget => 30.to_f}]
       item_total = 60.to_f
       @flow.adjust_to_total(collection, @target, @amount_key).should ==
-        [{:budget => 10.to_f/item_total*@target},
-          {:budget => 20.to_f/item_total*@target},
-          {:budget => 30.to_f/item_total*@target}]
+        [{:budget => 10.to_f/item_total * @target},
+          {:budget => 20.to_f/item_total * @target},
+          {:budget => 30.to_f/item_total * @target}]
     end
   end
+
+  describe "#to_provider_totals" do
+    before :each do
+      ufs_test_setup
+      @flow = Factory(:funding_flow, :from => @org2, :to => @org1, :project => @proj12,
+        :budget => 10, :spend => 20)
+      @activity = Factory(:activity, :project => @proj12, :provider => @org1,
+                :data_response => @proj12.data_response, :budget => 5, :spend => 10)
+      @proj12.reload
+    end
+
+    it "finds the activities whose providers match who this fflow goes to" do
+      totals = @flow.to_provider_totals([@proj12])
+      totals.should have(1).item
+      totals[0][:budget].should == 5
+      totals[0][:spend].should == 10
+      totals[0][:p].should == @proj12
+    end
+
+    it "finds multiple activities whose providers match who this fflow goes to" do
+      activity = Factory(:activity, :project => @proj11, :provider => @org1,
+                :data_response => @proj11.data_response, :budget => 5, :spend => 10)
+      @proj11.reload
+      totals = @flow.to_provider_totals([@proj11, @proj12])
+      totals.should have(2).items
+      totals[0][:budget].should == 5
+      totals[0][:spend].should == 10
+      totals[0][:p].should == @proj11
+      totals[1][:budget].should == 5
+      totals[1][:spend].should == 10
+      totals[1][:p].should == @proj12
+    end
+  end
+
 
 end
 

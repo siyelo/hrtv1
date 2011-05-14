@@ -53,22 +53,22 @@ class FundingFlow < ActiveRecord::Base
   end
 
   def funding_chains
-    if self_funded? or donor_funded? or candidates_empty?
+    if self_funded? #or donor_funded? or candidates_empty?
       { :org_chain => [from, to], :ufs => from, :fa => to,
         :budget => budget, :spend => spend}
     else
-      chains = find_fuzzy_linked_projects
-      chains.each do |c|
-        c[:org_chain] << to  # add our org to the end of the chain to show entire flow
-        c = set_funding_agent(c)
-      end
+      chains = from.funding_chains_to(to)
       adjust_to_total(chains, budget, :budget)
       adjust_to_total(chains, spend, :spend)
-
       chains
     end
   end
 
+  chains = find_fuzzy_linked_projects
+  chains.each do |c|
+    c[:org_chain] << to  # add our org to the end of the chain to show entire flow
+    c = set_funding_agent(c)
+  end
   # If the FA can be a different org, then we use it.
   # (otherwise the funding agent will always be penultimate org)
   def set_funding_agent(chain)

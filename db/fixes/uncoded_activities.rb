@@ -20,7 +20,6 @@ d = DataResponse.find(6669)
       act_sum += a.spend || 0
       act_csd_sum += a.CodingSpendDistrict_amount || 0
       csd_ca_usd = CodingSpend.with_activity(a).with_code_ids(code_ids).sum('cached_amount_in_usd')
-      #debugger if a.spend.to_s == "42753120.0"
       am = Money.new((a.spend.to_f.round(2)*100).to_i, :RWF)
       m = Money.new(csd_ca_usd, 'USD').exchange_to(:RWF)
       csd_ca_usd_sum += m.cents

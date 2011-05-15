@@ -3,13 +3,21 @@
 # CI server test script
 #   Runs all specs and cukes
 
+# Usage:
+#  !/bin/bash
+#  source /var/lib/jenkins/.rvm/scripts/rvm
+#  source $WORKSPACE/.rvmrc_ree
+#  $WORKSPACE/script/ci/ci.rb
+#
+
 require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 include ScriptHelper
 
 WORKSPACE=ENV['WORKSPACE']
 
 def bundle_install
-  run_or_die "bundle install"
+  result = run "bundle check"
+  run_or_die "bundle install" unless result == true
 end
 
 def setup_sqlite
@@ -24,7 +32,8 @@ end
 
 def specs
   setup_specs
-  run_or_die "spec spec"
+  #run_or_die "spec spec"
+  run_or_die "spec spec/models/commodity_spec.rb"
 end
 
 # http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/
@@ -41,12 +50,12 @@ end
 
 def cukes
   setup_cukes
-  run_or_die "rake cucumber"
+  #run_or_die "rake cucumber"
+  run_or_die "rake cucumber:run"
   teardown_cukes
 end
 
 # main
-
 bundle_install
 setup_sqlite
 specs

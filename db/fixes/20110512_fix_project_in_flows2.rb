@@ -19,7 +19,7 @@ csv = FasterCSV.generate do |csv|
   projects.each_with_index do |project, index|
     puts "Checking in flows for project with id: #{project.id} | #{index + 1}/#{total}"
 
-    ultimate_funding_sources = project.ultimate_funding_sources
+    #funding_chains = project.funding_chains
 
     self_in_flows = project.in_flows.select{|f| f.from == project.data_response.organization}.select{|f| f.from == f.to}
 
@@ -40,7 +40,7 @@ csv = FasterCSV.generate do |csv|
           row << in_flow.budget
           row << in_flow.spend
           row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.budget}|#{f.spend}"}.join(";")
-          row << ultimate_funding_sources.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name}) - Budget: #{fs[:budget]} - Spent: #{fs[:spend]}"}.join('; ')
+          #row << funding_chains.map{|fs| "#{fs[:ufs].name} (#{fs[:fa].name}) - Budget: #{fs[:budget]} - Spent: #{fs[:spend]}"}.join('; ')
 
           csv << row
 

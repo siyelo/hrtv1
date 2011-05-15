@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+# CI server test script
+#   Runs all specs and cukes
+
+require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
+include ScriptHelper
+
+WORKSPACE=ENV['WORKSPACE']
+
+def bundle_install
+  run_or_die "bundle install"
+end
+
+def setup_sqlite
+  #run_or_die "cp #{WORKSPACE}/config/database.yml.sample.sqlite3 #{WORKSPACE}/config/database.yml"
+  run "cp #{WORKSPACE}/config/database.yml.sample.sqlite3 #{WORKSPACE}/config/database.yml"
+end
+
+def setup_specs
+  ENV['RAILS_ENV'] = 'test'
+  run_or_die "rake setup_quick --trace"
+end
+
+def specs
+  setup_specs
+  run_or_die "spec spec"
+end
+
+# http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/
+# and http://markgandolfo.com/2010/07/01/hudson-ci-server-running-cucumber-in-headless-mode-xvfb
+def setup_cukes
+  ENV['RAILS_ENV'] = 'cucumber'
+  ENV['DISPLAY'] = ":99"
+  run "/etc/init.d/xvfb start"
+end
+
+def teardown_cukes
+  run "/etc/init.d/xvfb stop"
+end
+
+def cukes
+  setup_cukes
+  run_or_die "rake cucumber"
+  teardown_cukes
+end
+
+# main
+
+bundle_install
+setup_sqlite
+specs
+cukes

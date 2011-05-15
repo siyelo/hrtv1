@@ -3,7 +3,7 @@
 # newer version of cucumber-rails. Consider adding your own code to a new file
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
-# 
+#
 
 unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:* tasks
 
@@ -15,7 +15,7 @@ begin
 
   require 'spec/rake/spectask'
   namespace :rcov do
-    Cucumber::Rake::Task.new(:cucumber) do |t|    
+    Cucumber::Rake::Task.new(:cucumber) do |t|
       t.rcov = true
       t.rcov_opts = %w{--rails --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate coverage.data}
       t.rcov_opts << %[-o "coverage"]
@@ -37,7 +37,7 @@ begin
       Rake::Task["rcov:cucumber"].invoke
     end
   end
-  
+
   namespace :cucumber do
     Cucumber::Rake::Task.new({:ok => ['db:test:prepare', 'db:seed']}, 'Run features that should pass') do |t|
       t.binary = vendored_cucumber_bin # If nil, the gem's binary is used.
@@ -49,6 +49,12 @@ begin
       t.binary = vendored_cucumber_bin
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'wip'
+    end
+
+    Cucumber::Rake::Task.new({:run => ['db:test:prepare', 'db:seed']}, 'Run features that are tagged to run') do |t|
+      t.binary = vendored_cucumber_bin
+      t.fork = true # You may get faster startup if you set this to false
+      t.profile = 'run'
     end
 
     desc 'Run all features'

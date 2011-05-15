@@ -54,11 +54,11 @@ class FundingFlow < ActiveRecord::Base
 
   def funding_chains
     if self_funded?
-      FundingChain.new(
+      [FundingChain.new(
 	{ :organization_chain => [from, to], 
-        :budget => budget, :spend => spend})
+        :budget => budget, :spend => spend})]
     else
-      chains = from.try(:best_guess_funding_chains_to, to)
+      chains = from.best_guess_funding_chains_to(to, response.data_request) unless from.nil?
      
       unless chains.nil? or chains.empty?
         # TODO for better heurestics will need to pass
@@ -69,6 +69,7 @@ class FundingFlow < ActiveRecord::Base
       
         chains
       else
+        error = from.nil? ? "From was nil" : "From guessed no chains"
 	raise 'From was nil or From didnt guess chains to me'
       end
 

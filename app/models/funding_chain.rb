@@ -60,7 +60,7 @@ class FundingChain
   end
 
   def self.add_to(chains, to, spend = nil, budget = nil)
-    chains.each{|e| e.org_chain = e.org_chain + to}
+    chains.each{|e| e.org_chain = e.org_chain << to}
     unless spend.nil? and budget.nil?
       adjust_amount_totals!(chains, spend, budget)
     else
@@ -69,8 +69,8 @@ class FundingChain
   end
 
   def self.adjust_amount_totals!(chains, spend = nil, budget = nil)
-    force_total(chains, spend, :spend) unless spend.nil?
-    force_total(chains, budget, :budget) unless budget.nil?
+    force_total!(chains, spend, :spend) unless spend.nil?
+    force_total!(chains, budget, :budget) unless budget.nil?
     chains.select{|e| e.non_zero?}
   end
 
@@ -86,9 +86,9 @@ class FundingChain
       nil_replacement = 0 # ignore those missing the key
     end
     collection.each do |e| 
-      set_if_nil(e, amount_key, val)
+      set_if_nil(e, amount_key, nil_replacement)
     end
-    adjust_to_total!(collection, desired, amount_key)
+    adjust_total!(collection, desired, amount_key)
   end
 
   def self.adjust_total!(collection, desired, amount_key)

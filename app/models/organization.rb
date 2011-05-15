@@ -106,8 +106,57 @@ class Organization < ActiveRecord::Base
   def has_provider?(organization)
     projects.map(&:activities).flatten.map(&:provider).include?(organization)
   end
-end
+  
 
+  def projects_in_request(request)
+      r = data_responses.select{|dr| dr.data_request = request}.first
+      unless r.nil?
+        r.projects
+      else
+        []
+      end
+  end
+  
+  def funding_chains(request)
+    ufs = projects_in_request(request).map(&:funding_chains).flatten
+    if ufs.empty?
+      ufs = [FundingChain.new({:organization_chain => [self, self]})]
+    end
+    ufs
+  end
+  
+  def funding_chains_to(to, request)
+    projects_in_request(request).map{|p| p.funding_chains_to(to)}.flatten
+    #[1,[],2].flatten = ? # possible bug if some have contents and others dont
+  end
+  
+  def best_guess_funding_chains_to(to, request)
+    chains = funding_chains_to(to, request)
+    unless chains.empty?
+      chains 
+    else
+      guess_funding_chains_to(to,request)
+    end
+  end
+  
+  def guess_funding_chains_to(to, request)
+    if ["Donor", "Bilateral", "Multilateral"].include?(raw_type)
+      # assume i funded even if didnt enter it
+      return [FundingChain.new({:organization_chain => [self, to]})] 
+    else
+      # evenly split across all funding sources
+      chains = funding_chains(request)
+      unless chains.empty?
+        FundingChain.add_to(chains, to) 
+      else 
+        #assume I am self funded if I entered no funding information
+        # could enter "Unknown - maybe #{self.name}" ?
+        [FundingChain.new({:organization_chain => [self, to]})]
+      end
+    end
+  end
+  
+end
 
 
 

@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
            :conditions => [ 'self_provider_flag = 0 and
                             organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ 'self_provider_flag = 0 AND
+           :conditions => [ '
                             organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
@@ -156,10 +156,10 @@ END
   end
 
   def amount_for_provider(provider, field)
-    activities.inject(0){|sum, a| sum += a.amount_for_provider(to, field)}
+    activities.inject(0){|sum, a| sum += a.amount_for_provider(provider, field)}
   end
 
-  def ultimate_funding_sources
+  def funding_chains
     ufs = in_flows.map(&:funding_chains).flatten
     if ufs.empty? #we should always return a UFS, i.e. if data bad, assume self-funded
       ufs = FundingChain.new({:organization_chain => [organization, organization],
@@ -169,12 +169,12 @@ END
   end
 
   def funding_chains_to(to)
-      s = p.amount_for_provider(to, :spend)
-      b = p.amount_for_provider(to, :budget)
-      fs = p.funding_chains
+      s = amount_for_provider(to, :spend)
+      b = amount_for_provider(to, :budget)
+      fs = funding_chains
       if s > 0 or b > 0
         FundingChain.add_to(fs, s, b)
-    else 
+      else 
         []
       end
   end

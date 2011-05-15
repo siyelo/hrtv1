@@ -32,8 +32,8 @@ end
 
 def specs
   setup_specs
-  #run_or_die "spec spec"
-  run_or_die "spec spec/models/commodity_spec.rb"
+  run_or_die "spec spec"
+  #run_or_die "spec spec/models/commodity_spec.rb" #debug
 end
 
 # http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/
@@ -50,8 +50,8 @@ end
 
 def cukes
   setup_cukes
-  #run_or_die "rake cucumber"
-  run_or_die "rake cucumber:run"
+  run_or_die "rake cucumber"
+  #run_or_die "rake cucumber:run" #for debug
   teardown_cukes
 end
 
@@ -60,3 +60,4 @@ bundle_install
 setup_sqlite
 specs
 cukes
+

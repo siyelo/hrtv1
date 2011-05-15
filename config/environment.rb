@@ -2,6 +2,7 @@
 
 RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
+require 'thread' #fixes uninitialized constant ActiveSupport::Dependencies::Mutex (NameError) on 2.3.8
 require File.join(File.dirname(__FILE__), 'boot')
 
 puts "WARN: $HRT_COUNTRY not set, defaulting to Rwanda" unless ENV['HRT_COUNTRY']

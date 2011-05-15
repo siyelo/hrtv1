@@ -23,9 +23,9 @@ We use RVM+Bundler to standardize the Ruby and Gem environments across developer
         $ rvm install ruby-1.8.7-p299
         $ rvm use ruby-1.8.7-p299
 
-  * Create a "resource_tracking_non_ree" rvm gemset
+  * Create a "hrt" rvm gemset
 
-        $ rvm gemset create 'resource_tracking_non_ree'
+        $ rvm gemset create 'hrt'
 
   * Install bundler for this gemset
 

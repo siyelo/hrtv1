@@ -159,13 +159,21 @@ END
     activities.inject(0){|sum, a| sum += a.amount_for_provider(provider, field)}
   end
 
-  def funding_chains
+  def funding_chains(fake_if_none = true, scale_if_not_match_proj = true)
     ufs = in_flows.map(&:funding_chains).flatten
-    if ufs.empty? #we should always return a UFS, i.e. if data bad, assume self-funded
-      ufs = FundingChain.new({:organization_chain => [organization, organization],
-       :budget => budget, :spend => spend})
+    if ufs.empty? and fake_if_none
+      # if data bad, assume self-funded
+      ufs = [FundingChain.new({:organization_chain => [organization, organization],
+       :budget => budget, :spend => spend})]
+    end
+    if scale_if_not_match_proj
+      ufs = FundingChain.adjust_amount_totals!(ufs, spend, budget)
     end
     ufs
+  end
+
+  def ultimate_funding_sources
+    funding_chains
   end
 
   def funding_chains_to(to)
@@ -173,7 +181,7 @@ END
       b = amount_for_provider(to, :budget)
       fs = funding_chains
       if s > 0 or b > 0
-        FundingChain.add_to(fs, s, b)
+        FundingChain.add_to(fs, to, s, b)
       else 
         []
       end

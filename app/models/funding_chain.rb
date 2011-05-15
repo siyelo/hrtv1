@@ -6,10 +6,6 @@ class FundingChain
     attr_accessor attr
   end
 
-  alias :ufs :ultimate_funding_source
-  alias :ufs= :ultimate_funding_source=
-  alias :fa :financing_agent
-  alias :fa= :financing_agent=
   alias :org_chain :organization_chain
   alias :org_chain= :organization_chain=
 
@@ -17,6 +13,10 @@ class FundingChain
     ATTRIBUTES.each do |attr|
       if (args.key?(attr))
         instance_variable_set("@#{attr}", args[attr])
+        #self.send("#{attr}=", args[attr])
+      end
+      if attr == "organization_chain"
+        self.organization_chain = args[attr]
       end
     end
   end
@@ -49,14 +49,26 @@ class FundingChain
     @organization_chain = val
     set_fa_ufs
   end
-  
-  def set_fa_ufs
-    ufs = org_chain.first
-    penultimate = org_chain[org_chain.size - 2]
-    fa = penultimate
-    if ufs == fa
-      fa = org_chain.last
+ 
+  def ultimate_funding_source
+    org_chain.try(:first)
+  end
+
+  def ufs
+    ultimate_funding_source
+  end
+ 
+  def financing_agent
+    penultimate = org_chain[1]
+    @fa = penultimate
+    if ultimate_funding_source == @fa and org_chain.size > 2
+      @fa = org_chain[2]
     end
+    @fa
+  end
+
+  def fa
+    financing_agent
   end
 
   def self.add_to(chains, to, spend = nil, budget = nil)
@@ -79,7 +91,7 @@ class FundingChain
   # otherwise, send it as a hash key
   def self.force_total!(collection, desired, amount_key)
     #collection = collection.dup
-    without_key = collection.select{|e| get(e, amount_key)}
+    without_key = collection.select{|e| get(e, amount_key).nil?}
     if without_key.size == collection.size 
       nil_replacement = 1 # distribute desired evenly across collection
     else 
@@ -107,7 +119,8 @@ class FundingChain
       element.send(key)
     end
   end
-  
+ 
+  #TODO add rounding back to three decimal points outback 
   def self.set(element, key, val)
     if element.is_a?(Hash)
       element[key] = val

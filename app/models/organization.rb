@@ -118,7 +118,7 @@ class Organization < ActiveRecord::Base
   end
   
   def funding_chains(request)
-    ufs = projects_in_request(request).map(&:funding_chains).flatten
+    ufs = projects_in_request(request).map{|p| p.funding_chains(false)}.flatten
     if ufs.empty?
       ufs = [FundingChain.new({:organization_chain => [self, self]})]
     end

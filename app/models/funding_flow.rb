@@ -64,8 +64,8 @@ class FundingFlow < ActiveRecord::Base
         # TODO for better heurestics will need to pass
         # amounts up into best_guess_funding_chains_to
         FundingChain.adjust_amount_totals!(chains,
-          budget.try(:>, 0) ? budget : 0 ,
-  	  spend.try(:>, 0) ?  spend : 0)
+  	  spend.try(:>, 0) ?  spend : 0,
+          budget.try(:>, 0) ? budget : 0)
       
         chains
       else

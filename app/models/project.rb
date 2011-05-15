@@ -155,13 +155,28 @@ END
     return saved, errors
   end
 
+  def amount_for_provider(provider, field)
+    activities.inject(0){|sum, a| sum += a.amount_for_provider(to, field)}
+  end
+
   def ultimate_funding_sources
     ufs = in_flows.map(&:funding_chains).flatten
     if ufs.empty? #we should always return a UFS, i.e. if data bad, assume self-funded
-      ufs = [{:org_chain => [organization, organization], :ufs => organization,
-        :fa => organization, :budget => budget, :spend => spend}]
+      ufs = FundingChain.new({:organization_chain => [organization, organization],
+       :budget => budget, :spend => spend})
     end
     ufs
+  end
+
+  def funding_chains_to(to)
+      s = p.amount_for_provider(to, :spend)
+      b = p.amount_for_provider(to, :budget)
+      fs = p.funding_chains
+      if s > 0 or b > 0
+        FundingChain.add_to(fs, s, b)
+    else 
+        []
+      end
   end
 
   def cached_ultimate_funding_sources

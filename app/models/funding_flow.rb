@@ -53,108 +53,37 @@ class FundingFlow < ActiveRecord::Base
   end
 
   def funding_chains
-    if self_funded? #or donor_funded? or candidates_empty?
-      { :org_chain => [from, to], :ufs => from, :fa => to,
-        :budget => budget, :spend => spend}
+    if self_funded?
+      FundingChain.new(
+	{ :organization_chain => [from, to], 
+        :budget => budget, :spend => spend})
     else
-      chains = from.funding_chains_to(to)
-      adjust_to_total(chains, budget, :budget)
-      adjust_to_total(chains, spend, :spend)
-      chains
-    end
-  end
-
-  chains = find_fuzzy_linked_projects
-  chains.each do |c|
-    c[:org_chain] << to  # add our org to the end of the chain to show entire flow
-    c = set_funding_agent(c)
-  end
-  # If the FA can be a different org, then we use it.
-  # (otherwise the funding agent will always be penultimate org)
-  def set_funding_agent(chain)
-    penultimate = chain[:org_chain][chain[:org_chain].size - 2]
-    chain[:fa] = penultimate
-    if chain[:ufs] == chain[:fa]
-      chain[:fa] = chain[:org_chain].last
-    end
-    chain
-  end
-
-  # without a linked project, need some heuristic logic
-  # to figure out which projects from the from organization
-  # to get the ultimate funding sources from
-  def find_fuzzy_linked_projects
-    if project_from #if the project is linked to funders project
-      chains = project_from.ultimate_funding_sources
-    else
-      # find all possible projects we may have been funded by
-      projects = candidate_projects
-
-      # adjust so the funding chain total matches our activity total
-      chains = to_provider_totals(projects).map do |t|
-        adjust_to_total(t[:p].ultimate_funding_sources, t[:budget], :budget)
-        adjust_to_total(t[:p].ultimate_funding_sources, t[:spend], :spend)
-      end
-
-      # if no activites found for us in our funders projects
-      # then take all of our funders' funding sources
-      if chains.nil? or chains.size == 0
-        chains = projects.map(&:ultimate_funding_sources)
-      end
-    end
-    chains.flatten
-  end
-
-  # look in the activities, total all amounts where we were a provider
-  def to_provider_totals(projects)
-    total = projects.collect do |p|
-      b_total = p.activities.inject(0){|sum, a| sum += a.amount_for_provider(to, :budget)}
-      s_total = p.activities.inject(0){|sum, a| sum += a.amount_for_provider(to, :spend)}
-      if b_total > 0 or s_total > 0
-        {:p => p, :budget => b_total, :spend => s_total}
+      chains = from.try(:best_guess_funding_chains_to, to)
+     
+      unless chains.nil? or chains.empty?
+        # TODO for better heurestics will need to pass
+        # amounts up into best_guess_funding_chains_to
+        FundingChain.adjust_amount_totals!(chains,
+          budget.try(:>, 0) ? budget : 0 ,
+  	  spend.try(:>, 0) ?  spend : 0)
+      
+        chains
       else
-        []
+	raise 'From was nil or From didnt guess chains to me'
       end
+
     end
-    total.reject{|r| r==[]}
   end
 
   def self_funded?
     from == to
   end
-
+  
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
 
-  def candidate_projects
-    # find all possible projects we may have been funded by
-    candidates = from.projects.select do |p|
-      p.response.data_request == self.response.data_request
-    end
-  end
-
-  def candidates_empty?
-    candidate_projects.empty?
-  end
-
-  # helper
-  def adjust_to_total(collection, target_total, amount_key)
-    collection = collection.dup
-    collection_total = collection.sum{|e| e[amount_key]}
-    collection.each do |e|
-      e[amount_key] = (e[amount_key] * target_total) / collection_total
-    end
-    collection
-  end
-
 end
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: funding_flows

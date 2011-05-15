@@ -117,8 +117,9 @@ describe Project do
       proj_funded_by(@proj3, @org2, 11, 22)
       @proj3.budget = 12; @proj3.spend = 24; @proj3.save
       ufs = @proj3.ultimate_funding_sources
-      ufs_equality([ufs[0]], [{:ufs => @org1, :fa => @org3, :budget => 1, :spend => 2}])
-      ufs_equality([ufs[1]], [{:ufs => @org2, :fa => @org3, :budget => 11, :spend => 22}])
+      ufs.size.should == 2
+      ufs_equality([ufs[1]], [{:ufs => @org1, :fa => @org3, :budget => 1, :spend => 2}])
+      ufs_equality([ufs[0]], [{:ufs => @org2, :fa => @org3, :budget => 11, :spend => 22}])
     end
 
     it "returns both n-1 upstream sources with different amts for a single project" do
@@ -126,8 +127,9 @@ describe Project do
       proj_funded_by(@proj3, @org1, 50, 75)
       proj_funded_by(@proj3, @org2, 50, 25)
       ufs = @proj3.ultimate_funding_sources
-      ufs_equality([ufs[0]], [{:ufs => @org1, :fa => @org3, :budget => 50, :spend => 75}])
-      ufs_equality([ufs[1]], [{:ufs => @org2, :fa => @org3, :budget => 50, :spend => 25}])
+      ufs.size.should == 2
+      ufs_equality([ufs[1]], [{:ufs => @org1, :fa => @org3, :budget => 50, :spend => 75}])
+      ufs_equality([ufs[0]], [{:ufs => @org2, :fa => @org3, :budget => 50, :spend => 25}])
     end
 
     it "returns the n-2 upstream funder as the UFS" do
@@ -174,9 +176,9 @@ describe Project do
       @proj3.spend = @proj3.budget = 50; @proj3.save
       proj_funded_by(@proj3, @org1, 50, 50)
       ufs = @proj3.ultimate_funding_sources
-      ufs_equality([ufs[0]], [{:ufs => @org1, :fa => @org3, :budget => 10, :spend => 25}])
-      ufs_equality([ufs[1]], [{:ufs => @org2, :fa => @org1, :budget => 40, :spend => 25}])
       ufs.size.should == 2
+      ufs_equality([ufs[1]], [{:ufs => @org1, :fa => @org3, :budget => 10, :spend => 25}])
+      ufs_equality([ufs[0]], [{:ufs => @org2, :fa => @org1, :budget => 40, :spend => 25}])
     end
 
     it "disambiguates funders with activities in projects of n-1 upstream for UFS" do
@@ -288,7 +290,7 @@ describe Project do
     end
 
     # bugfix spec
-    it "doesn't duplicates organizations when same from-to flows reported" do
+    it "doesn't duplicate organizations when same from-to flows reported" do
       # organization 2 is donor
       @org2.raw_type = "Donor"; @org2.save
       Factory(:funding_flow, :from => @org0, :to => @org2, :project => @proj2,
@@ -303,6 +305,7 @@ describe Project do
               :budget => 50, :spend => 50)
       @proj2.reload
       @proj3.reload
+      @proj3.budget = 100; @proj3.spend = 100; @proj3.save
       ufs = @proj3.ultimate_funding_sources
       ufs_equality(ufs, [{:ufs => @org0, :fa => @org2, :budget => 100, :spend => 100}])
     end
@@ -318,6 +321,7 @@ describe Project do
               :budget => 1, :spend => 2)
       @proj2.reload
       @proj3.reload
+      @proj3.budget = 1; @proj3.spend = 2; @proj3.save
       ufs = @proj3.ultimate_funding_sources
       ufs_equality(ufs, [{:ufs => @org2, :fa => @org3, :budget => 1, :spend => 2}])
     end

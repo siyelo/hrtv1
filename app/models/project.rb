@@ -161,6 +161,7 @@ END
 
   def funding_chains(fake_if_none = true, scale_if_not_match_proj = true)
     ufs = in_flows.map(&:funding_chains).flatten
+    ufs = FundingChain.merge_chains(ufs)
     if ufs.empty? and fake_if_none
       # if data bad, assume self-funded
       ufs = [FundingChain.new({:organization_chain => [organization, organization],

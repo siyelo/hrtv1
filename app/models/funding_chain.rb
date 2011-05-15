@@ -80,6 +80,20 @@ class FundingChain
     end
   end
 
+  def self.merge_chains(collection)
+    aggregate = {}
+    collection.each do |e|
+      unless aggregate.has_key?(e.org_chain)
+        aggregate[e.org_chain] = {:budget => 0, :spend => 0}
+      end
+      aggregate[e.org_chain][:spend] += e.spend unless e.spend.nil?
+      aggregate[e.org_chain][:budget] += e.budget unless e.budget.nil?
+    end
+    aggregate.collect do |org_chain,amts|
+      FundingChain.new( amts.merge({:organization_chain => org_chain}))
+    end.select{|e| e.non_zero?}
+  end
+
   def self.adjust_amount_totals!(chains, spend = nil, budget = nil)
     force_total!(chains, spend, :spend) unless spend.nil?
     force_total!(chains, budget, :budget) unless budget.nil?

@@ -126,8 +126,8 @@ class Organization < ActiveRecord::Base
   end
   
   def funding_chains_to(to, request)
-    projects_in_request(request).map{|p| p.funding_chains_to(to)}.flatten
-    #[1,[],2].flatten = ? # possible bug if some have contents and others dont
+    fs = projects_in_request(request).map{|p| p.funding_chains_to(to)}.flatten
+    FundingChain.merge_chains(fs)
   end
   
   def best_guess_funding_chains_to(to, request)

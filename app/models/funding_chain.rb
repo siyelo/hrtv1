@@ -84,7 +84,8 @@ class FundingChain
     aggregate = {}
     collection.each do |e|
       unless aggregate.has_key?(e.org_chain)
-        aggregate[e.org_chain] = {:budget => 0, :spend => 0}
+        aggregate[e.org_chain] = {
+          :budget => BigDecimal.new("0"), :spend => BigDecimal.new("0")}
       end
       aggregate[e.org_chain][:spend] += e.spend unless e.spend.nil?
       aggregate[e.org_chain][:budget] += e.budget unless e.budget.nil?
@@ -105,14 +106,14 @@ class FundingChain
   # otherwise, send it as a hash key
   def self.force_total!(collection, desired, amount_key)
     #collection = collection.dup
-    without_key = collection.select{|e| get(e, amount_key).nil?}
+    without_key = collection.select{|e| a = get(e, amount_key); a.nil? or a <= 0 }
     if without_key.size == collection.size 
       nil_replacement = 1 # distribute desired evenly across collection
     else 
       nil_replacement = 0 # ignore those missing the key
     end
     collection.each do |e| 
-      set_if_nil(e, amount_key, nil_replacement)
+      set_if_nil_or_zero(e, amount_key, nil_replacement)
     end
     adjust_total!(collection, desired, amount_key)
   end
@@ -143,7 +144,8 @@ class FundingChain
     end
   end
 
-  def self.set_if_nil(element, key, val)
-    set(element, key, val) if get(element, key).nil?
+  def self.set_if_nil_or_zero(element, key, val)
+    a = get(element, key)
+    set(element, key, val) if a.nil? or a <= 0
   end
 end

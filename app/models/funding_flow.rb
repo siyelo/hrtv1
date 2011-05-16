@@ -70,7 +70,11 @@ class FundingFlow < ActiveRecord::Base
         chains
       else
         error = from.nil? ? "From was nil" : "From guessed no chains"
-	raise 'From was nil or From didnt guess chains to me'
+        puts error
+	#raise error
+        [FundingChain.new(
+          {:organization_chain => [Organization.new(:name => "Unspecified"), to],
+           :budget => budget, :spend => spend})]
       end
 
     end

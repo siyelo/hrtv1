@@ -156,7 +156,11 @@ END
   end
 
   def amount_for_provider(provider, field)
-    activities.inject(0){|sum, a| sum += a.amount_for_provider(provider, field)}
+    activities.inject(0) do |sum, a| 
+      amt = a.amount_for_provider(provider, field)
+      sum += amt unless amt.nil?
+      sum = sum
+    end
   end
 
   def funding_chains(fake_if_none = true, scale_if_not_match_proj = true)

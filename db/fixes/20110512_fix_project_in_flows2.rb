@@ -44,8 +44,8 @@ csv = FasterCSV.generate do |csv|
 
           csv << row
 
-          #in_flow.self_provider_flag = 1
-          #in_flow.save(false)
+          in_flow.self_provider_flag = 1
+          in_flow.save(false)
         end
       end
     end

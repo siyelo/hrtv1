@@ -564,7 +564,16 @@ class Activity < ActiveRecord::Base
     if sub_activities.empty?
       return self.send(field) if self.provider == provider
     else
-      return sub_activities.select{|a| a.provider == provider}.sum{|a| a.send(field)}
+      sum = 0
+      sub_activities.select{|a| a.provider == provider}.each do |a| 
+        if a.nil?
+          puts "had nil in subactivities in proj #{project.id}"
+        else
+          amt = a.send(field)
+          sum += amt unless amt.nil?
+        end
+      end
+      return sum
     end
     0
   end

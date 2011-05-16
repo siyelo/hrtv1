@@ -6,7 +6,7 @@
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
     = f.input :organization_id_to, :as => :hidden, :value => @response.organization.id, :required => false
     = f.input :from, :collection => Organization.find(:all, :order => 'old_type, name'),
-      :hint => "The organization funding the project", :required => false, :input_html => {:class => 'ff_from'}, :as => :select
+      :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'ff_from'}, :as => :select
 
     - if @response.data_request.spend?
       = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_spend'}

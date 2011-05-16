@@ -12,17 +12,17 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [@activity.try(:project).try(:data_response).try(:projects)].flatten, :hint => "The project this activity correlates to"
+      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [@activity.try(:project).try(:data_response).try(:projects)].flatten, :hint => "The Project this activity correlates to"
 
       #project_sub_form
         #project_sub_form_fields
           - if @activity.project
             = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
 
-      = f.input :name, :required => false, :hint => "The name of this activity."
-      = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this activity."
+      = f.input :name, :required => false, :hint => "The name of this Activity."
+      = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Activity."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => false
 
 
   - if @response.data_request.spend?
@@ -68,32 +68,32 @@
           = render "activities/funding_source_fields", :f => fs
         .add
           = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
-          %p.hint The sources from which your organization receives funding for this activity.
+          %p.hint The sources from which your organization receives funding for this Activity.
         
 
   %li.last
     %h3== Implementers
     %ul.dashboard_section
       %p.hint Service Providers and partners you work with
-      - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
+      - hint = "Service Providers who implement Activities for your organization's Projects/Activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
       = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.find(:all, :order => 'old_type, name'), :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
       = render :partial => 'shared/add_organizations'
       
   %li.last.sub_activities
     %h3 Sub Activities
-    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar activities.
+    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
     - f.semantic_fields_for :sub_activities do |ca|
       = render "activities/sub_activity_fields", :f => ca
     .add
-      = link_to_add_fields "Add sub activity", f, :sub_activities, "activities/"
+      = link_to_add_fields "Add Sub Activity", f, :sub_activities, "activities/"
 
   %li.last
     %h3== Other
     %ul.dashboard_section
-      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiary details / Other beneficiaries", :hint => "Beneficiaries of your activity, if applicable to any of these population groups."
-      = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your activity that are not listed above."
-      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this activity."
+      = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiary details / Other beneficiaries", :hint => "Beneficiaries of your Activity, if applicable to any of these population groups."
+      = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your Activity that are not listed above."
+      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity."
 
   %li
     %ul.horizontal
@@ -104,7 +104,7 @@
 
 - unless @activity.new_record?
   .delete_section
-    = link_to "Delete this Activity", response_activity_path(@response, @activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "delete_btn", :class => 'delete_action'
+    = link_to "Delete this Activity", response_activity_path(@response, @activity), :confirm => "Are you sure you want to delete this Activity?", :method => :delete, :class => "delete_btn", :class => 'delete_action'
     %p
       %strong Warning:
-      Once you delete an activity, you will lose all data associated with it, and there is no undo.
+      Once you delete an Activity, you will lose all data associated with it, and there is no undo.

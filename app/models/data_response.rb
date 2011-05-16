@@ -183,10 +183,10 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      self.errors.add_to_base("Project expenditures or budgets are not yet entered.") unless project_amounts_entered?
+      self.errors.add_to_base("Project expenditures and/or budgets are not yet entered.") unless project_amounts_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      self.errors.add_to_base("Activity expenditures or budgets are not yet entered.") unless activities_spend_or_budget_entered?
+      self.errors.add_to_base("Activity expenditures and/or budgets are not yet entered.") unless activity_amounts_entered?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
@@ -211,7 +211,7 @@ class DataResponse < ActiveRecord::Base
     projects_have_other_costs? &&
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends? &&
-    activities_spend_or_budget_entered? &&
+    activity_amounts_entered? &&
     activities_coded? &&
     other_costs_coded? &&
     projects_and_activities_have_correct_budgets? &&
@@ -235,7 +235,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_without_amounts
-    reject_without_amounts(self.projects)
+    select_without_amounts(self.projects)
   end
 
   def projects_without_budget
@@ -267,7 +267,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activities_without_amounts
-    reject_without_amounts(self.activities)
+    select_without_amounts(self.activities)
   end
 
   def projects_have_activities?
@@ -358,8 +358,8 @@ class DataResponse < ActiveRecord::Base
       activities.select{ |a| a.classified? }
     end
 
-    def reject_without_amounts(items)
-      items.reject do |a|
+    def select_without_amounts(items)
+      items.select do |a|
         (!a.spend_entered? && !a.budget_entered? && request.spend_and_budget?) ||
         (!a.spend_entered? && request.only_spend?) ||
         (!a.budget_entered? && request.only_budget?)

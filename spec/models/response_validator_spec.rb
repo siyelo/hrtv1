@@ -1,20 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-shared_examples_for "activities with either budget or spend set" do
-  it "is OK if least one of budget or spend set" do
-    @response.uncoded_activities.should be_empty
-    @response.activity_amounts_entered?.should == true
-  end
-end
-
-shared_examples_for "checks coded Activities"
+shared_examples_for "checks coded Activities" do
   it "should find no uncoded Activities" do
     @response.uncoded_activities.should be_empty
     @response.activities_coded?.should == true
   end
 end
 
-shared_examples_for "checks coded Other Costs"
+shared_examples_for "checks coded Other Costs" do
   it "should find no uncoded Other Costs" do
     @response.uncoded_other_costs.should be_empty
     @response.other_costs_coded?.should == true
@@ -72,20 +65,18 @@ describe DataResponse do #validations
 
     describe "project amounts entered" do
       it "succeeds if it has a spend and budget" do
-        @response.projects_amounts_entered?.should == true
+        @response.project_amounts_entered?.should == true
       end
 
       it "succeeds with only a budget entered" do
-          @project   = Factory(:project, :data_response => @response, :budget => 10, :spend => nil)
-          @response.project_amounts_entered?.should == true
-        end
+        @project   = Factory(:project, :data_response => @response, :budget => 10, :spend => nil)
+        @response.project_amounts_entered?.should == true
       end
 
       it "succeeds with only a spend entered" do
-          @project   = Factory(:project, :data_response => @response,
-            :budget => nil, :spend => 10)
-          @response.project_amounts_entered?.should == true
-        end
+        @project   = Factory(:project, :data_response => @response,
+          :budget => nil, :spend => 10)
+        @response.project_amounts_entered?.should == true
       end
 
       it "succeeds if spend not entered but a quarter spend is" do
@@ -110,26 +101,41 @@ describe DataResponse do #validations
     end
 
     describe "activity amounts entered" do
-      describe "only budget set" do
-        before :each do
-          @activity   = Factory(:activity_w_only_budget_coding, :data_response => @response,
-            :project => @project)
-        end
-
-        it_should_behave_like "activities with either budget or spend set"
+      it "succeeds if it has a spend and budget" do
+        @response.activity_amounts_entered?.should == true
       end
 
-      describe "activity with only spend set" do
-        before :each do
-          @activity   = Factory(:activity_w_only_spend_coding, :data_response => @response,
-            :project => @project)
-        end
+      it "succeeds with only a budget entered" do
+        @activity.spend = nil; @activity.save; @response.reload
+        @response.activity_amounts_entered?.should == true
+      end
 
-        it_should_behave_like "activities with either budget or spend set"
+      it "succeeds with only a spend entered" do
+        @activity.budget = nil; @activity.save; @response.reload
+        @response.activity_amounts_entered?.should == true
+      end
+
+      it "succeeds if spend not entered but a quarter spend is" do
+        @activity.spend = nil; @activity.spend_q1 = 10 ; @activity.save
+        @response.activity_amounts_entered?.should == true
+      end
+
+      it "fails if spend is not entered and no quarter spends are" do
+        @activity.spend = nil; @activity.save
+        @response.activity_amounts_entered?.should == false
+      end
+
+      it "succeeds if budget not entered but a quarter budget is" do
+        @activity.budget = nil; @activity.budget_q1 = 10; @activity.save
+        @response.activity_amounts_entered?.should == true
+      end
+
+      it "fails if budget is not entered and no quarter budgets are" do
+        @activity.budget = nil; @activity.save
+        @response.activity_amounts_entered?.should == false
       end
     end
   end
-
 
   describe "project linking" do
     before :each do
@@ -180,19 +186,17 @@ describe DataResponse do #validations
     context "response is complete" do
       it "validates OK if everything is entered" do
         @response.projects_entered?.should == true
-        @response.projects_amounts_entered?.should == true
-        @response.projects_budget_entered?.should == true
+        @response.project_amounts_entered?.should == true
         @response.projects_linked?.should == true
+        @response.activity_amounts_entered?.should == true
         @response.activities_coded?.should == true
         @response.other_costs_coded?.should == true
-
         @response.projects_have_activities?.should == true
         @response.projects_have_other_costs?.should == true
         @response.projects_and_funding_sources_have_matching_budgets?.should == true
         @response.projects_and_funding_sources_have_correct_spends?.should == true
         @response.projects_and_activities_have_correct_budgets?.should == true
         @response.projects_and_activities_have_correct_spends?.should == true
-
         @response.ready_to_submit?.should == true
       end
 
@@ -203,20 +207,17 @@ describe DataResponse do #validations
     end
 
     it "succeeds if only project budget defined " do
-      @project.budget = 10; @project.spend = nil; @project.save;
-      @response.reload
+      @project.budget = 10; @project.spend = nil; @project.save; @response.reload
       @response.ready_to_submit?.should == true
     end
 
     it "succeeds if only project spend defined" do
-      @project.budget = nil; @project.spend = 10; @project.save
-      @response.reload
+      @project.budget = nil; @project.spend = 10; @project.save; @response.reload
       @response.ready_to_submit?.should == true
     end
 
     it "succeeds if only activity budget defined " do
-      @activity.budget = 10; @activity.spend = nil; @activity.save;
-      @response.reload
+      @activity.budget = 10; @activity.spend = nil; @activity.save; @response.reload
       @response.ready_to_submit?.should == true
     end
 
@@ -228,21 +229,16 @@ describe DataResponse do #validations
 
     context "projects not linked" do
       before :each do
-        @funder.project_from_id = nil
-        @funder.save
+        @funder.project_from_id = nil; @funder.save
       end
 
       it "succeeds if request not in final review" do
-        @request.final_review = false
-        @request.save
-        @response.reload
+        @request.final_review = false; @request.save; @response.reload
         @response.ready_to_submit?.should == true
       end
 
       it "fails if in final review " do
-        @request.final_review = true
-        @request.save
-        @response.reload
+        @request.final_review = true; @request.save; @response.reload
         @response.ready_to_submit?.should == false
       end
     end
@@ -253,9 +249,8 @@ describe DataResponse do #validations
     end
 
     it "fails if project spends are not entered" do
-      @project.spend = nil
-      @project.save
-      @response.projects_amounts_entered?.should == false
+      @project.spend = nil; @project.save
+      @response.project_amounts_entered?.should == false
       @response.ready_to_submit?.should == false
     end
 

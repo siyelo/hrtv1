@@ -1,0 +1,7 @@
+= link_to "Add Organization", '#', :class => 'show_organizations_add create_new', :id => 'show_organizations_add'
+.add_organization{:style => "display: none;"}
+  %li
+    = label_tag :organization_name
+    = text_field_tag :organization_name, '', :class => 'organization_name'
+    %p.inline-hints The name of the organization
+  = link_to "Create Organization", organizations_path, :class => 'add_organization_link create_new'

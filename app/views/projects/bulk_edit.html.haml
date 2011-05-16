@@ -1,3 +1,7 @@
+:javascript
+  var _response_id = #{@response.id.to_json};
+  
+  
 %h1.main_heading Link to Funders' Projects
 
 - if current_user.tips_shown
@@ -38,9 +42,10 @@
     %thead.static
       %tr
         %th Name
-        %th Description
+        
         %th Funder
         %th Funder Project
+        %th Description
         %th Budget
         %th Spend
     %tbody
@@ -49,15 +54,16 @@
           %tr
             %td
               = project.name
-              = link_to "(Edit)", edit_response_project_path(project.response, project)
-            %td= project.description
+              = link_to "(Edit)", edit_response_project_path(project.response, project)      
             %td= !in_flow.from.blank? ? in_flow.from.try(:name) : "Funder Missing: Edit Project then return here to link"
             %td
               - unless in_flow.from.nil?
-                = select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from, project.id), in_flow.project_from_id)
+                = select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from, project.id), in_flow.project_from_id), :class => 'parent_project'
+            %td{:class => 'funder_project_description'}
             %td= project.budget
             %td= project.spend
 
   %br
   - @projects.count
   =submit_tag "Update", :class => 'small_submit_button'
+  

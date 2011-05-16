@@ -192,8 +192,8 @@ class DataResponse < ActiveRecord::Base
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
       self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_correct_budgets?
-      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_correct_spends?
+      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
+      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
   end
@@ -214,9 +214,24 @@ class DataResponse < ActiveRecord::Base
     activity_amounts_entered? &&
     activities_coded? &&
     other_costs_coded? &&
-    projects_and_activities_have_correct_budgets? &&
-    projects_and_activities_have_correct_spends?
+    projects_and_activities_have_matching_budgets? &&
+    projects_and_activities_have_matching_spends?
   end
+
+  def basics_done_to_h
+    {:projects_entered =>                                  projects_entered?,
+    :project_amounts_entered =>                            project_amounts_entered?,
+    :projects_have_activities =>                           projects_have_activities?,
+    :projects_have_other_costs =>                          projects_have_other_costs?,
+    :projects_and_funding_sources_have_matching_budgets => projects_and_funding_sources_have_matching_budgets?,
+    :projects_and_funding_sources_have_correct_spends =>   projects_and_funding_sources_have_correct_spends?,
+    :activity_amounts_entered =>                           activity_amounts_entered?,
+    :activities_coded =>                                   activities_coded?,
+    :other_costs_coded =>                                  other_costs_coded?,
+    :projects_and_activities_have_matching_budgets =>       projects_and_activities_have_matching_budgets?,
+    :projects_and_activities_have_matching_spends? =>       projects_and_activities_have_matching_spends? }
+  end
+
 
   def ready_to_submit?
     if request.final_review?
@@ -304,7 +319,7 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def projects_and_activities_have_correct_budgets?
+  def projects_and_activities_have_matching_budgets?
     projects.each do |project|
       return false if project.budget != (project.activities_budget_total +
                                          project.other_costs_budget_total)
@@ -312,7 +327,7 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def projects_and_activities_have_correct_spends?
+  def projects_and_activities_have_matching_spends?
     projects.each do |project|
       return false if project.spend != (project.activities_spend_total +
                                         project.other_costs_spend_total)
@@ -365,7 +380,6 @@ class DataResponse < ActiveRecord::Base
         (!a.budget_entered? && request.only_budget?)
       end
     end
-
 end
 
 

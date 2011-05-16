@@ -124,48 +124,24 @@ describe DataResponse do #validations
         :budget => 100, :spend => 80)
     end
 
-    context "response is complete" do
-      it "validates OK if everything is entered" do
-        @response.projects_entered?.should == true
-        @response.project_amounts_entered?.should == true
-        @response.projects_linked?.should == true
-        @response.activity_amounts_entered?.should == true
-        @response.activities_coded?.should == true
-        @response.other_costs_coded?.should == true
-        @response.projects_have_activities?.should == true
-        @response.projects_have_other_costs?.should == true
-        @response.projects_and_funding_sources_have_matching_budgets?.should == true
-        @response.projects_and_funding_sources_have_correct_spends?.should == true
-        @response.projects_and_activities_have_correct_budgets?.should == true
-        @response.projects_and_activities_have_correct_spends?.should == true
-        @response.ready_to_submit?.should == true
-      end
-
-      it "submits if everything is coded" do
-        @response.submit!.should == true
-      end
-
-    end
-
-    it "succeeds if only project budget defined " do
-      @project.budget = 10; @project.spend = nil; @project.save
+    it "is OK if everything is entered" do
+      @response.projects_entered?.should == true
+      @response.project_amounts_entered?.should == true
+      @response.projects_linked?.should == true
+      @response.activity_amounts_entered?.should == true
+      @response.activities_coded?.should == true
+      @response.other_costs_coded?.should == true
+      @response.projects_have_activities?.should == true
+      @response.projects_have_other_costs?.should == true
+      @response.projects_and_funding_sources_have_matching_budgets?.should == true
+      @response.projects_and_funding_sources_have_correct_spends?.should == true
+      @response.projects_and_activities_have_matching_budgets?.should == true
+      @response.projects_and_activities_have_matching_spends?.should == true
       @response.ready_to_submit?.should == true
     end
 
-    it "succeeds if only project spend defined" do
-      @project.budget = nil; @project.spend = 10; @project.save
-      @response.ready_to_submit?.should == true
-    end
-
-    it "succeeds if only activity budget defined " do
-      @activity.budget = 10; @activity.spend = nil; @activity.save
-      @response.ready_to_submit?.should == true
-    end
-
-    it "succeeds if only activity spend defined" do
-      @activity.budget = nil; @activity.spend = 10; @activity.save
-      @response.reload
-      @response.ready_to_submit?.should == true
+    it "allows submit if everything is coded" do
+      @response.submit!.should == true
     end
 
     context "projects not linked" do
@@ -189,9 +165,9 @@ describe DataResponse do #validations
       @response.submit!.should == false
     end
 
-    it "fails if project spends are not entered" do
-      @project.spend = nil; @project.save
-      @response.project_amounts_entered?.should == false
+    it "fails if no project amounts are entered" do
+      @project.spend = @project.budget = nil; @project.save
+      @response.project_amounts_entered?.should == false #duplicates of tests above - left for clarity
       @response.ready_to_submit?.should == false
     end
 
@@ -209,10 +185,7 @@ describe DataResponse do #validations
 
     it "fails if an activity is missing a coding split" do
       cs = @activity.coding_spend.first
-      cs.cached_amount = 0
-      cs.amount = 0
-      cs.save!
-      @activity.reload
+      cs.cached_amount = 0; cs.amount = 0; cs.save! ; @activity.reload
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
@@ -220,10 +193,7 @@ describe DataResponse do #validations
 
     it "fails if there are uncoded other costs" do
       cs = @other_cost.coding_spend.first
-      cs.cached_amount = 0
-      cs.amount = 0
-      cs.save!
-      @other_cost.reload
+      cs.cached_amount = 0; cs.amount = 0; cs.save!; @other_cost.reload
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end
@@ -231,11 +201,11 @@ describe DataResponse do #validations
 
   describe "#projects_and_funding_sources_have_matching_budgets?" do
     before :each do
-      @funder1 = Factory.create(:organization)
-      @funder2 = Factory.create(:organization)
+      @funder1     = Factory.create(:organization)
+      @funder2     = Factory.create(:organization)
       @implementer = Factory.create(:organization)
       @response    = Factory.create(:data_response, :organization => @implementer)
-      @project = Factory.create(:project, :data_response => @response, :budget => 10)
+      @project     = Factory.create(:project, :data_response => @response, :budget => 10)
     end
 
     it "succeeds if no projects entered" do
@@ -245,34 +215,21 @@ describe DataResponse do #validations
     it "is true when budget in flow equals to project budget" do
       Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
                      :data_response => @response, :project => @project, :budget => 10)
-
       @response.projects_and_funding_sources_have_matching_budgets?.should == true
     end
 
     it "is true when sum of budget in flows is equals to funder budget" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 5)
-
+      setup_funder_equal_to_project(:budget)
       @response.projects_and_funding_sources_have_matching_budgets?.should == true
     end
 
     it "is false when sum of budget in flows are greated than funder budget" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 6)
-
+      setup_funder_more_than_project(:budget)
       @response.projects_and_funding_sources_have_matching_budgets?.should == false
     end
 
     it "is false when sum of budget in flows are less than funder budget" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :budget => 6)
-
+      setup_funder_less_than_project(:budget)
       @response.projects_and_funding_sources_have_matching_budgets?.should == false
     end
   end
@@ -289,39 +246,26 @@ describe DataResponse do #validations
     it "is true when spend in flow equals to project spend" do
       Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
                      :data_response => @response, :project => @project, :spend => 10)
-
       @response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 
     it "is true when sum of spend in flows is equals to funder spend" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 5)
-
+      setup_funder_equal_to_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 
-    it "is false when sum of spend in flows are greated than funder spend" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 6)
-
+    it "is false when sum of spend in flows are greater than funder spend" do
+      setup_funder_more_than_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == false
     end
 
     it "is false when sum of spend in flows are less than funder spend" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 5)
-      Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-                     :data_response => @response, :project => @project, :spend => 6)
-
+      setup_funder_less_than_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == false
     end
   end
 
-  describe "#projects_and_activities_have_correct_budgets?" do
+  describe "#projects_and_activities_have_matching_budgets?" do
     before :each do
       @response = Factory.create(:data_response)
       @project  = Factory.create(:project, :data_response => @response, :budget => 10)
@@ -329,36 +273,26 @@ describe DataResponse do #validations
 
     it "is true when activity budget is equal to project budget" do
       Factory.create(:activity, :project => @project, :budget => 10)
-
-      @response.projects_and_activities_have_correct_budgets?.should == true
+      @response.projects_and_activities_have_matching_budgets?.should == true
     end
 
     it "is true when sum of activities and other cost budgets is equal to project budget" do
-      Factory.create(:activity, :project => @project, :budget => 2)
-      Factory.create(:activity, :project => @project, :budget => 3)
-      Factory.create(:other_cost, :project => @project, :budget => 5)
-
-      @response.projects_and_activities_have_correct_budgets?.should == true
+      setup_equal_to_project(:budget)
+      @response.projects_and_activities_have_matching_budgets?.should == true
     end
 
     it "is false when sum of activities and other cost budgets is more than to project budget" do
-      Factory.create(:activity, :project => @project, :budget => 2)
-      Factory.create(:activity, :project => @project, :budget => 3)
-      Factory.create(:other_cost, :project => @project, :budget => 10)
-
-      @response.projects_and_activities_have_correct_budgets?.should == false
+      setup_more_than_project(:budget)
+      @response.projects_and_activities_have_matching_budgets?.should == false
     end
 
     it "is false when sum of activities and other cost budgets is less than to project budget" do
-      Factory.create(:activity, :project => @project, :budget => 2)
-      Factory.create(:activity, :project => @project, :budget => 3)
-      Factory.create(:other_cost, :project => @project, :budget => 3)
-
-      @response.projects_and_activities_have_correct_budgets?.should == false
+      setup_less_than_project(:budget)
+      @response.projects_and_activities_have_matching_budgets?.should == false
     end
   end
 
-  describe "#projects_and_activities_have_correct_spends?" do
+  describe "#projects_and_activities_have_matching_spends?" do
     before :each do
       @response = Factory.create(:data_response)
       @project  = Factory.create(:project, :data_response => @response, :spend => 10)
@@ -366,32 +300,64 @@ describe DataResponse do #validations
 
     it "is true when activity spend is equal to project spend" do
       Factory.create(:activity, :project => @project, :spend => 10)
-
-      @response.projects_and_activities_have_correct_spends?.should == true
+      @response.projects_and_activities_have_matching_spends?.should == true
     end
 
     it "is true when sum of activities and other cost spend is equal to project spend" do
-      Factory.create(:activity, :project => @project, :spend => 2)
-      Factory.create(:activity, :project => @project, :spend => 3)
-      Factory.create(:other_cost, :project => @project, :spend => 5)
-
-      @response.projects_and_activities_have_correct_spends?.should == true
+      setup_equal_to_project(:spend)
+      @response.projects_and_activities_have_matching_spends?.should == true
     end
 
     it "is false when sum of activities and other cost spend is more than to project spend" do
-      Factory.create(:activity, :project => @project, :spend => 2)
-      Factory.create(:activity, :project => @project, :spend => 3)
-      Factory.create(:other_cost, :project => @project, :spend => 10)
-
-      @response.projects_and_activities_have_correct_spends?.should == false
+      setup_more_than_project(:spend)
+      @response.projects_and_activities_have_matching_spends?.should == false
     end
 
     it "is false when sum of activities and other cost spend is less than to project spend" do
-      Factory.create(:activity, :project => @project, :spend => 2)
-      Factory.create(:activity, :project => @project, :spend => 3)
-      Factory.create(:other_cost, :project => @project, :spend => 3)
-
-      @response.projects_and_activities_have_correct_spends?.should == false
+      setup_less_than_project(:spend)
+      @response.projects_and_activities_have_matching_spends?.should == false
     end
   end
+end
+
+#assumes project total is 10
+def setup_equal_to_project(field)
+  setup_project(field,[2,3,5])
+end
+
+def setup_more_than_project(field)
+  setup_project(field,[2,3,10])
+end
+
+def setup_less_than_project(field)
+  setup_project(field,[2,3,3])
+end
+
+# quick setup a spend/budget(field) with amounts (activity1, activity2, othercost1)
+def setup_project(field, amounts)
+  Factory.create(:activity, :project => @project, field => amounts[0])
+  Factory.create(:activity, :project => @project, field => amounts[1])
+  Factory.create(:other_cost, :project => @project, field => amounts[2])
+end
+
+
+#assumes project total is 10
+def setup_funder_equal_to_project(field)
+  setup_funders(field,[5,5])
+end
+
+def setup_funder_more_than_project(field)
+  setup_funders(field,[5,6])
+end
+
+def setup_funder_less_than_project(field)
+  setup_funders(field,[1,1])
+end
+
+# quick setup a spend/budget(field) with amounts (funder1, funder2)
+def setup_funders(field, amounts)
+  Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
+   :data_response => @response, :project => @project, field => amounts[0])
+  Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
+   :data_response => @response, :project => @project, field => amounts[1])
 end

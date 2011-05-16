@@ -50,9 +50,9 @@ Edit config/database.yml per your environment.  This file is not tracked by git.
 
   rake db:schema:load
 
-  rake db:populate
-
   rake db:seed
+
+  rake db:populate
 
 ### App settings
 

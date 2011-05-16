@@ -69,6 +69,7 @@
         .add
           = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
           %p.hint The sources from which your organization receives funding for this activity.
+        
 
   %li.last
     %h3== Implementers
@@ -76,7 +77,8 @@
       %p.hint Service Providers and partners you work with
       - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.find(:all, :order => 'old_type, name'), :hint => hint, :required => false
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.find(:all, :order => 'old_type, name'), :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
+      = render :partial => 'shared/add_organizations'
       
   %li.last.sub_activities
     %h3 Sub Activities

@@ -48,7 +48,8 @@
       %p.hint Service Providers and partners you work with
       - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@other_cost.text_for_provider}\"" if !@other_cost.text_for_provider.blank? && @activity.provider.nil?
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => hint, :required => false
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all, :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
+      = render :partial => 'shared/add_organizations'
       
   %li.last
     %h3== Other

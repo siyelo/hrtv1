@@ -1272,6 +1272,27 @@ var activity_form = function () {
       $('#project_sub_form_hint').show();
     }
   });
+  
+  $('.show_organizations_add').live('click', function(e) {
+    e.preventDefault();
+    var element = $(this);
+    element.next('.add_organization').slideToggle();
+  });
+  
+  $('.add_organization_link').live('click', function(e) {
+    e.preventDefault();
+    var name = $('.organization_name').val();
+    $.post("/organizations.js", { "name" : name }, function(data){
+      var data = $.parseJSON(data);
+      // var implementer = fieldsBlock.find('.implementer_select');
+      $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+      $('.implementer_select').val(data.organization.id);
+    });
+    $('.organization_name').attr('value', '');
+    $('.add_organization').slideToggle();
+  });
+
+
 
   $('.edit').live('click', function (e) {
     e.preventDefault();
@@ -1309,6 +1330,25 @@ var activities_new = activities_create = activities_edit = activities_update = {
 var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
+    
+    $('.show_organizations_add').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      element.next('.add_organization').slideToggle();
+    });
+
+    $('.add_organization_link').live('click', function(e) {
+      e.preventDefault();
+      var name = $('.organization_name').val();
+      $.post("/organizations.js", { "name" : name }, function(data){
+        var data = $.parseJSON(data);
+        // var implementer = fieldsBlock.find('.implementer_select');
+        $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        $('.implementer_select').val(data.organization.id);
+      });
+      $('.organization_name').attr('value', '');
+      $('.add_organization').slideToggle();
+    });
   }
 };
 

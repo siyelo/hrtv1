@@ -257,6 +257,14 @@ class DataResponse < ActiveRecord::Base
 
   def activities_entered?
     !self.normal_activities.empty?
+  end 
+  
+  def activities_have_implementers?
+    return false unless activities_entered?
+    self.activities.each do |activity|
+      return false if activity.implementer.nil?
+    end
+    true
   end
 
   def projects_have_activities?

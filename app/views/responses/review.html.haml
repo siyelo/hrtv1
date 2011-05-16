@@ -19,6 +19,7 @@
 - projects_funding_sources_spends_ok = @response.projects_and_funding_sources_have_correct_spends?
 - projects_activities_budgets_ok = @response.projects_and_activities_have_correct_budgets?
 - projects_activities_spends_ok = @response.projects_and_activities_have_correct_spends?
+- activities_have_implementers = @response.activities_have_implementers? ? "ready" : " not-ready"
 
 = render :partial => 'projects/sub_nav'
 
@@ -157,6 +158,14 @@
               Once your Funder's have added all their projects too, please
               = link_to "link your projects", bulk_edit_response_projects_path(@response)
               to each Funder project respectively.
+              
+      %li
+        %h3{:class => (activities_have_implementers)}
+          All Activities have Providers
+          - unless @response.activities_have_implementers?
+            %span.info
+              - @response.activities.each do |activity|
+                = link_to activity.name, edit_response_activity_path(@response, activity) if activity.implementer.nil?
 
       %li
         %h3{:class => (projects_funding_sources_budgets_ok ? "ready" : "not-ready")}

@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage other costs
   In order to track information
   As a reporter

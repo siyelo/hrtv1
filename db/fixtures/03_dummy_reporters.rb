@@ -1,5 +1,9 @@
 require 'factory_girl'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
+
+reporter = Factory(:reporter)
+print "=> reporter #{reporter.name} created (org: #{reporter.organization.name})"
+
 response = Factory.create(:data_response, :organization => reporter.organization)
 Factory(:project, :data_response => response, :budget => 100, :spend => 80)
 Factory(:activity_fully_coded, :data_response => response, :project => @project)

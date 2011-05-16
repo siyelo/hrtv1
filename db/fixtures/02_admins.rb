@@ -1,10 +1,5 @@
-#create dummy users
-user = User.find_or_create_by_username('admin',
-                :email => 'admin@ubuzima.org',
-                :password => ENV['ADMIN_PASS'] || 'password',
-                :password_confirmation => ENV['ADMIN_PASS'] || 'password',
-                :organization => Organization.find_or_create_by_name("internal_for_dev"),
-                :roles => ['admin'])
+require 'factory_girl'
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
 
-print "  WARN: Admin not created" unless user
-
+admin = Factory(:admin)
+print "=> admin user: #{admin.name} created (org: #{admin.organization.name})"

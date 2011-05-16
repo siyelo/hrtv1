@@ -3,7 +3,30 @@
 // BUTTONS AND BUTTON-LIKE LINKS //
 ///////////////////////////////////
 
-a
+a.target, a.add_nested, a.remove_nested
+  background: image_url("icon_link.png") no-repeat $lightest-blue 10px center
+  display: block
+  font-size: 12px
+  margin-bottom: 5px
+  padding: 10px 8px 8px 28px
+  text-decoration: none
+  +border-radius
+  +transition(hover, 1s, ease, 0)
+  &.grayed-out
+    color: #999
+  &:hover
+    background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+    +box-shadow($light-blue, 0, 0, 5px)
+
+a.add_nested
+  width: 150px
+  +pie-clearfix
+
+a.remove_nested
+  width: 80px
+  +pie-clearfix
+  
+.app a
   &.create_new
     background: $orange
     border: 1px solid $orange - #222

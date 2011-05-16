@@ -85,6 +85,7 @@ class CodeAssignmentsController < Reporter::BaseController
     def add_code_assignments_error(coding_class, activity)
       if !activity_classified?(activity, coding_class)
         coding_type        = get_coding_type(coding_class)
+        amount_name        = coding_type.to_s.capitalize
         coding_type_amount = activity.send(coding_type) || 0
         coding_amount      = activity.send("#{coding_class}_amount")
         coding_amount      = 0 if coding_amount.nil?
@@ -94,13 +95,15 @@ class CodeAssignmentsController < Reporter::BaseController
         coding_amount      = n2c(coding_amount)
         difference         = n2c(difference)
         percent_diff       = n2c(percent_diff)
+        classification_name = get_coding_name(coding_class)
 
         if coding_amount != coding_type_amount
-          return "We're sorry, when we added up your #{get_coding_name(coding_class)}
-           classifications, they equaled #{coding_amount} but the #{coding_type}
+          return "We're sorry, when we added up your #{classification_name}
+           classifications, they equaled #{coding_amount} but the #{amount_name}
            is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount}
            = #{difference}, which is ~#{percent_diff}%). The total classified
-           should add up to #{coding_type_amount}."
+           should add up to #{coding_type_amount}. Your #{classification_name} classifications must be entered and the total must be equal to the #{amount_name} amount."
+
         end
       end
     end

@@ -74,7 +74,7 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "1,234,567.00"
-        And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00." within "#flashes"
+        And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
 
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
@@ -199,7 +199,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Purposes"
         And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
-      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00."
+      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"

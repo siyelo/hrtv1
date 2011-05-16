@@ -32,7 +32,7 @@ class DataRequest < ActiveRecord::Base
   end
 
   def only_budget?
-    !budget? && spend?
+    budget? && !spend?
   end
 
 end

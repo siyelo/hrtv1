@@ -1,18 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-
-shared_examples_for "checks coded Activities" do
-  it "should find no uncoded Activities" do
-    @response.uncoded_activities.should be_empty
-    @response.activities_coded?.should == true
-  end
-end
-
-shared_examples_for "checks coded Other Costs" do
-  it "should find no uncoded Other Costs" do
-    @response.uncoded_other_costs.should be_empty
-    @response.other_costs_coded?.should == true
-  end
-end
+require File.dirname(__FILE__) + '/../helpers/response_validation_helper'
 
 describe DataResponse do #validations
   before :each do
@@ -30,12 +17,21 @@ describe DataResponse do #validations
       @other_cost = Factory(:other_cost_w_spend_coding, :data_response => @response, :project => @project)
     end
 
-    it "is sane" do
-      @activity.spend_classified?.should == true
-      @activity.budget_classified?.should == false
+    it_should_behave_like "project spend checker"
+
+    it "fails if project spend is not entered and no quarter spends are" do
+      @project.spend = nil; @project.save
+      @response.project_amounts_entered?.should == false
     end
-    it_should_behave_like "checks coded Activities"
-    it_should_behave_like "checks coded Other Costs"
+
+    it "is ok if project budget is not entered and no quarter budgets are" do
+      @project.budget = nil; @project.save
+      @response.project_amounts_entered?.should == true
+    end
+
+    it_should_behave_like "activity spend checker"
+    it_should_behave_like "coded Activities checker"
+    it_should_behave_like "coded OtherCosts checker"
   end
 
   describe "Request for only budget" do
@@ -45,13 +41,21 @@ describe DataResponse do #validations
       @other_cost = Factory(:other_cost_w_budget_coding, :data_response => @response, :project => @project)
     end
 
-    it "is sane" do
-      @activity.spend_classified?.should == false
-      @activity.budget_classified?.should == true
+    it_should_behave_like "project budget checker"
+
+    it "fails if project budget is not entered and no quarter budgets are" do
+      @project.budget = nil; @project.save
+      @response.project_amounts_entered?.should == false
     end
 
-    it_should_behave_like "checks coded Activities"
-    it_should_behave_like "checks coded Other Costs"
+    it "is ok if project spend is not entered and no quarter spends are" do
+      @project.spend = nil; @project.save
+      @response.project_amounts_entered?.should == true
+    end
+
+    it_should_behave_like "activity budget checker"
+    it_should_behave_like "coded Activities checker"
+    it_should_behave_like "coded OtherCosts checker"
   end
 
   describe "Requesting both budget and spend" do
@@ -60,81 +64,18 @@ describe DataResponse do #validations
       @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
     end
 
-    it_should_behave_like "checks coded Activities"
-    it_should_behave_like "checks coded Other Costs"
-
-    describe "project amounts entered" do
-      it "succeeds if it has a spend and budget" do
-        @response.project_amounts_entered?.should == true
-      end
-
-      it "succeeds with only a budget entered" do
-        @project   = Factory(:project, :data_response => @response, :budget => 10, :spend => nil)
-        @response.project_amounts_entered?.should == true
-      end
-
-      it "succeeds with only a spend entered" do
-        @project   = Factory(:project, :data_response => @response,
-          :budget => nil, :spend => 10)
-        @response.project_amounts_entered?.should == true
-      end
-
-      it "succeeds if spend not entered but a quarter spend is" do
-        @project.spend = nil; @project.spend_q1 = 10 ; @project.save
-        @response.project_amounts_entered?.should == true
-      end
-
-      it "fails if spend is not entered and no quarter spends are" do
-        @project.spend = nil; @project.save
-        @response.project_amounts_entered?.should == false
-      end
-
-      it "succeeds if budget not entered but a quarter budget is" do
-        @project.budget = nil; @project.budget_q1 = 10; @project.save
-        @response.project_amounts_entered?.should == true
-      end
-
-      it "fails if budget is not entered and no quarter budgets are" do
-        @project.budget = nil; @project.save
-        @response.project_amounts_entered?.should == false
-      end
+    it "succeeds if project has a spend and budget" do
+      @response.project_amounts_entered?.should == true
     end
-
-    describe "activity amounts entered" do
-      it "succeeds if it has a spend and budget" do
-        @response.activity_amounts_entered?.should == true
-      end
-
-      it "succeeds with only a budget entered" do
-        @activity.spend = nil; @activity.save; @response.reload
-        @response.activity_amounts_entered?.should == true
-      end
-
-      it "succeeds with only a spend entered" do
-        @activity.budget = nil; @activity.save; @response.reload
-        @response.activity_amounts_entered?.should == true
-      end
-
-      it "succeeds if spend not entered but a quarter spend is" do
-        @activity.spend = nil; @activity.spend_q1 = 10 ; @activity.save
-        @response.activity_amounts_entered?.should == true
-      end
-
-      it "fails if spend is not entered and no quarter spends are" do
-        @activity.spend = nil; @activity.save
-        @response.activity_amounts_entered?.should == false
-      end
-
-      it "succeeds if budget not entered but a quarter budget is" do
-        @activity.budget = nil; @activity.budget_q1 = 10; @activity.save
-        @response.activity_amounts_entered?.should == true
-      end
-
-      it "fails if budget is not entered and no quarter budgets are" do
-        @activity.budget = nil; @activity.save
-        @response.activity_amounts_entered?.should == false
-      end
+    it_should_behave_like "project spend checker"
+    it_should_behave_like "project budget checker"
+    it "succeeds if activity has spend and budget" do
+      @response.activity_amounts_entered?.should == true
     end
+    it_should_behave_like "activity spend checker"
+    it_should_behave_like "activity budget checker"
+    it_should_behave_like "coded Activities checker"
+    it_should_behave_like "coded OtherCosts checker"
   end
 
   describe "project linking" do
@@ -207,17 +148,17 @@ describe DataResponse do #validations
     end
 
     it "succeeds if only project budget defined " do
-      @project.budget = 10; @project.spend = nil; @project.save; @response.reload
+      @project.budget = 10; @project.spend = nil; @project.save
       @response.ready_to_submit?.should == true
     end
 
     it "succeeds if only project spend defined" do
-      @project.budget = nil; @project.spend = 10; @project.save; @response.reload
+      @project.budget = nil; @project.spend = 10; @project.save
       @response.ready_to_submit?.should == true
     end
 
     it "succeeds if only activity budget defined " do
-      @activity.budget = 10; @activity.spend = nil; @activity.save; @response.reload
+      @activity.budget = 10; @activity.spend = nil; @activity.save
       @response.ready_to_submit?.should == true
     end
 
@@ -453,5 +394,4 @@ describe DataResponse do #validations
       @response.projects_and_activities_have_correct_spends?.should == false
     end
   end
-
 end

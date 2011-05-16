@@ -65,7 +65,7 @@ GEM
       activesupport (>= 2.3.7)
       i18n (~> 0.4)
     gem_plugin (0.2.3)
-    gherkin (2.3.5)
+    gherkin (2.3.7)
       json (>= 1.4.6)
     google_currency (1.2.0)
       money (~> 3.5)
@@ -202,6 +202,7 @@ DEPENDENCIES
   factory_girl (= 1.2.4)
   fastercsv
   formtastic (= 1.2.3)
+  gherkin (= 2.3.7)
   google_currency (= 1.2.0)
   growl
   guard

@@ -61,6 +61,7 @@ end
 group :test do
   gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
   gem 'cucumber'
+  gem 'gherkin', '2.3.7'
   gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'
   gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3

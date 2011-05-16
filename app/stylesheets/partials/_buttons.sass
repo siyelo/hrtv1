@@ -1,0 +1,330 @@
+
+///////////////////////////////////
+// BUTTONS AND BUTTON-LIKE LINKS //
+///////////////////////////////////
+
+a
+  &.create_new
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff
+      +linear-gradient(color-stops(green, green - #222))
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.create_alt
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff
+      +linear-gradient(color-stops(green, green - #222))
+      +text-shadow(green - #222, 0, 0, 1px)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.create_inline
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #444
+    display: inline-block
+    font-size: 9px
+    font-weight: bold
+    line-height: 1 !important
+    margin: 0 0 0 3px
+    padding: 2px 6px 1px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff
+      +linear-gradient(color-stops(green, green - #222))
+      +text-shadow(green - #222, 0, 0, 1px)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.edit_button
+    background: $light-blue
+    border: 1px solid $light-blue - #222
+    color: $mid-blue
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
+    +text-shadow($lighter-blue + #111, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $orange
+      border: 1px solid $orange - #222
+      color: #fff
+      +linear-gradient(color-stops($orange, $orange - #222))
+      +text-shadow($orange - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.delete_button
+    background: $lightest-blue
+    border: 1px solid $light-blue - #222
+    color: $mid-blue
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $red
+      border: 1px solid $red - #222
+      color: #fff
+      +linear-gradient(color-stops($red, $red - #222))
+      +text-shadow($red - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.edit_button
+    background: $light-blue
+    border: 1px solid $light-blue - #222
+    color: $mid-blue
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
+    +text-shadow($lighter-blue + #111, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $orange
+      border: 1px solid $orange - #222
+      color: #fff
+      +linear-gradient(color-stops($orange, $orange - #222))
+      +text-shadow($orange - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.delete_button
+    background: $lightest-blue
+    border: 1px solid $light-blue - #222
+    color: $mid-blue
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $red
+      border: 1px solid $red - #222
+      color: #fff
+      +linear-gradient(color-stops($red, $red - #222))
+      +text-shadow($red - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.overlay
+    color: $light-blue - #333
+    font-size: 11px
+    display: inline-block
+    &:hover
+      color: $mid-blue
+
+
+.next, input[type=submit]
+  +border-radius
+  border: 1px
+  background: $orange
+  color: white
+  cursor: pointer
+  font-size: 14px
+  font-weight: bold
+  padding: 9px 15px 7px 15px
+  text-decoration: none
+  +linear-gradient(color-stops($orange, $orange - #333))
+  +box-shadow(#666, 0, 1px, 3px)
+  +text-shadow(#666, 0, 1px, 1px)
+  &:hover
+    background= !mid-blue
+    color: white
+    text-decoration: none
+  &.big
+    clear: both
+    display: inline-block
+    float: none
+    margin: 10px 0
+    padding: 13px 20px 10px 20px
+    overflow: hidden
+
+  &.small_submit_button
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff
+      +linear-gradient(color-stops(green, green - #222))
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+.next
+  margin-top: -5px
+  
+#buttons
+  margin-bottom: 5px
+  padding: 5px 0px
+  button
+    border: none
+    background: $lightest-blue
+    cursor: pointer
+    margin-right: 5px
+    padding: 3px 5px
+    +border-radius(5px)
+    &:hover
+      background: $mid-blue
+      color: white
+      
+.simple_table a
+  display: inline-block
+  font-size: 1em
+  &.respond
+    background: green
+    color: #fff
+    font-size: 9px
+    font-weight: bold
+    padding: 8px 10px 5px
+    text-transform: uppercase
+    &:hover, &:focus
+      background: orange
+  &.new_btn
+    background: $mid-blue
+    border-bottom: 1px solid $light-blue
+    color: white
+    font-size: 10px
+    margin-top: 10px
+    padding: 6px 12px 5px
+    text-decoration: none
+    text-transform: uppercase
+    +border-top-radius(3px)
+    &:hover
+      background: $light-blue
+      color: $dark-blue
+  &.disabled
+    display: none
+
+a.delete_btn
+  background: #eee
+  border: 1px solid $light-blue
+  display: inline-block
+  font-size: 10px
+  height: auto
+  line-height: 1.4
+  margin-left: 3px
+  padding: 3px 5px 2px
+  text-decoration: none
+  +border-radius(2px)
+  +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+  +text-shadow(#fff, 0, 0, 1px)
+  &:hover, &:focus
+    background: $red
+    border: 1px solid $red - #111
+    color: #fff
+    +linear-gradient(color-stops($red - #111, $red + #111))
+    +text-shadow(#444, 0, 0, 1px)
+  &:active
+    outline: none
+    position: relative
+    top: 1px

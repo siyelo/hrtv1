@@ -1120,7 +1120,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
       });
       fieldsBlock.find('.organization_name').attr('value', '');
       fieldsBlock.find('.add_organization').slideToggle();
-      
     });
     
     validateDates($('#project_start_date'), $('#project_end_date'));
@@ -1138,6 +1137,23 @@ var projects_index = {
     $('#import_export').click(function (e) {
       e.preventDefault();
       $('#import_export_box .upload_box').slideToggle();
+    });
+  }
+};
+
+var projects_bulk_edit = {
+  run: function () {
+    
+    $('.parent_project').live('change', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      var tableRow = element.parents('tr');
+      url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
+      console.log
+      $.get(url, function(data) {
+        var data = $.parseJSON(data);
+        id = tableRow.find('.funder_project_description').html(data.project.description);
+      });
     });
   }
 };

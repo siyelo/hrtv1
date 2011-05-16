@@ -158,7 +158,7 @@ class Activity < ActiveRecord::Base
   def self.download_template(activities = [])
     FasterCSV.generate do |csv|
       header_row = Activity::FILE_UPLOAD_COLUMNS
-      (20 - header_row.length).times{ header_row << nil}
+      (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
 
       csv << header_row
@@ -185,7 +185,7 @@ class Activity < ActiveRecord::Base
         row << activity.start_date
         row << activity.end_date
 
-        (20 - row.length).times{ row << nil}
+        (100 - row.length).times{ row << nil}
         row << activity.id
 
         csv << row
@@ -193,7 +193,7 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def self.find_or_initialize_from_file(response, doc)
+  def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
 
     doc.each do |row| 

@@ -108,7 +108,6 @@ Feature: Reporter can manage projects
      When I follow "Download template"
      Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
-     
     Scenario: A reporter can create comments for a project
      Given a project exists with name: "project1", data_response: data_response "data_response"
      When I follow "Projects"
@@ -139,7 +138,7 @@ Feature: Reporter can manage projects
       And I should see "Comment body"
 
 
-    @javascript 
+    @javascript
     Scenario: A reporter can create in flows for a project
      When I follow "Create Project"
       And I fill in "Name" with "Project1"
@@ -147,7 +146,11 @@ Feature: Reporter can manage projects
       And I fill in "Start date" with "2011-01-01"
       And I fill in "End date" with "2011-12-01"
       And I follow "Add funding source"
-      And I select "organization2" from "From" within ".fields"
+      
+      And I follow "show_organizations_add"
+      And I fill in "organization_name" with "The Best Org"
+      And I follow "Create Organization"
+      And I select "The Best Org" from "From" within ".fields"
       And I fill in "Spent" with "11" within ".fields"
       And I fill in "Q4 08-09" with "22" within ".fields .spend"
       And I fill in "Q1 09-10" with "33" within ".fields .spend"
@@ -183,7 +186,7 @@ Feature: Reporter can manage projects
       And I press "Update Project"
       And I follow "Project1"
      Then the "Budget" field within ".fields" should contain "7778"
-
+     
   Scenario: If the data_request spend is not checked, spend should not show up in the project screen
    Given I follow "Sign Out"
     And an organization exists with name: "organization5"

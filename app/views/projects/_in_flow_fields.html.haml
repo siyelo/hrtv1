@@ -29,8 +29,11 @@
           = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q2'}
           = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q3'}
           = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q4'}
-
+          
+    = render :partial => 'projects/add_organizations'
   .preview_block{:style => "display: none;"}
 
   .manage_block
     = link_to_remove_fields "X", f, :class => 'delete'
+    
+

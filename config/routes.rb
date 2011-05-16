@@ -65,6 +65,8 @@ ActionController::Routing::Routes.draw do |map|
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
   end
+  
+  map.resources :organizations
 
   # REPORTER USER
   map.namespace :reporter do |reporter|

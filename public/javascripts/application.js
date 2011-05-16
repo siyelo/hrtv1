@@ -1100,7 +1100,29 @@ var projects_new = projects_create = projects_edit = projects_update = {
       element.find('.preview_block').hide();
       close_project_in_flow_fields(fields);
     });
-
+    
+    $('.show_organizations_add').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      element.next('.add_organization').slideToggle();
+    });
+ 
+    $('.add_organization_link').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      var fieldsBlock = element.parents('.fields');
+      var name = fieldsBlock.find('.organization_name').val();
+      $.post("/organizations.js", { "name" : name }, function(data){
+        var data = $.parseJSON(data);
+        var ff_from = fieldsBlock.find('.ff_from');
+        ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        ff_from.val(data.organization.id);
+      });
+      fieldsBlock.find('.organization_name').attr('value', '');
+      fieldsBlock.find('.add_organization').slideToggle();
+      
+    });
+    
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }

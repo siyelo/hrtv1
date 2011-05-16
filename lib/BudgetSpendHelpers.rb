@@ -85,6 +85,16 @@ module BudgetSpendHelpers
     budget * Money.default_bank.get_rate(currency, :RWF)
   end
 
+  def spend_entered?
+    spend.present? || spend_q1.present? || spend_q2.present? ||
+      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+  end
+
+  def budget_entered?
+    budget.present? || budget_q1.present? || budget_q2.present? ||
+      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+  end
+
   protected
 
     # some older, unmigrated objects are going to break here...

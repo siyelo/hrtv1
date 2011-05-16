@@ -183,17 +183,17 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      self.errors.add_to_base("Project expenditures are not yet entered.") unless projects_spend_entered?
-      self.errors.add_to_base("Project budgets are not yet entered.") unless projects_budget_entered?
+      self.errors.add_to_base("Project expenditures and/or budgets are not yet entered.") unless project_amounts_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
+      self.errors.add_to_base("Activity expenditures and/or budgets are not yet entered.") unless activity_amounts_entered?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_budgets?
+      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_correct_budgets?
-      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_correct_spends?
+      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
+      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
   end
@@ -206,17 +206,32 @@ class DataResponse < ActiveRecord::Base
 
   def basics_done?
     projects_entered? &&
-    projects_spend_entered? &&
-    projects_budget_entered? &&
-    activities_coded? &&
-    other_costs_coded? &&
+    project_amounts_entered? &&
     projects_have_activities? &&
     projects_have_other_costs? &&
-    projects_and_funding_sources_have_correct_budgets? &&
+    projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends? &&
-    projects_and_activities_have_correct_budgets? &&
-    projects_and_activities_have_correct_spends?
+    activity_amounts_entered? &&
+    activities_coded? &&
+    other_costs_coded? &&
+    projects_and_activities_have_matching_budgets? &&
+    projects_and_activities_have_matching_spends?
   end
+
+  def basics_done_to_h
+    {:projects_entered =>                                  projects_entered?,
+    :project_amounts_entered =>                            project_amounts_entered?,
+    :projects_have_activities =>                           projects_have_activities?,
+    :projects_have_other_costs =>                          projects_have_other_costs?,
+    :projects_and_funding_sources_have_matching_budgets => projects_and_funding_sources_have_matching_budgets?,
+    :projects_and_funding_sources_have_correct_spends =>   projects_and_funding_sources_have_correct_spends?,
+    :activity_amounts_entered =>                           activity_amounts_entered?,
+    :activities_coded =>                                   activities_coded?,
+    :other_costs_coded =>                                  other_costs_coded?,
+    :projects_and_activities_have_matching_budgets =>       projects_and_activities_have_matching_budgets?,
+    :projects_and_activities_have_matching_spends? =>       projects_and_activities_have_matching_spends? }
+  end
+
 
   def ready_to_submit?
     if request.final_review?
@@ -230,17 +245,12 @@ class DataResponse < ActiveRecord::Base
     !projects.empty?
   end
 
-  # if the request asks for spend, check if the spends were entered
-  def projects_spend_entered?
-    !request.spend? || projects_without_spend.empty?
+  def project_amounts_entered?
+    projects_without_amounts.empty?
   end
 
-  def projects_budget_entered?
-    !request.budget? || projects_without_budget.empty?
-  end
-
-  def projects_without_spend
-    self.projects.select{ |p| !p.spend_entered? }
+  def projects_without_amounts
+    select_without_amounts(self.projects)
   end
 
   def projects_without_budget
@@ -267,6 +277,14 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
+  def activity_amounts_entered?
+    activities_without_amounts.empty?
+  end
+
+  def activities_without_amounts
+    select_without_amounts(self.activities)
+  end
+
   def projects_have_activities?
     return false unless activities_entered?
     self.projects.each do |project|
@@ -287,10 +305,9 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def projects_and_funding_sources_have_correct_budgets?
-    
+  def projects_and_funding_sources_have_matching_budgets?
     self.projects.each do |project|
-      return false unless project.budget_matches_funders? 
+      return false unless project.budget_matches_funders?
     end
     true
   end
@@ -302,17 +319,17 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def projects_and_activities_have_correct_budgets?
+  def projects_and_activities_have_matching_budgets?
     projects.each do |project|
-      return false if project.budget != (project.activities_budget_total + 
+      return false if project.budget != (project.activities_budget_total +
                                          project.other_costs_budget_total)
     end
     true
   end
 
-  def projects_and_activities_have_correct_spends?
+  def projects_and_activities_have_matching_spends?
     projects.each do |project|
-      return false if project.spend != (project.activities_spend_total + 
+      return false if project.spend != (project.activities_spend_total +
                                         project.other_costs_spend_total)
     end
     true
@@ -354,6 +371,14 @@ class DataResponse < ActiveRecord::Base
     # Find all complete Activities
     def select_coded(activities)
       activities.select{ |a| a.classified? }
+    end
+
+    def select_without_amounts(items)
+      items.select do |a|
+        (!a.spend_entered? && !a.budget_entered? && request.spend_and_budget?) ||
+        (!a.spend_entered? && request.only_spend?) ||
+        (!a.budget_entered? && request.only_budget?)
+      end
     end
 end
 

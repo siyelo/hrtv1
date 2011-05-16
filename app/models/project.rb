@@ -48,15 +48,15 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?} 
+  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
-  
-  
+
+
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
@@ -71,7 +71,7 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-  
+
   ### Public methods
   #
   def implementers
@@ -94,8 +94,8 @@ class Project < ActiveRecord::Base
     return c unless c.blank?
     return data_response.currency
   end
-  
-  
+
+
   #Methods correctly strip the non-word characters from the following fields
   CURRENCY_FIELDS = [:budget, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4,  :entire_budget]
     Project.class_eval CURRENCY_FIELDS.each.inject("") {|s,field| s += <<END}
@@ -165,16 +165,6 @@ END
     ufs
   end
 
-  def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? || 
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
-  end
-
-  def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? || 
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
-  end
-
   def linked?
     return false if self.in_flows.empty?
     self.in_flows.each do |in_flow|
@@ -182,11 +172,11 @@ END
     end
     true
   end
-   
+
   def has_activities?
     !self.normal_activities.empty?
   end
-  
+
   def has_other_costs?
     !self.activities.with_type("OtherCost").empty?
   end
@@ -194,16 +184,16 @@ END
   def budget_matches_funders?
      self.in_flows.empty? || (self.budget == self.in_flows_budget_total)
   end
-  
+
   def in_flows_budget_total
     return 0 if self.funding_sources.empty?
     in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
   end
 
   def spend_matches_funders?
-    self.spend == self.in_flows_spend_total 
+    self.spend == self.in_flows_spend_total
   end
-  
+
   def in_flows_spend_total
     in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
@@ -225,15 +215,15 @@ END
   end
 
   private
-  
+
     ### Validations
-    
+
     def validate_total_budget_not_exceeded
       errors.add(:base, "Budget must be less than or equal to the Total Budget") if budget > entire_budget
     end
-    
+
     ### Misc
-    
+
     def trace_ultimate_funding_source(organization, funders, traced = [])
       #spacing = '   ' * traced.length                 # DEBUG
       #puts "#{spacing}tracing #{organization.name}"   # DEBUG

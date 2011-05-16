@@ -1,10 +1,13 @@
-#create dummy users
-user = User.find_or_create_by_username('admin',
-                :email => 'admin@ubuzima.org',
-                :password => ENV['ADMIN_PASS'] || 'password',
-                :password_confirmation => ENV['ADMIN_PASS'] || 'password',
-                :organization => Organization.find_or_create_by_name("internal_for_dev"),
-                :roles => ['admin'])
+require 'factory_girl'
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
 
-print "  WARN: Admin not created" unless user
-
+begin
+  puts "creating admin"
+  org = Factory(:organization, :name => 'internal_admin_org')
+  admin = Factory(:admin, :username => 'admin', :email => 'admin@eg.com', :organization => org)
+rescue ActiveRecord::RecordInvalid => e
+  puts e.message
+  puts "   Do you already have an org 'admin_org' or user named 'admin'? "
+else
+  puts "=> admin user: #{admin.name} created (org: #{admin.organization.name})"
+end

@@ -23,6 +23,18 @@ class DataRequest < ActiveRecord::Base
     return 'In progress'
   end
 
+  def spend_and_budget?
+    spend? && budget?
+  end
+
+  def only_spend?
+    spend? && !budget?
+  end
+
+  def only_budget?
+    budget? && !spend?
+  end
+
 end
 
 

@@ -20,8 +20,8 @@ Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
   f.activity        { Factory.create :activity }
 end
 
-### partial factories to keep it DRY
 
+### Partial factories: just to keep it DRY
 Factory.define :_budget_coded, :class => Activity, :parent => :activity  do |f|
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
@@ -33,6 +33,8 @@ Factory.define :_spend_coded, :class => Activity, :parent => :activity  do |f|
   f.after_create { |a| Factory(:coding_spend_cost_categorization, :cached_amount => 40, :activity => a) }
   f.after_create { |a| Factory(:service_level_spend, :cached_amount => 40, :activity => a) }
 end
+# end partials
+
 
 ### Factories with codings
 
@@ -43,6 +45,16 @@ end
 Factory.define :activity_w_budget_coding, :class => Activity, :parent => :_budget_coded  do |f|
   f.after_create { |a| Factory(:coding_budget, :cached_amount => 50, :activity => a) }
 end
+
+# An activity that has no spend yet (e.g. a newly started activity)
+Factory.define :activity_w_only_budget_coding, :class => Activity, :parent => :activity_w_budget_coding  do |f|
+  f.spend           { nil }
+end
+
+Factory.define :activity_w_only_spend_coding, :class => Activity, :parent => :activity_w_spend_coding  do |f|
+  f.budget           { nil }
+end
+
 
 Factory.define :activity_fully_coded, :class => Activity, :parent => :activity_w_spend_coding  do |f|
   # Not DRY. Need to figure out how to mix two factories together
@@ -67,3 +79,5 @@ Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_c
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:service_level_budget, :cached_amount => 50, :activity => a) }
 end
+
+

@@ -15,6 +15,7 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
     @treemap      = params[:chart_type] == "treemap"
     @pie          = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type     = get_code_type_and_initialize(params[:code_type])
+    @chart_name   = get_chart_name(params[:code_type])
     activities    = @organization.dr_activities
 
     if @pie

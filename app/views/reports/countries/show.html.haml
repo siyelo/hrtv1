@@ -59,20 +59,13 @@
   - if !@hssp2_strat_prog && !@hssp2_strat_obj
     %li= link_to "Treemap", reports_country_path(:chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
 
-- if @mtef
-  - type = 'MTEF'
-- elsif @cost_category
-  - type = 'Inputs'
-- else
-  - type = 'NSP'
-
 .full
   .first-half
-    %h2= "#{type} Spent"
+    %h2= "#{@chart_name} Spent"
     #code_spent.bordered
 
   .second-half
-    %h2= "#{type} Budget"
+    %h2= "#{@chart_name} Budget"
     #code_budget.bordered
 
 

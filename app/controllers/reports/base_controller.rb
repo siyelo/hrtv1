@@ -22,4 +22,21 @@ class Reports::BaseController < ApplicationController
 
       code_type
     end
+
+    def get_chart_name(code_type)
+      case code_type
+      when 'mtef'
+        'MTEF'
+      when 'cost_category'
+        'Inputs'
+      when 'nsp', '', nil
+        'NSP'
+      when 'hssp2_strat_prog'
+        'HSSP2 Strat Prog'
+      when 'hssp2_strat_obj'
+        'HSSP2 Strat Obj'
+      else
+        raise "Invalid code type #{code_type}"
+      end
+    end
 end

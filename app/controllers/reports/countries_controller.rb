@@ -1,8 +1,9 @@
 class Reports::CountriesController < Reports::BaseController
 
   def show
-    @pie      = params[:chart_type] == "pie" || params[:chart_type].blank?
-    code_type = get_code_type_and_initialize(params[:code_type])
+    @pie        = params[:chart_type] == "pie" || params[:chart_type].blank?
+    code_type   = get_code_type_and_initialize(params[:code_type])
+    @chart_name = get_chart_name(params[:code_type])
 
     if @pie
       if @hssp2_strat_prog || @hssp2_strat_obj

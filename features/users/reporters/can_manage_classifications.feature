@@ -29,8 +29,8 @@ Feature: Reporter can manage classifications
       And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 100, spend: 200
 
-      And a coding_budget exists with activity: the activity, code: mtef_code "mtef11", amount: 44
-      And a coding_budget exists with activity: the activity, code: mtef_code "mtef12", amount: 55
+      And a coding_spend exists with activity: the activity, code: mtef_code "mtef11", amount: 44
+      And a coding_spend exists with activity: the activity, code: mtef_code "mtef12", amount: 55
       And I am signed in as "reporter"
 
       When I follow "data_request1"

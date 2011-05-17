@@ -95,6 +95,19 @@ class Code < ActiveRecord::Base
     return saved, errors
   end
 
+  def context
+    array = []
+    if parent
+      array << parent.short_display
+      if parent.parent
+        array.unshift(parent.short_display)
+        array.unshift('...') if parent.parent
+      end
+    end
+    array << ''
+    array.join(' > ')
+  end
+
   private
     def assign_type
       self[:type] = type_string

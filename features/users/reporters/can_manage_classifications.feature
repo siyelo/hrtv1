@@ -19,21 +19,18 @@ Feature: Reporter can manage classifications
       # level 3
       And a mtef_code "mtef111" exists with short_display: "mtef111", parent: mtef_code "mtef11"
       And a mtef_code "mtef112" exists with short_display: "mtef112", parent: mtef_code "mtef11"
-
       And an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1", organization: the organization
-      And an organization exists with name: "organization2"
       And a data_response exists with data_request: the data_request, organization: the organization
       And a project exists with name: "Project", data_response: the data_response
       And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 100, spend: 200
-
       And a coding_spend exists with activity: the activity, code: mtef_code "mtef11", amount: 44
       And a coding_spend exists with activity: the activity, code: mtef_code "mtef12", amount: 55
       And I am signed in as "reporter"
 
   @run
-  Scenario: Repoter can edit Purposes classifications for Spent
+  Scenario: Reporter can edit Purposes classifications for Spent
       When I follow "data_request1"
       And I follow "Projects"
       And I follow "Purposes"
@@ -45,6 +42,6 @@ Feature: Reporter can manage classifications
 
   @run1
   Scenario: Reporter can add a purpose
-    Given I am on the purposes classification page for "data_request1" org "organization1"
-    And I follow "Add Purpose" within "project_1"
+    Given I am on the purpose classification page for response "data_request1" org "organization1"
+    And I follow "+ Add Purpose" within the first row
     Then I should see "Search purpose"

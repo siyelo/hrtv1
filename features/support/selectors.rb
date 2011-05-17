@@ -51,6 +51,9 @@ module HtmlSelectorsHelper
     when /the group tab/
       "ul#group"
 
+    when /the first row/
+      ".purpose_row#0"
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
         "Now, go and add a mapping in #{__FILE__}"

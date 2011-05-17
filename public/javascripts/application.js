@@ -1113,7 +1113,27 @@ var projects_new = projects_create = projects_edit = projects_update = {
       close_project_in_flow_fields(fields);
     });
 
-    // ?
+    $('.show_organizations_add').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      element.next('.add_organization').slideToggle();
+    });
+
+    $('.add_organization_link').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      var fieldsBlock = element.parents('.fields');
+      var name = fieldsBlock.find('.organization_name').val();
+      $.post("/organizations.js", { "name" : name }, function(data){
+        var data = $.parseJSON(data);
+        var ff_from = fieldsBlock.find('.ff_from');
+        ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        ff_from.val(data.organization.id);
+      });
+      fieldsBlock.find('.organization_name').attr('value', '');
+      fieldsBlock.find('.add_organization').slideToggle();
+    });
+
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
@@ -1281,11 +1301,15 @@ var activity_form = function () {
     }
   });
 
+<<<<<<< HEAD
   // show the jquery autocomplete combobox instead of
   // standard dropdown
   $( ".combobox" ).combobox();
 
   $('.implementer_select').live('change', function(e) {
+=======
+  $('.show_organizations_add').live('click', function(e) {
+>>>>>>> features/users/reporters/can_manage_classifications.feature
     e.preventDefault();
     var element = $(this);
     if(element.val() == "-1"){
@@ -1361,7 +1385,11 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
 
+<<<<<<< HEAD
     $('.implementer_select').live('change', function(e) {
+=======
+    $('.show_organizations_add').live('click', function(e) {
+>>>>>>> features/users/reporters/can_manage_classifications.feature
       e.preventDefault();
       var element = $(this);
       if(element.val() == "-1"){
@@ -1398,6 +1426,65 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
   }
 };
+
+//###################################
+//# Purposes
+//###################################
+var classifications_edit = {
+  run: function () {
+    $(".add_purpose").click(function(event){
+      purposes.show_add_purpose_form(event, $(this));
+    });
+
+    $(".cancel_add").click(function(event){
+      purposes.hide_add_purpose_form(event, $(this));
+    });
+
+  }
+};
+
+var purposes = {
+  // find the purpose 'row' closest relative to given link
+  find_row: function(link) {
+    return link.closest('.purpose_row');
+  },
+
+  find_row_id: function(link) {
+    return purposes.find_row(link).attr('id');
+  },
+
+  // finds the add form relative to the add link
+  find_add_purpose_form: function(add_link){
+    return $('#add_purpose_form_' + purposes.find_row_id(add_link));
+  },
+
+  // finds the add link relative to the cancel link
+  find_add_purpose_link: function(cancel_link){
+    return purposes.find_row(cancel_link).find(".add_purpose");
+  },
+
+  show_add_purpose_form: function(event, add_link) {
+    event.preventDefault();
+    if(add_link.hasClass('disabled'))
+      return false;
+    var add_purpose_form = purposes.find_add_purpose_form(add_link);
+    add_purpose_form.removeClass('hidden');
+    //TODO: initialize form and add focus
+    add_link.addClass('disabled');
+    return true;
+  },
+
+  hide_add_purpose_form: function(event, cancel_link) {
+    event.preventDefault();
+    var add_purpose_form = purposes.find_add_purpose_form(cancel_link);
+    add_purpose_form.addClass('hidden');
+    add_link = purposes.find_add_purpose_link(cancel_link);
+    add_link.removeClass('disabled');
+    return true;
+  },
+
+};
+//end purposes
 
 $(function () {
 
@@ -1475,5 +1562,9 @@ $(function () {
     $('#gs_container').remove();
     $.post('/profile/disable_tips', { "_method": "put" });
   });
+
+
+
+
 });
 

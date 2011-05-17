@@ -1,0 +1,37 @@
+body.app #content h2.regular
+  background: none
+  padding: 0
+
+ul.integrated_tabs
+  border-bottom: 5px solid $filler
+  margin-left: 40%
+  +pie-clearfix
+  
+  li
+    display: inline
+    float: left
+    
+  a
+    color: $dark-blue
+    display: inline-block
+    font-size: 12px
+    padding: 8px 10px 6px
+    text-decoration: none
+    &.active
+      background: $filler
+      +border-top-radius
+      +linear-gradient(color-stops($filler - #222, $filler))
+      
+ul.purposes_list
+  
+  hgroup
+    display: block
+    float: left
+    width: 40%
+    
+  form
+    background: $filler
+    float: right
+    padding: 10px 1%
+    width: 58%
+    +pie-clearfix

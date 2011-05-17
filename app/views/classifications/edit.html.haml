@@ -3,16 +3,22 @@
 
 %h1.main_heading Purposes
 
-%ul.inline_tab
-  %li= link_to 'Spent', '#'
+%ul.integrated_tabs
+  %li= link_to 'Spent', '#', :class => "active"
   %li= link_to 'Budget', '#'
 
-%ul
+//%ul
+//  %li Activity
+//  %li Purpose
+//  %li Amount
+
+%ul.purposes_list
   - @projects.each do |project|
     - project.activities.each do |activity|
       %li.activity
-        %h2= link_to project.name, edit_response_project_path(@response, project)
-        %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
+        %hgroup
+          %h2.regular= link_to project.name, edit_response_project_path(@response, project)
+          %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
         - if activity.code_assignments.present?
           - form_tag response_classifications_path(@response, :activity_id => activity.id) do
             %ul.classifications

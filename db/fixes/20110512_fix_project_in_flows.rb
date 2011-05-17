@@ -77,6 +77,6 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-File.open(File.join(Rails.root, 'db', 'fixes', '20110512_fix_project_in_flows.csv'), 'w') do |file|
-  file.puts csv
-end
+#File.open(File.join(Rails.root, 'db', 'fixes', '20110512_fix_project_in_flows.csv'), 'w') do |file|
+#  file.puts csv
+#end

@@ -196,7 +196,7 @@ END
     ufs = []
     funding_streams.each do |fs|
       # fa = financing agent - the last link in the chain before the actual implementer
-      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
+      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => fs.budget, :spend => fs.spend}
     end
     ufs
   end

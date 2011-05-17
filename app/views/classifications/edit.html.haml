@@ -4,8 +4,8 @@
 %h1.main_heading Purposes
 
 %ul.integrated_tabs
-  %li= link_to 'Spent', '#', :class => "active"
-  %li= link_to 'Budget', '#'
+  %li= link_to 'Spent', edit_response_classifications_path(@response, :coding_type => spend_coding_type), :class => (params[:coding_type].match('Spend') ? 'active' : nil)
+  %li= link_to 'Budget', edit_response_classifications_path(@response, :coding_type => budget_coding_type), :class => (params[:coding_type].match('Budget') ? 'active' : nil)
 
 //%ul
 //  %li Activity
@@ -21,25 +21,25 @@
           %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
         - code_assignments = activity.code_assignments.with_type(params[:coding_type]).find(:all, :order => 'codes.short_display', :joins => :code, :conditions => 'amount IS NOT NULL OR percentage IS NOT NULL')
         - cached_amount_total = code_assignments.map{|ca| ca.cached_amount}.sum
-        - if code_assignments.present?
-          - form_tag response_classifications_path(@response, :activity_id => activity.id, :coding_type => params[:coding_type]), :method => :put do
-            %ul.classifications
-              - code_assignments.each do |ca|
-                - if ca.amount.present? || ca.percentage.present?
-                  %li
-                    = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
-                    = text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%"
-                    %p= ca.code.context
-                    = image_tag "icon_close_flash.png"
+        - form_tag response_classifications_path(@response, :activity_id => activity.id, :coding_type => params[:coding_type]), :method => :put do
+          %ul.classifications
+            - code_assignments.each do |ca|
+              - if ca.amount.present? || ca.percentage.present?
+                %li
+                  = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
+                  = text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%"
+                  %p= ca.code.context
+                  = image_tag "icon_close_flash.png"
 
-            %ul.left
-              %li Add purpose
+          %ul.left
+            %li Add purpose
+            - if code_assignments.present?
               %li= submit_tag "Save"
 
-            %ul.right
-              %li
-                Total
-                %span= cached_amount_total
-              %li
-                Remaining
-                %span= activity.send(get_coding_type(params[:coding_type])) - cached_amount_total
+          %ul.right
+            %li
+              Total
+              %span= cached_amount_total
+            %li
+              Remaining
+              %span= activity.send(get_coding_type(params[:coding_type])) - cached_amount_total

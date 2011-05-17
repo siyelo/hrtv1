@@ -1,5 +1,9 @@
 #sub-nav.alt
   %ul
-    %li= link_to 'Purposes', edit_response_classifications_path(@response, :coding_type => 'CodingSpend')
-    %li= link_to 'Inputs', '#'
-    %li= link_to 'Service Levels', '#'
+    %li= link_to 'Workplan', '#'
+    %li= link_to 'Funders', '#'
+    %li= link_to 'Implementers', '#'
+    %li{:class => ['CodingSpend', 'CodingBudget'].include?(params[:coding_type]) ? 'active' : nil}= link_to 'Purposes', edit_response_classifications_path(@response, :coding_type => 'CodingSpend')
+    %li{:class => ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:coding_type]) ? 'active' : nil}= link_to 'Inputs', edit_response_classifications_path(@response, :coding_type => 'CodingSpendCostCategorization')
+    %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:coding_type]) ? 'active' : nil}= link_to 'Service Levels', edit_response_classifications_path(@response, :coding_type => 'ServiceLevelSpend')
+    %li= link_to 'Manage', '#'

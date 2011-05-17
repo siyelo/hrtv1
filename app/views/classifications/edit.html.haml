@@ -1,28 +1,36 @@
+
 = render 'shared/data_entry_sub_nav'
 
-%h1 Purposes
+%h1.main_heading Purposes
 
 %ul.inline_tab
   %li= link_to 'Spent', '#'
   %li= link_to 'Budget', '#'
 
-.head Activity
-.head Purpose
-.head Amount
-
-- @projects.each do |project|
-  .project
-    %h2= link_to project.name, edit_response_project_path(@response, project)
+%ul
+  - @projects.each do |project|
     - project.activities.each do |activity|
-      .activity
+      %li.activity
+        %h2= link_to project.name, edit_response_project_path(@response, project)
         %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
-        .classifications
-          - if activity.code_assignments.present?
-            - form_tag response_classifications_path(@response, :activity_id => activity.id) do
+        - if activity.code_assignments.present?
+          - form_tag response_classifications_path(@response, :activity_id => activity.id) do
+            %ul.classifications
               - activity.code_assignments.each do |ca|
-                .classification
+                %li
                   = label_tag :"#{ca.code.short_display}"
                   = text_field_tag :"#{ca.code.short_display}", ca.amount
+                  %p (Services > Development)
+                  = image_tag "icon_close_flash.png"
 
-              = submit_tag "Save"
+            %ul.left
+              %li Add purpose
+              %li= submit_tag "Save"
 
+            %ul.right
+              %li
+                Total
+                %span 100000
+              %li
+                Remaining
+                %span 100000

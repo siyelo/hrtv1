@@ -153,15 +153,15 @@ end
     if ufs.size == 1 and ufs.size == target.size
       ufs = ufs.first; target = target.first
       # simple case, can do pretty compare
-      puts ufs.org_chain
+      #puts ufs.org_chain
       ufs.ufs.should == target[:ufs]
       ufs.fa.should == target[:fa]
       ufs.budget.round(3).should == target[:budget]
       ufs.spend.round(3).should == target[:spend]
       # chain[:org_chain].should == target's after we add chains to test
     else
-      puts ufs.map(&:to_h)
-      debugger
+      #puts ufs.map(&:to_h)
+      #debugger
       raise 'collection comparison not implemented here'
       ufs.should == target
     end

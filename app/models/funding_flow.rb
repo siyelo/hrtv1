@@ -41,7 +41,7 @@ class FundingFlow < ActiveRecord::Base
   def name
     "From: #{from.name} - To: #{to.name}"
   end
-  
+
   def self.create_flows(params)
     unless params[:funding_flows].blank?
       params[:funding_flows].each_pair do |flow_id, project_id|
@@ -55,23 +55,23 @@ class FundingFlow < ActiveRecord::Base
   def funding_chains
     if self_funded?
       [FundingChain.new(
-	{ :organization_chain => [from, to], 
+  { :organization_chain => [from, to],
         :budget => budget, :spend => spend})]
     else
       chains = from.best_guess_funding_chains_to(to, response.data_request) unless from.nil?
-     
+
       unless chains.nil? or chains.empty?
         # TODO for better heurestics will need to pass
         # amounts up into best_guess_funding_chains_to
         FundingChain.adjust_amount_totals!(chains,
-  	  spend.try(:>, 0) ?  spend : 0,
+      spend.try(:>, 0) ?  spend : 0,
           budget.try(:>, 0) ? budget : 0)
-      
+
         chains
       else
         error = from.nil? ? "From was nil" : "From guessed no chains"
         puts error
-	#raise error
+  #raise error
         [FundingChain.new(
           {:organization_chain => [Organization.new(:name => "Unspecified"), to],
            :budget => budget, :spend => spend})]
@@ -83,7 +83,7 @@ class FundingFlow < ActiveRecord::Base
   def self_funded?
     from == to
   end
-  
+
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end

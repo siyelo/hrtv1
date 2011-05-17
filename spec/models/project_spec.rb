@@ -54,7 +54,7 @@ describe Project do
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
-    it { should allow_value('12,323.32').for(:spend) } 
+    it { should allow_value('12,323.32').for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
@@ -65,7 +65,7 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
-    it { should_not allow_value('abcd').for(:spend) } 
+    it { should_not allow_value('abcd').for(:spend) }
 
     it "should have a valid data_response " do
       project = Factory(:project)
@@ -82,8 +82,8 @@ describe Project do
       proj.funding_flows.should have(0).items
     end
   end
-  
-  
+
+
   describe "cleans currency formats" do
     FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
     TESTS = [
@@ -99,7 +99,7 @@ describe Project do
         before :each do
           @project = Factory(:project)
         end
-        
+
         TESTS.each do |test|
           it "should #{test[2]}" do
             @project.send(field.to_s + "=", test[0])
@@ -107,10 +107,10 @@ describe Project do
             @project.send(field).to_s.should == test[1]
           end
         end
-      end  
+      end
     end
   end
-  
+
   context "Submit page: " do
     before(:each) do
       @our_org       = Factory(:organization)
@@ -120,7 +120,7 @@ describe Project do
       @project       = Factory(:project,
                                :data_response => @response )
     end
-    
+
     it "returns true if a project funders has an organization" do
       flow      = Factory(:funding_flow,
                           :from          => @other_org,
@@ -130,7 +130,8 @@ describe Project do
       @project.reload
       @project.funding_sources_have_organizations?.should be_true
     end
-    
+
+    # this should be deprecated since org from is required from now on
     it "returns false if a project funders has an organization" do
       flow      = Factory(:funding_flow,
                           :from          => @other_org,
@@ -140,39 +141,39 @@ describe Project do
       @project.reload
       @project.in_flows.each do |in_flow|
         in_flow.organization_id_from = nil
-        in_flow.save
+        in_flow.save(false)
       end
       @project.reload
       @project.funding_sources_have_organizations?.should be_false
     end
-    
+
     it "checks whether a project has an activity" do
       @activity = Factory(:activity, :project => @project)
       @project.has_activities?.should == true
     end
-    
+
     it "checks whether a project has an activity when it does not" do
       @project.has_activities?.should be_false
     end
-    
+
     it "checks whether a project has an other cost" do
       @activity = Factory(:other_cost, :project => @project)
       @project.has_other_costs?.should == true
     end
-    
+
     it "checks whether a project has an other cost when it does not" do
       @project.has_other_costs?.should be_false
     end
-    
+
     it "checks whether a project has an activity when an other cost is present" do
       @activity = Factory(:other_cost, :project => @project)
       @project.has_activities?.should be_false
     end
-    
+
     it "checks whether a project has an other cost when an activity is present" do
       @activity = Factory(:activity, :project => @project)
       @project.has_other_costs?.should be_false
-    end    
+    end
   end
 
   context "Funding flows: " do
@@ -317,7 +318,7 @@ describe Project do
   end
 
 
-  describe 'Currency override default' do 
+  describe 'Currency override default' do
      before :each do
        @project       = Factory(:project, :data_response => Factory(:data_response, :currency => "RWF"))
      end
@@ -327,13 +328,13 @@ describe Project do
        @project.save
        @project.currency.should == 'EUR'
      end
-    
+
     it "should not return blank" do
       @project1       = Factory.build(:project, :data_response => Factory(:data_response, :currency => "GBP"))
       @project1.save
       @project1.currency.should == "GBP"
     end
-    
+
   end
 
   describe 'Currency cache update' do
@@ -380,7 +381,7 @@ describe Project do
       activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
   end
-  
+
   describe "project spend check" do
     before :each do
       @project = Factory(:complete_project, :spend => 20)
@@ -394,14 +395,14 @@ describe Project do
       @project.spend_entered?.should == true
 
     end
-    
+
     it "succeeds if spend not entered but a quarter spend is" do
       @project.spend = nil
       @project.spend_q1 = 10
       @project.save
       @project.spend_entered?.should == true
     end
-    
+
     it "fails if spend is not entered and no quarter spends are" do
       @project.spend = nil
       @project.save
@@ -417,47 +418,47 @@ describe Project do
     it "succeeds if entered" do
       @project.budget_entered?.should == true
     end
-    
+
     it "succeeds if not entered but a quarter budget is" do
       @project.budget = nil
       @project.budget_q1 = 10
       @project.save
       @project.budget_entered?.should == true
     end
-    
+
     it "fails if not entered and no quarter budgets are" do
       @project.budget = nil
       @project.save
       @project.budget_entered?.should be_false
     end
   end
-  
+
   describe "linking to funding source project" do
     before :each do
       @data_request = Factory(:data_request)
       @data_request1 = Factory(:data_request)
       @organization = Factory(:organization)
       @organization1 = Factory(:organization)
-      @response      = Factory(:data_response, :data_request => @data_request, 
+      @response      = Factory(:data_response, :data_request => @data_request,
                                :organization => @organization)
-      @response1 = Factory(:data_response, :data_request => @data_request1, 
+      @response1 = Factory(:data_response, :data_request => @data_request1,
                                 :organization => @organization1)
       @project = Factory(:project, :data_response => @response)
     end
-    
+
     it "returns false if a project is not linked to a parent project" do
       @project.linked?.should be_false
-    end    
-    
+    end
+
     it "returns true if a project is linked to a parent project" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project, 
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project,
                               :data_response => @response, :project_from_id => @project.id)
       @project.reload
       @project.linked?.should == true
     end
-    
+
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, 
+      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization,
         :project => @project, :data_response => @response, :project_from_id => 0)
       @project.reload
       @project.linked?.should == true

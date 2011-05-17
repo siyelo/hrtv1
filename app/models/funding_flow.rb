@@ -19,18 +19,22 @@ class FundingFlow < ActiveRecord::Base
   alias :response= :data_response=
 
   ### Validations
+  validates_presence_of :project
+  validates_presence_of :data_response_id
+  validates_presence_of :organization_id_from,
+    :message => :"organization_id_from.missing"
+  validates_presence_of :organization_id_to,
+    :message => :"organization_id_to.missing"
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
   validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0,
-    :unless => lambda {|fs| fs["project_from_id"].blank? }
-
-  # GN: Removed until UI shows these well
-  # PT: 12144777
-  #validates_presence_of :project
-  #validates_presence_of :data_response_id
-  #validates_presence_of :organization_id_from, :organization_id_to
+    :unless => lambda {|fs| fs["project_from_id"].blank?}
+  # if we pass "-1" then the user somehow selected "Add an Organization..."
+  validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
+    :unless => lambda {|fs| fs["project_from_id"].blank?},
+    :message => :"organization_id_from.id_below_zero"
 
   delegate :organization, :to => :project
 

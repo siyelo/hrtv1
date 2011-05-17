@@ -225,12 +225,12 @@ module ApplicationHelper
   end
 
   def fiscal_year_prev(data_response)
-    year1 = data_response.fiscal_year_start_date.present? ? 
+    year1 = data_response.fiscal_year_start_date.present? ?
       data_response.fiscal_year_start_date.strftime('%y') : 'xx'
     year2 = data_response.fiscal_year_end_date.present? ?
       data_response.fiscal_year_end_date.strftime('%y') : 'xx'
 
-    "#{year1}-#{year2}" 
+    "#{year1}-#{year2}"
   end
 
   def fiscal_year(data_response)
@@ -242,13 +242,14 @@ module ApplicationHelper
       year2 = 'xx'
     end
 
-    "#{year1}-#{year2}" 
+    "#{year1}-#{year2}"
   end
-  
+
   def funding_organizations_select
     orgs = Organization.find(:all, :order => 'old_type, name')
     organizations = orgs.map{ |o| [o.name, o.id]}
-    options = [["Add an Organization...", "-1"]].concat(organizations)
+    options = [["Add an Organization...", "-1"],
+      ["-----------------------", ""]].concat(organizations)
     options
   end
 end

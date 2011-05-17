@@ -1100,7 +1100,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
       element.find('.preview_block').hide();
       close_project_in_flow_fields(fields);
     });
-    
+
     $('.ff_from').live('change', function(e) {
       e.preventDefault();
       var element = $(this);
@@ -1110,7 +1110,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
         fieldsBlock.find('.add_organization').show();
       }
     });
- 
+
     $('.add_organization_link').live('click', function(e) {
       e.preventDefault();
       var element = $(this);
@@ -1127,7 +1127,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
       fieldsBlock.find('.organization_name').attr('value', '');
       fieldsBlock.find('.add_organization').slideToggle();
     });
-    
+
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
@@ -1149,7 +1149,7 @@ var projects_index = {
 
 var projects_bulk_edit = {
   run: function () {
-    
+
     $('.parent_project').live('change', function(e) {
       e.preventDefault();
       var element = $(this);
@@ -1294,7 +1294,7 @@ var activity_form = function () {
       $('#project_sub_form_hint').show();
     }
   });
-  
+
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
@@ -1333,7 +1333,7 @@ var activity_form = function () {
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
-    // namespace is from project_sub_form, 
+    // namespace is from project_sub_form,
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
@@ -1356,7 +1356,7 @@ var activities_new = activities_create = activities_edit = activities_update = {
 var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
-    
+
     $('.implementer_select').live('change', function(e) {
       e.preventDefault();
       var element = $(this);
@@ -1379,7 +1379,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.organization_name').attr('value', '');
       $('.add_organization').slideToggle();
     });
-        
+
   }
 };
 

@@ -6,7 +6,6 @@ Spork.prefork do
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
 
-
   # This file is copied to ~/spec when you run 'ruby script/generate rspec'
   # from the project root directory.
   ENV["RAILS_ENV"] ||= 'test'
@@ -124,6 +123,7 @@ def ufs_test_setup
 
   Factory(:data_response, :organization => @org_with_empty_data_response,
           :data_request => request)
+
   @response0 = Factory(:data_response, :organization => @org0,
                        :data_request => request, :currency => 'USD')
   @response1 = Factory(:data_response, :organization => @org1,
@@ -144,28 +144,25 @@ def ufs_test_setup
   @proj4 = Factory(:project, :name => 'p4', :data_response => @response4, :currency => "USD")
 end
 
-  def ufs_without_chains(ufs)
-    ufs.each{|fs| fs.delete(:org_chain)}
-  end
+def ufs_without_chains(ufs)
+  ufs.each{|fs| fs.delete(:org_chain)}
+end
 
-  def ufs_equality(ufs, target)
-    #ufs.each{|fs| fs.delete(:org_chain)}
-    if ufs.size == 1 and ufs.size == target.size
-      ufs = ufs.first; target = target.first
-      # simple case, can do pretty compare
-      #puts ufs.org_chain
-      ufs.ufs.should == target[:ufs]
-      ufs.fa.should == target[:fa]
-      ufs.budget.round(3).should == target[:budget]
-      ufs.spend.round(3).should == target[:spend]
-      # chain[:org_chain].should == target's after we add chains to test
-    else
-      #puts ufs.map(&:to_h)
-      #debugger
-      raise 'collection comparison not implemented here'
-      ufs.should == target
-    end
+def ufs_equality(ufs, target)
+  if ufs.size == 1 and ufs.size == target.size
+    ufs = ufs.first; target = target.first
+    # simple case, can do pretty compare
+    ufs.ufs.should == target[:ufs]
+    ufs.fa.should == target[:fa]
+    ufs.budget.round(3).should == target[:budget]
+    ufs.spend.round(3).should == target[:spend]
+    # chain[:org_chain].should == target's after we add chains to test
+  else
+    raise 'collection comparison not implemented here'
+    ufs.should == target
   end
+end
+
 def bd(integer)
   BigDecimal.new(integer.to_s)
 end

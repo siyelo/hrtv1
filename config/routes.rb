@@ -56,6 +56,8 @@ ActionController::Routing::Routes.draw do |map|
                         :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
+      response.resource :classifications,
+        :only => [:edit, :update]
   end
 
   map.resources :activities do |activity|

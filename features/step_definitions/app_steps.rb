@@ -109,7 +109,7 @@ end
 Given /^I am signed in as "([^"]*)"$/ do |name|
   steps %Q{
     When I go to the login page
-    When I fill in "Username or Email" with "#{name}"
+    And I fill in "Username or Email" with "#{name}"
     And  I fill in "Password" with "password"
     And  I press "Sign in"
   }
@@ -118,7 +118,7 @@ end
 Given /^I am signed in as a reporter$/ do
   steps %Q{
     Given a reporter "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    And I am signed in as "Frank"
   }
 end
 

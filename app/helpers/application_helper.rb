@@ -244,4 +244,11 @@ module ApplicationHelper
 
     "#{year1}-#{year2}" 
   end
+  
+  def funding_organizations_select
+    orgs = Organization.find(:all, :order => 'old_type, name')
+    organizations = orgs.map{ |o| [o.name, o.id]}
+    options = [["Add an Organization...", "-1"]].concat(organizations)
+    options
+  end
 end

@@ -31,6 +31,12 @@ en:
     errors:
       full_messages:
         format: "%{attribute} %{message}"
+        organization_id_from:
+          missing: The Funding Source 'from' organization must be set.
+          id_below_zero: The Funding Source 'from' organization must be set.
+        organization_id_to:
+          missing: The Funding Source 'to' organization must be set.
+
 
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:

@@ -15,6 +15,9 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :project_from # funder's project
   belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
 
+  alias :response :data_response
+  alias :response= :data_response=
+
   ### Validations
 
   # if project from id == nil => then the user hasnt linked them
@@ -48,13 +51,44 @@ class FundingFlow < ActiveRecord::Base
       end
     end
   end
+
+  def funding_chains
+    if self_funded?
+      [FundingChain.new(
+	{ :organization_chain => [from, to], 
+        :budget => budget, :spend => spend})]
+    else
+      chains = from.best_guess_funding_chains_to(to, response.data_request) unless from.nil?
+     
+      unless chains.nil? or chains.empty?
+        # TODO for better heurestics will need to pass
+        # amounts up into best_guess_funding_chains_to
+        FundingChain.adjust_amount_totals!(chains,
+  	  spend.try(:>, 0) ?  spend : 0,
+          budget.try(:>, 0) ? budget : 0)
+      
+        chains
+      else
+        error = from.nil? ? "From was nil" : "From guessed no chains"
+        puts error
+	#raise error
+        [FundingChain.new(
+          {:organization_chain => [Organization.new(:name => "Unspecified"), to],
+           :budget => budget, :spend => spend})]
+      end
+
+    end
+  end
+
+  def self_funded?
+    from == to
+  end
+  
+  def donor_funded?
+    ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
+  end
+
 end
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: funding_flows

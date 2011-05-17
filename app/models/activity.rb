@@ -13,7 +13,7 @@ class Activity < ActiveRecord::Base
     "Human Resources for Health" => ["2"],
     "Governance" => ["101","103"],
     "Planning and M&E" => ["102","104","105","106"]
-  }  
+  }
 
   STRAT_OBJ_TO_CODES_FOR_TOTALING = {
     "Across all 3 objectives" => ["1","201","202","203","204","206","207",
@@ -345,7 +345,7 @@ class Activity < ActiveRecord::Base
     coding_spend_cc_classified? &&
     service_level_spend_classified?
   end
-  
+
   # An activity can be considered classified if at least one of these are populated.
   def classified?
     (budget_classified? && !budget.blank?) || (spend_classified? && !spend.blank?)
@@ -524,40 +524,58 @@ class Activity < ActiveRecord::Base
 
   def check_projects_budget_and_spend?
     return true if self.budget.nil? && self.spend.nil?
-    return true if self.actual_budget <= (self.project.budget || 0) && 
-                   self.actual_spend <= (self.project.spend || 0) && 
-                   self.actual_quarterly_spend_check? && 
+    return true if self.actual_budget <= (self.project.budget || 0) &&
+                   self.actual_spend <= (self.project.spend || 0) &&
+                   self.actual_quarterly_spend_check? &&
                    self.actual_quarterly_budget_check?
     return false
   end
-  
+
   def actual_spend
     (self.spend || 0 )
   end
-  
+
   def actual_budget
     (self.budget || 0 )
   end
-  
+
   def actual_quarterly_spend_check?
-    return true if (self.spend_q1 || 0) <= (self.project.spend_q1 || 0) && 
-                   (self.spend_q2 || 0) <= (self.project.spend_q2 || 0) && 
-                   (self.spend_q3 || 0) <= (self.project.spend_q3 || 0) && 
+    return true if (self.spend_q1 || 0) <= (self.project.spend_q1 || 0) &&
+                   (self.spend_q2 || 0) <= (self.project.spend_q2 || 0) &&
+                   (self.spend_q3 || 0) <= (self.project.spend_q3 || 0) &&
                    (self.spend_q4 || 0) <= (self.project.spend_q1 || 0)
     return false
   end
-  
+
   def actual_quarterly_budget_check?
-    return true if (self.budget_q1 || 0) <= (self.project.budget_q1 || 0) && 
-                   (self.budget_q2 || 0) <= (self.project.budget_q2 || 0) && 
-                   (self.budget_q3 || 0) <= (self.project.budget_q3 || 0) && 
+    return true if (self.budget_q1 || 0) <= (self.project.budget_q1 || 0) &&
+                   (self.budget_q2 || 0) <= (self.project.budget_q2 || 0) &&
+                   (self.budget_q3 || 0) <= (self.project.budget_q3 || 0) &&
                    (self.budget_q4 || 0) <= (self.project.budget_q4 || 0)
-                    
+
     return false
   end
 
   def sub_activities_each_have_defined_districts?(coding_type)
     !sub_activity_district_code_assignments_if_complete(coding_type).empty?
+  end
+
+  def amount_for_provider(provider, field)
+    if sub_activities.empty?
+      return self.send(field) if self.provider == provider
+    else
+      sum = 0
+      sub_activities.select{|a| a.provider == provider}.each do |a| 
+        if a.nil?
+          puts "had nil in subactivities in proj #{project.id}"
+        else
+          amt = a.send(field)
+          sum += amt unless amt.nil?
+        end
+      end
+      return sum
+    end
+    0
   end
 
   private
@@ -567,7 +585,7 @@ class Activity < ActiveRecord::Base
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
     end
 
-    # NOTE: respond_to? is used on some fields because 
+    # NOTE: respond_to? is used on some fields because
     # some previous data fixes use this method and at that point
     # some counter cache fields didn't existed
     # TODO: remove the respond_to? when data fixes

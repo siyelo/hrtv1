@@ -24,8 +24,6 @@ end
 
 Then /^the cached field within "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
   field = ".subtotal"
-  #$page = page
-  #debugger
   within(selector) do
     find(field).text.should == value
   end

@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
            :conditions => [ 'self_provider_flag = 0 and
                             organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ 'self_provider_flag = 0 AND
+           :conditions => [ '
                             organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
@@ -80,6 +80,10 @@ class Project < ActiveRecord::Base
 
   def response
     self.data_response
+  end
+
+  def organization
+    response.organization
   end
 
   # view helper ??!
@@ -151,17 +155,49 @@ END
     return saved, errors
   end
 
+  def amount_for_provider(provider, field)
+    activities.inject(0) do |sum, a| 
+      amt = a.amount_for_provider(provider, field)
+      sum += amt unless amt.nil?
+      sum = sum
+    end
+  end
+
+  def funding_chains(fake_if_none = true, scale_if_not_match_proj = true)
+    ufs = in_flows.map(&:funding_chains).flatten
+    ufs = FundingChain.merge_chains(ufs)
+    if ufs.empty? and fake_if_none
+      # if data bad, assume self-funded
+      ufs = [FundingChain.new({:organization_chain => [organization, organization],
+       :budget => budget, :spend => spend})]
+    end
+    if scale_if_not_match_proj
+      ufs = FundingChain.adjust_amount_totals!(ufs, spend, budget)
+    end
+    ufs
+  end
+
   def ultimate_funding_sources
-    funders = in_flows.map(&:from).reject{|f| f.nil?}
-    trace_ultimate_funding_source(organization, funders.uniq)
+    funding_chains
+  end
+
+  def funding_chains_to(to)
+      s = amount_for_provider(to, :spend)
+      b = amount_for_provider(to, :budget)
+      fs = funding_chains
+      if s > 0 or b > 0
+        FundingChain.add_to(fs, to, s, b)
+      else 
+        []
+      end
   end
 
   def cached_ultimate_funding_sources
     ufs = []
     funding_streams.each do |fs|
-      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => budget, :spend => spend}
+      # fa = financing agent - the last link in the chain before the actual implementer
+      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => fs.budget, :spend => fs.spend}
     end
-
     ufs
   end
   
@@ -171,6 +207,16 @@ END
       return false unless in_flow.organization_id_from
     end
     true
+  end
+
+  def spend_entered?
+    spend.present? || spend_q1.present? || spend_q2.present? ||
+      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+  end
+
+  def budget_entered?
+    budget.present? || budget_q1.present? || budget_q2.present? ||
+      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
 
   def linked?
@@ -262,7 +308,7 @@ END
               ffs = funder.in_flows.select{|ff| ff.from == funder}
               funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => get_budget(ffs), :spend => get_spend(ffs)}
-            elsif funder.in_flows.empty? || funder.raw_type == "Donor" # when funder has blank data response
+            elsif funder.in_flows.empty? || ["Multilateral", "Bilateral", "Donor"].include?(funder.raw_type) || funder.name == "Ministry of Health" # when funder has blank data response
               budget, spend = get_budget_and_spend(funder.id, organization.id)
               funding_sources << {:ufs => funder, :fa => traced.last,
                                   :budget => budget, :spend => spend}
@@ -291,7 +337,8 @@ END
       real_funders = []
 
       parent_funders.each do |parent_funder|
-        unless (funder.raw_type == "Donor" && !activities_funders.include?(parent_funder))
+        unless ((funder.raw_type == "Donor" || funder.name == "Ministry of Health") &&
+                !activities_funders.include?(parent_funder))
           real_funders << parent_funder
         end
       end

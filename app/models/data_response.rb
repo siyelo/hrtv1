@@ -256,6 +256,14 @@ class DataResponse < ActiveRecord::Base
   def projects_without_budget
     self.projects.select{ |p| !p.budget_entered? }
   end
+  
+  def check_projects_funding_sources_have_organizations?
+    return false unless projects_entered?
+    self.projects.each do |project|
+      return false unless project.funding_sources_have_organizations?
+    end
+    true
+  end
 
   def projects_linked?
     return false unless projects_entered?

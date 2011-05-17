@@ -16,6 +16,7 @@
 - data_verification = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends? && @response.projects_and_activities_have_matching_budgets? && @response.projects_and_activities_have_matching_spends? && projects_linked_class ? "ready" : "not-ready"
 - projects_funding_sources_ok = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends?
 - projects_activities_ok = @response.projects_and_activities_have_matching_budgets? && @response.projects_and_activities_have_matching_spends?
+- projects_funders_have_organizations = @response.check_projects_funding_sources_have_organizations? ? "ready" : "not-ready"
 - activities_have_implementers = @response.activities_have_implementers? ? "ready" : " not-ready"
 
 = render :partial => 'projects/sub_nav'
@@ -131,15 +132,24 @@
               Once your Funder's have added all their projects too, please
               = link_to "link your projects", bulk_edit_response_projects_path(@response)
               to each Funder project respectively.
+              
+      %li
+        %h3{:class => (projects_funders_have_organizations)}
+          All Projects have Funding Flows have Organizations
+          - unless @response.check_projects_funding_sources_have_organizations?
+            %span.info All Projects have Funding Sources and all Funding Sources have an Organization linked to them
+            - @response.projects.each do |project|
+              %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+
 
       %li
         %h3{:class => (activities_have_implementers)}
           All Activities have Providers
           - unless @response.activities_have_implementers?
             %span.info Not all activities currently have implementers.
-            
             - @response.activities.each do |activity|
-              = link_to nice_name(activity, 16), edit_response_activity_path(@response, activity) if activity.implementer.nil?
+              - if activity.implementer.nil?
+                %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity) 
 
       %li
         %h3{:class => (projects_funding_sources_ok ? "ready" : "not-ready")}

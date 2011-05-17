@@ -3,9 +3,12 @@
 
 %h1.main_heading Purposes
 
+- type_param = params[:coding_type]
+- type_param = 'CodingSpend' unless type_param #default to this one otherwise page breaks with no params.
+
 %ul.integrated_tabs
-  %li= link_to 'Spent', edit_response_classifications_path(@response, :coding_type => spend_coding_type), :class => (params[:coding_type].match('Spend') ? 'active' : nil)
-  %li= link_to 'Budget', edit_response_classifications_path(@response, :coding_type => budget_coding_type), :class => (params[:coding_type].match('Budget') ? 'active' : nil)
+  %li= link_to 'Spent', edit_response_classifications_path(@response, :coding_type => spend_coding_type(type_param)), :class => (type_param.match('Spend') ? 'active' : nil)
+  %li= link_to 'Budget', edit_response_classifications_path(@response, :coding_type => budget_coding_type(type_param)), :class => (type_param.match('Budget') ? 'active' : nil)
 
 //%ul
 //  %li Activity
@@ -20,9 +23,9 @@
           %hgroup
             %h2.regular= link_to project.name, edit_response_project_path(@response, project)
             %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
-          - code_assignments = activity.code_assignments.with_type(params[:coding_type]).find(:all, :order => 'codes.short_display', :joins => :code, :conditions => 'amount IS NOT NULL OR percentage IS NOT NULL')
+          - code_assignments = activity.code_assignments.with_type(type_param).find(:all, :order => 'codes.short_display', :joins => :code, :conditions => 'amount IS NOT NULL OR percentage IS NOT NULL')
           - cached_amount_total = code_assignments.map{|ca| ca.cached_amount}.sum
-          - form_tag response_classifications_path(@response, :activity_id => activity.id, :coding_type => params[:coding_type]), :method => :put do
+          - form_tag response_classifications_path(@response, :activity_id => activity.id, :coding_type => type_param), :method => :put do
             %ul.classifications
               - code_assignments.each do |ca|
                 - if ca.amount.present? || ca.percentage.present?
@@ -33,7 +36,6 @@
                     = image_tag "icon_close_flash.png"
 
             %ul.left
-              %li Add purpose
               - if code_assignments.present?
                 %li= submit_tag "Save"
 
@@ -43,7 +45,7 @@
                 %span= cached_amount_total
               %li
                 Remaining
-                %span= activity.send(get_coding_type(params[:coding_type])) - cached_amount_total
+                %span= activity.send(get_coding_type(type_param)) - cached_amount_total
 
           %div{:id => "add_purpose_form_#{index}", :class => "hidden"}
             %ul

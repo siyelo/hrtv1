@@ -127,7 +127,6 @@ Feature: Reporter can manage activities
       Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
 
-      @run
     Scenario: Reporter can download Activities
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"

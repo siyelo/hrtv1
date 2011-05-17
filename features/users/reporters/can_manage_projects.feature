@@ -147,7 +147,7 @@ Feature: Reporter can manage projects
       And I fill in "End date" with "2011-12-01"
       And I follow "Add funding source"
       
-      And I follow "show_organizations_add"
+      And I select "Add an Organization..." from "From" within ".fields"
       And I fill in "organization_name" with "The Best Org"
       And I follow "Create Organization"
       And I select "The Best Org" from "From" within ".fields"

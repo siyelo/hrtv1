@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FundingFlow do
-
   describe "attributes" do
     it { should allow_mass_assignment_of(:organization_text) }
     it { should allow_mass_assignment_of(:project_id) }
@@ -34,10 +33,14 @@ describe FundingFlow do
   describe "validations" do
     subject { Factory(:funding_flow) }
     it { should be_valid }
-    #it { should validate_presence_of(:project) }
-    #it { should validate_presence_of(:data_response_id) }
+    it { should validate_presence_of(:project) }
+    it { should validate_presence_of(:data_response_id) }
+    ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }
     #it { should validate_presence_of(:organization_id_from) }
+    # and this breaks too
+    #it { should validate_numericality_of(:organization_id_from) }
+    it { should validate_numericality_of(:project_from_id) }
   end
 
   describe "counter cache" do

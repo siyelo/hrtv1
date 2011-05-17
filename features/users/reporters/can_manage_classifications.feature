@@ -41,3 +41,9 @@ Feature: Reporter can manage classifications
       And I fill in "mtef12" with "200"
       And I press "Save"
       Then I should see "Purposes classifications for Spent were successfully saved"
+
+  @run1
+  Scenario: Reporter can add a purpose
+    Given I am on the purposes classification page
+    And I follow "Add Purpose" within "project_1"
+    Then I should see the search purpose box

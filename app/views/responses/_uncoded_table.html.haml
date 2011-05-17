@@ -1,6 +1,5 @@
 - other_costs = false
 - other_costs = true if activities.first.class == OtherCost
--# other_costs ? colspan = 3 : colspan = 4
 - @data_request = activities.first.data_response.data_request
 - colspan = 0
 - ["purposes", "locations", "inputs", "service_levels"].each do |request|

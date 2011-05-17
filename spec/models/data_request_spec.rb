@@ -9,10 +9,10 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:year_q2) }
-    it { should allow_mass_assignment_of(:year_q3) }
-    it { should allow_mass_assignment_of(:year_q4) }
-    it { should allow_mass_assignment_of(:year_q5) }
+    it { should allow_mass_assignment_of(:year_2) }
+    it { should allow_mass_assignment_of(:year_3) }
+    it { should allow_mass_assignment_of(:year_4) }
+    it { should allow_mass_assignment_of(:year_5) }
     it { should allow_mass_assignment_of(:purposes) }
     it { should allow_mass_assignment_of(:locations) }
     it { should allow_mass_assignment_of(:inputs) }

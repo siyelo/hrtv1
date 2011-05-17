@@ -3,8 +3,7 @@ Feature: Reporter can manage classifications
   As a reporter
   I want to be able to classify activities
 
-  @run
-  Scenario: Repoter can edit Purposes classifications for Spent
+  Background:
     # Given the following code structure
     #
     #               / code111
@@ -33,6 +32,8 @@ Feature: Reporter can manage classifications
       And a coding_spend exists with activity: the activity, code: mtef_code "mtef12", amount: 55
       And I am signed in as "reporter"
 
+  @run
+  Scenario: Repoter can edit Purposes classifications for Spent
       When I follow "data_request1"
       And I follow "Projects"
       And I follow "Purposes"
@@ -44,6 +45,6 @@ Feature: Reporter can manage classifications
 
   @run1
   Scenario: Reporter can add a purpose
-    Given I am on the purposes classification page
+    Given I am on the purposes classification page for "data_request1" org "organization1"
     And I follow "Add Purpose" within "project_1"
-    Then I should see the search purpose box
+    Then I should see "Search purpose"

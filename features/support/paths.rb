@@ -58,6 +58,11 @@ module NavigationHelpers
       response = get_data_response($2, $1)
       admin_response_path(response)
 
+    when /the purpose classifications page for response "(.+)" org "(.+)"/
+      req = DataRequest.find_by_title($1)
+      response = Organization.find_by_name($2).data_responses.find_by_data_request_id(req)
+      edit_response_classification_path(response)
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

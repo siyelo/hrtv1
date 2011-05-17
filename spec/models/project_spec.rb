@@ -121,6 +121,31 @@ describe Project do
                                :data_response => @response )
     end
     
+    it "returns true if a project funders has an organization" do
+      flow      = Factory(:funding_flow,
+                          :from          => @other_org,
+                          :to            => @our_org,
+                          :project       => @project,
+                          :data_response => @project.data_response)
+      @project.reload
+      @project.funding_sources_have_organizations?.should be_true
+    end
+    
+    it "returns false if a project funders has an organization" do
+      flow      = Factory(:funding_flow,
+                          :from          => @other_org,
+                          :to            => @our_org,
+                          :project       => @project,
+                          :data_response => @project.data_response)
+      @project.reload
+      @project.in_flows.each do |in_flow|
+        in_flow.organization_id_from = nil
+        in_flow.save
+      end
+      @project.reload
+      @project.funding_sources_have_organizations?.should be_false
+    end
+    
     it "checks whether a project has an activity" do
       @activity = Factory(:activity, :project => @project)
       @project.has_activities?.should == true

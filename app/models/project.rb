@@ -164,6 +164,14 @@ END
 
     ufs
   end
+  
+  def funding_sources_have_organizations?
+    return false if self.in_flows.empty?
+    self.in_flows.each do |in_flow|
+      return false unless in_flow.organization_id_from
+    end
+    true
+  end
 
   def linked?
     return false if self.in_flows.empty?

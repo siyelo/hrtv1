@@ -1,10 +1,14 @@
 = render 'shared/data_entry_sub_nav'
 
+%h1 Purposes
+
 %ul.inline_tab
   %li= link_to 'Spent', '#'
   %li= link_to 'Budget', '#'
 
-%h1 Purposes
+.head Activity
+.head Purpose
+.head Amount
 
 - @projects.each do |project|
   .project

@@ -1505,8 +1505,12 @@ var purposes = {
     return purposes.find_row(cancel_link).find(".add_purpose");
   },
 
-  find_selected_purpose: function(link){
+  find_selected_purpose_id: function(link){
     return purposes.find_add_purpose_form(link).find('.mcdropdown input').filter(':hidden').val();
+  },
+
+  find_selected_purpose_text: function(link){
+    return purposes.find_add_purpose_form(link).find('.mcdropdown input:first').val();
   },
 
   show_add_purpose_form: function(add_link) {
@@ -1526,10 +1530,13 @@ var purposes = {
   },
 
   add_entry: function(save_link) {
-    // determine if the purpose was already added
-    var purpose_id = purposes.find_selected_purpose(save_link);
-    alert(purpose_id);
+    // TODO determine if the purpose was already added
+    var purpose_id = purposes.find_selected_purpose_id(save_link);
+
     // add a row to the actual form that will be submitted
+    var purpose_text = purposes.find_selected_purpose_text(save_link);
+    //alert(purpose_text);
+
 
     // hide the add form
     purposes.hide_add_purpose_form(save_link);

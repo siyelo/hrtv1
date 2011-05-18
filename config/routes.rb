@@ -58,6 +58,8 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :classifications,
         :only => [:edit, :update]
+      response.resource :workplan,
+        :only => [:show, :edit]
   end
 
   map.resources :activities do |activity|

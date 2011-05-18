@@ -29,7 +29,6 @@ Feature: Reporter can manage classifications
       And a coding_spend exists with activity: the activity, code: mtef_code "mtef12", amount: 55
       And I am signed in as "reporter"
 
-  @run
   Scenario: Reporter can edit Purposes classifications for Spent
       When I follow "data_request1"
       And I follow "Projects"

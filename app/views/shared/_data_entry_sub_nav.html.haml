@@ -1,9 +1,9 @@
 #sub-nav.alt
   %ul
-    %li= link_to 'Workplan', '#'
+    %li{:class => (params[:controller] == 'workplans' && params[:action] == 'show' ? 'active' : nil)}= link_to 'Workplan', response_workplan_path(@response)
     %li= link_to 'Funders', '#'
     %li= link_to 'Implementers', '#'
-    %li{:class => ['CodingSpend', 'CodingBudget'].include?(params[:id]) ? 'active' : nil}= link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
-    %li{:class => ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id]) ? 'active' : nil}= link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
+    %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}= link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
+    %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}= link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
     %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}= link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
-    %li= link_to 'Manage', '#'
+    %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}= link_to 'Manage', edit_response_workplan_path(@response)

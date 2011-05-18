@@ -1,4 +1,10 @@
-%ul
-  %input{ :type=> 'text', :class => 'purpose_search'}
-  %li Save
-  %li= link_to "Cancel", "#", :class => "cancel_add"
+%tr{:id => "add_purpose_form_#{index}", :class => "hidden"}
+  %td{:colspan => 3}
+    %ul
+      -# this input gets replaced by mcdropdown
+      %input{ :type=> 'text', :class => "purpose_search", :id => "#{index}"}
+      %li= link_to "Save", "#", :class => 'add_entry'
+      %li= link_to "Cancel", "#", :class => "cancel_add"
+    -# unfortunate workaround for http://forum.jquery.com/topic/mcdropdown-more-than-one-on-a-page
+    -# page will be Big like Tom Hanks.
+    = render 'dropdown_data', :index => index

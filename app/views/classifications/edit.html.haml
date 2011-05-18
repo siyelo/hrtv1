@@ -22,42 +22,17 @@
           %td{:rowspan => project.activities.length + 1}
             = project.name
             %span= activity.title
-        - code_assignments = activity.code_assignments.with_type(params[:id]).find(:all, :order => 'codes.short_display', :joins => :code, :conditions => 'amount IS NOT NULL OR percentage IS NOT NULL')
-        - cached_amount_total = code_assignments.map{|ca| ca.cached_amount}.sum
         %tr{:class => "purpose_row", :id => "#{index}"}
           %td{:colspan => 3}
             - form_tag response_classification_path(@response, params[:id], :activity_id => activity.id), :method => :put do
               %table.standard
                 %tbody
+                  - code_assignments = find_existing_assignments(activity)
                   - code_assignments.each do |ca|
                     - if ca.amount.present? || ca.percentage.present?
-                      %tr{:"data-ca_id" => ca.id}
-                        %td
-                          = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
-                          %span= ca.code.context
-                        %td= text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%"
-                        %td= image_tag "icon_close_flash.png", :class => 'classification_destroy'
-
-                  %tr{:id => "add_purpose_form_#{index}", :class => "hidden"}
-                    %td{:colspan => 3}
-                      = render 'add_purpose_form', :index => index
-
-                  %tr
-                    %td
-                      %ul
-                        %li= link_to "+ Add Purpose", "#", :class => "add_purpose"
-                        - if code_assignments.present?
-                          %li= submit_tag "Save"
-
-                    %td
-                      %ul.right
-                        %li
-                          Total
-                          %span= cached_amount_total
-                        %li
-                          Remaining
-                          %span= (activity.send(get_coding_type(params[:id])) || 0) - cached_amount_total
-                    %td
+                      = render 'purpose', :ca => ca
+                  = render 'add_purpose_form', :index => index
+                  = render 'purpose_footer', :activity => activity, :code_assignments => code_assignments
     %tr
       %td{:colspan => 4}= link_to "Add project", new_response_project_path(@response)
 

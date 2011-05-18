@@ -1445,15 +1445,23 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 var classifications_edit = {
   run: function () {
     $(".classification_destroy").click(function(event){
-      purposes.destroy_classification(event, $(this));
+      event.preventDefault();
+      purposes.destroy_classification($(this));
     });
 
     $(".add_purpose").click(function(event){
-      purposes.show_add_purpose_form(event, $(this));
+      event.preventDefault();
+      purposes.show_add_purpose_form($(this));
+    });
+
+    $(".add_entry").click(function(event){
+      event.preventDefault();
+      purposes.add_entry($(this));
     });
 
     $(".cancel_add").click(function(event){
-      purposes.hide_add_purpose_form(event, $(this));
+      event.preventDefault();
+      purposes.hide_add_purpose_form($(this));
     });
 
     $(".purpose_search").mcDropdown("#purpose_menu", {
@@ -1485,8 +1493,11 @@ var purposes = {
     return purposes.find_row(cancel_link).find(".add_purpose");
   },
 
-  show_add_purpose_form: function(event, add_link) {
-    event.preventDefault();
+  find_selected_purpose: function(link){
+    return purposes.find_add_purpose_form(link).find('.mcdropdown input').filter(':hidden').val();
+  },
+
+  show_add_purpose_form: function(add_link) {
     if(add_link.hasClass('disabled'))
       return false;
     var add_purpose_form = purposes.find_add_purpose_form(add_link);
@@ -1496,17 +1507,27 @@ var purposes = {
     return true;
   },
 
-  hide_add_purpose_form: function(event, cancel_link) {
-    event.preventDefault();
-    var add_purpose_form = purposes.find_add_purpose_form(cancel_link);
+  add_entry: function(save_link) {
+    // determine if the purpose was already added
+    var purpose_id = purposes.find_selected_purpose(save_link);
+    alert(purpose_id);
+    // add a row to the actual form that will be submitted
+
+    // hide the add form
+    purposes.hide_add_purpose_form(save_link);
+  },
+
+  // hides the form containing the given link
+  // works for both save & cancel links
+  hide_add_purpose_form: function(link) {
+    var add_purpose_form = purposes.find_add_purpose_form(link);
     add_purpose_form.addClass('hidden');
-    add_link = purposes.find_add_purpose_link(cancel_link);
+    add_link = purposes.find_add_purpose_link(link);
     add_link.removeClass('disabled');
     return true;
   },
 
-  destroy_classification: function (event, destroy_link) {
-    event.preventDefault();
+  destroy_classification: function(destroy_link) {
     var classification_id = destroy_link.parent().attr('data-ca_id');
     $.post('/activities/' + classification_id + '/code_assignments', {'_method': 'delete'}, function (data, status, response) {})
   },

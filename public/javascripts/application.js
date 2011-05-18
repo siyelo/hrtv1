@@ -1130,8 +1130,12 @@ var projects_new = projects_create = projects_edit = projects_update = {
         var ff_from = fieldsBlock.find('.ff_from');
         fieldsBlock.find('.ff_from_container').show();
         fieldsBlock.find('.add_organization').hide();
-        ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-        ff_from.val(data.organization.id);
+        if(isNaN(data.organization.id)){
+          ff_from.val(null);
+        }else{
+          ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+          ff_from.val(data.organization.id);
+        }
       });
       fieldsBlock.find('.organization_name').attr('value', '');
       fieldsBlock.find('.add_organization').slideToggle();
@@ -1328,8 +1332,12 @@ var activity_form = function () {
       var data = $.parseJSON(data);
       $('.implementer_container').show();
       $('.add_organization').hide();
-      $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-      $('.implementer_select').val(data.organization.id);
+      if(isNaN(data.organization.id)){
+        $('.implementer_select').val(null);
+      }else{
+        $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        $('.implementer_select').val(data.organization.id);
+      }
     });
     $('.organization_name').attr('value', '');
     $('.add_organization').slideToggle();
@@ -1398,8 +1406,12 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
         var data = $.parseJSON(data);
         $('.implementer_container').show();
         $('.add_organization').hide();
-        $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-        $('.implementer_select').val(data.organization.id);
+        if(isNaN(data.organization.id)){
+          $('.implementer_select').val(null);
+        }else{
+          $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+          $('.implementer_select').val(data.organization.id);
+        }
       });
       $('.organization_name').attr('value', '');
       $('.add_organization').slideToggle();

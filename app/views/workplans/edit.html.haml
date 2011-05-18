@@ -1,3 +1,6 @@
+- total_budget = 0
+- total_spend = 0
+
 = render 'shared/data_entry_sub_nav'
 
 %h1.main_heading Manage
@@ -7,21 +10,34 @@
     %tr
       %th Project
       %th Activity
+      %th Budget
+      %th Spend
   %tbody
     - @projects.each do |project|
       %tr
         %td
-          %table.standard
-            %tbody
-              %tr
-                %td= link_to project.name, edit_response_project_path(@response, project)
-                %td.manage
-                  = link_to image_tag("icon_close_flash.png"), response_project_path(@response, project), :method => :delete, :confirm => "Are you sure you want to delete \"#{project.name}\"?", :title => 'Delete project'
+          %div
+            = link_to project.name, edit_response_project_path(@response, project)
+            = link_to 'Edit', edit_response_project_path(@response, project)
+            = link_to image_tag("icon_close_flash.png"), response_project_path(@response, project), :method => :delete, :confirm => "Are you sure you want to delete \"#{project.name}\"?", :title => 'Delete project'
+
         %td
-          %table.standard
-            %tbody
-              - project.activities.each do |activity|
-                %tr
-                  %td= link_to activity.title, edit_response_activity_path(@response, activity)
-                  %td.manage
-                    = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
+          - project.activities.each do |activity|
+            - total_budget += activity.budget if activity.budget.present?
+            - total_spend  += activity.spend if activity.spend.present?
+            %div
+              = link_to activity.title, edit_response_activity_path(@response, activity)
+              = link_to 'Edit', edit_response_activity_path(@response, activity)
+              = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
+              = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
+          %div
+            = link_to "Add activity", new_response_activity_path(@response)
+        %td
+        %td
+    %tr
+      %td
+      %td
+      %td= total_budget
+      %td= total_spend
+
+= link_to "Add project", new_response_project_path(@response)

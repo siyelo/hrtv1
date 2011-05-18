@@ -1458,8 +1458,9 @@ var classifications_edit = {
     });
 
     $(".purpose_search").mcDropdown("#purpose_menu", {
-      hoverOutDelay: 1000,
-      hoverOverDelay: 500,
+      hoverOutDelay: 0,
+      hoverOverDelay: 300,
+      showACOnEmptyFocus: true,
       allowParentSelect: true});
 
   }

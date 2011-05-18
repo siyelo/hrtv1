@@ -1,19 +1,28 @@
 = render 'shared/data_entry_sub_nav'
 
+- fiscal_year_prev = @response.fiscal_year_start_date.try(:year)
+- fiscal_year = @response.fiscal_year_end_date.try(:year)
+
+
 %h1.main_heading Workplan
 
 - form_tag response_workplan_path(@response, params[:id]), :method => :put do
-  %table.standard
+  %table
     %thead
       %tr
         %th{:colspan => 2}
-        %th{:colspan => 5}
+        %th{:colspan => 6}
           %ul
             %li= link_to 'Spend', response_workplan_path(@response, :spend)
             %li= link_to 'Budget', response_workplan_path(@response, :budget)
       %tr
+        %th{:colspan => 2}
+        %th= fiscal_year_prev
+        %th{:colspan => 5}= fiscal_year
+      %tr
         %th Project
         %th Activity
+        %th Q4 Prev
         %th Q1
         %th Q2
         %th Q3
@@ -26,18 +35,19 @@
         - project.activities.each do |activity|
           %tr
             %td= activity.title
+            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q4_prev", activity.send("#{params[:id]}_q4_prev")
             %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q1", activity.send("#{params[:id]}_q1")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q1", activity.send("#{params[:id]}_q2")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q1", activity.send("#{params[:id]}_q3")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q1", activity.send("#{params[:id]}_q4")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}", activity.send(params[:id])
+            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q2", activity.send("#{params[:id]}_q2")
+            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q3", activity.send("#{params[:id]}_q3")
+            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q4", activity.send("#{params[:id]}_q4")
+            %td= activity.total_by_type(params[:id])
         %tr
-          %td{:colspan => 4}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)
+          %td{:colspan => 5}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)
           %td Total
-          %td 1000
+          %td= project.activities.map{|a| a.total_by_type(params[:id])}.sum
       %tr
-        %td{:colspan => 5}= link_to "Add project", new_response_project_path(@response)
+        %td{:colspan => 6}= link_to "Add project", new_response_project_path(@response)
         %td Total
-        %td 1000
+        %td= @projects.map{|p| p.activities.map{|a| a.total_by_type(params[:id])}.sum }.sum
       %tr
-        %td{:colspan => 7}= submit_tag :Save
+        %td{:colspan => 8}= submit_tag :Save

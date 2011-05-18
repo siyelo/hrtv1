@@ -581,6 +581,16 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
+  def total_by_type(t)
+    amounts = []
+    amounts << self.send("#{t}_q4_prev") if self.send("#{t}_q4_prev")
+    amounts << self.send("#{t}_q1") if self.send("#{t}_q1")
+    amounts << self.send("#{t}_q2") if self.send("#{t}_q2")
+    amounts << self.send("#{t}_q3") if self.send("#{t}_q4")
+    amounts << self.send("#{t}_q4") if self.send("#{t}_q4")
+    amounts.sum
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

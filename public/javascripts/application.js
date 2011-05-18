@@ -1170,24 +1170,64 @@ var projects_bulk_edit = {
   }
 };
 
+var initDemoText = function (elements) {
+  elements.each(function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+
+    if (demo_text != null) {
+      element.attr('title', demo_text);
+      if (element.val() == '' || element.val() == demo_text) {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+var focusDemoText = function (elements) {
+  elements.live('focus', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
+        element.removeClass('input_hint');
+      }
+    }
+  });
+};
+
+var blurDemoText = function (elements) {
+  elements.live('blur', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == '') {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+var resetDemoText = function (elements) {
+  // reset input values before submit !!
+  elements.each(function() {
+    var input = $(this);
+    var demo_text = input.attr('data-hint');
+
+    if (input.val() == demo_text) {
+      input.val('');
+    }
+  });
+};
+
 var activities_bulk_create = {
   run: function () {
-    var initDemoText = function (elements) {
-      elements.each(function(){
-        var element = $(this);
-        var demo_text = element.attr('data-hint');
-
-        if (demo_text != null) {
-          element.attr('title', demo_text);
-          if (element.val() == '' || element.val() == demo_text) {
-            element.val( demo_text );
-            element.addClass('input_hint');
-          }
-        }
-      });
-    };
-
     initDemoText($('*[data-hint]'));
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
 
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
@@ -1199,27 +1239,7 @@ var activities_bulk_create = {
       activity_box.find('.main').toggle();
     });
 
-    $('*[data-hint]').live('focus', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == demo_text) {
-          element.val('');
-          element.removeClass('input_hint');
-        }
-      }
-    });
 
-    $('*[data-hint]').live('blur', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == '') {
-          element.val( demo_text );
-          element.addClass('input_hint');
-        }
-      }
-    });
 
 
     $('.save_btn').live('click', function (e) {
@@ -1229,15 +1249,7 @@ var activities_bulk_create = {
       var ajaxLoader = element.next('.ajax-loader');
       var activityBox = element.parents('.activity_box');
 
-      // reset input values before submit !!
-      form.find('*[data-hint]').each(function() {
-        var input = $(this);
-        var demo_text = input.attr('data-hint');
-
-        if (input.val() == demo_text) {
-          input.val('');
-        }
-      });
+      resetDemoText(form.find('*[data-hint]'));
 
       ajaxLoader.show();
 
@@ -1540,6 +1552,75 @@ var purposes = {
 
 };
 //end purposes
+
+var changeRowspan = function (element, value) {
+  var projectTd = $(element.parents('tbody').find('tr')[0]).find('td');
+  projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
+};
+
+var workplans_edit = {
+  run: function () {
+    $('.add_activity').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var project_id = element.parents('tr').attr('data-project_id');
+      var url = '/responses/' + _response_id + '/activities/new.js?type=' + _type + '&project_id=' + project_id;
+
+      $.get(url, function (data) {
+        element.hide();
+        var tr = $('<tr/>').append(
+          $('<td/>').attr({colspan: 7}).html(data)
+        );
+        element.parents('tr').before(tr);
+        initDemoText(tr.find('*[data-hint]'));
+        changeRowspan(element, 1);
+      });
+    });
+
+    $('.cancel_add_activity').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      changeRowspan(element, -1);
+      element.parents('tr').next('tr').find('.add_activity').show();
+      element.parents('tr').remove();
+    });
+
+    initDemoText($('*[data-hint]'));
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
+
+
+    $('.save_btn').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('.new_activity_form');
+      var ajaxLoader = element.parents('ol').find('.ajax-loader');
+
+      resetDemoText(form.find('*[data-hint]'));
+      ajaxLoader.show();
+
+      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        if (data.status) {
+          var box = element.parents('tr')
+          box.replaceWith(data.html)
+          element.parents('tr').next('tr').find('.add_activity').show();
+        } else {
+          var box = element.parents('td')
+          box.html(data.html)
+          initDemoText(box.find('*[data-hint]'));
+        }
+      });
+    });
+
+
+
+
+
+
+
+
+  }
+}
 
 $(function () {
 

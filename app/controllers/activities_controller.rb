@@ -21,6 +21,10 @@ class ActivitiesController < Reporter::BaseController
     @activity = Activity.new
     @activity.project = @response.projects.find_by_id(params[:project_id])
     @activity.provider = current_user.organization
+    respond_to do |format|
+      format.html
+      format.js { render :partial => 'new_inline', :locals => {:activity => @activity, :type => params[:type]}}
+    end
   end
 
   def edit
@@ -196,7 +200,21 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def js_redirect
-      render :partial => 'bulk_edit', :layout => false,
-        :locals => {:activity => @activity, :response => @response}
+      if request.referrer.match('workplan')
+        if @activity.valid?
+          render :json => {:status => @activity.valid?,
+                           :html => render_to_string({:partial => 'workplans/activity_row',
+                                                :locals => {:activity => @activity,
+                                                            :type => params[:type]}})}
+        else
+          render :json => {:status => @activity.valid?,
+                           :html => render_to_string({:partial => 'new_inline',
+                                                :locals => {:activity => @activity,
+                                                            :type => params[:type]}})}
+        end
+      else
+        render :partial => 'bulk_edit', :layout => false,
+          :locals => {:activity => @activity, :response => @response}
+      end
     end
 end

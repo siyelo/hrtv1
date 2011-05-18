@@ -1,6 +1,6 @@
 %tr
   %td{:colspan => 7, :class => 'new_activity'}
-    - semantic_form_for @activity, :url => response_activities_path(@response, :type => params[:type]), :method => :post, :html => {:class => "basic_form new_activity_form"} do |f|
+    - semantic_form_for @activity, :url => response_activities_path(@response, :type => params[:type]), :html => {:class => "basic_form new_activity_form"} do |f|
       - f.inputs :class => 'inputs' do
         = f.input :project_id, :as => :hidden
         = f.input :name, :input_html => { 'data-hint' => 'Enter activity name' }, :label => false
@@ -8,6 +8,6 @@
         = f.input :start_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'Start date' }, :label => false
         = f.input :end_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'End date' }, :label => false
       - f.buttons :class => 'buttons' do
-        = f.commit_button "Add activity", :wrapper_html => {:class => 'save_btn'}
+        = f.commit_button "Add activity", :wrapper_html => {:class => 'save_activity'}
         %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
         %li= link_to "Cancel", "#", :class => 'cancel_add_activity'

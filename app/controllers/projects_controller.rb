@@ -15,6 +15,14 @@ class ProjectsController < Reporter::BaseController
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
+  def new
+    @project = Project.new
+    respond_to do |format|
+      format.html
+      format.js { render :partial => 'new_inline' }
+    end
+  end
+
   def show
     @project = Project.find(params[:id])
     load_comment_resources(@project)
@@ -33,6 +41,16 @@ class ProjectsController < Reporter::BaseController
     @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
       success.html { redirect_to response_projects_url(@response) }
+      success.js do
+        render :json => {:status => @project.valid?,
+                         :html => render_to_string({:partial => 'workplans/project_row', 
+                                              :locals => {:project => @project}})}
+      end
+      failure.js do
+        render :json => {:status => @project.valid?, 
+                         :html => render_to_string({:partial => 'new_inline', 
+                                              :locals => {:project => @project}})}
+      end
     end
   end
 

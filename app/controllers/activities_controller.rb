@@ -23,7 +23,7 @@ class ActivitiesController < Reporter::BaseController
     @activity.provider = current_user.organization
     respond_to do |format|
       format.html
-      format.js { render :partial => 'new_inline', :locals => {:activity => @activity, :type => params[:type]}}
+      format.js { render :partial => 'new_inline' }
     end
   end
 

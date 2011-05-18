@@ -1579,6 +1579,12 @@ var changeRowspan = function (element, value) {
 
 var workplans_edit = {
   run: function () {
+    initDemoText($('*[data-hint]'));
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
+
+
+    // activity
     $('.add_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
@@ -1602,11 +1608,7 @@ var workplans_edit = {
       element.parents('tr').remove();
     });
 
-    initDemoText($('*[data-hint]'));
-    focusDemoText($('*[data-hint]'));
-    blurDemoText($('*[data-hint]'));
-
-    $('.save_btn').live('click', function (e) {
+    $('.save_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
       var form = element.parents('.new_activity_form');
@@ -1618,8 +1620,54 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          box.replaceWith(data.html)
           element.parents('tr').next('tr').find('.add_activity').show();
+          box.replaceWith(data.html)
+        } else {
+          var box = element.parents('tr')
+          box.replaceWith(data.html)
+          initDemoText(box.find('*[data-hint]'));
+        }
+      });
+    });
+
+
+    // project
+    $('.add_project').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var url = '/responses/' + _response_id + '/projects/new.js';
+
+      $.get(url, function (data) {
+        element.hide();
+        currentTr = element.parents('tr');
+        currentTr.before(data);
+        initDemoText(currentTr.prev('tr').find('*[data-hint]'));
+        changeRowspan(element, 1);
+      });
+    });
+
+    $('.cancel_add_project').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      changeRowspan(element, -1);
+      element.parents('tr').next('tr').find('.add_project').show();
+      element.parents('tr').remove();
+    });
+
+    $('.save_project').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('.new_project_form');
+      var ajaxLoader = element.parents('ol').find('.ajax-loader');
+
+      resetDemoText(form.find('*[data-hint]'));
+      ajaxLoader.show();
+
+      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        if (data.status) {
+          var box = element.parents('tr')
+          element.parents('tr').next('tr').find('.add_project').show();
+          box.replaceWith(data.html)
         } else {
           var box = element.parents('tr')
           box.replaceWith(data.html)

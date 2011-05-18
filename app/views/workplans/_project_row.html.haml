@@ -1,0 +1,8 @@
+%tr{:class => 'project_row'}
+  %td{:rowspan => project.activities.length + 2}= project.name
+- project.activities.ordered.each do |activity|
+  = render 'activity_row', :activity => activity, :type => params[:id]
+%tr{:"data-project_id" => project.id}
+  %td{:colspan => 5}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id), :class => 'add_activity'
+  %td Total
+  %td= project.activities.map{|a| a.total_by_type(params[:id])}.sum

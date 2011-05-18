@@ -1,0 +1,12 @@
+%tr
+  %td{:colspan => 7, :class => 'new_project'}
+    - semantic_form_for @project, :url => response_projects_path(@response), :html => {:class => "basic_form new_project_form"} do |f|
+      - f.inputs :class => 'inputs' do
+        = f.input :name, :input_html => { 'data-hint' => 'Enter project name' }, :label => false
+        = f.input :description, :input_html => { :rows => 2, 'data-hint' => 'Enter project description' }, :label => false
+        = f.input :start_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'Start date' }, :label => false
+        = f.input :end_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'End date' }, :label => false
+      - f.buttons :class => 'buttons' do
+        = f.commit_button "Add project", :wrapper_html => {:class => 'save_project'}
+        %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+        %li= link_to "Cancel", "#", :class => 'cancel_add_project'

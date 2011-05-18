@@ -5,12 +5,10 @@
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :required => false, :hint => "The total amount that you are planning to spend in the upcoming fiscal year."
-        = f.input :budget_percentage, :label => "% of Main Activity's Budget", :required => false, :hint => "The percentage amount allocated to this Sub-Activity from the main Activity's Spend"
+        = f.input :spend, :required => false, :hint => "Enter the amount or the percentage amount spent by this Sub-Activity from the main Activity's Spend. Accepts spend amount OR percentage." 
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :spend, :required => false, :hint => "The total amount that you have spent in the past fiscal year."
-        = f.input :spend_percentage, :label => "% of Main Activity's Spend", :required => false, :hint => "The percentage amount allocated to this Sub-Activity from the main Activity's Spend"
+        = f.input :budget, :required => false, :hint => "Enter the amount or the percentage amount allocated to this Sub-Activity from the main Activity's Spend. Accepts spend amount OR percentage."
 
     = link_to_remove_fields "remove", f

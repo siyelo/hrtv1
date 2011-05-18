@@ -1449,7 +1449,6 @@ var classifications_edit = {
     });
 
     $(".add_purpose").click(function(event){
-        alert(1)
       purposes.show_add_purpose_form(event, $(this));
     });
 
@@ -1476,7 +1475,7 @@ var purposes = {
     return purposes.find_row(link).attr('id');
   },
 
-  // finds the add form relative to the add link
+  // finds the add form with an id the same as the add link's container
   find_add_purpose_form: function(add_link){
     return $('#add_purpose_form_' + purposes.find_row_id(add_link));
   },

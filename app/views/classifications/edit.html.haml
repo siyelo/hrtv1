@@ -37,7 +37,8 @@
                           %span= ca.code.context
                         %td= text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%"
                         %td= image_tag "icon_close_flash.png", :class => 'classification_destroy'
-                  %tr{:style => 'display: none;'}
+
+                  %tr{:id => "add_purpose_form_#{index}", :class => "hidden"}
                     %td{:colspan => 3}
                       = render 'add_purpose_form', :index => index
 

@@ -109,6 +109,7 @@ class Activity < ActiveRecord::Base
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
+  named_scope :ordered,           { :order => 'description ASC' }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
@@ -258,6 +259,14 @@ class Activity < ActiveRecord::Base
     end
 
     activities
+  end
+
+  def self.bulk_update(response, activities)
+    activities.each_pair do |activity_id, attributes|
+      activity = response.activities.find(activity_id)
+      activity.attributes = attributes
+      activity.save
+    end
   end
 
   def possible_duplicate?

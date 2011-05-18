@@ -56,7 +56,7 @@
                           %span= cached_amount_total
                         %li
                           Remaining
-                          %span= activity.send(get_coding_type(params[:id])) - cached_amount_total
+                          %span= (activity.send(get_coding_type(params[:id])) || 0) - cached_amount_total
                     %td
     %tr
       %td{:colspan => 4}= link_to "Add project", new_response_project_path(@response)

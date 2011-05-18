@@ -32,14 +32,14 @@
       - @projects.each do |project|
         %tr
           %td{:rowspan => project.activities.length + 2}= project.name
-        - project.activities.each do |activity|
+        - project.activities.ordered.each do |activity|
           %tr
             %td= activity.title
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q4_prev", activity.send("#{params[:id]}_q4_prev")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q1", activity.send("#{params[:id]}_q1")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q2", activity.send("#{params[:id]}_q2")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q3", activity.send("#{params[:id]}_q3")
-            %td= text_field_tag :"activity_#{activity.id}#{params[:id]}_q4", activity.send("#{params[:id]}_q4")
+            %td= text_field_tag :"activities[#{activity.id}]#{params[:id]}_q4_prev", activity.send("#{params[:id]}_q4_prev")
+            %td= text_field_tag :"activities[#{activity.id}]#{params[:id]}_q1", activity.send("#{params[:id]}_q1")
+            %td= text_field_tag :"activities[#{activity.id}]#{params[:id]}_q2", activity.send("#{params[:id]}_q2")
+            %td= text_field_tag :"activities[#{activity.id}]#{params[:id]}_q3", activity.send("#{params[:id]}_q3")
+            %td= text_field_tag :"activities[#{activity.id}]#{params[:id]}_q4", activity.send("#{params[:id]}_q4")
             %td= activity.total_by_type(params[:id])
         %tr
           %td{:colspan => 5}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)

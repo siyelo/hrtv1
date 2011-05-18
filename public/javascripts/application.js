@@ -1110,6 +1110,15 @@ var projects_new = projects_create = projects_edit = projects_update = {
         fieldsBlock.find('.add_organization').show();
       }
     });
+    
+    $('.cancel_organization_link').live('click', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      var fieldsBlock = element.parents('.fields');
+      fieldsBlock.find('.organization_name').attr('value', '');
+      fieldsBlock.find('.add_organization').hide();
+      fieldsBlock.find('.ff_from_container').show();
+    });
 
     $('.add_organization_link').live('click', function(e) {
       e.preventDefault();
@@ -1303,6 +1312,14 @@ var activity_form = function () {
       $('.add_organization').show();
     }
   });
+  
+  $('.cancel_organization_link').live('click', function(e) {
+    e.preventDefault();
+    $('.organization_name').attr('value', '');
+    $('.add_organization').hide();
+    $('.implementer_container').show();
+    $('.implementer_select').val(null);
+  });
 
   $('.add_organization_link').live('click', function(e) {
     e.preventDefault();
@@ -1364,6 +1381,14 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
         $('.implementer_container').hide();
         $('.add_organization').show();
       }
+    });
+    
+    $('.cancel_organization_link').live('click', function(e) {
+      e.preventDefault();
+      $('.organization_name').attr('value', '');
+      $('.add_organization').hide();
+      $('.implementer_container').show();
+      $('.implementer_select').val(null);
     });
 
     $('.add_organization_link').live('click', function(e) {

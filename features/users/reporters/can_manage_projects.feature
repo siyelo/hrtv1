@@ -19,7 +19,21 @@ Feature: Reporter can manage projects
     And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
-
+    
+    Scenario: Reporter cannot see the quarterly budget fields if they are not available
+      Given a data_request "data_request_no_quarters" exists with title: "data_request_no_quarters", budget_by_quarter: "false"
+      And an organization "organization4" exists with name: "organization4"
+      And a data_response "data_response3" exists with data_request: data_request "data_request_no_quarters", organization: organization "organization4"
+      And a project "Project9" exists with name: "Project9", data_response: data_response "data_response3"
+      And a reporter exists with username: "reporter2", organization: organization "organization4"
+      And I follow "Sign Out"
+      And I am signed in as "reporter2"
+      And I follow "Projects"
+      And I follow "Projects"
+      And I follow "Project9"
+      Then I should not see "Quarterly budget"
+    
+    
     Scenario: Reporter can CRUD projects
      When I follow "Create Project"
       And I fill in "Name" with "Project1"

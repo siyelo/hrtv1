@@ -7,4 +7,5 @@ Factory.define :data_request, :class => DataRequest do |f|
   f.service_levels{ true }
   f.budget        { true }
   f.spend         { true }
+  f.budget_by_quarter { false }
 end

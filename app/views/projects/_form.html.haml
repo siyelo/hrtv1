@@ -37,14 +37,15 @@
       %ul.dashboard_section
         %br
         = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-        %li.amounts.last
-          %label Quarterly budget
-          %ul
-            = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-            = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
-            = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
-            = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
-            = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
+        - if @response.request.budget_by_quarter?
+          %li.amounts.last
+            %label Quarterly budget
+            %ul
+              = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
+              = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
+              = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
+              = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
+              = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
 
         -unless @response.request.no_long_term_budgets?
           %li.amounts

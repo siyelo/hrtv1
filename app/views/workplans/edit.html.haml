@@ -30,7 +30,7 @@
         %th Total
     %tbody
       - @projects.each do |project|
-        %tr
+        %tr{:class => 'project_row'}
           %td{:rowspan => project.activities.length + 2}= project.name
         - project.activities.ordered.each do |activity|
           = render 'activity_row', :activity => activity, :type => params[:id]

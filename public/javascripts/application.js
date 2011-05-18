@@ -1561,7 +1561,7 @@ var purposes = {
 //end purposes
 
 var changeRowspan = function (element, value) {
-  var projectTd = $(element.parents('tbody').find('tr')[0]).find('td');
+  var projectTd = $(element.parents('tr').prev('.project_row')[0]).find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
 
@@ -1575,11 +1575,9 @@ var workplans_edit = {
 
       $.get(url, function (data) {
         element.hide();
-        var tr = $('<tr/>').append(
-          $('<td/>').attr({colspan: 7}).html(data)
-        );
-        element.parents('tr').before(tr);
-        initDemoText(tr.find('*[data-hint]'));
+        currentTr = element.parents('tr');
+        currentTr.before(data);
+        initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
       });
     });
@@ -1596,7 +1594,6 @@ var workplans_edit = {
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
 
-
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
@@ -1612,20 +1609,12 @@ var workplans_edit = {
           box.replaceWith(data.html)
           element.parents('tr').next('tr').find('.add_activity').show();
         } else {
-          var box = element.parents('td')
-          box.html(data.html)
+          var box = element.parents('tr')
+          box.replaceWith(data.html)
           initDemoText(box.find('*[data-hint]'));
         }
       });
     });
-
-
-
-
-
-
-
-
   }
 }
 

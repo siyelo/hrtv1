@@ -1,0 +1,17 @@
+%tr
+  %td
+    %ul
+      %li= link_to "+ Add Purpose", "#", :class => "add_purpose"
+      - if code_assignments.present?
+        %li= submit_tag "Save"
+
+  %td
+    %ul.right
+      %li
+        Total
+        - total = cached_amount_total(code_assignments)
+        %span= total
+      %li
+        Remaining
+        %span= (activity.send(get_coding_type(params[:id])) || 0) - total
+  %td

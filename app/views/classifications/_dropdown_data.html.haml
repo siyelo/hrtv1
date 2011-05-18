@@ -1,0 +1,3 @@
+%ul{:id => "purpose_menu_#{index}", :class => "mcdropdown_menu"}
+  - @codes.each do |code|
+    = render 'code_row', :code => code

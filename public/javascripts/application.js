@@ -1390,6 +1390,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       e.preventDefault();
       var element = $(this);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
       element.next('.add_organization').slideToggle();
@@ -1411,6 +1412,9 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 =======
 >>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
 >>>>>>> cherry pick fdcdac - add mcdropdown to show nested purpose tree hierarchy
+=======
+      element.next('.add_organization').slideToggle();
+>>>>>>> fix missed merge conflict
     });
 
     $('.add_organization_link').live('click', function(e) {
@@ -1450,8 +1454,6 @@ var classifications_edit = {
   }
 };
 
-<<<<<<< HEAD
-=======
 //###################################
 //# Purposes
 //###################################
@@ -1470,7 +1472,6 @@ var classifications_edit = {
   }
 };
 
->>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
 var purposes = {
   // find the purpose 'row' closest relative to given link
   find_row: function(link) {
@@ -1514,10 +1515,6 @@ var purposes = {
 };
 //end purposes
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
 $(function () {
 
   // tipsy tooltips everywhere!

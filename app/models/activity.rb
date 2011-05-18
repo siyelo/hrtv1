@@ -196,12 +196,12 @@ class Activity < ActiveRecord::Base
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
 
-    doc.each do |row| 
+    doc.each do |row|
       activity_id = row['Id']
 
       if activity_id.present?
         # reset the activity id if it is already found in previous rows
-        # this can happen when user edits existing activities but copies 
+        # this can happen when user edits existing activities but copies
         # the whole row (then the activity id is also copied)
         if activities.map(&:id).include?(activity_id.to_i)
           activity = response.activities.new
@@ -329,7 +329,7 @@ class Activity < ActiveRecord::Base
   def service_level_spend_classified?
     !data_response.request.service_levels? || spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
   end
-  
+
   def budget_classified?
     return true if self.budget.blank?
     coding_budget_classified? &&
@@ -565,7 +565,7 @@ class Activity < ActiveRecord::Base
       return self.send(field) if self.provider == provider
     else
       sum = 0
-      sub_activities.select{|a| a.provider == provider}.each do |a| 
+      sub_activities.select{|a| a.provider == provider}.each do |a|
         if a.nil?
           puts "had nil in subactivities in proj #{project.id}"
         else
@@ -576,10 +576,12 @@ class Activity < ActiveRecord::Base
       return sum
     end
     0
+
+  def title
+    description.presence || '(no description)'
   end
 
   private
-
 
     def delete_existing_code_assignments_by_type(coding_type)
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])

@@ -18,7 +18,7 @@
         %li.activity
           %hgroup
             %h2.regular= link_to project.name, edit_response_project_path(@response, project)
-            %h3= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
+            %h3= link_to activity.title, edit_response_activity_path(@response, activity)
           - code_assignments = activity.code_assignments.with_type(params[:id]).find(:all, :order => 'codes.short_display', :joins => :code, :conditions => 'amount IS NOT NULL OR percentage IS NOT NULL')
           - cached_amount_total = code_assignments.map{|ca| ca.cached_amount}.sum
           - form_tag response_classification_path(@response, params[:id], :activity_id => activity.id), :method => :put do

@@ -3,4 +3,8 @@ class WorkplansController < Reporter::BaseController
 
   def show
   end
+
+  def edit
+    @projects = @response.projects.all
+  end
 end

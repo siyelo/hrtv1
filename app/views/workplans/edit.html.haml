@@ -2,3 +2,26 @@
 
 %h1.main_heading Manage
 
+%table.standard
+  %thead
+    %tr
+      %th Project
+      %th Activity
+  %tbody
+    - @projects.each do |project|
+      %tr
+        %td
+          %table.standard
+            %tbody
+              %tr
+                %td= link_to project.name, edit_response_project_path(@response, project)
+                %td.manage
+                  = link_to image_tag("icon_close_flash.png"), response_project_path(@response, project), :method => :delete, :confirm => "Are you sure you want to delete \"#{project.name}\"?", :title => 'Delete project'
+        %td
+          %table.standard
+            %tbody
+              - project.activities.each do |activity|
+                %tr
+                  %td= link_to activity.title, edit_response_activity_path(@response, activity)
+                  %td.manage
+                    = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'

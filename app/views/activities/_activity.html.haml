@@ -1,5 +1,5 @@
 %tr
-  %td= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
+  %td= link_to activity.title, edit_response_activity_path(@response, activity)
   %td= n2cndrs(activity.spend, activity.currency)
   %td= n2cndrs(activity.budget, activity.currency)
   %td.wrap-10

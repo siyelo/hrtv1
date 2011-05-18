@@ -15,6 +15,15 @@ class ProjectsController < Reporter::BaseController
                                :order => sort_column + " " + sort_direction) # rails 2
   end
 
+  def show
+    @project = Project.find(params[:id])
+    load_comment_resources(@project)
+    respond_to do |format|
+      format.html {}
+      format.js {render :json => @project.to_json}
+    end
+  end
+
   def edit
     load_comment_resources(resource)
     edit!
@@ -38,15 +47,6 @@ class ProjectsController < Reporter::BaseController
         load_comment_resources(resource)
         render :action => 'edit'
       end
-    end
-  end
-
-  def show
-    @project = Project.find(params[:id])
-    load_comment_resources(@project)
-    respond_to do |format|
-      format.html {}
-      format.js {render :json => @project.to_json}
     end
   end
 
@@ -83,6 +83,18 @@ class ProjectsController < Reporter::BaseController
     rescue
       flash[:error] = "Your CSV file does not seem to be properly formatted."
       redirect_to response_projects_path(@response)
+    end
+  end
+
+  def destroy
+    destroy! do |success, failure|
+      success.html do
+        if request.referrer.match('workplan/edit')
+          redirect_to edit_response_workplan_path(@response)
+        else
+          redirect_to response_projects_url(@response)
+        end
+      end
     end
   end
 

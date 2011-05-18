@@ -1467,7 +1467,10 @@ var classifications_edit = {
       purposes.hide_add_purpose_form(event, $(this));
     });
 
-    $(".purpose_search").mcDropdown("#purpose_menu");
+    $(".purpose_search").mcDropdown("#purpose_menu", {
+      hoverOutDelay: 1000,
+      hoverOverDelay: 500,
+      allowParentSelect: true});
 
   }
 };

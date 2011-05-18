@@ -10,7 +10,7 @@
     %ul
       %li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
       %li= link_to 'Settings', hacked_edit_response_url, :class => (controller.class == ResponsesController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)
-      %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController].include?(controller.class) ? "active" : nil)
+      %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ClassificationsController].include?(controller.class) ? "active" : nil)
       %li= link_to 'Review', hacked_response_url, :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')
       %li= link_to 'Submit', hacked_review_response_url, :class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')
       %li= link_to 'Reports', reporter_reports_path, :class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)

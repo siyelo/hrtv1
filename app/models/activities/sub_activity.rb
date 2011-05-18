@@ -28,8 +28,6 @@ class SubActivity < Activity
   def budget
     if read_attribute(:budget)
       read_attribute(:budget)
-    elsif budget_percentage && activity.budget
-      activity.budget * budget_percentage / 100
     else
       nil
     end
@@ -38,8 +36,6 @@ class SubActivity < Activity
   def spend
     if read_attribute(:spend)
       read_attribute(:spend)
-    elsif spend_percentage && activity.spend
-      activity.spend * spend_percentage / 100
     else
       nil
     end

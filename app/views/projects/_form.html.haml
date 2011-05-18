@@ -47,7 +47,7 @@
               = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
               = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
 
-        -unless @response.request.no_long_term_budgets?
+        - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term
             %ul

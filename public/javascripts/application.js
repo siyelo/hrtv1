@@ -1438,27 +1438,16 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
   }
 };
 
-//###################################
-//# Purposes
-//###################################
-var classifications_edit = {
-  run: function () {
-    $(".add_purpose").click(function(event){
-      purposes.show_add_purpose_form(event, $(this));
-    });
-
-    $(".cancel_add").click(function(event){
-      purposes.hide_add_purpose_form(event, $(this));
-    });
-
-  }
-};
 
 //###################################
 //# Purposes
 //###################################
 var classifications_edit = {
   run: function () {
+    $(".classification_destroy").click(function(event){
+      purposes.destroy_classification(event, $(this));
+    });
+
     $(".add_purpose").click(function(event){
       purposes.show_add_purpose_form(event, $(this));
     });
@@ -1513,6 +1502,12 @@ var purposes = {
     add_link = purposes.find_add_purpose_link(cancel_link);
     add_link.removeClass('disabled');
     return true;
+  },
+
+  destroy_classification: function (event, destroy_link) {
+    event.preventDefault();
+    var classification_id = destroy_link.parent().attr('data-ca_id');
+    $.post('/activities/' + classification_id + '/code_assignments', {'_method': 'delete'}, function (data, status, response) {})
   },
 
 };

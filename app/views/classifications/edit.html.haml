@@ -25,11 +25,11 @@
             %ul.classifications
               - code_assignments.each do |ca|
                 - if ca.amount.present? || ca.percentage.present?
-                  %li
+                  %li{:"data-ca_id" => ca.id}
                     = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
                     = text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%"
                     %p= ca.code.context
-                    = image_tag "icon_close_flash.png"
+                    = image_tag "icon_close_flash.png", :class => 'classification_destroy'
 
             %ul.left
               - if code_assignments.present?

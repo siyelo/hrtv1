@@ -1449,6 +1449,7 @@ var classifications_edit = {
     });
 
     $(".add_purpose").click(function(event){
+        alert(1)
       purposes.show_add_purpose_form(event, $(this));
     });
 

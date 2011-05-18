@@ -89,8 +89,8 @@ class ProjectsController < Reporter::BaseController
   def destroy
     destroy! do |success, failure|
       success.html do
-        if request.referrer.match('workplan/edit')
-          redirect_to edit_response_workplan_path(@response)
+        if request.referrer.match('workplan')
+          redirect_to response_workplans_path(@response)
         else
           redirect_to response_projects_url(@response)
         end

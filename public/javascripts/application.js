@@ -1301,17 +1301,14 @@ var activity_form = function () {
     }
   });
 
-<<<<<<< HEAD
   // show the jquery autocomplete combobox instead of
   // standard dropdown
   $( ".combobox" ).combobox();
 
   $('.implementer_select').live('change', function(e) {
-=======
-  $('.show_organizations_add').live('click', function(e) {
->>>>>>> features/users/reporters/can_manage_classifications.feature
     e.preventDefault();
     var element = $(this);
+    element.next('.add_organization').slideToggle();
     if(element.val() == "-1"){
       $('.implementer_container').hide();
       $('.add_organization').show();
@@ -1392,6 +1389,12 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 >>>>>>> features/users/reporters/can_manage_classifications.feature
       e.preventDefault();
       var element = $(this);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      element.next('.add_organization').slideToggle();
+=======
+>>>>>>> cherry pick fdcdac - add mcdropdown to show nested purpose tree hierarchy
       if(element.val() == "-1"){
         $('.implementer_container').hide();
         $('.add_organization').show();
@@ -1404,6 +1407,10 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.add_organization').hide();
       $('.implementer_container').show();
       $('.implementer_select').val(null);
+<<<<<<< HEAD
+=======
+>>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
+>>>>>>> cherry pick fdcdac - add mcdropdown to show nested purpose tree hierarchy
     });
 
     $('.add_organization_link').live('click', function(e) {
@@ -1443,6 +1450,27 @@ var classifications_edit = {
   }
 };
 
+<<<<<<< HEAD
+=======
+//###################################
+//# Purposes
+//###################################
+var classifications_edit = {
+  run: function () {
+    $(".add_purpose").click(function(event){
+      purposes.show_add_purpose_form(event, $(this));
+    });
+
+    $(".cancel_add").click(function(event){
+      purposes.hide_add_purpose_form(event, $(this));
+    });
+
+    $(".purpose_search").mcDropdown("#purpose_menu");
+
+  }
+};
+
+>>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
 var purposes = {
   // find the purpose 'row' closest relative to given link
   find_row: function(link) {
@@ -1486,6 +1514,10 @@ var purposes = {
 };
 //end purposes
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
 $(function () {
 
   // tipsy tooltips everywhere!

@@ -1,0 +1,6 @@
+%li{:rel => "#{code.id}"}
+  = code.short_display
+  - unless code.leaf?
+    %ul
+      - @coding_tree.cached_children(code).each do |child|
+        = render 'code_row', :code => child

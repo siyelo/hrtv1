@@ -82,21 +82,25 @@ class CodingTree
     node && node.valid_node?
   end
 
-  def root_codes
-    case @coding_klass.to_s
+  def self.root_codes(coding_klass, activity)
+    case coding_klass.to_s
     when 'CodingBudget', 'CodingSpend'
-      @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
+      activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
     when 'ServiceLevelBudget', 'ServiceLevelSpend'
       ServiceLevel.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-      @activity.locations
+      activity.locations
     when 'HsspBudget', 'HsspSpend'
-      @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
+      activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
     else
-      raise "Invalid coding_klass #{@coding_klass.to_s}".to_yaml
+      raise "Invalid coding_klass #{coding_klass.to_s}".to_yaml
     end
+  end
+
+  def root_codes
+    self.class.root_codes(@coding_klass, @activity)
   end
 
   def set_cached_amounts!

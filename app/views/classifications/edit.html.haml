@@ -1,4 +1,3 @@
-
 = render 'shared/data_entry_sub_nav'
 
 %h1.main_heading Purposes
@@ -44,11 +43,7 @@
                 Remaining
                 %span= activity.send(get_coding_type(params[:id])) - cached_amount_total
 
-          %div{:id => "add_purpose_form_#{index}", :class => "hidden"}
-            %ul
-              %li Search purpose
-              %li Save
-              %li= link_to "Cancel", "#", :class => "cancel_add"
+          = render 'add_purpose_form', :index => index
           %ul.left
             %li Add purpose
             - if code_assignments.present?
@@ -62,3 +57,7 @@
               Remaining
               %span= activity.send(get_coding_type(params[:coding_type])) - cached_amount_total
             %li= link_to "+ Add Purpose", "#", :class => "add_purpose"
+
+%ul#purpose_menu.mcdropdown_menu
+  - @codes.each do |code|
+    = render 'code_row', :code => code

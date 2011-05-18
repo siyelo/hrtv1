@@ -3,6 +3,10 @@ class ClassificationsController < Reporter::BaseController
 
   def edit
     @projects = @response.projects.all
+    @coding_type = params[:coding_type] || 'CodingBudget'
+    # We just want the root codes for an Activity Type for now
+    @coding_tree         = CodingTree.new(Activity.new, @coding_type.constantize)
+    @codes               = @coding_tree.root_codes
   end
 
   def update

@@ -1468,8 +1468,8 @@ var classifications_edit = {
       hoverOutDelay: 0,
       hoverOverDelay: 300,
       showACOnEmptyFocus: true,
-      allowParentSelect: true});
-
+      allowParentSelect: true}
+    );
   }
 };
 
@@ -1500,6 +1500,12 @@ var purposes = {
   show_add_purpose_form: function(add_link) {
     if(add_link.hasClass('disabled'))
       return false;
+    // close all other add purpose forms to mask the mcdropdown duplication
+    // otherwise we need to embed the whole tree data for each dropdown making
+    // a rather large html...
+    $(".add_purpose_form").addClass('hidden');
+    $(".add_purpose").removeClass('disabled'); // other add links should be enabled then
+
     var add_purpose_form = purposes.find_add_purpose_form(add_link);
     add_purpose_form.removeClass('hidden');
     //TODO: initialize form and add focus

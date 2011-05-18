@@ -36,6 +36,4 @@
     %tr
       %td{:colspan => 4}= link_to "Add project", new_response_project_path(@response)
 
-%ul#purpose_menu.mcdropdown_menu
-  - @codes.each do |code|
-    = render 'code_row', :code => code
+= render 'dropdown_data'

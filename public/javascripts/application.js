@@ -1529,17 +1529,29 @@ var purposes = {
     return true;
   },
 
-  add_entry: function(save_link) {
+  add_entry: function(link) {
     // TODO determine if the purpose was already added
-    var purpose_id = purposes.find_selected_purpose_id(save_link);
-
+    var purpose_id = purposes.find_selected_purpose_id(link);
+    var activity_id = 1
     // add a row to the actual form that will be submitted
-    var purpose_text = purposes.find_selected_purpose_text(save_link);
+    var purpose_text = purposes.find_selected_purpose_text(link);
     //alert(purpose_text);
 
+    var tr =  "<tr>" +
+              "  <td>" +
+              "    <label for=\"classifications_"+ purpose_id + "\">" + purpose_text + "</label>" +
+              "    <span></span>" +
+              "  </td>" +
+              "  <td>" +
+              "    <input type=\"text\" value=\"0.0\" name=\"classifications["+ purpose_id +"]\" id=\"classifications_"+ purpose_id + "\"></td>" +
+              "  <td>" +
+              "    <img src=\"/images/icon_close_flash.png\" class=\"classification_destroy\" alt=\"Icon_close_flash\">" +
+              "  </td>" +
+              "</tr>";
+    link.parents('tr').before(tr);
 
     // hide the add form
-    purposes.hide_add_purpose_form(save_link);
+    purposes.hide_add_purpose_form(link);
   },
 
   // hides the form containing the given link

@@ -6,26 +6,19 @@
   %thead
     %tr
       %th Project
-      %th Activity
+      %th{:colspan => 2} Activity
   %tbody
     - @projects.each do |project|
       %tr
-        %td
-          %div
-            = link_to project.name, edit_response_project_path(@response, project)
-            = link_to 'Edit', edit_response_project_path(@response, project)
-            = link_to image_tag("icon_close_flash.png"), response_project_path(@response, project), :method => :delete, :confirm => "Are you sure you want to delete \"#{project.name}\"?", :title => 'Delete project'
+        %td{:rowspan => project.activities.length + 2}= link_to project.name, edit_response_project_path(@response, project)
+      - project.activities.each do |activity|
+        %tr
+          %td= link_to activity.title, edit_response_activity_path(@response, activity)
+          %td
+            = link_to 'Edit', edit_response_activity_path(@response, activity)
+            = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
 
-        %td
-          - project.activities.each do |activity|
-            %div
-              = link_to activity.title, edit_response_activity_path(@response, activity)
-              = link_to 'Edit', edit_response_activity_path(@response, activity)
-              = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
-          %div
-            = link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)
+      %tr
+        %td{:colspan => 2}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)
     %tr
-      %td
-      %td
-
-= link_to "Add project", new_response_project_path(@response)
+      %td{:colspan => 3}= link_to "Add project", new_response_project_path(@response)

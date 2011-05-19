@@ -1,5 +1,5 @@
 %tr
-  %td{:colspan => 7, :class => 'new_project'}
+  %td{:colspan => 8, :class => 'new_project'}
     - semantic_form_for @project, :url => response_projects_path(@response), :html => {:class => "basic_form new_project_form"} do |f|
       - f.inputs :class => 'inputs' do
         = f.input :name, :input_html => { 'data-hint' => 'Enter project name' }, :label => false

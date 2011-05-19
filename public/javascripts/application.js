@@ -1461,18 +1461,18 @@ var classifications_edit = {
       purposes.destroy_classification($(this));
     });
 
-    $(".add_purpose").click(function(event){
-      event.preventDefault();
+    $(".add_purpose").click(function (e) {
+      e.preventDefault();
       purposes.show_add_purpose_form($(this));
     });
 
-    $(".add_entry").click(function(event){
-      event.preventDefault();
+    $(".add_entry").click(function (e) {
+      e.preventDefault();
       purposes.add_entry($(this));
     });
 
-    $(".cancel_add").click(function(event){
-      event.preventDefault();
+    $(".cancel_add").click(function (e) {
+      e.preventDefault();
       purposes.hide_add_purpose_form($(this));
     });
 
@@ -1514,8 +1514,10 @@ var purposes = {
   },
 
   show_add_purpose_form: function(add_link) {
-    if(add_link.hasClass('disabled'))
+    if (add_link.hasClass('disabled')) {
       return false;
+    }
+
     // close all other add purpose forms to mask the mcdropdown duplication
     // otherwise we need to embed the whole tree data for each dropdown making
     // a rather large html...
@@ -1524,6 +1526,7 @@ var purposes = {
 
     var add_purpose_form = purposes.find_add_purpose_form(add_link);
     add_purpose_form.removeClass('hidden');
+
     //TODO: initialize form and add focus
     add_link.addClass('disabled');
     return true;
@@ -1537,17 +1540,17 @@ var purposes = {
     var purpose_text = purposes.find_selected_purpose_text(link);
     //alert(purpose_text);
 
-    var tr =  "<tr>" +
-              "  <td>" +
-              "    <label for=\"classifications_"+ purpose_id + "\">" + purpose_text + "</label>" +
-              "    <span></span>" +
-              "  </td>" +
-              "  <td>" +
-              "    <input type=\"text\" value=\"0.0\" name=\"classifications["+ purpose_id +"]\" id=\"classifications_"+ purpose_id + "\"></td>" +
-              "  <td>" +
-              "    <img src=\"/images/icon_close_flash.png\" class=\"classification_destroy\" alt=\"Icon_close_flash\">" +
-              "  </td>" +
-              "</tr>";
+    var tr =  '<tr>' +
+              '  <td>' +
+              '    <label for="classifications_' + purpose_id + '">' + purpose_text + '</label>' +
+              '    <span></span>' +
+              '  </td>' +
+              '  <td>' +
+              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '"></td>' +
+              '  <td>' +
+              '    <img src="/images/icon_close_flash.png" class="classification_destroy" alt="Icon_close_flash">' +
+              '  </td>' +
+              '</tr>';
     link.parents('tr').before(tr);
 
     // hide the add form
@@ -1661,7 +1664,7 @@ var workplans_edit = {
     $('.cancel_add_project').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
-      changeRowspan(element, -1);
+      //changeRowspan(element, -1);
       element.parents('tr').next('tr').find('.add_project').show();
       element.parents('tr').remove();
     });

@@ -1550,6 +1550,11 @@ var purposes = {
     var purpose_id   = form.find('.mcdropdown input:hidden').val()
     var purpose_text = form.find('.mcdropdown input:first').val();
 
+    if (!purpose_id) {
+      return;
+    }
+
+
     // determine if the purpose was already added
     addedIds = jQuery.map(form.find('.ca'), function (e) {
       return Number($(e).attr('id').match(/\d+/)[0]);
@@ -1569,7 +1574,7 @@ var purposes = {
               '  <td class="total">' +
               '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +
               '  <td class="actions">' +
-              '    <img src="/images/icon_close_flash.png" class="classification_destroy pointer" alt="Icon_close_flash">' +
+              '    <img src="/images/icon_close_flash.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
 

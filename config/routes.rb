@@ -57,7 +57,7 @@ ActionController::Routing::Routes.draw do |map|
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :classifications,
-        :only => [:edit, :update]
+        :only => [:edit, :update, :destroy]
       response.resources :workplans,
         :only => [:index, :edit, :update], :requirements => {:id => /budget|spend|all/}
   end

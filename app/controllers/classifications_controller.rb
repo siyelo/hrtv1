@@ -15,4 +15,11 @@ class ClassificationsController < Reporter::BaseController
     flash[:notice] = 'Purposes classifications for Spent were successfully saved'
     redirect_to edit_response_classification_url(@response, params[:id])
   end
+
+  def destroy
+    ca = @response.code_assignments.find(params[:id])
+    ca.destroy
+
+    render :json => {:status => true}
+  end
 end

@@ -1456,7 +1456,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 var classifications_edit = {
   run: function () {
-    $(".classification_destroy").click(function(event){
+    $(".classification_destroy").live('click', function(event){
       event.preventDefault();
       purposes.destroy_classification($(this));
     });
@@ -1565,8 +1565,18 @@ var purposes = {
   },
 
   destroy_classification: function(destroy_link) {
-    var classification_id = destroy_link.parent().attr('data-ca_id');
-    $.post('/activities/' + classification_id + '/code_assignments', {'_method': 'delete'}, function (data, status, response) {})
+    var tr = destroy_link.parents('tr');
+    var id = tr.attr('data-ca_id');
+    if (id) {
+      //'/responses/:response_id/classifications/:id'
+      $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
+        if (data.status) {
+          tr.remove();
+        }
+      })
+    } else {
+      tr.remove();
+    }
   },
 
 };

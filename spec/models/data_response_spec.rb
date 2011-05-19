@@ -13,6 +13,7 @@ describe DataResponse do
     it { should have_many(:commodities).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
     it { should have_many(:comments) }
+    it { should have_many(:code_assignments) }
   end
 
   describe "validations" do

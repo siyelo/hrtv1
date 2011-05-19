@@ -5,10 +5,10 @@
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :spend, :required => false, :hint => "Amount OR Percentage allocated to this Sub-Activity from the main Activity's Spend."
+        = f.input :spend, :required => false, :hint => "Amount OR Percentage allocated to this Sub-Activity from the main Activity's Spend.", :label => "Sub-Activity Spend"
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Sub-Activity from the main Activity's Budget."
+        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Sub-Activity from the main Activity's Budget.", :label => "Sub-Activity Budget"
 
     = link_to_remove_fields "remove", f

@@ -63,28 +63,6 @@ describe SubActivity do
           @sub_activity.budget.should == 4
         end
       end
-
-      context "budget is nil" do
-        it "returns proportion of activity budget when activity budget is not nil" do
-          @activity.budget = 10
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :budget => nil, :budget_percentage => 50)
-
-          @sub_activity.budget.should == 5
-        end
-
-        it "returns proportion of activity budget when activity budget is nil" do
-          @activity.budget = nil
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :budget => nil, :budget_percentage => 50)
-
-          @sub_activity.budget.should be_nil
-        end
-      end
     end
 
     describe "spend" do
@@ -96,28 +74,6 @@ describe SubActivity do
                                          :spend => 3)
 
           @sub_activity.spend.should == 3
-        end
-      end
-
-      context "spend is nil" do
-        it "returns proportion of activity spend when activity spend is not nil" do
-          @activity.spend = 100
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :spend => nil, :spend_percentage => 50)
-
-          @sub_activity.spend.should == 50
-        end
-
-        it "returns proportion of activity spend when activity spend is nil" do
-          @activity.spend = nil
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :spend => nil, :spend_percentage => 50)
-
-          @sub_activity.spend.should be_nil
         end
       end
     end

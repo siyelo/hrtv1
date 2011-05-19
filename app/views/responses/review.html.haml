@@ -224,7 +224,7 @@
                       %td.first= n2cndrs(universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
                       - project.activities.each do |activity|
                         %tr{:class => "#{dom_id(project)}_budget"}
-                          %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity)
+                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity= n2cndrs(universal_currency_converter(activity.budget, activity.currency, @response.currency), @response.currency)
                 
                 %tr
@@ -242,7 +242,7 @@
                       %td.first= n2cndrs(universal_currency_converter((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency), @response.currency)
                       - project.activities.each do |activity|
                         %tr{:class => "#{dom_id(project)}_spend"}
-                          %td.activity= link_to nice_name(activity), edit_response_activity_path(@response, activity)
+                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity= n2cndrs(universal_currency_converter(activity.spend, activity.currency, @response.currency), @response.currency)
           
 

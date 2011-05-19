@@ -175,7 +175,8 @@ table.sum
   tr.none td
     border: none
 
-.workplan
+table.workplan
+  
   color: $mid-blue
   width: 100%
   th
@@ -188,12 +189,18 @@ table.sum
     line-height: 1.4
     padding: 10px
   th, td
+    height: 100%
     min-width: 5%
     &.desc
       font-size: 11px
       min-width: 40%
     &.no-padding
       padding: 0
+    &.actions
+      min-width: 10%
+      *
+        float: right
+        margin-right: 5px
   .head th
     background: $mid-blue
     &.no-bg
@@ -216,6 +223,15 @@ table.sum
         +border-top-radius
         +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
         +text-shadow(#000, 0, 1px, 0)
+  .name
+    font-weight: bold
+    line-height: 1.2
+    min-width: 10%
+    span
+      display: block
+      font-size: 11px
+      font-weight: normal
+      margin-left: 10px
   tbody
     tr td
       border-bottom: 1px solid $lightest-blue
@@ -225,18 +241,20 @@ table.sum
         color: $light-blue - #222
         font-size: 11px
         text-align: right
-      &.name
-        font-weight: bold
-        min-width: 10%
     tr.filler td
       background: $lightest-blue
+      font-weight: bold
     tr.filler2 td
       background: $filler
+      font-weight: bold
   .create_alt
     margin-bottom: 0 !important
   input[type=text]
     padding: 4px 2px !important
     width: 80px
+    &.purpose_search
+      margin: 1px
+      padding: 0 !important
   .new_activity, .new_project
     background: $filler
     .inputs, .buttons
@@ -253,3 +271,36 @@ table.sum
       width: 150px !important
     textarea
       width: 300px
+  .nested
+    td
+      background: $filler
+      &.wrap-3
+        min-width: 1%
+      &.wrap-10
+        min-width: 10%
+      &.wrap-30
+        min-width: 30%
+      &.wrap-40
+        min-width: 40%
+      &.wrap-50
+        min-width: 50%
+      &.wrap-60
+        min-width: 55%
+    tr:last-child td
+      border: none
+  .classification_destroy
+    opacity: 0.6
+    &:hover, &:focus
+      opacity: 1
+  a.create_inline
+    margin-left: 0
+  a.create_new
+    margin-bottom: 0
+    
+.mcdropdown_wrap
+  background: $lightest-blue
+  padding: 7px 7px 6px !important
+  width: 415px
+  +border-radius
+.mcdropdown
+  border: none !important

@@ -3,29 +3,29 @@
   var _response_id = "#{@response.id}"
 %h1.main_heading Purposes
 
-%table.standard
+%table.workplan
   %thead
     %tr
-      %th
-      %th{:colspan => 3}
-        %ul
+      %th.no-bg
+      %th.no-padding{:colspan => 3}
+        %ul.tabs
           %li= link_to 'Spent', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil)
           %li= link_to 'Budget', edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil)
-    %tr
-      %th Activity
-      %th Purpose
-      %th Amount
+    %tr.head
+      %th.name Activity
+      %th.name Purpose
       %th
+      %th.wrap-3
   %tbody
     - @projects.each do |project|
       - project.activities.each do |activity|
         %tr{:class => "purpose_row"}
-          %td
+          %td.name
             = project.name
             %span= activity.title
-          %td{:colspan => 3}
+          %td.no-padding{:colspan => 3}
             - form_tag response_classification_path(@response, params[:id], :activity_id => activity.id), :method => :put do
-              %table.standard
+              %table.nested
                 %tbody
                   - code_assignments = find_existing_assignments(activity)
                   - code_assignments.each do |ca|

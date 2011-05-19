@@ -1,12 +1,13 @@
 %tr
-  %td
+  %td.name.wrap-50
     %ul
-      %li= link_to "+ Add Purpose", "#", :class => "add_purpose"
-      - if code_assignments.present?
-        %li= submit_tag "Save"
-
-  %td
-    %ul.right
+      %li
+        - link_to "#", :class => "add_purpose create_inline" do
+          = image_tag"new.png"
+          Add Purpose
+      
+  %td.total
+    %ul
       %li
         Total
         - total = cached_amount_total(code_assignments)
@@ -14,4 +15,6 @@
       %li
         Remaining
         %span= (activity.send(get_coding_type(params[:id])) || 0) - total
-  %td
+  %td.actions
+    - if code_assignments.present?
+      = submit_tag "Save"

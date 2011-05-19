@@ -40,7 +40,8 @@ class FundingChain
 
   def to_h
      { :org_chain => organization_chain, :ufs => ultimate_funding_source, :fa => financing_agent,
-        :budget => budget, :spend => spend}
+        :budget => budget, :spend => spend,
+        :budget_in_usd => budget, :spend_in_usd => spend}
   end
   
   # If the FA can be a different org, then we use it.

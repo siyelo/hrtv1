@@ -21,7 +21,8 @@ csv = FasterCSV.generate do |csv|
     ultimate_funding_sources.each do |fs|
       fs = fs.to_h
       project.funding_streams.create(:ufs => fs[:ufs], :fa => fs[:fa], 
-                                     :budget => fs[:budget].try(:round,3), :spend => fs[:spend].try(:round,3))
+        :budget => fs[:budget].try(:round,3), :spend => fs[:spend].try(:round,3),
+        :budget_in_usd => fs[:budget_in_usd].try(:round,3), :spend_in_usd => fs[:spend_in_usd].try(:round,3))
     end
 
     row = []
@@ -38,7 +39,7 @@ csv = FasterCSV.generate do |csv|
   end
 end
 
-File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
-  file.puts csv
-end
+#File.open(File.join(Rails.root, 'db', 'reports', 'ufs', 'ultimate_funding_sources.csv'), 'w') do |file|
+#  file.puts csv
+#end
 

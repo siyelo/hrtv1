@@ -16,7 +16,7 @@ class ProjectsController < Reporter::BaseController
   end
 
   def new
-    @project = Project.new
+    @project = @response.projects.new
     respond_to do |format|
       format.html
       format.js { render :partial => 'new_inline' }

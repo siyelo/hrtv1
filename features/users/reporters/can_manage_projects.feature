@@ -152,7 +152,7 @@ Feature: Reporter can manage projects
       And I should see "Comment body"
 
 
-    @javascript
+    @javascript @run
     Scenario: A reporter can create in flows for a project
      When I follow "Create Project"
       And I fill in "Name" with "Project1"

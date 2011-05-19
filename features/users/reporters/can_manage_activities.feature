@@ -58,7 +58,7 @@ Feature: Reporter can manage activities
       Then the "Sub-Activity Spend" field should contain "20"
       And the "Sub-Activity Budget" field should contain "30"
      
-     @javascript @run 
+     @javascript 
   Scenario: Reporter can add sub-activities (percentage values must be less than 100)
     When I follow "Add" within ".sub-head:nth-child(2)"
      And I fill in "Name" with "activity1"

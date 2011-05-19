@@ -33,7 +33,7 @@ describe FundingFlow do
   describe "validations" do
     subject { Factory(:funding_flow) }
     it { should be_valid }
-    it { should validate_presence_of(:project) }
+    # it { should validate_presence_of(:project) }
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }

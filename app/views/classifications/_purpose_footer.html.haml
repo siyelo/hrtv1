@@ -5,16 +5,19 @@
         - link_to "#", :class => "add_purpose create_inline" do
           = image_tag"new.png"
           Add Purpose
-      
+
   %td.total
     %ul
+      - total = cached_amount_total(code_assignments)
+      - remaining = (activity.send(get_coding_type(params[:id])) || 0) - total
+
       %li
         Total
-        - total = cached_amount_total(code_assignments)
         %span= total
-      %li
-        Remaining
-        %span= (activity.send(get_coding_type(params[:id])) || 0) - total
+      - if remaining != 0
+        %li
+          Remaining
+          %span= remaining
   %td.actions
     = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

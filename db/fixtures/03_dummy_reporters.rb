@@ -9,13 +9,13 @@ rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_reporter_org' or user named 'reporter'? "
 else
-  puts "=> reporter #{reporter.name} created (org: #{reporter.organization.name})"
+  puts "=> reporter #{@reporter.name} created (org: #{@reporter.organization.name})"
 
   @response = Factory(:data_response, :organization => @reporter.organization)
   @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
   Factory(:activity_fully_coded, :data_response => @response, :project => @project)
   Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
-  puts " added sample data for reporter #{reporter.name}"
+  puts " added sample data for reporter #{@reporter.name}"
 end
 
 begin

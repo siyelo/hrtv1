@@ -234,6 +234,10 @@ END
   def has_other_costs?
     !self.activities.with_type("OtherCost").empty?
   end
+  
+  def matches_funders?
+    budget_matches_funders? && spend_matches_funders?
+  end
 
   def budget_matches_funders?
      self.in_flows.empty? || (self.budget == self.in_flows_budget_total)

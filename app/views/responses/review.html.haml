@@ -172,7 +172,7 @@
                   %th{:colspan => 5}
                     Budget
                 - @response.projects.each do |project|
-                  - if project.in_flows_budget_total != project.budget
+                  - if (project.in_flows_budget_total || 0) != (project.budget || 0)
                     %tr
                       %td= project.name
                       %td= n2cndrs(universal_currency_converter(project.budget, project.currency, @response.currency), @response.currency)
@@ -184,7 +184,7 @@
                   %th{:colspan => 5}
                     Spend
                 - @response.projects.each do |project|
-                  - if project.in_flows_spend_total != project.spend
+                  - if (project.in_flows_spend_total || 0) != (project.spend || 0)
                     %tr
                       %td= project.name
                       %td= n2cndrs(universal_currency_converter(project.spend, project.currency, @response.currency), @response.currency)
@@ -214,7 +214,7 @@
                   %th{:colspan => 5}
                     Budget
                 - @response.projects.each do |project|
-                  - if project.budget != (project.activities_budget_total + project.other_costs_budget_total)
+                  - if (project.budget || 0) != ((project.activities_budget_total + project.other_costs_budget_total) || 0)
                     %tr{:class => "#{dom_id(project)}"}
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
@@ -232,7 +232,7 @@
                     Spend
                 
                 - @response.projects.each do |project|
-                  - if project.spend != (project.activities_spend_total + project.other_costs_spend_total)
+                  - if (project.spend || 0) != ((project.activities_spend_total + project.other_costs_spend_total) || 0)
                     %tr
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"

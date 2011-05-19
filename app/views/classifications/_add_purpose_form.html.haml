@@ -1,12 +1,11 @@
 // need both the id and class selectors called add_purpose_form
-%tr{:id => "add_purpose_form_#{index}", :class => "hidden add_purpose_form"}
+%tr{:class => "hidden add_purpose_form"}
   %td{:colspan => 3}
     %ul
       -# this input gets replaced by mcdropdown
       %input{ :type=> 'text', :class => "purpose_search"}
       %li= link_to "Add Purpose", "#", :class => 'add_entry'
-      %li= link_to "Cancel", "#", :class => "cancel_add"
+      %li= link_to "Cancel", "#", :class => "cancel_add_purpose"
     -# workaround for http://forum.jquery.com/topic/mcdropdown-more-than-one-on-a-page
     -# page will be Big like Tom Hanks.
     -# screw that. lets hide the bug by keeping one add form active at a time
-    -#= render 'dropdown_data', :index => index

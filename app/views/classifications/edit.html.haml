@@ -18,8 +18,8 @@
       %th
   %tbody
     - @projects.each do |project|
-      - project.activities.each_with_index do |activity, index|
-        %tr{:class => "purpose_row", :id => "#{index}"}
+      - project.activities.each do |activity|
+        %tr{:class => "purpose_row"}
           %td
             = project.name
             %span= activity.title
@@ -31,7 +31,7 @@
                   - code_assignments.each do |ca|
                     - if ca.amount.present? || ca.percentage.present?
                       = render 'purpose', :ca => ca
-                  = render 'add_purpose_form', :index => index
+                  = render 'add_purpose_form'
                   = render 'purpose_footer', :activity => activity, :code_assignments => code_assignments
 
 = render 'dropdown_data'

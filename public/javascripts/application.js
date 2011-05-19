@@ -1463,7 +1463,7 @@ var classifications_edit = {
 
     $(".add_purpose").click(function (e) {
       e.preventDefault();
-      purposes.show_add_purpose_form($(this));
+      purposes.add_purpose($(this));
     });
 
     $(".add_entry").click(function (e) {
@@ -1471,9 +1471,9 @@ var classifications_edit = {
       purposes.add_entry($(this));
     });
 
-    $(".cancel_add").click(function (e) {
+    $(".cancel_add_purpose").click(function (e) {
       e.preventDefault();
-      purposes.hide_add_purpose_form($(this));
+      purposes.cancel_add_purpose($(this));
     });
 
     $(".purpose_search").mcDropdown("#purpose_menu", {
@@ -1495,25 +1495,12 @@ var purposes = {
     return purposes.find_row(link).attr('id');
   },
 
-  // finds the add form with an id the same as the add link's container
-  find_add_purpose_form: function(add_link){
-    return $('#add_purpose_form_' + purposes.find_row_id(add_link));
-  },
-
   // finds the add link relative to the cancel link
   find_add_purpose_link: function(cancel_link){
     return purposes.find_row(cancel_link).find(".add_purpose");
   },
 
-  find_selected_purpose_id: function(link){
-    return purposes.find_add_purpose_form(link).find('.mcdropdown input').filter(':hidden').val();
-  },
-
-  find_selected_purpose_text: function(link){
-    return purposes.find_add_purpose_form(link).find('.mcdropdown input:first').val();
-  },
-
-  show_add_purpose_form: function(add_link) {
+  add_purpose: function(add_link) {
     if (add_link.hasClass('disabled')) {
       return false;
     }
@@ -1524,8 +1511,7 @@ var purposes = {
     $(".add_purpose_form").addClass('hidden');
     $(".add_purpose").removeClass('disabled'); // other add links should be enabled then
 
-    var add_purpose_form = purposes.find_add_purpose_form(add_link);
-    add_purpose_form.removeClass('hidden');
+    add_link.parents('tr:first').prev('tr').removeClass('hidden');
 
     //TODO: initialize form and add focus
     add_link.addClass('disabled');
@@ -1535,8 +1521,9 @@ var purposes = {
   add_entry: function(link) {
     // TODO: determine if the purpose was already added
 
-    var purpose_id = purposes.find_selected_purpose_id(link);
-    var purpose_text = purposes.find_selected_purpose_text(link);
+    var form         = link.parents('form')
+    var purpose_id   = form.find('.mcdropdown input:hidden').val()
+    var purpose_text = form.find('.mcdropdown input:first').val();
 
     var tr =  '<tr>' +
               '  <td>' +
@@ -1554,14 +1541,13 @@ var purposes = {
     link.parents('tr:first').before(tr);
 
     // hide the add form
-    purposes.hide_add_purpose_form(link);
+    purposes.cancel_add_purpose(link);
   },
 
   // hides the form containing the given link
   // works for both save & cancel links
-  hide_add_purpose_form: function(link) {
-    var add_purpose_form = purposes.find_add_purpose_form(link);
-    add_purpose_form.addClass('hidden');
+  cancel_add_purpose: function(link) {
+    link.parents('tr:first').addClass('hidden');
     add_link = purposes.find_add_purpose_link(link);
     add_link.removeClass('disabled');
     return true;

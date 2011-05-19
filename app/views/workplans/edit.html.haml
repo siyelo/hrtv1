@@ -41,4 +41,4 @@
         %td= @projects.map{|p| p.activities.map{|a| a.total_by_type(params[:id])}.sum }.sum
       %tr
         %td.borderless{:colspan => 8}
-          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right'
+          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

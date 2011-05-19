@@ -230,35 +230,33 @@ a.remove_nested
     &:hover
       color: $mid-blue
 
-
 .next, input[type=submit]
   +border-radius
   border: 1px
   background: $orange
   color: white
   cursor: pointer
-  font-size: 14px
+  font-size: 12px
   font-weight: bold
   padding: 9px 15px 7px 15px
   text-decoration: none
   +linear-gradient(color-stops($orange, $orange - #333))
   +box-shadow(#666, 0, 1px, 3px)
-  +text-shadow(#666, 0, 1px, 1px)
-  &:hover
-    background= !mid-blue
+  +text-shadow(#444, 0, 1px, 0)
+  &:hover, &:focus
+    background: green
     color: white
     text-decoration: none
+    +linear-gradient(color-stops(green, green - #333))
+  &:active
+    outline: none
+    position: relative
+    top: 1
   &.big
-    clear: both
-    color: white
     display: inline-block
-    float: none
-    margin: 10px 0
+    font-size: 14px
     padding: 13px 20px 10px 20px
     overflow: hidden
-    &:hover
-      color: white
-
   &.small_submit_button
     background: $orange
     border: 1px solid $orange - #222

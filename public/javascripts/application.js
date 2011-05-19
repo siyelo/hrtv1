@@ -1623,9 +1623,10 @@ var workplans_edit = {
           element.parents('tr').next('tr').find('.add_activity').show();
           box.replaceWith(data.html)
         } else {
-          var box = element.parents('tr')
-          box.replaceWith(data.html)
-          initDemoText(box.find('*[data-hint]'));
+          var newTr = $(data.html);
+          var box = element.parents('tr');
+          box.replaceWith(newTr);
+          initDemoText(newTr.find('*[data-hint]'));
         }
       });
     });
@@ -1665,13 +1666,14 @@ var workplans_edit = {
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
-          var box = element.parents('tr')
+          var box = element.parents('tr');
           element.parents('tr').next('tr').find('.add_project').show();
-          box.replaceWith(data.html)
+          box.replaceWith(data.html);
         } else {
-          var box = element.parents('tr')
-          box.replaceWith(data.html)
-          initDemoText(box.find('*[data-hint]'));
+          var newTr = $(data.html);
+          var box = element.parents('tr');
+          box.replaceWith(newTr);
+          initDemoText(newTr.find('*[data-hint]'));
         }
       });
     });

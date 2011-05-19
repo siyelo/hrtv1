@@ -36,9 +36,8 @@ describe Project do
 
     it "returns self as UFS if project has no funder" do
       ufs = @proj0.ultimate_funding_sources
-      ufs[0].to_h.should == {:org_chain => [@org0, @org0],
-        :budget => @proj0.budget, :spend => @proj0.spend, :fa => @org0, :ufs => @org0}
       ufs.size.should == 1
+      ufs_equality(ufs, [{:budget => @proj0.budget, :spend => @proj0.spend, :fa => @org0, :ufs => @org0}])
     end
 
     it "returns self as the UFS if project was self-funded" do
@@ -177,8 +176,8 @@ describe Project do
       proj_funded_by(@proj3, @org1, 50, 50)
       ufs = @proj3.ultimate_funding_sources
       ufs.size.should == 2
-      ufs_equality([ufs[1]], [{:ufs => @org1, :fa => @org3, :budget => 10, :spend => 25}])
-      ufs_equality([ufs[0]], [{:ufs => @org2, :fa => @org1, :budget => 40, :spend => 25}])
+      ufs_equality([ufs[0]], [{:ufs => @org1, :fa => @org3, :budget => 10, :spend => 25}])
+      ufs_equality([ufs[1]], [{:ufs => @org2, :fa => @org1, :budget => 40, :spend => 25}])
     end
 
     it "disambiguates funders with activities in projects of n-1 upstream for UFS" do

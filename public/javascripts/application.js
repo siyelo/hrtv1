@@ -1573,7 +1573,7 @@ var purposes = {
 //end purposes
 
 var changeRowspan = function (element, value) {
-  var projectTd = $(element.parents('tr').prev('.project_row')[0]).find('td');
+  var projectTd = $(element.parents('tr').prevAll('.project_row')[0]).find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
 
@@ -1596,7 +1596,7 @@ var workplans_edit = {
         currentTr = element.parents('tr');
         currentTr.before(data);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
-        changeRowspan(element, 1);
+        //changeRowspan(element, 1);
       });
     });
 
@@ -1622,6 +1622,7 @@ var workplans_edit = {
           var box = element.parents('tr')
           element.parents('tr').next('tr').find('.add_activity').show();
           box.replaceWith(data.html)
+          $('#workplan').find('.save_btn').show();
         } else {
           var newTr = $(data.html);
           var box = element.parents('tr');
@@ -1668,7 +1669,8 @@ var workplans_edit = {
         if (data.status) {
           var box = element.parents('tr');
           element.parents('tr').next('tr').find('.add_project').show();
-          box.replaceWith(data.html);
+          box.after(data.html);
+          box.remove();
         } else {
           var newTr = $(data.html);
           var box = element.parents('tr');

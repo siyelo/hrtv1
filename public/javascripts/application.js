@@ -1496,11 +1496,18 @@ var purposes = {
   },
 
   // finds the add link relative to the cancel link
-  find_add_purpose_link: function(cancel_link){
+  find_add_purpose_link: function (cancel_link) {
     return purposes.find_row(cancel_link).find(".add_purpose");
   },
 
-  add_purpose: function(add_link) {
+
+  resetMcdropdown: function () {
+    // reset and focus search
+    $('.mcdropdown input:hidden').val('');
+    $('.mcdropdown input.purpose_search').val('').focus();
+  },
+
+  add_purpose: function (add_link) {
     if (add_link.hasClass('disabled')) {
       return false;
     }
@@ -1513,17 +1520,28 @@ var purposes = {
 
     add_link.parents('tr:first').prev('tr').removeClass('hidden');
 
-    //TODO: initialize form and add focus
     add_link.addClass('disabled');
+
+    purposes.resetMcdropdown();
     return true;
   },
 
   add_entry: function(link) {
-    // TODO: determine if the purpose was already added
 
     var form         = link.parents('form')
     var purpose_id   = form.find('.mcdropdown input:hidden').val()
     var purpose_text = form.find('.mcdropdown input:first').val();
+
+    // determine if the purpose was already added
+    addedIds = jQuery.map(link.parents('form').find('.ca'), function (e) { 
+      return Number($(e).attr('id').match(/\d+/)[0]);
+    });
+    if (addedIds.indexOf(Number(purpose_id)) >= 0) {
+      alert('"' + purpose_text + '" is already in the list');
+      purposes.resetMcdropdown();
+      return;
+    }
+    
 
     var tr =  '<tr>' +
               '  <td>' +
@@ -1531,7 +1549,7 @@ var purposes = {
               '    <span></span>' +
               '  </td>' +
               '  <td>' +
-              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '"></td>' +
+              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +
               '  <td>' +
               '    <img src="/images/icon_close_flash.png" class="classification_destroy pointer" alt="Icon_close_flash">' +
               '  </td>' +

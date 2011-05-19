@@ -1456,8 +1456,8 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 var classifications_edit = {
   run: function () {
-    $(".classification_destroy").live('click', function(event){
-      event.preventDefault();
+    $(".classification_destroy").live('click', function (e) {
+      e.preventDefault();
       purposes.destroy_classification($(this));
     });
 
@@ -1533,12 +1533,10 @@ var purposes = {
   },
 
   add_entry: function(link) {
-    // TODO determine if the purpose was already added
+    // TODO: determine if the purpose was already added
+
     var purpose_id = purposes.find_selected_purpose_id(link);
-    var activity_id = 1
-    // add a row to the actual form that will be submitted
     var purpose_text = purposes.find_selected_purpose_text(link);
-    //alert(purpose_text);
 
     var tr =  '<tr>' +
               '  <td>' +
@@ -1548,10 +1546,12 @@ var purposes = {
               '  <td>' +
               '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '"></td>' +
               '  <td>' +
-              '    <img src="/images/icon_close_flash.png" class="classification_destroy" alt="Icon_close_flash">' +
+              '    <img src="/images/icon_close_flash.png" class="classification_destroy pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
-    link.parents('tr').before(tr);
+
+    // add a row to the actual form that will be submitted
+    link.parents('tr:first').before(tr);
 
     // hide the add form
     purposes.hide_add_purpose_form(link);
@@ -1568,20 +1568,23 @@ var purposes = {
   },
 
   destroy_classification: function(destroy_link) {
-    var tr = destroy_link.parents('tr');
+    var tr = destroy_link.parents('tr:first');
     var id = tr.attr('data-ca_id');
-    if (id) {
-      //'/responses/:response_id/classifications/:id'
-      $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
-        if (data.status) {
-          tr.remove();
-        }
-      })
-    } else {
-      tr.remove();
-    }
-  },
+    var loader = destroy_link.next('.ajax-loader');
 
+    if (confirm('Are you sure?')) {
+      if (id) {
+        loader.show();
+        $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
+          if (data.status) {
+            tr.remove();
+          }
+        })
+      } else {
+        tr.remove();
+      }
+    }
+  }
 };
 //end purposes
 

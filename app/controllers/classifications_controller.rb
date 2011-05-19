@@ -18,7 +18,10 @@ class ClassificationsController < Reporter::BaseController
 
   def destroy
     ca = @response.code_assignments.find(params[:id])
+    activity = ca.activity
+    klass = ca.class
     ca.destroy
+    activity.update_classified_amount_cache(klass)
 
     render :json => {:status => true}
   end

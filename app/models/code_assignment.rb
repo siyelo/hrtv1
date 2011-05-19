@@ -184,9 +184,17 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def self.update_classifications(activity, classifications, coding_type)
+    klass = coding_type.constantize
     classifications.each_pair do |code_id, value|
       code_assignments = activity.code_assignments.with_type(coding_type)
       ca = code_assignments.detect{|ca| ca.code_id == code_id.to_i}
+
+      # create new code assignment if it does not exist
+      unless ca
+        code = Code.find(code_id)
+        ca = klass.new(:activity => activity, :code => code)
+      end
+
       if value.to_s.last == '%'
         ca.percentage = value.to_s.delete('%')
         ca.amount = nil

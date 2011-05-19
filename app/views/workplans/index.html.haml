@@ -2,9 +2,9 @@
 
 %h1.main_heading Manage
 
-%table.standard
+%table.workplan
   %thead
-    %tr
+    %tr.head
       %th Project
       %th{:colspan => 2} Activity
   %tbody
@@ -13,12 +13,18 @@
         %td{:rowspan => project.activities.length + 2}= link_to project.name, edit_response_project_path(@response, project)
       - project.activities.ordered.each do |activity|
         %tr
-          %td= link_to activity.title, edit_response_activity_path(@response, activity)
-          %td
+          %td.name= link_to activity.title, edit_response_activity_path(@response, activity)
+          %td.total
             = link_to 'Edit', edit_response_activity_path(@response, activity)
             = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
 
-      %tr
-        %td{:colspan => 2}= link_to "Add activity", new_response_activity_path(@response, :project_id => project.id)
-    %tr
-      %td{:colspan => 3}= link_to "Add project", new_response_project_path(@response)
+      %tr.filler2
+        %td{:colspan => 2}
+          - link_to new_response_activity_path(@response, :project_id => project.id), :class => "create_inline" do
+            = image_tag"new.png"
+            Add activity
+    %tr.filler
+      %td{:colspan => 3}
+        - link_to new_response_project_path(@response), :class => "create_new" do
+          = image_tag"new.png"
+          Add project

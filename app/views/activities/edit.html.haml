@@ -14,13 +14,15 @@
     - if !@activity.spend?
       %li= "Enter the Expenditure for this activity."
     - else
-      %li= "Please classify the Expenditure for this activity." if !@activity.spend_classified?
+      - if !@activity.spend_classified?
+        %li= "Please classify the Expenditure for this activity." 
 
   - if @response.data_request.budget?
     - if !@activity.budget?
       %li= "Enter the Budget for this activity."
     - else
-      %li= "Please classify the Budget for this activity." if !@activity.budget_classified?
+      -if !@activity.budget_classified?
+        %li= "Please classify the Budget for this activity." 
 
 
 

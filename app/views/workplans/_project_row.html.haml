@@ -2,7 +2,7 @@
   %td.name{:rowspan => project.activities.length + 2}= project.name
 - project.activities.ordered.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
-%tr{:"data-project_id" => project.id}
+%tr.filler2{:"data-project_id" => project.id}
   %td{:colspan => 5}
     - link_to new_response_activity_path(@response, :project_id => project.id), :class => 'add_activity create_inline' do
       = image_tag "new.png"

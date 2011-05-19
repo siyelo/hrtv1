@@ -135,7 +135,7 @@ class ActivitiesController < Reporter::BaseController
   private
   
     def clean_out_sa_params(params)
-      unless params[:activity][:sub_activities_attributes].empty?
+      unless params[:activity][:sub_activities_attributes].nil?
         params[:activity][:sub_activities_attributes].each_key do |key|
           if params[:activity][:sub_activities_attributes][key][:spend].last == '%'
             if params[:activity][:sub_activities_attributes][key][:spend].to_i < 101

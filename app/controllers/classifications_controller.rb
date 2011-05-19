@@ -12,8 +12,16 @@ class ClassificationsController < Reporter::BaseController
   def update
     @activity = @response.activities.find(params[:activity_id])
     CodeAssignment.update_classifications(@activity, params[:classifications], params[:id])
-    flash[:notice] = 'Purposes classifications for Spent were successfully saved'
-    redirect_to edit_response_classification_url(@response, params[:id])
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = 'Purposes classifications for Spent were successfully saved'
+        redirect_to edit_response_classification_url(@response, params[:id])
+      end
+      format.js { render :partial => 'activity_row', :locals => {
+                                                        :project => @activity.project, 
+                                                        :activity => @activity } }
+    end
   end
 
   def destroy

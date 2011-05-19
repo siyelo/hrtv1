@@ -1,0 +1,15 @@
+- code_assignments = find_existing_assignments(activity)
+
+%tr{:class => "purpose_row"}
+  %td.name
+    = project.name
+    %span= activity.title
+  %td.no-padding{:colspan => 3}
+    - form_tag response_classification_path(@response, params[:id], :activity_id => activity.id), :method => :put do
+      %table.nested
+        %tbody
+          - code_assignments.each do |ca|
+            - if ca.amount.present? || ca.percentage.present?
+              = render 'purpose', :ca => ca
+          = render 'add_purpose_form'
+          = render 'purpose_footer', :activity => activity, :code_assignments => code_assignments

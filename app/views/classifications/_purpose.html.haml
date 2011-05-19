@@ -6,5 +6,5 @@
     %span= ca.code.context
   %td.total= text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%", :class => 'ca'
   %td.actions
-    = image_tag "icon_close_flash.png", :class => 'classification_destroy pointer'
+    = image_tag "icon_close_flash.png", :class => 'remove_purpose pointer'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

@@ -1456,32 +1456,42 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 var classifications_edit = {
   run: function () {
-    $(".classification_destroy").live('click', function (e) {
+    $(".remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
     });
 
-    $(".add_purpose").click(function (e) {
+    $(".add_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.add_purpose($(this));
     });
 
-    $(".add_entry").click(function (e) {
+    $(".add_entry").live('click', function (e) {
       e.preventDefault();
       purposes.add_entry($(this));
     });
 
-    $(".cancel_add_purpose").click(function (e) {
+    $(".cancel_add_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.cancel_add_purpose($(this));
     });
 
-    $(".purpose_search").mcDropdown("#purpose_menu", {
-      hoverOutDelay: 0,
-      hoverOverDelay: 300,
-      showACOnEmptyFocus: true,
-      allowParentSelect: true}
-    );
+    purposes.initMcDropdown($(".purpose_search"));
+
+    $(".save_btn").live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var loader  = element.next('.ajax-loader');
+      var form    = element.parents('form');
+      loader.show();
+
+      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        var tr = $(data);
+        element.parents('tr.purpose_row').replaceWith(tr);
+        purposes.initMcDropdown(tr.find(".purpose_search"));
+        loader.hide();
+      });
+    });
   }
 };
 
@@ -1500,11 +1510,19 @@ var purposes = {
     return purposes.find_row(cancel_link).find(".add_purpose");
   },
 
-
   resetMcdropdown: function (parentElement) {
     // reset and focus search
     parentElement.find('.mcdropdown input:hidden').val('');
     parentElement.find('.mcdropdown input.purpose_search').val('').focus();
+  },
+
+  initMcDropdown: function (elements) {
+    elements.mcDropdown("#purpose_menu", {
+      hoverOutDelay: 0,
+      hoverOverDelay: 300,
+      showACOnEmptyFocus: true,
+      allowParentSelect: true
+    })
   },
 
   add_purpose: function (add_link) {
@@ -1586,7 +1604,6 @@ var purposes = {
     var tr = destroy_link.parents('tr:first');
     var id = tr.attr('data-ca_id');
     var loader = destroy_link.next('.ajax-loader');
-    var form   = destroy_link.parents('form');
 
     if (confirm('Are you sure?')) {
       if (id) {
@@ -1594,12 +1611,10 @@ var purposes = {
         $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
           if (data.status) {
             tr.remove();
-            purposes.btnToggle(form);
           }
         })
       } else {
         tr.remove();
-        purposes.btnToggle(form);
       }
     }
   }

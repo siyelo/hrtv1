@@ -7,19 +7,19 @@
 %h1.main_heading Workplan
 
 - form_tag response_workplan_path(@response, params[:id]), :method => :put, :id => 'workplan' do
-  %table
+  %table.workplan
     %thead
       %tr
-        %th{:colspan => 2}
-        %th{:colspan => 6}
-          %ul
-            %li= link_to 'Spend', response_workplan_path(@response, :spend)
+        %th.no-bg{:colspan => 2}
+        %th.no-padding{:colspan => 6}
+          %ul.tabs
+            %li= link_to 'Spend', response_workplan_path(@response, :spend), :class => "active"
             %li= link_to 'Budget', response_workplan_path(@response, :budget)
-      %tr
+      %tr.head
         %th{:colspan => 2}
         %th= @response.fiscal_year_start_date.try(:year)
         %th{:colspan => 5}= @response.fiscal_year_end_date.try(:year)
-      %tr
+      %tr.head
         %th Project
         %th Activity
         %th Q4 Prev
@@ -31,10 +31,14 @@
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project
-      %tr
-        %td{:colspan => 6}= link_to "Add project", new_response_project_path(@response), :class => 'add_project'
-        %td Total
+      %tr.filler
+        %td{:colspan => 6}
+          - link_to new_response_project_path(@response), :class => 'add_project create_alt' do
+            = image_tag "new.png"
+            Add project
+          
+        %td.total Total
         %td= @projects.map{|p| p.activities.map{|a| a.total_by_type(params[:id])}.sum }.sum
       %tr
-        %td{:colspan => 8}
-          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn'
+        %td.borderless{:colspan => 8}
+          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right'

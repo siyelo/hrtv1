@@ -1458,7 +1458,7 @@ var classifications_edit = {
   run: function () {
     $(".classification_destroy").live('click', function (e) {
       e.preventDefault();
-      purposes.destroy_classification($(this));
+      purposes.remove_purpose($(this));
     });
 
     $(".add_purpose").click(function (e) {
@@ -1501,10 +1501,10 @@ var purposes = {
   },
 
 
-  resetMcdropdown: function () {
+  resetMcdropdown: function (parentElement) {
     // reset and focus search
-    $('.mcdropdown input:hidden').val('');
-    $('.mcdropdown input.purpose_search').val('').focus();
+    parentElement.find('.mcdropdown input:hidden').val('');
+    parentElement.find('.mcdropdown input.purpose_search').val('').focus();
   },
 
   add_purpose: function (add_link) {
@@ -1522,7 +1522,7 @@ var purposes = {
 
     add_link.addClass('disabled');
 
-    purposes.resetMcdropdown();
+    purposes.resetMcdropdown(add_link.parents('form'));
     return true;
   },
 
@@ -1533,24 +1533,24 @@ var purposes = {
     var purpose_text = form.find('.mcdropdown input:first').val();
 
     // determine if the purpose was already added
-    addedIds = jQuery.map(link.parents('form').find('.ca'), function (e) { 
+    addedIds = jQuery.map(form.find('.ca'), function (e) { 
       return Number($(e).attr('id').match(/\d+/)[0]);
     });
     if (addedIds.indexOf(Number(purpose_id)) >= 0) {
-      alert('"' + purpose_text + '" is already in the list');
-      purposes.resetMcdropdown();
+      alert('"' + purpose_text + '" is already added');
+      purposes.resetMcdropdown(form);
       return;
     }
     
 
     var tr =  '<tr>' +
-              '  <td>' +
+              '  <td class="wrap-50">' +
               '    <label for="classifications_' + purpose_id + '">' + purpose_text + '</label>' +
               '    <span></span>' +
               '  </td>' +
-              '  <td>' +
+              '  <td class="total">' +
               '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +
-              '  <td>' +
+              '  <td class="actions">' +
               '    <img src="/images/icon_close_flash.png" class="classification_destroy pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
@@ -1560,6 +1560,12 @@ var purposes = {
 
     // hide the add form
     purposes.cancel_add_purpose(link);
+
+
+    purposes.btnToggle(form);
+    if (form.find('.ca').length > 0) {
+      form.find('.save_btn').show();
+    }
   },
 
   // hides the form containing the given link
@@ -1571,10 +1577,16 @@ var purposes = {
     return true;
   },
 
-  destroy_classification: function(destroy_link) {
+  btnToggle: function (form) {
+    var btn = form.find('.save_btn');
+    form.find('.ca').length > 0 ? btn.show() : btn.hide();
+  },
+
+  remove_purpose: function(destroy_link) {
     var tr = destroy_link.parents('tr:first');
     var id = tr.attr('data-ca_id');
     var loader = destroy_link.next('.ajax-loader');
+    var form   = destroy_link.parents('form');
 
     if (confirm('Are you sure?')) {
       if (id) {
@@ -1582,10 +1594,12 @@ var purposes = {
         $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
           if (data.status) {
             tr.remove();
+            purposes.btnToggle(form);
           }
         })
       } else {
         tr.remove();
+        purposes.btnToggle(form);
       }
     }
   }

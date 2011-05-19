@@ -16,5 +16,4 @@
         Remaining
         %span= (activity.send(get_coding_type(params[:id])) || 0) - total
   %td.actions
-    - if code_assignments.present?
-      = submit_tag "Save"
+    = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'

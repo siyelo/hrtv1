@@ -29,7 +29,7 @@
           = file_field_tag :file
         = submit_tag "Upload", :class => 'small_submit_button'
 
-        = link_to "Download template", download_template_activity_code_assignments_path(@activity, :coding_type => @coding_type), :class => "create_alt right"
+        = link_to "Download template", download_template_activity_code_assignments_path(@activity, :coding_type => @coding_type), :class => "row_cancel right"
 
 
 - if @error_message

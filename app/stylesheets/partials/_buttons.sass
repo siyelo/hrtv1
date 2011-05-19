@@ -32,10 +32,10 @@ a.remove_nested
     border: 1px solid $orange - #222
     color: #fff
     display: inline-block
-    font-size: 12px
+    font-size: 10px
     font-weight: bold
     margin-bottom: 10px
-    padding: 7px 12px 5px
+    padding: 5px 8px
     text-decoration: none
     +border-radius
     +box-shadow(#999, 0, 1px, 3px)
@@ -54,17 +54,17 @@ a.remove_nested
       position: relative
       top: 1px
 
-  &.create_alt
+  &.row_cancel
     background: #eee
     border: 1px solid $light-blue
     color: $mid-blue
     display: inline-block
-    font-size: 12px
+    font-size: 10px
     font-weight: bold
     margin-bottom: 10px
-    padding: 7px 12px 5px
+    padding: 5px 8px
     text-decoration: none
-    +border-radius(2px)
+    +border-radius
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +text-shadow(#fff, 0, 0, 1px)
@@ -82,16 +82,19 @@ a.remove_nested
       position: relative
       top: 1px
 
-  &.create_inline
+  // add row is a significant call to action on the page
+  // we have several on the page at the moment, so they
+  // cannot be overwhelming
+  &.add_row
     background: #eee
     border: 1px solid $light-blue
-    color: $mid-blue + #444
+    color: $mid-blue + #222 !important
     display: inline-block
-    font-size: 9px
+    font-size: 11px
     font-weight: bold
     line-height: 1 !important
     margin: 0 0 0 3px
-    padding: 2px 6px 1px
+    padding: 5px 6px
     text-decoration: none
     +border-radius(2px)
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
@@ -101,15 +104,25 @@ a.remove_nested
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
-      color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #222, 0, 0, 1px)
+      border: 1px solid $light-blue - #222
+      color: $mid-blue !important
+      &.disabled
+        border: 1px solid $light-blue
     &:active
       outline: none
       position: relative
       top: 1px
+      &.disabled
+        top: 0px
+    &.disabled
+      color: $light-grey + #222 !important
+      pointer-events: none
+      cursor: default
+
+    // secondary "add row" button is a bit smaller, less important,
+    // fits into row better
+    &.secondary
+
 
   &.edit_button
     background: $light-blue
@@ -352,7 +365,3 @@ a.delete_btn
     outline: none
     position: relative
     top: 1px
-
-a.add_purpose
-  &.disabled
-    color: $light-grey !important

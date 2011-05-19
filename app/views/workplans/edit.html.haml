@@ -33,7 +33,7 @@
         = render 'project_row', :project => project
       %tr.filler
         %td{:colspan => 6}
-          - link_to new_response_project_path(@response), :class => 'add_project create_alt' do
+          - link_to new_response_project_path(@response), :class => 'add_project row_cancel' do
             = image_tag "new.png"
             Add project
           

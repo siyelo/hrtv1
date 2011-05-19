@@ -66,7 +66,7 @@
         - f.semantic_fields_for :in_flows do |ff|
           = render "projects/in_flow_fields", :f => ff
         .add
-          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt'
+          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'row_cancel'
 
   %li.last
     %h3 Other

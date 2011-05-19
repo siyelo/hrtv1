@@ -13,5 +13,5 @@
       = submit_tag "Import", :class => 'small_submit_button'
 
       - if can_export
-        = link_to "Export", export_response_activities_path(@response, url_params), :class => "create_alt right"
-      = link_to "Get Template", template_response_activities_path(@response), :class => "create_alt right"
+        = link_to "Export", export_response_activities_path(@response, url_params), :class => "row_cancel right"
+      = link_to "Get Template", template_response_activities_path(@response), :class => "row_cancel right"

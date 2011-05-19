@@ -3,6 +3,6 @@
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
   %td.wrap-10
-    - link_to edit_response_other_cost_path(@response, other_cost), :class => 'create_inline right' do
+    - link_to edit_response_other_cost_path(@response, other_cost), :class => 'add_row right' do
       = image_tag "pencil_10.png"
       edit

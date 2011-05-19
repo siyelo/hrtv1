@@ -1520,7 +1520,7 @@ var purposes = {
     elements.mcDropdown("#purpose_menu", {
       hoverOutDelay: 0,
       hoverOverDelay: 300,
-      showACOnEmptyFocus: true,
+//      showACOnEmptyFocus: true,
       allowParentSelect: true
     })
   },
@@ -1551,7 +1551,7 @@ var purposes = {
     var purpose_text = form.find('.mcdropdown input:first').val();
 
     // determine if the purpose was already added
-    addedIds = jQuery.map(form.find('.ca'), function (e) { 
+    addedIds = jQuery.map(form.find('.ca'), function (e) {
       return Number($(e).attr('id').match(/\d+/)[0]);
     });
     if (addedIds.indexOf(Number(purpose_id)) >= 0) {
@@ -1559,7 +1559,7 @@ var purposes = {
       purposes.resetMcdropdown(form);
       return;
     }
-    
+
 
     var tr =  '<tr>' +
               '  <td class="wrap-50">' +

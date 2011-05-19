@@ -3,11 +3,11 @@
     %h4
       Activities
       %span
-        - link_to new_response_activity_path(response, :project_id => project.id), :class => "create_inline" do
+        - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row" do
           = image_tag "new.png"
           Add
 
-        - link_to "#", :class => "create_inline upload_btn" do
+        - link_to "#", :class => "add_row upload_btn" do
           = image_tag "new.png"
           Import / Export
 

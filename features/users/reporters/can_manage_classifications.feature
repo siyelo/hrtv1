@@ -39,7 +39,7 @@ Feature: Reporter can manage classifications
       And I press "Save"
       Then I should see "Purposes classifications for Spent were successfully saved"
 
-  @run1
+  @wip
   Scenario: Reporter can add a purpose
     Given I am on the purpose classification page for response "data_request1" org "organization1"
     And I follow "+ Add Purpose" within the first row

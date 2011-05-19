@@ -106,8 +106,7 @@ Feature: Reporter can upload classifications
         And I press "Upload"
       Then I should see "Activity classification was successfully uploaded."
         And I should be on the budget classification page for "Activity"
-        And the "mtef1" field should contain "20"
-        And the "mtef1" percentage field should contain "10"
+        And the "mtef1" field should contain "10"
 
       Examples:
       | type   |
@@ -115,15 +114,14 @@ Feature: Reporter can upload classifications
       | Spend  |
 
 
-    Scenario Outline: Reporter can upload Purposes
+    Scenario Outline: Reporter can upload Inputs
       When I follow "<type>"
         And I follow "Inputs"
         And I attach the file "spec/fixtures/classifications_inputs.csv" to "File" within ".upload_box"
         And I press "Upload"
       Then I should see "Activity classification was successfully uploaded."
         And I should be on the budget classification page for "Activity"
-        And the "cost_category1" field should contain "20"
-        And the "cost_category1" percentage field should contain "10"
+        And the "cost_category1" field should contain "10"
 
       Examples:
       | type   |
@@ -138,8 +136,7 @@ Feature: Reporter can upload classifications
         And I press "Upload"
       Then I should see "Activity classification was successfully uploaded."
         And I should be on the budget classification page for "Activity"
-        And the "location1" field should contain "20"
-        And the "location1" percentage field should contain "10"
+        And the "location1" field should contain "10"
 
       Examples:
       | type   |
@@ -154,8 +151,7 @@ Feature: Reporter can upload classifications
         And I press "Upload"
       Then I should see "Activity classification was successfully uploaded."
         And I should be on the budget classification page for "Activity"
-        And the "service_level1" field should contain "20"
-        And the "service_level1" percentage field should contain "10"
+        And the "service_level1" field should contain "10"
 
       Examples:
       | type   |

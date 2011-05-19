@@ -33,7 +33,7 @@ body #content #main .activity_tree a
   position: relative
   top: 15px
   span
-    padding: 0 48px 0 3px
+    padding: 0 25px 0 3px
 
 ul.activity_tree
   border-bottom: $filler 4px solid
@@ -113,7 +113,7 @@ body.app
     label
       display: inline
     .values
-      width: 280px
+      width: 200px
 
 .tooltip
   &.info
@@ -174,3 +174,8 @@ body.app
         border-width: 1px 1px 0
         color: $mid-blue
         font-weight: bold
+
+// override
+#code_assignments_show
+  input[type=text], textarea
+    padding: 2px

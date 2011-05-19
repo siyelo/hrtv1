@@ -42,4 +42,14 @@ module CodeAssignmentsHelper
   def node_error(code, assignment)
     "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children})."
   end
+
+  def classified_value(assignment)
+    if assignment
+      if assignment.amount
+        n2c(assignment.amount)
+      elsif assignment.percentage
+        "#{assignment.percentage}%"
+      end
+    end
+  end
 end

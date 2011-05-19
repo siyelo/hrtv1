@@ -1,5 +1,5 @@
 %tr
-  %td= link_to other_cost.title
+  %td= link_to other_cost.title, edit_response_other_cost_path(@response, other_cost)
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
   %td.wrap-10

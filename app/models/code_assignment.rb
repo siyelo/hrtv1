@@ -74,7 +74,7 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def self.create_from_file(doc, activity, coding_type)
-    updates = HashWithIndifferentAccess.new
+    classifications = {}
     doc.each do |row|
       percentage = row['Percentage']
       amount     = row['Amount']
@@ -82,14 +82,13 @@ class CodeAssignment < ActiveRecord::Base
 
       code = Code.find(id)
 
-      if (code && (amount.present? || percentage.present?))
-        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount,
-                                                               :percentage => percentage})
+      if (code && value.present?)
+        classifications[code.id] = value
       end
     end
 
     klass = coding_type.constantize
-    klass.update_codings(updates, activity)
+    klass.update_classifications(activity, classifications, coding_type)
   end
 
   def self.add_rows(csv, code, max_level, current_level)
@@ -160,53 +159,44 @@ class CodeAssignment < ActiveRecord::Base
     ).group_by{|ca| ca.activity_id}
   end
 
-  # TODO: spec
-  def self.update_codings(code_assignments, activity)
-    if code_assignments
-      code_assignments.delete_if { |key,val| val["amount"].blank? && val["percentage"].blank? }
-      selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
-      self.with_activity(activity.id).delete_all
-      # if there are any codes, then save them!
-      selected_codes.each do |code|
-        self.create!(:activity => activity,
-                     :code => code,
-                     :amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
-                     :percentage => code_assignments[code.id.to_s]["percentage"]
-        )
-      end
-
-      # TODO: find what's the problem with this !
-      # sum_of_children gets saved properly when this is called 2 times
-      #
-      activity.update_classified_amount_cache(self)
-      activity.update_classified_amount_cache(self)
-    end
-  end
-
   def self.update_classifications(activity, classifications, coding_type)
-    klass = coding_type.constantize
+    klass     = coding_type.constantize
+    blank_ids = []
+
+    code_assignments = activity.code_assignments.with_type(coding_type)
+
     classifications.each_pair do |code_id, value|
-      code_assignments = activity.code_assignments.with_type(coding_type)
-      ca = code_assignments.detect{|ca| ca.code_id == code_id.to_i}
-
-      # create new code assignment if it does not exist
-      unless ca
-        code = Code.find(code_id)
-        ca = klass.new(:activity => activity, :code => code)
-      end
-
-      if value.to_s.strip.last == '%'
-        ca.percentage = value.to_s.delete('%')
-        ca.amount = nil
+      if value.blank?
+        blank_ids << code_id
       else
-        ca.amount = value
-        ca.percentage = nil
-      end
+        ca = code_assignments.detect{|ca| ca.code_id == code_id.to_i}
 
-      ca.save
+        # initialize new code assignment if it does not exist
+        unless ca
+          code = Code.find(code_id)
+          ca = klass.new(:activity => activity, :code => code)
+        end
+
+        value = value.to_s.strip
+        if value.last == '%'
+          ca.percentage = value.delete('%').strip
+          ca.amount = nil
+        else
+          ca.amount = value.strip
+          ca.percentage = nil
+        end
+
+        ca.save
+      end
     end
 
-    activity.update_classified_amount_cache(coding_type.constantize)
+    # faster deletion
+    CodeAssignment.delete_all(["activity_id = ? AND type = ? AND code_id IN (?)",
+                               activity.id, coding_type, blank_ids])
+    #activity.code_assignments.with_type(coding_type).
+      #with_code_ids(blank_ids).each { |ca| ca.destroy }
+
+    activity.update_classified_amount_cache(klass)
   end
 
   private

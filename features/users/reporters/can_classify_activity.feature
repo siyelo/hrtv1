@@ -33,10 +33,10 @@ Feature: Reporter can enter a code breakdown for each activity
       And a mtef_code "mtef112" exists with short_display: "mtef112", parent: mtef_code "mtef11"
       And a mtef_code "mtef121" exists with short_display: "mtef121", parent: mtef_code "mtef12"
       And a mtef_code "mtef122" exists with short_display: "mtef122", parent: mtef_code "mtef12"
-      And a mtef_code "mtef211" exists with short_display: "mtef111", parent: mtef_code "mtef21"
-      And a mtef_code "mtef212" exists with short_display: "mtef112", parent: mtef_code "mtef21"
-      And a mtef_code "mtef221" exists with short_display: "mtef121", parent: mtef_code "mtef22"
-      And a mtef_code "mtef222" exists with short_display: "mtef122", parent: mtef_code "mtef22"
+      And a mtef_code "mtef211" exists with short_display: "mtef211", parent: mtef_code "mtef21"
+      And a mtef_code "mtef212" exists with short_display: "mtef212", parent: mtef_code "mtef21"
+      And a mtef_code "mtef221" exists with short_display: "mtef221", parent: mtef_code "mtef22"
+      And a mtef_code "mtef222" exists with short_display: "mtef222", parent: mtef_code "mtef22"
 
       # level 1
       And a cost_category_code exists with short_display: "cost_category1"
@@ -79,12 +79,12 @@ Feature: Reporter can enter a code breakdown for each activity
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
         And I follow "Purposes"
-        And I fill in "mtef1" percentage field with "<amount>"
+        And I fill in "mtef1" with "<amount>"
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
         And I should see "We're sorry, when we added up your Budget by Purposes classifications"
 
-        And the "mtef1" percentage field should contain "<amount2>"
+        And the "mtef1" field should contain "<amount2>"
 
         Examples:
           | amount | amount2 |
@@ -145,13 +145,13 @@ Feature: Reporter can enter a code breakdown for each activity
     Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
       When I follow "Budget"
         And I follow "Purposes"
-        And I fill in "%" with "10" within "ul.activity_tree > li:nth-child(1)"
-        And I fill in "%" with "5" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)"
-        And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+        And I fill in "mtef1" with "10%"
+        And I fill in "mtef11" with "5%"
+        And I fill in "mtef111" with "1%"
 
-        And I fill in "%" with "10" within "ul.activity_tree > li:nth-child(2)"
-        And I fill in "%" with "5" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)"
-        And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+        And I fill in "mtef2" with "10%"
+        And I fill in "mtef21" with "5%"
+        And I fill in "mtef211" with "1%"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
@@ -176,9 +176,8 @@ Feature: Reporter can enter a code breakdown for each activity
       When I press "Save & Classify >"
         And I follow "Budget"
         And I follow "Purposes"
-
-        And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
-        And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)"
+        And I fill in "mtef111" with "1%"
+        And I fill in "mtef112" with "2%"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "150,000.00"
@@ -194,10 +193,10 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "120,000.00"
 
-      #### change coding and see if budget codings are changed
+      ### change coding and see if budget codings are changed
       When I follow "Budget"
         And I follow "Purposes"
-        And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
+        And I fill in "mtef111" with "2%"
         And I press "Save"
       Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"

@@ -214,6 +214,66 @@ describe CodeAssignment do
     end
   end
 
+  describe "#update_classifications" do
+    before :each do
+      @activity = Factory.create(:activity)
+      @code1    = Factory.create(:code)
+      @code2    = Factory.create(:code)
+    end
+
+    it "updates classifications with percentages" do
+      classifications = {@code1.id.to_s => "50%", @code2.id.to_s => "50%"}
+      CodeAssignment.update_classifications(@activity, classifications, 'CodingBudget')
+      CodeAssignment.count.should == 2
+      code_ids = CodeAssignment.all.map(&:code_id)
+      code_ids.should include(@code1.id)
+      code_ids.should include(@code2.id)
+
+      classifications = {@code1.id.to_s => "50%", @code2.id.to_s => ""}
+      CodeAssignment.update_classifications(@activity, classifications, 'CodingBudget')
+      CodeAssignment.count.should == 1
+      code_assignments = CodeAssignment.all
+      code_ids = code_assignments.map(&:code_id)
+      code_ids.should include(@code1.id)
+      code_ids.should_not include(@code2.id)
+      code_assignments[0].amount.should == nil
+      code_assignments[0].percentage.should == 50
+    end
+
+    it "updates classifications with amounts" do
+      classifications = {@code1.id.to_s => "50", @code2.id.to_s => "50"}
+      CodeAssignment.update_classifications(@activity, classifications, 'CodingBudget')
+      CodeAssignment.count.should == 2
+      code_ids = CodeAssignment.all.map(&:code_id)
+      code_ids.should include(@code1.id)
+      code_ids.should include(@code2.id)
+
+      classifications = {@code1.id.to_s => "50", @code2.id.to_s => ""}
+      CodeAssignment.update_classifications(@activity, classifications, 'CodingBudget')
+      CodeAssignment.count.should == 1
+      code_assignments = CodeAssignment.all
+      code_ids = CodeAssignment.all.map(&:code_id)
+      code_ids.should include(@code1.id)
+      code_ids.should_not include(@code2.id)
+      code_assignments[0].percentage.should == nil
+      code_assignments[0].amount.should == 50
+    end
+
+    # sanity check for the delete SQL statement
+    it "does not delete other classifications" do
+      @activity2 = Factory.create(:activity)
+      Factory.create(:coding_budget, :code => @code1, :activity => @activity)
+      Factory.create(:coding_spend, :code => @code1, :activity => @activity)
+      Factory.create(:coding_budget, :code => @code2, :activity => @activity2)
+      Factory.create(:coding_spend, :code => @code2, :activity => @activity2)
+
+      CodeAssignment.count.should == 4
+      CodeAssignment.update_classifications(@activity, {@code1.id.to_s => ""}, 'CodingBudget')
+      CodeAssignment.count.should == 3
+    end
+  end
+
+
 end
 
 # == Schema Information

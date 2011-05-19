@@ -2,11 +2,9 @@ class ClassificationsController < Reporter::BaseController
   before_filter :load_data_response
 
   def edit
-    @projects = @response.projects.find(:all, :order => 'name ASC')
-    @coding_type = params[:coding_type] || 'CodingBudget'
-    # We just want the root codes for an Activity Type for now
-    @coding_tree         = CodingTree.new(Activity.new, @coding_type.constantize)
-    @codes               = @coding_tree.root_codes
+    @projects     = @response.projects.find(:all, :order => 'name ASC')
+    @coding_tree  = CodingTree.new(Activity.new, params[:id].constantize)
+    @codes        = @coding_tree.root_codes
   end
 
   def update

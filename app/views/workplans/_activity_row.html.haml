@@ -5,4 +5,4 @@
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q2", activity.send("#{type}_q2")
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q3", activity.send("#{type}_q3")
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q4", activity.send("#{type}_q4")
-  %td= activity.total_by_type(type)
+  %td.total_amount= activity.total_by_type(type)

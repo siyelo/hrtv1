@@ -1083,6 +1083,11 @@ var validateDates = function (startDate, endDate) {
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
+
+    // show the jquery autocomplete combobox instead of
+    // standard dropdown
+    $( ".ff_from" ).combobox();
+
     $('.edit').live('click', function (e) {
       e.preventDefault();
       var element = $(this).parents('.fields');
@@ -1095,48 +1100,85 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
     $('.ff_from').live('change', function(e) {
       e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      if(element.val() == "-1"){
-        fieldsBlock.find('.ff_from_container').hide();
-        fieldsBlock.find('.add_organization').show();
-      }
+      organization.show_add_form($(this));
     });
-    
+
     $('.cancel_organization_link').live('click', function(e) {
       e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      fieldsBlock.find('.organization_name').attr('value', '');
-      fieldsBlock.find('.add_organization').hide();
-      fieldsBlock.find('.ff_from_container').show();
+      organization.hide_add_form($(this));
     });
 
     $('.add_organization_link').live('click', function(e) {
       e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      var name = fieldsBlock.find('.organization_name').val();
-      $.post("/organizations.js", { "name" : name }, function(data){
-        var data = $.parseJSON(data);
-        var ff_from = fieldsBlock.find('.ff_from');
-        fieldsBlock.find('.ff_from_container').show();
-        fieldsBlock.find('.add_organization').hide();
-        if(isNaN(data.organization.id)){
-          ff_from.val(null);
-        }else{
-          ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-          ff_from.val(data.organization.id);
-        }
-      });
-      fieldsBlock.find('.organization_name').attr('value', '');
-      fieldsBlock.find('.add_organization').slideToggle();
+      organization.add($(this))
     });
 
+    // ?
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
 };
+
+var organization = {
+  combo_box: function(fieldsBlock) {
+    return fieldsBlock.find('.ff_from');
+  },
+
+  combo_box_container: function(fieldsBlock) {
+    return fieldsBlock.find('.ff_from_container');
+  },
+
+  add_form: function(fieldsBlock){
+    return fieldsBlock.find('.add_organization');
+  },
+
+  // if the currently selected element is "Add an Organization..." (-1)
+  // show the org form
+  show_add_form: function(element) {
+    var ADD_AN_ORGANIZATION = "-1"
+    var fieldsBlock = element.parents('.fields');
+    if(element.val() == ADD_AN_ORGANIZATION){
+      organization.combo_box_container(fieldsBlock).hide();
+      organization.add_form(fieldsBlock).show();
+    }
+  },
+
+  hide_add_form: function(element){
+    var fieldsBlock = element.parents('.fields');
+    fieldsBlock.find('.organization_name').attr('value', '');
+    organization.combo_box(fieldsBlock).val("0"); // reset combo box selection
+    organization.add_form(fieldsBlock).hide();
+    organization.combo_box_container(fieldsBlock).show();
+  },
+
+  add: function(element){
+    var fieldsBlock = element.parents('.fields');
+    var name = fieldsBlock.find('.organization_name').val();
+    if(!name){
+      alert("Please enter a name");
+    }else{
+      organization.create_remote(name, fieldsBlock);
+      fieldsBlock.find('.organization_name').attr('value', '');
+      organization.add_form(fieldsBlock).slideToggle();
+    };
+  },
+
+  create_remote: function(name, fieldsBlock){
+    $.post("/organizations.js", { "name" : name }, function(data){
+      var data = $.parseJSON(data);
+      var ff_from = organization.combo_box(fieldsBlock);
+      organization.combo_box_container(fieldsBlock).show();
+      organization.add_form(fieldsBlock).hide();
+      if(isNaN(data.organization.id)){
+        ff_from.val(null);
+      }else{
+        ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        ff_from.val(data.organization.id);
+      }
+    });
+  }
+};
+
 
 var projects_index = {
   run: function () {
@@ -1300,6 +1342,11 @@ var activity_form = function () {
     }
   });
 
+
+  // show the jquery autocomplete combobox instead of
+  // standard dropdown
+  $( ".combobox" ).combobox();
+
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
@@ -1308,7 +1355,7 @@ var activity_form = function () {
       $('.add_organization').show();
     }
   });
-  
+
   $('.cancel_organization_link').live('click', function(e) {
     e.preventDefault();
     $('.organization_name').attr('value', '');
@@ -1361,6 +1408,8 @@ var activity_form = function () {
 var admin_activities_edit = admin_activities_update = {
   run: function () {
     activity_form();
+
+
   }
 };
 
@@ -1382,7 +1431,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
         $('.add_organization').show();
       }
     });
-    
+
     $('.cancel_organization_link').live('click', function(e) {
       e.preventDefault();
       $('.organization_name').attr('value', '');

@@ -25,7 +25,7 @@ class Organization < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :name
-  validates_uniqueness_of :name 
+  validates_uniqueness_of :name
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
@@ -80,11 +80,12 @@ class Organization < ActiveRecord::Base
     #TODO remove district name in (), capitalized, and as below
     n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?
     n ||= name
-    n = n.gsub("Health Center", "HC")
-    n = n.gsub("District Hospital", "DH")
-    n = n.gsub("Health Post", "HP")
-    n = n.gsub("Dispensary", "Disp")
-    n
+    tidy_name(n)
+  end
+
+  def display_name(length = 100)
+    n = self.name || "<no name>"
+    n.first(length)
   end
 
   def self.download_template
@@ -106,7 +107,7 @@ class Organization < ActiveRecord::Base
   def has_provider?(organization)
     projects.map(&:activities).flatten.map(&:provider).include?(organization)
   end
-  
+
 
   def projects_in_request(request)
       r = data_responses.select{|dr| dr.data_request = request}.first
@@ -116,7 +117,7 @@ class Organization < ActiveRecord::Base
         []
       end
   end
-  
+
   def funding_chains(request)
     ufs = projects_in_request(request).map{|p| p.funding_chains(false)}.flatten
     if ufs.empty?
@@ -124,38 +125,49 @@ class Organization < ActiveRecord::Base
     end
     ufs
   end
-  
+
   def funding_chains_to(to, request)
     fs = projects_in_request(request).map{|p| p.funding_chains_to(to)}.flatten
     FundingChain.merge_chains(fs)
   end
-  
+
   def best_guess_funding_chains_to(to, request)
     chains = funding_chains_to(to, request)
     unless chains.empty?
-      chains 
+      chains
     else
       guess_funding_chains_to(to,request)
     end
   end
-  
+
   def guess_funding_chains_to(to, request)
     if ["Donor", "Bilateral", "Multilateral"].include?(raw_type)
       # assume i funded even if didnt enter it
-      return [FundingChain.new({:organization_chain => [self, to]})] 
+      return [FundingChain.new({:organization_chain => [self, to]})]
     else
       # evenly split across all funding sources
       chains = funding_chains(request)
       unless chains.empty?
-        FundingChain.add_to(chains, to) 
-      else 
+        FundingChain.add_to(chains, to)
+      else
         #assume I am self funded if I entered no funding information
         # could enter "Unknown - maybe #{self.name}" ?
         [FundingChain.new({:organization_chain => [self, to]})]
       end
     end
   end
-  
+
+  protected
+
+    def tidy_name(n)
+      n = n.gsub("Health Center", "HC")
+      n = n.gsub("District Hospital", "DH")
+      n = n.gsub("Health Post", "HP")
+      n = n.gsub("Dispensary", "Disp")
+      n
+    end
+
+
 end
 
 

@@ -71,7 +71,7 @@
         .add
           = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
           %p.hint The sources from which your organization receives funding for this Activity.
-        
+
 
   %li.last
     %h3== Implementers
@@ -80,9 +80,10 @@
       - hint = "Service Providers who implement Activities for your organization's Projects/Activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
       .implementer_container
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
+        .ui_widget
+          = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select combobox'}
       = render :partial => 'shared/add_organizations'
-      
+
   %li.last.sub_activities
     %h3 Sub Activities
     %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.

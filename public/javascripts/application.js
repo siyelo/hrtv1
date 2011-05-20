@@ -22,6 +22,7 @@ var build_project_in_flow_row = function (edit_block, type, type_name, display_f
   var value_q2         = edit_block.find('.ff_' + type + '_q2').val();
   var value_q3         = edit_block.find('.ff_' + type + '_q3').val();
   var value_q4         = edit_block.find('.ff_' + type + '_q4').val();
+  var values = [value_q4_prev, value_q1, value_q2, value_q3, value_q4];
 
   if (display_funder) {
     var organization = edit_block.find('.ff_from option:selected').text();
@@ -33,36 +34,27 @@ var build_project_in_flow_row = function (edit_block, type, type_name, display_f
     var funder = $('<li/>');
   }
 
+  var labels = jQuery.map(edit_block.find('.' + type + ' ul label'), function (e) {
+    return $(e).text();
+  });
+
+  var ul = $('<ul/>');
+  for (var i = 0; i < values.length; i++) {
+    ul.append(
+      $('<li/>').append(
+        $('<span/>').text(labels[i]),
+        values[i] || 'N/A'
+      )
+    )
+  }
+
   return $('<ul/>').append(
     funder,
     $('<li/>').append(
       $('<span/>').text(type_name),
       value || 'N/A'
     ),
-    $('<li/>').append(
-      $('<ul/>').append(
-        $('<li/>').append(
-          $('<span/>').text('Q4 08-09'),
-          value_q4_prev || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Q1 09-10'),
-          value_q1 || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Q2 09-10'),
-          value_q2 || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Q3 09-10'),
-          value_q3 || 'N/A'
-        ),
-        $('<li/>').append(
-          $('<span/>').text('Q4 09-10'),
-          value_q4 || 'N/A'
-        )
-      )
-    )
+    $('<li/>').append(ul)
   )
 };
 

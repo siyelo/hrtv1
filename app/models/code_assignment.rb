@@ -65,7 +65,10 @@ class CodeAssignment < ActiveRecord::Base
   def self.download_template(klass)
     max_level = klass.deepest_nesting
     FasterCSV.generate do |csv|
-      csv << (['Code'] * max_level).concat(['Percentage', 'Amount', 'Code', 'Description'])
+      header_row = (['Code'] * max_level).concat(['Percentage', 'Amount', 'Code', 'Description'])
+      (100 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+      csv << header_row
       klass.roots.each{|code| add_rows(csv, code, max_level, 0)}
     end
   end
@@ -73,12 +76,11 @@ class CodeAssignment < ActiveRecord::Base
   def self.create_from_file(doc, activity, coding_type)
     updates = HashWithIndifferentAccess.new
     doc.each do |row| 
-      percentage    = row[row.length - 4]
-      amount        = row[row.length - 3]
-      short_display = row[row.length - 2]
-      #description = row[row.length - 1]
+      percentage = row['Percentage']
+      amount     = row['Amount']
+      id         = row['Id']
       
-      code = Code.find_by_short_display(short_display)
+      code = Code.find(id)
 
       if (code && (amount.present? || percentage.present?))
         updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount, 
@@ -100,6 +102,9 @@ class CodeAssignment < ActiveRecord::Base
     row << ''
     row << code.short_display
     row << code.description
+
+    (100 - row.length).times{ row << nil}
+    row << code.id
 
     csv << row
 

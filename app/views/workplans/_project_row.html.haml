@@ -1,6 +1,6 @@
 %tr{:class => 'project_row'}
   %td.name{:rowspan => project.activities.length + 2}= project.name
-- project.activities.ordered.each do |activity|
+- project.activities.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
 %tr.filler2{:"data-project_id" => project.id}
   %td{:colspan => 5}

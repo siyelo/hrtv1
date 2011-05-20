@@ -110,6 +110,7 @@ class Activity < ActiveRecord::Base
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
   named_scope :ordered,           { :order => 'description ASC' }
+  named_scope :ordered_by_id,     { :order => 'id ASC' }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',

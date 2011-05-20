@@ -16,6 +16,6 @@ class WorkplansController < Reporter::BaseController
 
   private
     def load_projects
-      @projects = @response.projects.find(:all, :order => "name ASC")
+      @projects = @response.projects.find(:all, :order => "id ASC")
     end
 end

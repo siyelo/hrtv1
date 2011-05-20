@@ -8,4 +8,4 @@
       = image_tag "new.png"
       Add activity
   %td.total Total
-  %td.total_amount= project.activities.map{|a| a.total_by_type(params[:id])}.sum
+  %td.total_amount= project.total_by_type(params[:id])

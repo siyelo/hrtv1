@@ -591,14 +591,14 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
-  def total_by_type(t)
-    amounts = []
-    amounts << self.send("#{t}_q4_prev") if self.send("#{t}_q4_prev")
-    amounts << self.send("#{t}_q1") if self.send("#{t}_q1")
-    amounts << self.send("#{t}_q2") if self.send("#{t}_q2")
-    amounts << self.send("#{t}_q3") if self.send("#{t}_q4")
-    amounts << self.send("#{t}_q4") if self.send("#{t}_q4")
-    amounts.sum
+  def total_by_type(amount_type)
+    amounts = [
+      self.send("#{amount_type}_q4_prev"),
+      self.send("#{amount_type}_q1"),
+      self.send("#{amount_type}_q2"),
+      self.send("#{amount_type}_q3"),
+      self.send("#{amount_type}_q4")
+    ].compact.sum
   end
 
   private

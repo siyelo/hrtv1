@@ -1642,6 +1642,13 @@ var workplans_edit = {
     $('.add_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
+
+      if (element.hasClass('inactive')) {
+        return;
+      }
+
+      element.addClass('inactive');
+
       var project_id = element.parents('tr').attr('data-project_id');
       var url = '/responses/' + _response_id + '/activities/new.js?type=' + _type + '&project_id=' + project_id;
 
@@ -1658,7 +1665,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_activity').show();
+      element.parents('tr').next('tr').find('.add_activity').show().removeClass('inactive');
       element.parents('tr').remove();
     });
 
@@ -1674,7 +1681,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_activity').show();
+          element.parents('tr').next('tr').find('.add_activity').show().removeClass('inactive');
           box.replaceWith(data.html)
           $('#workplan').find('.save_btn').show();
         } else {
@@ -1691,6 +1698,13 @@ var workplans_edit = {
     $('.add_project').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
+
+      if (element.hasClass('inactive')) {
+        return;
+      }
+
+      element.addClass('inactive');
+
       var url = '/responses/' + _response_id + '/projects/new.js';
 
       $.get(url, function (data) {
@@ -1706,7 +1720,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       //changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_project').show();
+      element.parents('tr').next('tr').find('.add_project').show().removeClass('inactive');
       element.parents('tr').remove();
     });
 
@@ -1722,7 +1736,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');
-          element.parents('tr').next('tr').find('.add_project').show();
+          element.parents('tr').next('tr').find('.add_project').show().removeClass('inactive');
           box.after(data.html);
           box.remove();
         } else {

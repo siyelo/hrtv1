@@ -1,4 +1,4 @@
-#sub-nav.alt
+#sub-nav
   %ul
     %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}= link_to 'Workplan', edit_response_workplan_path(@response, :spend)
     %li= link_to 'Funders', '#'

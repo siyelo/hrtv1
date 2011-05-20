@@ -100,12 +100,15 @@ class Code < ActiveRecord::Base
     if parent
       array << parent.short_display
       if parent.parent
-        array.unshift(parent.short_display)
+        array.unshift(parent.parent.short_display)
         array.unshift('...') if parent.parent
       end
     end
-    array << ''
-    array.join(' > ')
+    if array.present?
+      "(#{array.join(' > ').concat(' > ')})"
+    else
+      ''
+    end
   end
 
   private

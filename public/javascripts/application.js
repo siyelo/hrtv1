@@ -1520,7 +1520,8 @@ var purposes = {
       hoverOutDelay: 0,
       hoverOverDelay: 300,
 //      showACOnEmptyFocus: true,
-      allowParentSelect: true
+      allowParentSelect: true,
+      delim: ">"
     })
   },
 
@@ -1543,11 +1544,35 @@ var purposes = {
     return true;
   },
 
+  get_purpose_context: function(purpose_text) {
+    var arr = [];
+    var codes = purpose_text.split('>');
+    var purpose_context = '';
+
+    if (codes.length > 1) {
+      arr.push(codes[codes.length - 2]);
+      if (codes.length > 2) {
+        arr.unshift(codes[codes.length - 3]);
+        if (codes.length >= 3) {
+          arr.unshift('...');
+        }
+      }
+      purpose_context = '( ' + arr.join(' > ') + ' > )';
+    }
+
+    return purpose_context;
+  },
+
+  get_purpose_label: function(purpose_text) {
+      var codes = purpose_text.split('>')
+      return codes[codes.length - 1];
+  },
+
   add_entry: function(link) {
 
-    var form         = link.parents('form')
-    var purpose_id   = form.find('.mcdropdown input:hidden').val()
-    var purpose_text = form.find('.mcdropdown input:first').val();
+    var form         = link.parents('form');
+    var purpose_id   = form.find('.mcdropdown input:hidden').val();
+    var purpose_text = form.find('.mcdropdown input:first').val(); 
 
     if (!purpose_id) {
       return;
@@ -1564,11 +1589,13 @@ var purposes = {
       return;
     }
 
+    var purpose_context = purposes.get_purpose_context(form.find('.mcdropdown input:first').val());
+    var purpose_label = purposes.get_purpose_label(form.find('.mcdropdown input:first').val());
 
     var tr =  '<tr>' +
               '  <td class="wrap-50">' +
-              '    <label for="classifications_' + purpose_id + '">' + purpose_text + '</label>' +
-              '    <span></span>' +
+              '    <label for="classifications_' + purpose_id + '">' + purpose_label + '</label>' +
+              '    <span>' + purpose_context + '</span>' +
               '  </td>' +
               '  <td class="total">' +
               '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +

@@ -1,7 +1,7 @@
 -# this partial is duplicated in jQuery
 -# any changes here must be reflected there!!
 %tr{:"data-ca_id" => ca.id}
-  %td.wrap-50
+  %td.wrap-60
     = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
     %span= ca.code.context
   %td.total= text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%", :class => 'ca'

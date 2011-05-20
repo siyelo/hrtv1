@@ -1161,7 +1161,6 @@ var projects_bulk_edit = {
       var element = $(this);
       var tableRow = element.parents('tr');
       url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
-      console.log
       $.get(url, function(data) {
         var data = $.parseJSON(data);
         id = tableRow.find('.funder_project_description').html(data.project.description);
@@ -1636,6 +1635,49 @@ var workplans_edit = {
     initDemoText($('*[data-hint]'));
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
+
+    var getTotal = function (amounts) {
+      var total = 0;
+      for (var i = 0; i < amounts.length; i++) {
+        var amount = Number(amounts[i]);
+        if (!isNaN(amount)) {
+          total += amount;
+        }
+      }
+      return total + '.00';
+    };
+
+    // quarters sum
+
+    //$('.qamount').live('keydown', function (e) {
+      //var code = e.keyCode || e.which;
+
+      //// http://www.cambiaresearch.com/c4/702b8cd1-e5b0-42e6-83ac-25f0306e3e25/javascript-char-codes-key-codes.aspx
+      //var goodCode = code <= 57; // 0-9
+
+      //if (!goodCode) {
+        //e.preventDefault();
+      //}
+    //});
+    $('.qamount').live('keyup', function (e) {
+      var element = $(this);
+      var tr = element.parents('tr:first');
+
+      // activity total
+      var elements = tr.find('.qamount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.find('.total_amount').text(getTotal(amounts));
+
+      // project total
+      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      tr.nextAll('.activity_total:first').find('.total_amount').text(getTotal(amounts));
+
+      // all projects total
+      var elements = $('.activity_total .total_amount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.project_total .total_amount').text(getTotal(amounts));
+    });
 
 
     // activity

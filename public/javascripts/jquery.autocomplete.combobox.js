@@ -13,9 +13,12 @@
             minLength: 2,
             source: function( request, response ) {
               var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-              response( select.children( "option" ).map(function() {
+              var match = false;
+
+              response( select.children( "option" ).map(function(i, value) {
                 var text = $( this ).text();
-                if ( this.value && ( !request.term || matcher.test(text) ) )
+                if ( this.value && ( !request.term || matcher.test(text) ) ) {
+                  match = true;
                   return {
                     label: text.replace(
                       new RegExp(
@@ -26,10 +29,26 @@
                     value: text,
                     option: this
                   };
-              }) );
+                }
+                // great "add new" solution from Nazar:
+                // http://stackoverflow.com/questions/4690292/jquery-autocomplete-for-rails-application
+                if (!match && i == select.children("option").size() -1) { //&& self.options.allow_new ) {
+                  // remove any previous selected
+                  select.children( ":selected" ).removeAttr("selected");
+                  return {
+                    label:'&lt;Create new <strong>'+ input.val() +'</strong>&gt;',
+                    value: input.val(),
+                    option: null
+                  };
+                }
+              }));
             },
             select: function( event, ui ) {
-              ui.item.option.selected = true;
+              if(ui.item.option){
+                ui.item.option.selected = true;
+              }else{ // we clicked Create New
+                select.children("option").val("-1") = $(this).val()
+              };
               self._trigger( "selected", event, {
                 item: ui.item.option
               });
@@ -45,6 +64,9 @@
                   }
                 });
                 if ( !valid ) {
+                  // Trigger the event for value not found
+                  $(select).trigger('autocompletenotfound', $(this).val());
+
                   // remove invalid value, as it didn't match anything
                   $( this ).val( "" );
                   select.val( "" );

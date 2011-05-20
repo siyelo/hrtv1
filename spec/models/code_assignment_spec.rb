@@ -260,16 +260,29 @@ describe CodeAssignment do
     end
 
     # sanity check for the delete SQL statement
-    it "does not delete other classifications" do
+    it "deletes appropriate records when all classificatoins blank" do
       @activity2 = Factory.create(:activity)
       Factory.create(:coding_budget, :code => @code1, :activity => @activity)
       Factory.create(:coding_spend, :code => @code1, :activity => @activity)
       Factory.create(:coding_budget, :code => @code2, :activity => @activity2)
       Factory.create(:coding_spend, :code => @code2, :activity => @activity2)
 
-      CodeAssignment.count.should == 4
+      CodingBudget.with_activity(@activity).count.should == 1
       CodeAssignment.update_classifications(@activity, {@code1.id.to_s => ""}, 'CodingBudget')
-      CodeAssignment.count.should == 3
+      CodingBudget.with_activity(@activity).count.should == 0
+    end
+
+    it "deletes appropriate records when not all classificatoins blank" do
+      @activity2 = Factory.create(:activity)
+      Factory.create(:coding_budget, :code => @code1, :activity => @activity)
+      Factory.create(:coding_budget, :code => @code2, :activity => @activity)
+      Factory.create(:coding_spend, :code => @code1, :activity => @activity)
+      Factory.create(:coding_budget, :code => @code2, :activity => @activity2)
+      Factory.create(:coding_spend, :code => @code2, :activity => @activity2)
+
+      CodingBudget.with_activity(@activity).count.should == 2
+      CodeAssignment.update_classifications(@activity, {@code1.id.to_s => "10", @code2.id.to_s => ""}, 'CodingBudget')
+      CodingBudget.with_activity(@activity).count.should == 1
     end
   end
 

@@ -20,6 +20,9 @@ class CodeAssignment < ActiveRecord::Base
   named_scope :with_code_ids,
               lambda { |code_ids| { :conditions =>
                 ["code_assignments.code_id IN (?)", code_ids]} }
+  named_scope :without_code_ids,
+              lambda { |code_ids| { :conditions =>
+                ["code_assignments.code_id NOT IN (?)", code_ids]} }
   named_scope :with_activity,
               lambda { |activity_id| { :conditions =>
                 ["code_assignments.activity_id = ?", activity_id]} }
@@ -65,7 +68,7 @@ class CodeAssignment < ActiveRecord::Base
   def self.download_template(klass)
     max_level = klass.deepest_nesting
     FasterCSV.generate do |csv|
-      header_row = (['Code'] * max_level).concat(['Percentage', 'Amount', 'Code', 'Description'])
+      header_row = (['Code'] * max_level).concat(['Value', 'Code', 'Description'])
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
       csv << header_row
@@ -97,8 +100,7 @@ class CodeAssignment < ActiveRecord::Base
     current_level.times{|i| row << '' }
     row << code.short_display
     (max_level - (current_level + 1)).times{ |i| row << '' }
-    row << ''
-    row << ''
+    row << '' # for the value
     row << code.short_display
     row << code.description
 
@@ -160,15 +162,14 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   def self.update_classifications(activity, classifications, coding_type)
-    klass     = coding_type.constantize
-    blank_ids = []
-
+    klass            = coding_type.constantize
+    non_blank_ids    = []
     code_assignments = activity.code_assignments.with_type(coding_type)
 
     classifications.each_pair do |code_id, value|
-      if value.blank?
-        blank_ids << code_id
-      else
+      if value.present?
+        non_blank_ids << code_id
+
         ca = code_assignments.detect{|ca| ca.code_id == code_id.to_i}
 
         # initialize new code assignment if it does not exist
@@ -178,6 +179,7 @@ class CodeAssignment < ActiveRecord::Base
         end
 
         value = value.to_s.strip
+
         if value.last == '%'
           ca.percentage = value.delete('%').strip
           ca.amount = nil
@@ -190,11 +192,13 @@ class CodeAssignment < ActiveRecord::Base
       end
     end
 
-    # faster deletion
-    CodeAssignment.delete_all(["activity_id = ? AND type = ? AND code_id IN (?)",
-                               activity.id, coding_type, blank_ids])
-    #activity.code_assignments.with_type(coding_type).
-      #with_code_ids(blank_ids).each { |ca| ca.destroy }
+    # SQL deletion, faster than deleting records individually
+    if non_blank_ids.present?
+      CodeAssignment.delete_all(["activity_id = ? AND type = ? AND code_id NOT IN (?)",
+                                 activity.id, coding_type, non_blank_ids])
+    else
+      CodeAssignment.delete_all(["activity_id = ? AND type = ?", activity.id, coding_type])
+    end
 
     activity.update_classified_amount_cache(klass)
   end

@@ -16,7 +16,7 @@
           %td.name= link_to activity.title, edit_response_activity_path(@response, activity)
           %td.total
             = link_to 'Edit', edit_response_activity_path(@response, activity)
-            = link_to image_tag("icon_close_flash.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity'
+            = link_to image_tag("delete_row.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity', :class => "delete_row"
 
       %tr.filler2
         %td{:colspan => 2}

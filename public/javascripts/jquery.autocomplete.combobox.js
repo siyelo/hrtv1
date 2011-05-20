@@ -9,8 +9,8 @@
           .insertAfter( select )
           .val( value )
           .autocomplete({
-            delay: 0,
-            minLength: 2,
+            delay: 200, //otherwise when you type a long string, it crawls
+            minLength: 2, // for performance
             source: function( request, response ) {
               var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
               var match = false;
@@ -30,6 +30,7 @@
                     option: this
                   };
                 }
+
                 // great "add new" solution from Nazar:
                 // http://stackoverflow.com/questions/4690292/jquery-autocomplete-for-rails-application
                 if (!match && i == select.children("option").size() -1) { //&& self.options.allow_new ) {
@@ -47,7 +48,16 @@
               if(ui.item.option){
                 ui.item.option.selected = true;
               }else{ // we clicked Create New
-                select.children("option").val("-1") = $(this).val()
+                var input_val = $(this).val();
+                // set the id of this option to be the string the user entered
+                select.children("option:first").val(input_val);
+                // (then on the server side we detect this string to create the
+                // object with that name.)
+                // TODO: we should probably set this option to be selected
+                // but it seems to pass the correct "selected" attribute without
+                // doing this
+                // select.children("option:first").attr("selected", true);
+
               };
               self._trigger( "selected", event, {
                 item: ui.item.option

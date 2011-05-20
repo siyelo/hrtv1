@@ -247,9 +247,11 @@ module ApplicationHelper
 
   def funding_organizations_select
     orgs = Organization.find(:all, :order => 'old_type, name')
-    organizations = orgs.map{ |o| [o.display_name(100), o.id]}
-    options = [["Add an Organization...", "-1"],
-      ["-----------------------", ""]].concat(organizations)
-    options
+    orgs.map{|o| [o.display_name(100), o.id]}
   end
+  
+  def is_number?(i)
+    true if Float(i) rescue false
+  end
+  
 end

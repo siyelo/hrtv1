@@ -5,8 +5,13 @@
 .full-width-container
   %h1.main_heading.left Dashboard
   %ul.horizontal.right
-    %li= link_to "Edit Workplan", edit_response_workplan_path(current_or_last_response, :spend), :class => "add_row"
-    %li= link_to "Classify Activities", edit_response_classification_path(current_or_last_response, 'CodingSpend'), :class => "add_row"
+    -#%li= link_to "Edit Workplan", edit_response_workplan_path(current_or_last_response, :spend), :class => "add_row"
+    -# instead, a hack
+    %li= link_to "Edit Workplan", current_projects_url_hack, :class => "add_row"
+
+    -#%li= link_to "Classify Activities", edit_response_classification_path(current_or_last_response, 'CodingSpend'), :class => "add_row"
+    -# instead, a hack
+    %li= link_to "Classify Activities", current_classifications_url_hack, :class => "add_row"
     %li= link_to "Review & Respond", current_response_url, :class => "add_row"
 
 %hr
@@ -30,6 +35,7 @@
     %h3 123
 
 - @response = current_or_last_response
+- @response =  @response || DataResponse.new # hack
 
 .summary
   %h1 Workplan Summary

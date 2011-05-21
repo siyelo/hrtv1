@@ -15,17 +15,16 @@
     %span
       Configure your fiscal year and contact settings
   %li
-    = link_to "Enter Your Workplan", edit_response_workplan_path(current_or_last_response, :spend)
+    -#= link_to "Enter Your Workplan", edit_response_workplan_path(current_or_last_response, :spend)
+    = link_to "Enter Your Workplan", current_projects_url_hack
     %span
       Define the health projects/activities your organization does
   %li
-    = link_to "Add Classifications", edit_response_classification_path(current_or_last_response, 'CodingSpend')
+    = link_to "Add Classifications", current_classifications_url_hack
     %span Add a little extra detail about your activities.
   %li
     = link_to "Review & Respond", current_response_url
     %span Submit your data for the requested period
-
-
 
 %ul.right
   %li

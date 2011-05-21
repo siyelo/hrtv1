@@ -249,40 +249,43 @@ module ApplicationHelper
     orgs = Organization.find(:all, :order => 'old_type, name')
     orgs.map{|o| [o.display_name(100), o.id]}
   end
-  
+
   def is_number?(i)
     true if Float(i) rescue false
   end
-  
-  
-  def last_response 
+
+  def last_response
     current_user.organization.data_responses.last
   end
-  
-  def current_response 
+
+  def current_response
     current_user.current_data_response
   end
-  
+
   def last_response_path
     last_response ? edit_response_path(last_response) : new_response_path
   end
-  
+
   def current_or_last_response
     current_response || last_response
   end
-    
-  def current_projects_url
+
+  def current_projects_url_hack
     current_response ? edit_response_workplan_path(current_response, :spend) : last_response_path
   end
-  
+
+  def current_classifications_url_hack
+    current_response ? edit_response_classification_path(current_or_last_response, 'CodingSpend') : last_response_path
+  end
+
   def current_edit_response_url
     current_response ? edit_response_path(current_response) : last_response_path
   end
-  
+
   def current_response_url
     current_response ? response_path(current_response) : last_response_path
   end
-  
+
   def current_review_response_url
     current_response ? review_response_path(current_response) : last_response_path
   end

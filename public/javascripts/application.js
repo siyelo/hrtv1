@@ -773,7 +773,7 @@ var responses_show = {
   }
 };
 
-var responses_edit = {
+var responses_edit = responses_new = responses_create = responses_update = {
   run: function () {
     $( ".combobox" ).combobox(); // for pretty currency select
   }

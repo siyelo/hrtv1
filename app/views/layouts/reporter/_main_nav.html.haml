@@ -5,7 +5,7 @@
         %a{:href => user_dashboard_path(current_user)}
           %span Home
       %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ClassificationsController, WorkplansController].include?(controller.class) ? "active" : nil)}
-        = link_to 'Projects', current_projects_url
+        = link_to 'Projects', current_projects_url_hack
       %li{:class => (controller.class == ResponsesController && ["show", "review", "submit"].include?(controller.action_name) ? "active" : '')}
         = link_to 'Responses', current_response_url
       %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}

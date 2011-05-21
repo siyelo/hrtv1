@@ -1617,7 +1617,7 @@ var purposes = {
 
     var form         = link.parents('form');
     var purpose_id   = form.find('.mcdropdown input:hidden').val();
-    var purpose_text = form.find('.mcdropdown input:first').val(); 
+    var purpose_text = form.find('.mcdropdown input:first').val();
 
     if (!purpose_id) {
       return;
@@ -1722,7 +1722,7 @@ var workplans_edit = {
       // activity total
       var elements = tr.find('.qamount');
       var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.find('.total_transform').text(getTotal(amounts));
+      tr.find('.total_transform .amount').text(getTotal(amounts));
 
       // project total
       var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount');
@@ -1758,7 +1758,7 @@ var workplans_edit = {
 
     $('.activity_row .total_transform').live('click', function (e) {
       console.log('click')
-      var element = $(this);
+      var element = $(this).find('.amount');
       var value = element.text();
       if (element.hasClass('inactive')) {
         return;
@@ -1767,7 +1767,7 @@ var workplans_edit = {
       element.html($('<input/>').attr({type: 'text'}).val(value))
     }).live('blur', function (e) {
       console.log('blur')
-      var element = $(this);
+      var element = $(this).find('.amount');
       var value = element.find('input').val();
       element.removeClass('inactive').addClass('pointer');
       element.html(value);

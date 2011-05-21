@@ -1,3 +1,4 @@
-= render :partial => 'projects/sub_nav'
+- content_for :sub_nav do
+  = render 'shared/sub_nav_response'
 
 = render '/shared/data_responses/show'

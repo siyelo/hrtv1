@@ -1,0 +1,4 @@
+#sub-nav
+  %ul
+    %li= link_to 'Review', response_path(@response), :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')
+    %li= link_to 'Submit', review_response_path(@response), :class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')

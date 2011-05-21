@@ -1,6 +1,8 @@
 - coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 
-= render 'shared/data_entry_sub_nav'
+- content_for :sub_nav do
+  = render 'shared/sub_nav_projects'
+
 :javascript
   var _response_id = "#{@response.id}"
 %h1.main_heading Purposes

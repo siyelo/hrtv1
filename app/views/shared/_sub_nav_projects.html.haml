@@ -1,6 +1,6 @@
 %ul
   %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}= link_to 'Workplan', edit_response_workplan_path(@response, :spend)
-  %li= link_to 'Funders', '#'
+  %li{:class => (params[:controller] == 'funders' && params[:action] == 'edit' ? 'active' : nil)}= link_to 'Funders', edit_response_funder_path(@response, :spend)
   %li= link_to 'Implementers', '#'
   %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}= link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
   %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}= link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')

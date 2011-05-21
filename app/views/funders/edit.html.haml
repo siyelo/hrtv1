@@ -5,9 +5,9 @@
 - content_for :sub_nav do
   = render 'shared/sub_nav_projects'
 
-%h1.main_heading Workplan
+%h1.main_heading Funders
 
-= render 'workplan_getting_started'
+= render 'getting_started'
 
 - form_tag response_workplan_path(@response, params[:id]), :method => :put, :id => 'workplan' do
   %table.workplan
@@ -16,8 +16,8 @@
         %th.no-bg{:colspan => 2}
         %th.no-padding{:colspan => 6}
           %ul.tabs
-            %li= link_to 'Spend', edit_response_workplan_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
-            %li= link_to 'Budget', edit_response_workplan_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
+            %li= link_to 'Spend', edit_response_funder_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
+            %li= link_to 'Budget', edit_response_funder_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
       %tr.head
         %th{:colspan => 2}
         %th= @response.fiscal_year_start_date.try(:year)
@@ -34,16 +34,6 @@
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project
-      %tr.filler.js_projects_total_row
-        %td{:colspan => 6}
-          - link_to new_response_project_path(@response), :class => 'add_project create_new' do
-            = image_tag "new.png"
-            Add project
-
-        %td.total Total
-        %td.total_amount
-          %span.js_projects_total_amount= @projects.map{|p| p.total_by_type(params[:id])}.sum
-          %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

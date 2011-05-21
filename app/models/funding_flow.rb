@@ -26,6 +26,9 @@ class FundingFlow < ActiveRecord::Base
   validates_presence_of :organization_id_to,
     :message => :"organization_id_to.missing"
 
+  ### Named scopes
+  named_scope :ordered_by_id, { :order => 'id ASC' }
+
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project

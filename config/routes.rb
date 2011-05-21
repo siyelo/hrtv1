@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
 
   # PROFILE
-  map.resource :profile, :only => [:edit, :update, :disable_tips], 
+  map.resource :profile, :only => [:edit, :update, :disable_tips],
     :member => {:disable_tips => :put}
 
   # STATIC PAGES
@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
       :member     => {:delete => :get}
     admin.resources :organizations,
-      :collection => {:duplicate => :get, :remove_duplicate  => :put, 
+      :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
@@ -50,16 +50,17 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,
         :member => {:approve => :put, :classifications => :get},
-        :collection => {:bulk_create => :post, 
-                        :template => :get, 
-                        :export => :get, 
+        :collection => {:bulk_create => :post,
+                        :template => :get,
+                        :export => :get,
                         :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :classifications,
         :only => [:edit, :update, :destroy]
       response.resources :workplans,
-        :only => [:index, :edit, :update], :requirements => {:id => /budget|spend|all/}
+        :only => [:index, :edit, :update], :requirements => {:id => /budget|spend/}
+      response.resources :funders, :requirements => {:id => /budget|spend/}
   end
 
   map.resources :activities do |activity|
@@ -69,7 +70,7 @@ ActionController::Routing::Routes.draw do |map|
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
   end
-  
+
   map.resources :organizations
 
   # REPORTER USER

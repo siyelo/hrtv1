@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe UserSessionsController do
-  
+
   it "new action should render new template" do
     get :new
     response.should render_template(:new)
   end
- 
-  context "attempt login with invalid user" do    
+
+  context "attempt login with invalid user" do
     before :each do
       post :create
     end
@@ -15,19 +15,19 @@ describe UserSessionsController do
     it { should set_the_flash.now }
     it { should render_template(:new) }
   end
-  
-  context "login (create new session)" do    
+
+  context "authenticated login (create new session)" do
     before :each do
       @user = Factory.create(:reporter)
-      post :create, :user_session => {:username => @user.username, 
+      post :create, :user_session => {:username => @user.username,
                                       :password => @user.password}
     end
 
     it { should redirect_to(reporter_dashboard_path) }
 
-    it "redirects the user to root path when requesting the login form" do
+    it "redirects the user to their dashboar when requesting the login form" do
       get :new
-      response.should redirect_to root_path
+      response.should redirect_to reporter_dashboard_path
     end
   end
 

@@ -1,11 +1,7 @@
 %tr.sub-head
   %td{:colspan => 100}
-    %h4
+    %span
       Other Costs
-      %span
-        - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row" do
-          = image_tag "new.png"
-          Add
 
 - if other_costs.present?
   - other_costs.each do |other_cost|
@@ -15,3 +11,8 @@
     %td{:colspan => 100}
       No other costs found.
       = link_to "Add Other Costs now.", new_response_other_cost_path(response, :project_id => project.id)
+%tr
+  %td
+    - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row" do
+      = image_tag "new.png"
+      Add Other Cost

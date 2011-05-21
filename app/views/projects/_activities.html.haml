@@ -1,15 +1,10 @@
 %tr.sub-head
   %td{:colspan => 100}
-    %h4
+    %span
       Activities
-      %span
-        - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row" do
-          = image_tag "new.png"
-          Add
 
-        - link_to "#", :class => "add_row upload_btn" do
-          = image_tag "new.png"
-          Import / Export
+    - link_to "#", :class => "add_row upload_btn" do
+      Import / Export
 
     = render 'activities_import', :project => project, :can_export => project.activities.present?
 
@@ -21,3 +16,8 @@
     %td{:colspan => 100}
       No activities found.
       = link_to "Add Activities now.", new_response_activity_path(response, :project_id => project.id)
+%tr
+  %td
+    - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row" do
+      = image_tag "new.png"
+      Add Activity

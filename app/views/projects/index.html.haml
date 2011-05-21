@@ -11,13 +11,13 @@
 
 %ul.horizontal
   %li
-    - link_to new_response_project_path(@response), :class => "create_new" do
-      = image_tag "new_white.png"
-      Create Project
+    - link_to new_response_project_path(@response), :class => "add_row" do
+      = image_tag "new.png"
+      Add Project
   %li
     = link_to "Link Projects", bulk_edit_response_projects_path, :class => 'create_new'
   %li
-    = link_to "Import / Export", '#', :id => "import_export", :class => 'create_new'
+    = link_to "Import / Export", '#', :id => "import_export", :class => 'add_row upload_btn'
 
 #import_export_box
   = render 'activities_import', :project => nil, :can_export => @response.activities.present?
@@ -28,11 +28,6 @@
     = link_to "(Back to complete project listing)", response_projects_path(@response)
 
 %table.sum.rounded
-  %thead
-    %tr
-      %th= sortable "project"
-      %th.wrap-10
-
   %tbody
     - unless @projects.empty?
       - @projects.each do |project|
@@ -41,11 +36,6 @@
       %tr
         %td{:colspan => 100}
           = render 'no_projects_yet'
-    %tr.filler
-      %td{:colspan => 3}
-        - link_to new_response_project_path(@response), :class => "create_new" do
-          = image_tag"new.png"
-          Add project
 
 = will_paginate @projects
 

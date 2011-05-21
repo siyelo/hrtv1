@@ -29,14 +29,14 @@ class OtherCostsController < Reporter::BaseController
     load_comment_resources(resource)
     show!
   end
-  
+
   def create
     create! do |success, failure|
       success.html { html_redirect }
     end
   end
-  
-  
+
+
   def update
     update! do |success, failure|
       success.html { html_redirect }
@@ -92,12 +92,12 @@ class OtherCostsController < Reporter::BaseController
     def html_redirect
       unless @other_cost.check_projects_budget_and_spend?
         flash.delete(:notice)
-        flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+        flash[:error] = "Please be aware that your activities spend/budget exceeds that of your projects"
       end
 
       if params[:commit] == "Save & Classify >"
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
-        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type) 
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type)
       else
         redirect_to response_projects_path(@other_cost.project.response)
       end

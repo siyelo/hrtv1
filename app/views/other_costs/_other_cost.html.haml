@@ -1,6 +1,1 @@
-%tr
-  %td= link_to other_cost.title, edit_response_other_cost_path(@response, other_cost)
-  %td.wrap-10
-    - link_to edit_response_other_cost_path(@response, other_cost), :class => 'add_row right' do
-      = image_tag "pencil_10.png"
-      edit
+= render '/shared/activities/row', :edit_path => edit_response_other_cost_path(@response, other_cost), :title => other_cost.title

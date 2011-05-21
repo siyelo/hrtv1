@@ -59,7 +59,7 @@ class ActivitiesController < Reporter::BaseController
           if @activity.check_projects_budget_and_spend?
             flash[:notice] = 'Activity was successfully updated'
           else
-            flash[:error] = 'Please be aware that your activities spend/budget exceeded that of your projects'
+            flash[:error] = 'Please be aware that your activities spend/budget exceeds that of your projects'
           end
           html_redirect
         end

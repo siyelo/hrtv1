@@ -114,6 +114,10 @@ table.rounded
 table.sum
   width: 100%
 
+  .project
+    a:hover
+      text-decoration: underline !important
+
   td:first-child, th:first-child
     width: 60%
 
@@ -161,10 +165,16 @@ table.sum
       text-decoration: none
 
   tr.head td
-    background: $lightest-blue
     font-weight: bold
-    padding: 2px 12px 0px 12px
+    padding: 5px 12px 4px
+    background: $mid-blue
+
+    a
+      color: $lightest-blue
+      font-size: 12px
+
   tr.sub-head td
+    background: $lightest-blue
     padding: 15px 12px 4px 12px
   tr td
     border-bottom: 1px solid $lightest-blue
@@ -203,13 +213,13 @@ table.workplan
         font-style: italic
         span
           color: $red
-    
+
     &.actions
       min-width: 20%
       *
         float: right
         margin-right: 5px
-      
+
     &.wrap-3
       width: 1%
     &.wrap-10
@@ -232,7 +242,7 @@ table.workplan
       top: 4px
       &:hover
         opacity: 0.7
-        
+
   .head th
     background: $mid-blue
     &.no-bg
@@ -314,7 +324,7 @@ table.workplan
     width: 100%
     td
       background: $filler
-      
+
     tr:last-child td
       border: none
     tr:hover td

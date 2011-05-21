@@ -8,12 +8,12 @@
 
 %ul.horizontal
   %li
-    - link_to new_response_other_cost_path(@response), :class => "create_new" do
+    - link_to new_response_other_cost_path(@response), :class => "create_button" do
       = image_tag "new_white.png"
       Create Other Cost
 
   %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_button'
 
 #import
   %h3.title_bar Import a CSV file

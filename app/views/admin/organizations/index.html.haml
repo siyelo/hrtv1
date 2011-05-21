@@ -1,6 +1,6 @@
 - title("Organizations")
 
-%h1.main_heading 
+%h1.main_heading
   #search
     - form_tag admin_organizations_path, :method => :get do
       = render 'shared/search_form'
@@ -8,13 +8,13 @@
 
 %ul.horizontal
   %li
-    - link_to new_admin_organization_path, :class => "create_new" do
+    - link_to new_admin_organization_path, :class => "create_button" do
       = image_tag "new_white.png"
       Create Organization
   %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_button'
   %li
-    - link_to duplicate_admin_organizations_path, :class => 'create_new' do
+    - link_to duplicate_admin_organizations_path, :class => 'create_button' do
       Fix duplicate organizations
 
 #import

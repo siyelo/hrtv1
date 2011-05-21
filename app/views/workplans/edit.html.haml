@@ -36,7 +36,7 @@
         = render 'project_row', :project => project
       %tr.filler.js_projects_total_row
         %td{:colspan => 6}
-          - link_to new_response_project_path(@response), :class => 'add_project create_new' do
+          - link_to new_response_project_path(@response), :class => 'js_add_project add_row' do
             = image_tag "new.png"
             Add project
 

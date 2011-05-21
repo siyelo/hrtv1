@@ -1799,7 +1799,7 @@ var workplans_edit = {
       });
     });
 
-    $('.cancel_add_activity').live('click', function (e) {
+    $('.js_cancel_add_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
@@ -1807,7 +1807,7 @@ var workplans_edit = {
       element.parents('tr').remove();
     });
 
-    $('.save_activity').live('click', function (e) {
+    $('.js_save_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
       var form = element.parents('.new_activity_form');
@@ -1833,7 +1833,7 @@ var workplans_edit = {
 
 
     // project
-    $('.add_project').live('click', function (e) {
+    $('.js_add_project').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
 
@@ -1858,7 +1858,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       //changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_project').show().removeClass('inactive');
+      element.parents('tr').next('tr').find('.js_add_project').show().removeClass('inactive');
       element.parents('tr').remove();
     });
 
@@ -1874,7 +1874,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');
-          element.parents('tr').next('tr').find('.add_project').show().removeClass('inactive');
+          element.parents('tr').next('tr').find('.js_add_project').show().removeClass('inactive');
           box.after(data.html);
           box.remove();
         } else {

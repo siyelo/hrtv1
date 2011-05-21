@@ -2,7 +2,7 @@
   .wrapper
     #logo
       - if current_user && current_user.organization
-        = "#{truncate(current_user.organization.name, :length => 35)}"
+        = truncate(current_user.organization.name, :length => 35)
       - else
         = "No organization specified"
 

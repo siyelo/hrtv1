@@ -1,0 +1,13 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Service Levels"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Allocate resources to Service Levels
+        %ul.bulleted
+          %li Enter allocation of resources for each Service Levels.
+          %li Use the Add Service Level button and browsing widget to select a Service Level
+          %li Enter Spend and/or Budget for that Service Level
+          %li Press Save to save allocations for that Activity

@@ -1,0 +1,13 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Locations"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Allocate resources to Locations
+        %ul.bulleted
+          %li Enter allocation of resources for each Activity.
+          %li Use the Add Location button and browsing widget to select a Location
+          %li Enter Spend and/or Budget for that Location
+          %li Press Save to save allocations for that Activity

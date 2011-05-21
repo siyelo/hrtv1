@@ -1,0 +1,18 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with the Workplan"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Create your workplan for the requested fiscal year.
+        %ul.bulleted
+          %li Add projects for the high-level health programmes that your organization implements.
+          %li Add Activities for all the functional tasks that fall within a Project.
+          %li Indicate the Spend and/or Budget for the activities
+        %p
+          There is great
+          = link_to "online help", help_link, :target => "_blank"
+          in HRT and you can always
+          = link_to "contact the Support Team", contact_link, :target => "_blank"
+          at anytime to ask us a question.

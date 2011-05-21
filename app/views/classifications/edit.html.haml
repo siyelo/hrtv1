@@ -5,7 +5,9 @@
 
 :javascript
   var _response_id = "#{@response.id}"
-%h1.main_heading Purposes
+%h1.main_heading= friendly_name_for_coding_copy(params[:id])
+
+= render "classifications/getting_started/#{getting_started_partial(params[:id])}"
 
 %table.workplan
   %thead

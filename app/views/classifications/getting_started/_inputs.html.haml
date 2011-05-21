@@ -1,0 +1,14 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Inputs"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Enter the Input(s) (Cost Categories) you used
+        %ul.bulleted
+          %li Enter allocation of resources for each Input (Cost Category).
+          %li Use the Add Input button and browsing widget to select an Input
+          %li Enter Spend and/or Budget for that Input
+          %li Press Save to save allocations for that Activity
+          %li If your Activities are more complex, you can add as much detail as you like with more Inputs etc.

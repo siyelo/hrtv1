@@ -26,5 +26,17 @@ module ClassificationsHelper
     code_assignments.map{|ca| ca.cached_amount}.sum
   end
 
+  def getting_started_partial(coding_type)
+    case coding_type
+    when 'CodingBudget', 'CodingSpend'
+      'purposes'
+    when 'CodingBudgetDistrict', 'CodingSpendDistrict'
+      'locations'
+    when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
+      'inputs'
+    when 'ServiceLevelBudget', 'ServiceLevelSpend'
+      'service_levels'
+    end
+  end
 end
 

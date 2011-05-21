@@ -1,4 +1,8 @@
-%tr
+- total  = cached_amount_total(code_assignments)
+- amount = activity.send(get_coding_type(params[:id])) || 0
+- remaining = amount - total
+
+%tr.activity_total
   %td.name.wrap-50
     %ul
       %li
@@ -8,17 +12,12 @@
 
   %td.total
     %ul
-      - total = cached_amount_total(code_assignments)
-      - remaining = (activity.send(get_coding_type(params[:id])) || 0) - total
-
       %li
         Total
         %span= total
-      - if remaining != 0
-        %li.remaining
-          Remaining
-          %span= remaining
-          
+      %li.remaining{:style => (remaining == 0 ? 'display: none' : nil)}
+        Remaining
+        %span= remaining
   %td.actions
     = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

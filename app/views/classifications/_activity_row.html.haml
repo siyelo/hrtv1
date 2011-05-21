@@ -1,6 +1,7 @@
 - code_assignments = find_existing_assignments(activity)
+- amount = activity.send(get_coding_type(params[:id])) || 0
 
-%tr{:class => "purpose_row"}
+%tr{:class => "purpose_row", :"data-amount" => amount}
   %td.name.fixed
     = project.name
     %span= activity.title

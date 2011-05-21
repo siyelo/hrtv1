@@ -1455,6 +1455,24 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 var classifications_edit = {
   run: function () {
+
+    var getClassificationTotal = function (amounts, amount) {
+      var total = 0;
+      for (var i = 0; i < amounts.length; i++) {
+        var value = String.trim(amounts[i]) ;
+        if (value.charAt(value.length - 1) === '%') {
+          var percent = Number(value.substring(0, value.length - 1));
+          value = percent * amount / 100;
+        } else {
+          value = Number(value);
+        }
+        if (!isNaN(value)) {
+          total += value;
+        }
+      }
+      return total;
+    };
+
     $(".remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
@@ -1482,7 +1500,9 @@ var classifications_edit = {
       var element = $(this);
       var loader  = element.next('.ajax-loader');
       var form    = element.parents('form');
+
       loader.show();
+      form.find('.add_purpose').hide();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         var tr = $(data);
@@ -1490,6 +1510,24 @@ var classifications_edit = {
         purposes.initMcDropdown(tr.find(".purpose_search"));
         loader.hide();
       });
+    });
+
+    $('.ca').live('keyup', function (e) {
+      var element = $(this);
+      var tr = element.parents('tr.purpose_row');
+      var amount = Number(tr.attr('data-amount'));
+
+      // activity total
+      var elements = tr.find('.ca');
+      var amounts  = jQuery.map(elements, function (e) { return $(e).val();});
+      var total    = getClassificationTotal(amounts, amount);
+      tr.find('.activity_total .total li:first span').text(total);
+
+      // remaining
+      var remaining = amount - total;
+      var remaining_box = tr.find('.activity_total .remaining');
+      remaining === 0 ? remaining_box.hide() : remaining_box.show();
+      remaining_box.find('span').text(remaining)
     });
   }
 };
@@ -1659,9 +1697,6 @@ var changeRowspan = function (element, value) {
 
 var workplans_edit = {
   run: function () {
-    initDemoText($('*[data-hint]'));
-    focusDemoText($('*[data-hint]'));
-    blurDemoText($('*[data-hint]'));
 
     var getTotal = function (amounts) {
       var total = 0;
@@ -1671,8 +1706,12 @@ var workplans_edit = {
           total += amount;
         }
       }
-      return total + '.00';
+      return total;
     };
+
+    initDemoText($('*[data-hint]'));
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
 
     // quarters sum
 

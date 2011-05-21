@@ -21,4 +21,6 @@
       - project.activities.ordered.each do |activity|
         = render 'activity_row', :project => project, :activity => activity
 
-= render 'dropdown_data'
+%ul#purpose_menu.mcdropdown_menu
+  - @codes.each do |code|
+    = render 'code_row', :code => code

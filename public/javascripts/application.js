@@ -773,6 +773,12 @@ var responses_show = {
   }
 };
 
+var responses_edit = {
+  run: function () {
+    $( ".combobox" ).combobox(); // for pretty currency select
+  }
+};
+
 var policy_maker_data_responses_show = {
   run: function () {
     build_data_response_review_screen();
@@ -1093,7 +1099,9 @@ var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
     // show the jquery autocomplete combobox instead of standard dropdown
-    //$( ".ff_from" ).combobox(); // handled by add row js callback
+    $( ".combobox" ).combobox(); // for currency dropdown
+                                // the nested funding source init should be
+                                // handled by the "add row" js callback
 
     $('.edit').live('click', function (e) {
       e.preventDefault();

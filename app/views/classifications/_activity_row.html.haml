@@ -1,5 +1,6 @@
 - code_assignments = find_existing_assignments(activity)
 - amount = activity.send(get_coding_type(params[:id])) || 0
+- coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 
 %tr{:class => "purpose_row", :"data-amount" => amount}
   %td.name.fixed
@@ -12,5 +13,5 @@
           - code_assignments.each do |ca|
             - if ca.amount.present? || ca.percentage.present?
               = render 'purpose', :ca => ca
-          = render 'add_purpose_form'
-          = render 'purpose_footer', :activity => activity, :code_assignments => code_assignments
+          = render 'add_purpose_form', :coding_name => coding_name
+          = render 'purpose_footer', :activity => activity, :code_assignments => code_assignments, :coding_name => coding_name

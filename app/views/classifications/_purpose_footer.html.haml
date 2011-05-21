@@ -1,14 +1,15 @@
 - total  = cached_amount_total(code_assignments)
 - amount = activity.send(get_coding_type(params[:id])) || 0
 - remaining = amount - total
+- coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 
 %tr.activity_total
   %td.name.wrap-50
     %ul
       %li
         - link_to "#", :class => "add_purpose add_row" do
-          = image_tag"new.png"
-          Add Purpose
+          = image_tag "new.png"
+          == Add #{coding_name}
 
   %td.total
     %ul

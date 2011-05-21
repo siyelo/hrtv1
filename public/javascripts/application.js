@@ -1501,10 +1501,17 @@ var classifications_edit = {
       var loader  = element.next('.ajax-loader');
       var form    = element.parents('form');
 
+      if (element.hasClass('inactive')) {
+        return;
+      }
+      element.addClass('inactive');
+
+
       loader.show();
       form.find('.add_purpose').hide();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+        element.removeClass('inactive');
         var tr = $(data);
         element.parents('tr.purpose_row').replaceWith(tr);
         purposes.initMcDropdown(tr.find(".purpose_search"));
@@ -1631,7 +1638,7 @@ var purposes = {
     var purpose_label = purposes.get_purpose_label(form.find('.mcdropdown input:first').val());
 
     var tr =  '<tr>' +
-              '  <td class="wrap-50">' +
+              '  <td class="wrap-60">' +
               '    <label for="classifications_' + purpose_id + '">' + purpose_label + '</label>' +
               '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +

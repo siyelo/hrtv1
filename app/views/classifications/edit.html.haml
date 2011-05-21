@@ -1,3 +1,5 @@
+- coding_name = friendly_name_for_coding_copy(params[:id]).singularize
+
 = render 'shared/data_entry_sub_nav'
 :javascript
   var _response_id = "#{@response.id}"
@@ -13,7 +15,7 @@
           %li= link_to 'Budget', edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil)
     %tr.head
       %th.name.fixed Activity
-      %th.name Purpose
+      %th.name= coding_name
       %th
       %th.wrap-3
   %tbody

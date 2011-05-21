@@ -156,35 +156,6 @@ body.app
     a
       padding: 5px 10px !important
 
-  /* sub-nav styles */
-  #sub-nav
-    +box-shadow(#f0f0f0, 0, 2px, 7px)
-    margin: 15px 0 10px
-    ul
-      +horizontal-list
-      padding: 0 15px 15px 15px
-    .active
-      a
-        background: !orange
-        color: white
-        +text-shadow(!orange - #333, 0, 1px, 0)
-
-    a
-      +border-radius
-      background: !lightest-blue
-      color: !mid-blue
-      display: inline-block
-      font-size: 12px
-      padding: 7px 10px 6px 10px
-      text-decoration: none
-      +text-shadow(#fff, 0, 1px, 0)
-      &:hover, &:focus
-        background: !mid-blue
-        color: white
-        +text-shadow(#000, 0, 1px, 0)
-    &.alt
-      margin: 10px -15px
-
   #page_tips
     .nav
       display: none
@@ -810,3 +781,34 @@ ul.review li
 
 .pointer
   cursor: pointer
+
+/* sub-nav styles */
+#sub-nav
+  border-bottom: 1px solid #ddd
+  padding-top: 4px
+
+  ul
+    +horizontal-list
+    padding: 0 10px 8px 15px
+    margin-top: 4px !important
+  a
+    +border-radius
+    background: !lightest-blue
+    color: !mid-blue
+    display: inline-block
+    font-size: 12px
+    padding: 7px 10px 6px 10px
+    text-decoration: none
+    +text-shadow(#fff, 0, 1px, 0)
+    &:hover, &:focus
+      background: !mid-blue
+      color: white
+      +text-shadow(#000, 0, 1px, 0)
+  &.alt
+    margin: 10px -15px
+
+  .active
+    a
+      background: !orange
+      color: white
+      +text-shadow(!orange - #333, 0, 1px, 0)

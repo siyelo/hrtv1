@@ -1,0 +1,3 @@
+%ul
+  %li= link_to 'Welcome', user_dashboard_path(current_user), :class => (controller.class == Reporter::DashboardController && controller.action_name == "welcome" ? "active" : '')
+  %li= link_to 'Dashboard', user_dashboard_path(current_user), :class => (controller.class == Reporter::DashboardController && controller.action_name == "index" ? "active" : '')

@@ -1,0 +1,45 @@
+- title("Welcome")
+
+- content_for :sub_nav do
+  = render "/shared/sub_nav_home"
+
+%h1.main_heading Welcome
+
+%h2= "Hello, #{current_user.name_or_email}!"
+
+%p Here are a few simple steps to get started with the Health Resource Tracker (HRT).
+
+%ul.left
+  %li
+    = link_to "Setup Your Organization", current_edit_response_url
+    %span
+      Configure your fiscal year and contact settings
+  %li
+    = link_to "Enter Your Workplan", edit_response_workplan_path(current_or_last_response, :spend)
+    %span
+      Define the health projects/activities your organization does
+  %li
+    = link_to "Add Classifications", edit_response_classification_path(current_or_last_response, 'CodingSpend')
+    %span Add a little extra detail about your activities.
+  %li
+    = link_to "Review & Respond", current_response_url
+    %span Submit your data for the requested period
+
+
+
+%ul.right
+  %li
+    %h3 Have questions?
+  %li
+    = link_to "Help Center", help_link, :target => "_blank"
+    %span Our knowledge base and FAQ's
+  %li
+    = link_to "Contact Us", contact_link, :target => "_blank"
+    %span Start a discussion with the support team.
+
+
+%p.left
+  Done with this welcome screen?
+  = link_to "Hide this welcome screen", "#"
+  and the home tab will take you directly to your
+  = link_to "Dashboard", user_dashboard_path(current_user)

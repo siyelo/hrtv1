@@ -92,6 +92,10 @@ class User < ActiveRecord::Base
     full_name.present? ? full_name : username
   end
 
+  def name_or_email
+    name || email
+  end
+
   private
 
     def role?(role)

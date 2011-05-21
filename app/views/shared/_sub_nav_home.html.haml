@@ -1,5 +1,5 @@
 %ul
   %li{:class => (controller.class == Reporter::DashboardController && controller.action_name == "welcome" ? "active" : '')}
-    = link_to 'Welcome', user_dashboard_path(current_user)
+    = link_to 'Welcome', reporter_welcome_path
   %li{:class => (controller.class == Reporter::DashboardController && controller.action_name == "index" ? "active" : '')}
     = link_to 'Dashboard', user_dashboard_path(current_user)

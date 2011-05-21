@@ -76,6 +76,7 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.welcome 'welcome', :controller => 'dashboard', :action => :welcome
     reporter.resources :reports, :only => [:index, :show]
   end
 

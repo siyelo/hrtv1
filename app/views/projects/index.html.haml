@@ -17,7 +17,7 @@
   %li
     = link_to "Link Projects", bulk_edit_response_projects_path, :class => 'add_row'
   %li
-    = link_to "Import / Export", '#', :id => "import_export", :class => 'add_row upload_btn'
+    = link_to "Import / Export", '#', :id => "import_export", :class => 'add_row js_upload_btn'
 
 #import_export_box
   = render 'activities_import', :project => nil, :can_export => @response.activities.present?

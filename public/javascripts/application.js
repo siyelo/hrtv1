@@ -818,7 +818,7 @@ var code_assignments_show = {
       e.preventDefault();
     });
 
-    $('.upload_btn').click(function (e) {
+    $('.js_upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('.upload').find('.upload_box').toggle();
     });
@@ -1141,7 +1141,14 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 var projects_index = {
   run: function () {
-    $('.upload_btn').click(function (e) {
+    import_export.init();
+  }
+};
+
+var import_export = {
+  // find the purpose 'row' closest relative to given link
+  init: function() {
+    $('.js_upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('td').find('.upload_box').slideToggle();
     });
@@ -1690,6 +1697,8 @@ var changeRowspan = function (element, value) {
 
 var workplans_edit = {
   run: function () {
+
+    import_export.init();
 
     var getTotal = function (amounts) {
       var total = 0;

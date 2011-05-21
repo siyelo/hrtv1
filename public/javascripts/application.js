@@ -1790,8 +1790,6 @@ var workplans_edit = {
     });
 
 
-
-
     // activity
     $('.add_activity').live('click', function (e) {
       e.preventDefault();

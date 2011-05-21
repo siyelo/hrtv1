@@ -119,6 +119,21 @@ body.app
             +linear-gradient(color-stops($lightest-blue, white))
             +text-shadow(#fff, 0, 1px, 1px)
 
+        &.home_tab
+          a
+            span
+              background: image_url("home_nav.png") repeat scroll 0 -17px transparent
+              display: block
+              height: 17px
+              line-height: 17px
+              margin-top: -2px
+              text-indent: -5000px
+              width: 18px
+
+          a.active
+            span
+              background-position: 0 0
+
     img
       float: right
       margin-top: -35px

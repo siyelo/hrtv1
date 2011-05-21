@@ -91,7 +91,6 @@ body
           padding: 0
 
           &:first-child
-            border-right: 1px solid $mid-blue
             a
               +border-left-radius
               border-right: 1px solid $dark-blue
@@ -165,13 +164,18 @@ body
   #footer
     color: !mid-blue
     font-size: 11px
-    margin-bottom: 15px
     text-align: center
     text-transform: uppercase
     +pie-clearfix
 
     ul
       line-height: 16px
+      +horizontal-list
+      margin-bottom: 10px
+
+      li
+        padding-top: 6px
+
       li.powered
         font-size: 11px
         text-transform: none
@@ -181,15 +185,13 @@ body
       font-size: 13px
     h2.left
       left: 2px
+      margin-right: 2px
       position: relative
       top: 3px
 
     .version
-      background: $mid-blue
-      color: #FFF
-      padding: 3px 6px 2px !important
+      color: black
       text-transform: none
-      +border-radius
 
     .left
       float: left
@@ -204,10 +206,6 @@ body
       text-decoration: none
       &:hover, &:focus
         color: orange
-
-    ul
-      +horizontal-list
-      margin-bottom: 10px
 
   .wrapper > .full-width
     padding: 5px 15px 0

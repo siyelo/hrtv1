@@ -6,4 +6,5 @@
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}= link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}= link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
     %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}= link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
+    %li{:class => ['CodingSpendDistrict', 'CodingBudgetDistrict'].include?(params[:id]) ? 'active' : nil}= link_to 'Locations', edit_response_classification_path(@response, 'CodingSpendDistrict')
     %li{:class => (params[:controller] == 'workplans' && params[:action] == 'index' ? 'active' : nil)}= link_to 'Manage', response_workplans_path(@response)

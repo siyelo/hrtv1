@@ -91,7 +91,8 @@ class CodingTree
     when 'ServiceLevelBudget', 'ServiceLevelSpend'
       ServiceLevel.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-      activity.locations
+      #activity.locations
+      Location.all
     when 'HsspBudget', 'HsspSpend'
       activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
     else
@@ -225,7 +226,8 @@ class CodingTree
       when 'ServiceLevelBudget', 'ServiceLevelSpend'
         ServiceLevel.all
       when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-        @activity.locations
+        #@activity.locations
+        Location.all
       when 'HsspBudget', 'HsspSpend'
         @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
       else

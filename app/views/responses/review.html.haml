@@ -2,25 +2,6 @@
   = render 'shared/sub_nav_response'
 
 - title("Submit Response")
-- your_projects = @response.projects_entered? && @response.project_amounts_entered? && @response.projects_have_activities? && @response.projects_have_other_costs? ? "ready" : "not-ready"
-- projects_entered = @response.projects_entered? ? "ready" : "not-ready"
-- project_amounts_entered = @response.project_amounts_entered? ? "ready" : "not-ready"
-- projects_have_activities = @response.projects_have_activities? ? "ready" : "not-ready"
-- projects_have_other_costs = @response.projects_have_other_costs? ? "ready" : "not-ready"
-- detailed_classification = @response.activities_coded? && @response.other_costs_coded? ? "ready" : "not-ready"
-- activities_coded = @response.activities_coded? ? "ready" : "not-ready"
-- final_review = @response.request.final_review?
-- projects_linked = @response.projects_linked?
-- if final_review
-  - projects_linked_class = projects_linked ? "ready" : "not-ready"
-- else
-  - projects_linked_class = projects_linked ? "ready" : "info"
-- other_costs_coded = @response.other_costs_coded? ? "ready" : "not-ready"
-- data_verification = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends? && @response.projects_and_activities_have_matching_budgets? && @response.projects_and_activities_have_matching_spends? && projects_linked_class ? "ready" : "not-ready"
-- projects_funding_sources_ok = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends?
-- projects_activities_ok = @response.projects_and_activities_have_matching_budgets? && @response.projects_and_activities_have_matching_spends?
-- projects_funders_have_organizations = @response.check_projects_funding_sources_have_organizations? ? "ready" : "not-ready"
-- activities_have_implementers = @response.activities_have_implementers? ? "ready" : " not-ready"
 
 %h1.main_heading Submit Response
 
@@ -133,7 +114,7 @@
               Once your Funder's have added all their projects too, please
               = link_to "link your projects", bulk_edit_response_projects_path(@response)
               to each Funder project respectively.
-              
+
       %li
         %h3{:class => (projects_funders_have_organizations)}
           All Projects have Funding Flows have Organizations
@@ -150,7 +131,7 @@
             %span.info Not all activities currently have implementers.
             - @response.activities.each do |activity|
               - if activity.implementer.nil?
-                %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity) 
+                %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity)
 
       %li
         %h3{:class => (projects_funding_sources_ok ? "ready" : "not-ready")}
@@ -180,7 +161,7 @@
                       %td= n2cndrs(universal_currency_converter(project.in_flows_budget_total, project.currency, @response.currency), @response.currency)
                       %td= n2cndrs(universal_currency_converter(((project.budget || 0) - project.in_flows_budget_total), project.currency, @response.currency), @response.currency)
                       %td= link_to "Edit", edit_response_project_path(@response, project)
-                      
+
                 %tr
                   %th{:colspan => 5}
                     Spend
@@ -227,11 +208,11 @@
                         %tr{:class => "#{dom_id(project)}_budget"}
                           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity= n2cndrs(universal_currency_converter(activity.budget, activity.currency, @response.currency), @response.currency)
-                
+
                 %tr
                   %th{:colspan => 5}
                     Spend
-                
+
                 - @response.projects.each do |project|
                   - if (project.spend || 0) != ((project.activities_spend_total + project.other_costs_spend_total) || 0)
                     %tr
@@ -245,7 +226,7 @@
                         %tr{:class => "#{dom_id(project)}_spend"}
                           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity= n2cndrs(universal_currency_converter(activity.spend, activity.currency, @response.currency), @response.currency)
-          
+
 
 
 //%hr.divider

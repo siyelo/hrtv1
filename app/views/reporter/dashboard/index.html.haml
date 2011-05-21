@@ -1,9 +1,61 @@
 - title("Dashboard")
 - content_for :sub_nav do
   = render "/shared/sub_nav_home"
-%h1.main_heading Dashboard
 
-= render 'getting_started'
+.full-width-container
+  %h1.main_heading.left Dashboard
+  %ul.horizontal.right
+    %li= link_to "Edit Workplan", edit_response_workplan_path(current_or_last_response, :spend), :class => "add_row"
+    %li= link_to "Classify Activities", edit_response_classification_path(current_or_last_response, 'CodingSpend'), :class => "add_row"
+    %li= link_to "Review & Respond", current_response_url, :class => "add_row"
+
+%hr
+
+.full-width-container
+  = render 'getting_started'
+
+.summary
+  %h1 Project Summary
+  .span-3.spend_tracked
+    %h2 Spend Tracked
+    %h3 1000000.00
+  .span-3.budget_tracked
+    %h2 Budget Tracked
+    %h3 1200000.00
+  .span-3.projects_tracked
+    %h2 Projects Tracked
+    %h3 12
+  .span-3.activities_tracked
+    %h2 Activities Tracked
+    %h3 123
+
+- @response = current_or_last_response
+
+.summary
+  %h1 Workplan Summary
+  %ul.review
+    %li
+      %h3{:class => (projects_entered)}
+        Projects Entered
+    %li
+      %h3{:class => (projects_have_activities)}
+        Activities Entered
+    %li
+      %h3{:class => (projects_have_other_costs)}
+        Other Costs Entered
+
+.summary
+  %h1 Classification Summary
+  %ul.review
+    %li
+      %h3{:class => (activities_coded)}
+        Activities Classified
+    %li
+      %h3{:class => (other_costs_coded)}
+        Other Costs Classified
+    %li
+      %h3{:class => ready(@response.submitted)}
+        Submitted for Review
 
 %ul.response-notice
   - @responses.each do |dr|
@@ -20,38 +72,14 @@
         %td Request
         %td Requested By
         %td Due
-        %td Valid
+        %td Ready to Submit?
         %td Status
         %td
     %tbody
       = render :partial => 'request', :collection => @requests
       = render :partial => 'response', :collection => @responses
 
-.first-half
-  %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
-    Reports
-  .dashboard_section
-    %ul.admin_reports
-      - if current_user.current_data_response
-        %li
-          - link_to response_path(current_user.current_data_response), :class => "drill_down target" do
-            Review My Response
-            %span.hint Interactive report of your current data response
-      %li
-        - link_to reports_districts_path, :class => "drill_down target" do
-          Review District Expenditures and Budgets
-          %span.hint Interactive reports
-      %li
-        - link_to reports_country_path, :class => "drill_down target" do
-          Review National Expenditures and Budgets
-          %span.hint Interactive reports
-      %li
-        - link_to reporter_reports_path, :class => "drill_down target" do
-          All Reports
-          %span.hint Export a report in CSV
-
-.second-half
+.dashboard_section
   %h2
     =image_tag"icon_comments.png", :class => "heading_icon"
     Recent Comments

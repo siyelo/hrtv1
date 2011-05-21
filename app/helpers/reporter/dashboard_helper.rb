@@ -1,4 +1,6 @@
 module Reporter::DashboardHelper
+  include ResponsesHelper
+
   def commentable_path(type, commentable, user)
     case type
     when "Project"

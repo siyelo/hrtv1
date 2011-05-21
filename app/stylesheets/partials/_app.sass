@@ -439,8 +439,6 @@ ul.group
         +linear-gradient(color-stops($lightest-blue + #090909, white))
 
 .main_heading
-  +box-shadow(#eee, 0, 2px, 3px)
-  border-bottom: 1px solid #eee
   clear: both
   margin: 0 -15px 15px
   padding: 5px 15px 10px
@@ -821,3 +819,11 @@ ul.review li
       background: !mid-blue
       color: white
       +text-shadow(#000, 0, 1px, 0)
+
+.full-width-container
+  display: block
+  +clearfix
+
+  h1.main_heading
+    padding: 0
+    margin: 0

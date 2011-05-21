@@ -1716,6 +1716,25 @@ var workplans_edit = {
       return total;
     };
 
+    var updateValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // activity total
+      var elements = tr.find('.qamount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.find('.total_transform').text(getTotal(amounts));
+
+      // project total
+      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      tr.nextAll('.activity_total:first').find('.total_amount').text(getTotal(amounts));
+
+      // all projects total
+      var elements = $('.activity_total .total_amount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.project_total .total_amount').text(getTotal(amounts));
+    };
+
     initDemoText($('*[data-hint]'));
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
@@ -1734,23 +1753,45 @@ var workplans_edit = {
     //});
     $('.qamount').live('keyup', function (e) {
       var element = $(this);
-      var tr = element.parents('tr:first');
-
-      // activity total
-      var elements = tr.find('.qamount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.find('.total_amount').text(getTotal(amounts));
-
-      // project total
-      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      tr.nextAll('.activity_total:first').find('.total_amount').text(getTotal(amounts));
-
-      // all projects total
-      var elements = $('.activity_total .total_amount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.project_total .total_amount').text(getTotal(amounts));
+      updateValues(element);
     });
+
+    $('.activity_row .total_transform').live('click', function (e) {
+      console.log('click')
+      var element = $(this);
+      var value = element.text();
+      if (element.hasClass('inactive')) {
+        return;
+      }
+      element.addClass('inactive').removeClass('pointer');
+      element.html($('<input/>').attr({type: 'text'}).val(value))
+    }).live('blur', function (e) {
+      console.log('blur')
+      var element = $(this);
+      var value = element.find('input').val();
+      element.removeClass('inactive').addClass('pointer');
+      element.html(value);
+      var amount = Number(value);
+      if (!isNaN(amount)) {
+        quarter = amount / 5;
+        var activity_row = element.parents('.activity_row');
+        activity_row.find('.qamount').val(quarter);
+        updateValues(activity_row.find('.qamount:first'));
+      }
+    }).live('keydown', function (e) {
+      var code = e.keyCode || e.which;
+      if (code === 13) { // enter key
+        e.preventDefault();
+      }
+    });
+
+    $('body').click(function (e) {
+      console.log($(e.target).parent().attr('class'));
+      if (!$(e.target).parent().hasClass('total_transform')) {
+        $('.activity_row .total_amount input').trigger('blur')
+      }
+    });
+
 
 
     // activity

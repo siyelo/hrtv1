@@ -17,8 +17,8 @@ class ClassificationsController < Reporter::BaseController
         redirect_to edit_response_classification_url(@response, params[:id])
       end
       format.js { render :partial => 'activity_row', :locals => {
-                                                        :project => @activity.project, 
-                                                        :activity => @activity } }
+        :project => @activity.project,
+        :activity => @activity } }
     end
   end
 

@@ -1393,20 +1393,11 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
 
-<<<<<<< HEAD
     $('.implementer_select').live('change', function(e) {
-=======
-    $('.show_organizations_add').live('click', function(e) {
->>>>>>> features/users/reporters/can_manage_classifications.feature
+    //$('.show_organizations_add').live('click', function(e) {
       e.preventDefault();
       var element = $(this);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
       element.next('.add_organization').slideToggle();
-=======
->>>>>>> cherry pick fdcdac - add mcdropdown to show nested purpose tree hierarchy
       if(element.val() == "-1"){
         $('.implementer_container').hide();
         $('.add_organization').show();
@@ -1419,13 +1410,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.add_organization').hide();
       $('.implementer_container').show();
       $('.implementer_select').val(null);
-<<<<<<< HEAD
-=======
->>>>>>> fdcdac4... add mcdropdown to show nested purpose tree hierarchy
->>>>>>> cherry pick fdcdac - add mcdropdown to show nested purpose tree hierarchy
-=======
       element.next('.add_organization').slideToggle();
->>>>>>> fix missed merge conflict
     });
 
     $('.add_organization_link').live('click', function(e) {
@@ -1696,6 +1681,7 @@ var purposes = {
   }
 };
 //end purposes
+
 
 var changeRowspan = function (element, value) {
   var projectTd = $(element.parents('tr').prevAll('.js_project_row')[0]).find('td');

@@ -1513,28 +1513,28 @@ var classifications_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         element.removeClass('inactive');
         var tr = $(data);
-        element.parents('tr.purpose_row').replaceWith(tr);
+        element.parents('tr.js_purpose_row').replaceWith(tr);
         purposes.initMcDropdown(tr.find(".purpose_search"));
         loader.hide();
       });
     });
 
-    $('.ca').live('keyup', function (e) {
+    $('.js_ca').live('keyup', function (e) {
       var element = $(this);
-      var tr = element.parents('tr.purpose_row');
+      var tr = element.parents('tr.js_purpose_row');
       var amount = Number(tr.attr('data-amount'));
 
       // activity total
-      var elements = tr.find('.ca');
+      var elements = tr.find('.js_ca');
       var amounts  = jQuery.map(elements, function (e) { return $(e).val();});
       var total    = getClassificationTotal(amounts, amount);
-      tr.find('.js_project_total_row .total li:first span').text(total);
+      tr.find('.js_activity_total_row .total li:first span.js_activity_total').text(total);
 
       // remaining
       var remaining = amount - total;
-      var remaining_box = tr.find('.js_project_total_row .remaining');
+      var remaining_box = tr.find('.js_activity_total_row .js_remaining_box');
       remaining === 0 ? remaining_box.hide() : remaining_box.show();
-      remaining_box.find('span').text(remaining)
+      remaining_box.find('span.js_remaining').text(remaining)
     });
   }
 };
@@ -1542,7 +1542,7 @@ var classifications_edit = {
 var purposes = {
   // find the purpose 'row' closest relative to given link
   find_row: function(link) {
-    return link.closest('.purpose_row');
+    return link.closest('.js_purpose_row');
   },
 
   find_row_id: function(link) {
@@ -1625,7 +1625,7 @@ var purposes = {
 
 
     // determine if the purpose was already added
-    addedIds = jQuery.map(form.find('.ca'), function (e) {
+    addedIds = jQuery.map(form.find('.js_ca'), function (e) {
       return Number($(e).attr('id').match(/\d+/)[0]);
     });
     if (addedIds.indexOf(Number(purpose_id)) >= 0) {
@@ -1643,7 +1643,7 @@ var purposes = {
               '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +
               '  <td class="total">' +
-              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +
+              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="js_ca"></td>' +
               '  <td class="actions">' +
               '    <img src="/images/delete_row.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
               '  </td>' +
@@ -1657,7 +1657,7 @@ var purposes = {
 
 
     purposes.btnToggle(form);
-    if (form.find('.ca').length > 0) {
+    if (form.find('.js_ca').length > 0) {
       form.find('.save_btn').show();
     }
   },
@@ -1673,7 +1673,7 @@ var purposes = {
 
   btnToggle: function (form) {
     var btn = form.find('.save_btn');
-    form.find('.ca').length > 0 ? btn.show() : btn.hide();
+    form.find('.js_ca').length > 0 ? btn.show() : btn.hide();
   },
 
   remove_purpose: function(destroy_link) {

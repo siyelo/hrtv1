@@ -2,7 +2,7 @@
 - amount = activity.send(get_coding_type(params[:id])) || 0
 - remaining = amount - total
 
-%tr.js_activity_total
+%tr.js_activity_total_row
   %td.name.wrap-50
     %ul
       %li
@@ -14,10 +14,12 @@
     %ul
       %li
         Total
-        %span= n2cndrs(total, activity.currency)
-      %li.remaining{:style => (remaining == 0 ? 'display: none' : nil)}
+        %span.js_activity_total= total
+        %span.currency= activity.currency
+      %li.remaining.js_remaining_box{:style => (remaining == 0 ? 'display: none' : nil)}
         Remaining
-        %span= remaining
+        %span.js_remaining= remaining
+        %span.currency= activity.currency
   %td.actions
     = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

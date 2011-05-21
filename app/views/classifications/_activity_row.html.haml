@@ -2,7 +2,7 @@
 - amount = activity.send(get_coding_type(params[:id])) || 0
 - coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 
-%tr{:class => "purpose_row", :"data-amount" => amount}
+%tr{:class => "js_purpose_row", :"data-amount" => amount}
   %td.name.fixed
     = project.name
     %span= activity.title

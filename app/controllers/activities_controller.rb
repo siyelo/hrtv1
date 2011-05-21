@@ -47,6 +47,8 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     clean_out_sa_params(params)
+    check_for_new_provider(params)
+    debugger
     @activity = Activity.find(params[:id])
     if @activity.update_attributes(params[:activity])
       respond_to do |format|
@@ -105,7 +107,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def export
-    activities = params[:project_id].present? ? 
+    activities = params[:project_id].present? ?
       @response.projects.find(params[:project_id]).activities : @response.activities
     template = Activity.download_template(activities)
     send_csv(template, 'activities_existing.csv')
@@ -133,7 +135,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
-  
+
     def clean_out_sa_params(params)
       unless params[:activity][:sub_activities_attributes].nil?
         params[:activity][:sub_activities_attributes].each_key do |key|
@@ -159,6 +161,17 @@ class ActivitiesController < Reporter::BaseController
       end
     end
 
+    def check_for_new_provider(params)
+      unless params[:activity][:provider_id].nil?
+        unless is_number?(params[:activity][:provider_id])
+          name = params[:activity][:provider_id]
+          params[:activity][:provider] = {}
+          params[:activity][:provider][:name] = name
+          params[:activity].delete(:provider_id)
+        end
+      end
+    end
+
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"
     end
@@ -170,14 +183,14 @@ class ActivitiesController < Reporter::BaseController
     def html_redirect
       if params[:commit] == "Save & Classify >"
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
-        redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type) 
+        redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
       else
         redirect_to response_projects_path(@activity.project.response)
       end
     end
 
     def js_redirect
-      render :partial => 'bulk_edit', :layout => false, 
+      render :partial => 'bulk_edit', :layout => false,
         :locals => {:activity => @activity, :response => @response}
     end
 end

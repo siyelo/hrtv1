@@ -13,6 +13,8 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
   $(link).parent().before(content.replace(regexp, new_id));
+
+  after_add_fields_callback(association);
 };
 
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
@@ -143,6 +145,12 @@ var before_add_fields_callback = function (association) {
   if (association === 'funding_sources') {
     close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
+};
+
+var after_add_fields_callback = function (association) {
+  // show the jquery autocomplete combobox instead of
+  // standard dropdowns
+  $( ".combobox" ).combobox();
 };
 
 /* Nested model forms END */
@@ -765,6 +773,12 @@ var responses_show = {
   }
 };
 
+var responses_edit = {
+  run: function () {
+    $( ".combobox" ).combobox(); // for pretty currency select
+  }
+};
+
 var policy_maker_data_responses_show = {
   run: function () {
     build_data_response_review_screen();
@@ -1083,6 +1097,12 @@ var validateDates = function (startDate, endDate) {
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
+
+    // show the jquery autocomplete combobox instead of standard dropdown
+    $( ".combobox" ).combobox(); // for currency dropdown
+                                // the nested funding source init should be
+                                // handled by the "add row" js callback
+
     $('.edit').live('click', function (e) {
       e.preventDefault();
       var element = $(this).parents('.fields');
@@ -1093,46 +1113,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
       close_project_in_flow_fields(fields);
     });
 
-    $('.ff_from').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      if(element.val() == "-1"){
-        fieldsBlock.find('.ff_from_container').hide();
-        fieldsBlock.find('.add_organization').show();
-      }
-    });
-    
-    $('.cancel_organization_link').live('click', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      fieldsBlock.find('.organization_name').attr('value', '');
-      fieldsBlock.find('.add_organization').hide();
-      fieldsBlock.find('.ff_from_container').show();
-    });
-
-    $('.add_organization_link').live('click', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var fieldsBlock = element.parents('.fields');
-      var name = fieldsBlock.find('.organization_name').val();
-      $.post("/organizations.js", { "name" : name }, function(data){
-        var data = $.parseJSON(data);
-        var ff_from = fieldsBlock.find('.ff_from');
-        fieldsBlock.find('.ff_from_container').show();
-        fieldsBlock.find('.add_organization').hide();
-        if(isNaN(data.organization.id)){
-          ff_from.val(null);
-        }else{
-          ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-          ff_from.val(data.organization.id);
-        }
-      });
-      fieldsBlock.find('.organization_name').attr('value', '');
-      fieldsBlock.find('.add_organization').slideToggle();
-    });
-
+    // ?
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
@@ -1300,6 +1281,10 @@ var activity_form = function () {
     }
   });
 
+  // show the jquery autocomplete combobox instead of
+  // standard dropdown
+  $( ".combobox" ).combobox();
+
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
@@ -1308,7 +1293,7 @@ var activity_form = function () {
       $('.add_organization').show();
     }
   });
-  
+
   $('.cancel_organization_link').live('click', function(e) {
     e.preventDefault();
     $('.organization_name').attr('value', '');
@@ -1361,6 +1346,8 @@ var activity_form = function () {
 var admin_activities_edit = admin_activities_update = {
   run: function () {
     activity_form();
+
+
   }
 };
 
@@ -1382,7 +1369,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
         $('.add_organization').show();
       }
     });
-    
+
     $('.cancel_organization_link').live('click', function(e) {
       e.preventDefault();
       $('.organization_name').attr('value', '');

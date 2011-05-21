@@ -99,7 +99,6 @@ class Project < ActiveRecord::Base
     return data_response.currency
   end
 
-
   #Methods correctly strip the non-word characters from the following fields
   CURRENCY_FIELDS = [:budget, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4,  :entire_budget]
     Project.class_eval CURRENCY_FIELDS.each.inject("") {|s,field| s += <<END}
@@ -156,7 +155,7 @@ END
   end
 
   def amount_for_provider(provider, field)
-    activities.inject(0) do |sum, a| 
+    activities.inject(0) do |sum, a|
       amt = a.amount_for_provider(provider, field)
       sum += amt unless amt.nil?
       sum = sum
@@ -187,7 +186,7 @@ END
       fs = funding_chains
       if s > 0 or b > 0
         FundingChain.add_to(fs, to, s, b)
-      else 
+      else
         []
       end
   end
@@ -200,7 +199,7 @@ END
     end
     ufs
   end
-  
+
   def funding_sources_have_organizations?
     return false if self.in_flows.empty?
     self.in_flows.each do |in_flow|
@@ -234,7 +233,7 @@ END
   def has_other_costs?
     !self.activities.with_type("OtherCost").empty?
   end
-  
+
   def matches_funders?
     budget_matches_funders? && spend_matches_funders?
   end

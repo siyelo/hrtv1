@@ -6,4 +6,7 @@
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q3", activity.send("#{type}_q3"), :class => 'qamount'
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q4", activity.send("#{type}_q4"), :class => 'qamount'
   %td.total_amount
-    %span.total_transform.pointer= n2cndrs(activity.total_by_type(type), activity.currency)
+    %span.total_transform.pointer
+      -# wont use the n2cndrs() helper here, but lets keep the dom structure
+      -# consistent with it, in case we decide to change it later
+      %span.amount= activity.total_by_type(type)

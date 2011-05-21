@@ -7,5 +7,5 @@
     - link_to new_response_activity_path(@response, :project_id => project.id), :class => 'add_activity add_row' do
       = image_tag "new.png"
       Add activity
-  %td.total Total
-  %td.total_amount= project.total_by_type(params[:id])
+  %td.total Subtotal
+  %td.total_amount= n2cndrs(project.total_by_type(params[:id]), project.currency)

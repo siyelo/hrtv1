@@ -1725,12 +1725,12 @@ var workplans_edit = {
       tr.find('.total_transform .amount').text(getTotal(amounts));
 
       // project total
-      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount');
+      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount .amount');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
       tr.nextAll('.activity_total:first').find('.total_amount').text(getTotal(amounts));
 
       // all projects total
-      var elements = $('.activity_total .total_amount');
+      var elements = $('.activity_total .total_amount .amount');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
       $('.project_total .total_amount').text(getTotal(amounts));
     };

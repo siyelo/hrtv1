@@ -1528,11 +1528,11 @@ var classifications_edit = {
       var elements = tr.find('.ca');
       var amounts  = jQuery.map(elements, function (e) { return $(e).val();});
       var total    = getClassificationTotal(amounts, amount);
-      tr.find('.activity_total .total li:first span').text(total);
+      tr.find('.js_project_total_row .total li:first span').text(total);
 
       // remaining
       var remaining = amount - total;
-      var remaining_box = tr.find('.activity_total .remaining');
+      var remaining_box = tr.find('.js_project_total_row .remaining');
       remaining === 0 ? remaining_box.hide() : remaining_box.show();
       remaining_box.find('span').text(remaining)
     });
@@ -1698,7 +1698,7 @@ var purposes = {
 //end purposes
 
 var changeRowspan = function (element, value) {
-  var projectTd = $(element.parents('tr').prevAll('.project_row')[0]).find('td');
+  var projectTd = $(element.parents('tr').prevAll('.js_project_row')[0]).find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
 
@@ -1720,19 +1720,19 @@ var workplans_edit = {
       var tr = element.parents('tr:first');
 
       // activity total
-      var elements = tr.find('.qamount');
+      var elements = tr.find('.js_qamount');
       var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.find('.total_transform .amount').text(getTotal(amounts));
+      tr.find('.js_activity_total').text(getTotal(amounts));
 
       // project total
-      var elements = tr.prevAll('.project_row:first').nextUntil('.activity_total').find('.total_amount .amount');
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_activity_total');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      tr.nextAll('.activity_total:first').find('.total_amount').text(getTotal(amounts));
+      tr.nextAll('.js_project_total_row:first').find('.js_project_total').text(getTotal(amounts));
 
       // all projects total
-      var elements = $('.activity_total .total_amount .amount');
+      var elements = $('.js_project_total_row .js_project_total');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.project_total .total_amount').text(getTotal(amounts));
+      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
     };
 
     initDemoText($('*[data-hint]'));
@@ -1741,7 +1741,7 @@ var workplans_edit = {
 
     // quarters sum
 
-    //$('.qamount').live('keydown', function (e) {
+    //$('.js_qamount').live('keydown', function (e) {
       //var code = e.keyCode || e.which;
 
       //// http://www.cambiaresearch.com/c4/702b8cd1-e5b0-42e6-83ac-25f0306e3e25/javascript-char-codes-key-codes.aspx
@@ -1751,14 +1751,13 @@ var workplans_edit = {
         //e.preventDefault();
       //}
     //});
-    $('.qamount').live('keyup', function (e) {
+    $('.js_qamount').live('keyup', function (e) {
       var element = $(this);
       updateValues(element);
     });
 
-    $('.activity_row .total_transform').live('click', function (e) {
-      console.log('click')
-      var element = $(this).find('.amount');
+    $('.js_activity_row .js_activity_total').live('click', function (e) {
+      var element = $(this);
       var value = element.text();
       if (element.hasClass('inactive')) {
         return;
@@ -1766,17 +1765,16 @@ var workplans_edit = {
       element.addClass('inactive').removeClass('pointer');
       element.html($('<input/>').attr({type: 'text'}).val(value))
     }).live('blur', function (e) {
-      console.log('blur')
-      var element = $(this).find('.amount');
+      var element = $(this);
       var value = element.find('input').val();
       element.removeClass('inactive').addClass('pointer');
       element.html(value);
       var amount = Number(value);
       if (!isNaN(amount)) {
         quarter = amount / 5;
-        var activity_row = element.parents('.activity_row');
-        activity_row.find('.qamount').val(quarter);
-        updateValues(activity_row.find('.qamount:first'));
+        var activity_row = element.parents('.js_activity_row');
+        activity_row.find('.js_qamount').val(quarter);
+        updateValues(activity_row.find('.js_qamount:first'));
       }
     }).live('keydown', function (e) {
       var code = e.keyCode || e.which;
@@ -1786,11 +1784,11 @@ var workplans_edit = {
     });
 
     $('body').click(function (e) {
-      console.log($(e.target).parent().attr('class'));
-      if (!$(e.target).parent().hasClass('total_transform')) {
-        $('.activity_row .total_amount input').trigger('blur')
+      if (!$(e.target).parent().hasClass('js_activity_total')) {
+        $('.js_activity_row .total_amount input').trigger('blur')
       }
     });
+
 
 
 

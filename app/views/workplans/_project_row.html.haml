@@ -1,11 +1,13 @@
-%tr.project_row
+%tr.js_project_row
   %td.name{:rowspan => project.activities.length + 2}= project.name
 - project.activities.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
-%tr.filler2.activity_total{:"data-project_id" => project.id}
+%tr.filler2.js_project_total_row{:"data-project_id" => project.id}
   %td{:colspan => 5}
     - link_to new_response_activity_path(@response, :project_id => project.id), :class => 'add_activity add_row' do
       = image_tag "new.png"
       Add activity
   %td.total Subtotal
-  %td.total_amount= n2cndrs(project.total_by_type(params[:id]), project.currency)
+  %td.total_amount
+    %span.js_project_total= project.total_by_type(params[:id])
+    %span.currency= project.currency

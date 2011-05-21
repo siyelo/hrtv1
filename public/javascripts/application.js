@@ -1595,12 +1595,12 @@ var purposes = {
     var tr =  '<tr>' +
               '  <td class="wrap-50">' +
               '    <label for="classifications_' + purpose_id + '">' + purpose_label + '</label>' +
-              '    <span>' + purpose_context + '</span>' +
+              '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +
               '  <td class="total">' +
               '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="ca"></td>' +
               '  <td class="actions">' +
-              '    <img src="/images/icon_close_flash.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
+              '    <img src="/images/delete_row.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
 

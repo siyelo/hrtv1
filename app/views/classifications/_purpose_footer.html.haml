@@ -18,6 +18,7 @@
         %li.remaining
           Remaining
           %span= remaining
+          
   %td.actions
     = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

@@ -1,10 +1,10 @@
 - code_assignments = find_existing_assignments(activity)
 
 %tr{:class => "purpose_row"}
-  %td.name.wrap-40
+  %td.name.fixed
     = project.name
     %span= activity.title
-  %td.no-padding.wrap-50{:colspan => 3}
+  %td.no-padding{:colspan => 3}
     - form_tag response_classification_path(@response, params[:id], :activity_id => activity.id), :method => :put do
       %table.nested
         %tbody

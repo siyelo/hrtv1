@@ -154,15 +154,11 @@ ActiveRecord::Schema.define(:version => 20110519112419) do
     t.boolean  "year_3",            :default => true
     t.boolean  "year_4",            :default => true
     t.boolean  "year_5",            :default => true
-    t.boolean  "budget_by_quarter", :default => false
     t.boolean  "purposes",          :default => true
     t.boolean  "locations",         :default => true
     t.boolean  "inputs",            :default => true
     t.boolean  "service_levels",    :default => true
-    t.boolean  "year_q2",           :default => true
-    t.boolean  "year_q3",           :default => true
-    t.boolean  "year_q4",           :default => true
-    t.boolean  "year_q5",           :default => true
+    t.boolean  "budget_by_quarter", :default => false
   end
 
   create_table "data_responses", :force => true do |t|

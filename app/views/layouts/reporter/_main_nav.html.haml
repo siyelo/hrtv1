@@ -15,7 +15,7 @@
       %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ClassificationsController, WorkplansController].include?(controller.class) ? "active" : nil)}
         = link_to 'Projects', current_projects_url
       %li{:class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')}
-        = link_to 'Responses', response_path(current_response)
+        = link_to 'Responses', current_edit_response_url
       %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}
         = link_to 'Reports', reporter_reports_path
       %li{:class => (controller.class == ResponsesController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}

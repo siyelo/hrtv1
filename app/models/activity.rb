@@ -586,6 +586,7 @@ class Activity < ActiveRecord::Base
       return sum
     end
     0
+  end
 
   def title
     description.presence || '(no description)'
@@ -712,11 +713,6 @@ class Activity < ActiveRecord::Base
                 :cached_amount => amount)
     end
 end
-
-
-
-
-
 
 # == Schema Information
 #

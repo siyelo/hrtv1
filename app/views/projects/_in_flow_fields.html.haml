@@ -6,9 +6,9 @@
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
     = f.input :organization_id_to, :as => :hidden, :value => @response.organization.id, :required => false
     .ff_from_container
-      = f.input :from, :collection => funding_organizations_select,
-        :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'ff_from'}, :as => :select
-    = render :partial => 'shared/add_organizations'
+      .implementer_container
+        .ui_widget
+          = f.input :from, :as => :select, :collection => funding_organizations_select, :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}
 
     - if @response.data_request.spend?
       = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_spend'}
@@ -31,11 +31,11 @@
           = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q2'}
           = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q3'}
           = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q4'}
-          
-    
+
+
   .preview_block{:style => "display: none;"}
 
   .manage_block
     = link_to_remove_fields "X", f, :class => 'delete'
-    
+
 

@@ -13,6 +13,8 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
   $(link).parent().before(content.replace(regexp, new_id));
+
+  after_add_fields_callback(association);
 };
 
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
@@ -143,6 +145,12 @@ var before_add_fields_callback = function (association) {
   if (association === 'funding_sources') {
     close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
+};
+
+var after_add_fields_callback = function (association) {
+  // show the jquery autocomplete combobox instead of
+  // standard dropdowns
+  $( ".combobox" ).combobox();
 };
 
 /* Nested model forms END */
@@ -1084,9 +1092,8 @@ var validateDates = function (startDate, endDate) {
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
-    // show the jquery autocomplete combobox instead of
-    // standard dropdown
-    $( ".ff_from" ).combobox();
+    // show the jquery autocomplete combobox instead of standard dropdown
+    //$( ".ff_from" ).combobox(); // handled by add row js callback
 
     $('.edit').live('click', function (e) {
       e.preventDefault();
@@ -1098,87 +1105,11 @@ var projects_new = projects_create = projects_edit = projects_update = {
       close_project_in_flow_fields(fields);
     });
 
-    $('.ff_from').live('change', function(e) {
-      e.preventDefault();
-      organization.show_add_form($(this));
-    });
-
-    $('.cancel_organization_link').live('click', function(e) {
-      e.preventDefault();
-      organization.hide_add_form($(this));
-    });
-
-    $('.add_organization_link').live('click', function(e) {
-      e.preventDefault();
-      organization.add($(this))
-    });
-
     // ?
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
 };
-
-var organization = {
-  combo_box: function(fieldsBlock) {
-    return fieldsBlock.find('.ff_from');
-  },
-
-  combo_box_container: function(fieldsBlock) {
-    return fieldsBlock.find('.ff_from_container');
-  },
-
-  add_form: function(fieldsBlock){
-    return fieldsBlock.find('.add_organization');
-  },
-
-  // if the currently selected element is "Add an Organization..." (-1)
-  // show the org form
-  show_add_form: function(element) {
-    var ADD_AN_ORGANIZATION = "-1"
-    var fieldsBlock = element.parents('.fields');
-    if(element.val() == ADD_AN_ORGANIZATION){
-      organization.combo_box_container(fieldsBlock).hide();
-      organization.add_form(fieldsBlock).show();
-    }
-  },
-
-  hide_add_form: function(element){
-    var fieldsBlock = element.parents('.fields');
-    fieldsBlock.find('.organization_name').attr('value', '');
-    organization.combo_box(fieldsBlock).val("0"); // reset combo box selection
-    organization.add_form(fieldsBlock).hide();
-    organization.combo_box_container(fieldsBlock).show();
-  },
-
-  add: function(element){
-    var fieldsBlock = element.parents('.fields');
-    var name = fieldsBlock.find('.organization_name').val();
-    if(!name){
-      alert("Please enter a name");
-    }else{
-      organization.create_remote(name, fieldsBlock);
-      fieldsBlock.find('.organization_name').attr('value', '');
-      organization.add_form(fieldsBlock).slideToggle();
-    };
-  },
-
-  create_remote: function(name, fieldsBlock){
-    $.post("/organizations.js", { "name" : name }, function(data){
-      var data = $.parseJSON(data);
-      var ff_from = organization.combo_box(fieldsBlock);
-      organization.combo_box_container(fieldsBlock).show();
-      organization.add_form(fieldsBlock).hide();
-      if(isNaN(data.organization.id)){
-        ff_from.val(null);
-      }else{
-        ff_from.prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-        ff_from.val(data.organization.id);
-      }
-    });
-  }
-};
-
 
 var projects_index = {
   run: function () {
@@ -1341,7 +1272,6 @@ var activity_form = function () {
       $('#project_sub_form_hint').show();
     }
   });
-
 
   // show the jquery autocomplete combobox instead of
   // standard dropdown

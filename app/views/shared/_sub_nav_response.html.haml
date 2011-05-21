@@ -1,3 +1,5 @@
 %ul
-  %li= link_to 'Review', response_path(@response), :class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')
-  %li= link_to 'Submit', review_response_path(@response), :class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')
+  %li{:class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')}
+    = link_to 'Review', response_path(@response)
+  %li{:class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')}
+    = link_to 'Submit', review_response_path(@response)

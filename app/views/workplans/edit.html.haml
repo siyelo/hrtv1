@@ -37,9 +37,11 @@
           - link_to new_response_project_path(@response), :class => 'add_project create_new' do
             = image_tag "new.png"
             Add project
-          
+
         %td.total Total
-        %td.total_amount= @projects.map{|p| p.activities.map{|a| a.total_by_type(params[:id])}.sum }.sum
+        -# TODO: allow it to mix currencies - see bug #13666947
+        - total = @projects.map{|p| p.activities.map{|a| a.total_by_type(params[:id])}.sum }.sum
+        %td.total_amount= n2cndrs(total, @response.currency)
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

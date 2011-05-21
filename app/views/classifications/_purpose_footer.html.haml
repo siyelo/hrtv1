@@ -15,7 +15,7 @@
     %ul
       %li
         Total
-        %span= total
+        %span= n2cndrs(total, activity.currency)
       %li.remaining{:style => (remaining == 0 ? 'display: none' : nil)}
         Remaining
         %span= remaining

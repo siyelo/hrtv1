@@ -1502,17 +1502,16 @@ var classifications_edit = {
       var loader  = element.next('.ajax-loader');
       var form    = element.parents('form');
 
-      if (element.hasClass('inactive')) {
+      if (element.hasClass('disabled')) {
         return;
       }
-      element.addClass('inactive');
-
+      element.addClass('disabled');
 
       loader.show();
-      form.find('.add_purpose').hide();
+      form.find('.add_purpose').addClass('disabled');
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
-        element.removeClass('inactive');
+        element.removeClass('disabled');
         var tr = $(data);
         element.parents('tr.js_purpose_row').replaceWith(tr);
         purposes.initMcDropdown(tr.find(".purpose_search"));
@@ -1763,15 +1762,15 @@ var workplans_edit = {
     $('.js_activity_row .js_activity_total').live('click', function (e) {
       var element = $(this);
       var value = element.text();
-      if (element.hasClass('inactive')) {
+      if (element.hasClass('disabled')) {
         return;
       }
-      element.addClass('inactive').removeClass('pointer');
+      element.addClass('disabled').removeClass('pointer');
       element.html($('<input/>').attr({type: 'text'}).val(value))
     }).live('blur', function (e) {
       var element = $(this);
       var value = element.find('input').val();
-      element.removeClass('inactive').addClass('pointer');
+      element.removeClass('disabled').addClass('pointer');
       element.html(value);
       var amount = Number(value);
       if (!isNaN(amount)) {
@@ -1799,11 +1798,11 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
 
-      if (element.hasClass('inactive')) {
+      if (element.hasClass('disabled')) {
         return;
       }
 
-      element.addClass('inactive');
+      element.addClass('disabled');
 
       var project_id = element.parents('tr').attr('data-project_id');
       var url = '/responses/' + _response_id + '/activities/new.js?type=' + _type + '&project_id=' + project_id;
@@ -1821,7 +1820,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_activity').show().removeClass('inactive');
+      element.parents('tr').next('tr').find('.add_activity').show().removeClass('disabled');
       element.parents('tr').remove();
     });
 
@@ -1837,7 +1836,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_activity').show().removeClass('inactive');
+          element.parents('tr').next('tr').find('.add_activity').show().removeClass('disabled');
           box.replaceWith(data.html)
           $('#workplan').find('.save_btn').show();
         } else {
@@ -1855,11 +1854,11 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
 
-      if (element.hasClass('inactive')) {
+      if (element.hasClass('disabled')) {
         return;
       }
 
-      element.addClass('inactive');
+      element.addClass('disabled');
 
       var url = '/responses/' + _response_id + '/projects/new.js';
 
@@ -1876,7 +1875,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       //changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.js_add_project').show().removeClass('inactive');
+      element.parents('tr').next('tr').find('.js_add_project').show().removeClass('disabled');
       element.parents('tr').remove();
     });
 
@@ -1892,7 +1891,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');
-          element.parents('tr').next('tr').find('.js_add_project').show().removeClass('inactive');
+          element.parents('tr').next('tr').find('.js_add_project').show().removeClass('disabled');
           box.after(data.html);
           box.remove();
         } else {
@@ -1928,11 +1927,11 @@ var funders_edit = {
       e.preventDefault();
       var element = $(this);
 
-      if (element.hasClass('inactive')) {
+      if (element.hasClass('disabled')) {
         return;
       }
 
-      element.addClass('inactive');
+      element.addClass('disabled');
 
       var project_id = element.parents('tr').attr('data-project_id');
       var url = '/responses/' + _response_id + '/funders/new?type=' + _type + '&project_id=' + project_id;
@@ -1950,7 +1949,7 @@ var funders_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_funder').show().removeClass('inactive');
+      element.parents('tr').next('tr').find('.add_funder').show().removeClass('disabled');
       element.parents('tr').remove();
     });
 
@@ -1965,7 +1964,7 @@ var funders_edit = {
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_funder').show().removeClass('inactive');
+          element.parents('tr').next('tr').find('.add_funder').show().removeClass('disabled');
           box.replaceWith(data.html)
           $('#js_funders_form').find('.save_btn').show();
         } else {

@@ -3,7 +3,7 @@
 - coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 
 %tr{:class => "js_purpose_row", :"data-amount" => amount}
-  %td.name.fixed
+  %td.nested_name.fixed
     = project.name
     %span= activity.title
   %td.no-padding{:colspan => 3}

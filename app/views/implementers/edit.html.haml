@@ -29,7 +29,7 @@
           = render 'activity_row', :project => project, :activity => activity
 
       %tr.filler.js_projects_total_row
-        %td.name.fixed
+        %td.nested_name.fixed
         %td.total Total
         %td.total_amount
           %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(params[:id])}.sum

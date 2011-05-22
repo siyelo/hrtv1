@@ -1808,7 +1808,7 @@ var workplans_edit = {
       var url = '/responses/' + _response_id + '/activities/new.json?type=' + _type + '&project_id=' + project_id;
 
       $.get(url, function (data) {
-        element.hide();
+        element.addClass('disabled');
         currentTr = element.parents('tr');
         currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
@@ -1820,7 +1820,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr:first').next('tr').find('.add_activity').show().removeClass('disabled');
+      element.parents('tr:first').next('tr').find('.add_activity').removeClass('disabled');
       element.parents('tr:first').remove();
     });
 
@@ -1836,7 +1836,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_activity').show().removeClass('disabled');
+          element.parents('tr').next('tr').find('.add_activity').removeClass('disabled');
           box.replaceWith(data.html)
           $('#workplan').find('.save_btn').show();
         } else {
@@ -1863,7 +1863,6 @@ var workplans_edit = {
       var url = '/responses/' + _response_id + '/projects/new.json';
 
       $.get(url, function (data) {
-        element.hide();
         currentTr = element.parents('tr');
         currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
@@ -1875,7 +1874,7 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       //changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.js_add_project').show().removeClass('disabled');
+      element.parents('tr').next('tr').find('.js_add_project').removeClass('disabled');
       element.parents('tr').remove();
     });
 
@@ -1891,7 +1890,7 @@ var workplans_edit = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');
-          element.parents('tr').next('tr').find('.js_add_project').show().removeClass('disabled');
+          element.parents('tr').next('tr').find('.js_add_project').removeClass('disabled');
           box.after(data.html);
           box.remove();
         } else {
@@ -1939,12 +1938,14 @@ var funders_edit = {
       element.addClass('disabled');
 
       var project_id = element.parents('tr').attr('data-project_id');
-      var url = '/responses/' + _response_id + '/funders/new?type=' + _type + '&project_id=' + project_id;
+      var url = '/responses/' + _response_id + '/funders/new.json?type=' + _type + '&project_id=' + project_id;
 
       $.get(url, function (data) {
-        element.hide();
+        element.addClass('disabled');
         currentTr = element.parents('tr');
-        currentTr.before(data);
+        var newTr = $(data.html);
+        currentTr.before(newTr);
+        //newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
       });
@@ -1954,7 +1955,7 @@ var funders_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_funder').show().removeClass('disabled');
+      element.parents('tr').next('tr').find('.add_funder').removeClass('disabled');
       element.parents('tr').remove();
     });
 
@@ -1969,8 +1970,9 @@ var funders_edit = {
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_funder').show().removeClass('disabled');
-          box.replaceWith(data.html)
+          box.next('tr').find('.add_funder').removeClass('disabled');
+          var newTr = $(data.html)
+          box.replaceWith(newTr)
           $('#js_funders_form').find('.save_btn').show();
         } else {
           var newTr = $(data.html);

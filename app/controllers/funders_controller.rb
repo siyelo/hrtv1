@@ -5,7 +5,12 @@ class FundersController < Reporter::BaseController
   def new
     @funder = FundingFlow.new
     @funder.project = @response.projects.find_by_id(params[:project_id])
-    render :partial => 'new_inline', :layout => false
+
+    respond_to do |format|
+      format.json do
+        render :json => {:html => render_to_string({:partial => 'new_inline.html.haml'})}
+      end
+    end
   end
 
   def edit
@@ -15,13 +20,21 @@ class FundersController < Reporter::BaseController
     @funder = @response.funding_flows.new(params[:funding_flow])
 
     if @funder.save
-      render :json => {:status => @funder.valid?,
-                       :html => render_to_string({:partial => 'funder_row.html.haml',
-                                            :locals => {:funder => @funder,
-                                                        :type => params[:type]}})}
+      respond_to do |format|
+        format.json do
+          render :json => {:status => @funder.valid?,
+                           :html => render_to_string({:partial => 'funder_row.html.haml',
+                                                :locals => {:funder => @funder,
+                                                            :type => params[:type]}})}
+        end
+      end
     else
-      render :json => {:status => @funder.valid?,
-                       :html => render_to_string({:partial => 'new_inline.html.haml'})}
+      respond_to do |format|
+        format.json do
+          render :json => {:status => @funder.valid?,
+                           :html => render_to_string({:partial => 'new_inline.html.haml'})}
+        end
+      end
     end
   end
 

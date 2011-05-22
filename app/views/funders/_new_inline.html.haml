@@ -5,7 +5,7 @@
         = f.input :project_id, :as => :hidden
         = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
         = f.input :organization_id_to, :as => :hidden, :value => @response.organization.id, :required => false
-        = f.input :from, :as => :select, :collection => funding_organizations_select, :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}
+        = f.input :from, :as => :select, :collection => funding_organizations_select, :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}, :label => false
         = f.commit_button "Add funder", :wrapper_html => {:class => 'js_save_funder'}, :button_html => {:class => 'create_button'}
         %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
         %li= link_to "Cancel", "#", :class => 'js_cancel_add_funder row_cancel'

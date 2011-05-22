@@ -6,18 +6,18 @@ puts "Loading codes.csv..."
 Code.delete_all
 # if we do lookups by col id, not name, then FasterCSV
 # is more forgiving with (non)/quoted csv's
-$id_col            = 2
-$parent_id_col     = 3
-$class_col         = 4 # should go to official_description
-$stratprog_col     = 5 # should go to official_description
-$stratobj_col      = 6 # should go to official_description
-$type_col          = 8
-$short_display_col = 9
-$long_display_col  = 11
-$description_col   = 12
-$sub_account_col   = 13
-$nha_code_col      = 14
-$nasa_code_col     = 15
+$id_col            = 7
+$parent_id_col     = 8
+$class_col         = 9 # should go to official_description
+$stratprog_col     = 10 # should go to official_description
+$stratobj_col      = 11 # should go to official_description
+$type_col          = 13
+$short_display_col = 14
+$long_display_col  = 16
+$description_col   = 17
+$sub_account_col   = 18
+$nha_code_col      = 19
+$nasa_code_col     = 20
 
 
 def set_attributes_for_code(c, row)
@@ -57,7 +57,7 @@ end
 
 
 i = 0
-FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
+FasterCSV.foreach("db/seed_files/kenya/codes.csv", :headers => true) do |row|
   begin
     i = i + 1
 
@@ -79,8 +79,8 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
     #we in fact shouldnt be initializing any new codes this time we run the script
 
 
-    original_code = Code.find(:all, :conditions => ['external_id = ? AND type = ?',
-                                                    row[$id_col], klass_string])
+    original_code = []#Code.find(:all, :conditions => ['external_id = ? AND type = ?',
+                                                    #row[$id_col], klass_string])
 
     if original_code.length == 1
       c = original_code.first
@@ -89,7 +89,7 @@ FasterCSV.foreach("db/seed_files/codes.csv", :headers => true) do |row|
     elsif original_code.length > 1
       puts "!!!! Duplicate codes with ids #{original_code.map(&:id).join(', ')}"
     else
-      problematic_code = Code.find_by_external_id(row[$id_col])
+      problematic_code = Code.find_by_external_id(row[$id_col]) unless row[$id_col].blank?
       if problematic_code
         puts "!!!! Wrong type for code with id: #{problematic_code.id} and external_id #{row[$id_col]}"
       else

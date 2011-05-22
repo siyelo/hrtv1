@@ -1,0 +1,320 @@
+"acronym","name","raw_type","old_type"
+,"Ministry of Medical Services (MOMS)","Government",
+,"MOMS Technical Planning","Government",
+,"MOMS Clinical Services","Government",
+,"MOMS Clinical Services: Internal Medicine","Government",
+,"MOMS Clinical Services: Mental Health","Government",
+,"MOMS Clinical Services: Paediatrics","Government",
+,"MOMS Clinical Services: Clinical Nutrition","Government",
+,"MOMS Clinical Services: HIV/AIDS & STIs (NASCOP)","Government",
+,"MOMS Nursing Services","Government",
+,"MOMS Technical Admin Services","Government",
+,"MOMS Technical Admin Services: Health Administration","Government",
+,"MOMS Technical Admin Services: Medical Engineering","Government",
+,"MOMS Technical Admin Services: HRH deployment & training","Government",
+,"MOMS Technical Admin Services: HMIS","Government",
+,"MOMS Surgical & Rehab Services","Government",
+,"MOMS Surgical & Rehab Services: Surgical Services","Government",
+,"MOMS Surgical & Rehab Services: Obs/Gyn","Government",
+,"MOMS Surgical & Rehab Services: Dental","Government",
+,"MOMS Surgical & Rehab Services: Clinical Services","Government",
+,"MOMS Surgical & Rehab Services: Disaster Management","Government",
+,"MOMS Surgical & Rehab Services: Physiotherapy","Government",
+,"MOMS Surgical & Rehab Services: Occupational Therapy","Government",
+,"MOMS Surgical & Rehab Services: Orthopaedic Technology","Government",
+,"MOMS Pharmaceutical Services","Government",
+,"MOMS Pharmaceutical Services: Pharmaceutical Policy (KNPP)","Government",
+,"MOMS Pharmaceutical Services: Essential Medicines & Supplies Management","Government",
+,"MOMS Pharmaceutical Services: Clinical Pharmaceutical Services","Government",
+,"MOMS Pharmaceutical Services: Medicine Regulation & Quality Assurance","Government",
+,"MOMS Pharmaceutical Services: Pharmaceutical HRH","Government",
+,"MOMS Pharmaceutical Services: Drugs Inspectorate","Government",
+,"MOMS Diagnostic & Forensic Services","Government",
+,"MOMS Diagnostic & Forensic Services: Medical Laboratories","Government",
+,"MOMS Diagnostic & Forensic Services: Blood Transfusion Services","Government",
+,"MOMS Diagnostic & Forensic Services: Forensic Services","Government",
+,"MOMS Standards & Regulatory Services","Government",
+,"MOMS Standards & Regulatory Services: Research & Development","Government",
+,"MOMS Standards & Regulatory Services: Professional Development, e-health, alt medicine","Government",
+,"MOMS Standards & Regulatory Services: Quality Assurance & Standards","Government",
+,"MOMS Regulatory Bodies","Government",
+,"MOMS Regulatory Bodies: Pharmacy & Poisons Board","Government",
+,"MOMS Regulatory Bodies: Clinical Council","Government",
+,"MOMS Regulatory Bodies: Nursing Council","Government",
+,"MOMS Regulatory Bodies: KMLTTB","Government",
+,"MOMS Regulatory Bodies: Medical Practitioners & Dentist Board","Government",
+,"MOMS Administration","Government",
+,"MOMS Administration: Procurement","Government",
+,"MOMS Administration: Finance","Government",
+,"MOMS Administration: Accounts","Government",
+,"MOMS Administration: HRH Management","Government",
+,"MOMS Administration: Planning & Policy","Government",
+,"MOMS Administration: ICT, Public Relations, HRH Development","Government",
+,"MOMS Parastatals","Government",
+,"MOMS Parastatals: NHIF (National Health Insurance Fund)","Government",
+,"MOMS Parastatals: KMTC (Kenya Medical Training Colleges)","Government",
+,"MOMS Parastatals: KEMSA (Kenya Medical Supplies Agency)","Government",
+,"MOMS Parastatals: KNH (Kenyatta National Hospital)","Government",
+,"MOMS Parastatals: MTRH (Moi Training & Referral Hospital)","Government",
+,"MINISTRY OF PUBLIC HEALTH & SANITATION (MOPHS)","Government",
+,"MOPHS Disease Control","Government",
+,"MOPHS Disease Control: Disease Surveillance & Response","Government",
+,"MOPHS Disease Control: Non-Communicable Diseases","Government",
+,"MOPHS Disease Control: Malaria Control","Government",
+,"MOPHS Disease Control: AIDS/STI Control (NASCOP)","Government",
+,"MOPHS Disease Control: TB, Leprosy & Lung Disease","Government",
+,"MOPHS Disease Control: Vector-borne & Neglected Diseases","Government",
+,"MOPHS Disease Control: National Public Health Laboratories","Government",
+,"MOPHS Disease Control: Preventive Ophthalmic Services","Government",
+,"MOPHS Disease Control: Government Chemist","Government",
+,"MOPHS Family Health","Government",
+,"MOPHS Family Health: Immunisation Services","Government",
+,"MOPHS Family Health: Nutrition","Government",
+,"MOPHS Family Health: Child & Adolescent Health","Government",
+,"MOPHS Family Health: Reproductive Health","Government",
+,"MOPHS Sanitation & Environmental Health","Government",
+,"MOPHS Sanitation & Environmental Health: Sanitation","Government",
+,"MOPHS Sanitation & Environmental Health: Food Quality & Safety","Government",
+,"MOPHS Sanitation & Environmental Health: Port Health","Government",
+,"MOPHS Sanitation & Environmental Health: Occupational Health","Government",
+,"MOPHS Sanitation & Environmental Health: Water Safety","Government",
+,"MOPHS Sanitation & Environmental Health: Pollution Control & Housing","Government",
+,"MOPHS Sanitation & Environmental Health: Vector & Vermin Control","Government",
+,"MOPHS Health Promotion","Government",
+,"MOPHS Health Promotion: Health Communications & Social Marketing","Government",
+,"MOPHS Health Promotion: Policy Advocacy & Strategic Alliances","Government",
+,"MOPHS Health Promotion: Settings Programme","Government",
+,"MOPHS Primary Health Services","Government",
+,"MOPHS Primary Health Services: Health Facility Services","Government",
+,"MOPHS Primary Health Services: Standards & Quality Assurance","Government",
+,"MOPHS Primary Health Services: Commodities & Supplies","Government",
+,"MOPHS Primary Health Services: Community Health Services","Government",
+,"MOPHS Primary Health Services: Health Administration","Government",
+,"MOPHS Technical Planning & Monitoring","Government",
+,"MOPHS Technical Planning & Monitoring: Technical Planning","Government",
+,"MOPHS Technical Planning & Monitoring: HMIS & Monitoring","Government",
+,"MOPHS Technical Planning & Monitoring: Sector Coordination & Partnerships","Government",
+,"MOPHS Technical Planning & Monitoring: Research Coordination & Reform Implementation","Government",
+,"MOPHS Disaster Preparedness & Response","Government",
+,"MOPHS International Health","Government",
+,"MOPHS Administration","Government",
+,"MOPHS Administration: Public Relations","Government",
+,"MOPHS Administration: ICT","Government",
+,"MOPHS Administration: Planning & Policy","Government",
+,"MOPHS Administration: HRH Management","Government",
+,"MOPHS Administration: HRH Development","Government",
+,"MOPHS Administration: Finance","Government",
+,"MOPHS Administration: Accounts","Government",
+,"MOPHS Administration: Procurement","Government",
+,"MOPHS Administration: General Admin","Government",
+,"MOPHS Parastatals","Government",
+,"MOPHS Parastatals: KEMRI (Kenya Medical Research Institute)","Government",
+,"MOPHS Parastatals: Radiation Protection Board","Government",
+,"DANIDA (Denmark)","Donor","BILATERAL AGENCIES"
+,"DFID (UK)","Donor","BILATERAL AGENCIES"
+,"FRANCE","Donor","BILATERAL AGENCIES"
+,"GDC-GIZ (Germany)","Donor","BILATERAL AGENCIES"
+,"GDC-KFW (Germany)","Donor","BILATERAL AGENCIES"
+,"GDC-DED (Germany)","Donor","BILATERAL AGENCIES"
+,"JICA (Japan)","Donor","BILATERAL AGENCIES"
+,"NETHERLANDS ","Donor","BILATERAL AGENCIES"
+,"USG-USAID (US)","Donor","BILATERAL AGENCIES"
+,"USG-CDC (US)","Donor","BILATERAL AGENCIES"
+,"USG-PEPFAR (US)","Donor","BILATERAL AGENCIES"
+,"CLINTON Foundation","Donor","PRIVATE FOUNDATIONS"
+,"GATES Foundation","Donor","PRIVATE FOUNDATIONS"
+,"WELLCOME TRUST","Donor","PRIVATE FOUNDATIONS"
+,"AFDB (African Dev Bank)","Donor","MULTILATERAL AGENCIES"
+,"EU","Donor","MULTILATERAL AGENCIES"
+,"UNAIDS","Donor","UN AGENCIES"
+,"UNFPA","Donor","UN AGENCIES"
+,"UNICEF","Donor","UN AGENCIES"
+,"WFP","Donor","UN AGENCIES"
+,"WHO","Donor","UN AGENCIES"
+,"WORLD BANK","Donor","UN AGENCIES"
+,"IFC (World Bank)","Donor","UN AGENCIES"
+,"GFATM","Donor","GLOBAL FUNDING AGENCIES"
+,"GAVI","Donor","GLOBAL FUNDING AGENCIES"
+,"BADEA","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"BELGIUM","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"CHINA","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"KUWAIT","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"MEXICO","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"OPEC","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"SAUDI FUND","Donor","OTHER DONOR AGENCES (no technical presence)"
+,"HENNET (Health NGO Network)","NGO","PRIVATE NOT-FOR-PROFIT"
+,"CHAK (Church Health Assoc Kenya / Protestant)","NGO","PRIVATE NOT-FOR-PROFIT"
+,"KEC-CS (Catholic Secretariat)","NGO","PRIVATE NOT-FOR-PROFIT"
+,"SUPKEM (Muslim Supreme Council)","NGO","PRIVATE NOT-FOR-PROFIT"
+,"Private Healthcare Providers Consortium","NGO","PRIVATE FOR-PROFIT"
+,"KHF (Kenya Healthcare Federation, KEPSA)","NGO","PRIVATE FOR-PROFIT"
+,"PPP-HK","NGO","MIXED PNFP-PFP"
+"AA","Action Aid","NGO","INT"
+"ADRA","Adventist Development Relief Agency","NGO","INT"
+"AFYA","Afri Afya","NGO","LOC"
+"ADEO","African Development and Emergency Organization","NGO","INT"
+"APHRC","African Population and Health Research Centre","NGO","LOC"
+"AKF","Aga Khan Foundation","NGO","INT"
+"AMREF","AMREF African Medical Research Foundation","NGO","INT"
+"APDK","Association for the Physically Disabled in Kenya","NGO","LOC"
+"BN","BasicNeeds UK in Kenya","NGO","INT"
+"BH","Beacon of Hope","NGO","INT"
+"CI","Care International","NGO","INT"
+"CHF","CHF International","NGO","INT"
+"CHAK","Christian Health Association of Kenya","NGO","LOC"
+"CISP","CISP International Committee for the Development of Peoples","NGO","INT"
+"CMED-A","Community Mobilisation for Economic Development and Advancement ","NGO","LOC"
+"DOW","Doctors of the World","NGO","INT"
+"EH","Engender Health","NGO","INT"
+"FHI","Family Health International","NGO","INT"
+"FHOK","Family Health Options Kenya","NGO","INT"
+"FSI","Family Support institute","NGO","LOC"
+"FFH","Food for the Hungry International","NGO","INT"
+"FHEA","Fred Hollows Eastern Africa","NGO","INT"
+"GOAL","Goal Kenya","NGO","INT"
+"GLUK","Great Lakes University Kenya","NGO","LOC"
+"HI","Handicap International","NGO","INT"
+"HPI","Health Policy Initiative","NGO","INT"
+"ICLA","I Choose Life-Africa","NGO","LOC"
+"IMC","International Medical Corps","NGO","INT"
+"IN","Internews Network","NGO","INT"
+"IH","Intra Health International","NGO","INT"
+"JHPIEGO","JHPIEGO Kenya","NGO","INT"
+"KCBHPA","KCBHPA","NGO",
+"KEC-CS","KEC - Catholic Secritariat","NGO","LOC"
+"KANCO","Kenya AIDS NGOs Consortium","NGO","LOC"
+"KAWE","Kenya Association for the Welfare of People with Epilepsy","NGO","LOC"
+"KAMMP","Kenya Association of Muslim Medical Professionals","NGO","LOC"
+"KAPC","Kenya Association of Professional Counselors","NGO","LOC"
+"KCBHFA","Kenya Community-Based Health Financing Association","NGO","LOC"
+"KECOFATUMA","Kenya Consortium to Fight AIDS, TB & Malaria","NGO","LOC"
+"KENAAM","Kenya NGO Alliance Against Malaria","NGO","LOC"
+"KRCS","Kenya Red Cross Society","NGO","LOC"
+"KSB","Kenya Society for the Blind","NGO","LOC"
+"KICOSHEP","Kibera Community Self Help Programme","NGO","LOC"
+"LICASU","Life Care Support","NGO","LOC"
+"LVCT","Liverpool VCT Care and treatment","NGO","LOC"
+"MALT","Malteser International","NGO","INT"
+"MDA","Mama Dada Africa","NGO","LOC"
+"MAP","MAP International","NGO","INT"
+"MSI","Marie Stopes","NGO","INT"
+"MATF","Matibabu Foundation","NGO","LOC"
+"MSF-BE","Médecins Sans Frontières - Belgium","NGO","INT"
+"MERLIN","MERLIN Medical Emergency Relief International UK","NGO","INT"
+"MI","Mildmay International","NGO","INT"
+"PACT","Pact","NGO","INT"
+"PFI","Pathfinder International","NGO","INT"
+"PPFA","Planned Parenthood Federation Africa","NGO","INT"
+"PPFAI","Planned Parenthood Federation of Amercia Inc","NGO","INT"
+"PSA","Population Services International","NGO","INT"
+"PATH","Program for Appropriate Technology in Health","NGO","INT"
+"PI","Provide International","NGO","INT"
+"RI","Ripples International","NGO","INT"
+"RAPADO","Rural Aids Prevention & Development Organization","NGO","LOC"
+"SWAP","Safe Water and AIDS Project","NGO","LOC"
+"SP","Samaritans Purse","NGO","INT"
+"SCF-CA","Save the Children Canada","NGO","INT"
+"SCF-UK","Save the Children Fund UK","NGO","INT"
+"SSI","Sight Savers International","NGO","INT"
+"SANA","Sustainable Aid in Africa International ","NGO","LOC"
+"WASDA","Water and Sewer Distributors of America","NGO","INT"
+"WEMIHS","Wem Integrated Health Services","NGO","INT"
+"WIFIP","Women in Fishing Industry Project","NGO","LOC"
+"WF","World Friends","NGO","INT"
+"WN","World Neighbors","NGO","INT"
+"WR","World Relief","NGO","INT"
+"WVI","World Vision","NGO","INT"
+"ABT","Abt Associates","NGO","ICF"
+"AED","Academy for Educational Development","NGO","ICF"
+"FUTURES","Futures Group","NGO","ICF"
+"JSI","John Snow International","NGO","ICF"
+"LATH","Liverpool Associates in Tropical Health ","NGO","ICF"
+"MSH","Management Sciences for Health","NGO","ICF"
+"ORCMACRO","ORC Macro","NGO","ICF"
+"RTI","RTI International","NGO","ICF"
+"AVSI","Association of Volunteers in International Service","NGO","INT"
+"CARTER","Carter Centre","NGO","INT"
+"CRS","Catholic Relief Services","NGO","INT"
+"CHANGE","Center for Health and Gender Equity","NGO","INT"
+"CHMP","Centrale Humanitaire Medico Pharmaceutique","NGO","INT"
+"CCF","ChildFund International (Christian Chidrens Fund)","NGO","INT"
+"CA","Christian Aid","NGO","INT"
+"CRWRC","Christian Reformed World Relief Committee","NGO","INT"
+"CBM","Christoffel Blindenmission","NGO","INT"
+"CLUSA","CLUSA International","NGO","INT"
+"CCM-ONLUS","Comitato Collaborazione Medica","NGO","INT"
+"CAI","Community Aid International","NGO","INT"
+"CI","Compassion International","NGO","INT"
+"CU","Concern Universal","NGO","INT"
+"CW","Concern Worldwide Kenya","NGO","INT"
+"DRC","Danish Refugee Council","NGO","INT"
+"DNDI","Drugs for Neglected Diseases Initiative ","NGO","INT"
+"EGPAF","Elizabeth Glaser Pediatric AIDS Foundation","NGO","INT"
+"FCI","Family Care International","NGO","INT"
+"DSW","German Foundation for World Population","NGO","INT"
+"HAI","Health Action International","NGO","INT"
+"HOPE","HOPE Worldwide","NGO","INT"
+"IAVI","International AIDS Vaccine Initiative","NGO","INT"
+"IFRC","International Federation of Red Cross","NGO","INT"
+"IRC","International Rescue Committee","NGO","INT"
+"IPAS","IPAS Africa Alliance","NGO","INT"
+"IR ","Islamic Relief","NGO","INT"
+"JH-CCP","Johns Hopkins Centre for Communications Programs","NGO","INT"
+"LWF","Lutheran World Federation","NGO","INT"
+"MSF-FR","Médecins Sans Frontières - France","NGO","INT"
+"MEDS","Mission for Essential Drugs & Supplies","NGO","INT"
+"NRC","Norwegian Refugee Council","NGO","INT"
+"OXFAM","OXFAM","NGO","INT"
+"PLAN","Plan International Kenya","NGO","INT"
+"PC","Population Council","NGO","INT"
+"PATH","Program for Appropriate Technology in Health","NGO","INT"
+"SI","Social Impact","NGO","INT"
+"WCI","World Concern International","NGO","INT"
+"CAFS","Centre for African Family Studies","NGO","REG"
+"NETWAS","Network for Water & Sanitation ","NGO","REG"
+"NARESA","Network of AIDS Researchers of East & S Africa","NGO","REG"
+"RATN","Regional AIDS Training Network","NGO","REG"
+"AFYA","Afri Afya","NGO","LOC"
+"APHRC","African Population and Health Research Centre","NGO","LOC"
+"APDK","Association for the Physically Disabled in Kenya","NGO","LOC"
+"CHAK","Christian Health Association of Kenya","NGO","LOC"
+"CMED-A","Community Mobilisation for Economic Dev and Advancement ","NGO","LOC"
+"FSI","Family Support institute","NGO","LOC"
+"GLUK","Great Lakes University Kenya","NGO","LOC"
+"ICLA","I Choose Life-Africa","NGO","LOC"
+"KEC-CS","KEC - Catholic Secritariat","NGO","LOC"
+"KANCO","Kenya AIDS NGOs Consortium","NGO","LOC"
+"KAWE","Kenya Association for the Welfare of People with Epilepsy","NGO","LOC"
+"KAMMP","Kenya Association of Muslim Medical Professionals","NGO","LOC"
+"KAPC","Kenya Association of Professional Counselors","NGO","LOC"
+"KCBHFA","Kenya Community-Based Health Financing Association","NGO","LOC"
+"KECOFATUMA","Kenya Consortium to Fight AIDS, TB & Malaria","NGO","LOC"
+"KENAAM","Kenya NGO Alliance Against Malaria","NGO","LOC"
+"KRCS","Kenya Red Cross Society","NGO","LOC"
+"KSB","Kenya Society for the Blind","NGO","LOC"
+"KICOSHEP","Kibera Community Self Help Programme","NGO","LOC"
+"LICASU","Life Care Support","NGO","LOC"
+"LVCT","Liverpool VCT Care and treatment","NGO","LOC"
+"MDA","Mama Dada Africa","NGO","LOC"
+"MATF","Matibabu Foundation","NGO","LOC"
+"RAPADO","Rural Aids Prevention & Development Organization","NGO","LOC"
+"SWAP","Safe Water and AIDS Project","NGO","LOC"
+"SANA","Sustainable Aid in Africa International ","NGO","LOC"
+"WIFIP","Women in Fishing Industry Project","NGO","LOC"
+"TAPWAK","Association of People with AIDS in Kenya","NGO","LOC"
+"CCD","Centre for Child Development","NGO","LOC"
+"CPAK","Cerebral Palsy Association of Kenya","NGO","LOC"
+"COVAW","Coalition on Violence Against Women","NGO","LOC"
+"FGE","Foundation for Gender and Equality","NGO","LOC"
+"IDCCS","Inter-Diocesan Christian Community Services ","NGO","LOC"
+"KADA","Kenya AIDS & Drugs Alliance","NGO","LOC"
+"KAWAIDS","Kenya Alliance for Women and AIDS","NGO","LOC"
+"KAPAH","Kenya Assoc for the Promotion of Adolescent Health","NGO","LOC"
+"KENWA","Kenya Network of Women with AIDS","NGO","LOC"
+"KSDC","Kenya Society for Deaf Children","NGO","LOC"
+"KSMH","Kenya Society for Mentally Handicapped","NGO","LOC"
+"KEWASNET","Kenya Water and Sanitation Network ","NGO","LOC"
+"KWAHO","Kenya Water for Health Organisation","NGO","LOC"
+"NOPE","National Organisation of Peer Educators","NGO","LOC"
+"SWAK","Society for Women & AIDS in Kenya","NGO","LOC"
+"WOFAK","Women Fighting AIDS in Kenya","NGO","LOC"

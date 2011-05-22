@@ -271,16 +271,12 @@ END
     other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
 
-  def total_by_type(type)
-    amounts = []
-      activities.map do |a| 
-        amounts << a.total_by_type(type)
-      end
-    amounts.sum
+  def activities_total_by_type(amount_type)
+    activities.map { |a| a.total_by_type(amount_type) }.compact.sum
   end
 
-  def total_by_type(amount_type)
-    activities.map { |a| a.total_by_type(amount_type) }.compact.sum
+  def funders_total_by_type(amount_type)
+    in_flows.map { |flow| flow.total_by_type(amount_type) }.compact.sum
   end
 
   private

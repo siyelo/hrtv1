@@ -1919,7 +1919,12 @@ var funders_edit = {
       // project total
       var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_funder_total');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      tr.nextAll('.js_project_total_row:first').find('.js_funder_total').text(getTotal(amounts));
+      tr.nextAll('.js_project_total_row:first').find('.js_project_total').text(getTotal(amounts));
+
+      // all projects total
+      var elements = $('.js_project_total_row .js_project_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
     };
 
 

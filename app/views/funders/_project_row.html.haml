@@ -9,5 +9,5 @@
       Add funder
   %td.total Subtotal
   %td.total_amount
-    %span.js_project_total= project.total_by_type(params[:id])
+    %span.js_project_total= project.funders_total_by_type(params[:id])
     %span.currency= project.currency

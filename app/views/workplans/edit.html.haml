@@ -50,7 +50,7 @@
 
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_amount= @projects.map{|p| p.total_by_type(params[:id])}.sum
+          %span.js_projects_total_amount= @projects.map{|p| p.activities_total_by_type(params[:id])}.sum
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

@@ -30,13 +30,7 @@ describe ResponsesController do
     end
 
     it "GET/1 should find a response" do
-      DataResponse.should_receive(:find).with('1',
-        {:having=>nil, :include=>nil, :offset=>nil, :readonly=>nil,
-          :select=>"\"data_responses\".*",
-          :conditions=>"(\"organizations\".id = 1)", :group=>nil,
-          :from=>"\"data_responses\"",
-          :joins=>"INNER JOIN \"organizations\" ON \"data_responses\".organization_id = \"organizations\".id   ",
-          :limit=>nil}).and_return(@data_response)
+      DataResponse.should_receive(:find).and_return(@data_response)
       get :show, :id => 1
       response.should be_success
     end

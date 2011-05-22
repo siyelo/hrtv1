@@ -1452,9 +1452,9 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 
 //###################################
-//# Purposes
+//# Classifications
 //###################################
-var classifications_edit = {
+var classifications_edit = implementers_edit = {
   run: function () {
 
     var getClassificationTotal = function (amounts, amount) {
@@ -1474,7 +1474,10 @@ var classifications_edit = {
       return total;
     };
 
-    $(".remove_purpose").live('click', function (e) {
+    //implementers use an autocomplete combobox, not an mcdropdowns
+    $(".combobox").combobox();
+
+    $(".js_remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
     });
@@ -1484,7 +1487,7 @@ var classifications_edit = {
       purposes.add_purpose($(this));
     });
 
-    $(".add_entry").live('click', function (e) {
+    $(".js_add_entry").live('click', function (e) {
       e.preventDefault();
       purposes.add_entry($(this));
     });
@@ -1589,9 +1592,9 @@ var purposes = {
     return true;
   },
 
-  get_purpose_context: function(purpose_text) {
+  get_purpose_context: function(selected_text) {
     var arr = [];
-    var codes = purpose_text.split('>');
+    var codes = selected_text.split('>');
     var purpose_context = '';
 
     if (codes.length > 1) {
@@ -1608,44 +1611,64 @@ var purposes = {
     return purpose_context;
   },
 
-  get_purpose_label: function(purpose_text) {
-      var codes = purpose_text.split('>')
+  get_purpose_label: function(selected_text) {
+      var codes = selected_text.split('>')
       return codes[codes.length - 1];
+  },
+
+  // find the value from a mcdropdown or a combobox
+  // (classfications are using mcdropdown, implementer orgs are a combobox)
+  get_selected_val: function(form){
+    var selected_id   = form.find('.mcdropdown input:hidden').val();
+    if (!selected_id) {
+      selected_id = form.find('.combobox').val();
+    }
+    return selected_id;
+  },
+
+  // find the value from a mcdropdown or a combobox
+  // (classfications are using mcdropdown, implementer orgs are a combobox)
+  get_selected_text: function(form){
+    var selected_text   = form.find('.mcdropdown input:first').val();
+    if (!selected_text) {
+      selected_text = form.find(".combobox").find(":selected").text();
+    }
+    return selected_text;
   },
 
   add_entry: function(link) {
 
-    var form         = link.parents('form');
-    var purpose_id   = form.find('.mcdropdown input:hidden').val();
-    var purpose_text = form.find('.mcdropdown input:first').val();
+    var form          = link.parents('form');
+    var selected_id   = purposes.get_selected_val(form);
+    var selected_text = purposes.get_selected_text(form);
 
-    if (!purpose_id) {
+    if (!selected_id) {
       return;
     }
-
 
     // determine if the purpose was already added
     addedIds = jQuery.map(form.find('.js_ca'), function (e) {
       return Number($(e).attr('id').match(/\d+/)[0]);
     });
-    if (addedIds.indexOf(Number(purpose_id)) >= 0) {
-      alert('"' + purpose_text + '" is already added');
+
+    if (addedIds.indexOf(Number(selected_id)) >= 0) {
+      alert('"' + selected_text + '" is already added');
       purposes.resetMcdropdown(form);
       return;
     }
 
-    var purpose_context = purposes.get_purpose_context(form.find('.mcdropdown input:first').val());
-    var purpose_label = purposes.get_purpose_label(form.find('.mcdropdown input:first').val());
+    var purpose_context = purposes.get_purpose_context(selected_text);
+    var purpose_label = purposes.get_purpose_label(selected_text);
 
     var tr =  '<tr>' +
               '  <td class="wrap-60">' +
-              '    <label for="classifications_' + purpose_id + '">' + purpose_label + '</label>' +
+              '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
               '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +
               '  <td class="total">' +
-              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="js_ca"></td>' +
+              '    <input type="text" value="0.0" name="classifications[' + selected_id + ']" id="classifications_' + selected_id + '" class="js_ca"></td>' +
               '  <td class="actions">' +
-              '    <img src="/images/delete_row.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
+              '    <img src="/images/delete_row.png" class="js_remove_purpose delete_row pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
 
@@ -1654,7 +1677,6 @@ var purposes = {
 
     // hide the add form
     purposes.cancel_add_purpose(link);
-
 
     purposes.btnToggle(form);
     if (form.find('.js_ca').length > 0) {
@@ -1791,7 +1813,6 @@ var workplans_edit = {
         $('.js_activity_row .total_amount input').trigger('blur')
       }
     });
-
 
     // activity
     $('.add_activity').live('click', function (e) {

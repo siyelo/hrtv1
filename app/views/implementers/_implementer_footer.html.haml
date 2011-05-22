@@ -1,0 +1,25 @@
+- total  = 100
+- amount = 10 || 0
+- remaining = amount - total
+
+%tr.js_activity_total_row
+  %td.name.wrap-50
+    %ul
+      %li
+        - link_to "#", :class => "add_purpose add_row" do
+          = image_tag "new.png"
+          Add Implementer
+
+  %td.total
+    %ul
+      %li
+        Total
+        %span.js_activity_total= total
+        %span.currency= activity.currency
+      %li.remaining.js_remaining_box{:style => (remaining == 0 ? 'display: none' : nil)}
+        Remaining
+        %span.js_remaining= remaining
+        %span.currency= activity.currency
+  %td.actions
+    = submit_tag "Save", :style => (activity.sub_activities.present? ? nil : 'display: none;'), :class => 'save_btn'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

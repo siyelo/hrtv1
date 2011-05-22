@@ -1,0 +1,15 @@
+-# this partial is duplicated in jQuery
+-# any changes here must be reflected there!!
+- field = :spend
+- field = :budget if params[:id] == 'budget'
+%tr.js_activity_row
+  %td.desc.wrap-60
+    -# Im using "classification[]" params keys because we can then reuse
+    -# the same js that is dynamically inserting purpose rows
+    -# Ideally these params should be names sub_activity[:blah]
+    = label_tag :"classifications[#{sub_activity.id}]", "#{sub_activity.provider.name}"
+  %td.total
+    = text_field_tag :"classifications[#{sub_activity.id}]", sub_activity.send(field)
+  %td.actions
+    = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

@@ -81,6 +81,7 @@ class SubActivity < Activity
   private
 
     def update_counter_cache
+      debugger
       self.data_response.sub_activities_count = data_response.sub_activities.count
       self.data_response.save(false)
     end

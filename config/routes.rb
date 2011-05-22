@@ -61,6 +61,8 @@ ActionController::Routing::Routes.draw do |map|
       response.resources :workplans,
         :only => [:index, :edit, :update], :requirements => {:id => /budget|spend/}
       response.resources :funders, :requirements => {:id => /budget|spend/}
+      response.resources :implementers,
+        :only => [:edit, :update, :destroy], :requirements => {:id => /budget|spend/}
   end
 
   map.resources :activities do |activity|

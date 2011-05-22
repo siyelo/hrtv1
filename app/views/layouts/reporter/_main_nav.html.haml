@@ -4,7 +4,7 @@
       %li.home_tab{:class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)}
         %a{:href => user_dashboard_path(current_user)}
           %span Home
-      %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ClassificationsController, WorkplansController].include?(controller.class) ? "active" : nil)}
+      %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ClassificationsController, WorkplansController, ImplementersController].include?(controller.class) ? "active" : nil)}
         = link_to 'Projects', current_projects_url_hack
       %li{:class => (controller.class == ResponsesController && ["show", "review", "submit"].include?(controller.action_name) ? "active" : '')}
         = link_to 'Responses', current_response_url

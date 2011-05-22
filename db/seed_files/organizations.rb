@@ -1,10 +1,10 @@
-#Organization.delete_all
+Organization.delete_all
 
 case ENV['HRT_COUNTRY']
 when 'kenya'
   print "\n Seeding organizations for kenya"
   FasterCSV.foreach("db/seed_files/kenya/organizations.csv", :headers=>true) do |row|
-    organization = Organization.find_or_initialize_by_name(row["name"])
+    organization = Organization.new(:name => row["name"])
     organization.raw_type = row["raw_type"]
     organization.old_type = row["old_type"]
     organization.acronym  = row["acronym"]

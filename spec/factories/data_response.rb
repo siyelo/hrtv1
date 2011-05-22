@@ -1,7 +1,7 @@
 Factory.define :data_response, :class => DataResponse do |f|
   f.data_request             { Factory(:data_request) }
   f.organization             { Factory(:organization) }
-  f.currency                 { "RWF" }
+  f.currency                 { ENV['HRT_COUNTRY'] == "kenya"? "KES" : "RWF" }
   f.fiscal_year_start_date   { Date.parse("2008-09-01") }
   f.fiscal_year_end_date     { Date.parse("2009-09-01") }
   f.contact_name             { "Bob" }

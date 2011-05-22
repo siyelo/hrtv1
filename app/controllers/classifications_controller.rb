@@ -16,11 +16,12 @@ class ClassificationsController < Reporter::BaseController
         flash[:notice] = 'Purposes classifications for Spent were successfully saved'
         redirect_to edit_response_classification_url(@response, params[:id])
       end
-      format.js do
-        render :partial => 'activity_row', :locals => {
-          :project => @activity.project,
-          :activity => @activity
-        }
+      format.json do
+        render :json => {:html => render_to_string(:partial => 'activity_row.html.haml',
+                                                   :locals => {
+                                                     :project => @activity.project,
+                                                     :activity => @activity
+                                                   })}
       end
     end
   end

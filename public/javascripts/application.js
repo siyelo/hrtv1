@@ -1510,9 +1510,9 @@ var classifications_edit = {
       loader.show();
       form.find('.add_purpose').addClass('disabled');
 
-      $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
+      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
         element.removeClass('disabled');
-        var tr = $(data);
+        var tr = $(data.html);
         element.parents('tr.js_purpose_row').replaceWith(tr);
         purposes.initMcDropdown(tr.find(".purpose_search"));
         loader.hide();
@@ -1945,7 +1945,7 @@ var funders_edit = {
         currentTr = element.parents('tr');
         var newTr = $(data.html);
         currentTr.before(newTr);
-        $(".combobox" ).combobox();
+        newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
       });

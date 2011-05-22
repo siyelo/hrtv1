@@ -11,14 +11,14 @@
   - if @response.data_request.spend?
     - if !@other_cost.spend?
       %li= "Enter the Expenditure for this activity."
-    - else
-      %li= "Please classify the Expenditure for this activity." if !@other_cost.spend_classified?
+    - elsif !@other_cost.spend_classified?
+      %li= "Please classify the Expenditure for this activity."
 
   - if @response.data_request.budget?
     - if !@other_cost.budget?
       %li= "Enter the Budget for this activity."
-    - else
-      %li= "Please classify the Budget for this activity." if !@other_cost.budget_classified?
+    - elsif !@other_cost.budget_classified?
+      %li= "Please classify the Budget for this activity."
 
 = render 'activities/tab_nav', :activity => @other_cost
 

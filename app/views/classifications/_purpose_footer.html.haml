@@ -3,12 +3,13 @@
 - remaining = amount - total
 
 %tr.js_activity_total_row
-  %td.name.wrap-50
+  %td{:colspan => "2", :class => "name wrap-50"}
     %ul
       %li
         - link_to "#", :class => "add_purpose add_row" do
           = image_tag "new.png"
           == Add #{coding_name}
+  %td asd
 
   %td.total
     %ul

@@ -1,4 +1,4 @@
-%tr.js_implementer_row
+%tr.js_implementer_row.filler2
   %td{:colspan => "2", :class => "desc"}= implementer.provider.try(:name)
   %td= text_field_tag :"sub_activities[#{implementer.id}]#{type}", implementer.send("#{type}"), :class => 'js_qamount'
   %td.actions

@@ -12,9 +12,9 @@
 - form_tag response_implementer_path(@response, params[:id]), :method => :put, :id => 'js_implementers_form' do
   %table.workplan
     %thead
-      %tr
+      %tr.filler2
         %th.no-bg
-        %th.no-padding{:colspan => 4}
+        %th.no-padding{:colspan => "100"}
           %ul.tabs
             %li= link_to 'Spent', edit_response_implementer_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
             %li= link_to 'Budget', edit_response_implementer_path(@response, :budget), :class => (params[:id] == 'budget'  ? 'active' : nil)
@@ -31,7 +31,7 @@
           = render 'activity_row', :project => project, :activity => activity
 
       %tr.filler.js_projects_total_row
-        %td.name.fixed
+        %td{:colspan => "2", :class => "name fixed"}
         %td.total Total
         %td.total_amount
           %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(params[:id])}.sum
@@ -39,5 +39,5 @@
         %td.actions
 
       %tr
-        %td.borderless{:colspan => 8}
+        %td.borderless{:colspan => 100}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

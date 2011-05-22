@@ -1452,9 +1452,9 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 
 //###################################
-//# Purposes
+//# Classifications
 //###################################
-var classifications_edit = {
+var classifications_edit = implementers_edit = {
   run: function () {
 
     var getClassificationTotal = function (amounts, amount) {
@@ -1474,7 +1474,10 @@ var classifications_edit = {
       return total;
     };
 
-    $(".remove_purpose").live('click', function (e) {
+    //implementers use an autocomplete combobox, not an mcdropdowns
+    $(".combobox").combobox();
+
+    $(".js_remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
     });
@@ -1484,7 +1487,7 @@ var classifications_edit = {
       purposes.add_purpose($(this));
     });
 
-    $(".add_entry").live('click', function (e) {
+    $(".js_add_entry").live('click', function (e) {
       e.preventDefault();
       purposes.add_entry($(this));
     });
@@ -1589,9 +1592,9 @@ var purposes = {
     return true;
   },
 
-  get_purpose_context: function(purpose_text) {
+  get_purpose_context: function(selected_text) {
     var arr = [];
-    var codes = purpose_text.split('>');
+    var codes = selected_text.split('>');
     var purpose_context = '';
 
     if (codes.length > 1) {
@@ -1608,44 +1611,64 @@ var purposes = {
     return purpose_context;
   },
 
-  get_purpose_label: function(purpose_text) {
-      var codes = purpose_text.split('>')
+  get_purpose_label: function(selected_text) {
+      var codes = selected_text.split('>')
       return codes[codes.length - 1];
+  },
+
+  // find the value from a mcdropdown or a combobox
+  // (classfications are using mcdropdown, implementer orgs are a combobox)
+  get_selected_val: function(form){
+    var selected_id   = form.find('.mcdropdown input:hidden').val();
+    if (!selected_id) {
+      selected_id = form.find('.combobox').val();
+    }
+    return selected_id;
+  },
+
+  // find the value from a mcdropdown or a combobox
+  // (classfications are using mcdropdown, implementer orgs are a combobox)
+  get_selected_text: function(form){
+    var selected_text   = form.find('.mcdropdown input:first').val();
+    if (!selected_text) {
+      selected_text = form.find(".combobox").find(":selected").text();
+    }
+    return selected_text;
   },
 
   add_entry: function(link) {
 
-    var form         = link.parents('form');
-    var purpose_id   = form.find('.mcdropdown input:hidden').val();
-    var purpose_text = form.find('.mcdropdown input:first').val();
+    var form          = link.parents('form');
+    var selected_id   = purposes.get_selected_val(form);
+    var selected_text = purposes.get_selected_text(form);
 
-    if (!purpose_id) {
+    if (!selected_id) {
       return;
     }
-
 
     // determine if the purpose was already added
     addedIds = jQuery.map(form.find('.js_ca'), function (e) {
       return Number($(e).attr('id').match(/\d+/)[0]);
     });
-    if (addedIds.indexOf(Number(purpose_id)) >= 0) {
-      alert('"' + purpose_text + '" is already added');
+
+    if (addedIds.indexOf(Number(selected_id)) >= 0) {
+      alert('"' + selected_text + '" is already added');
       purposes.resetMcdropdown(form);
       return;
     }
 
-    var purpose_context = purposes.get_purpose_context(form.find('.mcdropdown input:first').val());
-    var purpose_label = purposes.get_purpose_label(form.find('.mcdropdown input:first').val());
+    var purpose_context = purposes.get_purpose_context(selected_text);
+    var purpose_label = purposes.get_purpose_label(selected_text);
 
     var tr =  '<tr>' +
               '  <td class="wrap-60">' +
-              '    <label for="classifications_' + purpose_id + '">' + purpose_label + '</label>' +
+              '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
               '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +
               '  <td class="total">' +
-              '    <input type="text" value="0.0" name="classifications[' + purpose_id + ']" id="classifications_' + purpose_id + '" class="js_ca"></td>' +
+              '    <input type="text" value="0.0" name="classifications[' + selected_id + ']" id="classifications_' + selected_id + '" class="js_ca"></td>' +
               '  <td class="actions">' +
-              '    <img src="/images/delete_row.png" class="remove_purpose pointer" alt="Icon_close_flash">' +
+              '    <img src="/images/delete_row.png" class="js_remove_purpose delete_row pointer" alt="Icon_close_flash">' +
               '  </td>' +
               '</tr>';
 
@@ -1654,7 +1677,6 @@ var purposes = {
 
     // hide the add form
     purposes.cancel_add_purpose(link);
-
 
     purposes.btnToggle(form);
     if (form.find('.js_ca').length > 0) {
@@ -1791,7 +1813,6 @@ var workplans_edit = {
         $('.js_activity_row .total_amount input').trigger('blur')
       }
     });
-
 
     // activity
     $('.add_activity').live('click', function (e) {
@@ -1974,6 +1995,92 @@ var funders_edit = {
           var newTr = $(data.html)
           box.replaceWith(newTr)
           $('#js_funders_form').find('.save_btn').show();
+        } else {
+          var newTr = $(data.html);
+          var box = element.parents('tr');
+          box.replaceWith(newTr);
+        }
+      });
+    });
+
+    $('.js_qamount').live('keyup', function (e) {
+      var element = $(this);
+      updateValues(element);
+    });
+  }
+}
+
+// TODO - DRY this up alongside funders_edit
+var implementers_edit = {
+  run: function () {
+
+    var updateValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // activity total
+      var elements = tr.find('.js_qamount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.find('.js_implementer_total').text(getTotal(amounts));
+
+      // project total
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_implementer_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      tr.nextAll('.js_project_total_row:first').find('.js_project_total').text(getTotal(amounts));
+
+      // all projects total
+      var elements = $('.js_project_total_row .js_project_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
+    };
+
+
+    $('.add_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+
+      if (element.hasClass('disabled')) {
+        return;
+      }
+
+      element.addClass('disabled');
+
+      var activity_id = element.parents('tr').attr('data-activity_id');
+      var url = '/responses/' + _response_id + '/implementers/new.json?type=' + _type + '&activity_id=' + activity_id;
+
+      $.get(url, function (data) {
+        element.addClass('disabled');
+        currentTr = element.parents('tr');
+        var newTr = $(data.html);
+        currentTr.before(newTr);
+        newTr.find( ".combobox" ).combobox();
+        initDemoText(currentTr.prev('tr').find('*[data-hint]'));
+        changeRowspan(element, 1);
+      });
+    });
+
+    $('.js_cancel_add_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      changeRowspan(element, -1);
+      element.parents('tr').next('tr').find('.add_implementer').removeClass('disabled');
+      element.parents('tr').remove();
+    });
+
+    $('.js_save_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('.new_implementer_form');
+      var ajaxLoader = element.parents('ol').find('.ajax-loader');
+
+      ajaxLoader.show();
+
+      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
+        if (data.status) {
+          var box = element.parents('tr')
+          box.next('tr').find('.add_implementer').removeClass('disabled');
+          var newTr = $(data.html)
+          box.replaceWith(newTr)
+          $('#js_implementers_form').find('.save_btn').show();
         } else {
           var newTr = $(data.html);
           var box = element.parents('tr');

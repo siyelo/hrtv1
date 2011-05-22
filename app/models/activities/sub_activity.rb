@@ -17,6 +17,18 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
+  ### Class Methods
+  def self.bulk_update(response, sub_acts)
+    sub_acts.each_pair do |sa_id, attributes|
+      sa = response.activities.find(sa_id) # possible issue with scoping here
+      sa.attributes = attributes
+      sa.save
+    end
+  end
+
+
+  ### Instance Methods
+
   def locations
     if provider && provider.locations.present?
       provider.locations

@@ -39,3 +39,62 @@ ul.purposes_list
     padding: 10px 1%
     width: 58%
     +pie-clearfix
+    
+ul.welcome_box
+  float: left
+  margin-left: 15%
+  width: 40%
+  li
+    clear: left
+
+  a
+    border: 1px solid #fff
+    border-bottom: 1px solid $filler
+    display: block
+    height: 77px
+    padding: 5px 0 0 7px
+    text-decoration: none
+    &:hover
+      background: $filler
+      border: 1px solid $lightest-blue
+      +border-radius
+      .title
+        color: $mid-blue
+        +text-shadow(#fff, 0, 1px, 0)
+      
+  .icon
+    display: inline-block
+    float: left
+    width: 90px
+    
+  .title
+    color: $orange
+    display: inline-block
+    font-size: 18px
+    font-weight: bold
+    margin-top: 20px
+    text-decoration: none
+  .desc
+    color: $light-blue - #333
+    font-size: 12px
+    
+.welcome_info
+  border-left: 5px solid $filler
+  float: right
+  font-size: 12px
+  line-height: 1.4
+  margin: 15px 15% 0 0
+  padding-left: 10px
+  width: 20%
+  li
+    margin-bottom: 10px
+    &:last-child
+      margin: 0
+  span
+    display: block
+    
+  p
+    color: $mid-blue
+    font-size: 16px
+    font-weight: bold
+    margin: 10px 0 10px

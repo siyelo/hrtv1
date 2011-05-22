@@ -447,13 +447,21 @@ ul.group
         +linear-gradient(color-stops($lightest-blue + #090909, white))
 
 .main_heading
+  border-bottom: 1px solid #eee
   clear: both
   margin: 0 -15px 15px
   padding: 5px 15px 10px
-  +box-shadow(#eee, 0, 2px, 3px)
+  +box-shadow(#eee, 0, 2px, 4px)
   +clearfix
   span
     display: inline
+  span.sub
+    color: $mid-blue + #333
+    display: block
+    font-size: 13px
+    line-height: 1
+  &.alt
+    padding: 15px 0 15px 17%
 
 .sub_heading
   clear: both
@@ -850,3 +858,10 @@ ul.review li
   h1.main_heading
     padding: 0
     margin: 0
+    
+.welcome_continue
+  color: $mid-blue
+  float: left
+  font-size: 12px
+  margin: 10px 0 20px 15%
+  width: 40%

@@ -1,7 +1,9 @@
 %tr.js_project_row
   %td.name{:rowspan => project.in_flows.length + 2}= project.name
+
 - project.in_flows.ordered_by_id.each do |funder|
   = render 'funder_row', :funder => funder, :type => params[:id]
+
 %tr.filler2.js_project_total_row{:"data-project_id" => project.id}
   %td{:colspan => 5}
     - link_to new_response_funder_path(@response), :class => 'add_funder add_row' do

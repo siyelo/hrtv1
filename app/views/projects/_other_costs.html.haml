@@ -2,7 +2,7 @@
   %td{:colspan => 100}
     %span
       Other Costs
-    - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row" do
+    - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row right" do
       = image_tag "new.png"
       Add Other Cost
 
@@ -11,7 +11,7 @@
   - other_costs.each do |other_cost|
     = render "other_costs/other_cost", :other_cost => other_cost
 - else
-  %tr.none
+  %tr.none.filler2
     %td{:colspan => 100}
       No other costs found.
       = link_to "Add Other Costs now.", new_response_other_cost_path(response, :project_id => project.id)

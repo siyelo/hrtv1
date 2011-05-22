@@ -2,13 +2,14 @@
   %td{:colspan => 100}
     %span
       Activities
-
-    - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row" do
+      
+    - link_to "#", :class => "add_row right js_upload_btn" do
+      = image_tag "icon_import_export.png"
+      Import / Export
+      
+    - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row right" do
       = image_tag "new.png"
       Add Activity
-
-    - link_to "#", :class => "add_row js_upload_btn" do
-      Import / Export
 
     = render 'activities_import', :project => project, :can_export => project.activities.present?
 
@@ -16,7 +17,7 @@
   - activities.each do |activity|
     = render "activities/activity", :activity => activity
 - else
-  %tr.none
+  %tr.none.filler2
     %td{:colspan => 100}
       No activities found.
       = link_to "Add Activities now.", new_response_activity_path(response, :project_id => project.id)

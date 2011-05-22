@@ -11,7 +11,7 @@
 
 %ul.horizontal
   %li
-    = link_to "Import / Export", '#', :id => "import_export", :class => 'add_row js_upload_btn'
+    = link_to "Import / Export", '#', :id => "import_export", :class => 'create_button js_upload_btn'
 
 #import_export_box
   = render '/projects/activities_import', :project => nil, :can_export => @response.activities.present?

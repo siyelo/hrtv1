@@ -123,7 +123,6 @@ table.sum
 
   tbody tr:last-child td
     border: none
-    padding-bottom: 20px
 
   h1 a
     color: $mid-blue
@@ -175,10 +174,13 @@ table.sum
 
   tr.sub-head td
     background: $lightest-blue
-    padding: 15px 12px 4px 12px
+    padding: 4px 12px
     span
-      text-transform: uppercase
+      display: inline-block
       font-size: 10px
+      padding-top: 15px
+      text-transform: uppercase
+      
   tr td
     border-bottom: 1px solid $lightest-blue
     color: $mid-blue
@@ -293,12 +295,7 @@ table.workplan
         li span
           color: $mid-blue
           font-weight: bold
-    tr.filler td
-      background: $lightest-blue
-      font-weight: bold
-    tr.filler2 td
-      background: $filler
-      font-weight: bold
+
   .row_cancel
     margin-bottom: 0 !important
   input[type=text]
@@ -356,3 +353,10 @@ table.workplan
   +border-radius
 .mcdropdown
   border: none !important
+tbody
+  tr.filler td
+    background: $lightest-blue
+    font-weight: bold
+  tr.filler2 td
+    background: $filler
+    font-weight: bold

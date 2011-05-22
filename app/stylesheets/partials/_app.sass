@@ -85,6 +85,7 @@ body.app
 
         &.active
           a
+            background: $filler
             border-bottom: 1px solid #FFF
             border-left: none
             background: white
@@ -92,8 +93,10 @@ body.app
             letter-spacing: 0.05em
             margin: 0
             padding-top: 15px
+            position: relative
+            top: 1px
             +border-top-radius(3px)
-            +linear-gradient(color-stops($lightest-blue, white))
+            +linear-gradient(color-stops(white, $filler))
             +text-shadow(#fff, 0, 1px, 1px)
 
             // dont want hover background on active tab
@@ -315,11 +318,16 @@ body.app
     h2
       padding: 10px
       +border-top-radius
-      background: image_url("bg-blue.jpg")
+      background: $lighter-blue
+      border: 1px solid $lightest-blue
+      border-bottom: none
       clear: both
-      color: #fff
-      font-size: 0.8em
+      color: $mid-blue + #333
+      font-size: 12px
       letter-spacing: 0.05em
+      line-height: 1
+      +linear-gradient(color-stops($lightest-blue, $filler))
+      +text-shadow(#fff, 0, 1px, 0)
 
   #content #map_fields_form
     .map_fields
@@ -442,6 +450,7 @@ ul.group
   clear: both
   margin: 0 -15px 15px
   padding: 5px 15px 10px
+  +box-shadow(#eee, 0, 2px, 3px)
   +clearfix
   span
     display: inline
@@ -486,6 +495,19 @@ ul.group
       margin-bottom: 0
   h3
     padding-top: 10px !important
+    .large
+      display: block
+      font-size: 40px
+      margin-top: 5px
+      +text-shadow(#fff, 0, 1px, 0)
+    .light
+      color: $light-blue
+      font-size: 12px
+      +text-shadow(#fff, 0, 1px, 0)
+    &.tracked
+      float: left
+      margin-left: 2%
+      width: 23%
 
   ul.report_actions
     opacity: 0
@@ -793,6 +815,7 @@ ul.review li
 
 /* sub-nav styles */
 #sub-nav
+  background: $filler
   border-bottom: 1px solid #ddd
   padding-top: 4px
 

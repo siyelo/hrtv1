@@ -98,7 +98,6 @@
 
       destroy: function() {
         this.input.remove();
-        this.button.remove();
         this.element.show();
         $.Widget.prototype.destroy.call( this );
       }

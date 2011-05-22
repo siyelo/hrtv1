@@ -1945,7 +1945,7 @@ var funders_edit = {
         currentTr = element.parents('tr');
         var newTr = $(data.html);
         currentTr.before(newTr);
-        //newTr.find( ".combobox" ).combobox();
+        $(".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
       });

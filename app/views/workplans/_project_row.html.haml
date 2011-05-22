@@ -1,5 +1,5 @@
 %tr.js_project_row
-  %td.name{:rowspan => project.activities.length + 2}= project.name
+  %td.name.wrap-10{:rowspan => project.activities.length + 2}= project.name
 - project.activities.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
 %tr.filler2.js_project_total_row{:"data-project_id" => project.id}

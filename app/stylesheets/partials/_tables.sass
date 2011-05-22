@@ -202,7 +202,7 @@ table.workplan
   td
     font-size: 12px
     line-height: 1.4
-    padding: 10px
+    padding: 7px 10px
   th, td
     height: 100%
     &.desc
@@ -271,7 +271,7 @@ table.workplan
         +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
         +text-shadow(#000, 0, 1px, 0)
   .name
-    font-weight: normal
+    font-weight: bold
     line-height: 1
     font-size: 11px
     span
@@ -353,10 +353,9 @@ table.workplan
   +border-radius
 .mcdropdown
   border: none !important
-tbody
-  tr.filler td
-    background: $lightest-blue
-    font-weight: bold
-  tr.filler2 td
-    background: $filler
-    font-weight: bold
+tr.filler th, tr.filler td
+  background: $lightest-blue
+  font-weight: bold
+tr.filler2 th, tr.filler2 td
+  background: $filler
+  font-weight: bold

@@ -11,7 +11,9 @@
 
 %ul.horizontal
   %li
-    = link_to "Import / Export", '#', :id => "import_export", :class => 'create_button js_upload_btn'
+    - link_to '#', :id => "import_export", :class => 'create_button js_upload_btn' do
+      = image_tag "icon_import_export.png"
+      Import / Export
 
 #import_export_box
   = render '/projects/activities_import', :project => nil, :can_export => @response.activities.present?
@@ -20,8 +22,8 @@
 - form_tag response_workplan_path(@response, params[:id]), :method => :put, :id => 'workplan' do
   %table.workplan
     %thead
-      %tr
-        %th.no-bg{:colspan => 2}
+      %tr.filler
+        %th{:colspan => 2}
         %th.no-padding{:colspan => 6}
           %ul.tabs
             %li= link_to 'Spend', edit_response_workplan_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
@@ -49,7 +51,7 @@
             Add project
 
         %td.total Total
-        %td.total_amount
+        %td.total_amount.wrap-10
           %span.js_projects_total_amount= @projects.map{|p| p.activities_total_by_type(params[:id])}.sum
           %span.currency= @response.currency
       %tr

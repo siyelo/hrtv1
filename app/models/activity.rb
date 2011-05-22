@@ -95,8 +95,9 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_save :update_cached_usd_amounts
+  before_save :set_total_amounts
   #before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches
+  #before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
 
@@ -390,21 +391,22 @@ class Activity < ActiveRecord::Base
     self.save(false) # save the activity even if it's approved
   end
 
+  # NOTE: disabled because it's too slow when saving workplan page
   # Updates classified amount caches if budget or spend have been changed
-  def update_all_classified_amount_caches
-    if budget_changed?
-      [CodingBudget, CodingBudgetDistrict,
-         CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
-        set_classified_amount_cache(type)
-      end
-    end
-    if spend_changed?
-      [CodingSpend, CodingSpendDistrict,
-         CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
-        set_classified_amount_cache(type)
-      end
-    end
-  end
+  #def update_all_classified_amount_caches
+    #if budget_changed?
+      #[CodingBudget, CodingBudgetDistrict,
+         #CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
+        #set_classified_amount_cache(type)
+      #end
+    #end
+    #if spend_changed?
+      #[CodingSpend, CodingSpendDistrict,
+         #CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
+        #set_classified_amount_cache(type)
+      #end
+    #end
+  #end
 
   def coding_budget_sum_in_usd
     coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
@@ -694,6 +696,11 @@ class Activity < ActiveRecord::Base
           self.spend_in_usd  = (spend || 0)  * rate
         end
       end
+    end
+
+    def set_total_amounts
+      self.budget = [budget_q1, budget_q2, budget_q3, budget_q4].compact.sum
+      self.spend  = [spend_q1, spend_q2, spend_q3, spend_q4].compact.sum
     end
 
     def fake_ca(klass, code, amount, percentage = nil)

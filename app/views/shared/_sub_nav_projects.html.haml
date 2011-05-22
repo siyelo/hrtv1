@@ -6,4 +6,4 @@
   %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}= link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
   %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}= link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
   %li{:class => ['CodingSpendDistrict', 'CodingBudgetDistrict'].include?(params[:id]) ? 'active' : nil}= link_to 'Locations', edit_response_classification_path(@response, 'CodingSpendDistrict')
-  %li{:class => (params[:controller] == 'projects' && params[:action] == 'index' ? 'active' : nil)}= link_to 'Manage', response_projects_path(@response)
+  %li{:class => ((params[:controller] == 'projects' && params[:action] == 'index') || (params[:controller] == 'activities' && params[:action] == 'bulk_create') ? 'active' : nil)}= link_to 'Manage', response_projects_path(@response)

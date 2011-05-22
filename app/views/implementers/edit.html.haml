@@ -18,23 +18,26 @@
           %ul.tabs
             %li= link_to 'Spent', edit_response_implementer_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
             %li= link_to 'Budget', edit_response_implementer_path(@response, :budget), :class => (params[:id] == 'budget'  ? 'active' : nil)
+
       %tr.head
         %th.name.fixed Activity
         %th Implementer
         %th
         %th.actions
+
     %tbody
       - @projects.each do |project|
         - project.activities.ordered.each do |activity|
           = render 'activity_row', :project => project, :activity => activity
 
       %tr.filler.js_projects_total_row
-        %td
+        %td.name.fixed
         %td.total Total
         %td.total_amount
           %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(params[:id])}.sum
           %span.currency= @response.currency
         %td.actions
+
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

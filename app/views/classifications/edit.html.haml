@@ -14,15 +14,13 @@
   %thead
     %tr
       %th.no-bg
-      %th.no-padding{:colspan => 3}
+      %th.no-padding{:colspan => 100}
         %ul.tabs
           %li= link_to 'Spent', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil)
           %li= link_to 'Budget', edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil)
     %tr.head
       %th.name.fixed Activity
-      %th.name= coding_name
-      %th
-      %th.wrap-3
+      %th.name{:colspan => 100}= coding_name
   %tbody
     - @projects.each do |project|
       - project.activities.ordered.each do |activity|

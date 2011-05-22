@@ -1,6 +1,6 @@
 %tr.js_implementer_row
-  %td.desc= implementer.provider.try(:name)
-  %td= text_field_tag :"sub_activities[#{implementer.id}]#{type}", implementer.send("#{type}"), :class => 'js_amount'
+  %td{:colspan => "2", :class => "desc"}= implementer.provider.try(:name)
+  %td= text_field_tag :"sub_activities[#{implementer.id}]#{type}", implementer.send("#{type}"), :class => 'js_qamount'
   %td.actions
     = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

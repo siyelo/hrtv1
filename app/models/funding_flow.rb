@@ -58,6 +58,14 @@ class FundingFlow < ActiveRecord::Base
     end
   end
 
+  def self.bulk_update(response, funders)
+    funders.each_pair do |funder_id, attributes|
+      funder = response.funding_flows.find(funder_id)
+      funder.attributes = attributes
+      funder.save
+    end
+  end
+
   def funding_chains
     if self_funded?
       [FundingChain.new(

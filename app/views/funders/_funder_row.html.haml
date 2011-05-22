@@ -1,10 +1,10 @@
-%tr.js_activity_row
+%tr.js_funder_row
   %td.desc= funder.from.try(:name)
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q4_prev", funder.send("#{type}_q4_prev"), :class => 'js_qamount'
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q1", funder.send("#{type}_q1"), :class => 'js_qamount'
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q2", funder.send("#{type}_q2"), :class => 'js_qamount'
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q3", funder.send("#{type}_q3"), :class => 'js_qamount'
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q4", funder.send("#{type}_q4"), :class => 'js_qamount'
+  %td= text_field_tag :"funders[#{funder.id}]#{type}_q4_prev", funder.send("#{type}_q4_prev"), :class => 'js_qamount'
+  %td= text_field_tag :"funders[#{funder.id}]#{type}_q1", funder.send("#{type}_q1"), :class => 'js_qamount'
+  %td= text_field_tag :"funders[#{funder.id}]#{type}_q2", funder.send("#{type}_q2"), :class => 'js_qamount'
+  %td= text_field_tag :"funders[#{funder.id}]#{type}_q3", funder.send("#{type}_q3"), :class => 'js_qamount'
+  %td= text_field_tag :"funders[#{funder.id}]#{type}_q4", funder.send("#{type}_q4"), :class => 'js_qamount'
   %td.total_amount
-    %span.pointer.js_activity_total= funder.total_by_type(type)
+    %span.pointer.js_funder_total= funder.total_by_type(type)
     %span.currency= funder.currency

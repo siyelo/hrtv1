@@ -95,6 +95,16 @@ module BudgetSpendHelpers
       budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
 
+  def total_by_type(amount_type)
+    amounts = [
+      self.send("#{amount_type}_q4_prev"),
+      self.send("#{amount_type}_q1"),
+      self.send("#{amount_type}_q2"),
+      self.send("#{amount_type}_q3"),
+      self.send("#{amount_type}_q4")
+    ].compact.sum
+  end
+
   protected
 
     # some older, unmigrated objects are going to break here...

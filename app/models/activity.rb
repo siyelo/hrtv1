@@ -592,17 +592,6 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
-  # TODO - make this currency-aware
-  def total_by_type(amount_type)
-    amounts = [
-      self.send("#{amount_type}_q4_prev"),
-      self.send("#{amount_type}_q1"),
-      self.send("#{amount_type}_q2"),
-      self.send("#{amount_type}_q3"),
-      self.send("#{amount_type}_q4")
-    ].compact.sum
-  end
-
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

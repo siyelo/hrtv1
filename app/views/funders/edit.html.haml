@@ -9,7 +9,7 @@
 
 = render 'getting_started'
 
-- form_tag response_workplan_path(@response, params[:id]), :method => :put, :id => 'workplan' do
+- form_tag response_funder_path(@response, params[:id]), :method => :put, :id => 'js_funders_form' do
   %table.workplan
     %thead
       %tr
@@ -24,7 +24,7 @@
         %th{:colspan => 5}= @response.fiscal_year_end_date.try(:year)
       %tr.head
         %th Project
-        %th Activity
+        %th Funder
         %th Q4
         %th Q1
         %th Q2

@@ -232,6 +232,15 @@ var buildUrl = function (url) {
   }
 };
 
+var buildJsonUrl = function (url) {
+  var parts = url.split('?');
+  if (parts.length > 1) {
+    return parts.join('.json?');
+  } else {
+    return parts[0] + '.json';
+  }
+};
+
 var getResources = function (element) {
   return element.parents('.resources');
 }
@@ -1695,21 +1704,21 @@ var changeRowspan = function (element, value) {
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
 
+var getTotal = function (amounts) {
+  var total = 0;
+  for (var i = 0; i < amounts.length; i++) {
+    var amount = Number(amounts[i]);
+    if (!isNaN(amount)) {
+      total += amount;
+    }
+  }
+  return total;
+};
+
 var workplans_edit = {
   run: function () {
 
     import_export.init();
-
-    var getTotal = function (amounts) {
-      var total = 0;
-      for (var i = 0; i < amounts.length; i++) {
-        var amount = Number(amounts[i]);
-        if (!isNaN(amount)) {
-          total += amount;
-        }
-      }
-      return total;
-    };
 
     var updateValues = function (element) {
       var tr = element.parents('tr:first');
@@ -1893,6 +1902,83 @@ var workplans_edit = {
           initDemoText(newTr.find('*[data-hint]'));
         }
       });
+    });
+  }
+}
+
+var funders_edit = {
+  run: function () {
+
+    var updateValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // activity total
+      var elements = tr.find('.js_qamount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.find('.js_funder_total').text(getTotal(amounts));
+
+      // project total
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_funder_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      tr.nextAll('.js_project_total_row:first').find('.js_funder_total').text(getTotal(amounts));
+    };
+
+
+    $('.add_funder').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+
+      if (element.hasClass('inactive')) {
+        return;
+      }
+
+      element.addClass('inactive');
+
+      var project_id = element.parents('tr').attr('data-project_id');
+      var url = '/responses/' + _response_id + '/funders/new?type=' + _type + '&project_id=' + project_id;
+
+      $.get(url, function (data) {
+        element.hide();
+        currentTr = element.parents('tr');
+        currentTr.before(data);
+        initDemoText(currentTr.prev('tr').find('*[data-hint]'));
+        changeRowspan(element, 1);
+      });
+    });
+
+    $('.js_cancel_add_funder').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      changeRowspan(element, -1);
+      element.parents('tr').next('tr').find('.add_funder').show().removeClass('inactive');
+      element.parents('tr').remove();
+    });
+
+    $('.js_save_funder').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('.new_funder_form');
+      var ajaxLoader = element.parents('ol').find('.ajax-loader');
+
+      ajaxLoader.show();
+
+      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
+        if (data.status) {
+          var box = element.parents('tr')
+          element.parents('tr').next('tr').find('.add_funder').show().removeClass('inactive');
+          box.replaceWith(data.html)
+          $('#js_funders_form').find('.save_btn').show();
+        } else {
+          var newTr = $(data.html);
+          var box = element.parents('tr');
+          box.replaceWith(newTr);
+        }
+      });
+    });
+
+    $('.js_qamount').live('keyup', function (e) {
+      var element = $(this);
+      updateValues(element);
     });
   }
 }

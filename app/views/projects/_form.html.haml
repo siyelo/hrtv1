@@ -15,46 +15,8 @@
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the Project.", :required => false
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation."
+      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false, :input_html => { :class => "combobox" }
 
-  - if @response.data_request.spend?
-    %li.last
-      %h3 Past Project Expenditure
-      %ul.dashboard_section
-        = f.input :spend, :label => "Spend", :hint => "Total amount spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-
-        %li.amounts.last
-          %label Quarterly spend
-          %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false
-
-  - if @response.data_request.budget?
-    %li.last
-      %h3 Project Budget
-      %ul.dashboard_section
-        %br
-        = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-        - if @response.request.budget_by_quarter?
-          %li.amounts.last
-            %label Quarterly budget
-            %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
-
-        - unless @response.request.no_long_term_budgets?
-          %li.amounts
-            %label Long-term
-            %ul
-              = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
 
   %li.last
     %h2 Project Funding Sources
@@ -67,12 +29,6 @@
           = render "projects/in_flow_fields", :f => ff
         .add
           = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'row_cancel'
-
-  %li.last
-    %h3 Other
-    %ul.dashboard_section
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false, :input_html => { :class => "combobox" }
-      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint =>"All the districts/provinces in which this Project was implemented. If a Project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"

@@ -19,7 +19,7 @@ class ProjectsController < Reporter::BaseController
     @project = @response.projects.new
     respond_to do |format|
       format.html
-      format.js { render :partial => 'new_inline' }
+      format.json { render :json => {:html => render_to_string(:partial => 'new_inline.html.haml') } }
     end
   end
 
@@ -43,12 +43,12 @@ class ProjectsController < Reporter::BaseController
       success.html { redirect_to response_projects_url(@response) }
       success.js do
         render :json => {:status => @project.valid?,
-                         :html => render_to_string({:partial => 'workplans/project_row', 
+                         :html => render_to_string({:partial => 'workplans/project_row',
                                               :locals => {:project => @project}})}
       end
       failure.js do
-        render :json => {:status => @project.valid?, 
-                         :html => render_to_string({:partial => 'new_inline', 
+        render :json => {:status => @project.valid?,
+                         :html => render_to_string({:partial => 'new_inline',
                                               :locals => {:project => @project}})}
       end
     end

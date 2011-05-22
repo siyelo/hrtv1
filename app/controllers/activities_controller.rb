@@ -23,7 +23,7 @@ class ActivitiesController < Reporter::BaseController
     @activity.provider = current_user.organization
     respond_to do |format|
       format.html
-      format.js { render :partial => 'new_inline' }
+      format.json { render :json => {:html => render_to_string(:partial => 'new_inline.html.haml') } }
     end
   end
 

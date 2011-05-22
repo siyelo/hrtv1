@@ -1699,7 +1699,7 @@ var purposes = {
 
 
 var changeRowspan = function (element, value) {
-  var projectTd = $(element.parents('tr').prevAll('.js_project_row')[0]).find('td');
+  var projectTd = element.parents('tr').prevAll('.js_project_row:first').find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
 
@@ -1805,14 +1805,14 @@ var workplans_edit = {
       element.addClass('disabled');
 
       var project_id = element.parents('tr').attr('data-project_id');
-      var url = '/responses/' + _response_id + '/activities/new.js?type=' + _type + '&project_id=' + project_id;
+      var url = '/responses/' + _response_id + '/activities/new.json?type=' + _type + '&project_id=' + project_id;
 
       $.get(url, function (data) {
         element.hide();
         currentTr = element.parents('tr');
-        currentTr.before(data);
+        currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
-        //changeRowspan(element, 1);
+        changeRowspan(element, 1);
       });
     });
 
@@ -1820,8 +1820,8 @@ var workplans_edit = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr').next('tr').find('.add_activity').show().removeClass('disabled');
-      element.parents('tr').remove();
+      element.parents('tr:first').next('tr').find('.add_activity').show().removeClass('disabled');
+      element.parents('tr:first').remove();
     });
 
     $('.js_save_activity').live('click', function (e) {
@@ -1860,14 +1860,14 @@ var workplans_edit = {
 
       element.addClass('disabled');
 
-      var url = '/responses/' + _response_id + '/projects/new.js';
+      var url = '/responses/' + _response_id + '/projects/new.json';
 
       $.get(url, function (data) {
         element.hide();
         currentTr = element.parents('tr');
-        currentTr.before(data);
+        currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
-        changeRowspan(element, 1);
+        //changeRowspan(element, 1);
       });
     });
 

@@ -3,7 +3,7 @@
 # Expected Columns
 
 puts "Loading codes.csv..."
-Code.delete_all
+#Code.delete_all
 # if we do lookups by col id, not name, then FasterCSV
 # is more forgiving with (non)/quoted csv's
 $id_col            = 7

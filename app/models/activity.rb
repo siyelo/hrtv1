@@ -95,7 +95,6 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_save :update_cached_usd_amounts
-  #before_update :remove_district_codings
   before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
@@ -666,25 +665,6 @@ class Activity < ActiveRecord::Base
         sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
       end.flatten
     end
-
-    # NOTE: not needed because locations are handled via classifications
-    ## removes code assignments for non-existing locations for this activity
-    #def remove_district_codings
-      #activity_id           = self.id
-      #location_ids          = locations.map(&:id)
-      #code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-      #deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                        #{:activity_id => activity_id,
-                         #:code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
-                         #:location_ids => location_ids}])
-
-      ## only if there are deleted code assignments, update the district cached amounts
-      #if deleted_count > 0
-        #code_assignment_types.each do |type|
-          #set_classified_amount_cache(type)
-        #end
-      #end
-    #end
 
     def approved_activity_cannot_be_changed
       errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]

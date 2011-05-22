@@ -1,7 +1,0 @@
-// need both the id and class selectors called add_purpose_form
-%tr{:class => "hidden add_purpose_form"}
-  %td{:colspan => 3}
-    %ul.horizontal
-      %li= select_tag :provider, options_for_select(funding_organizations_select), :class => 'implementer_select combobox'
-      %li= link_to "Add Implementer", "#", :class => 'js_add_entry create_button', :tabindex => 0
-      %li= link_to "Cancel", "#", :class => "cancel_add_purpose row_cancel", :tabindex => 0

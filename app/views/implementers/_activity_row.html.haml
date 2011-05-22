@@ -1,13 +1,17 @@
--# TODO %tr{:class => "js_purpose_row", :"data-amount" => activity.amount}
-%tr{:class => "js_purpose_row"}
-  %td.name.fixed
+%tr.js_project_row
+  %td.name.fixed{:rowspan => activity.sub_activities.length + 2}
     = project.name
     %span= activity.title
-  %td.no-padding{:colspan => 3}
-    - form_tag response_implementer_path(@response, params[:id], :activity_id => activity.id), :method => :put do
-      %table.nested
-        %tbody
-          - activity.sub_activities.each do |sa|
-            = render 'implementer_row', :sub_activity => sa, :type => params[:id]
-          = render 'add_implementer_form'
-          = render 'implementer_footer', :activity => activity
+
+- activity.sub_activities.ordered_by_id.each do |implementer|
+  = render 'implementer_row', :implementer => implementer, :type => params[:id]
+
+%tr.filler2.js_project_total_row{:"data-activity_id" => activity.id}
+  %td.name.wrap-50
+    - link_to new_response_implementer_path(@response), :class => 'add_implementer add_row' do
+      = image_tag "new.png"
+      Add implementer
+  %td.total Subtotal
+  %td.total_amount
+    %span.js_project_total= 999 #project.funders_total_by_type(params[:id])
+    %span.currency= project.currency

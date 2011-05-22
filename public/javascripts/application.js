@@ -2010,6 +2010,92 @@ var funders_edit = {
   }
 }
 
+// TODO - DRY this up alongside funders_edit
+var implementers_edit = {
+  run: function () {
+
+    var updateValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // activity total
+      var elements = tr.find('.js_qamount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.find('.js_implementer_total').text(getTotal(amounts));
+
+      // project total
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_implementer_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      tr.nextAll('.js_project_total_row:first').find('.js_project_total').text(getTotal(amounts));
+
+      // all projects total
+      var elements = $('.js_project_total_row .js_project_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
+    };
+
+
+    $('.add_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+
+      if (element.hasClass('disabled')) {
+        return;
+      }
+
+      element.addClass('disabled');
+
+      var activity_id = element.parents('tr').attr('data-activity_id');
+      var url = '/responses/' + _response_id + '/implementers/new.json?type=' + _type + '&activity_id=' + activity_id;
+
+      $.get(url, function (data) {
+        element.addClass('disabled');
+        currentTr = element.parents('tr');
+        var newTr = $(data.html);
+        currentTr.before(newTr);
+        newTr.find( ".combobox" ).combobox();
+        initDemoText(currentTr.prev('tr').find('*[data-hint]'));
+        changeRowspan(element, 1);
+      });
+    });
+
+    $('.js_cancel_add_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      changeRowspan(element, -1);
+      element.parents('tr').next('tr').find('.add_implementer').removeClass('disabled');
+      element.parents('tr').remove();
+    });
+
+    $('.js_save_implementer').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var form = element.parents('.new_implementer_form');
+      var ajaxLoader = element.parents('ol').find('.ajax-loader');
+
+      ajaxLoader.show();
+
+      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
+        if (data.status) {
+          var box = element.parents('tr')
+          box.next('tr').find('.add_implementer').removeClass('disabled');
+          var newTr = $(data.html)
+          box.replaceWith(newTr)
+          $('#js_implementers_form').find('.save_btn').show();
+        } else {
+          var newTr = $(data.html);
+          var box = element.parents('tr');
+          box.replaceWith(newTr);
+        }
+      });
+    });
+
+    $('.js_qamount').live('keyup', function (e) {
+      var element = $(this);
+      updateValues(element);
+    });
+  }
+}
+
 $(function () {
 
   // tipsy tooltips everywhere!

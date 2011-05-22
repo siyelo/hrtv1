@@ -1,0 +1,36 @@
+parent,code,name
+,1,Service provider type
+1,11,GOK services
+1,12,Private not-for-profit (PNFP) - NGO/FBO
+1,13,Private for-profit (PFP)
+,2,Service delivery level
+2,21,Level 1 – community services
+2,22,Level 2/3 – dispensary / health centre
+2,23,Level 4 – District hospital
+2,24,Level 5 – Provincial hospital
+2,25,Level 6 – National referral hospital
+,3,Management level
+3,31,MDistrict health management
+3,32,District L4 hospital management
+3,33,Provincial health management
+3,34,Provincial L5 hospital management
+3,35,National MOMS management (by dept/div)
+3,36,National MOPHS management (by dept/div)
+3,37,National L6 hospital management
+3,38,National parastatal (KEMSA, KMTC, NHIF etc)
+3,39,National non-GOK (HENNET, CHAK, etc)
+,4,Geographic location
+4,41,MOH department / division (specify)
+4,42,MOH institution or parastatal (specify)
+4,43,Province (specify)
+4,44,District (specify)
+4,45,Health facility (specify)
+,5,Beneficiaries
+5,51,General population
+5,52,Women of reproductive age
+5,53,Adolescents
+5,54,Children under-5
+5,55,HIV+ adults
+5,56,HIV+ children
+5,57,Refugee populations
+5,58,Other

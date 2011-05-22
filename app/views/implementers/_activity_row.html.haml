@@ -11,8 +11,9 @@
     - link_to new_response_implementer_path(@response), :class => 'add_implementer add_row' do
       = image_tag "new.png"
       Add implementer
-  %td.total Subtotal
-  %td.total_amount
-    %span.js_activity_total= activity.sub_activities_total_by_type(params[:id])
-    %span.currency= project.currency
+  %td.total
+    Subtotal
+    .total_amount
+      %span.js_activity_total= activity.sub_activities_total_by_type(params[:id])
+      %span.currency= project.currency
   %td.actions

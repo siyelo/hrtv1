@@ -173,6 +173,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: organizations
@@ -186,5 +187,6 @@ end
 #  fosaid         :string(255)
 #  users_count    :integer         default(0)
 #  comments_count :integer         default(0)
+#  acronym        :string(255)
 #
 

@@ -20,20 +20,21 @@
             %li= link_to 'Budget', edit_response_implementer_path(@response, :budget), :class => (params[:id] == 'budget'  ? 'active' : nil)
       %tr.head
         %th.name.fixed Activity
-        %th.name Implementer
+        %th Implementer
         %th
-        %th.wrap-3
+        %th.actions
     %tbody
       - @projects.each do |project|
         - project.activities.ordered.each do |activity|
           = render 'activity_row', :project => project, :activity => activity
 
       %tr.filler.js_projects_total_row
-        %td{:colspan => 2}
+        %td
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_amount= 9999 #@projects.map{|p| p.funders_total_by_type(params[:id])}.sum
+          %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(params[:id])}.sum
           %span.currency= @response.currency
+        %td.actions
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'

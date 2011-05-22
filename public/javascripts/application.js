@@ -2016,19 +2016,13 @@ var implementers_edit = {
 
     var updateValues = function (element) {
       var tr = element.parents('tr:first');
-
       // activity total
-      var elements = tr.find('.js_qamount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.find('.js_implementer_total').text(getTotal(amounts));
-
-      // project total
-      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_total_row').find('.js_implementer_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      tr.nextAll('.js_project_total_row:first').find('.js_project_total').text(getTotal(amounts));
+      var elements = tr.prevAll('.js_activity_row:first').nextUntil('.js_activity_total_row').find('.js_amount');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();}); // use textinput val, not .text!
+      tr.nextAll('.js_activity_total_row:first').find('.js_activity_total').text(getTotal(amounts));
 
       // all projects total
-      var elements = $('.js_project_total_row .js_project_total');
+      var elements = $('.js_activity_total_row .js_activity_total');
       var amounts = jQuery.map(elements, function (e) { return $(e).text();});
       $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
     };
@@ -2089,7 +2083,7 @@ var implementers_edit = {
       });
     });
 
-    $('.js_qamount').live('keyup', function (e) {
+    $('.js_amount').live('keyup', function (e) {
       var element = $(this);
       updateValues(element);
     });

@@ -279,6 +279,10 @@ END
     in_flows.map { |flow| flow.total_by_type(amount_type) }.compact.sum
   end
 
+  def sub_activities_total_by_type(amount_type)
+    activities.map { |a| a.sub_activities_total_by_type(amount_type) }.compact.sum
+  end
+
   private
 
     ### Validations

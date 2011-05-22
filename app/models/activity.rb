@@ -595,6 +595,10 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
+  def sub_activities_total_by_type(amount_type)
+    sub_activities.map { |implementer| implementer.send(amount_type) }.compact.sum
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)

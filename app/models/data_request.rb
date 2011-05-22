@@ -43,6 +43,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -62,10 +63,14 @@ end
 #  year_3            :boolean         default(TRUE)
 #  year_4            :boolean         default(TRUE)
 #  year_5            :boolean         default(TRUE)
+#  budget_by_quarter :boolean         default(FALSE)
 #  purposes          :boolean         default(TRUE)
 #  locations         :boolean         default(TRUE)
 #  inputs            :boolean         default(TRUE)
 #  service_levels    :boolean         default(TRUE)
-#  budget_by_quarter :boolean         default(FALSE)
+#  year_q2           :boolean         default(TRUE)
+#  year_q3           :boolean         default(TRUE)
+#  year_q4           :boolean         default(TRUE)
+#  year_q5           :boolean         default(TRUE)
 #
 

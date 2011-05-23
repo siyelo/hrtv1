@@ -1,5 +1,6 @@
 require 'lib/BudgetSpendHelpers'
 require 'validators'
+include NumberHelper
 
 class Activity < ActiveRecord::Base
   ### Constants
@@ -154,6 +155,14 @@ class Activity < ActiveRecord::Base
     Activity.only_simple.find(:all,
       :include => [:locations, :provider, :organizations,
                   :beneficiaries, {:data_response => :organization}])
+  end
+
+  def convert_to_project_currency(type)
+    return 0 if self.send(type).nil?
+    amount_type = type
+    rate = currency_rate(self.currency, self.project.currency)
+    converted_amount = self.send(type) * rate
+    return converted_amount
   end
 
   def self.download_template(activities = [])

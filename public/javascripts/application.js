@@ -1661,7 +1661,7 @@ var purposes = {
     var purpose_label = purposes.get_purpose_label(selected_text);
 
     var tr =  '<tr>' +
-              '  <td class="wrap-60">' +
+              '  <td class="wrap-60 desc">' +
               '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
               '    <span class="context">' + purpose_context + '</span>' +
               '  </td>' +

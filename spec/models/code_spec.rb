@@ -25,7 +25,7 @@ describe Code do
   end
 
   describe "associations" do
-    it { should have_many(:code_assignments) }
+    it { should have_many(:code_assignments).dependent(:destroy) }
     it { should have_many(:activities) }
     it { should have_many(:comments) }
   end

@@ -21,7 +21,7 @@ class Code < ActiveRecord::Base
   acts_as_nested_set
 
   ### Associations
-  has_many :code_assignments
+  has_many :code_assignments, :dependent => :destroy
   has_many :activities, :through => :code_assignments
   has_many :comments, :as => :commentable, :dependent => :destroy
 

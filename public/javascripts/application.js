@@ -1791,7 +1791,7 @@ var workplans_edit = {
       element.html($('<input/>').attr({type: 'text'}).val(value))
     }).live('blur', function (e) {
       var element = $(this);
-      var value = element.find('input').val();
+      var value = element.find('input').val().replace(',', '');
       element.removeClass('disabled').addClass('pointer');
       element.html(value);
       var amount = Number(value);

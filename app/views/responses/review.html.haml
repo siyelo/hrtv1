@@ -2,7 +2,7 @@
 - your_projects = @response.projects_entered? && @response.project_amounts_entered? && @response.projects_have_activities? && @response.projects_have_other_costs? ? "ready" : "not-ready"
 - projects_entered = @response.projects_entered? ? "ready" : "not-ready"
 - project_amounts_entered = @response.project_amounts_entered? ? "ready" : "not-ready"
-- projects_have_activities = @response.projects_have_activities? ? "ready" : "not-ready"
+- projects_have_activities = @response.projects_have_activities? && @response.activities_have_budget_or_spend? ? "ready" : "not-ready"
 - projects_have_other_costs = @response.projects_have_other_costs? ? "ready" : "not-ready"
 - detailed_classification = @response.activities_coded? && @response.other_costs_coded? ? "ready" : "not-ready"
 - activities_coded = @response.activities_coded? ? "ready" : "not-ready"
@@ -61,7 +61,7 @@
         %h3{:class => (projects_have_activities)}
           Activities Entered
           - unless projects_have_activities
-            - unless projects_entered
+            - if !projects_entered
               %span.info
                 = render 'projects/no_projects_yet'
                 then you can start adding Activities.
@@ -69,6 +69,10 @@
               %span.info
                 You have project(s), but not all have activities yet.
                 = link_to "Start by adding your activities here.", response_projects_path(@response)
+          - if !@response.activities_have_budget_or_spend?  
+            %span.info  
+              - @response.activities.each do |activity|
+                = link_to nice_name(activity), response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
         %h3{:class => (projects_have_other_costs)}

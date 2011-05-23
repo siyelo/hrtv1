@@ -48,7 +48,6 @@ class ActivitiesController < Reporter::BaseController
   def update
     clean_out_sa_params(params)
     check_for_new_provider(params)
-    debugger
     @activity = Activity.find(params[:id])
     if @activity.update_attributes(params[:activity])
       respond_to do |format|

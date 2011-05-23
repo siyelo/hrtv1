@@ -10,21 +10,18 @@
   = render 'help'
 
 %ul.response-notice
-  - if @response.data_request.spend?
-    - if !@activity.spend?
-      %li= "Enter the Expenditure for this activity."
-    - else
-      - if !@activity.spend_classified?
-        %li= "Please classify the Expenditure for this activity." 
 
-  - if @response.data_request.budget?
-    - if !@activity.budget?
-      %li= "Enter the Budget for this activity."
-    - else
-      -if !@activity.budget_classified?
-        %li= "Please classify the Budget for this activity." 
+  - unless @activity.budget && @activity.spend
+    - if !@activity.spend && @activity.data_request.spend?
+      %li= "Please enter the spend amount for this activity."
+    - if !@activity.budget && @activity.data_request.budget?
+      %li= "Please enter the budget amount for this activity."
+    
+  - unless @activity.spend_classified?
+    %li= "Please classify the Expenditure for this activity." 
 
-
+  - unless @activity.budget_classified?
+    %li= "Please classify the Budget for this activity."  
 
 = render 'activities/tab_nav', :activity => @activity
 

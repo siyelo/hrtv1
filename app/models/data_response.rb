@@ -252,6 +252,14 @@ class DataResponse < ActiveRecord::Base
   def projects_without_amounts
     select_without_amounts(self.projects)
   end
+  
+  def activities_have_budget_or_spend?
+    return false unless activities_entered?
+    self.activities.each do |activity|
+      return false unless activity.has_budget_or_spend?
+    end
+    true
+  end
 
   def projects_without_budget
     self.projects.select{ |p| !p.budget_entered? }

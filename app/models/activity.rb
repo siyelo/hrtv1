@@ -95,7 +95,7 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_save :update_cached_usd_amounts
-  before_update :update_all_classified_amount_caches
+  # killing our demo!!! before_update :update_all_classified_amount_caches
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
 

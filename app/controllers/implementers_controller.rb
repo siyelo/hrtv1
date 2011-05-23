@@ -41,7 +41,7 @@ class ImplementersController < Reporter::BaseController
   end
 
   def update
-    SubActivity.bulk_update(@response, params[:sub_activities])
+    SubActivity.bulk_update(@response, params[:sub_activities], params[:id])
     flash[:notice] = 'Implementers were successfully saved'
     redirect_to edit_response_implementer_url(@response, params[:id])
   end

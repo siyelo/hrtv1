@@ -5,7 +5,8 @@
     = render "layouts/header_app"
     = render "layouts/reporter/main_nav"
     #sub-nav
-      = yield :sub_nav
+      .wrapper
+        = yield :sub_nav
 
     #content
       .wrapper

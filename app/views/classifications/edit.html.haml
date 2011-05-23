@@ -27,5 +27,5 @@
         = render 'activity_row', :project => project, :activity => activity
 
 %ul#purpose_menu.mcdropdown_menu
-  - @codes.each do |code|
+  - @codes.sort_by(&:short_display).each do |code|
     = render 'code_row', :code => code

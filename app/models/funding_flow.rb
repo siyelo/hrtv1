@@ -26,9 +26,6 @@ class FundingFlow < ActiveRecord::Base
   validates_presence_of :organization_id_to,
     :message => :"organization_id_to.missing"
 
-  ### Named scopes
-  named_scope :ordered_by_id, { :order => 'id ASC' }
-
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
@@ -37,6 +34,9 @@ class FundingFlow < ActiveRecord::Base
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?},
     :message => :"organization_id_from.id_below_zero"
+
+  ### Named scopes
+  named_scope :ordered_by_id, { :order => 'id ASC' }
 
   delegate :organization, :to => :project
 
@@ -101,7 +101,6 @@ class FundingFlow < ActiveRecord::Base
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
-
 end
 # == Schema Information
 #

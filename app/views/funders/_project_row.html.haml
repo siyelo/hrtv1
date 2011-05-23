@@ -1,4 +1,8 @@
-%tr.js_project_row
+- project_amount = (project.send(:"#{params[:id]}") || 0)
+- project_funders_total = project.funders_total_by_type(params[:id])
+- remaining = project_amount - project_funders_total
+
+%tr.js_project_row{:"data-amount" => project_amount}
   %td.name{:rowspan => project.in_flows.length + 2}= project.name
 
 - project.in_flows.ordered_by_id.each do |funder|
@@ -10,6 +14,12 @@
       = image_tag "new.png"
       Add funder
   %td.total Subtotal
-  %td.total_amount
-    %span.js_project_total= project.funders_total_by_type(params[:id])
-    %span.currency= project.currency
+  %td.total
+    %ul
+      %li
+        %span.js_project_total= project_funders_total
+        %span.currency= project.currency
+      %li.remaining.js_remaining_box{:style => (remaining == 0 ? 'display: none' : nil)}
+        Remaining
+        %span.js_remaining= remaining
+        %span.currency= project.currency

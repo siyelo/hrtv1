@@ -1,6 +1,7 @@
 %tr.js_implementer_row.filler2
   %td{:colspan => "2", :class => "desc"}= implementer.provider.try(:name)
-  %td= text_field_tag :"sub_activities[#{implementer.id}]", (implementer.send("#{type}") || "#{implementer.send("#{type}_percentage")}%"), :class => 'js_qamount'
+  %td= text_field_tag :"sub_activities[#{implementer.id}]spend", implementer.spend || "#{implementer.spend_percentage}%", :class => 'js_spend_column_amount'
+  %td= text_field_tag :"sub_activities[#{implementer.id}]budget", implementer.budget || "#{implementer.budget_percentage}%", :class => 'js_budget_column_amount'
   %td.actions
     = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

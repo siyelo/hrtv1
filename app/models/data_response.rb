@@ -40,11 +40,6 @@ class DataResponse < ActiveRecord::Base
 
 
   validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
-  # TODO: spec
-  validates_date :fiscal_year_start_date
-  validates_date :fiscal_year_end_date
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date."
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -257,7 +252,7 @@ class DataResponse < ActiveRecord::Base
   def projects_without_budget
     self.projects.select{ |p| !p.budget_entered? }
   end
-  
+
   def check_projects_funding_sources_have_organizations?
     return false unless projects_entered?
     self.projects.each do |project|
@@ -276,8 +271,8 @@ class DataResponse < ActiveRecord::Base
 
   def activities_entered?
     !self.normal_activities.empty?
-  end 
-  
+  end
+
   def activities_have_implementers?
     return false unless activities_entered?
     self.activities.each do |activity|

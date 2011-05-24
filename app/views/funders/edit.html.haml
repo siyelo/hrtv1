@@ -13,8 +13,8 @@
   %table.workplan
     %thead
       %tr
-        %th.no-bg{:colspan => 3}
-        %th.no-padding{:colspan => 6}
+        %th.no-bg{:colspan => 4}
+        %th.no-padding{:colspan => 100}
           %ul.tabs
             %li= link_to 'Yearly', edit_response_funder_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
             %li= link_to 'Quarterly', edit_response_funder_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)

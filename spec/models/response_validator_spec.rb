@@ -209,6 +209,7 @@ describe DataResponse do #validations
     end
 
     it "succeeds if no projects entered" do
+      @project.budget = 0; @project.save
       @response.projects_and_funding_sources_have_matching_budgets?.should == true
     end
 

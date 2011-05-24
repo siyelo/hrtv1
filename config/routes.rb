@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   # STATIC PAGES
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
-    
+
 
   map.resources :comments, :member => {:delete => :get}
 
@@ -60,10 +60,10 @@ ActionController::Routing::Routes.draw do |map|
       response.resources :classifications,
         :only => [:edit, :update, :destroy]
       response.resources :workplans,
-        :member => {:keph => :get},
         :only => [:index, :edit, :update], :requirements => {:id => /budget|spend/}
       response.resources :funders, :requirements => {:id => /budget|spend/}
       response.resources :implementers, :requirements => {:id => /budget|spend/}
+      response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
   end
 
   map.resources :activities do |activity|

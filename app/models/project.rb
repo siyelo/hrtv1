@@ -239,20 +239,24 @@ END
   end
 
   def budget_matches_funders?
-     self.in_flows.empty? || (self.budget == self.in_flows_budget_total)
+    (self.budget || 0) == self.in_flows_budget_total
   end
 
   def in_flows_budget_total
-    return 0 if self.funding_sources.empty?
-    in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
+    in_flows_total(:budget)
   end
 
   def spend_matches_funders?
-    self.spend == self.in_flows_spend_total
+    (self.spend || 0) == self.in_flows_spend_total
   end
 
   def in_flows_spend_total
-    in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
+    #(in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend) || 0)
+    in_flows_total(:spend)
+  end
+  
+  def in_flows_total(amount_method)
+    smart_sum(in_flows, amount_method)
   end
 
   def activities_budget_total

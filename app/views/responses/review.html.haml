@@ -71,8 +71,10 @@
                 = link_to "Start by adding your activities here.", response_projects_path(@response)
           - if !@response.activities_have_budget_or_spend?  
             %span.info  
+              The activities below are missing amounts, click to edit and add amounts
+            %ul.push
               - @response.activities.each do |activity|
-                = link_to nice_name(activity), response_activity_path(@response, activity) unless activity.has_budget_or_spend?
+                %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
         %h3{:class => (projects_have_other_costs)}
@@ -139,9 +141,9 @@
               
       %li
         %h3{:class => (projects_funders_have_organizations)}
-          All Project Funding Sources have Organization Specified
+          All Projects have Funding Sources
           - unless @response.check_projects_funding_sources_have_organizations?
-            %span.info All Projects have Funding Sources and all Funding Sources have an Organization linked to them
+            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
             - @response.projects.each do |project|
               %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
@@ -150,16 +152,16 @@
         %h3{:class => (activities_have_implementers)}
           All Activities have Providers
           - unless @response.activities_have_implementers?
-            %span.info Not all activities currently have implementers.
+            %span.info The activities below are missing their provider(s).
             - @response.activities.each do |activity|
               - if activity.implementer.nil?
                 %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity) 
 
       %li
         %h3{:class => (projects_funding_sources_ok ? "ready" : "not-ready")}
-          Correct amounts for Projects & Funding Sources
+          Projects Amounts = Totals for Funding Sources
           - unless projects_funding_sources_ok
-            %span.info The Project budget/spend amounts do not match their Funding Source budget/spend amount(s). Please update your projects and/or funding sources.
+            %span.info The Project amounts do not match their Funding Source amount totals. Please update your projects and/or funding sources.
 
         - unless projects_funding_sources_ok
           .simple_table.push
@@ -167,8 +169,8 @@
               %thead
                 %tr
                   %th Project
-                  %th Project Budget/Expenditure
-                  %th Funding Sources Budget/Expenditure Total
+                  %th Project Amount
+                  %th Funding Sources Amount Total
                   %th Diff
                   %th.manage Manage
               %tbody
@@ -199,10 +201,10 @@
 
       %li
         %h3{:class =>  projects_activities_ok ? "ready" : "not-ready"}
-          Amounts total correctly for Projects, Activities & Other Costs
+          Projects Amounts = Totals for Activities + Totals for Other Costs
           - unless projects_activities_ok
             %span.info
-              The Project amount should match the total amounts for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+              The Project amounts should match the total amounts for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
         - unless projects_activities_ok
           .simple_table.push.review
@@ -210,9 +212,9 @@
               %thead
                 %tr
                   %th= "Project/Activity"
-                  %th= "Activity/Other Costs Expenditure/Budget Total (#{@response.currency})"
-                  %th= "Project Expenditure/Budget Total (#{@response.currency})"
-                  %th= "Diff (#{@response.currency})"
+                  %th= "Project Amount Total"
+                  %th= "Activity/Other Costs Amount Total"
+                  %th= "Diff"
               %tbody
                 %tr
                   %th{:colspan => 5}
@@ -223,8 +225,8 @@
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
                         = link_to project.name, edit_response_project_path(@response, project)
-                      %td.first= n2cndrs(universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter(project.budget, project.currency, @response.currency), @response.currency)
+                      %td.first= n2cndrs(universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
                       - project.activities.each do |activity|
                         %tr{:class => "#{dom_id(project)}_budget"}
@@ -241,8 +243,8 @@
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"
                         = link_to project.name, edit_response_project_path(@response, project)
-                      %td.first= n2cndrs(universal_currency_converter((project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter(project.spend, project.currency, @response.currency), @response.currency)
+                      %td.first= n2cndrs(universal_currency_converter((project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency, @response.currency), @response.currency)
                       - project.activities.each do |activity|
                         %tr{:class => "#{dom_id(project)}_spend"}

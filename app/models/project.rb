@@ -51,9 +51,6 @@ class Project < ActiveRecord::Base
   validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
-  validates_date :start_date
-  validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
 

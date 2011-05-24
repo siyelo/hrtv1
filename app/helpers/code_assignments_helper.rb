@@ -2,7 +2,7 @@ module CodeAssignmentsHelper
   def friendly_name_for_coding_copy(coding_type)
     case coding_type
     when 'CodingBudget', 'CodingSpend'
-      'Purposes'
+      'Health Functions'
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       'Locations'
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'

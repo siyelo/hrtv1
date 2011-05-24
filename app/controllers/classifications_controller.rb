@@ -13,7 +13,7 @@ class ClassificationsController < Reporter::BaseController
 
     respond_to do |format|
       format.html do
-        flash[:notice] = 'Purposes classifications for Spent were successfully saved'
+        flash[:notice] = 'Health Functions classifications for Spent were successfully saved'
         redirect_to edit_response_classification_url(@response, params[:id])
       end
       format.json do

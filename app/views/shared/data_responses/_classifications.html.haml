@@ -5,7 +5,7 @@
   .tab1{:"data-chart_type" => "activity", :"data-id" => activity.id, :style => "display:block;"}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_coding', :link_name => 'Codings'
     .pie
-      %h4 Budget Purposes
+      %h4 Budget Health Functions
       %ul
         - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - code_roots.each do |code|
@@ -53,7 +53,7 @@
   .tab5{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_coding', :link_name => 'Codings'
     .pie
-      %h4 Expenditure Purposes
+      %h4 Expenditure Health Functions
       %ul
         - budget_assignments =  CodingSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - code_roots.each do |code|

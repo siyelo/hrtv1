@@ -8,7 +8,7 @@
     
   - if @response.request.purposes?
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}
-      = link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
+      = link_to 'Health Functions', edit_response_classification_path(@response, 'CodingSpend')
       
   - if @response.request.inputs?
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}

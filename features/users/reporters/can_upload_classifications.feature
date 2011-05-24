@@ -41,7 +41,7 @@ Feature: Reporter can upload classifications
 
     Scenario Outline: Reporter can download Purposes template
       When I follow "<type>"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I follow "Download template"
       Then I should see "mtef1"
         And I should not see "cost_category1"
@@ -101,7 +101,7 @@ Feature: Reporter can upload classifications
 
     Scenario Outline: Reporter can upload Purposes
       When I follow "<type>"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
         And I press "Upload"
       Then I should see "Activity classification was successfully uploaded."

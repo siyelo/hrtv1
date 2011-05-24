@@ -21,6 +21,3 @@
   - if @response.request.locations?
     %li{:class => ['CodingSpendDistrict', 'CodingBudgetDistrict'].include?(params[:id]) ? 'active' : nil}
       = link_to 'Locations', edit_response_classification_path(@response, 'CodingSpendDistrict')
-      
-  %li{:class => (['projects', 'activities'].include?(params[:controller]) ? 'active' : nil)}
-    = link_to 'Manage', response_projects_path(@response)

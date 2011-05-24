@@ -8,11 +8,16 @@ class ProjectsController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @response.projects.scoped({})
-    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
-                                         {:q => "%#{params[:query]}%"}]) if params[:query]
-    @projects = scope.paginate(:page => params[:page], :per_page => 10,
-                               :order => sort_column + " " + sort_direction) # rails 2
+    
+    redirect_to edit_response_workplan_path(@response, :spend)
+    ### due to https://www.pivotaltracker.com/story/show/13759613
+    ### Not quite sure we should remove all this yet
+    
+    # scope = @response.projects.scoped({})
+    #   scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
+    #                                        {:q => "%#{params[:query]}%"}]) if params[:query]
+    #   @projects = scope.paginate(:page => params[:page], :per_page => 10,
+    #                              :order => sort_column + " " + sort_direction) # rails 2
   end
 
   def new
@@ -40,7 +45,7 @@ class ProjectsController < Reporter::BaseController
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
-      success.html { redirect_to response_projects_url(@response) }
+      success.html { redirect_to edit_response_workplan_path(@response, :spend) }
       success.js do
         render :json => {:status => @project.valid?,
                          :html => render_to_string({:partial => 'workplans/project_row',
@@ -59,7 +64,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to response_projects_url(@response)
+        redirect_to edit_response_workplan_path(@response, :spend)
       }
       failure.html do
         load_comment_resources(resource)

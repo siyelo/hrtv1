@@ -3,10 +3,12 @@
     - semantic_form_for @activity, :url => response_activities_path(@response, :type => params[:type]), :html => {:class => "basic_form new_activity_form"} do |f|
       - f.inputs :class => 'inputs' do
         = f.input :project_id, :as => :hidden
+        %li
+          %label.required Name
         = f.input :name, :input_html => { 'data-hint' => 'Enter activity name' }, :label => false
+        %li
+          %label.required Description
         = f.input :description, :input_html => { :rows => 2, 'data-hint' => 'Enter activity description' }, :label => false
-        = f.input :start_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'Start date' }, :label => false
-        = f.input :end_date, :as => :string, :input_html => { :class => 'date_picker', 'data-hint' => 'End date' }, :label => false
       - f.buttons :class => 'buttons' do
         = f.commit_button "Add activity", :wrapper_html => {:class => 'js_save_activity'}, :button_html => {:class => 'create_button'}
         %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

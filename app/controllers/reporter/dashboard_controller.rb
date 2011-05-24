@@ -9,5 +9,6 @@ class Reporter::DashboardController < Reporter::BaseController
     @response = @projects.first.response
     # /hack
   end
+  
 end
 

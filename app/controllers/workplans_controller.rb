@@ -13,6 +13,7 @@ class WorkplansController < Reporter::BaseController
     flash[:notice] = 'Workplan was successfully saved'
     redirect_to edit_response_workplan_url(@response, params[:id])
   end
+  
 
   private
     def load_projects

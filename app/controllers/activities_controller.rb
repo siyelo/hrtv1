@@ -38,7 +38,10 @@ class ActivitiesController < Reporter::BaseController
 
     if @activity.save
       respond_to do |format|
-        format.html { flash[:notice] = 'Activity was successfully created'; html_redirect }
+        format.html { 
+          flash[:notice] = 'Activity was successfully created' 
+          redirect_to edit_response_workplan_path(@response, :spend)
+        }
         format.js   { js_redirect }
       end
     else
@@ -61,7 +64,7 @@ class ActivitiesController < Reporter::BaseController
           else
             flash[:error] = 'Please be aware that your activities spend/budget exceeds that of your projects'
           end
-          html_redirect
+          redirect_to edit_response_workplan_path(@response, :spend)
         end
         format.js   { js_redirect }
       end

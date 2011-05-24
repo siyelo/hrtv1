@@ -30,3 +30,9 @@
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|
     = render 'code_row', :code => code
+    
+%br
+- if @projects.empty? || !@response.projects_have_activities?
+  %p.centered.attention
+    You have not added any activities.
+    = link_to "Add them now.", edit_response_workplan_path(@response, :spend)

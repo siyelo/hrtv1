@@ -34,6 +34,7 @@
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project
+          
       %tr.filler.js_projects_total_row
         %td{:colspan => 6}
         %td.total Total
@@ -43,3 +44,8 @@
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'
+          
+- if @projects.empty?          
+  %p.centered.attention
+    You have not added any projects.
+    = link_to "Add them now.", edit_response_workplan_path(@response, :spend)

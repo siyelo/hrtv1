@@ -94,3 +94,8 @@
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'
+
+
+- if @projects.empty?
+  %p.centered.attention Hi! Click "Add Project" to get started
+  %p.centered.attention Or you can Import your workplan from a file.

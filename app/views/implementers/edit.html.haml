@@ -13,16 +13,29 @@
   %table.workplan
     %thead
       %tr.filler2
-        %th.no-bg
+        %th{:colspan => 3}
         %th.no-padding{:colspan => "100"}
           %ul.tabs
-            %li= link_to 'Spent', edit_response_implementer_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
-            %li= link_to 'Budget', edit_response_implementer_path(@response, :budget), :class => (params[:id] == 'budget'  ? 'active' : nil)
+            %li= link_to 'Yearly', edit_response_implementer_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
+            %li= link_to 'Quarterly', edit_response_implementer_path(@response, :budget), :class => (params[:id] == 'budget'  ? 'active' : nil)
 
       %tr.head
-        %th.name.fixed Activity
-        %th{:colspan => "2"} Implementer
-        %th
+        %th{:colspan => 3}
+        - start_year = @response.request.start_date.try(:year)
+        - end_year = @response.request.end_date.try(:year)
+        - if start_year == end_year
+          - prev_fy = "FY #{start_year}"
+          - next_fy = "FY #{start_year+1}"
+        - else
+          - prev_fy = "FY #{start_year}-#{end_year}"
+          - next_fy = "FY #{start_year+1}-#{end_year+1}"
+        %th= prev_fy
+        %th{:colspan => 10}= next_fy
+      %tr.head
+        %th Activity
+        %th{:colspan => 2} Implementer
+        %th Spend
+        %th Budget
         %th.actions
 
     %tbody
@@ -34,7 +47,10 @@
         %td{:colspan => "2", :class => "name fixed"}
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(params[:id])}.sum
+          %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(:spend)}.sum
+          %span.currency= @response.currency
+        %td.total_amount
+          %span.js_projects_total_amount= @projects.map{ |p| p.sub_activities_total_by_type(:budget)}.sum
           %span.currency= @response.currency
         %td.actions
 

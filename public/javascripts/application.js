@@ -1724,6 +1724,10 @@ var changeRowspan = function (element, value) {
   var projectTd = element.parents('tr').prevAll('.js_project_row:first').find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
+var changeRowspanForActivity = function (element, value) {
+  var projectTd = element.parents('tr').prevAll('.js_activity_row:first').find('td');
+  projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
+};
 
 var getTotal = function (amounts) {
   var total = 0;
@@ -2096,7 +2100,7 @@ var implementers_edit = {
         currentTr.before(newTr);
         newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
-        changeRowspan(element, 1);
+        changeRowspanForActivity(element, 1);
       });
     });
 

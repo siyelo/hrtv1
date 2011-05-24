@@ -7,13 +7,16 @@
   = render 'implementer_row', :implementer => implementer, :type => params[:id]
 
 %tr.filler2.js_activity_total_row{:"data-activity_id" => activity.id}
-  %td{:colspan => "2", :class => "name wrap-50"}
+  %td{:colspan => 2}
     - link_to new_response_implementer_path(@response), :class => 'add_implementer add_row' do
       = image_tag "new.png"
       Add implementer
   %td.total
-    Subtotal
     .total_amount
-      %span.js_activity_total= activity.sub_activities_total_by_type(params[:id])
+      %span.js_activity_total= activity.sub_activities_total_by_type(:spend)
+      %span.currency= project.currency
+  %td.total
+    .total_amount
+      %span.js_activity_total= activity.sub_activities_total_by_type(:budget)
       %span.currency= project.currency
   %td.actions

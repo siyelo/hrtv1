@@ -99,7 +99,7 @@ module BudgetSpendHelpers
     return total_by_type_no_quarters(amount_type) unless quarters
     return total_by_type(amount_type)
   end
-  
+
   def total_by_type(amount_type)
     amounts = [
       self.send("#{amount_type}_q4_prev"),
@@ -110,13 +110,13 @@ module BudgetSpendHelpers
     ].compact.sum
   end
 
-
   def total_by_type_no_quarters(amount_type)
     amounts = [
       self.send("#{amount_type}_q4_prev"),
       self.send("#{amount_type}")
     ].compact.sum
   end
+
   protected
 
     # some older, unmigrated objects are going to break here...

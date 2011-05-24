@@ -1,7 +1,6 @@
 %tr.js_activity_row
   %td.desc
-    = activity.title
-    = link_to "(edit)", edit_response_activity_path(@response, activity)
+    = link_to activity.title, edit_response_activity_path(@response, activity)
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q4_prev", activity.send("#{type}_q4_prev"), :class => 'js_qamount'
   - if !@response.request.budget_by_quarter? && params[:id] == "budget"
     %td{:colspan => 3}
@@ -12,7 +11,7 @@
     %td= text_field_tag :"activities[#{activity.id}]#{type}_q3", activity.send("#{type}_q3"), :class => 'js_qamount'
     %td= text_field_tag :"activities[#{activity.id}]#{type}_q4", activity.send("#{type}_q4"), :class => 'js_qamount'
   %td.total_amount
-    %span.pointer.js_activity_total= activity.total_by_type(type, @response.request.budget_by_quarter?)
+    %span.pointer.js_activity_total= activity.workplan_total_by_type(type, @response.request.budget_by_quarter?)
     %span.currency= activity.currency
 
 :javascript

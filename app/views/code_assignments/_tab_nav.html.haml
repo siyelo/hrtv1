@@ -4,7 +4,7 @@
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingBudget')}
-        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
+        = link_to "1. Health Functions", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
 
     - unless other_costs
       - if @response.request.locations?
@@ -20,7 +20,7 @@
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :spend
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingSpend')}
-        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
+        = link_to "1. Health Functions", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
     - unless other_costs
       - if @response.request.locations?

@@ -58,7 +58,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: enter budget for an activity (don't see flash errors)
       When I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef1" with "5000000.00"
         And I press "Save"
       Then I should see "Activity classification was successfully updated."
@@ -68,21 +68,21 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: enter budget for an activity (see flash errors)
       When I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "1,234,567.00"
-        And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
+        And I should see "We're sorry, when we added up your Budget by Health Functions classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Budget by Health Functions classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
 
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef1" with "<amount>"
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
-        And I should see "We're sorry, when we added up your Budget by Purposes classifications"
+        And I should see "We're sorry, when we added up your Budget by Health Functions classifications"
 
         And the "mtef1" field should contain "<amount2>"
 
@@ -95,7 +95,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: enter expenditure for an activity
       When I follow "Spend"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
@@ -144,7 +144,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
       When I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef1" with "10%"
         And I fill in "mtef11" with "5%"
         And I fill in "mtef111" with "1%"
@@ -162,9 +162,9 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Purposes tab"
+      When I follow "Click here to copy the Budget splits below to the Spend Health Functions tab"
         And I follow "Spend"
-        And I follow "Purposes"
+        And I follow "Health Functions"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
@@ -175,7 +175,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
       When I press "Save & Classify >"
         And I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef111" with "1%"
         And I fill in "mtef112" with "2%"
         And I press "Save"
@@ -185,9 +185,9 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Purposes tab"
+      When I follow "Click here to copy the Budget splits below to the Spend Health Functions tab"
         And I follow "Spend"
-        And I follow "Purposes"
+        And I follow "Health Functions"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
@@ -195,10 +195,10 @@ Feature: Reporter can enter a code breakdown for each activity
 
       ### change coding and see if budget codings are changed
       When I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
         And I fill in "mtef111" with "2%"
         And I press "Save"
-      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount."
+      Then I should see "We're sorry, when we added up your Budget by Health Functions classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Budget by Health Functions classifications must be entered and the total must be equal to the Budget amount."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
@@ -210,7 +210,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "Spent" with "2000"
         And I press "Save & Classify >"
         And I follow "Budget"
-        And I follow "Purposes"
+        And I follow "Health Functions"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "40.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "40.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "20.00"

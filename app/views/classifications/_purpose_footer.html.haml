@@ -1,6 +1,7 @@
 - total  = cached_amount_total(code_assignments)
 - amount = activity.send(get_coding_type(params[:id])) || 0
 - remaining = amount - total
+- coding_name = "Health Function" if coding_name == "Purpose"
 
 %tr.js_activity_total_row
   %td{:class => "name wrap-50"}

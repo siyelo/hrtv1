@@ -32,12 +32,12 @@ Feature: Reporter can manage classifications
   Scenario: Reporter can edit Purposes classifications for Spent
       When I follow "data_request1"
       And I follow "Projects"
-      And I follow "Purposes"
+      And I follow "Health Functions"
       Then I should see "Purposes" within "h1"
       And I fill in "mtef11" with "100"
       And I fill in "mtef12" with "200"
       And I press "Save"
-      Then I should see "Purposes classifications for Spent were successfully saved"
+      Then I should see "Health Functions classifications for Spent were successfully saved"
 
   @wip
   Scenario: Reporter can add a purpose

@@ -11,28 +11,28 @@
   %li
     - link_to current_edit_response_url do
       %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "70"
-      %span.title Setup Your Organization
+      %span.title 1. Configure your Organization
       %br
-      %span.desc Configure your fiscal year and contact settings
-      
+      %span.desc Your basic preferences and contact settings
+
   %li
     -#= link_to "Enter Your Workplan", edit_response_workplan_path(current_or_last_response, :spend)
     - link_to current_projects_url_hack do
       %span.icon= image_tag "icon_welcome5.png", :alt => "Setup Your Organization", :height => "70"
-      %span.title Enter Your Workplan
+      %span.title 2. Enter Your Workplan
       %br
-      %span.desc Define the health projects/activities your organization does
-      
+      %span.desc Define the health projects and activities your organization does
+
   %li
     - link_to current_classifications_url_hack do
-      %span.icon= image_tag "icon_welcome4.png", :alt => "Setup Your Organization", :height => "70"
-      %span.title Add Classifications
+      %span.icon= image_tag "icon_welcome4.png", :alt => "Add Classifications", :height => "70"
+      %span.title 3. Add Classifications
       %br
       %span.desc Add a little extra detail about your activities.
   %li
     - link_to current_response_url do
       %span.icon= image_tag "icon_welcome3.png", :alt => "Setup Your Organization", :height => "70"
-      %span.title Review & Respond
+      %span.title 4. Review & Respond
       %br
       %span.desc Submit your data for the requested period
 
@@ -45,7 +45,7 @@
     %li
       = link_to "Contact Us", contact_link, :target => "_blank"
       %span Start a discussion with the support team.
-      
+
 %p.welcome_continue
   Done with this welcome screen?
   = link_to "Hide this welcome screen", "#"

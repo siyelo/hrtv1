@@ -42,7 +42,7 @@ class ResponsesController < ApplicationController
     @response = find_response(params[:id])
     @response.update_attributes(params[:data_response])
     if @response.save
-      flash[:notice] = "Successfully updated."
+      flash[:notice] = "Successfully updated settings."
       redirect_to edit_response_url(@response)
     else
       render :action => :edit

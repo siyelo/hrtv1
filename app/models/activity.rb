@@ -274,8 +274,7 @@ class Activity < ActiveRecord::Base
     activities.each_pair do |activity_id, attributes|
       activity = response.activities.find(activity_id)
       activity.attributes = attributes
-      activity.budget = [activity.budget_q1, activity.budget_q2,
-                     activity.budget_q3, activity.budget_q4].compact.sum
+      attributes[:budget].nil? ? activity.budget = [activity.budget_q1, activity.budget_q2, activity.budget_q3, activity.budget_q4].compact.sum : activity.budget = attributes[:budget]
       activity.spend  = [activity.spend_q1, activity.spend_q2,
                      activity.spend_q3, activity.spend_q4].compact.sum
       activity.save

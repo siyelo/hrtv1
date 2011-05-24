@@ -275,8 +275,8 @@ END
     activities.map { |a| a.total_by_type(amount_type) }.compact.sum
   end
   
-  def converted_activities_total_by_type(amount_type)
-    activities.map { |a| a.total_by_type(amount_type) * currency_rate(a.currency, a.project.currency) }.compact.sum
+  def converted_activities_total_by_type(amount_type, quarters)
+    activities.map { |a| a.total_by_type(amount_type, quarters) * currency_rate(a.currency, a.project.currency) }.compact.sum
   end
 
   def funders_total_by_type(amount_type)

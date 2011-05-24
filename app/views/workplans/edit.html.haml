@@ -7,6 +7,7 @@
 
 %h1.main_heading Workplan
 
+= @response.request.budget_by_quarter?
 = render 'workplan_getting_started'
 
 %ul.horizontal
@@ -36,10 +37,14 @@
         %th Project
         %th Activity
         %th Q4
-        %th Q1
-        %th Q2
-        %th Q3
-        %th Q4
+        - if !@response.request.budget_by_quarter? && params[:id] == "budget"
+          %th{:colspan => 3}
+          %th Total Budget
+        - else
+          %th Q1
+          %th Q2
+          %th Q3
+          %th Q4
         %th Total
     %tbody
       - @projects.each do |project|
@@ -54,7 +59,7 @@
               Add activity
           %td.total Subtotal
           %td.total_amount
-            %span.js_project_total= project.converted_activities_total_by_type(params[:id])
+            %span.js_project_total= project.converted_activities_total_by_type(params[:id], @response.request.budget_by_quarter?)
             %span.currency= @response.currency
       %tr.filler.js_projects_total_row
         %td{:colspan => 6}
@@ -65,7 +70,8 @@
         %td.total Total
         %td.total_amount.wrap-10
           %span.js_projects_total_amount
-            = @projects.map{|p| p.converted_activities_total_by_type(params[:id])}.sum
+            = @projects.map{ |p| p.converted_activities_total_by_type(params[:id], @response.request.budget_by_quarter?)}
+            =# @projects.map{|p| p.converted_activities_total_by_type(params[:id])}.sum
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

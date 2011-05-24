@@ -274,21 +274,31 @@ describe DataResponse do #validations
     it "is true when activity budget is equal to project budget" do
       Factory.create(:activity, :project => @project, :budget => 10)
       @response.projects_and_activities_have_matching_budgets?.should == true
+      @response.projects_with_activities_not_matching_amounts(:budget).should == []
     end
 
     it "is true when sum of activities and other cost budgets is equal to project budget" do
       setup_equal_to_project(:budget)
       @response.projects_and_activities_have_matching_budgets?.should == true
+      @response.projects_with_activities_not_matching_amounts(:budget).should == []
+    end
+
+    it "is true when activities empty and budget is 0" do
+      @project.budget = 0 ; @project.save(false)
+      @response.projects_and_activities_have_matching_budgets?.should == true
+      @response.projects_with_activities_not_matching_amounts(:budget).should == []
     end
 
     it "is false when sum of activities and other cost budgets is more than to project budget" do
       setup_more_than_project(:budget)
       @response.projects_and_activities_have_matching_budgets?.should == false
+      @response.projects_with_activities_not_matching_amounts(:budget).should == [@project]
     end
 
     it "is false when sum of activities and other cost budgets is less than to project budget" do
       setup_less_than_project(:budget)
       @response.projects_and_activities_have_matching_budgets?.should == false
+      @response.projects_with_activities_not_matching_amounts(:budget).should == [@project]
     end
   end
 
@@ -301,6 +311,12 @@ describe DataResponse do #validations
     it "is true when activity spend is equal to project spend" do
       Factory.create(:activity, :project => @project, :spend => 10)
       @response.projects_and_activities_have_matching_spends?.should == true
+    end
+
+    it "is true when activities empty and spend is 0" do
+      @project.spend = 0 ; @project.save(false)
+      @response.projects_and_activities_have_matching_spends?.should == true
+      @response.projects_with_activities_not_matching_amounts(:spend).should == []
     end
 
     it "is true when sum of activities and other cost spend is equal to project spend" do

@@ -139,7 +139,7 @@
               
       %li
         %h3{:class => (projects_funders_have_organizations)}
-          All Projects have Funding Flows have Organizations
+          All Project Funding Sources have Organization Specified
           - unless @response.check_projects_funding_sources_have_organizations?
             %span.info All Projects have Funding Sources and all Funding Sources have an Organization linked to them
             - @response.projects.each do |project|
@@ -157,7 +157,7 @@
 
       %li
         %h3{:class => (projects_funding_sources_ok ? "ready" : "not-ready")}
-          Correct Budget amounts for Projects & Funding Sources
+          Correct amounts for Projects & Funding Sources
           - unless projects_funding_sources_ok
             %span.info The Project budget/spend amounts do not match their Funding Source budget/spend amount(s). Please update your projects and/or funding sources.
 
@@ -199,10 +199,10 @@
 
       %li
         %h3{:class =>  projects_activities_ok ? "ready" : "not-ready"}
-          Correct Expenditure amounts for Projects, Activities & Other Costs
+          Amounts total correctly for Projects, Activities & Other Costs
           - unless projects_activities_ok
             %span.info
-              The Project expenditure should match the total expenditures for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+              The Project amount should match the total amounts for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
 
         - unless projects_activities_ok
           .simple_table.push.review
@@ -217,8 +217,8 @@
                 %tr
                   %th{:colspan => 5}
                     Budget
-                - @response.projects.each do |project|
-                  - if (project.budget || 0) != ((project.activities_budget_total + project.other_costs_budget_total) || 0)
+                - @response.projects_with_activities_not_matching_amounts(:budget).each do |project|
+                  - if true
                     %tr{:class => "#{dom_id(project)}"}
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
@@ -234,9 +234,9 @@
                 %tr
                   %th{:colspan => 5}
                     Spend
-                
-                - @response.projects.each do |project|
-                  - if (project.spend || 0) != ((project.activities_spend_total + project.other_costs_spend_total) || 0)
+
+                - @response.projects_with_activities_not_matching_amounts(:spend).each do |project|
+                  - if true
                     %tr
                       %td.first
                         = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"

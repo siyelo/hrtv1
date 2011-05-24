@@ -271,6 +271,30 @@ END
     other_costs.reject{|fs| fs.spend.nil?}.sum(&:spend)
   end
 
+  def direct_activities_total(amount_type)
+    smart_sum(activities.roots, amount_type)
+  end
+
+  def other_costs_total(amount_type)
+    smart_sum(other_costs, amount_type)
+  end
+
+
+  def errors_from_response
+    errors = []
+    
+    [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
+      if !response.project_and_activities_matching_amounts?(self, m)
+        st = m == :budget ? "Budget" : "Expenditure"
+        errors << "The Project #{st} should match the total budgets for Activities plus Other Costs. Please update your activities/other costs for this project accordingly."
+      end
+    end
+    if !linked?
+      errors << "The Project is not currently linked."
+    end
+    errors
+  end
+
   private
 
     ### Validations

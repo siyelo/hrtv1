@@ -23,28 +23,28 @@
   %table.workplan
     %thead
       %tr.filler
-        %th{:colspan => 2}
+        %th{:colspan => 3}
         %th.no-padding{:colspan => 6}
           %ul.tabs
-            %li= link_to 'Spend', edit_response_workplan_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
-            %li= link_to 'Budget', edit_response_workplan_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
+            %li= link_to 'Yearly', edit_response_workplan_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
+            %li= link_to 'Quarterly', edit_response_workplan_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
       %tr.head
-        %th{:colspan => 2}
-        %th= @response.fiscal_year_start_date.try(:year)
-        %th{:colspan => 5}= @response.fiscal_year_end_date.try(:year)
+        %th{:colspan => 3}
+        - start_year = @response.request.start_date.try(:year)
+        - end_year = @response.request.end_date.try(:year)
+        - if start_year == end_year
+          - prev_fy = "FY #{start_year}"
+          - next_fy = "FY #{start_year+1}"
+        - else
+          - prev_fy = "FY '#{start_year}-'#{end_year}"
+          - next_fy = "FY '#{start_year+1}-'#{end_year+1}"
+        %th= prev_fy
+        %th{:colspan => 10}= next_fy
       %tr.head
         %th Project
-        %th Activity
-        %th Q4
-        - if !@response.request.budget_by_quarter? && params[:id] == "budget"
-          %th{:colspan => 3}
-          %th Total Budget
-        - else
-          %th Q1
-          %th Q2
-          %th Q3
-          %th Q4
-        %th Total
+        %th{:colspan => 2} Activity
+        %th Spend
+        %th Budget
     %tbody
       - @projects.each do |project|
         %tr.js_project_row
@@ -53,25 +53,32 @@
         - project.activities.ordered_by_id.each do |activity|
           = render 'activity_row', :activity => activity, :type => params[:id]
         %tr.filler2.js_project_total_row{:"data-project_id" => project.id}
-          %td{:colspan => 5}
+          %td
             - link_to new_response_activity_path(@response, :project_id => project.id), :class => 'add_activity add_row' do
               = image_tag "new.png"
               Add activity
           %td.total Subtotal
           %td.total_amount
-            %span.js_project_total= project.converted_activities_total_by_type(params[:id], @response.request.budget_by_quarter?)
+            %span.js_spend_column_total= project.converted_activities_total_by_type('spend', false)
+            %span.currency= @response.currency
+
+          %td.total_amount
+            %span.js_budget_column_total= project.converted_activities_total_by_type('budget', false)
             %span.currency= @response.currency
       %tr.filler.js_projects_total_row
-        %td{:colspan => 6}
+        %td{:colspan => 2}
           - link_to new_response_project_path(@response), :class => 'js_add_project add_row' do
             = image_tag "new.png"
             Add project
 
         %td.total Total
         %td.total_amount.wrap-10
-          %span.js_projects_total_amount
-            = @projects.map{ |p| p.converted_activities_total_by_type(params[:id], @response.request.budget_by_quarter?)}
-            =# @projects.map{|p| p.converted_activities_total_by_type(params[:id])}.sum
+          %span.js_projects_total_spend_amount
+            = @projects.map{ |p| p.converted_activities_total_by_type('spend', false)}.compact.sum
+          %span.currency= @response.currency
+        %td.total_amount.wrap-10
+          %span.js_projects_total_budget_amount
+            = @projects.map{ |p| p.converted_activities_total_by_type('budget', false)}.compact.sum
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

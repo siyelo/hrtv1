@@ -111,10 +111,7 @@ module BudgetSpendHelpers
   end
 
   def total_by_type_no_quarters(amount_type)
-    amounts = [
-      self.send("#{amount_type}_q4_prev"),
-      self.send("#{amount_type}")
-    ].compact.sum
+    self.send("#{amount_type}")
   end
 
   protected

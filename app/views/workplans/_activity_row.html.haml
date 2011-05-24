@@ -1,18 +1,8 @@
 %tr.js_activity_row
-  %td.desc
+  %td.desc{:colspan => 2}
     = link_to activity.title, edit_response_activity_path(@response, activity)
-  %td= text_field_tag :"activities[#{activity.id}]#{type}_q4_prev", activity.send("#{type}_q4_prev"), :class => 'js_qamount'
-  - if !@response.request.budget_by_quarter? && params[:id] == "budget"
-    %td{:colspan => 3}
-    %td= text_field_tag :"activities[#{activity.id}]#{type}", activity.send("#{type}"), :class => 'js_qamount'
-  - else
-    %td= text_field_tag :"activities[#{activity.id}]#{type}_q1", activity.send("#{type}_q1"), :class => 'js_qamount'
-    %td= text_field_tag :"activities[#{activity.id}]#{type}_q2", activity.send("#{type}_q2"), :class => 'js_qamount'
-    %td= text_field_tag :"activities[#{activity.id}]#{type}_q3", activity.send("#{type}_q3"), :class => 'js_qamount'
-    %td= text_field_tag :"activities[#{activity.id}]#{type}_q4", activity.send("#{type}_q4"), :class => 'js_qamount'
-  %td.total_amount
-    %span.pointer.js_activity_total= activity.workplan_total_by_type(type, @response.request.budget_by_quarter?)
-    %span.currency= activity.currency
+  %td= text_field_tag :"activities[#{activity.id}]spend", activity.spend, :class => 'js_spend_column_amount'
+  %td= text_field_tag :"activities[#{activity.id}]budget", activity.budget, :class => 'js_budget_column_amount'
 
 :javascript
   var _type = "#{params[:id]}";

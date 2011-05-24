@@ -5,13 +5,22 @@
     = link_to 'Funders', edit_response_funder_path(@response, :spend)
   %li{:class => (params[:controller] == 'implementers' && params[:action] == 'edit' ? 'active' : nil)}
     = link_to 'Implementers', edit_response_implementer_path(@response, :spend)
-  %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}
-    = link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
-  %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}
-    = link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
-  %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}
-    = link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
-  %li{:class => ['CodingSpendDistrict', 'CodingBudgetDistrict'].include?(params[:id]) ? 'active' : nil}
-    = link_to 'Locations', edit_response_classification_path(@response, 'CodingSpendDistrict')
+    
+  - if @response.request.purposes?
+    %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}
+      = link_to 'Purposes', edit_response_classification_path(@response, 'CodingSpend')
+      
+  - if @response.request.inputs?
+    %li{:class => (params[:controller] == 'classifications' && ['CodingSpendCostCategorization', 'CodingBudgetCostCategorization'].include?(params[:id])) ? 'active' : nil}
+      = link_to 'Inputs', edit_response_classification_path(@response, 'CodingSpendCostCategorization')
+      
+  - if @response.request.service_levels?
+    %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}
+      = link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
+      
+  - if @response.request.locations?
+    %li{:class => ['CodingSpendDistrict', 'CodingBudgetDistrict'].include?(params[:id]) ? 'active' : nil}
+      = link_to 'Locations', edit_response_classification_path(@response, 'CodingSpendDistrict')
+      
   %li{:class => (['projects', 'activities'].include?(params[:controller]) ? 'active' : nil)}
     = link_to 'Manage', response_projects_path(@response)

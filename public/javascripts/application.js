@@ -1760,6 +1760,34 @@ var workplans_edit = {
       $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
     };
 
+    var updateSpendColumnValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // project total for spend
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_spend_column_amount:first');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.nextAll('.js_project_total_row:first').find('.js_spend_column_total').text(getTotal(amounts));
+
+      // all projects total for spend
+      var elements = $('.js_spend_column_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.js_projects_total_row .js_projects_total_spend_amount').text(getTotal(amounts));
+    };
+    // TODO  - DRY it up
+    var updateBudgetColumnValues = function (element) {
+      var tr = element.parents('tr:first');
+
+      // project total for spend
+      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_budget_column_amount:first');
+      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+      tr.nextAll('.js_project_total_row:first').find('.js_budget_column_total').text(getTotal(amounts));
+
+      // all projects total for spend
+      var elements = $('.js_budget_column_total');
+      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+      $('.js_projects_total_row .js_projects_total_budget_amount').text(getTotal(amounts));
+    };
+
     initDemoText($('*[data-hint]'));
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
@@ -1779,6 +1807,16 @@ var workplans_edit = {
     $('.js_qamount').live('keyup', function (e) {
       var element = $(this);
       updateValues(element);
+    });
+
+    $('.js_spend_column_amount').live('keyup', function (e) {
+      var element = $(this);
+      updateSpendColumnValues(element);
+    });
+
+    $('.js_budget_column_amount').live('keyup', function (e) {
+      var element = $(this);
+      updateBudgetColumnValues(element);
     });
 
     $('.js_activity_row .js_activity_total').live('click', function (e) {
@@ -2097,6 +2135,8 @@ var implementers_edit = {
       var element = $(this);
       updateValues(element);
     });
+
+
   }
 }
 

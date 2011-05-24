@@ -34,15 +34,12 @@ class DataRequest < ActiveRecord::Base
   def only_budget?
     budget? && !spend?
   end
-  
+
   def no_long_term_budgets?
-    !year_2 && !year_3 && !year_4 && !year_5 
+    !year_2 && !year_3 && !year_4 && !year_5
   end
+
 end
-
-
-
-
 
 
 # == Schema Information

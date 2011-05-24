@@ -36,8 +36,8 @@
           - prev_fy = "FY #{start_year}"
           - next_fy = "FY #{start_year+1}"
         - else
-          - prev_fy = "FY '#{start_year}-'#{end_year}"
-          - next_fy = "FY '#{start_year+1}-'#{end_year+1}"
+          - prev_fy = "FY #{start_year}-#{end_year}"
+          - next_fy = "FY #{start_year+1}-#{end_year+1}"
         %th= prev_fy
         %th{:colspan => 10}= next_fy
       %tr.head

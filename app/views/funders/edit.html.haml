@@ -13,39 +13,46 @@
   %table.workplan
     %thead
       %tr
-        %th.no-bg{:colspan => 2}
+        %th.no-bg{:colspan => 3}
         %th.no-padding{:colspan => 6}
           %ul.tabs
-            %li= link_to 'Spend', edit_response_funder_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
-            %li= link_to 'Budget', edit_response_funder_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
+            %li= link_to 'Yearly', edit_response_funder_path(@response, :spend), :class => (params[:id] == 'spend' ? 'active' : nil)
+            %li= link_to 'Quarterly', edit_response_funder_path(@response, :budget), :class => (params[:id] == 'budget' ? 'active' : nil)
       %tr.head
-        %th{:colspan => 2}
-        %th= @response.fiscal_year_start_date.try(:year)
-        %th{:colspan => 5}= @response.fiscal_year_end_date.try(:year)
+        %th{:colspan => 3}
+        - start_year = @response.request.start_date.try(:year)
+        - end_year = @response.request.end_date.try(:year)
+        - if start_year == end_year
+          - prev_fy = "FY #{start_year}"
+          - next_fy = "FY #{start_year+1}"
+        - else
+          - prev_fy = "FY #{start_year}-#{end_year}"
+          - next_fy = "FY #{start_year+1}-#{end_year+1}"
+        %th.amount= prev_fy
+        %th.amount= next_fy
       %tr.head
         %th Project
-        %th Funder
-        %th Q4
-        %th Q1
-        %th Q2
-        %th Q3
-        %th Q4
-        %th Total
+        %th{:colspan => 2} Funder
+        %th.amount Spend
+        %th.amount Budget
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project
-          
+
       %tr.filler.js_projects_total_row
-        %td{:colspan => 6}
+        %td{:colspan => 2}
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_amount= @projects.map{|p| p.funders_total_by_type(params[:id])}.sum
+          %span.js_projects_total_amount= @projects.map{|p| p.funders_total_by_type('spend')}.sum
+          %span.currency= @response.currency
+        %td.total_amount
+          %span.js_projects_total_amount= @projects.map{|p| p.funders_total_by_type('budget')}.sum
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'
-          
-- if @projects.empty?          
+
+- if @projects.empty?
   %p.centered.attention
     You have not added any projects.
     = link_to "Add them now.", edit_response_workplan_path(@response, :spend)

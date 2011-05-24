@@ -10,10 +10,6 @@
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}
       = link_to 'Health Functions', edit_response_classification_path(@response, 'CodingSpend')
 
-  - if @response.request.service_levels?
-    %li{:class => ['ServiceLevelSpend', 'ServiceLevelBudget'].include?(params[:id]) ? 'active' : nil}
-      = link_to 'Service Levels', edit_response_classification_path(@response, 'ServiceLevelSpend')
-
   - if @response.request.locations?
     %li{:class => 'inactive'}
       = link_to 'Locations', '#'

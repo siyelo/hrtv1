@@ -1,5 +1,7 @@
 %tr.js_activity_row
-  %td.desc= activity.title
+  %td.desc
+    = activity.title
+    = link_to "(edit)", edit_response_activity_path(@response, activity)
   %td= text_field_tag :"activities[#{activity.id}]#{type}_q4_prev", activity.send("#{type}_q4_prev"), :class => 'js_qamount'
   - if !@response.request.budget_by_quarter? && params[:id] == "budget"
     %td{:colspan => 3}

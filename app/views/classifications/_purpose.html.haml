@@ -7,7 +7,9 @@
     = label_tag :"classifications[#{ca.code.id}]", "#{ca.code.short_display}"
     %span.context= ca.code.context
   %td.total
-    = text_field_tag :"classifications[#{ca.code.id}]", ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+    = text_field_tag :"classifications[#{ca.code.id}]spend", ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+  %td.total
+    = text_field_tag :"classifications[#{ca.code.id}]budget", ca.amount || "#{ca.percentage}%", :class => 'js_ca'
   %td.actions
     = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

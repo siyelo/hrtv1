@@ -9,7 +9,7 @@
 
 %ul.response-notice
   - unless @response.project_amounts_entered?
-    %li Please enter a Expenditure/Budget this Project
+    %li Please enter an Expenditure or Budget amount
     
   - if @response.data_request.spend? && !@project.spend_matches_funders?
     %li= "The Project Expenditure amounts do not match their Funding Source budget amounts"

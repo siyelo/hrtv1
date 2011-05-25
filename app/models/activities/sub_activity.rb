@@ -18,17 +18,26 @@ class SubActivity < Activity
   end
 
   ### Class Methods
-  def self.bulk_update(response, sub_acts, amount_type)
-    sub_acts.each_pair do |sa_id, value|
+  def self.bulk_update(response, sub_acts)
+    sub_acts.each_pair do |sa_id, attributes|
       sa = response.activities.find(sa_id) # possible issue with scoping here
 
-      value = value.to_s.strip
-      if value.last == '%'
-        sa.send(:"#{amount_type}_percentage=", value.delete('%').strip)
-        sa.send(:"#{amount_type}=", nil)
+      budget = attributes['budget'].to_s.strip
+      if budget.last == '%'
+        sa.budget_percentage = budget.delete('%').strip
+        sa.budget = nil
       else
-        sa.send(:"#{amount_type}_percentage=", nil)
-        sa.send(:"#{amount_type}=", value.strip)
+        sa.budget_percentage = nil
+        sa.budget = budget.strip
+      end
+
+      spend  = attributes['spend'].to_s.strip
+      if spend.last == '%'
+        sa.spend_percentage = spend.delete('%').strip
+        sa.spend = nil
+      else
+        sa.spend_percentage = nil
+        sa.spend = spend.strip
       end
 
       sa.save

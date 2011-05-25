@@ -277,7 +277,7 @@ class Activity < ActiveRecord::Base
       else
         activity.budget = attributes[:budget]
       end
-      if attributes[:budget].nil?
+      if attributes[:spend].nil?
         activity.spend  = [activity.spend_q1, activity.spend_q2,
                      activity.spend_q3, activity.spend_q4].compact.sum
       else

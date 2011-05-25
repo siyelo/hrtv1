@@ -55,7 +55,7 @@
 
         %ul.review
           %li
-            = render 'project_amounts', :project_amounts_entered => project_amounts_entered
+            = render 'project_amounts', :project_amounts_entered => project_amounts_entered, :projects_entered => projects_entered
 
       %li
         %h3{:class => (projects_have_activities)}
@@ -73,7 +73,7 @@
             %span.info  
               The activities below are missing amounts, click to edit and add amounts
             %ul.push
-              - @response.activities.each do |activity|
+              - @response.activities.roots.each do |activity|
                 %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
@@ -135,7 +135,7 @@
           Projects Linked to the Funder Projects
           - unless projects_linked
             %span.info
-              Once your Funder's have added all their projects too, please
+              Please
               = link_to "link your projects", bulk_edit_response_projects_path(@response)
               to each Funder project respectively.
               
@@ -228,7 +228,7 @@
                       %td.first= n2cndrs(universal_currency_converter(project.budget, project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter((project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
                       %td.first= n2cndrs(universal_currency_converter((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency, @response.currency), @response.currency)
-                      - project.activities.each do |activity|
+                      - project.activities.roots.each do |activity|
                         %tr{:class => "#{dom_id(project)}_budget"}
                           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity= n2cndrs(universal_currency_converter(activity.budget, activity.currency, @response.currency), @response.currency)

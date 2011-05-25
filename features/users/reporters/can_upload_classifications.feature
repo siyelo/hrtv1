@@ -6,23 +6,17 @@ Feature: Reporter can upload classifications
   Background:
     # Given the following code structure
     #
-    #               / code111
-    #      / code11 - code112
-    # code1
-    #      \ code12 - code121
-    #               \ code122
+    # mtef1
+    # cost_category1
+    # service_level1
+    # location1
     #
-    #               / code211
-    #      / code21 - code212
-    # code2
-    #      \ code22 - code221
-    #               \ code222
 
     # level 1
-    Given a mtef_code "mtef1" exists with short_display: "mtef1"
-      And a cost_category_code exists with short_display: "cost_category1"
-      And a service_level exists with short_display: "service_level1"
-      And a location exists with short_display: "location1"
+    Given a mtef_code "mtef1" exists with short_display: "mtef1", id: "1"
+      And a cost_category_code exists with short_display: "cost_category1", id: "2"
+      And a service_level exists with short_display: "service_level1", id: "3"
+      And a location exists with short_display: "location1", id: "4"
 
       And an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"

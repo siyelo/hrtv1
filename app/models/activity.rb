@@ -196,12 +196,12 @@ class Activity < ActiveRecord::Base
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
 
-    doc.each do |row| 
+    doc.each do |row|
       activity_id = row['Id']
 
       if activity_id.present?
         # reset the activity id if it is already found in previous rows
-        # this can happen when user edits existing activities but copies 
+        # this can happen when user edits existing activities but copies
         # the whole row (then the activity id is also copied)
         if activities.map(&:id).include?(activity_id.to_i)
           activity = response.activities.new
@@ -304,37 +304,37 @@ class Activity < ActiveRecord::Base
 
 
   def coding_budget_classified? #purposes
-    !data_response.request.purposes? || budget.blank? || CodingTree.new(self, CodingBudget).valid?
+    !data_response.request.purposes? || CodingTree.new(self, CodingBudget).valid?
   end
 
   def coding_budget_cc_classified? #inputs
-    !data_response.request.inputs? || budget.blank? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
+    !data_response.request.inputs? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
   end
 
   def coding_budget_district_classified? #locations
-    !data_response.request.locations? || budget.blank? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
+    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
   end
 
   def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || budget.blank? || CodingTree.new(self, ServiceLevelBudget).valid?
+    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelBudget).valid?
   end
 
   def coding_spend_classified?
-    !data_response.request.purposes? || spend.blank? || CodingTree.new(self, CodingSpend).valid?
+    !data_response.request.purposes? || CodingTree.new(self, CodingSpend).valid?
   end
 
   def coding_spend_cc_classified?
-    !data_response.request.inputs? || spend.blank? || CodingTree.new(self, CodingSpendCostCategorization).valid?
+    !data_response.request.inputs? || CodingTree.new(self, CodingSpendCostCategorization).valid?
   end
 
   def coding_spend_district_classified?
-    !data_response.request.locations? || spend.blank? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
+    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
   end
 
   def service_level_spend_classified?
-    !data_response.request.service_levels? || spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
+    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelSpend).valid?
   end
-  
+
   def budget_classified?
     return true if self.budget.blank?
     coding_budget_classified? &&
@@ -570,7 +570,7 @@ class Activity < ActiveRecord::Base
       return self.send(field) if self.provider == provider
     else
       sum = 0
-      sub_activities.select{|a| a.provider == provider}.each do |a| 
+      sub_activities.select{|a| a.provider == provider}.each do |a|
         if a.nil?
           puts "had nil in subactivities in proj #{project.id}"
         else

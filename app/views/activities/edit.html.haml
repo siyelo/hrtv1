@@ -11,11 +11,8 @@
 
 %ul.response-notice
 
-  - unless @activity.budget && @activity.spend
-    - if !@activity.spend && @activity.data_request.spend?
-      %li= "Please enter the spend amount for this activity."
-    - if !@activity.budget && @activity.data_request.budget?
-      %li= "Please enter the budget amount for this activity."
+  - unless @response.activities_without_amounts.select{|e| e == @activity}.empty?
+    %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Activity"
     
   - unless @activity.spend_classified?
     %li= "Please classify the Expenditure for this activity." 

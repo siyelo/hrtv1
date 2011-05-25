@@ -8,7 +8,7 @@
   = render 'help'
 
 %ul.response-notice
-  - unless @response.project_amounts_entered?
+  - unless @response.projects_without_amounts.select{|p| p == @project}.empty?
     %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Project"
     
   - if @response.data_request.spend? && !@project.spend_matches_funders?

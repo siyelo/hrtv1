@@ -24,7 +24,7 @@ module BudgetSpendHelpers
   def total_quarterly_spending_w_shift
     if check_data_response()
       if data_response.fiscal_year_start_date &&
-         data_response.fiscal_year_start_date.month == USG_START_MONTH # 7 is July
+         data_response.fiscal_year_start_date.month == USG_START_MONTH
         total = 0
         [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
           total += self.send(s) if self.send(s)
@@ -48,18 +48,18 @@ module BudgetSpendHelpers
     end
   end
 
-  def budget_gor_quarter(quarter)
-    gor_quarter(:budget, quarter)
+  def budget_quarter(quarter)
+    get_quarter(:budget, quarter)
   end
 
-  def spend_gor_quarter(quarter)
-    gor_quarter(:spend, quarter)
+  def spend_quarter(quarter)
+    get_quarter(:spend, quarter)
   end
 
   def total_quarterly_budget_w_shift
     if check_data_response()
       if data_response.fiscal_year_start_date &&
-         data_response.fiscal_year_start_date.month == USG_START_MONTH # 7 is July
+         data_response.fiscal_year_start_date.month == USG_START_MONTH
         total = 0
         [:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3].each do |s|
           total += self.send(s) if self.respond_to?(s) and self.send(s)
@@ -109,7 +109,7 @@ module BudgetSpendHelpers
       data_ok
     end
 
-    def gor_quarter(method, quarter)
+    def get_quarter(method, quarter)
       if check_data_response()
         if data_response.fiscal_year_start_date &&
             data_response.fiscal_year_start_date.month == USG_START_MONTH

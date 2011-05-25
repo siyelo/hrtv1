@@ -1,8 +1,7 @@
 %tr
-  %td= link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
+  %td
+    = link_to "edit", edit_response_activity_path(@response, activity), :class => 'edit_button inline'
+    = link_to activity.description.presence || '(no description)', edit_response_activity_path(@response, activity)
   %td= n2cndrs(activity.spend, activity.currency)
   %td= n2cndrs(activity.budget, activity.currency)
-  %td.wrap-10
-    - link_to edit_response_activity_path(@response, activity), :class => 'create_inline right' do
-      = image_tag "pencil_10.png"
-      edit
+    

@@ -121,8 +121,8 @@ a.remove_nested
     margin-bottom: 10px
     padding: 7px 12px 5px
     text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
+    +border-radius(3px)
+    +box-shadow(#bbb, 0, 1px, 2px)
     +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
     +text-shadow($lighter-blue + #111, 0, 1px, 0)
     img
@@ -138,6 +138,18 @@ a.remove_nested
       outline: none
       position: relative
       top: 1px
+    &.inline
+      font-size: 9px
+      line-height: 1
+      margin: 0
+      opacity: 0.5
+      padding: 2px 6px 1px
+      position: relative
+      top: -2px
+      left: -3px
+      +box-shadow(none)
+      &:hover
+        opacity: 1
 
   &.delete_button
     background: $lightest-blue

@@ -2,6 +2,7 @@ require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Activity < ActiveRecord::Base
+
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
@@ -96,7 +97,7 @@ class Activity < ActiveRecord::Base
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches
+  before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
 

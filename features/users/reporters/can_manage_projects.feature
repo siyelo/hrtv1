@@ -19,7 +19,7 @@ Feature: Reporter can manage projects
     And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
-    
+
     Scenario: Reporter cannot see the quarterly budget fields if they are not available
       Given a data_request "data_request_no_quarters" exists with title: "data_request_no_quarters", budget_by_quarter: "false"
       And an organization "organization4" exists with name: "organization4"
@@ -32,8 +32,8 @@ Feature: Reporter can manage projects
       And I follow "Projects"
       And I follow "Project9"
       Then I should not see "Quarterly budget"
-    
-    
+
+
     Scenario: Reporter can CRUD projects
      When I follow "Create Project"
       And I fill in "Name" with "Project1"
@@ -45,14 +45,14 @@ Feature: Reporter can manage projects
       And I press "Create Project"
      Then I should see "Project was successfully created"
       And I should see "Project1"
-      
+
      When I follow "Project1"
       And I fill in "Name" with "Project2"
       And I fill in "Description" with "Project2 description"
       And I uncheck "Location1"
       And I press "Update Project"
      Then I should see "Project was successfully updated"
-      
+
      When I follow "Project2"
       And I follow "Delete this Project"
      Then I should see "Project was successfully destroyed"
@@ -90,7 +90,7 @@ Feature: Reporter can manage projects
           | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created                                     |
           | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
 
-    
+
       @wip
     Scenario: Adding malformed CSV file doesn't throw exception
      When I attach the file "spec/fixtures/malformed.csv" to "File"
@@ -118,7 +118,7 @@ Feature: Reporter can manage projects
      When I attach the file "spec/fixtures/invalid.csv" to "File"
       And I press "Upload and Import"
      Then I should see "Wrong fields mapping. Please download the CSV template"
-     
+
      When I follow "Download template"
      Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
@@ -140,12 +140,12 @@ Feature: Reporter can manage projects
       And I press "Create Comment"
      Then I should see "can't be blank" within "#comment_title_input"
       And I should see "can't be blank" within "#comment_comment_input"
-     
+
      When I fill in "Title" with "Comment title"
       And I press "Create Comment"
      Then I should not see "can't be blank" within "#comment_title_input"
       And I should see "can't be blank" within "#comment_comment_input"
-     
+
      When I fill in "Comment" with "Comment body"
       And I press "Create Comment"
      Then I should see "Comment title"
@@ -160,12 +160,12 @@ Feature: Reporter can manage projects
       And I fill in "Start date" with "2011-01-01"
       And I fill in "End date" with "2011-12-01"
       And I follow "Add funding source"
-      
+
       #todo, combobox for funding source
       # Then show me the page
       #   And I fill in "theCombobox" with "organization3"
-      
-      
+
+
       # And I select "Add an Organization..." from "From" within ".fields"
       #       And I fill in "organization_name" with "The Best Org"
       #       And I follow "Create Organization"
@@ -184,7 +184,7 @@ Feature: Reporter can manage projects
       And I fill in "Q4 09-10" with "66" within ".fields .budget"
       And I press "Create Project"
      Then I should see "Project was successfully created"
-     
+
      When I follow "Project1"
      Then the "Spent" field within ".fields" should contain "11"
       And the "Q4 08-09" field within ".fields .spend" should contain "22"
@@ -192,20 +192,20 @@ Feature: Reporter can manage projects
       And the "Q2 09-10" field within ".fields .spend" should contain "44"
       And the "Q3 09-10" field within ".fields .spend" should contain "55"
       And the "Q4 09-10" field within ".fields .spend" should contain "66"
-      
+
       And the "Budget" field within ".fields" should contain "11"
       And the "Q4 08-09" field within ".fields .budget" should contain "22"
       And the "Q1 09-10" field within ".fields .budget" should contain "33"
       And the "Q2 09-10" field within ".fields .budget" should contain "44"
       And the "Q3 09-10" field within ".fields .budget" should contain "55"
       And the "Q4 09-10" field within ".fields .budget" should contain "66"
-     
+
      When I follow "Edit" within ".funding_flows"
       And I fill in "Budget" with "7778" within ".fields"
       And I press "Update Project"
       And I follow "Project1"
      Then the "Budget" field within ".fields" should contain "7778"
-     
+
   Scenario: If the data_request spend is not checked, spend should not show up in the project screen
    Given I follow "Sign Out"
     And an organization exists with name: "organization5"
@@ -217,7 +217,7 @@ Feature: Reporter can manage projects
     And I am signed in as "reporter2"
     And I follow "data_request2"
     And I follow "Projects"
-   
+
    When I follow "Create Project"
    Then I should not see "Past Project Expenditure"
     And I should not see "Quarterly Spend"
@@ -230,14 +230,14 @@ Feature: Reporter can manage projects
    Then select "Project6" from "funding_flows_3"
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
-   
- Scenario: A Reporter can bulk unlink their projects to those from other organizations
-  Then I should see "Project5"
-  Given I follow "Link Projects"
-  Then I should see "Project5"
-  Then select "" from "funding_flows_3"
-  And I press "Update"
-  Then I should see "Your projects have been successfully updated"
+
+  Scenario: A Reporter can bulk unlink their projects to those from other organizations
+    Then I should see "Project5"
+    Given I follow "Link Projects"
+    Then I should see "Project5"
+    Then select "" from "funding_flows_3"
+    And I press "Update"
+    Then I should see "Your projects have been successfully updated"
 
   Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
    Then I should see "Project5"
@@ -246,26 +246,26 @@ Feature: Reporter can manage projects
    Then select "<Project not listed or unknown>" from "funding_flows_3"
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
-   
+
   #  Scenario: A Reporter can link their projects to those from other organizations from the edit page
   #   Then I should see "Project5"
   #   Given I follow "Project5"
   #   And I select "Project6" from "funding_flows_3"
   #   And I press "Update Project"
   #   Then I should see "Project was successfully updated"
-  #   
+  #
   # Scenario: A Reporter can unlink their projects to those from other organizations from the edit page
   #  Then I should see "Project5"
   #  Given I follow "Project5"
   #  And I select "" from "funding_flows_3"
   #  And I press "Update Project"
   #  Then I should see "Project was successfully updated"
-  # 
+  #
   #  Scenario: A Reporter select project missing or project unknown for their FS from the edit page
   #   Then I should see "Project5"
   #   Given I follow "Project5"
   #   And I select "Project Missing/Unknown" from "funding_flows_3"
   #   And I press "Update Project"
   #   Then I should see "Project was successfully updated"
-    
-    
+
+

@@ -16,12 +16,12 @@
       %li= "Please enter the spend amount for this activity."
     - if !@activity.budget && @activity.data_request.budget?
       %li= "Please enter the budget amount for this activity."
-    
+
   - unless @activity.spend_classified?
-    %li= "Please classify the Expenditure for this activity." 
+    %li= "Please classify the Expenditure for this activity."
 
   - unless @activity.budget_classified?
-    %li= "Please classify the Budget for this activity."  
+    %li= "Please classify the Budget for this activity."
 
 = render 'activities/tab_nav', :activity => @activity
 
@@ -31,5 +31,7 @@
 
   - semantic_form_for @activity, :url => response_activity_path(@response, @activity), :html => {:class => "basic_form"} do |f|
     = render 'form', :f => f
+
+  = render 'sub_activities_import_export', :activity => @activity
 
 = render :partial => 'shared/comments', :comments => @comments

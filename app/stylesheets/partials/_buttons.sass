@@ -301,19 +301,36 @@ a.remove_nested
 .next
   margin-top: -5px
   
-#buttons
-  margin-bottom: 5px
+#buttons, .buttons
+  margin-bottom: 5px !important
   padding: 5px 0px
-  button
+  button, a
     border: none
     background: $lightest-blue
     cursor: pointer
+    font-family: Arial, sans-serif
     margin-right: 5px
     padding: 3px 5px
+    text-decoration: none
     +border-radius(5px)
     &:hover
       background: $mid-blue
       color: white
+      
+  li
+    display: inline
+    float: left
+    a
+      color: #000 !important
+      display: inline-block
+      font-size: 11px !important
+      padding: 5px 8px
+      &:hover
+        color: #fff !important
+        
+    &:last-child
+      border-right: 1px dotted $light-blue
+      margin-right: 5px
       
 .simple_table a
   display: inline-block

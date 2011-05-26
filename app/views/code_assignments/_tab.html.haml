@@ -39,13 +39,12 @@
 - unless @codes.empty?
   - form_for @activity, :url => activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => params[:view]), :method => :put, :html => {:id => ''} do |form|
 
-    %ul
-      %li= link_to 'My data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'my')
-      %li= link_to 'All data', activity_code_assignments_path(@activity, :coding_type => @coding_type)
-
     %p#expl
       %span Amount (#{@activity.currency} or %)
       %span Subtotal
+    %ul.buttons.left
+      %li= link_to 'My data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'my')
+      %li= link_to 'All data', activity_code_assignments_path(@activity, :coding_type => @coding_type)
     %ul.activity_tree
       - if params[:view] == 'my'
         - @coding_tree.roots.each do |node|

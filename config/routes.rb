@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :password_resets
 
   # PROFILE
-  map.resource :profile, :only => [:edit, :update, :disable_tips], 
+  map.resource :profile, :only => [:edit, :update, :disable_tips],
     :member => {:disable_tips => :put}
 
   # STATIC PAGES
@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
       :member     => {:delete => :get}
     admin.resources :organizations,
-      :collection => {:duplicate => :get, :remove_duplicate  => :put, 
+      :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
@@ -50,9 +50,9 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,
         :member => {:approve => :put, :classifications => :get},
-        :collection => {:bulk_create => :post, 
-                        :template => :get, 
-                        :export => :get, 
+        :collection => {:bulk_create => :post,
+                        :template => :get,
+                        :export => :get,
                         :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
@@ -64,8 +64,11 @@ ActionController::Routing::Routes.draw do |map|
       :member => {:copy_budget_to_spend => :put,
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
+    activity.resources :sub_activities,
+      :only => [:index, :create],
+      :collection => {:template => :get}
   end
-  
+
   map.resources :organizations
 
   # REPORTER USER

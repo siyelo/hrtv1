@@ -1,0 +1,15 @@
+#sub_activities_upload_box.upload_box.simple_overlay
+  %h3.title_bar Upload a CSV file for Sub Activities
+  .dashboard_section
+    %p Create one or more sub activities from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+    %br
+    - form_tag(activity_sub_activities_path(activity), :multipart => true) do
+
+      .upbox
+        = label_tag :file, "File"
+        = file_field_tag :file
+      = submit_tag "Import", :class => 'small_submit_button'
+
+      - if activity.sub_activities.present?
+        = link_to "Export", activity_sub_activities_path(activity), :class => "create_alt right"
+      = link_to "Get Template", template_activity_sub_activities_path(activity), :class => "create_alt right"

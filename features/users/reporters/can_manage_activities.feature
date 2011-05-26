@@ -37,47 +37,46 @@ Feature: Reporter can manage activities
       When I follow "activity1"
        Then the "Sub-Activity Spend" field should contain "99"
        And the "Sub-Activity Budget" field should contain "19"
-       
-   @javascript 
-   Scenario: Reporter can add sub-activities (percentage values)
-     When I follow "Add" within ".sub-head:nth-child(2)"
-      And I fill in "Name" with "activity1"
-      And I fill in "Description" with "1ctivity1 description"
-      And I fill in "Start date" with "2011-01-01"
-      And I fill in "End date" with "2011-12-01"
-      And I fill in "Spent" with "200"
-      And I fill in "Budget" with "300"
-      And I select "project1" from "Project"
-      And I follow "Add Sub Activity"
-      And I fill in "theCombobox" with "organization1"
-      And I fill in "Sub-Activity Spend" with "10%"
-      And I fill in "Sub-Activity Budget" with "10%"
-      And I press "Save & Classify >"
-     Then I should see "Activity was successfully created"
-     When I follow "activity1"
-      Then the "Sub-Activity Spend" field should contain "20"
-      And the "Sub-Activity Budget" field should contain "30"
-     
-     @javascript 
-  Scenario: Reporter can add sub-activities (percentage values must be less than 100)
-    When I follow "Add" within ".sub-head:nth-child(2)"
-     And I fill in "Name" with "activity1"
-     And I fill in "Description" with "1ctivity1 description"
-     And I fill in "Start date" with "2011-01-01"
-     And I fill in "End date" with "2011-12-01"
-     And I fill in "Spent" with "200"
-     And I fill in "Budget" with "300"
-     And I select "project1" from "Project"
-     And I follow "Add Sub Activity"
-     And I fill in "theCombobox" with "organization1"
-     And I fill in "Sub-Activity Spend" with "101%"
-     And I fill in "Sub-Activity Budget" with "10%"
-     And I press "Save & Classify >"
-    Then I should see "Activity was successfully created"
-    When I follow "activity1"
-     Then the "Sub-Activity Spend" field should contain "101"
-     And the "Sub-Activity Budget" field should contain "30"
-      
+
+     @javascript
+     Scenario: Reporter can add sub-activities (percentage values)
+       When I follow "Add" within ".sub-head:nth-child(2)"
+        And I fill in "Name" with "activity1"
+        And I fill in "Description" with "1ctivity1 description"
+        And I fill in "Start date" with "2011-01-01"
+        And I fill in "End date" with "2011-12-01"
+        And I fill in "Spent" with "200"
+        And I fill in "Budget" with "300"
+        And I select "project1" from "Project"
+        And I follow "Add Sub Activity"
+        And I fill in "theCombobox" with "organization1"
+        And I fill in "Sub-Activity Spend" with "10%"
+        And I fill in "Sub-Activity Budget" with "10%"
+        And I press "Save & Classify >"
+       Then I should see "Activity was successfully created"
+       When I follow "activity1"
+        Then the "Sub-Activity Spend" field should contain "20"
+        And the "Sub-Activity Budget" field should contain "30"
+
+       @javascript
+    Scenario: Reporter can add sub-activities (percentage values must be less than 100)
+      When I follow "Add" within ".sub-head:nth-child(2)"
+       And I fill in "Name" with "activity1"
+       And I fill in "Description" with "1ctivity1 description"
+       And I fill in "Start date" with "2011-01-01"
+       And I fill in "End date" with "2011-12-01"
+       And I fill in "Spent" with "200"
+       And I fill in "Budget" with "300"
+       And I select "project1" from "Project"
+       And I follow "Add Sub Activity"
+       And I fill in "theCombobox" with "organization1"
+       And I fill in "Sub-Activity Spend" with "101%"
+       And I fill in "Sub-Activity Budget" with "10%"
+       And I press "Save & Classify >"
+      Then I should see "Activity was successfully created"
+      When I follow "activity1"
+       Then the "Sub-Activity Spend" field should contain "101"
+       And the "Sub-Activity Budget" field should contain "30"
 
     @javascript
     Scenario: Reporter can CRUD activities
@@ -218,12 +217,12 @@ Feature: Reporter can manage activities
         And no emails have been sent
       When I follow "Projects"
         And I follow "Activity1 description"
-        And I fill in "Comment" with "Comment body"  
+        And I fill in "Comment" with "Comment body"
         And I fill in "Title" with "Comment title"
         And I fill in "Comment" with "Comment body"
         And I press "Create Comment"
       Then "reporter_1@example.com" should not receive an email
-      
+
 
     Scenario: A reporter can select implementer for an activity
       When I follow "Add" within ".sub-head:nth-child(2)"
@@ -234,7 +233,7 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "Activity1 description"
         And I select "organization1" from "Implementer"
         And I select "project1" from "Project"
-        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-03-01"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
@@ -272,11 +271,11 @@ Feature: Reporter can manage activities
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-            | column_name  | column | text1                 | text2                 | 
-            | Project      | 1      | project1              | project2              | 
-            | Description  | 2      | activity1 description | activity2 description | 
-            | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               | 
-            | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               | 
+            | column_name  | column | text1                 | text2                 |
+            | Project      | 1      | project1              | project2              |
+            | Description  | 2      | activity1 description | activity2 description |
+            | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               |
+            | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               |
 
 
     @javascript
@@ -288,7 +287,7 @@ Feature: Reporter can manage activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
-        And I fill in "Start date" with "2011-01-01" 
+        And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-03-01"
         And I select "project1" from "Project"
         And I follow "Add funding source"
@@ -308,36 +307,83 @@ Feature: Reporter can manage activities
       Then I should see "Activity was successfully updated"
 
 
-  Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
+    Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
+        Given I follow "Sign Out"
+        And an organization exists with name: "organization5"
+        And a data_request exists with title: "data_request2", budget: false
+        And a data_response exists with data_request: the data_request, organization: the organization
+        And a reporter exists with username: "reporter2", organization: the organization
+        And a location exists with short_display: "Location1"
+        And a location exists with short_display: "Location2"
+        And I am signed in as "reporter2"
+        And I follow "data_request2"
+        And a project exists with name: "project1", data_response: the data_response
+        And I follow "Projects"
+        When I follow "Add" within ".sub-head:nth-child(2)"
+        Then I should not see "Budget (planned expenditure)"
+        And  I should see "Past Activity Expenditure"
+
+    Scenario: If the data_request has not got a budget or a spend then only the save button should appear
       Given I follow "Sign Out"
-      And an organization exists with name: "organization5"
-      And a data_request exists with title: "data_request2", budget: false
-      And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with username: "reporter2", organization: the organization
-      And a location exists with short_display: "Location1"
-      And a location exists with short_display: "Location2"
-      And I am signed in as "reporter2"
-      And I follow "data_request2"
-      And a project exists with name: "project1", data_response: the data_response
+      And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false
+      And a data_response "data_response10" exists with data_request: data_request "data_request10", organization: organization "my_organization"
+      And a project exists with name: "project19", data_response: data_response "data_response10"
+      And a activity exists with project: the project, name: "activity14", description: "act14desc"
+      And I am signed in as "reporter"
+      And I follow "THE DATA_REQUEST"
       And I follow "Projects"
       When I follow "Add" within ".sub-head:nth-child(2)"
-      Then I should not see "Budget (planned expenditure)"
-      And  I should see "Past Activity Expenditure"
-      
-  Scenario: If the data_request has not got a budget or a spend then only the save button should appear
-    Given I follow "Sign Out"
-    And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false
-    And a data_response "data_response10" exists with data_request: data_request "data_request10", organization: organization "my_organization"
-    And a project exists with name: "project19", data_response: data_response "data_response10"
-    And a activity exists with project: the project, name: "activity14", description: "act14desc"
-    And I am signed in as "reporter"
-    And I follow "THE DATA_REQUEST"
-    And I follow "Projects"
-    When I follow "Add" within ".sub-head:nth-child(2)"
-      And I fill in "Name" with "activity1"
-      And I fill in "Description" with "1ctivity1 description"
-      And I fill in "Start date" with "2011-01-01"
-      And I fill in "End date" with "2011-12-01"
-      And I select "project1" from "Project"
-    Then I should see "Save" button
-    And I should not see "Save & Classify >" button
+        And I fill in "Name" with "activity1"
+        And I fill in "Description" with "1ctivity1 description"
+        And I fill in "Start date" with "2011-01-01"
+        And I fill in "End date" with "2011-12-01"
+        And I select "project1" from "Project"
+      Then I should see "Save" button
+      And I should not see "Save & Classify >" button
+
+
+    Scenario: Reporter can download Implementers CSV template
+      Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+      When I follow "Projects"
+        And I follow "activity1"
+        And I follow "Get Template" within "#sub_activities_upload_box"
+      Then I should see "Implementer,Spend,Budget"
+
+    Scenario: Reporter can see message when attached malformed CSV file for implementers
+      Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+      When I follow "Projects"
+        And I follow "activity1"
+        And I attach the file "spec/fixtures/malformed.csv" to "File" within "#sub_activities_upload_box"
+        And I press "Import" within "#sub_activities_upload_box"
+      Then I should see "Your CSV file does not seem to be properly formatted."
+
+
+    Scenario: Reporter can see message when no file attached for implementers
+      Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+      When I follow "Projects"
+        And I follow "activity1"
+        And I press "Import" within "#sub_activities_upload_box"
+        Then I should see "Please select a file to upload implementers."
+
+
+  Scenario: Reporter can upload and change implementers
+    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+    When I follow "Projects"
+      And I follow "activity1"
+      And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
+      And I press "Import" within "#sub_activities_upload_box"
+    Then I should see "Implementers were successfully uploaded."
+      And the "Sub-Activity Spend" field should contain "66"
+      And the "Sub-Activity Budget" field should contain "77"
+
+
+  Scenario: Reporter can upload and change implementers
+    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+      And sub_activity exists with budget: 66, spend: 77, data_response: the data_response, activity: the activity, provider: the organization, id: 100
+    When I follow "Projects"
+      And I follow "activity1"
+      And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
+      And I press "Import" within "#sub_activities_upload_box"
+    Then I should see "Implementers were successfully uploaded."
+      And the "Sub-Activity Spend" field should contain "99"
+      And the "Sub-Activity Budget" field should contain "100"

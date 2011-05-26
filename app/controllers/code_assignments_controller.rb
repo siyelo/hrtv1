@@ -21,7 +21,7 @@ class CodeAssignmentsController < Reporter::BaseController
         assignment[1]["percentage"] = nil if assignment[1]["amount"].present?
       end
       @coding_class.update_codings(params[:activity][:updates], @activity)
-      message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
+      @activity.classified? ? message = "Activity classification was successfully updated. Thank you for classifying this activity!" : message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     end
     @error_message = add_code_assignments_error(@coding_class, @activity)
     @error_message ? flash[:error] = @error_message : flash[:notice] = message

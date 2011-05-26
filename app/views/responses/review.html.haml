@@ -1,7 +1,7 @@
 - title("Submit Response")
 - your_projects = @response.projects_entered? && @response.project_amounts_entered? && @response.projects_have_activities? && @response.projects_have_other_costs? ? "ready" : "not-ready"
 - projects_entered = @response.projects_entered? ? "ready" : "not-ready"
-- project_amounts_entered = @response.project_amounts_entered? ? "ready" : "not-ready"
+- project_amounts_entered = @response.projects_entered? && @response.project_amounts_entered? ? "ready" : "not-ready"
 - projects_have_activities = @response.projects_have_activities? && @response.activities_have_budget_or_spend? ? "ready" : "not-ready"
 - projects_have_other_costs = @response.projects_have_other_costs? ? "ready" : "not-ready"
 - detailed_classification = @response.activities_coded? && @response.other_costs_coded? ? "ready" : "not-ready"
@@ -11,7 +11,7 @@
 - if final_review
   - projects_linked_class = projects_linked ? "ready" : "not-ready"
 - else
-  - projects_linked_class = projects_linked ? "ready" : "info"
+  - projects_linked_class = projects_linked ? "ready" : "not-ready"
 - other_costs_coded = @response.other_costs_coded? ? "ready" : "not-ready"
 - data_verification = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends? && @response.projects_and_activities_have_matching_budgets? && @response.projects_and_activities_have_matching_spends? && projects_linked_class ? "ready" : "not-ready"
 - projects_funding_sources_ok = @response.projects_and_funding_sources_have_matching_budgets? && @response.projects_and_funding_sources_have_correct_spends?
@@ -49,22 +49,20 @@
       %li
         %h3{:class => (projects_entered)}
           Projects Entered
-          - unless projects_entered
+          - unless @response.projects_entered?
             %span.info
               = render 'projects/no_projects_yet'
-
-        %ul.review
-          %li
-            = render 'project_amounts', :project_amounts_entered => project_amounts_entered
+        %li
+          = render 'project_amounts', :project_amounts_entered => project_amounts_entered
 
       %li
         %h3{:class => (projects_have_activities)}
           Activities Entered
-          - unless projects_have_activities
-            - if !projects_entered
+          - unless @response.projects_have_activities?
+            - if !@response.projects_entered?
               %span.info
                 = render 'projects/no_projects_yet'
-                then you can start adding Activities.
+                Then you may start adding Activities.
             - else
               %span.info
                 You have project(s), but not all have activities yet.
@@ -77,11 +75,11 @@
       %li
         %h3{:class => (projects_have_other_costs)}
           Other Costs Entered
-          - unless projects_have_other_costs
-            - unless projects_entered
+          - unless @response.projects_have_other_costs?
+            - unless @response.projects_entered?
               %span.info
                 = render 'projects/no_projects_yet'
-                then you can start adding Other Costs.
+                Then you may start adding Other Costs.
             - else
               %span.info
                 Other Costs help you include any financial information at the central level and/or administrative expenses.
@@ -97,13 +95,14 @@
       %li
         %h3{:class => (activities_coded)}
           Activities Classified
-          - unless activities_coded
+          - unless @response.activities_coded?
             - unless @response.uncoded_activities.empty?
               %span.info
                 Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
             - else
               %span.info
-                Start by adding a few Activities first (see above), then you can start classifying them.
+                Start by adding a few Activities first (see above), then you can start classifying them. 
+                = link_to "Start adding your Activities here.", response_projects_path(@response)
         - unless @response.activities_coded?
           - unless @response.uncoded_activities.empty?
             = render 'uncoded_table', :activities => @response.uncoded_activities
@@ -113,11 +112,13 @@
       %li
         %h3{:class => (other_costs_coded)}
           Other Costs Classified
-          - unless other_costs_coded
+          - unless @response.other_costs_coded?
             - unless @response.uncoded_other_costs.empty?
               %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
             - else
-              %span.info Start by adding a few Other Costs first (see above), then you can start classifying them.
+              %span.info 
+                Start by adding a few Other Costs first (see above), then you can start classifying them.
+                = link_to "Start adding your Other Costs here.", response_projects_path(@response)
 
         - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?

@@ -1,11 +1,12 @@
 %h3{:class => (project_amounts_entered)}
   Project Amounts
-  - unless project_amounts_entered
-    - if projects_entered
+  - unless @response.projects_entered?
+    %span.info
+      = render 'projects/no_projects_yet'
+  - else
+    - unless @response.project_amounts_entered?
       %span.info Please enter Expenditures/Budgets for your projects.
-    - else
-      %span.info
-        = render 'projects/no_projects_yet'
+      
 
 %ul.push
   - @response.projects_without_amounts.each do |p|

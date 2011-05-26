@@ -11,6 +11,13 @@ class CodeAssignmentsController < Reporter::BaseController
     @codes               = @coding_tree.root_codes
     @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
     @error_message       = add_code_assignments_error(@coding_class, @activity)
+
+    # set default to 'my' view if there are code assignments present
+    if params[:view].blank? && @current_assignments.present?
+      params[:view] = 'my'
+    else
+      params[:view] = 'all'
+    end
   end
 
   def update

@@ -43,8 +43,8 @@
       %span Amount (#{@activity.currency} or %)
       %span Subtotal
     %ul.buttons.left
-      %li= link_to 'My data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'my')
-      %li= link_to 'All data', activity_code_assignments_path(@activity, :coding_type => @coding_type)
+      %li= link_to 'All data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)
+      %li= link_to 'My data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'my'), :class => (params[:view] == 'my' ? 'active' : nil)
     %ul.activity_tree
       - if params[:view] == 'my'
         - @coding_tree.roots.each do |node|

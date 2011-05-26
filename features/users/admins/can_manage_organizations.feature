@@ -129,7 +129,7 @@ Feature: Admin can manage organizations
       When I follow "Organizations"
         And I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Upload and Import"
-      Then I should see "Your CSV file does not seem to be properly formatted"
+      Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
 
     Scenario: Reporter can upload activities

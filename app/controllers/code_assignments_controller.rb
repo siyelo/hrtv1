@@ -11,6 +11,13 @@ class CodeAssignmentsController < Reporter::BaseController
     @codes               = @coding_tree.root_codes
     @current_assignments = @coding_class.with_activity(@activity).all.map_to_hash{ |b| {b.code_id => b} }
     @error_message       = add_code_assignments_error(@coding_class, @activity)
+
+    # set default to 'my' view if there are code assignments present
+    if params[:view].blank? && @current_assignments.present?
+      params[:view] = 'my'
+    else
+      params[:view] = 'all'
+    end
   end
 
   def update
@@ -25,7 +32,7 @@ class CodeAssignmentsController < Reporter::BaseController
     end
     @error_message = add_code_assignments_error(@coding_class, @activity)
     @error_message ? flash[:error] = @error_message : flash[:notice] = message
-    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type], :view => params[:view])
   end
 
   def copy_budget_to_spend
@@ -35,7 +42,7 @@ class CodeAssignmentsController < Reporter::BaseController
       flash[:error] = "We could not copy your budget classifications across."
     end
 
-    redirect_to activity_code_assignments_url(@activity, :coding_type => Activity::CLASSIFICATION_MAPPINGS[params[:coding_type]])
+    redirect_to activity_code_assignments_url(@activity, :coding_type => Activity::CLASSIFICATION_MAPPINGS[params[:coding_type]], :view => params[:view])
   end
 
   def derive_classifications_from_sub_implementers
@@ -45,7 +52,7 @@ class CodeAssignmentsController < Reporter::BaseController
       flash[:error] = "We could not derive classification from sub implementers."
     end
 
-    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type], :view => params[:view])
   end
 
   def bulk_create
@@ -61,7 +68,7 @@ class CodeAssignmentsController < Reporter::BaseController
       flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
     end
 
-    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type])
+    redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type], :view => params[:view])
   end
 
   def download_template

@@ -1102,6 +1102,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     $( ".combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
                                 // handled by the "add row" js callback
+    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
     $('.edit').live('click', function (e) {
       e.preventDefault();
@@ -1283,7 +1284,9 @@ var activity_form = function () {
 
   // show the jquery autocomplete combobox instead of
   // standard dropdown
+  // setting the id for cucumber tests
   $( ".combobox" ).combobox();
+  $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
 
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();

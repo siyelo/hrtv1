@@ -394,8 +394,8 @@ var ajaxifyResources = function (resources) {
 /* Ajax CRUD END */
 
 var collapse_expand = function (e, element, type) {
-  // if target element is link, skip collapsing
-  if (e.target.nodeName === 'A') {
+  // if target element is link or the user is selecting text, skip collapsing
+  if (e.target.nodeName === 'A' || window.getSelection().toString() !== "") {
     return;
   }
 

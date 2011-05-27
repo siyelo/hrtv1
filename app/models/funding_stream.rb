@@ -17,3 +17,20 @@ end
 #  budget              :decimal(, )     default(0.0)
 #  spend               :decimal(, )     default(0.0)
 #
+
+# == Schema Information
+#
+# Table name: funding_streams
+#
+#  id                  :integer         not null, primary key
+#  project_id          :integer
+#  organization_ufs_id :integer
+#  organization_fa_id  :integer
+#  created_at          :datetime
+#  updated_at          :datetime
+#  budget              :decimal(, )     default(0.0)
+#  spend               :decimal(, )     default(0.0)
+#  budget_in_usd       :decimal(, )     default(0.0)
+#  spend_in_usd        :decimal(, )     default(0.0)
+#
+

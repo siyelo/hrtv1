@@ -34,6 +34,10 @@ describe Project do
     it { should allow_mass_assignment_of(:budget3) }
     it { should allow_mass_assignment_of(:budget4) }
     it { should allow_mass_assignment_of(:budget5) }
+    it { should allow_mass_assignment_of(:budget2) }
+    it { should allow_mass_assignment_of(:budget3) }
+    it { should allow_mass_assignment_of(:budget4) }
+    it { should allow_mass_assignment_of(:budget5) }
     it { should allow_mass_assignment_of(:budget_q1) }
     it { should allow_mass_assignment_of(:budget_q2) }
     it { should allow_mass_assignment_of(:budget_q3) }
@@ -66,6 +70,10 @@ describe Project do
     it { should_not allow_value('2010-12-41').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
     it { should_not allow_value('abcd').for(:spend) }
+    it { should_not allow_value('abcd').for(:budget2) }
+    it { should_not allow_value('abcd').for(:budget3) }
+    it { should_not allow_value('abcd').for(:budget4) }
+    it { should_not allow_value('abcd').for(:budget5) }
 
     it "should have a valid data_response " do
       project = Factory(:project)

@@ -50,7 +50,12 @@ class Project < ActiveRecord::Base
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
+  validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
+  validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
+  validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
+  validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
+  
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."

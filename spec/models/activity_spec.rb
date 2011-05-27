@@ -97,19 +97,19 @@ describe Activity do
                                  :data_request => Factory.create(:data_request, :service_levels => false)))
       @activity.service_level_budget_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require inputs and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :inputs => false)))
       @activity.coding_budget_cc_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require locations and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :locations => false)))
       @activity.coding_budget_district_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require purposes and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :purposes => false)))
@@ -121,34 +121,34 @@ describe Activity do
                                  :data_request => Factory.create(:data_request, :service_levels => false)))
       @activity.service_level_spend_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require inputs and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :inputs => false)))
       @activity.coding_spend_cc_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require locations and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :locations => false)))
       @activity.coding_spend_district_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require purposes and none are entered" do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :purposes => false)))
       @activity.coding_spend_classified?.should be_true
     end
-    
+
 
   end
-  
-  describe "review screen validations" do 
+
+  describe "review screen validations" do
     it "will return true if the activity has a budget or a spend entered" do
       @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => 20, :spend => nil)
       @activity.has_budget_or_spend?.should be_true
     end
-    
+
     it "will return false if the activity has no budget or spend entered" do
       @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => nil, :spend => nil)
       @activity.has_budget_or_spend?.should be_false
@@ -1457,14 +1457,13 @@ describe Activity do
 
     context "sub activities" do
       it "looks for amount in sub-activity" do
-        @subact = Factory(:sub_activity, :budget => 10)
-        @activity = @subact.activity
-        @activity.sub_activities.should == [@subact] #sanity
+        @activity = Factory.create(:activity)
+        @subact = Factory(:sub_activity, :activity => @activity, :budget => 10)
+        @activity.sub_activities.reload
         @activity.amount_for_provider(@subact.provider, :budget).should == 10
       end
     end
   end
-
 end
 
 

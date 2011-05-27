@@ -15,6 +15,13 @@
     %li= "The Project Expenditure amounts do not match their Funding Source budget amounts"
   - if @response.data_request.budget? && !@project.budget_matches_funders?
     %li= "The Project budget amounts do not match their Funding Source budget amounts"
+    
+  - if !@project.total_matches_quarters?("spend")
+    %li Your quarterly Spend amounts do not match the total Spend amounts
+  
+  - if @response.request.budget_by_quarter?
+    - if !@project.total_matches_quarters?("budget")
+      %li Your quarterly Budget amounts do not match the total Budget amounts
 
 
 .wrap-70

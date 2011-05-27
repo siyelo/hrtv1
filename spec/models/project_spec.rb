@@ -110,6 +110,43 @@ describe Project do
       end
     end
   end
+  
+  context "Amount validations" do 
+    it "should return true if budget is equal to that of the quarterlys" do 
+      @project = Factory(:project, :budget => "140", 
+                         :budget_q1 => "20", :budget_q2 => "30", 
+                         :budget_q3 => "40", :budget_q4 => "50")
+      @project.total_matches_quarters?(:budget).should be_true
+    end
+    
+     it "should return true if budget is equal to that of the quarterlys" do 
+       @project = Factory(:project, :spend => "140", 
+                          :spend_q1 => "20", :spend_q2 => "30", 
+                          :spend_q3 => "40", :spend_q4 => "50")
+       @project.total_matches_quarters?(:spend).should be_true
+     end
+      
+      it "should return false if spend is nil and quarterlys arent" do 
+        @project = Factory(:project, :spend => nil, 
+                            :spend_q1 => "20", :spend_q2 => "30", 
+                            :spend_q3 => "40", :spend_q4 => "50")
+        @project.total_matches_quarters?(:spend).should be_false
+      end
+      
+      it "should return true if spend is nil and quarterlys are too" do 
+        @project = Factory(:project, :spend => nil, 
+                            :spend_q1 => nil, :spend_q2 => nil, 
+                            :spend_q3 => nil, :spend_q4 => nil)
+        @project.total_matches_quarters?(:spend).should be_true
+      end
+      
+      it "should return false if spend is nil and quarterlys are too" do 
+        @project = Factory(:project, :spend => nil, 
+                            :spend_q1 => nil, :spend_q2 => nil, 
+                            :spend_q3 => nil, :spend_q4 => nil)
+        @project.total_matches_quarters?(:spend).should be_true
+      end
+  end
 
   context "Submit page: " do
     before(:each) do

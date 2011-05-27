@@ -12,13 +12,20 @@
 %ul.response-notice
 
   - unless @activity.budget && @activity.spend
-    - if !@activity.spend && @activity.data_request.spend?
+    - if (!@activity.spend || 0) && @activity.data_request.spend?
       %li= "Please enter the spend amount for this activity."
-    - if !@activity.budget && @activity.data_request.budget?
+    - if (!@activity.budget || 0) && @activity.data_request.budget?
       %li= "Please enter the budget amount for this activity."
 
+  - else
+    - if @activity.data_request.budget? && (@activity.budget.nil? || @activity.budget == 0)
+      %li= "Please enter the Budget amount for this activity."
+      
+    - if @activity.data_request.spend? && (@activity.spend.nil? || @activity.spend == 0)
+      %li= "Please enter the Spend amount for this activity."
+
   - unless @activity.spend_classified?
-    %li= "Please classify the Expenditure for this activity."
+    %li= "Please classify the Spend for this activity."
 
   - unless @activity.budget_classified?
     %li= "Please classify the Budget for this activity."

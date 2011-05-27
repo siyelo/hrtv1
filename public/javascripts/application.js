@@ -822,6 +822,10 @@ var code_assignments_show = {
       e.preventDefault();
       $(this).parents('.upload').find('.upload_box').toggle();
     });
+
+    $('.submit_btn').click(function (e) {
+      $(this).next('.ajax-loader').show();
+    });
   }
 };
 

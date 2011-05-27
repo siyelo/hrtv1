@@ -53,3 +53,4 @@
         - @codes.each do |code|
           = render 'code_row', { :code => code, :form => form, :tab => tab, :level => 1 }
     = submit_tag 'Save', :class => 'submit_btn'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

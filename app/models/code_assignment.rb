@@ -75,15 +75,15 @@ class CodeAssignment < ActiveRecord::Base
 
   def self.create_from_file(doc, activity, coding_type)
     updates = HashWithIndifferentAccess.new
-    doc.each do |row| 
+    doc.each do |row|
       percentage = row['Percentage']
       amount     = row['Amount']
       id         = row['Id']
-      
+
       code = Code.find(id)
 
       if (code && (amount.present? || percentage.present?))
-        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount, 
+        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount,
                                                                :percentage => percentage})
       end
     end
@@ -187,7 +187,7 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activity/project/DR
     def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) * 
+      self.cached_amount_in_usd = (cached_amount || 0) *
         Money.default_bank.get_rate(currency, :USD)
     end
 

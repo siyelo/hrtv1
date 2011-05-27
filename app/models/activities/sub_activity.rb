@@ -145,7 +145,12 @@ class SubActivity < Activity
 
       if sub_activity_amount > 0
         old_assignments.each do |ca|
-          cached_amount = sub_activity_amount * (ca.cached_amount || 0) / activity_amount
+          if activity_amount > 0
+            cached_amount = sub_activity_amount * (ca.cached_amount || 0) / activity_amount
+          else
+            # set cached amount to zero, otherwise it is Infinity
+            cached_amount = sub_activity_amount
+          end
           new_assignments << fake_ca(klass, ca.code, cached_amount)
         end
       end

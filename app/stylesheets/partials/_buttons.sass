@@ -25,7 +25,7 @@ a.add_nested
 a.remove_nested
   width: 80px
   +pie-clearfix
-  
+
 .app a
   &.create_new
     background: $orange
@@ -300,7 +300,7 @@ a.remove_nested
 
 .next
   margin-top: -5px
-  
+
 #buttons, .buttons
   margin-bottom: 5px !important
   padding: 5px 0px
@@ -313,10 +313,10 @@ a.remove_nested
     padding: 3px 5px
     text-decoration: none
     +border-radius(5px)
-    &:hover
+    &:hover, &.active
       background: $mid-blue
       color: white
-      
+
   li
     display: inline
     float: left
@@ -325,13 +325,13 @@ a.remove_nested
       display: inline-block
       font-size: 11px !important
       padding: 5px 8px
-      &:hover
+      &:hover, &.active
         color: #fff !important
-        
+
     &:last-child
       border-right: 1px dotted $light-blue
       margin-right: 5px
-      
+
 .simple_table a
   display: inline-block
   font-size: 1em

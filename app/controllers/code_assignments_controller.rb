@@ -13,10 +13,8 @@ class CodeAssignmentsController < Reporter::BaseController
     @error_message       = add_code_assignments_error(@coding_class, @activity)
 
     # set default to 'my' view if there are code assignments present
-    if params[:view].blank? && @current_assignments.present?
-      params[:view] = 'my'
-    else
-      params[:view] = 'all'
+    if params[:view].blank?
+      params[:view] = @current_assignments.present? ? 'my' : 'all'
     end
   end
 

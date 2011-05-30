@@ -49,6 +49,12 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
 
+  ### Meta Data for Meta Programming
+  ## GN TODO: refactor out getting collections of items failing
+  ## some validation method and defining those as "magic nicely named" methods
+  ## using metaprogramming
+  @@validation_methods = []
+
   ### Callbacks
   after_save :update_cached_currency_amounts
 
@@ -336,19 +342,31 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_and_activities_have_matching_budgets?
+    projects_and_activities_matching_amounts?(:budget)
+  end
+
+  def projects_and_activities_have_matching_spends?
+    projects_and_activities_matching_amounts?(:spend)
+  end
+
+  def projects_and_activities_matching_amounts?(amount_method)
     projects.each do |project|
-      return false if project.budget != (project.activities_budget_total +
-                                         project.other_costs_budget_total)
+      return false if !project_and_activities_matching_amounts?(project, amount_method)
     end
     true
   end
 
-  def projects_and_activities_have_matching_spends?
-    projects.each do |project|
-      return false if project.spend != (project.activities_spend_total +
-                                        project.other_costs_spend_total)
-    end
-    true
+  def project_and_activities_matching_amounts?(project, amount_method)
+    m = amount_method
+    p_total = project.send(m) || 0
+    a_total = project.direct_activities_total(m) || 0
+    o_total = project.other_costs_total(m) || 0
+#     puts "return #{p_total} == #{a_total} + #{o_total}"
+    p_total == a_total + o_total
+  end
+  
+  def projects_with_activities_not_matching_amounts(amount_method)
+    select_failing(projects, :project_and_activities_matching_amounts?, amount_method)
   end
 
   def uncoded_activities
@@ -387,6 +405,10 @@ class DataResponse < ActiveRecord::Base
     # Find all complete Activities
     def select_coded(activities)
       activities.select{ |a| a.classified? }
+    end
+
+    def select_failing(collection, validation_method, amount_method)
+      collection.select{|e| !self.send(validation_method, e, amount_method)}
     end
 
     def select_without_amounts(items)

@@ -1,5 +1,7 @@
-- fiscal_year_prev = fiscal_year_prev(@response)
-- fiscal_year = fiscal_year(@response)
+- budget_fiscal_year_prev = "09-10"
+- budget_fiscal_year = "10-11"
+- spend_fiscal_year_prev = "08-09"
+- spend_fiscal_year = "09-10"
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -33,26 +35,26 @@
         %li.amounts.last
           %label== Quarterly spend
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false
+            = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
+            = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
 
   - if @response.data_request.budget?
     %li.last
-      %h3 Budget (planned expenditure) (#{@response.currency})
+      %h3 Budget (Planned Expenditure) (#{@response.currency})
       %ul.dashboard_section
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label== Quarterly budget
             %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
+              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term
@@ -70,13 +72,13 @@
           = render "activities/funding_source_fields", :f => fs
         .add
           = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
-          %p.hint The sources from which your organization receives funding for this Activity.
+          %p.hint Enter sources here if this activity is funded differently from other activities for this project. For example, if your project has two donors, and only one of them funds this activity, enter that single source of funds here.
 
 
   %li.last
-    %h3== Implementers
+    %h3== Implementer
     %ul.dashboard_section
-      %p.hint Service Providers and partners you work with
+      %p.hint Direct service provider for this activity. If you transferred funds to another organization that carried out this work, enter that organization instead of your organization
       - hint = "Service Providers who implement Activities for your organization's Projects/Activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
       .implementer_container
@@ -103,7 +105,7 @@
     %ul.dashboard_section
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiary details / Other beneficiaries", :hint => "Beneficiaries of your Activity, if applicable to any of these population groups."
       = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your Activity that are not listed above."
-      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity."
+      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity. Example: 25,000 people on ART treatment"
 
   %li
     %ul.horizontal

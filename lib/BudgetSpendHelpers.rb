@@ -85,6 +85,8 @@ module BudgetSpendHelpers
     budget * Money.default_bank.get_rate(currency, :RWF)
   end
 
+  # GN TODO: refactor for spend in quarters to total up
+  # into spend field so only spend field is checked here
   def spend_entered?
     spend.present? || spend_q1.present? || spend_q2.present? ||
       spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
@@ -93,6 +95,11 @@ module BudgetSpendHelpers
   def budget_entered?
     budget.present? || budget_q1.present? || budget_q2.present? ||
       budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+  end
+
+  def smart_sum(collection, method)
+    s = collection.reject{|e| e.nil? or e.send(method).nil?}.sum{|e| e.send(method)}
+    s || 0
   end
 
   protected
@@ -121,4 +128,5 @@ module BudgetSpendHelpers
         self.send(:"#{method}_#{quarted_lookup[quarter-1]}")
       end
     end
+
 end

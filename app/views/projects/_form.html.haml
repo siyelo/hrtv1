@@ -1,7 +1,9 @@
 - editing     = controller.action_name == 'edit' ? true : false
 - button_text = editing ? "Update Project" : "Create New Project"
-- fiscal_year_prev = fiscal_year_prev(@response)
-- fiscal_year = fiscal_year(@response)
+- budget_fiscal_year_prev = "09-10"
+- budget_fiscal_year = "10-11"
+- spend_fiscal_year_prev = "08-09"
+- spend_fiscal_year = "09-10"
 
 :javascript
   var _budget = #{@response.data_request.budget.to_json};
@@ -25,11 +27,11 @@
         %li.amounts.last
           %label Quarterly spend
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false
+            = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
+            = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
 
   - if @response.data_request.budget?
     %li.last
@@ -41,11 +43,11 @@
           %li.amounts.last
             %label Quarterly budget
             %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
+              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
 
         - unless @response.request.no_long_term_budgets?
           %li.amounts

@@ -55,7 +55,7 @@ class Project < ActiveRecord::Base
   validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
   validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
-  
+
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
@@ -84,7 +84,7 @@ class Project < ActiveRecord::Base
   end
 
 
-  
+
   def response
     self.data_response
   end
@@ -214,16 +214,16 @@ END
     end
     true
   end
-  
+
   def total_matches_quarters?(type)
     return true if (self.send(type) || 0) == total_amount_of_quarters(type)
     return false
   end
-  
+
   def total_amount_of_quarters(type)
-    (self.send("#{type}_q1") || 0) + 
-    (self.send("#{type}_q2") || 0) + 
-    (self.send("#{type}_q3") || 0) + 
+    (self.send("#{type}_q1") || 0) +
+    (self.send("#{type}_q2") || 0) +
+    (self.send("#{type}_q3") || 0) +
     (self.send("#{type}_q4") || 0)
   end
 
@@ -273,7 +273,7 @@ END
     #(in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend) || 0)
     in_flows_total(:spend)
   end
-  
+
   def in_flows_total(amount_method)
     smart_sum(in_flows, amount_method)
   end
@@ -305,7 +305,7 @@ END
 
   def errors_from_response
     errors = []
-    
+
     [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
       if !response.project_and_activities_matching_amounts?(self, m)
         st = m == :budget ? "Budget" : "Expenditure"
@@ -429,7 +429,7 @@ END
       end
       amount
     end
-    
+
     # setting the total amount if the quarterlys are set
     def check_quarterly_vs_total
       ["budget", "spend"].each do |type|

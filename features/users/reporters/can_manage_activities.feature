@@ -21,26 +21,6 @@ Feature: Reporter can manage activities
     @javascript
     Scenario: Reporter can add sub-activities (normal values)
       When I follow "Add" within ".sub-head:nth-child(2)"
-       And I fill in "Name" with "activity1"
-       And I fill in "Description" with "1ctivity1 description"
-       And I fill in "Start date" with "2011-01-01"
-       And I fill in "End date" with "2011-12-01"
-       And I fill in "Spent" with "200"
-       And I fill in "Budget" with "300"
-       And I select "project1" from "Project"
-       And I follow "Add Sub Activity"
-       And I fill in "theCombobox" with "organization1"
-       And I fill in "Sub-Activity Spend" with "99"
-       And I fill in "Sub-Activity Budget" with "19"
-       And I press "Save & Classify >"
-      Then I should see "Activity was successfully created"
-      When I follow "activity1"
-       Then the "Sub-Activity Spend" field should contain "99"
-       And the "Sub-Activity Budget" field should contain "19"
-
-     @javascript
-     Scenario: Reporter can add sub-activities (percentage values)
-       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "activity1"
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2011-01-01"
@@ -50,15 +30,35 @@ Feature: Reporter can manage activities
         And I select "project1" from "Project"
         And I follow "Add Sub Activity"
         And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Activity Spend" with "10%"
+        And I fill in "Sub-Activity Expenditure" with "99"
+        And I fill in "Sub-Activity Budget" with "19"
+        And I press "Save & Classify >"
+      Then I should see "Activity was successfully created"
+      When I follow "activity1"
+      Then the "Sub-Activity Expenditure" field should contain "99"
+        And the "Sub-Activity Budget" field should contain "19"
+
+    @javascript
+    Scenario: Reporter can add sub-activities (percentage values)
+      When I follow "Add" within ".sub-head:nth-child(2)"
+        And I fill in "Name" with "activity1"
+        And I fill in "Description" with "1ctivity1 description"
+        And I fill in "Start date" with "2011-01-01"
+        And I fill in "End date" with "2011-12-01"
+        And I fill in "Spent" with "200"
+        And I fill in "Budget" with "300"
+        And I select "project1" from "Project"
+        And I follow "Add Sub Activity"
+        And I fill in "theCombobox" with "organization1"
+        And I fill in "Sub-Activity Expenditure" with "10%"
         And I fill in "Sub-Activity Budget" with "10%"
         And I press "Save & Classify >"
-       Then I should see "Activity was successfully created"
-       When I follow "activity1"
-        Then the "Sub-Activity Spend" field should contain "20"
+      Then I should see "Activity was successfully created"
+      When I follow "activity1"
+        Then the "Sub-Activity Expenditure" field should contain "20"
         And the "Sub-Activity Budget" field should contain "30"
 
-       @javascript
+    @javascript
     Scenario: Reporter can add sub-activities (percentage values must be less than 100)
       When I follow "Add" within ".sub-head:nth-child(2)"
        And I fill in "Name" with "activity1"
@@ -70,12 +70,12 @@ Feature: Reporter can manage activities
        And I select "project1" from "Project"
        And I follow "Add Sub Activity"
        And I fill in "theCombobox" with "organization1"
-       And I fill in "Sub-Activity Spend" with "101%"
+       And I fill in "Sub-Activity Expenditure" with "101%"
        And I fill in "Sub-Activity Budget" with "10%"
        And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-       Then the "Sub-Activity Spend" field should contain "101"
+       Then the "Sub-Activity Expenditure" field should contain "101"
        And the "Sub-Activity Budget" field should contain "30"
 
     @javascript
@@ -373,7 +373,7 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Spend" field should contain "66"
+      And the "Sub-Activity Expenditure" field should contain "66"
       And the "Sub-Activity Budget" field should contain "77"
 
 
@@ -385,5 +385,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Spend" field should contain "99"
+      And the "Sub-Activity Expenditure" field should contain "99"
       And the "Sub-Activity Budget" field should contain "100"

@@ -150,16 +150,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   # TODO: spec
-  def total_activity_spend_RWF
-    total_activity_method("spend_RWF")
-  end
-
-  # TODO: spec
-  def total_activity_budget_RWF
-    total_activity_method("budget_RWF")
-  end
-
-  # TODO: spec
   def total_activity_method(method)
     activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
@@ -252,7 +242,7 @@ class DataResponse < ActiveRecord::Base
   def projects_without_amounts
     select_without_amounts(self.projects)
   end
-  
+
   def activities_have_budget_or_spend?
     return false unless activities_entered?
     self.activities.each do |activity|
@@ -264,7 +254,7 @@ class DataResponse < ActiveRecord::Base
   def projects_without_budget
     self.projects.select{ |p| !p.budget_entered? }
   end
-  
+
   def check_projects_funding_sources_have_organizations?
     return false unless projects_entered?
     self.projects.each do |project|
@@ -283,8 +273,8 @@ class DataResponse < ActiveRecord::Base
 
   def activities_entered?
     !self.normal_activities.empty?
-  end 
-  
+  end
+
   def activities_have_implementers?
     return false unless activities_entered?
     self.activities.each do |activity|

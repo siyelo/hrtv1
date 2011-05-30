@@ -100,6 +100,7 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
+  before_save :check_quarterly_vs_total
 
   ### Named scopes
   # TODO: spec
@@ -583,6 +584,13 @@ class Activity < ActiveRecord::Base
     end
     0
   end
+  
+  def total_amount_of_quarters(type)
+    (self.send("#{type}_q1") || 0) + 
+    (self.send("#{type}_q2") || 0) + 
+    (self.send("#{type}_q3") || 0) + 
+    (self.send("#{type}_q4") || 0)
+  end
 
   private
 
@@ -684,6 +692,15 @@ class Activity < ActiveRecord::Base
         if (rate = Money.default_bank.get_rate(self.currency, :USD))
           self.budget_in_usd = (budget || 0) * rate
           self.spend_in_usd  = (spend || 0)  * rate
+        end
+      end
+    end
+    
+    # setting the total amount if the quarterlys are set
+    def check_quarterly_vs_total
+      ["budget", "spend"].each do |type|
+        if total_amount_of_quarters(type) > 0
+          self.send(:"#{type}=", total_amount_of_quarters(type))
         end
       end
     end

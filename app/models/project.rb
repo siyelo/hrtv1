@@ -76,13 +76,15 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-
+  before_save :check_quarterly_vs_total
   ### Public methods
   #
   def implementers
     providers
   end
 
+
+  
   def response
     self.data_response
   end
@@ -426,6 +428,15 @@ END
         amount += spend * currency_rate(project.currency, 'USD')
       end
       amount
+    end
+    
+    # setting the total amount if the quarterlys are set
+    def check_quarterly_vs_total
+      ["budget", "spend"].each do |type|
+        if total_amount_of_quarters(type) > 0
+          self.send(:"#{type}=", total_amount_of_quarters(type))
+        end
+      end
     end
 
     # work arround for validates_presence_of :project issue

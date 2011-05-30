@@ -1,3 +1,7 @@
+# reload project model because of some reason for some project(s) it gives:
+# NoMethodError: undefined method `funding_streams' for #<Project:0xb5c1a6f0>
+load 'app/models/project.rb'
+
 include NumberHelper
 
 puts "Loading funding streams"
@@ -15,7 +19,7 @@ FasterCSV.foreach("db/reports/ufs/funding_streams.csv", :headers => true) do |ro
     puts "Could not find fa with name #{row[2]}" if fa.nil?
 
     rate = currency_rate(project.currency, 'USD')
-    FundingStream.create!(:project_id => row[0], 
+    FundingStream.create!(:project_id => row[0],
                           :organization_ufs_id => ufs.id,
                           :organization_fa_id => fa.id,
                           :budget => project.budget,

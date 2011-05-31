@@ -179,6 +179,7 @@ describe Project do
       @proj3.spend = @proj3.budget = 50; @proj3.save
       proj_funded_by(@proj3, @org1, 50, 50)
       ufs = @proj3.ultimate_funding_sources
+      ufs.sort!{|a, b| a.ultimate_funding_source.name <=> b.ultimate_funding_source.name}
       ufs.size.should == 2
       ufs_equality([ufs[0]], [{:ufs => @org1, :fa => @org3, :budget => 10, :spend => 25}])
       ufs_equality([ufs[1]], [{:ufs => @org2, :fa => @org1, :budget => 40, :spend => 25}])

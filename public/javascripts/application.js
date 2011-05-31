@@ -766,7 +766,7 @@ var admin_responses_show = {
   }
 };
 
-var responses_show = {
+var responses_review = {
   run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
@@ -847,7 +847,7 @@ var data_responses_review = {
   }
 }
 
-var responses_review = {
+var responses_submit = {
   run: function () {
     $(".collapse").click(function(e){
       e.preventDefault();

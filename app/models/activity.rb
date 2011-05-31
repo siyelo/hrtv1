@@ -584,11 +584,11 @@ class Activity < ActiveRecord::Base
     end
     0
   end
-  
+
   def total_amount_of_quarters(type)
-    (self.send("#{type}_q1") || 0) + 
-    (self.send("#{type}_q2") || 0) + 
-    (self.send("#{type}_q3") || 0) + 
+    (self.send("#{type}_q1") || 0) +
+    (self.send("#{type}_q2") || 0) +
+    (self.send("#{type}_q3") || 0) +
     (self.send("#{type}_q4") || 0)
   end
 
@@ -695,7 +695,7 @@ class Activity < ActiveRecord::Base
         end
       end
     end
-    
+
     # setting the total amount if the quarterlys are set
     def check_quarterly_vs_total
       ["budget", "spend"].each do |type|

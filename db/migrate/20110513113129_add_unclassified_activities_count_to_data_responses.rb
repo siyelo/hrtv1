@@ -4,7 +4,7 @@ class AddUnclassifiedActivitiesCountToDataResponses < ActiveRecord::Migration
 
     DataResponse.reset_column_information
     DataResponse.find(:all).each do |dr|
-      DataResponse.update_counters(dr.id, 
+      DataResponse.update_counters(dr.id,
         :unclassified_activities_count => dr.activities.only_simple.unclassified.length)
     end
   end

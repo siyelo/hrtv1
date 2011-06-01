@@ -283,7 +283,7 @@ class DataResponse < ActiveRecord::Base
 
   def activities_have_implementers?
     return false unless activities_entered?
-    self.activities.each do |activity|
+    self.normal_activities.each do |activity|
       return false if activity.implementer.nil?
     end
     true

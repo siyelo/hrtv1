@@ -346,12 +346,11 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def project_and_activities_matching_amounts?(project, amount_method)
+  def project_and_activities_matching_amounts?(project, amount_method) 
     m = amount_method
     p_total = project.send(m) || 0
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
-#     puts "return #{p_total} == #{a_total} + #{o_total}"
     p_total == a_total + o_total
   end
   

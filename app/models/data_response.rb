@@ -38,7 +38,6 @@ class DataResponse < ActiveRecord::Base
                         :contact_main_office_phone_number
 
 
-  validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
   validates_date :fiscal_year_start_date
   validates_date :fiscal_year_end_date
@@ -353,7 +352,7 @@ class DataResponse < ActiveRecord::Base
     o_total = project.other_costs_total(m) || 0
     p_total == a_total + o_total
   end
-  
+
   def projects_with_activities_not_matching_amounts(amount_method)
     select_failing(projects, :project_and_activities_matching_amounts?, amount_method)
   end

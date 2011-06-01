@@ -144,18 +144,10 @@ describe Project do
        @project.total_matches_quarters?(:spend).should be_true
      end
       
-      it "should return false if spend is nil and quarterlys arent" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => "20", :spend_q2 => "30", 
-                            :spend_q3 => "40", :spend_q4 => "50")
-        @project.total_matches_quarters?(:spend).should be_false
-      end
-      
       it "should return true if spend is nil and quarterlys are too" do 
         @project = Factory(:project, :spend => nil, 
                             :spend_q1 => nil, :spend_q2 => nil, 
                             :spend_q3 => nil, :spend_q4 => nil)
-        puts "lsdkfjsldkfjsldkfjsldjfk"
         @project.total_matches_quarters?(:spend).should be_true
       end
       

@@ -69,7 +69,17 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
+    it { should_not allow_value('abcd').for(:budget_q1) }
+    it { should_not allow_value('abcd').for(:budget_q2) }
+    it { should_not allow_value('abcd').for(:budget_q3) }
+    it { should_not allow_value('abcd').for(:budget_q4) }
+    it { should_not allow_value('abcd').for(:budget_q4_prev) }
     it { should_not allow_value('abcd').for(:spend) }
+    it { should_not allow_value('abcd').for(:spend_q1) }
+    it { should_not allow_value('abcd').for(:spend_q2) }
+    it { should_not allow_value('abcd').for(:spend_q3) }
+    it { should_not allow_value('abcd').for(:spend_q4) }
+    it { should_not allow_value('abcd').for(:spend_q4_prev) }
     it { should_not allow_value('abcd').for(:budget2) }
     it { should_not allow_value('abcd').for(:budget3) }
     it { should_not allow_value('abcd').for(:budget4) }
@@ -133,13 +143,6 @@ describe Project do
                           :spend_q3 => "40", :spend_q4 => "50")
        @project.total_matches_quarters?(:spend).should be_true
      end
-      
-      it "should return false if spend is nil and quarterlys arent" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => "20", :spend_q2 => "30", 
-                            :spend_q3 => "40", :spend_q4 => "50")
-        @project.total_matches_quarters?(:spend).should be_false
-      end
       
       it "should return true if spend is nil and quarterlys are too" do 
         @project = Factory(:project, :spend => nil, 

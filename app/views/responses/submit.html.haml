@@ -1,4 +1,5 @@
 - title("Submit Response")
+- your_data_response = @response.valid? ? "ready" : "not-ready"
 - your_projects = @response.projects_entered? && @response.project_amounts_entered? && @response.projects_have_activities? && @response.projects_have_other_costs? ? "ready" : "not-ready"
 - projects_entered = @response.projects_entered? ? "ready" : "not-ready"
 - project_amounts_entered = @response.projects_entered? && @response.project_amounts_entered? ? "ready" : "not-ready"
@@ -39,6 +40,14 @@
 = error_messages_for :response, :header_message => "", :message => ""
 
 %ul.review
+  %li.alt
+    %h2 Data Response Settings
+  %li.dashboard_section
+    %h3{:class => (your_data_response)}
+      Your Data Response Settings
+      - unless @response.valid?
+        %span.info
+          = "Your Data Response Settings are not complete. Please visit the #{link_to "settings", edit_response_path(@response)} to make the necessary changes."
   %li.alt
     %h2 Projects
   %li.dashboard_section

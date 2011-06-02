@@ -264,9 +264,10 @@ class Activity < ActiveRecord::Base
 
 
   def has_budget_or_spend?
-    return true if self.spend
-    return true if self.budget
+    return true if self.spend.present?
+    return true if self.budget.present?
   end
+  
   def possible_duplicate?
     self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
   end

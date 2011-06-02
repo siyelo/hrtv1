@@ -251,7 +251,7 @@ class DataResponse < ActiveRecord::Base
   def activities_have_budget_or_spend?
     return false unless activities_entered?
     self.activities.each do |activity|
-      return false unless activity.has_budget_or_spend?
+      return false if !activity.has_budget_or_spend? && !activity.type == "SubActivity" ## change me later
     end
     true
   end
@@ -293,8 +293,10 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activities_without_amounts
-    select_without_amounts(self.activities)
+    select_without_amounts(self.normal_activities)
   end
+  
+  
 
   def projects_have_activities?
     return false unless activities_entered?

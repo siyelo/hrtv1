@@ -241,7 +241,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def project_amounts_entered?
-    projects_without_amounts.empty?
+    projects_entered? && projects_without_amounts.empty?
   end
 
   def projects_without_amounts
@@ -332,12 +332,22 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
+  def projects_funding_sources_ok?
+    projects_and_funding_sources_have_matching_budgets? &&
+    projects_and_funding_sources_have_correct_spends?
+  end
+
   def projects_and_activities_have_matching_budgets?
     projects_and_activities_matching_amounts?(:budget)
   end
 
   def projects_and_activities_have_matching_spends?
     projects_and_activities_matching_amounts?(:spend)
+  end
+
+  def projects_activities_ok?
+    projects_and_activities_have_matching_budgets? &&
+    projects_and_activities_have_matching_spends?
   end
 
   def projects_and_activities_matching_amounts?(amount_method)
@@ -347,7 +357,7 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def project_and_activities_matching_amounts?(project, amount_method) 
+  def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method
     p_total = project.send(m) || 0
     a_total = project.direct_activities_total(m) || 0

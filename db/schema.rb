@@ -51,10 +51,10 @@ ActiveRecord::Schema.define(:version => 20110531083206) do
     t.decimal  "spend_in_usd",                          :default => 0.0
     t.decimal  "budget_in_usd",                         :default => 0.0
     t.integer  "project_id"
-    t.decimal  "budget2"
-    t.decimal  "budget3"
     t.decimal  "ServiceLevelBudget_amount",             :default => 0.0
     t.decimal  "ServiceLevelSpend_amount",              :default => 0.0
+    t.decimal  "budget2"
+    t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
   end

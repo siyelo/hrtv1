@@ -3,6 +3,7 @@ require 'validators'
 class DataResponse < ActiveRecord::Base
   include ActsAsDateChecker
   include CurrencyCacheHelpers
+  include NumberHelper
 
   ### Attributes
 
@@ -126,12 +127,12 @@ class DataResponse < ActiveRecord::Base
 
   # TODO: spec
   def total_project_budget
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget}
+    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + universal_currency_converter(p.budget, p.currency, currency)}
   end
 
   # TODO: spec
   def total_project_spend
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend}
+    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + universal_currency_converter(p.spend, p.currency, currency)}
   end
 
   # TODO: spec
@@ -158,7 +159,7 @@ class DataResponse < ActiveRecord::Base
   def total_activity_method(method)
     activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
-        sum + a.send(method)
+        sum + universal_currency_converter(a.send(method), a.project.currency, currency)
       else
         sum
       end

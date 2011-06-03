@@ -44,8 +44,6 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
-      response.resources :commodities,
-        :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :projects,
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,

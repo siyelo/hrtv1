@@ -23,7 +23,6 @@ class DataResponse < ActiveRecord::Base
   has_many :sub_activities, :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
-  has_many :commodities, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
            :foreign_key => :data_response_id_current
@@ -346,14 +345,14 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
-  def project_and_activities_matching_amounts?(project, amount_method) 
+  def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method
     p_total = project.send(m) || 0
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
     p_total == a_total + o_total
   end
-  
+
   def projects_with_activities_not_matching_amounts(amount_method)
     select_failing(projects, :project_and_activities_matching_amounts?, amount_method)
   end

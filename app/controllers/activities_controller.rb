@@ -5,6 +5,7 @@ class ActivitiesController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
@@ -192,4 +193,11 @@ class ActivitiesController < Reporter::BaseController
       render :partial => 'bulk_edit', :layout => false,
         :locals => {:activity => @activity, :response => @response}
     end
+
+    def confirm_activity_type
+      @activity = Activity.find(params[:id])     
+      return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
+      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
+
 end

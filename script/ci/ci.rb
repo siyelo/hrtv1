@@ -33,7 +33,7 @@ end
 def specs
   setup_specs
   run_or_die "spec spec"
-  #run_or_die "spec spec/models/commodity_spec.rb" #debug
+  #run_or_die "spec spec/models/<pick_some_quick_spec>.rb" #debug
 end
 
 # http://blog.kabisa.nl/2010/05/24/headless-cucumbers-and-capybaras-with-selenium-and-hudson/

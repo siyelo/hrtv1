@@ -271,7 +271,7 @@ class DataResponse < ActiveRecord::Base
   def projects_linked?
     return false unless projects_entered?
     self.projects.each do |project|
-      return false unless project.linked?
+      return false if project.in_flows.present? && !project.linked?
     end
     true
   end
@@ -295,8 +295,8 @@ class DataResponse < ActiveRecord::Base
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
   end
-  
-  
+
+
 
   def projects_have_activities?
     return false unless activities_entered?

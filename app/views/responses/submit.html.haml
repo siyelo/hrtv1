@@ -137,7 +137,7 @@
           All Projects have Funding Sources
           - unless @response.check_projects_funding_sources_have_organizations?
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
-            - @response.projects.each do |project|
+            - @projects.each do |project|
               %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
 
@@ -170,7 +170,7 @@
                 %tr
                   %th{:colspan => 5}
                     Budget
-                - @response.projects.each do |project|
+                - @projects.each do |project|
                   - if (project.in_flows_budget_total || 0) != (project.budget || 0)
                     %tr
                       %td= project.name
@@ -222,7 +222,7 @@
                       %td.first= n2crs(project.budget, project.currency)
                       %td.first= n2crs((project.activities_budget_total + project.other_costs_budget_total), project.currency)
                       %td.first= n2crs((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency)
-                      - project.activities.roots.each do |activity|
+                      - project.normal_activities.each do |activity|
                         %tr{:class => "#{dom_id(project)}_budget"}
                           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
                           %td.activity

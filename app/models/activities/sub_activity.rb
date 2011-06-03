@@ -28,22 +28,6 @@ class SubActivity < Activity
     end
   end
 
-  def budget
-    if read_attribute(:budget)
-      read_attribute(:budget)
-    else
-      nil
-    end
-  end
-
-  def spend
-    if read_attribute(:spend)
-      read_attribute(:spend)
-    else
-      nil
-    end
-  end
-
   # Creates new code_assignments records for sub_activity on the fly
   def code_assignments
     coding_budget + coding_budget_cost_categorization + budget_district_coding_adjusted +

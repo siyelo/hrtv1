@@ -59,5 +59,5 @@ end
 bundle_install
 setup_sqlite
 specs
-cukes
+#cukes - ffox busting its nut on CI server. Not worth the trouble.
 

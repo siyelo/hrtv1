@@ -37,7 +37,6 @@ class DataResponse < ActiveRecord::Base
                         :contact_main_office_phone_number
 
 
-  validates_numericality_of :contact_phone_number, :contact_main_office_phone_number
   # TODO: spec
   validates_date :fiscal_year_start_date
   validates_date :fiscal_year_end_date
@@ -241,7 +240,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def project_amounts_entered?
-    projects_without_amounts.empty?
+    projects_entered? && projects_without_amounts.empty?
   end
 
   def projects_without_amounts
@@ -251,7 +250,7 @@ class DataResponse < ActiveRecord::Base
   def activities_have_budget_or_spend?
     return false unless activities_entered?
     self.activities.each do |activity|
-      return false unless activity.has_budget_or_spend?
+      return false if !activity.has_budget_or_spend? && !activity.type == "SubActivity" ## change me later
     end
     true
   end
@@ -271,7 +270,7 @@ class DataResponse < ActiveRecord::Base
   def projects_linked?
     return false unless projects_entered?
     self.projects.each do |project|
-      return false unless project.linked?
+      return false if project.in_flows.present? && !project.linked?
     end
     true
   end
@@ -282,7 +281,7 @@ class DataResponse < ActiveRecord::Base
 
   def activities_have_implementers?
     return false unless activities_entered?
-    self.activities.each do |activity|
+    self.normal_activities.each do |activity|
       return false if activity.implementer.nil?
     end
     true
@@ -293,8 +292,10 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activities_without_amounts
-    select_without_amounts(self.activities)
+    select_without_amounts(self.normal_activities)
   end
+
+
 
   def projects_have_activities?
     return false unless activities_entered?
@@ -330,12 +331,22 @@ class DataResponse < ActiveRecord::Base
     true
   end
 
+  def projects_funding_sources_ok?
+    projects_and_funding_sources_have_matching_budgets? &&
+    projects_and_funding_sources_have_correct_spends?
+  end
+
   def projects_and_activities_have_matching_budgets?
     projects_and_activities_matching_amounts?(:budget)
   end
 
   def projects_and_activities_have_matching_spends?
     projects_and_activities_matching_amounts?(:spend)
+  end
+
+  def projects_activities_ok?
+    projects_and_activities_have_matching_budgets? &&
+    projects_and_activities_have_matching_spends?
   end
 
   def projects_and_activities_matching_amounts?(amount_method)

@@ -16,9 +16,11 @@ module ProjectsHelper
   def get_project_errors(project)
     errors = project.try(:errors_from_response)
 
-    if errors
+    if errors.present?
       errors = errors.collect{|e| "<li>#{e}</li>"}
       '<ul class="response-notice">' + errors.join + '</ul>'
+    else
+      nil # when no errors
     end
   end
 end

@@ -51,6 +51,7 @@ class ResponsesController < ApplicationController
 
   def submit
     @response = find_response(params[:id])
+    @projects = @response.projects.find(:all, :include => :normal_activities)
   end
 
   def send_data_response

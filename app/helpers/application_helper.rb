@@ -224,13 +224,47 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
-  def fiscal_year_prev(data_response)
-    year1 = data_response.fiscal_year_start_date.present? ?
-      data_response.fiscal_year_start_date.strftime('%y') : 'xx'
-    year2 = data_response.fiscal_year_end_date.present? ?
-      data_response.fiscal_year_end_date.strftime('%y') : 'xx'
+  def budget_fiscal_year_prev(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.pred.to_s.split('')[-2..-1].join
+      year2 = year.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
 
     "#{year1}-#{year2}"
+  end
+
+  def budget_fiscal_year(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.to_s.split('')[-2..-1].join
+      year2 = year.next.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def spend_fiscal_year_prev(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.pred.pred.to_s.split('')[-2..-1].join
+      year2 = year.pred.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def spend_fiscal_year(data_response)
+    budget_fiscal_year_prev(data_response)
   end
 
   def fiscal_year(data_response)
@@ -249,9 +283,9 @@ module ApplicationHelper
     orgs = Organization.find(:all, :order => 'old_type, name')
     orgs.map{|o| [o.display_name(100), o.id]}
   end
-  
+
   def is_number?(i)
     true if Float(i) rescue false
   end
-  
+
 end

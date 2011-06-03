@@ -270,7 +270,8 @@ class DataResponse < ActiveRecord::Base
   def projects_linked?
     return false unless projects_entered?
     self.projects.each do |project|
-      return false if project.in_flows.present? && !project.linked?
+      #return false if project.in_flows.present? && !project.linked?
+      return false unless project.linked?
     end
     true
   end

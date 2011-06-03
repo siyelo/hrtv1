@@ -29,7 +29,7 @@ class FundingFlow < ActiveRecord::Base
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
- validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?},

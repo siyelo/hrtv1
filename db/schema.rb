@@ -9,48 +9,6 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20100928120818) do
-
-  create_table "abilities", :force => true do |t|
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "activities", :force => true do |t|
-    t.string    "name"
-    t.string    "beneficiary"
-    t.string    "target"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "provider_id"
-    t.integer   "other_cost_type_id"
-    t.text      "description"
-    t.string    "type"
-    t.decimal   "budget"
-    t.decimal   "spend_q1"
-    t.decimal   "spend_q2"
-    t.decimal   "spend_q3"
-    t.decimal   "spend_q4"
-    t.date      "start"
-    t.date      "end"
-    t.decimal   "spend"
-    t.text      "text_for_provider"
-    t.text      "text_for_targets"
-    t.text      "text_for_beneficiaries"
-    t.decimal   "spend_q4_prev"
-    t.integer   "data_response_id"
-    t.integer   "activity_id"
-    t.decimal   "budget_percentage"
-    t.decimal   "spend_percentage"
-    t.boolean   "approved"
-    t.decimal   "CodingBudget_amount"
-    t.decimal   "CodingBudgetCostCategorization_amount"
-    t.decimal   "CodingBudgetDistrict_amount"
-    t.decimal   "CodingSpend_amount"
-    t.decimal   "CodingSpendCostCategorization_amount"
-    t.decimal   "CodingSpendDistrict_amount"
-=======
 ActiveRecord::Schema.define(:version => 20110603115555) do
 
   create_table "activities", :force => true do |t|
@@ -99,7 +57,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -135,25 +92,9 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
-<<<<<<< HEAD
-    t.integer   "parent_id"
-    t.integer   "lft"
-    t.integer   "rgt"
-    t.string    "short_display"
-    t.string    "long_display"
-    t.text      "description"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.date      "start_date"
-    t.date      "end_date"
-    t.integer   "replacement_code_id"
-    t.string    "type"
-    t.string    "external_id"
-=======
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
@@ -171,17 +112,16 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.string   "sub_account"
     t.string   "nha_code"
     t.string   "nasa_code"
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   create_table "comments", :force => true do |t|
-    t.string    "title",            :limit => 50, :default => ""
-    t.text      "comment",                        :default => ""
-    t.integer   "commentable_id"
-    t.string    "commentable_type"
-    t.integer   "user_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.string   "title",            :limit => 50, :default => ""
+    t.text     "comment",                        :default => ""
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
@@ -189,14 +129,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "data_requests", :force => true do |t|
-<<<<<<< HEAD
-    t.integer   "organization_id_requester"
-    t.string    "title"
-    t.boolean   "complete",                  :default => false
-    t.boolean   "pending_review",            :default => false
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-=======
     t.integer  "organization_id"
     t.string   "title"
     t.datetime "created_at"
@@ -216,7 +148,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.boolean  "inputs",            :default => true
     t.boolean  "service_levels",    :default => true
     t.boolean  "budget_by_quarter", :default => false
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   create_table "data_responses", :force => true do |t|
@@ -235,8 +166,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.string   "contact_office_location"
     t.boolean  "submitted"
     t.datetime "submitted_at"
-<<<<<<< HEAD
-=======
     t.integer  "projects_count",                    :default => 0
     t.integer  "comments_count",                    :default => 0
     t.integer  "activities_count",                  :default => 0
@@ -245,7 +174,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.datetime "submitted_for_final_at"
     t.boolean  "submitted_for_final"
     t.integer  "unclassified_activities_count",     :default => 0
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -260,64 +188,15 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
   end
 
   create_table "field_helps", :force => true do |t|
-    t.string    "attribute_name"
-    t.string    "short"
-    t.text      "long"
-    t.integer   "model_help_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "funding_flows", :force => true do |t|
-<<<<<<< HEAD
-    t.integer   "organization_id_from"
-    t.integer   "organization_id_to"
-    t.integer   "project_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.decimal   "budget"
-    t.decimal   "spend_q1"
-    t.decimal   "spend_q2"
-    t.decimal   "spend_q3"
-    t.decimal   "spend_q4"
-    t.text      "organization_text"
-    t.integer   "self_provider_flag",   :default => 0
-    t.decimal   "spend"
-    t.decimal   "spend_q4_prev"
-    t.integer   "data_response_id"
-  end
-
-  create_table "help_requests", :force => true do |t|
-    t.string    "email"
-    t.text      "message"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "indicators", :force => true do |t|
-    t.string    "name"
-    t.text      "description"
-    t.string    "source"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "line_items", :force => true do |t|
-    t.text      "description"
-    t.integer   "activity_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "activity_cost_category_id"
-    t.decimal   "budget"
-    t.decimal   "spend"
-  end
-
-  create_table "locations", :force => true do |t|
-    t.string    "name"
-    t.string    "type"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-=======
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
     t.integer  "project_id"
@@ -372,7 +251,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.text     "message"
     t.datetime "created_at"
     t.datetime "updated_at"
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   create_table "locations_organizations", :id => false, :force => true do |t|
@@ -386,40 +264,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
   end
 
   create_table "model_helps", :force => true do |t|
-<<<<<<< HEAD
-    t.string    "model_name"
-    t.string    "short"
-    t.text      "long"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-  end
-
-  create_table "organizations", :force => true do |t|
-    t.string    "name"
-    t.string    "type"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.string    "raw_type"
-  end
-
-  create_table "projects", :force => true do |t|
-    t.string    "name"
-    t.text      "description"
-    t.date      "start_date"
-    t.date      "end_date"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.decimal   "budget"
-    t.decimal   "spend"
-    t.decimal   "entire_budget"
-    t.string    "currency"
-    t.decimal   "spend_q1"
-    t.decimal   "spend_q2"
-    t.decimal   "spend_q3"
-    t.decimal   "spend_q4"
-    t.decimal   "spend_q4_prev"
-    t.integer   "data_response_id"
-=======
     t.string   "model_name"
     t.string   "short"
     t.text     "long"
@@ -482,34 +326,19 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.string   "formatted_csv_content_type"
     t.integer  "formatted_csv_file_size"
     t.datetime "formatted_csv_updated_at"
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   create_table "sessions", :force => true do |t|
-    t.string    "session_id", :null => false
-    t.text      "data"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "users", :force => true do |t|
-<<<<<<< HEAD
-    t.string    "username"
-    t.string    "email"
-    t.string    "crypted_password"
-    t.string    "password_salt"
-    t.string    "persistence_token"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "roles_mask"
-    t.integer   "organization_id"
-    t.integer   "data_response_id_current"
-    t.text      "text_for_organization"
-    t.string    "full_name"
-=======
     t.string   "username"
     t.string   "email"
     t.string   "crypted_password"
@@ -524,7 +353,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.string   "full_name"
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
->>>>>>> 2ffc6189c1d60b146bcf6ffd5709b49d0af8095a
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

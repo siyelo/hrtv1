@@ -15,7 +15,7 @@
 
   - if @response.data_request.spend?
     %li.last
-      %h3== Past Activity Expenditure (#{@activity.project.currency})
+      %h3== Past Activity Expenditure (#{@other_cost.project.currency})
       %ul.dashboard_section
 
         = f.input :spend, :label => "Spend", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false

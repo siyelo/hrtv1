@@ -17,7 +17,7 @@ class Project < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 3
 
-  acts_as_stripper
+  # acts_as_stripper
   strip_commas_from_all_numbers
 
   ### Associations
@@ -115,15 +115,6 @@ class Project < ActiveRecord::Base
     return c unless c.blank?
     return data_response.currency
   end
-
-  #Methods correctly strip the non-word characters from the following fields
-  CURRENCY_FIELDS = [:budget, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4,  :entire_budget]
-    Project.class_eval CURRENCY_FIELDS.each.inject("") {|s,field| s += <<END}
-      def #{field}=(amount)
-        super(strip_non_decimal(amount))
-      end
-END
-#do not indent the above end
 
   def to_s
     result = ''

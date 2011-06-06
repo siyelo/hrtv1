@@ -106,8 +106,6 @@ describe Project do
     FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
     TESTS = [
               ["10,783.32",     "10783.32",  "clean commas"],
-              ["$10,783.32",    "10783.32",   "ignore currency symbols and commas"],
-              ["$10783.32",     "10783.32",   "ignore currency symbols"],
               ["10783,32",      "1078332.0",  "ingore commas as decimal separator"],
               ["10.783,32",     "10.78332",   "ignore decimals as thousands separators"],
               ["21.100.783,32", "21.1",       "ignore multiple decimals as thousands separators"]

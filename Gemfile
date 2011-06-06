@@ -6,7 +6,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
 gem 'fastercsv'
 gem 'formtastic', "= 1.2.3"
-gem 'haml'
+gem 'haml', '=3.0.25'
 gem 'hoptoad_notifier'
 gem 'ar_strip_commas'
 

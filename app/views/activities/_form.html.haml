@@ -29,7 +29,7 @@
 
   - if @response.data_request.spend?
     %li.last
-      %h3== Past Activity Expenditure (#{@response.currency})
+      %h3= "Past Activity Expenditure (#{@activity.project.try(:currency)})"
       %ul.dashboard_section
         = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         %li.amounts.last
@@ -43,7 +43,7 @@
 
   - if @response.data_request.budget?
     %li.last
-      %h3 Budget (Planned Expenditure) (#{@response.currency})
+      %h3= "Budget (Planned Expenditure) (#{@activity.project.try(:currency)})"
       %ul.dashboard_section
         = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         - if @response.request.budget_by_quarter?

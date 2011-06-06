@@ -1,71 +1,114 @@
-class OtherCostsController < ActiveScaffoldController
-  authorize_resource
+class OtherCostsController < Reporter::BaseController
+  SORTABLE_COLUMNS = ['description', 'spend', 'budget']
 
-  before_filter :check_user_has_data_response
+  inherit_resources
+  helper_method :sort_column, :sort_direction
+  before_filter :load_data_response
+  before_filter :confirm_activity_type, :only => [:edit]
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
-  @@shown_columns = [ :projects, :budget, :spend]
-  @@create_columns = [:projects,  :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :description]
-  def self.create_columns
-    @@create_columns
+  def index
+    scope = @response.other_costs.scoped()
+    scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR
+                                         UPPER(activities.description) LIKE UPPER(:q)",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+    @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
-  @@columns_for_file_upload = %w[budget spend
-    spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 description] # TODO fix bug, projects for instance won't work
 
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+  def new
+    @other_cost = OtherCost.new
+    @other_cost.project = @response.projects.find_by_id(params[:project_id])
+  end
 
-  active_scaffold :other_costs do |config|
-    config.action_links.add('Detail Cost Areas',
-      :action => "popup_coding",
-      :type => :member,
-      :popup => true,
-      :label => "Detail Cost Areas")
-    config.nested.add_link("Comments", [:comments])
-    config.label                                  = "Other Costs"
-    config.columns                                = @@shown_columns
-    list.sorting                                  = {:budget => 'DESC'} #adding this didn't break in place editing
-    config.columns[:comments].association.reverse = :commentable
-    config.create.columns                         = @@create_columns
-    config.update.columns                         = @@create_columns
-    config.columns[:projects].inplace_edit        = true
-    config.columns[:projects].form_ui             = :select
-    config.columns[:description].inplace_edit     = true
-    config.columns[:description].label            = "Description (optional)"
-    config.columns[:budget].label                 = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label                  = "Total Spend GOR FY 09-10"
+  def edit
+    load_comment_resources(resource)
+    edit!
+  end
 
-    [:spend, :budget].each do |c|
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].inplace_edit = true
+  def show
+    load_comment_resources(resource)
+    show!
+  end
+  
+  def create
+    create! do |success, failure|
+      success.html { html_redirect }
     end
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
+  end
+  
+  
+  def update
+    update! do |success, failure|
+      success.html { html_redirect }
+      failure.html { load_comment_resources(resource); render :action => 'edit'}
     end
-    config.columns[:spend_q4_prev].inplace_edit = true
-    quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
+  end
+
+  def destroy
+    destroy! do |success, failure|
+      success.html do
+        flash[:notice] = 'Other Cost was successfully destroyed'
+        redirect_to response_projects_url(@response)
+      end
+    end
+  end
+
+  def download_template
+    template = OtherCost.download_template
+    send_csv(template, 'other_costs_template.csv')
   end
 
   def create_from_file
-    super @@columns_for_file_upload
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
+          saved, errors = OtherCost.create_from_file(doc, @response)
+          flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
+        else
+          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        end
+      else
+        flash[:error] = 'Please select a file to upload'
+      end
+
+      redirect_to response_other_costs_url(@response)
+    rescue
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      redirect_to response_other_costs_url(@response)
+    end
   end
 
-  def beginning_of_chain
-    super.available_to current_user
-  end
 
-  #fixes create
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
+  private
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
+    end
 
-  def popup_coding
-    redirect_to budget_activity_coding_url(params[:id])
-  end
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
+
+    def html_redirect
+      unless @other_cost.check_projects_budget_and_spend?
+        flash.delete(:notice)
+        flash[:error] = "Please be aware that your activities spend/budget exceeded that of your projects"
+      end
+
+      if params[:commit] == "Save & Classify >"
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type) 
+      else
+        redirect_to response_projects_path(@other_cost.project.response)
+      end
+    end
+
+
+    def confirm_activity_type
+      @activity = Activity.find(params[:id])     
+      return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
+      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
 
 end

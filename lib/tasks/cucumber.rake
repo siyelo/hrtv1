@@ -3,7 +3,7 @@
 # newer version of cucumber-rails. Consider adding your own code to a new file
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
-
+#
 
 unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:* tasks
 
@@ -12,6 +12,31 @@ $LOAD_PATH.unshift(File.dirname(vendored_cucumber_bin) + '/../lib') unless vendo
 
 begin
   require 'cucumber/rake/task'
+
+  require 'spec/rake/spectask'
+  namespace :rcov do
+    Cucumber::Rake::Task.new(:cucumber) do |t|
+      t.rcov = true
+      t.rcov_opts = %w{--rails --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate coverage.data}
+      t.rcov_opts << %[-o "coverage"]
+    end
+
+    Spec::Rake::SpecTask.new(:rspec) do |t|
+      t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
+      t.spec_files = FileList['spec/**/*_spec.rb']
+      t.rcov = true
+      t.rcov_opts = lambda do
+        IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
+      end
+    end
+
+    desc "Run both specs and features to generate aggregated coverage"
+    task :all do |t|
+      rm "coverage.data" if File.exist?("coverage.data")
+      Rake::Task['rcov:rspec'].invoke
+      Rake::Task["rcov:cucumber"].invoke
+    end
+  end
 
   namespace :cucumber do
     Cucumber::Rake::Task.new({:ok => ['db:test:prepare', 'db:seed']}, 'Run features that should pass') do |t|
@@ -24,6 +49,12 @@ begin
       t.binary = vendored_cucumber_bin
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'wip'
+    end
+
+    Cucumber::Rake::Task.new({:run => ['db:test:prepare', 'db:seed']}, 'Run features that are tagged to run') do |t|
+      t.binary = vendored_cucumber_bin
+      t.fork = true # You may get faster startup if you set this to false
+      t.profile = 'run'
     end
 
     desc 'Run all features'

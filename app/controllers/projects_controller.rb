@@ -1,76 +1,131 @@
-class ProjectsController < ActiveScaffoldController
-  authorize_resource
+require 'set'
+class ProjectsController < Reporter::BaseController
+  SORTABLE_COLUMNS = ['name', 'spend', 'budget']
 
-  before_filter :check_user_has_data_response
+  inherit_resources
+  helper_method :sort_column, :sort_direction
+  before_filter :load_data_response
+  before_filter :strip_commas_from_in_flows, :only => [:create, :update]
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
-  @@shown_columns = [:organization, :name, :description,  :budget, :spend]
-  @@create_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date, :locations]
-  @@upload_columns = [:name, :description, :currency, :entire_budget, :budget, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :start_date, :end_date ]
-  def self.create_columns
-    @@create_columns
-  end
-  @@columns_for_file_upload = @@upload_columns.map {|c| c.to_s} # TODO fix bug, >1 location won't work
-
- # record_select :per_page => 20, :search_on => 'name', :order_by => "name ASC"
-
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
-
-  active_scaffold :projects do |config|
-    config.columns =  @@shown_columns
-    list.sorting = {:organization => 'DESC', :name => 'DESC'}
-
-    config.nested.add_link("Activities", [:activities])
-    config.nested.add_link("Comments", [:comments])
-    config.columns[:comments].association.reverse = :commentable
-    config.create.columns                         = @@create_columns
-    config.update.columns                         = @@create_columns
-    config.columns[:name].inplace_edit            = true
-    config.columns[:description].inplace_edit     = true
-    config.columns[:locations].form_ui            = :select
-    config.columns[:locations].label              = "Districts Worked In"
-    config.columns[:currency].label               = "Currency (if different)"
-    [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :entire_budget, :budget
-      end
-      columns.add_subgroup "Past Expenditure" do |funds_group|
-        funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
-      end
-    end
-    config.columns[:entire_budget].label = "Total Project Budget"
-    config.columns[:budget].label        = "Total Budget GOR FY 10-11"
-    config.columns[:spend].label         = "Total Spent GOR FY 09-10"
-
-    [:spend, :budget, :entire_budget].each do |c|
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].inplace_edit = true
-    end
-    # copy / paste from activities
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
-    end
-    config.columns[:spend_q4_prev].inplace_edit = true
-    quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
+  def index
+    scope = @response.projects.scoped({})
+    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
+                                         {:q => "%#{params[:query]}%"}]) if params[:query]
+    @projects = scope.paginate(:page => params[:page], :per_page => 10,
+                               :order => "#{sort_column} #{sort_direction}",
+                               :include => :activities)
   end
 
+  def edit
+    load_comment_resources(resource)
+    edit!
+  end
+
+  def create
+    @project = Project.new(params[:project].merge(:data_response => @response))
+    create! do |success, failure|
+      success.html { redirect_to response_projects_url(@response) }
+    end
+  end
+
+  def update
+    success = FundingFlow.create_flows(params)
+    update! do |success, failure|
+      success.html {
+        flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
+        redirect_to response_projects_url(@response)
+      }
+      failure.html do
+        load_comment_resources(resource)
+        render :action => 'edit'
+      end
+    end
+  end
+
+  def show
+    @project = Project.find(params[:id])
+    load_comment_resources(@project)
+    respond_to do |format|
+      format.html {}
+      format.js {render :json => @project.to_json}
+    end
+  end
+
+  def bulk_edit
+    @projects = @response.projects
+  end
+
+  def bulk_update
+    success = FundingFlow.create_flows(params)
+    flash[:notice] = "Your projects have been successfully updated"
+    redirect_to response_projects_url
+  end
+
+  def download_template
+    template = Project.download_template
+    send_csv(template, 'projects_template.csv')
+  end
 
   def create_from_file
-    super @@columns_for_file_upload
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
+          saved, errors = Project.create_from_file(doc, @response)
+          flash[:notice] = "Created #{saved} of #{saved + errors} projects successfully"
+        else
+          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
+        end
+      else
+        flash[:error] = 'Please select a file to upload'
+      end
+
+      redirect_to response_projects_url(@response)
+    rescue
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      redirect_to response_projects_path(@response)
+    end
   end
 
-  def beginning_of_chain
-    super.available_to current_user
-  end
+  protected
 
-  #fixes create
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
+
+    def begin_of_association_chain
+      @response
+    end
+
+    def strip_commas_from_in_flows
+      if params[:project].present? && params[:project][:in_flows_attributes].present?
+        in_flows = params[:project][:in_flows_attributes]
+        in_flows.each_pair do |id, in_flow|
+          [:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4].each do |field|
+            in_flows[id][field] = convert_number_column_value(in_flows[id][field])
+          end
+        end
+      end
+    end
+
+    def convert_number_column_value(value)
+      if value == false
+        0
+      elsif value == true
+        1
+      elsif value.is_a?(String)
+        if (value.blank?)
+          nil
+        else
+          value.gsub(",", "")
+        end
+      else
+        value
+      end
+    end
 end

@@ -1,108 +1,95 @@
 ActionController::Routing::Routes.draw do |map|
+  # ROOT
+  map.root :controller => 'static_page', :action => 'index'
 
-  map.data_response_start "data_responses/:id", :controller => 'data_responses', :action => 'start'
+  # LOGIN/LOGOUT
+  map.resource  :user_session
+  map.login     'login', :controller => 'user_sessions', :action => 'new'
+  map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
+  map.resources :password_resets
 
-  map.data_response_edit "data_responses/:id/edit", :controller => 'data_responses', :action => 'edit'
+  # PROFILE
+  map.resource :profile, :only => [:edit, :update, :disable_tips],
+    :member => {:disable_tips => :put}
 
-  map.data_requests 'data_requests', :controller => 'data_requests', :action => :index #until we flesh out this model
+  # STATIC PAGES
+  map.about_page 'about', :controller => 'static_page',
+    :action => 'about'
 
-  # routes for CSV uploading for various models
-  %w[activities funding_flows projects providers funding_sources model_helps comments other_costs organizations users sub_activities].each do |model|
-    map.create_from_file model+"/create_from_file", :controller => model, :action => "create_from_file"
-    map.create_from_file_form model+"/create_from_file_form", :controller => model, :action => "create_from_file_form"
+  map.resources :comments, :member => {:delete => :get}
+
+  # ADMIN
+  map.namespace :admin do |admin|
+    admin.resources :requests
+    admin.resources :responses,
+      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
+      :member     => {:delete => :get}
+    admin.resources :organizations,
+      :collection => {:duplicate => :get, :remove_duplicate  => :put,
+                      :download_template => :get, :create_from_file => :post}
+    admin.resources :reports, :member => {:generate => :get}
+    admin.resources :users,
+      :collection => {:create_from_file => :post, :download_template => :get}
+    admin.resources :activities
+    admin.resources :codes,
+      :collection => {:create_from_file => :post, :download_template => :get}
+    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
   end
 
-  map.funding_sources_data_entry "funding_sources",
-    :controller => 'funding_sources', :action => 'index'
-
-  map.providers_data_entry "providers",
-    :controller => 'providers', :action => 'index'
-
-  map.resources :projects,
-    :collection => {:browse => :get},
-    :member => {:select => :post}, :active_scaffold => true
-
-  map.resources :organizations,
-    :collection => {:browse => :get},
-    :member => {:select => :post}, :active_scaffold => true
-
-  map.resources :activities,
-                :member => { :approve => :post },
-                :active_scaffold => true        do |activity|
-
-    activity.resource :budget, :path_prefix => '/activities/:activity_id/classification',
-                                :controller => :budget_classification,
-                                :only => [ :show, :update ]
-    activity.resource :expenditure, :path_prefix => '/activities/:activity_id/classification',
-                                      :controller => :expenditure_classification,
-                                      :only => [ :show, :update ]
-     #TODO : refactor as above
-    activity.resource :coding,  :controller => :code_assignments,
-                                :only => [:index], #no restful routes k thx
-                                :member => {  :budget                      => :get,
-                                              :budget_districts            => :get,
-                                              :budget_cost_categories      => :get,
-                                              :expenditure                 => :get,
-                                              :expenditure_districts            => :get,
-                                              :expenditure_cost_categories => :get
-                                            }
-
-    map.resources :sub_activities, :active_scaffold => true
-
-    activity.update_coding_budget 'update_coding_budget', :controller => :code_assignments, :action => :update_budget
-    activity.update_coding_expenditure 'update_coding_expenditure', :controller => :code_assignments, :action => :update_expenditure
-
-    activity.update_coding_budget_cost_categories 'update_coding_budget_cost_categories', :controller => :code_assignments, :action => :update_budget_cost_categories
-    activity.update_coding_expenditure_cost_categories 'update_coding_expenditure_cost_categories', :controller => :code_assignments, :action => :update_expenditure_cost_categories
-
-    activity.update_coding_budget_districts 'update_coding_budget_districts', :controller => :code_assignments, :action => :update_budget_districts
-    activity.update_coding_expenditure_districts 'update_coding_expenditure_districts', :controller => :code_assignments, :action => :update_expenditure_districts
+  # POLICY MAKER
+  map.namespace :policy_maker do |policy_maker|
+    policy_maker.resources :responses, :only => [:show, :index]
   end
 
-  # AS redirect helpers
-  map.popup_coding 'popup_coding', :controller => :activities, :action => :popup_coding
-  map.popup_other_cost_coding "popup_other_cost_coding", :controller => 'other_costs', :action => 'popup_coding'
-
-  map.resources :indicators, :active_scaffold => true
-  #map.resources :line_items, :active_scaffold => true
-  map.resources :comments, :active_scaffold => true
-  map.resources :field_helps, :active_scaffold => true
-  map.resources :model_helps, :active_scaffold => true
-  map.resources :funding_flows, :active_scaffold => true
-  map.resources :codes, :active_scaffold => true
-  #map.resources :activity_cost_categories, :active_scaffold => true
-  map.resources :other_costs, :active_scaffold => true
-  #map.resources :other_cost_types, :active_scaffold => true
-
-  map.resources :users, :active_scaffold => true
-  map.resource :user_session
-
-  map.resources :help_requests, :active_scaffold => true
-
-  map.login 'login', :controller => 'user_sessions', :action => 'new'
-  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
-
-  map.reporter_dashboard "reporter_dashboard", :controller => 'static_page', :action => "reporter_dashboard"
-
-  # do not remove, these routes make the pages accessible without security checks
-  %w[about news contact].each do |p|
-    map.send(p.to_sym, p, :controller => 'static_page', :action => p)
+  # REPORTER USER: DATA ENTRY
+  map.resources :responses,
+    :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
+      response.resources :projects,
+        :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
+      response.resources :activities,
+        :member => {:approve => :put, :classifications => :get},
+        :collection => {:bulk_create => :post,
+                        :template => :get,
+                        :export => :get,
+                        :project_sub_form => :get}
+      response.resources :other_costs,
+        :collection => {:create_from_file => :post, :download_template => :get}
   end
 
-  #reports
-  map.activities_by_district 'activities_by_district', :controller => 'reports', :action => 'activities_by_district'
-  map.activities_by_district_sub_activities 'activities_by_district_sub_activities', :controller => 'reports', :action => 'activities_by_district_sub_activities'
-  map.activities_by_budget_coding 'activities_by_budget_coding', :controller => 'reports', :action => 'activities_by_budget_coding'
-  map.activities_by_budget_cost_cat 'activities_by_budget_cost_cat', :controller => 'reports', :action => 'activities_by_budget_cost_cat'
-  map.activities_by_expenditure_coding 'activities_by_expenditure_coding', :controller => 'reports', :action => 'activities_by_expenditure_coding'
-  map.activities_by_expenditure_cost_cat 'activities_by_expenditure_cost_cat', :controller => 'reports', :action => 'activities_by_expenditure_cost_cat'
-  map.users_by_organization 'users_by_organization', :controller => 'reports', :action => 'users_by_organization'
+  map.resources :activities do |activity|
+    activity.resource :code_assignments,
+      :only => [:show, :update],
+      :member => {:copy_budget_to_spend => :put,
+      :derive_classifications_from_sub_implementers => :put},
+      :collection => {:bulk_create => :put, :download_template => :get}
+    activity.resources :sub_activities,
+      :only => [:index, :create],
+      :collection => {:template => :get}
+  end
 
-  map.static_page ':page',
-                  :controller => 'static_page',
-                  :action => 'show',
-                  :page => Regexp.new(%w[about contact admin_dashboard about news submit user_guide reports].join('|'))
+  map.resources :organizations
 
-  map.root :controller => 'static_page', :action => 'index' # a replacement for public/index.html
+  # REPORTER USER
+  map.namespace :reporter do |reporter|
+    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.resources :reports, :only => [:index, :show]
+  end
 
+  # REPORTS
+  map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
+
+  map.namespace :reports do |reports|
+    reports.resources :districts, :only => [:index, :show] do |districts|
+      districts.resources :activities, :only => [:index, :show],
+        :controller => "districts/activities"
+      districts.resources :organizations, :only => [:index, :show],
+        :controller => "districts/organizations"
+    end
+    reports.resource :country do |country|
+      country.resources :activities, :only => [:index, :show],
+        :controller => "countries/activities"
+      country.resources :organizations, :only => [:index, :show],
+        :controller => "countries/organizations"
+    end
+  end
 end

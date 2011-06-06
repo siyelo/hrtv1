@@ -1,16 +1,12 @@
 - content_for :page_help do
-  #page_tips_nav
-    = link_to "Show Page Tips", "#", :id => "page_tips_open_link"
-  #desc
-    %h2 Description
-    %span.close= link_to "Close", "#", :id => "page_tips_close_link"
-    %p= h @model_help.long
+  = render '/shared/page_help'
+
 
 - content_for :side_bar do
   :javascript
-    $('sidebar').show()
+    jQuery('#sidebar').show()
   %h2 Help
-  %p= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
+  %p.title= link_to 'Field Definitions', '#',  :onclick => "$('terms').toggle();"
   #terms
     :javascript
       $('terms').hide();

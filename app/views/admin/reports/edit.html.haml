@@ -1,0 +1,15 @@
+- title("Edit Report")
+
+%ul.breadcrumb
+  %li= link_to "Reports", admin_reports_path()
+
+%h1.main_heading== Edit Report: #{@report.key.humanize}
+
+= error_messages_for :report, :header_message => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @report, :url => admin_report_path(@report), :html => {:multipart => true} do |f|
+  - f.inputs do
+    = f.input :formatted_csv, :as => :file, :label => "Upload a Formatted Report"
+    %span.hint.padded Upload and replace a formatted version of this report (.xls, .xlsx, or other document type), preferably in a zip format.
+  - f.buttons do
+    = f.commit_button "Update Report"

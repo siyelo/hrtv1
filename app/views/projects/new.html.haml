@@ -1,0 +1,14 @@
+- title("New Project")
+
+= render :partial => 'projects/sub_nav'
+
+%h1.main_heading New Project
+
+.main_heading
+  = render 'help'
+
+.wrap-70
+  = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+  - semantic_form_for @project, :url => response_projects_path(@response), :html => {:class => "basic_form"} do |f|
+    = render 'form', :f => f

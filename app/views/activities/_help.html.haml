@@ -1,0 +1,17 @@
+= render 'getting_started'
+
+%a{:href => "#", :class => 'overlay', :rel => "#help_overlay"}
+  = image_tag 'overlay.png'
+  Whats this?
+
+
+.simple_overlay#help_overlay
+  %h3 What's an Activity?
+  %p Each Activity can describe several details like the Beneficiaries/Implementers (who), the Location/District (where) and the Purpose/Code (what).
+  %br
+  %h3 How do I add more detail?
+  %p You can break-down your Activities across several dimensions, such as Purpose Codes, Locations, Inputs
+  %br
+  %p
+    Read more on our
+    = link_to "Activity FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=activity", :target => '_blank'

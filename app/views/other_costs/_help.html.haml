@@ -1,0 +1,17 @@
+= render 'getting_started'
+
+%a{:href => "#", :class => 'overlay', :rel => "#help_overlay"}
+  = image_tag 'overlay.png'
+  Whats this?
+
+
+#help_overlay.simple_overlay
+  %h3 What's an Other Cost?
+  %p Other Costs are designed to help you identify where your organization classifies activities other than those that fit into activities that you’ve categorized. E.g. expenses for managing projects at a central level.
+  %br
+  %h3 How do I add more detail?
+  %p To detail the expenses for one or more projects, create a new flow, and select the number of projects the detail applies to.  Once you have created a flow, click on the "detail cost areas" link and classify/split these costs.
+  %br
+  %p
+    Read more on our
+    = link_to "Other Costs FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=other", :target => '_blank'

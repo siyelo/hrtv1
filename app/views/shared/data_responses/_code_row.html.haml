@@ -1,0 +1,8 @@
+- if assignments.has_key?(code.id)
+  %li
+    = code.short_display
+    = n2cnds(assignments[code.id].cached_amount, activity.currency)
+    - unless code.leaf?
+      %ul
+        - code.children.each do |child|
+          = render 'shared/data_responses/code_row', :code => child, :activity => activity, :assignments => assignments

@@ -213,6 +213,25 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
+Then /^I should see "([^"]*)" button/ do |name|
+  find_button(name).should_not be_nil
+end
+
+Then /^I should not see "([^"]*)" button/ do |name|
+  find_button(name).should be_nil
+end
+
+
 Then /^show me the page$/ do
   save_and_open_page
+end
+
+Then /^"([^"]*)" should be selected for "([^"]*)"$/ do |value, field|
+  field_labeled(field).element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
+end
+
+When /^I go into debug mode$/ do
+  require 'ruby-debug'
+  debugger
+  1
 end

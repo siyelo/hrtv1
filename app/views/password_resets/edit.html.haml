@@ -1,0 +1,12 @@
+- title "Change Your Password"
+
+.sign_in_form
+
+  %h3 Change Password
+
+  - semantic_form_for @user, :url => password_reset_path(:id => params[:id]) do |f|
+    - f.inputs do
+      = f.input :password, :label => "New Password"
+      = f.input :password_confirmation
+    - f.buttons do
+      = f.commit_button "Change My Password"

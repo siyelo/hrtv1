@@ -1,0 +1,17 @@
+%h1.main_heading Edit Profile
+
+= error_messages_for :user, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+%h2 Enter your personal information
+.dashboard_section
+  - semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
+    - f.inputs :class => 'wrap-80 inputs' do
+      %ul.dashboard_section
+        = f.input :username, :hint => "Your username"
+        = f.input :email, :hint => "Your email address"
+        = f.input :password, :hint => "Your password"
+        = f.input :password_confirmation, :hint => "A confirmation of your password"
+        = f.input :tips_shown, :hint => "Show getting started tips?"
+
+    - f.buttons :class => 'wrap-80 buttons' do
+      = f.commit_button "Save", :class => "last"

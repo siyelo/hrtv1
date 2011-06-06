@@ -1,3 +1,12 @@
+class HelpRequest < ActiveRecord::Base
+
+  ### Validations
+  validates_presence_of  :message, :email
+end
+
+
+
+
 # == Schema Information
 #
 # Table name: help_requests
@@ -9,6 +18,3 @@
 #  updated_at :datetime
 #
 
-class HelpRequest < ActiveRecord::Base
-  validates_presence_of  :message, :email
-end

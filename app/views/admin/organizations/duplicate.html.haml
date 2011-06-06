@@ -1,0 +1,25 @@
+- form_tag remove_duplicate_admin_organizations_path, :method => :put do
+  .box{:"data-type" => 'duplicate'}
+    %h2 Potential problem organization (duplicate)
+    = label_tag :duplicate_organization_id, "Duplicate organization"
+    = select_tag :duplicate_organization_id, options_for_select(@organizations_without_users.map{|o| [o.name, o.id]})
+    = link_to "Delete", '#', :class => "destroy_btn"
+  // TODO add tabs here for Fix Duplicate, Mark/Comment On Data Referencing This and functionality for those
+  .box{:"data-type" => 'target'}
+    %h2 All organizations
+    = label_tag :target_organization_id, "Replacement organization"
+    = select_tag :target_organization_id, options_for_select(@all_organizations.map{|o| [organization_name_w_num_users(o), o.id]})
+    = link_to "Delete", '#', :class => "destroy_btn"
+
+  .submit
+    // JS event: replace_organization
+    = submit_tag "Replace", :id => "replace_organization"
+
+  .preview
+    #duplicate
+      %h2 Duplicate
+      .placer
+    // TODO add button to switch the two
+    #target
+      %h2 Replacement
+      .placer

@@ -1,15 +1,25 @@
 *.swp
 *.swo
+*.sw*
 *~
 .~*
 *sqlite3-journal
 .DS_Store
+resourcetracking.tar.gz
 app/stylesheets/.sass-cache/*
 db/*.sqlite3
+db/*.sqlite3-*
+db/*.gz
+db/*.db
+db/*.tgz
+db/*pgdump*
+db/reports/*.csv
+db/reports/ufs/*.csv
 config/database.yml
 log/*.log
 tmp/*
 public/stylesheets/compiled/*
+public/system/*
 
 # Cucumber/webrat tmp files
 webrat-*
@@ -28,7 +38,24 @@ pull*.dat
 .loadpath
 .project
 *.tmproj
+.sass-cache
+
+#rcov data should not be pushed to the repo
+coverage/
+coverage.data
+
+# Slurper config (for pivotal tracker)
+doc/slurper_config.yml
+slurper_config.yml
 
 # heroku vars files
 config/settings.secret.yml
 config/settings.loader*
+
+# diffmerge temp files
+___*
+
+.amazon_keys
+slurper
+slurper_config.yml
+

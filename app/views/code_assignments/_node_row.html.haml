@@ -1,0 +1,7 @@
+%li
+  = render 'li', :code => node.code
+
+  - if node.children.present?
+    %ul{:id => node.code.external_id, :class => "lvl#{level}"}
+      - node.children.each do |child|
+        = render '/code_assignments/node_row', :node => child, :tab => tab, :level => level + 1

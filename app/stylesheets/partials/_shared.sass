@@ -6,7 +6,14 @@ body
   /* shared heading styles */
   h1, h2, h3, h4, h5, h6
     font-weight: bold
+
+  h2, h3, h4, h5, h6
+    font-weight: bold
     text-transform: uppercase
+
+  /* universal float right class */
+  .left
+    float: left
 
   /* universal float right class */
   .right
@@ -15,122 +22,117 @@ body
   /* shared content>wrapper styles */
   #content .wrapper
     +border-bottom-radius
-    +box-shadow(#eee, 0, 2px, 5px)
     +clearfix
     background: white
+    margin: 0 auto
+    padding: 0 10px
 
-  /* shared header styles */
-  #header, #header_app
-    background= image_url("bg-blue.jpg")
-    color: !lightest-blue
-    +clearfix
-
-    #logo
-      float: left
-      padding: 45px 0 35px
-      width: 400px
-      +text-shadow(#222, 0, 0, 15px)
-      
-      img
-        float: left
-        height: 22px
-        margin-right: 3px
-        width: 20px
-
-      h1
-        color: orange
-        font-size: 2em
-        padding: 7px 0 0
-        margin: 0
-
-        span
-          margin-left: -8px
-          padding: 0
-          color: !lightest-blue
-
-        span.mu
-          color: !light-blue
-          font-size: 0.6em
-          margin-left: 0
-          text-transform: none
-      p
-        color: !light-blue
-        font-size: 0.6em
-        letter-spacing: 0.02em
-        padding-left: 55px
-        text-transform: uppercase
-
-    #admin
-      float: right
-      width: 550px
-
-      span
-        font-size: 0.7em
-        float: right
-        padding-top: 10px
-
-
-      ul
-        +border-radius
-        +box-shadow(#444, 0, 0, 15px)
-        +horizontal-list
-        float: right
-        padding-left: 10px
-
-        li
-          padding: 0
-
-          a
-            background: !light-blue
-            color: !dark-blue
-            display: inline-block
-            font-size: 0.6em
-            font-weight: bold
-            padding: 10px
-            text-decoration: none
-            text-transform: uppercase
-
-            &:hover, &:focus
-              background: !lightest-blue
-              color: !dark-blue
-
-    #tagline
-      float: right
-      padding-top: 60px
-      text-align: right
-      width: 400px
-      +text-shadow(#444, 0, 0, 15px)
-
-      h2
-        color: !light-blue
-        font-size: 1em
-        padding-bottom: 2px
-
-      h6
-        color: orange
-        font-family: Arial, Helvetica Neu, sans-serif
-        font-size: 0.6em
-        font-weight: normal
-        letter-spacing: 0.1em
-
-  /* flashes styles */
-  #flashes
-    margin-top: 25px
-    padding: 0
-    *
-      +border-radius(5px)
-      +box-shadow(#eee, 0, 2px, 5px)
+  /* warning text */
+  p.warning
+    border: 1px solid red
+    color: red
   /* end */
+
+  /* bordered paragraph style */
+  p.borderful
+    border: 1px solid !lightest-blue
+    color: !mid-blue
+    margin-bottom: 20px
+  /* end */
+  
+  .borderless
+    border: none !important
 
   /* shared footer styles */
   #footer
+    color: !mid-blue
+    font-size: 11px
     margin-bottom: 15px
     text-align: center
-    a
+    text-transform: uppercase
+    +pie-clearfix
+
+    ul
+      line-height: 16px
+      li.powered
+        font-size: 11px
+        text-transform: none
+
+    h2.logo
       color: !dark-blue
-      font-size: 0.7em
+      font-size: 13px
+    h2.left
+      left: 2px
+      position: relative
+      top: 3px
+      
+    .version
+      background: $mid-blue
+      color: #FFF
+      padding: 3px 6px 2px !important
+      text-transform: none
+      +border-radius
+
+    .left
+      float: left
+      h2
+        display: inline-block
+      img
+        margin-bottom: -5px
+
+    a
+      color: !mid-blue
       padding-right: 10px
       text-decoration: none
-      text-transform: uppercase
       &:hover, &:focus
         color: orange
+
+    ul
+      +horizontal-list
+      margin-bottom: 10px
+
+  .wrapper > .full-width
+    padding: 5px 15px 0
+
+  .like_a_h2
+    font-size: 12px
+  
+.wrap-80
+  float: left
+  margin-right: 1%
+  width: 78%
+  +pie-clearfix
+  
+.wrap-70
+  float: left
+  margin-right: 2%
+  width: 68%
+  +pie-clearfix
+
+.wrap-30
+  float: left
+  width: 25%
+  +pie-clearfix
+  
+.wrap-10
+  width: 8%
+  
+h3.title_bar
+  background: image_url("bg-blue.jpg")
+  color: #fff !important
+  margin-top: 5px
+  padding: 10px 10px 7px !important
+  +border-top-radius(3px)
+  
+hr
+  border: none
+  border-top: 3px solid $lightest-blue
+  
+.clearfix
+  +pie-clearfix
+  
+.marginless
+  margin: 0 !important
+  
+.push-12
+  margin-top: 12px !important

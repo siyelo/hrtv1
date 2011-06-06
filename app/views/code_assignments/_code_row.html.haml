@@ -1,19 +1,7 @@
-- updater_field = activity_model_attribute_to_update @coding_type
-- assignment = @current_assignments[code.id] if @current_assignments.has_key?(code.id)
-- amount     = assignment.nil? ? "" : assignment.amount
-- percentage = assignment.nil? ? "" : assignment.percentage
-
 %li
-  = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
-  = text_field_tag "activity[#{updater_field}][#{code.id}][amount]", number_to_currency(amount, :unit => ""), :size => 8
-  or
-  = text_field_tag "activity[#{updater_field}][#{code.id}][percentage]", h(percentage), :size => 3
-  = label_tag "activity[#{updater_field}][#{code.id}][percentage]", "%"
-
-  = link_to "?", "#", :title => code.description, :class => "tooltip" if code.description
-  = label_tag "activity[#{updater_field}][#{code.id}][amount]", "#{code.short_display}"
+  = render 'li', :code => code
 
   - unless code.leaf?
-    %ul{:id => code.external_id}
-      - code.children.each do |child|
-        = render '/code_assignments/code_row', :code => child, :tab => tab
+    %ul{:id => code.external_id, :class => "lvl#{level}"}
+      - @coding_tree.cached_children(code).each do |child|
+        = render '/code_assignments/code_row', :code => child, :tab => tab, :level => level + 1

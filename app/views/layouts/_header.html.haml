@@ -1,15 +1,21 @@
+- landing_page = false unless landing_page
 #header
   .wrapper
-    #logo
-      = image_tag('coat-of-arms.png')
-      %h1
-        UBU
-        %span ZIMA
-        %span.mu Mu Rwanda
-      %p Improving lives through better health policy
-      
+    %h1
+      - country = ENV['HRT_COUNTRY'] || 'rwanda'
+      %a{ :id => "logo", :href => '/'}
+        = image_tag "#{country}-coat-of-arms-med.png"
+        = country.titleize
+
     = render :partial => '/layouts/login_nav'
     
-    #tagline
-      %h2 Resource Tracking Database
-      %h6 Health Resource Tracking and Planning
+    - if landing_page
+      %h2#headline
+        Health Resource Tracker
+        %span Improving lives through better health policy
+      %h2#kids
+        Improve lives
+      %h2#screens
+        Our application
+        
+= render 'layouts/flashes'

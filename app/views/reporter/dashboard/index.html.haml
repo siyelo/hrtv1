@@ -1,0 +1,58 @@
+- title("Dashboard")
+
+%h1.main_heading Dashboard
+
+= render 'getting_started'
+
+%ul.response-notice
+  - @responses.each do |dr|
+    -if dr.data_request.final_review?
+      %li= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, #{link_to "please re-check, then (re)submit", review_response_path(dr) } your response."
+
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Data Requests & Responses
+.dashboard_section
+  %table.modern_table
+    %thead
+      %tr
+        %td Request
+        %td Requested By
+        %td Due
+        %td Valid
+        %td Status
+        %td
+    %tbody
+      = render :partial => 'request', :collection => @requests
+      = render :partial => 'response', :collection => @responses
+
+.first-half
+  %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Reports
+  .dashboard_section
+    %ul.admin_reports
+      - if current_user.current_data_response
+        %li
+          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
+            Review My Response
+            %span.hint Interactive report of your current data response
+      %li
+        - link_to reports_districts_path, :class => "drill_down target" do
+          Review District Expenditures and Budgets
+          %span.hint Interactive reports
+      %li
+        - link_to reports_country_path, :class => "drill_down target" do
+          Review National Expenditures and Budgets
+          %span.hint Interactive reports
+      %li
+        - link_to reporter_reports_path, :class => "drill_down target" do
+          All Reports
+          %span.hint Export a report in CSV
+
+.second-half
+  %h2
+    =image_tag"icon_comments.png", :class => "heading_icon"
+    Recent Comments
+  = render 'reporter/dashboard/comment_short_list', :comments => @comments
+

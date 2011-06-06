@@ -1,44 +1,78 @@
+require 'validators'
+class DataRequest < ActiveRecord::Base
+
+  ### Attributes
+  attr_accessible :organization_id, :title, :final_review,
+                  :start_date, :end_date, :due_date, :budget, :spend,
+                  :year_2, :year_3, :year_4, :year_5, :purposes, :locations,
+                  :inputs, :service_levels, :budget_by_quarter
+
+  ### Associations
+  belongs_to :organization
+  has_many :data_responses, :dependent => :destroy
+
+  ### Validations
+  validates_presence_of :organization_id, :title
+  validates_date :due_date
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
+
+  def status
+    return 'Final review' if final_review?
+    return 'In progress'
+  end
+
+  def spend_and_budget?
+    spend? && budget?
+  end
+
+  def only_spend?
+    spend? && !budget?
+  end
+
+  def only_budget?
+    budget? && !spend?
+  end
+  
+  def no_long_term_budgets?
+    !year_2 && !year_3 && !year_4 && !year_5 
+  end
+  
+  def requested_amounts
+    r = []
+    r << "Expenditure" if spend?
+    r << "Budget" if budget?
+    r
+  end
+end
+
+
+
+
 # == Schema Information
 #
 # Table name: data_requests
 #
-#  id                        :integer         not null, primary key
-#  organization_id_requester :integer
-#  title                     :string(255)
-#  complete                  :boolean         default(FALSE)
-#  pending_review            :boolean         default(FALSE)
-#  created_at                :datetime
-#  updated_at                :datetime
+#  id                :integer         not null, primary key
+#  organization_id   :integer
+#  title             :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  due_date          :date
+#  start_date        :date
+#  end_date          :date
+#  budget            :boolean         default(TRUE), not null
+#  spend             :boolean         default(TRUE), not null
+#  final_review      :boolean         default(FALSE)
+#  year_2            :boolean         default(TRUE)
+#  year_3            :boolean         default(TRUE)
+#  year_4            :boolean         default(TRUE)
+#  year_5            :boolean         default(TRUE)
+#  purposes          :boolean         default(TRUE)
+#  locations         :boolean         default(TRUE)
+#  inputs            :boolean         default(TRUE)
+#  service_levels    :boolean         default(TRUE)
+#  budget_by_quarter :boolean         default(FALSE)
 #
 
-class DataRequest < ActiveRecord::Base
-  attr_accessible :organization_id_requester, :title, :complete, :pending_review
-
-  belongs_to :requesting_organization, :class_name => "Organization",
-    :foreign_key => :organization_id_requester
-
-  has_many :data_responses, :dependent => :destroy
-
-  def self.find_unfulfill_request organization_id
-    DataRequest.find(:all, :conditions=>["organization_id_requester = ? AND complete = ?", organization_id, false])
-  end
-  def self.find_all_unfulfill_request
-    DataRequest.find(:all, :conditions=>["complete = ?", false])
-  end
-
-  after_save :check_response_created
-
-  def add_data_element data
-    data_element << data
-  end
-
-  protected
-  def check_response_created
-    if data_responses.empty?
-      Organization.all.each do |org|
-        data_responses.create :responding_organization => org
-      end
-    end
-  end
-
-end

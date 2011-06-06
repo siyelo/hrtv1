@@ -1,0 +1,48 @@
+#projects
+  .simple_table
+    %table
+      %thead
+        %tr
+          %th Project
+          %th Activities
+          %th Spent
+          %th Budget
+          %th.manage Manage
+      %tbody
+        - projects.each do |project|
+          %tr.project.entry_header
+            %td
+              %ul
+                - if project.comments.size > 0
+                  %li.comment_indicator
+                    = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => project)
+                %li.name= project.name
+                %li.descr= project.description.to_s
+                %li.funders
+                  = "Funders: "
+                  - project.in_flows.each do |flow|
+                    = "#{flow.from.try(:name)} (#{flow.budget}),"
+            %td= project.activities.count
+            %td= n2cnds(universal_currency_converter(project.spend, project.currency, project.response.currency), project.response.currency)
+            %td= n2cnds(universal_currency_converter(project.budget, project.currency, project.response.currency), project.response.currency)
+            %td.manage
+              = link_to "Edit", edit_response_project_path(project.response, project)
+              = link_to "Delete", response_project_path(project.response, project), :method => :delete, :confirm => "Are you sure you want to delete this project?"
+
+          %tr.project.entry_main.s_border
+            %td{:colspan => 100}
+              = render 'shared/data_responses/project_summary', :project => project
+
+              .project_sub_tabs.tabs_nav
+                %ul.inline_alt_tab
+                  %li{:class => 'selected' }= link_to "Comments (#{project.comments.size})", "#", :class => "comment_details"
+                  %li= link_to "Activities (#{project.activities.roots.count})", "#", :class => "activity_details"
+                  %li= link_to "Other Costs (#{project.activities.with_type('OtherCost').count})", "#", :class => "activity_details"
+
+              .tabs
+                .tab1
+                  = render 'shared/data_responses/comments', :commentable => project
+                .tab2
+                  = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first.find(:all, :include => {:sub_activities => :provider})
+                .tab3
+                  = render 'shared/data_responses/activities', :activities => project.other_costs, :other_costs => true

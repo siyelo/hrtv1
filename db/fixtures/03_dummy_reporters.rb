@@ -1,24 +1,30 @@
-# to be removed
+require 'factory_girl'
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
 
-User.stub_current_user_and_data_response
-#create dummy users
+begin
+  puts "creating reporter"
+  org = Factory(:organization, :name => "internal_reporter_org")
+  @reporter = Factory(:reporter, :username => 'reporter', :email => 'reporter@eg.com', :organization => org)
+rescue ActiveRecord::RecordInvalid => e
+  puts e.message
+  puts "   Do you already have an org 'internal_reporter_org' or user named 'reporter'? "
+else
+  puts "=> reporter #{@reporter.name} created (org: #{@reporter.organization.name})"
 
-saved = User.create(:username => 'reporter',
-              :email => 'reporter@ubuzima.org',
-              :password => 'password',
-              :password_confirmation => 'password',
-              :organization => Organization.create!(:name => "internal_for_dev2"),
-              :roles => ['reporter'])
+  @response = Factory(:data_response, :organization => @reporter.organization)
+  @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
+  Factory(:activity_fully_coded, :data_response => @response, :project => @project)
+  Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
+  puts " added sample data for reporter #{@reporter.name}"
+end
 
-print "  WARN: reporter not created" unless saved
-
-saved = User.create(:username => 'reporter2',
-              :email => 'reporter2@ubuzima.org',
-              :password => 'password',
-              :password_confirmation => 'password',
-              :organization => Organization.create!(:name => "internal_for_dev3"),
-              :roles => ['reporter'])
-
-print "  WARN: reporter2 not created" unless saved
-
-User.unstub_current_user_and_data_response
+begin
+  puts "creating activity_manager"
+  org = Factory(:organization, :name => "internal_activity_manager_org")
+  am = Factory(:activity_manager, :username => 'activity_manager',  :email => 'am@eg.com', :organization => org)
+rescue ActiveRecord::RecordInvalid => e
+  puts e.message
+  puts "   Do you already have an org 'internal_activity_manager_org' or user named 'activity_manager'? "
+else
+  print "=> activity_manager #{am.name} created (org: #{am.organization.name})"
+end

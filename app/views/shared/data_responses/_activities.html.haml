@@ -1,0 +1,72 @@
+- other_costs = false unless other_costs
+- non_linked = false unless non_linked
+
+.activities
+
+  - header = "Activities"
+  -# header = "Activities without a Project" if non_linked
+  - header = "Other Costs" if other_costs
+
+  .simple_table
+    %table
+      %thead
+        %tr
+          %th= header
+          %th Classified?
+          %th Approved?
+          - unless other_costs
+            %th Sub-Implementers
+          %th Spent
+          %th Budget
+          %th.manage Manage
+      %tbody
+        - activities.each do |activity|
+          %tr.activity.entry_header
+            %td
+              %ul
+                - if activity.comments.size > 0
+                  %li.comment_indicator
+                    = image_tag 'comment.png', :class => 'comments_tooltip', :title => render('shared/data_responses/comments_tooltip', :commentable => activity)
+                %li.name
+                  = activity.name
+                %li.descr= truncate(activity.description, :length => 300, :omission => '<span class="orange">...</span>')
+                %li.descr_full= activity.description
+                - unless activity.type == "OtherCost"
+                  %li.implementer= "Implementer: #{activity.provider.try(:name)}"
+                
+            %td= activity.classified? ? "Yes" : "No"
+            %td= activity.approved
+            - unless other_costs
+              %td= activity.sub_activities.size              
+            %td= n2cnds(universal_currency_converter(activity.spend, activity.currency, activity.data_response.currency), activity.data_response.currency)
+            %td= n2cnds(universal_currency_converter(activity.budget, activity.currency, activity.data_response.currency), activity.data_response.currency)
+            %td.manage
+              %ul
+                %li= link_to "Edit", edit_response_activity_path(activity.data_response, activity)
+                %li= link_to "Delete", response_activity_path(activity.data_response, activity), :method => :delete, :confirm => "Are you sure you want to delete this #{activity.type ? "other cost" : "activity"}?"
+                %li= link_to "Classify", activity_code_assignments_url(activity)
+                %li= render '/code_assignments/approve', :activity => activity
+
+          %tr.activity.entry_main
+            %td.s_border{:colspan => 100}
+              = render '/shared/data_responses/activity_summary', :activity => activity, :other_costs => other_costs
+
+              %div{:class => 'activity_classifications', :"data-activity_id" => activity.id, :"data-response_id" => activity.data_response.id, :"data-other_costs" => other_costs ? '1' : '0'}
+                = image_tag "ajax-loader.gif"
+              -#= render '/shared/data_responses/classifications', :activity => activity, :other_costs => other_costs, :cost_cat_roots => @cost_cat_roots, :code_roots => (other_costs ? @other_cost_roots : @code_roots)
+
+              .activity_sub_tabs.tabs_nav
+                %ul.inline_alt_tab
+                  %li{:class => 'selected' }= link_to "Comments (#{activity.comments.size})", "#", :class => "comment_details"
+                  - unless other_costs
+                    %li= link_to "Sub-Activities (#{activity.sub_activities.size})", "#", :class => "activity_details"
+
+              .tabs
+                .tab1
+                  = render 'shared/data_responses/comments', :commentable => activity
+                - unless other_costs
+                  .tab2
+                    = render '/shared/data_responses/sub_activities', :activity => activity
+
+  - if non_linked
+    %span= link_to "What's this?", "#", :title => "It's possible you have not specified what project(s) these activities are related to. We've listed them here separately for your convenience.", :class => "tooltip info help_tip"

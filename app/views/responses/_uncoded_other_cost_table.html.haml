@@ -1,0 +1,21 @@
+.simple_table.push
+  %table
+    %thead
+      %tr
+        %td Name
+        %td Description
+        %td Budget by Purposes
+        %td Budget by Inputs
+        %td Expenditure by Purposes
+        %td Expenditure by Inputs
+        %td.manage Manage
+    %tbody
+      - activities.each do |activity|
+        %tr
+          %th= activity.name
+          %th= activity.description
+          %th= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
+          %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
+          %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_response_other_cost_path(activity.data_response, activity)}"

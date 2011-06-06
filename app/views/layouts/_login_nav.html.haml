@@ -2,15 +2,25 @@
 
   - if current_user
     %ul
-      %li= link_to "My Profile", edit_user_url(current_user.id)
-      %li= link_to "Sign out", logout_path
+      %li
+        - link_to user_dashboard_path(current_user) do
+          = image_tag("icon_dashboard.png")
+          Dashboard
+      %li
+        - link_to edit_profile_path do
+          = image_tag("icon_profile.png")
+          My Profile
+      %li
+        - link_to logout_path do
+          = image_tag("icon_logout.png")
+          Sign Out
     %span
-      - if current_user.organization
-        = "#{current_user.email} [#{current_user.organization.name}]"
-      - else
-        = "#{current_user.email} [No organization specified]"
+      = "#{current_user.email}"
 
   - else
     %ul
-      %li= link_to "Sign in", login_path
+      %li.borderless
+        %a{ :href => login_path, :class => "signin borderless"}
+          =image_tag"icon_signin.png"
+          Sign in
     %span Have an account?

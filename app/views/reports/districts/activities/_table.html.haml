@@ -1,0 +1,30 @@
+%table.standard.clickable
+  %thead
+    %tr
+      %th Name
+      %th Organization
+      %th Project
+      %th Funders
+      = render :partial => 'reports/shared/sort_columns'
+
+  %tbody
+    - activities.each do |activity|
+      %tr{:class => cycle("even", "odd")}
+        %td= link_to "#{friendly_name(activity)}", reports_district_activity_path(location, activity)
+        %td= h activity.org_name
+        %td= h friendly_name(activity.project)
+        %td
+          - if activity.project
+            %ul
+              - activity.project.funding_sources.map(&:name).uniq.each do |name|
+                %li= name
+        - spent_total  = activity.spent_sum
+        - budget_total = activity.budget_sum
+        %td
+          %ul
+            %li= n2crs(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= "(#{n2c(spent_total, '$')})"
+        %td
+          %ul
+            %li= n2crs(budget_total * usd_to_local_currency, Money.default_currency.iso_code)
+            %li= "(#{n2c(budget_total, '$')})"

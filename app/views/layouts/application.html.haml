@@ -1,20 +1,13 @@
+-# default layout is the Promotional site (static pages)
+-# an inner page with a compact header
 !!! Strict
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
-  %head
-    = render :partial => 'layouts/title'
-    = yield(:head)
+  = render 'layouts/head'
+  %body.promo.login
+    = render "layouts/header"
 
-  - if controller.controller_name == "static_page" && controller.action_name == "index"
-    = render :partial => 'layouts/landing_page'
-  - elsif controller.controller_name == "static_page" && controller.action_name == "about"
-    = render :partial => 'layouts/landing_page'
-  - elsif controller.controller_name == "user_sessions"
-    = render :partial => 'layouts/user_session'
-  - elsif controller.controller_name == "static_page" && %w[news contact].include?(controller.action_name)
-    = render :partial => 'layouts/user_session'
-  - elsif controller.controller_name == "help_requests" && %w[create new].include?(controller.action_name)
-    = render :partial => 'layouts/user_session'
-  - else
-    = render :partial => 'layouts/inner_pages'
+    #content
+      .wrapper
+        = yield
 
-  = render :partial => 'layouts/footer'
+    = render 'layouts/footer'

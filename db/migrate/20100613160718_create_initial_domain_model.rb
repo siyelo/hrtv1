@@ -53,6 +53,12 @@ class CreateInitialDomainModel < ActiveRecord::Migration
       t.datetime "updated_at"
     end
 
+    create_table :currencies do |t|
+      t.decimal :toRWF
+      t.string :symbol
+      t.string :name
+    end
+
     create_table "sessions", :force => true do |t|
       t.string   "session_id", :null => false
       t.text     "data"
@@ -62,28 +68,18 @@ class CreateInitialDomainModel < ActiveRecord::Migration
 
     add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
     add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
-    
   end
 
   def self.down
-    
-
     remove_index "sessions", :name => "index_sessions_on_updated_at"
     remove_index "sessions", :name => "index_sessions_on_session_id"
-
     drop_table "sessions"
-
+    drop_table :currencies
     drop_table "locations"
-
     drop_table "line_items"
-
     drop_table "indicators"
-
     drop_table "codes"
-
     drop_table "activities_indicators"
-
     drop_table "activities"
   end
 end

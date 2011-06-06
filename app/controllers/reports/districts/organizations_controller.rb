@@ -1,0 +1,40 @@
+class Reports::Districts::OrganizationsController < Reports::BaseController
+  MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
+  before_filter :load_location
+
+  def index
+    @organizations     = Reports::OrganizationReport.top_by_spent_and_budget({
+                         :per_page => 25, :page => params[:page], :sort => params[:sort],
+                         :code_ids => [@location.id], :type => 'district'})
+    @spent_pie_values  = Charts::DistrictPies::organizations(@location, "CodingSpendDistrict")
+    @budget_pie_values = Charts::DistrictPies::organizations(@location, "CodingBudgetDistrict")
+  end
+
+  def show
+    @organization = Organization.find(params[:id])
+    @treemap      = params[:chart_type] == "treemap"
+    @pie          = params[:chart_type] == "pie" || params[:chart_type].blank?
+    code_type     = get_code_type_and_initialize(params[:code_type])
+    @chart_name   = get_chart_name(params[:code_type])
+    activities    = @organization.dr_activities
+
+    if @pie
+      if @hssp2_strat_prog || @hssp2_strat_obj
+        @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, true, activities)
+        @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, false, activities)
+      else
+        @code_spent_values  = Charts::DistrictPies::organization_pie(@location, activities, code_type, true)
+        @code_budget_values = Charts::DistrictPies::organization_pie(@location, activities, code_type, false)
+      end
+    else
+    @code_spent_values   = Charts::DistrictTreemaps::treemap(@location, code_type, activities, true)
+      @code_budget_values  = Charts::DistrictTreemaps::treemap(@location, code_type, activities, false)
+    end
+  end
+
+  private
+
+    def load_location
+      @location = Location.find(params[:district_id])
+    end
+end

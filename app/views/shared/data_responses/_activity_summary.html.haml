@@ -1,0 +1,30 @@
+.third
+  - other_costs = false unless other_costs
+
+  %table.summary
+    %tbody
+      = render  '/code_assignments/progress_bar', :activity => activity
+      - unless other_costs
+        %tr
+          %td Dates
+          %td= "#{activity.start_date} to #{activity.end_date}"
+      - unless @policy_maker
+        %tr
+          %td Text for Provider:
+          %td= activity.text_for_provider
+      %tr
+        %td Beneficiaries:
+        %td= activity.beneficiaries.map(&:short_display).join(', ')
+      %tr
+        %td Text for Beneficiaries:
+        %td= activity.text_for_beneficiaries
+      - unless other_costs
+        %tr
+          %td Org's Assisted:
+          %td= activity.organizations.map(&:name).join(', ')
+        %tr
+          %td== Districts (#{activity.locations.count}/#{(activity.project ? activity.project.locations.count : 0)}):
+          %td
+            %ul.dashboard_districts
+              - activity.locations.map(&:name).each do |loc|
+                %li= "#{loc},"

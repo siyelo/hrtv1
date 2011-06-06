@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
+require 'thread' #fixes uninitialized constant ActiveSupport::Dependencies::Mutex (NameError) on 2.3.8
 require File.expand_path('../../config/boot',  __FILE__)
 require 'commands/server'

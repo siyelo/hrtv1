@@ -6,7 +6,7 @@
 // $blueprint-grid-margin: 10px
 
 // Use this to calculate the width based on the total width.
-// Or you can set !blueprint_grid_width to a fixed value and unset !blueprint_container_size -- it will be calculated for you.
+// Or you can set $blueprint_grid_width to a fixed value and unset $blueprint_container_size -- it will be calculated for you.
 // $blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $blueprint-grid-columns - $blueprint-grid-margin
 
 // Compass imports
@@ -15,13 +15,28 @@
 @import "compass/css3"
 
 // Custom colors
-!dark-blue              = #20303f
-!mid-blue               = #425160
-!light-blue             = #c1ced9
-!lighter-blue           = #d0dde7
-!lightest-blue          = #e6edf3
-!orange                 = #cc873c
+$dark-blue              = #20303f
+$mid-blue               = #425160
+$light-blue             = #c1ced9
+$lighter-blue           = #d0dde7
+$lightest-blue          = #e6edf3
+$filler                 = #f3f7f9
+$orange                 = #cc873c
+$dark-orange            = #c3671d
+$light_grey             = #888
+$very-light-blue        = #f4f9fd
+$very-light-grey        = #EEE
+$dark-grey              = #515151
+$red                    = #d14a39
+$warm-red               = #990000
+$header-blue            = #3d4d5d
+$login-nav-blue         = #596a7b
+$login-nav-light-blue   = $login-nav-blue + #333
 
-!header-blue            = #3d4d5d
-!login-nav-blue         = #596a7b
-!login-nav-light-blue   = !login-nav-blue + #333
+//Avenir custom font-face
+@font-face
+  font-family: 'Avenir'
+  src: url('../../avenirltstd-black-webfont.eot')
+  src: local('☺'), url('../../avenirltstd-black-webfont.woff') format('woff'), url('../../avenirltstd-black-webfont.ttf') format('truetype'), url('../../avenirltstd-black-webfont.svg#webfontS2cE5GsC') format('svg')
+  font-weight: normal
+  font-style: normal

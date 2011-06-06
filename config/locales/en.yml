@@ -3,3 +3,81 @@
 
 en:
   hello: "Hello world"
+
+
+  date:
+    formats:
+      short: "%d %b '%y"
+
+  time:
+    formats:
+      short: "%d %b '%y, %H:%M"
+
+  flash:
+    actions:
+      create:
+        notice: "%{resource_name} was successfully created"
+      update:
+        notice: "%{resource_name} was successfully updated"
+      destroy:
+        notice: "%{resource_name} was successfully destroyed"
+        alert: "%{resource_name} could not be destroyed"
+
+  formtastic:
+    submit: "Submit"
+
+# "{{attribute}} {{message}}" fix
+  activerecord:
+    errors:
+      full_messages:
+        format: "%{attribute} %{message}"
+        organization_id_from:
+          missing: The Funding Source 'from' organization must be set.
+          id_below_zero: The Funding Source 'from' organization must be set.
+        organization_id_to:
+          missing: The Funding Source 'to' organization must be set.
+
+  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
+  datetime:
+    distance_in_words:
+      half_a_minute: "half a minute"
+      less_than_x_seconds:
+        one:   "less than 1 second"
+        other: "less than %{count} seconds"
+      x_seconds:
+        one:   "1 second"
+        other: "%{count} seconds"
+      less_than_x_minutes:
+        one:   "less than a minute"
+        other: "less than %{count} minutes"
+      x_minutes:
+        one:   "1 minute"
+        other: "%{count} minutes"
+      about_x_hours:
+        one:   "about 1 hour"
+        other: "about %{count} hours"
+      x_days:
+        one:   "1 day"
+        other: "%{count} days"
+      about_x_months:
+        one:   "about 1 month"
+        other: "about %{count} months"
+      x_months:
+        one:   "1 month"
+        other: "%{count} months"
+      about_x_years:
+        one:   "about 1 year"
+        other: "about %{count} years"
+      over_x_years:
+        one:   "over 1 year"
+        other: "over %{count} years"
+      almost_x_years:
+        one:   "almost 1 year"
+        other: "almost %{count} years"
+    prompts:
+      year:   "Year"
+      month:  "Month"
+      day:    "Day"
+      hour:   "Hour"
+      minute: "Minute"
+      second: "Seconds"

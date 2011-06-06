@@ -1,0 +1,149 @@
+/* STYLES EXCLUSIVE TO THE LANDING PAGES */
+body.landing
+  background: image_url("landing_pattern.png")
+  #header
+    background: image_url("landing_wall.jpg") no-repeat center bottom
+    height: 580px
+    #admin
+      margin-top: 42px
+      position: relative
+      z-index: 5
+      span
+        color: $dark-blue
+        +text-shadow(#ddd, 0, 1px, 1px)
+
+    #logo
+      a
+        text-decoration: none
+      h1
+        color: $dark-orange
+        font-family: 'Avenir'
+        font-size: 24px
+        font-weight: normal
+        position: relative
+        text-transform: none
+        z-index: 5
+        +text-shadow(#ddd, 0, 1px, 1px)
+        span
+          color: $dark-blue
+          margin-left: -6px
+      img
+        //height: 50px
+        margin: -9px 7px 0 0
+        //width: 46px
+    .wrapper
+      height: 580px
+      position: relative
+  #headline
+    height: 145px
+    position: absolute
+    top: 162px
+    width: 960px
+    +replace-text("landing_headline.png")
+  #kids
+    bottom: -2px
+    height: 212px
+    left: -20px
+    position: absolute
+    width: 355px
+    +replace-text("landing_kids.png")
+  #screens
+    bottom: 0
+    height: 208px
+    position: absolute
+    right: 0px
+    width: 612px
+    +replace-text("landing_screens.png")
+  #content
+    background: image_url("landing_grad_dark.png") repeat-x top
+
+    .wrapper
+      background: image_url("landing_glow.png") no-repeat center top !important
+      padding-top: 50px
+    .slider
+      float: left
+      margin: 30px 20px 15px 30px
+
+      #s3slider
+        span.top
+          font-size: 1em
+          line-height: 1.2em
+  #main
+    float: left
+    padding-left: 30px
+    width: 480px
+    h3
+      color: #fff
+      font-family: 'Avenir'
+      font-size: 24px
+      font-weight: normal
+      margin-bottom: 20px
+      text-transform: none
+    p
+      color: #eee
+      font-size: 12px
+      line-height: 1.4
+      padding-bottom: 15px
+  #sidebar
+    background: image_url("landing_grad.png") repeat-x
+    float: right
+    padding: 30px
+    width: 360px
+    ul
+      +horizontal-list
+      li
+        width: 48%
+    img
+      +opacity(0.8)
+      &:hover
+        +opacity(1)
+    h2
+      color: #f9f9f9
+      font-family: 'Avenir'
+      font-weight: normal
+      margin-bottom: 30px
+      text-transform: none
+
+    h3
+      color: #f9f9f9
+      font-size: 12px
+      padding-bottom: 2px
+    p
+      color: #ccc
+      font-size: 11px
+      padding-bottom: 10px
+  #browsers
+    margin-bottom: 30px
+    padding: 20px 20px 15px
+    text-align: left
+    +border-radius
+    +clearfix
+    +horizontal-list
+    p
+      color: #ccc
+      font-size: 10px
+      line-height: 1.25
+      padding: 3px 5px 0 0
+    img
+      width: 30px
+    h2
+      color: #f9f9f9
+      font-family: 'Avenir'
+      font-size: 14px
+      font-weight: normal
+      margin-bottom: 7px
+      text-transform: none
+
+  /* override footer styles */
+  #footer .wrapper
+    background: image_url("landing_grad.png") repeat-x !important
+    margin-top: 35px
+    padding: 30px
+    width: 900px
+    color: #fff
+
+    h2.logo
+      color: $lighter-blue
+      font-size: 13px
+    a
+      color: #fff

@@ -1,0 +1,77 @@
+/* STYLES EXCLUSIVE TO THE LOGIN/INNER PROMO PAGES */
+body.login
+
+  /* login forms styles */
+  .sign_in_form
+    +border-radius(5px)
+    +box-shadow($very-light-grey, 0, 2px, 5px)
+    background: #fff
+    color: $mid-blue
+    line-height: 1.3
+    margin: 25px auto 10px
+    padding: 30px 30px 15px
+    width: 500px
+
+    li
+      margin-bottom: 15px
+
+    h3
+      font-size: 1.5em
+      font-weight: bold
+      color: $dark-blue
+      padding-bottom: 15px
+      text-transform: uppercase
+
+      a
+        color: $orange
+
+    a
+      font-size: 12px
+      text-transform: none
+      font-weight: normal
+
+    input
+      background: #f9f9f9
+      border: 1px solid $lighter-blue
+      width: 96%
+      font-size: 14px
+      padding: 10px
+      +border-radius(5px)
+
+    input[type="checkbox"]
+      display: inline
+      margin-right: 5px
+      vertical-align: middle
+      width: auto
+
+    input[type=submit]
+      background: !mid-blue
+      border: none
+      color: $lightest-blue
+      cursor: pointer
+      font-size: 0.9em
+      font-weight: bold
+      margin-top: 10px
+      padding: 10px 20px
+      width: auto
+      &:hover
+        background: orange
+        color: white
+
+    label
+      color: #7A7A7A
+      display: inline
+      font-size: 0.9em
+      font-weight: normal
+      padding: 0
+      text-align: left
+      vertical-align: middle
+
+    .inline-errors
+      background: image_url("") $lightest-blue
+      color: $red
+      font-size: 11px
+      margin-left: 3px
+      padding: 3px 8px
+      +border-bottom-radius(3px)
+  /* end */

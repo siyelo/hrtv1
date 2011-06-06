@@ -11,20 +11,19 @@ describe UserSessionsController do
     before :each do
       post :create
     end
-    
     it { should respond_with(:success) }
-    it { should set_the_flash.to("Wrong Username/email and password combination. If you think this message is being shown in error after multiple tries, use the form on the contact page (link below) to get help.") }
+    it { should set_the_flash.now }
     it { should render_template(:new) }
   end
   
   context "login (create new session)" do    
     before :each do
       @user = Factory.create(:reporter)
-      post :create, :user_session => { :username => @user.username, :password => @user.password}
+      post :create, :user_session => {:username => @user.username, 
+                                      :password => @user.password}
     end
 
-    it { should set_the_flash.to("Successfully logged in.") }
-    it { should redirect_to(static_page_url(:user_guide)) }
+    it { should redirect_to(reporter_dashboard_path) }
 
     it "redirects the user to root path when requesting the login form" do
       get :new
@@ -35,7 +34,7 @@ describe UserSessionsController do
   context "not logged in" do
     it "redirects the user to root path when requesting logout" do
       delete :destroy
-      response.should redirect_to new_user_session_path
+      response.should redirect_to login_path
     end
   end
 end

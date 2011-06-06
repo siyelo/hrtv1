@@ -1,0 +1,53 @@
+- title("Organizations")
+
+%h1.main_heading 
+  #search
+    - form_tag admin_organizations_path, :method => :get do
+      = render 'shared/search_form'
+  Organizations
+
+%ul.horizontal
+  %li
+    - link_to new_admin_organization_path, :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Organization
+  %li
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+  %li
+    - link_to duplicate_admin_organizations_path, :class => 'create_new' do
+      Fix duplicate organizations
+
+#import
+  %h3.title_bar Import a CSV file
+  .dashboard_section
+    %p Create one or more organizations from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+
+    #import_csv
+      -form_tag create_from_file_admin_organizations_path, :multipart => true do
+        = label_tag :file, "File"
+        = file_field_tag :file
+        = submit_tag "Upload and Import", :class => 'small_submit_button'
+
+      = link_to "Download template", download_template_admin_organizations_path, :class => 'target'
+
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "name"
+      %th= sortable "raw_type"
+      %th= sortable "fosaid"
+      %th
+  %tbody
+    - @organizations.each do |organization|
+      %tr
+        %td= organization.name
+        %td= organization.raw_type
+        %td= organization.fosaid
+        %td
+          %ul.manage_bar
+            %li= link_to "Show", admin_organization_path(organization)
+            %li= link_to "Edit", edit_admin_organization_path(organization)
+            %li= link_to "X", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
+
+
+= will_paginate @organizations

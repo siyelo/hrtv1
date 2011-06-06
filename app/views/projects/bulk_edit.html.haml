@@ -1,0 +1,69 @@
+:javascript
+  var _response_id = #{@response.id.to_json};
+
+
+%h1.main_heading Link to Funders' Projects
+
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Linking Projects"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Linking your Projects to those of your Funder improves the quality of your Response, and of your Funders' Response too.
+
+        %ul.bulleted
+          %li Add Funding organizations for all your Projects.
+          %li Select the Projects from each Funder that you think corresponds to the Project from the drop down.
+          %li If a Project has multiple funders a project may show up more than once.
+        %p
+          There is great
+          = link_to "online help", help_link, :target => "_blank"
+          in HRT and you can always
+          = link_to "contact the Support Team", contact_link, :target => "_blank"
+          at anytime to ask us a question.
+
+%a{:href => "#", :class => 'overlay', :rel => "#help_overlay"}
+  Whats this?
+  = image_tag 'overlay.png'
+
+.simple_overlay#help_overlay
+  %h3 What is Linking to Funders' Projects?
+  %p Linking Funder's Projects is the process of matching each of your Projects to a Project that your Funder has.
+  %p Linking your Project to a Funder, and to a specific Project of theirs, greatly improves the ability of the HRT to derive accurate information from your Response.
+  %br
+  %p
+    Read more on our
+    = link_to "Project FAQ", "https://hrtapp.tenderapp.com/search?t=f&q=project", :target => '_blank'
+
+-form_tag(bulk_update_response_projects_path, :method => :put) do
+  %table.standard.rounded
+    %thead.static
+      %tr
+        %th Name
+
+        %th Funder
+        %th Funder Project
+        %th Description
+        %th Budget
+        %th Spend
+    %tbody
+      - @projects.each do |project|
+        - project.in_flows.each do |in_flow|
+          %tr
+            %td
+              = project.name
+              = link_to "(Edit)", edit_response_project_path(project.response, project)
+            %td= !in_flow.from.blank? ? in_flow.from.try(:name) : "Funder Missing: Edit Project then return here to link"
+            %td
+              - unless in_flow.from.nil?
+                = select_tag "funding_flows[#{in_flow.id}]", options_for_select(funder_projects_select(in_flow.from, project.id), in_flow.project_from_id), :class => 'parent_project'
+            %td{:class => 'funder_project_description'}
+            %td= project.budget
+            %td= project.spend
+
+  %br
+  - @projects.count
+  =submit_tag "Update", :class => 'small_submit_button'
+

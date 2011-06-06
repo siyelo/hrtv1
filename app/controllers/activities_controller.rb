@@ -1,135 +1,203 @@
-class ActivitiesController < ActiveScaffoldController
-  authorize_resource
+require 'set'
+class ActivitiesController < Reporter::BaseController
+  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
-  before_filter :check_user_has_data_response
+  inherit_resources
+  helper_method :sort_column, :sort_direction
+  before_filter :load_data_response
+  before_filter :confirm_activity_type, :only => [:edit]
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
-  include ActivitiesHelper
-  @@shown_columns = [:organization, :projects, :provider, :description,  :budget, :spend, :approved ]
-  @@create_columns = [:projects, :locations, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries,:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  def self.create_columns
-    @@create_columns
+  def index
+    scope = @response.activities.roots.scoped({:include => :project})
+    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
+                                          UPPER(activities.name) LIKE UPPER(:q) OR
+                                          UPPER(activities.description) LIKE UPPER(:q)",
+              {:q => "%#{params[:query]}%"}]) if params[:query]
+    @activities = scope.paginate(:page => params[:page], :per_page => 10,
+                    :order => "#{sort_column} #{sort_direction}")
   end
-  @@update_columns = [:projects, :locations, :text_for_provider, :provider, :name, :description,  :start, :end, :beneficiaries, :text_for_beneficiaries, :text_for_targets, :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
-  @@columns_for_file_upload = %w[name description
-    text_for_targets text_for_beneficiaries text_for_provider
-    spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 budget]
 
-  map_fields :create_from_file,
-    @@columns_for_file_upload,
-    :file_field => :file
+  def new
+    @activity = Activity.new
+    @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity.provider = current_user.organization
+  end
 
-  active_scaffold :activity do |config|
-    config.columns        = @@shown_columns
-    config.create.columns = @@create_columns
-    config.update.columns = @@update_columns
-    list.sorting          = {:name => 'DESC'}
+  def edit
+    load_comment_resources(resource)
+    edit!
+  end
 
-    #TODO better name / standarize on verb noun or just noun
-    config.action_links.add('Classify',
-      :action => "popup_coding",
-      :parameters =>{:controller=>'activities'},
-      :type => :member,
-      :popup => true,
-      :label => "Classify")
+  def create
+    clean_out_sa_params(params)
+    @activity = @response.activities.new(params[:activity])
 
-    config.nested.add_link("Institutions Assisted", [:organizations])
-    config.columns[:organizations].association.reverse = :activities
-    config.nested.add_link("Sub Implementers", [:sub_activities])
-    # we want to use this below but its frazzed
-    # config.columns[:organizations].form_ui = :select # TODO remove and let subform handle it once we fix subforms
-    # config.columns[:organizations].label = "Targets"
-
-    config.nested.add_link("Comments", [:comments])
-    config.columns[:comments].association.reverse = :commentable
-#    config.columns[:projects].inplace_edit        = :ajax#TODO get working
-    config.columns[:projects].form_ui             = :select
-    config.columns[:locations].form_ui            = :select
-    config.columns[:locations].label              = "Districts Worked In"
-#    config.columns[:projects].options[:update_column] = [:provider] #TODO fix AS not doing this correctly with multi check boxes
-#    config.columns[:provider].inplace_edit        = :ajax#TODO get working
-    config.columns[:provider].form_ui             = :select
-    config.columns[:provider].association.reverse = :provider_for
-    config.columns[:provider].label               = "Implementer"
-    config.columns[:name].inplace_edit            = true
-    config.columns[:name].label                   = "Name (Optional)"
-    config.columns[:description].inplace_edit     = true
-    config.columns[:description].options          = {:cols => 60, :rows => 8}
-    config.columns[:beneficiaries].form_ui        = :select
-    config.columns[:approved].label               = "Approved?"
-
-    [config.update.columns, config.create.columns].each do |columns|
-      columns.add_subgroup "Planned Expenditure" do |budget_group|
-        budget_group.add :budget
+    if @activity.save
+      respond_to do |format|
+        format.html { flash[:notice] = 'Activity was successfully created'; html_redirect }
+        format.js   { js_redirect }
       end
-      columns.add_subgroup "Past Expenditure" do |funds_group|
-        funds_group.add :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4
+    else
+      respond_to do |format|
+        format.html { render :action => 'new' }
+        format.js   { js_redirect }
       end
     end
+  end
 
-    config.columns[:spend].label = "Total Spent GOR FY 09-10"
-    config.columns[:budget].label = "Total Budget GOR FY 10-11"
-    [:spend, :budget].each do |c|
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].inplace_edit = true
+  def update
+    clean_out_sa_params(params)
+    check_for_new_provider(params)
+    @activity = Activity.find(params[:id])
+    if @activity.update_attributes(params[:activity])
+      respond_to do |format|
+        format.html do
+          if @activity.check_projects_budget_and_spend?
+            flash[:notice] = 'Activity was successfully updated'
+          else
+            flash[:error] = 'Please be aware that your activities spend/budget exceeded that of your projects'
+          end
+          html_redirect
+        end
+        format.js   { js_redirect }
+      end
+    else
+      respond_to do |format|
+        format.html { load_comment_resources(resource); render :action => 'edit'}
+        format.js   { js_redirect }
+      end
     end
-
-    [:start, :end].each do |c|
-      config.columns[c].label = "#{c.to_s.capitalize} Date"
-    end
-
-    %w[q1 q2 q3 q4].each do |quarter|
-      c = "spend_"+quarter
-      c = c.to_sym
-      config.columns[c].inplace_edit = true
-      quarterly_amount_field_options config.columns[c]
-      config.columns[c].label = "Expenditure in Your FY 09-10 "+quarter.capitalize
-    end
-    config.columns[:spend_q4_prev].inplace_edit = true
-    quarterly_amount_field_options config.columns[:spend_q4_prev]
-    config.columns[:spend_q4_prev].label = "Expenditure in your FY 08-09 Q4"
-    [:text_for_beneficiaries, :text_for_targets, :text_for_provider].each do |c|
-      config.columns[c].form_ui = :textarea
-      config.columns[c].options = {:cols => 50, :rows => 3}
-    end
-    # add in later version, not part of minimal viable product
-    #config.columns[:indicators].form_ui = :select
-    #config.columns[:indicators].options = {:draggable_lists => true}
   end
 
-  def create_from_file
-    super @@columns_for_file_upload
+  def show
+    load_comment_resources(resource)
+    show!
   end
 
-  #AS helper method
-  def popup_coding
-    redirect_to budget_activity_coding_url(params[:id])
-  end
-
-  def conditions_for_collection
-    ["activities.type IS NULL "]
-  end
-
-  def active_scaffold_block
-    #TODO figure out how to return block for the AS config
-    # so I can subclass then yield this block & block
-    # that changes things for activity so don't have to
-    # have duplicate code w some modifications
-  end
-
-  def beginning_of_chain
-    super.available_to current_user
-  end
-
-  #fixes create
-  def before_create_save record
-    record.data_response = current_user.current_data_response
-  end
-
+  # called only via Ajax
   def approve
-    @activity = Activity.available_to(current_user).find(params[:id])
-    authorize! :approve, @activity
-    @activity.update_attributes({ :approved => params[:checked] })
-    render :nothing => true
+    if current_user.admin? || current_user.activity_manager?
+      @activity = @response.activities.find(params[:id])
+      @activity.update_attributes({:approved => params[:checked]})
+      render :nothing => true
+    else
+      raise AccessDenied
+    end
   end
+
+  # TODO refactor
+  def classifications
+    activity = Activity.find(params[:id])
+    other_costs = params[:other_costs] == '1' ? true : false
+    code_roots =  other_costs ? OtherCostCode.roots : Code.purposes.roots
+    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.purposes.roots), :service_level_roots => ServiceLevel.roots}
+  end
+
+  def project_sub_form
+    @activity = @response.activities.find_by_id(params[:activity_id])
+    @project  = @response.projects.find(params[:project_id])
+    render :partial => "project_sub_form",
+           :locals => {:activity => (@activity || :activity), :project => @project}
+  end
+
+  def template
+    template = Activity.download_template
+    send_csv(template, 'activities_template.csv')
+  end
+
+  def export
+    activities = params[:project_id].present? ?
+      @response.projects.find(params[:project_id]).activities : @response.activities
+    template = Activity.download_template(activities)
+    send_csv(template, 'activities_existing.csv')
+  end
+
+  def bulk_create
+    begin
+      if params[:file].present?
+        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+        @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
+      else
+        flash[:error] = 'Please select a file to upload activities'
+        redirect_to response_projects_path(@response)
+      end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      redirect_to response_projects_path(@response)
+    end
+  end
+
+  def destroy
+    destroy! do |success, failure|
+      success.html { redirect_to response_projects_url(@response) }
+    end
+  end
+
+  private
+
+    def clean_out_sa_params(params)
+      unless params[:activity][:sub_activities_attributes].nil?
+        params[:activity][:sub_activities_attributes].each_key do |key|
+          if params[:activity][:sub_activities_attributes][key][:spend].last == '%'
+            if params[:activity][:sub_activities_attributes][key][:spend].to_i < 101
+              spend = params[:activity][:spend].to_f * params[:activity][:sub_activities_attributes][key][:spend].delete('%').to_f / 100
+              params[:activity][:sub_activities_attributes][key][:spend] = spend
+            else
+              spend = params[:activity][:sub_activities_attributes][key][:spend].delete('%')
+              params[:activity][:sub_activities_attributes][key][:spend] = spend
+            end
+          end
+          if params[:activity][:sub_activities_attributes][key][:budget].last == '%'
+            if params[:activity][:sub_activities_attributes][key][:budget].to_i < 101
+              budget = params[:activity][:budget].to_f * params[:activity][:sub_activities_attributes][key][:budget].delete('%').to_f / 100
+              params[:activity][:sub_activities_attributes][key][:budget] = budget
+            else
+              budget = params[:activity][:sub_activities_attributes][key][:budget].delete('%')
+              params[:activity][:sub_activities_attributes][key][:budget] = budget
+            end
+          end
+        end
+      end
+    end
+
+    def check_for_new_provider(params)
+      unless params[:activity][:provider_id].nil?
+        unless is_number?(params[:activity][:provider_id])
+          name = params[:activity][:provider_id]
+          params[:activity][:provider] = {}
+          params[:activity][:provider][:name] = name
+          params[:activity].delete(:provider_id)
+        end
+      end
+    end
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    end
+
+    def html_redirect
+      if params[:commit] == "Save & Classify >"
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
+      else
+        redirect_to response_projects_path(@activity.project.response)
+      end
+    end
+
+    def js_redirect
+      render :partial => 'bulk_edit', :layout => false,
+        :locals => {:activity => @activity, :response => @response}
+    end
+
+    def confirm_activity_type
+      @activity = Activity.find(params[:id])     
+      return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
+      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
 
 end

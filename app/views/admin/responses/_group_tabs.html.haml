@@ -1,0 +1,4 @@
+%ul.group
+  %li= link_to "Submitted (#{@submitted_total})", submitted_admin_responses_path, active_if([:index, :submitted])
+  %li= link_to "In Progress (#{@in_progress_total})", in_progress_admin_responses_path, active_if(:in_progress)
+  %li= link_to "Empty (#{@empty_total})", empty_admin_responses_path, active_if(:empty)

@@ -1,63 +1,97 @@
 Given /^a project$/ do
-  @project = Factory.create(:project)
+  @project = Factory(:project)
 end
 
-Given /^a project with name "([^\"]*)"$/ do |name|
-  @project = Factory.create(:project, :name => name)
+Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
+  @project = Factory(:project,
+                    :name          => project_name,
+                    :data_response => get_data_response(data_request_name, organization_name))
 end
 
-# kill meeeee
-Given /^a project with name "([^\"]*)" and an existing response$/ do |name|
-  @project = Factory.create(:project, :name => name, :data_response => @data_response)
+Given /^an implementer "([^"]*)" for project "([^"]*)"$/ do |implementer_name, project_name|
+  steps %Q{
+    Given an implementer "#{implementer_name}" who we gave "20000000" for project "#{project_name}"
+  }
 end
 
-# kill meeeee
-Given /^a project with name "([^\"]*)" in district "([^\"]*)" and an existing response$/ do |name, district|
-  @project = Factory.create(:project, 
-                            :name => name, 
-                            :locations => [ Location.find_by_short_display district],
-                            :data_response => @data_response)
+Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ do |implementer_name, budget, project_name|
+  @project = Project.find_by_name(project_name)
+  @implementer = Factory(:implementer,
+                          :project       => @project,
+                          :from          => @project.organization,
+                          :budget        => budget,
+                          :to            => Organization.find_by_name(implementer_name),
+                          :data_response => @project.data_response)
 end
 
-Given /^an activity with name "([^\"]*)"$/ do |name|
-  @activity = Factory.create(:activity, :name => name)
+Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
+  # assumes @activity is set !
+  @code_assignment = Factory(:coding_budget,
+                             :activity => @activity,
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
+  @activity.reload
 end
 
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)"$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :projects => [Project.find_by_name(project)])
+# Uses "the activity" definition from Pickle
+Given /^a budget coding code_name: "([^"]*)", activity: "([^"]*)", amount: "([^"]*)"$/ do |code_name, activity, amount|
+  @code_assignment = Factory(:coding_budget,
+                             :activity => model(activity),
+                             :code => Code.find_by_short_display(code_name),
+                             :amount => amount,
+                             :cached_amount => amount)
 end
 
-Given /^an activity with name "([^\"]*)" in project "([^\"]*)" and an existing response$/ do |name, project|
-  @activity = Factory.create(:activity, :name => name, :data_response => @data_response, :projects => [Project.find_by_name(project)])
+Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$/ do |name, code_name, fields|
+  code_assignments = create_model(name, fields)
+  code_assignments.merge(:code => Code.find_by_short_display(code_name))
 end
 
 Given /^the following projects$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:project, hash)
+    Factory(:project, { :data_response => get_data_response(hash.delete("request"),
+                                                            hash.delete("organization"))
+                      }.merge(hash) )
+  end
+end
+
+Given /^the following comments$/ do |table|
+  table.hashes.each do |hash|
+    commentable = Project.find_by_name(hash.delete("project"))
+    Factory(:comment, hash.merge(:commentable => commentable))
   end
 end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-  @user = Factory.create(:reporter, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory(:reporter,
+                :username              => name,
+                :email                 => email,
+                :password              => password,
+                :password_confirmation => password)
 end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
-  @user = Factory.create(:activity_manager, :username => name, :email => email, :password => password, :password_confirmation => password)
+@user = Factory(:activity_manager,
+                :username              => name,
+                :email                 => email,
+                :password              => password,
+                :password_confirmation => password)
 end
 
 Given /^the following reporters$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
-    Factory.create(:reporter, { :username => username,
-                                :organization_id => org.id
-                                }.merge(hash) )
+    Factory(:reporter, { :username => username,
+                         :organization => org
+                       }.merge(hash) )
   end
 end
 
 Given /^the root codes$/ do |table|
   table.hashes.each do |hash|
-    f = Factory.create(:root_code, hash.merge(:type => 'Nha'))
+    f = Factory(:root_code, hash.merge(:type => 'Nha'))
   end
 end
 
@@ -65,12 +99,11 @@ Given /^the following activity managers$/ do |table|
   table.hashes.each do |hash|
     org  = Organization.find_by_name(hash.delete("organization"))
     username  = hash.delete("name")
-    Factory.create(:activity_manager, { :username => username,
-                                        :organization_id => org.id
-                                      }.merge(hash) )
+    Factory(:activity_manager, { :username => username,
+                                 :organization => org
+                               }.merge(hash) )
   end
 end
-
 
 
 Given /^I am signed in as "([^"]*)"$/ do |name|
@@ -96,34 +129,58 @@ Given /^I am signed in as an activity manager$/ do
   }
 end
 
+Given /^I am signed in as an admin$/ do
+  steps %Q{
+    Given an admin "Frank" in organization "Test Org"
+    Given I am signed in as "Frank"
+  }
+end
 
 Given /^an organization with name "([^"]*)"$/ do |name|
-  @organization = Factory.create(:organization, :name => name)
+  @organization = Factory(:organization, :name => name)
 end
 
 Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
   org  = Organization.find_by_name(requestor)
-  @data_request = Factory.create(:data_request, :title => title, :requesting_organization => org)
+  @data_request = Factory(:data_request, :title => title, :organization => org)
 end
 
 Given /^the following organizations$/ do |table|
   table.hashes.each do |hash|
-    Factory.create(:organization, hash)
+    Factory(:organization, hash)
   end
 end
 
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
-  @organization = Factory.create(:organization, :name => org_name)
-  @user = Factory.create(:reporter, :username => name, :email => 'frank@f.com', 
-                          :password => 'password', :password_confirmation => 'password',
-                          :organization => @organization)
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:reporter,
+                  :username => name,
+                  :email => 'frank@f.com',
+                  :password => 'password',
+                  :password_confirmation => 'password',
+                  :organization => @organization)
 end
 
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
-  @organization = Factory.create(:organization, :name => org_name)
-  @user = Factory.create(:activity_manager, :username => name, :email => 'frank@f.com', 
-                          :password => 'password', :password_confirmation => 'password',
-                          :organization => @organization)
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:activity_manager,
+                  :username              => name,
+                  :email                 => 'frank@f.com',
+                  :password              => 'password',
+                  :password_confirmation => 'password',
+                  :organization          => @organization)
+
+end
+
+Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+  @organization = Factory(:organization, :name => org_name)
+  @user = Factory(:admin,
+                  :username              => name,
+                  :email                 => 'frank@f.com',
+                  :password              => 'password',
+                  :password_confirmation => 'password',
+                  :organization          => @organization)
+
 end
 
 Given /^the following funding flows$/ do |table|
@@ -131,16 +188,18 @@ Given /^the following funding flows$/ do |table|
     to_org   = Organization.find_by_name(hash.delete("to"))
     project  = Project.find_by_name(hash.delete("project"))
     from_org = Organization.find_by_name(hash.delete("from"))
-
-    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                                      :project_id => project.id, 
-                                      :organization_id_from => from_org.id
-                                      }.merge(hash) )
+    Factory(:funding_flow, {
+                            :project       => project,
+                            :to            => to_org.id,
+                            :from          => from_org,
+                            :data_response => project.data_response
+                          }.merge(hash) )
   end
 end
 
 Then /^debug$/ do
-  debugger # express the regexp above with the code you wish you had
+  $page = page
+  debugger
 end
 
 Then /^I should see the "([^"]*)" tab is active$/ do |text|
@@ -149,47 +208,32 @@ Then /^I should see the "([^"]*)" tab is active$/ do |text|
   }
 end
 
-Given /^the following funding flows$/ do |table|
-  table.hashes.each do |hash|
-    to_org   = Organization.find_by_name(hash.delete("to"))
-    project  = Project.find_by_name(hash.delete("project"))
-    from_org = Organization.find_by_name(hash.delete("from"))
-
-    Factory.create(:funding_flow,  { :organization_id_to => to_org.id,  
-                                      :project_id => project.id, 
-                                      :organization_id_from => from_org.id
-                                      }.merge(hash) )
-  end
-end
-
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#header_app_app"
-    And I should see "Sign in" within "div#header_app_app"
+    Then I should see "Have an account?" within "div#admin"
+    And I should see "Sign in" within "div#admin"
   }
 end
 
 Then /^I should see the reporters admin nav$/ do
   steps %Q{
-    Then I should see "frank@f.com" within "div#header_app"
-    Then I should see "My Profile" within "div#header_app"
-    Then I should see "Sign out" within "div#header_app"
+    Then I should see "My Profile" within "div#admin"
+    Then I should see "Sign Out" within "div#admin"
   }
 end
 
 Then /^I should see the common footer$/ do
   steps %Q{
-    Then I should see "About" within "div#footer"
     Then I should see "Help" within "div#footer"
-    Then I should see "Contact Us" within "div#footer"
-    Then I should see "News" within "div#footer"
+    Then I should see "Contact" within "div#footer"
+    Then I should see "About" within "div#footer"
   }
 end
 
 Then /^I should see the main nav tabs$/ do
   steps %Q{
-    Then I should see "Dashboard" within "div#main-nav"
-    Then I should see "My Data" within "div#main-nav"
+    Then I should see "Home" within "div#main-nav"
+    Then I should see "Projects" within "div#main-nav"
     Then I should see "Reports" within "div#main-nav"
     Then I should see "Help" within "div#main-nav"
   }
@@ -207,7 +251,7 @@ Then /^I should not see the data response tabs$/ do
   }
 end
 
-# use this when you need to match the EXACT value of a field (vs the "should contain" matcher) 
+# use this when you need to match the EXACT value of a field (vs the "should contain" matcher)
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
@@ -220,35 +264,200 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should equal "([^"]*)"$/ do |fi
   end
 end
 
-# a bit brittle
-When /^I fill in the percentage for "Human Resources For Health" with "([^"]*)"$/ do |amount|
-   steps %Q{ When I fill in "activity_budget_codes_updates_1_percentage" with "#{amount}"}
+def field_id(code_name)
+  code = Code.find_by_short_display(code_name)
+  return "activity_updates_#{code.id}_percentage"
 end
 
-Then /^the percentage for "Human Resources For Health" field should equal "([^"]*)"$/ do |amount|
-  steps %Q{ Then the "activity_budget_codes_updates_1_percentage" field should equal "#{amount}"}
+When /^I fill in "([^"]*)" percentage field with "([^"]*)"$/ do |code_name, value|
+  steps %Q{
+    When I fill in "#{field_id(code_name)}" with "#{value}"
+  }
 end
+
+Then /^the "([^"]*)" percentage field should contain "([^"]*)"$/ do |code_name, value|
+  steps %Q{
+    And the "#{field_id(code_name)}" field should contain "#{value}"
+  }
+end
+
 
 
 # band aid fix
-Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|  
-  @data_response = DataResponse.new :data_request => DataRequest.find_by_title(request),
-                                    :responding_organization => Organization.find_by_name(org)
-  @data_response.save!
-end
-
-# refactor meeeee
-Given /^a refactor_me_please current_data_response for user "([^"]*)"$/ do |name|
-  @user = User.find_by_username name
-  @data_response = DataResponse.last
-  @user.current_data_response = @data_response
-  @user.save!
+Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
+  @response = Factory(:data_response,
+                      :data_request => DataRequest.find_by_title(request),
+                      :organization => Organization.find_by_name(org))
 end
 
 Then /^wait a few moments$/ do
-  sleep 20
+  sleep 4
 end
 
 When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
+end
+
+
+Given /^a basic org \+ reporter profile, signed in$/ do
+  steps %Q{
+    Given a data_request exists with title: "Req1"
+    And an organization exists with name: "UNDP"
+    And a reporter exists with username: "undp_user", organization: the organization
+    And I am signed in as "undp_user"
+  }
+end
+
+Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)"$/ do |org, request|
+  steps %Q{
+    Given a data_request exists with title: "#{request}"
+    And an organization exists with name: "#{org}"
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
+    And a project exists with name: "TB Treatment Project", data_response: the data_response
+    And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
+  }
+end
+
+Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
+  steps %Q{
+    Given a basic org "UNDP" + reporter profile, with data response to "Req1"
+    And I am signed in as "undp_user"
+  }
+end
+
+Given /^a basic org \+ reporter profile, with data response$/ do
+  steps %Q{
+    Given a basic org "UNDP" + reporter profile, with data response to "Req1"
+  }
+end
+
+Given /^a basic org \+ reporter profile, with data response, signed in$/ do
+  steps %Q{
+    Given a basic org + reporter profile, with data response
+    And I am signed in as "undp_user"
+  }
+end
+
+Given /^a model help for "([^"]*)"$/ do |model_name|
+  Factory(:model_help, :model_name => model_name)
+end
+
+Given /^model help for "([^"]*)" page$/ do |page|
+  model_help_name = case page
+                    when 'projects'
+                      "Project"
+                    when 'funding sources'
+                      "FundingSource"
+                    when 'implementers'
+                      "Provider"
+                    when 'activities'
+                      "Activity"
+                    when 'classifications'
+                      "CodeAssignment"
+                    when 'other costs'
+                      "OtherCost"
+                    when 'review'
+                      "DataResponseReview"
+                    end
+  steps %Q{
+    Given a model help for "#{model_help_name}"
+  }
+end
+
+Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
+  activity = Activity.find_by_name(activity_name)
+  location = Location.find_by_short_display(location_name)
+  activity.locations << location
+end
+
+Then /^I can manage the comments$/ do
+  steps %Q{
+    When I click element "#project_details"
+    And I click element "#projects .project .descr"
+    And I click element "#projects .activity_details"
+    And I click element "#projects .activity .descr"
+    And I click element "#projects .activity .comment_details"
+    And I follow "+ Add Comment" within ".activity"
+    And I fill in "Title" with "comment title"
+    And I fill in "Comment" with "comment body"
+    And I press "Create Comment"
+    Then I should see "comment title"
+    And I should see "comment body"
+    When I follow "Edit" within "#projects .activity .resources"
+    And I fill in "Title" with "new comment title"
+    And I fill in "Comment" with "new comment body"
+    And I press "Update Comment"
+    Then I should see "new comment title"
+    And I should see "new comment body"
+    When I confirm the popup dialog
+    And I follow "Delete" within "#projects .activity .resources"
+    Then I should not see "new comment title"
+    And I should not see "new comment body"
+  }
+end
+
+Then /^I should see tabs for comments,projects,non-project activites$/ do
+  steps %Q{
+    Then I should see "Comments" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a#project_details"
+    Then I should see "Projects" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a.activity_details"
+    Then I should see "Activities without a Project" within the selected data response sub-tab
+    When I click element "#data_response_sub_tabs ul li a.comment_details"
+    Then I should see "Comments" within the selected data response sub-tab
+  }
+end
+
+Then /^I should see tabs for comments,activities,other costs$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project .descr"
+    Then I should see "Comments" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li a.activity_details"
+    Then I should see "Activities" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li:last a.activity_details"
+    Then I should see "Other Costs" within the selected project sub-tab
+    When I click element ".project_sub_tabs ul li a.comment_details"
+    Then I should see "Comments" within the selected project sub-tab
+  }
+end
+
+Then /^I should see tabs for comments,sub-activities when activities already open$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project_sub_tabs ul li a.activity_details"
+    And I click element ".activities .activity.entry_header"
+    Then I should see "Comments" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:last a"
+    Then I should see "Sub-Activities" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:first"
+    Then I should see "Comments" within the selected activity sub-tab
+  }
+end
+
+Then /^I should see tabs for comments,sub-activities$/ do
+  steps %Q{
+    When I click element "#data_response_sub_tabs > ul:first-child li a#project_details"
+    And I click element ".project .descr"
+    And I click element ".project_sub_tabs ul li a.activity_details"
+    And I click element ".activities .activity.entry_header"
+    Then I should see "Comments" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:last a"
+    Then I should see "Sub-Activities" within the selected activity sub-tab
+    When I click element ".activity_sub_tabs ul li:first"
+    Then I should see "Comments" within the selected activity sub-tab
+  }
+end
+
+Then /^page should have css "([^"]*)"$/ do |selector|
+  page.should have_css(selector)
+end
+
+Then /^page should not have css "([^"]*)"$/ do |selector|
+  page.should_not have_css(selector)
+end
+
+Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, row, text|
+  page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
 end

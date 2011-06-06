@@ -1,0 +1,74 @@
+# PostgreSQL. Versions 7.4 and 8.x are supported.
+#
+# You need ruby-pg or ruby
+#   gem install ruby-pg
+#     or
+#   gem install ruby-postgres
+#
+
+# START Helpful PostgreSQL Setup Instructions
+#  If you have a fresh install of postgres, you need to create
+#  a password for the postgres user.
+#  See "Basic Server Setup" under https://help.ubuntu.com/community/PostgreSQL
+
+#   Once you have the postgres user you can enter psql or from the command
+#   line run these commands below, prefixed with "sudo -u postgres"
+# END
+#
+#
+# For OS X:
+#  - Use homebrew to install postgres
+#  - Create user and database
+#   createuser -d -R -P hrt_dev
+#   createdb -O hrt_dev hrt_dev
+
+# For Ubuntu:
+# - Change to md5, instead of using ident
+#   vi /etc/postgresql/8.4/main/pg_hba.conf
+#   Change the line:
+#     local all all ident
+#   to:
+#     local all all md5
+#
+#   Read more: http://jaystile.wordpress.com/2010/08/31/programming-rails-with-postgres-couldnt-create-database/
+#
+# - Create hrt_dev and hrt_test users
+#   sudo -u postgres createuser -d -R -P hrt_dev
+#   sudo -u postgres createuser -d -R -P hrt_test
+#
+
+# to load a pgdump.sql from Heroku (pgbackup)
+#   pg_restore --verbose --clean --no-acl --no-owner -h localhost -U hrt_dev -d hrt_dev blah.pgbackup.db
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: hrt_dev
+  pool: 5
+  username: hrt_dev
+  password: hrt_dev
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: hrt_test
+  pool: 5
+  username: hrt_test
+  password: hrt_test
+
+# note - yes this is a duplication of the test db - but with just
+#   cucumber:
+#      <<: *test
+# then the build wont work for some reason.
+cucumber:
+  adapter: postgresql
+  encoding: unicode
+  database: hrt_test
+  pool: 5
+  username: hrt_test
+  password: hrt_test
+
+# prod config doesnt matter since we're using heroku

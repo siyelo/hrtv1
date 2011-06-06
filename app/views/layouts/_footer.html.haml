@@ -1,5 +1,35 @@
 #footer
   .wrapper
-    = link_to "About", static_page_url(:about)
-    = link_to "Help / Contact Us", static_page_url(:contact)
-    = link_to "News", static_page_url(:news)
+    - unless controller_name == "static_page"
+      %ul.right
+        %li
+          - country = ENV['HRT_COUNTRY'] || 'rwanda'
+          %a{:href => '/'}
+            = image_tag "#{country}-coat-of-arms-small.png", :class => "left"
+            %h2.left= country
+        %li= link_to image_tag("usaid.jpg"), 'http://www.usaid.gov/', :target => '_blank'
+        %li= link_to image_tag("hs2020.jpg"), 'http://www.hs2020.org/', :target => '_blank'
+        - unless RAILS_ENV == 'production'
+          %li.version= "v#{Version.current}"
+
+    %ul.left
+      %li= link_to "Help", help_link, :target => "_blank"
+      %li= link_to "Contact", contact_link, :target => "_blank"
+      %li= link_to "About", about_page_path
+      %li.powered
+        Powered by
+      %li
+        %h2.logo
+          Health Resource Tracker
+
+  -# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
+  - unless Settings.google_account_id.blank?
+    :javascript
+      var _gaq = [['_setAccount', '#{Settings.google_account_id}'], ['_trackPageview']];
+      (function(d, t) {
+       var g = d.createElement(t),
+           s = d.getElementsByTagName(t)[0];
+       g.async = true;
+       g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       s.parentNode.insertBefore(g, s);
+      })(document, 'script');

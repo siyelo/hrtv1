@@ -1,0 +1,40 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages:["corechart", "treemap"]});
+  var _pie = #{@pie.to_json};
+  var _code_spent_values  = #{js_safe(@code_spent_values)};
+  var _code_budget_values = #{js_safe(@code_budget_values)};
+
+%ul.breadcrumb
+  %li= link_to 'Reports', user_report_dashboard_path(current_user)
+  %li= link_to 'National', reports_country_path
+  %li= link_to 'Activities', reports_country_activities_path
+
+%h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
+
+= render 'reports/shared/activity_summary'
+
+%br
+
+%ul.group
+  %li= link_to "NSP", reports_country_activity_path(@activity, :code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", reports_country_activity_path(@activity, :code_type => "mtef"), active_if(@mtef)
+  %li= link_to "Inputs", reports_country_activity_path(@activity, :code_type => "cost_category"), active_if(@cost_category)
+  %li= link_to "HSSP2 Strat Prog", reports_country_activity_path(@activity, :code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
+  %li= link_to "HSSP2 Strat Obj", reports_country_activity_path(@activity, :code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
+
+%ul.group
+  %li= link_to "Pie", reports_country_activity_path(@activity, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
+  - if !@hssp2_strat_prog && !@hssp2_strat_obj
+    %li= link_to "Treemap", reports_country_activity_path(@activity, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
+
+.full
+  .first-half
+    %h2= "#{@chart_name} Spent"
+    #code_spent.bordered
+
+  .second-half
+    %h2= "#{@chart_name} Budget"
+    #code_budget.bordered

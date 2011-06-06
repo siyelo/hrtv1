@@ -1,0 +1,16 @@
+%tbody
+  %tr.head
+    %td
+      = link_to "edit", edit_response_project_path(@response, project), :class => 'edit_button inline left push-12'
+      %h1
+        = link_to "#{h project.name}", edit_response_project_path(@response, project)
+
+        - project_errors = get_project_errors(project)
+        - if project_errors.present?
+          = image_tag "warning_12.png", :title => project_errors, :class => 'tooltip'
+
+    %td= n2cndrs(project.spend, project.currency)
+    %td= n2cndrs(project.budget, project.currency)
+
+  = render 'activities', :response => @response, :project => project, :activities => project.normal_activities
+  = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs

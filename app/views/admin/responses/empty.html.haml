@@ -1,0 +1,24 @@
+= render "heading"
+
+= render 'group_tabs'
+
+/ js event: #resources, .data_responses
+%div{:class => "resources", :"data-resources" => "data_responses"}
+  - if @empty_responses.empty?
+    %p.guide All data responses have been started.
+  - else
+    %table.standard
+      %thead.static
+        %tr
+          %th Organization
+          %th User Emails
+          %th Point of Contact Phone Number
+          %th Actions
+      %tbody
+        - @empty_responses.each do |data_response|
+          %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
+            %td= link_to data_response.organization, admin_response_path(data_response)
+            %td= data_response.organization.user_email_list_limit_3
+            %td= data_response.contact_phone_number
+            %td
+              = link_to "Delete", delete_admin_response_path(data_response), :class => "destroy_btn"

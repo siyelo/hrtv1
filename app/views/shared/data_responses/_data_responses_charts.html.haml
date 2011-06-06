@@ -1,0 +1,21 @@
+= render '/shared/data_responses/chart_nav'
+
+
+.tabs.two-thirds
+  .tab1{:"data-chart_type" => "data_response", :"data-id" => data_response.id, :style => "display: block;"}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => data_response, :element_type => 'data_response'
+
+  .tab2{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_spend', :element => data_response, :element_type => 'data_response'
+
+  .tab3{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_budget', :element => data_response, :element_type => 'data_response'
+
+  .tab4{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'nsp_spend', :element => data_response, :element_type => 'data_response'
+
+  .tab5{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_budget', :element => data_response, :element_type => 'data_response'
+
+  .tab6{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+    = render 'shared/data_responses/chart_tab', :chart_type => 'cc_spend', :element => data_response, :element_type => 'data_response'

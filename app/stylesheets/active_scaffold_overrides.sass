@@ -1,16 +1,16 @@
 body.app
 
-  #content .wrapper #main
+  #content .wrapper
 
     .active-scaffold
       width: 100%
-      
+
       .view
         background: #f9f9f9
         border: 1px solid !light-blue
         margin: 0 auto
         padding: 30px
-        
+
       .active-scaffold-header .actions
         margin: 5px
         a
@@ -21,23 +21,23 @@ body.app
             color= !lightest-blue
             background= !mid-blue
             +border-radius
-            
+
         .disabled
           background: !mid-blue
           color: !lightest-blue
           +border-radius
-          
+
       table thead a:hover
         color: !light-blue
-        
+
       th a
         background-color: !mid-blue
         font-size: 0.75em
         padding: 7px 10px
-        
+
       th p
         background: none
-        
+
       .record
         a
           color: !mid-blue
@@ -59,12 +59,12 @@ body.app
           table
             float: left
             padding-left: 5px
-            td 
+            td
               float: left
               position: relative
               &.indicator-container
                 float: right
-              
+
     .edit_data_response
       +border-radius
       border: 1px solid !lightest-blue
@@ -79,9 +79,15 @@ body.app
       input
         margin: 10px 0 0
 
-    thead tr th
-      background= !mid-blue
-      border-left: 1px solid !dark-blue
+    .sub-form
+      thead tr th
+        background: none
+        border: none
+        font-size: 16px
+        label
+          margin-left: -10px
+      input
+        width: 300px
 
     .active-scaffold-header
       +border-top-radius
@@ -103,15 +109,15 @@ body.app
 
     .active-scaffold th.desc a, .active-scaffold th a
       &:hover
-        color: !lighter-blue
+        color: $lighter-blue
 
     .active-scaffold-records
       padding-left: 10px
 
-    .active-scaffold 
+    .active-scaffold
 
       h4, h5
-        color: !mid-blue
+        color: $mid-blue
         padding: 0
         text-transform: uppercase
 
@@ -122,19 +128,39 @@ body.app
 
       input[type=text], select, textarea
         +border-radius
-        border= !light-blue " 1px solid "
+        border: $light-blue " 1px solid "
         color: !dark-blue
+        font-size: 12px
         font-weight: normal
         letter-spacing: 0.05em
         margin-bottom: 5px
         padding: 5px 0 6px 0
         width: 400px
+      .subform
+        input, textarea
+          height: 50px
+          width: 300px
 
       ol.form
         width: 100%
         padding: 0
         margin: 0
 
+        .sub-form
+          input, textarea
+            height: 50px
+            width: 300px
+          input[type="button"]
+            height: auto
+            width: auto
+            background: orange
+            border: none
+            +border-radius
+            cursor: pointer
+            padding: 7px 15px
+            color: white
+            &:hover, &:active, &:focus
+              background: $dark-blue
         dl
           border-bottom: 1px #e3e3e3 dashed
           margin-bottom: 10px
@@ -157,7 +183,7 @@ body.app
 
         label
           font-size: 0.7em
-          padding-left: 20px
+          padding-left: 10px
 
         select
           font-size: 0.8em
@@ -178,6 +204,16 @@ body.app
       .description
         color= !mid-blue
         font-size: 0.7em
+      .checkbox-list
+        li
+          display: inline-block
+          vertical-align: top
+          width: 175px
+        label
+          display: inline-block
+          width: 140px
+        input
+          vertical-align: top
 
     .name-column
       font-weight: bold
@@ -186,13 +222,13 @@ body.app
     #as_projects-content, #as_activities-content
       thead .sorted
         background: !dark-blue
-        
+
       thead th
         &:hover
           background: !dark-blue
         &:hover a
           background: !dark-blue
-      
+
     tr.inline-adapter
 
       .view
@@ -206,9 +242,12 @@ body.app
         h2
           background: white
           border: none
-          
+
         a.inline-adapter-close
           position: absolute
           right: 20px
           top: 20px
           vertical-align: center
+
+    #page_tips_close:hover
+      color: $dark-blue !important

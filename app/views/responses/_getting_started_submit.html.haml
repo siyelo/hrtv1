@@ -1,0 +1,21 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Submitting"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p The Submit page shows what actions you need to take before you can submit your data for review. You can use the other tabs to review the data you have entered as well, before you submit your response.
+
+        %p Unchecked boxes mean that the split has not been started or does not add up to the correct amount.
+
+        %ul.bulleted
+          %li Classify link each Activity whose Input/Purpose/Location split is incomplete.
+          %li Refresh the page to remove rows you have already corrected.
+
+        %p
+          Still having trouble? Check out the
+          = link_to "online help", help_link, :target => "_blank"
+          and if still no luck, then
+          = link_to "contact the Support Team", contact_link, :target => "_blank"
+          and we'll be glad to assist.

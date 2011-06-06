@@ -1,128 +1,177 @@
-#content
-  #main
-    .nav2
-      +border-top-radius
-      background= !lightest-blue
-      color= !mid-blue
-      padding-left: 15px
-      display: block
-
-      ul
-        +horizontal-list
-        padding-top: 4px
-
-        li
-          display: inline
-          float: left
-          padding: 5px 12px 2px
-          white-space: nowrap
-
-          //override
-          &:first-child, &:last-child
-            padding: 5px 12px 2px
-
-          &.selected
-            background: none repeat scroll 0 0 #FFFFFF
-            border-color= !lighter-blue !lighter-blue " -moz-use-text-color"
-            border-style: solid solid none
-            border-bottom: none
-            border-width: 1px 1px 0
-            font-weight: bold
-
-    table#activity_description
-      margin-top: 15px
-      padding: 10px
-
-      td
-        color= !mid-blue
-        padding: 4px 8px
-        font-size: 0.85em
-        &.title
-          color: #aaa
-          font-size: 0.7em
-          text-transform: uppercase
-
-        a
-          font-size: 1.15em
+#classification
+  a
+    font-weight: normal
+    font-size: 12px
+  table#activity_description
+    margin-top: 15px
+    padding: 10px
+    td
+      color: $mid-blue
+      padding: 4px 8px
+      font-size: 0.85em
+      &.title
+        color: #aaaaaa
+        font-size: 0.7em
+        text-transform: uppercase
 
 #activity_classification
   padding: 10px
-
   form
     input[type=submit]
       margin-top: 10px
-
-  .tab2, .tab3, .tab4, .tab5, .tab6
-    display: none
 
 body #content #main .activity_tree a
   font-size: 12px
   padding: 4px 7px
 
-#buttons
-  margin-bottom: 5px
-  padding: 5px 0px
-  button
-
-    border: none
-    background= !lightest-blue
-    cursor: pointer
-    margin-right: 5px
-    padding: 3px 5px
-    +border-radius(5px)
-    &:hover
-      background= !mid-blue
-      color: white
+.edit_activity
+  position: relative
+#expl
+  color: $mid-blue + #222
+  float: right
+  font-size: 11px
+  position: relative
+  top: 15px
+  span
+    padding: 0 48px 0 3px
 
 ul.activity_tree
-  border-bottom= !lighter-blue " 1px solid "
+  border-bottom: $filler 4px solid
+  clear: both
   font-size: 12px
-
+  ul
+    border-left: 1px dotted $lightest-blue
+    border-right: 1px dotted $lightest-blue
+    margin-bottom: 5px !important
+    padding: 0 5px
   li
-    border-top= !lighter-blue " 1px solid "
+    border-top: $filler 4px solid
     font-size: 12px
     list-style: none
-    padding: 10px 0
+    //padding: 5px 0
     &:hover
-      background: #f9f9f9
+      background: $filler + #030303
+    > div
+      padding: 5px 0
+    div.invalid
+      background: #f7eeec
+      .subtotal
+        background: $lighter-blue
+    a.invalid_node
+      background: #FF0000
+      color: #FFF
+      font-weight: bold
+      text-align: center
+      width: 8px
+      +border-radius(30px)
+    > span
+      float: left
+    input, textarea
+      background: white
+      margin-bottom: 6px
+      padding: 3px
+    .greyed
+      color: $light_grey
+      display: inline-block
+      width: 10px
     span
       font-size: 1.4em
       font-weight: bold
       &.expanded
         color: red
+        padding-top: 7px
       &.collapsed
         color: green
+        padding-top: 7px
     ul
-      margin-left: 30px
+      margin: 0 15px
       li
-        margin-top: 10px
+        margin-top: 4px
         padding-bottom: 0
-        border-top= !lightest-blue " 1px dashed "
+        border-top: $lightest-blue unquote(" 1px dashed ")
 
-      &.incomplete
-        color: orange
-
+  .subtotal
+    background: $lightest-blue
+    display: inline-block !important
+    float: right
+    height: 12px
+    margin-left: 3px
+    padding: 5px
+    width: 80px
+    +border-radius
 
   .hide
     display: none
-
   span
-    color: #999
+    color: #999999
     font-family: "Courier New", Courier, monospace
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
 
+body.app
+  ul.activity_tree, #activity_description
+    label
+      display: inline
+    .values
+      width: 280px
+
 .tooltip
-  -moz-border-radius: 5px 5px 5px 5px
-  background: none repeat scroll 0 0 #DDDDDD
-  color: #fff
-  display: inline-block
-  font-size: 14px
-  font-weight: bold
-  margin-left: 2px
-  padding: 1px 5px
-  text-decoration: none
-  text-shadow: none
+  &.info
+    -moz-border-radius: 5px 5px 5px 5px
+    background: none repeat scroll 0 0 #dddddd
+    color: orange
+    display: inline-block
+    font-size: 14px
+    font-weight: bold
+    margin: 1px 0 0 2px
+    padding: 4px 5px 1px 5px
+    text-decoration: none
+    text-shadow: none
+    &.help_tip
+      font-size: 11px
+      font-weight: normal
+      background-color: white
 
+// Shared
+.tab1, .tab2, .tab3, .tab4, .tab5, .tab6, .tab7, .tab8, .tab9, .tab10
+  display: none
 
+.progress-container
+  border: 1px solid #cccccc
+  width: 100px
+  margin: 2px 5px 2px 0
+  padding: 1px
+  float: left
+  background: white
+
+.progress-container > div
+  background-color: #ace97c
+  height: 12px
+
+.nav2
+  +border-top-radius
+  border-bottom: 1px solid $lighter-blue
+  color: $mid-blue
+  padding-left: 5px
+  display: block
+  ul
+    +horizontal-list
+    margin-bottom: -1px
+    padding-top: 4px
+    li
+      display: inline
+      float: left
+      font-size: 12px
+      padding: 5px 9px 2px
+      white-space: nowrap
+      //override
+      &:first-child, &:last-child
+        padding: 5px 9px 2px
+      &.selected
+        background: none repeat scroll 0 0 white
+        border-color: $lighter-blue $lighter-blue unquote(" -moz-use-text-color")
+        border-bottom: none
+        border-width: 1px 1px 0
+        color: $mid-blue
+        font-weight: bold

@@ -1,5 +1,7 @@
-- fiscal_year_prev = fiscal_year_prev(@response)
-- fiscal_year = fiscal_year(@response)
+- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year = budget_fiscal_year(@response)
+- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year = spend_fiscal_year(@response)
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -28,11 +30,11 @@
         %li.amounts.last
           %label== Quarterly spend
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{fiscal_year}", :required => false
+            = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
+            = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
 
   - if @response.data_request.budget?
     %li.last
@@ -43,11 +45,11 @@
           %li.amounts.last
             %label== Quarterly budget
             %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{fiscal_year}", :required => false
+              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term
@@ -65,7 +67,7 @@
           = render "activities/funding_source_fields", :f => fs
         .add
           = link_to_add_fields "Add funding source", f, :funding_sources, "activities/"
-          %p.hint The sources from which your organization receives funding for this Activity.
+          %p.hint Enter sources here if this activity is funded differently from other activities for this project. For example, if your project has two donors, and only one of them funds this activity, enter that single source of funds here.
 
 
   %li.last.sub_activities
@@ -81,7 +83,7 @@
     %ul.dashboard_section
       = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiary details / Other beneficiaries", :hint => "Beneficiaries of your Activity, if applicable to any of these population groups."
       = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your Activity that are not listed above."
-      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity."
+      = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity. Example: 25,000 people on ART treatment"
 
   %li
     %ul.horizontal

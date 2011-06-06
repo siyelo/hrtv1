@@ -6,7 +6,7 @@ class ResponsesController < ApplicationController
     @response = DataResponse.new
   end
 
-  def show
+  def review
     @response                     = find_response(params[:id])
     @projects                     = @response.projects.find(:all, :order => "name ASC")
     @activities_without_projects  = @response.activities.roots.without_a_project
@@ -49,17 +49,18 @@ class ResponsesController < ApplicationController
     end
   end
 
-  def review
+  def submit
     @response = find_response(params[:id])
+    @projects = @response.projects.find(:all, :include => :normal_activities)
   end
 
-  def submit
+  def send_data_response
     @response = find_response(params[:id])
     if @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)
     else
-      render :review
+      render :submit
     end
   end
 end

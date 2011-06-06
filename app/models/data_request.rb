@@ -39,7 +39,14 @@ class DataRequest < ActiveRecord::Base
     !year_2 && !year_3 && !year_4 && !year_5
   end
 
+  def requested_amounts
+    r = []
+    r << "Expenditure" if spend?
+    r << "Budget" if budget?
+    r
+  end
 end
+
 
 
 # == Schema Information

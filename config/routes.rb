@@ -44,9 +44,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :put} do |response|
-      response.resources :commodities,
-        :collection => {:create_from_file => :post, :download_template => :get}
+    :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
       response.resources :projects,
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,
@@ -72,6 +70,9 @@ ActionController::Routing::Routes.draw do |map|
       :member => {:copy_budget_to_spend => :put,
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
+    activity.resources :sub_activities,
+      :only => [:index, :create],
+      :collection => {:template => :get}
   end
 
   map.resources :organizations

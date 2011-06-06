@@ -10,7 +10,7 @@
     %ul.admin_reports
       - if current_user.current_data_response
         %li
-          - link_to response_path(current_user.current_data_response), :class => "drill_down target" do
+          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
             Review My Response
             %span.hint Interactive report of your current data response
 

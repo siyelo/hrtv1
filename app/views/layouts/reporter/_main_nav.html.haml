@@ -1,3 +1,8 @@
+- data_response = current_user.organization.data_responses.last
+- current_response_url = data_response ? edit_response_path(data_response) : new_response_path
+- current_projects_url_hack = current_user.current_data_response ? response_projects_path(current_user.current_data_response) : current_response_url
+- current_edit_response_url = current_user.current_data_response ? edit_response_path(current_user.current_data_response) : current_response_url
+
 #main-nav
   .wrapper
     %ul

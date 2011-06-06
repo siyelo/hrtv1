@@ -49,8 +49,26 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
   validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
+  validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
+  validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
+  validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
+  validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
+  validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
   validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
+  validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
+  validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
+  validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
+  validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
+  validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
+  validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
+  validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
+  validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
+  validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
+
+  validates_date :start_date
+  validates_date :end_date
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
 
@@ -68,12 +86,14 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-
+  before_save :check_quarterly_vs_total
   ### Public methods
   #
   def implementers
     providers
   end
+
+
 
   def response
     self.data_response
@@ -205,6 +225,18 @@ END
     true
   end
 
+  def total_matches_quarters?(type)
+    return true if (self.send(type) || 0) == total_amount_of_quarters(type)
+    return false
+  end
+
+  def total_amount_of_quarters(type)
+    (self.send("#{type}_q1") || 0) +
+    (self.send("#{type}_q2") || 0) +
+    (self.send("#{type}_q3") || 0) +
+    (self.send("#{type}_q4") || 0)
+  end
+
   def spend_entered?
     spend.present? || spend_q1.present? || spend_q2.present? ||
       spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
@@ -236,20 +268,24 @@ END
   end
 
   def budget_matches_funders?
-     self.in_flows.empty? || (self.budget == self.in_flows_budget_total)
+    (self.budget || 0) == self.in_flows_budget_total
   end
 
   def in_flows_budget_total
-    return 0 if self.funding_sources.empty?
-    in_flows.reject{|fs| fs.budget.nil?}.sum(&:budget)
+    in_flows_total(:budget)
   end
 
   def spend_matches_funders?
-    self.spend == self.in_flows_spend_total
+    (self.spend || 0) == self.in_flows_spend_total
   end
 
   def in_flows_spend_total
-    in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend)
+    #(in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend) || 0)
+    in_flows_total(:spend)
+  end
+
+  def in_flows_total(amount_method)
+    smart_sum(in_flows, amount_method)
   end
 
   def activities_budget_total
@@ -282,6 +318,30 @@ END
 
   def sub_activities_total_by_type(amount_type)
     activities.map { |a| a.sub_activities_total_by_type(amount_type) }.compact.sum
+  end
+
+  def direct_activities_total(amount_type)
+    smart_sum(activities.roots, amount_type)
+  end
+
+  def other_costs_total(amount_type)
+    smart_sum(other_costs, amount_type)
+  end
+
+
+  def errors_from_response
+    errors = []
+
+    [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
+      if !response.project_and_activities_matching_amounts?(self, m)
+        st = m == :budget ? "Budget" : "Expenditure"
+        errors << "The Project #{st} should match the total budgets for Activities plus Other Costs. Please update your activities/other costs for this project accordingly."
+      end
+    end
+    if !linked?
+      errors << "The Project is not currently linked."
+    end
+    errors
   end
 
   private
@@ -394,6 +454,15 @@ END
         amount += spend * currency_rate(project.currency, 'USD')
       end
       amount
+    end
+
+    # setting the total amount if the quarterlys are set
+    def check_quarterly_vs_total
+      ["budget", "spend"].each do |type|
+        if total_amount_of_quarters(type) > 0
+          self.send(:"#{type}=", total_amount_of_quarters(type))
+        end
+      end
     end
 
     # work arround for validates_presence_of :project issue

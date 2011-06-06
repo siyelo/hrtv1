@@ -32,7 +32,7 @@ class FundingChain
     return true unless budget.nil? or budget < 0
     return true unless spend.nil? or spend < 0
     false
-  end  
+  end
 
   def to_s
     self.inspect
@@ -43,14 +43,14 @@ class FundingChain
         :budget => budget, :spend => spend,
         :budget_in_usd => budget, :spend_in_usd => spend}
   end
-  
+
   # If the FA can be a different org, then we use it.
   # (otherwise the funding agent will always be penultimate org)
   def organization_chain=(val)
     @organization_chain = val
     set_fa_ufs
   end
- 
+
   def ultimate_funding_source
     org_chain.try(:first)
   end
@@ -58,7 +58,7 @@ class FundingChain
   def ufs
     ultimate_funding_source
   end
- 
+
   def financing_agent
     penultimate = org_chain[1]
     @fa = penultimate
@@ -108,12 +108,12 @@ class FundingChain
   def self.force_total!(collection, desired, amount_key)
     #collection = collection.dup
     without_key = collection.select{|e| a = get(e, amount_key); a.nil? or a <= 0 }
-    if without_key.size == collection.size 
+    if without_key.size == collection.size
       nil_replacement = 1 # distribute desired evenly across collection
-    else 
+    else
       nil_replacement = 0 # ignore those missing the key
     end
-    collection.each do |e| 
+    collection.each do |e|
       set_if_nil_or_zero(e, amount_key, nil_replacement)
     end
     adjust_total!(collection, desired, amount_key)
@@ -135,8 +135,8 @@ class FundingChain
       element.send(key)
     end
   end
- 
-  #TODO add rounding back to three decimal points outback 
+
+  #TODO add rounding back to three decimal points outback
   def self.set(element, key, val)
     if element.is_a?(Hash)
       element[key] = val

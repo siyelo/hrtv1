@@ -1,7 +1,7 @@
-- editing     = controller.action_name == 'edit' ? true : false
-- button_text = editing ? "Update Project" : "Create New Project"
-- fiscal_year_prev = fiscal_year_prev(@response)
-- fiscal_year = fiscal_year(@response)
+- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year = budget_fiscal_year(@response)
+- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year = spend_fiscal_year(@response)
 
 :javascript
   var _budget = #{@response.data_request.budget.to_json};
@@ -14,7 +14,6 @@
       = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the Project.", :required => false
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false, :input_html => { :class => "combobox" }
-
 
   %li.last
     %h2 Project Funding Sources

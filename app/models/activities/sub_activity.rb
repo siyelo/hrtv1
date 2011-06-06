@@ -1,6 +1,9 @@
 class SubActivity < Activity
   extend ActiveSupport::Memoizable
 
+  ### Constants
+  FILE_UPLOAD_COLUMNS = ["Implementer", "Spend", "Budget"]
+
   ### Associations
   belongs_to :activity, :counter_cache => true
 
@@ -55,22 +58,6 @@ class SubActivity < Activity
     end
   end
 
-  def budget
-    if read_attribute(:budget)
-      read_attribute(:budget)
-    else
-      nil
-    end
-  end
-
-  def spend
-    if read_attribute(:spend)
-      read_attribute(:spend)
-    else
-      nil
-    end
-  end
-
   # Creates new code_assignments records for sub_activity on the fly
   def code_assignments
     coding_budget + coding_budget_cost_categorization + budget_district_coding_adjusted +
@@ -108,6 +95,41 @@ class SubActivity < Activity
   end
   memoize :coding_spend_cost_categorization
 
+  def self.download_template(activity = nil)
+    FasterCSV.generate do |csv|
+      header_row = SubActivity::FILE_UPLOAD_COLUMNS
+      (100 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+
+      csv << header_row
+
+      if activity
+        activity.sub_activities.each do |sa|
+          row = [sa.provider.try(:name), sa.spend, sa.budget]
+
+          (100 - row.length).times{ row << nil}
+          row << sa.id
+          csv << row
+        end
+      end
+    end
+  end
+
+  def self.create_from_file(activity, doc)
+    doc.each do |row|
+      attributes = {:budget => row['Budget'],
+                    :spend => row['Spend'],
+                    :provider_id => Organization.find_by_name(row['Implementer']).try(:id),
+                    :data_response_id => activity.data_response.id}
+      sa = activity.sub_activities.find_by_id(row['Id'])
+      if sa
+        sa.update_attributes(attributes)
+      else
+        activity.sub_activities.create(attributes)
+      end
+    end
+  end
+
   private
 
     def update_counter_cache
@@ -137,7 +159,12 @@ class SubActivity < Activity
 
       if sub_activity_amount > 0
         old_assignments.each do |ca|
-          cached_amount = sub_activity_amount * (ca.cached_amount || 0) / activity_amount
+          if activity_amount > 0
+            cached_amount = sub_activity_amount * (ca.cached_amount || 0) / activity_amount
+          else
+            # set cached amount to zero, otherwise it is Infinity
+            cached_amount = sub_activity_amount
+          end
           new_assignments << fake_ca(klass, ca.code, cached_amount)
         end
       end

@@ -4,6 +4,9 @@
   = render 'shared/sub_nav_projects'
 
 %h1.main_heading Activities Bulk Create
+
+= render 'getting_started_bulk'
+
 - @activities.each_with_index do |activity, index|
   .activity_box
     = render 'bulk_edit', :activity => activity, :response => @response

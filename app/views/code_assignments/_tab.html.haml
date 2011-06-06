@@ -37,13 +37,20 @@
     .error= @error_message
 
 - unless @codes.empty?
-  - form_for @activity, :url => activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :html => {:id => ''} do |form|
+  - form_for @activity, :url => activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => params[:view]), :method => :put, :html => {:id => ''} do |form|
 
     %p#expl
       %span Amount (#{@activity.currency} or %)
       %span Subtotal
+    %ul.buttons.left
+      %li= link_to 'All data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)
+      %li= link_to 'My data', activity_code_assignments_path(@activity, :coding_type => @coding_type, :view => 'my'), :class => (params[:view] == 'my' ? 'active' : nil)
     %ul.activity_tree
-      - @codes.each do |code|
-        = render 'code_row', { :code => code, :form => form, :tab => tab, :level => 1 }
+      - if params[:view] == 'my'
+        - @coding_tree.roots.each do |node|
+          = render 'node_row', { :node => node, :form => form, :tab => tab, :level => 1 }
+      - else
+        - @codes.each do |code|
+          = render 'code_row', { :code => code, :form => form, :tab => tab, :level => 1 }
     = submit_tag 'Save', :class => 'submit_btn'
-
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

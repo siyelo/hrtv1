@@ -3,6 +3,7 @@ require 'validators'
 include NumberHelper
 
 class Activity < ActiveRecord::Base
+
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
@@ -94,9 +95,12 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_save :update_cached_usd_amounts
+  before_update :remove_district_codings
   # killing our demo!!! before_update :update_all_classified_amount_caches
+  before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
+  before_save :check_quarterly_vs_total
 
   ### Named scopes
   # TODO: spec
@@ -287,6 +291,11 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def has_budget_or_spend?
+    return true if self.spend.present?
+    return true if self.budget.present?
+  end
+
   def possible_duplicate?
     self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
   end
@@ -326,35 +335,35 @@ class Activity < ActiveRecord::Base
 
 
   def coding_budget_classified? #purposes
-    !data_response.request.purposes? || budget.blank? || CodingTree.new(self, CodingBudget).valid?
+    !data_response.request.purposes? || CodingTree.new(self, CodingBudget).valid?
   end
 
   def coding_budget_cc_classified? #inputs
-    !data_response.request.inputs? || budget.blank? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
+    !data_response.request.inputs? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
   end
 
   def coding_budget_district_classified? #locations
-    !data_response.request.locations? || budget.blank? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
+    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
   end
 
   def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || budget.blank? || CodingTree.new(self, ServiceLevelBudget).valid?
+    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelBudget).valid?
   end
 
   def coding_spend_classified?
-    !data_response.request.purposes? || spend.blank? || CodingTree.new(self, CodingSpend).valid?
+    !data_response.request.purposes? || CodingTree.new(self, CodingSpend).valid?
   end
 
   def coding_spend_cc_classified?
-    !data_response.request.inputs? || spend.blank? || CodingTree.new(self, CodingSpendCostCategorization).valid?
+    !data_response.request.inputs? || CodingTree.new(self, CodingSpendCostCategorization).valid?
   end
 
   def coding_spend_district_classified?
-    !data_response.request.locations? || spend.blank? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
+    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
   end
 
   def service_level_spend_classified?
-    !data_response.request.service_levels? || spend.blank? || CodingTree.new(self, ServiceLevelSpend).valid?
+    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelSpend).valid?
   end
 
   def budget_classified?
@@ -613,6 +622,13 @@ class Activity < ActiveRecord::Base
     sub_activities.map { |implementer| implementer.send(amount_type) }.compact.sum
   end
 
+  def total_amount_of_quarters(type)
+    (self.send("#{type}_q1") || 0) +
+    (self.send("#{type}_q2") || 0) +
+    (self.send("#{type}_q3") || 0) +
+    (self.send("#{type}_q4") || 0)
+  end
+
   private
 
     def delete_existing_code_assignments_by_type(coding_type)
@@ -694,6 +710,15 @@ class Activity < ActiveRecord::Base
         if (rate = Money.default_bank.get_rate(self.currency, :USD))
           self.budget_in_usd = (budget || 0) * rate
           self.spend_in_usd  = (spend || 0)  * rate
+        end
+      end
+    end
+
+    # setting the total amount if the quarterlys are set
+    def check_quarterly_vs_total
+      ["budget", "spend"].each do |type|
+        if total_amount_of_quarters(type) > 0
+          self.send(:"#{type}=", total_amount_of_quarters(type))
         end
       end
     end

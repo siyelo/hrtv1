@@ -1,18 +1,18 @@
 require 'set'
 class ProjectsController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['name', 'description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['name', 'spend', 'budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    
     redirect_to edit_response_workplan_path(@response, :spend)
     ### due to https://www.pivotaltracker.com/story/show/13759613
     ### Not quite sure we should remove all this yet
-    
+
     # scope = @response.projects.scoped({})
     #   scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
     #                                        {:q => "%#{params[:query]}%"}]) if params[:query]
@@ -104,7 +104,7 @@ class ProjectsController < Reporter::BaseController
 
       redirect_to response_projects_url(@response)
     rescue
-      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
       redirect_to response_projects_path(@response)
     end
   end
@@ -133,5 +133,32 @@ class ProjectsController < Reporter::BaseController
 
     def begin_of_association_chain
       @response
+    end
+
+    def strip_commas_from_in_flows
+      if params[:project].present? && params[:project][:in_flows_attributes].present?
+        in_flows = params[:project][:in_flows_attributes]
+        in_flows.each_pair do |id, in_flow|
+          [:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4].each do |field|
+            in_flows[id][field] = convert_number_column_value(in_flows[id][field])
+          end
+        end
+      end
+    end
+
+    def convert_number_column_value(value)
+      if value == false
+        0
+      elsif value == true
+        1
+      elsif value.is_a?(String)
+        if (value.blank?)
+          nil
+        else
+          value.gsub(",", "")
+        end
+      else
+        value
+      end
     end
 end

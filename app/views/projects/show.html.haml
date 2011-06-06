@@ -1,6 +1,8 @@
 - title(@project.name)
-- fiscal_year_prev = fiscal_year_prev(@response)
-- fiscal_year = fiscal_year(@response)
+- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year = budget_fiscal_year(@response)
+- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year = spend_fiscal_year(@response)
 
 %h1.main_heading
   = @project.name
@@ -40,19 +42,19 @@
         %li Spend
         %li= c(@project.spend, @project.currency)
       %ul.row
-        %li= "Spend Q4 #{fiscal_year_prev}"
+        %li= "Spend Q4 #{spend_fiscal_year_prev}"
         %li= c(@project.spend_q4_prev, @project.currency)
       %ul.row
-        %li= "Spend Q1 #{fiscal_year}"
+        %li= "Spend Q1 #{spend_fiscal_year}"
         %li= c(@project.spend_q1, @project.currency)
       %ul.row
-        %li= "Spend Q2 #{fiscal_year}"
+        %li= "Spend Q2 #{spend_fiscal_year}"
         %li= c(@project.spend_q2, @project.currency)
       %ul.row
-        %li= "Spend Q3 #{fiscal_year}"
+        %li= "Spend Q3 #{spend_fiscal_year}"
         %li= c(@project.spend_q3, @project.currency)
       %ul.row
-        %li= "Spend Q4 #{fiscal_year}"
+        %li= "Spend Q4 #{spend_fiscal_year}"
         %li= c(@project.spend_q4, @project.currency)
 
   %h3.form_heading Budget (planned expenditure)
@@ -88,19 +90,19 @@
           %li Spend
           %li= c(flow.spend, flow.currency)
         %ul.row
-          %li= "Spend Q4 #{fiscal_year_prev}"
+          %li= "Spend Q4 #{spend_fiscal_year_prev}"
           %li= c(flow.spend_q4_prev, flow.currency)
         %ul.row
-          %li= "Spend Q1 #{fiscal_year}"
+          %li= "Spend Q1 #{spend_fiscal_year}"
           %li= c(flow.spend_q1, flow.currency)
         %ul.row
-          %li= "Spend Q2 #{fiscal_year}"
+          %li= "Spend Q2 #{spend_fiscal_year}"
           %li= c(flow.spend_q2, flow.currency)
         %ul.row
-          %li= "Spend Q3 #{fiscal_year}"
+          %li= "Spend Q3 #{spend_fiscal_year}"
           %li= c(flow.spend_q3, flow.currency)
         %ul.row
-          %li= "Spend Q4 #{fiscal_year}"
+          %li= "Spend Q4 #{spend_fiscal_year}"
           %li= c(flow.spend_q4, flow.currency)
 
   %h3.form_heading Out flows
@@ -117,19 +119,19 @@
           %li Spend
           %li= c(flow.spend, flow.currency)
         %ul.row
-          %li= "Spend Q4 #{fiscal_year_prev}"
+          %li= "Spend Q4 #{spend_fiscal_year_prev}"
           %li= c(flow.spend_q4_prev, flow.currency)
         %ul.row
-          %li= "Spend Q1 #{fiscal_year}"
+          %li= "Spend Q1 #{spend_fiscal_year}"
           %li= c(flow.spend_q1, flow.currency)
         %ul.row
-          %li= "Spend Q2 #{fiscal_year}"
+          %li= "Spend Q2 #{spend_fiscal_year}"
           %li= c(flow.spend_q2, flow.currency)
         %ul.row
-          %li= "Spend Q3 #{fiscal_year}"
+          %li= "Spend Q3 #{spend_fiscal_year}"
           %li= c(flow.spend_q3, flow.currency)
         %ul.row
-          %li= "Spend Q4 #{fiscal_year}"
+          %li= "Spend Q4 #{spend_fiscal_year}"
           %li= c(flow.spend_q4, flow.currency)
 
 = render :partial => 'shared/comments', :comments => @comments

@@ -90,53 +90,72 @@ describe Activity do
       #a.should_not be_valid
     #end
   end
-  
+
   describe "codings required is decided by data_request" do
     it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :service_levels => false)))
       @activity.service_level_budget_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require inputs and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :inputs => false)))
       @activity.coding_budget_cc_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require locations and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :locations => false)))
       @activity.coding_budget_district_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require purposes and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :purposes => false)))
       @activity.coding_budget_classified?.should be_true
     end
-    
+
     it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :service_levels => false)))
       @activity.service_level_spend_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require inputs and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :inputs => false)))
       @activity.coding_spend_cc_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require locations and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :locations => false)))
       @activity.coding_spend_district_classified?.should be_true
     end
+
     it "will return true if the data_request doesn't require purposes and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response, 
+      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :purposes => false)))
       @activity.coding_spend_classified?.should be_true
+    end
+
+
+  end
+
+  describe "review screen validations" do
+    it "will return true if the activity has a budget or a spend entered" do
+      @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => 20, :spend => nil)
+      @activity.has_budget_or_spend?.should be_true
+    end
+
+    it "will return false if the activity has no budget or spend entered" do
+      @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => nil, :spend => nil)
+      @activity.has_budget_or_spend?.should be_false
     end
   end
 
   describe "checking activities budget/spend against projects validations" do
-
     it "returns false when the activitys spend is greater than that of the projects" do
       @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000),
                                  :spend => 11000, :budget => 9000)
@@ -596,7 +615,7 @@ describe Activity do
       @activity.classified?.should be_false
     end
   end
-  
+
   describe "budget_district_coding_adjusted" do
     before :each do
       @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
@@ -1280,18 +1299,18 @@ describe Activity do
     end
   end
 
-  describe "budget_gor_quarter" do
+  describe "budget_quarter" do
     context "Invalid quarter" do
       before :each do
         activity = Factory.create(:activity)
       end
 
       it "raises errors when quarter is invalid - 0" do
-        lambda { activity.budget_gor_quarter(0) }.should raise_error
+        lambda { activity.budget_quarter(0) }.should raise_error
       end
 
       it "raises errors when quarter is invalid - 5" do
-        lambda { activity.budget_gor_quarter(5) }.should raise_error
+        lambda { activity.budget_quarter(5) }.should raise_error
       end
     end
 
@@ -1304,22 +1323,22 @@ describe Activity do
 
       it "returns proper budget for 1st quarter" do
         activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @response)
-        activity.budget_gor_quarter(1).should == 123
+        activity.budget_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
         activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
-        activity.budget_gor_quarter(2).should == 123
+        activity.budget_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
         activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
-        activity.budget_gor_quarter(3).should == 123
+        activity.budget_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
         activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
-        activity.budget_gor_quarter(4).should == 123
+        activity.budget_quarter(4).should == 123
       end
     end
 
@@ -1332,38 +1351,38 @@ describe Activity do
 
       it "returns proper budget for 1st quarter" do
         activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
-        activity.budget_gor_quarter(1).should == 123
+        activity.budget_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
         activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
-        activity.budget_gor_quarter(2).should == 123
+        activity.budget_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
         activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
-        activity.budget_gor_quarter(3).should == 123
+        activity.budget_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
         activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @response)
-        activity.budget_gor_quarter(4).should == 123
+        activity.budget_quarter(4).should == 123
       end
     end
   end
 
-  describe "spend_gor_quarter" do
+  describe "spend_quarter" do
     context "Invalid quarter" do
       before :each do
         activity = Factory.create(:activity)
       end
 
       it "raises errors when quarter is invalid - 0" do
-        lambda { activity.spend_gor_quarter(0) }.should raise_error
+        lambda { activity.spend_quarter(0) }.should raise_error
       end
 
       it "raises errors when quarter is invalid - 5" do
-        lambda { activity.spend_gor_quarter(5) }.should raise_error
+        lambda { activity.spend_quarter(5) }.should raise_error
       end
     end
 
@@ -1376,22 +1395,22 @@ describe Activity do
 
       it "returns proper budget for 1st quarter" do
         activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @response)
-        activity.spend_gor_quarter(1).should == 123
+        activity.spend_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
         activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
-        activity.spend_gor_quarter(2).should == 123
+        activity.spend_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
         activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
-        activity.spend_gor_quarter(3).should == 123
+        activity.spend_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
         activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
-        activity.spend_gor_quarter(4).should == 123
+        activity.spend_quarter(4).should == 123
       end
     end
 
@@ -1404,22 +1423,22 @@ describe Activity do
 
       it "returns proper budget for 1st quarter" do
         activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
-        activity.spend_gor_quarter(1).should == 123
+        activity.spend_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
         activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
-        activity.spend_gor_quarter(2).should == 123
+        activity.spend_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
         activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
-        activity.spend_gor_quarter(3).should == 123
+        activity.spend_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
         activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @response)
-        activity.spend_gor_quarter(4).should == 123
+        activity.spend_quarter(4).should == 123
       end
     end
   end
@@ -1438,14 +1457,13 @@ describe Activity do
 
     context "sub activities" do
       it "looks for amount in sub-activity" do
-        @subact = Factory(:sub_activity, :budget => 10)
-        @activity = @subact.activity
-        @activity.sub_activities.should == [@subact] #sanity
+        @activity = Factory.create(:activity)
+        @subact = Factory(:sub_activity, :activity => @activity, :budget => 10)
+        @activity.sub_activities.reload
         @activity.amount_for_provider(@subact.provider, :budget).should == 10
       end
     end
   end
-
 end
 
 

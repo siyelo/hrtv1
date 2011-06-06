@@ -11,17 +11,14 @@
   = render 'help'
 
 %ul.response-notice
-  - if @response.data_request.spend?
-    - if !@activity.spend?
-      %li= "Enter the Expenditure for this activity."
-    - elsif !@activity.spend_classified?
-      %li= "Please classify the Expenditure for this activity."
+  - unless @response.activities_without_amounts.select{|e| e == @activity}.empty?
+    %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Activity"
 
-  - if @response.data_request.budget?
-    - if !@activity.budget?
-      %li= "Enter the Budget for this activity."
-    - elsif !@activity.budget_classified?
-      %li= "Please classify the Budget for this activity."
+  - unless @activity.spend_classified?
+    %li= "Please classify the Spend for this activity."
+
+  - unless @activity.budget_classified?
+    %li= "Please classify the Budget for this activity."
 
 = render 'activities/tab_nav', :activity => @activity
 
@@ -30,5 +27,7 @@
 
   - semantic_form_for @activity, :url => response_activity_path(@response, @activity), :html => {:class => "basic_form"} do |f|
     = render 'form', :f => f
+
+  = render 'sub_activities_import_export', :activity => @activity
 
 = render :partial => 'shared/comments', :comments => @comments

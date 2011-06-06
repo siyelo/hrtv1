@@ -112,6 +112,29 @@ describe CodingTree do
   end
 
   describe "coding tree" do
+    it "is valid when activity amount is nil and classifications amount is 0" do
+      @activity.budget = nil
+      ct  = CodingTree.new(@activity, CodingBudget)
+      ct.stub(:root_codes).and_return([@code1]) # stub root_codes
+      ct.valid?.should == true
+    end
+
+    it "is valid when activity amount is 0 and classifications amount is 0" do
+      @activity.budget = nil
+      ct  = CodingTree.new(@activity, CodingBudget)
+      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 0)
+      ct.stub(:root_codes).and_return([@code1]) # stub root_codes
+      ct.valid?.should == true
+    end
+
+    it "is not valid when activity amount is 0 and classifications amount greater than 0" do
+      @activity.budget = nil
+      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
+      ct  = CodingTree.new(@activity, CodingBudget)
+      ct.stub(:root_codes).and_return([@code1]) # stub root_codes
+      ct.valid?.should == false
+    end
+
     it "is valid when there are only roots" do
       ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
       ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60)

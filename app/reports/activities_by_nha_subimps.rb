@@ -32,18 +32,18 @@ class Reports::ActivitiesByNhaSubimps
   # otherwise it returns the values for Rwanda fiscal year
   def build_rows(csv, activity)
     if @is_budget
-      amount_q1             = activity.budget_gor_quarter(1)
-      amount_q2             = activity.budget_gor_quarter(2)
-      amount_q3             = activity.budget_gor_quarter(3)
-      amount_q4             = activity.budget_gor_quarter(4)
+      amount_q1             = activity.budget_quarter(1)
+      amount_q2             = activity.budget_quarter(2)
+      amount_q3             = activity.budget_quarter(3)
+      amount_q4             = activity.budget_quarter(4)
       amount_total          = activity.budget
       amount_total_in_usd   = activity.budget_in_usd
       is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
     else
-      amount_q1             = activity.spend_gor_quarter(1)
-      amount_q2             = activity.spend_gor_quarter(2)
-      amount_q3             = activity.spend_gor_quarter(3)
-      amount_q4             = activity.spend_gor_quarter(4)
+      amount_q1             = activity.spend_quarter(1)
+      amount_q2             = activity.spend_quarter(2)
+      amount_q3             = activity.spend_quarter(3)
+      amount_q4             = activity.spend_quarter(4)
       amount_total          = activity.spend
       amount_total_in_usd   = activity.spend_in_usd
       is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
@@ -101,7 +101,7 @@ class Reports::ActivitiesByNhaSubimps
         district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, [])#dont want split over these ones
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, [])#dont want split over these ones
       end
-      
+
       parent_activity = activity
       parent_amount_total = amount_total
       parent_amount_total_in_usd = amount_total_in_usd
@@ -109,7 +109,7 @@ class Reports::ActivitiesByNhaSubimps
         sub_activities = [activity]
         use_sub_activity_district_coding = false
       else
-        sub_activities = activity.sub_activities 
+        sub_activities = activity.sub_activities
          if @is_budget
            use_sub_activity_district_coding =
               parent_activity.sub_activities_each_have_defined_districts?("CodingBudgetDistrict")
@@ -130,7 +130,7 @@ class Reports::ActivitiesByNhaSubimps
           funding_sources_total += fs[:spend] if fs[:spend]
         end
       end
-      
+
       # edge case that handles bad quality data e.g. funding sources
       # that dont have amounts specified for them
       # TODO move this into helper in get_funding_sources for all reports!
@@ -175,7 +175,7 @@ class Reports::ActivitiesByNhaSubimps
               codes                 = ca_codes[1]
               last_code             = codes.last
               row                   = base_row.dup
-              funding_source_amount =  @is_budget ? 
+              funding_source_amount =  @is_budget ?
                 funding_source[:budget] : funding_source[:spend]
               funding_source_amount =  0 if funding_source_amount.nil?
               ratio = get_ratio(parent_amount_total, ca.amount_not_in_children) *
@@ -183,13 +183,13 @@ class Reports::ActivitiesByNhaSubimps
 
               #puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(parent_amount_total, ca.amount_not_in_children)})"
               #puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children)}"
-              #puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children)}" 
+              #puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children)}"
               #puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
 
               # adjust ratio with subactivity % or amount
               # if activity.sub_activities.empty?
               #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
-              # else 
+              # else
               #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
               #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? )}
               # end
@@ -249,7 +249,7 @@ class Reports::ActivitiesByNhaSubimps
       row << "Beneficiaries"
       row << "ID"
       row << "Currency"
-   
+
       # values below given through build_code_assignment_rows
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"

@@ -72,9 +72,10 @@ class CodingTree
   #   - if all root assignments are valid
   #   - if sum of children is same as activity classification amount
   def valid?
-    children_sum = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
-    inner_root.valid_children? &&
-      children_sum == @activity.classification_amount(@coding_klass.to_s)
+    children_sum    = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
+    activity_amount = @activity.classification_amount(@coding_klass.to_s)
+    (activity_amount.blank? && children_sum == 0) ||
+    (inner_root.valid_children? && children_sum == activity_amount)
   end
 
   def valid_ca?(code_assignment)

@@ -403,8 +403,8 @@ var ajaxifyResources = function (resources) {
 /* Ajax CRUD END */
 
 var collapse_expand = function (e, element, type) {
-  // if target element is link, skip collapsing
-  if (e.target.nodeName === 'A') {
+  // if target element is link or the user is selecting text, skip collapsing
+  if (e.target.nodeName === 'A' || window.getSelection().toString() !== "") {
     return;
   }
 
@@ -775,7 +775,7 @@ var admin_responses_show = {
   }
 };
 
-var responses_show = {
+var responses_review = {
   run: function () {
     build_data_response_review_screen();
     ajaxifyResources('comments');
@@ -831,6 +831,10 @@ var code_assignments_show = {
       e.preventDefault();
       $(this).parents('.upload').find('.upload_box').toggle();
     });
+
+    $('.submit_btn').click(function (e) {
+      $(this).next('.ajax-loader').show();
+    });
   }
 };
 
@@ -852,7 +856,7 @@ var data_responses_review = {
   }
 }
 
-var responses_review = {
+var responses_submit = {
   run: function () {
     $(".collapse").click(function(e){
       e.preventDefault();
@@ -1111,6 +1115,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     $( ".combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
                                 // handled by the "add row" js callback
+    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
     $('.edit').live('click', function (e) {
       e.preventDefault();
@@ -1330,7 +1335,9 @@ var activity_form = function () {
 
   // show the jquery autocomplete combobox instead of
   // standard dropdown
+  // setting the id for cucumber tests
   $( ".combobox" ).combobox();
+  $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
 
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();

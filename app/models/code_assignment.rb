@@ -1,4 +1,5 @@
 class CodeAssignment < ActiveRecord::Base
+  include NumberHelper
 
   strip_commas_from_all_numbers
 
@@ -207,8 +208,7 @@ class CodeAssignment < ActiveRecord::Base
 
     # currency is derived from the parent activity/project/DR
     def update_cached_amount_in_usd
-      self.cached_amount_in_usd = (cached_amount || 0) *
-        Money.default_bank.get_rate(currency, :USD)
+      self.cached_amount_in_usd = (cached_amount || 0) * currency_rate(currency, :USD)
     end
 
     # Checks if it's a budget code assignment
@@ -219,12 +219,6 @@ class CodeAssignment < ActiveRecord::Base
        'HsspBudget'].include?(type.to_s)
     end
 end
-
-
-
-
-
-
 
 # == Schema Information
 #

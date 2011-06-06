@@ -34,6 +34,10 @@ describe Project do
     it { should allow_mass_assignment_of(:budget3) }
     it { should allow_mass_assignment_of(:budget4) }
     it { should allow_mass_assignment_of(:budget5) }
+    it { should allow_mass_assignment_of(:budget2) }
+    it { should allow_mass_assignment_of(:budget3) }
+    it { should allow_mass_assignment_of(:budget4) }
+    it { should allow_mass_assignment_of(:budget5) }
     it { should allow_mass_assignment_of(:budget_q1) }
     it { should allow_mass_assignment_of(:budget_q2) }
     it { should allow_mass_assignment_of(:budget_q3) }
@@ -65,7 +69,21 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
+    it { should_not allow_value('abcd').for(:budget_q1) }
+    it { should_not allow_value('abcd').for(:budget_q2) }
+    it { should_not allow_value('abcd').for(:budget_q3) }
+    it { should_not allow_value('abcd').for(:budget_q4) }
+    it { should_not allow_value('abcd').for(:budget_q4_prev) }
     it { should_not allow_value('abcd').for(:spend) }
+    it { should_not allow_value('abcd').for(:spend_q1) }
+    it { should_not allow_value('abcd').for(:spend_q2) }
+    it { should_not allow_value('abcd').for(:spend_q3) }
+    it { should_not allow_value('abcd').for(:spend_q4) }
+    it { should_not allow_value('abcd').for(:spend_q4_prev) }
+    it { should_not allow_value('abcd').for(:budget2) }
+    it { should_not allow_value('abcd').for(:budget3) }
+    it { should_not allow_value('abcd').for(:budget4) }
+    it { should_not allow_value('abcd').for(:budget5) }
 
     it "should have a valid data_response " do
       project = Factory(:project)
@@ -109,6 +127,36 @@ describe Project do
         end
       end
     end
+  end
+  
+  context "Amount validations" do 
+    it "should return true if budget is equal to that of the quarterlys" do 
+      @project = Factory(:project, :budget => "140", 
+                         :budget_q1 => "20", :budget_q2 => "30", 
+                         :budget_q3 => "40", :budget_q4 => "50")
+      @project.total_matches_quarters?(:budget).should be_true
+    end
+    
+     it "should return true if budget is equal to that of the quarterlys" do 
+       @project = Factory(:project, :spend => "140", 
+                          :spend_q1 => "20", :spend_q2 => "30", 
+                          :spend_q3 => "40", :spend_q4 => "50")
+       @project.total_matches_quarters?(:spend).should be_true
+     end
+      
+      it "should return true if spend is nil and quarterlys are too" do 
+        @project = Factory(:project, :spend => nil, 
+                            :spend_q1 => nil, :spend_q2 => nil, 
+                            :spend_q3 => nil, :spend_q4 => nil)
+        @project.total_matches_quarters?(:spend).should be_true
+      end
+      
+      it "should return false if spend is nil and quarterlys are too" do 
+        @project = Factory(:project, :spend => nil, 
+                            :spend_q1 => nil, :spend_q2 => nil, 
+                            :spend_q3 => nil, :spend_q4 => nil)
+        @project.total_matches_quarters?(:spend).should be_true
+      end
   end
 
   context "Submit page: " do

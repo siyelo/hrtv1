@@ -4,6 +4,7 @@ class OtherCostsController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
+  before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
@@ -74,7 +75,7 @@ class OtherCostsController < Reporter::BaseController
 
       redirect_to response_other_costs_url(@response)
     rescue
-      flash[:error] = "Your CSV file does not seem to be properly formatted."
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
       redirect_to response_other_costs_url(@response)
     end
   end
@@ -102,4 +103,12 @@ class OtherCostsController < Reporter::BaseController
         redirect_to response_projects_path(@other_cost.project.response)
       end
     end
+
+
+    def confirm_activity_type
+      @activity = Activity.find(params[:id])     
+      return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
+      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
+
 end

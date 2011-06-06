@@ -10,7 +10,6 @@ describe DataResponse do
     it { should have_many(:sub_activities).dependent(:destroy) }
     it { should have_many(:funding_flows).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
-    it { should have_many(:commodities).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
     it { should have_many(:comments) }
     it { should have_many(:code_assignments) }
@@ -24,7 +23,7 @@ describe DataResponse do
     it { should validate_presence_of(:contact_position) }
     it { should validate_presence_of(:contact_phone_number) }
     it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}  
+    it { should validate_presence_of(:contact_office_location)}
   end
 
   describe "custom date validations" do

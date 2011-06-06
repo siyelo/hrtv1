@@ -1,0 +1,250 @@
+
+/* SHARED HEADER STYLES */
+
+#header, #header_app
+  background: image_url("bg-blue.jpg")
+  color: $lightest-blue
+  +pie-clearfix
+
+  #logo
+    color: orange
+    font-size: 30px
+    float: left
+    margin: 0
+    padding: 50px 0 35px
+    text-decoration: none
+    +text-shadow(#777, 0, 0, 15px)
+    &:hover
+      color: $mid-blue
+      +text-shadow($light-blue, 0, 0, 15px)
+
+    img
+      float: left
+      position: relative
+      top: -3px
+        
+    p
+      color: !light-blue
+      font-size: 0.6em
+      letter-spacing: 0.02em
+      padding-left: 55px
+      text-transform: uppercase
+      
+  .right
+    margin-top: 9px
+    
+  #admin
+    float: right
+    font-family: 'Avenir'
+    width: 550px
+
+    span
+      color: $light-blue
+      font-size: 11px
+      float: right
+      padding-top: 14px
+      letter-spacing: 1px
+      padding-right: 10px
+      text-transform: uppercase
+      +text-shadow(#111, 0, 1px, 1px)
+
+
+    ul
+      +horizontal-list
+      border: 1px solid $dark-blue
+      float: right
+      +box-shadow(rgba(0, 0, 0, 0.2), 0, 2px, 2px)
+      +border-radius(6px)
+
+      li
+
+        padding: 0
+
+        &:first-child
+          border-right: 1px solid $mid-blue
+          a
+            +border-left-radius
+            border-right: 1px solid $dark-blue
+        &:last-child
+          border-left: 1px solid $mid-blue
+          a
+            +border-right-radius
+            border-left: 1px solid $dark-blue
+
+        a
+          background: $dark-blue
+          border-top: 1px solid $mid-blue + #222
+          color: $light-blue
+          display: inline-block
+          float: left
+          font-size: 11px
+          height: 14px
+          padding: 11px 12px 12px
+          text-decoration: none
+          +linear-gradient(color-stops($mid-blue, $dark-blue))
+          +text-shadow(#111, 0, 1px, 1px)
+          img
+            margin: 0 2px -2px 0
+          &:hover, &:focus
+            background: $mid-blue
+            color: #fff
+          &.signin
+            text-transform: uppercase
+            img
+              margin-bottom: -5px
+
+  #tagline
+    float: right
+    padding-top: 50px
+    padding-bottom: 10px
+    text-align: right
+    width: 400px
+    +text-shadow(#444, 0, 0, 15px)
+
+    h2
+      color: !light-blue
+      font-size: 1em
+      padding-bottom: 2px
+
+    h6
+      color: orange
+      font-family: Arial, Helvetica Neu, sans-serif
+      font-size: 0.6em
+      font-weight: normal
+      letter-spacing: 0.1em
+
+/* SHARED HEADER STYLES end */
+
+
+
+/* APP HEADER STYLES */
+  
+#header_app
+  height: 30px
+
+  .wrapper
+    +pie-clearfix
+    
+  /* app logo styles - overriding the shared logo style */
+  #logo
+    color: $light-blue
+    font-size: 14px
+    font-weight: bold
+    padding: 10px 0
+    position: absolute
+    text-transform: uppercase
+    width: 300px
+    +opacity(0.8)
+    +text-shadow(#000, 0, 1px, 1px)
+    &:hover
+      +opacity(1)
+
+  /* app logo styles end */
+  
+/* APP HEADER STYLES end */
+
+
+
+/* APP MAIN-NAV STYLES */
+#main-nav
+  background= image_url("bg-blue.jpg")
+
+  a
+    color= !lighter-blue
+    font-size: 0.8em
+
+  ul
+    display: block
+    overflow: hidden
+    min-width: 650px
+
+    li
+      +box-shadow(#111, 0, 0px, 13px)
+      display: block
+
+      &:first-child a
+        +border-top-left-radius
+      &:last-child a
+        +border-top-right-radius
+
+      a
+        border: 1px solid $mid-blue
+        border-left: 1px solid $light-blue - #222
+        border-right: 1px solid $mid-blue + #222
+        margin: 3px 0 0
+        background: !light-blue
+        color: !mid-blue
+        display: inline
+        float: left
+        font-size: 12px
+        height: 15px
+        font-weight: bold
+        padding: 12px 15px 8px 17px
+        text-decoration: none
+        +transition(hover, 1s, ease, 0)
+        +linear-gradient(color-stops($light-blue - #111, $light-blue - #555))
+        +text-shadow($light-blue, 0, 1px, 1px)
+
+        &:hover
+          background: !lightest-blue
+          color: !mid-blue
+          +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
+          +text-shadow(#fff, 0, 1px, 1px)
+
+        &.active
+          border-bottom: 1px solid #FFF
+          border-left: none
+          background: white
+          color= !dark-blue
+          letter-spacing: 0.05em
+          margin: 0
+          padding-top: 15px
+          +border-top-radius(3px)
+          +linear-gradient(color-stops($lightest-blue, white))
+          +text-shadow(#fff, 0, 1px, 1px)
+
+  img
+    float: right
+    margin-top: -35px
+/* APP MAIN-NAV STYLES end */
+
+
+
+/* LANDING & LOGIN PAGES SPECIFIC STYLES */
+
+body.login
+  #header, #header_app
+    #logo
+      padding: 16px 0 1px
+      text-decoration: none
+      color: $dark-orange
+      font-family: 'Avenir'
+      font-size: 24px
+      font-weight: normal
+      text-decoration: none
+      text-transform: none
+      +text-shadow(#000, 0, 1px, 0)
+          
+      img
+        margin: -9px 7px 0 0
+
+    /* overriding the shared tagline style*/
+    #tagline
+      float: left
+      text-align: left
+      padding-top: 12px
+      a
+        color: $light-blue
+        font-weight: bold
+        text-decoration: none
+        &:hover, &:focus
+          color: $lightest-blue
+
+    /* end */
+
+    #admin
+      margin-top: 5px
+      span
+        margin-right: 10px
+
+/* LANDING PAGE STYLES end */

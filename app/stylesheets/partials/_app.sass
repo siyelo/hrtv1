@@ -22,9 +22,6 @@ body.app
   #content .wrapper
     //+box-shadow(#eee, 0, 2px, 5px)
 
-  #header_app
-    height: 30px
-
   h1
     font: bold 24px/30px Arial,sans-serif
     color: $mid-blue
@@ -34,96 +31,6 @@ body.app
   p
     line-height: 1.2em
     +clearfix
-
-  /* overriding the shared logo style*/
-  #header_app
-    a
-      text-decoration: none
-    .wrapper
-      +pie-clearfix
-    #logo
-      color: $light-blue
-      font-size: 14px
-      font-weight: bold
-      padding: 10px 0
-      position: absolute
-      text-decoration: none
-      text-transform: uppercase
-      width: 400px
-      +opacity(0.8)
-      +text-shadow(#000, 0, 1px, 1px)
-      &:hover
-        +opacity(1)
-      h1
-        margin-top: -9px
-        span
-          margin-left: -5px
-  /* end */
-
-
-
-  /* app main nav styles */
-  #main-nav
-    background= image_url("bg-blue.jpg")
-
-    a
-      color= !lighter-blue
-      font-size: 0.8em
-
-    ul
-      display: block
-      overflow: hidden
-      min-width: 650px
-
-      li
-        +box-shadow(#111, 0, 0px, 13px)
-        display: block
-
-        &:first-child a
-          +border-top-left-radius
-        &:last-child a
-          +border-top-right-radius
-
-        a
-          border: 1px solid $mid-blue
-          border-left: 1px solid $light-blue - #222
-          border-right: 1px solid $mid-blue + #222
-          margin: 3px 0 0
-          background: !light-blue
-          color: !mid-blue
-          display: inline
-          float: left
-          font-size: 12px
-          height: 15px
-          font-weight: bold
-          padding: 12px 15px 8px 17px
-          text-decoration: none
-          +transition(hover, 1s, ease, 0)
-          +linear-gradient(color-stops($light-blue - #111, $light-blue - #555))
-          +text-shadow($light-blue, 0, 1px, 1px)
-
-          &:hover
-            background: !lightest-blue
-            color: !mid-blue
-            +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
-            +text-shadow(#fff, 0, 1px, 1px)
-
-          &.active
-            border-bottom: 1px solid #FFF
-            border-left: none
-            background: white
-            color= !dark-blue
-            letter-spacing: 0.05em
-            margin: 0
-            padding-top: 15px
-            +border-top-radius(3px)
-            +linear-gradient(color-stops($lightest-blue, white))
-            +text-shadow(#fff, 0, 1px, 1px)
-
-    img
-      float: right
-      margin-top: -35px
-  /* end */
 
   /* adding properties to the shared flashes styles */
   #flashes

@@ -1,13 +1,11 @@
 - landing_page = false unless landing_page
 #header
   .wrapper
-    
-
-    #logo
+    %h1
       - country = ENV['HRT_COUNTRY'] || 'rwanda'
-      %a{:href => '/'}
+      %a{ :id => "logo", :href => '/'}
         = image_tag "#{country}-coat-of-arms-med.png"
-        %h1= country.titleize
+        = country.titleize
 
     = render :partial => '/layouts/login_nav'
     

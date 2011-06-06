@@ -78,7 +78,7 @@ Feature: Reporter can manage activities
        Then the "Sub-Activity Expenditure" field should contain "101"
        And the "Sub-Activity Budget" field should contain "30"
 
-    @javascript
+    @javascript 
     Scenario: Reporter can CRUD activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "activity1"

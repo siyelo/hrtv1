@@ -210,7 +210,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   guard-spork
-  haml
+  haml (= 3.0.25)
   heroku (>= 2.1.2)
   hirb
   hoptoad_notifier

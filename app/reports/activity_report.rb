@@ -55,6 +55,10 @@ class Reports::ActivityReport
       :conditions => "ca_spent_sum > 0 OR ca_budget_sum > 0"
     })
 
+    # filter only canonical activities
+    scope = scope.scoped({:conditions => ["activities.id IN (?)",
+                                          Activity.canonical.map{|a| a.id}]})
+
     results = scope.paginate :all, :per_page => per_page, :page => page
     # Dynamic instance methods that convert the aggregate columns to the correct type
     results.each{|r| def r.spent_sum; BigDecimal.new(spent_sum_raw.to_s) end
@@ -91,6 +95,10 @@ class Reports::ActivityReport
                  org_name",
       :order => "spent_sum_raw DESC"
     })
+
+    # canonical activities
+    scope = scope.scoped({:conditions => ["activities.id IN (?)",
+                                          Activity.canonical.map{|a| a.id}]})
 
     results = scope.find :all, :limit => limit
     # Dynamically define a method on the resulting instance that converts

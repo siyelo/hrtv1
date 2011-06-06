@@ -41,8 +41,8 @@ class Reports::ActivitiesByDistrict
      row << "activity.budget"
      row << "activity.spend"
      row << "currency"
-     row << "activity.start"
-     row << "activity.end"
+     row << "activity.start_date"
+     row << "activity.end_date"
      row << "activity.provider"
      row << "activity.provider.FOSAID"
      row << "activity.text_for_beneficiaries"
@@ -60,18 +60,18 @@ class Reports::ActivitiesByDistrict
 
       row = []
 
-      row << get_funding_source_name(activity)
-      row << first_project(activity)
+      row << funding_source_name(activity)
+      row << activity.project.try(:name)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"
-      row << "#{activity.budget}"
-      row << "#{activity.spend}"
+      row << "#{activity.budget_in_usd}"
+      row << "#{activity.spend_in_usd}"
       row << "#{activity.currency}"
-      row << "#{activity.start}"
-      row << "#{activity.end}"
+      row << "#{activity.start_date}"
+      row << "#{activity.end_date}"
       row << provider_name(activity)
       row << provider_fosaid(activity)
       row << "#{h activity.text_for_beneficiaries}"

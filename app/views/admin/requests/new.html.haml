@@ -1,0 +1,8 @@
+%h1.main_heading New data request
+
+= error_messages_for :request, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+%h2 Enter data request information
+.dashboard_section
+  - semantic_form_for :request, @request, :url => admin_requests_path, :html => {:class => 'basic_form'} do |f|
+    = render 'form', :f => f

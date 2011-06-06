@@ -4,6 +4,25 @@
 en:
   hello: "Hello world"
 
+
+  date:
+    formats:
+      short: "%d %b '%y"
+
+  time:
+    formats:
+      short: "%d %b '%y, %H:%M"
+
+  flash:
+    actions:
+      create:
+        notice: "%{resource_name} was successfully created"
+      update:
+        notice: "%{resource_name} was successfully updated"
+      destroy:
+        notice: "%{resource_name} was successfully destroyed"
+        alert: "%{resource_name} could not be destroyed"
+
   formtastic:
     submit: "Submit"
 
@@ -12,6 +31,11 @@ en:
     errors:
       full_messages:
         format: "%{attribute} %{message}"
+        organization_id_from:
+          missing: The Funding Source 'from' organization must be set.
+          id_below_zero: The Funding Source 'from' organization must be set.
+        organization_id_to:
+          missing: The Funding Source 'to' organization must be set.
 
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:

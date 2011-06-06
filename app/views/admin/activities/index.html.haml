@@ -1,0 +1,29 @@
+- title("Activities")
+
+%h1.main_heading
+  #search
+    - form_tag admin_activities_path, :method => :get do
+      = render 'shared/search_form'
+  Activities
+
+- if params[:query]
+  %p
+    = "Activities with names or description containing #{params[:query]}"
+    = link_to "(Back to complete activity listing)", admin_activities_path
+
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "projects.name", "Project"
+      %th= sortable "description"
+      %th= sortable "spend", "Total Spent"
+      %th= sortable "budget", "Total Budget"
+      %th.dummy Classified
+      %th
+
+  %tbody
+    = render :partial => "activity", :collection => @activities
+
+= will_paginate @activities
+
+%ul{ :id => 'position_container', :class => 'image_list' }

@@ -1,3 +1,4 @@
+# TODO: remove this model and move fields to Code model
 class District < ActiveRecord::Base
 
   # Associations
@@ -6,6 +7,7 @@ class District < ActiveRecord::Base
   # Validations
   validates_presence_of :name, :population
 end
+
 
 
 

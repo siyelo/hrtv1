@@ -31,7 +31,7 @@ RAKE_TASK  = ARGV[1] || 'fast'
 
 date = get_date()
 
-puts "*** #{date}: Report regeneration for #{HEROKU_APP} started... ***"
+puts "\n\n*** #{date}: Report regeneration for #{HEROKU_APP} started... ***"
 
 #run "heroku maintenance:on --app #{HEROKU_APP}"
 

@@ -1,0 +1,171 @@
+- @response = @activity.data_response
+- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year = budget_fiscal_year(@response)
+- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year = spend_fiscal_year(@response)
+
+.wrap-70
+  %h3.form_heading Basics
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Project name
+        %li= @activity.project.try(:name)
+      %ul.row
+        %li Locations
+        %li= @activity.locations.map(&:short_display).join(', ')
+      %ul.row
+        %li Name
+        %li= @activity.name
+      %ul.row
+        %li Description
+        %li= @activity.description
+      %ul.row
+        %li Start date
+        %li= @activity.start_date
+      %ul.row
+        %li End date
+        %li= @activity.end_date
+      %ul.row
+        %li Currency
+        %li= @activity.currency
+      %ul.row
+        %li Implementer
+        %li= @activity.provider.try(:name)
+      %ul.row
+        %li Beneficiaries
+        %li= @activity.beneficiaries.map(&:short_display).join(', ')
+      %ul.row
+        %li Other beneficiaries
+        %li= @activity.text_for_beneficiaries
+      %ul.row.last
+        %li Targets
+        %li= @activity.text_for_targets
+
+  %h3.form_heading Past Expenditure
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Spend
+        %li= c(@activity.spend, @activity.currency)
+      %ul.row
+        %li= "Spend Q4 #{spend_fiscal_year_prev}"
+        %li= c(@activity.spend_q4_prev, @activity.currency)
+      %ul.row
+        %li= "Spend Q1 #{spend_fiscal_year}"
+        %li= c(@activity.spend_q1, @activity.currency)
+      %ul.row
+        %li= "Spend Q2 #{spend_fiscal_year}"
+        %li= c(@activity.spend_q2, @activity.currency)
+      %ul.row
+        %li= "Spend Q3 #{spend_fiscal_year}"
+        %li= c(@activity.spend_q4, @activity.currency)
+      %ul.row.last
+        %li= "Spend Q4 #{spend_fiscal_year}"
+        %li= c(@activity.spend_q4, @activity.currency)
+
+  %h3.form_heading Budget
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Quarterly Budget
+        %li= c(@activity.budget, @activity.currency)
+      %ul.row
+        %li= "Budget Q4 #{budget_fiscal_year_prev}"
+        %li= c(@activity.budget_q4_prev, @activity.currency)
+      %ul.row
+        %li= "Budget Q1 #{budget_fiscal_year}"
+        %li= c(@activity.budget_q1, @activity.currency)
+      %ul.row
+        %li= "Budget Q2 #{budget_fiscal_year}"
+        %li= c(@activity.budget_q2, @activity.currency)
+      %ul.row
+        %li= "Budget Q3 #{budget_fiscal_year}"
+        %li= c(@activity.budget_q4, @activity.currency)
+      %ul.row.last
+        %li= "Budget Q4 #{budget_fiscal_year}"
+        %li= c(@activity.budget_q4, @activity.currency)
+
+  %h3.form_heading Budget (planned expenditure)
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget
+        %li= c(@activity.budget, @activity.currency)
+      %ul.row
+        %li Year + 2
+        %li= c(@activity.budget2, @activity.currency)
+      %ul.row
+        %li Year + 3
+        %li= c(@activity.budget3, @activity.currency)
+      %ul.row
+        %li Year + 4
+        %li= c(@activity.budget4, @activity.currency)
+      %ul.row.last
+        %li Year + 5
+        %li= c(@activity.budget5, @activity.currency)
+
+  %h3.form_heading Sub Activities
+  %ul.dashboard_section
+    - @activity.sub_activities.each do |sub_activity|
+      %li
+        %ul.row
+          %li Implementer
+          %li= sub_activity.provider.try(:name)
+        %ul.row
+          %li Budget
+          %li= c(sub_activity.budget, @activity.currency)
+        %ul.row
+          %li Budget percentage
+          %li= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
+        %ul.row
+          %li Spend
+          %li= c(sub_activity.spend, @activity.currency)
+        %ul.row
+          %li Spend percentage
+          %li= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
+
+  %h3.form_heading Funding Sources
+  %ul.dashboard_section
+    - @activity.funding_sources.each do |funding_source|
+      %li
+        %ul.row
+          %li Organization
+          %li= funding_source.funding_flow.from.try(:name)
+        %ul.row
+          %li Spent
+          %li= c(funding_source.spend, @activity.currency)
+        %ul.row
+          %li Budget
+          %li= c(funding_source.budget, @activity.currency)
+
+  %h3.form_heading Institutions Assisted
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Institutions assisted
+        %li= @activity.organizations.map(&:name).join(', ')
+
+  %h3.form_heading Classifications
+  %ul.dashboard_section
+    %li
+      %ul.row
+        %li Budget by Purposes
+        %li= b @activity.coding_budget_classified?
+      %ul.row
+        %li Budget by Locations
+        %li= b @activity.coding_budget_district_classified?
+      %ul.row
+        %li Budget by Inputs
+        %li= b @activity.coding_budget_cc_classified?
+      %ul.row
+        %li Spend by Purposes
+        %li= b @activity.coding_spend_classified?
+      %ul.row
+        %li Spend by Locations
+        %li= b @activity.coding_spend_district_classified?
+      %ul.row
+        %li Spend by Inputs
+        %li= b @activity.coding_spend_cc_classified?
+
+= render :partial => 'shared/comments', :comments => @comments

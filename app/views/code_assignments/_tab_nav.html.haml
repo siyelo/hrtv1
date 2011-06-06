@@ -1,26 +1,34 @@
 - other_costs = false unless other_costs
 
 %ul.inline_tab
-  %li Budget:
+  - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
+    - if @response.request.purposes?
+      %li{:class => tab_class(activity, coding_type, 'CodingBudget')}
+        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
 
-  - style = activity.budget_coded? ? 'selected' : 'selected incomplete'
-  %li{:id => 'tab1', :class => style }= link_to "Coding", "#"
+    - unless other_costs
+      - if @response.request.locations?
+        %li{:class => tab_class(activity, coding_type, 'CodingBudgetDistrict')}
+          = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetDistrict')
+    - if @response.request.inputs?
+      %li{:class => tab_class(activity, coding_type, 'CodingBudgetCostCategorization')}
+        = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetCostCategorization')
+    - if @response.request.service_levels?
+      %li{:class => tab_class(activity, coding_type, 'ServiceLevelBudget')}
+        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
-  - unless other_costs
-    - style = activity.budget_by_district_coded? ? '' : 'incomplete'
-    %li{:id => 'tab2', :class => style}= link_to "District", "#"
+  - if params[:controller] == 'activities' || get_coding_type(coding_type) == :spend
+    - if @response.request.purposes?
+      %li{:class => tab_class(activity, coding_type, 'CodingSpend')}
+        = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
-  - style = activity.budget_by_cost_category_coded? ? '' : 'incomplete'
-  %li{:id => 'tab3', :class => style}=   link_to "Cost Categorization", "#"
-
-  %li Expenditure:
-
-  - style = activity.spend_coded? ? '' : 'incomplete'
-  %li{:id => 'tab4', :class => style}=   link_to "Coding", "#"
-
-  - unless other_costs
-    - style = activity.spend_by_district_coded? ? '' : 'incomplete'
-    %li{:id => 'tab5', :class => style}= link_to "District", "#"
-
-  - style = activity.spend_by_cost_category_coded? ? '' : 'incomplete'
-  %li{:id => 'tab6', :class => style}=   link_to "Cost Categorization", "#"
+    - unless other_costs
+      - if @response.request.locations?
+        %li{:class => tab_class(activity, coding_type, 'CodingSpendDistrict')}
+          = link_to "2. Locations", activity_code_assignments_path(activity, :coding_type => 'CodingSpendDistrict')
+    - if @response.request.inputs?
+      %li{:class => tab_class(activity, coding_type, 'CodingSpendCostCategorization')}
+        = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingSpendCostCategorization')
+    - if @response.request.service_levels?
+      %li{:class => tab_class(activity, coding_type, 'ServiceLevelSpend')}
+        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelSpend')

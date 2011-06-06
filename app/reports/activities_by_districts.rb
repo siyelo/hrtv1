@@ -4,7 +4,8 @@ class Reports::ActivitiesByDistricts
   include Reports::Helpers
 
   def initialize(type)
-    @is_budget    = is_budget?(type)
+    @is_budget     = is_budget?(type)
+    @coding_class  = @is_budget ? CodingBudgetDistrict : CodingSpendDistrict
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries
@@ -13,16 +14,7 @@ class Reports::ActivitiesByDistricts
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-
-      root_activities.each do |activity|
-        if activity.projects.empty?
-          csv << build_row(activity, " ")
-        else
-          activity.projects.each do |project|
-            csv << build_row(activity, "#{h project.name}")
-          end
-        end
-      end
+      root_activities.each{|activity| csv << build_row(activity)}
     end
   end
 
@@ -44,25 +36,25 @@ class Reports::ActivitiesByDistricts
       row << "activity.budget"
       row << "activity.spend"
       row << "currency"
-      row << "activity.start"
-      row << "activity.end"
+      row << "activity.start_date"
+      row << "activity.end_date"
       row << "activity.provider"
       @codes.each{|code| row << "#{code.short_display}"}
 
       row
     end
 
-    def build_row(activity, project_name)
+    def build_row(activity)
       act_benefs = activity.beneficiaries.map{|code| code.short_display}
       if @is_budget
-        code_assignments = activity.budget_district_coding.map(&:code_id)
+        code_assignments = activity.budget_district_coding_adjusted.map(&:code_id)
       else
-        code_assignments = activity.spend_district_coding.map(&:code_id)
+        code_assignments = activity.spend_district_coding_adjusted.map(&:code_id)
       end
       row = []
 
-      row << get_funding_source_name(activity)
-      row << project_name
+      row << funding_source_name(activity)
+      row << activity.project.try(:name)
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.type}"
       row << "#{activity.id}"
@@ -71,11 +63,11 @@ class Reports::ActivitiesByDistricts
       @beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
       row << "#{h activity.text_for_targets}"
-      row << "#{activity.budget}"
-      row << "#{activity.spend}"
+      row << "#{activity.budget_in_usd}"
+      row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"
-      row << "#{activity.start}"
-      row << "#{activity.end}"
+      row << "#{activity.start_date}"
+      row << "#{activity.end_date}"
       row << provider_name(activity)
       @code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 
@@ -88,12 +80,8 @@ class Reports::ActivitiesByDistricts
 
     def get_code_assignment_value(activity, code_assignments, code_id)
       if code_assignments.include?(code_id)
-        if @is_budget
-          ca = CodingBudgetDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        else
-          ca = CodingSpendDistrict.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
-        end
-        ca ? ca.cached_amount : 0
+        ca = @coding_class.find(:first, :conditions => {:activity_id => activity.id, :code_id => code_id})
+        ca ? ca.cached_amount_in_usd : 0
       else
         nil
       end

@@ -2,7 +2,7 @@
 
 
 .tabs.two-thirds
-  .tab1{:"data-chart_type" => "data_response", :"data-id" => data_response.id}
+  .tab1{:"data-chart_type" => "data_response", :"data-id" => data_response.id, :style => "display: block;"}
     = render 'shared/data_responses/chart_tab', :chart_type => 'mtef_budget', :element => data_response, :element_type => 'data_response'
 
   .tab2{:"data-chart_type" => "data_response", :"data-id" => data_response.id}

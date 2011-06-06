@@ -2,10 +2,10 @@
   %tbody
     %tr
       %td Point of Contact
-      %td= @data_response.contact_name.blank? ? 'n/a' : @data_response.contact_name
+      %td= @response.contact_name.blank? ? 'n/a' : @response.contact_name
     %tr
       %td Phone
-      %td= @data_response.contact_phone_number
+      %td= @response.contact_phone_number
     %tr
       %td Office Phone
-      %td= @data_response.contact_main_office_phone_number
+      %td= @response.contact_main_office_phone_number

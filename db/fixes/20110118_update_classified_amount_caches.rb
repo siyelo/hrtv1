@@ -1,4 +1,4 @@
-include MoneyHelper
+#include MoneyHelper
 
 def codings_sum(available_codes, activity, max, type, cache_object)
   total = 0

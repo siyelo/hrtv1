@@ -2,61 +2,112 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
+  describe "attributes" do
+    it { should allow_mass_assignment_of(:name) }
+    it { should allow_mass_assignment_of(:raw_type) }
+    it { should allow_mass_assignment_of(:fosaid) }
+  end
+
+  describe "validations" do
+    subject { Factory(:organization) }
+    it { should be_valid }
+    it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name) }
+  end
+
+  describe "associations" do
+    it { should have_and_belong_to_many(:activities) }
+    it { should have_and_belong_to_many(:locations) }
+    it { should have_many(:users) }
+    it { should have_many(:data_requests) }
+    it { should have_many(:data_responses) }
+    it { should have_many(:projects) }
+    it { should have_many(:fulfilled_data_requests) }
+    it { should have_many(:dr_activities) }
+    it { should have_many(:out_flows).dependent(:destroy) }
+    it { should have_many(:in_flows).dependent(:destroy) }
+    it { should have_many(:donor_for) }
+    it { should have_many(:implementor_for) }
+    it { should have_many(:provider_for) }
+    it { should have_many(:comments) }
+
+    it "returns fulfilled_data_requests" do
+      organization = Factory.create(:organization)
+      data_request1 = Factory.create(:data_request)
+      data_request2 = Factory.create(:data_request)
+      Factory.create(:data_response, :data_request => data_request1,
+                     :organization => organization)
+
+      organization.fulfilled_data_requests.should == [data_request1]
+    end
+  end
+
+  describe "unfulfilled_data_requests" do
+    it "returns empty array when no data requests" do
+      organization = Factory.create(:organization)
+      organization.unfulfilled_data_requests.should == []
+    end
+
+    it "returns empty array when no data requests" do
+      organization = Factory.create(:organization)
+      data_request1 = Factory.create(:data_request)
+      data_request2 = Factory.create(:data_request)
+      Factory.create(:data_response, :data_request => data_request1,
+                     :organization => organization)
+
+      organization.unfulfilled_data_requests.should == [data_request2]
+    end
+  end
+
   describe "creating a organization record" do
     before :each do
       @organization = Factory(:organization)
       Factory(:data_response, :organization => @organization)
     end
 
-    subject { @organization }
-
-    it { should be_valid }
-    it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name) }
-
     it "can have many in_flows" do
-      subject.in_flows.should have(0).items
+      @organization.in_flows.should have(0).items
       Factory(:funding_flow,
-              :to => subject,
-              :data_response => subject.data_responses.first)
-      subject.reload
-      subject.in_flows.should have(1).item
+              :to => @organization,
+              :data_response => @organization.data_responses.first)
+      @organization.reload
+      @organization.in_flows.should have(1).item
     end
 
     it "can have many out_flows" do
-      subject.out_flows.should have(0).items
+      @organization.out_flows.should have(0).items
       Factory(:funding_flow,
-                      :from => subject,
-                      :data_response => subject.data_responses.first)
-      subject.reload
-      subject.out_flows.should have(1).item
+                      :from => @organization,
+                      :data_response => @organization.data_responses.first)
+      @organization.reload
+      @organization.out_flows.should have(1).item
     end
 
     context "flows to/from projects" do
       before :each do
         @project = Factory(:project,
-                           :data_response => subject.data_responses.first)
+                           :data_response => @organization.data_responses.first)
       end
 
       it "can donate to a project" do
-        subject.donor_for.should have(0).items
+        @organization.donor_for.should have(0).items
         Factory(:funding_flow,
-                        :from => subject,
+                        :from => @organization,
                         :project => @project,
-                        :data_response => subject.data_responses.first)
-        subject.reload
-        subject.donor_for.should have(1).item
+                        :data_response => @organization.data_responses.first)
+        @organization.reload
+        @organization.donor_for.should have(1).item
       end
 
       it "can implement a project" do
-        subject.implementor_for.should have(0).items
+        @organization.implementor_for.should have(0).items
         Factory(:funding_flow,
-                        :to => subject,
+                        :to => @organization,
                         :project => @project,
-                        :data_response => subject.data_responses.first)
-        subject.reload
-        subject.implementor_for.should have(1).item
-        subject.implementor_for.first.should == @project
+                        :data_response => @organization.data_responses.first)
+        @organization.reload
+        @organization.implementor_for.should have(1).item
+        @organization.implementor_for.first.should == @project
       end
     end
   end
@@ -147,11 +198,11 @@ describe Organization do
       @target.activities.count.should == 2
     end
 
-    it "copies data_requests_made from duplicate to @target" do
-      Factory(:data_request, :requesting_organization => @target)
-      Factory(:data_request, :requesting_organization => @duplicate)
+    it "copies data_requests from duplicate to @target" do
+      Factory(:data_request, :organization => @target)
+      Factory(:data_request, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_requests_made.count.should == 2
+      @target.data_requests.count.should == 2
     end
 
     it "copies data responses from @duplicate to @target" do
@@ -256,4 +307,49 @@ describe Organization do
       end
     end
   end
+
+  describe "#has_provider?" do
+    before :each do
+      @request = Factory.create(:data_request)
+
+      @org1 = Factory.create(:organization)
+      @org2 = Factory.create(:organization)
+
+      @response1 = Factory.create(:data_response, :data_request => @request, 
+                                 :organization => @org1)
+      @response2 = Factory.create(:data_response, :data_request => @request, 
+                                 :organization => @org2)
+
+
+    end
+
+    it "has X as provider when any of its activities has it as provider" do
+      project1  = Factory.create(:project, :data_response => @response1)
+      activity1 = Factory.create(:activity, :project => project1, :provider => @org2,
+                                :data_response => @response1)
+
+      @org1.has_provider?(@org2).should be_true
+    end
+
+    it "does not have X as provider when all of its activities does not have it as provider" do
+      project1  = Factory.create(:project, :data_response => @response1)
+      @org1.has_provider?(@org2).should be_false
+    end
+  end
 end
+
+# == Schema Information
+#
+# Table name: organizations
+#
+#  id             :integer         primary key
+#  name           :string(255)
+#  type           :string(255)
+#  created_at     :timestamp
+#  updated_at     :timestamp
+#  raw_type       :string(255)
+#  fosaid         :string(255)
+#  users_count    :integer         default(0)
+#  comments_count :integer         default(0)
+#
+

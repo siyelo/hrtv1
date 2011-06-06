@@ -1,0 +1,7 @@
+- f.inputs :class => 'wrap-80 inputs' do
+  = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
+  = f.input :raw_type, :label => 'Raw type', :hint => 'Raw type of organization'
+  = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization'
+
+- f.buttons :class => 'wrap-80 buttons' do
+  = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :class => 'last')

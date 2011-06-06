@@ -1,6 +1,7 @@
 class Admin::ReportsController < Admin::BaseController
   include ReportsControllerHelpers
 
+  ### Filters
   before_filter :find_report, :only => [:show, :edit, :update]
 
   def index
@@ -26,8 +27,7 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def update
-    @report.update_attributes params[:report]
-    if @report.save
+    if @report.update_attributes(params[:report])
       flash[:notice] = "Successfully updated."
       redirect_to admin_reports_path()
     else

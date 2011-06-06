@@ -1,75 +1,41 @@
-Feature: In order to reduce costs
+Feature: Reporter can manage data response
+  In order to track information
   As a reporter
-  I want to be able to manage my data response settings
+  I want to be able to manage data response
 
-Background:
-  Given a basic org + reporter profile, with data response, signed in
+  Background:
 
-@reporter_data_response
-Scenario: Browse to data response edit page
-  When I follow "My Data"
-  And I follow "Settings"
-  Then I should be on the data response page for "Req1"
-  And I should see "Currency"
 
-@reporter_data_response
-Scenario Outline: Edit data response, see feedback messages
-  When I follow "My Data"
-  When I go to the data response page for "Req1"
-  And I select "Euro (EUR)" from "data_response_currency"
-  And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
-  And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
-  And I press "Save"
-  Then I should see "<message>"
-  And I should see "<specific_message>"
 
-  Examples:
-    | start_date | end_date   | message                              | specific_message                          |
-    | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |
-    |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is an invalid date |
-    | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
+    Scenario: User can start a data response
+      Given a data_request exists with title: "Req1"
+        And a basic org + reporter profile, signed in
+      When I follow "Dashboard"
+        And I follow "Respond"
+      Then I should see "New Response" within "h1"
 
-@reporter_data_response
-Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
-  When I go to the data response page for "Req1"
-  And I fill in "data_response_fiscal_year_start_date" with ""
-  And I fill in "data_response_fiscal_year_end_date" with ""
-  And I press "Save"
-  Then I should not see "Something went wrong, if this happens repeatedly, contact an administrator."
 
-@reporter_data_response @javascript
-Scenario: BUG: 5165708 - AS Comments breaking when validation errors on DResponse form
-  When I go to the data response page for "Req1"
-  And I fill in "data_response_fiscal_year_start_date" with ""
-  And I fill in "data_response_fiscal_year_end_date" with ""
-  And I press "Save"
-  Then I should not see "ActionController::InvalidAuthenticityToken"
+    Scenario: Browse to data response edit page
+      Given a basic org + reporter profile, with data response, signed in
+      When I follow "Settings"
+      Then I should see "Response Settings" within "h1"
 
-@reporter_data_response
-Scenario Outline: Edit data response, see feedback messages
-  When I go to the data response page for "Req1"
-  And I select "Euro (EUR)" from "data_response_currency"
-  And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
-  And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
-  And I press "Save"
-  Then I should see "<message>"
-  And I should see "<specific_message>"
 
-  Examples:
-    | start_date | end_date   | message                              | specific_message                          |
-    | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |
-    |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is an invalid date |
-    | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |
+    Scenario Outline: Edit data response, see feedback messages
+      Given a basic org + reporter profile, with data response, signed in
+        And I follow "Settings"
+        And I select "Euro (EUR)" from "data_response_currency"
+        And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
+        And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
+        And I press "Update Response"
+      Then I should see "<message>"
+        And I should see "<specific_message>"
 
-@reporter_data_response
-Scenario: User can start a data response
-  When I follow "Dashboard"
-  And I follow "Edit Req1"
-  Then I should see "Currency"
-  And I should see "Start of Fiscal Year 2008-2009"
-  And I should see "End of Fiscal Year 2008-2009"
-  And I should see "Point of Contact Name"
-  And I should see "Point of Contact Position"
-  And I should see "Point of Contact Phone Number"
-  And I should see "Point of Contact Office Phone Number"
-  And I should see "Point of Contact Office Location"
+        Examples:
+          | start_date | end_date   | message                              | specific_message                          |
+          | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |
+          |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date can't be blank |
+          | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is not a valid date |
+          | 2010-01-02 |            | Oops, we couldn't save your changes. | Fiscal year end date can't be blank |
+          | 2010-01-02 | 123        | Oops, we couldn't save your changes. | Fiscal year end date is not a valid date |
+          | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.     |

@@ -9,10 +9,16 @@ class ProfilesController < ApplicationController
   def update
     if @user.update_attributes(params[:user])
       flash[:notice] = 'Profile was successfully updated'
-      redirect_to edit_profile_path
+      redirect_to root_url
     else
       render :action => 'edit'
     end
+  end
+
+  def disable_tips
+    @user.tips_shown = false
+    @user.save
+    render :nothing => true
   end
 
   private

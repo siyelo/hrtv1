@@ -24,6 +24,7 @@ class Reports::ActivityReport
       :select => "activities.id,
                   activities.name,
                   activities.description,
+                  activities.project_id,
                   organizations.name AS org_name,
                   COALESCE(SUM(ca_spent_sum),0) AS spent_sum_raw,
                   COALESCE(SUM(ca_budget_sum),0) AS budget_sum_raw",
@@ -44,10 +45,11 @@ class Reports::ActivityReport
           AND ca2.code_id IN (#{code_ids})
           GROUP BY ca2.activity_id
         ) ca2 ON activities.id = ca2.activity_id",
-      :include => {:projects => {:funding_flows => :project}},
+      :include => {:project => {:funding_flows => :project}},
       :group => "activities.id,
                  activities.name,
                  activities.description,
+                 activities.project_id,
                  org_name",
       :order => SortOrder.get_sort_order(sort),
       :conditions => "ca_spent_sum > 0 OR ca_budget_sum > 0"

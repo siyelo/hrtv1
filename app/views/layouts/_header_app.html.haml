@@ -1,16 +1,15 @@
 #header_app
   .wrapper
-    //%a{:href => '/', :id => "logo"}
     #logo
       - if current_user && current_user.organization
         = "#{truncate(current_user.organization.name, :length => 35)}"
       - else
         = "No organization specified"
-        //= image_tag('coat_of_arms.png')
-        //%h1
-        //  UBU
-        //  %span ZIMA
+
     .right
-      =image_tag"rwanda-coat-of-arms-app.png"
+      - country = ENV['HRT_COUNTRY'] || 'rwanda'
+      %a{:href => '/'}
+        = image_tag "#{country}-coat-of-arms-med.png"
+
     = render :partial => '/layouts/login_nav'
 

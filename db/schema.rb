@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110208090926) do
+ActiveRecord::Schema.define(:version => 20110603115555) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.decimal  "spend_q2"
     t.decimal  "spend_q3"
     t.decimal  "spend_q4"
-    t.date     "start"
-    t.date     "end"
+    t.date     "start_date"
+    t.date     "end_date"
     t.decimal  "spend"
     t.text     "text_for_provider"
     t.text     "text_for_targets"
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.integer  "sub_activities_count",                  :default => 0
     t.decimal  "spend_in_usd",                          :default => 0.0
     t.decimal  "budget_in_usd",                         :default => 0.0
+    t.integer  "project_id"
+    t.decimal  "ServiceLevelBudget_amount",             :default => 0.0
+    t.decimal  "ServiceLevelSpend_amount",              :default => 0.0
+    t.decimal  "budget2"
+    t.decimal  "budget3"
+    t.decimal  "budget4"
+    t.decimal  "budget5"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -72,11 +79,6 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.integer "organization_id"
   end
 
-  create_table "activities_projects", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "activity_id"
-  end
-
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
@@ -90,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -101,9 +104,6 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "start_date"
-    t.date     "end_date"
-    t.integer  "replacement_code_id"
     t.string   "type"
     t.string   "external_id"
     t.string   "hssp2_stratprog_val"
@@ -129,20 +129,26 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
-  create_table "currencies", :force => true do |t|
-    t.decimal "toRWF"
-    t.string  "symbol"
-    t.string  "name"
-    t.decimal "toUSD"
-  end
-
   create_table "data_requests", :force => true do |t|
-    t.integer  "organization_id_requester"
+    t.integer  "organization_id"
     t.string   "title"
-    t.boolean  "complete",                  :default => false
-    t.boolean  "pending_review",            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "due_date"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.boolean  "budget",            :default => true,  :null => false
+    t.boolean  "spend",             :default => true,  :null => false
+    t.boolean  "final_review",      :default => false
+    t.boolean  "year_2",            :default => true
+    t.boolean  "year_3",            :default => true
+    t.boolean  "year_4",            :default => true
+    t.boolean  "year_5",            :default => true
+    t.boolean  "purposes",          :default => true
+    t.boolean  "locations",         :default => true
+    t.boolean  "inputs",            :default => true
+    t.boolean  "service_levels",    :default => true
+    t.boolean  "budget_by_quarter", :default => false
   end
 
   create_table "data_responses", :force => true do |t|
@@ -166,6 +172,9 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
+    t.datetime "submitted_for_final_at"
+    t.boolean  "submitted_for_final"
+    t.integer  "unclassified_activities_count",     :default => 0
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -210,11 +219,33 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",       :default => 0
+    t.integer  "project_from_id"
   end
 
   add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
+
+  create_table "funding_sources", :force => true do |t|
+    t.integer  "activity_id"
+    t.integer  "funding_flow_id"
+    t.decimal  "spend"
+    t.decimal  "budget"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "funding_streams", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "organization_ufs_id"
+    t.integer  "organization_fa_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "budget",              :default => 0.0
+    t.decimal  "spend",               :default => 0.0
+    t.decimal  "budget_in_usd",       :default => 0.0
+    t.decimal  "spend_in_usd",        :default => 0.0
+  end
 
   create_table "help_requests", :force => true do |t|
     t.string   "email"
@@ -244,7 +275,7 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.string   "type"
+    t.string   "old_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "raw_type"
@@ -276,6 +307,10 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",   :default => 0
+    t.decimal  "budget2"
+    t.decimal  "budget3"
+    t.decimal  "budget4"
+    t.decimal  "budget5"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
@@ -317,7 +352,8 @@ ActiveRecord::Schema.define(:version => 20110208090926) do
     t.integer  "data_response_id_current"
     t.text     "text_for_organization"
     t.string   "full_name"
-    t.string   "perishable_token",         :default => "", :null => false
+    t.string   "perishable_token",         :default => "",   :null => false
+    t.boolean  "tips_shown",               :default => true
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

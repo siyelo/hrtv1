@@ -5,6 +5,7 @@ class Reports::MapDistrictsByNsp
 
   def initialize(activities, type)
     @is_budget                 = is_budget?(type)
+    @coding_class              = @is_budget ? CodingBudget : CodingSpend
     @activities                = activities
     @codes                     = Nsp.all
     @leaves                    = Nsp.leaves
@@ -19,6 +20,7 @@ class Reports::MapDistrictsByNsp
       end
     end
 
+    preload_district_associations(activities, @is_budget) # eager-load
     @codes.each{|code| set_district_hash_for_code(code)}
   end
 
@@ -60,11 +62,10 @@ class Reports::MapDistrictsByNsp
 
     # TODO: refactor - duplicate method
     def set_district_hash_for_code(code)
-      if @is_budget
-        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
-      else
-        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
-      end
+      code_assignments = CodeAssignment.with_type(@coding_class.to_s).
+                                        with_activities(@activities.map(&:id)).
+                                        with_code_id(code.id)
+
       cache_activities(code_assignments).each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
           #have cached values, so speed up these proportions
@@ -74,9 +75,9 @@ class Reports::MapDistrictsByNsp
           end
         else
           @district_proportions_hash[activity] = {}
-          activity.budget_district_coding.each do |bd|
-            proportion = bd.proportion_of_activity
-            location = bd.code
+          activity.budget_district_coding_adjusted.each do |ca|
+            proportion = ca.proportion_of_activity
+            location = ca.code
             @district_proportions_hash[activity][location] = proportion
             @districts_hash[location][:total] += amounts_hash[:leaf_amount] * proportion
             @districts_hash[location][code] += amounts_hash[:amount] * proportion
@@ -84,5 +85,4 @@ class Reports::MapDistrictsByNsp
         end
       end
     end
-
 end

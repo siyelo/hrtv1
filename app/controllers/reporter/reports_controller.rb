@@ -2,7 +2,7 @@ class Reporter::ReportsController < Reporter::BaseController
   include ReportsControllerHelpers
 
   def index
-    @data_responses = current_user.data_responses
+    @responses = current_user.data_responses
   end
 
   def show
@@ -15,8 +15,12 @@ class Reporter::ReportsController < Reporter::BaseController
       case params[:id]
       when 'users_in_my_organization'
         Reports::UsersByOrganization.new(current_user)
-      when 'all_codes'
-        Reports::AllCodes.new
+      when 'purposes'
+        Reports::AllCodes.new(Mtef)
+      when 'inputs'
+        Reports::AllCodes.new(CostCategory)
+      when 'locations'
+        Reports::AllCodes.new(Location)
       when 'activities_by_nsp_budget'
         Reports::ActivitiesByNsp.new(activities, :budget, current_user.admin?)
       when 'activities_by_all_codes_budget'

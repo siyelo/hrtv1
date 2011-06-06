@@ -4,11 +4,22 @@ body.login
   #header, #header_app
     /* overriding the shared logo style*/
     #logo
-      font-size: 0.6em
-      padding: 4px 0 3px 10px
+      padding: 12px 0 5px
       h1
+        color: $dark-orange
+        font-family: 'Avenir'
+        font-size: 24px
+        font-weight: normal
+        text-transform: none
+        +text-shadow(#000, 0, 1px, 0)
         span
-          margin-left: -5px
+          color: $dark-blue
+          margin-left: -6px
+      img
+        //height: 50px
+        margin: -9px 7px 0 0
+        //width: 46px
+    
     /* end */
 
     /* overriding the shared tagline style*/
@@ -30,11 +41,6 @@ body.login
       span
         margin-right: 10px
 
-  /* adding properties to the shared flashes styles */
-  #flashes
-    width: 560px
-  /* end */
-
   /* login forms styles */
   .sign_in_form
     +border-radius(5px)
@@ -42,7 +48,7 @@ body.login
     background: #fff
     color: $mid-blue
     line-height: 1.3
-    margin: 30px auto 10px
+    margin: 25px auto 10px
     padding: 30px 30px 15px
     width: 500px
 
@@ -55,6 +61,9 @@ body.login
       color: $dark-blue
       padding-bottom: 15px
       text-transform: uppercase
+
+      a
+        color: $orange
 
     a
       font-size: 12px
@@ -84,7 +93,6 @@ body.login
       font-weight: bold
       margin-top: 10px
       padding: 10px 20px
-      text-transform: uppercase
       width: auto
       &:hover
         background: orange
@@ -98,4 +106,12 @@ body.login
       padding: 0
       text-align: left
       vertical-align: middle
+
+    .inline-errors
+      background: image_url("") $lightest-blue
+      color: $red
+      font-size: 11px
+      margin-left: 3px
+      padding: 3px 8px
+      +border-bottom-radius(3px)
   /* end */

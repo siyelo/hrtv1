@@ -1,0 +1,12 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Other Costs"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Other costs are designed to help you identify where your organization classifies Activities other than those you've already categorized. They are typically the expenses you incur for managing projects and activities at a central level.
+        %ul.bulleted
+          %li Detail Other Costs at the project or at the organization level.
+          %li Detail expenses for either all projects, or at the organization level.
+          %li Split your Other Costs into further detail via the "Detail cost areas" classification screen.

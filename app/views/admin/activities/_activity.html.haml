@@ -1,0 +1,11 @@
+%tr{:class => cycle("even", "odd")}
+  %td= activity.project.try(:name)
+  %td= link_to activity.description.presence || 'No Description Entered', admin_activity_path(activity)
+  %td= n2cndrs(activity.spend, activity.currency)
+  %td= n2cndrs(activity.budget, activity.currency)
+  %td= b activity.classified?
+  %td
+    %ul.manage_bar
+      %li= link_to "X", admin_activity_path(activity), :confirm => "Are you sure you want to delete this activity?", :method => :delete, :class => "right"
+      %li= link_to "Edit", edit_admin_activity_path(activity)
+      %li= link_to "Show", admin_activity_path(activity)

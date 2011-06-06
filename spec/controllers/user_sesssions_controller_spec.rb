@@ -23,7 +23,6 @@ describe UserSessionsController do
                                       :password => @user.password}
     end
 
-    it { should set_the_flash.to("Successfully signed in.") }
     it { should redirect_to(reporter_dashboard_path) }
 
     it "redirects the user to root path when requesting the login form" do

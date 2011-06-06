@@ -21,6 +21,60 @@ body.app
     ul
       margin-bottom: 10px
       +border-bottom-radius
+      &.horizontal
+        +horizontal-list
+        margin-bottom: 0
+      &.bulleted
+        list-style: disc
+        margin: 5px 0 0
+        padding-left: 20px
+        li
+          margin-bottom: 4px
+      &.marginless
+        margin: 0
+      &.admin_reports
+        margin-bottom: 0
+        > li
+          &:hover > a
+            background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+            +box-shadow($light-blue, 0, 0, 5px)
+        li:last-child a
+          margin-bottom: 0
+      &.manage_bar
+        margin: 0
+        +pie-clearfix
+        &.inline
+          display: inline-block
+          position: relative
+          top: 5px
+        li
+          display: inline
+          float: right
+          a
+            background: #eee
+            border: 1px solid $light-blue
+            color: $dark-grey
+            display: inline-block
+            font-size: 10px
+            height: auto
+            line-height: 1.4
+            margin-left: 3px
+            padding: 3px 5px 2px
+            text-decoration: none
+            +border-radius(2px)
+            +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+            +text-shadow(#fff, 0, 0, 1px)
+            &:hover, &:focus
+              background: $orange
+              border: 1px solid $orange - #111
+              color: #fff
+              +linear-gradient(color-stops($orange - #111, $orange + #111))
+              +text-shadow(#444, 0, 0, 1px)
+            &:active
+              outline: none
+              position: relative
+              top: 1px
+
     h2
       background: none
       text-transform: none
@@ -29,6 +83,30 @@ body.app
       font-size: 0.9em
       padding: 20px 0 10px
       text-transform: none
+      &.ready
+        background: image_url("tick_32.png") no-repeat 5px top
+        padding: 8px 0 20px 40px
+      &.ready-sub
+        font-size: 14px
+        background: image_url("tick_32.png") no-repeat 5px top
+        padding: 8px 0 20px 40px
+      &.info
+        background: image_url("info_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
+      &.not-ready
+        background: image_url("warning_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
+      &.not-ready
+        font-size: 14px
+        background: image_url("warning_32.png") no-repeat 5px top
+        padding: 10px 0 10px 40px
+      &.not-ready, &.ready, &.info
+        .info
+          display: block
+          font-size: 12px
+          font-weight: normal
+          line-height: 1.4
+          padding-top: 5px
     h4
       font-size: 12px
     > .summary
@@ -112,7 +190,7 @@ body.app
       margin: 15px 0 0 10px
   input, textarea
     border: 1px solid $light-blue
-    margin-bottom: 10px
+    //margin-bottom: 10px
     padding: 7px
     +border-radius
   input[type="submit"]
@@ -123,7 +201,6 @@ body.app
     font-size: 12px
     font-weight: bold
     padding: 7px 15px
-    text-transform: uppercase
     &:hover
       background: $mid-blue
   label
@@ -144,12 +221,66 @@ body.app
     font-size: 11px
     font-style: italic
     letter-spacing: 0.05em
-    margin: 20px 0 10px 5px
-    padding: 0 0 0 35px
+    margin: 15px 0 5px 0px
+    padding: 5px 0 5px 40px
   /* default layout for a simple table
+  .modern_table
+    font-size: 12px
+    margin-top: 10px
+    width: 100%
+    td
+      &:first-child
+        padding-left: 7px
+      &:last-child
+        padding-right: 5px
+
+    thead td
+      border-bottom: 1px solid $light-blue
+      color: $mid-blue + #333
+      font-weight: bold
+      padding-bottom: 5px
+      +linear-gradient(color-stops($filler, $lightest-blue))
+    tbody td
+      border-bottom: 1px solid $lightest-blue
+      padding: 5px 0
+      &.title
+        color: $mid-blue
+        font-weight: bold
+
+    a
+      background: none
+      display: inline-block
+      font-size: 11px
+      padding: 0
+      text-decoration: none
+      +border-radius
+      &.title
+        color: $orange
+        font-size: 12px
+        font-weight: bold
+      &.respond
+        background: green
+        color: #fff
+        float: right
+        font-size: 9px
+        font-weight: bold
+        padding: 7px 10px 4px
+        text-transform: uppercase
+        &:hover, &:focus
+          background: orange
+
   .simple_table
     +pie-clearfix
     /* a hack, but the padding interferes with .third
+    &.push
+      margin: 0 0 15px 40px
+    &.review
+      td.first
+        font-weight: bold
+      td.activity
+        padding-left: 40px
+        font-size: 12px
+
     hr
       background: none
       border: none
@@ -171,24 +302,6 @@ body.app
       font-size: 0.9em
       padding: 20px 10px 10px 0
       text-transform: none
-    a
-      display: inline-block
-      font-size: 1em
-      &.new_btn
-        background: $mid-blue
-        border-bottom: 1px solid $light-blue
-        color: white
-        font-size: 10px
-        margin-top: 10px
-        padding: 6px 12px 5px
-        text-decoration: none
-        text-transform: uppercase
-        +border-top-radius(3px)
-        &:hover
-          background: $light-blue
-          color: $dark-blue
-      &.disabled
-        display: none
     table
       background: $very-light-grey
       color: $mid-blue
@@ -318,6 +431,7 @@ body.app
     border-bottom: 1px solid $light-blue
     color: $light-blue - #333333
     line-height: 1.5em
+    margin-bottom: 10px
     font-size: 12px
     a
       text-decoration: none
@@ -326,6 +440,8 @@ body.app
       color: $mid-blue
       display: inline-block
       font-weight: bold
+    .incomplete a
+      color: #973030
   ul.inline_alt_tab
     +horizontal-list
     border-bottom: 3px solid $mid-blue
@@ -382,8 +498,10 @@ body.app
       margin: 0
   .fourth
     float: left
-    margin-right: 2%
+    margin-right: 1%
     width: 23%
+    .fourth
+      margin: 0
   .third, .half, .fourth
     +pie-clearfix
     li
@@ -528,5 +646,9 @@ body.app #content .tabs
   .comment
     font-size: 11px
     letter-spacing: 0.05
+    padding: 0px 5px 5px
+  .author
     margin-bottom: 10px
+    font-style: italic
+    font-size: 10px
     padding: 0px 5px 5px

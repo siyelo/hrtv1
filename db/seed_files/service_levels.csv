@@ -1,0 +1,147 @@
+parent,code,name
+,1,Government
+1,11,National
+11,111,Management Support
+111,1111,Prevention
+1111,11111,MOMS
+11111,111111,Department / Division 1
+11111,111112,Department / Division 2
+11111,111113,Department / Division …
+1111,11112,MOPHS
+11112,111121,Department / Division 1
+11112,111122,Department / Division 2
+11112,111123,Department / Division …
+1111,11113,Parastatal
+11113,111131,Organization 1
+11113,111132,Organization 2
+11113,111133,Organization …
+111,1112,Treatment
+1112,11121,MOMS
+11121,111211,Department / Division 1
+11121,111212,Department / Division 2
+11121,111213,Department / Division …
+1112,11122,MOPHS
+11122,111221,Department / Division 1
+11122,111222,Department / Division 2
+11122,111223,Department / Division …
+1112,11123,Parastatal
+11123,111231,Organization 1
+11123,111232,Organization 2
+11123,111233,Organization …
+111,1113,Monitoring and General Evaluation
+1113,11131,MOMS
+11131,111311,Department / Division 1
+11131,111312,Department / Division 2
+11131,111313,Department / Division …
+1113,11132,MOPHS
+11132,111321,Department / Division 1
+11132,111322,Department / Division 2
+11132,111323,Department / Division …
+1113,11133,Parastatal
+11133,111331,Organization 1
+11133,111332,Organization 2
+11133,111333,Organization …
+11,112,Service Delivery (National Referral Hospital)
+112,1121,Management Support
+112,1122,Training
+112,1123,Service Delivery
+1123,11231,Treatment
+1123,11232,Prevention
+1,12,PROVINCIAL - LEVEL 5
+12,121,Management Support
+121,1211,Provincial health management
+1211,12111,Prevention
+1211,12112,Treatment
+1211,12113,Monitoring and General Evaluation
+121,1212,Provincial hospital management
+12,122,Service Delivery (Provincial Hospital)
+122,1221,Management Support
+122,1222,Training
+122,1223,Service Delivery
+1223,12231,Treatment
+1223,12232,Prevention
+1,13,DISTRICT - LEVEL 4
+13,131,Management Support
+131,1311,District health management
+1311,13111,Prevention
+1311,13112,Treatment
+1311,13113,Monitoring and General Evaluation
+131,1312,District hospital management
+13,132,Service Delivery (District Hospital)
+132,1321,Management Support
+132,1322,Training
+132,1323,Service Delivery
+1323,13231,Treatment
+1323,13232,Prevention
+1,14,HEALTH FACILITY - LEVEL 2-3
+14,141,Service Delivery (Health Facility)
+141,1411,Management Support
+141,1412,Training
+141,1413,Service Delivery
+1413,14131,Treatment
+1413,14132,Prevention
+1,15,COMMUNITY - LEVEL 1
+15,151,Service Delivery (Community Health Workers)
+151,1511,Management Support
+151,1512,Training
+151,1513,Service Delivery
+1513,15131,Treatment
+1513,15132,Prevention
+15,152,Other
+152,1521,Treatment
+152,1522,Prevention
+,2,Non-Government
+2,21,National
+21,211,Management Support
+211,2111,Prevention
+211,2112,Treatment
+211,2113,Monitoring and General Evaluation
+21,212,Service Delivery (National Referral Hospital)
+212,2121,Management Support
+212,2122,Training
+212,2123,Service Delivery
+2123,21231,Treatment
+2123,21232,Prevention
+2,22,PROVINCIAL - LEVEL 5
+22,221,Management Support
+221,2211,Provincial health management
+2211,22111,Prevention
+2211,22112,Treatment
+2211,22113,Monitoring and General Evaluation
+221,2212,Provincial hospital management
+22,222,Service Delivery (Provincial Hospital)
+222,2221,Management Support
+222,2222,Training
+222,2223,Service Delivery
+2223,22231,Treatment
+2223,22232,Prevention
+2,23,DISTRICT - LEVEL 4
+23,231,Management Support
+231,2311,District health management
+2311,23111,Prevention
+2311,23112,Treatment
+2311,23113,Monitoring and General Evaluation
+231,2312,District hospital management
+23,232,Service Delivery (District Hospital)
+232,2321,Management Support
+232,2322,Training
+232,2323,Service Delivery
+2323,23231,Treatment
+2323,23232,Prevention
+2,24,HEALTH FACILITY - LEVEL 2-3
+24,241,Service Delivery (Health Facility)
+241,2411,Management Support
+241,2412,Training
+241,2413,Service Delivery
+2413,24131,Treatment
+2413,24132,Prevention
+2,25,COMMUNITY - LEVEL 1
+25,251,Service Delivery (Community Health Workers)
+251,2511,Management Support
+251,2512,Training
+251,2513,Service Delivery
+2513,25131,Treatment
+2513,25132,Prevention
+25,252,Other
+252,2521,Treatment
+252,2522,Prevention

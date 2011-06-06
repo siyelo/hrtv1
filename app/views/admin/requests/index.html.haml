@@ -1,0 +1,36 @@
+- title("Data Requests")
+
+%h1.main_heading Data Requests
+
+%p
+  - link_to new_admin_request_path, :class => "create_new" do
+    = image_tag "new_white.png"
+    Create Data Request
+
+%table.standard.rounded
+  %thead.static
+    %tr
+      %th Organization
+      %th Title
+      %th Final review
+      %th Start date
+      %th End date
+      %th Budget
+      %th Spend
+      %th.action Manage
+  %tbody
+    - @requests.each do |request|
+      %tr
+        %td= request.organization.try(:name)
+        %td= request.title
+        %td= request.final_review
+        %td= request.start_date
+        %td= request.end_date
+        %td= request.budget
+        %td= request.spend
+        %td.action
+          = link_to "Edit", edit_admin_request_path(request)
+          = link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+
+
+= will_paginate @requests

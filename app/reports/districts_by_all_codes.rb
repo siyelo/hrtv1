@@ -5,6 +5,7 @@ class Reports::DistrictsByAllCodes
 
   def initialize(activities, type)
     @is_budget                 = is_budget?(type)
+    @coding_class              = @is_budget ? CodingBudget : CodingSpend
     @activities                = activities
     @leaves                    = Nsp.leaves
     @codes_to_include          = []
@@ -20,6 +21,8 @@ class Reports::DistrictsByAllCodes
         @districts_hash[c][l] = 0
       end
     end
+
+    preload_district_associations(activities, @is_budget) # eager-load
   end
 
   def csv
@@ -63,11 +66,8 @@ class Reports::DistrictsByAllCodes
 
     # TODO: refactor - duplicate method
     def add_code_summary_row(csv, code)
-      if @is_budget
-        code_total = code.sum_of_assignments_for_activities(CodingBudget, @activities)
-      else
-        code_total = code.sum_of_assignments_for_activities(CodingSpend, @activities)
-      end
+      code_total = code.sum_of_assignments_for_activities(@coding_class, @activities)
+
       if code_total > 0
         row = []
         add_all_codes_hierarchy(row, code)
@@ -83,11 +83,10 @@ class Reports::DistrictsByAllCodes
 
     # TODO: refactor - duplicate method
     def set_district_hash_for_code(code)
-      if @is_budget
-        code_assignments = CodingBudget.with_activities(@activities.map(&:id)).with_code_id(code.id)
-      else
-        code_assignments = CodingSpend.with_activities(@activities.map(&:id)).with_code_id(code.id)
-      end
+      code_assignments = CodeAssignment.with_type(@coding_class.to_s).
+                                        with_activities(@activities.map(&:id)).
+                                        with_code_id(code.id)
+
       activities = cache_activities(code_assignments)
       activities.each do |activity, amounts_hash|
         if @district_proportions_hash.key?(activity)
@@ -100,7 +99,7 @@ class Reports::DistrictsByAllCodes
           @district_proportions_hash[activity] = {}
           # We've got non-report type report type hard coding here
           # so it uses budgets
-          activity.budget_district_coding.each do |code_assignment|
+          activity.budget_district_coding_adjusted.each do |code_assignment|
             proportion = code_assignment.proportion_of_activity
             location = code_assignment.code
             @district_proportions_hash[activity][location] = proportion

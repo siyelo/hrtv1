@@ -1,0 +1,11 @@
+.form_aside.wrap-30
+  %h3 Comments
+  %ul
+    - comments.each do |comment|
+      %li.comment_wrap
+        .title= comment.title
+        .comment= comment.comment
+        .author= "Posted by #{comment.user.try(:name)} #{time_ago_in_words(comment.created_at)} ago"
+.form_aside.wrap-30
+  %h3 Add new comment
+  = render 'comments/form', :comment => @comment

@@ -40,13 +40,13 @@ module ApplicationHelper
   end
 
   # Generates proper dashboard url link depending on the type of user
-  def user_dashboard_path current_user
+  def user_dashboard_path(current_user)
     if current_user
-      if current_user.role? :admin
+      if current_user.admin?
         admin_dashboard_path
-      elsif current_user.role? :reporter
+      elsif current_user.reporter?
         reporter_dashboard_path
-      elsif current_user.role? :activity_manager
+      elsif current_user.activity_manager?
         reporter_dashboard_path
       else
         raise 'user role not found'
@@ -55,14 +55,14 @@ module ApplicationHelper
   end
 
   # Generates proper dashboard url link depending on the type of user
-  def user_report_dashboard_path current_user
+  def user_report_dashboard_path(current_user)
     if current_user
-      if current_user.role? :admin
+      if current_user.admin?
         admin_reports_path
-      elsif current_user.role? :reporter
+      elsif current_user.reporter?
         reporter_reports_path
       else
-        raise 'user role not found'
+        reporter_reports_path
       end
     end
   end
@@ -79,6 +79,9 @@ module ApplicationHelper
         active = current_controller_with_nesting?('reports', 'districts') ||
                  current_controller_with_nesting?('districts', 'activities') ||
                  current_controller_with_nesting?('districts', 'organizations') ||
+                 current_controller_with_nesting?('reports', 'countries') ||
+                 current_controller_with_nesting?('countries', 'activities') ||
+                 current_controller_with_nesting?('countries', 'organizations') ||
                  current_controller_with_nesting?('admin', 'responses')
       end
     end
@@ -95,10 +98,8 @@ module ApplicationHelper
 
   # check the request matches the form 'parent/controller'
   def current_controller_with_nesting?(parent_name, controller_name)
-    path    = request.path_parameters[:controller].split('/')
-    current = path.pop
-    parent  = path.pop
-    controller_name == current && parent_name == parent
+    path = request.path_parameters[:controller].split('/')
+    controller_name == path[1] && parent_name == path[0]
   end
 
   def friendly_name(object, truncate_length = 45)
@@ -145,6 +146,146 @@ module ApplicationHelper
   # returns a javascript friendly definition of a ruby variable, even if the var is nil
   def js_safe(var)
     var.nil? ? "undefined" : var
+  end
+
+  def usd_to_local_currency
+    Money.default_bank.get_rate(:USD, Money.default_currency)
+  end
+
+  # sortable columns
+  def sortable(column, title = nil)
+    title ||= column.titleize
+    css_class = column == sort_column ? "current #{sort_direction}" : nil
+    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    link_to title, {:sort => column, :direction => direction, :query => params[:query]}, {:class => css_class}
+  end
+
+
+  # Helper for adding remove link to nested form models
+  def link_to_remove_fields(name, f, options = {})
+    class_name = options[:class] || 'remove_nested'
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)
+  end
+
+  # Helper for adding new nested form models
+  def link_to_add_fields(name, f, association, subfolder, options = {})
+    class_name = options[:class] || 'add_nested'
+    new_object = f.object.class.reflect_on_association(association).klass.new
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
+      render(subfolder + association.to_s.singularize + "_fields", :f => builder)
+    end
+    link_to_function(name, h("add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")"), :class => class_name)
+  end
+
+  def b(bool)
+    bool ? 'yes' : 'no'
+  end
+
+  def c(amount, currency)
+    if amount.present?
+      "#{amount} <span class='currency'>#{currency}</span>"
+    else
+      "0.00 <span class='currency'>#{currency}</span>"
+    end
+  end
+
+  def help_link(query = nil)
+    link = "kb" #default to hte knowledge base
+    link = "search?t=f&q=#{query}" if query
+    return "http://hrtapp.tenderapp.com/#{link}"
+  end
+
+  def contact_link
+    "http://hrtapp.tenderapp.com/discussions"
+  end
+
+  # given a project or activity, render a nice name from either
+  # the name() or description()
+  def nice_name(object, length=16)
+    descr = '(no name)'
+    unless object.nil?
+      descr = object.description unless object.description.blank?
+      descr = object.name unless object.name.blank?
+    end
+    truncate(descr, :length => length)
+  end
+
+  def coding_progress_style(progress)
+    style = ''
+    style = "background: #ccff00" if progress < 90
+    style = "background: #ffd800" if progress < 80
+    style = "background: #ff9c00" if progress < 70
+    style = "background: #ff6c00" if progress < 50
+    style = "background: red" if progress < 30
+    style = style + "; width: #{progress}%"
+  end
+
+  def form_namespace(object)
+    "f#{object.object_id}"
+  end
+
+  def budget_fiscal_year_prev(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.pred.to_s.split('')[-2..-1].join
+      year2 = year.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def budget_fiscal_year(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.to_s.split('')[-2..-1].join
+      year2 = year.next.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def spend_fiscal_year_prev(data_response)
+    if data_response.fiscal_year_start_date.present?
+      year = data_response.fiscal_year_start_date.year
+      year1 = year.pred.pred.to_s.split('')[-2..-1].join
+      year2 = year.pred.to_s.split('')[-2..-1].join
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def spend_fiscal_year(data_response)
+    budget_fiscal_year_prev(data_response)
+  end
+
+  def fiscal_year(data_response)
+    if data_response.fiscal_year_end_date.present?
+      year1 = data_response.fiscal_year_end_date.strftime('%y')
+      year2 = (data_response.fiscal_year_end_date + 1.year).strftime('%y')
+    else
+      year1 = 'xx'
+      year2 = 'xx'
+    end
+
+    "#{year1}-#{year2}"
+  end
+
+  def funding_organizations_select
+    orgs = Organization.find(:all, :order => 'old_type, name')
+    orgs.map{|o| [o.display_name(100), o.id]}
+  end
+
+  def is_number?(i)
+    true if Float(i) rescue false
   end
 
 end

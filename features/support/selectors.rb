@@ -24,17 +24,26 @@ module HtmlSelectorsHelper
     when /the budget cost categorization tab/
       "#tab3"
 
-    when /the expenditure coding tab/
+    when /the budget service levels tab/
       "#tab4"
 
-    when /the expenditure districts tab/
+    when /the expenditure coding tab/
       "#tab5"
 
-    when /the expenditure cost categorization tab/
+    when /the expenditure districts tab/
       "#tab6"
+
+    when /the expenditure cost categorization tab/
+      "#tab7"
+
+    when /the expenditure service levels tab/
+      "#tab8"
 
     when /the main nav/
       "#main-nav"
+
+    when /the sub nav/
+      "#sub-nav"
 
     when /the admin nav/
       "#admin"

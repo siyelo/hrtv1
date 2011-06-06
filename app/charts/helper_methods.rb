@@ -80,13 +80,14 @@ module Charts::HelperMethods
   def remove_parent_code_assignments(code_assignments)
     parent_ids = code_assignments.collect{|n| n.parent_id} - [nil]
     parent_ids.uniq!
+    parent_ids = parent_ids.map{|id| id.to_s}
 
     # remove cached (parent) code assignments
-    code_assignments = code_assignments.reject{|ca| parent_ids.include?(ca.code_id)}
+    # to_s is used for code_id because AR does not set proper type on joined columns
+    code_assignments.reject{|ca| parent_ids.include?(ca.code_id.to_s)}
   end
 
   def get_virtual_codes(activities, virtual_type)
-    raise 1.to_yaml
     codes = []
     assignments = activities.collect{|a| a.send(virtual_type)}.flatten
     assignments.group_by {|a| a.code}.each do |code, array|
@@ -101,4 +102,66 @@ module Charts::HelperMethods
     end
     codes
   end
+
+  def get_hssp2_column_name(code_type)
+    if code_type == 'hssp2_strat_prog'
+      'hssp2_stratprog_val'
+    elsif code_type == 'hssp2_strat_obj'
+      'hssp2_stratobj_val'
+    else
+      raise "Invalid HSSP2 type #{code_type}".to_yaml
+    end
+  end
+
+  def get_hssp2_coding_type(is_spent)
+    is_spent ? 'CodingSpend' : 'CodingBudget'
+  end
+
+  private
+
+    def prepare_pie_values_json(records)
+      values = []
+      other = 0.0
+
+      records.each_with_index do |record, index|
+        if index < 10
+          values << [safe_sql_name_alias(record), record.value.to_f.round(2)]
+        else
+          other += record.value.to_f
+        end
+      end
+
+      values << ['Other', other.round(2)]
+
+      build_pie_values_json(values)
+    end
+
+    # In postgres, you can't sql alias something if its also a
+    # column - Group By will fail.. But we still want to use
+    # AR convenient alias 'methods' on the result set objects.
+    # So for those columns,  we use a different alias
+    def safe_sql_name_alias(record)
+      name = record.respond_to?(:name) ? record.name : record.name_or_descr
+    end
+
+    def build_pie_values_json(values)
+      {
+        :values => values,
+        :names => {:column1 => 'Name', :column2 => 'Amount'}
+      }.to_json
+    end
+
+    def get_summed_code_assignments(code_assignments, ratio = 1)
+      values = {}
+
+      code_assignments.each do |ca|
+        if values[ca.name]
+          values[ca.name] += ca.value.to_f * ratio
+        else
+          values[ca.name] = ca.value.to_f * ratio
+        end
+      end
+
+      values.to_a
+    end
 end

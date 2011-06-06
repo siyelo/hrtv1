@@ -23,7 +23,7 @@
           %td Org's Assisted:
           %td= activity.organizations.map(&:name).join(', ')
         %tr
-          %td== Districts (#{activity.locations.count}/#{activity.projects.collect{|p| p.locations}.flatten.uniq.count}):
+          %td== Districts (#{activity.locations.count}/#{(activity.project ? activity.project.locations.count : 0)}):
           %td
             %ul.dashboard_districts
               - activity.locations.map(&:name).each do |loc|

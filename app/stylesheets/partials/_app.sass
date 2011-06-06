@@ -1,4 +1,3 @@
-
 =normal_link()
   color= !orange
   background: none
@@ -10,6 +9,9 @@
     color= !mid-blue
     text-decoration: underline
 
+.currency
+  font-size: 9px
+
 body.app
   .wrapper
     min-width: 960px
@@ -18,7 +20,7 @@ body.app
     padding: 0 15px
     position: relative
   #content .wrapper
-    +box-shadow(#eee, 0, 2px, 5px)
+    //+box-shadow(#eee, 0, 2px, 5px)
 
   #header_app
     height: 30px
@@ -26,11 +28,12 @@ body.app
   h1
     font: bold 24px/30px Arial,sans-serif
     color: $mid-blue
+    a
+      text-decoration: none
 
   p
     line-height: 1.2em
     +clearfix
-
 
   /* overriding the shared logo style*/
   #header_app
@@ -44,8 +47,9 @@ body.app
       font-weight: bold
       padding: 10px 0
       position: absolute
+      text-decoration: none
       text-transform: uppercase
-      width: 300px
+      width: 400px
       +opacity(0.8)
       +text-shadow(#000, 0, 1px, 1px)
       &:hover
@@ -137,13 +141,6 @@ body.app
       padding-top: 10px !important
     a
       padding: 5px 10px !important
-
-    //ul li
-    //  &:first-child a
-    //    +border-bottom-left-radius
-    //  &:last-child a
-    //    +border-bottom-right-radius
-  /* end */
 
   /* sub-nav styles */
   #sub-nav
@@ -243,34 +240,6 @@ body.app
         &:hover
           color: #069
           text-decoration: underline
-    .next, input[type=submit]
-      +border-radius
-      border: 1px
-      background: $orange
-      color: white
-      cursor: pointer
-      font-size: 14px
-      font-weight: bold
-      padding: 9px 15px 7px 15px
-      text-decoration: none
-      text-transform: uppercase
-      +linear-gradient(color-stops($orange, $orange - #333))
-      +box-shadow(#666, 0, 1px, 3px)
-      +text-shadow(#666, 0, 1px, 1px)
-      &:hover
-        background= !mid-blue
-        color: white
-        text-decoration: none
-      &.big
-        clear: both
-        display: inline-block
-        float: none
-        margin: 10px 0
-        padding: 13px 20px 10px 20px
-        overflow: hidden
-
-    .next
-      margin-top: -5px
 
     .comments
       border-bottom: 1px dashed #ddd
@@ -344,14 +313,14 @@ body.app
 
     h2
       padding: 10px
-
-    h2
       +border-top-radius
-      background= !lightest-blue
+      background: image_url("bg-blue.jpg")
       clear: both
-      color= !mid-blue
+      color: #fff
       font-size: 0.8em
       letter-spacing: 0.05em
+
+
 
   #content #map_fields_form
     .map_fields
@@ -364,33 +333,6 @@ body.app
     td
       font-size: 0.8em
       padding: 2px 0
-
-  #guide
-    h2
-      +border-radius
-      margin: 10px 0
-    h3, h5
-      font-weight: bold
-    h3, h5, h6
-      padding: 20px 0 10px 10px
-    h6
-      font-style: italic
-      text-decoration: underline
-    p
-      padding: 0 0 10px 10px
-    a
-      margin-bottom: 10px
-    em
-      font-style: italic
-    ul, ol
-      padding-left: 20px
-      margin-bottom: 10px
-      font-size: 0.8em
-      li
-        padding-bottom: 5px
-    ul li
-      list-style-type: disc
-      margin-left: 10px
 
   /* comments styles
   #main > ul
@@ -459,11 +401,10 @@ body#static_page_submit #content .wrapper #main
         background: #f9f9f9
 
     thead
-      background: !mid-blue
       border-bottom: 1px solid white
       color: white
       &:hover
-        background: $mid-blue
+        background: $lightest-blue
 
 // Grouping tab styles
 
@@ -486,9 +427,6 @@ ul.group
       padding: 8px 15px 5px
       text-decoration: none
 
-      &:hover, &:focus
-        text-decoration: underline
-
       &.active
         background: white
         border-top: 1px solid $light-blue
@@ -502,10 +440,14 @@ ul.group
         +linear-gradient(color-stops($lightest-blue + #090909, white))
 
 .main_heading
-  +box-shadow(#eee, 0, 3px, 3px)
+  +box-shadow(#eee, 0, 2px, 3px)
+  border-bottom: 1px solid #eee
+  clear: both
   margin: 0 -15px 15px
   padding: 5px 15px 10px
   +clearfix
+  span
+    display: inline
 
 .sub_heading
   clear: both
@@ -524,6 +466,7 @@ ul.group
     padding: 0 0 3px 10px
 
 .dashboard_section
+  background: $filler
   border: 1px solid $lightest-blue
   margin-bottom: 20px
   padding: 7px 10px 12px 10px
@@ -531,42 +474,36 @@ ul.group
   +clearfix
   .first-half, .second-half
     margin: 0 !important
+  ul
+    margin-bottom: 0 !important
   li
     position: relative
     +transition(hover, 1s, ease, 0)
     &:hover
       a
-        background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
         color: $mid-blue
         +transition(hover, 1s, ease, 0)
       ul.report_actions
         opacity: 1
+    &:last-child a
+      margin-bottom: 0
   h3
     padding-top: 10px !important
-    
-  a
-    background: image_url("icon_link.png") no-repeat $lightest-blue + #090909 10px center
-    display: block
-    font-size: 12px
-    margin-bottom: 5px
-    padding: 10px 8px 8px 28px
-    text-decoration: none
-    +border-radius
-    +transition(hover, 1s, ease, 0)
-    &.grayed-out
-      color: #999
-    &:hover
-      background: image_url("icon_link_hover.png") no-repeat $lightest-blue 10px center
-      
+
   ul.report_actions
     opacity: 0
     position: absolute
     top: 6px
-    right: 10px
+    right: 5px
     +transition(hover, 0.6s, ease, 0)
     li
       display: inline
       float: right
+      &.separator
+        border-left: 1px dotted #bbb
+        height: 15px
+        margin: 2px 4px 2px 5px
+        width: 1px
     a
       background: none
       display: inline
@@ -576,7 +513,28 @@ ul.group
         opacity: 0.9
       &.regenerate
         opacity: 0.9
-      
+      &.sml_btn
+        background: $light-blue
+        border: 1px solid $light-blue
+        color: $mid-blue
+        display: inline-block
+        float: right
+        font-size: 9px
+        line-height: 1
+        margin-right: 5px
+        opacity: 1
+        padding: 4px 6px 2px
+        text-decoration: none
+        text-transform: uppercase
+        +border-radius
+        +linear-gradient(color-stops($light-blue + #111, $light-blue))
+        +text-shadow($lightest-blue, 0, 1px, 0)
+        &:hover
+          background: $mid-blue
+          border: 1px solid $mid-blue
+          color: #fff
+          +linear-gradient(color-stops($mid-blue, $mid-blue - #111))
+          +text-shadow(#000, 0, 1px, 0)
 
 #heading-activity
   background: image_url("icon_reporter.png") no-repeat center left
@@ -585,94 +543,28 @@ ul.group
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
 
-.hint
-  color: #666
-  display: block
-  font-size: 10px
-  padding-top: 3px
-
-// Pretty Table (with clickable rows)
-
-table.standard
-  color: $mid-blue
-  font-size: 11px
-  line-height: 14px
-  width: 100%
-
-  thead
-    color: $lightest-blue
-    font-weight: bold
-
-    th
-      padding-top: 12px
-
-      a
-        color: $lightest-blue
-        display: block
-        text-decoration: none
-        &:hover, &:focus, &:active
-          color: #fff
-        &.asc
-          background: image_url("active_scaffold/default/arrow_up.gif") no-repeat right center
-        &.desc
-          background: image_url("active_scaffold/default/arrow_down.gif") no-repeat right center
-  tbody tr
-    border-spacing: 0
-
-    &.odd
-      background: $lightest-blue + #090909
-      +linear-gradient(color-stops(white, $lightest-blue + #090909))
-
-  th, td
-    padding: 12px 7px 3px
-    min-width: 100px
-
-  td
-    border-bottom: 1px dashed !light_blue
-    vertical-align: middle
-    a
-      font-size: 12px
-      font-weight: bold
-      text-transform: uppercase
-
-// Pretty Table with clickable rows
-table.clickable
-
-  tbody tr
-
-    &:hover
-      background: $lightest-blue
-      +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
-      color: $dark-blue
-      td
-        border-bottom: 1px solid !light_blue
-
-  td:hover
-    cursor: pointer
-
-// Pretty Table with rounded thead
-// use it when there is no additional heading (for ex. h2)
-table.rounded
-  th:first-child
-    background: $mid-blue !important
-    +border-top-left-radius
-  th:last-child
-    background: $mid-blue !important
-    +border-top-right-radius
-
 .breadcrumb
-  +border-radius
-  +clearfix
-  +horizontal-list
-  border: 1px dotted $lightest-blue
+  background: $filler
+  border: 1px solid $lightest-blue
+  border-right: none
+  float: left
   font-size: 11px
   margin-top: 7px
-  margin-bottom: 4px !important
-  padding: 5px
+  margin-bottom: 10px !important
+  +border-radius
+  +pie-clearfix
 
-  a
-    background: image_url("icon_mark.png") no-repeat right center
-    padding-right: 10px
+  li
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 18px 5px 10px
+
+    &:last-child
+      background: image_url("breadcrumb-last.png") no-repeat right center
+
+    a
+      text-decoration: none
 
 .bordered
   border: 1px solid $lightest-blue
@@ -705,6 +597,188 @@ table.rounded
 
 .half h2
   clear: both
-  
+
 .edit_user label
   margin-right: 10px
+
+#import
+  display: none
+  .dashboard_section
+    background: $filler
+  p
+    font-size: 12px
+
+.horizontal
+  +horizontal-list
+
+#import_csv
+  padding-top: 10px
+  *
+    display: inline-block
+
+  label
+    margin: 5px 0px
+
+#guide
+  h2
+    +border-radius
+    margin: 10px 0
+  h3, h5
+    font-weight: bold
+  h3, h5, h6
+    padding: 20px 0 10px 10px
+  h6
+    font-style: italic
+    text-decoration: underline
+  p
+    padding: 0 0 10px 10px
+  a
+    margin-bottom: 10px
+  em
+    font-style: italic
+  ul, ol
+    padding-left: 20px
+    margin-bottom: 10px
+    font-size: 0.8em
+    li
+      padding-bottom: 5px
+  ul li
+    list-style-type: disc
+    margin-left: 10px
+
+
+#gs_container
+  margin-bottom: 20px
+  width: 100%
+  #getting_started_title
+    overflow: hidden
+    +border-top-radius
+    background-color: #64B23B
+
+    h2
+      padding: 5px 5px 5px 10px
+      background-image: none
+      float: left
+
+    span.close
+      background: image_url("tips_close.png") no-repeat right
+      cursor: pointer
+      float: right
+      height: 16px
+      margin: -2px 0 0 10px
+      width: 17px
+
+    a
+      margin: 5px 5px 0 0
+      text-decoration: none
+      font-size: 11px
+      float: right
+      color: #FFF
+      span.hint_text
+        visibility: hidden
+        color: #D4EF74
+        margin-right: 5px
+
+    &:hover
+      span.hint_text
+        visibility: visible
+
+
+
+  .getting_started
+    +clearfix
+    background-color: #F9FEF6
+    border-color: #C1C1C1
+    border-right: 1px solid #C1C1C1
+    border-style: solid
+    border-width: 0 1px 1px
+    +border-bottom-radius
+    -moz-box-shadow: 1px 1px 3px #DDDDDD
+    margin-bottom: 15px
+    padding: 10px
+    .message
+      color: #555555
+      padding: 0
+      display: block
+      float: left
+      font-size: 11px
+      line-height: 14px
+      margin: 0
+
+// overlayed element
+.simple_overlay
+  display: none
+  background-color: #F7F7F7
+  width: 640px
+  min-height: 200px
+  padding: 35px
+  z-index: 10000
+  border: 1px solid #666
+  -moz-box-shadow: 0 0 90px 5px #000
+  -webkit-box-shadow: 0 0 90px #000
+  font-size: 12px
+
+.simple_overlay .close
+  background-image= image_url("overlay/close.png")
+  position: absolute
+  left: -18px
+  top: -15px
+  cursor: pointer
+  height: 35px
+  width: 35px
+
+
+ul.status
+  padding-bottom: 15px
+  li
+    font-size: 14px
+    span
+      font-size: 12px
+      color: $dark-grey
+      padding-right: 5px
+
+ul.push
+  font-size: 12px
+  margin: 0 0 15px 65px
+  list-style: disc
+
+.status
+  border: 1px solid $lighter-blue
+  padding: 15px 15px 15px 75px
+  +border-radius
+
+  &.go
+    background: image_url("flag_48_green.png") no-repeat 15px center $lightest-blue
+  &.stop
+    background: image_url("flag_48_red.png") no-repeat 15px center $lightest-blue
+
+  li
+    color: $mid-blue
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 4px
+    &:last-child
+      margin-bottom: 0
+
+    span
+      color: $light-blue - #333
+      display: inline-block
+      font-weight: normal
+      padding-top: 4px
+      text-transform: lowercase
+      min-width: 90px
+
+ul.review li
+  padding-left: 32px
+  &.alt
+    padding: 0
+
+  &.dashboard_section
+    padding-top: 20px
+
+  .simple_table td
+    background: #fff
+    border-bottom: 1px solid $lightest-blue !important
+
+.add_organization_link
+  margin-left: 10px

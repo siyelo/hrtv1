@@ -7,7 +7,11 @@
 # => [ :aed, :afn, all, ... ]
 
 module CurrencyHelper
-  OTHER_PRIORITIES = [:rwf] #RWF is a prio currency
+  if ENV['HRT_COUNTRY'] == 'kenya'
+    OTHER_PRIORITIES = [:jpy, :dkk, :gbp] # Priority currencies for kenya
+  else
+    OTHER_PRIORITIES = [:rwf] # Priority currencies for kenya
+  end
   PRIORITY_CUTOFF = 5
 
   ### jump through hoops to include this in the ActiveScaffold controllers
@@ -21,7 +25,7 @@ module CurrencyHelper
     def major_currencies(hash)
       hash.inject([]) do |array, (id, attributes)|
         priority = attributes[:priority]
-        if priority && priority < PRIORITY_CUTOFF
+        if priority && priority < PRIORITY_CUTOFF && Money.default_bank.get_rate(id, :USD)
           array[priority] ||= []
           array[priority] << id
         end
@@ -60,7 +64,7 @@ module CurrencyHelper
         end.compact.sort {|a,b| a[0] <=> b[0]}
         all_currencies = hash.inject([]) do |array, (id, attributes)|
           iso_code = id.to_s.upcase
-          array << [attributes[:name] + " (#{iso_code})", iso_code]
+          array << [attributes[:name] + " (#{iso_code})", iso_code] if Money.default_bank.get_rate(iso_code, "USD")
           array
         end.compact.sort {|a,b| a[0] <=> b[0]}
         return prios, all_currencies

@@ -5,6 +5,8 @@ class HelpRequest < ActiveRecord::Base
 end
 
 
+
+
 # == Schema Information
 #
 # Table name: help_requests

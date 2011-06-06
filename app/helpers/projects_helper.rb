@@ -1,20 +1,26 @@
 module ProjectsHelper
 
-  # Active Scaffold fields override
-  def start_date_form_column(column, options)
-    text_field :record, :start_date, options.merge({:class => "date_picker"})
-  end
-
-  def end_date_form_column(column, options)
-    text_field :record, :end_date, options.merge({:class => "date_picker"})
-  end
-
-  # this disallows adding existing comments
-  def options_for_association_count association
-    if association.name == :comments
-      0
+  def funder_projects_select(from_org, project_id)
+    if from_org
+      funder_projects = from_org.projects.select{ |op| op.id != project_id }.map{ |op| [op.name, op.id] }
     else
-      super
+      funder_projects = []
+    end
+
+    options = [["Please select a project...", ""]]
+    options.concat(funder_projects)
+    options << ["<Project not listed or unknown>", 0]
+    options
+  end
+
+  def get_project_errors(project)
+    errors = project.try(:errors_from_response)
+
+    if errors.present?
+      errors = errors.collect{|e| "<li>#{e}</li>"}
+      '<ul class="response-notice">' + errors.join + '</ul>'
+    else
+      nil # when no errors
     end
   end
 end

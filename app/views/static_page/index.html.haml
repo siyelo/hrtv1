@@ -1,25 +1,3 @@
-//- content_for :head do
-//  = stylesheet_link_tag 's3slider.css', :media => 'screen'
-//  :javascript
-//    jQuery(document).ready(function(){
-//      jQuery('#s3slider').s3Slider({
-//        timeOut: 4000
-//      });
-//    });
-//
-//.slider
-//  #s3slider
-//    %ul#s3sliderContent
-//      %li.s3sliderImage
-//        %img{ :src => "images/slider/1.png" }
-//        %span.top
-//          Resources going where they're most needed
-//      %li.s3sliderImage
-//        %img{ :src => "images/slider/2.jpg" }
-//        %span.top
-//          To improve and save lives
-//      %div.clear.s3sliderImage
-
 #main
   %h3
     Better Information.
@@ -27,12 +5,32 @@
     Better Decisions.
   %p
     %span
-      =image_tag"landing_wave.png"
+      =image_tag "landing_wave.png"
     The Health Resource Tracker tracks resource flows in the health sector from their many sources to the ultimate health function they serve. Information about health spending, both planned and realized, are essential for evidence-based budgeting, planning and policy-making.
   %p
     %span
-      =image_tag"landing_wave.png"
-    This database was created under the stewardship of the Resource Tracking Steering Committee, chaired by the Ministry of Health, with extensive input from CNLS. It was implemented by Health Systems 20/20, a global project funded by USAID, aided by many development partners, especially USAID, UNAIDS and CHAI.
+      = image_tag "landing_wave.png"
+    This system was created under the stewardship of the Resource Tracking Steering Committee, chaired by the Ministry of Health, with extensive input from CNLS. It was implemented by Health Systems 20/20, a global project funded by USAID, aided by many development partners, especially USAID, UNAIDS and CHAI.
+  %p
+    %ul#browsers
+      %li
+        %p
+          Recommended
+          %br
+          Browsers:
+      %li
+        %a{:href => 'http://firefox.com/'}
+          = image_tag"firefox_icon.png"
+      %li
+        %a{:href => 'http://www.google.com/chrome/'}
+          = image_tag"chrome_icon.png"
+      %li
+        %a{:href => 'http://opera.com/'}
+          = image_tag"opera_icon.png"
+      %li
+        %a{:href => 'http://www.apple.com/safari/'}
+          = image_tag"safari_icon.png"
+
 #sidebar
   %h2
     This project is supported by:

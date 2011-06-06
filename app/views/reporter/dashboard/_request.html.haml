@@ -1,0 +1,7 @@
+%tr
+  %td.title= request.title
+  %td= request.organization.name
+  %td= request.due_date.strftime('%d %b %y')
+  %td /
+  %td Pending
+  %td= link_to "Respond", new_response_path, :class => "respond"

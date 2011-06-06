@@ -25,7 +25,7 @@ def set_attributes_for_code(c, row)
   unless parent_external_id.blank?
     parents = Code.find(:all,
                         :conditions => ['external_id = ? AND type IN (?)',
-                          parent_external_id, Code::ACTIVITY_ROOT_TYPES])
+                          parent_external_id, Code::PURPOSES])
 
     if parents.length > 1
       raise "More that one code with same external_id: #{parent_external_id}

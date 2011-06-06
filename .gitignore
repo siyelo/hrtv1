@@ -13,6 +13,8 @@ db/*.gz
 db/*.db
 db/*.tgz
 db/*pgdump*
+db/reports/*.csv
+db/reports/ufs/*.csv
 config/database.yml
 log/*.log
 tmp/*
@@ -38,6 +40,14 @@ pull*.dat
 *.tmproj
 .sass-cache
 
+#rcov data should not be pushed to the repo
+coverage/
+coverage.data
+
+# Slurper config (for pivotal tracker)
+doc/slurper_config.yml
+slurper_config.yml
+
 # heroku vars files
 config/settings.secret.yml
 config/settings.loader*
@@ -46,3 +56,6 @@ config/settings.loader*
 ___*
 
 .amazon_keys
+slurper
+slurper_config.yml
+

@@ -6,46 +6,45 @@
     Manage
   .dashboard_section
     %ul.admin_dashboard
-      %li= link_to "Organizations", admin_organizations_path, :class => 'drill_down'
-      %li= link_to "Users", admin_users_path, :class => 'drill_down'
-      %li=  link_to "Activities", activities_url, :class => 'drill_down'
-      %li=  link_to "Comments", comments_url, :class => 'drill_down'
-      %li=  link_to "Codes", codes_url, :class => 'drill_down'
-      %li=  link_to "Respond to help requests", help_requests_url, :class => 'drill_down'
-      %li=  link_to "Help and page tips", model_helps_url, :class => 'drill_down'
+      %li= link_to "Requests", admin_requests_path, :class => 'drill_down target'
+      %li= link_to "Organizations", admin_organizations_path, :class => 'drill_down target'
+      %li= link_to "Users", admin_users_path, :class => 'drill_down target'
+      %li= link_to "Activities", admin_activities_url, :class => 'drill_down target'
+      %li= link_to "Comments", comments_url, :class => 'drill_down target'
+      %li= link_to "Codes", admin_codes_url, :class => 'drill_down target'
 
   %h2
-    =image_tag"icon_reporter.png", :class => "heading_icon"
+    = image_tag "icon_reporter.png", :class => "heading_icon"
     Policy Maker Dashboard
   .dashboard_section
     %ul.policy_maker_dashboard
-      %li= link_to "Review data responses", policy_maker_data_responses_path, :class => 'drill_down'
+      %li= link_to "Review data responses", policy_maker_responses_path, :class => 'drill_down target'
 
 .second-half
   %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
+    = image_tag "icon_lightning.png", :class => "heading_icon"
     Reports
   .dashboard_section
     %ul.admin_reports
       %li
-        %a{ :href => admin_responses_path, :class => "drill_down"}
+        - link_to admin_responses_path, :class => "drill_down target" do
           Review Organization Expenditures and Budgets
           %span.hint Interactive reports
       %li
-        %a{ :href => reports_districts_path, :class => "drill_down"}
+        - link_to reports_districts_path, :class => "drill_down target" do
           Review District Expenditures and Budgets
           %span.hint Interactive reports
       %li
-        %a{ :href => reports_country_path, :class => "drill_down"}
+        - link_to reports_country_path, :class => "drill_down target" do
           Review National Expenditures and Budgets
           %span.hint Interactive reports
       %li
-        %a{ :href => admin_reports_path, :class => "drill_down"}
+        - link_to admin_reports_path, :class => "drill_down target" do
           All Reports
           %span.hint Export a report in CSV
 
   %h2
-    =image_tag"icon_comments.png", :class => "heading_icon"
+    = image_tag "icon_comments.png", :class => "heading_icon"
     Recent Comments
   = render 'reporter/dashboard/comment_short_list', :comments => @comments
 

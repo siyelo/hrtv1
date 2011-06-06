@@ -1,6 +1,578 @@
-// Only apply the blueprint form styles to forms with
-// a class of "bp". This makes it easier to style
-// forms from scratch if you need to.
+form.data_response, .basic_form
+  .dashboard_section
+    background: $filler
 
-form.bp
-  +blueprint-form
+  ol
+    li
+      border-bottom: 1px solid $lightest-blue
+      margin-bottom: 7px
+      padding-bottom: 7px
+      +pie-clearfix
+      &:last-child
+        border: none
+        margin: 0
+      &.last
+        border: none
+        margin: 0
+        padding: 0
+      &.numeric
+        input[type=text]
+          width: 14%
+      input[type=text]
+        &.date_picker
+          width: 14%
+      &.amounts
+        display: block
+        li
+          border: none
+          display: inline
+          float: left
+          margin: 0
+          padding: 0
+          width: 20%
+          label
+            width: 100%
+          input[type=text]
+            width: 85%
+        ul
+          float: left
+          margin: 0
+          width: 82%
+
+        input[type=text], textarea
+          width: 75px
+
+    h3
+      background: image_url("bg-blue.jpg")
+      color: #fff !important
+      margin-top: 5px
+      padding: 10px 10px 7px !important
+      +border-top-radius(3px)
+    label
+      float: left
+      margin-top: 9px
+      width: 18%
+    select, input[type=text], input[type=password], textarea
+      float: left
+      font-size: 12px
+      padding: 5px
+      width: 35%
+      +border-radius(3px)
+    select
+      padding: 2px
+      width: 36.5%
+
+    .inline-hints
+      float: right
+      margin-left: 1%
+      width: 42%
+
+    .inline-errors
+      color: red
+      float: left
+      font-size: 11px
+      margin-top: 3px
+      margin-left: 17%
+      padding-left: 10px
+      width: 70%
+
+  .check_boxes
+    fieldset
+      float: left
+      width: 55%
+    legend
+      float: left
+      width: 170px
+      label
+        line-height: 1.3
+        padding-right: 5px
+        white-space: normal
+        width: auto
+    .label
+      width: 33%
+    ol
+      +pie-clearfix
+      float: left
+      width: 67%
+      +border-radius(3px)
+    li
+      border: none
+      display: inline-block
+      float: left
+      margin-bottom: 0
+      width: 33%
+      label
+        font-size: 11px
+        font-weight: normal
+        margin-top: 0
+        width: auto
+    input[type=checkbox]
+      margin: 0
+      padding: 0
+
+.checkbox_push
+  float: left
+
+.form_aside
+  background: $filler
+  border: 1px solid $lightest-blue
+  float: right !important
+  margin-top: 5px
+  padding: 1% 2% 1%
+  width: 16%
+  +border-radius(3px)
+
+  .warn
+    color: $warm-red
+
+  h3
+    border-bottom: 1px dashed $light-blue
+    margin-bottom: 10px
+    padding-top: 0px !important
+  p
+    color: $mid-blue
+    font-size: 11px
+    line-height: 1.4
+  input[type=text], textarea
+    width: 92% !important
+  textarea
+    height: 100px
+
+.hint, .inline-hints
+  color: $mid-blue
+  display: block
+  font-size: 11px
+  padding: 3px 0 0
+  &.padded
+    padding: 0 0 20px
+
+.sub_activities
+  .hint
+    margin: 10px 5px
+
+  h4
+    margin: 15px 0 10px
+    color: #555555
+
+  .nested_field
+    margin-left: 20px
+
+.inputs
+  li
+    margin-bottom: 20px
+  label
+    color: $mid-blue + #222 !important
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 3px
+  input[type=text], textarea
+    width: 340px
+  select
+    padding: 7px 5px
+    width: 353px
+
+  li.amounts
+    display: inline-block
+    li
+      float: left
+    input[type=text], textarea
+      width: 75px
+
+// SEARCH
+#search
+  float: right
+
+  #search_box
+    +border-radius
+    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
+    border: 1px solid #DDDDDD
+    float: right
+    font-size: 12px
+    padding: 0 28px 0 5px
+    width: 210px
+
+  input[type='text']
+    -moz-box-shadow: none
+    background: none repeat scroll 0 0 #FFFFFF !important
+    border: none
+    left: 10px
+    color: #000000
+    font-size: 12px
+    font-weight: normal
+    padding: 5px
+    width: 200px
+    height: 16px
+    line-height: 1.4em
+  input[type=text], textarea
+    &:hover, &:focus, &:active
+      border: none !important
+
+
+  input[type='submit']
+    display: none
+
+
+input[type=text], textarea
+  &:hover, &:focus, &:active
+    border: 1px solid $light-blue - #222 !important
+    +box-shadow($light-blue, 0, 0, 3px)
+
+h3.form_heading
+  background: image_url("bg-blue.jpg")
+  color: #fff !important
+  margin-top: 5px
+  padding: 10px 10px 7px !important
+  +border-top-radius(3px)
+
+.row
+  border-bottom: 1px dashed $light-blue
+  color: $mid-blue
+  font-size: 12px
+  font-weight: bold
+  margin-top: 5px
+  padding-bottom: 5px
+  width: 100%
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    &:first-child
+      color: $mid-blue + #444
+      width: 18%
+  &.last
+    border: none
+    padding: 0
+
+.comment_wrap
+  font-size: 12px
+  line-height: 1.4
+  margin-bottom: 20px
+  &:last-child
+    margin-bottom: 0px
+  .title
+    color: $mid-blue + #444
+    font-weight: bold
+    margin-bottom: 3px
+  .comment
+    border-bottom: 1px dashed $lighter-blue
+    color: $mid-blue
+    margin-bottom: 5px
+    padding-bottom: 5px
+  .author
+    color: $light-blue - #222
+    font-size: 9px
+    text-transform: uppercase
+
+#project_sub_form
+  overflow: hidden
+  margin-bottom: 5px
+  padding-bottom: 8px
+  border-bottom: 1px solid #E6EDF3
+  ol
+    padding-top: 5px
+
+.fields
+  overflow: hidden
+  border-bottom: 4px solid $lightest-blue
+  margin-bottom: 10px
+  padding: 10px 0
+
+  .preview_block
+    ul
+      +horizontal-list
+
+      > li
+        width: 10%
+
+        &:first-child
+          width: 37%
+          overflow: hidden
+
+        &:last-child
+          width: 50%
+
+          ul
+            border-left: 3px solid $lightest-blue
+            padding-left: 15px
+
+            li
+              width: 17%
+
+      li
+        border: none
+        color: $mid-blue
+        font-size: 12px
+        font-weight: bold
+
+
+        span
+          display: block
+          margin-bottom: 3px
+          font-size: 9px
+          font-weight: normal
+          color: $mid-blue + #333
+
+
+  .edit_block, .preview_block
+    width: 90%
+    float: left
+
+  .manage_block
+    float: right
+    text-align: right
+    width: 10%
+
+    a.edit, a.delete
+      background: #eee
+      border: 1px solid $light-blue
+      color: $dark-grey
+      display: inline-block
+      font-size: 10px
+      height: auto
+      line-height: 1.4
+      margin-left: 3px
+      padding: 3px 5px 2px
+      text-decoration: none
+      +border-radius(2px)
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +text-shadow(#fff, 0, 0, 1px)
+      &:hover, &:focus
+        background: $orange
+        border: 1px solid $orange - #111
+        color: #fff
+        +linear-gradient(color-stops($orange - #111, $orange + #111))
+        +text-shadow(#444, 0, 0, 1px)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
+    a.delete
+      &:hover, &:focus
+        background: $red
+        border: 1px solid $red - #111
+        color: #fff
+        +linear-gradient(color-stops($red - #111, $red + #111))
+        +text-shadow(#444, 0, 0, 1px)
+
+.add
+  a
+
+
+.delete_aside
+  background: $filler
+  border: 1px solid $lightest-blue
+  float: right
+  margin-top: 5px
+  width: 10px
+  +border-radius(3px)
+
+.delete_section
+  background-color: #EEEEEE
+  border-top: 1px solid #CCCCCC
+  color: #666666
+  font-size: 11px
+  margin: 20px 0 0
+  padding: 10px
+
+  a.delete_action
+    border: 0 none
+    color: #990000
+    font-size: 11px
+    font-weight: bold
+    text-decoration: underline
+
+  strong
+    font-weight: bold
+
+  p
+    margin-top: 5px
+
+  //a:hover, a:link, a:active, a:visited
+    //outline: medium none
+
+.condensed_form
+.inputs_condensed
+  > ol
+    > li
+      border-bottom: 4px solid $lightest-blue
+      margin-bottom: 10px
+      padding-bottom: 10px
+      +pie-clearfix
+      &:first-child
+        display: none
+
+  .check_boxes
+    margin-bottom: 0
+    .label
+      padding-bottom: 5px
+    ol li
+      display: inline
+      float: left
+      margin: 0 10px 0 0
+      +pie-clearfix
+    label
+      font-size: 11px
+      font-weight: normal
+
+.upload_box
+  display: none
+  .dashboard_section
+    padding-bottom: 0
+    margin-bottom: 0
+  h3
+    font-size: 12px !important
+  p
+    font-size: 12px
+  input[type='submit']
+    margin-top: 0 !important
+
+.activity_box
+  margin: 0 !important
+
+  .dashboard_section
+    margin-bottom: 0
+
+  .left
+    float: left
+
+  .ajax-loader
+    margin: 10px
+
+  .header
+    background: $mid-blue
+    color: $lightest-blue
+    font-size: 12px
+    font-weight: bold
+    padding: 10px
+    text-transform: none
+    +linear-gradient(color-stops($mid-blue + #111, $mid-blue))
+    cursor: pointer
+
+    span
+      background: $mid-blue
+      color: $light-blue - #111
+      font-size: 10px
+      padding: 3px 5px
+      +border-radius
+
+    img
+      margin-right: 5px
+    ul
+      font-size: 11px
+      font-weight: normal
+      margin-bottom: 0 !important
+      li
+        background: $mid-blue
+        display: inline
+        float: left
+        margin-left: 5px
+        padding: 3px 5px
+        +border-radius
+
+  .activity_project
+    float: left
+    width: 20%
+
+  select
+    padding: 2px
+    width: 100%
+
+  .project_sub_form
+    float: left
+    margin-left: 5%
+    margin-bottom: 0
+    width: 75%
+    .inline-hints
+      display: none
+
+.inputs_condensed
+  input[type=text], textarea
+    display: inline-block
+    padding: 5px
+    width: 96%
+
+  label
+    margin-bottom: 2px
+
+  .inline-errors
+    background: $lightest-blue
+    border: 1px solid $lighter-blue
+    color: red
+    float: left
+    font-size: 11px
+    margin-top: -5px
+    padding: 6px 8px 2px
+    +border-bottom-radius
+    //+box-shadow($lighter-blue, 0, 1px, 0)
+
+  .second-half > li
+    &:first-child
+      height: 100px
+    &.grid-80
+      margin-bottom: 10px
+
+  .grid-10
+    float: left
+    margin-right: 1%
+    width: 9%
+  .grid-15
+    float: left
+    margin-right: 3%
+    width: 12%
+  .grid-20
+    float: left
+    margin-right: 4%
+    width: 16%
+  .grid-30
+    float: left
+    margin-right: 2%
+    width: 28%
+  .grid-40
+    float: left
+    margin-right: 2%
+    width: 38%
+  .grid-50
+    float: left
+    width: 50%
+  .grid-60
+    float: left
+    width: 60%
+  .grid-80
+    float: left
+    width: 80%
+  .grid-100
+    float: left
+    width: 100%
+
+.upbox
+  background: $light-blue
+  border: 1px solid $light-blue - #111
+  float: left
+  margin-right: 5px
+  padding: 5px 5px 4px
+  +border-radius
+  label
+    display: inline !important
+
+.input_hint
+  font-style: italic
+  color: gray
+
+.app
+
+  .ui-autocomplete-input, .ui-autocomplete
+    font-size: 11px
+    font-weight: normal
+
+  .ui-autocomplete-input
+    width: 35%
+
+  .ui-autocomplete
+    li
+      a
+        color: $dark-grey
+
+        strong
+          font-weight: bold
+          color: black

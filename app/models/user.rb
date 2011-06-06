@@ -1,43 +1,56 @@
 class User < ActiveRecord::Base
   acts_as_authentic
 
-  attr_accessible :full_name, :email, :username,
-                  :password, :password_confirmation,
-                  :organization_id, :organization, :roles
+  ### Constants
+  ROLES = %w[admin reporter activity_manager]
+  FILE_UPLOAD_COLUMNS = %w[organization_name username email full_name roles password password_confirmation]
 
-  # Associations
-  has_many  :comments
-  belongs_to :organization, :counter_cache => true
+  ### Attributes
+  attr_accessible :full_name, :email, :username, :organization_id, :organization,
+                  :password, :password_confirmation, :roles, :tips_shown
+
+  ### Associations
+  has_many :comments
   has_many :data_responses, :through => :organization
+  belongs_to :organization, :counter_cache => true
+  # TODO: remove
   belongs_to :current_data_response, :class_name => "DataResponse",
               :foreign_key => :data_response_id_current
 
-  # Validations
+  ### Validations
   validates_presence_of  :username, :email, :organization_id
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
 
-  # Named scopes
-  named_scope :with_role, lambda { |role| {:conditions => "roles_mask & #{2**ROLES.index(role.to_s)} > 0 "} }
-
-  def self.remove_security
-    with_exclusive_scope {find(:all)}
-  end
-
-  # Authlogic
+  # Used by Authlogic's UserSession to find the user by username or by email
   def self.find_by_username_or_email(login)
     self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
   end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << User::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      organization = Organization.find_by_name(attributes.delete('organization_name'))
+      attributes.merge!(:organization_id => organization.id) if organization
+      user = User.new(attributes)
+      user.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
 
   def deliver_password_reset_instructions!
     reset_perishable_token!
     Notifier.deliver_password_reset_instructions(self)
   end
-
-
-
-  ROLES = %w[admin reporter activity_manager]
 
   def roles=(roles)
     roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
@@ -48,18 +61,24 @@ class User < ActiveRecord::Base
     ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
   end
 
-  def role?(role)
-    roles.include? role.to_s
-  end
-
   def admin?
     role?('admin')
   end
 
+  def reporter?
+    role?('reporter')
+  end
+
+  def activity_manager?
+    role?('activity_manager')
+  end
+
+  # TODO: spec or remove
   def to_s
     username
   end
 
+  # TODO: spec or remove
   # Law of Demeter methods
   def organization_status
     return "No Organization" if organization.nil?
@@ -69,6 +88,15 @@ class User < ActiveRecord::Base
     current_dr.status
   end
 
+  def name
+    full_name.present? ? full_name : username
+  end
+
+  private
+
+    def role?(role)
+      roles.include?(role.to_s)
+    end
 end
 
 
@@ -93,5 +121,6 @@ end
 #  text_for_organization    :text
 #  full_name                :string(255)
 #  perishable_token         :string(255)     default(""), not null
+#  tips_shown               :boolean         default(TRUE)
 #
 

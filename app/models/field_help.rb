@@ -1,13 +1,18 @@
 class FieldHelp < ActiveRecord::Base
+
+  ### Associations
   belongs_to :model_help
 
   default_scope :order => 'attribute_name'
-  
+
   # for active scaffold labels & drop downs
+  # TODO: remove
   def name
     attribute_name.humanize
   end
 end
+
+
 
 
 # == Schema Information

@@ -55,6 +55,33 @@ module Reports::Helpers
     coding_with_parent_codes
   end
 
+  # replacing method above, leaving above in case referenced elsewhere
+  # and what it returns is what should be used for a report
+  # TODO: refactor methods here into code assignment or coding class
+  def get_coding_only_nodes_with_local_amounts(codings)
+    if codings.size == 1 && codings.first.code_id.nil?
+      #coding was faked, just return this correctly
+      #return [[codings.first, ["No Code Specified"]]]
+    end 
+    coding_with_parent_codes = []
+    coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
+
+    real_codings  = codings.select do |ca|
+      code = codes_cache[ca.code_id]
+      (ca.amount.present? || ca.percentage.present?) &&
+      code && ca.has_amount_not_in_children?
+    end
+
+    real_codings.each do |ca|
+      coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
+    end
+
+    # TODO FIX BUG, sometimes this returns an [] when codings is non-empty
+    # should NEVER have code assignments which have no real codings
+    # raise codings.to_yaml if coding_with_parent_codes.size == 0
+    coding_with_parent_codes
+  end
+
   def codes_cache
     return @codes_cache if @codes_cache
 
@@ -77,6 +104,8 @@ module Reports::Helpers
     return @code_descendants_cache
   end
 
+  # TODO refactor methods having to do with code assignments
+  # traversal, and values, back into the model for them
   def lowest_level_code?(code, coded_codes)
     llcode = true
 
@@ -95,20 +124,17 @@ module Reports::Helpers
   end
 
 
-  def get_funding_source_name(activity)
+  def funding_source_name(activity)
     get_funding_sources(activity).map{|f| f.from.try(:name)}.uniq.join(', ')
-  end
-
-  def get_funding_source_type(activity)
-    get_funding_sources(activity).map{|f| f.from.try(:type)}.uniq.join(', ')
   end
 
   def get_funding_sources(activity)
     #TODO fake one if none so works correctly, w name of Not Entered
     #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
+    # TODO take logic from jawp report that replaces bad funding sources, marked with a TODO
     funding_sources = []
-    activity.projects.each do |project|
-      project.in_flows.with_organizations.each do |funding_source|
+    if activity.project
+      activity.project.in_flows.each do |funding_source|
         funding_sources << funding_source
       end
     end
@@ -125,31 +151,39 @@ module Reports::Helpers
   end
 
   def add_codes_to_row(row, codes, deepest_nesting, attr)
+    last_code_found = 0
     deepest_nesting.times do |i|
       code = codes[i]
       if code
         row << codes_cache[code.id].try(attr)
+        last_code_found = i
       else
-        row << nil
+        if last_code_found == i - 1
+          row << "Not Disaggregated Further"
+        else
+          row << "At Level Above"
+        end
       end
     end
   end
 
-  def get_funding_sources_total(funding_sources, is_budget)
+  def get_funding_sources_total(activity, funding_sources, is_budget)
     sum = 0
+    usd_rate = get_usd_rate(activity)
     funding_sources.each do |fs|
       if is_budget
-        sum += fs.budget if fs.budget
+        sum += fs.budget * usd_rate if fs.budget
       else
-        sum += fs.spend if fs.spend
+        sum += fs.spend * usd_rate if fs.spend
       end
     end
     sum
   end
 
-  def get_funding_source_amount(funding_source, is_budget)
+  def get_funding_source_amount(activity, funding_source, is_budget)
+    usd_rate = get_usd_rate(activity)
     amount = is_budget ? funding_source.budget :  funding_source.spend
-    amount || 0 # return 0 when amount is nil
+    (amount || 0) * usd_rate
   end
 
   def get_ratio(amount_total, amount)
@@ -210,16 +244,10 @@ module Reports::Helpers
     activities = {}
     code_assignments.each do |ca|
       activities[ca.activity] = {}
-      sum_of_children = ca.sum_of_children.nil? ? 0 : ca.sum_of_children
-      activities[ca.activity][:leaf_amount] = sum_of_children > 0 ? 0 : ca.cached_amount
-      activities[ca.activity][:amount] = ca.cached_amount
+      activities[ca.activity][:leaf_amount] = (ca.sum_of_children == 0 ? ca.cached_amount_in_usd : 0)
+      activities[ca.activity][:amount] = ca.cached_amount_in_usd
     end
     activities
-  end
-
-  def first_project(activity)
-    project = activity.projects.first
-    project ? "#{h project.name}" : " "
   end
 
   def provider_fosaid(activity)
@@ -231,11 +259,11 @@ module Reports::Helpers
   end
 
   def parent_activity_budget(activity)
-    activity.class == SubActivity ? activity.activity.budget : ""
+    activity.class == SubActivity ? activity.activity.budget_in_usd : ""
   end
 
   def parent_activity_spend(activity)
-    activity.class == SubActivity ? activity.activity.spend : ""
+    activity.class == SubActivity ? activity.activity.spend_in_usd : ""
   end
 
   def is_budget?(type)
@@ -245,6 +273,26 @@ module Reports::Helpers
       false
     else
       raise "Invalid type #{type}".to_yaml
+    end
+  end
+
+  def preload_district_associations(activities, is_budget)
+    if is_budget
+      Activity.send(:preload_associations, activities,
+                    [:locations, {:coding_budget_district => :activity}])
+    else
+      Activity.send(:preload_associations, activities,
+                    [:locations, {:coding_spend_district => :activity}])
+    end
+  end
+
+  def get_usd_rate(activity)
+    if activity.currency.present?
+      Money.default_bank.get_rate(activity.currency, :USD)
+    else
+      # Workarround for reports not to raise an exception
+      # TODO: remove when all activities have a currency
+      1
     end
   end
 end

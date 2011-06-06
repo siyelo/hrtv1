@@ -8,13 +8,19 @@ Factory.define :user, :class => User do |f|
 end
 
 Factory.define :reporter,  :parent => :user do |f|
+  f.sequence(:username)   { |i| "reporter_#{i}" }
+  f.sequence(:email)      { |i| "reporter_#{i}@example.com" }
   f.roles { ['reporter'] }
 end
 
 Factory.define :activity_manager,  :parent => :user do |f|
+  f.sequence(:username)   { |i| "activity_manager_#{i}" }
+  f.sequence(:email)      { |i| "activity_manager_#{i}@example.com" }
   f.roles { ['activity_manager'] }
 end
 
 Factory.define :admin,  :parent => :user do |f|
+  f.sequence(:username)   { |i| "admin_#{i}" }
+  f.sequence(:email)      { |i| "admin_#{i}@example.com" }
   f.roles { ['admin'] }
 end

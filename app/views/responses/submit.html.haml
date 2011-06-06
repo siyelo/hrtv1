@@ -1,0 +1,258 @@
+- title("Submit Response")
+
+
+
+= render :partial => 'projects/sub_nav'
+
+%h1.main_heading Submit Response
+
+%ul.status.stop
+  %li
+    %span Request:
+    = @response.request.title
+  %li
+    %span Status:
+    = @response.request.status
+  %li
+    %span Last Submitted:
+    = !@response.last_submitted_at.nil? ? l(@response.last_submitted_at, :format => :short) : 'never'
+
+= render 'getting_started_submit'
+
+%ul.review
+  %li.alt
+    %h2 Data Response Settings
+  %li.dashboard_section
+    %h3{:class => ready(@response.valid?)}
+      Your Data Response Settings
+      - unless @response.valid?
+        %span.info
+          = "Your Data Response Settings are not complete. Please visit the #{link_to "settings", edit_response_path(@response)} to make the necessary changes."
+  %li.alt
+    %h2 Projects
+  %li.dashboard_section
+    %h3{:class => your_projects_class()}
+      Your Projects
+
+    %ul.review
+      %li
+        %h3{:class => ready(@response.projects_entered?)}
+          Projects Entered
+          - unless @response.projects_entered?
+            %span.info
+              = render 'projects/no_projects_yet'
+      // maybe ul.review first?
+      %li
+        = render 'project_amounts', :project_amounts_entered => ready(@response.project_amounts_entered?), :projects_entered => ready(@response.projects_entered?)
+
+      %li
+        %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
+          Activities Entered
+          - unless @response.projects_have_activities?
+            - if !@response.projects_entered?
+              %span.info
+                = render 'projects/no_projects_yet'
+                Then you may start adding Activities.
+            - else
+              %span.info
+                You have project(s), but not all have activities yet.
+                = link_to "Start by adding your activities here.", response_projects_path(@response)
+          - unless @response.activities_without_amounts.empty?
+            %span.info
+              The activities below are missing amounts, click to edit and add amounts
+            // GN TODO: handle sub activities better here
+            // currently just takes to edit page for activity, very confusing
+            %ul.push
+              - @response.activities_without_amounts.each do |activity|
+                %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
+
+      %li
+        %h3{:class => ready(@response.projects_have_other_costs?)}
+          Other Costs Entered
+          - unless @response.projects_have_other_costs?
+            - unless @response.projects_entered?
+              %span.info
+                = render 'projects/no_projects_yet'
+                Then you may start adding Other Costs.
+            - else
+              %span.info
+                Other Costs help you include any financial information at the central level and/or administrative expenses.
+                = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+
+  %li.alt
+    %h2 Classifications
+  %li.dashboard_section
+    %h3{:class => ready(@response.activities_coded? && @response.other_costs_coded?)}
+      Detailed Classifications
+
+    %ul.review
+      %li
+        %h3{:class => ready(@response.activities_coded?)}
+          Activities Classified
+          - unless @response.activities_coded?
+            - unless @response.uncoded_activities.empty?
+              %span.info
+                Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info
+                Start by adding a few Activities first (see above), then you can start classifying them.
+                = link_to "Start adding your Activities here.", response_projects_path(@response)
+        - unless @response.activities_coded?
+          - unless @response.uncoded_activities.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_activities
+
+
+
+      %li
+        %h3{:class => ready(@response.other_costs_coded?)}
+          Other Costs Classified
+          - unless @response.other_costs_coded?
+            - unless @response.uncoded_other_costs.empty?
+              %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info
+                Start by adding a few Other Costs first (see above), then you can start classifying them.
+                = link_to "Start adding your Other Costs here.", response_projects_path(@response)
+
+        - unless @response.other_costs_coded?
+          - unless @response.uncoded_other_costs.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_other_costs
+  %li.alt
+    %h2 Data entry
+  %li.dashboard_section
+    %h3{:class => (data_verification_class())}
+      Data Verification
+    %ul.review
+      %li
+        %h3{:class => projects_linked_class()}
+          Projects Linked to Funders' Projects
+          - unless @response.projects_linked?
+            %span.info
+              Please
+              = link_to "link your projects", bulk_edit_response_projects_path(@response)
+              to each Funder project respectively.
+
+      %li
+        %h3{:class => ready(@response.check_projects_funding_sources_have_organizations?)}
+          All Projects have Funding Sources
+          - unless @response.check_projects_funding_sources_have_organizations?
+            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
+            - @projects.each do |project|
+              %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+
+
+      %li
+        %h3{:class => ready(@response.activities_have_implementers?)}
+          All Activities have Providers
+          - unless @response.activities_have_implementers?
+            %span.info The activities below are missing their provider(s).
+            - @response.normal_activities.each do |activity|
+              - if activity.implementer.nil?
+                %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity)
+
+      %li
+        %h3{:class => ready(@response.projects_funding_sources_ok?)}
+          Projects Amounts = Totals for Funding Sources
+          - unless @response.projects_funding_sources_ok?
+            %span.info The Project amounts do not match their Funding Source amount totals. Please update your projects and/or funding sources.
+
+        - unless @response.projects_funding_sources_ok?
+          .simple_table.push
+            %table
+              %thead
+                %tr
+                  %th Project
+                  %th Project Amount
+                  %th Funding Sources Amount Total
+                  %th Diff
+                  %th.manage Manage
+              %tbody
+                %tr
+                  %th{:colspan => 5}
+                    Budget
+                - @projects.each do |project|
+                  - if (project.in_flows_budget_total || 0) != (project.budget || 0)
+                    %tr
+                      %td= project.name
+                      %td= n2crs(project.budget, project.currency)
+                      %td= n2crs(project.in_flows_budget_total, project.currency)
+                      %td= n2crs(((project.budget || 0) - project.in_flows_budget_total), project.currency)
+                      %td= link_to "Edit", edit_response_project_path(@response, project)
+
+                %tr
+                  %th{:colspan => 5}
+                    Spend
+                - @response.projects.each do |project|
+                  - if (project.in_flows_spend_total || 0) != (project.spend || 0)
+                    %tr
+                      %td= project.name
+                      %td= n2crs(project.spend, project.currency)
+                      %td= n2crs(project.in_flows_spend_total, project.currency)
+                      %td= n2crs(((project.spend || 0) - project.in_flows_spend_total), project.currency)
+                      %td= link_to "Edit", edit_response_project_path(@response, project)
+
+
+      %li
+        %h3{:class =>  ready(@response.projects_activities_ok?)}
+          Projects Amounts = Totals for Activities + Totals for Other Costs
+          - unless @response.projects_activities_ok?
+            %span.info
+              The Project amounts should match the total amounts for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
+
+        - unless @response.projects_activities_ok?
+          .simple_table.push.review
+            %table
+              %thead
+                %tr
+                  %th= "Project/Activity"
+                  %th= "Project Amount Total"
+                  %th= "Activity/Other Costs Amount Total"
+                  %th= "Diff"
+              %tbody
+                // GN TODO: refactor so its [:budget, :spend].each do |m| render "some_partial", :response => @response, :amount_method => m
+                %tr
+                  %th{:colspan => 5}
+                    Budget
+                - @response.projects_with_activities_not_matching_amounts(:budget).each do |project|
+                  - if true
+                    %tr{:class => "#{dom_id(project)}"}
+                      %td.first
+                        = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
+                        = link_to project.name, edit_response_project_path(@response, project)
+                      %td.first= n2crs(project.budget, project.currency)
+                      %td.first= n2crs((project.activities_budget_total + project.other_costs_budget_total), project.currency)
+                      %td.first= n2crs((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency)
+                      - project.normal_activities.each do |activity|
+                        %tr{:class => "#{dom_id(project)}_budget"}
+                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
+                          %td.activity
+                          %td.activity= n2crs(universal_currency_converter(activity.budget, activity.currency, project.currency), project.currency)
+
+                %tr
+                  %th{:colspan => 5}
+                    Spend
+
+                - @response.projects_with_activities_not_matching_amounts(:spend).each do |project|
+                  - if true
+                    %tr
+                      %td.first
+                        = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"
+                        = link_to project.name, edit_response_project_path(@response, project)
+                      %td.first= n2crs(project.spend, project.currency)
+                      %td.first= n2crs(project.activities_spend_total + project.other_costs_spend_total, project.currency)
+                      %td.first= n2crs((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency)
+                      - project.activities.roots.each do |activity|
+                        %tr{:class => "#{dom_id(project)}_spend"}
+                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
+                          %td.activity
+                          %td.activity= n2crs(activity.spend, activity.currency)
+
+
+
+//%hr.divider
+%p
+  = link_to "Submit", send_data_response_response_path(current_user.current_data_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+
+
+
+

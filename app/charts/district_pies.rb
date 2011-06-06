@@ -19,7 +19,60 @@ module Charts::DistrictPies
                  organizations.name",
       :order => "value DESC"
 
-      prepare_organizations_pie_values(records)
+      prepare_pie_values_json(records)
+    end
+
+    def ultimate_funding_sources(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_ufs_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def financing_agents(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
+        :joins => "INNER JOIN organizations ON 
+                    funding_streams.organization_fa_id = organizations.id
+                   INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
+    end
+
+    def implementers(location, amount_type)
+      records = FundingStream.find :all,
+        :select => "organizations.id,
+          organizations.name,
+          SUM(funding_streams.#{amount_type}_in_usd) as value",
+        :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
+                   INNER JOIN activities ON activities.project_id = projects.id
+                   INNER JOIN organizations ON activities.provider_id = organizations.id
+                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
+                     AND code_assignments.code_id = #{location.id}",
+        :group => "organizations.id,
+                   organizations.name",
+        :order => "value DESC"
+
+      prepare_pie_values_json(records)
     end
 
     ### admin/district/:id/activities
@@ -47,13 +100,45 @@ module Charts::DistrictPies
       load_pie(codes, district_klass, coding_type, location)
     end
 
+    def hssp2_strat_activities_pie(location, code_type, is_spent, activities = nil)
+      column_name = get_hssp2_column_name(code_type)
+      coding_type = get_hssp2_coding_type(is_spent)
+      district_klass = is_spent ? CodingSpendDistrict : CodingBudgetDistrict
+
+      if activities == nil
+        # district all activities
+        activity_ids = location.code_assignments.find(:all, 
+                         :select => 'DISTINCT("activity_id")').map(&:activity_id)
+      else
+        # district selected activities
+        activity_ids = activities.map(&:id)
+      end
+
+      code_assignments = CodeAssignment.find(:all,
+        :select => "codes.id as code_id,
+                    codes.parent_id as parent_id,
+                    codes.short_display,
+                    codes.#{column_name} AS name,
+                    SUM(code_assignments.cached_amount) AS value",
+        :conditions => ["code_assignments.type = ?
+                        AND activities.id IN (?)", 
+                        coding_type, activity_ids],
+        :joins => [:activity, :code],
+        :group => "codes.short_display, codes.id, codes.parent_id, codes.#{column_name}",
+        :order => 'value DESC')
+
+      code_assignments = remove_parent_code_assignments(code_assignments)
+      district_ratio   = calculate_district_ratio(district_klass, location)
+      build_pie_values_json(get_summed_code_assignments(code_assignments, district_ratio))
+    end
+
     def activity_pie(location, activity, code_type, is_spent)
       code_klass_string = get_code_klass_string(code_type)
       coding_type       = get_coding_type(code_type, is_spent)
       district_type     = is_spent ? "CodingSpendDistrict" : "CodingBudgetDistrict"
       activity_amount   = is_spent ? activity.spend_in_usd : activity.budget_in_usd
 
-      district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_location(location).last
+      district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_code_id(location.id).last
       coded_ok          = district_coding && district_coding.cached_amount_in_usd &&
                           activity_amount && activity_amount > 0
 
@@ -66,7 +151,7 @@ module Charts::DistrictPies
 
     ### show
     def activity_spent_ratio(location, activity)
-      district_spend_coding = activity.coding_spend_district.with_location(location).last
+      district_spend_coding = activity.coding_spend_district.with_code_id(location.id).last
       spend_coded_ok = district_spend_coding && activity.spend_in_usd && activity.spend_in_usd > 0 && district_spend_coding.cached_amount_in_usd
       if spend_coded_ok
         district_spent_ratio   = district_spend_coding.cached_amount_in_usd / activity.spend_in_usd # % that this district has allocated
@@ -77,7 +162,7 @@ module Charts::DistrictPies
 
     def activity_budget_ratio(location, activity)
       # TODO
-      district_budget_coding = activity.coding_budget_district.with_location(location).last
+      district_budget_coding = activity.coding_budget_district.with_code_id(location.id).last
       budget_coded_ok = district_budget_coding && activity.budget_in_usd && activity.budget_in_usd > 0 && district_budget_coding.cached_amount_in_usd
       if budget_coded_ok
         district_budgeted_ratio = district_budget_coding.cached_amount_in_usd / activity.budget_in_usd # % that this district has allocated
@@ -112,25 +197,6 @@ module Charts::DistrictPies
             values << [friendly_name(ca.activity), ca.value.to_f.round(2)] #value is the aggregate column from the sql
           else
             other += ca.value.to_f
-          end
-        end
-
-        values << ['Other', other.round(2)]
-
-        {
-          :values => values,
-          :names => {:column1 => 'Activity', :column2 => 'Amount'}
-        }.to_json
-      end
-
-      def prepare_organizations_pie_values(organizations)
-        values = []
-        other = 0.0
-        organizations.each_with_index do |organization, index|
-          if index < 5
-            values << [organization.name, organization.value.to_f.round(2)]
-          else
-            other += organization.value.to_f
           end
         end
 
@@ -192,13 +258,14 @@ module Charts::DistrictPies
         total_in_district = district_klass.sum(:cached_amount,
                                                :conditions => ["code_id = ?", location.id])
         total_in_all_districts = district_klass.sum(:cached_amount)
-        return total_in_district / total_in_all_districts
+
+        total_in_all_districts > 0 ? total_in_district / total_in_all_districts : 0
       end
 
       def prepare_pie_values(code_assignments, ratio)
         values = []
         code_assignments.each do |ca|
-          values << [ca.code_name, (ca.value.to_f * ratio).round(2)]
+          values << [ca.code.short_display, (ca.value.to_f * ratio).round(2)]
         end
 
         {

@@ -1,29 +1,32 @@
+- title("Dashboard")
+
 %h1.main_heading Dashboard
 
+= render 'getting_started'
+
+%ul.response-notice
+  - @responses.each do |dr|
+    -if dr.data_request.final_review?
+      %li= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, #{link_to "please re-check, then (re)submit", review_response_path(dr) } your response."
+
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Data Requests & Responses
+.dashboard_section
+  %table.modern_table
+    %thead
+      %tr
+        %td Request
+        %td Requested By
+        %td Due
+        %td Valid
+        %td Status
+        %td
+    %tbody
+      = render :partial => 'request', :collection => @requests
+      = render :partial => 'response', :collection => @responses
+
 .first-half
-  %h2
-    =image_tag "icon_admin.png", :class => "heading_icon"
-    My Responses
-  .dashboard_section
-    %ul.admin_dashboard
-      - if @data_responses.empty?
-        %li You have not responded to any Data Requests yet.
-      - @data_responses.each do |response|
-        %li.current_request= link_to "Edit #{response.data_request.title}", edit_data_response_url(response), :class => 'drill_down'
-
-  %h2
-    =image_tag "icon_reporter.png", :class => "heading_icon"
-    Data Requests
-  .dashboard_section
-    - if @data_requests_unfulfilled.empty?
-      %p You do not need to respond to any additional data requests right now.
-      %span.hint We will email you with any additional requests for data
-    - else
-      %ul.admin_dashboard
-        - @data_requests_unfulfilled.each do |req|
-          %li= req.title
-      %p= link_to "Start a new data request", new_data_response_path
-
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
     Reports
@@ -31,19 +34,19 @@
     %ul.admin_reports
       - if current_user.current_data_response
         %li
-          %a{ :href => reporter_data_response_path(current_user.current_data_response), :class => "drill_down"}
+          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
             Review My Response
             %span.hint Interactive report of your current data response
       %li
-        %a{ :href => reports_districts_path, :class => "drill_down"}
+        - link_to reports_districts_path, :class => "drill_down target" do
           Review District Expenditures and Budgets
           %span.hint Interactive reports
       %li
-        %a{ :href => reports_country_path, :class => "drill_down"}
+        - link_to reports_country_path, :class => "drill_down target" do
           Review National Expenditures and Budgets
           %span.hint Interactive reports
       %li
-        %a{ :href => reporter_reports_path, :class => "drill_down"}
+        - link_to reporter_reports_path, :class => "drill_down target" do
           All Reports
           %span.hint Export a report in CSV
 

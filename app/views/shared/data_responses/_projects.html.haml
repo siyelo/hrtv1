@@ -23,11 +23,11 @@
                   - project.in_flows.each do |flow|
                     = "#{flow.from.try(:name)} (#{flow.budget}),"
             %td= project.activities.count
-            %td= n2c(project.spend, project.currency || project.data_response.currency)
-            %td= n2c(project.budget, project.currency || project.data_response.currency)
+            %td= n2cnds(universal_currency_converter(project.spend, project.currency, project.response.currency), project.response.currency)
+            %td= n2cnds(universal_currency_converter(project.budget, project.currency, project.response.currency), project.response.currency)
             %td.manage
-              = link_to "Edit", edit_project_path(project)
-              = link_to "Delete", project, :method => :delete, :confirm => "Are your sure?"
+              = link_to "Edit", edit_response_project_path(project.response, project)
+              = link_to "Delete", response_project_path(project.response, project), :method => :delete, :confirm => "Are you sure you want to delete this project?"
 
           %tr.project.entry_main.s_border
             %td{:colspan => 100}
@@ -45,4 +45,4 @@
                 .tab2
                   = render 'shared/data_responses/activities', :activities => project.activities.roots.greatest_first.find(:all, :include => {:sub_activities => :provider})
                 .tab3
-                  = render 'shared/data_responses/activities', :activities => project.activities.with_type("OtherCost"), :other_costs => true
+                  = render 'shared/data_responses/activities', :activities => project.other_costs, :other_costs => true

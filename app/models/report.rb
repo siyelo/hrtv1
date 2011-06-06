@@ -25,17 +25,14 @@ class Report < ActiveRecord::Base
     'jawp_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
+    'activities_by_nha_subimps',
     'activities_by_all_codes_budget'
   ]
 
   attr_accessible :key, :csv, :formatted_csv
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
-  has_attached_file :csv,
-    {:path => "report/:attachment/:key.:extension"
-    }.merge(Settings.paperclip.to_options)
-  has_attached_file :formatted_csv,
-    {:path => "report/:attachment/:key.:extension"
-    }.merge(Settings.paperclip.to_options)
+  has_attached_file :csv, Settings.paperclip.to_options
+  has_attached_file :formatted_csv, Settings.paperclip.to_options
 
   validates_presence_of :key
   validates_uniqueness_of :key
@@ -105,6 +102,8 @@ class Report < ActiveRecord::Base
           Reports::ActivitiesByNsp.new(Activity.only_simple.canonical, :budget, true)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(Activity.only_simple.canonical)
+        when 'activities_by_nha_subimps'
+          Reports::ActivitiesByNhaSubimps.new(:spent, Activity.jawp_activities)
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(Activity.only_simple.canonical, :budget, true)
         else
@@ -135,17 +134,24 @@ class Report < ActiveRecord::Base
 end
 
 
+
+
+
 # == Schema Information
 #
 # Table name: reports
 #
-#  id               :integer         not null, primary key
-#  key              :string(255)
-#  created_at       :datetime
-#  updated_at       :datetime
-#  csv_file_name    :string(255)
-#  csv_content_type :string(255)
-#  csv_file_size    :integer
-#  csv_updated_at   :datetime
+#  id                         :integer         not null, primary key
+#  key                        :string(255)
+#  created_at                 :datetime
+#  updated_at                 :datetime
+#  csv_file_name              :string(255)
+#  csv_content_type           :string(255)
+#  csv_file_size              :integer
+#  csv_updated_at             :datetime
+#  formatted_csv_file_name    :string(255)
+#  formatted_csv_content_type :string(255)
+#  formatted_csv_file_size    :integer
+#  formatted_csv_updated_at   :datetime
 #
 

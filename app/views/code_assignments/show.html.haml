@@ -1,26 +1,37 @@
 :javascript
   var _activity_id = "#{@activity.id}";
 
-= render 'layouts/active_scaffold_js'
+- type = 'Spend'
+- if @coding_type =~ /Budget/
+  - type = 'Budget'
 
-- content_for :sub_nav do
-  = render :partial => 'layouts/sub_nav'
+= render 'breadcrumb', :response => @response, :activity => @activity, :type => type
+
+
+%h1.main_heading
+  = "#{@activity.class.to_s.underscore.humanize.titleize} #{type}"
+
+.main_heading
+  = render 'help'
+
+= render 'activities/tab_nav', :activity => @activity
 
 #classification
+  %ul#activity_description.status
 
-  = render '/shared/page_help'
+    %li
+      %span= "#{type} Amount:"
+      = c(@activity.send(get_coding_type(@coding_type)), @activity.currency)
 
-  .nav2
-    %h2= "Activity Classification"
-    = render 'tab_nav', :activity => @activity
+    = render  '/code_assignments/progress_bar', :activity => @activity
 
-  = render 'code_assignments/activity_description', :activity => @activity
+    - if current_user.admin? || current_user.activity_manager?
+      %li
+        %span= label_tag :approve_activity, "Approved?"
+        = check_box_tag :approve_activity, true, @activity.approved, :class => "approve_activity", :"data-id" => @activity.id, :"data-response_id" => @activity.data_response.id
+
+  = render 'tab_nav', :activity => @activity, :coding_type => @coding_type
 
   #activity_classification
-    %div.tab1
-      = render 'tab', { :coding_type => @coding_type, :activity => @activity, :codes => @codes, :tab => 'tab1' }
-    %div.tab2
-    %div.tab3
-    %div.tab4
-    %div.tab5
-    %div.tab6
+    %div.tab1{:style => 'display: block'}
+      = render 'tab'

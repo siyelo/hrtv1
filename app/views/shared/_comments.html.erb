@@ -1,7 +1,0 @@
-<% content_for :comments do %>
-  <% if @model_help %>
-    <p> All users can see the comments in the table below. </p>
-    <%= render :active_scaffold => "comments", :label => "Questions on this Page",
-               :constraints => {:commentable_id => @model_help.id, :commentable_type => "ModelHelp"} %>
-  <% end %>
-<% end %>

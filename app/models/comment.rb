@@ -1,21 +1,21 @@
 class Comment < ActiveRecord::Base
-  include ActsAsCommentable::Comment
 
   ### Attributes
   attr_accessible :title, :comment
 
   ### Validations
-  validates_presence_of :commentable_id, :commentable_type, :title,
-                        :comment, :user_id
+  validates_presence_of :title, :comment, :user_id,
+                        :commentable_id, :commentable_type
 
   ### Associations
-  belongs_to :commentable, :polymorphic => true, :counter_cache => true
   belongs_to :user
+  belongs_to :commentable, :polymorphic => true, :counter_cache => true
 
   ### Scopes
   default_scope :order => 'created_at ASC'
 
   ### Named scopes
+  # TODO: spec and REFACTOR !!!
   named_scope :by_projects, :joins => "JOIN comments c ON c.commentable_id = projects.id "
   named_scope :on_projects_for, lambda { |organization|
       { :joins => "JOIN projects p ON p.id = comments.commentable_id ",
@@ -64,38 +64,13 @@ class Comment < ActiveRecord::Base
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
 
-  ### public methods
-  def authorized_for_read?
-    if current_user
-      if current_user.role?(:admin)
-        return true
-      else
-        if %w[ModelHelp FieldHelp].include? commentable_type
-          return true
-        else
-          if commentable == nil
-            return false
-          else
-            if commentable == current_user.current_data_response
-              return true
-            else
-              commentable.data_response == current_user.current_data_response
-            end
-          end
-        end
-      end
-    else
-      false
-    end
+  def email_the_organisation_users(comment)
+    data_response = comment.commentable.is_a?(DataResponse) ?
+      commentable : commentable.data_response
+    Notifier.deliver_email_organisation_users(comment, data_response)
   end
-  def authorized_for_update?
-    authorized_for_read?
-  end
-  def authorized_for_delete?
-    authorized_for_read?
-  end
-
 end
+
 
 
 # == Schema Information

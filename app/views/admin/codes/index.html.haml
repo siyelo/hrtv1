@@ -1,0 +1,56 @@
+- title("Codes")
+
+%h1.main_heading
+  #search
+    - form_tag admin_codes_path, :method => :get do
+      = render 'shared/search_form'
+  Codes
+
+%ul.horizontal
+  %li
+    - link_to new_admin_code_path, :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Code
+
+  %li
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+
+#import
+  %h3.title_bar Import a CSV file
+  .dashboard_section
+    %p Create one or more codes from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+
+    #import_csv
+      -form_tag create_from_file_admin_codes_path, :multipart => true do
+        = label_tag :file, "File"
+        = file_field_tag :file
+        = submit_tag "Upload and Import", :class => 'small_submit_button'
+
+      = link_to "Download template", download_template_admin_codes_path
+
+- if params[:query]
+  %p
+    = "Codes with short_display, type or description containing #{params[:query]}"
+    = link_to "(Back to complete codes listing)", admin_codes_path
+
+%table.standard.rounded
+  %thead
+    %tr
+      %th= sortable "short_display"
+      %th= sortable "type"
+      %th= sortable "description"
+      %th
+
+  %tbody
+    - @codes.each do |code|
+      %tr{:class => cycle("even", "odd")}
+        %td= code.short_display
+        %td= code.type
+        %td= code.description
+        %td
+          %ul.manage_bar
+            %li= link_to "Edit", edit_admin_code_path(code)
+            %li= link_to "Show", admin_code_path(code)
+            %li= link_to "X", admin_code_path(code), :confirm => "Are you sure you want to delete this code?", :method => :delete, :class => "right"
+
+= will_paginate @codes

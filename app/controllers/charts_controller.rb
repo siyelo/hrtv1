@@ -1,16 +1,18 @@
 class ChartsController < ApplicationController
   include StringCleanerHelper # gives h method
 
+  before_filter :require_user
+
   def data_response_pie
-    @data_response = DataResponse.available_to(current_user).find(params[:id])
-    @assignments = Charts::DataResponsePies.data_response_pie(@data_response, params[:codings_type], params[:code_type])
+    @response    = find_response(params[:id])
+    @assignments = Charts::DataResponsePies.data_response_pie(@response, params[:codings_type], params[:code_type])
 
     #/charts/data_response_pie?id=6586&codings_type=CodingBudget&code_type=CostCategory
     send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')
   end
 
   def project_pie
-    @project = Project.available_to(current_user).find(params[:id])
+    @project     = find_project(params[:id])
     @assignments = Charts::ProjectPies.project_pie(@project, params[:codings_type], params[:code_type])
 
     send_data(get_csv_string(@assignments), :type => 'text/csv; charset=iso-8859-1; header=present')

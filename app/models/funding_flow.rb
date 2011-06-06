@@ -1,68 +1,97 @@
-require 'lib/ActAsDataElement'
 require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
-
-  include ActAsDataElement
-  configure_act_as_data_element
   include BudgetSpendHelpers
-  acts_as_commentable
+
+  ### Attributes
+  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
+                  :self_provider_flag, :organization_id_from, :organization_id_to,
+                  :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
+                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
 
   ### Associations
-  #
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
-  delegate :organization, :to => :project
+  belongs_to :project_from # funder's project
+  belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
 
-  belongs_to :data_response #todo: deprecate in favour of: delegate :data_response, :to => :project
-
-  ### Attributes
-  #
-  attr_accessible :budget, :organization_text, :project,
-                  :from, :to, :self_provider_flag, :spend, :spend_q4_prev,
-                  :spend_q1, :spend_q2, :spend_q3, :spend_q4, :data_response_id
+  alias :response :data_response
+  alias :response= :data_response=
 
   ### Validations
-  #
+  # validates_presence_of :project # ???
+  validates_presence_of :data_response_id
+  validates_presence_of :organization_id_from,
+    :message => :"organization_id_from.missing"
+  validates_presence_of :organization_id_to,
+    :message => :"organization_id_to.missing"
 
-  #GN: validations break how users create a new org if that org not in the list
-  # sadly they are disabled for now
-  validates_presence_of :project_id#, :organization_id_from, :organization_id_to
-
-  validates_presence_of :data_response_id # required for AS/available_to magickery
-                                          # consider removing relation and delegating to project
+  # if project from id == nil => then the user hasnt linked them
+  # if project from id == 0 => then the user can't find Funder project in a list
+  # if project from id > 0 => user has selected a Funder project
+  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
+  # if we pass "-1" then the user somehow selected "Add an Organization..."
+  validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
+    :unless => lambda {|fs| fs["project_from_id"].blank?},
+    :message => :"organization_id_from.id_below_zero"
 
   delegate :organization, :to => :project
-  delegate :data_response, :to => :project
-
-  delegate :organization, :to => :project
-  delegate :data_response, :to => :project
-
-  # Named scopes
-  named_scope :with_organizations, :conditions => "organization_id_from IS NOT NULL AND organization_id_to IS NOT NULL"
-
-  def to_s
-    "Flow"
-  end
-
-  # had to add this in to solve some odd AS bug...
-  def to_label
-    to_s
-  end
-
-  def name
-    from.name
-  end
 
   def currency
     project.try(:currency)
   end
 
+  def name
+    "From: #{from.name} - To: #{to.name}"
+  end
+
+  def self.create_flows(params)
+    unless params[:funding_flows].blank?
+      params[:funding_flows].each_pair do |flow_id, project_id|
+        ff = self.find(flow_id)
+        ff.project_from_id = project_id
+        ff.save
+      end
+    end
+  end
+
+  def funding_chains
+    if self_funded?
+      [FundingChain.new(
+  { :organization_chain => [from, to],
+        :budget => budget, :spend => spend})]
+    else
+      chains = from.best_guess_funding_chains_to(to, response.data_request) unless from.nil?
+
+      unless chains.nil? or chains.empty?
+        # TODO for better heurestics will need to pass
+        # amounts up into best_guess_funding_chains_to
+        FundingChain.adjust_amount_totals!(chains,
+      spend.try(:>, 0) ?  spend : 0,
+          budget.try(:>, 0) ? budget : 0)
+
+        chains
+      else
+        error = from.nil? ? "From was nil" : "From guessed no chains"
+        puts error
+  #raise error
+        [FundingChain.new(
+          {:organization_chain => [Organization.new(:name => "Unspecified"), to],
+           :budget => budget, :spend => spend})]
+      end
+
+    end
+  end
+
+  def self_funded?
+    from == to
+  end
+
+  def donor_funded?
+    ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
+  end
+
 end
-
-
-
-
 # == Schema Information
 #
 # Table name: funding_flows
@@ -89,5 +118,6 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  comments_count       :integer         default(0)
+#  project_from_id      :integer
 #
 

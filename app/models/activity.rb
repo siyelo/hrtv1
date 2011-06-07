@@ -95,9 +95,7 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_save :update_cached_usd_amounts
-  before_update :remove_district_codings
-  # killing our demo!!! before_update :update_all_classified_amount_caches
-  before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
+  # killing our demo!!! before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
   before_save :check_quarterly_vs_total

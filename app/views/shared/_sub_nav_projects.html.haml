@@ -1,6 +1,6 @@
 %ul
   %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}
-    = link_to 'Overview', edit_response_workplan_path(@response, :spend)
+    = link_to 'Projects', edit_response_workplan_path(@response, :spend)
   %li{:class => (params[:controller] == 'funders' && params[:action] == 'edit' ? 'active' : nil)}
     = link_to 'Funders', edit_response_funder_path(@response, :spend)
   %li{:class => (params[:controller] == 'implementers' && params[:action] == 'edit' ? 'active' : nil)}

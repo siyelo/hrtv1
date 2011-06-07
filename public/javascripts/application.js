@@ -1744,7 +1744,11 @@ var getTotal = function (amounts) {
       total += amount;
     }
   }
-  return total;
+  return roundAmount(total);
+};
+
+var roundAmount = function (amount) {
+  return amount ? Math.round(amount * 1000) / 1000 : '';
 };
 
 var workplans_edit = {

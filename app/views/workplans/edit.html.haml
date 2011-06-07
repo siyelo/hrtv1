@@ -57,11 +57,11 @@
         %td.total Total
         %td.total_amount.wrap-10
           %span.js_projects_total_spend_amount
-            = @projects.map{ |p| p.converted_activities_total_by_type('spend', false)}.compact.sum
+            = @response.total_spend
           %span.currency= @response.currency
         %td.total_amount.wrap-10
           %span.js_projects_total_budget_amount
-            = @projects.map{ |p| p.converted_activities_total_by_type('budget', false)}.compact.sum
+            = @response.total_budget
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

@@ -395,6 +395,16 @@ class DataResponse < ActiveRecord::Base
     other_costs_entered? && uncoded_other_costs.empty?
   end
 
+  def total_spend
+    projects.map{ |p| p.converted_activities_total_by_type('spend', false, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('spend', false, currency)}.compact.sum
+  end
+
+  def total_budget
+    projects.map{ |p| p.converted_activities_total_by_type('budget', false, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('budget', false, currency)}.compact.sum
+  end
+
   private
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.

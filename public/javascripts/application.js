@@ -1744,7 +1744,22 @@ var getTotal = function (amounts) {
 };
 
 var roundAmount = function (amount) {
-  return amount ? Math.round(amount * 1000) / 1000 : '';
+  return amount ? Math.round(amount * 1000) / 1000 : 0;
+};
+
+var getInputTotal = function (elements) {
+  total = 0;
+
+  $.each(elements, function () {
+    var element = $(this);
+    var amount  = element.text();
+    var rate    = element.attr('data-rate');
+    if (!isNaN(amount) && !isNaN(rate)) {
+      total += amount * rate;
+    }
+  });
+
+  return roundAmount(total);
 };
 
 
@@ -1757,9 +1772,8 @@ var updateSpendColumnValues = function (element) {
   tr.nextAll('.js_project_total_row:first').find('.js_project_total_spend_amount').text(getTotal(amounts));
 
   // all projects total for spend
-  var elements = $('.js_project_total_spend_amount');
-  var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-  $('.js_projects_total_row .js_projects_total_spend_amount').text(getTotal(amounts));
+  var total = getInputTotal($('.js_project_total_spend_amount'));
+  $('.js_projects_total_row .js_projects_total_spend_amount').text(total);
 };
 
 var updateBudgetColumnValues = function (element) {
@@ -1771,9 +1785,8 @@ var updateBudgetColumnValues = function (element) {
   tr.nextAll('.js_project_total_row:first').find('.js_project_total_budget_amount').text(getTotal(amounts));
 
   // all projects total for budget
-  var elements = $('.js_project_total_budget_amount');
-  var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-  $('.js_projects_total_row .js_projects_total_budget_amount').text(getTotal(amounts));
+  var total = getInputTotal($('.js_project_total_budget_amount'));
+  $('.js_projects_total_row .js_projects_total_budget_amount').text(total);
 };
 
 

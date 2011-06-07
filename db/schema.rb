@@ -79,11 +79,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.integer "organization_id"
   end
 
-  create_table "activities_projects", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "activity_id"
-  end
-
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
@@ -345,12 +340,6 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
-  create_table "sqlite_stat1", :id => false, :force => true do |t|
-    t.text "tbl"
-    t.text "idx"
-    t.text "stat"
-  end
-
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "email"
@@ -367,5 +356,8 @@ ActiveRecord::Schema.define(:version => 20110603115555) do
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

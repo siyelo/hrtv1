@@ -43,7 +43,7 @@ class ResponsesController < ApplicationController
     @response.update_attributes(params[:data_response])
     if @response.save
       flash[:notice] = "Successfully updated settings."
-      redirect_to edit_response_url(@response)
+      redirect_to reporter_dashboard_url
     else
       render :action => :edit
     end

@@ -101,14 +101,20 @@ module BudgetSpendHelpers
     quarters ? total_by_type(amount_type) : total_by_type_no_quarters(amount_type)
   end
 
-  def total_by_type(amount_type)
-    amounts = [
-      self.send("#{amount_type}_q4_prev"),
-      self.send("#{amount_type}_q1"),
-      self.send("#{amount_type}_q2"),
-      self.send("#{amount_type}_q3"),
-      self.send("#{amount_type}_q4")
-    ].compact.sum
+  def total_by_type(amount_type, quarters)
+    if quarters
+      amounts = [
+        self.send("#{amount_type}_q4_prev"),
+        self.send("#{amount_type}_q1"),
+        self.send("#{amount_type}_q2"),
+        self.send("#{amount_type}_q3"),
+        self.send("#{amount_type}_q4")
+      ].compact.sum
+    else
+      amounts = [
+        self.send("#{amount_type}")
+      ].compact.sum
+    end
   end
 
   def total_by_type_no_quarters(amount_type)

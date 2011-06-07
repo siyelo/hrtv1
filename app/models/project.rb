@@ -310,8 +310,8 @@ END
     other_costs.map { |a| a.workplan_total_by_type(amount_type, quarters) * currency_rate(a.currency, a.project.try(:currency)) }.compact.sum
   end
 
-  def funders_total_by_type(amount_type)
-    in_flows.map { |flow| flow.total_by_type(amount_type) }.compact.sum
+  def converted_funders_total_by_type(amount_type, quarters)
+    in_flows.map { |flow| flow.total_by_type(amount_type, quarters) * currency_rate(flow.currency, flow.project.currency) }.compact.sum
   end
 
   def sub_activities_total_by_type(amount_type)

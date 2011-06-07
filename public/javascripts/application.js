@@ -1751,6 +1751,36 @@ var roundAmount = function (amount) {
   return amount ? Math.round(amount * 1000) / 1000 : '';
 };
 
+
+var updateSpendColumnValues = function (element) {
+  var tr = element.parents('tr:first');
+
+  // project total for spend
+  var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_spend_column_amount:first');
+  var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+  tr.nextAll('.js_project_total_row:first').find('.js_project_total_spend_amount').text(getTotal(amounts));
+
+  // all projects total for spend
+  var elements = $('.js_project_total_spend_amount');
+  var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+  $('.js_projects_total_row .js_projects_total_spend_amount').text(getTotal(amounts));
+};
+
+var updateBudgetColumnValues = function (element) {
+  var tr = element.parents('tr:first');
+
+  // project total for budget
+  var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_budget_column_amount:first');
+  var amounts = jQuery.map(elements, function (e) { return $(e).val();});
+  tr.nextAll('.js_project_total_row:first').find('.js_project_total_budget_amount').text(getTotal(amounts));
+
+  // all projects total for budget
+  var elements = $('.js_project_total_budget_amount');
+  var amounts = jQuery.map(elements, function (e) { return $(e).text();});
+  $('.js_projects_total_row .js_projects_total_budget_amount').text(getTotal(amounts));
+};
+
+
 var workplans_edit = {
   run: function () {
 
@@ -1775,34 +1805,6 @@ var workplans_edit = {
       $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
     };
 
-    var updateSpendColumnValues = function (element) {
-      var tr = element.parents('tr:first');
-
-      // project total for spend
-      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_spend_column_amount:first');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.nextAll('.js_project_total_row:first').find('.js_spend_column_total').text(getTotal(amounts));
-
-      // all projects total for spend
-      var elements = $('.js_spend_column_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.js_projects_total_row .js_projects_total_spend_amount').text(getTotal(amounts));
-    };
-    // TODO  - DRY it up
-    var updateBudgetColumnValues = function (element) {
-      var tr = element.parents('tr:first');
-
-      // project total for spend
-      var elements = tr.prevAll('.js_project_row:first').nextUntil('.js_project_row').find('.js_budget_column_amount:first');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.nextAll('.js_project_total_row:first').find('.js_budget_column_total').text(getTotal(amounts));
-
-      // all projects total for spend
-      var elements = $('.js_budget_column_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.js_projects_total_row .js_projects_total_budget_amount').text(getTotal(amounts));
-    };
-
     initDemoText($('*[data-hint]'));
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
@@ -1819,10 +1821,6 @@ var workplans_edit = {
         //e.preventDefault();
       //}
     //});
-    $('.js_qamount').live('keyup', function (e) {
-      var element = $(this);
-      updateValues(element);
-    });
 
     $('.js_spend_column_amount').live('keyup', function (e) {
       var element = $(this);
@@ -1832,33 +1830,6 @@ var workplans_edit = {
     $('.js_budget_column_amount').live('keyup', function (e) {
       var element = $(this);
       updateBudgetColumnValues(element);
-    });
-
-    $('.js_activity_row .js_activity_total').live('click', function (e) {
-      var element = $(this);
-      var value = element.text();
-      if (element.hasClass('disabled')) {
-        return;
-      }
-      element.addClass('disabled').removeClass('pointer');
-      element.html($('<input/>').attr({type: 'text'}).val(value))
-    }).live('blur', function (e) {
-      var element = $(this);
-      var value = element.find('input').val().replace(',', '');
-      element.removeClass('disabled').addClass('pointer');
-      element.html(value);
-      var amount = Number(value);
-      if (!isNaN(amount)) {
-        quarter = amount / 5;
-        var activity_row = element.parents('.js_activity_row');
-        activity_row.find('.js_qamount').val(quarter);
-        updateValues(activity_row.find('.js_qamount:first'));
-      }
-    }).live('keydown', function (e) {
-      var code = e.keyCode || e.which;
-      if (code === 13) { // enter key
-        e.preventDefault();
-      }
     });
 
     $('body').click(function (e) {
@@ -1981,36 +1952,6 @@ var workplans_edit = {
 var funders_edit = {
   run: function () {
 
-    var updateValues = function (element) {
-      var tr = element.parents('tr:first');
-
-      // activity total
-      var elements = tr.find('.js_qamount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();});
-      tr.find('.js_funder_total').text(getTotal(amounts));
-
-      // project total
-      var projectRow = tr.prevAll('.js_project_row:first');
-      var projectTotalRow = tr.nextAll('.js_project_total_row:first');
-      var elements = projectRow.nextUntil('.js_project_total_row').find('.js_funder_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      var total = getTotal(amounts);
-      projectTotalRow.find('.js_project_total').text(total);
-
-      // remaining
-      var amount = Number(projectRow.attr('data-amount'));
-      var remaining = amount - total;
-      var remaining_box = projectTotalRow.find('.js_remaining_box');
-      remaining === 0 ? remaining_box.hide() : remaining_box.show();
-      remaining_box.find('span.js_remaining').text(remaining)
-
-      // all projects total
-      var elements = $('.js_project_total_row .js_project_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
-    };
-
-
     $('.add_funder').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
@@ -2066,9 +2007,14 @@ var funders_edit = {
       });
     });
 
-    $('.js_qamount').live('keyup', function (e) {
+    $('.js_spend_column_amount').live('keyup', function (e) {
       var element = $(this);
-      updateValues(element);
+      updateSpendColumnValues(element);
+    });
+
+    $('.js_budget_column_amount').live('keyup', function (e) {
+      var element = $(this);
+      updateBudgetColumnValues(element);
     });
   }
 }

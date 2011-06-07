@@ -21,9 +21,9 @@
       Add other cost
   %td.total Subtotal
   %td.total_amount
-    %span.js_spend_column_total= project.converted_activities_total_by_type('spend', false)
+    %span.js_project_total_spend_amount= project.converted_activities_total_by_type('spend', false)
     %span.currency= @response.currency
 
   %td.total_amount
-    %span.js_budget_column_total= project.converted_activities_total_by_type('budget', false)
+    %span.js_project_total_budget_amount= project.converted_activities_total_by_type('budget', false)
     %span.currency= @response.currency

@@ -19,7 +19,7 @@
   %td.total
     %ul
       %li
-        %span.js_project_total= project_funders_total
+        %span.js_project_total_spend_amount= project_funders_total
         %span.currency= project.currency
       %li.remaining.js_remaining_box{:style => (remaining_spend == 0 ? 'display: none' : nil)}
         Remaining
@@ -28,7 +28,7 @@
   %td.total
     %ul
       %li
-        %span.js_project_total= project_funders_total
+        %span.js_project_total_budget_amount= project_funders_total
         %span.currency= project.currency
       %li.remaining.js_remaining_box{:style => (remaining_budget == 0 ? 'display: none' : nil)}
         Remaining

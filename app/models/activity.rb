@@ -78,7 +78,7 @@ class Activity < ActiveRecord::Base
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
   accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
-    :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
+    :reject_if => lambda { |fs| fs["funding_flow_id"].blank? }
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -87,23 +87,24 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_presence_of :description, :if => Proc.new {|model| model.class.to_s == 'Activity'}
-  validates_presence_of :data_response_id, :project_id, :if => Proc.new {|model| model.class.to_s == 'Activity'}
-  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
-  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
+  validates_presence_of :description, :if => Proc.new { |model| model.class.eql? Activity }
+  validates_presence_of :data_response_id, :project_id, :if => Proc.new { |model| model.class.eql? Activity }
+  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
+  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank? }, :unless => Proc.new { |model| model.activity_id }
 
 
   ### Callbacks
   before_save :update_cached_usd_amounts
-  # killing our demo!!! before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
+  before_update :remove_district_codings
+  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.eql? SubActivity }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
   before_save :check_quarterly_vs_total
 
   ### Named scopes
   # TODO: spec
-  named_scope :roots,             {:conditions => "activities.type IS NULL" }
-  named_scope :greatest_first,    {:order => "activities.budget DESC" }
+  named_scope :roots,             { :conditions => "activities.type IS NULL" }
+  named_scope :greatest_first,    { :order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
@@ -628,6 +629,23 @@ class Activity < ActiveRecord::Base
   end
 
   private
+  
+    def remove_district_codings
+      activity_id = self.id
+      location_ids = locations.map(&:id)
+      code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
+      deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
+                        {:activity_id => activity_id,
+                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
+                         :location_ids => location_ids}])
+
+      # only if there are deleted code assignments, update the district cached amounts
+      if deleted_count > 0
+        code_assignment_types.each do |type|
+          set_classified_amount_cache(type)
+        end
+      end
+    end
 
     def delete_existing_code_assignments_by_type(coding_type)
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])

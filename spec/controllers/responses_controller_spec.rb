@@ -29,12 +29,6 @@ describe ResponsesController do
       @data_response = Factory.create(:data_response, :data_request => @data_request)
     end
 
-    it "GET/1 should find a response" do
-      DataResponse.should_receive(:find).and_return(@data_response)
-      get :show, :id => 1
-      response.should be_success
-    end
-
     context "create new response" do
       before :each do
         post :create, :data_response => {:data_request_id => @data_request.id,

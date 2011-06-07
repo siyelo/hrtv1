@@ -163,7 +163,7 @@ describe ActivitiesController do
       response.should redirect_to(response_projects_url(@data_response.id))
     end
     
-    it "redircts to the projects index page when Save & Go to Classify is clicked" do 
+    it "redirects to the classify activities page when Save & Go to Classify is clicked" do 
       @project = Factory.create(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
@@ -173,10 +173,10 @@ describe ActivitiesController do
         :spend => 8000
       },
       :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+      response.should redirect_to(edit_response_workplan_path(@data_response, :spend))
     end
     
-    it "returns true if the activitys budget and spend is less than that of the projects" do 
+    it "returns true and goes to classify if the activitys budget and spend is less than that of the projects" do 
       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
@@ -186,20 +186,7 @@ describe ActivitiesController do
         :spend => 8000
       }, :commit => 'Save & Classify >', :response_id => @data_response.id
       flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-    end
-    
-    it "returns false if the activitys budget and spend is more than that of the projects using save button" do 
-      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
-      post :create, :activity => {
-        :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
-        :project_id => @project.id,
-        :budget => 19000,
-        :spend => 81000
-      }, :commit => 'Save', :response_id => @data_response.id
-      flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to(response_projects_path(@data_response))
+      response.should redirect_to(edit_response_workplan_path(@data_response, :spend))
     end
     
   end
@@ -219,7 +206,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+       response.should redirect_to(edit_response_workplan_path(@data_response, :budget))
      end
      
      it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do 
@@ -237,7 +224,7 @@ describe ActivitiesController do
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        flash[:notice].should == "Activity was successfully created"
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+       response.should redirect_to(edit_response_workplan_path(@data_response, :budget))
      end
      
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do 
@@ -253,7 +240,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+       response.should redirect_to(edit_response_workplan_path(@data_response, :spend))
      end
      
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do 
@@ -269,7 +256,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+       response.should redirect_to(edit_response_workplan_path(@data_response, :spend))
      end
    end  
 end

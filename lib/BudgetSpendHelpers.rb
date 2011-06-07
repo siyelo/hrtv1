@@ -98,8 +98,7 @@ module BudgetSpendHelpers
   end
 
   def workplan_total_by_type(amount_type, quarters = true)
-    return total_by_type_no_quarters(amount_type) unless quarters
-    return total_by_type(amount_type)
+    quarters ? total_by_type(amount_type) : total_by_type_no_quarters(amount_type)
   end
 
   def total_by_type(amount_type)

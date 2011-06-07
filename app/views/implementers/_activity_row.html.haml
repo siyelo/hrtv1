@@ -1,4 +1,4 @@
-%tr.js_activity_row
+%tr.js_project_row
   %td.nested_name.wrap-40{:rowspan => activity.sub_activities.length + 2}
     = project.name
     %span= activity.title
@@ -6,17 +6,17 @@
 - activity.sub_activities.ordered_by_id.each do |implementer|
   = render 'implementer_row', :implementer => implementer, :type => params[:id]
 
-%tr.filler2.js_activity_total_row{:"data-activity_id" => activity.id}
+%tr.filler2.js_project_total_row{:"data-activity_id" => activity.id}
   %td{:colspan => 2}
     - link_to new_response_implementer_path(@response), :class => 'add_implementer add_row' do
       = image_tag "new.png"
       Add implementer
   %td.total
     .total_amount
-      %span.js_activity_total= activity.sub_activities_total_by_type(:spend)
+      %span.js_project_total_spend_amount= activity.sub_activities_total_by_type(:spend)
       %span.currency= project.currency
   %td.total
     .total_amount
-      %span.js_activity_total= activity.sub_activities_total_by_type(:budget)
+      %span.js_project_total_budget_amount= activity.sub_activities_total_by_type(:budget)
       %span.currency= project.currency
   %td.actions

@@ -1731,10 +1731,6 @@ var changeRowspan = function (element, value) {
   var projectTd = element.parents('tr').prevAll('.js_project_row:first').find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
 };
-var changeRowspanForActivity = function (element, value) {
-  var projectTd = element.parents('tr').prevAll('.js_activity_row:first').find('td');
-  projectTd.attr('rowspan', projectTd.attr('rowspan') + value);
-};
 
 var getTotal = function (amounts) {
   var total = 0;
@@ -2019,23 +2015,8 @@ var funders_edit = {
   }
 }
 
-// TODO - DRY this up alongside funders_edit
 var implementers_edit = {
   run: function () {
-
-    var updateValues = function (element) {
-      var tr = element.parents('tr:first');
-      // activity total
-      var elements = tr.prevAll('.js_activity_row:first').nextUntil('.js_activity_total_row').find('.js_amount');
-      var amounts = jQuery.map(elements, function (e) { return $(e).val();}); // use textinput val, not .text!
-      tr.nextAll('.js_activity_total_row:first').find('.js_activity_total').text(getTotal(amounts));
-
-      // all projects total
-      var elements = $('.js_activity_total_row .js_activity_total');
-      var amounts = jQuery.map(elements, function (e) { return $(e).text();});
-      $('.js_projects_total_row .js_projects_total_amount').text(getTotal(amounts));
-    };
-
 
     $('.add_implementer').live('click', function (e) {
       e.preventDefault();
@@ -2057,7 +2038,7 @@ var implementers_edit = {
         currentTr.before(newTr);
         newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
-        changeRowspanForActivity(element, 1);
+        changeRowspan(element, 1);
       });
     });
 
@@ -2092,12 +2073,15 @@ var implementers_edit = {
       });
     });
 
-    $('.js_amount').live('keyup', function (e) {
+    $('.js_spend_column_amount').live('keyup', function (e) {
       var element = $(this);
-      updateValues(element);
+      updateSpendColumnValues(element);
     });
 
-
+    $('.js_budget_column_amount').live('keyup', function (e) {
+      var element = $(this);
+      updateBudgetColumnValues(element);
+    });
   }
 }
 

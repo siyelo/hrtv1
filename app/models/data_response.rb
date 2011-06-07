@@ -158,7 +158,7 @@ class DataResponse < ActiveRecord::Base
   def total_activity_method(method)
     activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
-        sum + universal_currency_converter(a.send(method), a.project.currency, currency)
+        sum + universal_currency_converter(a.send(method), a.project.try(:currency), currency)
       else
         sum
       end

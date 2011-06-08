@@ -6,8 +6,6 @@ Feature: Visitor can see homepage
   Background:
 
 
-
-    @visitors @homepage
     Scenario: See heading and login
       When I go to the home page
       Then I should see the visitors header

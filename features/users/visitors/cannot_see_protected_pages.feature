@@ -7,8 +7,6 @@ Feature: Visitors cannot see protected pages
     Given a basic org + reporter profile, with data response
 
 
-
-    @visitors @protected_pages @allow-rescue
     Scenario Outline: Visit protected page, get redirected to login screen
       When I go to the <page> page
       Then I should see "You must be logged in to access this page"
@@ -20,7 +18,7 @@ Feature: Visitors cannot see protected pages
 
 
     Scenario Outline: Visit protected page, get redirected to login screen
-      When I go to the <page> page for response "Req1" org "UNDP" 
+      When I go to the <page> page for response "Req1" org "UNDP"
       Then I should see "You must be logged in to access this page"
         And I should be on the login page
 

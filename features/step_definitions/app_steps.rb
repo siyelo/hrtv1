@@ -65,7 +65,6 @@ end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:reporter,
-                :username              => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
@@ -73,7 +72,6 @@ end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:activity_manager,
-                :username              => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
@@ -109,7 +107,7 @@ end
 Given /^I am signed in as "([^"]*)"$/ do |name|
   steps %Q{
     When I go to the login page
-    And I fill in "Username or Email" with "#{name}"
+    And I fill in "Email" with "#{name}"
     And  I fill in "Password" with "password"
     And  I press "Sign in"
   }
@@ -232,10 +230,10 @@ end
 
 Then /^I should see the main nav tabs$/ do
   steps %Q{
-    Then I should see "Home" within "div#main-nav"
-    Then I should see "Projects" within "div#main-nav"
+    Then I should see "Workplan" within "div#main-nav"
+    Then I should see "Responses" within "div#main-nav"
     Then I should see "Reports" within "div#main-nav"
-    Then I should see "Help" within "div#main-nav"
+    Then I should see "Settings" within "div#main-nav"
   }
 end
 
@@ -303,8 +301,8 @@ Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
     Given a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
-    And a reporter exists with username: "undp_user", organization: the organization
-    And I am signed in as "undp_user"
+    And a reporter exists with email: "pink.panter@hrt.com", organization: the organization
+    And I am signed in as "pink.panter@hrt.com"
   }
 end
 
@@ -313,9 +311,9 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
-    And a project exists with name: "TB Treatment Project", data_response: the data_response
-    And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
+    And a reporter exists with email: "pink.panter@hrt.com", organization: the organization, current_data_response: the data_response
+    And a project exists with name: "project1", data_response: the data_response
+    And an activity exists with name: "activity1", data_response: the data_response, project: the project
   }
 end
 

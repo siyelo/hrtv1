@@ -12,7 +12,6 @@ Feature: Reporter can see workplan
       And an activity exists with id: "1", name: "activity1", description: "activity1 description", data_response: the data_response, project: the project, budget: 100, spend: 200
       And I am signed in as "reporter"
 
-      @run
     Scenario: Reporter can edit activities
       When I follow "Projects"
         And I follow "Workplan"

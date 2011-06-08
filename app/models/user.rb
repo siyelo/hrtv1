@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
 
   ### Constants
   ROLES = %w[admin reporter activity_manager]
-  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
+  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles]
 
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
       organization = Organization.find_by_name(attributes.delete('organization_name'))
       attributes.merge!(:organization_id => organization.id) if organization
       user = User.new(attributes)
-      user.save ? (saved += 1) : (errors += 1)
+      user.save(false) ? (saved += 1) : (errors += 1)
     end
     return saved, errors
   end

@@ -13,10 +13,10 @@
       Add implementer
   %td.total
     .total_amount
-      %span.js_project_total_spend_amount= activity.sub_activities_total_by_type(:spend)
+      %span.js_project_total_spend_amount{:"data-rate" => currency_rate(activity.currency, @response.currency)}= activity.sub_activities_total_by_type(:spend, false, activity.currency)
       %span.currency= project.currency
   %td.total
     .total_amount
-      %span.js_project_total_budget_amount= activity.sub_activities_total_by_type(:budget)
+      %span.js_project_total_budget_amount{:"data-rate" => currency_rate(activity.currency, @response.currency)}= activity.sub_activities_total_by_type(:budget, false, activity.currency)
       %span.currency= project.currency
   %td.actions

@@ -317,8 +317,8 @@ END
     in_flows.map { |flow| flow.total_by_type(amount_type, quarters) * currency_rate(flow.currency, currency) }.compact.sum
   end
 
-  def sub_activities_total_by_type(amount_type)
-    activities.map { |a| a.sub_activities_total_by_type(amount_type) }.compact.sum
+  def sub_activities_total_by_type(amount_type, quarters, currency)
+    activities.map { |a| a.sub_activities_total_by_type(amount_type, quarters, currency) }.compact.sum
   end
 
   def direct_activities_total(amount_type)

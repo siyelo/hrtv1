@@ -617,8 +617,8 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
-  def sub_activities_total_by_type(amount_type)
-    sub_activities.map { |implementer| implementer.send(amount_type) }.compact.sum
+  def sub_activities_total_by_type(amount_type, quarters, other_currency)
+    sub_activities.map { |implementer| implementer.total_by_type(amount_type, quarters) }.compact.sum * currency_rate(currency, other_currency)
   end
 
   def total_amount_of_quarters(type)

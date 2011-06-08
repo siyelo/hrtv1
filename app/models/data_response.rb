@@ -406,11 +406,11 @@ class DataResponse < ActiveRecord::Base
   end
 
   def funders_total_spend
-    @projects.map{|p| p.converted_funders_total_by_type('spend', false)}.sum
+    @projects.map{|p| p.converted_funders_total_by_type('spend', false, currency)}.sum
   end
 
   def funders_total_budget
-    @projects.map{|p| p.converted_funders_total_by_type('budget', false)}.sum
+    @projects.map{|p| p.converted_funders_total_by_type('budget', false, currency)}.sum
   end
 
   private

@@ -1,8 +1,8 @@
 - spend_amount = project.spend || 0
 - budget_amount = project.budget || 0
-- funders_total_spend = project.converted_funders_total_by_type('spend', false)
+- funders_total_spend = project.converted_funders_total_by_type('spend', false, project.currency)
 - remaining_spend = spend_amount - funders_total_spend
-- funders_total_budget = project.converted_funders_total_by_type('budget', false)
+- funders_total_budget = project.converted_funders_total_by_type('budget', false, project.currency)
 - remaining_budget = budget_amount - funders_total_budget
 
 %tr.js_project_row

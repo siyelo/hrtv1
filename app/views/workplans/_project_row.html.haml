@@ -1,9 +1,9 @@
 %tr.js_project_row
-  %td.name.wrap-10{:rowspan => project.activities.length + project.other_costs.length + 4}
+  %td.name.wrap-10{:rowspan => project.normal_activities.length + project.other_costs.length + 4}
     = link_to project.name, edit_response_project_path(@response, project)
 %tr.activity_subheading
   %td{:colspan => 100} Activities
-- project.activities.ordered_by_id.each do |activity|
+- project.normal_activities.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
 %tr.activity_subheading
   %td{:colspan => 100} Other Costs
@@ -21,9 +21,9 @@
       Add other cost
   %td.total Subtotal
   %td.total_amount
-    %span.js_spend_column_total= project.converted_activities_total_by_type('spend', false)
-    %span.currency= @response.currency
+    %span.js_project_total_spend_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('spend', false, project.currency) + project.converted_other_costs_total_by_type('spend', false, project.currency)
+    %span.currency= project.currency
 
   %td.total_amount
-    %span.js_budget_column_total= project.converted_activities_total_by_type('budget', false)
-    %span.currency= @response.currency
+    %span.js_project_total_budget_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('budget', false, project.currency) + project.converted_other_costs_total_by_type('budget', false, project.currency)
+    %span.currency= project.currency

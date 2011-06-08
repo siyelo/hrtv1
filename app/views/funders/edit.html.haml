@@ -43,10 +43,10 @@
         %td{:colspan => 2}
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_amount= @projects.map{|p| p.funders_total_by_type('spend')}.sum
+          %span.js_projects_total_spend_amount= @response.funders_total_spend(false)
           %span.currency= @response.currency
         %td.total_amount
-          %span.js_projects_total_amount= @projects.map{|p| p.funders_total_by_type('budget')}.sum
+          %span.js_projects_total_budget_amount= @response.funders_total_budget(false)
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

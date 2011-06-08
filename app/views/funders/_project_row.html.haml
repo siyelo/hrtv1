@@ -1,10 +1,11 @@
 - spend_amount = project.spend || 0
 - budget_amount = project.budget || 0
-- project_funders_total = project.funders_total_by_type(params[:id])
-- remaining_spend = spend_amount - project_funders_total
-- remaining_budget = budget_amount - project_funders_total
+- funders_total_spend = project.converted_funders_total_by_type('spend', false, project.currency)
+- remaining_spend = spend_amount - funders_total_spend
+- funders_total_budget = project.converted_funders_total_by_type('budget', false, project.currency)
+- remaining_budget = budget_amount - funders_total_budget
 
-%tr.js_project_row{:"data-amount" => spend_amount}
+%tr.js_project_row
   %td.name{:rowspan => project.in_flows.length + 2}= project.name
 
 - project.in_flows.ordered_by_id.each do |funder|
@@ -19,7 +20,7 @@
   %td.total
     %ul
       %li
-        %span.js_project_total= project_funders_total
+        %span.js_project_total_spend_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= funders_total_spend
         %span.currency= project.currency
       %li.remaining.js_remaining_box{:style => (remaining_spend == 0 ? 'display: none' : nil)}
         Remaining
@@ -28,7 +29,7 @@
   %td.total
     %ul
       %li
-        %span.js_project_total= project_funders_total
+        %span.js_project_total_budget_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= funders_total_budget
         %span.currency= project.currency
       %li.remaining.js_remaining_box{:style => (remaining_budget == 0 ? 'display: none' : nil)}
         Remaining

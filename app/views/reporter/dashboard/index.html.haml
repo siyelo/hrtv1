@@ -24,13 +24,13 @@
   %h3.tracked
     %br
     %span.light Spend Tracked
-    %span.large= @projects.map{ |p| p.converted_activities_total_by_type('spend', false)}.compact.sum
+    %span.large= @response.projects_total_spend(false)
     %span.currency= @response.currency
 
   %h3.tracked
     %br
     %span.light Budget Tracked
-    %span.large= @projects.map{ |p| p.converted_activities_total_by_type('budget', false)}.compact.sum
+    %span.large= @response.projects_total_budget(false)
     %span.currency= @response.currency
   %h3.tracked
     %br

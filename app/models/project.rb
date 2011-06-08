@@ -66,9 +66,6 @@ class Project < ActiveRecord::Base
   validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
 
-  validates_date :start_date
-  validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
 
@@ -308,16 +305,20 @@ END
     activities.map { |a| a.total_by_type(amount_type) }.compact.sum
   end
 
-  def converted_activities_total_by_type(amount_type, quarters)
-    activities.map { |a| (a.workplan_total_by_type(amount_type, quarters) || 0) * currency_rate(a.currency, a.project.currency) }.compact.sum
+  def converted_activities_total_by_type(amount_type, quarters, currency)
+    normal_activities.map { |a| a.workplan_total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
   end
 
-  def funders_total_by_type(amount_type)
-    in_flows.map { |flow| flow.total_by_type(amount_type) }.compact.sum
+  def converted_other_costs_total_by_type(amount_type, quarters, currency)
+    other_costs.map { |a| a.workplan_total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
   end
 
-  def sub_activities_total_by_type(amount_type)
-    activities.map { |a| a.sub_activities_total_by_type(amount_type) }.compact.sum
+  def converted_funders_total_by_type(amount_type, quarters, currency)
+    in_flows.map { |flow| flow.total_by_type(amount_type, quarters) * currency_rate(flow.currency, currency) }.compact.sum
+  end
+
+  def sub_activities_total_by_type(amount_type, quarters, currency)
+    activities.map { |a| a.sub_activities_total_by_type(amount_type, quarters, currency) }.compact.sum
   end
 
   def direct_activities_total(amount_type)

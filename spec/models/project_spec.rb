@@ -62,12 +62,6 @@ describe Project do
     it { should allow_value(123.45).for(:entire_budget) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
-    it { should_not allow_value('').for(:start_date) }
-    it { should_not allow_value('').for(:end_date) }
-    it { should_not allow_value('2010-13-01').for(:start_date) }
-    it { should_not allow_value('2010-12-41').for(:start_date) }
-    it { should_not allow_value('2010-13-01').for(:end_date) }
-    it { should_not allow_value('2010-12-41').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
     it { should_not allow_value('abcd').for(:budget_q1) }
     it { should_not allow_value('abcd').for(:budget_q2) }
@@ -128,32 +122,32 @@ describe Project do
       end
     end
   end
-  
-  context "Amount validations" do 
-    it "should return true if budget is equal to that of the quarterlys" do 
-      @project = Factory(:project, :budget => "140", 
-                         :budget_q1 => "20", :budget_q2 => "30", 
+
+  context "Amount validations" do
+    it "should return true if budget is equal to that of the quarterlys" do
+      @project = Factory(:project, :budget => "140",
+                         :budget_q1 => "20", :budget_q2 => "30",
                          :budget_q3 => "40", :budget_q4 => "50")
       @project.total_matches_quarters?(:budget).should be_true
     end
-    
-     it "should return true if budget is equal to that of the quarterlys" do 
-       @project = Factory(:project, :spend => "140", 
-                          :spend_q1 => "20", :spend_q2 => "30", 
+
+     it "should return true if budget is equal to that of the quarterlys" do
+       @project = Factory(:project, :spend => "140",
+                          :spend_q1 => "20", :spend_q2 => "30",
                           :spend_q3 => "40", :spend_q4 => "50")
        @project.total_matches_quarters?(:spend).should be_true
      end
-      
-      it "should return true if spend is nil and quarterlys are too" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => nil, :spend_q2 => nil, 
+
+      it "should return true if spend is nil and quarterlys are too" do
+        @project = Factory(:project, :spend => nil,
+                            :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
         @project.total_matches_quarters?(:spend).should be_true
       end
-      
-      it "should return false if spend is nil and quarterlys are too" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => nil, :spend_q2 => nil, 
+
+      it "should return false if spend is nil and quarterlys are too" do
+        @project = Factory(:project, :spend => nil,
+                            :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
         @project.total_matches_quarters?(:spend).should be_true
       end
@@ -265,20 +259,6 @@ describe Project do
                         :start_date => DateTime.new(2010, 01, 01),
                         :end_date =>   DateTime.new(2010, 01, 02) )
       p.should be_valid
-    end
-
-    it "does not accept start date > end date" do
-      p = Factory.build(:project,
-                        :start_date => DateTime.new(2010, 01, 02),
-                        :end_date =>   DateTime.new(2010, 01, 01) )
-      p.should_not be_valid
-    end
-
-    it "does not accept start date = end date" do
-      p = Factory.build(:project,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 01) )
-      p.should_not be_valid
     end
 
     it "accepts Total Budget >= Total Budget" do

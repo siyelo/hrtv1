@@ -36,19 +36,21 @@
 %table.standard.rounded
   %thead
     %tr
-      %th= sortable "email"
-      %th= sortable "full_name"
       %th= sortable "organizations.name", "Organization"
+      %th= sortable "full_name", "Full Name"
+      %th= sortable "email"
       %th= "Role"
+      %th= "Invitation"
       %th
 
   %tbody
     - @users.each do |user|
       %tr{:class => cycle("even", "odd")}
-        %td= user.email
+        %td= truncate(user.organization.try(:name), 40)
         %td= user.full_name
-        %td= user.organization.try(:name)
+        %td= user.email
         %td= user.roles.map{|role| role.humanize}.join(', ')
+        %td Pending
         %td
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_user_path(user)

@@ -5,7 +5,6 @@ describe User do
   describe "attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }
-    it { should allow_mass_assignment_of(:username) }
     it { should allow_mass_assignment_of(:password) }
     it { should allow_mass_assignment_of(:password_confirmation) }
     it { should allow_mass_assignment_of(:organization_id) }
@@ -23,23 +22,9 @@ describe User do
   describe "validations" do
     subject { Factory(:user, :organization => Factory(:organization) ) }
     it { should be_valid }
-    it { should validate_presence_of(:username) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_uniqueness_of(:email).case_insensitive }
-    it { should validate_uniqueness_of(:username).case_insensitive }
-  end
-
-  describe "find_by_username_or_email" do
-    it "finds user by username" do
-      user = Factory.create(:user, :username => 'pink.panter')
-      User.find_by_username_or_email('pink.panter').should == user
-    end
-
-    it "finds user by email" do
-      user = Factory.create(:user, :email => 'pink.panter@gmail.com')
-      User.find_by_username_or_email('pink.panter@gmail.com').should == user
-    end
   end
 
   describe "roles" do
@@ -93,7 +78,7 @@ describe User do
       user.save
       user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
     end
-    
+
     it "cannot assign unexisting role" do
       user = Factory.create(:user)
       user.roles = ['admin123']
@@ -144,14 +129,14 @@ describe User do
       user.name.should == "Pink Panter"
     end
 
-    it "returns username if full name is nil" do
-      user = Factory.create(:user, :full_name => nil, :username => 'pink.panter')
-      user.name.should == "pink.panter"
+    it "returns email if full name is nil" do
+      user = Factory.create(:user, :full_name => nil, :email => 'pink.panter@hrt.com')
+      user.name.should == "pink.panter@hrt.com"
     end
 
-    it "returns username if full name is blank string" do
-      user = Factory.create(:user, :full_name => '', :username => 'pink.panter')
-      user.name.should == "pink.panter"
+    it "returns email if full name is blank string" do
+      user = Factory.create(:user, :full_name => '', :email => 'pink.panter@hrt.com')
+      user.name.should == "pink.panter@hrt.com"
     end
   end
 end

@@ -3,10 +3,10 @@ class User < ActiveRecord::Base
 
   ### Constants
   ROLES = %w[admin reporter activity_manager]
-  FILE_UPLOAD_COLUMNS = %w[organization_name username email full_name roles password password_confirmation]
+  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
 
   ### Attributes
-  attr_accessible :full_name, :email, :username, :organization_id, :organization,
+  attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown
 
   ### Associations
@@ -18,15 +18,10 @@ class User < ActiveRecord::Base
               :foreign_key => :data_response_id_current
 
   ### Validations
-  validates_presence_of  :username, :email, :organization_id
-  validates_uniqueness_of :email, :username, :case_sensitive => false
+  validates_presence_of  :email, :organization_id
+  validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
-
-  # Used by Authlogic's UserSession to find the user by username or by email
-  def self.find_by_username_or_email(login)
-    self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
-  end
 
   def self.download_template
     FasterCSV.generate do |csv|
@@ -75,7 +70,7 @@ class User < ActiveRecord::Base
 
   # TODO: spec or remove
   def to_s
-    username
+    email
   end
 
   # TODO: spec or remove
@@ -89,7 +84,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    full_name.present? ? full_name : username
+    full_name.present? ? full_name : email
   end
 
   def name_or_email
@@ -107,13 +102,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
 #  id                       :integer         not null, primary key
-#  username                 :string(255)
-#  email                    :string(255)
+#  email                    :string(255)     indexed
 #  crypted_password         :string(255)
 #  password_salt            :string(255)
 #  persistence_token        :string(255)
@@ -124,7 +119,7 @@ end
 #  data_response_id_current :integer
 #  text_for_organization    :text
 #  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
+#  perishable_token         :string(255)     default(""), not null, indexed
 #  tips_shown               :boolean         default(TRUE)
 #
 

@@ -5,7 +5,6 @@ describe User do
   describe "creating a user" do
     subject { Factory(:user, :organization => Factory(:organization) ) }
     it { should be_valid }
-    it { should validate_presence_of(:username) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
     it { should have_many :data_responses }

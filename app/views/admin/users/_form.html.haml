@@ -4,7 +4,6 @@
     %h3 User details
     %ul.dashboard_section
       = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :hint => "The organization this user is associated with"
-      = f.input :username, :hint => "Username of the user"
       = f.input :email, :hint => "Email of the user"
       = f.input :full_name, :hint => "Full name of the user", :required => false
       = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}

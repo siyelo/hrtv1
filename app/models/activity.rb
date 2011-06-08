@@ -746,6 +746,7 @@ class Activity < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -790,10 +791,10 @@ end
 #  spend_in_usd                          :decimal(, )     default(0.0)
 #  budget_in_usd                         :decimal(, )     default(0.0)
 #  project_id                            :integer
-#  budget2                               :decimal(, )
-#  budget3                               :decimal(, )
 #  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
+#  budget2                               :decimal(, )
+#  budget3                               :decimal(, )
 #  budget4                               :decimal(, )
 #  budget5                               :decimal(, )
 #

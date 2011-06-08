@@ -19,7 +19,7 @@ describe UserSessionsController do
   context "authenticated login (create new session)" do
     before :each do
       @user = Factory.create(:reporter)
-      post :create, :user_session => {:username => @user.username,
+      post :create, :user_session => {:email => @user.email,
                                       :password => @user.password}
     end
 

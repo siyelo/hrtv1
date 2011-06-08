@@ -1,7 +1,7 @@
-- title(@user.username)
+- title(@user.name)
 
 %h1.main_heading
-  = @user.username
+  = @user.name
 
   %span
     %ul.manage_bar.inline
@@ -16,8 +16,8 @@
         %li Organization
         %li= @user.organization.try(:name)
       %ul.row
-        %li Username
-        %li= @user.username
+        %li Full name
+        %li= @user.full_name
       %ul.row
         %li Email
         %li= @user.email

@@ -80,9 +80,6 @@ module NumberHelper
 
       to_usd && from_usd ? to_usd * from_usd : 1
     end
-  rescue Money::Currency::UnknownCurrency
-    Rails.logger.warn("ERROR: Can't convert '#{from}' to '#{to}'")
-    1
   end
 
   def universal_currency_converter(amount, from, to)

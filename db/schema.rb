@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110608080156) do
+ActiveRecord::Schema.define(:version => 20110608083651) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -77,11 +77,6 @@ ActiveRecord::Schema.define(:version => 20110608080156) do
   create_table "activities_organizations", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "organization_id"
-  end
-
-  create_table "activities_projects", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "activity_id"
   end
 
   create_table "code_assignments", :force => true do |t|
@@ -343,12 +338,6 @@ ActiveRecord::Schema.define(:version => 20110608080156) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
-  create_table "sqlite_stat1", :id => false, :force => true do |t|
-    t.text "tbl"
-    t.text "idx"
-    t.text "stat"
-  end
 
   create_table "users", :force => true do |t|
     t.string   "username"

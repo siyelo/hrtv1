@@ -35,7 +35,7 @@ class ActivitiesController < Reporter::BaseController
 
   def create
     clean_out_sa_params(params)
-    @activity = @response.activities.new(params[:activity])
+    @activity = params[:activity][:activity_type] == 'other_cost' ? @response.other_costs.new(params[:activity]) : @response.activities.new(params[:activity])
 
     if @activity.save
       respond_to do |format|

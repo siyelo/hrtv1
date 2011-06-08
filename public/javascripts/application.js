@@ -1848,9 +1848,10 @@ var workplans_edit = {
     });
 
     // activity
-    $('.add_activity').live('click', function (e) {
+    $('.add_activity, .add_other_cost').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
+      var type = element.hasClass('add_activity') ? 'activity' : 'other_cost';
 
       if (element.hasClass('disabled')) {
         return;
@@ -1859,7 +1860,7 @@ var workplans_edit = {
       element.addClass('disabled');
 
       var project_id = element.parents('tr').attr('data-project_id');
-      var url = '/responses/' + _response_id + '/activities/new.json?type=' + _type + '&project_id=' + project_id;
+      var url = '/responses/' + _response_id + '/activities/new.json?type=' + type + '&project_id=' + project_id;
 
       $.get(url, function (data) {
         element.addClass('disabled');
@@ -1889,9 +1890,19 @@ var workplans_edit = {
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
-          var box = element.parents('tr')
-          element.parents('tr').next('tr').find('.add_activity').removeClass('disabled');
-          box.replaceWith(data.html)
+          var box = element.parents('tr');
+          var add_btn = element.parents('tr').next('tr').find('.disabled');
+          add_btn.removeClass('disabled');
+
+          if (add_btn.hasClass('add_activity')) {
+            console.info('adding activity');
+            $('.js_other_costs_subheading').before(data.html);
+          } else if (add_btn.hasClass('add_other_cost')) {
+            console.info('adding other');
+            $('.js_activity_add_inline').before(data.html);
+          }
+          
+          $('.js_activity_add_inline').remove();
           $('#workplan').find('.save_btn').show();
         } else {
           var newTr = $(data.html);

@@ -1,11 +1,11 @@
 %tr.js_project_row
   %td.name.wrap-10{:rowspan => project.normal_activities.length + project.other_costs.length + 4}
     = link_to project.name, edit_response_project_path(@response, project)
-%tr.activity_subheading
+%tr.activity_subheading.js_activities_subheading
   %td{:colspan => 100} Activities
 - project.normal_activities.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
-%tr.activity_subheading
+%tr.activity_subheading.js_other_costs_subheading
   %td{:colspan => 100} Other Costs
 - project.other_costs.ordered_by_id.each do |activity|
   = render 'activity_row', :activity => activity, :type => params[:id]
@@ -16,7 +16,7 @@
       = image_tag "new.png"
       Add activity
     &nbsp;
-    - link_to new_response_other_cost_path(@response, :project_id => project.id), :class => 'add_activity add_row' do
+    - link_to new_response_other_cost_path(@response, :project_id => project.id), :class => 'add_other_cost add_row' do
       = image_tag "new.png"
       Add other cost
   %td.total Subtotal

@@ -1,7 +1,8 @@
-%tr
+%tr.js_activity_add_inline
   %td{:colspan => 7, :class => 'new_activity'}
     - semantic_form_for @activity, :url => response_activities_path(@response, :type => params[:type]), :html => {:class => "basic_form new_activity_form"} do |f|
       - f.inputs :class => 'inputs' do
+        = f.hidden_field :activity_type, :value => params[:type]
         = f.input :project_id, :as => :hidden
         %li
           %label.required Name

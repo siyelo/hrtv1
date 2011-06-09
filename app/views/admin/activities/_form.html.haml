@@ -55,7 +55,7 @@
           = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
           = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
       %li.amounts.last
-        %label Long-term
+        %label Future Budgets
         %ul
           = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
           = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?

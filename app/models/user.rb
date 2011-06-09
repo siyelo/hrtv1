@@ -41,9 +41,7 @@ class User < ActiveRecord::Base
       end
       user = User.new(attributes)
       if user.only_password_errors?
-        user.invite_token = user.generate_token
-        user.save(false)
-        user.send_user_invitation
+        user.save_and_invite!
         saved += 1
       elsif user.save
         user.save
@@ -53,13 +51,23 @@ class User < ActiveRecord::Base
     end
     return saved, errors
   end
-  
+
+  def save_and_invite!
+    self.invite_token = generate_token
+    self.save(false)
+    send_user_invitation
+  end
+
+  def activate
+    if valid?
+      self.invite_token = nil
+      self.active = true
+      self.save
+    end
+  end
+
   def generate_token
     Digest::SHA1.hexdigest("#{self.email}#{Time.now}")[24..38]
-  end
-  
-  def only_password_errors?
-    errors.length == errors.on(:password).to_a.length + errors.on(:password_confirmation).to_a.length
   end
 
   def send_user_invitation
@@ -116,7 +124,8 @@ class User < ActiveRecord::Base
   end
 
   def only_password_errors?
-    errors.length == errors.on(:password).to_a.length + errors.on(:password_confirmation).to_a.length
+    errors.length == errors.on(:password).to_a.length +
+      errors.on(:password_confirmation).to_a.length
   end
 
   private

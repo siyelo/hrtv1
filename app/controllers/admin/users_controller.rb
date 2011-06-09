@@ -34,8 +34,7 @@ class Admin::UsersController < Admin::BaseController
         @user = User.new(params[:user])
         @user.valid? # trigger validation errors
         if @user.only_password_errors?
-          @user.save(false)
-          # TODO: send invitation
+          @user.save_and_invite!
           render :json => {:status => 'ok',
                            :row => render_to_string(:partial => "row.html.haml",
                                                      :locals => {:user => @user}),

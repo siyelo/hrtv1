@@ -120,6 +120,12 @@ Given /^I am signed in as a reporter$/ do
   }
 end
 
+Given /^I am signed in as a member$/ do
+  steps %Q{
+    Given I am signed in as a reporter
+  }
+end
+
 Given /^I am signed in as an activity manager$/ do
   steps %Q{
     Given an activity manager "frank@hrt.com" in organization "Test Org"
@@ -129,7 +135,7 @@ end
 
 Given /^I am signed in as a sysadmin$/ do
   steps %Q{
-    Given an admin "frank@hrt.com" in organization "Test Org"
+    Given a sysadmin "frank@hrt.com" in organization "Test Org"
     Given I am signed in as "frank@hrt.com"
   }
 end
@@ -168,7 +174,7 @@ Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_
 
 end
 
-Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:admin,
                   :email                 => 'frank@f.com',

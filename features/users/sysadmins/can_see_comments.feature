@@ -1,6 +1,6 @@
 Feature: Admin can see comments
   In order to help reporters see missed areas
-  As an admin
+  As a sysadmin
   I want to be able to see comments that admins have made
 
   Background:

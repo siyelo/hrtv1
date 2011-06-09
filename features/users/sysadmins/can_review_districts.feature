@@ -1,6 +1,6 @@
 Feature: Admin can review districts
   In order to reduce costs
-  As an admin
+  As a sysadmin
   I want to be able to see district review screen
 
   Background:

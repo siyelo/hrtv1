@@ -6,7 +6,7 @@ Feature: Admin can manage data requests
   Background:
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization
-    And an admin exists with username: "admin", organization: the organization
+    And a sysadmin exists with username: "admin", organization: the organization
     And I am signed in as "admin"
 
     Scenario: Admin can CRUD data requests
@@ -57,7 +57,7 @@ Feature: Admin can manage data requests
         | org1         | title | 2010-09-01 | 2010-01-01 |            | End date can't be blank         | 
         | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date | 
 
-    Scenario: To expedite the review process, an Admin can change a Request to "Final Review" status
+    Scenario: To expedite the review process, a sysadmin can change a Request to "Final Review" status
       When I follow "Requests"
        And I follow "Edit"
        And I check "Final review"

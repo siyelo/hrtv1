@@ -1,6 +1,6 @@
 Feature: Admin can review country
   In order to reduce costs
-  As an admin
+  As a sysadmin
   I want to be able to see country review screen
 
   Background:

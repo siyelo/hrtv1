@@ -1,6 +1,6 @@
 Feature: Admin can see review page
   In order to view all my data
-  As an admin
+  As a sysadmin
   I want to be able to see review screen
 
   Background:

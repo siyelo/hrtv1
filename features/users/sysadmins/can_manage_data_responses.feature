@@ -1,6 +1,6 @@
 Feature: Admin can manage data responses
   In order to reduce costs
-  As an admin
+  As a sysadmin
   I want to be able to manage data responses
 
   Background:

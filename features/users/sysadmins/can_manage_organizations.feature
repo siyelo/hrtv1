@@ -1,13 +1,13 @@
 Feature: Admin can manage organizations
   In order to have good organizations in the system
-  As an admin
+  As a sysadmin
   I want to be able to manage organizations
 
   Background:
     Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "111"
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
-      And an admin exists with username: "admin", organization: the organization
+      And a sysadmin exists with username: "admin", organization: the organization
       And a reporter exists with username: "org2_user", organization: the organization
       And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as "admin"
@@ -98,7 +98,7 @@ Feature: Admin can manage organizations
         And I should see "You cannot delete an organization that has users or data associated with it."
 
 
-    Scenario Outline: An admin can sort organizations
+    Scenario Outline: a sysadmin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"
       Then column "<column>" row "1" should have text "<text1>"
@@ -115,7 +115,7 @@ Feature: Admin can manage organizations
          | Fosaid      | 3      | 111   | 222   | 
 
 
-    Scenario: An admin can filter organization
+    Scenario: a sysadmin can filter organization
       When I follow "Organizations"
       Then I should see "org1"
         And I should see "org2"
@@ -143,13 +143,13 @@ Feature: Admin can manage organizations
         And I should see "csv_org4"
 
 
-    Scenario: An admin can see error if no csv file is not attached for upload
+    Scenario: a sysadmin can see error if no csv file is not attached for upload
       When I follow "Organizations"
         And I press "Upload and Import"
       Then I should see "Please select a file to upload"
 
 
-    Scenario: An admin can see error when invalid csv file is attached for upload and download template
+    Scenario: a sysadmin can see error when invalid csv file is attached for upload and download template
       When I follow "Organizations"
         And I attach the file "spec/fixtures/invalid.csv" to "File"
         And I press "Upload and Import"

@@ -1,11 +1,11 @@
 Feature: Admin can manage codes
   In order to track information
-  As an admin
+  As a sysadmin
   I want to be able to manage codes
 
   Background:
     Given an organization exists with name: "organization1"
-      And an admin exists with username: "admin"
+      And a sysadmin exists with username: "admin"
       And I am signed in as "admin"
 
 
@@ -75,7 +75,7 @@ Feature: Admin can manage codes
       Then I should see "short_display,long_display,description,type,external_id,parent_short_display,hssp2_stratprog_val,hssp2_stratobj_val,official_name,sub_account,nha_code,nasa_code"
 
 
-    Scenario Outline: An admin can filter codes
+    Scenario Outline: a sysadmin can filter codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"
 
@@ -101,7 +101,7 @@ Feature: Admin can manage codes
             | Mtef       | Nha        | 
 
 
-    Scenario Outline: An admin can sort codes
+    Scenario Outline: a sysadmin can sort codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"
       When I follow "Codes"

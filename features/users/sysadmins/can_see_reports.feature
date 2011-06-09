@@ -1,6 +1,6 @@
 Feature: Admin can see reports
   In order to increase funding
-  As an admin
+  As a sysadmin
   I want to be able to see reports
 
   Background:

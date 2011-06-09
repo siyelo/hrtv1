@@ -203,9 +203,9 @@ Then /^debug$/ do
   debugger
 end
 
-Then /^I should see the "([^"]*)" tab is active$/ do |text|
+Then /^I should see the "([^"]*)" tab is "([^"]*)"/ do |text, class_name|
   steps %Q{
-    Then I should see "#{text}" within "li.selected"
+    Then I should see "#{text}" within "li.#{class_name}"
   }
 end
 

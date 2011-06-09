@@ -463,6 +463,48 @@ var admin_responses_empty = {
   }
 };
 
+
+var organizationCombobox = function (rootElement) {
+  // show the jquery autocomplete combobox instead of
+  // standard dropdown
+  // setting the id for cucumber tests
+  rootElement.find( ".combobox" ).combobox();
+  rootElement.find( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
+
+  rootElement.find('.organization_select').live('change', function(e) {
+    e.preventDefault();
+    var element = $(this);
+    element.next('.add_organization').slideToggle();
+    if(element.val() == "-1"){
+      rootElement.find('.implementer_container').hide();
+      rootElement.find('.add_organization').show();
+    }
+  });
+}
+
+var admin_users_index = {
+  run: function () {
+    $('#js_user_create_btn').live('click', function (e) {
+      e.preventDefault();
+      var form = $('#new_user')
+
+      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data, status, response) {
+        if (data.status === 'error') {
+          $('#js_user_create_form').html(data.form);
+        } else {
+          $('#js_organiations_tbl tbody').prepend(data.row);
+          $('#js_user_create_form').html(data.form);
+        }
+        // trigger organiazion combobox widget
+        organizationCombobox($('#js_user_create_form'));
+      });
+    });
+
+    // trigger organiazion combobox widget
+    organizationCombobox($('#js_user_create_form'));
+  }
+};
+
 var getOrganizationInfo = function (organization_id, box) {
   if (organization_id) {
     $.get(organization_id + '.js', function (data) {

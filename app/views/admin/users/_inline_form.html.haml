@@ -1,0 +1,9 @@
+- semantic_form_for [:admin, user], :url => admin_users_path, :html => {:class => "basic_form"} do |f|
+  - f.inputs :class => 'wrap-80 inputs' do
+    = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :hint => "The organization this user is associated with", :input_html => {:class => 'organization_select combobox'}
+    = f.input :full_name, :hint => "Full name of the user", :required => false
+    = f.input :email, :hint => "Email of the user"
+    = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
+
+  - f.buttons :class => 'wrap-80 buttons' do
+    = f.commit_button user.new_record? ? "Create New User" : "Update User", :button_html => {:id => "js_user_create_btn"}

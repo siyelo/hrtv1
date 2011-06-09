@@ -115,6 +115,10 @@ class User < ActiveRecord::Base
     name || email
   end
 
+  def only_password_errors?
+    errors.length == errors.on(:password).to_a.length + errors.on(:password_confirmation).to_a.length
+  end
+
   private
 
     def role?(role)

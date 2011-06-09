@@ -34,7 +34,7 @@
         - end_year = @response.request.end_date.try(:year)
         - if start_year == end_year
           - prev_fy = format_budget_date(@response.request.start_date)
-          - next_fy = format_budget_date(@respone.request.start_date, 1)
+          - next_fy = format_budget_date(@response.request.start_date, 1)
         - else
           - prev_fy = "#{format_budget_date(@response.request.start_date)} - #{format_budget_date(@response.request.end_date)}"
           - next_fy = "#{format_budget_date(@response.request.start_date, 1)} - #{format_budget_date(@response.request.end_date, 1)}"

@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 #source "http://gems.github.com"
 
+gem 'ar_strip_commas'
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
@@ -8,17 +9,14 @@ gem 'fastercsv'
 gem 'formtastic', "= 1.2.3"
 gem 'haml'
 gem 'hoptoad_notifier'
-gem 'ar_strip_commas'
-
-
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue
 #gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
-
 gem 'inherited_resources', "=1.0.6"
 gem 'money', "~> 3.5"
 gem "paperclip", "~> 2.3"
 gem 'rails', '2.3.8'
+gem 'sass'
 gem 'settingslogic'
 gem 'validates_timeliness', '~> 2.3'
 

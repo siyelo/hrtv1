@@ -4,7 +4,7 @@ describe Admin::OrganizationsController do
   
   describe "show organization" do
     before :each do
-      login(Factory.create(:admin))
+      login(Factory.create(:sysadmin))
       @mock_object = mock_model(Organization)
       Organization.stub!(:find).with("1").and_return(@mock_object)
     end
@@ -17,7 +17,7 @@ describe Admin::OrganizationsController do
 
   describe "destroy organization" do
     before :each do
-      login(Factory.create(:admin))
+      login(Factory.create(:sysadmin))
     end
 
     context "when organization is empty" do
@@ -119,7 +119,7 @@ describe Admin::OrganizationsController do
 
   describe "duplicate organization" do
     before :each do
-      login(Factory.create(:admin))
+      login(Factory.create(:sysadmin))
       organizations = [mock_model(Organization)]
       Organization.stub_chain(:without_users, :ordered).and_return(organizations)
       Organization.stub!(:ordered).and_return(organizations)
@@ -141,7 +141,7 @@ describe Admin::OrganizationsController do
 
   describe "remove duplicate organization" do
     before :each do
-      login(Factory.create(:admin))
+      login(Factory.create(:sysadmin))
     end
 
     context "duplicate_organization_id and target_organization_id are blank" do

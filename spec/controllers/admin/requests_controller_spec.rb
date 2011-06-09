@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Admin::RequestsController do
   before :each do
-    login(Factory.create(:admin))
+    login(Factory.create(:sysadmin))
   end
 
   it "cannot can delete data_request without data_responses" do

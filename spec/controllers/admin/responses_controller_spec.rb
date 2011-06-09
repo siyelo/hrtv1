@@ -15,7 +15,7 @@ describe Admin::ResponsesController do
   
   describe "Requesting Admin::Responses endpoints as a sysadmin" do
     before :each do
-      @admin = Factory.create(:admin)
+      @admin = Factory.create(:sysadmin)
       login @admin
       @data_response = Factory.create(:data_response)
     end

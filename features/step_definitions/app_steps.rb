@@ -127,7 +127,7 @@ Given /^I am signed in as an activity manager$/ do
   }
 end
 
-Given /^I am signed in as an admin$/ do
+Given /^I am signed in as a sysadmin$/ do
   steps %Q{
     Given an admin "frank@hrt.com" in organization "Test Org"
     Given I am signed in as "frank@hrt.com"

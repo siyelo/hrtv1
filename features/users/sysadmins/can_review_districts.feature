@@ -29,7 +29,7 @@ Feature: Admin can review districts
 
 
     Scenario: "Log in as admin, go to district activity detail screen"
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I follow "Dashboard"
         And I follow "Review District Expenditures and Budgets"
       Then I should see "Review District Expenditures and Budgets" within "h1"

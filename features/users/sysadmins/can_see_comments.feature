@@ -20,7 +20,7 @@ Feature: Admin can see comments
 
 
     Scenario: See latest comments on dashboard
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I follow "Dashboard"
       Then I should see "Recent Comments"
         And I should see "title1"
@@ -32,7 +32,7 @@ Feature: Admin can see comments
 
 
     Scenario: Access comments page from dashboard and edit them
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I follow "Dashboard"
         And I follow "all comments"
       Then I should be on the comments page
@@ -46,7 +46,7 @@ Feature: Admin can see comments
 
 
     Scenario: Admin can see all comments
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I go to the comments page
       Then I should see "comment1"
         And I should see "comment2"

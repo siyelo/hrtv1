@@ -102,7 +102,7 @@ body.app
             // dont want hover background on active tab
             &:hover
               background: white
-              color: !mid-blue + #222
+              color: $mid-blue + #222
               +linear-gradient(color-stops($lightest-blue, white))
               +text-shadow(#fff, 0, 1px, 1px)
 
@@ -113,8 +113,8 @@ body.app
           border-left: 1px solid $light-blue - #222
           border-right: 1px solid $mid-blue + #222
           margin: 3px 0 0
-          background: !light-blue
-          color: !mid-blue
+          background: $light-blue
+          color: $mid-blue
           display: inline
           float: left
           font-size: 12px
@@ -127,8 +127,8 @@ body.app
           +text-shadow($light-blue, 0, 1px, 1px)
 
           &:hover
-            background: !lightest-blue
-            color: !mid-blue
+            background: $lightest-blue
+            color: $mid-blue
             +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
             +text-shadow(#fff, 0, 1px, 1px)
 
@@ -261,7 +261,7 @@ body.app
 
     #page_tips .desc, #helper, #c-help
       +border-radius
-      border: !very-light-grey 1px solid
+      border: $very-light-grey 1px solid
       padding-bottom: 15px
       margin-bottom: 10px
 
@@ -383,12 +383,12 @@ body#static_page_submit #content .wrapper #main
 
   p
     border: 1px solid !lightest-blue
-    color: !mid-blue
+    color: $mid-blue
     margin-bottom: 20px
 
   table
-    background: !very-light-grey
-    color: !mid-blue
+    background: $very-light-grey
+    color: $mid-blue
     font-size: 0.8em
     margin: 0 0 20px 0
     width: 100%
@@ -835,7 +835,7 @@ ul.review li
     text-decoration: none
     +text-shadow(#fff, 0, 1px, 0)
     &:hover, &:focus
-      background: !mid-blue
+      background: $mid-blue
       color: white
       +text-shadow(#000, 0, 1px, 0)
   &.alt
@@ -843,7 +843,7 @@ ul.review li
 
   .active
     a
-      background: !mid-blue
+      background: $mid-blue
       color: white
       +text-shadow(#000, 0, 1px, 0)
   .inactive

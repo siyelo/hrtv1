@@ -7,7 +7,7 @@ Feature: Can add member
   Scenario: Add a member
     Given I am signed in as a member
     Then show me the page
-    When I follow Manage within the main nav
+    When I follow "Manage" within the main nav
     # And I follow "Add/Remove Members"
     # Then I should see "Members" within the title
     # And I should see "Add Member"

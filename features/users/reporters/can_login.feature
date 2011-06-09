@@ -13,9 +13,9 @@ Feature: Reporter can login
      And I should not see "There were problems with the following fields:"
 
   Scenario: Login as a reporter with email address
-    Given a reporter exists with email: "pink.panter@hrt.com"
+    Given a reporter exists with email: "pink.panter@hrtapp.com"
       And I go to the login page
-      And I fill in "Email" with "pink.panter@hrt.com"
+      And I fill in "Email" with "pink.panter@hrtapp.com"
       And I fill in "Password" with "password"
     When I press "Sign in"
     Then I should see the reporters admin nav

@@ -1,6 +1,6 @@
 Feature: Admin can see review page
   In order to view all my data
-  As an admin
+  As a sysadmin
   I want to be able to see review screen
 
   Background:
@@ -16,7 +16,7 @@ Feature: Admin can see review page
       And a data_response exists with data_request: the data_request, organization: the organization
       And a project exists with name: "Other Project", data_response: the data_response
       And a comment exists with title: "title2", comment: "comment2", commentable: the project
-      And I am signed in as an admin
+      And I am signed in as a sysadmin
     When I follow "Dashboard"
       And I follow "Review Organization Expenditures and Budgets"
       And I follow "In Progress"

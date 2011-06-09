@@ -1,7 +1,7 @@
-Feature: Admin can approve a code breakdown for each activity
+Feature: SysAdmin can approve a code breakdown for each activity
   In order to increase the quality of information reported
-  As an admin
-  I want to be able to approve activity splits via the admin data response review screen
+  As an SysAdmin
+  I want to be able to approve activity splits via the SysAdmin data response review screen
 
   Background:
    Given an organization exists with name: "UNAIDS"

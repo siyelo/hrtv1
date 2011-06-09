@@ -1,6 +1,6 @@
 Feature: Admin can manage data responses
   In order to reduce costs
-  As an admin
+  As a sysadmin
   I want to be able to manage data responses
 
   Background:
@@ -9,7 +9,7 @@ Feature: Admin can manage data responses
       And a reporter exists with username: "undp_user", organization: the organization
       And an organization exists with name: "UNDP", raw_type: "Agencies"
       And a data_response exists with data_request: the data_request, organization: the organization
-      And I am signed in as an admin
+      And I am signed in as a sysadmin
 
     Scenario: Manage data responses
       When I follow "Review Organization Expenditures and Budgets"

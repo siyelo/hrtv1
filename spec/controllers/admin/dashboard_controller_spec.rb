@@ -23,7 +23,7 @@ describe Admin::DashboardController do
     end
   end  
   
-  context "as an admin" do    
+  context "as a sysadmin" do    
     before :each do
       @admin = Factory.create(:admin)
       login @admin

@@ -97,10 +97,6 @@ module BudgetSpendHelpers
       budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
 
-  def workplan_total_by_type(amount_type, quarters = true)
-    quarters ? total_by_type(amount_type) : total_by_type_no_quarters(amount_type)
-  end
-
   def total_by_type(amount_type, quarters)
     if quarters
       amounts = [
@@ -115,10 +111,6 @@ module BudgetSpendHelpers
         self.send("#{amount_type}")
       ].compact.sum
     end
-  end
-
-  def total_by_type_no_quarters(amount_type)
-    self.send("#{amount_type}")
   end
 
   def smart_sum(collection, method)

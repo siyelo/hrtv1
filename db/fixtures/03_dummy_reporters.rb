@@ -5,7 +5,7 @@ begin
   puts "creating org"
   org = Factory(:organization, :name => "internal_reporter_org")
   puts "creating reporter user"
-  @reporter = Factory(:reporter, :email => 'reporter@hrt.com', :organization => org)
+  @reporter = Factory(:reporter, :email => 'reporter@hrtapp.com', :organization => org)
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_reporter_org' or user named 'reporter'? "
@@ -13,7 +13,7 @@ else
   puts "=> reporter #{@reporter.name} created (org: #{@reporter.organization.name})"
 end
 
-@reporter ||= User.find_by_email 'reporter@hrt.com'
+@reporter ||= User.find_by_email 'reporter@hrtapp.com'
 puts "creating response"
 @response = Factory(:data_response, :organization => @reporter.organization)
 puts "creating project"
@@ -27,7 +27,7 @@ puts "=> added sample data for reporter #{@reporter.name}"
 begin
   puts "creating activity_manager"
   org = Factory(:organization, :name => "internal_activity_manager_org")
-  am = Factory(:activity_manager, :email => 'activity_manager@hrt.com', :organization => org)
+  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com', :organization => org)
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_activity_manager_org' or user named 'activity_manager'? "

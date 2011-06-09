@@ -306,11 +306,11 @@ END
   end
 
   def converted_activities_total_by_type(amount_type, quarters, currency)
-    normal_activities.map { |a| a.workplan_total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
+    normal_activities.map { |a| a.total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
   end
 
   def converted_other_costs_total_by_type(amount_type, quarters, currency)
-    other_costs.map { |a| a.workplan_total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
+    other_costs.map { |a| a.total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
   end
 
   def converted_funders_total_by_type(amount_type, quarters, currency)

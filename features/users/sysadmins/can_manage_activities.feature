@@ -13,12 +13,10 @@ Feature: Reporter can manage activities
       And a reporter exists with username: "reporter", organization: the organization
       And a project exists with name: "project2", data_response: the data_response
       And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
-      And an admin exists with username: "admin"
+      And a sysadmin exists with username: "admin"
       And I am signed in as "admin"
 
-
-
-    Scenario: An admin can review activities
+    Scenario: a sysadmin can review activities
       When I follow "Activities"
         And I follow "activity1 description"
       Then I should see "activity1"
@@ -28,7 +26,7 @@ Feature: Reporter can manage activities
       Then I should not see "activity1 description"
 
 
-    Scenario: An admin can edit activity
+    Scenario: a sysadmin can edit activity
       When I follow "Activities"
         And I follow "Edit"
         And I fill in "Description" with "activity2 description"
@@ -37,7 +35,7 @@ Feature: Reporter can manage activities
         And I should not see "activity1 description"
 
 
-    Scenario: An admin can create comments for an activity
+    Scenario: a sysadmin can create comments for an activity
       When I follow "Activities"
         And I follow "activity1 description"
         And I fill in "Title" with "Comment title"
@@ -48,7 +46,7 @@ Feature: Reporter can manage activities
         And I should see "activity1 description"
 
 
-    Scenario: An admin can create comments for an activity and see comment errors
+    Scenario: a sysadmin can create comments for an activity and see comment errors
       When I follow "Activities"
         And I follow "activity1 description"
         And I press "Create Comment"
@@ -67,7 +65,7 @@ Feature: Reporter can manage activities
         And I should see "activity1 description"
 
 
-    Scenario: An admin can filter activities
+    Scenario: a sysadmin can filter activities
       When I follow "Activities"
       Then I should see "activity1 description"
         And I should see "activity2 description"
@@ -75,9 +73,9 @@ Feature: Reporter can manage activities
         And I press "Search"
         And I should see "activity1 description"
         And I should not see "activity2 description"
-      
 
-    Scenario: Sends email to users when a comment is made by an admin
+
+    Scenario: Sends email to users when a comment is made by a sysadmin
       Given no emails have been sent
       When I follow "Activities"
         And I follow "activity1 description"
@@ -87,9 +85,9 @@ Feature: Reporter can manage activities
         And "email@siyelo.com" should receive an email
         And I open the email
       Then I should see "Comment body" in the email body
-      
 
-    Scenario Outline: An admin can sort activities
+
+    Scenario Outline: a sysadmin can sort activities
       Given I follow "Activities"
       When I follow "<column_name>"
       Then column "<column>" row "1" should have text "<text1>"
@@ -100,8 +98,8 @@ Feature: Reporter can manage activities
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-          | column_name  | column | text1                 | text2                 | 
-          | Project      | 1      | project1              | project2              | 
-          | Description  | 2      | activity1 description | activity2 description | 
-          | Total Spent  | 3      | 1 RWF               | 2 RWF               | 
-          | Total Budget | 4      | 1 RWF               | 2 RWF               | 
+          | column_name  | column | text1                 | text2                 |
+          | Project      | 1      | project1              | project2              |
+          | Description  | 2      | activity1 description | activity2 description |
+          | Total Spent  | 3      | 1 RWF               | 2 RWF               |
+          | Total Budget | 4      | 1 RWF               | 2 RWF               |

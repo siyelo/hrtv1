@@ -13,7 +13,7 @@ describe Admin::ResponsesController do
     end
   end
   
-  describe "Requesting Admin::Responses endpoints as an admin" do
+  describe "Requesting Admin::Responses endpoints as a sysadmin" do
     before :each do
       @admin = Factory.create(:admin)
       login @admin

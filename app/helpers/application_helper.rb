@@ -225,6 +225,10 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
+  def format_budget_date (date, i = 0)
+    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
+  end
+
   def budget_fiscal_year_prev(data_response)
     if data_response.fiscal_year_start_date.present?
       year = data_response.fiscal_year_start_date.year

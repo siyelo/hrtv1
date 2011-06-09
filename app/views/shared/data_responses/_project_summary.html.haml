@@ -4,7 +4,7 @@
       %td Dates
       %td= "#{project.start_date} to #{project.end_date}"
     %tr
-      %td Total Budget:
+      %td Total Current budget:
       %td= n2cnds(project.entire_budget, project.currency || @response.currency)
     %tr
       %td Total Budget (current FY):

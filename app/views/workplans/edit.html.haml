@@ -33,18 +33,18 @@
         - start_year = @response.request.start_date.try(:year)
         - end_year = @response.request.end_date.try(:year)
         - if start_year == end_year
-          - prev_fy = "FY #{start_year}"
-          - next_fy = "FY #{start_year+1}"
+          - prev_fy = format_budget_date(@response.request.start_date)
+          - next_fy = format_budget_date(@response.request.start_date, 1)
         - else
-          - prev_fy = "FY #{start_year}-#{end_year}"
-          - next_fy = "FY #{start_year+1}-#{end_year+1}"
+          - prev_fy = "#{format_budget_date(@response.request.start_date)} - #{format_budget_date(@response.request.end_date)}"
+          - next_fy = "#{format_budget_date(@response.request.start_date, 1)} - #{format_budget_date(@response.request.end_date, 1)}"
         %th= prev_fy
         %th{:colspan => 10}= next_fy
       %tr.head
         %th Project
         %th{:colspan => 2} Activity / Other Cost
         %th Spend
-        %th Budget
+        %th Current budget
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project

@@ -3,7 +3,7 @@
     - link = activity.class == OtherCost ? new_response_other_cost_path(@response) : new_response_activity_path(@response)
     %li= link_to "1. Details", link
     %li 2. Spend
-    %li 3. Budget
+    %li 3. Current Budget
   - else
     - link = activity.class == OtherCost ? edit_response_other_cost_path(activity.data_response, activity) : edit_response_activity_path(activity.data_response, activity)
     %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}= link_to "1. Details", link
@@ -12,4 +12,4 @@
       %li{:class => (@coding_type.present? && get_coding_type(@coding_type) == :spend ? 'selected' : nil)}= link_to "2. Spend", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')
 
     - if @response.data_request.budget?
-      %li{:class => (@coding_type.present? && get_coding_type(@coding_type) == :budget ? 'selected' : nil)}= link_to "3. Budget", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
+      %li{:class => (@coding_type.present? && get_coding_type(@coding_type) == :budget ? 'selected' : nil)}= link_to "3. Current budget", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')

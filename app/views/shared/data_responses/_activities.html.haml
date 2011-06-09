@@ -15,8 +15,8 @@
           %th Classified?
           %th Approved?
           - unless other_costs
-            %th Sub-Implementers
-          %th Past Expenditure
+            %th Implementers
+          %th Expenditure
           %th Current Budget
           %th.manage Manage
       %tbody
@@ -59,7 +59,7 @@
                 %ul.inline_alt_tab
                   %li{:class => 'selected' }= link_to "Comments (#{activity.comments.size})", "#", :class => "comment_details"
                   - unless other_costs
-                    %li= link_to "Sub-Activities (#{activity.sub_activities.size})", "#", :class => "activity_details"
+                    %li= link_to "Implementers (#{activity.sub_activities.size})", "#", :class => "activity_details"
 
               .tabs
                 .tab1

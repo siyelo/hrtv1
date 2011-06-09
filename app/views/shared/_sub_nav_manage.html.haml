@@ -1,0 +1,5 @@
+%ul
+  %li{:class => (controller.class == OrganizationsController && controller.action_name == "edit" ? "active" : '')}
+    = link_to 'Basics', edit_organization_path(current_response.organization)
+  %li{:class => (controller.class == UsersController ? "active" : '')}
+    = link_to 'Members', members_path

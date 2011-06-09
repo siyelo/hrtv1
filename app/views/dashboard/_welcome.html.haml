@@ -1,0 +1,36 @@
+#welcome_box
+  %h2.welcome_msg Here are few simple steps to help you get started
+
+  %ul.welcome_steps
+    %li.first
+      - link_to edit_organization_path(:current) do
+        %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
+        %span.title 1. Basic Settings
+        %span.desc Your Organization's preferences and contact settings
+
+    %li
+      - link_to  response_projects_path(current_or_last_response)do
+        %span.icon= image_tag "icon_welcome5.png", :alt => "Enter your rojects", :height => "70"
+        %span.title 2. Enter Your Projects
+        %span.desc Define the health projects and activities your organization does
+
+    %li
+      - link_to review_response_path(current_or_last_response) do
+        %span.icon= image_tag "icon_welcome4.png", :alt => "Review Your Data", :height => "70"
+        %span.title 3. Review Your Data
+        %span.desc Add a little extra detail about your activities.
+    %li.last
+      - link_to submit_response_path(current_or_last_response) do
+        %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
+        %span.title 4. Submit Response
+        %span.desc Submit your data for the requested period
+
+  .welcome_info
+    %p Have questions?
+    %ul
+      %li
+        = link_to "Help Center", help_link, :target => "_blank"
+        %span Our knowledge base and FAQ's
+      %li
+        = link_to "Contact Us", contact_link, :target => "_blank"
+        %span Start a discussion with the support team.

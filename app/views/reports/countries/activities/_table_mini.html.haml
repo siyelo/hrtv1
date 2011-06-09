@@ -3,7 +3,7 @@
     %tr
       %th Activity
       %th Organization
-      %th Total Past Expenditure
+      %th Total Expenditure
 
   %tbody
     - top_activities.each do |activity|
@@ -11,7 +11,7 @@
         %td= link_to "#{friendly_name(activity)}", reports_country_activity_path(activity)
         %td= h activity.org_name
         - spent_total = activity.spent_sum
-        %td
+        %td.wrap_30
           %ul
             %li= n2crs(spent_total * usd_to_local_currency, Money.default_currency.iso_code)
             %li= "(#{n2c(spent_total, '$')})"

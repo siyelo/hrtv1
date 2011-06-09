@@ -14,7 +14,7 @@ class Admin::OrganizationsController < Admin::BaseController
                                          UPPER(fosaid) LIKE UPPER(:q)",
                          {:q => "%#{params[:query]}%"}]) if params[:query]
 
-    @organizations = scope.paginate(:page => params[:page], :per_page => 10,
+    @organizations = scope.paginate(:page => params[:page], :per_page => 200,
                     :order => "#{sort_column} #{sort_direction}")
   end
 
@@ -26,12 +26,21 @@ class Admin::OrganizationsController < Admin::BaseController
     end
   end
 
+  def create
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "Organization was successfully created"
+        redirect_to edit_admin_organization_url(resource)
+      end
+    end
+  end
+
   def update
     @organization = Organization.find(params[:id])
     @organization.attributes = params[:organization]
     if @organization.save(false)
       flash[:notice] = 'Organization was successfully updated'
-      redirect_to admin_organizations_url
+      redirect_to edit_admin_organization_url(resource)
     else
       render :edit
     end
@@ -47,7 +56,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
     if @organization.is_empty?
       @organization.destroy
-      render_notice("Organization was successfully deleted.", url)
+      render_notice("Organization was successfully destroyed.", url)
     else
       render_error("You cannot delete an organization that has users or data associated with it.", url)
     end

@@ -40,21 +40,6 @@ module ApplicationHelper
   end
 
   # Generates proper dashboard url link depending on the type of user
-  def user_dashboard_path(current_user)
-    if current_user
-      if current_user.admin?
-        admin_dashboard_path
-      elsif current_user.reporter?
-        reporter_dashboard_path
-      elsif current_user.activity_manager?
-        reporter_dashboard_path
-      else
-        raise 'user role not found'
-      end
-    end
-  end
-
-  # Generates proper dashboard url link depending on the type of user
   def user_report_dashboard_path(current_user)
     if current_user
       if current_user.admin?
@@ -85,8 +70,9 @@ module ApplicationHelper
                  current_controller_with_nesting?('admin', 'responses')
       end
     end
-
-    content_tag(:li, link_to(tab.humanize, { :controller => "/#{parent}/#{tab}" }), :class => ('active' if active))
+    content_tag(:li, :class => ('active' if active)) do
+      link_to tab.humanize, { :controller => "/#{parent}/#{tab}" }
+    end
   end
 
   # alternative to rails' current_page?() method
@@ -275,39 +261,47 @@ module ApplicationHelper
     true if Float(i) rescue false
   end
 
-  def last_response
-    current_user.organization.data_responses.last
-  end
-
   def current_response
     current_user.current_response
   end
 
-  def last_response_path
-    last_response ? edit_organization_path(last_response) : new_response_path
+  def last_response
+    current_user.organization.data_responses.last
   end
 
   def current_or_last_response
-    current_response || last_response
+    @response || current_response || last_response
   end
 
-  def current_projects_url_hack
-    current_response ? response_workplans_path(current_response) : last_response_path
+  def month_year(date, i = 0)
+    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
   end
 
-  def current_classifications_url_hack
-    current_response ? edit_response_classification_path(current_or_last_response, 'CodingSpend') : last_response_path
+  def prev_fy(response)
+    "#{month_year(response.request.start_date, -1)} - #{month_year(response.request.end_date, -1)}"
   end
 
-  def current_edit_response_url
-    current_response ? edit_organization_path(current_response) : last_response_path
+  def current_fy(response)
+    "#{month_year(response.request.start_date)} - #{month_year(response.request.end_date)}"
   end
 
-  def current_response_url
-    current_response ? response_path(current_response) : last_response_path
+  def next_fy(response)
+    "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
   end
 
-  def current_review_response_url
-    current_response ? review_response_path(current_response) : last_response_path
+  def get_activity_type(type)
+    case type
+    when "Budget"
+      "Current Budget"
+    when "Spend"
+      "Past Expenditure"
+    else
+      type
+    end
+  end
+
+  # find namespace of given class
+  def namespace(klass)
+    klass.to_s.split("::").first
   end
 end

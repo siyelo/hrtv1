@@ -22,6 +22,8 @@ class Project < ActiveRecord::Base
   ### Associations
   belongs_to :data_response, :counter_cache => true
   has_and_belongs_to_many :locations
+  belongs_to :user
+  has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :normal_activities, :class_name => "Activity",
@@ -47,8 +49,8 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?} 
-  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?} 
+  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
+  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
   validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
   validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
   validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
@@ -58,31 +60,28 @@ class Project < ActiveRecord::Base
 
   validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
 
-
   ### Attributes
-  attr_accessible :name, :description, :spend,
-                  :currency, :data_response, :activities,
+  attr_accessible :name, :description, :spend, :currency, :data_response, :activities,
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
-                  :budget2, :budget3, :budget4, :budget5
-
-  # Delegates
-  # TODO pull all this DR related stuff to module and mix in
+                  :budget2, :budget3, :budget4, :budget5,
+                  :user_id
+  ### Delegates
   delegate :organization, :to => :data_response
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-  ### Public methods
 
+  ### Named Scopes
+  named_scope :sorted,           {:order => "projects.name" }
+
+  ### Public methods
+  #
   def implementers
     providers
   end
 
   def response
     self.data_response
-  end
-
-  def organization
-    response.organization
   end
 
   # view helper ??!
@@ -111,11 +110,6 @@ END
     result = ''
     result = name unless name.nil?
     result
-  end
-
-  # TODO... GR: this is view code - must be moved out of the model
-  def to_label #so text doesn't spill over in nested scaffs.
-      to_s
   end
 
   def deep_clone
@@ -158,6 +152,7 @@ END
     return saved, errors
   end
 
+<<<<<<< HEAD
   def add_activity(attributes)
     activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
                            :spend => attributes["spend"],
@@ -173,11 +168,13 @@ END
                            :budget_q4 => attributes["budget_q4"],
                            :start_date => attributes["start_date"],
                            :end_date => attributes["end_date"])
-                           
+
     activity.data_response_id = data_response_id
     activity
   end
 
+=======
+>>>>>>> merge half the rwanda fixes
   def amount_for_provider(provider, field)
     activities.inject(0) do |sum, a|
       amt = a.amount_for_provider(provider, field)
@@ -272,8 +269,12 @@ END
     (self.spend || 0) == self.in_flows_spend_total
   end
 
+  #calculates the activitytotals for budget/spent
+  def subtotals(type)
+    activities.select{|a| a.send(type).present?}.sum(&type)
+  end
+
   def in_flows_spend_total
-    #(in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend) || 0)
     in_flows_total(:spend)
   end
 
@@ -340,7 +341,7 @@ END
     end
     errors
   end
-  
+
   private
 
     ### Validations
@@ -451,7 +452,7 @@ END
         amount += spend * currency_rate(project.currency, 'USD')
       end
       amount
-    end 
+    end
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id
@@ -460,6 +461,8 @@ END
       funding_flows.each {|ff| ff.project = self}
     end
 end
+
+
 
 
 
@@ -476,25 +479,27 @@ end
 #  description      :text
 #  created_at       :datetime
 #  updated_at       :datetime
-#  budget           :integer(10)
-#  spend            :integer(10)
-#  entire_budget    :integer(10)
+#  budget           :decimal(, )
+#  spend            :decimal(, )
+#  entire_budget    :decimal(, )
 #  currency         :string(255)
-#  spend_q1         :integer(10)
-#  spend_q2         :integer(10)
-#  spend_q3         :integer(10)
-#  spend_q4         :integer(10)
-#  spend_q4_prev    :integer(10)
+#  spend_q1         :decimal(, )
+#  spend_q2         :decimal(, )
+#  spend_q3         :decimal(, )
+#  spend_q4         :decimal(, )
+#  spend_q4_prev    :decimal(, )
 #  data_response_id :integer         indexed
-#  budget_q1        :integer(10)
-#  budget_q2        :integer(10)
-#  budget_q3        :integer(10)
-#  budget_q4        :integer(10)
-#  budget_q4_prev   :integer(10)
+#  budget_q1        :decimal(, )
+#  budget_q2        :decimal(, )
+#  budget_q3        :decimal(, )
+#  budget_q4        :decimal(, )
+#  budget_q4_prev   :decimal(, )
 #  comments_count   :integer         default(0)
-#  budget2          :integer(10)
-#  budget3          :integer(10)
-#  budget4          :integer(10)
-#  budget5          :integer(10)
+#  budget2          :decimal(, )
+#  budget3          :decimal(, )
+#  budget4          :decimal(, )
+#  budget5          :decimal(, )
+#  user_id          :integer
+#  am_approved_date :date
 #
 

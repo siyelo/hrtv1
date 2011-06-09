@@ -17,11 +17,11 @@
           - @empty_data_responses.each do |data_response|
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
               %td= data_response.organization
-              %td= data_response.organization.user_email_list_limit_3
+              %td= data_response.organization.user_emails(3).join ","
               %td= data_response.contact_phone_number
               %td
                 = link_to "Show", admin_response_path(data_response)
-                = link_to "Delete", delete_admin_response_path(data_response), :class => "destroy_btn"
+                = link_to "Delete", admin_response_path(data_response), :class => "destroy_btn", :method => :delete, :confirm => "Are you sure?"
   .simple_table
     %h3="In Process Data Responses (#{@in_progress_data_responses.size})"
     - if @in_progress_data_responses.empty?
@@ -32,11 +32,11 @@
           %tr
             %th Organization
             %th Projects
-            %th Past Expenditure Total
+            %th Expenditure Total
             %th Budget Total
             %th Activities
-            %th Sub Activities
-            %th Past Expenditure Total
+            %th Implementers
+            %th Expenditure Total
             %th Budget Total
             %th Unclassified Activities
             %th
@@ -64,8 +64,8 @@
             %tr
               %th Organization
               %th Date/time submitted
-              %th Total budget
-              %th Total spend
+              %th Total current budget
+              %th Total past expenditure
               %th
           %tbody
             - @submitted_data_responses.each do |data_response|

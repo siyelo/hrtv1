@@ -21,8 +21,8 @@ class Report < ActiveRecord::Base
     'activities_by_expenditure_coding',
     'activities_by_expenditure_cost_categorization',
     'activities_by_expenditure_districts',
-    'jawp_report_budget',
-    'jawp_report_spent',
+    'dynamic_query_report_budget',
+    'dynamic_query_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
     'activities_by_nha_subimps',
@@ -94,9 +94,9 @@ class Report < ActiveRecord::Base
           Reports::ActivitiesByCostCategorization.new(:spent)
         when 'activities_by_expenditure_districts'
           Reports::ActivitiesByDistricts.new(:spent)
-        when 'jawp_report_budget'
+        when 'dynamic_query_report_budget'
           Reports::JawpReport.new(:budget, Activity.jawp_activities)
-        when 'jawp_report_spent'
+        when 'dynamic_query_report_spent'
           Reports::JawpReport.new(:spent, Activity.jawp_activities)
         when 'activities_by_nsp_budget'
           Reports::ActivitiesByNsp.new(Activity.only_simple.canonical, :budget, true)

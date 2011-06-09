@@ -12,4 +12,17 @@ namespace :db do
   #  load File.join(RAILS_ROOT, 'db', 'fixtures', '04_users.rb')
   #end
 
+  desc "Resets user passwords for current environment."
+  task :password_reset => :environment do
+    puts "Reseting user passwords for environment #{RAILS_ENV}"
+    password = 'si@yelo'
+    User.all.each{|u| u.password = password; u.password_confirmation = password; u.save}
+    puts "------------------------------------------------------------------"
+    puts "Passwords are reset to: '#{password}'"
+    puts "------------------------------------------------------------------"
+    puts "You can use following users for login:"
+    puts "------------------------------------------------------------------"
+    puts Organization.all.select{|o| o.users.count > 0}.map{|o| o.users.first.email}
+    puts "------------------------------------------------------------------"
+  end
 end

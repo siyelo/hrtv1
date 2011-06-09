@@ -16,7 +16,7 @@ end
 puts " #{ca_total} code assignments deleted."
 
 
-puts "Deleting past expenditure code assignments where activity.spend is nil..."
+puts "Deleting spend code assignments where activity.spend is nil..."
 activities = Activity.only_simple.find(:all, :conditions => {:spend => nil})
 activities_total = activities.length
 ca_total = 0
@@ -34,7 +34,7 @@ puts " #{ca_total} code assignments deleted."
 # CF: https://rwandaonrails.campfirenow.com/room/313278/transcript/2011/02/02
 #
 # dalibor, commits look good
-# 1 thing: lets not delete code assignments when past expenditure or budget is 0, lets just set any amounts to nil, leave percentages
+# 1 thing: lets not delete code assignments when spend or budget is 0, lets just set any amounts to nil, leave percentages
 # otherwise we will sabotage that "put percentages in budget assigns and copied them over" case
 
 
@@ -59,7 +59,7 @@ activities.each_with_index do |activity, index|
 end
 puts " #{ca_total} code assignments updated."
 
-puts "Setting amounts to nil for past expenditure code assignments where activity.spend is 0..."
+puts "Setting amounts to nil for spend code assignments where activity.spend is 0..."
 activities = Activity.only_simple.find(:all, :conditions => {:spend => 0})
 activities_total = activities.length
 ca_total = 0

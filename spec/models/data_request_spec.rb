@@ -19,7 +19,12 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:final_review) }
   end
 
-  describe "Validations" do
+  describe "associations" do
+    it { should belong_to :organization }
+    it { should have_many :data_responses }
+  end
+
+  describe "validations" do
     subject { Factory(:data_request) }
     it { should be_valid }
     it { should validate_presence_of :organization_id }
@@ -30,11 +35,6 @@ describe DataRequest do
     it { should_not allow_value('9999').for(:start_year) }
     it { should_not allow_value('').for(:start_year) }
 
-  end
-
-  describe "Associations" do
-    it { should belong_to :organization }
-    it { should have_many :data_responses }
   end
 
   describe "Callbacks" do

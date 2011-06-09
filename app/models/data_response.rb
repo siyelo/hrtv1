@@ -35,6 +35,15 @@ class DataResponse < ActiveRecord::Base
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
+  named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
+  named_scope :latest_first, {:order => "data_responses.id DESC" }
+
+  ### Delegates
+  delegate :name, :to => :data_request
+  delegate :title, :to => :data_request
+
+  FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
+                           amount_in_dollars districts functions inputs]
 
   ### Meta Data for Meta Programming
   ## GN TODO: refactor out getting collections of items failing
@@ -105,7 +114,10 @@ class DataResponse < ActiveRecord::Base
   # TODO: spec
   def status
     return "Empty / Not Started" if empty?
+    return "Ready to Submit" if ready_to_submit?
     return "Submitted" if submitted
+    return "Submitted for Final Review" if submitted_for_final
+    return "Complete" if complete
     return "In Progress"
   end
 
@@ -143,7 +155,7 @@ class DataResponse < ActiveRecord::Base
   def total_activity_method(method)
     activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
-        sum + universal_currency_converter(a.send(method), a.project.currency, currency)
+        sum + universal_currency_converter(a.send(method), a.currency, currency)
       else
         sum
       end
@@ -163,16 +175,16 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      self.errors.add_to_base("Project expenditures and/or budgets are not yet entered.") unless project_amounts_entered?
+      self.errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      self.errors.add_to_base("Activity expenditures and/or budgets are not yet entered.") unless activity_amounts_entered?
+      self.errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-      self.errors.add_to_base("Project current budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
+      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      self.errors.add_to_base("Project current budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
+      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
       self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
@@ -281,8 +293,6 @@ class DataResponse < ActiveRecord::Base
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
   end
-
-
 
   def projects_have_activities?
     return false unless activities_entered?

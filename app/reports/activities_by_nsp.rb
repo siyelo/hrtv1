@@ -31,7 +31,7 @@ class Reports::ActivitiesByNsp
       row << "Data Source" if @show_organization
       row << "Implementer"
       row << "Institutions Assisted"
-      row << "# of HC's Sub-implementing"
+      row << "# of HC's implementing"
       row << "Beneficiaries"
       row << "ID"
 

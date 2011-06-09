@@ -35,6 +35,9 @@ Spork.prefork do
       DatabaseCleaner.strategy = :truncation
       DatabaseCleaner.clean
     end
+
+    config.include(EmailSpec::Helpers)
+    config.include(EmailSpec::Matchers)
   end
 
 end
@@ -160,4 +163,17 @@ end
 
 def bd(integer)
   BigDecimal.new(integer.to_s)
+end
+
+def login_as_admin
+  # mock current_response_is_latest? method for Users
+  # CAUTION: current_response_is_latest? method of model
+  # will probably be redefined for all future specs !?
+  #User.class_eval{ def current_response_is_latest?; true; end }
+  # does not work in this version of RSpec
+  # User.any_instance.stubs(:current_response_is_latest?).returns(true)
+  organization = Factory(:organization)
+  @data_request = Factory(:data_request, :organization => organization) # we need a request in the system first
+  @admin = Factory(:admin, :organization => organization)
+  login @admin
 end

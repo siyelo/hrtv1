@@ -1,5 +1,5 @@
 // Pretty Table (with clickable rows)
-// IMPORTANT: if thead doesn't contain links then add class "static"!!!
+// IMPORTANT: if thead doesn't contain links then add class "static"$$$
 
 table.standard
   color: $mid-blue
@@ -23,7 +23,7 @@ table.standard
         display: block
         font-size: 11px
         font-weight: bold
-        padding: 10px 12px 7px 12px
+        padding: 10px 20px 7px 12px
         text-decoration: none
         text-transform: uppercase
         &:hover, &:focus, &:active
@@ -69,7 +69,7 @@ table.standard
       td:last-child
         border-right: 3px solid $light-blue
 
-  a.create_button
+  a.create_new
     font-size: 11px
     font-weight: normal
     padding: 5px 10px 5px
@@ -85,6 +85,9 @@ table.standard
       border: none
     &.padding
       padding-top: 0
+
+  .wrap_30
+    min-width: 30%
 
 
 // Pretty Table with clickable rows
@@ -123,6 +126,7 @@ table.sum
 
   tbody tr:last-child td
     border: none
+    padding-bottom: 20px
 
   h1 a
     color: $mid-blue
@@ -164,23 +168,11 @@ table.sum
       text-decoration: none
 
   tr.head td
-    font-weight: bold
-    padding: 5px 12px 4px
-    background: $mid-blue
-
-    a
-      color: $lightest-blue
-      font-size: 12px
-
-  tr.sub-head td
     background: $lightest-blue
-    padding: 4px 12px
-    span
-      display: inline-block
-      font-size: 10px
-      padding-top: 15px
-      text-transform: uppercase
-
+    font-weight: bold
+    padding: 2px 12px 0px 12px
+  tr.sub-head td
+    padding: 15px 12px 4px 12px
   tr td
     border-bottom: 1px solid $lightest-blue
     color: $mid-blue
@@ -190,30 +182,42 @@ table.sum
   tr.none td
     border: none
 
+//
 table.workplan
-
   color: $mid-blue
   width: 100%
+
   th
     color: $lightest-blue
     font-size: 11px
-    padding: 10px 10px 3px
+    font-weight: bold
+    padding: 10px 10px 5px
     +text-shadow(#000, 0, 1px, 0)
     &.amount
       text-align: right
-      a
-        color: $lightest-blue
-        text-decoration: none
+    a
+      color: $lightest-blue
+      display: inline-block
+      text-decoration: none
+      padding-right: 22px
+      &:hover, &:focus
+        color: #FFF
+      &.asc
+        background: image_url("arrow_up.gif") no-repeat right center
+      &.desc
+        background: image_url("arrow_down.gif") no-repeat right center
+
   td
     font-size: 12px
     line-height: 1.4
     padding: 7px 10px
+
   th, td
     height: 100%
     &.desc
       font-size: 11px
       padding-left: 10px
-      
+
     &.no-padding
       padding: 0
     &.fixed
@@ -235,6 +239,8 @@ table.workplan
       width: 1%
     &.wrap-10
       width: 10%
+    &.wrap-20
+      width: 20%
     &.wrap-30
       width: 30%
     &.wrap-40
@@ -257,8 +263,7 @@ table.workplan
   .head th
     background: $mid-blue
     &.no-bg
-      background: $filler
-      font-weight: bold
+      background: none
   .tabs
     li
       display: inline-block
@@ -355,7 +360,7 @@ table.workplan
     textarea
       width: 400px
   .nested
-    width: 100%
+    width: 98%
     td
       background: $filler
 
@@ -376,7 +381,7 @@ table.workplan
     td
       background: $lightest-blue
   .context
-    color: $mid-blue + #333
+    color: $blue
     font-size: 11px
     font-style: italic
     margin-left: 10px
@@ -406,3 +411,49 @@ tr.activity_subheading
   td
     padding: 3px 10px
     font-size: 10px
+
+.nested
+  font-size: 11px
+  width: 100%
+  +border-radius
+  +box-shadow(#ddd, 0, 0, 4px)
+  th
+    background: $filler + #050505
+    border-bottom: 1px solid $lightest-blue
+    color: $mid-blue + #333
+    padding: 7px
+    +text-shadow(#fff, 0, 1px)
+    &:first-child
+      +border-top-left-radius
+    &:last-child
+      +border-top-right-radius
+  tbody
+    border: 1px solid $lightest-blue
+  td
+    background: #fff
+    border-bottom: 1px solid $lightest-blue
+    color: $mid-blue
+    padding: 5px 7px
+
+    li
+      padding: 0px !important
+    &.implementer
+      font-weight: bold
+      width: 55%
+    &.amount
+      width: 20%
+    &.action
+      text-align: right
+      width: 5%
+
+  tr:last-child td
+    &:first-child
+      +border-bottom-left-radius
+    &:last-child
+      +border-bottom-right-radius
+
+  input[type="text"]
+    background: $filler
+    padding: 2px !important
+    text-align: right
+    width: 75% !important

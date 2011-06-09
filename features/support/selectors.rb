@@ -57,6 +57,9 @@ module HtmlSelectorsHelper
     when /the first row/
       ".purpose_row#0"
 
+    when /the main heading/
+      ".main_heading"
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
         "Now, go and add a mapping in #{__FILE__}"

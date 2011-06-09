@@ -18,6 +18,12 @@ class DataRequest < ActiveRecord::Base
   ### Callbacks
   after_create :create_data_responses
 
+  ### Instance Methods
+
+  def name
+    title
+  end
+
   def status
     return 'Final review' if final_review?
     return 'In progress'
@@ -59,6 +65,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -69,8 +76,6 @@ end
 #  created_at        :datetime
 #  updated_at        :datetime
 #  due_date          :date
-#  start_date        :date
-#  end_date          :date
 #  final_review      :boolean         default(FALSE)
 #  year_2            :boolean         default(TRUE)
 #  year_3            :boolean         default(TRUE)
@@ -81,5 +86,6 @@ end
 #  inputs            :boolean         default(TRUE)
 #  service_levels    :boolean         default(TRUE)
 #  budget_by_quarter :boolean         default(FALSE)
+#  start_year        :integer
 #
 

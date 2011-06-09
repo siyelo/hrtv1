@@ -1,4 +1,4 @@
-form.data_response, .basic_form
+.basic_form
   .dashboard_section
     background: $filler
 
@@ -68,6 +68,8 @@ form.data_response, .basic_form
       float: right
       margin-left: 1%
       width: 42%
+      a
+        color: $orange
 
     .inline-errors
       color: red
@@ -112,6 +114,10 @@ form.data_response, .basic_form
       margin: 0
       padding: 0
 
+  .single_column
+    li
+      width: 100%
+
 .checkbox_push
   float: left
 
@@ -141,16 +147,25 @@ form.data_response, .basic_form
     height: 100px
 
 .hint, .inline-hints
-  color: $mid-blue
+  color: $mid-blue + #222
   display: block
   font-size: 11px
-  padding: 3px 0 0
+  font-style: italic
+  padding: 5px 0 0
   &.padded
-    padding: 0 0 20px
+    padding-bottom: 10px
+
+.heading_hint
+  background: $lightest-blue
+  border-bottom: 1px solid $lighter-blue
+  color: $mid-blue + #222
+  display: block
+  font-size: 11px
+  font-style: italic
+  margin: -10px -10px 10px
+  padding: 9px 10px 5px
 
 .sub_activities
-  .hint
-    margin: 10px 5px
 
   h4
     margin: 15px 0 10px
@@ -186,8 +201,8 @@ form.data_response, .basic_form
 
   #search_box
     +border-radius
-    background: image_url("icon_search.gif") no-repeat 97% 7px $filler
-    border: 1px solid $light-blue
+    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
+    border: 1px solid #DDDDDD
     float: right
     font-size: 12px
     padding: 0 28px 0 5px
@@ -195,7 +210,7 @@ form.data_response, .basic_form
 
   input[type='text']
     -moz-box-shadow: none
-    background: none repeat scroll 0 0 $filler !important
+    background: none repeat scroll 0 0 #FFFFFF !important
     border: none
     left: 10px
     color: #000000
@@ -205,8 +220,6 @@ form.data_response, .basic_form
     width: 200px
     height: 16px
     line-height: 1.4em
-    &:hover, &:focus, &:active
-      background: #FFF !important
   input[type=text], textarea
     &:hover, &:focus, &:active
       border: none !important
@@ -314,7 +327,7 @@ h3.form_heading
           margin-bottom: 3px
           font-size: 9px
           font-weight: normal
-          color: $mid-blue + #333
+          color: $blue
 
 
   .edit_block, .preview_block
@@ -325,39 +338,6 @@ h3.form_heading
     float: right
     text-align: right
     width: 10%
-
-    a.edit, a.delete
-      background: #eee
-      border: 1px solid $light-blue
-      color: $dark-grey
-      display: inline-block
-      font-size: 10px
-      height: auto
-      line-height: 1.4
-      margin-left: 3px
-      padding: 3px 5px 2px
-      text-decoration: none
-      +border-radius(2px)
-      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
-      +text-shadow(#fff, 0, 0, 1px)
-      &:hover, &:focus
-        background: $orange
-        border: 1px solid $orange - #111
-        color: #fff
-        +linear-gradient(color-stops($orange - #111, $orange + #111))
-        +text-shadow(#444, 0, 0, 1px)
-      &:active
-        outline: none
-        position: relative
-        top: 1px
-
-    a.delete
-      &:hover, &:focus
-        background: $red
-        border: 1px solid $red - #111
-        color: #fff
-        +linear-gradient(color-stops($red - #111, $red + #111))
-        +text-shadow(#444, 0, 0, 1px)
 
 .add
   a
@@ -376,7 +356,7 @@ h3.form_heading
   border-top: 1px solid #CCCCCC
   color: #666666
   font-size: 11px
-  margin: 20px 0 0
+  margin: 0 0 20px
   padding: 10px
 
   a.delete_action
@@ -565,14 +545,9 @@ h3.form_heading
 
 .app
 
-  // override default theme
-  .ui-widget-content
-    background: #fff
-
   .ui-autocomplete-input, .ui-autocomplete
     font-size: 11px
     font-weight: normal
-    padding: 5px
 
   .ui-autocomplete-input
     width: 33%
@@ -591,59 +566,90 @@ h3.form_heading
           font-weight: bold
           color: black
 
-#admin_users_index
+.targets
+
+  ul.horizontal li
+    border: none
+    padding: 0
+    margin: 0
+
+    &:first-child
+      width: 80%
+
+      input
+        width: 70%
+
+.organizations, .roles
+  label
+    display: block !important
+    float: none !important
+
+.organizations
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 200px !important
+
+.roles
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 120px !important
+
+.comment
+  .ajax-loader
+    margin: 5px 10px
+
+.ui-widget-header
+  height: 25px
+
+.search
+  padding: 0 !important
+
+strong
+  font-weight: bold
+
+.implementer_container
+  border-bottom: 1px solid $lightest-blue
+  margin-bottom: 7px
+  .ui-autocomplete-input
+    border: 1px solid $light-blue
+    padding: 5px
+
+#users_index
   .message
     height: 20px
     font-size: 14px
     padding: 6px
     text-align: center
     color: green
-  #new_user
-    fieldset.inputs
-      width: 90%
-      float: left
-      ol
-        li
-          float: left
-          margin-left: 2%
-          width: 23%
-          border-bottom: none
+  // has 4 input fields
+  fieldset.inputs
+    width: 90%
+    ol
+      li
+        margin-left: 2%
+        width: 23%
+  fieldset.buttons
+    width: 10%
 
-          p.inline-errors
-            margin: 0
-            padding: 2px
-            width: 100%
-      label
-        float: none
-        width: 90%
-      input, select
-        width: 90%
-        border: 1px solid #DDDDDD
-      select
-        margin-top: 1px
-        height: 26px
-    fieldset.buttons
-      width: 10%
-      ol
-        margin-top: 25px
-      &.no-margin ol
-        margin-top: 0
-        li
-          padding-top: 23px
+  .ajax-loader
+    margin: 4px
 
-        li
-          float: left
-          border-bottom: none
-        input
-          padding: 5px 5px 3px
-          width: 70px
-
-      .ajax-loader
-        margin: 4px
-        
 #theCombobox
   +border-radius
-  background: image_url("icon_search.gif") no-repeat 97% 4px #FFF 
+  background: image_url("icon_search.gif") no-repeat 97% 4px #FFF
   border: 1px solid $light-blue
   padding: 0 28px 0 5px
   height: 23px
+
+#users_index
+  // only has 3 input fields
+  fieldset.inputs
+    width: 90%
+    ol
+      li
+        margin-left: 2%
+        width: 31%
+  fieldset.buttons
+    width: 10%

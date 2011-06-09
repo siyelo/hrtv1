@@ -1,5 +1,7 @@
 - title("Edit Other Cost")
 
+= render 'projects/sub_nav'
+
 = render 'breadcrumb', :response => @response, :activity => @other_cost
 
 %h1.main_heading Edit Other Cost
@@ -18,10 +20,11 @@
   - elsif !@other_cost.budget_classified?
     %li= "Please classify the Current budget for this activity."
 
-.wrap-70
-  = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+= render 'activities/tab_nav', :activity => @other_cost
 
-  - semantic_form_for @other_cost, :url => response_other_cost_path(@response, @other_cost), :html => {:class => "basic_form"} do |f|
-    = render 'form', :f => f
+= error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-= render :partial => 'shared/comments', :comments => @comments
+- semantic_form_for @other_cost, :url => response_other_cost_path(@response, @other_cost), :html => {:class => "basic_form"} do |f|
+  = render 'form', :f => f
+
+= render 'shared/comments', :comments => @comments

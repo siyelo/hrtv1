@@ -212,7 +212,8 @@ describe Code do
   describe "leaf_assignments_for_activities" do
     before :each do
       Money.default_bank.add_rate(:USD, :USD, 1)
-      data_response = Factory.create(:data_response, :organization => Factory(:organization, :currency => "USD"))
+      organization  = Factory.create(:organization, :currency => "USD")
+      data_response = Factory.create(:data_response, :organization => organization)
       @activity1 = Factory.create(:activity, :data_response => data_response)
       @activity2 = Factory.create(:activity, :data_response => data_response)
       @code1     = Factory.create(:code, :short_display => 'code1')
@@ -254,16 +255,6 @@ describe Code do
                              :amount => 3, :cached_amount => 3)
 
       @code11.leaf_assignments_for_activities(CodingBudget, [@activity1, @activity2]).should == [a2ca12, a2ca11]
-    end
-  end
-
-  describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:activity)
-      end
-
-      it_should_behave_like "comments_cacher"
     end
   end
 end

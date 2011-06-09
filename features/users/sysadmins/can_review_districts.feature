@@ -27,21 +27,20 @@ Feature: Admin can review districts
       And a coding_spend_district exists with activity: the activity, code: the first location
 
 
-
-    Scenario: "Log in as admin, go to district activity detail screen"
-      Given I am signed in as a sysadmin
-      When I follow "Dashboard"
-        And I follow "Review District Past Expenditures and Current Budgets"
-      Then I should see "Review District Past Expenditures and Current Budgets" within "h1"
-        And I follow "Location A"
-        And I should see "Location A" within "h1"
-
-      When I follow "View all Activities"
-      Then I should see "Activities" within "h1"
-
-      When I follow "Activity A"
-      Then I should see "Activity A" within "h1"
-        And I should see "Proportion Past Expenditure"
-        And I should see "Proportion Current Budget"
-        And I should see "NSP Past Expenditure"
-        And I should see "NSP Current Budget"
+  Scenario: "Log in as admin, go to district activity detail screen"
+    Given an organization exists with name: "SysAdmin Org"
+    And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
+    And I am signed in as "sysadmin@hrtapp.com"
+    When I follow "Dashboard"
+    And I follow "Review District Past Expenditures and Current Budgets"
+    Then I should see "Review District Past Expenditures and Current Budgets" within "h1"
+    And I follow "Location A"
+    And I should see "Location A" within "h1"
+    When I follow "View all Activities"
+    Then I should see "Activities" within "h1"
+    When I follow "Activity A"
+    Then I should see "Activity A" within "h1"
+    And I should see "Proportion Past Expenditure"
+    And I should see "Proportion Current Budget"
+    And I should see "NSP Past Expenditure"
+    And I should see "NSP Current Budget"

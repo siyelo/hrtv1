@@ -8,21 +8,21 @@ class Location < Code
 
   # Named scopes
   named_scope :all_with_counters,
+              lambda { |request_id| { 
                 :select => "codes.id, codes.short_display, codes.type,
-                  (SELECT COUNT(*) FROM projects
-                    INNER JOIN locations_projects ON projects.id = locations_projects.project_id
-                    WHERE locations_projects.location_id = codes.id) AS projects_count,
                   (SELECT COUNT(DISTINCT(organizations.id)) FROM organizations
                     INNER JOIN data_responses ON organizations.id = data_responses.organization_id
+                    INNER JOIN data_requests ON data_responses.data_request_id = data_requests.id AND data_responses.data_request_id = #{request_id}
                     INNER JOIN activities ON data_responses.id = activities.data_response_id
                     INNER JOIN code_assignments on activities.id = code_assignments.activity_id
                     WHERE code_assignments.code_id = codes.id) AS organizations_count,
                   (SELECT COUNT(*) FROM activities
+                    INNER JOIN data_responses ON activities.data_response_id = data_responses.id
+                    INNER JOIN data_requests ON data_responses.data_request_id = data_requests.id AND data_responses.data_request_id = #{request_id}
                     INNER JOIN activities_locations ON activities.id = activities_locations.activity_id
                     WHERE activities_locations.location_id = codes.id) AS activities_count,
                   SUM(ca1.cached_amount) as spent_sum,
-                  SUM(ca2.cached_amount) as budget_sum
-                ",
+                  SUM(ca2.cached_amount) as budget_sum",
                 :joins => "
                   LEFT OUTER JOIN code_assignments ca1 ON codes.id = ca1.code_id
                      AND ca1.type = 'CodingSpendDistrict'
@@ -32,7 +32,14 @@ class Location < Code
                 :order => "short_display ASC",
                 :include => :district,
                 :group => "codes.id, codes.short_display, codes.type"
+                
+              }}
+
 end
+
+
+
+
 
 
 

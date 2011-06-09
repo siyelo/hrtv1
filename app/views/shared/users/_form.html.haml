@@ -1,0 +1,19 @@
+.form_aside
+- f.inputs :class => 'wrap-80 inputs' do
+  %li.last
+    %h3 User details
+    %ul.dashboard_section
+      - if current_user.sysadmin?
+        = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :hint => "The organization this member is associated with"
+      = f.input :email, :hint => "Email of the member"
+      = f.input :full_name, :hint => "Full name of the member", :required => false
+      = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => available_roles
+
+  %li.last
+    %h3 Password
+    %ul.dashboard_section
+      = f.input :password, :hint => "New password for the member"
+      = f.input :password_confirmation, :hint => "Type the password again"
+
+- f.buttons :class => 'wrap-80 buttons' do
+  = f.commit_button @user.new_record? ? "Add Member" : "Update Member", :class => "last"

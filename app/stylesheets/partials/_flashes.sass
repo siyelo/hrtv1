@@ -44,7 +44,7 @@
     +box-shadow($very-light-grey, 0, 2px, 5px)
     +text-shadow($filler, 0, 1px, 1px)
     max-width: 60%
-    margin: 0 auto
+    margin: 5px auto
 
   #success, #info, .success, .info
     border-color: #99cc99
@@ -118,9 +118,9 @@
       margin-bottom: 5px
 
 //Response notification message for Reporter Dashboard
-ul.response-notice 
+ul.response-notice
   clear: both
-  +pie-clearfix
+  margin-bottom: 10px
   li
     background: image_url("warning_16.png") #ffece9 no-repeat 10px center
     border: 1px solid #f4e8e6
@@ -133,7 +133,16 @@ ul.response-notice
     &:last-child
       margin: 0
       +border-bottom-radius
+      
+.inline-response-notice
+  background: image_url("warning_16.png") no-repeat 10px center
+  color: $mid-blue
+  display: inline-block
+  font-size: 11px
+  padding: 7px 0 3px 30px
 
+.final_review td
+  background: #ffece9
 // Landing Page flashes override
 body.landing
   #flashes

@@ -39,7 +39,7 @@ class Reports::DistrictsByAllCodes
 
       Code.deepest_nesting.times{|i| row << "Code"}
       row << "District"
-      row << "Budget"
+      row << "Current Budget"
 
       row
     end

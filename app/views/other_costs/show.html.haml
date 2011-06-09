@@ -4,6 +4,8 @@
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
 
+= render 'projects/sub_nav'
+
 = render 'activities/tab_nav', :activity => @other_cost
 
 %h1.main_heading
@@ -12,7 +14,7 @@
   %span
     %ul.manage_bar.inline
       %li= link_to "Edit", edit_response_other_cost_path(@response, @other_cost)
-      %li= link_to "X", response_other_cost_path(@response, @other_cost), :confirm => "Are you sure you want to delete this other cost?", :method => :delete
+      %li= link_to "x", response_other_cost_path(@response, @other_cost), :confirm => "Are you sure you want to delete this other cost?", :method => :delete
 
 .wrap-70
   %h3.form_heading Basics

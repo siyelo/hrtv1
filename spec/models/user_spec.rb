@@ -2,30 +2,45 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
 
-  describe "Attributes" do
+  describe "attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }
     it { should allow_mass_assignment_of(:password) }
     it { should allow_mass_assignment_of(:password_confirmation) }
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:organization) }
+    it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:roles) }
+    it { should allow_mass_assignment_of(:active) }
   end
 
-  describe "Associations" do
+  describe "associations" do
     it { should have_many :comments }
     it { should have_many :data_responses }
     it { should belong_to :organization }
     it { should belong_to :current_response }
+    it { should have_and_belong_to_many :organizations }
   end
 
   describe "Validations" do
     subject { Factory(:reporter, :organization => Factory(:organization) ) }
     it { should be_valid }
+    it { should validate_presence_of(:full_name) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
-    it { should validate_presence_of(:roles) }
     it { should validate_uniqueness_of(:email).case_insensitive }
+
+    it "cannot assign blank role" do
+      user = Factory.build(:reporter, :roles => [])
+      user.save
+      user.errors.on(:roles).should include('is not included in the list')
+    end
+
+    it "cannot assign unexisting role" do
+      user = Factory.build(:reporter, :roles => ['admin123'])
+      user.save
+      user.errors.on(:roles).should include('is not included in the list')
+    end
   end
 
   describe "Callbacks" do
@@ -49,109 +64,127 @@ describe User do
     end
   end
 
+  describe "passwords" do
+    it "should allow (admin) to create a user w/out a password" do
+      lambda {Factory(:user, :password => nil, :password_confirmation => nil,
+        :active => false)}.should_not raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "should allow (admin) to update a user before they have registered" do
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.full_name = "bob rob"
+      @user.save.should == true
+    end
+
+    it "should NOT allow (user) to accept invitation (go active) w/out a password" do
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.activate.should == false
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+    end
+
+    it "should NOT allow (user) to accept invitation (go active) with a short password" do
+      pending #seems to be skipping the length validation.
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.password = '123'
+      @user.password_confirmation = '123'
+      @user.activate.should == false
+      @user.errors.on(:password).should == "too short!"
+    end
+
+    it "should allow (user) to accept invitation (go active) with a good password" do
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.password = '123456'
+      @user.password_confirmation = '123456'
+      @user.activate.should == true
+    end
+
+    it "should allow (user) to update w/out a password" do
+      @user = Factory(:user, :password => 'abcdef', :password_confirmation => 'abcdef', :active => true)
+      @user.full_name = "bob rob"
+      @user.save.should == true
+    end
+  end
+
+  describe "roles" do
+    it "is admin when roles_mask = 1" do
+      user = Factory(:user, :roles => ['admin'])
+      user.roles.should == ['admin']
+      user.roles_mask.should == 1
+    end
+
+    it "is reporter when roles_mask = 2" do
+      user = Factory(:user, :roles => ['reporter'])
+      user.roles.should == ['reporter']
+      user.roles_mask.should == 2
+    end
+
+    it "is admin and reporter when roles_mask = 3" do
+      user = Factory(:user, :roles => ['admin', 'reporter'])
+      user.roles.should == ['admin', 'reporter']
+      user.roles_mask.should == 3
+    end
+
+    it "is activity_manager when roles_mask = 4" do
+      user = Factory(:user, :roles => ['activity_manager'])
+      user.roles.should == ['activity_manager']
+      user.roles_mask.should == 4
+    end
+
+    it "is admin and activity_manager when roles_mask = 5" do
+      user = Factory(:user, :roles => ['admin', 'activity_manager'])
+      user.roles.should == ['admin', 'activity_manager']
+      user.roles_mask.should == 5
+    end
+
+    it "is reporter and activity_manager when roles_mask = 6" do
+      user = Factory(:user, :roles => ['reporter', 'activity_manager'])
+      user.roles.should == ['reporter', 'activity_manager']
+      user.roles_mask.should == 6
+    end
+
+    it "is admin, reporter and activity_manager when roles_mask = 7" do
+      user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager'])
+      user.roles.should == ['admin', 'reporter', 'activity_manager']
+      user.roles_mask.should == 7
+    end
+  end
+
   describe "roles= can be assigned" do
     it "can assign 1 role" do
-      user = Factory.create(:reporter)
+      user = Factory(:reporter)
       user.roles = ['admin']
       user.save
       user.reload.roles.should == ['admin']
     end
 
     it "can assign 3 roles" do
-      user = Factory.create(:reporter)
+      user = Factory(:reporter)
       user.roles = ['admin', 'reporter', 'activity_manager']
       user.save
       user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
     end
+  end
 
-    it "cannot assign unexisting role" do
-      user = Factory.create(:reporter)
-      user.roles.should == ['reporter']
-      user.roles = ['admin123']
+  describe "role change" do
+    it "removed organizations when role is changed from activity_manager to else" do
+      org1 = Factory(:organization)
+      org2 = Factory(:organization)
+      user = Factory(:activity_manager, :organizations => [org1, org2])
+      user.roles = ['reporter']
       user.save
-      user.valid?.should be_false
+      user.organizations.should be_empty
     end
   end
 
-  describe "roles" do
-    it "is admin when roles_mask is 1" do
-      user = Factory.create(:sysadmin)
-      user.admin?.should be_true
-      user.roles_mask.should == 1
+  describe "current response/request" do
+    before :each do
+      @org = Factory :organization
+      @response = Factory(:response, :organization => @org)
+      @user = Factory(:reporter, :current_response => @response, :organization => @org)
     end
 
-    it "is reporter when roles_mask is 2" do
-      user = Factory.create(:reporter)
-      user.reporter?.should be_true
-      user.roles_mask.should == 2
-    end
-
-    it "is activity_manager when roles_mask is 4" do
-      user = Factory.create(:activity_manager)
-      user.activity_manager?.should be_true
-      user.roles_mask.should == 4
-    end
-
-    it "is admin and reporter when roles_mask = 3" do
-      user = Factory.create(:user, :roles => ['admin', 'reporter'])
-      user.roles.should == ['admin', 'reporter']
-      user.roles_mask.should == 3
-    end
-
-    it "is admin and activity_manager when roles_mask = 5" do
-      user = Factory.create(:user, :roles => ['admin', 'activity_manager'])
-      user.roles.should == ['admin', 'activity_manager']
-      user.roles_mask.should == 5
-    end
-
-    it "is reporter and activity_manager when roles_mask = 6" do
-      user = Factory.create(:user, :roles => ['reporter', 'activity_manager'])
-      user.roles.should == ['reporter', 'activity_manager']
-      user.roles_mask.should == 6
-    end
-
-    it "is admin, reporter and activity_manager when roles_mask = 7" do
-      user = Factory.create(:user, :roles => ['admin', 'reporter', 'activity_manager'])
-      user.roles.should == ['admin', 'reporter', 'activity_manager']
-      user.roles_mask.should == 7
-    end
-  end
-
-  describe "name" do
-    it "returns full_name if full name is present" do
-      user = Factory.create(:reporter, :full_name => "Pink Panter")
-      user.name.should == "Pink Panter"
-    end
-
-    it "returns email if full name is nil" do
-      user = Factory.create(:reporter, :full_name => nil, :email => 'pink.panter@hrtapp.com')
-      user.name.should == "pink.panter@hrtapp.com"
-    end
-
-    it "returns email if full name is blank string" do
-      user = Factory.create(:reporter, :full_name => '', :email => 'pink.panter@hrtapp.com')
-      user.name.should == "pink.panter@hrtapp.com"
+    it "returns the associated request" do
+      @user.current_request.should == @response.request
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: users
-#
-#  id                       :integer         primary key
-#  username                 :string(255)
-#  email                    :string(255)
-#  crypted_password         :string(255)
-#  password_salt            :string(255)
-#  persistence_token        :string(255)
-#  created_at               :timestamp
-#  updated_at               :timestamp
-#  roles_mask               :integer
-#  organization_id          :integer
-#  data_response_id_current :integer
-#  text_for_organization    :text
-#  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
-#
-

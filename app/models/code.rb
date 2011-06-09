@@ -30,6 +30,8 @@ class Code < ActiveRecord::Base
   named_scope :with_types, lambda { |types| {:conditions => ["codes.type IN (?)", types]} }
   named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
   named_scope :ordered, :order => 'lft'
+  named_scope :ordered_by_short_display, :order => 'short_display ASC'
+  
 
   def self.deepest_nesting
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
@@ -116,6 +118,10 @@ class Code < ActiveRecord::Base
       self[:type] = type_string
     end
 end
+
+
+
+
 
 
 

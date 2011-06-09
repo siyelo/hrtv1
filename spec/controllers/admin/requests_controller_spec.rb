@@ -5,7 +5,7 @@ describe Admin::RequestsController do
     login(Factory.create(:sysadmin))
   end
 
-  it "can delete data_request" do
+  it "can delete data_request without data_responses" do
     data_request = Factory.create(:data_request)
     delete :destroy, :id => data_request.id
     flash[:notice].should == "Request was successfully deleted."

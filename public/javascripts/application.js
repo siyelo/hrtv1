@@ -1,4 +1,12 @@
 /* Nested model forms BEGIN */
+function inspect(obj)
+{
+        var str;
+        for(var i in obj)
+        str+=i+";\n"
+  //str+=i+"="+obj[i]+";\n"
+        alert(str);
+}
 
 function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
@@ -93,7 +101,7 @@ var build_activity_funding_source_row = function (edit_block) {
 
   if (_budget) {
     budget = $('<li/>').append(
-      $('<span/>').text('Budget'),
+      $('<span/>').text('Current Budget'),
       edit_block.find('.ff_budget').val() || 'N/A'
     )
   }
@@ -144,9 +152,9 @@ var close_activity_funding_sources_fields = function (fields) {
     preview_block.append(build_activity_funding_source_row(edit_block))
     preview_block.show();
 
-    manage_block.find('.edit').remove();
+    manage_block.find('.edit_button').remove();
     manage_block.prepend(
-      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
     )
   });
 };
@@ -350,7 +358,7 @@ var ajaxifyResources = function (resources) {
   var editBtn = block.find(".edit_btn");
   var cancelBtn = block.find(".cancel_btn");
   var searchBtn = block.find(".search_btn");
-  var submitBtn = block.find(".submit_btn");
+  var submitBtn = block.find(".js_submit_btn");
   var destroyBtn = block.find(".destroy_btn");
 
   // new
@@ -496,26 +504,25 @@ var organizationCombobox = function (rootElement) {
   });
 }
 
-var admin_users_index = {
+// The route is members/index but the controller is users
+var users_index = users_create = {
   run: function () {
     $('#js_user_create_btn').live('click', function (e) {
       e.preventDefault();
-      var form = $('#new_user')
+      var form = $('.js_new_member')
       $(this).parents('.buttons').find('.ajax-loader').show();
 
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data, status, response) {
         if (data.status === 'error') {
-          $('#new_user').replaceWith(data.form);
+          $('.js_new_member').replaceWith(data.form);
         } else {
           $('#js_organiations_tbl tbody').prepend(data.row);
-          $('#new_user').replaceWith(data.form);
+          $('.js_new_member').replaceWith(data.form);
           var message = $('#js_user_create_form .js_message');
           message.text(data.message)
-
-
           setTimeout(function () {
             message.fadeOut(3000, function () {
-              message.show().css('visibility', 'hidden');
+              message.show();
             })
           }, 3000);
         }
@@ -799,24 +806,24 @@ var build_data_response_review_screen = function () {
 
   // Data Response charts
   createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-  createPieChart("data_response", {id: _dr_id, title: "MTEF Past Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
   createPieChart("data_response", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-  createPieChart("data_response", {id: _dr_id, title: "NSP Past Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
   createPieChart("data_response", {id: _dr_id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("data_response", {id: _dr_id, title: "Input Past Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
+  createPieChart("data_response", {id: _dr_id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
 
   // Project charts
   $.each(_projects, function (i, id) {
     createPieChart("project", {id: id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-    createPieChart("project", {id: id, title: "MTEF Past Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+    createPieChart("project", {id: id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
     createPieChart("project", {id: id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-    createPieChart("project", {id: id, title: "NSP Past Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+    createPieChart("project", {id: id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
   createPieChart("project", {id: id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("project", {id: id, title: "Input Past Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
+  createPieChart("project", {id: id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
     //createPieChart("project", {id: id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
     //createPieChart("project", {id: id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Program Past Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Past Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
+    //createPieChart("project", {id: id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
+    //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
   });
 
   approve_activity_checkbox();
@@ -848,7 +855,7 @@ var responses_review = {
   }
 };
 
-var responses_edit = responses_new = responses_create = responses_update = {
+var organizations_edit = {
   run: function () {
     $( ".combobox" ).combobox(); // for pretty currency select
   }
@@ -859,15 +866,6 @@ var policy_maker_data_responses_show = {
     build_data_response_review_screen();
     ajaxifyResources('comments');
   }
-};
-
-var approve_activity_checkbox = function () {
-  $(".approve_activity").click(function (e) {
-    activity_id = $(this).attr('data-id');
-    response_id = $(this).attr('data-response_id');
-    var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'
-    $.post(url, {checked: $(this).is(':checked'), "_method": "put"});
-  })
 };
 
 var code_assignments_show = {
@@ -898,7 +896,7 @@ var code_assignments_show = {
       $(this).parents('.upload').find('.upload_box').toggle();
     });
 
-    $('.submit_btn').click(function (e) {
+    $('.js_submit_btn').click(function (e) {
       $(this).next('.ajax-loader').show();
     });
   }
@@ -1006,8 +1004,9 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
   });
 }
 
-var reports_districts_show = {
+var reports_districts_show = reports_countries_show = {
   run: function () {
+
     drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
     drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
     drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
@@ -1219,12 +1218,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 };
 
-var projects_index = {
-  run: function () {
-    import_export.init();
-  }
-};
-
 var import_export = {
   // find the purpose 'row' closest relative to given link
   init: function() {
@@ -1239,6 +1232,15 @@ var import_export = {
     });
   }
 };
+
+
+var projects_index = {
+  run: function () {
+    import_export.init();
+  }
+};
+
+
 
 var projects_bulk_edit = {
   run: function () {
@@ -1284,6 +1286,19 @@ var focusDemoText = function (elements) {
   });
 };
 
+var removeDemoText = function (elements) {
+  elements.each(function () {
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
+      }
+    }
+  });
+};
+
+
 var blurDemoText = function (elements) {
   elements.live('blur', function(){
     var element = $(this);
@@ -1297,23 +1312,11 @@ var blurDemoText = function (elements) {
   });
 };
 
-var resetDemoText = function (elements) {
-  // reset input values before submit !!
-  elements.each(function() {
-    var input = $(this);
-    var demo_text = input.attr('data-hint');
-
-    if (input.val() == demo_text) {
-      input.val('');
-    }
-  });
-};
 
 var activities_bulk_create = {
   run: function () {
+
     initDemoText($('*[data-hint]'));
-    focusDemoText($('*[data-hint]'));
-    blurDemoText($('*[data-hint]'));
 
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
@@ -1325,8 +1328,8 @@ var activities_bulk_create = {
       activity_box.find('.main').toggle();
     });
 
-
-
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
@@ -1335,7 +1338,15 @@ var activities_bulk_create = {
       var ajaxLoader = element.next('.ajax-loader');
       var activityBox = element.parents('.activity_box');
 
-      resetDemoText(form.find('*[data-hint]'));
+      // reset input values before submit !!
+      form.find('*[data-hint]').each(function() {
+        var input = $(this);
+        var demo_text = input.attr('data-hint');
+
+        if (input.val() == demo_text) {
+          input.val('');
+        }
+      });
 
       ajaxLoader.show();
 
@@ -1371,10 +1382,47 @@ var activities_bulk_create = {
         activityBox.find('.project_sub_form_hint').show();
       }
     });
-
-
   }
 }
+
+// Post approval for an activity
+//
+// approval types;
+//   'activity_manager_approve'
+//   'sysadmin_approve'
+// success text
+//
+//
+
+var approveBudget = function() {
+  $(".js_am_approve").click(function (e) {
+    e.preventDefault();
+    approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
+  })
+};
+
+var approveAsAdmin = function() {
+  $(".js_sysadmin_approve").click(function (e) {
+    e.preventDefault();
+    approveActivity($(this), 'sysadmin_approve', 'Admin Approved');
+  })
+};
+
+var approveActivity = function (element, approval_type, success_text) {
+   var activity_id = element.attr('activity-id');
+   var response_id = element.attr('response-id');
+
+   element.parent('li').find(".ajax-loader").show();
+   var url = "/responses/" + response_id + "/activities/" + activity_id + "/" + approval_type
+   $.post(url, {approve: true, "_method": "put"}, function (data) {
+     element.parent('li').find(".ajax-loader").hide();
+     if (data.status == 'success') {
+       element.parent('li').html('<span>' + success_text + '</span>');
+     }
+   })
+};
+
+
 
 var activity_form = function () {
   $('#activity_project_id').change(function () {
@@ -1443,7 +1491,7 @@ var activity_form = function () {
 
 
 
-  $('.edit').live('click', function (e) {
+  $('.edit_button').live('click', function (e) {
     e.preventDefault();
     var element = $(this).parents('.fields');
     var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
@@ -1483,7 +1531,6 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
 
     $('.implementer_select').live('change', function(e) {
-    //$('.show_organizations_add').live('click', function(e) {
       e.preventDefault();
       var element = $(this);
       element.next('.add_organization').slideToggle();
@@ -1782,7 +1829,6 @@ var classifications_edit = {
       remaining_box.find('span.js_remaining').text(remaining)
     });
 
-
     $("td.tooltip").live('hover', function() {
       this.setAttribute("title", this.textContent)
     }).tipsy({gravity: 'w', live: true, html: true})
@@ -1797,6 +1843,7 @@ var classifications_edit = {
       var element = $('.mcdropdown').parents('tr:first').find('.js_remove_purpose')
       purposes.remove_purpose(element);
     };
+
 
     var changeMcDropDown = function (purpose_row) {
       if (purpose_row.length > 0) {

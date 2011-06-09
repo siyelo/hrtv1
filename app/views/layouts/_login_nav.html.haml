@@ -1,4 +1,5 @@
 #admin
+
   - if current_user
     %ul
       %li
@@ -13,7 +14,7 @@
         - link_to logout_path do
           = image_tag("icon_logout.png")
           Sign Out
-    %span
+    %p
       = "#{current_user.email}"
 
   - else
@@ -23,3 +24,5 @@
           =image_tag"icon_signin.png"
           Sign in
     %span Have an account?
+
+

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataResponse do
 
-  describe "Associations" do
+  describe "associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
     it { should have_many(:activities).dependent(:destroy) }
@@ -11,11 +11,10 @@ describe DataResponse do
     it { should have_many(:funding_flows).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
-    it { should have_many(:comments) }
-    it { should have_many(:code_assignments) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
-  describe "Validations" do
+  describe "validations" do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
   end
@@ -82,6 +81,7 @@ describe DataResponse do
       @activity  = Factory(:activity, :data_response => @dr,
                             :project => @project,
                             :budget => 1000, :spend => 2000)
+
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do

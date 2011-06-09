@@ -15,15 +15,15 @@ describe DataResponse do #validations
       @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
     end
 
-    it "succeeds if project has a past expenditure and budget" do
+    it "succeeds if project has a spend and budget" do
       @response.project_amounts_entered?.should == true
     end
-    it_should_behave_like "project past expenditure checker"
+    it_should_behave_like "project spend checker"
     it_should_behave_like "project budget checker"
-    it "succeeds if activity has past expenditure and budget" do
+    it "succeeds if activity has spend and budget" do
       @response.activity_amounts_entered?.should == true
     end
-    it_should_behave_like "activity past expenditure checker"
+    it_should_behave_like "activity spend checker"
     it_should_behave_like "activity budget checker"
     it_should_behave_like "coded Activities checker"
     it_should_behave_like "coded OtherCosts checker"
@@ -195,23 +195,23 @@ describe DataResponse do #validations
       @project = Factory.create(:project, :data_response => @response, :spend => 10)
     end
 
-    it "is true when past expenditure in flow equals to project past expenditure" do
+    it "is true when spend in flow equals to project spend" do
       Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
                      :data_response => @response, :project => @project, :spend => 10)
       @response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 
-    it "is true when sum of past expenditure in flows is equals to funder past expenditure" do
+    it "is true when sum of spend in flows is equals to funder spend" do
       setup_funder_equal_to_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 
-    it "is false when sum of past expenditure in flows are greater than funder past expenditure" do
+    it "is false when sum of spend in flows are greater than funder spend" do
       setup_funder_more_than_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == false
     end
 
-    it "is false when sum of past expenditure in flows are less than funder past expenditure" do
+    it "is false when sum of spend in flows are less than funder spend" do
       setup_funder_less_than_project(:spend)
       @response.projects_and_funding_sources_have_correct_spends?.should == false
     end
@@ -260,28 +260,28 @@ describe DataResponse do #validations
       @project  = Factory.create(:project, :data_response => @response, :spend => 10)
     end
 
-    it "is true when activity past expenditure is equal to project past expenditure" do
+    it "is true when activity spend is equal to project spend" do
       Factory.create(:activity, :project => @project, :spend => 10)
       @response.projects_and_activities_have_matching_spends?.should == true
     end
 
-    it "is true when activities empty and past expenditure is 0" do
+    it "is true when activities empty and spend is 0" do
       @project.spend = 0 ; @project.save(false)
       @response.projects_and_activities_have_matching_spends?.should == true
       @response.projects_with_activities_not_matching_amounts(:spend).should == []
     end
 
-    it "is true when sum of activities and other cost past expenditure is equal to project past expenditure" do
+    it "is true when sum of activities and other cost spend is equal to project spend" do
       setup_equal_to_project(:spend)
       @response.projects_and_activities_have_matching_spends?.should == true
     end
 
-    it "is false when sum of activities and other cost past expenditure is more than to project past expenditure" do
+    it "is false when sum of activities and other cost spend is more than to project spend" do
       setup_more_than_project(:spend)
       @response.projects_and_activities_have_matching_spends?.should == false
     end
 
-    it "is false when sum of activities and other cost past expenditure is less than to project past expenditure" do
+    it "is false when sum of activities and other cost spend is less than to project spend" do
       setup_less_than_project(:spend)
       @response.projects_and_activities_have_matching_spends?.should == false
     end

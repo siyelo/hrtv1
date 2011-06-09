@@ -6,7 +6,7 @@ describe ActivitiesController do
     controller_name :activities
 
     before(:each) do
-      @activity = Factory.create(:activity, :id => 1)
+      @activity = Factory(:activity)
       @activity.stub!(:to_param).and_return('1')
       @activities.stub!(:find).and_return(@activity)
 
@@ -38,13 +38,13 @@ describe ActivitiesController do
     end
 
     it "approve_response_activity_path(1,9) to /activities/9/approve" do
-      approve_response_activity_path(1,9).should == '/responses/1/activities/9/approve'
+      sysadmin_approve_response_activity_path(1,9).should == '/responses/1/activities/9/sysadmin_approve'
     end
   end
 
   describe "Requesting Activity endpoints as visitor" do
     before :each do
-      @data_response = Factory.create(:data_response)
+      @data_response = Factory(:data_response)
     end
     controller_name :activities
 
@@ -61,7 +61,7 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using GET" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
+          @activity = Factory(:activity, :data_response => @data_response)
           get :show, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
@@ -69,8 +69,8 @@ describe ActivitiesController do
 
       context "Requesting /activities/1/approve using POST" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
-          post :approve, :id => @activity.id, :response_id => @data_response.id
+          @activity = Factory(:activity, :data_response => @data_response)
+          post :sysadmin_approve, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
       end
@@ -78,7 +78,7 @@ describe ActivitiesController do
       context "Requesting /activities using POST" do
         before do
           params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
+          @activity = Factory(:activity, params.merge(:data_response => @data_response) )
           @activity.stub!(:save).and_return(true)
           post :create, :activity =>  params, :response_id => @data_response.id
         end
@@ -88,7 +88,7 @@ describe ActivitiesController do
       context "Requesting /activities/1 using PUT" do
         before do
           params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
+          @activity = Factory(:activity, params.merge(:data_response => @data_response) )
           @activity.stub!(:save).and_return(true)
           put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
         end
@@ -97,7 +97,7 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using DELETE" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
+          @activity = Factory(:activity, :data_response => @data_response)
           delete :destroy, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
@@ -109,39 +109,59 @@ describe ActivitiesController do
     controller_name :activities
 
     before :each do
-      @user = Factory.create(:reporter)
+      @data_request = Factory(:data_request)
+      @user = Factory(:reporter)
       login @user
-      #@activity = Factory.create(:activity, :user => @user)
-      @data_response = Factory.create(:data_response)
-      @activity = Factory.create(:activity, :data_response => @data_response) #TODO add back user!
+      @data_response = @user.current_response
+      @activity = Factory(:activity, :data_response => @data_response) #TODO add back user!
       @user_activities.stub!(:find).and_return(@activity)
     end
 
-    context "Requesting /activities/1/approve using POST" do
-      it "requres admin to approve an activity" do
-        data_response = Factory.create(:data_response, :organization => @user.organization)
-        @activity = Factory.create(:activity, :data_response => data_response)
-        post :approve, :id => @activity.id, :response_id => data_response.id
-        flash[:error].should == "You are not authorized to do that"
-      end
+    it "Requesting /activities/1/sysadmin_approve using POST requires admin to approve an activity" do
+      data_response = Factory(:data_response, :organization => @user.organization)
+      @activity = Factory(:activity, :data_response => data_response)
+      post :sysadmin_approve, :id => @activity.id, :response_id => data_response.id
+      flash[:error].should == "You must be an administrator to access that page"
     end
 
-    describe "download csv template" do
-      it "downloads csv template" do
-        data_response = mock_model(DataResponse)
-        DataResponse.stub(:find).and_return(data_response)
-        Activity.should_receive(:download_template).and_return('csv')
-
-        get :template, :response_id => 1
-
-        response.should be_success
-        response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
-        response.header["Content-Disposition"].should == "attachment; filename=activities_template.csv"
-      end
+    it "downloads csv template" do
+      data_response = mock_model(DataResponse)
+      DataResponse.stub(:find).and_return(data_response)
+      Activity.should_receive(:download_template).and_return('csv')
+      get :template, :response_id => 1
+      response.should be_success
+      response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
+      response.header["Content-Disposition"].should == "attachment; filename=activities_template.csv"
     end
   end
 
-  describe "create" do
+  describe "Update" do
+    before :each do
+      @data_request = Factory(:data_request, :spend => false, :budget => false)
+      @organization = Factory(:organization)
+      @user = Factory(:reporter, :organization => @organization)
+      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+      @project = Factory(:project, :data_response => @data_response)
+      login @user
+    end
+
+    it "should allow a reporter to update an activity if it's not am approved" do
+      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => false)
+      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => "9999993", :project_id => @project.id}
+      @activity.reload
+      @activity.budget.should == 9999993
+    end
+
+    it "should not allow a reporter to update a project once it has been am_approved" do
+      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => true)
+      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
+      @activity.reload
+      @activity.budget.should_not == 9999993
+      flash[:error].should == "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
+    end
+  end
+
+  describe "Redirects to budget or spend depending on datarequest" do
     before :each do
        @data_request = Factory.create(:data_request)
        @organization = Factory.create(:organization)
@@ -150,18 +170,10 @@ describe ActivitiesController do
        login @user
      end
 
-    it "redircts to the projects index page when save is clicked" do
-      @project = Factory.create(:project, :data_response => @data_response)
-      post :create, :activity => {
-        :name => "activity_name",
-        :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      },
-      :commit => 'Save', :response_id => @data_response.id
-      response.should redirect_to(response_projects_url(@data_response.id))
+    it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
+      put :update, :activity => { :budget => 0, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
     end
 
     it "redirects to the classify activities page when Save & Go to Classify is clicked" do
@@ -210,6 +222,24 @@ describe ActivitiesController do
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.reload.activities.last, :coding_type => 'CodingSpend'))
+     end
+   end
+
+   describe "activitymanager can approve an activity project" do
+     before :each do
+       @data_request = Factory(:data_request)
+       @organization = Factory(:organization)
+       @user = Factory(:activity_manager, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response)
+       @activity = Factory(:activity, :project => @project, :data_response => @data_response)
+       login @user
+     end
+     it "should approve the project if the am_approved field is not set" do
+       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
+       @activity.reload
+       @activity.user.should == @user
+       @activity.am_approved.should be_true
      end
    end
 end

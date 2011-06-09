@@ -1,0 +1,6 @@
+= error_messages_for :user,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for [@user], :url => member_path(@user), :html => {:class => "basic_form"} do |f|
+  = render '/shared/users/edit', :f => f
+
+

@@ -1,5 +1,4 @@
 module ResponsesHelper
-
   def ready(expr)
     expr ? "ready" : "not-ready"
   end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reports::DistrictsController do
 
   before :each do
-    @admin = Factory.create(:sysadmin)
+    @admin = Factory.create(:admin, :current_response => Factory(:data_response))
     login @admin
     @location = Factory.create(:location)
   end
@@ -13,6 +13,7 @@ describe Reports::DistrictsController do
       Location.should_receive(:all_with_counters).and_return([@location])
       get 'index'
       response.should be_success
+      response.flash.now[:warning].should =~ /^You are now viewing data for the Request:.*/
     end
   end
 

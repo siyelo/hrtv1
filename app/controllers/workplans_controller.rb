@@ -1,7 +1,6 @@
 class WorkplansController < Reporter::BaseController
   before_filter :load_data_response
   before_filter :load_projects
-  before_filter :check_reporters_response
 
   def index
   end

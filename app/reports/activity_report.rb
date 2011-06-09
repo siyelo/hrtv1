@@ -3,11 +3,12 @@ class Reports::ActivityReport
   # Returns Activity objects that respond to spent_sum() and budget_sum() and paginate
   #
   def self.top_by_spent_and_budget(options)
-    per_page = options[:per_page] || 25
-    page     = options[:page]     || 1
-    code_ids = options[:code_ids]
-    type     = options[:type]
-    sort     = options[:sort]
+    per_page        = options[:per_page] || 25
+    page            = options[:page]     || 1
+    code_ids        = options[:code_ids]
+    type            = options[:type]
+    sort            = options[:sort]
+    data_request_id = options[:data_request_id]
 
     raise "Missing code_ids param".to_yaml if code_ids.blank? ||
       !code_ids.kind_of?(Array)
@@ -30,6 +31,9 @@ class Reports::ActivityReport
                   COALESCE(SUM(ca_budget_sum),0) AS budget_sum_raw",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN data_requests ON
+          data_requests.id = data_responses.data_request_id AND
+          data_requests.id = #{data_request_id}
         INNER JOIN organizations ON organizations.id = data_responses.organization_id
         LEFT OUTER JOIN (
           SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as ca_spent_sum
@@ -67,9 +71,10 @@ class Reports::ActivityReport
   end
 
   def self.top_by_spent(options)
-    limit    = options[:limit]    || nil
-    code_ids = options[:code_ids]
-    type     = options[:type]
+    limit           = options[:limit]    || nil
+    code_ids        = options[:code_ids]
+    type            = options[:type]
+    request_id = options[:data_request_id]
 
     raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
     raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
@@ -85,6 +90,9 @@ class Reports::ActivityReport
                   SUM(ca1.cached_amount_in_usd) AS spent_sum_raw",
       :joins => "
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
+        INNER JOIN data_requests ON
+          data_requests.id = data_responses.data_request_id AND
+          data_requests.id = #{request_id}
         INNER JOIN organizations ON organizations.id = data_responses.organization_id
         INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
                AND ca1.type = '#{ca1_type}'

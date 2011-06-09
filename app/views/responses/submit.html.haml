@@ -1,5 +1,8 @@
 - title("Submit Response")
 
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
+
 %h1.main_heading Submit Response
 
 %ul.status.stop
@@ -17,13 +20,13 @@
 
 %ul.review
   %li.alt
-    %h2 Data Response Settings
+    %h2 Settings
   %li.dashboard_section
     %h3{:class => ready(@response.valid?)}
-      Your Data Response Settings
+      Your Settings
       - unless @response.valid?
         %span.info
-          = "Your Data Response Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(@response)} to make the necessary changes."
+          = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
   %li.alt
     %h2 Projects
   %li.dashboard_section
@@ -72,7 +75,7 @@
                 Then you may start adding Other Costs.
             - else
               %span.info
-                Other Costs help you include any financial information at the central level and/or administrative expenses.
+                Other Costs help you include any financial information at the national level and/or administrative expenses.
                 = link_to "Start adding your Other Costs now.", response_projects_path(@response)
 
   %li.alt
@@ -133,8 +136,11 @@
           All Projects have Funding Sources
           - unless @response.check_projects_funding_sources_have_organizations?
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
-            - @projects.each do |project|
-              %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+            %ul
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
 
       %li
@@ -163,30 +169,7 @@
                   %th Diff
                   %th.manage Manage
               %tbody
-                %tr
-                  %th{:colspan => 5}
-                    Current Budget
-                - @projects.each do |project|
-                  - if (project.in_flows_budget_total || 0) != (project.budget || 0)
-                    %tr
-                      %td= project.name
-                      %td= n2crs(project.budget, project.currency)
-                      %td= n2crs(project.in_flows_budget_total, project.currency)
-                      %td= n2crs(((project.budget || 0) - project.in_flows_budget_total), project.currency)
-                      %td= link_to "Edit", edit_response_project_path(@response, project)
-
-                %tr
-                  %th{:colspan => 5}
-                    Past Expenditure
-                - @response.projects.each do |project|
-                  - if (project.in_flows_spend_total || 0) != (project.spend || 0)
-                    %tr
-                      %td= project.name
-                      %td= n2crs(project.spend, project.currency)
-                      %td= n2crs(project.in_flows_spend_total, project.currency)
-                      %td= n2crs(((project.spend || 0) - project.in_flows_spend_total), project.currency)
-                      %td= link_to "Edit", edit_response_project_path(@response, project)
-
+                = render :partial => 'project_funding_sources'
 
       %li
         %h3{:class =>  ready(@response.projects_activities_ok?)}
@@ -205,49 +188,13 @@
                   %th= "Activity/Other Costs Amount Total"
                   %th= "Diff"
               %tbody
-                // GN TODO: refactor so its [:budget, :spend].each do |m| render "some_partial", :response => @response, :amount_method => m
-                %tr
-                  %th{:colspan => 5}
-                    Current Budget
-                - @response.projects_with_activities_not_matching_amounts(:budget).each do |project|
-                  - if true
-                    %tr{:class => "#{dom_id(project)}"}
-                      %td.first
-                        = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_budget_image"), '#', :id => "#{dom_id(project)}_budget", :class => "collapse"
-                        = link_to project.name, edit_response_project_path(@response, project)
-                      %td.first= n2crs(project.budget, project.currency)
-                      %td.first= n2crs((project.activities_budget_total + project.other_costs_budget_total), project.currency)
-                      %td.first= n2crs((project.budget || 0) - (project.activities_budget_total + project.other_costs_budget_total), project.currency)
-                      - project.normal_activities.each do |activity|
-                        %tr{:class => "#{dom_id(project)}_budget"}
-                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
-                          %td.activity
-                          %td.activity= n2crs(universal_currency_converter(activity.budget, activity.currency, project.currency), project.currency)
-
-                %tr
-                  %th{:colspan => 5}
-                    Past Expenditure
-
-                - @response.projects_with_activities_not_matching_amounts(:spend).each do |project|
-                  - if true
-                    %tr
-                      %td.first
-                        = link_to image_tag('icon_collapse.png', :class => "#{dom_id(project)}_spend_image"), '#', :id => "#{dom_id(project)}_spend", :class => "collapse"
-                        = link_to project.name, edit_response_project_path(@response, project)
-                      %td.first= n2crs(project.spend, project.currency)
-                      %td.first= n2crs(project.activities_spend_total + project.other_costs_spend_total, project.currency)
-                      %td.first= n2crs((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency)
-                      - project.activities.roots.each do |activity|
-                        %tr{:class => "#{dom_id(project)}_spend"}
-                          %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
-                          %td.activity
-                          %td.activity= n2crs(activity.spend, activity.currency)
+                = render :partial => 'project_amounts_match_activities_othercosts'
 
 
 
 //%hr.divider
 %p
-  = link_to "Submit", send_data_response_response_path(current_user.current_response), :method => :put, :confirm => "Are you sure?", :class => "next big" if current_user.org_admin?
+  = link_to "Submit", send_data_response_response_path(current_user.current_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
 
 
 

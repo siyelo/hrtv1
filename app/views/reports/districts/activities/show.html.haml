@@ -15,7 +15,8 @@
   %li= link_to h(@location.name), reports_district_path(@location)
   %li= link_to 'Activities', reports_district_activities_path(@location)
 
-%h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
+%h1.main_heading
+  = "Activity: #{h(friendly_name(@activity))}"
 
 = render 'reports/shared/activity_summary'
 
@@ -23,7 +24,7 @@
 
 .full
   .first-half
-    %h2 Proportion Past Expenditure
+    %h2 Proportion Expenditure
     #spent_pie.bordered
 
   .second-half
@@ -45,7 +46,7 @@
 
 .full
   .first-half
-    %h2= "#{@chart_name} Past Expenditure"
+    %h2= "#{@chart_name} Expenditure"
     #code_spent.bordered
 
   .second-half

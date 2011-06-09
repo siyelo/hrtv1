@@ -1,0 +1,23 @@
+<%  # just take one param with the current one, loop through links and bold the current one
+#then flatten and write to screen
+  model_link = [ 
+  #todo "Home", current_user.home_for -- add this method to return URL, or have in breadcrumbs helper
+  [Project , "/projects"],
+  [FundingFlow , "/funding_flows"],
+  [Activity , "/activities"]
+  ]
+  # [Request, "/requests"]
+  
+  while model_link.size > 0 do 
+    e=model_link.shift
+    model, link = e.first, e.last
+%>
+    ><%= link_to model.to_s, link %> 
+<%
+  end
+%>
+
+<% while model_link.size > 0 do  
+   model = model_link.shift %>
+  > <%= model.to_s %>
+<% end %>

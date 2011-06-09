@@ -1,0 +1,34 @@
+%h2
+  Organizations I Manage
+.dashboard_section
+  %h3.tracked
+    %br
+    %span.light Total Organizations
+    %span.large= @organizations.count
+  %h3.tracked
+    %br
+    %span.light Approved Activities
+    %span.large= @approved_orgs
+  %h3.tracked
+    %br
+    %span.light Pending
+    %span.large= @total_activities - @approved_orgs
+  %h3.tracked.last
+    %br
+    %span.light Recently Submitted for Approval
+    - unless @recent_responses.empty?
+      %ul
+        - @recent_responses.each do |r|
+          %li= link_to r.organization.name, response_projects_path(r)
+    - else
+      %span.none No responses submitted recently
+
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Organizations List
+.dashboard_section
+  %table.modern_table
+    %thead
+      = render :partial => '/organizations/index_header'
+    %tbody
+      = render :partial => '/organizations/organization', :collection => @organizations

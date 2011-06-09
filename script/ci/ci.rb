@@ -27,7 +27,9 @@ end
 
 def setup_specs
   ENV['RAILS_ENV'] = 'test'
-  run "rake setup_quick --trace"
+  run "gem uninstall rake -v=0.9.2"
+  run "rake db:migrate RAILS_ENV=test"
+  run_or_die "rake setup_quick --trace"
 end
 
 def specs

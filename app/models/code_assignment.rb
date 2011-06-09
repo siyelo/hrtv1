@@ -10,7 +10,7 @@ class CodeAssignment < ActiveRecord::Base
   ### Associations
   belongs_to :activity
   belongs_to :code
-
+  
   ### Validations
   validates_presence_of :activity_id, :code_id
 
@@ -44,7 +44,19 @@ class CodeAssignment < ActiveRecord::Base
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
+  named_scope :with_request,
+              lambda { |request_id| { 
+                :joins =>
+                  "INNER JOIN activities ON
+                    activities.id = code_assignments.activity_id
+                  INNER JOIN data_responses
+                    ON activities.data_response_id = data_responses.id
+                  INNER JOIN data_requests
+                    ON data_responses.data_request_id = data_requests.id AND 
+                    data_responses.data_request_id = #{request_id}",
+              }}
 
+  
   ### Callbacks
   before_save :update_cached_amount_in_usd
 
@@ -236,21 +248,20 @@ class CodeAssignment < ActiveRecord::Base
 end
 
 
-
 # == Schema Information
 #
 # Table name: code_assignments
 #
 #  id                   :integer         not null, primary key
 #  activity_id          :integer         indexed => [code_id, type]
-#  code_id              :integer         indexed, indexed => [activity_id, type]
-#  amount               :integer(10)
+#  code_id              :integer         indexed => [activity_id, type], indexed
+#  amount               :decimal(, )
 #  type                 :string(255)     indexed => [activity_id, code_id]
-#  percentage           :integer(10)
-#  cached_amount        :integer(10)     default(0)
-#  sum_of_children      :integer(10)     default(0)
+#  percentage           :decimal(, )
+#  cached_amount        :decimal(, )     default(0.0)
+#  sum_of_children      :decimal(, )     default(0.0)
 #  created_at           :datetime
 #  updated_at           :datetime
-#  cached_amount_in_usd :integer(10)     default(0)
+#  cached_amount_in_usd :decimal(, )     default(0.0)
 #
 

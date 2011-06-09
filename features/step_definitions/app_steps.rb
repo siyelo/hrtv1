@@ -65,6 +65,7 @@ end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:reporter,
+                :full_name             => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
@@ -72,19 +73,10 @@ end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:activity_manager,
+                :full_name             => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
-end
-
-Given /^the following reporters$/ do |table|
-  table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
-    username  = hash.delete("name")
-    Factory(:reporter, { :username => username,
-                         :organization => org
-                       }.merge(hash) )
-  end
 end
 
 Given /^the root codes$/ do |table|
@@ -93,30 +85,19 @@ Given /^the root codes$/ do |table|
   end
 end
 
-Given /^the following activity managers$/ do |table|
-  table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
-    username  = hash.delete("name")
-    Factory(:activity_manager, { :username => username,
-                                 :organization => org
-                               }.merge(hash) )
-  end
-end
-
-
-Given /^I am signed in as "([^"]*)"$/ do |name|
+Given /^I am signed in as "([^"]*)"$/ do |email|
   steps %Q{
     When I go to the login page
-    And I fill in "Email" with "#{name}"
-    And I fill in "Password" with "password"
-    And I press "Sign in"
+    When I fill in "Email" with "#{email}"
+    And  I fill in "Password" with "password"
+    And  I press "Sign in"
   }
 end
 
 Given /^I am signed in as a reporter$/ do
   steps %Q{
-    Given a reporter "frank@hrt.com" in organization "Test Org"
-    And I am signed in as "frank@hrt.com"
+    Given a reporter "reporter@hrtapp.com" in organization "Reporter Org"
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -128,15 +109,15 @@ end
 
 Given /^I am signed in as an activity manager$/ do
   steps %Q{
-    Given an activity manager "frank@hrt.com" in organization "Test Org"
-    Given I am signed in as "frank@hrt.com"
+    Given an activity manager "activity_manager@hrtapp.com" in organization "AM Org"
+    Given I am signed in as "activity_manager@hrtapp.com"
   }
 end
 
 Given /^I am signed in as a sysadmin$/ do
   steps %Q{
-    Given a sysadmin "frank@hrt.com" in organization "Test Org"
-    Given I am signed in as "frank@hrt.com"
+    Given a sysadmin "sysadmin@hrtapp.com" in organization "Sysadmin Org"
+    Given I am signed in as "sysadmin@hrtapp.com"
   }
 end
 
@@ -155,19 +136,19 @@ Given /^the following organizations$/ do |table|
   end
 end
 
-Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:reporter,
-                  :email => 'frank@f.com',
+                  :email => email || 'reporter@hrtapp.com',
                   :password => 'password',
                   :password_confirmation => 'password',
                   :organization => @organization)
 end
 
-Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:activity_manager,
-                  :email                 => 'frank@f.com',
+                  :email                 => email || 'activity_manager@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
@@ -176,8 +157,8 @@ end
 
 Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:sysadmin,
-                  :email                 => email,
+  @user = Factory(:admin,
+                  :email                 => email || 'sysadmin@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
@@ -303,8 +284,8 @@ Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
     Given a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
-    And a reporter exists with email: "pink.panter@hrtapp.com", organization: the organization
-    And I am signed in as "pink.panter@hrtapp.com"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -313,7 +294,7 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "pink.panter@hrtapp.com", organization: the organization, current_response: the data_response
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
     And a project exists with name: "project1", data_response: the data_response
     And an activity exists with name: "activity1", data_response: the data_response, project: the project
   }
@@ -322,7 +303,7 @@ end
 Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
   steps %Q{
     Given a basic org "UNDP" + reporter profile, with data response to "Req1"
-    And I am signed in as "pink.panter@hrtapp.com"
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -335,33 +316,7 @@ end
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   steps %Q{
     Given a basic org + reporter profile, with data response
-    And I am signed in as "pink.panter@hrtapp.com"
-  }
-end
-
-Given /^a model help for "([^"]*)"$/ do |model_name|
-  Factory(:model_help, :model_name => model_name)
-end
-
-Given /^model help for "([^"]*)" page$/ do |page|
-  model_help_name = case page
-                    when 'projects'
-                      "Project"
-                    when 'funding sources'
-                      "FundingSource"
-                    when 'implementers'
-                      "Provider"
-                    when 'activities'
-                      "Activity"
-                    when 'classifications'
-                      "CodeAssignment"
-                    when 'other costs'
-                      "OtherCost"
-                    when 'review'
-                      "DataResponseReview"
-                    end
-  steps %Q{
-    Given a model help for "#{model_help_name}"
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -430,7 +385,7 @@ Then /^I should see tabs for comments,sub-activities when activities already ope
     And I click element ".activities .activity.entry_header"
     Then I should see "Comments" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:last a"
-    Then I should see "Sub-Activities" within the selected activity sub-tab
+    Then I should see "Implementers" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
     Then I should see "Comments" within the selected activity sub-tab
   }
@@ -444,7 +399,7 @@ Then /^I should see tabs for comments,sub-activities$/ do
     And I click element ".activities .activity.entry_header"
     Then I should see "Comments" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:last a"
-    Then I should see "Sub-Activities" within the selected activity sub-tab
+    Then I should see "Implementers" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
     Then I should see "Comments" within the selected activity sub-tab
   }
@@ -460,4 +415,28 @@ end
 
 Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, row, text|
   page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
+end
+
+Then /^I drill down to Reports->Districts->"([^"]*)"->"([^"]*)"$/ do |location, activity|
+  steps %Q{
+    And I follow "Reports"
+    And I follow "Review District Expenditures and Current Budgets"
+    And I follow "#{location}"
+    And I follow "View all Activities"
+    And I follow "#{activity}"
+  }
+end
+
+Then /^I should see a District-Location-Activity report for "([^"]*)"$/ do |activity|
+  steps %Q{
+    Then I should see "#{activity}"
+    And I should see "Proportion Expenditure"
+    And I should see "Proportion Current Budget"
+    And I should see "NSP Expenditure"
+    And I should see "NSP Current Budget"
+  }
+end
+
+Then /^I should see "([^"]*)" is "([^"]*)"$/ do |label, text|
+  page.find("##{label} label").text.should == text
 end

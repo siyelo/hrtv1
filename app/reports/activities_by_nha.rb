@@ -31,7 +31,7 @@ class Reports::ActivitiesByNha
       row << 'Data Source'
       row << 'Implementer'
       row << 'District'
-      row << 'Sub-implementer'
+      row << 'Implementer'
       row << 'Activity ID'
       row << 'Activity name'
       row << 'Activity description'

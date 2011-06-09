@@ -1,0 +1,13 @@
+- admin_paths = Admin::UsersController == controller.class ? true : false
+
+%tr{:class => cycle("even", "odd")}
+  - if current_user.sysadmin?
+    %td= truncate(user.organization.try(:name), :length => 40)
+  %td= user.full_name
+  %td= user.email
+  %td= user.roles.map{|role| role.humanize}.join(', ')
+  %td= user.invite_token.nil? ? "No pending invitation" : "1 pending"
+  %td
+    %ul.manage_bar
+      %li= link_to "Edit", admin_paths ? edit_admin_user_path(user) : edit_member_path(user)
+      %li= link_to "X", admin_paths ? admin_user_path(user) : member_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right", :alt => 'Delete'

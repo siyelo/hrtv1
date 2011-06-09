@@ -13,40 +13,38 @@
   var _code_spent_values      = #{js_safe(@code_spent_values)};
   var _code_budget_values     = #{js_safe(@code_budget_values)};
 
-
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
   %li{:class => 'last'}= link_to "Districts", reports_districts_path
 
-%h1.main_heading= h @location.name
-
-
-.full
-  .third
-    %h2 Ultimate Funding Source (Current budget)
-    #budget_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Current budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Current budget)
-    #budget_i_pie.bordered
+%h1.main_heading
+  = h @location.name
 
 .full
   .third
-    %h2 Ultimate Funding Source (Past Expenditure)
+    %h2 Ultimate Funding Source (Expenditure)
     #spend_ufs_pie.bordered
 
   .third
-    %h2 Financing Agent (Past Expenditure)
+    %h2 Financing Agent (Expenditure)
     #spend_fa_pie.bordered
 
   .third
-    %h2 Implementer (Past Expenditure)
+    %h2 Implementer (Expenditure)
     #spend_i_pie.bordered
 
+.full
+  .third
+    %h2 Ultimate Funding Source (Current Budget)
+    #budget_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Current Budget)
+    #budget_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Current Budget)
+    #budget_i_pie.bordered
 
 %ul.group
   %li= link_to "NSP", reports_district_path(@location, :code_type => "nsp"), active_if(@nsp)
@@ -63,7 +61,7 @@
 
 .full
   .first-half
-    %h2= "#{@chart_name} Past Expenditure"
+    %h2= "#{@chart_name} Expenditure"
     #code_spent.bordered
 
   .second-half
@@ -73,12 +71,12 @@
 
 .full
   .first-half
-    %h2 Top Organizations by Past Expenditure
+    %h2 Top Organizations by Expenditure
     = render 'reports/districts/organizations/table_mini', :top_organizations => @top_organizations, :location => @location
     %p.bordered= link_to "View all Organizations", reports_district_organizations_path(@location), :class => "right"
 
   .second-half
-    %h2 Top Activities by Past Expenditure
+    %h2 Top Activities by Expenditure
     = render 'reports/districts/activities/table_mini', :top_activities => @top_activities, :location => @location
     %p= link_to "View all Activities", reports_district_activities_path(@location), :class => "right"
 

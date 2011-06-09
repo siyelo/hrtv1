@@ -16,11 +16,11 @@ Feature: Admin can see comments
     And a data_response exists with data_request: the data_request, organization: the organization
     And a project exists with name: "Other Project", data_response: the data_response
     And a comment exists with title: "title2", comment: "comment2", commentable: the project
-
-
+    Given an organization exists with name: "SysAdmin Org"
+    And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
+    And I am signed in as "sysadmin@hrtapp.com"
 
     Scenario: See latest comments on dashboard
-      Given I am signed in as a sysadmin
       When I follow "Dashboard"
       Then I should see "Recent Comments"
         And I should see "title1"
@@ -30,23 +30,18 @@ Feature: Admin can see comments
         And I should see "on Project: "
         And I should see "Other Project"
 
-
     Scenario: Access comments page from dashboard and edit them
-      Given I am signed in as a sysadmin
       When I follow "Dashboard"
         And I follow "all comments"
       Then I should be on the comments page
         And I should see "TB Treatment Project"
         And I should see "comment1"
-
       When I follow "Edit"
       And I fill in "Title" with "comment3"
       And I press "Update"
       Then I should see "comment3"
 
-
     Scenario: Admin can see all comments
-      Given I am signed in as a sysadmin
       When I go to the comments page
       Then I should see "comment1"
         And I should see "comment2"

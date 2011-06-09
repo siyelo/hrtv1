@@ -4,10 +4,11 @@ class ProjectsController < Reporter::BaseController
 
   inherit_resources
   helper_method :sort_column, :sort_direction
-  before_filter :load_data_response
+  before_filter :load_response
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
-  before_filter :check_reporters_response, :only => [:index]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
+  before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
+
 
   def index
     redirect_to response_workplans_path(@response)

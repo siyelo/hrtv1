@@ -1,1 +1,17 @@
-= render '/shared/activities/row', :edit_path => edit_response_activity_path(@response, activity), :title => activity.title
+%tr
+  %td{:colspan => 2}
+    = link_to activity.name.presence || 'Unnamed Activity', edit_response_activity_path(@response, activity), :title => activity.description, :class => 'tooltip'
+  %td= n2cndrs(activity.spend, activity.currency)
+  %td= n2cndrs(activity.budget, activity.currency)
+  %td
+    %ul
+      = render 'activities/approve_budget', :activity => activity
+
+/ TODO: check the above code works instead of this old code;
+/ %tr.filler2
+/   %td
+/
+/     - link_to edit_path do
+/       = image_tag "pencil_10.png"
+/       = title
+

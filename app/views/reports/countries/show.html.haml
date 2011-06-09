@@ -17,33 +17,35 @@
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
-%h1.main_heading Review National Past Expenditures and Current Budgets
+%h1.main_heading
+  Review National Expenditures and Current Budgets
 
 .full
   .third
-    %h2 Ultimate Funding Source (Current budget)
-    #budget_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Current budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Current budget)
-    #budget_i_pie.bordered
-
-.full
-  .third
-    %h2 Ultimate Funding Source (Past Expenditure)
+    %h2 Ultimate Funding Source (Expenditure)
     #spend_ufs_pie.bordered
 
   .third
-    %h2 Financing Agent (Past Expenditure)
+    %h2 Financing Agent (Expenditure)
     #spend_fa_pie.bordered
 
   .third
-    %h2 Implementer (Past Expenditure)
+    %h2 Implementer (Expenditure)
     #spend_i_pie.bordered
+
+.full
+  .third
+    %h2 Ultimate Funding Source (Current Budget)
+    #budget_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Current Budget)
+    #budget_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Current Budget)
+    #budget_i_pie.bordered
+
 
 
 
@@ -61,7 +63,7 @@
 
 .full
   .first-half
-    %h2= "#{@chart_name} Past Expenditure"
+    %h2= "#{@chart_name} Expenditure"
     #code_spent.bordered
 
   .second-half
@@ -71,12 +73,12 @@
 
 .full
   .first-half
-    %h2 Top Organizations by Past Expenditure
+    %h2 Top Organizations by Expenditure
     = render 'reports/countries/organizations/table_mini', :top_organizations => @top_organizations
-    %p.bordered= link_to "View all Organizations", reports_country_organizations_path, :class => "right"
+    %p= link_to "View all Organizations", reports_country_organizations_path, :class => "right"
 
   .second-half
-    %h2 Top Activities by Past Expenditure
+    %h2 Top Activities by Expenditure
     = render 'reports/countries/activities/table_mini', :top_activities => @top_activities
     %p= link_to "View all Activities", reports_country_activities_path, :class => "right"
 

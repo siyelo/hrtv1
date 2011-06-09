@@ -1,0 +1,15 @@
+- available_roles = %w[reporter manager]
+- available_roles = User::ROLES if current_user.sysadmin?
+- available_roles = available_roles.map{|u| [u.humanize, u]}
+
+- semantic_form_for :member, @user, :url => @member_collection_url, :html => {:class => "basic_form js_new_member"} do |f|
+  - f.inputs :class => 'inputs' do
+    - if current_user.sysadmin?
+      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :input_html => {:class => 'organization_select combobox'}
+    = f.input :full_name
+    = f.input :email
+    = f.input :roles, :label => "Role", :required => true, :collection => available_roles
+
+  - f.buttons :class => 'buttons no-margin' do
+    = f.commit_button "Add", :button_html => {:id => "js_user_create_btn"}
+    %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

@@ -1,11 +1,12 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+require "lib/hrt"
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery
   filter_parameter_logging :password, :password_confirmation
-  helper_method :current_user_session, :current_user
+  helper_method :current_user_session, :current_user, :current_request
 
   include ApplicationHelper
   include SslRequirement
@@ -29,14 +30,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_layout
-      if current_user
-        current_user.reporter? ? 'reporter' : 'admin'
-      else
-        'application'
-      end
-    end
-
     def send_csv(text, filename)
       send_data text,
                 :type => 'text/csv; charset=iso-8859-1; header=present',
@@ -57,6 +50,10 @@ class ApplicationController < ActionController::Base
       @current_user
     end
 
+    def current_request
+      current_user.current_request
+    end
+
     def require_user
       unless current_user
         store_location
@@ -67,20 +64,36 @@ class ApplicationController < ActionController::Base
     end
 
     def require_admin
-      unless current_user && current_user.admin?
+      unless current_user && current_user.sysadmin?
         store_location
         flash[:error] = "You must be an administrator to access that page"
-        redirect_to login_url
+        redirect_to :back
+        return false
+      end
+    end
+
+    def require_manager
+      unless current_user && current_user.manager?
+        store_location
+        flash[:error] = "You must be an Organization Manager to access that page"
+        redirect_to :back
         return false
       end
     end
 
     def require_no_user
       if current_user
-        store_location
-        #flash[:error] = "You must be logged out to access requested page"
-        redirect_to user_dashboard_path(current_user)
+        flash[:error] = "You must be logged out to access requested page"
+        redirect_to root_path
         return false
+      end
+    end
+
+    def load_user
+      if current_user.sysadmin?
+        @user = User.find(params[:id])
+      else
+        @user = current_user.organization.users.find(params[:id])
       end
     end
 
@@ -95,11 +108,47 @@ class ApplicationController < ActionController::Base
 
     def find_response(response_id)
       if current_user.admin?
-        # work-arround until all admin actions are moved to admin controllers
-        DataResponse.find(response_id)
+        @response = DataResponse.find(response_id)
+      elsif current_user.activity_manager?
+        # scope by the organizations the AM has access to
+        @response = DataResponse.find(response_id,
+          :conditions => ["organization_id in (?)", [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
       else
-        current_user.data_responses.find(response_id)
+        @response = current_user.data_responses.find(response_id)
       end
+      @response
+    end
+
+    def load_response
+      find_response(params[:response_id])
+    end
+
+    # use this if your controller expects :id instead of :response_id
+    def load_response_from_id
+      find_response(params[:id])
+    end
+
+    # deprecated - use load_response
+    def load_data_response
+      load_response
+    end
+
+    def find_organization(org_id)
+      if current_user.admin?
+        @organization = Organization.find(org_id)
+      elsif current_user.activity_manager?
+        # scope by the organizations the AM has access to
+        @organization = Organization.find(org_id,
+          :conditions => ["organization_id in (?)",
+                         [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
+      else # reporter
+        @organization = current_user.organization
+      end
+      @organization
+    end
+
+    def load_organization_from_id
+      find_organization(params[:id])
     end
 
     def find_project(project_id)
@@ -123,6 +172,46 @@ class ApplicationController < ActionController::Base
         end
       end
       super
+    end
+
+    def latest_request_message(request)
+      "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
+    end
+
+    def not_latest_request_message(request)
+      "You are now viewing data for the Request: \"<span class='bold'>#{request.name}</span>\".
+       All changes made will be saved for this Request.
+       Would you like to <a href='#{set_latest_request_path}'>resume editing the latest Request?</a>"
+    end
+
+    def warn_if_not_current_request
+      unless current_user.current_response_is_latest?
+        if current_user.current_request
+          flash.now[:warning] = not_latest_request_message(current_user.current_request)
+        else
+          if current_user.sysadmin?
+            flash.now[:warning] = "You do not have a current Request set. Please create/assign a Request."
+          else
+            raise Hrt::CurrentRequestNotSet
+          end
+        end
+      end
+    end
+
+    def change_user_current_response(new_request_id)
+      user = current_user
+      response = user.responses.find_by_data_request_id(new_request_id)
+      if response
+        user.data_response_id_current = response.id
+        if user.save
+          user.reload #otherwise current_response association is stale
+          flash[:notice] = latest_request_message(user.current_response.request) if user.current_response_is_latest?
+        else
+          flash[:error] = "Sorry we could not update your response"
+        end
+      else
+        flash[:error] = "Sorry we could not find that response"
+      end
     end
 
     # object = params[:funding_flow]; key = :organization_id_from

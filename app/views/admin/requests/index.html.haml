@@ -3,7 +3,7 @@
 %h1.main_heading Data Requests
 
 %p
-  - link_to new_admin_request_path, :class => "create_button" do
+  - link_to new_admin_request_path, :class => "create_new" do
     = image_tag "new_white.png"
     Create Data Request
 
@@ -25,8 +25,9 @@
         %td= request.start_date
         %td= request.end_date
         %td.action
-          = link_to "Edit", edit_admin_request_path(request)
-          = link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+          %ul.manage_bar
+            %li= link_to "Edit", edit_admin_request_path(request)
+            %li= link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
 
 
 = will_paginate @requests

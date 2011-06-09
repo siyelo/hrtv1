@@ -1,0 +1,84 @@
+<!--Custom maintenance page for Heroku. Deploy to s3 as per http://devcenter.heroku.com/articles/custom-error-pages -->
+
+<!-- Pacman idea - gifted from AdBrite using 37signals style error page -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      Oops, something isn’t working.
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    body {
+      margin: 0;
+      padding: 60px 15px;
+      font-family: "Lucida Grande", verdana, arial, helvetica, sans-serif;
+      color: #222;
+      background: #e5e5e5;
+      text-align: center;
+    }
+    div.dialog {
+      background: #fff;
+      max-width: 600px;
+      text-align: left;
+      margin: 0 auto;
+      -webkit-border-radius: 16px; -moz-border-radius: 16px; border-radius: 16px;
+      -webkit-box-shadow: 0 0 6px #999; -moz-box-shadow: 0 0 6px #999; box-shadow: 0 0 6px #999;
+      border: 1px solid #ccc;
+    }
+    body:first-of-type div.dialog {border: none;}
+    div.innercol {padding: 15px 30px 20px 35px;}
+    h1 {color: #000; font-size: 24px; margin: 14px 0 5px; font-family: helvetica, arial, sans-serif;}
+    h2 {color: #c00; font-size: 18px; margin: 5px 0 18px; font-family: helvetica, arial, sans-serif;}
+    p {font-size: 14px; margin: 0 0 20px; line-height: 18px;}
+    li {font-size: 14px; list-style-type: square; margin-bottom: 6px;}
+    h2 em {text-decoration: underline; font-style: normal;}
+    p.back {margin: 18px 0 0;}
+    a, a:link, a:visited {text-decoration: underline; padding: 1px; color: #03c;}
+    a:hover {color: #fff; background-color: #30c; text-decoration: none;}
+    p.back a {
+      color: #000;
+      text-decoration: none;
+      display: inline-block;
+      padding: 8px 12px;
+      border: 2px solid #ccc;
+      background: #eee;
+      background: -moz-linear-gradient(top, #fff 0%, #eee 70%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(0.7, #eee));
+      -webkit-border-radius: 18px; -moz-border-radius: 18px; border-radius: 18px;
+    }
+    p.back a:hover {
+      background: #fff;
+      background: -moz-linear-gradient(top, #ddd 0%, #fff 70%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ddd), color-stop(0.7, #fff));
+    }
+    @media screen and (max-width: 400px) {
+      body {padding: 0;}
+      div.dialog {margin: 0; border: none; -webkit-border-radius: 0; -moz-border-radius: 10; border-radius: 0;}
+    }
+    /*]]>*/
+    </style>
+  </head>
+  <body>
+    <div class="dialog">
+      <div class="innercol">
+        <h1>
+          The HRT is temporarily unavailable.
+        </h1>
+        <h2>
+          Our engineers will have it back up and running shortly.
+        </h2>
+        <p>
+          In the meanwhile, please enjoy a game of pacman. Click "Play game" and use the arrow keys to move.
+        </p><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://active.macromedia.com/flash/cabs/swflash.cab#version=5,0,0,0" id="pac3" style="border: 10px solid rgb(255, 255, 0);" height="575" width="498">
+          <param name="movie" value="pacman-flash.swf" />
+          <param name="quality" value="high" />
+          <param name="bgcolor" value="#000000" />
+          <embed src="https://s3.amazonaws.com/us.assets.hrtapp.com/custom_errors/pacman.swf" swliveconnect="FALSE" quality="high" bgcolor="#000000" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" height="575" width="498" />
+        </object>
+      </div>
+    </div>
+  </body>
+</html>

@@ -35,7 +35,7 @@ describe Project do
     it { should allow_mass_assignment_of(:budget2) }
     it { should allow_mass_assignment_of(:budget3) }
     it { should allow_mass_assignment_of(:budget4) }
-    it { should allow_mass_assignment_of(:budget5) } 
+    it { should allow_mass_assignment_of(:budget5) }
   end
 
   describe "validations" do
@@ -49,8 +49,8 @@ describe Project do
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value('12,323.32').for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }
-    it { should_not allow_value('abcd').for(:budget) } 
-    it { should_not allow_value('abcd').for(:spend) } 
+    it { should_not allow_value('abcd').for(:budget) }
+    it { should_not allow_value('abcd').for(:spend) }
     it { should_not allow_value('abcd').for(:budget2) }
     it { should_not allow_value('abcd').for(:budget3) }
     it { should_not allow_value('abcd').for(:budget4) }
@@ -282,9 +282,9 @@ describe Project do
 
   describe 'Currency override default' do
      before :each do
-       organization   = Factory(:organization, :currency => "RWF")
-       @project       = Factory(:project, :data_response => Factory(:data_response,
-                                                                    :organization => organization))
+       organization  = Factory.create(:organization, :currency => "RWF")
+       data_response = Factory(:data_response, :organization => organization)
+       @project      = Factory(:project, :data_response => data_response)
      end
      it "should return the Data Response currency if no currency overridden" do
        @project.currency.should == 'RWF'
@@ -294,10 +294,10 @@ describe Project do
      end
 
     it "should not return blank" do
-      data_response   = Factory(:data_response,
-                                :organization => Factory(:organization, :currency => "GBP"))
-      @project1       = Factory.build(:project,
-                                      :data_response => data_response)
+      organization   = Factory.create(:organization, :currency => "GBP")
+      data_response  = Factory(:data_response, :organization => organization)
+
+      @project1      = Factory.build(:project, :data_response => data_response)
       @project1.save
       @project1.currency.should == "GBP"
     end
@@ -309,8 +309,8 @@ describe Project do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
-      @response      = Factory(:data_response,
-                               :organization => Factory.create(:organization, :currency => 'RWF'))
+      organization   = Factory.create(:organization, :currency => 'RWF')
+      @response      = Factory(:data_response, :organization => organization)
       @project       = Factory(:project,
                                 :data_response => @response,
                                 :currency => nil)
@@ -350,7 +350,7 @@ describe Project do
     end
   end
 
-  describe "project past expenditure check" do
+  describe "project spend check" do
     before :each do
       @project = Factory(:complete_project, :spend => 20)
       funder = @project.in_flows.first
@@ -359,10 +359,9 @@ describe Project do
       @project.reload
     end
 
-    it "succeeds if past expenditure is entered" do
+    it "succeeds if spend is entered" do
       @project.spend_entered?.should == true
-
-    end 
+    end
   end
 
   describe "project budget" do
@@ -372,7 +371,7 @@ describe Project do
 
     it "succeeds if entered" do
       @project.budget_entered?.should == true
-    end 
+    end
   end
 
   describe "linking to funding source project" do

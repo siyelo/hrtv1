@@ -1,13 +1,10 @@
 class Admin::RequestsController < Admin::BaseController
-
-  # Inherited Resources
+  ### Inherited Resources
   inherit_resources
   defaults :resource_class => DataRequest,
            :collection_name => 'requests',
            :instance_name => 'request'
 
-
-  # Respond type
   respond_to :html
 
   def index
@@ -16,22 +13,20 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
-    @request = DataRequest.new(params[:request])   
-    if @request.save
-      flash[:notice] = 'Request was successfully created'
-      redirect_to admin_requests_url
-    else
-      render :action => 'new'
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "Request was successfully created"
+        redirect_to admin_requests_url
+      end
     end
   end
 
   def update
-    @request = DataRequest.find(params[:id])
-    if @request.update_attributes(params[:request])
-      flash[:notice] = 'Request was successfully updated'
-      redirect_to admin_requests_url
-    else
-      render :action => 'edit'
+    update! do |success, failure|
+      success.html do
+        flash[:notice] = "Request was successfully updated"
+        redirect_to admin_requests_url
+      end
     end
   end
 

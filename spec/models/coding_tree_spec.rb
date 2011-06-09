@@ -266,7 +266,7 @@ describe CodingTree do
 
     it "returns codes for simple activity and 'CodingBudgetDistrict' type" do
       activity = Factory.create(:activity)
-      Location.stub(:all).and_return(@fake_codes)
+      activity.stub(:locations).and_return(@fake_codes)
 
       ct       = CodingTree.new(activity, CodingBudgetDistrict)
       ct.root_codes.should == @fake_codes
@@ -274,7 +274,7 @@ describe CodingTree do
 
     it "returns codes for other cost activity and 'CodingBudgetDistrict' type" do
       activity = Factory.create(:other_cost)
-      Location.stub(:all).and_return(@fake_codes)
+      activity.stub(:locations).and_return(@fake_codes)
 
       ct       = CodingTree.new(activity, CodingBudgetDistrict)
       ct.root_codes.should == @fake_codes
@@ -348,7 +348,7 @@ describe CodingTree do
 
     it "returns codes for simple activity and 'CodingSpendDistrict' type" do
       activity = Factory.create(:activity)
-      Location.stub(:all).and_return(@fake_codes)
+      activity.stub(:locations).and_return(@fake_codes)
 
       ct       = CodingTree.new(activity, CodingSpendDistrict)
       ct.root_codes.should == @fake_codes
@@ -356,7 +356,7 @@ describe CodingTree do
 
     it "returns codes for other cost activity and 'CodingSpendDistrict' type" do
       activity = Factory.create(:other_cost)
-      Location.stub(:all).and_return(@fake_codes)
+      activity.stub(:locations).and_return(@fake_codes)
 
       ct       = CodingTree.new(activity, CodingSpendDistrict)
       ct.root_codes.should == @fake_codes

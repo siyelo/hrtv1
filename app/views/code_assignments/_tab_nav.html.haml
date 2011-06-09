@@ -1,6 +1,9 @@
 - other_costs = false unless other_costs
 
-%ul.inline_tab
+// old tab styles
+//%ul.group.small_tabs
+
+%ul.ordered_sub_nav
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingBudget')}

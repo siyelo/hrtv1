@@ -17,15 +17,18 @@ ActionController::Routing::Routes.draw do |map|
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
 
+  map.resources :comments
 
-  map.resources :comments, :member => {:delete => :get}
+  # ALL USERS
+  map.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+  map.set_request 'set_request/:id', :controller => 'users', :action => :set_request
+  map.set_latest_request 'set_latest_request', :controller => 'users', :action => :set_latest_request
 
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
     admin.resources :responses,
-      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
-      :member     => {:delete => :get}
+      :collection => {:empty => :get, :in_progress => :get, :submitted => :get}
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
@@ -35,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :activities
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    admin.resources :comments
   end
 
   # POLICY MAKER
@@ -45,27 +48,33 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :except => [:edit, :update],
+    :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridiculous, I know.
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
-      response.resources :projects,
-        :collection => {:bulk_create => :post, 
-                        :download_template => :get, 
-                        :bulk_edit => :get, 
-                        :bulk_update => :put}
-      response.resources :activities,
-        :member => {:approve => :put, :classifications => :get},
-        :collection => {:bulk_create => :post,
-                        :template => :get,
-                        :export => :get,
-                        :project_sub_form => :get}
-      response.resources :other_costs,
-        :collection => {:create_from_file => :post, :download_template => :get}
-      response.resources :classifications,
-        :only => [:edit, :update, :destroy]
-      response.resources :workplans
-      response.resources :funders
-      response.resources :implementers
-      response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
+    response.resources :projects,
+      :collection => {:bulk_create => :post,
+                      :download_template => :get,
+                      :bulk_edit => :get,
+                      :bulk_update => :put}
+    response.resources :activities,
+      :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
+      :collection => {:bulk_create => :post,
+                      :template => :get,
+                      :export => :get,
+                      :project_sub_form => :get}
+    response.resources :other_costs,
+      :collection => {:create_from_file => :post, :download_template => :get}
+    response.resources :districts, :only => [:index, :show] do |district|
+      district.resources :activities, :only => [:index, :show],
+        :controller => "districts/activities"
+      district.resources :organizations, :only => [:index, :show],
+        :controller => "districts/organizations"
+    end
+    response.resources :classifications,
+      :only => [:edit, :update, :destroy]
+    response.resources :workplans
+    response.resources :funders
+    response.resources :implementers
+    response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
   end
 
   map.resources :activities do |activity|
@@ -79,14 +88,16 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:template => :get}
   end
 
-  map.resources :organizations
+  map.resources :organizations, :only => [:edit, :update]
+
+  map.resources :members, :controller => "users",
+    :only => [:index, :create, :edit, :update, :destroy],
+    :collection => {:create_from_file => :post, :download_template => :get}
 
   # REPORTER USER
   map.namespace :reporter do |reporter|
-    reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.welcome 'welcome', :controller => 'dashboard', :action => :welcome
+    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
     reporter.resources :reports, :only => [:index, :show]
-
   end
 
   # REPORTS

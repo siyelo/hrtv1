@@ -4,4 +4,5 @@
       - flash.each do |key, value|
         %div{:id => key.to_s}
           = h value.html_safe
-          %span.notify-close= link_to_function 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'
+          %span.notify-close= link_to 'x', '#', :title => 'dismiss this notification', :id => 'closeFlash'
+        %br

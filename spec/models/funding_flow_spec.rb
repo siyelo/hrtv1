@@ -23,7 +23,6 @@ describe FundingFlow do
   describe "validations" do
     subject { Factory(:funding_flow) }
     it { should be_valid }
-    # it { should validate_presence_of(:project) }
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }
@@ -31,15 +30,27 @@ describe FundingFlow do
     # and this breaks too
     #it { should validate_numericality_of(:organization_id_from) }
     it { should validate_numericality_of(:project_from_id) }
+    it { should validate_numericality_of(:budget_q1) }
+    it { should validate_numericality_of(:budget_q2) }
+    it { should validate_numericality_of(:budget_q3) }
+    it { should validate_numericality_of(:budget_q4) }
+    it { should validate_numericality_of(:budget_q4_prev) }
+    it { should validate_numericality_of(:spend_q1) }
+    it { should validate_numericality_of(:spend_q2) }
+    it { should validate_numericality_of(:spend_q3) }
+    it { should validate_numericality_of(:spend_q4) }
+
+
   end
 
-  describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:funding_flow)
-      end
-
-      it_should_behave_like "comments_cacher"
+  describe "more validations" do
+    it "should validate the spend fields" do
+      @activity = Factory.build(:funding_flow, :spend => 'abcd')
+      @activity.save.should be_false
+    end
+    it "should validate the budget fields" do
+      @activity = Factory.build(:funding_flow, :budget => 'abcd')
+      @activity.save.should be_false
     end
   end
 

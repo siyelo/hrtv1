@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKSPACE=/var/lib/jenkins/jobs/HRT/workspace
+WORKSPACE=/var/lib/jenkins/jobs/HRT_Rwanda/workspace
 BACKUP_DIR=/home/shared/hrt_backups
 
 source /var/lib/jenkins/.rvm/scripts/rvm

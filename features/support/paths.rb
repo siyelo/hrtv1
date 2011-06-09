@@ -11,12 +11,8 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
-    when /the data response page for "(.+)"/
-      req = DataRequest.find_by_title($1)
-      edit_organization_path( DataResponse.find_by_data_request_id req.id)
-
-    when /the reporter dashboard page/
-      reporter_dashboard_path
+    when /the dashboard/
+      dashboard_path
 
     when /the projects page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)
@@ -33,6 +29,9 @@ module NavigationHelpers
 
     when /the classifications page/
       classifications_path
+
+    when /the admin comments page/
+      admin_comments_path
 
     when /the comments page/
       comments_path

@@ -1,6 +1,4 @@
 class ProfilesController < ApplicationController
-  layout :set_layout
-
   before_filter :require_user, :load_user
 
   def edit

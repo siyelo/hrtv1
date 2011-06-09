@@ -16,6 +16,7 @@ Rails::Initializer.run do |config|
   config.autoload_paths += %W(
                           #{RAILS_ROOT}/app/charts
                           #{RAILS_ROOT}/app/reports
+                          #{RAILS_ROOT}/app/observers
                           #{RAILS_ROOT}/lib/named_scopes
                         )
   config.autoload_paths += Dir["#{RAILS_ROOT}/app/models/**/**"]

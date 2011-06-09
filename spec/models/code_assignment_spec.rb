@@ -116,8 +116,8 @@ describe CodeAssignment do
 
     it "select_for_pies" do
       Money.default_bank.add_rate(:USD, :RWF, "500")
-      dr = Factory.create(:data_response,
-                          :organization => Factory(:organization, :currency => 'USD'))
+      organization = Factory.create(:organization, :currency => 'USD')
+      dr = Factory.create(:data_response, :organization => organization)
       activity1 = Factory.create(:activity, :budget => 100, :spend => 200,
                                  :data_response => dr,
                                  :project => Factory(:project, :data_response => dr))
@@ -190,11 +190,13 @@ describe CodeAssignment do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
       Money.default_bank.add_rate(:USD, :RWF, "500")
 
+      organization = Factory.create(:organization,
+                                    :currency => 'RWF')
+
       ### at time of writing, we need the long handed way of creating these objects
       # since the ca factory creates a project whose DR may not == ca.activity.dr
       # fix when the duplicate activity.dr association is removed.
-      @dr = Factory(:data_response,
-                    :organization => Factory(:organization, :currency => 'RWF'))
+      @dr = Factory(:data_response, :organization => organization)
       @a  = Factory(:activity, :data_response => @dr,
                     :project => Factory(:project, :data_response => @dr))
       ###

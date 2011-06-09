@@ -1,11 +1,15 @@
 - title("New Other Cost")
 
+= render :partial => 'projects/sub_nav'
+
 = render 'breadcrumb', :response => @response, :activity => @other_cost
 
 %h1.main_heading Create Other Cost
 
 .main_heading
   = render 'help'
+
+= render 'activities/tab_nav', :activity => @other_cost
 
 .wrap-70
   = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."

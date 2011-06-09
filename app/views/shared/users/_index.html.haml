@@ -1,0 +1,55 @@
+- title("Members")
+
+%h1.main_heading
+  #search
+    - form_tag members_path, :method => :get do
+      = render 'shared/search_form'
+  Members
+
+- if current_user.sysadmin?
+  %ul.horizontal
+    %li
+      = link_to "File Import", '#', :id => "csv_file", :class => 'create_button'
+
+  #import
+    %h3.title_bar Import a CSV file
+    .dashboard_section
+      %p Create one or more members from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
+
+      #import_csv
+        -form_tag create_from_file_members_path, :multipart => true do
+          = label_tag :file, "File"
+          = file_field_tag :file
+          = submit_tag "Upload and Import", :class => 'small_submit_button'
+
+        = link_to "Download template", download_template_members_path
+
+#js_user_create_form.dashboard_section
+  .message.js_message
+  %h2 Add Member
+  .dashboard_section
+    = render '/shared/users/inline_form', :user => @user
+
+- if params[:query]
+  %p.search_user_message
+    = "Members found containing \"#{params[:query]}\""
+    = link_to "(Back to complete member list)", members_path
+
+%table.standard.rounded#js_organiations_tbl
+  %thead
+    %tr
+      - if current_user.sysadmin?
+        %th= sortable "organizations.name", "Organization"
+      %th= sortable "full_name", "Full Name"
+      %th= sortable "email"
+      %th= "Role"
+      %th= "Invitation"
+      %th
+
+  %tbody
+    - @users.each do |user|
+      = render '/shared/users/row', :user => user
+
+= will_paginate @users
+
+%ul{ :id => 'position_container', :class => 'image_list' }

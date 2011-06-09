@@ -57,6 +57,9 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.boolean  "am_approved"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -92,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -176,15 +180,6 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.datetime "updated_at"
   end
 
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
@@ -252,15 +247,6 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.integer "project_id"
   end
 
-  create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "comments_count", :default => 0
-  end
-
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.string   "old_type"
@@ -281,6 +267,11 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.string   "contact_office_location"
   end
 
+  create_table "organizations_managers", :id => false, :force => true do |t|
+    t.integer "organization_id"
+    t.integer "user_id"
+  end
+
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -296,6 +287,8 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

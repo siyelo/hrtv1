@@ -1,5 +1,0 @@
-%ul
-  %li{:class => (controller.class == ResponsesController && controller.action_name == "show" ? "active" : '')}
-    = link_to 'Review', response_path(@response)
-  %li{:class => (controller.class == ResponsesController && ["review", "submit"].include?(controller.action_name) ? "active" : '')}
-    = link_to 'Submit', review_response_path(@response)

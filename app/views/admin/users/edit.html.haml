@@ -1,29 +1,6 @@
-- title("Edit User")
-
-%ul.breadcrumb
-  %li= link_to "Users", admin_users_path
-
-%h1.main_heading Edit User
-
 = error_messages_for :user,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-- semantic_form_for [:admin, @user], :url => admin_user_path(@user), :html => {:class => "basic_form"} do |f|
-  .form_aside
-  - f.inputs :class => 'wrap-80 inputs' do
-    %li.last
-      %h3 User details
-      %ul.dashboard_section
-        = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :hint => "The organization this user is associated with"
-        = f.input :email, :hint => "Email of the user"
-        = f.input :full_name, :hint => "Full name of the user", :required => false
-        = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
+- semantic_form_for [@user], :url => admin_user_path(@user), :html => {:class => "basic_form"} do |f|
+  = render '/shared/users/edit', :f => f
 
-    %li.last
-      %h3 Password
-      %ul.dashboard_section
-        = f.input :password, :hint => "Password of the user"
-        = f.input :password_confirmation, :hint => "Confirm the password"
-
-  - f.buttons :class => 'wrap-80 buttons' do
-    = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"
 

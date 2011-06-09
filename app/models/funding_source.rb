@@ -17,8 +17,8 @@ end
 #  id              :integer         not null, primary key
 #  activity_id     :integer
 #  funding_flow_id :integer
-#  spend           :integer(10)
-#  budget          :integer(10)
+#  spend           :decimal(, )
+#  budget          :decimal(, )
 #  created_at      :datetime
 #  updated_at      :datetime
 #

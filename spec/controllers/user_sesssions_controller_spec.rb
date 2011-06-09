@@ -16,18 +16,18 @@ describe UserSessionsController do
     it { should render_template(:new) }
   end
 
-  context "authenticated login (create new session)" do
+  context "login (create new session)" do
     before :each do
       @user = Factory.create(:reporter)
       post :create, :user_session => {:email => @user.email,
                                       :password => @user.password}
     end
 
-    it { should redirect_to(reporter_dashboard_path) }
+    it { should redirect_to(dashboard_path) }
 
-    it "redirects the user to their dashboar when requesting the login form" do
+    it "redirects the user to root path when requesting the login form" do
       get :new
-      response.should redirect_to reporter_dashboard_path
+      response.should redirect_to root_path
     end
   end
 

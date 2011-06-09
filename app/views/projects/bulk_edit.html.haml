@@ -1,6 +1,11 @@
 :javascript
   var _response_id = #{@response.id.to_json};
 
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
+
+= render 'breadcrumb', :response => @response, :project => @project
+
 
 %h1.main_heading Link to Funders' Projects
 
@@ -47,7 +52,7 @@
         %th Funder Project
         %th Description
         %th Current Budget
-        %th Past Expenditure
+        %th Expenditure
     %tbody
       - @projects.each do |project|
         - project.in_flows.each do |in_flow|

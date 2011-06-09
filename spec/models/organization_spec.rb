@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
-  describe "Attributes" do
+  describe "attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
@@ -14,33 +14,7 @@ describe Organization do
     it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
-  describe "Validations" do
-    subject { Factory(:organization) }
-    it { should be_valid }
-    it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name) }
-    it { should validate_presence_of(:currency) }
-    it { should validate_presence_of(:contact_name) }
-    it { should validate_presence_of(:contact_position) }
-    it { should validate_presence_of(:contact_phone_number) }
-    it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}
-    it { should validate_presence_of(:contact_office_location)}
-
-    it "is not valid when currency is not included in the list" do
-      organization = Factory.build(:organization, :currency => 'INVALID')
-      organization.save
-      organization.errors.on(:currency).should_not be_blank
-    end
-
-    it "is valid when currency is included in the list" do
-      organization = Factory.build(:organization, :currency => 'USD')
-      organization.save
-      organization.errors.on(:currency).should be_blank
-    end
-  end
-
-  describe "Associations" do
+  describe "associations" do
     it { should have_and_belong_to_many(:activities) }
     it { should have_and_belong_to_many(:locations) }
     it { should have_many(:users) }
@@ -54,7 +28,33 @@ describe Organization do
     it { should have_many(:donor_for) }
     it { should have_many(:implementor_for) }
     it { should have_many(:provider_for) }
-    it { should have_many(:comments) }
+    #TODO: retrofit from rw it { should have_and_belong_to_many :managers }
+    #TODO: retrofit from rw it { should_not have_many(:comments) }
+  end
+
+  describe "validations" do
+    subject { Factory(:organization) }
+    it { should be_valid }
+    it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name) }
+    it { should validate_presence_of(:currency) }
+    it { should validate_presence_of(:contact_name) }
+    it { should validate_presence_of(:contact_position) }
+    it { should validate_presence_of(:contact_phone_number) }
+    it { should validate_presence_of(:contact_main_office_phone_number) }
+    it { should validate_presence_of(:contact_office_location)}
+
+    it "is not valid when currency is not included in the list" do
+      organization = Factory.build(:organization, :currency => 'INVALID')
+      organization.save
+      organization.errors.on(:currency).should_not be_blank
+    end
+
+    it "is valid when currency is included in the list" do
+      organization = Factory.build(:organization, :currency => 'USD')
+      organization.save
+      organization.errors.on(:currency).should be_blank
+    end
   end
 
   describe "Callbacks" do
@@ -147,7 +147,7 @@ describe Organization do
     end
 
     it "is not empty when it has users" do
-      Factory(:user, :organization => @organization)
+      Factory(:reporter, :organization => @organization)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -192,9 +192,10 @@ describe Organization do
     before :each do
       @target     = Factory(:organization)
       @duplicate  = Factory(:organization)
-
-      @target_dr     = Factory(:data_response, :organization => @target)
-      @duplicate_dr  = Factory(:data_response, :organization => @duplicate)
+      data_request1 = Factory(:data_request, :organization => @target)
+      data_request2 = Factory(:data_request, :organization => @duplicate)
+      @target_dr    = Factory(:data_response, :organization => @target, :data_request => data_request1)
+      @duplicate_dr = Factory(:data_response, :organization => @duplicate, :data_request => data_request2)
     end
 
     it "deletes duplicate after merge" do
@@ -212,8 +213,6 @@ describe Organization do
     end
 
     it "copies data_requests from duplicate to @target" do
-      Factory(:data_request, :organization => @target)
-      Factory(:data_request, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.data_requests.count.should == 2
     end
@@ -263,8 +262,8 @@ describe Organization do
     end
 
     it "copies users from @duplicate to @target" do
-      Factory(:user, :organization => @target)
-      Factory(:user, :organization => @duplicate)
+      Factory(:reporter, :organization => @target)
+      Factory(:reporter, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.users.count.should == 2
     end
@@ -278,47 +277,35 @@ describe Organization do
   end
 
   describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:organization)
-      end
-
-      it_should_behave_like "comments_cacher"
-    end
-
     it "caches users count" do
       o = Factory.create(:organization)
       o.users_count.should == 0
-      Factory.create(:user, :organization => o)
+      Factory.create(:reporter, :organization => o)
       o.reload.users_count.should == 1
-      Factory.create(:user, :organization => o)
+      Factory.create(:reporter, :organization => o)
       o.reload.users_count.should == 2
     end
   end
 
   describe "named_scopes" do
-    describe "without_users" do
-      it "returns empty array when there are no organizations" do
-        Organization.without_users.should be_empty
-      end
-
-      it "returns organizations without users" do
-        org1 = Factory(:organization, :name => 'Org1')
-        Factory(:user, :organization => org1)
-
-        org2 = Factory(:organization, :name => 'Org2')
-
-        Organization.without_users.should == [org2]
-      end
+    it "returns empty array when there are no organizations" do
+      Organization.without_users.should be_empty
     end
 
-    describe "ordered" do
-      it "should order organizations by name" do
-        org1 = Factory(:organization, :name => 'Org2')
-        org2 = Factory(:organization, :name => 'Org1')
+    it "returns organizations without users" do
+      req = Factory :request
+      requestor = req.organization
+      org1 = Factory(:organization, :name => 'Org1')
+      Factory(:reporter, :organization => org1, :current_response => org1.responses.first)
+      org2 = Factory(:organization, :name => 'Org2')
+      Organization.without_users.should == [requestor, org2]
+    end
 
-        Organization.ordered.should == [org2, org1]
-      end
+    it "should order organizations by name" do
+      org1 = Factory(:organization, :name => 'Org2')
+      org2 = Factory(:organization, :name => 'Org1')
+
+      Organization.ordered.should == [org2, org1]
     end
   end
 
@@ -348,6 +335,32 @@ describe Organization do
     it "does not have X as provider when all of its activities does not have it as provider" do
       project1  = Factory.create(:project, :data_response => @response1)
       @org1.has_provider?(@org2).should be_false
+    end
+  end
+
+  describe "latest_response" do
+    before :each do
+      @req = Factory :request
+      @org = Factory :organization
+    end
+    it "should return the last data response that was created on this org" do
+      @org.latest_response.request.should == @req
+    end
+
+    it "should return nil if there is no response, though this means the Org is invalid!!" do
+      @org.responses.each {|r| r.destroy}
+      @org.reload
+      @org.latest_response.should == nil
+    end
+  end
+
+  describe "#user_emails" do
+    it "should return email addresses of users in the organization, up to the limit" do
+      @req = Factory :request
+      @org = Factory :organization
+      @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
+      @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
+      @org.user_emails(1).should == ['reporter@org.com']
     end
   end
 end

@@ -164,6 +164,7 @@ body
   #footer
     color: $mid-blue
     font-size: 11px
+    margin-bottom: 15px
     text-align: center
     text-transform: uppercase
     +pie-clearfix
@@ -190,8 +191,11 @@ body
       top: 3px
 
     .version
-      color: black
+      background: $mid-blue
+      color: #FFF
+      padding: 3px 6px 2px !important
       text-transform: none
+      +border-radius
 
     .left
       float: left
@@ -206,6 +210,10 @@ body
       text-decoration: none
       &:hover, &:focus
         color: orange
+
+    ul
+      +horizontal-list
+      margin-bottom: 10px
 
   .wrapper > .full-width
     padding: 5px 15px 0
@@ -268,3 +276,44 @@ hr
   margin-bottom: 30px
 .push-12
   margin-top: 12px !important
+
+
+
+//shared between admin user and org members screens
+form.member
+  fieldset.inputs
+    float: left
+    ol
+      li
+        float: left
+        border-bottom: none
+
+        p.inline-errors
+          margin: 0
+          padding: 2px
+          width: 100%
+    label
+      float: none
+      width: 90%
+    input, select
+      width: 90%
+      border: 1px solid #DDDDDD
+    select
+      margin-top: 1px
+      height: 26px
+  fieldset.buttons
+    ol
+      margin-top: 25px
+      li
+        float: left
+        border-bottom: none
+      input
+        padding: 5px 5px 3px
+        width: 70px
+    &.no-margin ol
+      margin-top: 0
+      li
+        padding-top: 23px
+
+    .ajax-loader
+      margin: 4px

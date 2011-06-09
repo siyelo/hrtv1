@@ -1,9 +1,9 @@
 class OtherCostsController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['description', 'past expenditure', 'current budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
-  before_filter :load_data_response
+  before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
@@ -18,7 +18,7 @@ class OtherCostsController < Reporter::BaseController
 
   def new
     @other_cost = OtherCost.new
-    @other_cost.project = @response.projects.find_by_id(params[:project_id])
+    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
   end
 
   def edit
@@ -32,12 +32,22 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html { html_redirect }
+    @other_cost = @response.activities.new(params[:activity])
+    @other_cost.data_response = @response
+    
+    if @other_cost.save
+      respond_to do |format|
+        format.html { flash[:notice] = 'Other Cost was successfully created'; html_redirect }
+        format.js { js_redirect }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => :new }
+        format.js { js_redirect }
+      end
     end
   end
-
-
+  
   def update
     update! do |success, failure|
       success.html { html_redirect }
@@ -93,19 +103,20 @@ class OtherCostsController < Reporter::BaseController
     def html_redirect
       unless @other_cost.check_projects_budget_and_spend?
         flash.delete(:notice)
-        flash[:error] = "Please be aware that your activities spend/budget exceeds that of your projects"
+        flash[:error] = "Please be aware that your activities past expenditure/current budget exceeded that of your projects"
       end
 
       if params[:commit] == "Save & Classify >"
-        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type)
       else
-        redirect_to response_projects_path(@other_cost.project.response)
+        redirect_to edit_response_other_cost_path(@response, @other_cost)
       end
     end
 
 
     def confirm_activity_type
-      @activity = Activity.find(params[:id])     
+      @activity = Activity.find(params[:id])
       return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end

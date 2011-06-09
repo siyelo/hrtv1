@@ -1,11 +1,10 @@
 require 'lib/BudgetSpendHelpers'
 require 'validators'
-include NumberHelper
 
 class Activity < ActiveRecord::Base
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Current Expenditure", "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -42,36 +41,40 @@ class Activity < ActiveRecord::Base
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :text_for_targets, :name, :description, :start_date, :end_date,
-    :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
+    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
+    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
+    :am_approved_date, :user_id
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
-  belongs_to :project, :autosave => true
+  belongs_to :project
+  belongs_to :user
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :funding_sources
+  has_many :sub_implementers, :through => :sub_activities, :source => :provider, :dependent => :destroy
+  has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
   has_many :comments, :as => :commentable, :dependent => :destroy
-  has_many :coding_budget
-  has_many :coding_budget_cost_categorization
-  has_many :coding_budget_district
-  has_many :service_level_budget
-  has_many :coding_spend
-  has_many :coding_spend_cost_categorization
-  has_many :coding_spend_district
-  has_many :service_level_spend
+  has_many :coding_budget, :dependent => :destroy
+  has_many :coding_budget_cost_categorization, :dependent => :destroy
+  has_many :coding_budget_district, :dependent => :destroy
+  has_many :service_level_budget, :dependent => :destroy
+  has_many :coding_spend, :dependent => :destroy
+  has_many :coding_spend_cost_categorization, :dependent => :destroy
+  has_many :coding_spend_district, :dependent => :destroy
+  has_many :service_level_spend, :dependent => :destroy
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
@@ -79,36 +82,45 @@ class Activity < ActiveRecord::Base
     :reject_if => lambda { |fs| fs["funding_flow_id"].blank? }
 
   ### Delegates
-  delegate :organization, :to => :data_response
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_presence_of :name, :description, :if => :is_simple?
-  validates_presence_of :data_response_id, :if => :is_simple?
-  validates_presence_of :project_id, :if => :is_simple?
-  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }
-  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank? }
+  validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_presence_of :data_response_id
+  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
+  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
+  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_length_of :name, :within => 3..64
+
+  #validates_associated :sub_activities
 
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.eql? SubActivity }
+  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
 
   ### Named scopes
   # TODO: spec
-  named_scope :roots,             { :conditions => "activities.type IS NULL" }
-  named_scope :greatest_first,    { :order => "activities.budget DESC" }
+  named_scope :roots,             {:conditions => "activities.type IS NULL" }
+  named_scope :greatest_first,    {:order => "activities.budget DESC" }
   named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
+  named_scope :with_organization, { :joins => "INNER JOIN data_responses ON data_responses.id = activities.data_response_id " +
+                                              "INNER JOIN organizations on data_responses.organization_id = organizations.id" }
   named_scope :ordered,           { :order => 'description ASC' }
   named_scope :ordered_by_id,     { :order => 'id ASC' }
+
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
@@ -121,6 +133,8 @@ class Activity < ActiveRecord::Base
     :conditions => ["activities.provider_id = data_responses.organization_id
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
+  named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
+  named_scope :sorted,           {:order => "activities.name" }
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
@@ -139,11 +153,6 @@ class Activity < ActiveRecord::Base
                         OR org_users_count.organization_id IS NULL)"])
       a.uniq
   end
-
-  #def description
-    #d = read_attribute(:description)
-    #d.present? ? d : 'No description'
-  #end
 
   def self.unclassified
     self.find(:all).select {|a| !a.classified?}
@@ -177,8 +186,8 @@ class Activity < ActiveRecord::Base
         row << activity.name
         row << activity.description
         row << activity.provider.try(:name)
-        row << activity.spend 
-        row << activity.budget 
+        row << activity.spend
+        row << activity.budget
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << ''
@@ -215,8 +224,8 @@ class Activity < ActiveRecord::Base
 
       activity.name                    = row['Activity Name']
       activity.description             = row['Activity Description']
-      activity.spend                   = row['Current Expenditure'] 
-      activity.budget                  = row['Current Budget'] 
+      activity.spend                   = row['Current Expenditure']
+      activity.budget                  = row['Current Budget']
       activity.start_date              = row['Start Date']
       activity.end_date                = row['End Date']
       activity.text_for_beneficiaries  = row['Beneficiaries']
@@ -530,18 +539,22 @@ class Activity < ActiveRecord::Base
   end
 
   def check_projects_budget_and_spend?
-    return true if self.budget.nil? && self.spend.nil?
-    return true if self.actual_budget <= (self.project.budget || 0) &&
-                   self.actual_spend <= (self.project.spend || 0) 
+    return true if budget.nil? && spend.nil?
+    return true if budget.present? && spend.present? &&
+                   type == "OtherCost" && project.nil?
+    return true if actual_budget <= (project.budget || 0) &&
+                   actual_spend <= (project.spend || 0) &&
+                   actual_quarterly_spend_check? &&
+                   actual_quarterly_budget_check?
     return false
   end
 
   def actual_spend
-    (self.spend || 0 )
+    (spend || 0 )
   end
 
   def actual_budget
-    (self.budget || 0 )
+    (budget || 0 )
   end
 
   def sub_activities_each_have_defined_districts?(coding_type)
@@ -572,7 +585,7 @@ class Activity < ActiveRecord::Base
 
   def sub_activities_total_by_type(amount_type, quarters, other_currency)
     sub_activities.map { |implementer| implementer.total_by_type(amount_type, quarters) }.compact.sum * currency_rate(currency, other_currency)
-  end 
+  end
 
   def is_simple?
     self.class.eql?(Activity) || self.class.eql?(OtherCost)
@@ -670,6 +683,24 @@ class Activity < ActiveRecord::Base
       end.flatten
     end
 
+    # removes code assignments for non-existing locations for this activity
+    def remove_district_codings
+      activity_id           = self.id
+      location_ids          = locations.map(&:id)
+      code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
+      deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
+                        {:activity_id => activity_id,
+                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
+                         :location_ids => location_ids}])
+
+      # only if there are deleted code assignments, update the district cached amounts
+      if deleted_count > 0
+        code_assignment_types.each do |type|
+          set_classified_amount_cache(type)
+        end
+      end
+    end
+
     def approved_activity_cannot_be_changed
       errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
     end
@@ -702,6 +733,12 @@ end
 
 
 
+
+
+
+
+
+
 # == Schema Information
 #
 # Table name: activities
@@ -713,44 +750,47 @@ end
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
-#  budget                                :integer(10)
-#  spend_q1                              :integer(10)
-#  spend_q2                              :integer(10)
-#  spend_q3                              :integer(10)
-#  spend_q4                              :integer(10)
+#  budget                                :decimal(, )
+#  spend_q1                              :decimal(, )
+#  spend_q2                              :decimal(, )
+#  spend_q3                              :decimal(, )
+#  spend_q4                              :decimal(, )
 #  start_date                            :date
 #  end_date                              :date
-#  spend                                 :integer(10)
+#  spend                                 :decimal(, )
 #  text_for_provider                     :text
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
-#  spend_q4_prev                         :integer(10)
+#  spend_q4_prev                         :decimal(, )
 #  data_response_id                      :integer         indexed
 #  activity_id                           :integer         indexed
-#  budget_percentage                     :integer(10)
-#  spend_percentage                      :integer(10)
+#  budget_percentage                     :decimal(, )
+#  spend_percentage                      :decimal(, )
 #  approved                              :boolean
-#  CodingBudget_amount                   :integer(10)     default(0)
-#  CodingBudgetCostCategorization_amount :integer(10)     default(0)
-#  CodingBudgetDistrict_amount           :integer(10)     default(0)
-#  CodingSpend_amount                    :integer(10)     default(0)
-#  CodingSpendCostCategorization_amount  :integer(10)     default(0)
-#  CodingSpendDistrict_amount            :integer(10)     default(0)
-#  budget_q1                             :integer(10)
-#  budget_q2                             :integer(10)
-#  budget_q3                             :integer(10)
-#  budget_q4                             :integer(10)
-#  budget_q4_prev                        :integer(10)
+#  CodingBudget_amount                   :decimal(, )     default(0.0)
+#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
+#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
+#  CodingSpend_amount                    :decimal(, )     default(0.0)
+#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
+#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
+#  budget_q1                             :decimal(, )
+#  budget_q2                             :decimal(, )
+#  budget_q3                             :decimal(, )
+#  budget_q4                             :decimal(, )
+#  budget_q4_prev                        :decimal(, )
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
-#  spend_in_usd                          :integer(10)     default(0)
-#  budget_in_usd                         :integer(10)     default(0)
+#  spend_in_usd                          :decimal(, )     default(0.0)
+#  budget_in_usd                         :decimal(, )     default(0.0)
 #  project_id                            :integer
-#  ServiceLevelBudget_amount             :integer(10)     default(0)
-#  ServiceLevelSpend_amount              :integer(10)     default(0)
-#  budget2                               :integer(10)
-#  budget3                               :integer(10)
-#  budget4                               :integer(10)
-#  budget5                               :integer(10)
+#  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
+#  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
+#  budget2                               :decimal(, )
+#  budget3                               :decimal(, )
+#  budget4                               :decimal(, )
+#  budget5                               :decimal(, )
+#  am_approved                           :boolean
+#  user_id                               :integer
+#  am_approved_date                      :date
 #
 

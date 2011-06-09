@@ -1,5 +1,5 @@
 
-# use past expenditure codings for budget if they are missing
+# use spend codings for budget if they are missing
 to_move_to_if_missing = { CodingBudget => CodingSpend,
   CodingBudgetCostCategorization => CodingSpendCostCategorization,
   CodingBudgetDistrict => CodingSpendDistrict}
@@ -17,7 +17,7 @@ Activity.all.each do |a|
 end
 
 # now save sub activity codings, which will take their parent's
-# expenditure codings made from the above, if they have a past expenditure
+# expenditure codings made from the above, if they have a spend
 # and budget ones as well
 
 Activity.all.each do |a|

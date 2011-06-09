@@ -1,15 +1,38 @@
 require 'validation_disabler'
 require 'validators'
 class Organization < ActiveRecord::Base
+  ### Attrribute Aliases
+  alias_attribute :budget_gor_q2, :budget_q1
+  alias_attribute :budget_gor_q3, :budget_q2
+  alias_attribute :budget_gor_q4, :budget_q3
+  alias_attribute :budget_gor_q1_next_fy, :budget_q4
+  alias_attribute :budget_gor_q1, :budget_q4_prev
+
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
+
+  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
+     "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO",
+     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
+     "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
+
+  def usg_fiscal_year
+    year = Date.today.strftime('%Y').to_i
+    { :start => Date.parse("01-01-#{year}"),
+      :end => Date.parse("31-12-#{year}") }
+  end
+
+  def gor_fiscal_year
+    year = Date.today.strftime('%Y').to_i
+    { :start => Date.parse("01-07-#{year - 1}"),
+      :end => Date.parse("30-06-#{year}") }
+  end
 
   include ActsAsDateChecker
 
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid, :currency,
-    :fiscal_year_end_date, :fiscal_year_start_date, :contact_name,
-    :contact_name, :contact_position, :contact_phone_number,
+  attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
+    :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
@@ -36,7 +59,6 @@ class Organization < ActiveRecord::Base
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number, :on => :update
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
-  # TODO: spec
   validates_date :fiscal_year_start_date, :on => :update
   validates_date :fiscal_year_end_date, :on => :update
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
@@ -51,21 +73,17 @@ class Organization < ActiveRecord::Base
   after_save :update_cached_currency_amounts
   after_create :create_data_responses
 
-  def is_empty?
-    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
-      true
-    else
-      false
-    end
+  ### Named scopes
+  named_scope :without_users, :conditions => 'users_count = 0'
+  named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
+  # works only on postgres
+  #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
+
+  def self.with_users
+    find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
   end
 
-  def referenced?
-    if in_flows.empty? && out_flows.empty? && provider_for.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
-      false
-    else
-      true
-    end
-  end
+  ### Class Methods
 
   def self.merge_organizations!(target, duplicate)
     ActiveRecord::Base.disable_validation!
@@ -79,29 +97,6 @@ class Organization < ActiveRecord::Base
     target.users << duplicate.users
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
     ActiveRecord::Base.enable_validation!
-  end
-
-  # TODO: write spec
-  def to_s
-    name
-  end
-
-  # TODO: write spec
-  def user_email_list_limit_3
-    users[0,2].collect{|u| u.email}.join ","
-  end
-
-  # TODO: write spec
-  def short_name
-    #TODO remove district name in (), capitalized, and as below
-    n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?
-    n ||= name
-    tidy_name(n)
-  end
-
-  def display_name(length = 100)
-    n = self.name || "<no name>"
-    n.first(length)
   end
 
   def self.download_template
@@ -120,10 +115,53 @@ class Organization < ActiveRecord::Base
     return saved, errors
   end
 
+  ### Instance Methods
+
+  def is_empty?
+    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+      true
+    else
+      false
+    end
+  end
+
+  def referenced?
+    if in_flows.empty? && out_flows.empty? && provider_for.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+      false
+    else
+      true
+    end
+  end
+
+  # Convenience until we deprecate the "data_" prefixes
+  def responses
+    self.data_responses
+  end
+
+  def to_s
+    name
+  end
+
+  def user_emails(limit = 3)
+    self.users.find(:all, :limit => limit).map{|u| u.email}
+  end
+
+  # TODO: write spec
+  def short_name
+    #TODO remove district name in (), capitalized, and as below
+    n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?
+    n ||= name
+    tidy_name(n)
+  end
+
+  def display_name(length = 100)
+    n = self.name || "<no name>"
+    n.first(length)
+  end
+
   def has_provider?(organization)
     projects.map(&:activities).flatten.map(&:provider).include?(organization)
   end
-
 
   def projects_in_request(request)
       r = data_responses.select{|dr| dr.data_request = request}.first
@@ -173,6 +211,29 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  # returns the last response that was created.
+  def latest_response
+    self.responses.latest_first.first
+  end
+
+  def response_for(request)
+    self.responses.find_by_data_request_id(request)
+  end
+
+  def response_status(request)
+    response_for(request).status
+  end
+
+  protected
+
+    def tidy_name(n)
+      n = n.gsub("Health Center", "HC")
+      n = n.gsub("District Hospital", "DH")
+      n = n.gsub("Health Post", "HP")
+      n = n.gsub("Dispensary", "Disp")
+      n
+    end
+
   private
 
     def update_cached_currency_amounts
@@ -184,12 +245,8 @@ class Organization < ActiveRecord::Base
       end
     end
 
-    def tidy_name(n)
-      n = n.gsub("Health Center", "HC")
-      n = n.gsub("District Hospital", "DH")
-      n = n.gsub("Health Post", "HP")
-      n = n.gsub("Dispensary", "Disp")
-      n
+    def validates_date_range
+      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
     end
 
     def create_data_responses
@@ -203,12 +260,10 @@ class Organization < ActiveRecord::Base
         end
       end
     end
-
-    def validates_date_range
-      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
-    end
-
 end
+
+
+
 
 
 

@@ -8,13 +8,13 @@
 
 %ul.horizontal
   %li
-    - link_to new_admin_organization_path, :class => "create_button" do
+    - link_to new_admin_organization_path, :class => "create_new" do
       = image_tag "new_white.png"
       Create Organization
   %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_button'
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
   %li
-    - link_to duplicate_admin_organizations_path, :class => 'create_button' do
+    - link_to duplicate_admin_organizations_path, :class => 'create_new' do
       Fix duplicate organizations
 
 #import
@@ -30,24 +30,18 @@
 
       = link_to "Download template", download_template_admin_organizations_path, :class => 'target'
 
+
 %table.standard.rounded
   %thead
     %tr
-      %th= sortable "name"
-      %th= sortable "raw_type"
-      %th= sortable "fosaid"
+      %th= sortable "name", "Organization"
+      %th Primary Contact Name (Phone)
+      %th Secondary Contacts
+      %th Activities Approved
+      %th= sortable "raw_type", "Type"
+      %th= sortable "fosaid", "Fosaid"
       %th
   %tbody
-    - @organizations.each do |organization|
-      %tr
-        %td= organization.name
-        %td= organization.raw_type
-        %td= organization.fosaid
-        %td
-          %ul.manage_bar
-            %li= link_to "Show", admin_organization_path(organization)
-            %li= link_to "Edit", edit_admin_organization_path(organization)
-            %li= link_to "X", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
-
+    = render :partial => '/organizations/organization', :collection => @organizations
 
 = will_paginate @organizations

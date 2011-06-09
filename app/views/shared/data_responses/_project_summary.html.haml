@@ -10,8 +10,8 @@
       %td Total Current Budget (current FY):
       %td= n2cnds(project.budget, project.currency || @response.currency)
     %tr
-      %td Total Past Expenditure (past FY):
-      %td= n2cnds(project.spend, project.currency || @response.currency) 
+      %td Total Expenditure (past FY):
+      %td= n2cnds(project.spend, project.currency || @response.currency)
 
     %tr
       %td== Districts (#{project.locations.count}/#{Location.count}):

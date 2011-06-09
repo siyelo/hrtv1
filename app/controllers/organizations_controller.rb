@@ -1,14 +1,17 @@
 class OrganizationsController < Reporter::BaseController
+  before_filter :load_organization
 
   before_filter :load_organization
 
   def edit
+    @organization.valid? # trigger validation errors
   end
 
   def update
-    if @organization.update_attributes(params[:organization])
-      flash[:notice] = "Settings were successfully updated."
-      redirect_to user_dashboard_path(current_user)
+    @organization.update_attributes(params[:organization])
+    if @organization.save
+      flash[:notice] = "Successfully updated."
+      redirect_to edit_organization_url(@organization)
     else
       render :action => :edit
     end

@@ -7,10 +7,20 @@
   - semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
     - f.inputs :class => 'wrap-80 inputs' do
       %ul.dashboard_section
+        = f.input :full_name, :hint => "Your first and last name"
         = f.input :email, :hint => "Your email address"
-        = f.input :password, :hint => "Your password"
-        = f.input :password_confirmation, :hint => "A confirmation of your password"
-        = f.input :tips_shown, :hint => "Show getting started tips?"
+        = f.input :password, :hint => "Your password", :label => "New password", :required => false
+        = f.input :password_confirmation, :hint => "Type your new password again", :label => "Confirm new password", :required => false
+        %li
+          .inputs
+            =f.label "Picture"
+          = image_tag current_user.gravatar(60), :class => "gravatar"
+          %p.inline-hints
+            You can change your picture at
+            = link_to "gravatar.com", "http://www.gravatar.com", :target => "_blank"
+            =" by registering "
+            = current_user.email
+        = f.input :tips_shown, :hint => "Show the Getting Started tips at the top of each page?", :label => "Show tips?", :required => false
 
     - f.buttons :class => 'wrap-80 buttons' do
       = f.commit_button "Save", :class => "last"

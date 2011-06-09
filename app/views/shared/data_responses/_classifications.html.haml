@@ -31,7 +31,7 @@
   .tab3{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_cost_categorization', :link_name => 'Codings'
     .pie
-      %h4 Current budget Inputs
+      %h4 Current Budget Inputs
       %ul
         - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - cost_cat_roots.each do |code|
@@ -42,7 +42,7 @@
   .tab4{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_service_level', :link_name => 'Codings'
     .pie
-      %h4 Current budget Service Levels
+      %h4 Current Budget Service Levels
       %ul
         - service_level_assignments = ServiceLevelBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - service_level_roots.each do |code|
@@ -66,7 +66,7 @@
     .tab6{:"data-chart_type" => "activity", :"data-id" => activity.id}
       = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_districts', :link_name => 'Codings'
       .pie
-        %h4 Past Expenditure Locations
+        %h4 Expenditure Locations
         %ul
           - activity.coding_spend_district.each do |assignment|
             %li
@@ -79,7 +79,7 @@
   .tab7{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_cost_categorization', :link_name => 'Codings'
     .pie
-      %h4 Past Expenditure Inputs
+      %h4 Expenditure Inputs
       %ul
         - service_level_assignments = CodingSpendCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - service_level_roots.each do |code|
@@ -90,7 +90,7 @@
   .tab8{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'spend_service_level', :link_name => 'Codings'
     .pie
-      %h4 Past Expenditure Service Levels
+      %h4 Expenditure Service Levels
       %ul
         - cost_cat_assignments = ServiceLevelSpend.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - cost_cat_roots.each do |code|

@@ -6,14 +6,14 @@
   - colspan += 1 if @data_request.send(request.to_sym)
   - if @data_request.locations?
     - colspan -= 1 if request == "locations" && activities.first.class == OtherCost
-
+  
 .simple_table.push
   %table
     %thead
       %tr
         %th Name
         %th{:colspan => colspan} Current Budget
-        %th{:colspan => colspan} Past Expenditure
+        %th{:colspan => colspan} Expenditure
         %th.manage Manage
       %tr
         %th

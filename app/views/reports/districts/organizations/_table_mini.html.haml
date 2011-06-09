@@ -2,13 +2,13 @@
   %thead
     %tr
       %th Organization
-      %th Total Past Expenditure
+      %th Total Expenditure
 
   %tbody
     - top_organizations.each do |organization|
       %tr{:class => cycle("even", "odd")}
         %td= link_to organization.name, reports_district_organization_path(@location, organization)
-        %td
+        %td.wrap_30
           - spent_total = organization.spent_sum
           %ul
             %li= n2crs(spent_total * usd_to_local_currency, Money.default_currency.iso_code)

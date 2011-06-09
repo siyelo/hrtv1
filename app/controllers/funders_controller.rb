@@ -17,7 +17,6 @@ class FundersController < Reporter::BaseController
   end
 
   def create
-    check_for_new_organization(params[:funding_flow], :organization_id_from)
     @funder = @response.funding_flows.new(params[:funding_flow])
 
     if @funder.save

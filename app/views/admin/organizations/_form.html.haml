@@ -1,7 +1,15 @@
 - f.inputs :class => 'wrap-80 inputs' do
   = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
-  = f.input :raw_type, :label => 'Raw type', :hint => 'Raw type of organization'
-  = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization'
+  = f.input :raw_type, :as => :select, :collection => Organization::ORGANIZATION_TYPES, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
+  = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :class => 'last')
+
+.wrap-80
+  - unless @organization.new_record?
+    .delete_section
+      = link_to "Delete this Organization", admin_organization_path(@organization), :confirm => "Are you sure you want to delete this Organization?", :method => :delete, :class => 'delete_action'
+      %p
+        %strong Warning:
+        Once you delete an Organization, you will lose all data associated with it, and there is no undo.

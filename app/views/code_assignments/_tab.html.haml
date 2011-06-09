@@ -2,18 +2,18 @@
   %ul.horizontal
     - if @activity.sub_activities.present? && ['CodingBudgetDistrict', 'CodingSpendDistrict'].include?(@coding_type)
       %li
-        - link_to derive_classifications_from_sub_implementers_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL current classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?", :title => "Use #{spend_or_budget(@coding_type)} classifications derived from sub implementers", :class => "create_button" do
+        - link_to derive_classifications_from_sub_implementers_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL current classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?", :title => "Use #{spend_or_budget(@coding_type)} classifications derived from implementers", :class => "create_new" do
           Derive classifications
 
 
     - if Activity::BUDGET_CODING_CLASSES.include?(@coding_type)
       %li
-        - link_to copy_budget_to_spend_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL the Past Expenditure classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?", :title => "Click here to copy the Current Budget splits below to the Past Expenditure #{friendly_name_for_coding_copy(@coding_type)} tab", :class => "create_button" do
+        - link_to copy_budget_to_spend_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL the Expenditure classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?", :title => "Click here to copy the Current Budget splits below to the Expenditure #{friendly_name_for_coding_copy(@coding_type)} tab", :class => "create_new" do
           Copy Current Budget to Past Expenditure
 
 
     %li
-      - link_to "#", :class => "create_button js_upload_btn" do
+      - link_to "#", :class => "create_new upload_btn" do
         = image_tag "new.png"
         Upload
 
@@ -29,7 +29,7 @@
           = file_field_tag :file
         = submit_tag "Upload", :class => 'small_submit_button'
 
-        = link_to "Download template", download_template_activity_code_assignments_path(@activity, :coding_type => @coding_type), :class => "row_cancel right"
+        = link_to "Download template", download_template_activity_code_assignments_path(@activity, :coding_type => @coding_type), :class => "create_alt right"
 
 
 - if @error_message
@@ -52,5 +52,5 @@
       - else
         - @codes.each do |code|
           = render 'code_row', { :code => code, :form => form, :tab => tab, :level => 1 }
-    = submit_tag 'Save', :class => 'submit_btn'
+    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

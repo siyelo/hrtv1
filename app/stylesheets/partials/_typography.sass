@@ -1,0 +1,67 @@
+#content
+  h2
+    padding: 10px
+    +border-top-radius
+    background: $lighter-blue
+    border: 1px solid $lightest-blue
+    border-bottom: none
+    clear: both
+    color: $blue
+    font-size: 12px
+    letter-spacing: 0.05em
+    line-height: 1
+    +linear-gradient(color-stops($lightest-blue, $filler))
+    +text-shadow(#fff, 0, 1px, 0)
+    &.welcome_msg
+      background: none
+      border: none
+      color: $light-blue - #111
+      display: block
+      font-size: 15px
+      margin-top: 3px
+      padding: 20px 0 5px
+      +text-shadow(#fff, 0, 1px, 0)
+
+.full-width
+  h2
+    background: none
+    text-transform: none
+  h3, .like_a_h3
+    color: $mid-blue
+    font-size: 0.9em
+    padding: 20px 0 10px
+    text-transform: none
+    &.ready
+      background: image_url("tick_32.png") no-repeat 5px top
+      padding: 8px 0 20px 40px
+    &.ready-sub
+      font-size: 14px
+      background: image_url("tick_32.png") no-repeat 5px top
+      padding: 8px 0 20px 40px
+    &.info
+      background: image_url("info_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready
+      background: image_url("warning_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready
+      font-size: 14px
+      background: image_url("warning_32.png") no-repeat 5px top
+      padding: 10px 0 10px 40px
+    &.not-ready, &.ready, &.info
+      .info
+        display: block
+        font-size: 12px
+        font-weight: normal
+        line-height: 1.4
+        padding-top: 5px
+  h4
+    font-size: 12px
+
+  .red
+    color: $red
+  .warm-red
+    color: $warm-red
+
+.gs_container a
+  text-transform: none

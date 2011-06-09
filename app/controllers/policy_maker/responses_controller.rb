@@ -1,8 +1,8 @@
 class PolicyMaker::ResponsesController < PolicyMaker::BaseController
 
   def index
-    @submitted_data_responses   = DataResponse.submitted.all
-    @in_progress_data_responses = DataResponse.in_progress
+    @submitted_data_responses   = DataResponse.submitted.all.sort_by{|u| u.organization.name.downcase}
+    @in_progress_data_responses = DataResponse.in_progress.sort_by{|u| u.organization.name.downcase}
     @empty_data_responses       = DataResponse.empty
   end
 

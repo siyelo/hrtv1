@@ -2,10 +2,24 @@ require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
 
+  ### Aliases
+  #budget
+  alias_attribute :budget_gor_q2, :budget_q1
+  alias_attribute :budget_gor_q3, :budget_q2
+  alias_attribute :budget_gor_q4, :budget_q3
+  alias_attribute :budget_gor_q1_next_fy, :budget_q4
+  alias_attribute :budget_gor_q1, :budget_q4_prev
+  #spend
+  alias_attribute :spend_gor_q2, :spend_q1
+  alias_attribute :spend_gor_q3, :spend_q2
+  alias_attribute :spend_gor_q4, :spend_q3
+  alias_attribute :spend_gor_q1_next_fy, :spend_q4
+  alias_attribute :spend_gor_q1, :spend_q4_prev
+
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
-                  :spend, :budget
+                  :spend, :budget, :updated_at
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
@@ -17,6 +31,9 @@ class FundingFlow < ActiveRecord::Base
   alias :response :data_response
   alias :response= :data_response=
 
+
+  before_validation :spend_from_quarters, :budget_from_quarters
+
   ### Validations
   # validates_presence_of :project # ???
   validates_presence_of :data_response_id
@@ -24,6 +41,17 @@ class FundingFlow < ActiveRecord::Base
     :message => :"organization_id_from.missing"
   validates_presence_of :organization_id_to,
     :message => :"organization_id_to.missing"
+
+  validates_numericality_of :budget_q1, :if => Proc.new { |model| model.budget_q1.present? }
+  validates_numericality_of :budget_q2, :if => Proc.new { |model| model.budget_q2.present? }
+  validates_numericality_of :budget_q3, :if => Proc.new { |model| model.budget_q3.present? }
+  validates_numericality_of :budget_q4, :if => Proc.new { |model| model.budget_q4.present? }
+  validates_numericality_of :budget_q4_prev, :if => Proc.new { |model| model.budget_q4_prev.present? }
+  validates_numericality_of :spend_q1, :if => Proc.new { |model| model.spend_q1.present? }
+  validates_numericality_of :spend_q2, :if => Proc.new { |model| model.spend_q2.present? }
+  validates_numericality_of :spend_q3, :if => Proc.new { |model| model.spend_q3.present? }
+  validates_numericality_of :spend_q4, :if => Proc.new { |model| model.spend_q4.present? }
+  validates_numericality_of :spend_q4_prev, :if => Proc.new { |model| model.spend_q4_prev.present? }
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
@@ -33,6 +61,8 @@ class FundingFlow < ActiveRecord::Base
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?},
     :message => :"organization_id_from.id_below_zero"
+  validates_numericality_of :budget, :spend, :message => "is not a number (Funding Sources)"
+  validate :budget_and_spend_are_greater_than_zero
 
   ### Named scopes
   named_scope :ordered_by_id, { :order => 'id ASC' }
@@ -45,6 +75,26 @@ class FundingFlow < ActiveRecord::Base
 
   def name
     "From: #{from.name} - To: #{to.name}"
+  end
+
+  def spend_from_quarters
+    if spend.nil?
+      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0)
+    else
+      spend
+    end
+  end
+
+  def budget_from_quarters
+    if budget.nil?
+      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0)
+    else
+      budget
+    end
+  end
+
+  def updated_at
+    Time.now
   end
 
   def self.create_flows(params)
@@ -100,7 +150,18 @@ class FundingFlow < ActiveRecord::Base
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
+
+  private
+
+    def budget_and_spend_are_greater_than_zero
+      errors.add(:spend, "must be greater than 0") unless (spend || 0) > 0
+      errors.add(:budget, "must be greater than 0") unless (budget || 0) > 0
+    end
 end
+
+
+
+
 
 # == Schema Information
 #
@@ -112,21 +173,21 @@ end
 #  project_id           :integer         indexed
 #  created_at           :datetime
 #  updated_at           :datetime
-#  budget               :integer(10)
-#  spend_q1             :integer(10)
-#  spend_q2             :integer(10)
-#  spend_q3             :integer(10)
-#  spend_q4             :integer(10)
+#  budget               :decimal(, )
+#  spend_q1             :decimal(, )
+#  spend_q2             :decimal(, )
+#  spend_q3             :decimal(, )
+#  spend_q4             :decimal(, )
 #  organization_text    :text
 #  self_provider_flag   :integer         default(0), indexed
-#  spend                :integer(10)
-#  spend_q4_prev        :integer(10)
+#  spend                :decimal(, )
+#  spend_q4_prev        :decimal(, )
 #  data_response_id     :integer         indexed
-#  budget_q1            :integer(10)
-#  budget_q2            :integer(10)
-#  budget_q3            :integer(10)
-#  budget_q4            :integer(10)
-#  budget_q4_prev       :integer(10)
+#  budget_q1            :decimal(, )
+#  budget_q2            :decimal(, )
+#  budget_q3            :decimal(, )
+#  budget_q4            :decimal(, )
+#  budget_q4_prev       :decimal(, )
 #  comments_count       :integer         default(0)
 #  project_from_id      :integer
 #

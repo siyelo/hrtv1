@@ -1,0 +1,15 @@
+%h2
+  = image_tag "icon_comments.png", :class => "heading_icon"
+  Recent Comments
+  .read_more.comments_read_more= link_to "view all", current_user.admin? ? admin_comments_path : comments_path
+%ul.dashboard_comments
+  - comments.each do |comment|
+    %li
+      %h5.title
+        %span= link_to "#{truncate(model_name(comment.commentable), :length => 40)} (#{comment.commentable.organization.name})", commentable_path(comment, current_user)
+      .author
+        from
+        = image_tag comment.user.gravatar(20)
+        %b= "#{comment.user.name} (#{auto_link(comment.user.email)})"
+        = "#{time_ago_in_words(comment.created_at)} ago"
+      %p.main= truncate(comment.comment, :length => 300)

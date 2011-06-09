@@ -4,19 +4,10 @@ class ActivitiesController < Reporter::BaseController
 
   inherit_resources
   helper_method :sort_column, :sort_direction
-  before_filter :load_data_response
+  before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
+  before_filter :require_admin, :only => [:sysadmin_approve]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
-
-  def index
-    scope = @response.activities.roots.scoped({:include => :project})
-    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
-                                          UPPER(activities.name) LIKE UPPER(:q) OR
-                                          UPPER(activities.description) LIKE UPPER(:q)",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
-    @activities = scope.paginate(:page => params[:page], :per_page => 10,
-                    :order => "#{sort_column} #{sort_direction}")
-  end
 
   def new
     @activity = Activity.new
@@ -57,13 +48,13 @@ class ActivitiesController < Reporter::BaseController
     clean_out_sa_params(params)
     check_for_new_provider(params)
     @activity = Activity.find(params[:id])
-    if @activity.update_attributes(params[:activity])
+    if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html do
           if @activity.check_projects_budget_and_spend?
             flash[:notice] = 'Activity was successfully updated'
           else
-            flash[:error] = 'Please be aware that your activities spend/budget exceeds that of your projects'
+            flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
           end
           html_redirect
         end
@@ -71,24 +62,45 @@ class ActivitiesController < Reporter::BaseController
       end
     else
       respond_to do |format|
-        format.html { load_comment_resources(resource); render :action => 'edit'}
+        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+                      load_comment_resources(resource)
+                      render :action => 'edit'
+                    }
         format.js   { js_redirect }
       end
     end
   end
 
-  def show
-    load_comment_resources(resource)
-    show!
+  # call only via Ajax
+  def sysadmin_approve
+    if current_user.admin?
+      @activity = @response.activities.find(params[:id])
+      unless @activity.approved?
+        @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
+        @activity.save(false)
+      end
+      render :json => {:status => 'success'}
+      return true
+    else
+      render :json => {:status => 'access denied'}
+      return false
+    end
   end
 
-  # called only via Ajax
-  def approve
+  # call only via Ajax
+  # toggles approved status
+  def activity_manager_approve
     if current_user.admin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
-      @activity.update_attributes({:approved => params[:checked]})
-      render :nothing => true
+      toggle_approved = !@activity.am_approved?
+      date = Time.now
+      date = nil if toggle_approved == false
+      @activity.attributes = {:user_id => current_user.id, :am_approved => toggle_approved,
+        :am_approved_date => date}
+      @activity.save(false)
+      render :json => {:status => 'success'}
     else
+      render :json => {:status => 'access denied'}
       raise AccessDenied
     end
   end
@@ -109,14 +121,14 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def template
-    template = Activity.download_template
+    template = Activity.download_template(@response)
     send_csv(template, 'activities_template.csv')
   end
 
   def export
     activities = params[:project_id].present? ?
       @response.projects.find(params[:project_id]).activities : @response.activities
-    template = Activity.download_template(activities)
+    template = Activity.download_template(@response, activities)
     send_csv(template, 'activities_existing.csv')
   end
 
@@ -148,42 +160,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
-
-    def clean_out_sa_params(params)
-      unless params[:activity][:sub_activities_attributes].nil?
-        params[:activity][:sub_activities_attributes].each_key do |key|
-          if params[:activity][:sub_activities_attributes][key][:spend].last == '%'
-            if params[:activity][:sub_activities_attributes][key][:spend].to_i < 101
-              spend = params[:activity][:spend].to_f * params[:activity][:sub_activities_attributes][key][:spend].delete('%').to_f / 100
-              params[:activity][:sub_activities_attributes][key][:spend] = spend
-            else
-              spend = params[:activity][:sub_activities_attributes][key][:spend].delete('%')
-              params[:activity][:sub_activities_attributes][key][:spend] = spend
-            end
-          end
-          if params[:activity][:sub_activities_attributes][key][:budget].last == '%'
-            if params[:activity][:sub_activities_attributes][key][:budget].to_i < 101
-              budget = params[:activity][:budget].to_f * params[:activity][:sub_activities_attributes][key][:budget].delete('%').to_f / 100
-              params[:activity][:sub_activities_attributes][key][:budget] = budget
-            else
-              budget = params[:activity][:sub_activities_attributes][key][:budget].delete('%')
-              params[:activity][:sub_activities_attributes][key][:budget] = budget
-            end
-          end
-        end
-      end
-    end
-
-    def check_for_new_provider(params)
-      unless params[:activity][:provider_id].nil?
-        unless is_number?(params[:activity][:provider_id])
-          name = params[:activity][:provider_id]
-          params[:activity][:provider] = {}
-          params[:activity][:provider][:name] = name
-          params[:activity].delete(:provider_id)
-        end
-      end
-    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"

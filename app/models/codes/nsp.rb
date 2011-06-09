@@ -17,6 +17,10 @@ class Nsp < Code
 end
 
 
+
+
+
+
 # == Schema Information
 #
 # Table name: codes

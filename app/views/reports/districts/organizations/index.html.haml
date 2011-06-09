@@ -11,15 +11,16 @@
   %li= link_to "Districts", reports_districts_path
   %li= link_to h(@location.name), reports_district_path(@location)
 
-%h1.main_heading Organizations
+%h1.main_heading 
+  Organizations
 
 .full
   .first-half
-    %h2 Past Expenditure
+    %h2 Expenditure
     #spent_pie.bordered
 
   .second-half
-    %h2 Current budget
+    %h2 Current Budget
     #budget_pie.bordered
 
 %h2= "Organizations (#{short_page_entries_info(@organizations)})"

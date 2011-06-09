@@ -33,14 +33,31 @@ class User < ActiveRecord::Base
     saved, errors = 0, 0
     doc.each do |row|
       attributes = row.to_hash
-      organization = Organization.find_by_name(attributes.delete('organization_name'))
-      attributes.merge!(:organization_id => organization.id) if organization
+      organization = Organization.find_by_name(attributes["organization_name"])
+      if organization
+        attributes.merge!(:organization_id => organization.id)
+      else
+        org = Organization.create!(:name => attributes["organization_name"])
+      end
       user = User.new(attributes)
-      user.save(false) ? (saved += 1) : (errors += 1)
+      if user.only_password_errors?
+        user.save(false)
+        user.bulk_invite_email
+        saved += 1
+      else
+        errors += 1
+      end
     end
     return saved, errors
   end
+  
+  def only_password_errors?
+    errors.length == errors.on(:password).to_a.length + errors.on(:password_confirmation).to_a.length
+  end
 
+  def bulk_invite_email
+    Notifier.deliver_bulk_invite_user(self)
+  end
 
   def deliver_password_reset_instructions!
     reset_perishable_token!

@@ -2,4 +2,4 @@ organization_name,email,full_name,roles
 organization14,user14@hrtapp.com,User 14,reporter
 organization14,user24@hrtapp.com,User 24,admin
 organization14,user34@hrtapp.com,User 34,activity_manager
-organization14,user44@hrtapp.com,User 44,reporter,password
+organization14,user44@hrtapp.com,User 44,reporter

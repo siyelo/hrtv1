@@ -17,7 +17,7 @@ class FundersController < Reporter::BaseController
   end
 
   def create
-    check_for_new_funder(params)
+    check_for_new_organization(params[:funding_flow], :organization_id_from)
     @funder = @response.funding_flows.new(params[:funding_flow])
 
     if @funder.save
@@ -48,15 +48,5 @@ class FundersController < Reporter::BaseController
   private
     def load_projects
       @projects = @response.projects.find(:all, :order => "id ASC")
-    end
-
-    def check_for_new_funder(params)
-      if !params[:funding_flow].nil? && !params[:funding_flow][:organization_id_from].nil?
-        id_or_name = params[:funding_flow][:organization_id_from]
-        unless is_number?(id_or_name)
-          org  = Organization.find_or_create_by_name(id_or_name)
-          params[:funding_flow][:organization_id_from] = org.id
-        end
-      end
     end
 end

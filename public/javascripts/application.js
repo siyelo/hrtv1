@@ -490,10 +490,16 @@ var admin_users_index = {
 
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data, status, response) {
         if (data.status === 'error') {
-          $('#js_user_create_form').html(data.form);
+          $('#new_user').replaceWith(data.form);
         } else {
           $('#js_organiations_tbl tbody').prepend(data.row);
-          $('#js_user_create_form').html(data.form);
+          $('#new_user').replaceWith(data.form);
+          var message = $('#js_user_create_form .message');
+          message.text(data.message)
+
+          setTimeout(function () {
+            message.fadeOut(3000)
+          }, 3000);
         }
         // trigger organiazion combobox widget
         organizationCombobox($('#js_user_create_form'));

@@ -6,4 +6,4 @@
     = f.input :roles, :label => "Role", :hint => "Roles", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
 
   - f.buttons :class => 'wrap-80 buttons' do
-    = f.commit_button user.new_record? ? "Create New User" : "Update User", :button_html => {:id => "js_user_create_btn"}
+    = f.commit_button "Add user", :button_html => {:id => "js_user_create_btn"}

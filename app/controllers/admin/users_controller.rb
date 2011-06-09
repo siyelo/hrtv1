@@ -40,7 +40,8 @@ class Admin::UsersController < Admin::BaseController
                            :row => render_to_string(:partial => "row.html.haml",
                                                      :locals => {:user => @user}),
                            :form => render_to_string(:partial => "inline_form.html.haml",
-                                                     :locals => {:user => User.new})}
+                                                     :locals => {:user => User.new}),
+                           :message => "An email invitation has been sent to '#{@user.name}' for the organization '#{@user.organization.name}'"}
         else
           #raise @user.errors.full_messages.to_yaml
           render :json => {:status => 'error',

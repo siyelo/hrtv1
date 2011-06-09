@@ -124,4 +124,15 @@ class ApplicationController < ActionController::Base
       end
       super
     end
+
+    # object = params[:funding_flow]; key = :organization_id_from
+    def check_for_new_organization(object, key)
+      if !object.nil? && !object[key].nil?
+        id_or_name = object[key]
+        unless is_number?(id_or_name)
+          org  = Organization.find_or_create_by_name(id_or_name)
+          object[key] = org.id
+        end
+      end
+    end
 end

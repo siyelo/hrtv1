@@ -6,6 +6,9 @@ module HtmlSelectorsHelper
     when /the body/
       "html > body"
 
+    when /the title/
+      "h1.main_heading"
+
     when /the selected data response sub-tab/
       "#data_response_sub_tabs.tabs_nav ul li.selected"
 

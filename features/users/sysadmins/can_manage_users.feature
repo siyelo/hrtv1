@@ -5,9 +5,24 @@ Feature: Admin can manage users
 
   Background:
     Given an organization exists with name: "organization1"
-      And a sysadmin exists with email: "pink.panther@hrt.com"
-      And I am signed in as "pink.panther@hrt.com"
+      And an organization exists with name: "FHI"
+      And an sysadmin exists with email: "pink.panter@hrt.com"
+      And I am signed in as "pink.panter@hrt.com"
 
+      @javascript
+    Scenario: Admin can add an user
+      When I follow "Users" within the main nav
+      Then I should see "Users" within the title
+      And I fill in "theCombobox" with "FHI"
+      When I fill in "Email" with "bob@siyelo.com"
+      And I fill in "Full name" with "bob smith"
+      And I select "Reporter" from "Role"
+      And I press "Add user"
+      Then I should see "An email invitation has been sent to 'bob smith' for the organization 'FHI'"
+      And I should see "bob@siyelo.com" within "#js_organiations_tbl"
+      And I should see "Pending" within "#js_organiations_tbl"
+
+    @wip
   Scenario: Admin can CRUD users
     When I follow "Users"
       And I follow "Create User"

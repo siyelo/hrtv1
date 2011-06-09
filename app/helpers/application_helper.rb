@@ -85,7 +85,8 @@ module ApplicationHelper
                  current_controller_with_nesting?('admin', 'responses')
       end
     end
-    return link_to tab.humanize, { :controller => "/#{parent}/#{tab}" }, :class => ('active' if active)
+
+    content_tag(:li, link_to(tab.humanize, { :controller => "/#{parent}/#{tab}" }), :class => ('active' if active))
   end
 
   # alternative to rails' current_page?() method

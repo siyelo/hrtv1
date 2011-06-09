@@ -7,7 +7,7 @@ body.app
 
       .view
         background: #f9f9f9
-        border: 1px solid !light-blue
+        border: 1px solid $light-blue
         margin: 0 auto
         padding: 30px
 
@@ -16,10 +16,10 @@ body.app
         a
           margin-left: 10px
           padding: 3px 5px
-          color= !mid-blue
+          color: $mid-blue
           &:hover
-            color= !lightest-blue
-            background= !mid-blue
+            color: $lightest-blue
+            background: $mid-blue
             +border-radius
 
         .disabled
@@ -67,7 +67,7 @@ body.app
 
     .edit_data_response
       +border-radius
-      border: 1px solid !lightest-blue
+      border: 1px solid $lightest-blue
       font-size: 0.8em
       padding: 10px
 
@@ -94,11 +94,11 @@ body.app
 
       .actions a
         background-image: none
-        color= !dark-blue
+        color: $dark-blue
 
       h2
-        border-bottom: 1px solid !dark-blue
-        color= !dark-blue
+        border-bottom: 1px solid $dark-blue
+        color: $dark-blue
         font-size: 0.8em
         letter-spacing: 0.05em
         padding: 12px 10px
@@ -190,11 +190,11 @@ body.app
           padding: 5px
 
     .active-scaffold tr.record
-      background= !lightest-blue
+      background: $lightest-blue
       +border-bottom-radius
 
     .active-scaffold .empty-message, .active-scaffold .filtered-message
-      background= !lightest-blue
+      background: $lightest-blue
       +border-bottom-radius
 
     .comments .messages
@@ -202,7 +202,7 @@ body.app
 
     .form-element
       .description
-        color= !mid-blue
+        color: $mid-blue
         font-size: 0.7em
       .checkbox-list
         li

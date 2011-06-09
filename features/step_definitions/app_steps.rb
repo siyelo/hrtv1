@@ -108,29 +108,29 @@ Given /^I am signed in as "([^"]*)"$/ do |name|
   steps %Q{
     When I go to the login page
     And I fill in "Email" with "#{name}"
-    And  I fill in "Password" with "password"
-    And  I press "Sign in"
+    And I fill in "Password" with "password"
+    And I press "Sign in"
   }
 end
 
 Given /^I am signed in as a reporter$/ do
   steps %Q{
-    Given a reporter "Frank" in organization "Test Org"
-    And I am signed in as "Frank"
+    Given a reporter "frank@hrt.com" in organization "Test Org"
+    And I am signed in as "frank@hrt.com"
   }
 end
 
 Given /^I am signed in as an activity manager$/ do
   steps %Q{
-    Given an activity manager "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    Given an activity manager "frank@hrt.com" in organization "Test Org"
+    Given I am signed in as "frank@hrt.com"
   }
 end
 
 Given /^I am signed in as an admin$/ do
   steps %Q{
-    Given an admin "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    Given an admin "frank@hrt.com" in organization "Test Org"
+    Given I am signed in as "frank@hrt.com"
   }
 end
 
@@ -152,7 +152,6 @@ end
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:reporter,
-                  :username => name,
                   :email => 'frank@f.com',
                   :password => 'password',
                   :password_confirmation => 'password',
@@ -162,7 +161,6 @@ end
 Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:activity_manager,
-                  :username              => name,
                   :email                 => 'frank@f.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
@@ -173,7 +171,6 @@ end
 Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:admin,
-                  :username              => name,
                   :email                 => 'frank@f.com',
                   :password              => 'password',
                   :password_confirmation => 'password',

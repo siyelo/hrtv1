@@ -18,6 +18,6 @@ Factory.define :activity_manager,  :parent => :user do |f|
 end
 
 Factory.define :sysadmin,  :parent => :user do |f|
-  f.sequence(:email)      { |i| "admin_#{i}@example.com" }
+  f.sequence(:email)      { |i| "sysadmin_#{i}@example.com" }
   f.roles { ['admin'] }
 end

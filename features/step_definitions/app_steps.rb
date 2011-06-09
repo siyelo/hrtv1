@@ -304,8 +304,8 @@ Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
     Given a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
-    And a reporter exists with email: "pink.panter@hrt.com", organization: the organization
-    And I am signed in as "pink.panter@hrt.com"
+    And a reporter exists with email: "pink.panter@hrtapp.com", organization: the organization
+    And I am signed in as "pink.panter@hrtapp.com"
   }
 end
 
@@ -314,7 +314,7 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "pink.panter@hrt.com", organization: the organization, current_data_response: the data_response
+    And a reporter exists with email: "pink.panter@hrtapp.com", organization: the organization, current_data_response: the data_response
     And a project exists with name: "project1", data_response: the data_response
     And an activity exists with name: "activity1", data_response: the data_response, project: the project
   }

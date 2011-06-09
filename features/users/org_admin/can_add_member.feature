@@ -6,6 +6,7 @@ Feature: Can add member
   @run
   Scenario: Add a member
     Given I am signed in as a member
+    Then show me the page
     When I follow Manage within the main nav
     # And I follow "Add/Remove Members"
     # Then I should see "Members" within the title
@@ -18,7 +19,7 @@ Feature: Can add member
     # Then I should see "An email invitation has been sent to 'bob smith'"
     # And I should see "bob@siyelo.com" in the User List
     # And I should see "1 pending" in the Invitation column for "bob@siyelo.com"
-  
-  
 
-  
+
+
+

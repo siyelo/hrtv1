@@ -130,13 +130,13 @@ describe User do
     end
 
     it "returns email if full name is nil" do
-      user = Factory.create(:user, :full_name => nil, :email => 'pink.panter@hrt.com')
-      user.name.should == "pink.panter@hrt.com"
+      user = Factory.create(:user, :full_name => nil, :email => 'pink.panter@hrtapp.com')
+      user.name.should == "pink.panter@hrtapp.com"
     end
 
     it "returns email if full name is blank string" do
-      user = Factory.create(:user, :full_name => '', :email => 'pink.panter@hrt.com')
-      user.name.should == "pink.panter@hrt.com"
+      user = Factory.create(:user, :full_name => '', :email => 'pink.panter@hrtapp.com')
+      user.name.should == "pink.panter@hrtapp.com"
     end
   end
 end

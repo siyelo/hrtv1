@@ -1,8 +1,8 @@
 %p Thank you for joining the Health Resource Tracker
 
-- semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
+- semantic_form_for @user, :url => registration_path(:invite_token => params[:invite_token]), :html => {:class => "basic_form"} do |f|
   - f.inputs :class => 'wrap-80 inputs' do
-    = f.input :password, :hint => "Your password"
+    = f.input :password, :hint => "Your password", :value => nil
     = f.input :password_confirmation, :hint => "A confirmation of your password"
     
   - f.buttons :class => 'wrap-80 buttons' do

@@ -43,8 +43,10 @@ class User < ActiveRecord::Base
       if user.only_password_errors?
         user.invite_token = user.generate_token
         user.save(false)
-        user.bulk_invite_email
+        user.send_user_invitation
         saved += 1
+      elsif user.save
+        user.save
       else
         errors += 1
       end
@@ -53,15 +55,15 @@ class User < ActiveRecord::Base
   end
   
   def generate_token
-    token = Digest::SHA1.hexdigest Time.now.to_s
+    Digest::SHA1.hexdigest("#{self.email}#{Time.now}")[24..38]
   end
   
   def only_password_errors?
     errors.length == errors.on(:password).to_a.length + errors.on(:password_confirmation).to_a.length
   end
 
-  def bulk_invite_email
-    Notifier.deliver_bulk_invite_user(self)
+  def send_user_invitation
+    Notifier.deliver_send_user_invitation(self)
   end
 
   def deliver_password_reset_instructions!

@@ -10,13 +10,14 @@ class Notifier < ActionMailer::Base
     body          :password_reset_url => edit_password_reset_url(user.perishable_token)
   end
   
-  def bulk_invite_user(user)
+  def send_user_invitation(user)
     subject       "[Health Resource Tracker] You have been invited to HRT"
     from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
     recipients    user.email
     sent_on       Time.now
     body          :full_name => user.full_name,
-                  :invite_token => user.invite_token
+                  :invite_token => user.invite_token,
+                  :follow_me => "To register follow this <a href=\"#{edit_registration_url}?invite_token=#{user.invite_token}\">link</a>"
   end
   
   def email_organisation_users(comment, data_response)

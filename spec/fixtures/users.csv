@@ -1,5 +1,5 @@
-organization_name,email,full_name,roles,password,password_confirmation
-organization1,user1@hrtapp.com,User 1,reporter,password,password
-organization1,user2@hrtapp.com,User 2,admin,password,password
-organization1,user3@hrtapp.com,User 3,activity_manager,password,password
-organization1,user4@hrtapp.com,User 4,reporter,password,password
+organization_name,email,full_name,roles
+organization14,user14@hrtapp.com,User 14,reporter
+organization14,user24@hrtapp.com,User 24,admin
+organization14,user34@hrtapp.com,User 34,activity_manager
+organization14,user44@hrtapp.com,User 44,reporter

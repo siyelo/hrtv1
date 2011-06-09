@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110608152226) do
+ActiveRecord::Schema.define(:version => 20110609115407) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(:version => 20110608152226) do
     t.string   "perishable_token",         :default => "",    :null => false
     t.boolean  "tips_shown",               :default => true
     t.boolean  "active",                   :default => false
+    t.string   "invite_token"
   end
 
 end

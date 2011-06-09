@@ -15,7 +15,8 @@ class Notifier < ActionMailer::Base
     from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
     recipients    user.email
     sent_on       Time.now
-    body          :full_name => user.full_name
+    body          :full_name => user.full_name,
+                  :invite_token => user.invite_token
   end
   
   def email_organisation_users(comment, data_response)

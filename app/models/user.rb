@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
       end
       user = User.new(attributes)
       if user.only_password_errors?
+        user.invite_token = user.generate_token
         user.save(false)
         user.bulk_invite_email
         saved += 1
@@ -49,6 +50,10 @@ class User < ActiveRecord::Base
       end
     end
     return saved, errors
+  end
+  
+  def generate_token
+    token = Digest::SHA1.hexdigest Time.now.to_s
   end
   
   def only_password_errors?

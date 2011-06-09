@@ -1,0 +1,10 @@
+%p Thank you for joining the Health Resource Tracker
+
+- semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
+  - f.inputs :class => 'wrap-80 inputs' do
+    = f.input :password, :hint => "Your password"
+    = f.input :password_confirmation, :hint => "A confirmation of your password"
+    
+  - f.buttons :class => 'wrap-80 buttons' do
+    = f.commit_button "Save", :class => "last"
+  

@@ -64,7 +64,7 @@
         %li= "Spend Q4 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
 
-  %h3.form_heading Budget
+  %h3.form_heading Current budget
   %ul.dashboard_section
     %li
       %ul.row
@@ -86,11 +86,11 @@
         %li= "Budget Q4 #{budget_fiscal_year}"
         %li= c(@activity.budget_q4, @activity.currency)
 
-  %h3.form_heading Budget (planned expenditure)
+  %h3.form_heading Current budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget
+        %li Current budget
         %li= c(@activity.budget, @activity.currency)
       %ul.row
         %li Year + 2
@@ -113,7 +113,7 @@
           %li Implementer
           %li= sub_activity.provider.try(:name)
         %ul.row
-          %li Budget
+          %li Current budget
           %li= c(sub_activity.budget, @activity.currency)
         %ul.row
           %li Budget percentage
@@ -136,7 +136,7 @@
           %li Spent
           %li= c(funding_source.spend, @activity.currency)
         %ul.row
-          %li Budget
+          %li Current budget
           %li= c(funding_source.budget, @activity.currency)
 
   %h3.form_heading Institutions Assisted

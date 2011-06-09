@@ -34,7 +34,7 @@
         %th Project
         %th{:colspan => 2} Funder
         %th.amount Spend
-        %th.amount Budget
+        %th.amount Current Budget
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project

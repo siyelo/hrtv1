@@ -24,7 +24,7 @@
           = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q4'}
 
     - if @response.data_request.budget?
-      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_budget'}
+      = f.input :budget, :label => "Current budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_budget'}
       %li.amounts.budget
         %label Quarterly budget
         %ul

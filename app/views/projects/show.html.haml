@@ -57,11 +57,11 @@
         %li= "Spend Q4 #{spend_fiscal_year}"
         %li= c(@project.spend_q4, @project.currency)
 
-  %h3.form_heading Budget (planned expenditure)
+  %h3.form_heading Current budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget
+        %li Current budget
         %li= c(@project.budget, @project.currency)
       %ul.row
         %li Year + 2
@@ -84,7 +84,7 @@
           %li From
           %li= flow.from.try(:name)
         %ul.row
-          %li Budget
+          %li Current budget
           %li= c(flow.budget, flow.currency)
         %ul.row
           %li Spend
@@ -113,7 +113,7 @@
           %li To
           %li= flow.from.try(:name)
         %ul.row
-          %li Budget
+          %li Current budget
           %li= c(flow.budget, flow.currency)
         %ul.row
           %li Spend

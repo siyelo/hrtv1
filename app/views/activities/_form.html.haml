@@ -38,7 +38,7 @@
 
   - if @response.data_request.budget?
     %li.last
-      %h3 Budget (planned expenditure) (#{@response.currency})
+      %h3 Current Budget (planned expenditure) (#{@response.currency})
       %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
       %ul.dashboard_section
         - if @response.request.budget_by_quarter?

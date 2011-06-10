@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
               :foreign_key => :data_response_id_current
 
   ### Validations
-  validates_presence_of  :email, :organization_id
+  validates_presence_of :email, :organization_id, :roles
   validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   end
 
   def roles=(roles)
-    roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
+    roles = (roles || []).collect {|r| r.to_s} # allows symbols to be passed in
     self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
   end
 

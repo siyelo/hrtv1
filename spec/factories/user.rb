@@ -5,6 +5,7 @@ Factory.define :user, :class => User do |f|
   f.password_confirmation { 'password' }
   f.organization          { Factory(:organization) } #for convenience, though the API assumes you do this first yourself
   f.active                { true }
+  f.roles                 { ['reporter'] }
 end
 
 Factory.define :reporter,  :parent => :user do |f|

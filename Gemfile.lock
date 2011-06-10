@@ -92,7 +92,7 @@ GEM
     hoptoad_notifier (2.4.11)
       activesupport
       builder
-    i18n (0.6.0)
+    i18n (0.4.2)
     inherited_resources (1.0.6)
       has_scope (~> 0.5.0)
       responders (~> 0.4.6)
@@ -212,6 +212,7 @@ DEPENDENCIES
   heroku (>= 2.1.2)
   hirb
   hoptoad_notifier
+  i18n (= 0.4.2)
   inherited_resources (= 1.0.6)
   interactive_editor
   json_pure

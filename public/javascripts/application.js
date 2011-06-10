@@ -487,6 +487,7 @@ var admin_users_index = {
     $('#js_user_create_btn').live('click', function (e) {
       e.preventDefault();
       var form = $('#new_user')
+      $(this).parents('.buttons').find('.ajax-loader').show();
 
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data, status, response) {
         if (data.status === 'error') {
@@ -497,8 +498,11 @@ var admin_users_index = {
           var message = $('#js_user_create_form .message');
           message.text(data.message)
 
+
           setTimeout(function () {
-            message.fadeOut(3000)
+            message.fadeOut(3000, function () {
+              message.show().css('visibility', 'hidden');
+            })
           }, 3000);
         }
         // trigger organiazion combobox widget
@@ -1949,7 +1953,7 @@ var workplans_edit = {
             console.info('adding other');
             $('.js_activity_add_inline').before(data.html);
           }
-          
+
           $('.js_activity_add_inline').remove();
           $('#workplan').find('.save_btn').show();
         } else {

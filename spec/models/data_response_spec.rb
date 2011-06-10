@@ -27,44 +27,12 @@ describe DataResponse do
   end
 
   describe "custom date validations" do
-    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
-    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_position) }
     it { should allow_mass_assignment_of(:contact_phone_number) }
     it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
     it { should allow_mass_assignment_of(:contact_office_location) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
-    it { should_not allow_value('').for(:fiscal_year_start_date) }
-    it { should_not allow_value('').for(:fiscal_year_end_date) }
-    it { should_not allow_value('2010-13-01').for(:fiscal_year_start_date) }
-    it { should_not allow_value('2010-12-41').for(:fiscal_year_start_date) }
-    it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
-    it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
-
-    it "accepts start date < end date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 02) )
-      dr.should be_valid
-    end
-
-    it "does not accept start date > end date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 02),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
-      dr.should_not be_valid
-    end
-
-    it "does not accept start date = end date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
-      dr.should_not be_valid
-    end
-
   end
 
   describe "counter cache" do

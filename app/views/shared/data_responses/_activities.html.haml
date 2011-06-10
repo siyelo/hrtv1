@@ -16,8 +16,8 @@
           %th Approved?
           - unless other_costs
             %th Sub-Implementers
-          %th Spent
-          %th Current budget
+          %th Past Expenditure
+          %th Current Budget
           %th.manage Manage
       %tbody
         - activities.each do |activity|
@@ -33,11 +33,11 @@
                 %li.descr_full= activity.description
                 - unless activity.type == "OtherCost"
                   %li.implementer= "Implementer: #{activity.provider.try(:name)}"
-                
+
             %td= activity.classified? ? "Yes" : "No"
             %td= activity.approved
             - unless other_costs
-              %td= activity.sub_activities.size              
+              %td= activity.sub_activities.size
             %td= n2cnds(universal_currency_converter(activity.spend, activity.currency, activity.data_response.currency), activity.data_response.currency)
             %td= n2cnds(universal_currency_converter(activity.budget, activity.currency, activity.data_response.currency), activity.data_response.currency)
             %td.manage

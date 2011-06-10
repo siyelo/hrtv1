@@ -225,63 +225,45 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
-  def format_budget_date (date, i = 0)
+  def month_year(date, i = 0)
     "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
   end
 
-  def budget_fiscal_year_prev(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.pred.to_s.split('')[-2..-1].join
-      year2 = year.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+  def prev_fy(response)
+    "#{month_year(response.request.start_date, -1)} - #{month_year(response.request.end_date, -1)}"
+  end
+
+  def current_fy(response)
+    "#{month_year(response.request.start_date)} - #{month_year(response.request.end_date)}"
+  end
+
+  def next_fy(response)
+    "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
+  end
+
+  def budget_fiscal_year_prev(response)
+    year1 = response.request.start_date.year.to_s.split('')[-2..-1].join
+    year2 = response.request.end_date.year.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
-  def budget_fiscal_year(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.to_s.split('')[-2..-1].join
-      year2 = year.next.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+  def budget_fiscal_year(response)
+    year1 = response.request.start_date.year.next.to_s.split('')[-2..-1].join
+    year2 = response.request.end_date.year.next.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
-  def spend_fiscal_year_prev(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.pred.pred.to_s.split('')[-2..-1].join
-      year2 = year.pred.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+  def spend_fiscal_year_prev(response)
+    year1 = response.request.start_date.year.pred.to_s.split('')[-2..-1].join
+    year2 = response.request.end_date.year.pred.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
-  def spend_fiscal_year(data_response)
-    budget_fiscal_year_prev(data_response)
-  end
-
-  def fiscal_year(data_response)
-    if data_response.fiscal_year_end_date.present?
-      year1 = data_response.fiscal_year_end_date.strftime('%y')
-      year2 = (data_response.fiscal_year_end_date + 1.year).strftime('%y')
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
-
-    "#{year1}-#{year2}"
+  def spend_fiscal_year(response)
+    budget_fiscal_year_prev(response)
   end
 
   def funding_organizations_select

@@ -21,24 +21,15 @@
 
       %tr.head
         %th{:colspan => 3}
-        - start_year = @response.request.start_date.try(:year)
-        - end_year = @response.request.end_date.try(:year)
-        - if start_year == end_year
-          - prev_fy = format_budget_date(@response.request.start_date)
-          - next_fy = format_budget_date(@response.request.start_date, 1)
-        - else
-          - prev_fy = "#{format_budget_date(@response.request.start_date)} - #{format_budget_date(@response.request.end_date)}"
-          - next_fy = "#{format_budget_date(@response.request.start_date, 1)} - #{format_budget_date(@response.request.end_date, 1)}"
-        %th.amount= prev_fy
-        %th.amount= next_fy
+        %th.amount= current_fy(@response)
+        %th.amount= next_fy(@response)
         %th
       %tr.head
         %th Activity
         %th{:colspan => 2} Implementer
-        %th.amount Spend
-        %th.amount Current budget
+        %th.amount Past Expenditure
+        %th.amount Current Budget
         %th.actions
-
     %tbody
       - @projects.each do |project|
         - project.activities.ordered.each do |activity|

@@ -24,7 +24,7 @@
 
   - if @response.data_request.spend?
     %li.last
-      %h3== Past Activity Expenditure (#{@response.currency})
+      %h3== Past Expenditure
       %p.hint The amount that you have spent in the past fiscal year.
       %ul.dashboard_section
         %li.amounts.last
@@ -36,12 +36,12 @@
             = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
             = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
 
-  - if @response.data_request.budget?
-    %li.last
-      %h3 Current Budget (planned expenditure) (#{@response.currency})
-      %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
-      %ul.dashboard_section
-        - if @response.request.budget_by_quarter?
+  - if @response.request.budget?
+    - if @response.request.budget_by_quarter?
+      %li.last
+        %h3 Current Budget
+        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %ul.dashboard_section
           %li.amounts.last
             %label== Quarterly budget
             %ul
@@ -50,9 +50,14 @@
               = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
               = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
               = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
-        - unless @response.request.no_long_term_budgets?
+
+    - unless @response.request.no_long_term_budgets?
+      %li.last
+        %h3 Future Budget
+        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %ul.dashboard_section
           %li.amounts
-            %label Future Budgets
+            %label Yearly budget
             %ul
               = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
               = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?

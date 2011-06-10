@@ -38,13 +38,6 @@ class DataResponse < ActiveRecord::Base
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number
 
-
-  # TODO: spec
-  validates_date :fiscal_year_start_date
-  validates_date :fiscal_year_end_date
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date."
-
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]

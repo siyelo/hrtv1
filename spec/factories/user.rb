@@ -12,6 +12,12 @@ Factory.define :reporter,  :parent => :user do |f|
   f.roles { ['reporter'] }
 end
 
+Factory.define :org_admin,  :parent => :user do |f|
+  f.sequence(:email)      { |i| "org_admin_#{i}@example.com" }
+  f.roles { %w[reporter org_admin] }
+end
+
+
 Factory.define :activity_manager,  :parent => :user do |f|
   f.sequence(:email)      { |i| "activity_manager_#{i}@example.com" }
   f.roles { ['activity_manager'] }

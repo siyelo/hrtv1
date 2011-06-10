@@ -8,7 +8,6 @@ class RegistrationsController < ApplicationController
   def update
     @user = User.find(:first, :conditions => {:invite_token => params[:invite_token]})
     @user.attributes = params[:user]
-
     if @user.activate
       flash[:notice] = "Thank you for registering on Health Resource Tracker."
       redirect_to root_url

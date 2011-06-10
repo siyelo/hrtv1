@@ -1,6 +1,6 @@
 require 'factory_girl'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
-
+## REPORTER
 begin
   puts "creating org"
   org = Factory(:organization, :name => "internal_reporter_org")
@@ -24,6 +24,8 @@ puts "creating other costs & coding"
 Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
 puts "=> added sample data for reporter #{@reporter.name}"
 
+
+##ACTIVITY MANAGER
 begin
   puts "creating activity_manager"
   org = Factory(:organization, :name => "internal_activity_manager_org")
@@ -34,3 +36,5 @@ rescue ActiveRecord::RecordInvalid => e
 else
   print "=> activity_manager #{am.name} created (org: #{am.organization.name})"
 end
+
+

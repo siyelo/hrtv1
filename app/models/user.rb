@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   acts_as_authentic
 
   ### Constants
-  ROLES = %w[admin reporter activity_manager]
+  ROLES = %w[admin reporter activity_manager org_admin]
   FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles]
 
   ### Attributes
@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
         saved += 1
       elsif user.save
         user.save
+        saved +=1
       else
         errors += 1
       end
@@ -98,6 +99,10 @@ class User < ActiveRecord::Base
 
   def activity_manager?
     role?('activity_manager')
+  end
+
+  def org_admin?
+    role?('org_admin')
   end
 
   # TODO: spec or remove

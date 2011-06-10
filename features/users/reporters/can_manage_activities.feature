@@ -8,112 +8,49 @@ Feature: Reporter can manage activities
     And a data_request exists with title: "data_request1"
     And an organization "my_organization" exists with name: "organization2"
     And a data_response exists with data_request: the data_request, organization: organization "my_organization"
-    And a reporter exists with username: "reporter", organization: organization "my_organization"
+    And a reporter exists with email: "pink.panther@hrtapp.com", organization: organization "my_organization"
     And a project exists with name: "project1", budget: "20000", data_response: the data_response
     And a location exists with short_display: "Location1"
     And the location is one of the project's locations
     And a location exists with short_display: "Location2"
     And the location is one of the project's locations
-    And I am signed in as "reporter"
+    And I am signed in as "pink.panther@hrtapp.com"
     And I follow "data_request1"
-    And I follow "Projects"
+    And I press "Update Response"
+    And I follow "Workplan"
 
-    @javascript
-    Scenario: Reporter can add sub-activities (normal values)
-      When I follow "Add" within ".sub-head:nth-child(2)"
-        And I fill in "Name" with "activity1"
-        And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
-        And I fill in "Spent" with "200"
-        And I fill in "Budget" with "300"
-        And I select "project1" from "Project"
-        And I follow "Add Sub Activity"
-        And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Activity Expenditure" with "99"
-        And I fill in "Sub-Activity Budget" with "19"
-        And I press "Save & Classify >"
-      Then I should see "Activity was successfully created"
-      When I follow "activity1"
-      Then the "Sub-Activity Expenditure" field should contain "99"
-        And the "Sub-Activity Budget" field should contain "19"
-
-    @javascript
-    Scenario: Reporter can add sub-activities (percentage values)
-      When I follow "Add" within ".sub-head:nth-child(2)"
-        And I fill in "Name" with "activity1"
-        And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
-        And I fill in "Spent" with "200"
-        And I fill in "Budget" with "300"
-        And I select "project1" from "Project"
-        And I follow "Add Sub Activity"
-        And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Activity Expenditure" with "10%"
-        And I fill in "Sub-Activity Budget" with "10%"
-        And I press "Save & Classify >"
-      Then I should see "Activity was successfully created"
-      When I follow "activity1"
-        Then the "Sub-Activity Expenditure" field should contain "20"
-        And the "Sub-Activity Budget" field should contain "30"
-
-    @javascript
-    Scenario: Reporter can add sub-activities (percentage values must be less than 100)
-      When I follow "Add" within ".sub-head:nth-child(2)"
-       And I fill in "Name" with "activity1"
-       And I fill in "Description" with "1ctivity1 description"
-       And I fill in "Start date" with "2011-01-01"
-       And I fill in "End date" with "2011-12-01"
-       And I fill in "Spent" with "200"
-       And I fill in "Budget" with "300"
-       And I select "project1" from "Project"
-       And I follow "Add Sub Activity"
-       And I fill in "theCombobox" with "organization1"
-       And I fill in "Sub-Activity Expenditure" with "101%"
-       And I fill in "Sub-Activity Budget" with "10%"
-       And I press "Save & Classify >"
-      Then I should see "Activity was successfully created"
-      When I follow "activity1"
-       Then the "Sub-Activity Expenditure" field should contain "101"
-       And the "Sub-Activity Budget" field should contain "30"
-
-    @javascript
+    @javascript 
     Scenario: Reporter can CRUD activities
-      When I follow "Add" within ".sub-head:nth-child(2)"
-        And I fill in "Name" with "activity1"
-        And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
-        And I select "project1" from "Project"
-        And I check "Location1"
-        And I check "Location2"
-        And I press "Save & Classify >"
-      Then I should see "Activity was successfully created"
-        #And I should see "activity1"
-        #And I should see "Location1, Location2"
-
-      When I follow "activity1"
+      When I follow "Add activity"
+        And I fill in "activity_name" with "activity1"
+        And I fill in "activity_description" with "1ctivity1 description"
+        And I press "activity_submit"
+        Then wait a few moments
+        And I fill in "activities_1spend" with "44"
+        And I fill in "activities_1budget" with "99"
+        And I press "Save"
+        Then I should see "Workplan was successfully saved"
+      When I follow "1ctivity1 description"
         And I fill in "Name" with "activity2"
         And I fill in "Description" with "activity2 description"
-        And I uncheck "Location2"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully updated"
-        #And I should see "activity2"
-        #And I should not see "activity1"
-        #And I should see "Location1"
-        #And I should not see "Location2"
-
       When I follow "activity2"
         And I confirm the popup dialog
         And I follow "Delete this Activity"
       Then I should see "Activity was successfully destroyed"
-        #And I should not see "activity1"
-        #And I should not see "activity2"
 
 
     Scenario Outline: Reporter can CRUD activities and see errors
-      When I follow "Add" within ".sub-head:nth-child(2)"
+      Given I follow "Add activity"
+        And I fill in "activity_name" with "activity1"
+        And I fill in "activity_description" with "1ctivity1 description"
+        And I press "activity_submit"
+        Then wait a few moments
+        And I fill in "activities_1spend" with "44"
+        And I fill in "activities_1budget" with "99"
+        And I press "Save"
+      When I follow "1ctivity1 description"
         And I fill in "Name" with "<name>"
         And I fill in "Description" with "activity description"
         And I fill in "Start date" with "<start_date>"
@@ -125,17 +62,19 @@ Feature: Reporter can manage activities
 
         Examples:
            | name | start_date | end_date   | project  | message                       |
-           #|      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
-           #| a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
-           #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
            | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
+           @run
     Scenario: Reporter can enter 5 year budget projections
-     When I follow "Add" within ".sub-head:nth-child(2)"
-      And I fill in "Name" with "Activity1"
-      And I fill in "Description" with "Activity1 description"
-      And I fill in "Start date" with "2011-01-01"
-      And I fill in "End date" with "2011-12-01"
+    When I follow "Add activity"
+      And I fill in "activity_name" with "activity1"
+      And I fill in "activity_description" with "1ctivity1 description"
+      And I press "activity_submit"
+      Then wait a few moments
+      And I fill in "activities_1spend" with "44"
+      And I fill in "activities_1budget" with "99"
+      And I press "Save"
+      And I follow "1ctivity1 description"
       And I select "project1" from "Project"
       And I fill in "Budget" with "10000"
       And I fill in "Year + 2" with "2000"

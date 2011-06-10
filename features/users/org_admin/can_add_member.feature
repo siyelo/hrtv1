@@ -3,7 +3,7 @@ Feature: Can add member
   As an org admin
   I want to be able to invite other users to my organization
 
-  @run
+  @wip
   Scenario: Add a member
     Given I am signed in as a member
     Then show me the page

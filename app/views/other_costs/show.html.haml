@@ -29,25 +29,25 @@
   %ul.dashboard_section
     %li
       %ul.row
-        %li Spend
+        %li Past Expenditure
         %li= c(@other_cost.spend, @other_cost.currency)
       %ul.row
-        %li= "Spend Q4 #{spend_fiscal_year_prev}"
+        %li= "Expenditure Q4 #{spend_fiscal_year_prev}"
         %li= c(@other_cost.spend_q4_prev, @other_cost.currency)
       %ul.row
-        %li= "Spend Q1 #{spend_fiscal_year}"
+        %li= "Expenditure Q1 #{spend_fiscal_year}"
         %li= c(@other_cost.spend_q1, @other_cost.currency)
       %ul.row
-        %li= "Spend Q2 #{spend_fiscal_year}"
+        %li= "Expenditure Q2 #{spend_fiscal_year}"
         %li= c(@other_cost.spend_q2, @other_cost.currency)
       %ul.row
-        %li= "Spend Q3 #{spend_fiscal_year}"
+        %li= "Expenditure Q3 #{spend_fiscal_year}"
         %li= c(@other_cost.spend_q3, @other_cost.currency)
       %ul.row
-        %li= "Spend Q4 #{spend_fiscal_year}"
+        %li= "Expenditure Q4 #{spend_fiscal_year}"
         %li= c(@other_cost.spend_q4, @other_cost.currency)
 
-  %h3.form_heading Current budget (planned expenditure)
+  %h3.form_heading Current Budget
   %ul.dashboard_section
     %li
       %ul.row
@@ -58,22 +58,22 @@
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget by Health Functions
+        %li Current Budget by Health Functions
         %li= b @other_cost.coding_budget_classified?
       %ul.row
-        %li Budget by Locations
+        %li Current Budget by Locations
         %li= b @other_cost.coding_budget_district_classified?
       %ul.row
-        %li Budget by Inputs
+        %li Current Budget by Inputs
         %li= b @other_cost.coding_budget_cc_classified?
       %ul.row
-        %li Spend by Health Functions
+        %li Past Expenditure by Health Functions
         %li= b @other_cost.coding_spend_classified?
       %ul.row
-        %li Spend by Locations
+        %li Past Expenditure by Locations
         %li= b @other_cost.coding_spend_district_classified?
       %ul.row
-        %li Spend by Inputs
+        %li Past Expenditure by Inputs
         %li= b @other_cost.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments', :comments => @comments

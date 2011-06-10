@@ -256,26 +256,14 @@ module ApplicationHelper
   end
 
   def spend_fiscal_year_prev(response)
-    year1 = response.request.start_date.year.pred.pred.to_s.split('')[-2..-1].join
-    year2 = response.request.end_date.year.pred.pred.to_s.split('')[-2..-1].join
+    year1 = response.request.start_date.year.pred.to_s.split('')[-2..-1].join
+    year2 = response.request.end_date.year.pred.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
   def spend_fiscal_year(response)
     budget_fiscal_year_prev(response)
-  end
-
-  def fiscal_year(data_response)
-    if data_response.fiscal_year_end_date.present?
-      year1 = data_response.fiscal_year_end_date.strftime('%y')
-      year2 = (data_response.fiscal_year_end_date + 1.year).strftime('%y')
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
-
-    "#{year1}-#{year2}"
   end
 
   def funding_organizations_select

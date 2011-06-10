@@ -111,21 +111,21 @@ class CodeAssignmentsController < Reporter::BaseController
     def get_coding_name(klass)
       case klass.to_s
       when 'CodingBudget'
-        'Budget by Purposes'
+        'Current Budget by Purposes'
       when 'CodingBudgetDistrict'
-        'Budget by Locations'
+        'Current Budget by Locations'
       when 'CodingBudgetCostCategorization'
-        'Budget by Inputs'
+        'Current Budget by Inputs'
       when 'ServiceLevelBudget'
-        'Budget by Service Level'
+        'Current Budget by Service Level'
       when 'CodingSpend'
-        'Spent by Purposes'
+        'Past Expenditure by Purposes'
       when 'CodingSpendDistrict'
-        'Spent by Locations'
+        'Past Expenditure by Locations'
       when 'CodingSpendCostCategorization'
-        'Spent by Inputs'
+        'Past Expenditure by Inputs'
       when 'ServiceLevelSpend'
-        'Spend by Service Level'
+        'Past Expenditure by Service Level'
       end
     end
 

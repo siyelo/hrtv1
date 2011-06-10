@@ -29,38 +29,34 @@
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
 
 
-  %li.last
-    %h3== Past Activity Expenditure (#{@response.currency})
-    %ul.dashboard_section
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-      %li.amounts.last
-        %label== Quarterly spend
-        %ul
-          = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
-          = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
-          = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
-          = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
-          = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
+  - if @response.request.budget?
+    - if @response.request.budget_by_quarter?
+      %li.last
+        %h3 Current Budget
+        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %ul.dashboard_section
+          %li.amounts.last
+            %label== Quarterly budget
+            %ul
+              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
 
-  %li.last
-    %h3 Current budget (planned expenditure) (#{@response.currency})
-    %ul.dashboard_section
-      = f.input :budget, :label => "Current budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-      %li.amounts
-        %label== Quarterly budget
-        %ul
-          = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
-          = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
-          = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
-          = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
-          = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
-      %li.amounts.last
-        %label Future Budgets
-        %ul
-          = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
-          = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
-          = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
-          = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
+    - unless @response.request.no_long_term_budgets?
+      %li.last
+        %h3 Future Budget
+        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %ul.dashboard_section
+          %li.amounts
+            %label Yearly budget
+            %ul
+              = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
+              = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
+              = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
+              = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
+
 
   %li.last
     %h3 Activity Funding Sources

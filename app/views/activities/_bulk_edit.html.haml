@@ -1,12 +1,12 @@
-- budget_fiscal_year_prev = "09-10"
-- budget_fiscal_year = "10-11"
-- spend_fiscal_year_prev = "08-09"
-- spend_fiscal_year = "09-10"
+- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year = budget_fiscal_year(@response)
+- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year = spend_fiscal_year(@response)
 
 .header
   - if activity.valid?
     = image_tag "tick_12.png"
-    = nice_name(activity, 50) 
+    = nice_name(activity, 50)
   - else
     = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
     = activity.name
@@ -19,16 +19,16 @@
           = activity.start_date.strftime("%d.%m.%Y")
           -
           = activity.end_date.strftime("%d.%m.%Y")
-      %li 
-        %span Spent:
+      %li
+        %span Past Expenditure:
         = "#{activity.spend} #{activity.currency}"
       %li
-        %span Current budget:
+        %span Current Budget:
         = "#{activity.budget} #{activity.currency}"
 
 .main.dashboard_section{:style => (activity.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
   - semantic_form_for activity, :namespace => form_namespace(activity), :url => (activity.new_record? ? response_activities_path(response) : response_activity_path(response, activity) ), :html => {:class => "condensed_form"} do |f|
-    
+
     - f.inputs :class => 'inputs_condensed' do
       %li
         %ul
@@ -50,7 +50,7 @@
 
         %ul.clearfix
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
-          
+
           %li.project_sub_form
             .project_sub_form_fields
               - if activity.project
@@ -62,13 +62,13 @@
           = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
           = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
           = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
-        
+
       %li
         - if response.data_request.spend?
           %ul.first-half
-            = f.input :spend, :required => false, :label => 'Spent', :wrapper_html => {:class => 'grid-20'}
+            = f.input :spend, :required => false, :label => 'Past Expenditure', :wrapper_html => {:class => 'grid-20'}
             %li
-              %label Quarterly spent
+              %label Quarterly Expenditure
               %ul
                 = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year_prev}"}, :label => false
                 = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year}"}, :label => false
@@ -78,7 +78,7 @@
 
         - if response.data_request.budget?
           %ul.second-half
-            = f.input :budget, :label => "Current budget", :required => false, :wrapper_html => {:class => 'grid-20'}
+            = f.input :budget, :label => "Current Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
             %li.grid-80
               %label Quarterly budget
               %ul

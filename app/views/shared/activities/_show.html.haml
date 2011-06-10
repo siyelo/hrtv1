@@ -46,25 +46,25 @@
   %ul.dashboard_section
     %li
       %ul.row
-        %li Spend
+        %li Past Expenditure
         %li= c(@activity.spend, @activity.currency)
       %ul.row
-        %li= "Spend Q4 #{spend_fiscal_year_prev}"
+        %li= "Expenditure Q4 #{spend_fiscal_year_prev}"
         %li= c(@activity.spend_q4_prev, @activity.currency)
       %ul.row
-        %li= "Spend Q1 #{spend_fiscal_year}"
+        %li= "Expenditure Q1 #{spend_fiscal_year}"
         %li= c(@activity.spend_q1, @activity.currency)
       %ul.row
-        %li= "Spend Q2 #{spend_fiscal_year}"
+        %li= "Expenditure Q2 #{spend_fiscal_year}"
         %li= c(@activity.spend_q2, @activity.currency)
       %ul.row
-        %li= "Spend Q3 #{spend_fiscal_year}"
+        %li= "Expenditure Q3 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
       %ul.row.last
-        %li= "Spend Q4 #{spend_fiscal_year}"
+        %li= "Expenditure Q4 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
 
-  %h3.form_heading Current budget
+  %h3.form_heading Current Budget
   %ul.dashboard_section
     %li
       %ul.row
@@ -86,11 +86,11 @@
         %li= "Budget Q4 #{budget_fiscal_year}"
         %li= c(@activity.budget_q4, @activity.currency)
 
-  %h3.form_heading Current budget (planned expenditure)
+  %h3.form_heading Current Budget
   %ul.dashboard_section
     %li
       %ul.row
-        %li Current budget
+        %li Current Budget
         %li= c(@activity.budget, @activity.currency)
       %ul.row
         %li Year + 2
@@ -113,16 +113,16 @@
           %li Implementer
           %li= sub_activity.provider.try(:name)
         %ul.row
-          %li Current budget
+          %li Current Budget
           %li= c(sub_activity.budget, @activity.currency)
         %ul.row
           %li Budget percentage
           %li= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
         %ul.row
-          %li Spend
+          %li Past Expenditure
           %li= c(sub_activity.spend, @activity.currency)
         %ul.row
-          %li Spend percentage
+          %li Past Expenditure percentage
           %li= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
 
   %h3.form_heading Funding Sources
@@ -136,7 +136,7 @@
           %li Spent
           %li= c(funding_source.spend, @activity.currency)
         %ul.row
-          %li Current budget
+          %li Current Budget
           %li= c(funding_source.budget, @activity.currency)
 
   %h3.form_heading Institutions Assisted
@@ -159,13 +159,13 @@
         %li Budget by Inputs
         %li= b @activity.coding_budget_cc_classified?
       %ul.row
-        %li Spend by Health Functions
+        %li Past Expenditure by Health Functions
         %li= b @activity.coding_spend_classified?
       %ul.row
-        %li Spend by Locations
+        %li Past Expenditure by Locations
         %li= b @activity.coding_spend_district_classified?
       %ul.row
-        %li Spend by Inputs
+        %li Past Expenditure by Inputs
         %li= b @activity.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments', :comments => @comments

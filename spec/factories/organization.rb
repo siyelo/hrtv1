@@ -1,5 +1,5 @@
 Factory.define :organization, :class => Organization do |f|
-  f.sequence(:name) { "organization_#{(1..99999).to_a.random_element}" }
+  f.sequence(:name) { |i| "organization_#{i}" }
   f.raw_type        { "" }
 end
 

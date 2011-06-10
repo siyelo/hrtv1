@@ -18,10 +18,10 @@
       %h3 Past Expenditure
       %ul.dashboard_section
 
-        = f.input :spend, :label => "Spend", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
 
         %li.amounts.last
-          %label Quarterly spend
+          %label Quarterly Expenditure
           %ul
             = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
             = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
@@ -31,9 +31,9 @@
 
   - if @response.data_request.budget?
     %li.last
-      %h3 Current budget (planned expenditure)
+      %h3 Current Budget
       %ul.dashboard_section
-        = f.input :budget, :label => "Current budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label Quarterly budget

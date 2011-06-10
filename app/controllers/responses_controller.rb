@@ -56,11 +56,13 @@ class ResponsesController < ApplicationController
 
   def send_data_response
     @response = find_response(params[:id])
-    if @response.submit!
-      flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      redirect_to review_response_url(@response)
-    else
-      render :submit
+    if current_user.org_admin?
+      if @response.submit!
+        flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
+        redirect_to review_response_url(@response)
+      else
+        render :submit
+      end
     end
   end
 end

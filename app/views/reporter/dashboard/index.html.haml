@@ -12,7 +12,7 @@
     -#%li= link_to "Classify Activities", edit_response_classification_path(current_or_last_response, 'CodingSpend'), :class => "add_row"
     -# instead, a hack
     %li= link_to "Classify Activities", current_classifications_url_hack, :class => "add_row"
-    %li= link_to "Review & Respond", current_response_url, :class => "add_row"
+    %li= link_to "Review & Respond", submit_response_path(@response), :class => "add_row"
 
 
 

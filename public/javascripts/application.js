@@ -151,6 +151,7 @@ var after_add_fields_callback = function (association) {
   // show the jquery autocomplete combobox instead of
   // standard dropdowns
   $( ".combobox" ).combobox();
+  $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
 };
 
 /* Nested model forms END */

@@ -197,8 +197,9 @@ class ActivitiesController < Reporter::BaseController
 
     def html_redirect
       if params[:commit] == "Save & Classify >"
-        coding_type = @response.data_request.spend? ? 'spend' : 'budget'
-        redirect_to edit_response_workplan_path(@response, coding_type)
+        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
+        # redirect_to edit_response_workplan_path(@response, coding_type)
+        redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
       else
         redirect_to response_projects_path(@activity.project.response)
       end

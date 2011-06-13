@@ -16,7 +16,7 @@
       %span.desc Your basic preferences and contact settings
 
   %li
-    -#= link_to "Enter Your Workplan", edit_response_workplan_path(current_or_last_response, :spend)
+    -#= link_to "Enter Your Workplan", response_workplans_path(current_or_last_response, :spend)
     - link_to current_projects_url_hack do
       %span.icon= image_tag "icon_welcome5.png", :alt => "Setup Your Organization", :height => "70"
       %span.title 2. Enter Your Workplan

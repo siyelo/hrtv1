@@ -9,7 +9,7 @@ class ProjectsController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    redirect_to edit_response_workplan_path(@response, :spend)
+    redirect_to response_workplans_path(@response)
     ### due to https://www.pivotaltracker.com/story/show/13759613
     ### Not quite sure we should remove all this yet
 
@@ -45,7 +45,7 @@ class ProjectsController < Reporter::BaseController
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
-      success.html { redirect_to edit_response_workplan_path(@response, :spend) }
+      success.html { redirect_to response_workplans_path(@response) }
       success.js do
         render :json => {:status => @project.valid?,
                          :html => render_to_string({:partial => 'workplans/project_row',
@@ -64,7 +64,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to edit_response_workplan_path(@response, :spend)
+        redirect_to response_workplans_path(@response)
       }
       failure.html do
         load_comment_resources(resource)

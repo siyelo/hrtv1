@@ -35,4 +35,4 @@
 - if @projects.empty? || !@response.projects_have_activities?
   %p.centered.attention
     You have not added any activities.
-    = link_to "Add them now.", edit_response_workplan_path(@response, :spend)
+    = link_to "Add them now.", response_workplans_path(@response)

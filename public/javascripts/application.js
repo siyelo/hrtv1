@@ -496,7 +496,7 @@ var admin_users_index = {
         } else {
           $('#js_organiations_tbl tbody').prepend(data.row);
           $('#new_user').replaceWith(data.form);
-          var message = $('#js_user_create_form .message');
+          var message = $('#js_user_create_form .js_message');
           message.text(data.message)
 
 
@@ -1514,7 +1514,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 //# Classifications
 //###################################
-var classifications_edit = implementers_edit = {
+var classifications_edit = implementers_index = {
   run: function () {
 
     var getClassificationTotal = function (amounts, amount) {
@@ -1843,11 +1843,11 @@ var updateBudgetColumnValues = function (element) {
 };
 
 
-var workplans_edit = {
+var workplans_index = {
   run: function () {
 
     import_export.init();
-    
+
     $('#inactive_location').tipsy();  //remove me when locations are active
 
     var updateValues = function (element) {
@@ -2024,7 +2024,7 @@ var workplans_edit = {
   }
 }
 
-var funders_edit = {
+var funders_index = {
   run: function () {
 
     $('.add_funder').live('click', function (e) {
@@ -2094,7 +2094,7 @@ var funders_edit = {
   }
 }
 
-var implementers_edit = {
+var implementers_index = {
   run: function () {
 
     $('.add_implementer').live('click', function (e) {

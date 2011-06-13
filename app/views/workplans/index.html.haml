@@ -1,43 +1,65 @@
+:javascript
+  var _response_id = "#{@response.id}";
+  var _type        = "#{params[:id]}";
+
 - content_for :sub_nav do
   = render 'shared/sub_nav_projects'
 
-%h1.main_heading Manage
+%h1.main_heading Workplan
+
+= render 'workplan_getting_started'
 
 %ul.horizontal
   %li
-    - link_to new_response_project_path(@response), :class => "create_new" do
-      = image_tag "new_white.png"
-      Create Project
-  %li
-    = link_to "Link Projects", bulk_edit_response_projects_path, :class => 'create_new'
-  %li
-    = image_tag "icon_link.png"
-    = link_to "Import / Export", '#', :id => "import_export", :class => 'create_new'
+    - link_to '#', :id => "import_export", :class => 'create_button js_upload_btn' do
+      = image_tag "icon_import_export.png"
+      Import / Export
 
-%table.workplan
-  %thead
-    %tr.head
-      %th Project
-      %th{:colspan => 2} Activity
-  %tbody
-    - @projects.each do |project|
-      %tr
-        %td{:rowspan => project.activities.length + 2}= link_to project.name, edit_response_project_path(@response, project)
-      - project.activities.ordered.each do |activity|
-        %tr
-          %td.name= link_to activity.title, edit_response_activity_path(@response, activity)
-          %td.total
-            = link_to 'Edit', edit_response_activity_path(@response, activity)
-            = link_to image_tag("delete_row.png"), response_activity_path(@response, activity), :method => :delete, :confirm => "Are you sure you want to delete \"#{activity.title}\"?", :title => 'Delete activity', :class => "delete_row"
+#import_export_box
+  = render '/projects/activities_import', :project => nil, :can_export => @response.activities.present?
 
-      %tr.filler2
+
+- form_tag response_workplan_path(@response, :current), :method => :put, :id => 'workplan' do
+  %table.workplan
+    %thead
+      %tr.filler
+        %th{:colspan => 3}
+        %th.no-padding{:colspan => 6}
+          %ul.tabs
+            %li= link_to 'Yearly', response_workplans_path(@response), :class => 'active'
+            %li= link_to 'Quarterly', response_workplans_path(@response)
+      %tr.head
+        %th{:colspan => 3}
+        %th= current_fy(@response)
+        %th{:colspan => 10}= next_fy(@response)
+      %tr.head
+        %th Project
+        %th{:colspan => 2} Activity / Other Cost
+        %th Past Expenditure
+        %th Current Budget
+    %tbody
+      - @projects.each do |project|
+        = render 'project_row', :project => project
+      %tr.filler.js_projects_total_row
         %td{:colspan => 2}
-          - link_to new_response_activity_path(@response, :project_id => project.id), :class => "add_row" do
-            = image_tag"new.png"
-            Add activity
+          - link_to new_response_project_path(@response), :class => 'js_add_project add_row' do
+            = image_tag "new.png"
+            Add project
 
-    %tr.filler
-      %td{:colspan => 3}
-        - link_to new_response_project_path(@response), :class => "add_row" do
-          = image_tag "new.png"
-          Add project
+        %td.total Total
+        %td.total_amount.wrap-10
+          %span.js_projects_total_spend_amount
+            = @response.projects_total_spend(false)
+          %span.currency= @response.currency
+        %td.total_amount.wrap-10
+          %span.js_projects_total_budget_amount
+            = @response.projects_total_budget(false)
+          %span.currency= @response.currency
+      %tr
+        %td.borderless{:colspan => 8}
+          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'
+
+
+- if @projects.empty?
+  %p.centered.attention Hi! Click "Add Project" to get started
+  %p.centered.attention Or you can Import your workplan from a file.

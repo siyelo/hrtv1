@@ -292,7 +292,7 @@ module ApplicationHelper
   end
 
   def current_projects_url_hack
-    current_response ? edit_response_workplan_path(current_response, :spend) : last_response_path
+    current_response ? response_workplans_path(current_response) : last_response_path
   end
 
   def current_classifications_url_hack

@@ -2,6 +2,9 @@ class FundersController < Reporter::BaseController
   before_filter :load_data_response
   before_filter :load_projects
 
+  def index
+  end
+
   def new
     @funder = FundingFlow.new
     @funder.project = @response.projects.find_by_id(params[:project_id])
@@ -11,9 +14,6 @@ class FundersController < Reporter::BaseController
         render :json => {:html => render_to_string({:partial => 'new_inline.html.haml'})}
       end
     end
-  end
-
-  def edit
   end
 
   def create
@@ -42,7 +42,7 @@ class FundersController < Reporter::BaseController
   def update
     FundingFlow.bulk_update(@response, params[:funders])
     flash[:notice] = 'Funders were successfully saved'
-    redirect_to edit_response_funder_url(@response, params[:id])
+    redirect_to response_funders_url(@response)
   end
 
   private

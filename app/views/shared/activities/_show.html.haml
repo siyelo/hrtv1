@@ -49,19 +49,19 @@
         %li Past Expenditure
         %li= c(@activity.spend, @activity.currency)
       %ul.row
-        %li= "Expenditure Q4 #{spend_fiscal_year_prev}"
+        %li= "Past Expenditure Q4 #{spend_fiscal_year_prev}"
         %li= c(@activity.spend_q4_prev, @activity.currency)
       %ul.row
-        %li= "Expenditure Q1 #{spend_fiscal_year}"
+        %li= "Past Expenditure Q1 #{spend_fiscal_year}"
         %li= c(@activity.spend_q1, @activity.currency)
       %ul.row
-        %li= "Expenditure Q2 #{spend_fiscal_year}"
+        %li= "Past Expenditure Q2 #{spend_fiscal_year}"
         %li= c(@activity.spend_q2, @activity.currency)
       %ul.row
-        %li= "Expenditure Q3 #{spend_fiscal_year}"
+        %li= "Past Expenditure Q3 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
       %ul.row.last
-        %li= "Expenditure Q4 #{spend_fiscal_year}"
+        %li= "Past Expenditure Q4 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
 
   %h3.form_heading Current Budget
@@ -133,7 +133,7 @@
           %li Organization
           %li= funding_source.funding_flow.from.try(:name)
         %ul.row
-          %li Spent
+          %li Expenditure
           %li= c(funding_source.spend, @activity.currency)
         %ul.row
           %li Current Budget

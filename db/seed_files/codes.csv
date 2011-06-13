@@ -114,7 +114,7 @@ resources for health.",HIV,HC.1,5.01,,,
 5.5.2 Financial Support,50502,50502,505,Financial Support,"Commodities, Supply and Logistics",Across all 3 objectives,Health Promotion,mtef,Financial Support,17,,,General,HC.7,,,,
 ,,b,,"Delivering Services, Implementing Programs, Conducting Research",,,,mtef,,,,,General,,,,,
 6 06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES,6,6,b,06  QUALITY AND DEMAND FOR SERVICES IN THE CONTROL OF DISEASES,,,Infectious Diseases,mtef,"Programs and services to care for, treat, and control diseases",62,,"All spending to control or treat diseases, excluding prevention. Includes research and training.",General,HC.1,,,,
-6.1 01  FIGHT AGAINST MALARIA,601,601,6,01  FIGHT AGAINST MALARIA,Quality Assurance,c. Treatment of diseases,Infectious Diseases,mtef,Fight Against Malaria,21,,"Spending for the primary purpose of :
+6.1 01  FIGHT AGAINST MALARIA,601,601,6,01  FIGHT AGAINST MALARIA,Quality Assurance,c. Treatment of diseases,Infectious Diseases,mtef,Fight Against Malaria,21,,"Expenditure for the primary purpose of :
 Managing malaria cases (parasitologically confirmed, clinically diagnosed or unconfirmed acute febrile cases)
 Providing support to malaria treatment activities
 ",Malaria,HC.1,,,,
@@ -166,7 +166,7 @@ Cash transfers and grants provide money directly to poor families via a 'social 
 6.2.2.1.1 AD.2 Policy advocacy 7.1 Advocacy and strategic communication,602020101,602020101,6020201,AD.2 Policy advocacy 7.1 Advocacy and strategic communication,Quality Assurance,c. Treatment of diseases,Infectious Diseases,nhanasa,Policy Advocacy for People Affected by HIV/AIDS,47,,,HIV, AD.2 ,7.01,,,
 6.2.2.1.2 AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication,602020102,602020102,6020201,AD.4 Empowerment and organization (incl. Legal services) 7.1 Advocacy and strategic communication,Quality Assurance,c. Treatment of diseases,Infectious Diseases,nhanasa,"Legal Services, Empowerment and Organization for People Affected by HIV/AIDS",76,,"Advocacy in the feld of HIV includes a full set of services that generate an increased and wider range of support of the key principles and essential actions to promote HIV prevention and reduce stigma and discrimination. It also includes the promotion of the scaling-up of national, regional HIV programmes by national governments with key partners, such as bilateral and multilateral donors, civil society, and the private sector.
 Also included are promotion and support of the development of a strong HIV constituency at the regional and country level, among civil society, including: community groups, policy-makers, opinion leaders, leaders of faith-based organizations, women's groups, youth leaders, and people living with HIV to strengthen their capacity to advocate for effective HIV prevention,
-care, and social support. Spending on all advocacy efforts to enhance the national response to HIV. ",HIV, AD.4 ,7.01,,,
+care, and social support. Expenditure on all advocacy efforts to enhance the national response to HIV. ",HIV, AD.4 ,7.01,,,
 ,,602020103,6020201,AD.4 Empowerment and organization (incl. Legal services)  7.02 Human rights programmes,Quality Assurance,c. Treatment of diseases,Infectious Diseases,nhanasa,HIV/AIDS Human Rights Programs,30,,"Human rights programmes cover all the activities and resources invested for
 the protection of human rights, legislative aspects of a broad number of areas of social life, such as employment and discrimination, education, liberty, association, movement, expression, privacy, legal counselling and services, efforts to overcome discrimination and improve accessibility to social and health services. Advocacy for human rights should be coded as Advocacy.
 Programmes focused on the human rights of women and girls should be coded as AIDS-specifc programmes focused on women.",HIV, AD.4 ,7.02,,,
@@ -339,7 +339,7 @@ HC.6.1.4 Other Maternal health programs,60100704,802010604,8020106,Other Materna
 HC.6.1.5 Maternal health programs that could not be disaggregated.,60100705,802010605,8020106,Maternal health programs that could not be disaggregated.,Quality Assurance,a. FP/MCH/RH/Nutrition services,MCH / FP / RH / Nutrition,nha,Maternal health programs that could not be disaggregated.,57,,,RH,HC.6.1.5,,,,
 9 09  DISEASES PREVENTION,9,9,b,09  DISEASES PREVENTION,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,mtef,Diseases Prevention,19,,"Consolidating, expanding and improving services for the prevention and
 control of infectious diseases ",General,HC.6.3,,,,
-9.1 01  FIGHT AGAINST MALARIA,901,901,9,01  FIGHT AGAINST MALARIA,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,mtef,Prevention of Malaria,21, ,"Spending for the primary purpose of :
+9.1 01  FIGHT AGAINST MALARIA,901,901,9,01  FIGHT AGAINST MALARIA,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,mtef,Prevention of Malaria,21, ,"Expenditure for the primary purpose of :
 Providing goods or implementing activities for malaria prevention and control
 Providing support to malaria prevention activities
 ",Malaria,HC.1,,,,
@@ -495,7 +495,7 @@ prevention of HIV transmission should be included.",HIV,HC.6.3.1.10 ,1.20,,,
 9.2.8.3 1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced,9020803,9020803,90208,1.3.1.3 Blood-borne HIV transmission outside clinical environments is reduced,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,nsp,1.3 Blood-borne HIV transmission outside clinical environments is reduced,73,,,HIV,HC.6.3.1.2.1 ,1.19,,,
 9.3 03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS,903,903,9,03  FIGHT AGAINST TUBERCULOSIS AND LEPROSIS,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,mtef,Fight Against Tuberculosis And Leprosis,39,,,General,HC.6.3,,,,
 9.4 04  FIGHT AGAINST ENDEMIC DISEASES,904,904,9,04  FIGHT AGAINST ENDEMIC DISEASES,Quality Assurance,b. Prevention and control of diseases,Infectious Diseases,mtef,Fight Against Endemic Diseases,30,,,General,HC.6.3,,,,
-9.5 05  FIGHT AGAINST DISEASES OF CHILDREN,905,905,9,05  FIGHT AGAINST DISEASES OF CHILDREN,Quality Assurance,b. Prevention and control of diseases,MCH / FP / RH / Nutrition,mtef,Fight Against Diseases Of Children,34,,"Spending during a specified period of time on goods, services and activities
+9.5 05  FIGHT AGAINST DISEASES OF CHILDREN,905,905,9,05  FIGHT AGAINST DISEASES OF CHILDREN,Quality Assurance,b. Prevention and control of diseases,MCH / FP / RH / Nutrition,mtef,Fight Against Diseases Of Children,34,,"Expenditure during a specified period of time on goods, services and activities
 delivered to the child or its caretaker after the birth of the child and
 whose primary purpose is to restore, improve and maintain the health of children
  of a country between zero and less than five years of age.",CH,,,,,

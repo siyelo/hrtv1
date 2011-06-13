@@ -35,9 +35,9 @@ Feature: Reporter can derive classifications from sub implementers
       Then the "Location1" field should contain "55.00"
 
 
-    Scenario: Use spend classifications derived from sub implementers
+    Scenario: Use past expenditure classifications derived from sub implementers
       When I press "Save & Classify >"
-        And I follow "Spend"
+        And I follow "Current Expenditure"
         And I follow "Locations"
         #And I follow "Use expenditure classifications derived from sub implementers"
         And I follow "Derive classification"

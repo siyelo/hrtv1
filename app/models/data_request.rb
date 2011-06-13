@@ -41,8 +41,8 @@ class DataRequest < ActiveRecord::Base
 
   def requested_amounts
     r = []
-    r << "Expenditure" if spend?
-    r << "Budget" if budget?
+    r << "Past Expenditure" if spend?
+    r << "Current Budget" if budget?
     r
   end
 end

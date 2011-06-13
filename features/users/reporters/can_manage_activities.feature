@@ -19,7 +19,7 @@ Feature: Reporter can manage activities
     And I press "Update Response"
     And I follow "Workplan"
 
-    @javascript 
+    @javascript
     Scenario: Reporter can CRUD activities
       When I follow "Add activity"
         And I fill in "activity_name" with "activity1"
@@ -63,8 +63,8 @@ Feature: Reporter can manage activities
         Examples:
            | name | start_date | end_date   | project  | message                       |
            | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
-           
-           
+
+
     Scenario: Reporter can enter 5 year budget projections
     When I follow "Add activity"
       And I fill in "activity_name" with "activity1"
@@ -91,7 +91,7 @@ Feature: Reporter can manage activities
         And the "Year + 4" field should contain "4000"
         And the "Year + 5" field should contain "5000"
 
-        
+
     Scenario: A reporter can create comments for an activity
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
@@ -102,7 +102,7 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-       
+
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Import" within ".activities_upload_box"
@@ -121,7 +121,7 @@ Feature: Reporter can manage activities
 
     Scenario: Reporter can download Activities CSV template
       When I follow "Get Template" within ".activities_upload_box"
-      Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
+      Then I should see "Project Name,Activity Name,Activity Description,Provider,Current Expenditure,Q1 Current Expenditure,Q2 Current Expenditure,Q3 Current Expenditure,Q4 Current Expenditure,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
 
     Scenario: Reporter can download Activities
@@ -221,12 +221,12 @@ Feature: Reporter can manage activities
             | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               |
 
 
-    @javascript 
+    @javascript
     Scenario: A reporter can create funding sources (self funded) for an activity
       Given an organization "funding_organization1" exists with name: "funding_organization1"
         And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response
         And a funding_flow exists with from: organization "my_organization", to: organization "my_organization", project: the project, data_response: the data_response
-        
+
       When I follow "Add activity"
         And I fill in "activity_name" with "activity1"
         And I fill in "activity_description" with "1ctivity1 description"
@@ -234,7 +234,7 @@ Feature: Reporter can manage activities
         And I fill in "activities_1spend" with "44"
         And I fill in "activities_1budget" with "99"
         And I press "Save"
-        
+
       When I follow "1ctivity1 description"
         And I select "project1" from "Project"
         And I follow "Add funding source"
@@ -246,7 +246,7 @@ Feature: Reporter can manage activities
       Then I should see "Activity was successfully updated"
 
       @wip
-    Scenario: If the data_request has not got a budget or a spend then only the save button should appear
+    Scenario: If the data_request has not got a budget or a past expenditure then only the save button should appear
       Given I follow "Sign Out"
       And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false
       And a data_response "data_response10" exists with data_request: data_request "data_request10", organization: organization "my_organization"
@@ -270,7 +270,7 @@ Feature: Reporter can manage activities
       When I follow "Projects"
         And I follow "activity1"
         And I follow "Get Template" within "#sub_activities_upload_box"
-      Then I should see "Implementer,Spend,Budget"
+      Then I should see "Implementer,Current Expenditure,Budget"
 
     Scenario: Reporter can see message when attached malformed CSV file for implementers
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
@@ -296,7 +296,7 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Expenditure" field should contain "66"
+      And the "Sub-Activity Past Expenditure" field should contain "66"
       And the "Sub-Activity Budget" field should contain "77"
 
 
@@ -308,5 +308,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Expenditure" field should contain "99"
+      And the "Sub-Activity Past Expenditure" field should contain "99"
       And the "Sub-Activity Budget" field should contain "100"

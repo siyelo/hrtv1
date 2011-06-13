@@ -94,7 +94,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
 
     Scenario: enter expenditure for an activity
-      When I follow "Spend"
+      When I follow "Past Expenditure"
         And I follow "Health Functions"
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
@@ -112,8 +112,8 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And the "Location1" field should contain "1,234,567.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Locations tab"
-        And I follow "Spend"
+      When I follow "Click here to copy the Budget splits below to the Past Expenditure Locations tab"
+        And I follow "Past Expenditure"
         And I follow "Locations"
       Then the "Location1" field should contain "1,481,480.40"
 
@@ -125,8 +125,8 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And the "cost_category1" field should contain "1,234,567.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Inputs tab"
-        And I follow "Spend"
+      When I follow "Click here to copy the Budget splits below to the Past Expenditure Inputs tab"
+        And I follow "Past Expenditure"
         And I follow "Inputs"
       Then the "cost_category1" field should contain "1,481,480.40"
 
@@ -138,7 +138,7 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "service_level1" field should contain "1,234,567.00"
-      When I follow "Click here to copy the Budget splits below to the Spend Service Levels tab"
+      When I follow "Click here to copy the Budget splits below to the Past Expenditure Service Levels tab"
       Then the "service_level1" field should contain "1,481,480.40"
 
 
@@ -162,8 +162,8 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Health Functions tab"
-        And I follow "Spend"
+      When I follow "Click here to copy the Budget splits below to the Past Expenditure Health Functions tab"
+        And I follow "Past Expenditure"
         And I follow "Health Functions"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
@@ -185,8 +185,8 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Spend Health Functions tab"
-        And I follow "Spend"
+      When I follow "Click here to copy the Budget splits below to the Past Expenditure Health Functions tab"
+        And I follow "Past Expenditure"
         And I follow "Health Functions"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "180,000.00"
@@ -204,10 +204,10 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
-      ### change budget and spend for activity
+      ### change budget and past expenditure for activity
       When I follow "Activity"
         And I fill in "Budget" with "1000"
-        And I fill in "Spent" with "2000"
+        And I fill in "Past Expenditure" with "2000"
         And I press "Save & Classify >"
         And I follow "Budget"
         And I follow "Health Functions"

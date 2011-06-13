@@ -22,7 +22,7 @@ Feature: Policy Maker can view review responses
     Scenario: "See list of all responses via admin dashboard"
       Given I am signed in as a sysadmin
       When I follow "Dashboard"
-        And I follow "Review Organization Expenditures and Budgets"
+        And I follow "Review Organization Past Expenditures and Budgets"
       Then I should see "Data Responses" within "h1"
 
 

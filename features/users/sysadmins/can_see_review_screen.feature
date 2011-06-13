@@ -18,7 +18,7 @@ Feature: Admin can see review page
       And a comment exists with title: "title2", comment: "comment2", commentable: the project
       And I am signed in as a sysadmin
     When I follow "Dashboard"
-      And I follow "Review Organization Expenditures and Budgets"
+      And I follow "Review Organization Past Expenditures and Budgets"
       And I follow "In Progress"
       And I follow "UNDP"
 

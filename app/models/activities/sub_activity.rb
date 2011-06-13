@@ -2,7 +2,7 @@ class SubActivity < Activity
   extend ActiveSupport::Memoizable
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Implementer", "Spend", "Budget"]
+  FILE_UPLOAD_COLUMNS = ["Implementer", "Current Expenditure", "Budget"]
 
   ### Associations
   belongs_to :activity, :counter_cache => true
@@ -118,7 +118,7 @@ class SubActivity < Activity
   def self.create_from_file(activity, doc)
     doc.each do |row|
       attributes = {:budget => row['Budget'],
-                    :spend => row['Spend'],
+                    :spend => row['Current Expenditure'],
                     :provider_id => Organization.find_by_name(row['Implementer']).try(:id),
                     :data_response_id => activity.data_response.id}
       sa = activity.sub_activities.find_by_id(row['Id'])

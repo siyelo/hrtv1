@@ -139,7 +139,7 @@ class Reports::JawpReport
       sub_activities.each do |activity|
         break_out = false
         if activity != parent_activity
-            if @is_budget #to get budget or spend district codings and check this sub_activity has nonzero budget or spend
+            if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
               if activity.budget?
                 district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
                 amount_total = activity.budget
@@ -245,7 +245,7 @@ class Reports::JawpReport
     end
 
     def build_header
-      amount_type = @is_budget ? 'Budget' : 'Spent'
+      amount_type = @is_budget ? 'Current Budget' : 'Past Expenditure'
 
       row = []
       row << "Project Name"

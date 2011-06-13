@@ -138,14 +138,14 @@ describe Project do
        @project.total_matches_quarters?(:spend).should be_true
      end
 
-      it "should return true if spend is nil and quarterlys are too" do
+      it "should return true if past expenditure is nil and quarterlys are too" do
         @project = Factory(:project, :spend => nil,
                             :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
         @project.total_matches_quarters?(:spend).should be_true
       end
 
-      it "should return false if spend is nil and quarterlys are too" do
+      it "should return false if past expenditure is nil and quarterlys are too" do
         @project = Factory(:project, :spend => nil,
                             :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
@@ -410,7 +410,7 @@ describe Project do
     end
   end
 
-  describe "project spend check" do
+  describe "project past expenditure check" do
     before :each do
       @project = Factory(:complete_project, :spend => 20)
       funder = @project.in_flows.first
@@ -419,19 +419,19 @@ describe Project do
       @project.reload
     end
 
-    it "succeeds if spend is entered" do
+    it "succeeds if past expenditure is entered" do
       @project.spend_entered?.should == true
 
     end
 
-    it "succeeds if spend not entered but a quarter spend is" do
+    it "succeeds if past expenditure not entered but a quarter past expenditure is" do
       @project.spend = nil
       @project.spend_q1 = 10
       @project.save
       @project.spend_entered?.should == true
     end
 
-    it "fails if spend is not entered and no quarter spends are" do
+    it "fails if past expenditure is not entered and no quarter past expenditures are" do
       @project.spend = nil
       @project.save
       @project.spend_entered?.should be_false

@@ -335,7 +335,7 @@ END
 
     [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
       if !response.project_and_activities_matching_amounts?(self, m)
-        st = m == :budget ? "Budget" : "Expenditure"
+        st = m == :budget ? "Current Budget" : "Past Expenditure"
         errors << "The Project #{st} should match the total budgets for Activities plus Other Costs. Please update your activities/other costs for this project accordingly."
       end
     end

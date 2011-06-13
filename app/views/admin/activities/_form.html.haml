@@ -33,7 +33,7 @@
     - if @response.request.budget_by_quarter?
       %li.last
         %h3 Current Budget
-        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
         %ul.dashboard_section
           %li.amounts.last
             %label== Quarterly budget
@@ -47,7 +47,7 @@
     - unless @response.request.no_long_term_budgets?
       %li.last
         %h3 Future Budget
-        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
         %ul.dashboard_section
           %li.amounts
             %label Yearly budget

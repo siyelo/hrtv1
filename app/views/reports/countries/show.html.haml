@@ -17,7 +17,7 @@
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
-%h1.main_heading Review National Expenditures and Budgets
+%h1.main_heading Review National Past Expenditures and Budgets
 
 .full
   .third
@@ -34,15 +34,15 @@
 
 .full
   .third
-    %h2 Ultimate Funding Source (Spent)
+    %h2 Ultimate Funding Source (Past Expenditure)
     #spend_ufs_pie.bordered
 
   .third
-    %h2 Financing Agent (Spent)
+    %h2 Financing Agent (Past Expenditure)
     #spend_fa_pie.bordered
 
   .third
-    %h2 Implementer (Spent)
+    %h2 Implementer (Past Expenditure)
     #spend_i_pie.bordered
 
 
@@ -71,12 +71,12 @@
 
 .full
   .first-half
-    %h2 Top Organizations by Expenditure
+    %h2 Top Organizations by Past Expenditure
     = render 'reports/countries/organizations/table_mini', :top_organizations => @top_organizations
     %p.bordered= link_to "View all Organizations", reports_country_organizations_path, :class => "right"
 
   .second-half
-    %h2 Top Activities by Expenditure
+    %h2 Top Activities by Past Expenditure
     = render 'reports/countries/activities/table_mini', :top_activities => @top_activities
     %p= link_to "View all Activities", reports_country_activities_path, :class => "right"
 

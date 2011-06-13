@@ -25,12 +25,12 @@
   - if @response.data_request.spend?
     %li.last
       %h3== Past Expenditure
-      %p.hint The amount that you have spent in the past fiscal year.
+      %p.hint The amount that you have past expenditure in the past fiscal year.
       %h3== Past Activity Expenditure (#{@response.currency})
       %ul.dashboard_section
-        = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         %li.amounts.last
-          %label== Quarterly spend
+          %label== Quarterly past expenditure
           %ul
             = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
             = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
@@ -42,7 +42,7 @@
     %li.last
       %h3 Current Budget (planned expenditure) (#{@response.currency})
       %ul.dashboard_section
-        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label== Quarterly budget
@@ -56,7 +56,7 @@
     - unless @response.request.no_long_term_budgets?
       %li.last
         %h3 Future Budget
-        %p.hint The total amount that you are planning to spend in the upcoming fiscal year(s).
+        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
         %ul.dashboard_section
           %li.amounts
             %label Yearly budget

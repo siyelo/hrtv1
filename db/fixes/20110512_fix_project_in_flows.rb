@@ -7,7 +7,7 @@ require 'fastercsv'
 #     from: organization1
 #     from: organizatoin2
 #     from: organization3
-#     we need to find the funding flow whose amounts are closest to the 
+#     we need to find the funding flow whose amounts are closest to the
 #     sum of the amounts for the activities of that project
 #     which are implemented by the responding organization
 #     we take that one and we set the self_provider_flag to 1/true
@@ -43,7 +43,7 @@ end
 
 csv = FasterCSV.generate do |csv|
   # header
-  row = ['Data Source', 'Project ID', 'Project Budget', 'Project Spent', 'Project name', 'In Flow Budget', 'In Flow Spend']
+  row = ['Data Source', 'Project ID', 'Project Budget', 'Project Spent', 'Project name', 'In Flow Budget', 'In Flow Current Expenditure']
   csv << row
 
   # data

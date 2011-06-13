@@ -17,7 +17,7 @@
       %th.no-bg
       %th.no-padding{:colspan => 100}
         %ul.tabs
-          %li= link_to 'Past Expenditure', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil)
+          %li= link_to 'Past Expenditure', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Expenditure') ? 'active' : nil)
           %li= link_to 'Current Budget', edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil)
     %tr.head
       %th.nested_name.fixed Activity

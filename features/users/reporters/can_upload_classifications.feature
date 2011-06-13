@@ -43,9 +43,9 @@ Feature: Reporter can upload classifications
         And I should not see "location1"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can download Inputs template
@@ -58,9 +58,9 @@ Feature: Reporter can upload classifications
         And I should not see "location1"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can download Locations template
@@ -73,9 +73,9 @@ Feature: Reporter can upload classifications
         And I should not see "service_level1"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can download Service Levels template
@@ -88,9 +88,9 @@ Feature: Reporter can upload classifications
         And I should not see "location1"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can upload Purposes
@@ -103,9 +103,9 @@ Feature: Reporter can upload classifications
         And the "mtef1" field should contain "10"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can upload Inputs
@@ -118,9 +118,9 @@ Feature: Reporter can upload classifications
         And the "cost_category1" field should contain "10"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can upload Locations
@@ -133,9 +133,9 @@ Feature: Reporter can upload classifications
         And the "location1" field should contain "10"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 
 
     Scenario Outline: Reporter can upload Service Levels
@@ -148,7 +148,7 @@ Feature: Reporter can upload classifications
         And the "service_level1" field should contain "10"
 
       Examples:
-      | type   |
-      | Budget |
-      | Spend  |
+      | type             |
+      | Current Budget   |
+      | Past Expenditure |
 

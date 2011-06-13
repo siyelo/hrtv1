@@ -20,7 +20,7 @@
     %ul.admin_reports
       %li
         - link_to reports_country_path, :class => "drill_down target" do
-          Review National Expenditures and Budgets
+          Review National Past Expenditures and Budgets
           %span.hint Interactive reports summarizing data at national level
 
   %h2
@@ -30,7 +30,7 @@
     %ul.admin_reports
       %li
         - link_to reports_districts_path, :class => "drill_down target" do
-          Review District Expenditures and Budgets
+          Review District Past Expenditures and Budgets
           %span.hint Interactive reports comparing districts and summarizing data at district level
 
       %li= render 'report_row', :title => 'By Nsp', :key => 'districts_by_nsp_budget'
@@ -53,7 +53,7 @@
 
       %ul
         %li= render 'report_row', :title => "By Partner Budget", :key => 'map_districts_by_partner_budget'
-        %li= render 'report_row', :title => "By Partner Spending", :key => 'map_districts_by_partner_spent'
+        %li= render 'report_row', :title => "By Partner Past Expenditure", :key => 'map_districts_by_partner_spent'
         %li= render 'report_row', :title => "By NSP", :key => 'map_districts_by_nsp_budget'
         %li= render 'report_row', :title => "By All Codes", :key => 'map_districts_by_all_codes_budget'
 
@@ -62,7 +62,7 @@
       %h3 Facilities
       %ul
         %li= render 'report_row', :title => "By Partner Budget", :key => 'map_facilities_by_partner_budget'
-        %li= render 'report_row', :title => "By Partner Spending", :key => 'map_facilities_by_partner_spent'
+        %li= render 'report_row', :title => "By Partner Past Expenditure", :key => 'map_facilities_by_partner_spent'
 
 .second-half
   %h2
@@ -71,7 +71,7 @@
   .dashboard_section
     %ul.admin_reports
       %li= render 'report_row', :title => "Joint Annual Workplan By Budget (beta)", :key => 'jawp_report_budget'
-      %li= render 'report_row', :title => "Joint Annual Workplan By Expenditure (beta)", :key => 'jawp_report_spent'
+      %li= render 'report_row', :title => "Joint Annual Workplan By Past Expenditure (beta)", :key => 'jawp_report_spent'
       %li= render 'report_row', :title => "Simple Workplan", :key => 'activities_summary'
       %li= render 'report_row', :title => "By District", :key => 'activities_by_district'
       %li= render 'report_row', :title => "By NSP", :key => 'activities_by_nsp_budget'
@@ -82,9 +82,9 @@
       %li= render 'report_row', :title => "By Budget Coding (beta)", :key => 'activities_by_budget_coding'
       %li= render 'report_row', :title => "By Budget Cost Categorization (beta)", :key => 'activities_by_budget_cost_categorization'
       %li= render 'report_row', :title => "By Budget Districts (beta)", :key => 'activities_by_budget_districts'
-      %li= render 'report_row', :title => "By Expenditure Coding (beta)", :key => 'activities_by_expenditure_coding'
-      %li= render 'report_row', :title => "By Expenditure Cost Categorization (beta)", :key => 'activities_by_expenditure_cost_categorization'
-      %li= render 'report_row', :title => "By Expenditure Districts (beta)", :key => 'activities_by_expenditure_districts'
+      %li= render 'report_row', :title => "By Past Expenditure Coding (beta)", :key => 'activities_by_expenditure_coding'
+      %li= render 'report_row', :title => "By Past Expenditure Cost Categorization (beta)", :key => 'activities_by_expenditure_cost_categorization'
+      %li= render 'report_row', :title => "By Past Expenditure Districts (beta)", :key => 'activities_by_expenditure_districts'
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Codes

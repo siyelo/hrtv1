@@ -67,7 +67,7 @@ var build_activity_funding_source_row = function (edit_block) {
 
   if (_spend) {
     spend = $('<li/>').append(
-      $('<span/>').text('Spend'),
+      $('<span/>').text('Past Expenditure'),
       edit_block.find('.ff_spend').val() || 'N/A'
     )
   }
@@ -102,10 +102,10 @@ var close_project_in_flow_fields = function (fields) {
     preview_block.html('');
 
     if (_budget && _spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
+      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
       preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
     } else if (_spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
+      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
     } else if (_budget) {
       preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', true))
     }
@@ -786,24 +786,24 @@ var build_data_response_review_screen = function () {
 
   // Data Response charts
   createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-  createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+  createPieChart("data_response", {id: _dr_id, title: "MTEF Past Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
   createPieChart("data_response", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-  createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+  createPieChart("data_response", {id: _dr_id, title: "NSP Past Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
   createPieChart("data_response", {id: _dr_id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("data_response", {id: _dr_id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
+  createPieChart("data_response", {id: _dr_id, title: "Input Past Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
 
   // Project charts
   $.each(_projects, function (i, id) {
     createPieChart("project", {id: id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-    createPieChart("project", {id: id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
+    createPieChart("project", {id: id, title: "MTEF Past Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
     createPieChart("project", {id: id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-    createPieChart("project", {id: id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
+    createPieChart("project", {id: id, title: "NSP Past Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
   createPieChart("project", {id: id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("project", {id: id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
+  createPieChart("project", {id: id, title: "Input Past Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
     //createPieChart("project", {id: id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
     //createPieChart("project", {id: id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
+    //createPieChart("project", {id: id, title: "HSSPII Strategic Program Past Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
+    //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Past Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
   });
 
   approve_activity_checkbox();

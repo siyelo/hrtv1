@@ -10,9 +10,9 @@
 %ul.response-notice
   - if @response.data_request.spend?
     - if !@other_cost.spend?
-      %li= "Enter the Expenditure for this activity."
+      %li= "Enter the Past Expenditure for this activity."
     - elsif !@other_cost.spend_classified?
-      %li= "Please classify the Expenditure for this activity."
+      %li= "Please classify the Past Expenditure for this activity."
 
   - if @response.data_request.budget?
     - if !@other_cost.budget?

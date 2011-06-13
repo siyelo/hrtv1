@@ -9,23 +9,23 @@ shared_examples_for "project budget checker" do
   end
 end
 
-shared_examples_for "project spend checker" do
-  it "succeeds with only a project spend entered" do
+shared_examples_for "project past expenditure checker" do
+  it "succeeds with only a project past expenditure entered" do
     @project.budget = nil; @project.save; @response.reload
     @response.project_amounts_entered?.should == true
   end
-  it "succeeds if project spend not entered but a quarter spend is" do
+  it "succeeds if project past expenditure not entered but a quarter past expenditure is" do
     @project.spend = nil; @project.spend_q1 = 10 ; @project.save
     @response.project_amounts_entered?.should == true
   end
 end
 
-shared_examples_for "activity spend checker" do
-  it "succeeds with only activity spend entered" do
+shared_examples_for "activity past expenditure checker" do
+  it "succeeds with only activity past expenditure entered" do
     @activity.budget = nil; @activity.save
     @response.activity_amounts_entered?.should == true
   end
-  it "succeeds if activity spend not entered but a quarter spend is" do
+  it "succeeds if activity past expenditure not entered but a quarter past expenditure is" do
     @activity.spend = nil; @activity.spend_q1 = 10 ; @activity.save
     @response.activity_amounts_entered?.should == true
   end

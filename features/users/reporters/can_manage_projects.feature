@@ -79,7 +79,7 @@ Feature: Reporter can manage projects
       And I fill in "Name" with "Some Project"
       And I fill in "Start date" with "<start_date>"
       And I fill in "End date" with "<end_date>"
-      And I fill in "Spend" with "<entire_budget>"
+      And I fill in "Current Expenditure" with "<entire_budget>"
       And I fill in "Budget" with "<budget_gor>"
       And I press "Create"
      Then I should see "<message>"
@@ -206,7 +206,7 @@ Feature: Reporter can manage projects
       And I follow "Project1"
      Then the "Budget" field within ".fields" should contain "7778"
 
-  Scenario: If the data_request spend is not checked, spend should not show up in the project screen
+  Scenario: If the data_request past expenditure is not checked, past expenditure should not show up in the project screen
    Given I follow "Sign Out"
     And an organization exists with name: "organization5"
     And a data_request exists with title: "data_request2", spend: false
@@ -219,8 +219,8 @@ Feature: Reporter can manage projects
     And I follow "Projects"
 
    When I follow "Create Project"
-   Then I should not see "Past Project Expenditure"
-    And I should not see "Quarterly Spend"
+   Then I should not see "Project Past Expenditure"
+    And I should not see "Quarterly Current Expenditure"
     And I should see "Budget"
 
   Scenario: A Reporter can bulk link their projects to those from other organizations

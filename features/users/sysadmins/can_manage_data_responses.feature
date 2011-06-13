@@ -12,7 +12,7 @@ Feature: Admin can manage data responses
       And I am signed in as a sysadmin
 
     Scenario: Manage data responses
-      When I follow "Review Organization Expenditures and Budgets"
+      When I follow "Review Organization Past Expenditures and Budgets"
        And I follow "Empty"
       Then I should see "UNDP"
 
@@ -23,7 +23,7 @@ Feature: Admin can manage data responses
 
     @javascript
     Scenario: Manage data responses (with JS)
-      When I follow "Review Organization Expenditures and Budgets"
+      When I follow "Review Organization Past Expenditures and Budgets"
        And I follow "Empty"
        And I confirm the popup dialog
        And I follow "Delete"

@@ -997,7 +997,7 @@ describe Activity do
       dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
     end
 
-    it "deletes existing Spend codings before copying the budget ones" do
+    it "deletes existing Current Expenditure codings before copying the budget ones" do
       activity = Factory(:activity)
       Factory(:coding_budget, :activity => activity)
       Factory(:coding_spend, :activity => activity)

@@ -19,7 +19,7 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Spend" within ".inline_tab"
+      Then I should see "Current Expenditure" within ".inline_tab"
         And I should see "Budget" within ".inline_tab"
 
 
@@ -36,7 +36,7 @@ Feature: Reporter can see classification tabs
         And I follow "Projects"
         And I follow "activity1 description"
       Then I should see "Budget" within ".inline_tab"
-        And I should not see "Spend" within ".inline_tab"
+        And I should not see "Current Expenditure" within ".inline_tab"
 
 
     Scenario: See spend tab when data request is for spend but not budget
@@ -51,5 +51,5 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Spend" within ".inline_tab"
+      Then I should see "Current Expenditure" within ".inline_tab"
         And I should not see "Budget" within ".inline_tab"

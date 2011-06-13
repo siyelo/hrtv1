@@ -68,7 +68,7 @@
           %ul.first-half
             = f.input :spend, :required => false, :label => 'Past Expenditure', :wrapper_html => {:class => 'grid-20'}
             %li
-              %label Quarterly Expenditure
+              %label Quarterly Past Expenditure
               %ul
                 = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year_prev}"}, :label => false
                 = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year}"}, :label => false

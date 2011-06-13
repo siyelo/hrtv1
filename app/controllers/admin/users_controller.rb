@@ -34,7 +34,7 @@ class Admin::UsersController < Admin::BaseController
         @user = User.new(params[:user])
         @user.valid? # trigger validation errors
         if @user.only_password_errors?
-          @user.save_and_invite!
+          @user.save_and_invite(current_user)
           render :json => {:status => 'ok',
                            :row => render_to_string(:partial => "row.html.haml",
                                                      :locals => {:user => @user}),
@@ -56,7 +56,7 @@ class Admin::UsersController < Admin::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == User::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = User.create_from_file(doc)
+          saved, errors = User.create_from_file(doc, current_user)
           flash[:notice] = "Created #{saved} of #{saved + errors} users successfully"
         else
           flash[:error] = 'Wrong fields mapping. Please download the CSV template'

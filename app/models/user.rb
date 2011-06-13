@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.create_from_file(doc)
+  def self.create_from_file(doc, inviter)
     saved, errors = 0, 0
     doc.each do |row|
       attributes = row.to_hash
@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
       end
       user = User.new(attributes)
       if user.only_password_errors?
-        user.save_and_invite!
+        user.save_and_invite(inviter)
         saved += 1
       elsif user.save
         user.save
@@ -53,10 +53,10 @@ class User < ActiveRecord::Base
     return saved, errors
   end
 
-  def save_and_invite!
+  def save_and_invite(inviter)
     self.invite_token = generate_token
     self.save(false)
-    send_user_invitation
+    send_user_invitation(inviter)
   end
 
   def activate
@@ -71,8 +71,8 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest("#{self.email}#{Time.now}")[24..38]
   end
 
-  def send_user_invitation
-    Notifier.deliver_send_user_invitation(self)
+  def send_user_invitation(inviter)
+    Notifier.deliver_send_user_invitation(self, inviter)
   end
 
   def deliver_password_reset_instructions!

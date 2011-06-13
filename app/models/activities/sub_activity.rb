@@ -2,7 +2,7 @@ class SubActivity < Activity
   extend ActiveSupport::Memoizable
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Implementer", "Current Expenditure", "Budget"]
+  FILE_UPLOAD_COLUMNS = ["Implementer", "Current Expenditure", "Current Budget"]
 
   ### Associations
   belongs_to :activity, :counter_cache => true

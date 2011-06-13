@@ -5,8 +5,7 @@
       = render 'projects/no_projects_yet'
   - else
     - unless @response.project_amounts_entered?
-      %span.info Please enter Past Expenditures / Budgets for your projects.
-
+      %span.info Please enter Past Expenditures / Current Budgets for your projects.
 
 %ul.push
   - @response.projects_without_amounts.each do |p|

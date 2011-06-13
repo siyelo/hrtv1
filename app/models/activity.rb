@@ -5,7 +5,7 @@ include NumberHelper
 class Activity < ActiveRecord::Base
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Current Expenditure", "Q1 Current Expenditure", "Q2 Current Expenditure", "Q3 Current Expenditure", "Q4 Current Expenditure", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Current Expenditure", "Q1 Current Expenditure", "Q2 Current Expenditure", "Q3 Current Expenditure", "Q4 Current Expenditure", "Current Budget", "Q1 Current Budget", "Q2 Current Budget", "Q3 Current Budget", "Q4 Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -231,11 +231,11 @@ class Activity < ActiveRecord::Base
       activity.spend_q2                = row['Q2 Current Expenditure']
       activity.spend_q3                = row['Q3 Current Expenditure']
       activity.spend_q4                = row['Q4 Current Expenditure']
-      activity.budget                  = row['Budget']
-      activity.budget_q1               = row['Q1 Budget']
-      activity.budget_q2               = row['Q2 Budget']
-      activity.budget_q3               = row['Q3 Budget']
-      activity.budget_q4               = row['Q4 Budget']
+      activity.budget                  = row['Current Budget']
+      activity.budget_q1               = row['Q1 Current Budget']
+      activity.budget_q2               = row['Q2 Current Budget']
+      activity.budget_q3               = row['Q3 Current Budget']
+      activity.budget_q4               = row['Q4 Current Budget']
       activity.start_date              = row['Start Date']
       activity.end_date                = row['End Date']
       activity.text_for_beneficiaries  = row['Beneficiaries']

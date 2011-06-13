@@ -24,7 +24,7 @@ class Reports::ActivitiesByNsp
       row = []
 
       Nsp.deepest_nesting.times{|i| row << "NSP Code"}
-      row << "Budget"
+      row << "Current Budget"
       row << "Activity Description"
       row << "Funding Source"
       row << "Q1"

@@ -5,7 +5,7 @@
 %h1.main_heading
   Dashboard
   %ul.horizontal.right
-    -#%li= link_to "Edit Workplan", edit_response_workplan_path(current_or_last_response, :spend), :class => "add_row"
+    -#%li= link_to "Edit Workplan", response_workplans_path(current_or_last_response), :class => "add_row"
     -# instead, a hack
     %li= link_to "Edit Workplan", current_projects_url_hack, :class => "add_row"
 
@@ -21,22 +21,22 @@
 
 %h2 Project Summary
 .dashboard_section
-  %h3.tracked
+  %h3.tracked.big
     %br
     %span.light Past Expenditure Tracked
     %span.large= @response.projects_total_spend(false)
     %span.currency= @response.currency
 
-  %h3.tracked
+  %h3.tracked.big
     %br
     %span.light Current budget Tracked
     %span.large= @response.projects_total_budget(false)
     %span.currency= @response.currency
-  %h3.tracked
+  %h3.tracked.small
     %br
     %span.light Projects Tracked
     %span.large= @projects.count
-  %h3.tracked
+  %h3.tracked.small
     %br
     %span.light Activities Tracked
     -# hacky

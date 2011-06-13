@@ -5,15 +5,12 @@ class WorkplansController < Reporter::BaseController
   def index
   end
 
-  def edit
-  end
-
   def update
     Activity.bulk_update(@response, params[:activities])
     flash[:notice] = 'Workplan was successfully saved'
-    redirect_to edit_response_workplan_url(@response, params[:id])
+    redirect_to response_workplans_url(@response)
   end
-  
+
 
   private
     def load_projects

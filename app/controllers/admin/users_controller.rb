@@ -28,7 +28,8 @@ class Admin::UsersController < Admin::BaseController
 
   def create
     respond_to do |format|
-      format.html { create! }
+      format.html { create!(:notice => "User was successfully created.") {
+        admin_users_url } }
       format.json {
         check_for_new_organization(params[:user], :organization_id)
         @user = User.new(params[:user])
@@ -48,6 +49,13 @@ class Admin::UsersController < Admin::BaseController
                                                      :locals => {:user => @user})}
         end
       }
+    end
+  end
+
+  def update
+    respond_to do |format|
+      format.html { update!(:notice => "User was successfully updated.") {
+        admin_users_url } }
     end
   end
 

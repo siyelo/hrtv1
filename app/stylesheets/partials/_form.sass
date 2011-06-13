@@ -184,8 +184,8 @@ form.data_response, .basic_form
 
   #search_box
     +border-radius
-    background: image_url("icon_search.gif") no-repeat scroll 97% 7px transparent
-    border: 1px solid #DDDDDD
+    background: image_url("icon_search.gif") no-repeat 97% 7px $filler
+    border: 1px solid $light-blue
     float: right
     font-size: 12px
     padding: 0 28px 0 5px
@@ -193,7 +193,7 @@ form.data_response, .basic_form
 
   input[type='text']
     -moz-box-shadow: none
-    background: none repeat scroll 0 0 #FFFFFF !important
+    background: none repeat scroll 0 0 $filler !important
     border: none
     left: 10px
     color: #000000
@@ -203,6 +203,8 @@ form.data_response, .basic_form
     width: 200px
     height: 16px
     line-height: 1.4em
+    &:hover, &:focus, &:active
+      background: #FFF !important
   input[type=text], textarea
     &:hover, &:focus, &:active
       border: none !important

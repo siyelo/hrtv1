@@ -1,6 +1,6 @@
 # app/models/notifier.rb
 class Notifier < ActionMailer::Base
-  default_url_options[:host] = "resourcetracking.heroku.com"
+  default_url_options[:host] = "hrtkenya.heroku.com"
 
   def password_reset_instructions(user)
     subject       "[Health Resource Tracker] Password Reset Instructions"

@@ -1,3 +1,8 @@
+:javascript
+  $(function() {
+    $('#inactive_location').tipsy();
+  });
+
 %ul
   %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}
     = link_to 'Projects', edit_response_workplan_path(@response, :spend)
@@ -12,6 +17,6 @@
 
   - if @response.request.locations?
     %li{:class => 'inactive'}
-      = link_to 'Locations', '#'
+      = link_to 'Locations', '#', :id => "inactive_location", "original-title" => "We'll re-enable Locations pending the changes to the Kenyan constitution."
   %li
     = link_to 'Future Budgets', response_long_term_budgets_path

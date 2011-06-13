@@ -389,13 +389,13 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_total_spend(quarters)
-    projects.map{ |p| p.converted_activities_total_by_type('spend', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('spend', quarters, currency)}.compact.sum
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('spend', quarters, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('spend', quarters, currency)}.compact.sum)
   end
 
   def projects_total_budget(quarters)
-    projects.map{ |p| p.converted_activities_total_by_type('budget', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('budget', quarters, currency)}.compact.sum
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('budget', quarters, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('budget', quarters, currency)}.compact.sum)
   end
 
   def funders_total_spend(quarters)

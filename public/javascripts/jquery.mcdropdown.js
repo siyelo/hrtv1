@@ -49,7 +49,7 @@
   var defaults = {
       minRows: 8                   // specify the minimum rows before creating a new column
     , maxRows: 25                  // specify the maximum rows in a column
-    , targetColumnSize: 2          // specify the default target column size (it'll attempt to create this many columns by default, unless the min/max row rules are not being met)
+    , targetColumnSize: 1          // specify the default target column size (it'll attempt to create this many columns by default, unless the min/max row rules are not being met)
     , openFx: "slideDown"          // the fx to use for showing the root menu
     , openSpeed: 250               // the speed of the openFx
     , closeFx: "slideUp"           // the fx to use for hiding the root menu

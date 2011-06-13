@@ -58,10 +58,9 @@ ActionController::Routing::Routes.draw do |map|
         :collection => {:create_from_file => :post, :download_template => :get}
       response.resources :classifications,
         :only => [:edit, :update, :destroy]
-      response.resources :workplans,
-        :only => [:index, :edit, :update], :requirements => {:id => /budget|spend/}
-      response.resources :funders, :requirements => {:id => /budget|spend/}
-      response.resources :implementers, :requirements => {:id => /budget|spend/}
+      response.resources :workplans
+      response.resources :funders
+      response.resources :implementers
       response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
   end
 

@@ -39,9 +39,8 @@ class ActivitiesController < Reporter::BaseController
 
     if @activity.save
       respond_to do |format|
-        format.html { 
-          flash[:notice] = 'Activity was successfully created' 
-          # redirect_to edit_response_workplan_path(@response, :spend)
+        format.html {
+          flash[:notice] = 'Activity was successfully created'
           html_redirect
         }
         format.js   { js_redirect }
@@ -66,7 +65,6 @@ class ActivitiesController < Reporter::BaseController
           else
             flash[:error] = 'Please be aware that your activities spend/budget exceeds that of your projects'
           end
-          # redirect_to edit_response_workplan_path(@response, :spend)
           html_redirect
         end
         format.js   { js_redirect }
@@ -198,7 +196,6 @@ class ActivitiesController < Reporter::BaseController
     def html_redirect
       if params[:commit] == "Save & Classify >"
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
-        # redirect_to edit_response_workplan_path(@response, coding_type)
         redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
       else
         redirect_to response_projects_path(@activity.project.response)
@@ -225,7 +222,7 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def confirm_activity_type
-      @activity = Activity.find(params[:id])     
+      @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end

@@ -18,7 +18,7 @@ class Notifier < ActionMailer::Base
     body          :full_name => user.full_name,
                   :org => user.organization,
                   :invite_token => user.invite_token,
-                  :follow_me => "To register follow this <a href=\"#{edit_registration_url}?invite_token=#{user.invite_token}\">link</a>",
+                  :follow_me => "#{edit_registration_url}?invite_token=#{user.invite_token}",
                   :sys_admin_org => inviter.organization ? "(#{inviter.organization.try(:name)})" : '',
                   :inviter_name => inviter.full_name ||= inviter.email
   end

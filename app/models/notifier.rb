@@ -11,7 +11,6 @@ class Notifier < ActionMailer::Base
   end
   
   def send_user_invitation(user, inviter)
-    debugger
     subject       "[Health Resource Tracker] You have been invited to HRT"
     from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
     recipients    user.email

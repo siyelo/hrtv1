@@ -1,10 +1,19 @@
-%p Thank you for joining the Health Resource Tracker
+-title "New Profile Registration"
 
-- semantic_form_for @user, :url => registration_path(:invite_token => params[:invite_token]), :html => {:class => "basic_form"} do |f|
-  - f.inputs :class => 'wrap-80 inputs' do
-    = f.input :password, :hint => "Your password", :value => nil
-    = f.input :password_confirmation, :hint => "A confirmation of your password"
+
+.sign_in_form
+  %h3
+    Please select a password
+  - semantic_form_for @user, :url => registration_path(:invite_token => params[:invite_token]), :html => {:class => "basic_form"} do |f|
+    - f.inputs do
+      %ul.dashboard_section
+        = f.input :password, :hint => "Your password", :value => nil
+        = f.input :password_confirmation, :hint => "A confirmation of your password"
     
-  - f.buttons :class => 'wrap-80 buttons' do
-    = f.commit_button "Save", :class => "last"
-  
+    - f.buttons do
+      = f.commit_button "Save", :class => "last"
+      
+      
+      
+      
+      

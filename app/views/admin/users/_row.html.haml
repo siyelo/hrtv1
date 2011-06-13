@@ -7,5 +7,4 @@
   %td
     %ul.manage_bar
       %li= link_to "Edit", edit_admin_user_path(user)
-      %li= link_to "Show", admin_user_path(user)
-      %li= link_to "X", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right"
+      %li= link_to "X", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right", :alt => 'Delete'

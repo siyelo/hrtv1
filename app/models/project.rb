@@ -350,7 +350,7 @@ END
     ### Validations
 
     def validate_total_budget_not_exceeded
-      errors.add(:base, "Budget must be less than or equal to the Total Budget") if budget > entire_budget
+      errors.add(:base, "Current Budget must be less than or equal to the Total Budget") if budget > entire_budget
     end
 
     ### Misc

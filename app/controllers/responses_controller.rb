@@ -26,7 +26,7 @@ class ResponsesController < ApplicationController
       current_user.current_data_response = @response
       current_user.save
       flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
-      redirect_to edit_response_workplan_path(@response, :spend)
+      redirect_to response_workplans_path(@response)
     else
       render :action => :new
     end

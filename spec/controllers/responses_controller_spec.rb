@@ -42,7 +42,7 @@ describe ResponsesController do
           :contact_position => "director"
           }
       end
-      it { should redirect_to(edit_response_workplan_path(DataResponse.last, :spend)) }
+      it { should redirect_to(response_workplans_path(DataResponse.last)) }
     end
   end
 end

@@ -1,10 +1,10 @@
 %ul
-  %li{:class => (params[:controller] == 'workplans' && params[:action] == 'edit' ? 'active' : nil)}
-    = link_to 'Projects', edit_response_workplan_path(@response, :spend)
-  %li{:class => (params[:controller] == 'funders' && params[:action] == 'edit' ? 'active' : nil)}
-    = link_to 'Funders', edit_response_funder_path(@response, :spend)
-  %li{:class => (params[:controller] == 'implementers' && params[:action] == 'edit' ? 'active' : nil)}
-    = link_to 'Implementers', edit_response_implementer_path(@response, :spend)
+  %li{:class => (params[:controller] == 'workplans' && params[:action] == 'index' ? 'active' : nil)}
+    = link_to 'Projects', response_workplans_path(@response)
+  %li{:class => (params[:controller] == 'funders' && params[:action] == 'index' ? 'active' : nil)}
+    = link_to 'Funders', response_funders_path(@response)
+  %li{:class => (params[:controller] == 'implementers' && params[:action] == 'index' ? 'active' : nil)}
+    = link_to 'Implementers', response_implementers_path(@response)
 
   - if @response.request.purposes?
     %li{:class => (params[:controller] == 'classifications' && ['CodingSpend', 'CodingBudget'].include?(params[:id])) ? 'active' : nil}
@@ -12,7 +12,7 @@
 
   - if @response.request.locations?
     / remove the tipsy from application.js when locations are active
-    %li{:class => 'inactive'} 
+    %li{:class => 'inactive'}
       = link_to 'Locations', '#', :id => "inactive_location", "original-title" => "We'll re-enable Locations pending the changes to the Kenyan constitution."
   %li
     = link_to 'Future Budgets', response_long_term_budgets_path

@@ -179,9 +179,9 @@ class DataResponse < ActiveRecord::Base
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
+      self.errors.add_to_base("Project current budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
+      self.errors.add_to_base("Project current budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
       self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
@@ -389,13 +389,13 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_total_spend(quarters)
-    projects.map{ |p| p.converted_activities_total_by_type('spend', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('spend', quarters, currency)}.compact.sum
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('spend', quarters, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('spend', quarters, currency)}.compact.sum)
   end
 
   def projects_total_budget(quarters)
-    projects.map{ |p| p.converted_activities_total_by_type('budget', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('budget', quarters, currency)}.compact.sum
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('budget', quarters, currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('budget', quarters, currency)}.compact.sum)
   end
 
   def funders_total_spend(quarters)

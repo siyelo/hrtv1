@@ -9,7 +9,7 @@ Feature: Admin can manage users
       And an sysadmin exists with email: "pink.panter@hrt.com"
       And I am signed in as "pink.panter@hrt.com"
 
-      @javascript
+      @javascript @run
     Scenario: Admin can add an user
       When I follow "Users" within the main nav
       Then I should see "Users" within the title
@@ -22,50 +22,43 @@ Feature: Admin can manage users
       And I should see "bob@siyelo.com" within "#js_organiations_tbl"
       And I should see "Pending" within "#js_organiations_tbl"
 
-    @wip
-  Scenario: Admin can CRUD users
+  Scenario: Admin can edit a user
+    Given an organization exists with name: "organization22"
+      And an user exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
     When I follow "Users"
-      And I follow "Create User"
-      And I select "organization1" from "Organization"
-      And I fill in "Email" with "pink.panter1@hrtapp.com"
-      And I fill in "Full name" with "Pink Panter"
-      And I select "Reporter" from "Role"
-      And I fill in "Password" with "password"
-      And I fill in "Password confirmation" with "password"
-      And I press "Create New User"
-    Then I should see "User was successfully created"
-      And I should see "pink.panter"
-
-    When I follow "Edit"
+      And I follow "Edit"
       And I fill in "Email" with "pink.panter2@hrtapp.com"
       And I press "Update User"
     Then I should see "User was successfully updated"
       And I should see "pink.panter2"
       And I should not see "pink.panter1"
 
-    When I follow "X"
+
+  Scenario: Admin can delete a user
+    Given an organization exists with name: "organization22"
+      And an user exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
+    When I follow "Users"
+    Then show me the page
+    When I follow "X" within "#js_organiations_tbl .odd"
     Then I should see "User was successfully destroyed"
       And I should not see "pink.panter1"
-      And I should not see "pink.panter2"
 
 
+
+    @javascript
   Scenario Outline: Admin can CRUD users and see errors
-    When I follow "Users"
-      And I follow "Create User"
-      And I select "<organization>" from "Organization"
-      And I fill in "Email" with "<email>"
-      And I fill in "Full name" with "<name>"
-      And I select "<roles>" from "Role"
-      And I fill in "Password" with "<password>"
-      And I fill in "Password confirmation" with "<password_conf>"
-      And I press "Create New User"
-    Then I should see "Oops, we couldn't save your changes."
-      And I should see "<message>"
+    When I follow "Users" within the main nav
+    And I fill in "theCombobox" with "<organization>"
+    And I fill in "Email" with "<email>"
+    And I fill in "Full name" with "<name>"
+    And I select "<roles>" from "Role"
+    And I press "Add user"
+    Then I should see "<message>"
 
-      Examples:
-         | organization   | email         | name | roles    | password | password_conf | message                     |
-         |                | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank |
-         | organization1  |               | P    | Reporter | password | password      | Email can't be blank        |
+    Examples:
+       | organization   | email         | name | roles    | message        |
+       |                | pp@hrtapp.com | P    | Reporter | can't be blank |
+       | organization1  |               | P    | Reporter | can't be blank |
 
 
 
@@ -75,6 +68,7 @@ Feature: Admin can manage users
       And I press "Upload and Import"
     Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
+
   Scenario: Admin can upload users
     When I follow "Users"
       And I attach the file "spec/fixtures/users.csv" to "File"
@@ -83,7 +77,6 @@ Feature: Admin can manage users
       And I should see "user24"
       And I should see "user34"
       And I should see "user44"
-
 
 
   Scenario: Admin can see error if no csv file is not attached for upload
@@ -101,22 +94,22 @@ Feature: Admin can manage users
     Then I should see "organization_name,email,full_name,roles"
 
   Scenario Outline: a sysadmin can filter users
-    Given an organization exists with name: "organization2"
+    Given an organization exists with name: "organization22"
       And an user exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
-      And an organization exists with name: "organization3"
+      And an organization exists with name: "organization33"
       And an user exists with email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
     When I follow "Users"
       And I fill in "query" with "<first>"
       And I press "Search"
     Then I should see "Users with name, email or organiation name containing <first>"
-    And I should see "<first>"
-    And I should not see "<second>"
+    And I should see "<first>" within "#js_organiations_tbl"
+    And I should not see "<second>" within "#js_organiations_tbl"
     And I fill in "query" with "<second>"
 
     When I press "Search"
     Then I should see "Users with name, email or organiation name containing <second>"
-    And I should see "<second>"
-    And I should not see "<first>"
+    And I should see "<second>" within "#js_organiations_tbl"
+    And I should not see "<first>" within "#js_organiations_tbl"
 
     Examples:
        | first            | second           |
@@ -124,8 +117,8 @@ Feature: Admin can manage users
        | user2@hrtapp.com | user1@hrtapp.com |
        | Full name 1      | Full name 2      |
        | Full name 2      | Full name 1      |
-       | organization1    | organization2    |
-       | organization2    | organization1    |
+       | organization22    | organization33    |
+       | organization33    | organization22    |
 
   Scenario Outline: a sysadmin can sort users
     Given an organization exists with name: "organization2"

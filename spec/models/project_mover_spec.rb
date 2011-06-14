@@ -16,7 +16,6 @@ describe ProjectMover do
     @a2 = Factory(:activity, :project => @project,
                   :data_response => @project.data_response)
 
-    @project.reload
     @dr2.reload #refreshes org.user relation
     @mover = ProjectMover.new(@dr1, @dr2, @project)
   end
@@ -28,7 +27,6 @@ describe ProjectMover do
 
   it "should deep clone the project" do
     @clone_project = @mover.move!
-    @clone_project.reload
     @clone_project.activities.count.should == 2
   end
 
@@ -58,4 +56,5 @@ describe ProjectMover do
       lambda { @clone_project = @mover.move_without_validations! }.should_not raise_error
     end
   end
+
 end

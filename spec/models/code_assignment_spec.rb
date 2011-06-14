@@ -117,16 +117,12 @@ describe CodeAssignment do
     it "select_for_pies" do
       Money.default_bank.add_rate(:USD, :RWF, "500")
       dr = Factory.create(:data_response, :currency => 'USD')
-      project1  = Factory.build(:project, :data_response => dr, :currency => nil)
-      project1.save(false)
       activity1 = Factory.create(:activity, :budget => 100, :spend => 200,
                                  :data_response => dr,
-                                 :project => project1)
-      project2  = Factory.build(:project, :data_response => dr, :currency => nil)
-      project2.save(false)
+                                 :project => Factory(:project, :data_response => dr))
       activity2 = Factory.create(:activity, :budget => 100, :spend => 200,
                                  :data_response => dr,
-                                 :project => project2)
+                                 :project => Factory(:project, :data_response => dr))
 
       code1      = Factory.create(:code, :short_display => 'code1')
       code2      = Factory.create(:code, :short_display => 'code2')

@@ -104,9 +104,8 @@ describe DataResponse do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
       @dr        = Factory(:data_response, :currency => 'RWF')
-      @project   = Factory.build(:project, :data_response => @dr,
+      @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)
-      @project.save(false)
       @activity  = Factory(:activity, :data_response => @dr,
                             :project => @project,
                             :budget => 1000, :spend => 2000)

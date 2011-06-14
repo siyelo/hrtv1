@@ -325,15 +325,13 @@ describe Project do
                      :data_response => @project.data_response)
       @a2 = Factory(:activity, :project => @project,
                      :data_response => @project.data_response)
-      @project.reload
       save_and_deep_clone
     end
 
     it "should clone associated activities" do
-      clone = @clone.reload
-      clone.activities.count.should == 2
-      clone.activities[0].project.should_not be_nil
-      clone.activities[1].project.should_not be_nil
+      @clone.activities.count.should == 2
+      @clone.activities[0].project.should_not be_nil
+      @clone.activities[1].project.should_not be_nil
     end
 
     it "should have the correct number of activities after the original project is destroyed" do
@@ -360,13 +358,11 @@ describe Project do
      end
 
     it "should not return blank" do
-      @project1       = Factory.build(:project,
-                                      :data_response => Factory(:data_response,
-                                                                :currency => "GBP"),
-                                      :currency => nil)
-      @project1.save(false)
+      @project1       = Factory.build(:project, :data_response => Factory(:data_response, :currency => "GBP"))
+      @project1.save
       @project1.currency.should == "GBP"
     end
+
   end
 
   describe 'Currency cache update' do
@@ -375,10 +371,9 @@ describe Project do
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
       @response      = Factory(:data_response, :currency => 'RWF')
-      @project       = Factory.build(:project,
+      @project       = Factory(:project,
                                 :data_response => @response,
                                 :currency => nil)
-      @project.save(false)
       @activity      = Factory(:activity, :project => @project,
                                 :budget => 1000, :spend => 2000)
     end

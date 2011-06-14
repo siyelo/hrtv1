@@ -254,25 +254,26 @@ table.workplan
   .head th
     background: $mid-blue
     &.no-bg
-      background: none
+      background: $filler
+      font-weight: bold
   .tabs
     li
       display: inline-block
-      float: left
-    a
-      color: $mid-blue + #222
-      display: inline-block
-      font-size: 12px
-      padding: 8px 10px 4px
-      text-decoration: none
-      +text-shadow(#fff, 0, 1px, 0)
-      &.active
-        background: $mid-blue
-        color: #fff
-        font-weight: bold
-        +border-top-radius
-        +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
-        +text-shadow(#000, 0, 1px, 0)
+      float: right
+      a
+        color: $mid-blue + #222
+        display: inline-block
+        font-size: 12px
+        padding: 8px 10px 4px
+        text-decoration: none
+        +text-shadow(#fff, 0, 1px, 0)
+        &.active
+          background: $mid-blue
+          color: #fff
+          font-weight: bold
+          +border-top-radius
+          +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
+          +text-shadow(#000, 0, 1px, 0)
   .name
     vertical-align: top
     padding-top: 14px

@@ -1848,8 +1848,6 @@ var workplans_index = {
 
     import_export.init();
 
-    $('#inactive_location').tipsy();  //remove me when locations are active
-
     var updateValues = function (element) {
       var tr = element.parents('tr:first');
 

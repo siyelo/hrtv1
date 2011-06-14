@@ -368,6 +368,14 @@ class DataResponse < ActiveRecord::Base
   def uncoded_activities
     reject_uncoded(self.normal_activities)
   end
+  
+  def uncoded_budgets
+    self.activities.select{ |a| !a.budget_classified? && self.request.budget? }
+  end
+  
+  def uncoded_spends
+    self.activities.select{ |a| !a.spend_classified? && self.request.spend? }
+  end
 
   def coded_activities
     select_coded(self.normal_activities)
@@ -414,6 +422,7 @@ class DataResponse < ActiveRecord::Base
   def implementers_total_budget(quarters)
     @projects.map{ |p| p.sub_activities_total_by_type('budget', quarters, currency)}.sum
   end
+  
 
   private
     # Find all incomplete Activities, ignoring missing codings if the
@@ -423,7 +432,7 @@ class DataResponse < ActiveRecord::Base
         (!a.budget_classified? && self.request.budget?) ||
         (!a.spend_classified?  && self.request.spend?)}
     end
-
+    
     # Find all complete Activities
     def select_coded(activities)
       activities.select{ |a| a.classified? }

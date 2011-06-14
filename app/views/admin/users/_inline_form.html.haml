@@ -5,6 +5,6 @@
     = f.input :email
     = f.input :roles, :label => "Role", :required => true, :collection => User::ROLES.map{|u| [u.humanize, u]}
 
-  - f.buttons :class => 'buttons' do
+  - f.buttons :class => 'buttons no-margin' do
     = f.commit_button "Add user", :button_html => {:id => "js_user_create_btn"}
     %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

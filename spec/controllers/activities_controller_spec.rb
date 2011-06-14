@@ -173,7 +173,7 @@ describe ActivitiesController do
         :spend => 8000
       },
       :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingSpend")
+      response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
     end
 
     it "returns true and goes to classify if the activitys budget and past expenditure is less than that of the projects" do
@@ -186,7 +186,7 @@ describe ActivitiesController do
         :spend => 8000
       }, :commit => 'Save & Classify >', :response_id => @data_response.id
       flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingSpend")
+      response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
     end
 
   end
@@ -206,7 +206,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingBudget")
+       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingBudget")
      end
 
      it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest past expenditure is false and budget is true but the activity budget is greater than project budget" do
@@ -224,7 +224,7 @@ describe ActivitiesController do
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        flash[:notice].should == "Activity was successfully created"
-       response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingBudget")
+       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingBudget")
      end
 
      it "redircts to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is false" do
@@ -240,7 +240,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingSpend")
+       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
      end
 
      it "redircts to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is true" do
@@ -256,7 +256,7 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.activities.last.id}/code_assignments?coding_type=CodingSpend")
+       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
      end
    end
 end

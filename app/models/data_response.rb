@@ -37,6 +37,7 @@ class DataResponse < ActiveRecord::Base
   validates_presence_of :currency, :contact_name, :contact_position,
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]

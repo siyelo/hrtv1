@@ -6,6 +6,7 @@ Factory.define :project, :class => Project do |f|
   f.start_date          { Date.parse("2010-01-01") }
   f.end_date            { Date.parse("2010-12-31") }
   f.data_response       { Factory(:data_response) }
+  f.currency            { ENV['HRT_COUNTRY'] == "kenya"? "KES" : "RWF" }
 end
 
 Factory.define :complete_project, :parent => :project do |f|

@@ -17,8 +17,20 @@
       %th.no-bg
       %th.no-padding{:colspan => 100}
         %ul.tabs
-          %li= link_to 'Past Expenditure', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Expenditure') ? 'active' : nil)
-          %li= link_to 'Current Budget', edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil)
+          - if @response.request.budget?
+            %li
+              - link_to edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil) do
+                2. Current Budget
+                %span.message
+                  = @response.uncoded_budgets.size ||= 0
+
+          - if @response.request.spend?
+            %li
+              - link_to edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil) do
+                1. Past Expenditure
+                %span.message
+                  = @response.uncoded_spends.size ||= 0
+
     %tr.head
       %th.nested_name.fixed Activity
       %th.name{:colspan => 100}= coding_name

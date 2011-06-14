@@ -24,6 +24,19 @@ describe DataResponse do
     it { should validate_presence_of(:contact_phone_number) }
     it { should validate_presence_of(:contact_main_office_phone_number) }
     it { should validate_presence_of(:contact_office_location)}
+    it { should validate_presence_of(:contact_office_location)}
+
+    it "is not valid when currency is not included in the list" do
+      response = Factory.build(:data_response, :currency => 'INVALID')
+      response.save
+      response.errors.on(:currency).should_not be_blank
+    end
+
+    it "is valid when currency is included in the list" do
+      response = Factory.build(:data_response, :currency => 'USD')
+      response.save
+      response.errors.on(:currency).should be_blank
+    end
   end
 
   describe "custom date validations" do
@@ -91,8 +104,9 @@ describe DataResponse do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
       @dr        = Factory(:data_response, :currency => 'RWF')
-      @project   = Factory(:project, :data_response => @dr,
+      @project   = Factory.build(:project, :data_response => @dr,
                             :currency => nil)
+      @project.save(false)
       @activity  = Factory(:activity, :data_response => @dr,
                             :project => @project,
                             :budget => 1000, :spend => 2000)

@@ -1220,8 +1220,11 @@ describe Activity do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
       @dr = Factory(:data_response, :currency => 'USD')
+      project = Factory.build(:project, :data_response => @dr, :currency => nil)
+      project.save(false)
       @a        = Factory(:activity, :data_response => @dr,
-                          :project => Factory(:project, :data_response => @dr))
+                          :project => project)
+      @a.reload
       @a.budget = 123.45
       @a.spend  = 123.45
       @a.save

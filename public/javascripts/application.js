@@ -1930,7 +1930,7 @@ var workplans_index = {
       e.preventDefault();
       var element = $(this);
       changeRowspan(element, -1);
-      element.parents('tr:first').next('tr').find('.add_activity').removeClass('disabled');
+      element.parents('tr:first').next('tr').find('.add_activity, .add_other_cost').removeClass('disabled');
       element.parents('tr:first').remove();
     });
 

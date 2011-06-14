@@ -28,7 +28,7 @@
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
     National
-  .dashboard_section
+  .dashboard_section.marginless
     %ul.admin_reports
       %li
         - link_to reports_country_path, :class => "drill_down target" do
@@ -47,7 +47,7 @@
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Codes
-  .dashboard_section
+  .dashboard_section.marginless
     %ul
       %li
         - link_to reporter_report_path('purposes'), :class => "target" do
@@ -63,8 +63,6 @@
           %span.hint from budget and expenditure classifications screen
 
 - @responses.each do |response|
-  %br
-  %br
   %h1.sub_heading= "Your Data for: #{response.data_request.title}"
 
   .first-half

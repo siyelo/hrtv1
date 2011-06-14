@@ -22,18 +22,14 @@
               - link_to edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil) do
                 2. Current Budget
                 %span.message
-                  12
-                  //- if @response.uncoded_budgets.empty?
-                  //  = @response.uncoded_budgets.size
-                
+                  = @response.uncoded_budgets.size ||= 0
+
           - if @response.request.spend?
             %li
               - link_to edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil) do
                 1. Past Expenditure
                 %span.message
-                  3
-                  //- if @response.uncoded_spends.empty?
-                  //  = @response.uncoded_spends.size
+                  = @response.uncoded_spends.size ||= 0
 
     %tr.head
       %th.nested_name.fixed Activity

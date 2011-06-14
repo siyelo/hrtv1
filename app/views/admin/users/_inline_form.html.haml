@@ -1,7 +1,7 @@
 %h2 Add User
 .dashboard_section
   - semantic_form_for [:admin, user], :url => admin_users_path, :html => {:class => "basic_form"} do |f|
-    - f.inputs :class => 'inputs pull-user' do
+    - f.inputs :class => 'inputs' do
       = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.all, :input_html => {:class => 'organization_select combobox'}
       = f.input :full_name, :required => false
       = f.input :email

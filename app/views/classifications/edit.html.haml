@@ -28,7 +28,6 @@
               = link_to '1. Past Expenditure', edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil)
               - if @response.uncoded_spends.empty?
                 = @response.uncoded_spends.size
-              
 
     %tr.head
       %th.nested_name.fixed Activity

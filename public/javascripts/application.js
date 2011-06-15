@@ -1099,6 +1099,14 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
+var reporter_dashboard_index = {
+  run: function () {
+    $('#user_data_response_id_current').live('change', function(e) {
+      $('#edit_user_2').submit();
+    });
+  }
+};
+
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 

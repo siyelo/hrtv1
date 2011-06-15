@@ -42,6 +42,17 @@ describe User do
     end
   end
 
+  describe "a user can change their current data response" do
+    it "it will allow a data response that they have access to" do
+      pending
+      @user = Factory(:user, :organization => Factory(:organization))
+      @user.change_data_response("1")
+    end
+    it "will not allow a user to change to a data request that they dont' have access to (ie. doesn't show up for @user.data_responses)" do 
+      pending
+    end
+  end
+  
   describe "roles" do
     it "is admin when roles_mask = 1" do
       user = Factory.create(:user, :roles_mask => 1)

@@ -46,6 +46,14 @@ class User < ActiveRecord::Base
     return saved, errors
   end
 
+  def change_data_response(response_id)
+    if self.data_responses.map(&:id).include?(response_id.to_i)
+      self.data_response_id_current = response_id
+      self.save
+    else
+      return false
+    end
+  end
 
   def deliver_password_reset_instructions!
     reset_perishable_token!

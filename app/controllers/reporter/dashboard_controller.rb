@@ -4,6 +4,13 @@ class Reporter::DashboardController < Reporter::BaseController
     @requests       = current_user.organization.unfulfilled_data_requests
     @responses      = current_user.data_responses
     @comments       = Comment.on_all(current_user.organization).limit(5)
+    @user           = current_user
+  end
+  
+  def change_data_response
+    result = current_user.change_data_response(params[:user][:data_response_id_current])
+    result ? flash[:notice] = "You have sucessfully changed your data response" : flash[:error] = "Sorry that action is not allowed"
+    redirect_to reporter_dashboard_path
   end
 end
 

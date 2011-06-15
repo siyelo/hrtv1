@@ -20,7 +20,7 @@
           -
           = activity.end_date.strftime("%d.%m.%Y")
       %li 
-        %span Spent:
+        %span Expenditure:
         = "#{activity.spend} #{activity.currency}"
       %li
         %span Budget:
@@ -66,9 +66,9 @@
       %li
         - if response.data_request.spend?
           %ul.first-half
-            = f.input :spend, :required => false, :label => 'Spent', :wrapper_html => {:class => 'grid-20'}
+            = f.input :spend, :required => false, :label => 'Expenditure', :wrapper_html => {:class => 'grid-20'}
             %li
-              %label Quarterly spent
+              %label Quarterly Expenditure
               %ul
                 = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year_prev}"}, :label => false
                 = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year}"}, :label => false

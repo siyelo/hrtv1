@@ -13,9 +13,9 @@
           = f.input :from, :as => :select, :collection => funding_organizations_select, :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}
 
     - if @response.data_request.spend?
-      = f.input :spend, :label => "Spent", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_spend'}
+      = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_spend'}
       %li.amounts.spend
-        %label Quarterly spend
+        %label Quarterly Expenditure
         %ul
           = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false, :input_html => {:class => 'ff_spend_q4_prev'}
           = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false, :input_html => {:class => 'ff_spend_q1'}
@@ -26,7 +26,7 @@
     - if @response.data_request.budget?
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_budget'}
       %li.amounts.budget
-        %label Quarterly budget
+        %label Quarterly Budget
         %ul
           = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false, :input_html => {:class => 'ff_budget_q4_prev'}
           = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false, :input_html => {:class => 'ff_budget_q1'}

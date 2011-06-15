@@ -18,6 +18,7 @@ WORKSPACE=ENV['WORKSPACE']
 def bundle_install
   result = run "bundle check"
   run_or_die "bundle install" unless result == true
+  run "gem uninstall rake -v=0.9.2"
 end
 
 def setup_sqlite

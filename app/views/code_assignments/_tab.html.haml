@@ -9,7 +9,7 @@
     - if Activity::BUDGET_CODING_CLASSES.include?(@coding_type)
       %li
         - link_to copy_budget_to_spend_activity_code_assignments_path(@activity, :coding_type => @coding_type), :method => :put, :confirm => "This will overwrite ALL the Past Expenditure classifications for the #{friendly_name_for_coding_copy(@coding_type)} tab. This operation cannot be undone. Are you sure?", :title => "Click here to copy the Current Budget splits below to the Past Expenditure #{friendly_name_for_coding_copy(@coding_type)} tab", :class => "create_button" do
-          Copy Budget to Past Expenditure
+          Copy Current Budget to Past Expenditure
 
 
     %li

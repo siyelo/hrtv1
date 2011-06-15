@@ -31,7 +31,7 @@
   %ul.dashboard_section
     %li
       %ul.row
-        %li Spend
+        %li Expenditure
         %li= c(@other_cost.spend, @other_cost.currency)
       %ul.row
         %li= "Spend Q4 #{spend_fiscal_year_prev}"
@@ -69,13 +69,13 @@
         %li Budget by Inputs
         %li= b @other_cost.coding_budget_cc_classified?
       %ul.row
-        %li Spend by Purposes
+        %li Expenditure by Purposes
         %li= b @other_cost.coding_spend_classified?
       %ul.row
-        %li Spend by Locations
+        %li Expenditure by Locations
         %li= b @other_cost.coding_spend_district_classified?
       %ul.row
-        %li Spend by Inputs
+        %li Expenditure by Inputs
         %li= b @other_cost.coding_spend_cc_classified?
 
 = render :partial => 'shared/comments', :comments => @comments

@@ -10,23 +10,23 @@
       %td Total Budget (current FY):
       %td= n2cnds(project.budget, project.currency || @response.currency)
     %tr
-      %td Total Spent (past FY):
+      %td Total Expenditure (past FY):
       %td= n2cnds(project.spend, project.currency || @response.currency)
     - unless @policy_maker
       %tr
-        %td Spent Q1:
+        %td Expenditure Q1:
         %td=  n2cnds(project.spend_q1, project.currency || @response.currency)
 
       %tr
-        %td Spent Q2:
+        %td Expenditure Q2:
         %td=  n2cnds(project.spend_q2, project.currency || @response.currency)
 
       %tr
-        %td Spent Q3:
+        %td Expenditure Q3:
         %td=  n2cnds(project.spend_q3, project.currency || @response.currency)
 
       %tr
-        %td Spent Q4:
+        %td Expenditure Q4:
         %td=  n2cnds(project.spend_q4, project.currency || @response.currency)
 
     %tr

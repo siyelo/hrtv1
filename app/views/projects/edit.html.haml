@@ -17,7 +17,7 @@
     %li= "Project budget does not match the total of budgets stated in funding sources below. Please add funding sources or adjust your amounts."
     
   - if !@project.total_matches_quarters?("spend")
-    %li Your quarterly Spend amounts do not match the total Spend amounts
+    %li Your quarterly Expenditure amounts do not match the total Expenditure amounts
   
   - if @response.request.budget_by_quarter?
     - if !@project.total_matches_quarters?("budget")

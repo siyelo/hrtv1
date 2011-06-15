@@ -79,7 +79,7 @@ Feature: Reporter can manage projects
       And I fill in "Name" with "Some Project"
       And I fill in "Start date" with "<start_date>"
       And I fill in "End date" with "<end_date>"
-      And I fill in "Spend" with "<entire_budget>"
+      And I fill in "Expenditure" with "<entire_budget>"
       And I fill in "Budget" with "<budget_gor>"
       And I press "Create"
      Then I should see "<message>"

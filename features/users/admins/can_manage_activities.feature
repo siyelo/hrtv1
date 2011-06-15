@@ -88,7 +88,6 @@ Feature: Reporter can manage activities
         And I open the email
       Then I should see "Comment body" in the email body
       
-
     Scenario Outline: An admin can sort activities
       Given I follow "Activities"
       When I follow "<column_name>"
@@ -100,8 +99,8 @@ Feature: Reporter can manage activities
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-          | column_name  | column | text1                 | text2                 | 
-          | Project      | 1      | project1              | project2              | 
-          | Description  | 2      | activity1 description | activity2 description | 
-          | Total Spent  | 3      | 1 RWF               | 2 RWF               | 
+          | column_name   | column | text1                 | text2                 | 
+          | Project       | 1      | project1              | project2              | 
+          | Description   | 2      | activity1 description | activity2 description | 
+          | Total Expenditure  | 3      | 1 RWF               | 2 RWF               | 
           | Total Budget | 4      | 1 RWF               | 2 RWF               | 

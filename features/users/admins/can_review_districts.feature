@@ -26,8 +26,6 @@ Feature: Admin can review districts
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
 
-
-
     Scenario: "Log in as admin, go to district activity detail screen"
       Given I am signed in as an admin
       When I follow "Dashboard"
@@ -41,7 +39,7 @@ Feature: Admin can review districts
 
       When I follow "Activity A"
       Then I should see "Activity A" within "h1"
-        And I should see "Proportion Spent"
+        And I should see "Proportion Expenditure"
         And I should see "Proportion Budget"
-        And I should see "NSP Spent"
+        And I should see "NSP Expenditure"
         And I should see "NSP Budget"

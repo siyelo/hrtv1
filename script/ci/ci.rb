@@ -27,7 +27,7 @@ end
 
 def setup_specs
   ENV['RAILS_ENV'] = 'test'
-  run_or_die "gem uninstall rake -v=0.9.2"
+  run "gem uninstall rake -v=0.9.2"
   run_or_die "rake setup_quick --trace"
 end
 

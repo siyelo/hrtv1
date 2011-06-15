@@ -19,7 +19,7 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Spend" within ".inline_tab"
+      Then I should see "Expenditure" within ".inline_tab"
         And I should see "Budget" within ".inline_tab"
 
 
@@ -51,5 +51,5 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Spend" within ".inline_tab"
+      Then I should see "Expenditure" within ".inline_tab"
         And I should not see "Budget" within ".inline_tab"

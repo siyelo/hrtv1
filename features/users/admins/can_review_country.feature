@@ -34,5 +34,5 @@ Feature: Admin can review country
 
       When I follow "Activity A"
       Then I should see "Activity A" within "h1"
-        And I should see "NSP Spent"
+        And I should see "NSP Expenditure"
         And I should see "NSP Budget"

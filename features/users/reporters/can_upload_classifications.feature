@@ -45,7 +45,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can download Inputs template
@@ -60,7 +60,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can download Locations template
@@ -75,7 +75,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can download Service Levels template
@@ -90,7 +90,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can upload Purposes
@@ -106,7 +106,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can upload Purposes
@@ -122,7 +122,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can upload Locations
@@ -138,7 +138,7 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 
 
     Scenario Outline: Reporter can upload Service Levels
@@ -154,5 +154,5 @@ Feature: Reporter can upload classifications
       Examples:
       | type   |
       | Budget |
-      | Spend  |
+      | Expenditure  |
 

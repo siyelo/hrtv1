@@ -25,7 +25,7 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
-        And I fill in "Spent" with "200"
+        And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
         And I follow "Add Sub Activity"
@@ -45,7 +45,7 @@ Feature: Reporter can manage activities
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
-        And I fill in "Spent" with "200"
+        And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
         And I follow "Add Sub Activity"
@@ -65,7 +65,7 @@ Feature: Reporter can manage activities
        And I fill in "Description" with "1ctivity1 description"
        And I fill in "Start date" with "2011-01-01"
        And I fill in "End date" with "2011-12-01"
-       And I fill in "Spent" with "200"
+       And I fill in "Expenditure" with "200"
        And I fill in "Budget" with "300"
        And I select "project1" from "Project"
        And I follow "Add Sub Activity"
@@ -174,7 +174,7 @@ Feature: Reporter can manage activities
       When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload activities"
 
-      @run
+    
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Import"
@@ -292,7 +292,7 @@ Feature: Reporter can manage activities
         And I select "project1" from "Project"
         And I follow "Add funding source"
         And I select "funding_organization1" from "Organization" within ".fields"
-        And I fill in "Spent" with "111" within ".fields"
+        And I fill in "Expenditure" with "111" within ".fields"
         And I fill in "Budget" with "222" within ".fields"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
@@ -301,7 +301,7 @@ Feature: Reporter can manage activities
       When I follow "Activity1 description"
         And I follow "Edit" within ".fields"
         And I select "funding_organization2" from "Organization" within ".fields"
-        And I fill in "Spent" with "333" within ".fields"
+        And I fill in "Expenditure" with "333" within ".fields"
         And I fill in "Budget" with "444" within ".fields"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully updated"

@@ -31,7 +31,7 @@
     %li.last
       %h3== Past Activity Expenditure (#{@activity.project.try(:currency)})
       %ul.dashboard_section
-        = f.input :spend, :label => "Expenditure", :hint => "The total amount that youExpenditure spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
         %li.amounts.last
           %label== Quarterly Expenditure
           %ul

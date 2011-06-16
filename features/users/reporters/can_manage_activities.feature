@@ -18,6 +18,23 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
+    @javascript @run
+  Scenario: Reporter can add outputs
+    When I follow "Add" within ".sub-head:nth-child(2)"
+      And I fill in "Name" with "activity1"
+      And I fill in "Description" with "activity1 description"
+      And I fill in "Start date" with "2011-01-01"
+      And I fill in "End date" with "2011-12-01"
+      And I fill in "Expenditure" with "200"
+      And I fill in "Budget" with "300"
+      And I select "project1" from "Project"
+      And I follow "Add Output"
+      And I fill in "Output" with "Output description value" within ".outputs"
+      And I press "Save"
+    Then I should see "Activity was successfully created"
+    When I follow "activity1 description"
+    Then the "Output" field within ".outputs" should contain "Output description value"
+
     @javascript
     Scenario: Reporter can add sub-activities (normal values)
       When I follow "Add" within ".sub-head:nth-child(2)"

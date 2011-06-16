@@ -45,9 +45,9 @@ class CodeAssignmentsController < Reporter::BaseController
 
   def derive_classifications_from_sub_implementers
     if @activity.derive_classifications_from_sub_implementers!(params[:coding_type])
-      flash[:notice] = "District classifications were successfully derived from sub implementers."
+      flash[:notice] = "District classifications were successfully derived from implementers."
     else
-      flash[:error] = "We could not derive classification from sub implementers."
+      flash[:error] = "We could not derive classification from implementers."
     end
 
     redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type], :view => params[:view])

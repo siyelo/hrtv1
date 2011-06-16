@@ -46,7 +46,7 @@ class Reports::ActivitiesSummary
       row << "activity.provider.FOSAID"
       row << "activity.text_for_beneficiaries"
       row << "activity.text_for_targets"
-      row << "Is Sub Activity?"
+      row << "Is Implementer?"
       row << "parent_activity.total_budget"
       row << "parent_activity.total_spend"
 
@@ -55,7 +55,7 @@ class Reports::ActivitiesSummary
 
     def build_row(activity)
       organization  = activity.data_response.organization
-      #TODO handle sub activities correctly
+      #TODO handle implementers correctly
 
       row = []
 

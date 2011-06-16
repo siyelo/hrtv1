@@ -39,8 +39,9 @@ Feature: Reporter can view review page
         And I should not see "new comment body"
 
 
-    @javascript
+    @javascript @run
     Scenario: Manage comments on project (with Javascript)
+      Then wait a few moments
       When I click element "#project_details"
         And I click element ".project .descr"
         And I click element ".project .comment_details"

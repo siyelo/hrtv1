@@ -430,7 +430,7 @@ Then /^I should see tabs for comments,sub-activities when activities already ope
     And I click element ".activities .activity.entry_header"
     Then I should see "Comments" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:last a"
-    Then I should see "Sub-Activities" within the selected activity sub-tab
+    Then I should see "Sub-Implementers" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
     Then I should see "Comments" within the selected activity sub-tab
   }
@@ -444,7 +444,7 @@ Then /^I should see tabs for comments,sub-activities$/ do
     And I click element ".activities .activity.entry_header"
     Then I should see "Comments" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:last a"
-    Then I should see "Sub-Activities" within the selected activity sub-tab
+    Then I should see "Sub-Implementers" within the selected activity sub-tab
     When I click element ".activity_sub_tabs ul li:first"
     Then I should see "Comments" within the selected activity sub-tab
   }

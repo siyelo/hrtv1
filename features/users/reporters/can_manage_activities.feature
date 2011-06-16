@@ -28,15 +28,15 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Implementer"
+        And I follow "Add Sub-Implementer"
         And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Activity Expenditure" with "99"
-        And I fill in "Sub-Activity Budget" with "19"
+        And I fill in "Sub-Implementer Expenditure" with "99"
+        And I fill in "Sub-Implementer Budget" with "19"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-      Then the "Sub-Activity Expenditure" field should contain "99"
-        And the "Sub-Activity Budget" field should contain "19"
+      Then the "Sub-Implementer Expenditure" field should contain "99"
+        And the "Sub-Implementer Budget" field should contain "19"
 
     @javascript
     Scenario: Reporter can add sub-activities (percentage values)
@@ -48,15 +48,15 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Implementer"
+        And I follow "Add Sub-Implementer"
         And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Activity Expenditure" with "10%"
-        And I fill in "Sub-Activity Budget" with "10%"
+        And I fill in "Sub-Implementer Expenditure" with "10%"
+        And I fill in "Sub-Implementer Budget" with "10%"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-        Then the "Sub-Activity Expenditure" field should contain "20"
-        And the "Sub-Activity Budget" field should contain "30"
+        Then the "Sub-Implementer Expenditure" field should contain "20"
+        And the "Sub-Implementer Budget" field should contain "30"
 
     @javascript
     Scenario: Reporter can add sub-activities (percentage values must be less than 100)
@@ -68,15 +68,15 @@ Feature: Reporter can manage activities
        And I fill in "Expenditure" with "200"
        And I fill in "Budget" with "300"
        And I select "project1" from "Project"
-       And I follow "Add Implementer"
+       And I follow "Add Sub-Implementer"
        And I fill in "theCombobox" with "organization1"
-       And I fill in "Sub-Activity Expenditure" with "101%"
-       And I fill in "Sub-Activity Budget" with "10%"
+       And I fill in "Sub-Implementer Expenditure" with "101%"
+       And I fill in "Sub-Implementer Budget" with "10%"
        And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-       Then the "Sub-Activity Expenditure" field should contain "101"
-       And the "Sub-Activity Budget" field should contain "30"
+       Then the "Sub-Implementer Expenditure" field should contain "101"
+       And the "Sub-Implementer Budget" field should contain "30"
 
     @javascript
     Scenario: Reporter can CRUD activities
@@ -174,7 +174,7 @@ Feature: Reporter can manage activities
       When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload activities"
 
-    
+
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Import"
@@ -373,8 +373,8 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Expenditure" field should contain "66"
-      And the "Sub-Activity Budget" field should contain "77"
+      And the "Sub-Implementer Expenditure" field should contain "66"
+      And the "Sub-Implementer Budget" field should contain "77"
 
 
   Scenario: Reporter can upload and change implementers
@@ -385,5 +385,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Expenditure" field should contain "99"
-      And the "Sub-Activity Budget" field should contain "100"
+      And the "Sub-Implementer Expenditure" field should contain "99"
+      And the "Sub-Implementer Budget" field should contain "100"

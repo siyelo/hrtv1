@@ -59,7 +59,7 @@
                 %ul.inline_alt_tab
                   %li{:class => 'selected' }= link_to "Comments (#{activity.comments.size})", "#", :class => "comment_details"
                   - unless other_costs
-                    %li= link_to "Implementers (#{activity.sub_activities.size})", "#", :class => "activity_details"
+                    %li= link_to "Sub-Implementers (#{activity.sub_activities.size})", "#", :class => "activity_details"
 
               .tabs
                 .tab1

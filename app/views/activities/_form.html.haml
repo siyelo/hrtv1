@@ -87,18 +87,18 @@
       = render :partial => 'shared/add_organizations'
 
   %li.last.sub_activities
-    %h3 Implementers
+    %h3 Sub-Implementers
     %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
 
     - unless @activity.new_record?
-      - link_to "#", :class => "create_inline upload_btn overlay", :rel => "#sub_activities_upload_box" do
+      - link_to "#", :class => "create_inline upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
         = image_tag "new.png"
         Import / Export
 
     - f.semantic_fields_for :sub_activities do |ca|
       = render "activities/sub_activity_fields", :f => ca
     .add
-      = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/"
+      = link_to_add_fields "Add Sub-Implementer", f, :sub_activities, "activities/"
 
   %li.last
     %h3== Other

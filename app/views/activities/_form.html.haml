@@ -100,6 +100,15 @@
     .add
       = link_to_add_fields "Add Sub-Implementer", f, :sub_activities, "activities/"
 
+  %li.last.outputs
+    %h3 Outputs
+    %p.hint Optional. Your planned targets for this activity.
+
+    - f.semantic_fields_for :outputs do |ca|
+      = render "activities/output_fields", :f => ca
+    .add
+      = link_to_add_fields "Add Output", f, :outputs, "activities/"
+
   %li.last
     %h3== Other
     %ul.dashboard_section.single_column

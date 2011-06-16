@@ -6,7 +6,7 @@ describe Activity do
     it { should be_valid }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
@@ -25,6 +25,7 @@ describe Activity do
     it { should have_many :coding_spend }
     it { should have_many :coding_spend_cost_categorization }
     it { should have_many :coding_spend_district }
+    it { should have_many :outputs }
   end
 
   describe "attributes" do

@@ -46,7 +46,8 @@ class Activity < ActiveRecord::Base
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
+    :outputs_attributes
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
@@ -73,11 +74,13 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_cost_categorization
   has_many :coding_spend_district
   has_many :service_level_spend
+  has_many :outputs
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
   accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -267,7 +270,7 @@ class Activity < ActiveRecord::Base
     return true if self.spend.present?
     return true if self.budget.present?
   end
-  
+
   def possible_duplicate?
     self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
   end

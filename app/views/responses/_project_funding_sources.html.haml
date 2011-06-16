@@ -1,0 +1,23 @@
+%tr
+  %th{:colspan => 5}
+    Budget
+- @projects.each do |project|
+  - if (project.in_flows_budget_total || 0) != (project.budget || 0)
+    %tr
+      %td= project.name
+      %td= n2crs(project.budget, project.currency)
+      %td= n2crs(project.in_flows_budget_total, project.currency)
+      %td= n2crs(((project.budget || 0) - project.in_flows_budget_total), project.currency)
+      %td= link_to "Edit", edit_response_project_path(@response, project)
+
+%tr
+  %th{:colspan => 5}
+    Expenditure
+- @response.projects.each do |project|
+  - if (project.in_flows_spend_total || 0) != (project.spend || 0)
+    %tr
+      %td= project.name
+      %td= n2crs(project.spend, project.currency)
+      %td= n2crs(project.in_flows_spend_total, project.currency)
+      %td= n2crs(((project.spend || 0) - project.in_flows_spend_total), project.currency)
+      %td= link_to "Edit", edit_response_project_path(@response, project)

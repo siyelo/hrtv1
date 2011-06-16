@@ -47,7 +47,7 @@ class Reports::ActivitiesByDistrict
      row << "activity.provider.FOSAID"
      row << "activity.text_for_beneficiaries"
      row << "activity.text_for_targets"
-     row << "Is Sub Activity?"
+     row << "Is Implementer?"
      row << "parent_activity.total_budget"
      row << "parent_activity.total_spend"
      @locations.each{|location| row << location.to_s_with_external_id}
@@ -56,7 +56,7 @@ class Reports::ActivitiesByDistrict
     end
 
     def build_row(activity)
-      #TODO handle sub activities correctly
+      #TODO handle implementers correctly
 
       row = []
 

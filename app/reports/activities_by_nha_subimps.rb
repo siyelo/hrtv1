@@ -197,8 +197,8 @@ class Reports::ActivitiesByNhaSubimps
 
               row << activity.possible_duplicate?
               row << activity.id
-              row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
-              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
+              row << activity.provider.try(:name) || "No Implementer Specified" # include implementer here
+              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include implementer here
               row << funding_source[:ufs].try(:name)
               row << funding_source[:ufs].try(:raw_type)
               row << funding_source[:fa].try(:name)
@@ -242,9 +242,9 @@ class Reports::ActivitiesByNhaSubimps
       row << "Q3 (USD)"
       row << "Q4 (USD)"
       row << "Districts"
-      row << "# of sub-activities"
+      row << "# of implementers"
       row << "# of facilities implementing"
-      row << "Sub-implementers"
+      row << "Implementers"
       row << "Data Source"
       row << "Beneficiaries"
       row << "ID"
@@ -254,7 +254,7 @@ class Reports::ActivitiesByNhaSubimps
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
-      row << "SubActivity ID"
+      row << "Implementer ID"
       row << "Possible Duplicate?"
       row << "Implementer"
       row << "Implementer Type"

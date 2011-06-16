@@ -28,7 +28,7 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Sub Activity"
+        And I follow "Add Implementer"
         And I fill in "theCombobox" with "organization1"
         And I fill in "Sub-Activity Expenditure" with "99"
         And I fill in "Sub-Activity Budget" with "19"
@@ -48,7 +48,7 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Sub Activity"
+        And I follow "Add Implementer"
         And I fill in "theCombobox" with "organization1"
         And I fill in "Sub-Activity Expenditure" with "10%"
         And I fill in "Sub-Activity Budget" with "10%"
@@ -68,7 +68,7 @@ Feature: Reporter can manage activities
        And I fill in "Expenditure" with "200"
        And I fill in "Budget" with "300"
        And I select "project1" from "Project"
-       And I follow "Add Sub Activity"
+       And I follow "Add Implementer"
        And I fill in "theCombobox" with "organization1"
        And I fill in "Sub-Activity Expenditure" with "101%"
        And I fill in "Sub-Activity Budget" with "10%"
@@ -78,7 +78,7 @@ Feature: Reporter can manage activities
        Then the "Sub-Activity Expenditure" field should contain "101"
        And the "Sub-Activity Budget" field should contain "30"
 
-    @javascript 
+    @javascript
     Scenario: Reporter can CRUD activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "activity1"

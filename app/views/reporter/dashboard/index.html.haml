@@ -2,18 +2,12 @@
 
 %h1.main_heading Dashboard
 
-//= render 'getting_started'
 = render 'welcome'
 
 %ul.horizontal.left
-  -#%li= link_to "Edit Workplan", response_workplans_path(current_or_last_response), :class => "add_row"
-  -# instead, a hack
-  %li= link_to "Edit Workplan", "#", :class => "create_new"
-
-  -#%li= link_to "Classify Activities", edit_response_classification_path(current_or_last_response, 'CodingSpend'), :class => "add_row"
-  -# instead, a hack
+  %li= link_to "Edit Projects", response_projects_path(current_or_last_response), :class => "create_new"
   %li= link_to "Classify Activities", "#", :class => "create_new"
-  %li= link_to "Review & Respond", "#", :class => "create_new"
+  %li= link_to "Review & Respond", submit_response_path(current_or_last_response), :class => "create_new"
 
 .right.request_select_box
   = link_to "Choose the data request you're responding to", "#", :class => "js_request_select add_row"

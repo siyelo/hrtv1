@@ -17,9 +17,9 @@
         %span.desc Your basic preferences and contact settings
 
     %li
-      - link_to "#" do
-        %span.icon= image_tag "icon_welcome5.png", :alt => "Setup Your Organization", :height => "70"
-        %span.title 2. Enter Your Workplan
+      - link_to response_projects_path(current_or_last_response) do
+        %span.icon= image_tag "icon_welcome5.png", :alt => "Enter your rojects", :height => "70"
+        %span.title 2. Enter Your Projects
         %span.desc Define the health projects and activities your organization does
 
     %li
@@ -28,7 +28,7 @@
         %span.title 3. Add Classifications
         %span.desc Add a little extra detail about your activities.
     %li.last
-      - link_to "#" do
+      - link_to submit_response_path(current_or_last_response) do
         %span.icon= image_tag "icon_welcome3.png", :alt => "Setup Your Organization", :height => "70"
         %span.title 4. Review & Respond
         %span.desc Submit your data for the requested period

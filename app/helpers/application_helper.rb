@@ -287,5 +287,17 @@ module ApplicationHelper
   def is_number?(i)
     true if Float(i) rescue false
   end
+  
+  def current_response
+    current_user.current_data_response
+  end
+  
+  def last_response
+    current_user.organization.data_responses.last
+  end
+  
+  def current_or_last_response
+    current_response || last_response
+  end
 
 end

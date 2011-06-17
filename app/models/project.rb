@@ -310,7 +310,7 @@ class Project < ActiveRecord::Base
     [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
       if !response.project_and_activities_matching_amounts?(self, m)
         st = m == :budget ? "Budget" : "Expenditure"
-        errors << "The Project #{st} (#{n2cndrs( m == :budget ? self.budget : self.spend , self.currency)}) should match 
+        errors << "The Project #{st} (#{n2cndrs(self.send(m), self.currency)}) should match 
          the total #{st.downcase} for Activities plus Other Costs (#{n2cndrs(self.direct_activities_total(m) + self.other_costs_total(m), self.currency)}). 
          Please update your activities/other costs for this project accordingly."
       end

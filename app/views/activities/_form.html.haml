@@ -31,7 +31,7 @@
     %li.last
       %h3== Past Activity Expenditure (#{@activity.project.try(:currency)})
       %ul.dashboard_section
-        = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_activity_spend_total"}
         %li.amounts.last
           %label== Quarterly Expenditure
           %ul
@@ -45,7 +45,7 @@
     %li.last
       %h3== Budget (Planned Expenditure) (#{@activity.project.try(:currency)})
       %ul.dashboard_section
-        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_activity_budget_total"}
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label== Quarterly budget
@@ -99,6 +99,15 @@
       = render "activities/sub_activity_fields", :f => ca
     .add
       = link_to_add_fields "Add Sub-Implementer", f, :sub_activities, "activities/"
+
+  %li.last.outputs
+    %h3 Outputs
+    %p.hint Optional. Your planned targets for this activity.
+
+    - f.semantic_fields_for :outputs do |ca|
+      = render "activities/output_fields", :f => ca
+    .add
+      = link_to_add_fields "Add Output", f, :outputs, "activities/"
 
   %li.last
     %h3== Other

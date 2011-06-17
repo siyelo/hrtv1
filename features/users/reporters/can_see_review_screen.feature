@@ -39,7 +39,7 @@ Feature: Reporter can view review page
         And I should not see "new comment body"
 
 
-    @javascript @run
+    @javascript
     Scenario: Manage comments on project (with Javascript)
       Then wait a few moments
       When I click element "#project_details"

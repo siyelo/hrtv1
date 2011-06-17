@@ -18,7 +18,7 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-    @javascript @run
+    @javascript
   Scenario: Reporter can add outputs
     When I follow "Add" within ".sub-head:nth-child(2)"
       And I fill in "Name" with "activity1"
@@ -365,6 +365,18 @@ Feature: Reporter can manage activities
         And I follow "activity1"
         And I follow "Get Template" within "#sub_activities_upload_box"
       Then I should see "Implementer,Spend,Budget"
+
+
+    Scenario: Reporter can export Implementers
+      Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+        And an organization exists with name: "implementer"
+        And a sub_activity exists with activity: the activity, provider: the organization, spend: 111, budget: 222
+      When I follow "Projects"
+        And I follow "activity1"
+        And I follow "Export" within "#sub_activities_upload_box"
+      Then I should see "Implementer,Spend,Budget"
+        And I should see "implementer,111.0,222.0"
+
 
     Scenario: Reporter can see message when attached malformed CSV file for implementers
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response

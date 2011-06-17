@@ -2,8 +2,8 @@ Feature: Reporter can start a data response
   In order to enter data
   As a reporter
   I want to be able to start a data response
-  
-@run
+
+
   Scenario: Reporter can start a data response
     Given an organization exists with name: "Organization 1"
       And a data_request exists with title: "Request 1"

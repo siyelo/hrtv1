@@ -20,7 +20,7 @@ Feature: Reporter can manage data response
       When I follow "Settings"
       Then I should see "Response Settings" within "h1"
 
-      @run
+
     Scenario Outline: Edit data response, see feedback messages
       Given a basic org + reporter profile, with data response, signed in
         And I follow "Settings"

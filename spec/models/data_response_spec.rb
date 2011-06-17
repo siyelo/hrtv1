@@ -60,7 +60,7 @@ describe DataResponse do
     it "does not accept start date > end date" do
       dr = Factory.build(:data_response,
                          :fiscal_year_start_date => DateTime.new(2010, 01, 02),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
+                         :fiscal_year_end_date =>   DateTime.new(2009, 01, 01) )
       dr.should_not be_valid
     end
 

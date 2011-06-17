@@ -20,7 +20,7 @@ Feature: Reporter can manage data response
       When I follow "Settings"
       Then I should see "Response Settings" within "h1"
 
-
+      @run
     Scenario Outline: Edit data response, see feedback messages
       Given a basic org + reporter profile, with data response, signed in
         And I follow "Settings"
@@ -33,7 +33,7 @@ Feature: Reporter can manage data response
 
         Examples:
           | start_date | end_date   | message                              | specific_message                          |
-          | 2010-01-01 | 2010-01-02 | Successfully updated.                | Successfully updated.                     |
+          | 2010-01-01 | 2010-12-31 | Successfully updated.                | Successfully updated.                     |
           |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date can't be blank |
           | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is not a valid date |
           | 2010-01-02 |            | Oops, we couldn't save your changes. | Fiscal year end date can't be blank |

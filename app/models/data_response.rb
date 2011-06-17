@@ -43,6 +43,7 @@ class DataResponse < ActiveRecord::Base
   validates_date :fiscal_year_end_date
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
     :message => "Start date must come before End date."
+  validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -397,6 +398,16 @@ class DataResponse < ActiveRecord::Base
   private
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
+    
+    
+    ### Validations
+    def validates_date_range
+      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
+    end
+    
+    
+    ###Other Methods
+    
     def reject_uncoded(activities)
       activities.select{ |a|
         (!a.budget_classified? && self.request.budget?) ||

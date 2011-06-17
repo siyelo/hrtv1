@@ -43,11 +43,18 @@ describe DataResponse do
     it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
     it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
 
-    it "accepts start date < end date" do
+    it "accepts start date < end date (exactly 1 year)" do
       dr = Factory.build(:data_response,
                          :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 02) )
+                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
       dr.should be_valid
+    end
+    
+    it "does not accept an end date that is not one year after the start date" do
+      dr = Factory.build(:data_response,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 30) )
+      dr.should_not be_valid
     end
 
     it "does not accept start date > end date" do

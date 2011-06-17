@@ -1128,6 +1128,30 @@ var reporter_dashboard_index = {
     $('#user_data_response_id_current').live('change', function(e) {
       $('#edit_user_2').submit();
     });
+		
+		$('.js_request_select').click(function (e) {
+			e.preventDefault();
+			$(this).next().show();
+			$(this).hide();
+		});
+		
+		$('.js_request_close').click(function (e) {
+			e.preventDefault();
+			$(this).parents('.request_select').hide();
+			$('.js_request_select').show();
+		})
+		
+		$('.js_welcome_show').click(function (e) {
+			e.preventDefault();
+			$(this).next().slideDown();
+			$(this).hide();
+		});
+		
+		$('.js_welcome_hide').click(function (e) {
+			e.preventDefault();
+			$(this).parents('.welcome_box').slideUp();
+			$('.js_welcome_show').show();
+		})
   }
 };
 

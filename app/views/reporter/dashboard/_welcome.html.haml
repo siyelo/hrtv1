@@ -1,0 +1,44 @@
+= link_to "Show welcome screen", "#", :class => "welcome_show right js_welcome_show"
+.welcome_box
+
+  - link_to "#", :class => "welcome_hide right js_welcome_hide" do
+    Hide this welcome screen
+    = image_tag "delete_row.png", :alt => "Hide"
+        
+  %h3.welcome_msg
+    Welcome Some Organization
+    %span Here are few simple steps to help you get started
+
+  %ul.welcome_steps
+    %li.first
+      - link_to "#" do
+        %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
+        %span.title 1. Configure Organization
+        %span.desc Your basic preferences and contact settings
+
+    %li
+      - link_to "#" do
+        %span.icon= image_tag "icon_welcome5.png", :alt => "Setup Your Organization", :height => "70"
+        %span.title 2. Enter Your Workplan
+        %span.desc Define the health projects and activities your organization does
+
+    %li
+      - link_to "#" do
+        %span.icon= image_tag "icon_welcome4.png", :alt => "Add Classifications", :height => "70"
+        %span.title 3. Add Classifications
+        %span.desc Add a little extra detail about your activities.
+    %li.last
+      - link_to "#" do
+        %span.icon= image_tag "icon_welcome3.png", :alt => "Setup Your Organization", :height => "70"
+        %span.title 4. Review & Respond
+        %span.desc Submit your data for the requested period
+
+  .welcome_info
+    %p Have questions?
+    %ul
+      %li
+        = link_to "Help Center", help_link, :target => "_blank"
+        %span Our knowledge base and FAQ's
+      %li
+        = link_to "Contact Us", contact_link, :target => "_blank"
+        %span Start a discussion with the support team.

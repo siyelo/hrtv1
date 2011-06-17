@@ -241,7 +241,34 @@ a.remove_nested
     display: inline-block
     &:hover
       color: $mid-blue
+      
+  &.welcome_hide
+    color: $mid-blue
+    display: block
+    font-size: 11px
+    font-weight: bold
+    margin-top: 20px
+    opacity: 0.3
+    text-align: right
+    text-decoration: none
+    img
+      margin: 0 0 -4px 5px
+    &:hover
+      opacity: 1
 
+  &.welcome_show
+    background: $lightest-blue
+    color: $mid-blue
+    display: none
+    font-size: 11px
+    font-weight: bold
+    margin-top: -50px
+    padding: 5px 10px
+    opacity: 0.4
+    text-decoration: none
+    +border-radius
+    &:hover, &:focus
+      opacity: 1
 
 .next, input[type=submit]
   +border-radius
@@ -394,3 +421,70 @@ body.login .buttons li:last-child
 
   &.sub_impl_imp_exp
     margin-bottom: 10px
+
+/* NEW BUTTON STYLES */
+
+a, input[type=text]
+
+  &.create_button, &.create_new
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 10px
+    font-weight: bold
+    margin-bottom: 10px
+    min-height: 13px
+    padding: 5px 8px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff
+      +linear-gradient(color-stops(green, green - #222))
+      +text-shadow(green - #444, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+
+  &.add_row, &.edit_button
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #222 !important
+    display: inline-block
+    font-size: 11px
+    font-weight: bold
+    line-height: 1 !important
+    margin: 0 0 0 3px
+    padding: 5px 6px
+    text-decoration: none
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 0, 1px)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      border: 1px solid $light-blue - #222
+      color: $mid-blue !important
+      &.disabled
+        border: 1px solid $light-blue
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+      &.disabled
+        top: 0px
+    &.disabled
+      color: $light-grey + #222 !important
+      pointer-events: none
+      cursor: default

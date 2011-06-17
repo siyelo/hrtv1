@@ -1,0 +1,214 @@
+.full_width ul
+  margin-bottom: 10px
+  +border-bottom-radius
+  
+  &.horizontal
+    +horizontal-list
+    margin-bottom: 0
+    
+  &.bulleted
+    list-style: disc
+    margin: 5px 0 0
+    padding-left: 20px
+    li
+      margin-bottom: 4px
+      
+  &.marginless
+    margin: 0
+    
+  &.admin_reports
+    margin-bottom: 0
+    > li
+      &:hover > a
+        background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+        +box-shadow($light-blue, 0, 0, 5px)
+    li:last-child a
+      margin-bottom: 0
+      
+  &.manage_bar
+    margin: 0
+    +pie-clearfix
+    &.inline
+      display: inline-block
+      position: relative
+      top: 5px
+    li
+      display: inline
+      float: right
+      a
+        background: #eee
+        border: 1px solid $light-blue
+        color: $dark-grey
+        display: inline-block
+        font-size: 10px
+        height: auto
+        line-height: 1.4
+        margin-left: 3px
+        padding: 3px 5px 2px
+        text-decoration: none
+        +border-radius(2px)
+        +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+        +text-shadow(#fff, 0, 0, 1px)
+        &:hover, &:focus
+          background: $orange
+          border: 1px solid $orange - #111
+          color: #fff
+          +linear-gradient(color-stops($orange - #111, $orange + #111))
+          +text-shadow(#444, 0, 0, 1px)
+        &:active
+          outline: none
+          position: relative
+          top: 1px
+
+.welcome_steps
+  //border-bottom: 1px solid $lightest-blue
+  clear: both
+  margin-bottom: 10px
+  //padding-bottom: 10px
+  width: 100%
+  +pie-clearfix
+
+  li
+    display: inline
+    float: left
+    margin: 0.5%
+    width: 24.25%
+    &.first
+      margin-left: 0
+    &.last
+      margin-right: 0
+    &.welcome_info
+      display: block
+      width: 99%
+      li
+        height: auto
+        width: auto
+
+  a
+    background: $lightest-blue
+    border: 1px solid $filler
+    border-bottom: 3px solid $lighter-blue
+    display: block
+    line-height: 1.3
+    min-height: 80px
+    padding: 10px 0 0 9px
+    text-decoration: none
+    +border-radius(10px)
+    +pie-clearfix
+    &:hover
+      background: #fff
+      border: 1px solid $lightest-blue
+      border-bottom: 3px solid $lightest-blue
+      .title
+        color: $mid-blue
+        +text-shadow(#fff, 0, 1px, 0)
+
+  .icon
+    display: inline-block
+    float: left
+    width: 80px
+
+  .title
+    color: $orange
+    display: inline-block
+    float: left
+    font-size: 16px
+    font-weight: bold
+    letter-spacing: -0.1em
+    margin-top: 10px
+    text-decoration: none
+    width: 63%
+    +text-shadow(#fff, 0, 1px, 0)
+
+  .desc
+    color: $light-blue - #333
+    display: block
+    float: left
+    font-size: 12px
+    margin: 3px 0 10px
+    width: 63%
+
+ul.status
+  padding-bottom: 15px
+  li
+    font-size: 14px
+    span
+      font-size: 12px
+      color: $dark-grey
+      padding-right: 5px
+
+ul.push
+  font-size: 12px
+  margin: 0 0 15px 65px
+  list-style: disc
+
+.status
+  border: 1px solid $lighter-blue
+  padding: 15px 15px 15px 75px
+  +border-radius
+
+  &.go
+    background: image_url("flag_48_green.png") no-repeat 15px center $lightest-blue
+  &.stop
+    background: image_url("flag_48_red.png") no-repeat 15px center $lightest-blue
+
+  li
+    color: $mid-blue
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 4px
+    &:last-child
+      margin-bottom: 0
+
+    span
+      color: $light-blue - #333
+      display: inline-block
+      font-weight: normal
+      padding-top: 4px
+      text-transform: lowercase
+      min-width: 90px
+
+ul.review li
+  padding-left: 32px
+  &.alt
+    padding: 0
+
+  &.dashboard_section
+    padding-top: 20px
+
+  .simple_table td
+    background: #fff
+    border-bottom: 1px solid $lightest-blue !important
+
+
+// GROUPING TAB STYLES //
+
+ul.group
+  border-bottom: 1px solid $light-blue
+  margin-top: 10px
+  margin-bottom: 20px
+  font-size: 11px
+  +linear-gradient(color-stops(white, $lightest-blue + #090909))
+
+  li
+    display: inline-block
+    padding: 0px
+
+    a
+      border-top: 1px solid #FFF
+      display: inline-block
+      line-height: 1.6em
+      padding: 8px 15px 5px
+      text-decoration: none
+
+      &.active
+        background: white
+        border-top: 1px solid $light-blue
+        border-right: 1px solid $light-blue
+        border-bottom: 1px solid white
+        border-left: 1px solid $light-blue
+        color: $mid-blue
+        font-weight: bold
+        margin-bottom: -1px
+        +border-top-radius
+        +linear-gradient(color-stops($lightest-blue + #090909, white))

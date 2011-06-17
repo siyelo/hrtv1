@@ -3,7 +3,7 @@ Factory.define :data_response, :class => DataResponse do |f|
   f.organization             { Factory(:organization) }
   f.currency                 { "RWF" }
   f.fiscal_year_start_date   { Date.parse("2008-09-01") }
-  f.fiscal_year_end_date     { Date.parse("2009-09-01") }
+  f.fiscal_year_end_date     { Date.parse("2009-08-31") }
   f.contact_name             { "Bob" }
   f.contact_position         { "Manager" }
   f.contact_phone_number     { "123123123" }

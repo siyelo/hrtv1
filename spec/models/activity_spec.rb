@@ -94,50 +94,50 @@ describe Activity do
 
   describe "codings required is decided by data_request" do
     it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :service_levels => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :service_levels => false)))
       @activity.service_level_budget_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require inputs and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :inputs => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :inputs => false)))
       @activity.coding_budget_cc_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require locations and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :locations => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :locations => false)))
       @activity.coding_budget_district_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require purposes and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :purposes => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :purposes => false)))
       @activity.coding_budget_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :service_levels => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :service_levels => false)))
       @activity.service_level_spend_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require inputs and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :inputs => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :inputs => false)))
       @activity.coding_spend_cc_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require locations and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :locations => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :locations => false)))
       @activity.coding_spend_district_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require purposes and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :purposes => false)))
+      @activity = Factory(:activity, :data_response => Factory(:data_response,
+                                 :data_request => Factory(:data_request, :purposes => false)))
       @activity.coding_spend_classified?.should be_true
     end
 
@@ -146,39 +146,39 @@ describe Activity do
 
   describe "review screen validations" do
     it "will return true if the activity has a budget or a spend entered" do
-      @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => 20, :spend => nil)
+      @activity = Factory(:activity, :project => Factory(:project), :budget => 20, :spend => nil)
       @activity.has_budget_or_spend?.should be_true
     end
 
     it "will return false if the activity has no budget or spend entered" do
-      @activity = Factory.create(:activity, :project => Factory.create(:project), :budget => nil, :spend => nil)
+      @activity = Factory(:activity, :project => Factory(:project), :budget => nil, :spend => nil)
       @activity.has_budget_or_spend?.should be_false
     end
   end
 
   describe "checking activities budget/spend against projects validations" do
     it "returns false when the activitys spend is greater than that of the projects" do
-      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000),
+      @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 11000, :budget => 9000)
       @activity.check_projects_budget_and_spend?.should be_false
     end
 
     it "returns false when the activitys budget is greater than that of the projects" do
-      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000),
+      @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 10000, :budget => 19000)
       @activity.check_projects_budget_and_spend?.should be_false
     end
 
     it "returns true when the activitys spend and budget is less than that of the projects" do
-      @activity = Factory.create(:activity, :project => Factory.create(:project, :budget => 10000, :spend => 10000),
+      @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 1000, :budget => 1000)
 
       @activity.check_projects_budget_and_spend?.should be_true
     end
 
     it "returns true when the activitys quarterly spend and budget is less than that of the projects" do
-      @activity = Factory.create(:activity,
-                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
+      @activity = Factory(:activity,
+                                 :project => Factory(:project, :budget => 10000, :spend => 10000,
                                  :spend_q1 => 1300, :spend_q2 => 1400, :spend_q3 => 1500, :spend_q4 => 1233,
                                  :budget_q1 => 1200,:budget_q2 => 1300,:budget_q3 => 1500,:budget_q4 => 1100),
 
@@ -188,8 +188,8 @@ describe Activity do
     end
 
     it "returns false when the activitys quarterly spend and budget is less than that of the projects" do
-      @activity = Factory.create(:activity,
-                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
+      @activity = Factory(:activity,
+                                 :project => Factory(:project, :budget => 10000, :spend => 10000,
                                  :spend_q1 => 10, :spend_q2 => 10, :spend_q3 => 10, :spend_q4 => 1233,
                                  :budget_q1 => 1200,:budget_q1 => 1300,:budget_q1 => 1500,:budget_q1 => 1100),
 
@@ -201,19 +201,19 @@ describe Activity do
 
   describe "currency" do
     it "complains when you dont have a project (therefore currency)" do
-      lambda{ activity = Factory.create(:activity, :projects => []) }.should raise_error
+      lambda{ activity = Factory(:activity, :projects => []) }.should raise_error
     end
 
     it "returns project currency when activity has currency" do
-      activity = Factory.create(:activity, :project => Factory.create(:project, :currency => 'USD'))
+      activity = Factory(:activity, :project => Factory(:project, :currency => 'USD'))
       activity.currency.should == "USD"
     end
   end
 
   describe "organization_name" do
     it "returns organization nane" do
-      data_response = Factory.create(:data_response, :organization => Factory.create(:organization, :name => "Organization1"))
-      activity = Factory.create(:activity, :data_response => data_response)
+      data_response = Factory(:data_response, :organization => Factory(:organization, :name => "Organization1"))
+      activity = Factory(:activity, :data_response => data_response)
       activity.organization_name.should == "Organization1"
     end
   end
@@ -221,14 +221,14 @@ describe Activity do
   describe "coding_budget_sum_in_usd" do
     it "returns coding_budget_sum_in_usd" do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      activity = Factory.create(:activity, :project => Factory.create(:project, :currency => "RWF"))
-      code1 = Factory.create(:code)
-      code2 = Factory.create(:code)
+      activity = Factory(:activity, :project => Factory(:project, :currency => "RWF"))
+      code1 = Factory(:code)
+      code2 = Factory(:code)
       Mtef.stub(:roots) { [code1, code2]}
 
-      Factory.create(:coding_budget, :activity => activity, :code => code1,
+      Factory(:coding_budget, :activity => activity, :code => code1,
                      :amount => 6000, :cached_amount => 6000)
-      Factory.create(:coding_budget, :activity => activity, :code => code2,
+      Factory(:coding_budget, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
       activity.coding_budget_sum_in_usd.should == 48
@@ -238,14 +238,14 @@ describe Activity do
   describe "coding_spend_sum_in_usd" do
     it "returns coding_spend_sum_in_usd" do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      activity = Factory.create(:activity, :project => Factory.create(:project, :currency => "RWF"))
-      code1 = Factory.create(:code)
-      code2 = Factory.create(:code)
+      activity = Factory(:activity, :project => Factory(:project, :currency => "RWF"))
+      code1 = Factory(:code)
+      code2 = Factory(:code)
       Mtef.stub(:roots) { [code1, code2]}
 
-      Factory.create(:coding_spend, :activity => activity, :code => code1,
+      Factory(:coding_spend, :activity => activity, :code => code1,
                      :amount => 6000, :cached_amount => 6000)
-      Factory.create(:coding_spend, :activity => activity, :code => code2,
+      Factory(:coding_spend, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
       activity.coding_spend_sum_in_usd.should == 48
@@ -255,13 +255,13 @@ describe Activity do
   describe "coding_budget_district_sum_in_usd" do
     it "returns coding_budget_district_sum_in_usd" do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      activity = Factory.create(:activity, :project => Factory.create(:project, :currency => "RWF"))
-      code1 = Factory.create(:code)
-      code2 = Factory.create(:code)
+      activity = Factory(:activity, :project => Factory(:project, :currency => "RWF"))
+      code1 = Factory(:code)
+      code2 = Factory(:code)
 
-      Factory.create(:coding_budget_district, :activity => activity, :code => code1,
+      Factory(:coding_budget_district, :activity => activity, :code => code1,
                      :amount => 6000, :cached_amount => 6000)
-      Factory.create(:coding_budget_district, :activity => activity, :code => code2,
+      Factory(:coding_budget_district, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
       activity.coding_budget_district_sum_in_usd(code1).should == 12
@@ -272,13 +272,13 @@ describe Activity do
   describe "coding_spend_district_sum_in_usd" do
     it "returns coding_spend_district_sum_in_usd" do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      activity = Factory.create(:activity, :project => Factory.create(:project, :currency => "RWF"))
-      code1 = Factory.create(:code)
-      code2 = Factory.create(:code)
+      activity = Factory(:activity, :project => Factory(:project, :currency => "RWF"))
+      code1 = Factory(:code)
+      code2 = Factory(:code)
 
-      Factory.create(:coding_spend_district, :activity => activity, :code => code1,
+      Factory(:coding_spend_district, :activity => activity, :code => code1,
                      :amount => 6000, :cached_amount => 6000)
-      Factory.create(:coding_spend_district, :activity => activity, :code => code2,
+      Factory(:coding_spend_district, :activity => activity, :code => code2,
                      :amount => 18000, :cached_amount => 18000)
 
       activity.coding_spend_district_sum_in_usd(code1).should == 12
@@ -288,23 +288,23 @@ describe Activity do
 
   describe "coding_budget_classified?" do
     it "is classified when activity budget is nil" do
-      activity = Factory.create(:activity, :budget => nil)
+      activity = Factory(:activity, :budget => nil)
       activity.coding_budget_classified?.should be_true
     end
 
     it "is classified when activity budget is equal to coded budget" do
-      code     = Factory.create(:mtef_code, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:coding_budget, :activity => activity,
+      code     = Factory(:mtef_code, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:coding_budget, :activity => activity,
                      :code => code, :cached_amount => 100)
 
       activity.coding_budget_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded budget" do
-      code     = Factory.create(:mtef_code, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:coding_budget, :activity => activity,
+      code     = Factory(:mtef_code, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:coding_budget, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_budget_classified?.should be_false
     end
@@ -312,22 +312,22 @@ describe Activity do
 
   describe "coding_budget_cc_classified?" do
     it "is classified when activity budget is nil" do
-      activity = Factory.create(:activity, :budget => nil)
+      activity = Factory(:activity, :budget => nil)
       activity.coding_budget_cc_classified?.should be_true
     end
 
     it "is classified when activity budget is equal to coded cost category budget" do
-      code     = Factory.create(:cost_category_code, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:coding_budget_cost_categorization, :activity => activity,
+      code     = Factory(:cost_category_code, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:coding_budget_cost_categorization, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.coding_budget_cc_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded cost category budget" do
-      code     = Factory.create(:cost_category_code, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:coding_budget_cost_categorization, :activity => activity,
+      code     = Factory(:cost_category_code, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:coding_budget_cost_categorization, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_budget_cc_classified?.should be_false
     end
@@ -335,22 +335,22 @@ describe Activity do
 
   describe "service_level_budget_classified?" do
     it "is classified when activity budget is nil" do
-      activity = Factory.create(:activity, :budget => nil)
+      activity = Factory(:activity, :budget => nil)
       activity.service_level_budget_classified?.should be_true
     end
 
     it "is classified when activity budget is equal to coded service level budget" do
-      code     = Factory.create(:service_level, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:service_level_budget, :activity => activity,
+      code     = Factory(:service_level, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:service_level_budget, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.service_level_budget_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded service level budget" do
-      code     = Factory.create(:service_level, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100)
-      Factory.create(:service_level_budget, :activity => activity,
+      code     = Factory(:service_level, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100)
+      Factory(:service_level_budget, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.service_level_budget_classified?.should be_false
     end
@@ -358,28 +358,28 @@ describe Activity do
 
   describe "coding_budget_district_classified?" do
     it "is classified when activity budget is nil" do
-      @activity = Factory.create(:activity, :budget => nil)
+      @activity = Factory(:activity, :budget => nil)
       @activity.coding_budget_district_classified?.should be_true
     end
 
 
     it "is classified when activity locations are empty" do
-      @activity = Factory.create(:activity, :budget => 100, :locations => [])
+      @activity = Factory(:activity, :budget => 100, :locations => [])
       @activity.coding_budget_district_classified?.should be_true
     end
 
     it "is classified when activity budget is equal to coded location budget" do
-      code     = Factory.create(:location, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100, :locations => [code])
-      Factory.create(:coding_budget_district, :activity => activity,
+      code     = Factory(:location, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100, :locations => [code])
+      Factory(:coding_budget_district, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.coding_budget_district_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded location budget" do
-      code     = Factory.create(:location, :short_display => 'code')
-      activity = Factory.create(:activity, :budget => 100, :locations => [code])
-      Factory.create(:coding_budget_district, :activity => activity,
+      code     = Factory(:location, :short_display => 'code')
+      activity = Factory(:activity, :budget => 100, :locations => [code])
+      Factory(:coding_budget_district, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_budget_district_classified?.should be_false
     end
@@ -387,22 +387,22 @@ describe Activity do
 
   describe "coding_spend_classified?" do
     it "is classified when activity spend is nil" do
-      activity = Factory.create(:activity, :spend => nil)
+      activity = Factory(:activity, :spend => nil)
       activity.coding_spend_classified?.should be_true
     end
 
     it "is classified when activity spend is equal to coded spend" do
-      code     = Factory.create(:mtef_code, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:coding_spend, :activity => activity,
+      code     = Factory(:mtef_code, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:coding_spend, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.coding_spend_classified?.should be_true
     end
 
     it "is not classified when activity spend is not equal to coded spend" do
-      code     = Factory.create(:mtef_code, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:coding_spend, :activity => activity,
+      code     = Factory(:mtef_code, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:coding_spend, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_spend_classified?.should be_false
     end
@@ -410,22 +410,22 @@ describe Activity do
 
   describe "coding_spend_cc_classified?" do
     it "is classified when activity spend is nil" do
-      activity = Factory.create(:activity, :spend => nil)
+      activity = Factory(:activity, :spend => nil)
       activity.coding_spend_cc_classified?.should be_true
     end
 
     it "is classified when activity spend is equal to coded cost category spend" do
-      code     = Factory.create(:cost_category_code, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:coding_spend_cost_categorization, :activity => activity,
+      code     = Factory(:cost_category_code, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:coding_spend_cost_categorization, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.coding_spend_cc_classified?.should be_true
     end
 
     it "is not classified when activity spend is not equal to coded cost category spend" do
-      code     = Factory.create(:cost_category_code, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:coding_spend_cost_categorization, :activity => activity,
+      code     = Factory(:cost_category_code, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:coding_spend_cost_categorization, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_spend_cc_classified?.should be_false
     end
@@ -433,22 +433,22 @@ describe Activity do
 
   describe "service_level_spend_classified?" do
     it "is classified when activity spend is nil" do
-      activity = Factory.create(:activity, :spend => nil)
+      activity = Factory(:activity, :spend => nil)
       activity.service_level_spend_classified?.should be_true
     end
 
     it "is classified when activity spend is equal to coded service level spend" do
-      code     = Factory.create(:service_level, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:service_level_spend, :activity => activity,
+      code     = Factory(:service_level, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:service_level_spend, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.service_level_spend_classified?.should be_true
     end
 
     it "is not classified when spend is not equal to coded service level spend" do
-      code     = Factory.create(:service_level, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100)
-      Factory.create(:service_level_spend, :activity => activity,
+      code     = Factory(:service_level, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100)
+      Factory(:service_level_spend, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.service_level_spend_classified?.should be_false
     end
@@ -456,27 +456,27 @@ describe Activity do
 
   describe "coding_spend_district_classified?" do
     it "is classified when activity spend is nil" do
-      activity = Factory.create(:activity, :spend => nil)
+      activity = Factory(:activity, :spend => nil)
       activity.coding_spend_district_classified?.should be_true
     end
 
     it "is classified when activity has no locations" do
-      @activity = Factory.create(:activity, :spend => 100, :locations => [])
+      @activity = Factory(:activity, :spend => 100, :locations => [])
       @activity.coding_spend_district_classified?.should be_true
     end
 
     it "is classified when activity spend is equal to coded location spend" do
-      code     = Factory.create(:location, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100, :locations => [code])
-      Factory.create(:coding_spend_district, :activity => activity,
+      code     = Factory(:location, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100, :locations => [code])
+      Factory(:coding_spend_district, :activity => activity,
                      :code => code, :cached_amount => 100)
       activity.coding_spend_district_classified?.should be_true
     end
 
     it "is classified when activity spend is not equal to coded activity spend" do
-      code     = Factory.create(:location, :short_display => 'code')
-      activity = Factory.create(:activity, :spend => 100, :locations => [code])
-      Factory.create(:coding_spend_district, :activity => activity,
+      code     = Factory(:location, :short_display => 'code')
+      activity = Factory(:activity, :spend => 100, :locations => [code])
+      Factory(:coding_spend_district, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.coding_spend_district_classified?.should be_false
     end
@@ -484,7 +484,7 @@ describe Activity do
 
   describe "budget_classified?" do
     before :each do
-      @activity = Factory.create(:activity)
+      @activity = Factory(:activity)
     end
 
     it "is budget_classified? when all budgets are classified" do
@@ -530,7 +530,7 @@ describe Activity do
 
   describe "spend_classified?" do
     before :each do
-      @activity = Factory.create(:activity)
+      @activity = Factory(:activity)
     end
 
     it "is spend_classified? when all spends are classified" do
@@ -576,8 +576,8 @@ describe Activity do
 
   describe "classified? (with factories)" do
     before :each do
-      @request  = Factory.create(:data_request, :title => 'Data Request 1')
-      @response = Factory.create(:data_response, :data_request => @request)
+      @request  = Factory(:data_request, :title => 'Data Request 1')
+      @response = Factory(:data_response, :data_request => @request)
       @project = Factory(:project, :data_response => @response)
     end
 
@@ -619,12 +619,12 @@ describe Activity do
 
   describe "budget_district_coding_adjusted" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
+      @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)
     end
 
     context "activity has budget district code assignments" do
       it "returns activity budget district code assignments" do
-        code_assignment = Factory.create(:coding_budget_district, :activity => @activity,
+        code_assignment = Factory(:coding_budget_district, :activity => @activity,
                                          :amount => 10, :cached_amount => 10)
 
         @activity.budget_district_coding_adjusted.should == [code_assignment]
@@ -633,14 +633,14 @@ describe Activity do
 
     context "activity does not have budget district code assignments" do
       it "returns sub_activity budget district code assignments" do
-        donor         = Factory.create(:donor, :name => 'Donor')
-        ngo           = Factory.create(:ngo, :name => 'Ngo')
-        @location1    = Factory.create(:location, :short_display => 'Location1')
-        @location2    = Factory.create(:location, :short_display => 'Location2')
-        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
-        data_request  = Factory.create(:data_request, :organization => donor)
-        data_response = Factory.create(:data_response, :organization => ngo,
+        donor         = Factory(:donor, :name => 'Donor')
+        ngo           = Factory(:ngo, :name => 'Ngo')
+        @location1    = Factory(:location, :short_display => 'Location1')
+        @location2    = Factory(:location, :short_display => 'Location2')
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory(:ngo, :name => 'Implementer2', :locations => [@location2])
+        data_request  = Factory(:data_request, :organization => donor)
+        data_response = Factory(:data_response, :organization => ngo,
                                        :data_request => data_request)
 
         @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
@@ -669,14 +669,14 @@ describe Activity do
       end
 
       it "returns empty array unless all sub implementers have locations" do
-        donor         = Factory.create(:donor, :name => 'Donor')
-        ngo           = Factory.create(:ngo, :name => 'Ngo')
-        @location1    = Factory.create(:location, :short_display => 'Location1')
-        @location2    = Factory.create(:location, :short_display => 'Location2')
-        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory.create(:ngo, :name => 'Implementer2')# , :locations => [@location2])
-        data_request  = Factory.create(:data_request, :organization => donor)
-        data_response = Factory.create(:data_response, :organization => ngo,
+        donor         = Factory(:donor, :name => 'Donor')
+        ngo           = Factory(:ngo, :name => 'Ngo')
+        @location1    = Factory(:location, :short_display => 'Location1')
+        @location2    = Factory(:location, :short_display => 'Location2')
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory(:ngo, :name => 'Implementer2')# , :locations => [@location2])
+        data_request  = Factory(:data_request, :organization => donor)
+        data_response = Factory(:data_response, :organization => ngo,
                                        :data_request => data_request)
 
         @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
@@ -698,8 +698,8 @@ describe Activity do
 
       context "sub_activities does not have budget district code assignments" do
         it "returns even split on activity locations when activity has locations" do
-          @activity.locations << Factory.create(:location, :short_display => 'Location1')
-          @activity.locations << Factory.create(:location, :short_display => 'Location2')
+          @activity.locations << Factory(:location, :short_display => 'Location1')
+          @activity.locations << Factory(:location, :short_display => 'Location2')
           @activity.budget_district_coding_adjusted.length.should == 2
           @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
           @activity.budget_district_coding_adjusted[0].cached_amount.should == 50
@@ -718,12 +718,12 @@ describe Activity do
 
   describe "spend_district_coding_adjusted" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :spend => 100)
+      @activity = Factory(:activity, :name => 'Activity 1', :spend => 100)
     end
 
     context "activity has spend district code assignments" do
       it "returns activity spend district code assignments" do
-        code_assignment = Factory.create(:coding_spend_district, :activity => @activity,
+        code_assignment = Factory(:coding_spend_district, :activity => @activity,
                                          :amount => 10, :cached_amount => 10)
 
         @activity.spend_district_coding_adjusted.should == [code_assignment]
@@ -732,14 +732,14 @@ describe Activity do
 
     context "activity does not have spend district code assignments" do
       it "returns sub_activity spend district code assignments" do
-        donor         = Factory.create(:donor, :name => 'Donor')
-        ngo           = Factory.create(:ngo, :name => 'Ngo')
-        @location1    = Factory.create(:location, :short_display => 'Location1')
-        @location2    = Factory.create(:location, :short_display => 'Location2')
-        implementer1  = Factory.create(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory.create(:ngo, :name => 'Implementer2', :locations => [@location2])
-        data_request  = Factory.create(:data_request, :organization => donor)
-        data_response = Factory.create(:data_response, :organization => ngo,
+        donor         = Factory(:donor, :name => 'Donor')
+        ngo           = Factory(:ngo, :name => 'Ngo')
+        @location1    = Factory(:location, :short_display => 'Location1')
+        @location2    = Factory(:location, :short_display => 'Location2')
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
+        implementer2  = Factory(:ngo, :name => 'Implementer2', :locations => [@location2])
+        data_request  = Factory(:data_request, :organization => donor)
+        data_response = Factory(:data_response, :organization => ngo,
                                        :data_request => data_request)
 
         @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
@@ -769,8 +769,8 @@ describe Activity do
 
       context "sub_activities does not have spend district code assignments" do
         it "returns even split on activity locations when activity has locations" do
-          @activity.locations << Factory.create(:location, :short_display => 'Location1')
-          @activity.locations << Factory.create(:location, :short_display => 'Location2')
+          @activity.locations << Factory(:location, :short_display => 'Location1')
+          @activity.locations << Factory(:location, :short_display => 'Location2')
           @activity.spend_district_coding_adjusted.length.should == 2
           @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
           @activity.spend_district_coding_adjusted[0].cached_amount.should == 50
@@ -789,21 +789,21 @@ describe Activity do
 
   describe "budget_stratprog_coding" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
-      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
-      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
-      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)
       @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
       Activity.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
       Activity.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
-      Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+      Factory(:coding_budget, :activity => @activity, :code => @code1,
                      :amount => 10, :cached_amount => 10)
-      Factory.create(:coding_budget, :activity => @activity, :code => @code2,
+      Factory(:coding_budget, :activity => @activity, :code => @code2,
                      :amount => 30, :cached_amount => 30)
-      Factory.create(:coding_budget, :activity => @activity, :code => @code3,
+      Factory(:coding_budget, :activity => @activity, :code => @code3,
                      :amount => 35, :cached_amount => 35)
 
       @activity.budget_stratprog_coding.length.should == 2
@@ -816,21 +816,21 @@ describe Activity do
 
   describe "spend_stratprog_coding" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
-      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
-      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
-      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)
       @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
       Activity.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
       Activity.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
-      Factory.create(:coding_spend, :activity => @activity, :code => @code1,
+      Factory(:coding_spend, :activity => @activity, :code => @code1,
                      :amount => 10, :cached_amount => 10)
-      Factory.create(:coding_spend, :activity => @activity, :code => @code2,
+      Factory(:coding_spend, :activity => @activity, :code => @code2,
                      :amount => 30, :cached_amount => 30)
-      Factory.create(:coding_spend, :activity => @activity, :code => @code3,
+      Factory(:coding_spend, :activity => @activity, :code => @code3,
                      :amount => 35, :cached_amount => 35)
 
       @activity.spend_stratprog_coding.length.should == 2
@@ -843,21 +843,21 @@ describe Activity do
 
   describe "budget_stratobj_coding" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
-      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
-      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
-      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)
       @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
       Activity.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
       Activity.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
-      Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+      Factory(:coding_budget, :activity => @activity, :code => @code1,
                      :amount => 10, :cached_amount => 10)
-      Factory.create(:coding_budget, :activity => @activity, :code => @code2,
+      Factory(:coding_budget, :activity => @activity, :code => @code2,
                      :amount => 30, :cached_amount => 30)
-      Factory.create(:coding_budget, :activity => @activity, :code => @code3,
+      Factory(:coding_budget, :activity => @activity, :code => @code3,
                      :amount => 35, :cached_amount => 35)
 
       @activity.budget_stratobj_coding.length.should == 2
@@ -870,21 +870,21 @@ describe Activity do
 
   describe "spend_stratobj_coding" do
     before :each do
-      @activity = Factory.create(:activity, :name => 'Activity 1', :budget => 100)
-      @code1    = Factory.create(:code, :short_display => 'code1', :external_id => 1)
-      @code2    = Factory.create(:code, :short_display => 'code2', :external_id => 2)
-      @code3    = Factory.create(:code, :short_display => 'code3', :external_id => 3)
+      @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)
+      @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
+      @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
+      @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)
       @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
       Activity.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
       Activity.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
     end
 
     it "should return code assignments" do
-      Factory.create(:coding_spend, :activity => @activity, :code => @code1,
+      Factory(:coding_spend, :activity => @activity, :code => @code1,
                      :amount => 10, :cached_amount => 10)
-      Factory.create(:coding_spend, :activity => @activity, :code => @code2,
+      Factory(:coding_spend, :activity => @activity, :code => @code2,
                      :amount => 30, :cached_amount => 30)
-      Factory.create(:coding_spend, :activity => @activity, :code => @code3,
+      Factory(:coding_spend, :activity => @activity, :code => @code3,
                      :amount => 35, :cached_amount => 35)
 
       @activity.spend_stratobj_coding.length.should == 2
@@ -897,8 +897,8 @@ describe Activity do
 
   describe "assigning an activity to a project" do
     it "should assign to a project" do
-      project      = Factory.create(:project)
-      activity     = Factory.create(:activity).reload # for << to work
+      project      = Factory(:project)
+      activity     = Factory(:activity).reload # for << to work
       project.activities << activity
       project.activities.should have(1).item
       project.activities[0].should == activity
@@ -1046,41 +1046,41 @@ describe Activity do
   describe "derive_classifications_from_sub_implementers" do
     before :each do
       # organizations
-      donor          = Factory.create(:donor, :name => 'Donor')
-      ngo            = Factory.create(:ngo,   :name => 'Ngo')
-      @location1 = Factory.create(:location, :short_display => 'Location1')
-      @location2 = Factory.create(:location, :short_display => 'Location2')
+      donor          = Factory(:donor, :name => 'Donor')
+      ngo            = Factory(:ngo,   :name => 'Ngo')
+      @location1 = Factory(:location, :short_display => 'Location1')
+      @location2 = Factory(:location, :short_display => 'Location2')
 
-      @implementer1  = Factory.create(:ngo, :name => 'Implementer1')
-      @implementer2  = Factory.create(:ngo, :name => 'Implementer2')
+      @implementer1  = Factory(:ngo, :name => 'Implementer1')
+      @implementer2  = Factory(:ngo, :name => 'Implementer2')
 
       # requests, responses
-      @data_request   = Factory.create(:data_request, :organization => donor)
-      @response  = Factory.create(:data_response, :organization => ngo,
+      @data_request   = Factory(:data_request, :organization => donor)
+      @response  = Factory(:data_response, :organization => ngo,
                                       :data_request => @data_request)
 
       # project
-      project        = Factory.create(:project, :data_response => @response)
+      project        = Factory(:project, :data_response => @response)
 
       # funding flows
-      in_flow        = Factory.create(:funding_flow, :data_response => @response,
+      in_flow        = Factory(:funding_flow, :data_response => @response,
                                :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory.create(:funding_flow, :data_response => @response,
+      out_flow       = Factory(:funding_flow, :data_response => @response,
                                :from => ngo, :to => @implementer1,
                                :budget => 7, :spend => 7)
 
       # activities
-      @activity      = Factory.create(:activity, :name => 'Activity 1',
+      @activity      = Factory(:activity, :name => 'Activity 1',
                                       :budget => 100, :spend => 100,
                                       :provider => ngo, :project => project)
 
-      @sub_activity1 = Factory.create(:sub_activity, :activity => @activity,
+      @sub_activity1 = Factory(:sub_activity, :activity => @activity,
                                      :provider => @implementer1,
                                      :data_response => @response,
                                      :budget => 2, :spend => 2)
 
-      @sub_activity2 = Factory.create(:sub_activity, :activity => @activity,
+      @sub_activity2 = Factory(:sub_activity, :activity => @activity,
                                      :provider => @implementer2,
                                      :data_response => @response,
                                      :budget => 3, :spend => 3)
@@ -1168,18 +1168,18 @@ describe Activity do
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory.create(:activity)
+        @commentable = Factory(:activity)
       end
 
       it_should_behave_like "comments_cacher"
     end
 
     it "caches sub activities count" do
-      activity = Factory.create(:activity)
+      activity = Factory(:activity)
       activity.sub_activities_count.should == 0
-      Factory.create(:sub_activity, :activity => activity)
+      Factory(:sub_activity, :activity => activity)
       activity.reload.sub_activities_count.should == 1
-      Factory.create(:sub_activity, :activity => activity)
+      Factory(:sub_activity, :activity => activity)
       activity.reload.sub_activities_count.should == 2
     end
   end
@@ -1303,7 +1303,7 @@ describe Activity do
   describe "budget_quarter" do
     context "Invalid quarter" do
       before :each do
-        activity = Factory.create(:activity)
+        activity = Factory(:activity)
       end
 
       it "raises errors when quarter is invalid - 0" do
@@ -1317,56 +1317,56 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+        @response = Factory(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-10-01"), 
+                                   :fiscal_year_end_date => Date.parse("2011-09-30"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q4_prev => 123, :data_response => @response)
         activity.budget_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q1 => 123, :data_response => @response)
         activity.budget_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q2 => 123, :data_response => @response)
         activity.budget_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q3 => 123, :data_response => @response)
         activity.budget_quarter(4).should == 123
       end
     end
 
     context "Goverment of Rwanda" do
       before :each do
-        @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
+        @response = Factory(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-01-01"), 
                                    :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q1 => 123, :data_response => @response)
         activity.budget_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q2 => 123, :data_response => @response)
         activity.budget_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q3 => 123, :data_response => @response)
         activity.budget_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @response)
+        activity = Factory(:activity, :budget_q4 => 123, :data_response => @response)
         activity.budget_quarter(4).should == 123
       end
     end
@@ -1375,7 +1375,7 @@ describe Activity do
   describe "spend_quarter" do
     context "Invalid quarter" do
       before :each do
-        activity = Factory.create(:activity)
+        activity = Factory(:activity)
       end
 
       it "raises errors when quarter is invalid - 0" do
@@ -1389,56 +1389,56 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+        @response = Factory(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-10-01"), 
+                                   :fiscal_year_end_date => Date.parse("2011-09-30"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q4_prev => 123, :data_response => @response)
         activity.spend_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q1 => 123, :data_response => @response)
         activity.spend_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q2 => 123, :data_response => @response)
         activity.spend_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q3 => 123, :data_response => @response)
         activity.spend_quarter(4).should == 123
       end
     end
 
     context "Goverment of Rwanda" do
       before :each do
-        @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
+        @response = Factory(:data_response, 
+                                   :fiscal_year_start_date => Date.parse("2010-01-01"), 
                                    :fiscal_year_end_date => Date.parse("2010-12-31"))
       end
 
       it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q1 => 123, :data_response => @response)
         activity.spend_quarter(1).should == 123
       end
 
       it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q2 => 123, :data_response => @response)
         activity.spend_quarter(2).should == 123
       end
 
       it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q3 => 123, :data_response => @response)
         activity.spend_quarter(3).should == 123
       end
 
       it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @response)
+        activity = Factory(:activity, :spend_q4 => 123, :data_response => @response)
         activity.spend_quarter(4).should == 123
       end
     end
@@ -1458,7 +1458,7 @@ describe Activity do
 
     context "sub activities" do
       it "looks for amount in sub-activity" do
-        @activity = Factory.create(:activity)
+        @activity = Factory(:activity)
         @subact = Factory(:sub_activity, :activity => @activity, :budget => 10)
         @activity.sub_activities.reload
         @activity.amount_for_provider(@subact.provider, :budget).should == 10

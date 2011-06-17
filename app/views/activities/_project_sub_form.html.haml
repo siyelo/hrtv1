@@ -4,7 +4,7 @@
 - if project.locations.present?
   - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
     - f.inputs do
-      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "All the places where activity was implemented", :collection => project.locations, :required => false
+      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "All the places where activity was implemented", :collection => ordered_locations(project.locations.ordered_by_short_display), :required => false
 - else
   - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
     - f.inputs do

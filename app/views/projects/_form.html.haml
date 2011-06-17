@@ -75,7 +75,7 @@
     %h3 Other
     %ul.dashboard_section
       = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false, :input_html => { :class => "combobox" }
-      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint =>"All the districts/provinces in which this Project was implemented. If a Project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
+      = f.input :locations, :as => :check_boxes, :collection => ordered_locations(Location.ordered_by_short_display), :label => "Locations worked in", :hint =>"All the districts/provinces in which this Project was implemented. If a Project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"

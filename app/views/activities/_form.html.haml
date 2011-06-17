@@ -2,6 +2,7 @@
 - budget_fiscal_year = budget_fiscal_year(@response)
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
+- fiscal_year_start_date = @response.fiscal_year_start_date.year
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -35,11 +36,11 @@
         %li.amounts.last
           %label== Quarterly Expenditure
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
+            = f.input :spend_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
+            = f.input :spend_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
+            = f.input :spend_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false
+            = f.input :spend_q3     , :label => "#{@response.quarters_months('q3')}",      :required => false
+            = f.input :spend_q4     , :label => "#{@response.quarters_months('q4')}",      :required => false
 
   - if @response.data_request.budget?
     %li.last
@@ -50,19 +51,19 @@
           %li.amounts.last
             %label== Quarterly budget
             %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
+              = f.input :budget_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
+              = f.input :budget_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
+              = f.input :budget_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false
+              = f.input :budget_q3     , :label => "#{@response.quarters_months('q3')}",      :required => false
+              = f.input :budget_q4     , :label => "#{@response.quarters_months('q4')}",      :required => false
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term
             %ul
-              = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
+              = f.input :budget2, :label => "#{fiscal_year_start_date + 2}", :required => false if @response.request.year_2?
+              = f.input :budget3, :label => "#{fiscal_year_start_date + 3}", :required => false if @response.request.year_3?
+              = f.input :budget4, :label => "#{fiscal_year_start_date + 4}", :required => false if @response.request.year_4?
+              = f.input :budget5, :label => "#{fiscal_year_start_date + 5}", :required => false if @response.request.year_5?
 
   %li.last
     %h3 Activity Funding Sources

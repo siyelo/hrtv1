@@ -44,6 +44,31 @@ describe DataRequest do
                          :end_date =>   DateTime.new(2010, 01, 02) )
       dr.should be_valid
     end
+    
+    it "does not allow a request to be submitted if the due date is before the end date" do 
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 01),
+                         :end_date =>   DateTime.new(2010, 01, 02),
+                         :due_date => DateTime.new(2010, 01, 01) )
+
+      dr.should_not be_valid
+    end
+
+    it "does allow the due date to be empty" do
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 01),
+                         :end_date =>   DateTime.new(2010, 01, 02),
+                         :due_date => nil )
+    end
+
+    it "does allow a request to be submitted if the due date is before the end date" do 
+      dr = Factory.build(:data_request,
+                         :start_date => DateTime.new(2010, 01, 01),
+                         :end_date =>   DateTime.new(2010, 01, 02),
+                         :due_date => DateTime.new(2010, 01, 04) )
+
+      dr.should be_valid
+    end
 
     it "does not accept start date > end date" do
       dr = Factory.build(:data_request,

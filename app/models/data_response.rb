@@ -112,7 +112,22 @@ class DataResponse < ActiveRecord::Base
   def name
     data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
-
+  
+  def quarters_months(quarter)
+    case quarter
+    when "q1"
+      "#{fiscal_year_start_date.strftime('%b \'%y')} - #{(fiscal_year_start_date + 2.months).strftime('%b \'%y')}"
+    when "q2"
+      "#{(fiscal_year_start_date + 3.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 5.months).strftime('%b \'%y')}"
+    when "q3"
+      "#{(fiscal_year_start_date + 6.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 8.months).strftime('%b \'%y')}"
+    when "q4"
+      "#{(fiscal_year_start_date + 9.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 11.months).strftime('%b \'%y')}"
+    when "q4_prev"
+      "#{(fiscal_year_start_date - 5.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 3.months).strftime('%b \'%y')}"
+    end
+  end
+    
   # TODO: spec
   def empty?
     activities.empty? && projects.empty? && funding_flows.empty?

@@ -70,6 +70,17 @@ describe DataResponse do
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
       dr.should_not be_valid
     end
+    
+    it "displays the quarters with their correct months" do
+      dr = Factory(:data_response,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
+      
+      dr.quarters_months("q1").should == "Jan '10 - Mar '10"
+      dr.quarters_months("q2").should == "Apr '10 - Jun '10"
+      dr.quarters_months("q3").should == "Jul '10 - Sep '10"
+      dr.quarters_months("q4").should == "Oct '10 - Dec '10"
+    end
 
   end
 

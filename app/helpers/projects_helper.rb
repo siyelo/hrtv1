@@ -23,4 +23,11 @@ module ProjectsHelper
       nil # when no errors
     end
   end
+
+  def ordered_locations(locations)
+    locations = locations.dup # copy the array, otherwise it removes project locations
+    central_level = locations.detect{|l| l.short_display == 'Central Level'}
+    central_level = locations.delete(central_level)
+    locations.unshift(central_level)
+  end
 end

@@ -25,40 +25,40 @@
     li:last-child a
       margin-bottom: 0
       
-  &.manage_bar
-    margin: 0
-    +pie-clearfix
-    &.inline
+ul.manage_bar
+  margin: 0
+  +pie-clearfix
+  &.inline
+    display: inline-block
+    position: relative
+    top: 5px
+  li
+    display: inline
+    float: right
+    a
+      background: #eee
+      border: 1px solid $light-blue
+      color: $dark-grey
       display: inline-block
-      position: relative
-      top: 5px
-    li
-      display: inline
-      float: right
-      a
-        background: #eee
-        border: 1px solid $light-blue
-        color: $dark-grey
-        display: inline-block
-        font-size: 10px
-        height: auto
-        line-height: 1.4
-        margin-left: 3px
-        padding: 3px 5px 2px
-        text-decoration: none
-        +border-radius(2px)
-        +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
-        +text-shadow(#fff, 0, 0, 1px)
-        &:hover, &:focus
-          background: $orange
-          border: 1px solid $orange - #111
-          color: #fff
-          +linear-gradient(color-stops($orange - #111, $orange + #111))
-          +text-shadow(#444, 0, 0, 1px)
-        &:active
-          outline: none
-          position: relative
-          top: 1px
+      font-size: 10px
+      height: auto
+      line-height: 1.4
+      margin-left: 3px
+      padding: 3px 5px 2px
+      text-decoration: none
+      +border-radius(2px)
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +text-shadow(#fff, 0, 0, 1px)
+      &:hover, &:focus
+        background: $orange
+        border: 1px solid $orange - #111
+        color: #fff
+        +linear-gradient(color-stops($orange - #111, $orange + #111))
+        +text-shadow(#444, 0, 0, 1px)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
 
 .welcome_steps
   //border-bottom: 1px solid $lightest-blue

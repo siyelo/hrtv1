@@ -4,26 +4,26 @@ Feature: Reporter can manage data response
   I want to be able to manage data response
 
   Background:
-
-
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "reporter", organization: the organization
+    And I am signed in as "reporter"
 
     Scenario: User can start a data response
-      Given a data_request exists with title: "Req1"
-        And a basic org + reporter profile, signed in
       When I follow "Dashboard"
-        And I follow "Respond"
-      Then I should see "New Response" within "h1"
+        And I follow "Edit"
+      Then show me the page
+      Then I should see "Response Settings" within "h1"
 
 
     Scenario: Browse to data response edit page
-      Given a basic org + reporter profile, with data response, signed in
       When I follow "Settings"
       Then I should see "Response Settings" within "h1"
 
 
     Scenario Outline: Edit data response, see feedback messages
-      Given a basic org + reporter profile, with data response, signed in
-        And I follow "Settings"
+        Given I follow "Settings"
         And I select "Euro (EUR)" from "data_response_currency"
         And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
         And I fill in "data_response_fiscal_year_end_date" with "<end_date>"

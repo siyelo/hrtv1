@@ -1,14 +1,18 @@
+@run
 Feature: Reporter can see dashboard
   In order to see latest news
   As a reporter
   I want to be able to see a dashboard for relevant activities
 
   Background:
-
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "reporter", organization: the organization
 
 
     Scenario: "See data requests"
-      Given I am signed in as a reporter
+      Given I am signed in as "reporter"
       When I go to the reporter dashboard page
       Then I should see "Dashboard"
         And I should see "Data Requests & Responses"

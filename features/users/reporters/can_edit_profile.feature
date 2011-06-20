@@ -4,14 +4,11 @@ Feature: Reporter can edit profile
   I want to be able to change my profile
 
   Background:
-    Given a reporter exists with username: "Frank"
-    When I go to the home page
-    And I go to the login page
-    And I fill in "Username or Email" with "Frank"
-    And I fill in "Password" with "password"
-    And I press "Sign in"
-
-
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "Frank", organization: the organization
+    And I am signed in as "Frank"
 
     Scenario: User can change credentials and login again
       And I follow "My Profile"

@@ -15,7 +15,10 @@ Feature: Reporter can login
       And I should see the common footer
 
   Scenario: Login with invalid data - see flash message not AR errors
-    Given a reporter exists
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "Frank", organization: the organization
     When I go to the login page
      And I fill in "Username or Email" with "not a real user"
      And I fill in "Password" with ""
@@ -24,7 +27,10 @@ Feature: Reporter can login
      And I should not see "There were problems with the following fields:"
 
   Scenario: Login as a reporter with a username
-    Given a reporter exists with username: "Frank"
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with username: "Frank", organization: the organization
       And I go to the login page
       And I fill in "Username or Email" with "Frank"
       And I fill in "Password" with "password"
@@ -33,7 +39,10 @@ Feature: Reporter can login
       And I should see the main nav tabs
 
   Scenario: Login as a reporter with email address
-    Given a reporter exists with email: "frank@f.com"
+    Given an organization exists with name: "org1"
+    And a data_request exists with organization: the organization
+    And a data_response exists with data_request: the data_request, organization: the organization
+    And a reporter exists with email: "frank@f.com", organization: the organization
     When I go to the login page
       And I fill in "Username or Email" with "frank@f.com"
       And I fill in "Password" with "password"

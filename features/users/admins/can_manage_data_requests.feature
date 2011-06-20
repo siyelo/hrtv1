@@ -14,7 +14,7 @@ Feature: Admin can manage data requests
        And I follow "Create Data Request"
        And I select "org1" from "Organization"
        And I fill in "Title" with "My data response title"
-       And I fill in "Due date" with "2010-09-01"
+       And I fill in "Due date" with "2012-09-01"
        And I fill in "Start date" with "2010-01-01"
        And I fill in "End date" with "2011-01-01"
        And I press "Create request"
@@ -32,7 +32,6 @@ Feature: Admin can manage data requests
       Then I should see "Request was successfully deleted"
        And I should not see "My data response title"
 
-
     Scenario Outline: See errors when creating data request
       When I follow "Requests"
        And I follow "Create Data Request"
@@ -46,7 +45,7 @@ Feature: Admin can manage data requests
 
       Examples:
         | organization | title | due_date   | start_date | end_date   | message                              | 
-        | org1         | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     | 
+        | org1         | title | 2012-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     | 
         |              | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank         | 
         | org1         |       | 2010-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank         | 
         | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date can't be blank         | 

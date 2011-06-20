@@ -96,7 +96,9 @@ class Activity < ActiveRecord::Base
   validates_date :start_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   validates_date :end_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
-
+  validate :start_date_within_project_date_range
+  validate :end_date_within_project_date_range
+  
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
@@ -713,6 +715,18 @@ class Activity < ActiveRecord::Base
       klass.new(:activity => self, :code => code,
                 :amount => amount, :percentage => percentage,
                 :cached_amount => amount)
+    end
+    
+    def start_date_within_project_date_range
+      if self.project.present?
+        errors.add(:start_date, "must be greater than or equal to the project start date (#{self.project.start_date})") if self.start_date < self.project.start_date         
+      end         
+    end
+    
+    def end_date_within_project_date_range
+      if self.project.present?
+        errors.add(:end_date, "must be less than or equal to the project end date (#{self.project.end_date})") if self.end_date > self.project.end_date
+      end
     end
 end
 

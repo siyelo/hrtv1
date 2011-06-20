@@ -37,7 +37,7 @@
       %h3 Project Budget
       %ul.dashboard_section
         %br
-        = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+        = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? "OR below in the quarterly fields" : ""}", :required => false
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label Quarterly budget

@@ -6,7 +6,7 @@ describe ActivitiesController do
     controller_name :activities
 
     before(:each) do
-      @activity = Factory.create(:activity)
+      @activity = Factory(:activity)
       @activity.stub!(:to_param).and_return('1')
       @activities.stub!(:find).and_return(@activity)
 
@@ -44,7 +44,7 @@ describe ActivitiesController do
 
   describe "Requesting Activity endpoints as visitor" do
     before :each do
-      @data_response = Factory.create(:data_response)
+      @data_response = Factory(:data_response)
     end
     controller_name :activities
 
@@ -61,7 +61,7 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using GET" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
+          @activity = Factory(:activity, :data_response => @data_response)
           get :show, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
@@ -69,7 +69,7 @@ describe ActivitiesController do
 
       context "Requesting /activities/1/approve using POST" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
+          @activity = Factory(:activity, :data_response => @data_response)
           post :approve, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
@@ -78,7 +78,7 @@ describe ActivitiesController do
       context "Requesting /activities using POST" do
         before do
           params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
+          @activity = Factory(:activity, params.merge(:data_response => @data_response) )
           @activity.stub!(:save).and_return(true)
           post :create, :activity =>  params, :response_id => @data_response.id
         end
@@ -88,7 +88,7 @@ describe ActivitiesController do
       context "Requesting /activities/1 using PUT" do
         before do
           params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory.create(:activity, params.merge(:data_response => @data_response) )
+          @activity = Factory(:activity, params.merge(:data_response => @data_response) )
           @activity.stub!(:save).and_return(true)
           put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
         end
@@ -97,7 +97,7 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using DELETE" do
         before do
-          @activity = Factory.create(:activity, :data_response => @data_response)
+          @activity = Factory(:activity, :data_response => @data_response)
           delete :destroy, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
@@ -109,18 +109,17 @@ describe ActivitiesController do
     controller_name :activities
 
     before :each do
-      @user = Factory.create(:reporter)
+      @user = Factory(:reporter)
       login @user
-      #@activity = Factory.create(:activity, :user => @user)
-      @data_response = Factory.create(:data_response)
-      @activity = Factory.create(:activity, :data_response => @data_response) #TODO add back user!
+      @data_response = Factory(:data_response)
+      @activity = Factory(:activity, :data_response => @data_response) #TODO add back user!
       @user_activities.stub!(:find).and_return(@activity)
     end
 
     context "Requesting /activities/1/approve using POST" do
       it "requres admin to approve an activity" do
-        data_response = Factory.create(:data_response, :organization => @user.organization)
-        @activity = Factory.create(:activity, :data_response => data_response)
+        data_response = Factory(:data_response, :organization => @user.organization)
+        @activity = Factory(:activity, :data_response => data_response)
         post :approve, :id => @activity.id, :response_id => data_response.id
         flash[:error].should == "You are not authorized to do that"
       end
@@ -143,15 +142,15 @@ describe ActivitiesController do
   
   describe "create" do
     before :each do
-       @data_request = Factory.create(:data_request)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
+       @data_request = Factory(:data_request)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
        login @user
      end
     
-    it "redircts to the projects index page when save is clicked" do 
-      @project = Factory.create(:project, :data_response => @data_response) 
+    it "redirects to the projects index page when save is clicked" do 
+      @project = Factory(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
@@ -164,7 +163,7 @@ describe ActivitiesController do
     end
     
     it "redircts to the projects index page when Save & Go to Classify is clicked" do 
-      @project = Factory.create(:project, :data_response => @data_response) 
+      @project = Factory(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
@@ -177,7 +176,7 @@ describe ActivitiesController do
     end
     
     it "returns true if the activitys budget and spend is less than that of the projects" do 
-      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
+      @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
@@ -190,7 +189,7 @@ describe ActivitiesController do
     end
     
     it "returns false if the activitys budget and spend is more than that of the projects using save button" do 
-      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
+      @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
@@ -205,12 +204,12 @@ describe ActivitiesController do
   end
   
   describe "Redirects to budget or spend depending on datarequest" do
-     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
-       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
+    it "redirects back to the projects index if save and next is pressed but there is no budget or spend" do
+       @data_request = Factory(:data_request, :spend => false, :budget => false)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response)
        login @user
        post :create, :activity => {
          :description => "some description",
@@ -219,15 +218,32 @@ describe ActivitiesController do
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(response_projects_path(@data_response))
+    end
+     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
+       @data_request = Factory(:data_request, :spend => false, :budget => true)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response)
+       login @user
+       post :create, :activity => {
+         :description => "some description",
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :project_id => @project.id,
+         :budget => 89
+       },
+       :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
      
      it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do 
-       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000)
+       @data_request = Factory(:data_request, :spend => false, :budget => true)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response, :budget => 10000)
        login @user
        post :create, :activity => {
          :description => "some description",
@@ -241,32 +257,35 @@ describe ActivitiesController do
      end
      
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do 
-       @data_request = Factory.create(:data_request, :spend => true, :budget => false)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
+       @data_request = Factory(:data_request, :spend => true, :budget => false)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response)
        login @user
        post :create, :activity => {
          :description => "some description",
          :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id
+         :project_id => @project.id,
+         :spend => 34
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
      
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do 
-       @data_request = Factory.create(:data_request, :spend => true, :budget => true)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
+       @data_request = Factory(:data_request, :spend => true, :budget => true)
+       @organization = Factory(:organization)
+       @user = Factory(:reporter, :organization => @organization)
+       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+       @project = Factory(:project, :data_response => @data_response)
        login @user
        post :create, :activity => {
          :description => "some description",
          :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id
+         :project_id => @project.id,
+         :budget => 34,
+         :spend => 88
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))

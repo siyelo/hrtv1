@@ -174,3 +174,207 @@ table.sum
     
   tr.none td
     border: none
+
+// 
+
+table.workplan
+  color: $mid-blue
+  width: 100%
+  
+  th
+    color: $lightest-blue
+    font-size: 11px
+    font-weight: bold
+    padding: 10px 10px 3px
+    +text-shadow(#000, 0, 1px, 0)
+    &.amount
+      text-align: right
+    a
+      color: $lightest-blue
+      text-decoration: none
+      
+  td
+    font-size: 12px
+    line-height: 1.4
+    padding: 7px 10px
+    
+  th, td
+    height: 100%
+    &.desc
+      font-size: 11px
+      padding-left: 10px
+      
+    &.no-padding
+      padding: 0
+    &.fixed
+      width: 300px !important
+    &.total
+      li.remaining
+        color: $red
+        font-style: italic
+        span
+          color: $red
+
+    &.actions
+      width: 8%
+      *
+        float: right
+        margin-right: 5px
+
+    &.wrap-3
+      width: 1%
+    &.wrap-10
+      width: 10%
+    &.wrap-20
+      width: 20%
+    &.wrap-30
+      width: 30%
+    &.wrap-40
+      width: 40%
+    &.wrap-50
+      width: 50%
+    &.wrap-60
+      width: 60%
+  .total_amount
+    text-align: right
+  .total, .actions
+    .delete_row
+      margin-left: 5px
+      opacity: 0.1
+      position: relative
+      top: 4px
+      &:hover
+        opacity: 0.7
+
+  .head th
+    background: $mid-blue
+    &.no-bg
+      background: none
+  .tabs
+    li
+      display: inline-block
+      float: left
+    a
+      color: $mid-blue + #222
+      display: inline-block
+      font-size: 12px
+      padding: 8px 10px 4px
+      text-decoration: none
+      +text-shadow(#fff, 0, 1px, 0)
+      &.active
+        background: $mid-blue
+        color: #fff
+        font-weight: bold
+        +border-top-radius
+        +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
+        +text-shadow(#000, 0, 1px, 0)
+  .name
+    vertical-align: top
+    padding-top: 14px
+    font-weight: bold
+    line-height: 1
+    font-size: 11px
+
+  .nested_name
+    line-height: 1
+    font-size: 11px
+    vertical-align: top
+    span
+      display: block
+      font-size: 12px
+      font-weight: bold
+      margin-left: 10px
+      padding-top: 2px
+    &.wrap_30
+      width: 30%
+
+  tbody
+    tr td
+      border-bottom: 1px solid $lightest-blue
+      &.borderless
+        border: none
+      &.total
+        color: $light-blue - #222
+        font-size: 11px
+        text-align: right
+        li span
+          color: $mid-blue
+          font-weight: bold
+
+  .row_cancel
+    margin-bottom: 0 !important
+  input[type=text]
+    padding: 4px 2px !important
+    width: 80px
+    float: right
+    &.purpose_search
+      margin: 1px
+      padding: 0 !important
+
+    &.string
+      text-align: left
+
+  .new_activity, .new_project, .new_funder, .new_implementer
+    background: $filler
+    .inline-errors
+      clear: both
+      margin-left: 0
+      padding-left: 0
+      width: auto
+    .inputs, .buttons
+      float: left
+    ol
+      +pie-clearfix
+    li
+      border: none
+      display: inline
+      float: left
+      margin: 0
+      padding: 0 10px 0 0
+    input[type=text]
+      width: 250px !important
+    textarea
+      width: 400px
+  .nested
+    width: 100%
+    td
+      background: $filler
+
+    tr:last-child td
+      border: none
+    tr:hover td
+      background: $lightest-blue
+  .classification_destroy
+    opacity: 0.6
+    &:hover, &:focus
+      opacity: 1
+  a.add_row
+    margin-left: 0
+  a.create_button
+    margin-bottom: 0
+
+  .add_purpose_form
+    td
+      background: $lightest-blue
+  .context
+    color: $mid-blue + #333
+    font-size: 11px
+    font-style: italic
+    margin-left: 10px
+    
+tr.filler th, tr.filler td
+  background: $lightest-blue
+  font-weight: bold
+
+tr.filler2 th, tr.filler2 td
+  background: $filler
+  font-weight: bold
+
+tr.activity_subheading
+  color: #888
+  background: $filler
+  font-weight: normal
+  text-transform: uppercase
+  td
+    padding: 3px 10px
+    font-size: 10px

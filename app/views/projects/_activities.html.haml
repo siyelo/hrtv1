@@ -1,15 +1,7 @@
-%tr.sub-head
+%tr.filler2.sub-head
   %td{:colspan => 100}
     %h4
       Activities
-      %span
-        - link_to new_response_activity_path(response, :project_id => project.id), :class => "create_inline" do
-          = image_tag "new.png"
-          Add
-
-        - link_to "#", :class => "create_inline upload_btn" do
-          = image_tag "new.png"
-          Import / Export
 
     = render 'activities_import', :project => project, :can_export => project.activities.present?
 

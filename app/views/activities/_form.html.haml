@@ -35,7 +35,7 @@
         = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_activity_spend_total"}
         %li.amounts.last
           %label== Quarterly Expenditure
-          %ul
+          %ul.js_quarterly_inputs
             = f.input :spend_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
             = f.input :spend_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
             = f.input :spend_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false
@@ -50,7 +50,7 @@
         - if @response.request.budget_by_quarter?
           %li.amounts.last
             %label== Quarterly budget
-            %ul
+            %ul.js_quarterly_inputs
               = f.input :budget_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
               = f.input :budget_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
               = f.input :budget_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false

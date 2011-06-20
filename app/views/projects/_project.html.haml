@@ -30,9 +30,9 @@
           - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row" do
             = image_tag "new.png"
             Add Other Cost
-      %td.total Sub Total
-      %td.wrap-10= n2cndrs(project.spend, project.currency)
-      %td.wrap-10= n2cndrs(project.budget, project.currency)
+    %td.total Sub Total
+    %td.wrap-10= n2cndrs(project.spend, project.currency)
+    %td.wrap-10= n2cndrs(project.budget, project.currency)
   
   %tr.filler
     %td{:colspan => 2}= link_to "Add Project", new_response_project_path(@response), :class => "add_row"

@@ -24,10 +24,11 @@ class Reports::CountriesController < Reports::BaseController
     @top_organizations     = Reports::OrganizationReport.top_by_spent({
                               :limit => 10, :code_ids => code_ids, :type => 'country'})
 
-    @budget_ufs_values = Charts::CountryPies::ultimate_funding_sources('budget')
+    data_request_id = current_user.current_data_response.data_request.id
+    @budget_ufs_values = Charts::CountryPies::ultimate_funding_sources('budget', data_request_id)
     @budget_fa_values  = Charts::CountryPies::financing_agents('budget')
     @budget_i_values   = Charts::CountryPies::implementers('budget')
-    @spend_ufs_values  = Charts::CountryPies::ultimate_funding_sources('spend')
+    @spend_ufs_values  = Charts::CountryPies::ultimate_funding_sources('spend', data_request_id)
     @spend_fa_values   = Charts::CountryPies::financing_agents('spend')
     @spend_i_values    = Charts::CountryPies::implementers('spend')
   end

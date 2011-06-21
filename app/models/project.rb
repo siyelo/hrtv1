@@ -309,9 +309,9 @@ class Project < ActiveRecord::Base
 
     [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
       if !response.project_and_activities_matching_amounts?(self, m)
-        st = m == :budget ? "Budget" : "Expenditure"
-        errors << "The Project #{st} (#{n2cndrs(self.send(m), self.currency)}) should match
-         the total #{st.downcase} for Activities plus Other Costs (#{n2cndrs(self.direct_activities_total(m) + self.other_costs_total(m), self.currency)}).
+        st = m == :budget ? "Current Budget" : "Past Expenditure"
+        errors << "The Project #{st} (#{n2cndrs(self.send(m), self.currency)}) should match 
+         the total #{st.downcase} for Activities plus Other Costs (#{n2cndrs(self.direct_activities_total(m) + self.other_costs_total(m), self.currency)}). 
          Please update your activities/other costs for this project accordingly."
       end
     end
@@ -326,7 +326,7 @@ class Project < ActiveRecord::Base
     ### Validations
 
     def validate_total_budget_not_exceeded
-      errors.add(:base, "Budget must be less than or equal to the Total Budget") if budget > entire_budget
+      errors.add(:base, "Current Budget must be less than or equal to the Total Budget") if budget > entire_budget
     end
 
     ### Misc

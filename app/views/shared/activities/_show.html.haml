@@ -64,7 +64,7 @@
         %li= "Spend Q4 #{spend_fiscal_year}"
         %li= c(@activity.spend_q4, @activity.currency)
 
-  %h3.form_heading Budget
+  %h3.form_heading Current Budget
   %ul.dashboard_section
     %li
       %ul.row
@@ -86,11 +86,11 @@
         %li= "Budget Q4 #{budget_fiscal_year}"
         %li= c(@activity.budget_q4, @activity.currency)
 
-  %h3.form_heading Budget (planned expenditure)
+  %h3.form_heading Current Budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget
+        %li Current Budget
         %li= c(@activity.budget, @activity.currency)
       %ul.row
         %li Year + 2
@@ -113,10 +113,10 @@
           %li Implementer
           %li= sub_activity.provider.try(:name)
         %ul.row
-          %li Budget
+          %li Current Budget
           %li= c(sub_activity.budget, @activity.currency)
         %ul.row
-          %li Budget percentage
+          %li Current Budget percentage
           %li= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
         %ul.row
           %li Expenditure
@@ -136,7 +136,7 @@
           %li Expenditure
           %li= c(funding_source.spend, @activity.currency)
         %ul.row
-          %li Budget
+          %li Current Budget
           %li= c(funding_source.budget, @activity.currency)
 
   %h3.form_heading Institutions Assisted
@@ -150,13 +150,13 @@
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget by Purposes
+        %li Current Budget by Purposes
         %li= b @activity.coding_budget_classified?
       %ul.row
-        %li Budget by Locations
+        %li Current Budget by Locations
         %li= b @activity.coding_budget_district_classified?
       %ul.row
-        %li Budget by Inputs
+        %li Current Budget by Inputs
         %li= b @activity.coding_budget_cc_classified?
       %ul.row
         %li Expenditure by Purposes

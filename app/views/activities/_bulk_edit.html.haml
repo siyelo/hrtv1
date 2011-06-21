@@ -23,7 +23,7 @@
         %span Expenditure:
         = "#{activity.spend} #{activity.currency}"
       %li
-        %span Budget:
+        %span Current Budget:
         = "#{activity.budget} #{activity.currency}"
 
 .main.dashboard_section{:style => (activity.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
@@ -78,7 +78,7 @@
 
         - if response.data_request.budget?
           %ul.second-half
-            = f.input :budget, :label => "Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
+            = f.input :budget, :label => "Current Budget", :required => false, :wrapper_html => {:class => 'grid-20'}
             %li.grid-80
               %label Quarterly budget
               %ul

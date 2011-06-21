@@ -17,19 +17,19 @@
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
-%h1.main_heading Review National Expenditures and Budgets
+%h1.main_heading Review National Expenditures and Current Budgets
 
 .full
   .third
-    %h2 Ultimate Funding Source (Budget)
+    %h2 Ultimate Funding Source (Current Budget)
     #budget_ufs_pie.bordered
 
   .third
-    %h2 Financing Agent (Budget)
+    %h2 Financing Agent (Current Budget)
     #budget_fa_pie.bordered
 
   .third
-    %h2 Implementer (Budget)
+    %h2 Implementer (Current Budget)
     #budget_i_pie.bordered
 
 .full
@@ -65,7 +65,7 @@
     #code_spent.bordered
 
   .second-half
-    %h2= "#{@chart_name} Budget"
+    %h2= "#{@chart_name} Current Budget"
     #code_budget.bordered
 
 

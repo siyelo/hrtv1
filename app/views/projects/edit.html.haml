@@ -14,7 +14,7 @@
   - if @response.data_request.spend? && !@project.spend_matches_funders?
     %li= "Project expenditure does not match the total expenditure stated in funding sources below. Please add funding sources or adjust your amounts."
   - if @response.data_request.budget? && !@project.budget_matches_funders?
-    %li= "Project budget does not match the total of budgets stated in funding sources below. Please add funding sources or adjust your amounts."
+    %li= "Project current budget does not match the total of budgets stated in funding sources below. Please add funding sources or adjust your amounts."
     
   - if !@project.total_matches_quarters?("spend")
     %li Your quarterly Expenditure amounts do not match the total Expenditure amounts

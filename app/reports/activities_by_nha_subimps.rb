@@ -221,7 +221,7 @@ class Reports::ActivitiesByNhaSubimps
     end
 
     def build_header
-      amount_type = @is_budget ? 'Budget' : 'Spent'
+      amount_type = @is_budget ? 'Current Budget' : 'Spent'
 
       row = []
       row << "contact name"

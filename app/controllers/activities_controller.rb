@@ -1,6 +1,6 @@
 require 'set'
 class ActivitiesController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'current budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
@@ -56,7 +56,7 @@ class ActivitiesController < Reporter::BaseController
           if @activity.check_projects_budget_and_spend?
             flash[:notice] = 'Activity was successfully updated'
           else
-            flash[:error] = 'Please be aware that your activities spend/budget exceeded that of your projects'
+            flash[:error] = 'Please be aware that your activities spend/current budget exceeded that of your projects'
           end
           html_redirect
         end

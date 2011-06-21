@@ -18,9 +18,9 @@
 
   - if @response.data_request.budget?
     - if !@other_cost.budget?
-      %li= "Enter the Budget for this activity."
+      %li= "Enter the Current Budget for this activity."
     - else
-      %li= "Please classify the Budget for this activity." if !@other_cost.budget_classified?
+      %li= "Please classify the Current Budget for this activity." if !@other_cost.budget_classified?
 
 = render 'activities/tab_nav', :activity => @other_cost
 

@@ -1,6 +1,6 @@
 %tr
   %th{:colspan => 5}
-    Budget
+    Current Budget
 - @projects.each do |project|
   - if (project.in_flows_budget_total || 0) != (project.budget || 0)
     %tr

@@ -24,7 +24,7 @@ class Reports::ActivitiesByAllCodes
       row = []
 
       Code.deepest_nesting.times{|i| row << "Code"}
-      row << "Budget"
+      row << "Current Budget"
       row << "Activity Description"
       row << "Funding Source"
       row << "Q1"

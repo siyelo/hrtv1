@@ -35,9 +35,9 @@ class CodeAssignmentsController < Reporter::BaseController
 
   def copy_budget_to_spend
     if @activity.copy_budget_codings_to_spend([params[:coding_type]])
-      flash[:notice] = "Budget classifications were successfully copied across."
+      flash[:notice] = "Current Budget classifications were successfully copied across."
     else
-      flash[:error] = "We could not copy your budget classifications across."
+      flash[:error] = "We could not copy your current budget classifications across."
     end
 
     redirect_to activity_code_assignments_url(@activity, :coding_type => Activity::CLASSIFICATION_MAPPINGS[params[:coding_type]], :view => params[:view])
@@ -116,13 +116,13 @@ class CodeAssignmentsController < Reporter::BaseController
     def get_coding_name(klass)
       case klass.to_s
       when 'CodingBudget'
-        'Budget by Purposes'
+        'Current Budget by Purposes'
       when 'CodingBudgetDistrict'
-        'Budget by Locations'
+        'Current Budget by Locations'
       when 'CodingBudgetCostCategorization'
-        'Budget by Inputs'
+        'Current Budget by Inputs'
       when 'ServiceLevelBudget'
-        'Budget by Service Level'
+        'Current Budget by Service Level'
       when 'CodingSpend'
         'Spent by Purposes'
       when 'CodingSpendDistrict'

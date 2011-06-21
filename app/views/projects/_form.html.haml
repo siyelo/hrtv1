@@ -34,7 +34,7 @@
 
   - if @response.data_request.budget?
     %li.last
-      %h3 Project Budget
+      %h3 Project Current Budget
       %ul.dashboard_section
         %br
         = f.input :budget, :label => "Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? "OR below in the quarterly fields" : ""}", :required => false

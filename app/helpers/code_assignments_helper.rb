@@ -15,7 +15,7 @@ module CodeAssignmentsHelper
   def spend_or_budget(coding_type)
     case coding_type
     when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'HsspBudget', 'ServiceLevelBudget'
-      "budget"
+      "current budget"
     when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'HsspSpend', 'ServiceLevelSpend'
       "expenditure"
     end

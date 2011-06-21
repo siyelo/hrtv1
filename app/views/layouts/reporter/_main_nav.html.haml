@@ -1,8 +1,13 @@
 - data_response = current_user.organization.data_responses.last
 - hacked_response_path = edit_organization_path(current_user.organization)
-- hacked_projects_url = current_user.current_data_response ? response_projects_path(current_user.current_data_response) : hacked_response_path
-- hacked_review_response_url = current_user.current_data_response ? review_response_path(current_user.current_data_response) : hacked_response_path
-- hacked_submit_response_url = current_user.current_data_response ? submit_response_path(current_user.current_data_response) : hacked_response_path
+- if current_user.organization.valid? & current_user.current_data_response
+  - hacked_projects_url = response_projects_path(current_user.current_data_response)
+  - hacked_review_response_url = review_response_path(current_user.current_data_response)
+  - hacked_submit_response_url = submit_response_path(current_user.current_data_response)
+- else
+  - hacked_projects_url = hacked_response_path
+  - hacked_review_response_url = hacked_response_path
+  - hacked_submit_response_url = hacked_response_path
 
 #main-nav
   .wrapper

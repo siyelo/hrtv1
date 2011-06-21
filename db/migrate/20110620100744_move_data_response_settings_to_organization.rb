@@ -17,14 +17,14 @@ class MoveDataResponseSettingsToOrganization < ActiveRecord::Migration
       if o.data_responses.present?
         puts "Copyting response setting to organization #{o.id}"
         dr = o.data_responses[0]
-        o.currency                         = dr.currency
-        o.fiscal_year_start_date           = dr.fiscal_year_start_date
-        o.fiscal_year_end_date             = dr.fiscal_year_end_date
-        o.contact_name                     = dr.contact_name
-        o.contact_position                 = dr.contact_position
-        o.contact_phone_number             = dr.contact_phone_number
-        o.contact_main_office_phone_number = dr.contact_main_office_phone_number
-        o.contact_office_location          = dr.contact_office_location
+        o.currency                         = dr[:currency]
+        o.fiscal_year_start_date           = dr[:fiscal_year_start_date]
+        o.fiscal_year_end_date             = dr[:fiscal_year_end_date]
+        o.contact_name                     = dr[:contact_name]
+        o.contact_position                 = dr[:contact_position]
+        o.contact_phone_number             = dr[:contact_phone_number]
+        o.contact_main_office_phone_number = dr[:contact_main_office_phone_number]
+        o.contact_office_location          = dr[:contact_office_location]
         o.save(false)
       end
     end

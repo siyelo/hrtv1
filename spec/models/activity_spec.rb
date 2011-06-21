@@ -63,33 +63,34 @@ describe Activity do
   end
 
   describe "validations" do
-    #it { should validate_presence_of(:name) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should validate_presence_of(:description) }
-    #it { should validate_uniqueness_of(:name).scoped_to(:project_id) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }
-    #it "accepts start date < end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 01),
-                        #:end_date =>   DateTime.new(2010, 01, 02) )
-      #a.should be_valid
-    #end
 
-    #it "does not accept start date > end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 02),
-                        #:end_date =>   DateTime.new(2010, 01, 01) )
-      #a.should_not be_valid
-    #end
-
-    #it "does not accept start date = end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 01),
-                        #:end_date =>   DateTime.new(2010, 01, 01) )
-      #a.should_not be_valid
-    #end
+    
+    it "will return false if the activity start date is before the project start date" do
+      @activity = Factory.build(:activity, 
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+                                :start_date => Date.parse("2010-01-01"), :end_date => Date.parse("2011-03-01"))
+                                
+      @activity.should_not be_valid
+    end
+      
+    it "will return false if the activity end date is after the project end date" do
+      @activity = Factory.build(:activity, 
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+                                :start_date => Date.parse("2001-03-01"), :end_date => Date.parse("2011-08-01"))
+      @activity.should_not be_valid
+    end
+    
+    it "will return true if the activity start and end date are within the project start and end date" do
+      @activity = Factory.build(:activity, 
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+                                :start_date => Date.parse("2011-02-01"), :end_date => Date.parse("2011-03-01"))
+      @activity.should be_valid
+    end
   end
 
   describe "codings required is decided by data_request" do

@@ -153,7 +153,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
+        :start_date => '2010-01-01', :end_date => '2010-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -166,7 +166,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
+        :start_date => '2010-01-01', :end_date => '2010-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -179,7 +179,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
+        :start_date => '2010-01-01', :end_date => '2010-03-01',
         :project_id => @project.id,
         :budget => 9000,
         :spend => 8000
@@ -192,7 +192,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
         :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
+        :start_date => '2010-01-01', :end_date => '2010-03-01',
         :project_id => @project.id,
         :budget => 19000,
         :spend => 81000
@@ -213,13 +213,14 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
       response.should redirect_to(response_projects_path(@data_response))
     end
+    
      it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do 
        @data_request = Factory(:data_request, :spend => false, :budget => true)
        @organization = Factory(:organization)
@@ -229,8 +230,7 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
          :project_id => @project.id,
          :budget => 89
        },
@@ -247,7 +247,7 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
          :project_id => @project.id,
          :budget => 11000
        },
@@ -265,7 +265,7 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
          :project_id => @project.id,
          :spend => 34
        },
@@ -282,10 +282,11 @@ describe ActivitiesController do
        login @user
        post :create, :activity => {
          :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
+         :start_date => '2010-01-01', :end_date => '2010-03-01',
          :project_id => @project.id,
          :budget => 34,
          :spend => 88
+
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))

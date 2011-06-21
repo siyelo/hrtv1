@@ -24,8 +24,8 @@
 
       = f.input :name, :required => false, :hint => "The name of this Activity."
       = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Activity."
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => false
+      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The date when the Activity started.", :required => false
+      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Activity’s implementation.", :required => false
 
 
   - if @response.data_request.spend?

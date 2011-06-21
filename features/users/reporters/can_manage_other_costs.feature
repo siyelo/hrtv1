@@ -19,8 +19,8 @@ Feature: Reporter can manage other costs
       Then I should see "Create Other Cost"
       When I fill in "Description" with "other_cost1"
         And I select "project1" from "Project"
-        And I fill in "Start date" with "2011-01-01" 
-        And I fill in "End date" with "2011-03-01"
+        And I fill in "Start date" with "2010-01-01" 
+        And I fill in "End date" with "2010-03-01"
         And I press "Save & Classify >"
       Then I should see "Othercost was successfully created"
       When I follow "other_cost1"
@@ -39,8 +39,8 @@ Feature: Reporter can manage other costs
     Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
       When I follow "Add Other Costs now"
         And I fill in "Description" with "other_cost1"
-        And I fill in "Start date" with "2011-01-01" 
-        And I fill in "End date" with "2011-03-01"
+        And I fill in "Start date" with "2010-01-01" 
+        And I fill in "End date" with "2010-03-01"
         And I press "Save & Classify >"
       Then I should see "Othercost was successfully created"
 
@@ -124,20 +124,3 @@ Feature: Reporter can manage other costs
       And I follow "Projects"
       And I follow "Add Other Costs now"
       Then I should not see "Budget (planned expenditure)"
-
-  Scenario: If the data_request has not got a budget or a spend then only the save button should appear
-    Given I follow "Sign Out"
-    And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false
-    And a data_response "data_response10" exists with data_request: data_request "data_request10", organization: the organization
-    And a project exists with name: "project19", data_response: data_response "data_response10"
-    And I am signed in as "reporter"
-    And I follow "THE DATA_REQUEST"
-    And I follow "Projects"
-    When I follow "Add Other Costs now"
-      And I fill in "Name" with "activity1"
-      And I fill in "Description" with "1ctivity1 description"
-      And I fill in "Start date" with "2011-01-01"
-      And I fill in "End date" with "2011-12-01"
-      And I select "project1" from "Project"
-    Then I should see "Save" button
-    And I should not see "Save & Classify >" button

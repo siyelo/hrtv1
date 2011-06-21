@@ -21,7 +21,7 @@
     %ul.admin_reports
       %li
         - link_to reports_districts_path, :class => "drill_down target" do
-          Review District Expenditures and Budgets
+          Review District Expenditures and Current Budgets
           %span.hint Interactive reports
       %li
 
@@ -32,7 +32,7 @@
     %ul.admin_reports
       %li
         - link_to reports_country_path, :class => "drill_down target" do
-          Review National Expenditures and Budgets
+          Review National Expenditures and Current Budgets
           %span.hint Interactive reports
       %li
 
@@ -52,15 +52,15 @@
       %li
         - link_to reporter_report_path('purposes'), :class => "target" do
           Purposes
-          %span.hint from budget and expenditure classifications screen
+          %span.hint from current budget and expenditure classifications screen
       %li
         - link_to reporter_report_path('inputs'), :class => "target" do
           Inputs
-          %span.hint from budget and expenditure classifications screen
+          %span.hint from current budget and expenditure classifications screen
       %li
         - link_to reporter_report_path('locations'), :class => "target" do
           Locations
-          %span.hint from budget and expenditure classifications screen
+          %span.hint from current budget and expenditure classifications screen
 
 - @responses.each do |response|
   %br

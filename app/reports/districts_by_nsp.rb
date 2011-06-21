@@ -30,7 +30,7 @@ class Reports::DistrictsByNsp
 
       Nsp.deepest_nesting.times{|i| row << "NSP Code"}
       row << "District"
-      row << "Budget"
+      row << "Current Budget"
 
       row
     end

@@ -1,7 +1,7 @@
 class OtherCost < Activity
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name description budget spend 
+  FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure 
                            spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4]
 
   def self.download_template

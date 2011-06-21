@@ -49,24 +49,24 @@
         %li= "Spend Q4 #{spend_fiscal_year}"
         %li= c(@other_cost.spend_q4, @other_cost.currency)
 
-  %h3.form_heading Budget (planned expenditure)
+  %h3.form_heading Current Budget (planned expenditure)
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget
+        %li Current Budget
         %li= c(@other_cost.budget, @other_cost.currency)
 
   %h3.form_heading Classifications
   %ul.dashboard_section
     %li
       %ul.row
-        %li Budget by Purposes
+        %li Current Budget by Purposes
         %li= b @other_cost.coding_budget_classified?
       %ul.row
-        %li Budget by Locations
+        %li Current Budget by Locations
         %li= b @other_cost.coding_budget_district_classified?
       %ul.row
-        %li Budget by Inputs
+        %li Current Budget by Inputs
         %li= b @other_cost.coding_budget_cc_classified?
       %ul.row
         %li Expenditure by Purposes

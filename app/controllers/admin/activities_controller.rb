@@ -2,7 +2,7 @@ require 'set'
 class Admin::ActivitiesController < Admin::BaseController
 
   ### Constants
-  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'current budget']
 
   ### Inherited Resources
   inherit_resources

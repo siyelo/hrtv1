@@ -12,6 +12,6 @@
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Budget.", :label => "Sub-Implementer Budget"
+        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Sub-Implementer Current Budget"
 
     = link_to_remove_fields "remove", f

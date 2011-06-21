@@ -162,10 +162,10 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      self.errors.add_to_base("Project expenditures and/or budgets are not yet entered.") unless project_amounts_entered?
+      self.errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
       self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      self.errors.add_to_base("Activity expenditures and/or budgets are not yet entered.") unless activity_amounts_entered?
+      self.errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
       self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
       self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
       self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?

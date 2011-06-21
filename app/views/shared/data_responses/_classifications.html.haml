@@ -5,7 +5,7 @@
   .tab1{:"data-chart_type" => "activity", :"data-id" => activity.id, :style => "display:block;"}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_coding', :link_name => 'Codings'
     .pie
-      %h4 Budget Purposes
+      %h4 Current Budget Purposes
       %ul
         - budget_assignments =  CodingBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - code_roots.each do |code|
@@ -18,7 +18,7 @@
     .tab2{:"data-chart_type" => "activity", :"data-id" => activity.id}
       = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_districts', :link_name => 'Codings'
       .pie
-        %h4 Budget Locations
+        %h4 Current Budget Locations
         %ul
           - activity.coding_budget_district.each do |assignment|
             %li
@@ -31,7 +31,7 @@
   .tab3{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_cost_categorization', :link_name => 'Codings'
     .pie
-      %h4 Budget Inputs
+      %h4 Current Budget Inputs
       %ul
         - cost_cat_assignments = CodingBudgetCostCategorization.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - cost_cat_roots.each do |code|
@@ -42,7 +42,7 @@
   .tab4{:"data-chart_type" => "activity", :"data-id" => activity.id}
     = render 'shared/data_responses/codings_inline_tab', :chart_type => 'budget_service_level', :link_name => 'Codings'
     .pie
-      %h4 Budget Service Levels
+      %h4 Current Budget Service Levels
       %ul
         - service_level_assignments = ServiceLevelBudget.with_activity(activity).all.map_to_hash{ |b| {b.code_id => b} }
         - service_level_roots.each do |code|

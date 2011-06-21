@@ -4,7 +4,7 @@ require 'validators'
 class Activity < ActiveRecord::Base
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Spend", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -223,12 +223,12 @@ class Activity < ActiveRecord::Base
 
       activity.name                    = row['Activity Name']
       activity.description             = row['Activity Description']
-      activity.spend                   = row['Spend']
+      activity.spend                   = row['Past Expenditure']
       activity.spend_q1                = row['Q1 Spend']
       activity.spend_q2                = row['Q2 Spend']
       activity.spend_q3                = row['Q3 Spend']
       activity.spend_q4                = row['Q4 Spend']
-      activity.budget                  = row['Budget']
+      activity.budget                  = row['Current Budget']
       activity.budget_q1               = row['Q1 Budget']
       activity.budget_q2               = row['Q2 Budget']
       activity.budget_q3               = row['Q3 Budget']

@@ -3,7 +3,7 @@ module Charts::CountryTreemaps
   extend Charts::HelperMethods
 
   class << self
-    def treemap(code_type, activities, is_spent)
+    def treemap(code_type, activities, data_request_id, is_spent)
       case code_type
       when 'mtef'
         codes   = Mtef.all + Nsp.all + Nha.all + Nasa.all
@@ -20,12 +20,12 @@ module Charts::CountryTreemaps
 
       coding_type = get_coding_type(code_type, is_spent)
 
-      get_treemap_rows(roots, codes, coding_type, activities).to_json
+      get_treemap_rows(roots, codes, coding_type, activities, data_request_id).to_json
     end
 
     private
 
-      def get_treemap_rows(root_codes, codes, coding_type, activities)
+      def get_treemap_rows(root_codes, codes, coding_type, activities, data_request_id)
         code_ids           = get_all_code_ids(root_codes)
 
         scope = CodeAssignment.with_code_ids(code_ids).with_type(coding_type)
@@ -34,7 +34,17 @@ module Charts::CountryTreemaps
 
         # format is my value, parent value, box_area_value, coloring_value
         code_assignments   = scope.find(:all,
-          :select => 'code_assignments.code_id, code_assignments.activity_id, SUM(code_assignments.cached_amount_in_usd) AS value',
+          :select => 'code_assignments.code_id, code_assignments.activity_id,
+                      SUM(code_assignments.cached_amount_in_usd) AS value',
+          :joins => "INNER JOIN activities ON
+                       activities.id = code_assignments.activity_id
+                     INNER JOIN projects ON
+                      projects.id = activities.project_id
+                     INNER JOIN data_responses ON
+                      data_responses.id = projects.data_response_id
+                     INNER JOIN data_requests ON
+                      data_requests.id = data_responses.data_request_id AND
+                      data_requests.id = #{data_request_id}",
           :group => 'code_assignments.code_id, code_assignments.activity_id',
           :order => 'value DESC'
         ).group_by{|ca| ca.code_id}

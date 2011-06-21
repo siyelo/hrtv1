@@ -21,13 +21,13 @@
 
 %ul.review
   %li.alt
-    %h2 Data Response Settings
+    %h2 Settings
   %li.dashboard_section
     %h3{:class => ready(@response.valid?)}
-      Your Data Response Settings
+      Your Settings
       - unless @response.valid?
         %span.info
-          = "Your Data Response Settings are not complete. Please visit the #{link_to "settings", edit_response_path(@response)} to make the necessary changes."
+          = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
   %li.alt
     %h2 Projects
   %li.dashboard_section

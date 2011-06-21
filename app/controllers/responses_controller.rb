@@ -32,23 +32,6 @@ class ResponsesController < ApplicationController
     end
   end
 
-  def edit
-    @response = find_response(params[:id])
-    current_user.current_data_response = @response
-    current_user.save
-  end
-
-  def update
-    @response = find_response(params[:id])
-    @response.update_attributes(params[:data_response])
-    if @response.save
-      flash[:notice] = "Successfully updated."
-      redirect_to edit_response_url(@response)
-    else
-      render :action => :edit
-    end
-  end
-
   def submit
     @response = find_response(params[:id])
     @projects = @response.projects.find(:all, :include => :normal_activities)

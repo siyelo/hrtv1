@@ -1,13 +1,19 @@
 - title("Dashboard")
+- if current_or_last_response
+  - hacked_response_projects_path = response_projects_path(current_or_last_response)
+  - hacked_submit_response_path   = submit_response_path(current_or_last_response)
+- else
+  - hacked_response_projects_path = new_response_path
+  - hacked_submit_response_path   = new_response_path
 
 %h1.main_heading Dashboard
 
 = render 'welcome'
 
 %ul.horizontal.left
-  %li= link_to "Edit Projects", response_projects_path(current_or_last_response), :class => "create_new"
+  %li= link_to "Edit Projects", hacked_response_projects_path, :class => "create_new"
   %li= link_to "Classify Activities", "#", :class => "create_new"
-  %li= link_to "Review & Respond", submit_response_path(current_or_last_response), :class => "create_new"
+  %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
 
 .right.request_select_box
   = link_to "Choose the data request you're responding to", "#", :class => "js_request_select add_row"
@@ -26,7 +32,7 @@
   =image_tag "icon_reporter.png", :class => "heading_icon"
   Data Requests & Responses
 .dashboard_section
-  
+
   %table.modern_table
     %thead
       %tr

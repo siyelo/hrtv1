@@ -1,10 +1,18 @@
 require 'validation_disabler'
+require 'validators'
 class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
+  include ActsAsDateChecker
+
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid
+  attr_accessible :name, :raw_type, :fosaid, :currency,
+    :fiscal_year_end_date, :fiscal_year_start_date, :contact_name,
+    :contact_name, :contact_position, :contact_phone_number,
+    :contact_main_office_phone_number, :contact_office_location
+
+  attr_accessor :current_data_request_id
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
@@ -26,6 +34,19 @@ class Organization < ActiveRecord::Base
   ### Validations
   validates_presence_of :name
   validates_uniqueness_of :name
+  validates_presence_of :currency, :contact_name, :contact_position,
+                        :contact_office_location, :contact_phone_number,
+                        :contact_main_office_phone_number, :on => :update
+  # TODO: spec
+  validates_date :fiscal_year_start_date, :on => :update
+  validates_date :fiscal_year_end_date, :on => :update
+  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
+    :message => "Start date must come before End date.", :on => :update
+  validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
+
+
+  ### Callbacks
+  after_save :update_cached_currency_amounts
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
@@ -157,6 +178,21 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def quarters_months(quarter)
+    case quarter
+    when "q1"
+      "#{fiscal_year_start_date.strftime('%b \'%y')} - #{(fiscal_year_start_date + 2.months).strftime('%b \'%y')}"
+    when "q2"
+      "#{(fiscal_year_start_date + 3.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 5.months).strftime('%b \'%y')}"
+    when "q3"
+      "#{(fiscal_year_start_date + 6.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 8.months).strftime('%b \'%y')}"
+    when "q4"
+      "#{(fiscal_year_start_date + 9.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 11.months).strftime('%b \'%y')}"
+    when "q4_prev"
+      "#{(fiscal_year_start_date - 5.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 3.months).strftime('%b \'%y')}"
+    end
+  end
+
   protected
 
     def tidy_name(n)
@@ -167,7 +203,20 @@ class Organization < ActiveRecord::Base
       n
     end
 
+  private
 
+    def update_cached_currency_amounts
+      if self.currency_changed?
+        self.dr_activities.each do |a|
+          a.code_assignments.each {|c| c.save}
+          a.save
+        end
+      end
+    end
+
+    def validates_date_range
+      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
+    end
 end
 
 

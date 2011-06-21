@@ -13,6 +13,59 @@ describe Organization do
     it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
+    it { should validate_presence_of(:currency) }
+    it { should validate_presence_of(:contact_name) }
+    it { should validate_presence_of(:contact_position) }
+    it { should validate_presence_of(:contact_phone_number) }
+    it { should validate_presence_of(:contact_main_office_phone_number) }
+    it { should validate_presence_of(:contact_office_location)}
+  end
+
+  describe "custom date validations" do
+    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
+    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
+    it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
+    it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
+    #it { should_not allow_value('').for(:fiscal_year_start_date) }
+    #it { should_not allow_value('').for(:fiscal_year_end_date) }
+    #it { should_not allow_value('2010-13-01').for(:fiscal_year_start_date) }
+    #it { should_not allow_value('2010-12-41').for(:fiscal_year_start_date) }
+    #it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
+    #it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
+
+    it "accepts start date < end date (exactly 1 year)" do
+      organization = Factory.build(:organization,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
+      organization.should be_valid
+    end
+
+    it "does not accept an end date that is not one year after the start date" do
+      organization = Factory.build(:organization,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 30) )
+      organization.should_not be_valid
+    end
+
+    it "does not accept start date > end date" do
+      organization = Factory.build(:organization,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 02),
+                         :fiscal_year_end_date =>   DateTime.new(2009, 01, 01) )
+      organization.should_not be_valid
+    end
+
+    it "does not accept start date = end date" do
+      organization = Factory.build(:organization,
+                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
+      organization.should_not be_valid
+    end
   end
 
   describe "associations" do
@@ -211,9 +264,10 @@ describe Organization do
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate,
-                    :fiscal_year_start_date => Date.parse("2010-02-01"),
-                    :fiscal_year_end_date => Date.parse("2010-01-01"))
+      @duplicate.fiscal_year_start_date = Date.parse("2010-02-01")
+      @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
+      @duplicate.save(false)
+      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
       duplicate_data_response.save(false)
       Organization.merge_organizations!(@target, @duplicate)
       @target.data_responses.count.should == 3 # not 2, since our before block created a valid DR
@@ -315,9 +369,9 @@ describe Organization do
       @org1 = Factory.create(:organization)
       @org2 = Factory.create(:organization)
 
-      @response1 = Factory.create(:data_response, :data_request => @request, 
+      @response1 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org1)
-      @response2 = Factory.create(:data_response, :data_request => @request, 
+      @response2 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org2)
 
 
@@ -335,6 +389,17 @@ describe Organization do
       project1  = Factory.create(:project, :data_response => @response1)
       @org1.has_provider?(@org2).should be_false
     end
+  end
+
+  it "displays the quarters with their correct months" do
+    o = Factory(:organization,
+                :fiscal_year_start_date => DateTime.new(2010, 01, 01),
+                :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
+
+    o.quarters_months("q1").should == "Jan '10 - Mar '10"
+    o.quarters_months("q2").should == "Apr '10 - Jun '10"
+    o.quarters_months("q3").should == "Jul '10 - Sep '10"
+    o.quarters_months("q4").should == "Oct '10 - Dec '10"
   end
 end
 

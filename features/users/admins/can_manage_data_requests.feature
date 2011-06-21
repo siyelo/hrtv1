@@ -14,7 +14,7 @@ Feature: Admin can manage data requests
        And I follow "Create Data Request"
        And I select "org1" from "Organization"
        And I fill in "Title" with "My data response title"
-       And I fill in "Due date" with "2012-09-01"
+       And I fill in "Due date" with "2011-09-01"
        And I fill in "Start date" with "2010-01-01"
        And I fill in "End date" with "2011-01-01"
        And I press "Create request"
@@ -44,17 +44,17 @@ Feature: Admin can manage data requests
       Then I should see "<message>"
 
       Examples:
-        | organization | title | due_date   | start_date | end_date   | message                              | 
-        | org1         | title | 2012-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     | 
-        |              | title | 2010-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank         | 
-        | org1         |       | 2010-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank         | 
-        | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date can't be blank         | 
-        | org1         |       | 123        | 2010-01-01 | 2011-01-01 | Due date is not a valid date    | 
-        | org1         | title | 2010-09-01 |            | 2011-01-01 | Start date can't be blank         | 
-        | org1         | title | 2010-09-01 | 123        | 2011-01-01 | Start date is not a valid date    | 
-        | org1         | title | 2010-09-01 | 2010-01-01 | 123        | End date is not a valid date    | 
-        | org1         | title | 2010-09-01 | 2010-01-01 |            | End date can't be blank         | 
-        | org1         | title | 2010-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date | 
+        | organization | title | due_date   | start_date | end_date   | message                              |
+        | org1         | title | 2011-09-01 | 2010-01-01 | 2011-01-01 | Request was successfully created     |
+        |              | title | 2011-09-01 | 2010-01-01 | 2011-01-01 | Organization can't be blank         |
+        | org1         |       | 2011-09-01 | 2010-01-01 | 2011-01-01 | Title can't be blank         |
+        | org1         |       |            | 2010-01-01 | 2011-01-01 | Due date can't be blank         |
+        | org1         |       | 123        | 2010-01-01 | 2011-01-01 | Due date is not a valid date    |
+        | org1         | title | 2011-09-01 |            | 2011-01-01 | Start date can't be blank         |
+        | org1         | title | 2011-09-01 | 123        | 2011-01-01 | Start date is not a valid date    |
+        | org1         | title | 2011-09-01 | 2010-01-01 | 123        | End date is not a valid date    |
+        | org1         | title | 2011-09-01 | 2010-01-01 |            | End date can't be blank         |
+        | org1         | title | 2011-09-01 | 2011-01-01 | 2010-01-01 | Start date must come before End date |
 
     Scenario: To expedite the review process, an Admin can change a Request to "Final Review" status
       When I follow "Requests"

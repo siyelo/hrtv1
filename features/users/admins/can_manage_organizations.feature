@@ -46,9 +46,9 @@ Feature: Admin can manage organizations
       Then I should see "<message>"
 
       Examples:
-         | duplicate | target         | message                                               | 
-         | org1      | org1 - 0 users | Same organizations for duplicate and target selected. | 
-         | org1      | org2 - 2 users  | Organizations successfully merged.                    | 
+         | duplicate | target         | message                                               |
+         | org1      | org1 - 0 users | Same organizations for duplicate and target selected. |
+         | org1      | org2 - 2 users  | Organizations successfully merged.                    |
 
 
     @javascript
@@ -65,9 +65,9 @@ Feature: Admin can manage organizations
         And the "Duplicate organization" text should be "<select_text>"
 
       Examples:
-          | duplicate | target         | duplicate_box | target_box | message                                               | select_text | 
-          | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. | org1        | 
-          | org1      | org2 - 2 users  | org1          | org2       | Organizations successfully merged.                    |             | 
+          | duplicate | target         | duplicate_box | target_box | message                                               | select_text |
+          | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. | org1        |
+          | org1      | org2 - 2 users  | org1          | org2       | Organizations successfully merged.                    |             |
 
 
     @javascript
@@ -81,9 +81,9 @@ Feature: Admin can manage organizations
         And the "Replacement organization" text should not be "<organization>"
 
         Examples:
-         | organization   | select_type              | info_block                  | 
-         | org1           | Duplicate organization   | .box[data-type='duplicate'] | 
-         | org1 - 0 users | Replacement organization | .box[data-type='target']    | 
+         | organization   | select_type              | info_block                  |
+         | org1           | Duplicate organization   | .box[data-type='duplicate'] |
+         | org1 - 0 users | Replacement organization | .box[data-type='target']    |
 
 
     @javascript
@@ -109,10 +109,10 @@ Feature: Admin can manage organizations
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-         | column_name | column | text1 | text2 | 
-         | Name        | 1      | org2  | org1  | 
-         | Raw Type    | 2      | Donor | Ngo   | 
-         | Fosaid      | 3      | 111   | 222   | 
+         | column_name | column | text1 | text2 |
+         | Name        | 1      | org2  | org1  |
+         | Raw Type    | 2      | Donor | Ngo   |
+         | Fosaid      | 3      | 111   | 222   |
 
 
     Scenario: An admin can filter organization
@@ -132,7 +132,7 @@ Feature: Admin can manage organizations
       Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
 
-    Scenario: Reporter can upload activities
+    Scenario: Admin can upload organizations
       When I follow "Organizations"
         And I attach the file "spec/fixtures/organizations.csv" to "File"
         And I press "Upload and Import"

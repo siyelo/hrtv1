@@ -7,10 +7,10 @@ Feature: Reporter can see help text
     Given a basic org "UNDP" + reporter profile, with data response to "Req1", signed in
 
 
-    
-    # this spec is for CMS-style help - to be added back once the UI is stabilised. 
+
+    # this spec is for CMS-style help - to be added back once the UI is stabilised.
     @wip
-    Scenario Outline: See help sections from the CMS 
+    Scenario Outline: See help sections from the CMS
       Given model help for "<page>" page
       When I go to the <page> page
       Then I should see "Questions on this Page"
@@ -28,7 +28,7 @@ Feature: Reporter can see help text
 
 
     Scenario: See help sidebar on Data Response page
-      When I go to the data response page for "Req1"
+      When I follow "Settings"
       Then I should see "What's a (Data) Response?"
 
 

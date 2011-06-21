@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110617113316) do
+ActiveRecord::Schema.define(:version => 20110620100744) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -157,14 +157,6 @@ ActiveRecord::Schema.define(:version => 20110617113316) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
-    t.string   "currency"
-    t.date     "fiscal_year_start_date"
-    t.date     "fiscal_year_end_date"
-    t.string   "contact_name"
-    t.string   "contact_position"
-    t.string   "contact_phone_number"
-    t.string   "contact_main_office_phone_number"
-    t.string   "contact_office_location"
     t.boolean  "submitted"
     t.datetime "submitted_at"
     t.integer  "projects_count",                    :default => 0
@@ -280,8 +272,16 @@ ActiveRecord::Schema.define(:version => 20110617113316) do
     t.datetime "updated_at"
     t.string   "raw_type"
     t.string   "fosaid"
-    t.integer  "users_count",    :default => 0
-    t.integer  "comments_count", :default => 0
+    t.integer  "users_count",                      :default => 0
+    t.integer  "comments_count",                   :default => 0
+    t.string   "currency"
+    t.date     "fiscal_year_start_date"
+    t.date     "fiscal_year_end_date"
+    t.string   "contact_name"
+    t.string   "contact_position"
+    t.string   "contact_phone_number"
+    t.string   "contact_main_office_phone_number"
+    t.string   "contact_office_location"
   end
 
   create_table "outputs", :force => true do |t|
@@ -362,8 +362,5 @@ ActiveRecord::Schema.define(:version => 20110617113316) do
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

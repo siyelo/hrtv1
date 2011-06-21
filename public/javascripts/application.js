@@ -1128,25 +1128,25 @@ var reporter_dashboard_index = {
     $('#user_data_response_id_current').live('change', function(e) {
       $('#edit_user_2').submit();
     });
-		
+
 		$('.js_request_select').click(function (e) {
 			e.preventDefault();
 			$(this).next().show();
 			$(this).hide();
 		});
-		
+
 		$('.js_request_close').click(function (e) {
 			e.preventDefault();
 			$(this).parents('.request_select').hide();
 			$('.js_request_select').show();
 		})
-		
+
 		$('.js_welcome_show').click(function (e) {
 			e.preventDefault();
 			$(this).next().slideDown();
 			$(this).hide();
 		});
-		
+
 		$('.js_welcome_hide').click(function (e) {
 			e.preventDefault();
 			$(this).parents('.welcome_box').slideUp();
@@ -1184,7 +1184,7 @@ var projects_index = {
   run: function () {
     $('.upload_btn').click(function (e) {
       e.preventDefault();
-      $(this).parents('td').find('.upload_box').slideToggle();
+      $(this).parents('tbody').find('.upload_box').slideToggle();
     });
 
     $('#import_export').click(function (e) {

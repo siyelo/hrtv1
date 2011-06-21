@@ -2,9 +2,6 @@
   %td{:colspan => 100}
     %h4
       Activities
-
-    = render 'activities_import', :project => project, :can_export => project.activities.present?
-
 - if activities.present?
   - activities.each do |activity|
     = render "activities/activity", :activity => activity

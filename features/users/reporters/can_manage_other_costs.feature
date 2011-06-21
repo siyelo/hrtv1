@@ -124,7 +124,7 @@ Feature: Reporter can manage other costs
       And I follow "Projects"
       And I follow "Add Other Costs now"
       Then I should not see "Budget (planned expenditure)"
-     
+
   Scenario: If the data_request has not got a budget or a spend then only the save button should appear
     Given I follow "Sign Out"
     And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false

@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can see dashboard
   In order to see latest news
   As a reporter

@@ -1,9 +1,11 @@
 - if current_or_last_response
   - hacked_response_projects_path = response_projects_path(current_or_last_response)
   - hacked_submit_response_path   = submit_response_path(current_or_last_response)
+  - hacked_review_response_path   = review_response_path(current_or_last_response)
 - else
   - hacked_response_projects_path = new_response_path
   - hacked_submit_response_path   = new_response_path
+  - hacked_review_response_path   = new_response_path
 
 = link_to "Show welcome screen", "#", :class => "welcome_show right js_welcome_show"
 .welcome_box
@@ -18,7 +20,7 @@
 
   %ul.welcome_steps
     %li.first
-      - link_to "#" do
+      - link_to edit_organization_path(:current) do
         %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
         %span.title 1. Configure Organization
         %span.desc Your basic preferences and contact settings
@@ -30,14 +32,14 @@
         %span.desc Define the health projects and activities your organization does
 
     %li
-      - link_to "#" do
-        %span.icon= image_tag "icon_welcome4.png", :alt => "Add Classifications", :height => "70"
-        %span.title 3. Add Classifications
+      - link_to hacked_review_response_path do
+        %span.icon= image_tag "icon_welcome4.png", :alt => "Review Your Data", :height => "70"
+        %span.title 3. Review Your Data
         %span.desc Add a little extra detail about your activities.
     %li.last
       - link_to hacked_submit_response_path do
-        %span.icon= image_tag "icon_welcome3.png", :alt => "Setup Your Organization", :height => "70"
-        %span.title 4. Review & Respond
+        %span.icon= image_tag "icon_welcome3.png", :alt => "Submit Response", :height => "70"
+        %span.title 4. Submit Response
         %span.desc Submit your data for the requested period
 
   .welcome_info

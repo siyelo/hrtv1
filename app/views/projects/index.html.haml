@@ -44,6 +44,11 @@
       %tr
         %td{:colspan => 100}
           = render 'no_projects_yet'
+    %tr.filler
+      %td{:colspan => 2}= link_to "Add Project", new_response_project_path(@response), :class => "add_row"
+      %td.total Total
+      %td.wrap-10= n2cndrs(@projects.map(&:spend).compact.sum, @response.currency)
+      %td.wrap-10= n2cndrs(@projects.map(&:budget).compact.sum, @response.currency)
 
 
 = will_paginate @projects

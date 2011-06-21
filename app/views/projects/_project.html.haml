@@ -4,13 +4,13 @@
       //= link_to "edit", edit_response_project_path(@response, project), :class => 'edit_button inline left push-12'
 
       = link_to "#{h project.name}", edit_response_project_path(@response, project)
-      
+
       - project_errors = get_project_errors(project)
       - if project_errors.present?
         = image_tag "warning_12.png", :title => project_errors, :class => 'tooltip'
 
   = render 'activities', :response => @response, :project => project, :activities => project.normal_activities
-  
+
   = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs
 
   %tr.filler2
@@ -20,22 +20,16 @@
           - link_to new_response_activity_path(response, :project_id => project.id), :class => "add_row" do
             = image_tag "new.png"
             Add Activity
-            
+
         %li
           - link_to "#", :class => "add_row upload_btn" do
             = image_tag "new.png"
             Import / Export Activity
-    
+
         %li
           - link_to new_response_other_cost_path(response, :project_id => project.id), :class => "add_row" do
             = image_tag "new.png"
             Add Other Cost
     %td.total Sub Total
-    %td.wrap-10= n2cndrs(project.spend, project.currency)
-    %td.wrap-10= n2cndrs(project.budget, project.currency)
-  
-  %tr.filler
-    %td{:colspan => 2}= link_to "Add Project", new_response_project_path(@response), :class => "add_row"
-    %td.total Total
     %td.wrap-10= n2cndrs(project.spend, project.currency)
     %td.wrap-10= n2cndrs(project.budget, project.currency)

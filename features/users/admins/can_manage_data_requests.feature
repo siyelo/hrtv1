@@ -14,11 +14,7 @@ Feature: Admin can manage data requests
        And I follow "Create Data Request"
        And I select "org1" from "Organization"
        And I fill in "Title" with "My data response title"
-<<<<<<< HEAD
-       And I fill in "Due date" with "2012-09-01"
-=======
        And I fill in "Due date" with "2011-09-01"
->>>>>>> User does not have to re-enter settings for each response
        And I fill in "Start date" with "2010-01-01"
        And I fill in "End date" with "2011-01-01"
        And I press "Create request"

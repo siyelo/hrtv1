@@ -1498,7 +1498,7 @@ var projects_edit = projects_new = {
    });
 
    $("#project_budget").keyup(function () {
-     split_total_across_quarters($(this).parents("ul:first").find('.amounts input'), $(this).val());
+     split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
    });
 
    $(".ff_spend").keyup(function () {

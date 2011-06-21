@@ -6,7 +6,7 @@ table.standard
   font-size: 11px
   line-height: 14px
   width: 100%
-  
+
   thead
     color: $mid-blue
 
@@ -38,18 +38,18 @@ table.standard
       &:last-child a
         +border-top-right-radius
 
-            
+
       &.static th
         color: $lightest-blue
         padding: 9px 7px 7px
-          
+
   tbody tr
     border-spacing: 0
 
     &.odd
       background: $lightest-blue + #090909
       +linear-gradient(color-stops(white, $lightest-blue + #090909))
-      
+
     &.activity
       td
         padding-left: 20px
@@ -59,7 +59,7 @@ table.standard
         border-right: 3px solid $light-blue
       h3
         padding: 4px 4px
-      
+
     &.project
       td
         border-top: 3px solid $light-blue
@@ -85,8 +85,8 @@ table.standard
       border: none
     &.padding
       padding-top: 0
-      
-      
+
+
 // Pretty Table with clickable rows
 table.clickable
 
@@ -109,28 +109,28 @@ table.rounded
     +border-top-left-radius
   th:last-child
     +border-top-right-radius
-    
-    
+
+
 table.sum
   width: 100%
-  
+
   td:first-child, th:first-child
     width: 60%
-  
+
   tbody tr:last-child td
     border: none
     padding-bottom: 20px
-    
+
   h1 a
     color: $mid-blue
     font-family: Avenir, sans-serif
     font-size: 16px
     font-weight: normal !important
     line-height: 1
-    
+
   thead tr
     background: $mid-blue - #111
-    
+
   thead th
     a
       background: $mid-blue - #111
@@ -153,13 +153,13 @@ table.sum
       +border-top-left-radius
     &:last-child a
       +border-top-right-radius
-  
+
   tbody td:first-child
     a
       font-weight: bold
       line-height: 1.4
       text-decoration: none
-      
+
   tr.head td
     background: $lightest-blue
     font-weight: bold
@@ -171,39 +171,47 @@ table.sum
     color: $mid-blue
     font-size: 12px
     padding: 5px 12px 4px
-    
+
   tr.none td
     border: none
 
-// 
+//
 
 table.workplan
   color: $mid-blue
   width: 100%
-  
+
   th
     color: $lightest-blue
     font-size: 11px
     font-weight: bold
-    padding: 10px 10px 3px
+    padding: 10px 10px 5px
     +text-shadow(#000, 0, 1px, 0)
     &.amount
       text-align: right
     a
       color: $lightest-blue
+      display: inline-block
       text-decoration: none
-      
+      padding-right: 22px
+      &:hover, &:focus
+        color: #FFF
+      &.asc
+        background: image_url("arrow_up.gif") no-repeat right center
+      &.desc
+        background: image_url("arrow_down.gif") no-repeat right center
+
   td
     font-size: 12px
     line-height: 1.4
     padding: 7px 10px
-    
+
   th, td
     height: 100%
     &.desc
       font-size: 11px
       padding-left: 10px
-      
+
     &.no-padding
       padding: 0
     &.fixed
@@ -361,7 +369,7 @@ table.workplan
     font-size: 11px
     font-style: italic
     margin-left: 10px
-    
+
 tr.filler th, tr.filler td
   background: $lightest-blue
   font-weight: bold

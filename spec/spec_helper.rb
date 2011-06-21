@@ -110,11 +110,11 @@ end
 
 # setup for Ultimate Funding Source scenarios
 def ufs_test_setup
-  @org0 = Factory(:organization, :name => 'org0')
-  @org1 = Factory(:organization, :name => 'org1')
-  @org2 = Factory(:organization, :name => 'org2')
-  @org3 = Factory(:organization, :name => 'org3')
-  @org4 = Factory(:organization, :name => 'org4')
+  @org0 = Factory(:organization, :name => 'org0', :currency => 'USD')
+  @org1 = Factory(:organization, :name => 'org1', :currency => 'USD')
+  @org2 = Factory(:organization, :name => 'org2', :currency => 'USD')
+  @org3 = Factory(:organization, :name => 'org3', :currency => 'USD')
+  @org4 = Factory(:organization, :name => 'org4', :currency => 'USD')
   @org_with_no_data_response = Factory(:organization,
                                        :name => 'org_with_no_data_response')
   @org_with_empty_data_response = Factory(:organization,
@@ -125,15 +125,15 @@ def ufs_test_setup
           :data_request => request)
 
   @response0 = Factory(:data_response, :organization => @org0,
-                       :data_request => request, :currency => 'USD')
+                       :data_request => request)
   @response1 = Factory(:data_response, :organization => @org1,
-                      :data_request => request, :currency => 'USD')
+                      :data_request => request)
   @response2 = Factory(:data_response, :organization => @org2,
-                      :data_request => request, :currency => 'USD')
+                      :data_request => request)
   @response3 = Factory(:data_response, :organization => @org3,
-                      :data_request => request, :currency => 'USD')
+                      :data_request => request)
   @response4 = Factory(:data_response, :organization => @org4,
-                      :data_request => request, :currency => 'USD')
+                      :data_request => request)
 
   @proj0 = Factory(:project, :name => 'p0', :data_response => @response0, :currency => "USD")
   @proj1 = Factory(:project, :name => 'p1', :data_response => @response1, :currency => "USD")

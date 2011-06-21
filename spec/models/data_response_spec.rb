@@ -17,71 +17,6 @@ describe DataResponse do
   describe "validations" do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
-    it { should validate_presence_of(:currency) }
-    it { should validate_presence_of(:contact_name) }
-    it { should validate_presence_of(:contact_position) }
-    it { should validate_presence_of(:contact_phone_number) }
-    it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}
-  end
-
-  describe "custom date validations" do
-    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
-    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
-    it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:contact_name) }
-    it { should allow_mass_assignment_of(:contact_position) }
-    it { should allow_mass_assignment_of(:contact_phone_number) }
-    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
-    it { should allow_mass_assignment_of(:contact_office_location) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
-    it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
-    it { should_not allow_value('').for(:fiscal_year_start_date) }
-    it { should_not allow_value('').for(:fiscal_year_end_date) }
-    it { should_not allow_value('2010-13-01').for(:fiscal_year_start_date) }
-    it { should_not allow_value('2010-12-41').for(:fiscal_year_start_date) }
-    it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
-    it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
-
-    it "accepts start date < end date (exactly 1 year)" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
-      dr.should be_valid
-    end
-    
-    it "does not accept an end date that is not one year after the start date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 30) )
-      dr.should_not be_valid
-    end
-
-    it "does not accept start date > end date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 02),
-                         :fiscal_year_end_date =>   DateTime.new(2009, 01, 01) )
-      dr.should_not be_valid
-    end
-
-    it "does not accept start date = end date" do
-      dr = Factory.build(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
-      dr.should_not be_valid
-    end
-    
-    it "displays the quarters with their correct months" do
-      dr = Factory(:data_response,
-                         :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                         :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
-      
-      dr.quarters_months("q1").should == "Jan '10 - Mar '10"
-      dr.quarters_months("q2").should == "Apr '10 - Jun '10"
-      dr.quarters_months("q3").should == "Jul '10 - Sep '10"
-      dr.quarters_months("q4").should == "Oct '10 - Dec '10"
-    end
-
   end
 
   describe "counter cache" do
@@ -139,7 +74,8 @@ describe DataResponse do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
-      @dr        = Factory(:data_response, :currency => 'RWF')
+      @organization = Factory(:organization, :currency => 'RWF')
+      @dr        = Factory(:data_response, :organization => @organization)
       @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)
       @activity  = Factory(:activity, :data_response => @dr,
@@ -151,9 +87,9 @@ describe DataResponse do
     it "should update cached USD amounts on Activity and Code Assignment" do
       @activity.budget_in_usd.should == 500
       @activity.spend_in_usd.should == 1000
-      @dr.reload # dr.activities wont be updated otherwise
-      @dr.currency = 'EUR'
-      @dr.save
+      @organization.reload # dr.activities wont be updated otherwise
+      @organization.currency = 'EUR'
+      @organization.save
       @activity.reload
       @activity.budget_in_usd.should == 1500
       @activity.spend_in_usd.should == 3000

@@ -1,15 +1,9 @@
-require 'validators'
-
 class DataResponse < ActiveRecord::Base
-  include ActsAsDateChecker
-  include CurrencyCacheHelpers
   include NumberHelper
 
   ### Attributes
 
-  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
-                  :contact_name, :contact_name, :contact_position, :contact_phone_number,
-                  :contact_main_office_phone_number, :contact_office_location
+  attr_accessible :data_request_id
 
   ### Associations
 
@@ -30,20 +24,12 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
-
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
-  validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location, :contact_phone_number,
-                        :contact_main_office_phone_number
-
-
-  # TODO: spec
-  validates_date :fiscal_year_start_date
-  validates_date :fiscal_year_end_date
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date."
-  validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
+  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
+    :contact_name, :contact_position, :contact_phone_number,
+    :contact_main_office_phone_number, :contact_office_location,
+    :quarters_months, :to => :organization
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -54,9 +40,6 @@ class DataResponse < ActiveRecord::Base
   ## some validation method and defining those as "magic nicely named" methods
   ## using metaprogramming
   @@validation_methods = []
-
-  ### Callbacks
-  after_save :update_cached_currency_amounts
 
   def self.in_progress
     self.find :all,
@@ -112,22 +95,7 @@ class DataResponse < ActiveRecord::Base
   def name
     data_request.try(:title) # some responses does not have data_requst (bug was on staging)
   end
-  
-  def quarters_months(quarter)
-    case quarter
-    when "q1"
-      "#{fiscal_year_start_date.strftime('%b \'%y')} - #{(fiscal_year_start_date + 2.months).strftime('%b \'%y')}"
-    when "q2"
-      "#{(fiscal_year_start_date + 3.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 5.months).strftime('%b \'%y')}"
-    when "q3"
-      "#{(fiscal_year_start_date + 6.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 8.months).strftime('%b \'%y')}"
-    when "q4"
-      "#{(fiscal_year_start_date + 9.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 11.months).strftime('%b \'%y')}"
-    when "q4_prev"
-      "#{(fiscal_year_start_date - 5.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 3.months).strftime('%b \'%y')}"
-    end
-  end
-    
+
   # TODO: spec
   def empty?
     activities.empty? && projects.empty? && funding_flows.empty?
@@ -413,16 +381,9 @@ class DataResponse < ActiveRecord::Base
   private
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
-    
-    
-    ### Validations
-    def validates_date_range
-      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
-    end
-    
-    
+
     ###Other Methods
-    
+
     def reject_uncoded(activities)
       activities.select{ |a|
         (!a.budget_classified? && self.request.budget?) ||

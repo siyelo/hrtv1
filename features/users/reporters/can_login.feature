@@ -38,6 +38,7 @@ Feature: Reporter can login
     Then I should see the reporters admin nav
       And I should see the main nav tabs
 
+      @run
   Scenario: Login as a reporter with email address
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization

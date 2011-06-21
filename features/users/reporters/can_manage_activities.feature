@@ -95,7 +95,7 @@ Feature: Reporter can manage activities
        Then the "Sub-Implementer Expenditure" field should contain "101"
        And the "Sub-Implementer Budget" field should contain "30"
 
-    @javascript 
+    @javascript
     Scenario: Reporter can CRUD activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "1ctivity1 description"
@@ -142,25 +142,25 @@ Feature: Reporter can manage activities
 
     Scenario: Reporter can enter 5 year budget projections
      When I follow "Add" within ".sub-head:nth-child(2)"
-      And I fill in "Name" with "Activity1"
-      And I fill in "Description" with "Activity1 description"
-      And I fill in "Start date" with "2011-01-01"
-      And I fill in "End date" with "2011-12-01"
-      And I select "project1" from "Project"
-      And I fill in "Budget" with "10000"
-      And I fill in "2010" with "2000"
-      And I fill in "2011" with "3000"
-      And I fill in "2012" with "4000"
-      And I fill in "2013" with "5000"
-      And I press "Save & Classify >"
+       And I fill in "Name" with "Activity1"
+       And I fill in "Description" with "Activity1 description"
+       And I fill in "Start date" with "2011-01-01"
+       And I fill in "End date" with "2011-12-01"
+       And I select "project1" from "Project"
+       And I fill in "Budget" with "10000"
+       And I fill in "2010" with "2000"
+       And I fill in "2011" with "3000"
+       And I fill in "2012" with "4000"
+       And I fill in "2013" with "5000"
+       And I press "Save & Classify >"
      Then I should see "Activity was successfully created"
 
-      When I follow "Details"
-      Then the "Budget" field should contain "10000"
-        And the "2010" field should contain "2000"
-        And the "2011" field should contain "3000"
-        And the "2012" field should contain "4000"
-        And the "2013" field should contain "5000"
+     When I follow "Activity1"
+     Then the "Budget" field should contain "1000"
+       And the "2010" field should contain "2000"
+       And the "2011" field should contain "3000"
+       And the "2012" field should contain "4000"
+       And the "2013" field should contain "5000"
 
 
     Scenario: A reporter can create comments for an activity

@@ -126,32 +126,32 @@ describe Project do
       end
     end
   end
-  
-  context "Amount validations" do 
-    it "should return true if budget is equal to that of the quarterlys" do 
-      @project = Factory(:project, :budget => "140", 
-                         :budget_q1 => "20", :budget_q2 => "30", 
+
+  context "Amount validations" do
+    it "should return true if budget is equal to that of the quarterlys" do
+      @project = Factory(:project, :budget => "140",
+                         :budget_q1 => "20", :budget_q2 => "30",
                          :budget_q3 => "40", :budget_q4 => "50")
       @project.total_matches_quarters?(:budget).should be_true
     end
-    
-     it "should return true if budget is equal to that of the quarterlys" do 
-       @project = Factory(:project, :spend => "140", 
-                          :spend_q1 => "20", :spend_q2 => "30", 
+
+     it "should return true if budget is equal to that of the quarterlys" do
+       @project = Factory(:project, :spend => "140",
+                          :spend_q1 => "20", :spend_q2 => "30",
                           :spend_q3 => "40", :spend_q4 => "50")
        @project.total_matches_quarters?(:spend).should be_true
      end
-      
-      it "should return true if spend is nil and quarterlys are too" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => nil, :spend_q2 => nil, 
+
+      it "should return true if spend is nil and quarterlys are too" do
+        @project = Factory(:project, :spend => nil,
+                            :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
         @project.total_matches_quarters?(:spend).should be_true
       end
-      
-      it "should return false if spend is nil and quarterlys are too" do 
-        @project = Factory(:project, :spend => nil, 
-                            :spend_q1 => nil, :spend_q2 => nil, 
+
+      it "should return false if spend is nil and quarterlys are too" do
+        @project = Factory(:project, :spend => nil,
+                            :spend_q1 => nil, :spend_q2 => nil,
                             :spend_q3 => nil, :spend_q4 => nil)
         @project.total_matches_quarters?(:spend).should be_true
       end
@@ -366,7 +366,9 @@ describe Project do
 
   describe 'Currency override default' do
      before :each do
-       @project       = Factory(:project, :data_response => Factory(:data_response, :currency => "RWF"))
+       organization  = Factory.create(:organization, :currency => "RWF")
+       data_response = Factory(:data_response, :organization => organization)
+       @project      = Factory(:project, :data_response => data_response)
      end
      it "should return the Data Response currency if no currency overridden" do
        @project.currency.should == 'RWF'
@@ -376,7 +378,10 @@ describe Project do
      end
 
     it "should not return blank" do
-      @project1       = Factory.build(:project, :data_response => Factory(:data_response, :currency => "GBP"))
+      organization   = Factory.create(:organization, :currency => "GBP")
+      data_response  = Factory(:data_response, :organization => organization)
+
+      @project1      = Factory.build(:project, :data_response => data_response)
       @project1.save
       @project1.currency.should == "GBP"
     end
@@ -388,7 +393,8 @@ describe Project do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
-      @response      = Factory(:data_response, :currency => 'RWF')
+      organization   = Factory.create(:organization, :currency => 'RWF')
+      @response      = Factory(:data_response, :organization => organization)
       @project       = Factory(:project,
                                 :data_response => @response,
                                 :currency => nil)

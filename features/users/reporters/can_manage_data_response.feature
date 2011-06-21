@@ -19,14 +19,15 @@ Feature: Reporter can manage data response
 
     Scenario: Browse to data response edit page
       When I follow "Settings"
-      Then I should see "Response Settings" within "h1"
+      Then I should see "Settings" within "h1"
 
 
     Scenario Outline: Edit data response, see feedback messages
-        Given I follow "Settings"
-        And I select "Euro (EUR)" from "data_response_currency"
-        And I fill in "data_response_fiscal_year_start_date" with "<start_date>"
-        And I fill in "data_response_fiscal_year_end_date" with "<end_date>"
+      Given a basic org + reporter profile, with data response, signed in
+        And I follow "Settings"
+        And I select "Euro (EUR)" from "Default Currency"
+        And I fill in "Start of Fiscal Year" with "<start_date>"
+        And I fill in "End of Fiscal Year" with "<end_date>"
         And I press "Update Response"
       Then I should see "<message>"
         And I should see "<specific_message>"

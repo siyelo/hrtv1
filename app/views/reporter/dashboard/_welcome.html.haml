@@ -1,10 +1,17 @@
+- if current_or_last_response
+  - hacked_response_projects_path = response_projects_path(current_or_last_response)
+  - hacked_submit_response_path   = submit_response_path(current_or_last_response)
+- else
+  - hacked_response_projects_path = new_response_path
+  - hacked_submit_response_path   = new_response_path
+
 = link_to "Show welcome screen", "#", :class => "welcome_show right js_welcome_show"
 .welcome_box
 
   - link_to "#", :class => "welcome_hide right js_welcome_hide" do
     Hide this welcome screen
     = image_tag "delete_row.png", :alt => "Hide"
-        
+
   %h3.welcome_msg
     Welcome Some Organization
     %span Here are few simple steps to help you get started
@@ -17,7 +24,7 @@
         %span.desc Your basic preferences and contact settings
 
     %li
-      - link_to response_projects_path(current_or_last_response) do
+      - link_to hacked_response_projects_path do
         %span.icon= image_tag "icon_welcome5.png", :alt => "Enter your rojects", :height => "70"
         %span.title 2. Enter Your Projects
         %span.desc Define the health projects and activities your organization does
@@ -28,7 +35,7 @@
         %span.title 3. Add Classifications
         %span.desc Add a little extra detail about your activities.
     %li.last
-      - link_to submit_response_path(current_or_last_response) do
+      - link_to hacked_submit_response_path do
         %span.icon= image_tag "icon_welcome3.png", :alt => "Setup Your Organization", :height => "70"
         %span.title 4. Review & Respond
         %span.desc Submit your data for the requested period

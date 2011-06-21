@@ -196,7 +196,7 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def confirm_activity_type
-      @activity = Activity.find(params[:id])     
+      @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end

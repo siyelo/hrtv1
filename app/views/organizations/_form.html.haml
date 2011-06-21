@@ -1,0 +1,31 @@
+- editing = controller.action_name == 'edit' ? true : false
+- button_text =  editing ? "Update Response" : "Begin Response"
+
+.form_aside
+  %h3 What's a (Data) Response?
+  %p The Government first creates a "Data Request", which is used to gather data in HRT for a certain period of time (e.g. 1 year.).
+  %br
+  %p When this happens, each organization (like yours) creates their own Response (a.k.a. "Data Response"), in which you can enter all information related to that request.
+
+- f.inputs :class => 'wrap-80 inputs' do
+
+  %li.last
+    %h3 Basics
+    %ul.dashboard_section
+      = f.input :current_data_request_id, :as => :select, :collection => DataRequest.all.map { |d| [ "#{d.title} (#{d.start_date.strftime("%b %Y")} - #{d.end_date.strftime("%b %Y")})", d.id ] }, :include_blank => false, :label => "Data Request", :hint => "The request you are responding to."
+      = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :input_html => {:class => 'combobox'}
+      = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
+      = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The End of the Fiscal Year"
+
+  %li.last
+    %h3 Contact Details
+    %ul.dashboard_section
+      = f.input :contact_name, :as => :string, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process."
+      = f.input :contact_position, :as => :string, :hint => "The position of the contact at your organization."
+      = f.input :contact_phone_number, :as => :string, :label => "Phone number", :hint => "A telephone number that can be used to contact the contact person."
+      = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number", :hint => "The telephone number of the organizations main office."
+      = f.input :contact_office_location, :as => :string, :label => "Office location", :hint => "The geographic location of the office."
+
+- f.buttons :class => 'wrap-80 buttons' do
+  = f.commit_button button_text, :class => "last"
+

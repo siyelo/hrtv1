@@ -15,7 +15,6 @@ class MoveDataResponseSettingsToOrganization < ActiveRecord::Migration
 
     Organization.find(:all, :include => :data_responses).each do |o|
       if o.data_responses.present?
-        puts "Copyting response setting to organization #{o.id}"
         dr = o.data_responses[0]
         o.currency                         = dr[:currency]
         o.fiscal_year_start_date           = dr[:fiscal_year_start_date]
@@ -25,7 +24,12 @@ class MoveDataResponseSettingsToOrganization < ActiveRecord::Migration
         o.contact_phone_number             = dr[:contact_phone_number]
         o.contact_main_office_phone_number = dr[:contact_main_office_phone_number]
         o.contact_office_location          = dr[:contact_office_location]
-        o.save(false)
+        if o.send(:update_without_callbacks)
+          puts "Copying response setting to organization #{o.id} [UPDATE]"
+        else
+          o.save(false)
+          puts "Copying response setting to organization #{o.id} [SAVE]"
+        end
       end
     end
 

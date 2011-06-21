@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can start a data response
   In order to enter data
   As a reporter

@@ -13,7 +13,6 @@ Feature: Reporter can manage data response
     Scenario: User can start a data response
       When I follow "Dashboard"
         And I follow "Edit"
-      Then show me the page
       Then I should see "Settings" within "h1"
 
 

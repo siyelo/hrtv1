@@ -89,20 +89,21 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_presence_of :description, :if => Proc.new {|model| model.class.to_s == 'Activity'}
-  validates_presence_of :data_response_id, :project_id, :if => Proc.new {|model| model.class.to_s == 'Activity'}
-  validates_numericality_of :spend, :if => Proc.new {|model| !model.spend.blank?}, :unless => Proc.new {|model| model.activity_id}
-  validates_numericality_of :budget, :if => Proc.new {|model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id}
-  validates_date :start_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
-  validates_date :end_date, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
-  validate :start_date_within_project_date_range
-  validate :end_date_within_project_date_range
+  validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_presence_of :data_response_id, :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
+  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
+  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+
+  
+  validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
   
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches, :unless => Proc.new {|model| model.class.to_s == 'SubActivity'}
+  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
   before_save :check_quarterly_vs_total
@@ -717,15 +718,10 @@ class Activity < ActiveRecord::Base
                 :cached_amount => amount)
     end
     
-    def start_date_within_project_date_range
-      if self.project.present?
-        errors.add(:start_date, "must be greater than or equal to the project start date (#{self.project.start_date})") if self.start_date < self.project.start_date         
-      end         
-    end
-    
-    def end_date_within_project_date_range
-      if self.project.present?
-        errors.add(:end_date, "must be less than or equal to the project end date (#{self.project.end_date})") if self.end_date > self.project.end_date
+    def dates_within_project_date_range
+      if project.present?
+        errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date
+        errors.add(:end_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if end_date > project.end_date
       end
     end
 end

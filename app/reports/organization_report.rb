@@ -3,11 +3,12 @@ class Reports::OrganizationReport
   # Returns Organization objects that respond to spent_sum() and budget_sum()
   #
   def self.top_by_spent_and_budget(options)
-    per_page = options[:per_page] || 25
-    page     = options[:page]     || 1
-    code_ids = options[:code_ids]
-    type     = options[:type]
-    sort     = options[:sort]
+    per_page        = options[:per_page] || 25
+    page            = options[:page]     || 1
+    code_ids        = options[:code_ids]
+    type            = options[:type]
+    sort            = options[:sort]
+    data_request_id = options[:data_request_id]
 
     raise "Missing code_ids param".to_yaml if code_ids.blank? ||
       !code_ids.kind_of?(Array)
@@ -27,6 +28,9 @@ class Reports::OrganizationReport
                   COALESCE(SUM(ca_budget_sum),0) AS budget_sum_raw",
       :joins => "
         INNER JOIN data_responses ON organizations.id = data_responses.organization_id
+        INNER JOIN data_requests ON
+          data_requests.id = data_responses.data_request_id AND
+          data_requests.id = #{data_request_id}
         INNER JOIN activities ON data_responses.id = activities.data_response_id
         LEFT OUTER JOIN (
           SELECT ca1.activity_id, SUM(ca1.cached_amount_in_usd) as ca_spent_sum

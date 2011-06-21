@@ -1,5 +1,5 @@
 class OtherCostsController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['description', 'spend', 'current budget']
+  SORTABLE_COLUMNS = ['description', 'past expenditure', 'current budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction
@@ -93,7 +93,7 @@ class OtherCostsController < Reporter::BaseController
     def html_redirect
       unless @other_cost.check_projects_budget_and_spend?
         flash.delete(:notice)
-        flash[:error] = "Please be aware that your activities spend/current budget exceeded that of your projects"
+        flash[:error] = "Please be aware that your activities past expenditure/current budget exceeded that of your projects"
       end
 
       if params[:commit] == "Save & Classify >"

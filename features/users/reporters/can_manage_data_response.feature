@@ -14,7 +14,7 @@ Feature: Reporter can manage data response
       When I follow "Dashboard"
         And I follow "Edit"
       Then show me the page
-      Then I should see "Response Settings" within "h1"
+      Then I should see "Settings" within "h1"
 
 
     Scenario: Browse to data response edit page
@@ -23,8 +23,7 @@ Feature: Reporter can manage data response
 
 
     Scenario Outline: Edit data response, see feedback messages
-      Given a basic org + reporter profile, with data response, signed in
-        And I follow "Settings"
+      When I follow "Settings"
         And I select "Euro (EUR)" from "Default Currency"
         And I fill in "Start of Fiscal Year" with "<start_date>"
         And I fill in "End of Fiscal Year" with "<end_date>"

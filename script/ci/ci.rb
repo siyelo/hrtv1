@@ -6,7 +6,7 @@
 # Usage:
 #  !/bin/bash
 #  source /var/lib/jenkins/.rvm/scripts/rvm
-#  source $WORKSPACE/.rvmrc_ree
+#  source $WORKSPACE/.rvmrc
 #  $WORKSPACE/script/ci/ci.rb
 #
 

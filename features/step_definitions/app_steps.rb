@@ -323,7 +323,7 @@ end
 Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
   steps %Q{
     Given a basic org "UNDP" + reporter profile, with data response to "Req1"
-    And I am signed in as "undp_user"
+    And I am signed in as "pink.panter@hrtapp.com"
   }
 end
 
@@ -336,7 +336,7 @@ end
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   steps %Q{
     Given a basic org + reporter profile, with data response
-    And I am signed in as "undp_user"
+    And I am signed in as "pink.panter@hrtapp.com"
   }
 end
 

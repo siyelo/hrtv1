@@ -9,7 +9,7 @@ Feature: Admin can manage users
       And an sysadmin exists with email: "pink.panter@hrt.com"
       And I am signed in as "pink.panter@hrt.com"
 
-      @javascript @run
+      @javascript 
     Scenario: Admin can add an user
       When I follow "Users" within the main nav
       Then I should see "Users" within the title

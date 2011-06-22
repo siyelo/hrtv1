@@ -4,9 +4,7 @@ Feature: Reporter can see classification tabs
   I want to be able to see classification tabs
 
   Background:
-
-
-
+    @wip
     Scenario: See budget and spend tabs when data request is for budget and spend
       Given an organization exists with name: "Organization1"
         And a data_request exists with title: "Request", budget: true, spend: true
@@ -22,7 +20,7 @@ Feature: Reporter can see classification tabs
       Then I should see "Current Expenditure" within ".inline_tab"
         And I should see "Budget" within ".inline_tab"
 
-
+		@wip
     Scenario: See only budget tab when data request is for budget but not spend
       Given an organization exists with name: "Organization1"
         And a data_request exists with title: "Request", budget: true, spend: false
@@ -38,7 +36,7 @@ Feature: Reporter can see classification tabs
       Then I should see "Budget" within ".inline_tab"
         And I should not see "Current Expenditure" within ".inline_tab"
 
-
+		@wip
     Scenario: See spend tab when data request is for spend but not budget
       Given an organization exists with name: "Organization1"
         And a data_request exists with title: "Request", budget: false, spend: true

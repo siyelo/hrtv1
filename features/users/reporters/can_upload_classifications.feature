@@ -32,7 +32,7 @@ Feature: Reporter can upload classifications
       And I follow "Activity description"
 
 
-
+		@wip
     Scenario Outline: Reporter can download Purposes template
       When I follow "<type>"
         And I follow "Health Functions"
@@ -47,7 +47,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Inputs template
       When I follow "<type>"
         And I follow "Inputs"
@@ -62,7 +62,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Locations template
       When I follow "<type>"
         And I follow "Locations"
@@ -77,7 +77,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Service Levels template
       When I follow "<type>"
         And I follow "Service Levels"
@@ -92,7 +92,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Purposes
       When I follow "<type>"
         And I follow "Health Functions"
@@ -107,7 +107,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Inputs
       When I follow "<type>"
         And I follow "Inputs"
@@ -122,7 +122,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Locations
       When I follow "<type>"
         And I follow "Locations"
@@ -137,7 +137,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Service Levels
       When I follow "<type>"
         And I follow "Service Levels"

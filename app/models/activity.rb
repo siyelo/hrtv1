@@ -61,20 +61,20 @@ class Activity < ActiveRecord::Base
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :funding_sources
+  has_many :sub_implementers, :through => :sub_activities, :source => :provider, :dependent => :destroy
+  has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
   has_many :comments, :as => :commentable, :dependent => :destroy
-  has_many :coding_budget
-  has_many :coding_budget_cost_categorization
-  has_many :coding_budget_district
-  has_many :service_level_budget
-  has_many :coding_spend
-  has_many :coding_spend_cost_categorization
-  has_many :coding_spend_district
-  has_many :service_level_spend
-  has_many :outputs
+  has_many :coding_budget, :dependent => :destroy
+  has_many :coding_budget_cost_categorization, :dependent => :destroy
+  has_many :coding_budget_district, :dependent => :destroy
+  has_many :service_level_budget, :dependent => :destroy
+  has_many :coding_spend, :dependent => :destroy
+  has_many :coding_spend_cost_categorization, :dependent => :destroy
+  has_many :coding_spend_district, :dependent => :destroy
+  has_many :service_level_spend, :dependent => :destroy
+  has_many :outputs, :dependent => :destroy
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
@@ -97,9 +97,9 @@ class Activity < ActiveRecord::Base
   validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
 
-  
+
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-  
+
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
@@ -718,7 +718,7 @@ class Activity < ActiveRecord::Base
                 :amount => amount, :percentage => percentage,
                 :cached_amount => amount)
     end
-    
+
     def dates_within_project_date_range
       if project.present?
         errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date

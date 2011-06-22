@@ -20,6 +20,46 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
+  ### Class Methods
+
+
+  def self.download_template(activity = nil)
+    FasterCSV.generate do |csv|
+      header_row = SubActivity::FILE_UPLOAD_COLUMNS
+      (100 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+
+      csv << header_row
+
+      if activity
+        activity.sub_activities.each do |sa|
+          row = [sa.provider.try(:name), sa.spend, sa.budget]
+
+          (100 - row.length).times{ row << nil}
+          row << sa.id
+          csv << row
+        end
+      end
+    end
+  end
+
+  def self.create_from_file(activity, doc)
+    doc.each do |row|
+      attributes = {:budget => row['Current Budget'],
+                    :spend => row['Past Expenditure'],
+                    :provider_id => Organization.find_by_name(row['Implementer']).try(:id),
+                    :data_response_id => activity.data_response.id}
+      sa = activity.sub_activities.find_by_id(row['Id'])
+      if sa
+        sa.update_attributes(attributes)
+      else
+        activity.sub_activities.create(attributes)
+      end
+    end
+  end
+
+  ### Instance Methods
+
   def locations
     if provider && provider.locations.present?
       provider.locations
@@ -64,41 +104,6 @@ class SubActivity < Activity
     adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
   memoize :coding_spend_cost_categorization
-
-  def self.download_template(activity = nil)
-    FasterCSV.generate do |csv|
-      header_row = SubActivity::FILE_UPLOAD_COLUMNS
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-
-      csv << header_row
-
-      if activity
-        activity.sub_activities.each do |sa|
-          row = [sa.provider.try(:name), sa.spend, sa.budget]
-
-          (100 - row.length).times{ row << nil}
-          row << sa.id
-          csv << row
-        end
-      end
-    end
-  end
-
-  def self.create_from_file(activity, doc)
-    doc.each do |row|
-      attributes = {:budget => row['Current Budget'],
-                    :spend => row['Past Expenditure'],
-                    :provider_id => Organization.find_by_name(row['Implementer']).try(:id),
-                    :data_response_id => activity.data_response.id}
-      sa = activity.sub_activities.find_by_id(row['Id'])
-      if sa
-        sa.update_attributes(attributes)
-      else
-        activity.sub_activities.create(attributes)
-      end
-    end
-  end
 
   private
 

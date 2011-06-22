@@ -92,7 +92,6 @@ module Charts::CountryPies
                     code_assignments.activity_id,
                     COALESCE(activities.name, activities.description) AS name_or_descr,
                     SUM(code_assignments.cached_amount_in_usd) AS value",
-        :joins => :activity,
         :joins => "INNER JOIN activities ON
                      activities.id = code_assignments.activity_id
                    INNER JOIN projects ON

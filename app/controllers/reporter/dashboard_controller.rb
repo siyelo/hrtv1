@@ -10,7 +10,7 @@ class Reporter::DashboardController < Reporter::BaseController
   def change_data_response
     result = current_user.change_data_response(params[:user][:data_response_id_current])
     result ? flash[:notice] = "You have sucessfully changed your data response" : flash[:error] = "Sorry that action is not allowed"
-    redirect_to reporter_dashboard_path
+    redirect_to :back
   end
 end
 

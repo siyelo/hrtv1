@@ -336,7 +336,6 @@ Feature: Reporter can manage activities
         And  I should see "Past Activity Expenditure"
 
 
-
     Scenario: Reporter can download Implementers CSV template
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       When I follow "Projects"

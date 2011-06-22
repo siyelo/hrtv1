@@ -74,7 +74,7 @@ class Reports::ActivityReport
     limit           = options[:limit]    || nil
     code_ids        = options[:code_ids]
     type            = options[:type]
-    data_request_id = options[:data_request_id]
+    request_id = options[:data_request_id]
 
     raise "Missing code_ids param".to_yaml if code_ids.blank? || !code_ids.kind_of?(Array)
     raise "Missing type param".to_yaml if type.blank? && (type != 'district' || type != 'country')
@@ -92,7 +92,7 @@ class Reports::ActivityReport
         INNER JOIN data_responses ON data_responses.id = activities.data_response_id
         INNER JOIN data_requests ON
           data_requests.id = data_responses.data_request_id AND
-          data_requests.id = #{data_request_id}
+          data_requests.id = #{request_id}
         INNER JOIN organizations ON organizations.id = data_responses.organization_id
         INNER JOIN code_assignments ca1 ON activities.id = ca1.activity_id
                AND ca1.type = '#{ca1_type}'

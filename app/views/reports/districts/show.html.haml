@@ -12,14 +12,14 @@
   var _spend_i_values         = #{js_safe(@spend_i_values)};
   var _code_spent_values      = #{js_safe(@code_spent_values)};
   var _code_budget_values     = #{js_safe(@code_budget_values)};
-
-
+  
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
   %li{:class => 'last'}= link_to "Districts", reports_districts_path
 
-%h1.main_heading= h @location.name
-
+%h1.main_heading
+  = h @location.name
+  = render :partial => "shared/response_selector"
 
 .full
   .third

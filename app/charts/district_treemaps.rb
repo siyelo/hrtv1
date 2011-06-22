@@ -3,7 +3,7 @@ module Charts::DistrictTreemaps
   extend Charts::HelperMethods
 
   class << self
-    def treemap(location, code_type, activities, is_spent)
+    def treemap(request_id, location, code_type, activities, is_spent)
       case code_type
       when 'mtef'
         codes   = Mtef.all + Nsp.all + Nha.all + Nasa.all
@@ -28,16 +28,16 @@ module Charts::DistrictTreemaps
         activity_value    = "budget"
       end
 
-      get_treemap_rows(roots, codes, coding_type, activities, location, district_type, activity_value).to_json
+      get_treemap_rows(roots, codes, coding_type, activities, location, district_type, activity_value, request_id).to_json
     end
 
     private
 
-      def get_treemap_rows(root_codes, codes, type, activities, location, district_type, activity_value)
+      def get_treemap_rows(root_codes, codes, type, activities, location, district_type, activity_value, request_id)
         # format is my value, parent value, box_area_value, coloring_value
         activities         = Activity.only_simple_activities(activities)
         code_ids           = get_all_code_ids(root_codes)
-        code_assignments   = CodeAssignment.sums_by_code_id(code_ids, type.to_s, activities)
+        code_assignments   = CodeAssignment.with_request(request_id).sums_by_code_id(code_ids, type.to_s, activities)
         treemap_ratios     = CodeAssignment.ratios_by_activity_id(location.id, activities.map(&:id), district_type, activity_value)
         treemap_sums       = prepare_treemap_sums(code_assignments, treemap_ratios, code_ids)
 

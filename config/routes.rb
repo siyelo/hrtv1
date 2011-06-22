@@ -55,6 +55,12 @@ ActionController::Routing::Routes.draw do |map|
                         :project_sub_form => :get}
       response.resources :other_costs,
         :collection => {:create_from_file => :post, :download_template => :get}
+    response.resources :districts, :only => [:index, :show] do |district|
+      district.resources :activities, :only => [:index, :show],
+        :controller => "districts/activities"
+      district.resources :organizations, :only => [:index, :show],
+        :controller => "districts/organizations"
+    end
   end
 
   map.resources :activities do |activity|

@@ -300,4 +300,20 @@ module ApplicationHelper
     current_response || last_response
   end
 
+  def month_year(date, i = 0)
+    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
+  end
+
+  def prev_fy(response)
+    "#{month_year(response.request.start_date, -1)} - #{month_year(response.request.end_date, -1)}"
+  end
+
+  def current_fy(response)
+    "#{month_year(response.request.start_date)} - #{month_year(response.request.end_date)}"
+  end
+
+  def next_fy(response)
+    "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
+  end
+
 end

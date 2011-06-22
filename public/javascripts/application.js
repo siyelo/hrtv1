@@ -1487,6 +1487,18 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.add_organization').slideToggle();
     });
 
+    $('#other_cost_spend').keyup(function () {
+      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:first)'), $(this).val());
+    });
+
+    $('.js_quarterly_inputs input:not(:first)').keyup(function () {
+      calculate_total_from_quarters($(this).parents('ul:first').find('input:not(:first)'), $(this).parents('li.amounts').prev().find('input'));
+    });
+
+    $('#other_cost_budget').keyup(function () {
+      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:first)'), $(this).val());
+    });
+
   }
 };
 

@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
 
   def change_data_response(response_id)
-    if self.data_responses.map(&:id).include?(response_id.to_i)
+    if data_responses.map(&:id).include?(response_id.to_i)
       self.data_response_id_current = response_id
       self.save
     else

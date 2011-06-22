@@ -19,6 +19,12 @@ class DataRequest < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_dates_order :end_date, :due_date, :message => "Due date must come after End date."
 
+  def current_request?
+    sd = start_date + 1.year
+    return true if sd < DateTime.now && DateTime.now < end_date
+    return false
+  end
+
   def status
     return 'Final review' if final_review?
     return 'In progress'

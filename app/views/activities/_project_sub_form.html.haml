@@ -1,11 +1,8 @@
 :javascript
   var namespace = "#{form_namespace(project)}";
 
-- if project.locations.present?
-  - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
-    - f.inputs do
-      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "All the places where activity was implemented", :collection => ordered_locations(project.locations.ordered_by_short_display), :required => false
-- else
-  - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
-    - f.inputs do
-      = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "All the places this activity was implemented", :collection => Location.all, :required => false
+- collection = project.locations.present? ? project.locations.ordered_by_short_display : Location.ordered_by_short_display
+
+- semantic_fields_for activity, :namespace => form_namespace(project) do |f|
+  - f.inputs do
+    = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "Please indicate all the districts in which this activity was implemented. If this activity had a national focus and did not target any districts specifically, select 'Central Level' from the list to the left.", :collection => ordered_locations(collection), :required => false

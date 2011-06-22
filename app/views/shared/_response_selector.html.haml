@@ -1,0 +1,7 @@
+.right.request_select_box
+  = link_to "Select the data request you would like to view", "#", :class => "js_request_select add_row"
+  .request_select{ :style => "display: none"}
+    - semantic_form_for current_user, :url => reporter_change_data_response_path, :html => {:id => "change_datarequest"} do |f|
+      %ul.horizontal
+        = f.input :data_response_id_current, :as => :select, :collection => @responses.all, :include_blank => false, :label => "Data Request"
+        %li= link_to "Close", "#", :class => "js_request_close add_row"

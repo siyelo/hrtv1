@@ -955,7 +955,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
   });
 }
 
-var reports_districts_show = {
+var reports_districts_show = reports_countries_show = {
   run: function () {    
     $('#user_data_response_id_current').live('change', function(e) {
       $('#change_datarequest').submit();

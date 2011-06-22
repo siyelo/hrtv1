@@ -17,8 +17,10 @@
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
-%h1.main_heading Review National Expenditures and Current Budgets
-
+%h1.main_heading 
+  Review National Expenditures and Current Budgets
+  = render :partial => "shared/response_selector"
+  
 .full
   .third
     %h2 Ultimate Funding Source (Current Budget)

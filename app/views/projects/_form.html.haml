@@ -49,7 +49,6 @@
               = f.input :budget_q4     , :label => "#{@response.quarters_months('q4')}",      :required => false
 
         %br
-        = f.input :entire_budget, :label => "Total Budget", :hint => "Total long term budget", :required => false
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term

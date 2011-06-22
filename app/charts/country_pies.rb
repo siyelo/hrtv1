@@ -118,7 +118,9 @@ module Charts::CountryPies
               :select => "code_assignments.code_id,
                 codes.short_display as name,
                 SUM(code_assignments.cached_amount_in_usd) AS value",
-              :joins => "INNER JOIN activities ON
+              :joins => "INNER JOIN codes ON
+                           codes.id = code_assignments.code_id
+                         INNER JOIN activities ON
                            activities.id = code_assignments.activity_id
                          INNER JOIN projects ON
                           projects.id = activities.project_id
@@ -127,7 +129,6 @@ module Charts::CountryPies
                          INNER JOIN data_requests ON
                           data_requests.id = data_responses.data_request_id AND
                           data_requests.id = #{data_request_id}",
-              :joins => :code,
               :group => 'code_assignments.code_id,
                          codes.short_display',
               :order => 'value DESC')

@@ -92,6 +92,8 @@ class FundingFlow < ActiveRecord::Base
   end
 
 end
+
+
 # == Schema Information
 #
 # Table name: funding_flows

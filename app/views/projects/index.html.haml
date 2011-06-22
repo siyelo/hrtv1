@@ -31,10 +31,14 @@
 %table.workplan
   %thead
     %tr.head
+      %th{:colspan => 3}
+      %th le date
+      %th{:colspan => 10} le date
+    %tr.head
       %th= sortable "name", "Project"
       %th{:colspan => 2} Activity / Other Cost
-      %th= sortable "spend", "Expenditure"
-      %th= sortable "budget", "Budget"
+      %th= sortable "spend", "Past Expenditure"
+      %th= sortable "budget", "Current Budget"
 
   %tbody
     - unless @projects.empty?

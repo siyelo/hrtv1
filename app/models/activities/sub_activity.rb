@@ -9,17 +9,61 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessor     :provider_mask
   attr_accessible :activity_id, :data_response_id, :provider_mask,
-                  :spend_percentage, :budget_percentage
+                  :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
 
   def provider_mask
-    raise 1.to_yaml
     @provider_mask || provider_id
   end
 
+  def provider_mask=(the_provider_mask)
+    @provider_mask = the_provider_mask
+
+    if is_number?(the_provider_mask)
+      self.provider_id = the_provider_mask
+    else
+      organization = Organization.find_or_create_by_name(the_provider_mask)
+      self.provider_id = organization.id
+    end
+  end
+
+  def spend_mask
+    @spend_mask || spend
+  end
+
+  def spend_mask=(the_spend_mask)
+    @spend_mask = the_spend_mask
+    if the_spend_mask.to_s.last == '%'
+      if the_spend_mask.to_i < 101
+        self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
+      else
+        self.spend = the_spend_mask.delete('%')
+      end
+    else
+      self.spend = the_spend_mask
+    end
+  end
+
+  def budget_mask
+    @budget_mask || budget
+  end
+
+  def budget_mask=(the_budget_mask)
+    @budget_mask = the_budget_mask
+
+    if the_budget_mask.to_s.last == '%'
+      if the_budget_mask.to_i < 101
+        self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
+      else
+        self.budget = the_budget_mask.delete('%')
+      end
+    else
+      self.budget = the_budget_mask
+    end
+  end
+
+
   ### Callbacks
-  after_initialize  :set_or_create_provider
   after_create      :update_counter_cache
   after_destroy     :update_counter_cache
 
@@ -154,17 +198,6 @@ class SubActivity < Activity
       end
 
       return new_assignments
-    end
-
-    def set_or_create_provider
-      raise provider_mask.to_yaml
-      if is_number?(provider_mask)
-        self.provider_id = provider_mask
-      else
-        organization = Organization.create_by_name(provider_mark)
-        raise organization.to_yaml
-        self.provider_id = organization.id
-      end
     end
 end
 

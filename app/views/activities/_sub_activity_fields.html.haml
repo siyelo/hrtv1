@@ -8,11 +8,11 @@
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :spend, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Sub-Implementer Expenditure"
+        = f.input :spend_mask, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Implementer Expenditure"
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Sub-Implementer Current Budget"
+        = f.input :budget_mask, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Implementer Current Budget"
 
     = link_to_remove_fields "remove", f
 

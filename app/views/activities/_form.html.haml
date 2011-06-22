@@ -76,19 +76,8 @@
           %p.hint Enter sources here if this activity is funded differently from other activities for this project. For example, if your project has two donors, and only one of them funds this activity, enter that single source of funds here.
 
 
-  %li.last
-    %h3== Implementer
-    %ul.dashboard_section
-      %p.hint Direct service provider for this activity. If you transferred funds to another organization that carried out this work, enter that organization instead of your organization
-      - hint = "Service Providers who implement Activities for your organization's Projects/Activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
-      - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
-      .implementer_container
-        .ui_widget
-          = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select combobox'}
-      = render :partial => 'shared/add_organizations'
-
   %li.last.sub_activities
-    %h3 Sub-Implementers
+    %h3 Implementers
     %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
 
     - unless @activity.new_record?
@@ -99,7 +88,7 @@
     - f.semantic_fields_for :sub_activities do |ca|
       = render "activities/sub_activity_fields", :f => ca
     .add
-      = link_to_add_fields "Add Sub-Implementer", f, :sub_activities, "activities/"
+      = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/"
 
   %li.last.outputs
     %h3 Outputs

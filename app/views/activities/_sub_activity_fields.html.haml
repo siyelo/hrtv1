@@ -3,7 +3,7 @@
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
     .implementer_container
       .ui_widget
-        = f.input :provider, :label => "Sub Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this Implementer", :required => false, :input_html => {:class => 'implementer_select combobox'}
+        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this Implementer", :required => false, :input_html => {:class => 'implementer_select combobox'}
 
     - if @response.data_request.spend?
       %h4 Past expenditure

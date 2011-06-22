@@ -2,11 +2,9 @@ class DataResponse < ActiveRecord::Base
   include NumberHelper
 
   ### Attributes
-
   attr_accessible :data_request_id
 
   ### Associations
-
   belongs_to :organization
   belongs_to :data_request
   has_many :activities, :dependent => :destroy

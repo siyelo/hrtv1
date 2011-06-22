@@ -19,8 +19,15 @@ Factory.define :activity_manager,  :parent => :user do |f|
   f.roles { ['activity_manager'] }
 end
 
+# deprecated - use :sysadmin from now on
 Factory.define :admin,  :parent => :user do |f|
   f.sequence(:username)   { |i| "admin_#{i}" }
   f.sequence(:email)      { |i| "admin_#{i}@example.com" }
   f.roles { ['admin'] }
+end
+
+Factory.define :sysadmin,  :parent => :user do |f|
+  f.sequence(:username)   { |i| "sysadmin_#{i}" }
+  f.sequence(:email)      { |i| "sysadmin_#{i}@example.com" }
+  f.roles { ['admin'] } #todo - change role names
 end

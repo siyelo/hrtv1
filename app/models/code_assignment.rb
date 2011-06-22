@@ -52,8 +52,7 @@ class CodeAssignment < ActiveRecord::Base
                   INNER JOIN data_requests
                     ON data_responses.data_request_id = data_requests.id AND 
                     data_responses.data_request_id = #{request_id}",
-                } 
-              }
+              }}
 
   
   ### Callbacks

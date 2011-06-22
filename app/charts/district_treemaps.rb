@@ -37,7 +37,7 @@ module Charts::DistrictTreemaps
         # format is my value, parent value, box_area_value, coloring_value
         activities         = Activity.only_simple_activities(activities)
         code_ids           = get_all_code_ids(root_codes)
-        code_assignments   = CodeAssignment.sums_by_code_id(code_ids, type.to_s, activities)
+        code_assignments   = CodeAssignment.with_request(request_id).sums_by_code_id(code_ids, type.to_s, activities)
         treemap_ratios     = CodeAssignment.ratios_by_activity_id(location.id, activities.map(&:id), district_type, activity_value)
         treemap_sums       = prepare_treemap_sums(code_assignments, treemap_ratios, code_ids)
 

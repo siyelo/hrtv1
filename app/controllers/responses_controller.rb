@@ -3,7 +3,7 @@ class ResponsesController < ApplicationController
   before_filter :require_user
 
   def new
-    @response = DataResponse.new
+    @response = DataResponse.new(:data_request_id => params[:data_request_id])
   end
 
   def review

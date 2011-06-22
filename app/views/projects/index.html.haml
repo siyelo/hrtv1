@@ -32,8 +32,8 @@
   %thead
     %tr.head
       %th{:colspan => 3}
-      %th le date
-      %th{:colspan => 10} le date
+      %th= current_fy(@response)
+      %th{:colspan => 10}= next_fy(@response)
     %tr.head
       %th= sortable "name", "Project"
       %th{:colspan => 2} Activity / Other Cost

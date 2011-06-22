@@ -1,5 +1,6 @@
 class SubActivity < Activity
   extend ActiveSupport::Memoizable
+  include NumberHelper
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Implementer", "Past Expenditure", "Current Budget"]
@@ -8,11 +9,19 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessible :activity_id, :spend_percentage, :budget_percentage, :data_response_id
+  attr_accessor     :provider_mask
+  attr_accessible :activity_id, :data_response_id, :provider_mask,
+                  :spend_percentage, :budget_percentage
+
+  def provider_mask
+    raise 1.to_yaml
+    @provider_mask || provider_id
+  end
 
   ### Callbacks
-  after_create  :update_counter_cache
-  after_destroy :update_counter_cache
+  after_initialize  :set_or_create_provider
+  after_create      :update_counter_cache
+  after_destroy     :update_counter_cache
 
   ### Delegates
   [:projects, :name, :description, :start_date, :end_date, :approved,
@@ -145,6 +154,17 @@ class SubActivity < Activity
       end
 
       return new_assignments
+    end
+
+    def set_or_create_provider
+      raise provider_mask.to_yaml
+      if is_number?(provider_mask)
+        self.provider_id = provider_mask
+      else
+        organization = Organization.create_by_name(provider_mark)
+        raise organization.to_yaml
+        self.provider_id = organization.id
+      end
     end
 end
 

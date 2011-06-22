@@ -1,6 +1,10 @@
 module NumberHelper
   include ActionView::Helpers::NumberHelper
 
+  def is_number?(i)
+    true if Float(i) rescue false
+  end
+
   def n2c(value, unit = "")
     number_to_currency(value,
                       :separator => ".",

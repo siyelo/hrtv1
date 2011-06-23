@@ -90,7 +90,7 @@ class CodeAssignmentsController < Reporter::BaseController
     def add_code_assignments_error(coding_class, activity)
       if !activity_classified?(activity, coding_class)
         coding_type        = get_coding_type(coding_class)
-        amount_name        = coding_type.to_s.capitalize
+        amount_name        = coding_type.to_s.capitalize == 'Spend' ? 'Past Expenditure' : coding_type.to_s.capitalize
         coding_type_amount = activity.send(coding_type) || 0
         coding_amount      = activity.send("#{coding_class}_amount")
         coding_amount      = 0 if coding_amount.nil?

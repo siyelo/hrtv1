@@ -30,7 +30,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    clean_out_sa_params(params)
     @activity = @response.activities.new(params[:activity])
 
     if @activity.save
@@ -47,9 +46,8 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def update
-    clean_out_sa_params(params)
-    check_for_new_provider(params)
     @activity = Activity.find(params[:id])
+
     if @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html do
@@ -135,42 +133,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
-
-    def clean_out_sa_params(params)
-      unless params[:activity][:sub_activities_attributes].nil?
-        params[:activity][:sub_activities_attributes].each_key do |key|
-          if params[:activity][:sub_activities_attributes][key][:spend].last == '%'
-            if params[:activity][:sub_activities_attributes][key][:spend].to_i < 101
-              spend = params[:activity][:spend].to_f * params[:activity][:sub_activities_attributes][key][:spend].delete('%').to_f / 100
-              params[:activity][:sub_activities_attributes][key][:spend] = spend
-            else
-              spend = params[:activity][:sub_activities_attributes][key][:spend].delete('%')
-              params[:activity][:sub_activities_attributes][key][:spend] = spend
-            end
-          end
-          if params[:activity][:sub_activities_attributes][key][:budget].last == '%'
-            if params[:activity][:sub_activities_attributes][key][:budget].to_i < 101
-              budget = params[:activity][:budget].to_f * params[:activity][:sub_activities_attributes][key][:budget].delete('%').to_f / 100
-              params[:activity][:sub_activities_attributes][key][:budget] = budget
-            else
-              budget = params[:activity][:sub_activities_attributes][key][:budget].delete('%')
-              params[:activity][:sub_activities_attributes][key][:budget] = budget
-            end
-          end
-        end
-      end
-    end
-
-    def check_for_new_provider(params)
-      unless params[:activity][:provider_id].nil?
-        unless is_number?(params[:activity][:provider_id])
-          name = params[:activity][:provider_id]
-          params[:activity][:provider] = {}
-          params[:activity][:provider][:name] = name
-          params[:activity].delete(:provider_id)
-        end
-      end
-    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"

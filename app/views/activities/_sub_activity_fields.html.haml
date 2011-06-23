@@ -3,15 +3,19 @@
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
     .implementer_container
       .ui_widget
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this Implementer", :required => false, :input_html => {:class => 'implementer_select combobox'}
+        = f.input :provider_mask, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this activity", :required => false, :input_html => {:class => 'implementer_select combobox'}
 
     - if @response.data_request.spend?
       %h4 Past expenditure
       .nested_field
-        = f.input :spend, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Sub-Implementer Expenditure"
+        = f.input :spend_mask, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Implementer Expenditure"
     - if @response.data_request.budget?
       %h4 Planned expenditure
       .nested_field
-        = f.input :budget, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Sub-Implementer Current Budget"
+        = f.input :budget_mask, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Implementer Current Budget"
 
     = link_to_remove_fields "remove", f
+
+
+
+

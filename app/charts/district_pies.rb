@@ -5,12 +5,15 @@ module Charts::DistrictPies
   class << self
 
     ### admin/district/:id/organizations
-    def organizations(location, code_type)
+    def organizations(location, code_type, request_id)
       records = Organization.find :all,
         :select => "organizations.id,
           organizations.name,
           SUM(ca1.cached_amount_in_usd) as value",
         :joins => "INNER JOIN data_responses dr1 ON organizations.id = dr1.organization_id
+          INNER JOIN data_requests ON
+            data_requests.id = dr1.data_request_id AND
+            data_requests.id = #{request_id}
           INNER JOIN activities a1 ON dr1.id = a1.data_response_id
           INNER JOIN code_assignments ca1 ON a1.id = ca1.activity_id
             AND ca1.type = '#{code_type}'
@@ -190,7 +193,7 @@ module Charts::DistrictPies
     end
 
     ### admin/district/:id/organizations/:id
-    def organization_pie(location, activities, code_type, is_spent)
+    def organization_pie(location, activities, code_type, is_spent, request_id)
       #codes = get_codes(code_type)
       coding_type = get_coding_type(code_type, is_spent)
 
@@ -203,7 +206,7 @@ module Charts::DistrictPies
       end
 
       code_klass = get_code_klass(code_type)
-      prepare_organization_pie_values(location, coding_type, code_klass.all.map(&:id), activities, district_type, activity_value)
+      prepare_organization_pie_values(location, coding_type, code_klass.all.map(&:id), activities, district_type, activity_value, request_id)
     end
 
     private
@@ -226,14 +229,24 @@ module Charts::DistrictPies
         }.to_json
       end
 
-      def prepare_organization_pie_values(location, coding_type, code_ids, activities, district_type, activity_value)
+      def prepare_organization_pie_values(location, coding_type, code_ids, activities, district_type, activity_value, request_id)
         code_assignments = CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
       :select => "codes.id as code_id,
                   codes.parent_id as parent_id,
                   code_assignments.activity_id,
                   codes.short_display AS my_name,
                   SUM(code_assignments.cached_amount_in_usd) AS value",
-      :joins => [:activity, :code],
+      :joins => "INNER JOIN codes ON
+                   codes.id = code_assignments.code_id
+                 INNER JOIN activities ON
+                   activities.id = code_assignments.activity_id
+                 INNER JOIN projects ON
+                  projects.id = activities.project_id
+                 INNER JOIN data_responses ON
+                  data_responses.id = projects.data_response_id
+                 INNER JOIN data_requests ON
+                  data_requests.id = data_responses.data_request_id AND
+                  data_requests.id = #{request_id}",
       :group => "codes.short_display,
                  codes.id,
                  codes.parent_id,

@@ -15,7 +15,6 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
   end
 
   def show
-    @responses = current_user.data_responses
     data_request_id = current_user.current_data_response.data_request.id
     @activity          = Activity.find(params[:id])
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity, data_request_id)

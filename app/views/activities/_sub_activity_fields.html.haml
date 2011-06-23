@@ -10,7 +10,7 @@
       .nested_field
         = f.input :spend_mask, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Implementer Expenditure"
     - if @response.data_request.budget?
-      %h4 Planned expenditure
+      %h4 Current Budget
       .nested_field
         = f.input :budget_mask, :required => false, :hint => "Amount OR Percentage allocated to this Implementer from the main Activity's Current Budget.", :label => "Implementer Current Budget"
 

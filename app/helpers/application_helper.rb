@@ -312,4 +312,14 @@ module ApplicationHelper
     "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
   end
 
+  def get_activity_type(type)
+    case type
+    when "Budget"
+      "Current Budget"
+    when "Spend"
+      "Past Expenditure"
+    else
+      type
+    end
+  end
 end

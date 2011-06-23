@@ -85,19 +85,27 @@ module Charts::DistrictPies
     end
 
     ### admin/district/:id/activities
-    def activities(location, coding_type)
+    def activities(location, coding_type, request_id)
       spent_codings = location.code_assignments.with_type(coding_type).find(:all,
         :select => "code_assignments.id,
                     code_assignments.activity_id,
                     activities.name AS activity_name,
                     SUM(code_assignments.cached_amount_in_usd) AS value",
-        :joins => :activity,
+        :joins => "INNER JOIN activities ON
+                     activities.id = code_assignments.activity_id
+                   INNER JOIN projects ON
+                    projects.id = activities.project_id
+                   INNER JOIN data_responses ON
+                    data_responses.id = projects.data_response_id
+                   INNER JOIN data_requests ON
+                    data_requests.id = data_responses.data_request_id AND
+                    data_requests.id = #{request_id}",
         :include => :activity,
         :group => 'code_assignments.activity_id,
                    activities.name,
                    code_assignments.id',
         :order => 'value DESC')
-
+        
       prepare_activities_pie_values(spent_codings)
     end
 

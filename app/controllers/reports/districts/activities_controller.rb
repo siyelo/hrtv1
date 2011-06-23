@@ -10,8 +10,8 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
                          :sort => params[:sort],
                          :code_ids => [@location.id], 
                          :type => 'district'})
-    @spent_pie_values  = Charts::DistrictPies::activities(@location, "CodingSpendDistrict")
-    @budget_pie_values = Charts::DistrictPies::activities(@location, "CodingBudgetDistrict")
+    @spent_pie_values  = Charts::DistrictPies::activities(@location, "CodingSpendDistrict", data_request_id)
+    @budget_pie_values = Charts::DistrictPies::activities(@location, "CodingBudgetDistrict", data_request_id)
   end
 
   def show

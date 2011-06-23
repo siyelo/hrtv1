@@ -70,23 +70,23 @@ describe Project do
         :fa => @org1, :budget => 1, :spend => 2}])
     end
 
-    #it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" do
-      #proj_funded_by(@proj1, @org_with_empty_data_response, 1, 2)
-      #@proj2.budget = 1; @proj2.spend = 2; @proj2.save
-      #proj_funded_by(@proj2, @org1, 1, 2)
-      #ufs = @proj2.ultimate_funding_sources
-      #ufs_equality(ufs, [{:ufs => @org_with_empty_data_response,
-        #:fa => @org1, :budget => 1, :spend => 2}])
-    #end
+    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with empty dr" do
+      proj_funded_by(@proj1, @org_with_empty_data_response, 1, 2)
+      @proj2.budget = 1; @proj2.spend = 2; @proj2.save
+      proj_funded_by(@proj2, @org1, 1, 2)
+      ufs = @proj2.ultimate_funding_sources
+      ufs_equality(ufs, [{:ufs => @org_with_empty_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}])
+    end
 
-    #it "returns n-1 (upstream) funder as the UFS if upstream has one funder with no dr" do
-      #proj_funded_by(@proj1, @org_with_no_data_response, 1, 2)
-      #proj_funded_by(@proj2, @org1, 1, 2)
-      #@proj2.budget = 1; @proj2.spend = 2; @proj2.save
-      #ufs = @proj2.ultimate_funding_sources
-      #ufs_equality(ufs, [{:ufs => @org_with_no_data_response,
-        #:fa => @org1, :budget => 1, :spend => 2}])
-    #end
+    it "returns n-1 (upstream) funder as the UFS if upstream has one funder with no dr" do
+      proj_funded_by(@proj1, @org_with_no_data_response, 1, 2)
+      proj_funded_by(@proj2, @org1, 1, 2)
+      @proj2.budget = 1; @proj2.spend = 2; @proj2.save
+      ufs = @proj2.ultimate_funding_sources
+      ufs_equality(ufs, [{:ufs => @org_with_no_data_response,
+        :fa => @org1, :budget => 1, :spend => 2}])
+    end
 
     it "returns n-1 funder if it's self-funded regardless of it's activities" do
       self_funded(@proj1)

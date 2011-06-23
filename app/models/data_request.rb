@@ -59,8 +59,9 @@ class DataRequest < ActiveRecord::Base
   private
     def create_data_responses
       Organization.all.each do |organization|
-        unless (dr = organization.data_responses.
-                find(:first, :conditions => {:organization_id => organization.id}))
+        dr = organization.data_responses.find(:first,
+          :conditions => {:data_request_id => self.id})
+        unless dr
           dr = organization.data_responses.new
           dr.data_request = self
           dr.save!

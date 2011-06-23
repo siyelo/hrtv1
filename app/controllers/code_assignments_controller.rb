@@ -124,13 +124,13 @@ class CodeAssignmentsController < Reporter::BaseController
       when 'ServiceLevelBudget'
         'Current Budget by Service Level'
       when 'CodingSpend'
-        'Spent by Purposes'
+        'Past Expenditure by Purposes'
       when 'CodingSpendDistrict'
-        'Spent by Locations'
+        'Past Expenditure by Locations'
       when 'CodingSpendCostCategorization'
-        'Spent by Inputs'
+        'Past Expenditure by Inputs'
       when 'ServiceLevelSpend'
-        'Spend by Service Level'
+        'Past Expenditure by Service Level'
       end
     end
 

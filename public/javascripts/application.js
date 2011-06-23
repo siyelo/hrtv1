@@ -956,7 +956,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 }
 
 var reports_districts_show = reports_countries_show = {
-  run: function () {    
+  run: function () {
     $('#user_data_response_id_current').live('change', function(e) {
       $('#change_datarequest').submit();
     });
@@ -972,7 +972,7 @@ var reports_districts_show = reports_countries_show = {
   		$(this).parents('.request_select').hide();
   		$('.js_request_select').show();
   	});
-    
+
     drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
     drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
     drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
@@ -1156,7 +1156,7 @@ var reporter_dashboard_index = {
 			$(this).parents('.request_select').hide();
 			$('.js_request_select').show();
 		});
-		
+
 		$('.js_welcome_show').click(function (e) {
 			e.preventDefault();
 			$(this).next().slideDown();
@@ -1431,14 +1431,19 @@ var activity_form = function () {
   $(".js_quarterly_inputs input").keyup(function () {
     calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find('li:first input'));
   });
-};
 
+  $('.js_target_field').live('keydown', function (e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      $('.js_targets .add_nested').trigger('click');
+      $('.js_targets .js_target_field:last').focus()
+    }
+  });
+};
 
 var admin_activities_edit = admin_activities_update = {
   run: function () {
     activity_form();
-
-
   }
 };
 

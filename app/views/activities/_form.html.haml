@@ -90,14 +90,14 @@
     .add
       = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/"
 
-  %li.last.outputs
-    %h3 Outputs
-    %p.hint Optional. Your planned targets for this activity.
+  %li.last.targets.js_targets
+    %h3 Activity Targets
+    %p.hint Optional. Describe planned targets for this activity.
 
     - f.semantic_fields_for :outputs do |ca|
       = render "activities/output_fields", :f => ca
     .add
-      = link_to_add_fields "Add Output", f, :outputs, "activities/"
+      = link_to_add_fields "Add Target", f, :outputs, "activities/"
 
   %li.last
     %h3== Other

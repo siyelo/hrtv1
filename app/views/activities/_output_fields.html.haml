@@ -1,5 +1,8 @@
 .fields
-  %ul.dashboard_section
-    = f.input :description, :label => "Output", :hint => "Planned target", :required => false
+  %ul.dashboard_section.marginless
+    %li
+      %ul.horizontal
+        = f.input :description, :label => "Target", :required => false, :input_html => {:class => 'js_target_field'}, :wrapper_html => {:class => 'wrap-80'}
 
-    = link_to_remove_fields "remove", f
+        %li.right
+          = link_to_remove_fields "remove", f

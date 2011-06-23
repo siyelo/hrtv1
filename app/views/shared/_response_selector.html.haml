@@ -1,5 +1,6 @@
-.request_select_box
-  - semantic_form_for current_user, :url => reporter_change_data_response_path, :html => {:id => "change_datarequest"} do |f|
-    %ul.horizontal
-      = f.input :data_response_id_current, :as => :select, :collection => current_user.responses.all, :include_blank => false, :label => false
+- unless current_user.admin?
+  .request_select_box
+    - semantic_form_for current_user, :url => reporter_change_data_response_path, :html => {:id => "change_datarequest"} do |f|
+      %ul.horizontal
+        = f.input :data_response_id_current, :as => :select, :collection => current_user.responses.all, :include_blank => false, :label => false
 

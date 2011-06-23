@@ -79,8 +79,9 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.change_data_response 'change_data_response', :controller => 'dashboard', :action => :change_data_response
-    reporter.set_latest_response 'set_latest_response', :controller => 'dashboard', :action => :set_latest_response
+    reporter.change_data_response 'change_data_response', :controller => 'responses', :action => :change
+    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
+    reporter.view_projects 'view_projects/:response_id', :controller => 'responses', :action => :view_projects
     reporter.resources :reports, :only => [:index, :show]
   end
 

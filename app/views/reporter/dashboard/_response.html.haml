@@ -1,6 +1,6 @@
 %tr
-  %td.title= link_to response.data_request.title, edit_organization_path(current_user.organization), :class => "title"
+  %td.title= link_to response.data_request.title, reporter_view_projects_path(response), :class => "title"
   %td= response.data_request.organization.name
   %td= response.data_request.due_date.strftime('%d %b %y')
   %td= response.ready_to_submit? ? 'Yes' : 'No'
-  %td Responding
+  %td= response.status

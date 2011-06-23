@@ -22,16 +22,20 @@
 
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
+<<<<<<< HEAD
   All Data Requests
+=======
+  Data Requests
+>>>>>>> improve Request section on dashboard. greatly.
 .dashboard_section
 
   %table.modern_table
     %thead
       %tr
-        %td Request
+        %td Name
         %td Requested By
         %td Due
-        %td Valid
+        %td Submitted at
         %td Status
     %tbody
       = render :partial => 'response', :collection => @responses

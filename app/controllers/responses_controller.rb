@@ -47,4 +47,23 @@ class ResponsesController < Reporter::BaseController
       render :submit
     end
   end
+
+  def change
+    change_user_current_response(params[:user][:data_response_id_current])
+    redirect_to :back
+  end
+
+  def view_projects
+    load_data_response
+    change_user_current_response(@response)
+    redirect_to response_projects_path(@response)
+  end
+
+  def set_latest
+    current_user.set_current_response_to_latest!
+    request = current_user.current_response.request
+    flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
+    redirect_to :back
+  end
+
 end

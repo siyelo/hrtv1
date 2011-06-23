@@ -9,6 +9,25 @@ class Reporter::BaseController < ApplicationController
 
   protected
 
+    def change_user_current_response(new_response_id)
+      user = current_user
+      response = user.responses.find(new_response_id)
+      if response
+        user.data_response_id_current = response.id
+        if user.save
+          user.reload #otherwise current_response association is stale
+          request = user.current_response.request
+          if user.current_response_is_latest?
+            flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
+          end
+        else
+          flash[:error] = "Sorry we could not update your response"
+        end
+      else
+        flash[:error] = "Sorry we could not find that response"
+      end
+    end
+
     def not_latest_request_message(request)
       "You are now viewing your data for the Request: \"<span class='bold'>#{request.name}</span>\".
        All changes made will be saved for this Request.

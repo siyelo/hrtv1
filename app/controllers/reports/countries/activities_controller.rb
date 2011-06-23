@@ -7,7 +7,8 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
                          :page => params[:page],
                          :sort => params[:sort],
                          :data_request_id => data_request_id,
-                         :code_ids => Mtef.roots.map(&:id), :type => 'country'})
+                         :code_ids => Mtef.roots.map(&:id), 
+                         :type => 'country'})
     @spent_pie_values  = Charts::CountryPies::activities_pie("CodingSpend", data_request_id)
     @budget_pie_values = Charts::CountryPies::activities_pie("CodingBudget", data_request_id)
   end

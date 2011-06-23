@@ -20,7 +20,7 @@ Feature: Reporter can manage activities
 
     @javascript
   Scenario: Reporter can add outputs
-    When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
       And I fill in "Name" with "activity1"
       And I fill in "Description" with "activity1 description"
       And I fill in "Start date" with "2010-01-01"
@@ -28,16 +28,16 @@ Feature: Reporter can manage activities
       And I fill in "Expenditure" with "200"
       And I fill in "Budget" with "300"
       And I select "project1" from "Project"
-      And I follow "Add Output"
-      And I fill in "Output" with "Output description value" within ".outputs"
+      And I follow "Add Target"
+      And I fill in "Target" with "Output description value" 
       And I press "Save"
     Then I should see "Activity was successfully created"
     When I follow "activity1 description"
-    Then the "Output" field within ".outputs" should contain "Output description value"
+    Then the "Target" field should contain "Output description value"
 
-    @javascript
+    @javascript @run
     Scenario: Reporter can add sub-activities (normal values)
-      When I follow "Add" within ".sub-head:nth-child(2)"
+      When I follow "Add Activities now"
         And I fill in "Name" with "activity1"
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2010-01-01"
@@ -45,19 +45,20 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Sub-Implementer"
-        And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Implementer Expenditure" with "99"
-        And I fill in "Sub-Implementer Budget" with "19"
+        And I follow "Add Implementer"
+        Then show me the page
+        And I fill in "Implementer" with "organization1"
+        And I fill in "Implementer Expenditure" with "99"
+        And I fill in "Implementer Current Budget" with "19"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-      Then the "Sub-Implementer Expenditure" field should contain "99"
-        And the "Sub-Implementer Budget" field should contain "19"
+      Then the "Implementer Expenditure" field should contain "99"
+        And the "Implementer Current Budget" field should contain "19"
 
     @javascript
     Scenario: Reporter can add sub-activities (percentage values)
-      When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
         And I fill in "Name" with "activity1"
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2010-01-01"
@@ -65,19 +66,19 @@ Feature: Reporter can manage activities
         And I fill in "Expenditure" with "200"
         And I fill in "Budget" with "300"
         And I select "project1" from "Project"
-        And I follow "Add Sub-Implementer"
-        And I fill in "theCombobox" with "organization1"
-        And I fill in "Sub-Implementer Expenditure" with "10%"
-        And I fill in "Sub-Implementer Budget" with "10%"
+        And I follow "Add Implementer"
+        And I fill in "Implementer" with "organization1"
+        And I fill in "Implementer Expenditure" with "10%"
+        And I fill in "Implementer Current Budget" with "10%"
         And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
         Then the "Sub-Implementer Expenditure" field should contain "20"
-        And the "Sub-Implementer Budget" field should contain "30"
+        And the "Implementer Current Budget" field should contain "30"
 
     @javascript
     Scenario: Reporter can add sub-activities (percentage values must be less than 100)
-      When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
        And I fill in "Name" with "activity1"
        And I fill in "Description" with "1ctivity1 description"
        And I fill in "Start date" with "2010-01-01"
@@ -85,19 +86,19 @@ Feature: Reporter can manage activities
        And I fill in "Expenditure" with "200"
        And I fill in "Budget" with "300"
        And I select "project1" from "Project"
-       And I follow "Add Sub-Implementer"
-       And I fill in "theCombobox" with "organization1"
-       And I fill in "Sub-Implementer Expenditure" with "101%"
-       And I fill in "Sub-Implementer Budget" with "10%"
+       And I follow "Add Implementer"
+       And I fill in "Implementer" with "organization1"
+       And I fill in "Implementer Expenditure" with "101%"
+       And I fill in "Implementer Current Budget" with "10%"
        And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
-       Then the "Sub-Implementer Expenditure" field should contain "101"
-       And the "Sub-Implementer Budget" field should contain "30"
+       Then the "Implementer Expenditure" field should contain "101"
+       And the "Implementer Current Budget" field should contain "30"
 
     @javascript
     Scenario: Reporter can CRUD activities
-      When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
         And I fill in "Name" with "1ctivity1 description"
         And I fill in "Description" with "1ctivity1 description"
         And I fill in "Start date" with "2010-01-01"
@@ -121,7 +122,7 @@ Feature: Reporter can manage activities
 
 
     Scenario Outline: Reporter can CRUD activities and see errors
-      When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
         And I fill in "Name" with "<name>"
         And I fill in "Description" with "activity description"
         And I fill in "Start date" with "<start_date>"
@@ -141,7 +142,7 @@ Feature: Reporter can manage activities
 
 
     Scenario: Reporter can enter 5 year budget projections
-     When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
        And I fill in "Name" with "Activity1"
        And I fill in "Description" with "Activity1 description"
        And I fill in "Start date" with "2010-01-01"
@@ -190,8 +191,8 @@ Feature: Reporter can manage activities
         And I press "Import"
       Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
-
-    Scenario: Reporter can download Activities CSV template
+      #has this been removed?
+      Scenario: Reporter can download Activities CSV template
       When I follow "Get Template" within ".activities_upload_box"
       Then I should see "Project Name,Activity Name,Activity Description,Provider,Spend,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
@@ -235,10 +236,8 @@ Feature: Reporter can manage activities
 
 
     Scenario: A reporter can select implementer for an activity
-      When I follow "Add" within ".sub-head:nth-child(2)"
-      # check if by default reporter organization is selected
+    When I follow "Add Activities now"
       Then I select "organization2" from "Implementer"
-
       When I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
         And I select "organization1" from "Implementer"
@@ -296,7 +295,7 @@ Feature: Reporter can manage activities
         And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response
         And an organization "funding_organization2" exists with name: "funding_organization2"
         And a funding_flow exists with from: organization "funding_organization2", to: organization "my_organization", project: the project, data_response: the data_response
-      When I follow "Add" within ".sub-head:nth-child(2)"
+    When I follow "Add Activities now"
         And I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
         And I fill in "Start date" with "2010-01-01"
@@ -331,7 +330,7 @@ Feature: Reporter can manage activities
         And I follow "data_request2"
         And a project exists with name: "project1", data_response: the data_response
         And I follow "Projects"
-        When I follow "Add" within ".sub-head:nth-child(2)"
+        When I follow "Add Activities now"
         Then I should not see "Budget (planned expenditure)"
         And  I should see "Past Activity Expenditure"
 
@@ -379,8 +378,8 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Implementer Expenditure" field should contain "66"
-      And the "Sub-Implementer Budget" field should contain "77"
+      And the "Implementer Expenditure" field should contain "66"
+      And the "Implementer Current Budget" field should contain "77"
 
 
   Scenario: Reporter can upload and change implementers
@@ -391,5 +390,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Implementer Expenditure" field should contain "99"
-      And the "Sub-Implementer Budget" field should contain "100"
+      And the "Implementer Expenditure" field should contain "99"
+      And the "Implementer Current Budget" field should contain "100"

@@ -13,7 +13,6 @@ class Reports::DistrictsController < Reports::BaseController
   end
 
   def show
-    @responses = current_user.data_responses
     @location   = Location.find(params[:id])
     @pie        = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type   = get_code_type_and_initialize(params[:code_type])

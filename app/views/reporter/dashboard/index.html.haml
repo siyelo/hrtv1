@@ -15,8 +15,6 @@
   %li= link_to "Classify Activities", "#", :class => "create_new"
   %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
 
-= render :partial => "shared/response_selector"
-
 %ul.response-notice
   - @responses.each do |dr|
     -if dr.data_request.final_review?

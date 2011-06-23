@@ -12,6 +12,9 @@
 .currency
   font-size: 9px
 
+.bold
+  font-weight: bold
+
 body.app
   .wrapper
     min-width: 960px
@@ -607,7 +610,7 @@ body#static_page_submit #content .wrapper #main
 
 // Welcome wrapper
 
-.welcome_box
+#welcome_box
   background: $filler
   border-bottom: 1px solid #eee
   clear: both
@@ -615,16 +618,16 @@ body#static_page_submit #content .wrapper #main
   padding: 5px 15px
   width: 100%
   +box-shadow(#eee, 0, 2px, 3px)
-  
+
 .welcome_info
   color: $light-blue - #111
   font-size: 12px
   line-height: 1.4
   +pie-clearfix
-  
+
   *
     float: left
-    
+
   p
     color: $light-blue - #333
     font-weight: bold

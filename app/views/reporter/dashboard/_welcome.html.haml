@@ -7,15 +7,9 @@
   - hacked_submit_response_path   = new_response_path
   - hacked_review_response_path   = new_response_path
 
-= link_to "Show welcome screen", "#", :class => "welcome_show right js_welcome_show"
-.welcome_box
-
-  - link_to "#", :class => "welcome_hide right js_welcome_hide" do
-    Hide this welcome screen
-    = image_tag "delete_row.png", :alt => "Hide"
-
+#welcome_box
   %h3.welcome_msg
-    Welcome Some Organization
+    = "Welcome #{current_user.name}"
     %span Here are few simple steps to help you get started
 
   %ul.welcome_steps

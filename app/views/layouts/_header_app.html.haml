@@ -1,15 +1,18 @@
 #header_app
   .wrapper
     #logo
+    
       - if current_user && current_user.organization
-        = "#{truncate(current_user.organization.name, :length => 35)}"
+        %p
+          = "#{truncate(current_user.organization.name, :length => 35)}"
+          = render :partial => "shared/response_selector"
+              
       - else
-        = "No organization specified"
-
+        %p= "No organization specified"
+      
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'
       %a{:href => '/'}
         = image_tag "#{country}-coat-of-arms-med.png"
 
     = render :partial => '/layouts/login_nav'
-

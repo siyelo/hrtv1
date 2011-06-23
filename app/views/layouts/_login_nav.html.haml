@@ -14,7 +14,8 @@
         - link_to logout_path do
           = image_tag("icon_logout.png")
           Sign Out
-    %span
+    %p
+      Logged in as
       = "#{current_user.email}"
 
   - else

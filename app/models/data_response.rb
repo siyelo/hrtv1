@@ -33,6 +33,11 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
   named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
+  named_scope :latest_first, {:order => "data_responses.id DESC" }
+
+  ### Delegates
+  delegate :name, :to => :data_request
+  delegate :title, :to => :data_request
 
   ### Meta Data for Meta Programming
   ## GN TODO: refactor out getting collections of items failing
@@ -279,8 +284,6 @@ class DataResponse < ActiveRecord::Base
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
   end
-
-
 
   def projects_have_activities?
     return false unless activities_entered?

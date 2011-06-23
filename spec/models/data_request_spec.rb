@@ -57,7 +57,6 @@ describe DataRequest do
                          :due_date => nil )
     end
 
-
     it "does not accept start date > end date" do
       dr = Factory.build(:data_request,
                          :start_date => DateTime.new(2010, 01, 02),
@@ -95,14 +94,14 @@ describe DataRequest do
                          :start_date => DateTime.new(2010, 01, 01),
                          :end_date =>   DateTime.new(2012, 01, 01) )
 
-      dr.current_request?.should be_true
+      dr.current?.should be_true
     end
     it "returns false if the datarequest is not the current one" do
       dr = Factory.build(:data_request,
                          :start_date => DateTime.new(2008, 01, 01),
                          :end_date =>   DateTime.new(2010, 01, 01) )
 
-      dr.current_request?.should_not be_true
+      dr.current?.should_not be_true
     end
 
     it "returns false if the datarequest in the spend phase" do
@@ -110,7 +109,7 @@ describe DataRequest do
                          :start_date => DateTime.new(2011, 01, 01),
                          :end_date =>   DateTime.new(2013, 01, 01) )
 
-      dr.current_request?.should_not be_true
+      dr.current?.should_not be_true
     end
 
     it "returns true if the datarequest in the budget phase" do
@@ -118,7 +117,7 @@ describe DataRequest do
                          :start_date => DateTime.new(2010, 01, 01),
                          :end_date =>   DateTime.new(2012, 01, 01) )
 
-      dr.current_request?.should be_true
+      dr.current?.should be_true
     end
   end
 end

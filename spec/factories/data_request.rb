@@ -1,5 +1,5 @@
 Factory.define :data_request, :class => DataRequest do |f|
-  f.title         { |n| "Data Request title #{n}" }
+  f.title         { "Data Request title #{(1..1000000).to_a.random_element}" }
   f.organization  { Factory.create(:organization) }
   f.start_date    { "2010-01-01" }
   f.end_date      { "2012-01-01" }

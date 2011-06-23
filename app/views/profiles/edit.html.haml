@@ -7,6 +7,7 @@
   - semantic_form_for @user, :url => profile_path, :html => {:class => "basic_form"} do |f|
     - f.inputs :class => 'wrap-80 inputs' do
       %ul.dashboard_section
+        = f.input :full_name, :hint => "Your first and last name"
         = f.input :username, :hint => "Your username"
         = f.input :email, :hint => "Your email address"
         = f.input :password, :hint => "Your password"

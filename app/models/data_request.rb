@@ -21,10 +21,10 @@ class DataRequest < ActiveRecord::Base
   ### Callbacks
   after_create :create_data_responses
 
-  def current_request?
-    sd = start_date + 1.year
-    return true if sd < DateTime.now && DateTime.now < end_date
-    return false
+  ### Instance Methods
+
+  def name
+    title
   end
 
   def status

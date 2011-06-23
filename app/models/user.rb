@@ -13,8 +13,12 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
-  # TODO: remove
+
+  # deprecated
   belongs_to :current_data_response, :class_name => "DataResponse",
+              :foreign_key => :data_response_id_current
+
+  belongs_to :current_response, :class_name => "DataResponse",
               :foreign_key => :data_response_id_current
 
   ### Validations
@@ -22,6 +26,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
+
+  ### Delegates
+  delegate :responses, :to => :organization # instead of deprecated data_response
+  delegate :latest_response, :to => :organization # find the last response in the org
 
   # Used by Authlogic's UserSession to find the user by username or by email
   def self.find_by_username_or_email(login)
@@ -46,6 +54,9 @@ class User < ActiveRecord::Base
     return saved, errors
   end
 
+  ### Instance Methods
+
+  ## TODO: remove
   def change_data_response(response_id)
     if data_responses.map(&:id).include?(response_id.to_i)
       self.data_response_id_current = response_id
@@ -97,7 +108,16 @@ class User < ActiveRecord::Base
   end
 
   def name
-    full_name.present? ? full_name : username
+    full_name.present? ? full_name : email
+  end
+
+  def current_response_is_latest?
+    self.current_response == self.latest_response
+  end
+
+  def set_current_response_to_latest!
+    self.current_response = self.latest_response
+    self.save!
   end
 
   private
@@ -105,6 +125,7 @@ class User < ActiveRecord::Base
     def role?(role)
       roles.include?(role.to_s)
     end
+
 end
 
 

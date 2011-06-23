@@ -1,4 +1,4 @@
-class ResponsesController < ApplicationController
+class ResponsesController < Reporter::BaseController
   layout 'reporter' #TODO: separate reporter/admin actions
   before_filter :require_user
 

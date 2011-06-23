@@ -150,13 +150,13 @@ module Charts::DistrictPies
       build_pie_values_json(get_summed_code_assignments(code_assignments, district_ratio))
     end
 
-    def activity_pie(location, activity, code_type, is_spent)
+    def activity_pie(location, activity, code_type, is_spent, request_id)
       code_klass_string = get_code_klass_string(code_type)
       coding_type       = get_coding_type(code_type, is_spent)
       district_type     = is_spent ? "CodingSpendDistrict" : "CodingBudgetDistrict"
       activity_amount   = is_spent ? activity.spend_in_usd : activity.budget_in_usd
 
-      district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_code_id(location.id).last
+      district_coding   = CodeAssignment.with_activity(activity.id).with_type(district_type).with_code_id(location.id).with_request(request_id).last
       coded_ok          = district_coding && district_coding.cached_amount_in_usd &&
                           activity_amount && activity_amount > 0
 
@@ -168,8 +168,8 @@ module Charts::DistrictPies
     end
 
     ### show
-    def activity_spent_ratio(location, activity)
-      district_spend_coding = activity.coding_spend_district.with_code_id(location.id).last
+    def activity_spent_ratio(location, activity, request_id)
+      district_spend_coding = activity.coding_spend_district.with_code_id(location.id).with_request(request_id).last
       spend_coded_ok = district_spend_coding && activity.spend_in_usd && activity.spend_in_usd > 0 && district_spend_coding.cached_amount_in_usd
       if spend_coded_ok
         district_spent_ratio   = district_spend_coding.cached_amount_in_usd / activity.spend_in_usd # % that this district has allocated
@@ -178,9 +178,9 @@ module Charts::DistrictPies
       end
     end
 
-    def activity_budget_ratio(location, activity)
+    def activity_budget_ratio(location, activity, request_id)
       # TODO
-      district_budget_coding = activity.coding_budget_district.with_code_id(location.id).last
+      district_budget_coding = activity.coding_budget_district.with_code_id(location.id).with_request(request_id).last
       budget_coded_ok = district_budget_coding && activity.budget_in_usd && activity.budget_in_usd > 0 && district_budget_coding.cached_amount_in_usd
       if budget_coded_ok
         district_budgeted_ratio = district_budget_coding.cached_amount_in_usd / activity.budget_in_usd # % that this district has allocated

@@ -19,6 +19,9 @@ class DataRequest < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_dates_order :end_date, :due_date, :message => "Due date must come after End date."
 
+  ### Callbacks
+  after_create :create_data_responses
+
   def current_request?
     sd = start_date + 1.year
     return true if sd < DateTime.now && DateTime.now < end_date
@@ -41,17 +44,30 @@ class DataRequest < ActiveRecord::Base
   def only_budget?
     budget? && !spend?
   end
-  
+
   def no_long_term_budgets?
-    !year_2 && !year_3 && !year_4 && !year_5 
+    !year_2 && !year_3 && !year_4 && !year_5
   end
-  
+
   def requested_amounts
     r = []
     r << "Expenditure" if spend?
     r << "Budget" if budget?
     r
   end
+
+  private
+    def create_data_responses
+      Organization.all.each do |organization|
+        dr = organization.data_responses.find(:first,
+          :conditions => {:data_request_id => self.id})
+        unless dr
+          dr = organization.data_responses.new
+          dr.data_request = self
+          dr.save!
+        end
+      end
+    end
 end
 
 

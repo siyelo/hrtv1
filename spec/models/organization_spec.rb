@@ -75,7 +75,6 @@ describe Organization do
     it { should have_many(:data_requests) }
     it { should have_many(:data_responses) }
     it { should have_many(:projects) }
-    it { should have_many(:fulfilled_data_requests) }
     it { should have_many(:dr_activities) }
     it { should have_many(:out_flows).dependent(:destroy) }
     it { should have_many(:in_flows).dependent(:destroy) }
@@ -83,32 +82,20 @@ describe Organization do
     it { should have_many(:implementor_for) }
     it { should have_many(:provider_for) }
     it { should have_many(:comments) }
-
-    it "returns fulfilled_data_requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
-
-      organization.fulfilled_data_requests.should == [data_request1]
-    end
   end
 
-  describe "unfulfilled_data_requests" do
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      organization.unfulfilled_data_requests.should == []
-    end
+  describe "Callbacks" do
+    # after_create :create_data_responses
+    it "creates data_responsesfor each data_request after organization is created" do
+      org0 = Factory(:organization, :name => "Requester Organization")
+      data_request1 = Factory(:data_request, :organization => org0)
+      data_request2 = Factory(:data_request, :organization => org0)
 
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
+      organizations = Factory(:organization, :name => "Responder Organization")
 
-      organization.unfulfilled_data_requests.should == [data_request2]
+      data_requests = organizations.data_responses.map(&:data_request)
+      data_requests.should include(data_request1)
+      data_requests.should include(data_request2)
     end
   end
 
@@ -232,9 +219,10 @@ describe Organization do
     before :each do
       @target     = Factory(:organization)
       @duplicate  = Factory(:organization)
-
-      @target_dr     = Factory(:data_response, :organization => @target)
-      @duplicate_dr  = Factory(:data_response, :organization => @duplicate)
+      data_request1 = Factory(:data_request, :organization => @target)
+      data_request2 = Factory(:data_request, :organization => @duplicate)
+      @target_dr    = Factory(:data_response, :organization => @target, :data_request => data_request1)
+      @duplicate_dr = Factory(:data_response, :organization => @duplicate, :data_request => data_request2)
     end
 
     it "deletes duplicate after merge" do
@@ -252,15 +240,13 @@ describe Organization do
     end
 
     it "copies data_requests from duplicate to @target" do
-      Factory(:data_request, :organization => @target)
-      Factory(:data_request, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.data_requests.count.should == 2
     end
 
     it "copies data responses from @duplicate to @target" do
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 2
+      @target.data_responses.count.should == 4
     end
 
     it "copies also invalid data responses from duplicate to @target" do
@@ -270,7 +256,7 @@ describe Organization do
       duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
       duplicate_data_response.save(false)
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 3 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 5 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do

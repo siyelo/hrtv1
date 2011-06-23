@@ -24,7 +24,7 @@
 
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
-  Data Requests & Responses
+  All Data Requests
 .dashboard_section
 
   %table.modern_table
@@ -35,9 +35,7 @@
         %td Due
         %td Valid
         %td Status
-        %td
     %tbody
-      = render :partial => 'request', :collection => @requests
       = render :partial => 'response', :collection => @responses
 
 .first-half

@@ -4,4 +4,3 @@
   %td= response.data_request.due_date.strftime('%d %b %y')
   %td= response.ready_to_submit? ? 'Yes' : 'No'
   %td Responding
-  %td= link_to "Edit", edit_organization_path(current_user.organization, :data_response_id => response.id), :class => "respond"

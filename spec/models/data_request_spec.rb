@@ -20,6 +20,11 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:final_review) }
   end
 
+  describe "associations" do
+    it { should belong_to :organization }
+    it { should have_many :data_responses }
+  end
+
   describe "validations" do
     subject { Factory(:data_request) }
     it { should be_valid }
@@ -44,8 +49,8 @@ describe DataRequest do
                          :end_date =>   DateTime.new(2010, 01, 02) )
       dr.should be_valid
     end
-    
-    it "does not allow a request to be submitted if the due date is before the end date" do 
+
+    it "does not allow a request to be submitted if the due date is before the end date" do
       dr = Factory.build(:data_request,
                          :start_date => DateTime.new(2010, 01, 01),
                          :end_date =>   DateTime.new(2010, 01, 02),
@@ -61,7 +66,7 @@ describe DataRequest do
                          :due_date => nil )
     end
 
-    it "does allow a request to be submitted if the due date is before the end date" do 
+    it "does allow a request to be submitted if the due date is before the end date" do
       dr = Factory.build(:data_request,
                          :start_date => DateTime.new(2010, 01, 01),
                          :end_date =>   DateTime.new(2010, 01, 02),
@@ -82,6 +87,22 @@ describe DataRequest do
                          :start_date => DateTime.new(2010, 01, 01),
                          :end_date =>   DateTime.new(2010, 01, 01) )
       dr.should_not be_valid
+    end
+  end
+
+  describe "Callbacks" do
+    # after_create :create_data_responses
+    it "creates data_responses for each organization after data_request is created" do
+      org0 = Factory(:organization, :name => "Requester Organization")
+      org1 = Factory(:organization, :name => "Responder Organization 1")
+      org2 = Factory(:organization, :name => "Responder Organization 2")
+      data_request = Factory.create(:data_request, :organization => org0)
+      data_request.data_responses.count.should == 3
+      organizations = data_request.data_responses.map(&:organization)
+
+      organizations.should include(org0)
+      organizations.should include(org1)
+      organizations.should include(org2)
     end
   end
 
@@ -116,11 +137,6 @@ describe DataRequest do
 
       dr.current_request?.should be_true
     end
-  end
-
-  describe "associations" do
-    it { should belong_to :organization }
-    it { should have_many :data_responses }
   end
 end
 

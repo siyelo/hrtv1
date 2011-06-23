@@ -221,29 +221,28 @@ class Activity < ActiveRecord::Base
         activity = response.activities.new
       end
 
-
-      activity.name                    = row['Activity Name']
-      activity.description             = row['Activity Description']
-      activity.spend                   = row['Past Expenditure']
-      activity.spend_q1                = row['Q1 Spend']
-      activity.spend_q2                = row['Q2 Spend']
-      activity.spend_q3                = row['Q3 Spend']
-      activity.spend_q4                = row['Q4 Spend']
-      activity.budget                  = row['Current Budget']
-      activity.budget_q1               = row['Q1 Budget']
-      activity.budget_q2               = row['Q2 Budget']
-      activity.budget_q3               = row['Q3 Budget']
-      activity.budget_q4               = row['Q4 Budget']
-      activity.start_date              = row['Start Date']
-      activity.end_date                = row['End Date']
-      activity.text_for_beneficiaries  = row['Beneficiaries']
+      activity.name                    = row['Activity Name'].try(:strip)
+      activity.description             = row['Activity Description'].try(:strip)
+      activity.spend                   = row['Past Expenditure'].try(:strip)
+      activity.spend_q1                = row['Q1 Spend'].try(:strip)
+      activity.spend_q2                = row['Q2 Spend'].try(:strip)
+      activity.spend_q3                = row['Q3 Spend'].try(:strip)
+      activity.spend_q4                = row['Q4 Spend'].try(:strip)
+      activity.budget                  = row['Current Budget'].try(:strip)
+      activity.budget_q1               = row['Q1 Budget'].try(:strip)
+      activity.budget_q2               = row['Q2 Budget'].try(:strip)
+      activity.budget_q3               = row['Q3 Budget'].try(:strip)
+      activity.budget_q4               = row['Q4 Budget'].try(:strip)
+      activity.start_date              = row['Start Date'].try(:strip)
+      activity.end_date                = row['End Date'].try(:strip)
+      activity.text_for_beneficiaries  = row['Beneficiaries'].try(:strip)
 
       # virtual attributes
-      activity.csv_project_name    = row['Project Name']
-      activity.csv_provider        = row['Provider']
-      activity.csv_districts       = row['Districts']
-      activity.csv_beneficiaries   = row['Beneficiaries']
-      activity.text_for_targets    = row['Outputs / Targets']
+      activity.csv_project_name    = row['Project Name'].try(:strip)
+      activity.csv_provider        = row['Provider'].try(:strip)
+      activity.csv_districts       = row['Districts'].try(:strip)
+      activity.csv_beneficiaries   = row['Beneficiaries'].try(:strip)
+      activity.text_for_targets    = row['Outputs / Targets'].try(:strip)
 
       # associations
       if activity.csv_project_name.present?

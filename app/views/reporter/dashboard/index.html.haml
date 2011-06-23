@@ -15,11 +15,6 @@
   %li= link_to "Classify Activities", "#", :class => "create_new"
   %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
 
-%ul.response-notice
-  - @responses.each do |dr|
-    -if dr.data_request.final_review?
-      %li= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, #{link_to "please re-check, then (re)submit", review_response_path(dr) } your response."
-
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
 <<<<<<< HEAD

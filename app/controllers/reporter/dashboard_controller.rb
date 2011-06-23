@@ -1,12 +1,11 @@
 class Reporter::DashboardController < Reporter::BaseController
 
   def index
-    @requests       = current_user.organization.unfulfilled_data_requests
-    @responses      = current_user.data_responses
+    @responses      = current_user.organization.data_responses.ordered.all
     @comments       = Comment.on_all(current_user.organization).limit(5)
     @user           = current_user
   end
-  
+
   def change_data_response
     result = current_user.change_data_response(params[:user][:data_response_id_current])
     if result

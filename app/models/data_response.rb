@@ -32,6 +32,7 @@ class DataResponse < ActiveRecord::Base
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
+  named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
 
   ### Meta Data for Meta Programming
   ## GN TODO: refactor out getting collections of items failing

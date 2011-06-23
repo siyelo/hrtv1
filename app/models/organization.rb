@@ -20,7 +20,6 @@ class Organization < ActiveRecord::Base
   has_many :users # people in this organization
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
-  has_many :fulfilled_data_requests, :through => :data_responses, :source => :data_request
   has_many :dr_activities, :through => :data_responses, :source => :activities
   # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
   has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :destroy
@@ -47,6 +46,7 @@ class Organization < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
+  after_create :create_data_responses
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
@@ -66,10 +66,6 @@ class Organization < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def unfulfilled_data_requests
-    DataRequest.all - fulfilled_data_requests
   end
 
   def self.merge_organizations!(target, duplicate)
@@ -216,6 +212,18 @@ class Organization < ActiveRecord::Base
 
     def validates_date_range
       errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
+    end
+
+    def create_data_responses
+      DataRequest.all.each do |data_request|
+        dr = self.data_responses.find(:first,
+                  :conditions => {:data_request_id => data_request.id})
+        unless dr
+          dr = self.data_responses.new
+          dr.data_request = data_request
+          dr.save!
+        end
+      end
     end
 end
 

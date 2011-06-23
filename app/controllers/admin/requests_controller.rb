@@ -2,8 +2,8 @@ class Admin::RequestsController < Admin::BaseController
 
   # Inherited Resources
   inherit_resources
-  defaults :resource_class => DataRequest, 
-           :collection_name => 'requests', 
+  defaults :resource_class => DataRequest,
+           :collection_name => 'requests',
            :instance_name => 'request'
 
 
@@ -25,12 +25,8 @@ class Admin::RequestsController < Admin::BaseController
 
   def destroy
     data_request = DataRequest.find(params[:id])
-    if data_request.data_responses.count > 0
-      flash[:error] = "You cannot delete request that has responses."
-    else
-      data_request.destroy
-      flash[:notice] = "Request was successfully deleted."
-    end
+    data_request.destroy
+    flash[:notice] = "Request was successfully deleted."
     redirect_to admin_requests_url
   end
 end

@@ -124,16 +124,11 @@ def ufs_test_setup
   Factory(:data_response, :organization => @org_with_empty_data_response,
           :data_request => request)
 
-  @response0 = Factory(:data_response, :organization => @org0,
-                       :data_request => request)
-  @response1 = Factory(:data_response, :organization => @org1,
-                      :data_request => request)
-  @response2 = Factory(:data_response, :organization => @org2,
-                      :data_request => request)
-  @response3 = Factory(:data_response, :organization => @org3,
-                      :data_request => request)
-  @response4 = Factory(:data_response, :organization => @org4,
-                      :data_request => request)
+  @response0 = @org0.data_responses[0]
+  @response1 = @org1.data_responses[0]
+  @response2 = @org2.data_responses[0]
+  @response3 = @org3.data_responses[0]
+  @response4 = @org4.data_responses[0]
 
   @proj0 = Factory(:project, :name => 'p0', :data_response => @response0, :currency => "USD")
   @proj1 = Factory(:project, :name => 'p1', :data_response => @response1, :currency => "USD")

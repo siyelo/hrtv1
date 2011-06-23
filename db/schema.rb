@@ -363,4 +363,7 @@ ActiveRecord::Schema.define(:version => 20110623141341) do
     t.boolean  "tips_shown",               :default => true
   end
 
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
+
 end

@@ -174,10 +174,10 @@ Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_
 
 end
 
-Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:admin,
-                  :email                 => 'frank@f.com',
+  @user = Factory(:sysadmin,
+                  :email                 => email,
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)

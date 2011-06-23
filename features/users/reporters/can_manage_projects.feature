@@ -33,26 +33,27 @@ Feature: Reporter can manage projects
     And I follow "Project9"
     Then I should not see "Quarterly budget"
 
-  @javascript @run
+  @javascript 
   Scenario: Reporter can CRUD projects
     When I follow "Add project"
       And I fill in "Name" with "Project1"
       And I fill in "Description" with "Project1 description"
       And I press "Add project"
-    Then I should see "Project was successfully created"
-      And I should see "Project1"
+    Then I should see "Project1"
 
    When I follow "Project1"
     And I fill in "Name" with "Project2"
     And I fill in "Description" with "Project2 description"
-    And I uncheck "Location1"
+    # And I uncheck "Location1"
     And I press "Update Project"
    Then I should see "Project was successfully updated"
-
+   
    When I follow "Project2"
-    And I follow "Delete this Project"
+     And I press "Delete this Project"
+		 And I confirm the popup dialog
    Then I should see "Project was successfully destroyed"
-
+  
+  @wip
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Create Project"
      And I fill in "Name" with "Some Project"
@@ -69,7 +70,7 @@ Feature: Reporter can manage projects
         | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Start date is not a valid date        |
         | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
-
+  @wip
   Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget
    When I follow "Create Project"
     And I fill in "Name" with "Some Project"
@@ -128,10 +129,9 @@ Feature: Reporter can manage projects
    Then I should see "Comment title"
     And I should see "Comment body"
 
-
   Scenario: A reporter can create comments for an activity and see comment errors
    Given a project exists with name: "project1", data_response: data_response "data_response"
-   When I follow "Projects"
+   When I follow "Workplans"
     And I follow "project1"
     And I press "Create Comment"
    Then I should see "can't be blank" within "#comment_title_input"
@@ -201,24 +201,23 @@ Feature: Reporter can manage projects
     And I press "Update Project"
     And I follow "Project1"
    Then the "Budget" field within ".fields" should contain "7778"
-
+  
   Scenario: If the data_request past expenditure is not checked, past expenditure should not show up in the project screen
    Given I follow "Sign Out"
     And an organization exists with name: "organization5"
-    And a data_request exists with title: "request2", spend: false
+    And a data_request exists with title: "request2", spend: false, budget: true
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "reporter2@hrtapp.com", organization: the organization
+    And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
     And a location exists with short_display: "Location1"
     And a location exists with short_display: "Location2"
     And I am signed in as "reporter2@hrtapp.com"
     And I follow "request2"
     And I follow "Workplan"
-
-   When I follow "Create Project"
-   Then I should not see "Project Past Expenditure"
-    And I should not see "Quarterly Current Expenditure"
-    And I should see "Budget"
-
+   Then show me the page
+   Then I should not see "Past Expenditure" within ".workplan"
+    And I should see "Current Budget" within ".workplan"
+  
+  @wip 
   Scenario: A Reporter can bulk link their projects to those from other organizations
    Then I should see "Project5"
    Given I follow "Link Projects"
@@ -226,7 +225,8 @@ Feature: Reporter can manage projects
    Then select "Project6" from "funding_flows_3"
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
-
+  
+  @wip
   Scenario: A Reporter can bulk unlink their projects to those from other organizations
     Then I should see "Project5"
     Given I follow "Link Projects"
@@ -234,7 +234,8 @@ Feature: Reporter can manage projects
     Then select "" from "funding_flows_3"
     And I press "Update"
     Then I should see "Your projects have been successfully updated"
-
+  
+  @wip
   Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
    Then I should see "Project5"
    Given I follow "Link Projects"

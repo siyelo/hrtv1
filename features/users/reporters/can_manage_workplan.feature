@@ -11,7 +11,8 @@ Feature: Reporter can see workplan
       And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
       And an activity exists with id: "1", name: "activity1", description: "activity1 description", data_response: the data_response, project: the project, budget: 100, spend: 200
       And I am signed in as "reporter"
-
+    
+    @wip
     Scenario: Reporter can edit activities
       When I follow "Projects"
         And I follow "Workplan"
@@ -29,7 +30,7 @@ Feature: Reporter can see workplan
         And the "activities_1spend_q3" field should contain "4"
         And the "activities_1spend_q4" field should contain "5"
 
-
+    @wip
     Scenario: Reporter can manage workplan
       When I follow "Projects"
         And I follow "Manage"

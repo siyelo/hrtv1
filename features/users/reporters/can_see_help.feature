@@ -4,10 +4,7 @@ Feature: Reporter can see help text
   I want to be able to see Comments/Questions and Help on the relevant pages
 
   Background:
-    Given a basic org "UNDP" + reporter profile, with data response to "Req1", signed in
-
-
-    
+    Given a basic org + reporter profile, with data response, signed in
     # this spec is for CMS-style help - to be added back once the UI is stabilised. 
     @wip
     Scenario Outline: See help sections from the CMS 

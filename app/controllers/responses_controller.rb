@@ -46,8 +46,5 @@ class ResponsesController < ApplicationController
     else
       render :submit
     end
-    
   end
- 
-  
 end

@@ -100,7 +100,7 @@ class OtherCostsController < Reporter::BaseController
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
         redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type) 
       else
-        redirect_to response_projects_path(@other_cost.project.response)
+        redirect_to edit_response_other_cost_path(@response, @other_cost)
       end
     end
 

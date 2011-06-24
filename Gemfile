@@ -9,6 +9,7 @@ gem 'formtastic', "= 1.2.3"
 gem 'haml', '=3.0.24'
 gem 'hoptoad_notifier'
 gem 'ar_strip_commas'
+gem 'rdoc'
 
 
 # grr - money 3.5 depends on i18n 0.4+
@@ -18,7 +19,7 @@ gem 'ar_strip_commas'
 gem 'inherited_resources', "=1.0.6"
 gem 'money', "~> 3.5"
 gem "paperclip", "~> 2.3"
-gem 'rails', '2.3.8'
+gem 'rails', '2.3.12'
 gem 'rake', '0.8.7' # lock it in since heroku complaining "You have already activated rake 0.9.2,
                     # but your Gemfile requires rake 0.8.7."
 gem 'settingslogic'

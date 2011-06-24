@@ -12,18 +12,32 @@ class SubActivity < Activity
   attr_accessible :activity_id, :data_response_id, :provider_mask,
                   :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
 
+  validates_presence_of :provider_mask
+  validate :budget_mask_and_spend_mask
+
+  HUMANIZED_ATTRIBUTES = {
+    :budget_mask => "Implementer Current Budget",
+    :spend_mask => "Implementer Past Expenditure",
+    :provider_mask => "Implementer"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
+
   def provider_mask
     @provider_mask || provider_id
   end
 
   def provider_mask=(the_provider_mask)
+    self.provider_id_will_change! # trigger saving of this model
     @provider_mask = the_provider_mask
 
     if is_number?(the_provider_mask)
       self.provider_id = the_provider_mask
     else
       organization = Organization.find_or_create_by_name(the_provider_mask)
-      self.provider_id = organization.id
+      self.provider_id = organization.id if organization.id.present?
     end
   end
 
@@ -33,12 +47,9 @@ class SubActivity < Activity
 
   def spend_mask=(the_spend_mask)
     @spend_mask = the_spend_mask
+
     if the_spend_mask.to_s.last == '%'
-      if the_spend_mask.to_i < 101
-        self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
-      else
-        self.spend = the_spend_mask.delete('%')
-      end
+      self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
     else
       self.spend = the_spend_mask
     end
@@ -52,16 +63,11 @@ class SubActivity < Activity
     @budget_mask = the_budget_mask
 
     if the_budget_mask.to_s.last == '%'
-      if the_budget_mask.to_i < 101
-        self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
-      else
-        self.budget = the_budget_mask.delete('%')
-      end
+      self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
     else
       self.budget = the_budget_mask
     end
   end
-
 
   ### Callbacks
   after_create      :update_counter_cache
@@ -198,6 +204,18 @@ class SubActivity < Activity
       end
 
       return new_assignments
+    end
+
+    def budget_mask_and_spend_mask
+      if spend_mask.to_s.last == '%'
+        spend_percent = spend_mask.to_s.delete('%').to_f
+        errors.add(:spend_mask, "must be between 0% - 100%") if spend_percent < 0 || spend_percent > 100
+      end
+
+      if budget_mask.to_s.last == '%'
+        budget_percent = budget_mask.to_s.delete('%').to_f
+        errors.add(:budget_mask, "must be between 0% - 100%") if budget_percent < 0 || budget_percent > 100
+      end
     end
 end
 

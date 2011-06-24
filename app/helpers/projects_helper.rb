@@ -26,7 +26,7 @@ module ProjectsHelper
 
   def ordered_locations(locations)
     locations = locations.dup # copy the array, otherwise it removes project locations
-    if (central_level = locations.detect{|l| l.short_display == 'Central Level'})
+    if (central_level = locations.detect{|l| l.short_display == 'National Level'})
       central_level = locations.delete(central_level)
       locations.unshift(central_level)
     end

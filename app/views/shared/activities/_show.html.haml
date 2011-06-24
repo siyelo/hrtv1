@@ -116,14 +116,8 @@
           %li Current Budget
           %li= c(sub_activity.budget, @activity.currency)
         %ul.row
-          %li Current Budget percentage
-          %li= number_to_percentage(sub_activity.budget_percentage, :precision => 2)
-        %ul.row
           %li Expenditure
           %li= c(sub_activity.spend, @activity.currency)
-        %ul.row
-          %li Expenditure percentage
-          %li= number_to_percentage(sub_activity.spend_percentage, :precision => 2)
 
   %h3.form_heading Funding Sources
   %ul.dashboard_section

@@ -10,7 +10,7 @@ class SubActivity < Activity
 
   ### Attributes
   attr_accessible :activity_id, :data_response_id, :provider_mask,
-                  :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
+                  :spend_mask, :budget_mask
 
   validates_presence_of :provider_mask
   validate :budget_mask_and_spend_mask
@@ -251,8 +251,6 @@ end
 #  spend_q4_prev                         :decimal(, )
 #  data_response_id                      :integer         indexed
 #  activity_id                           :integer         indexed
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
 #  approved                              :boolean
 #  CodingBudget_amount                   :decimal(, )     default(0.0)
 #  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)

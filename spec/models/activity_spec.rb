@@ -69,25 +69,25 @@ describe Activity do
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }
 
-    
+
     it "will return false if the activity start date is before the project start date" do
-      @activity = Factory.build(:activity, 
-                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+      @activity = Factory.build(:activity,
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'),
                                 :start_date => Date.parse("2010-01-01"), :end_date => Date.parse("2011-03-01"))
-                                
+
       @activity.should_not be_valid
     end
-      
+
     it "will return false if the activity end date is after the project end date" do
-      @activity = Factory.build(:activity, 
-                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+      @activity = Factory.build(:activity,
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'),
                                 :start_date => Date.parse("2001-03-01"), :end_date => Date.parse("2011-08-01"))
       @activity.should_not be_valid
     end
-    
+
     it "will return true if the activity start and end date are within the project start and end date" do
-      @activity = Factory.build(:activity, 
-                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'), 
+      @activity = Factory.build(:activity,
+                                :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'),
                                 :start_date => Date.parse("2011-02-01"), :end_date => Date.parse("2011-03-01"))
       @activity.should be_valid
     end
@@ -1500,8 +1500,6 @@ end
 #  spend_q4_prev                         :decimal(, )
 #  data_response_id                      :integer
 #  activity_id                           :integer
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
 #  approved                              :boolean
 #  CodingBudget_amount                   :decimal(, )     default(0.0)
 #  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)

@@ -1421,7 +1421,7 @@ var activity_form = function () {
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
-    split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
+    split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:first)"), $(this).val());
   });
 
   $(".js_activity_spend_total").keyup(function () {

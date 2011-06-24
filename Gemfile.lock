@@ -137,6 +137,7 @@ GEM
     rb-fsevent (0.4.0)
     rbx-require-relative (0.0.5)
     rcov (0.9.9)
+    rdoc (3.6.1)
     responders (0.4.8)
     rest-client (1.6.3)
       mime-types (>= 1.16)
@@ -227,6 +228,7 @@ DEPENDENCIES
   rake (= 0.8.7)
   rb-fsevent
   rcov
+  rdoc
   rspec (= 1.3.1)
   rspec-rails (= 1.3.3)
   ruby-debug

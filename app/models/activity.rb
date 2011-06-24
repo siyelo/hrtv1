@@ -34,6 +34,14 @@ class Activity < ActiveRecord::Base
     'ServiceLevelBudget' => 'ServiceLevelSpend'
   }
 
+  HUMANIZED_ATTRIBUTES = {
+    :sub_activities => "Implementers"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
+
   ### Includes
   include BudgetSpendHelpers
   strip_commas_from_all_numbers
@@ -100,7 +108,7 @@ class Activity < ActiveRecord::Base
 
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
-  validates_associated :sub_activities
+  #validates_associated :sub_activities
 
   ### Callbacks
   before_save :update_cached_usd_amounts

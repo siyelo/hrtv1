@@ -9,6 +9,7 @@ gem 'formtastic', "= 1.2.3"
 gem 'haml', '=3.0.24'
 gem 'hoptoad_notifier'
 gem 'ar_strip_commas'
+gem 'rdoc'
 
 
 # grr - money 3.5 depends on i18n 0.4+

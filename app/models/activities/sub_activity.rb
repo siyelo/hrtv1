@@ -12,7 +12,16 @@ class SubActivity < Activity
   attr_accessible :activity_id, :data_response_id, :provider_mask,
                   :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
 
-  validates_presence_of :spend_mask
+  validate :budget_mask_and_spend_mask
+
+  HUMANIZED_ATTRIBUTES = {
+    :budget_mask => "Implementer Current Budget",
+    :spend_mask => "Implementer Past Expenditure"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def provider_mask
     @provider_mask || provider_id
@@ -37,12 +46,7 @@ class SubActivity < Activity
     @spend_mask = the_spend_mask
 
     if the_spend_mask.to_s.last == '%'
-      percent = the_spend_mask.to_s.delete('%').to_f
-      if percent < 0 || percent > 100
-        errors.add(:spend_mask, "must be 0-100")
-      else
-        self.spend = activity.spend.to_f * percent / 100
-      end
+      self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
     else
       self.spend = the_spend_mask
     end
@@ -56,13 +60,7 @@ class SubActivity < Activity
     @budget_mask = the_budget_mask
 
     if the_budget_mask.to_s.last == '%'
-      percent = the_budget_mask.to_s.delete('%').to_f
-
-      if percent < 0 || percent > 100
-        errors.add(:budget_mask, "must be 0-100")
-      else
-        self.budget = activity.budget.to_f * percent / 100
-      end
+      self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
     else
       self.budget = the_budget_mask
     end
@@ -203,6 +201,18 @@ class SubActivity < Activity
       end
 
       return new_assignments
+    end
+
+    def budget_mask_and_spend_mask
+      if spend_mask.to_s.last == '%'
+        spend_percent = spend_mask.to_s.delete('%').to_f
+        errors.add(:spend_mask, "must be between 0% - 100%") if spend_percent < 0 || spend_percent > 100
+      end
+
+      if budget_mask.to_s.last == '%'
+        budget_percent = budget_mask.to_s.delete('%').to_f
+        errors.add(:budget_mask, "must be between 0% - 100%") if budget_percent < 0 || budget_percent > 100
+      end
     end
 end
 

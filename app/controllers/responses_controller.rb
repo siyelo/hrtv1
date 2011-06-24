@@ -39,6 +39,7 @@ class ResponsesController < ApplicationController
 
   def send_data_response
     @response = find_response(params[:id])
+    @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
       redirect_to review_response_url(@response)

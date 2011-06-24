@@ -185,7 +185,7 @@ class Organization < ActiveRecord::Base
     when "q4"
       "#{(fiscal_year_start_date + 9.months).strftime('%b \'%y')} - #{(fiscal_year_start_date + 11.months).strftime('%b \'%y')}"
     when "q4_prev"
-      "#{(fiscal_year_start_date - 5.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 3.months).strftime('%b \'%y')}"
+      "#{(fiscal_year_start_date - 3.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 1.months).strftime('%b \'%y')}"
     end
   end
 

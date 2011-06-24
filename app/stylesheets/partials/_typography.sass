@@ -2,6 +2,13 @@
   h2
     background: none
     text-transform: none
+    &.welcome_msg
+      padding: 20px 0 5px
+      +text-shadow(#fff, 0, 1px, 0)
+      color: $light-blue - #111
+      display: block
+      font-size: 12px
+      margin-top: 3px
   h3, .like_a_h3
     color: $mid-blue
     font-size: 0.9em
@@ -31,15 +38,6 @@
         font-weight: normal
         line-height: 1.4
         padding-top: 5px
-    &.welcome_msg
-      color: $light-blue - #333
-      font-size: 24px
-      padding: 20px 0 5px
-      +text-shadow(#fff, 0, 1px, 0)
-      span
-        color: $light-blue - #111
-        display: block
-        font-size: 12px
-        margin-top: 3px
   h4
     font-size: 12px
+

@@ -246,7 +246,7 @@ describe Organization do
 
     it "copies data responses from @duplicate to @target" do
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 4
+      @target.data_responses.count.should == 6
     end
 
     it "copies also invalid data responses from duplicate to @target" do
@@ -254,9 +254,9 @@ describe Organization do
       @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
       @duplicate.save(false)
       duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
-      duplicate_data_response.save(false)
+      duplicate_data_response.save
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 5 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 9 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do

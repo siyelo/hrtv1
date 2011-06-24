@@ -31,7 +31,6 @@ class SubActivity < Activity
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-    @provider_mask = the_provider_mask
 
     if is_number?(the_provider_mask)
       self.provider_id = the_provider_mask
@@ -39,6 +38,8 @@ class SubActivity < Activity
       organization = Organization.find_or_create_by_name(the_provider_mask)
       self.provider_id = organization.id if organization.id.present?
     end
+
+    @provider_mask   = self.provider_id
   end
 
   def spend_mask

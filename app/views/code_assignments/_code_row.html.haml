@@ -1,0 +1,20 @@
+- updater_field = 'updates' # @coding_type + '_updates'
+- assignment = @current_assignments[code.id]
+- invalid_class = assignment && !@coding_tree.valid_ca?(assignment) ? 'invalid' : nil
+
+%li
+  %div{:class => invalid_class}
+    = check_box_tag "activity[code_assignment_tree][]", code.id, @current_assignments.has_key?(code.id)
+    = label_tag :"classifications[#{code.id}]", "#{code.short_display}"
+    = link_to "?", "#", :title => code.description, :class => "tooltip info" if code.description
+    .values.right
+      = text_field_tag :"classifications[#{code.id}]", classified_value(assignment), :size => 8
+      = label_tag :"classifications[#{code.id}][cached]", n2c(assignment.try(:cached_amount).to_s), :id => nil, :class => "subtotal"
+
+    - if invalid_class
+      = link_to "!", "#" , :title => node_error(code, assignment), :class => "tooltip info invalid_node"
+
+  - unless code.leaf?
+    %ul{:id => code.external_id, :class => "lvl#{level}"}
+      - @coding_tree.cached_children(code).each do |child|
+        = render '/code_assignments/code_row', :code => child, :tab => tab, :level => level + 1

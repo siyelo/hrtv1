@@ -1,0 +1,3 @@
+- if current_user.admin? || current_user.activity_manager?
+  = label_tag "Approved?"
+  = check_box_tag 'approve_activity', true, activity.approved, :class => "approve_activity", :"data-id" => activity.id, :"data-response_id" => activity.data_response.id

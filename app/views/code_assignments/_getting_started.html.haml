@@ -1,0 +1,13 @@
+- if current_user.tips_shown
+  #gs_container
+    #getting_started_title
+      %h2= "Getting started with Activity Splits"
+      = render :partial => 'shared/tips_hide'
+    .getting_started
+      .message
+        %p Use Activity splits to conveniently add several dimensions of detail to your Activities.
+        %ul.bulleted
+          %li Enter the Input(s) (Cost Categories) you used
+          %li Show the Health Function(s) for the Activity. The more specific the Health Functions you enter, the easier it will be to generate reports for you!
+          %li Add your allocation of resources to each Location.
+          %li If your Activity is more complex, you can add as much detail as you like with more Inputs/Purposes etc.

@@ -43,6 +43,17 @@ describe FundingFlow do
     
   end
 
+  describe "more validations" do
+    it "should validate the spend fields" do
+      @activity = Factory.build(:funding_flow, :spend => 'abcd')
+      @activity.save.should be_false
+    end
+    it "should validate the budget fields" do
+      @activity = Factory.build(:funding_flow, :budget => 'abcd')
+      @activity.save.should be_false
+    end
+  end
+
   describe "counter cache" do
     context "comments cache" do
       before :each do

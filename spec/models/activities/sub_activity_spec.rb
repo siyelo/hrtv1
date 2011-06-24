@@ -13,8 +13,6 @@ describe SubActivity do
 
   describe "attributes" do
     it { should allow_mass_assignment_of(:activity_id) }
-    it { should allow_mass_assignment_of(:spend_percentage) }
-    it { should allow_mass_assignment_of(:budget_percentage) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
   end
@@ -364,7 +362,7 @@ describe SubActivity do
         end
       end
     end
-    
+
     describe "counter cache" do
       it "caches sub activities count" do
         @activity.sub_activities_count.should == 0
@@ -409,8 +407,6 @@ end
 #  spend_q4_prev                         :decimal(, )
 #  data_response_id                      :integer
 #  activity_id                           :integer
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
 #  approved                              :boolean
 #  CodingBudget_amount                   :decimal(, )     default(0.0)
 #  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)

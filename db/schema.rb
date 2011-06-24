@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110623141341) do
+ActiveRecord::Schema.define(:version => 20110624152608) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -32,8 +32,6 @@ ActiveRecord::Schema.define(:version => 20110623141341) do
     t.decimal  "spend_q4_prev"
     t.integer  "data_response_id"
     t.integer  "activity_id"
-    t.decimal  "budget_percentage"
-    t.decimal  "spend_percentage"
     t.boolean  "approved"
     t.decimal  "CodingBudget_amount",                   :default => 0.0
     t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0

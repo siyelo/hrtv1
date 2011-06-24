@@ -769,8 +769,6 @@ end
 #  spend_q4_prev                         :decimal(, )
 #  data_response_id                      :integer         indexed
 #  activity_id                           :integer         indexed
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
 #  approved                              :boolean
 #  CodingBudget_amount                   :decimal(, )     default(0.0)
 #  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)

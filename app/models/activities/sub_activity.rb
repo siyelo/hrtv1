@@ -12,6 +12,8 @@ class SubActivity < Activity
   attr_accessible :activity_id, :data_response_id, :provider_mask,
                   :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
 
+  validates_presence_of :spend_mask
+
   def provider_mask
     @provider_mask || provider_id
   end

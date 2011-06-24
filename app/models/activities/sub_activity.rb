@@ -9,11 +9,27 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :provider_mask,
-                  :spend_mask, :budget_mask
+  attr_accessible :activity_id, :data_response_id,
+                  :provider_mask, :spend_mask, :budget_mask
 
+  ### Callbacks
+  after_create    :update_counter_cache
+  after_destroy   :update_counter_cache
+  before_save     :set_budget_amount
+  before_save     :set_spend_amount
+
+  ### Validations
   validates_presence_of :provider_mask
-  validate :budget_mask_and_spend_mask
+  validate :budget_mask_percentage
+  validate :spend_mask_percentage
+  validate :numericality_of_budget_mask
+  validate :numericality_of_spend_mask
+
+  ### Delegates
+  [:projects, :name, :description, :start_date, :end_date, :approved,
+   :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
+    delegate method, :to => :activity, :allow_nil => true
+  end
 
   HUMANIZED_ATTRIBUTES = {
     :budget_mask => "Implementer Current Budget",
@@ -48,12 +64,6 @@ class SubActivity < Activity
 
   def spend_mask=(the_spend_mask)
     @spend_mask = the_spend_mask
-
-    if the_spend_mask.to_s.last == '%'
-      self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
-    else
-      self.spend = the_spend_mask
-    end
   end
 
   def budget_mask
@@ -62,22 +72,6 @@ class SubActivity < Activity
 
   def budget_mask=(the_budget_mask)
     @budget_mask = the_budget_mask
-
-    if the_budget_mask.to_s.last == '%'
-      self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
-    else
-      self.budget = the_budget_mask
-    end
-  end
-
-  ### Callbacks
-  after_create      :update_counter_cache
-  after_destroy     :update_counter_cache
-
-  ### Delegates
-  [:projects, :name, :description, :start_date, :end_date, :approved,
-   :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
-    delegate method, :to => :activity, :allow_nil => true
   end
 
   ### Class Methods
@@ -207,22 +201,48 @@ class SubActivity < Activity
       return new_assignments
     end
 
-    def budget_mask_and_spend_mask
-      if spend_mask.to_s.last == '%'
-        spend_percent = spend_mask.to_s.delete('%').to_f
-        errors.add(:spend_mask, "must be between 0% - 100%") if spend_percent < 0 || spend_percent > 100
-      end
-
+    def budget_mask_percentage
       if budget_mask.to_s.last == '%'
         budget_percent = budget_mask.to_s.delete('%').to_f
         errors.add(:budget_mask, "must be between 0% - 100%") if budget_percent < 0 || budget_percent > 100
       end
     end
+
+    def spend_mask_percentage
+      if spend_mask.to_s.last == '%'
+        spend_percent = spend_mask.to_s.delete('%').to_f
+        errors.add(:spend_mask, "must be between 0% - 100%") if spend_percent < 0 || spend_percent > 100
+      end
+    end
+
+    def numericality_of_budget_mask
+      budget_mask_number = budget_mask.to_s.last == '%' ?
+        budget_mask.to_s.delete('%') : budget_mask
+      errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
+    end
+
+    def numericality_of_spend_mask
+      spend_mask_number = spend_mask.to_s.last == '%' ?
+        spend_mask.to_s.delete('%') : spend_mask
+      errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
+    end
+
+    def set_spend_amount
+      if spend_mask.to_s.last == '%'
+        self.spend = activity.spend.to_f * spend_mask.to_s.delete('%').to_f / 100
+      else
+        self.spend = spend_mask
+      end
+    end
+
+    def set_budget_amount
+      if budget_mask.to_s.last == '%'
+        self.budget = activity.budget.to_f * budget_mask.to_s.delete('%').to_f / 100
+      else
+        self.budget = budget_mask
+      end
+    end
 end
-
-
-
-
 
 
 

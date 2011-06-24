@@ -23,6 +23,7 @@ class Project < ActiveRecord::Base
   ### Associations
   belongs_to :data_response, :counter_cache => true
   has_and_belongs_to_many :locations
+  has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :normal_activities, :class_name => "Activity",
@@ -80,27 +81,20 @@ class Project < ActiveRecord::Base
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
                   :budget2, :budget3, :budget4, :budget5
 
-  # Delegates
-  # TODO pull all this DR related stuff to module and mix in
-  delegate :organization, :to => :data_response
+  ### Delegates
 
   ### Callbacks
   after_save :update_cached_currency_amounts
   before_save :check_quarterly_vs_total
+
   ### Public methods
   #
   def implementers
     providers
   end
 
-
-
   def response
     self.data_response
-  end
-
-  def organization
-    response.organization
   end
 
   # view helper ??!

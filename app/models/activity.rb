@@ -63,6 +63,7 @@ class Activity < ActiveRecord::Base
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
   belongs_to :project
+  has_one :organization, :through => :data_response
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
@@ -91,7 +92,6 @@ class Activity < ActiveRecord::Base
   accepts_nested_attributes_for :outputs, :allow_destroy => true
 
   ### Delegates
-  delegate :organization, :to => :data_response
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
 

@@ -12,11 +12,13 @@ class SubActivity < Activity
   attr_accessible :activity_id, :data_response_id, :provider_mask,
                   :spend_mask, :budget_mask, :spend_percentage, :budget_percentage
 
+  validates_presence_of :provider_mask
   validate :budget_mask_and_spend_mask
 
   HUMANIZED_ATTRIBUTES = {
     :budget_mask => "Implementer Current Budget",
-    :spend_mask => "Implementer Past Expenditure"
+    :spend_mask => "Implementer Past Expenditure",
+    :provider_mask => "Implementer"
   }
 
   def self.human_attribute_name(attr)
@@ -28,13 +30,14 @@ class SubActivity < Activity
   end
 
   def provider_mask=(the_provider_mask)
+    self.provider_id_will_change! # trigger saving of this model
     @provider_mask = the_provider_mask
 
     if is_number?(the_provider_mask)
       self.provider_id = the_provider_mask
     else
       organization = Organization.find_or_create_by_name(the_provider_mask)
-      self.provider_id = organization.id
+      self.provider_id = organization.id if organization.id.present?
     end
   end
 

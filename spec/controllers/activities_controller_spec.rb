@@ -149,7 +149,7 @@ describe ActivitiesController do
        login @user
      end
     
-    it "redirects to the projects index page when save is clicked" do 
+    it "redirects to the activities edit page when save is clicked" do 
       @project = Factory(:project, :data_response => @data_response) 
       post :create, :activity => {
         :description => "some description",
@@ -159,7 +159,7 @@ describe ActivitiesController do
         :spend => 8000
       },
       :commit => 'Save', :response_id => @data_response.id
-      response.should redirect_to(response_projects_url(@data_response.id))
+      response.should redirect_to(edit_response_activity_path(@data_response, @project.activities.first))
     end
     
     it "redircts to the projects index page when Save & Go to Classify is clicked" do 
@@ -198,7 +198,7 @@ describe ActivitiesController do
         :spend => 81000
       }, :commit => 'Save', :response_id => @data_response.id
       flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to(response_projects_path(@data_response))
+      response.should redirect_to(edit_response_activity_path(@data_response, @project.activities.first))
     end
     
   end

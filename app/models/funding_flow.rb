@@ -6,7 +6,7 @@ class FundingFlow < ActiveRecord::Base
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
+                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :updated_at
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
@@ -35,6 +35,8 @@ class FundingFlow < ActiveRecord::Base
     :unless => lambda {|fs| fs["project_from_id"].blank?},
     :message => :"organization_id_from.id_below_zero"
 
+  validates_numericality_of :budget, :spend, :message => "is not a number (Funding Sources)"
+
   delegate :organization, :to => :project
 
   def currency
@@ -43,6 +45,10 @@ class FundingFlow < ActiveRecord::Base
 
   def name
     "From: #{from.name} - To: #{to.name}"
+  end
+
+  def updated_at
+    Time.now
   end
 
   def self.create_flows(params)

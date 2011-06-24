@@ -33,7 +33,6 @@ describe FundingFlow do
   describe "validations" do
     subject { Factory(:funding_flow) }
     it { should be_valid }
-    # it { should validate_presence_of(:project) }
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }
@@ -41,6 +40,7 @@ describe FundingFlow do
     # and this breaks too
     #it { should validate_numericality_of(:organization_id_from) }
     it { should validate_numericality_of(:project_from_id) }
+    
   end
 
   describe "counter cache" do

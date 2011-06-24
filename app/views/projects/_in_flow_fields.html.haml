@@ -10,6 +10,7 @@
     .ff_from_container
       .implementer_container
         .ui_widget
+          = f.input :updated_at, :as => :hidden
           = f.input :from, :as => :select, :collection => funding_organizations_select, :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}
 
     - if @response.data_request.spend?

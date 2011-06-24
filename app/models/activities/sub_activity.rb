@@ -35,11 +35,13 @@ class SubActivity < Activity
 
   def spend_mask=(the_spend_mask)
     @spend_mask = the_spend_mask
+
     if the_spend_mask.to_s.last == '%'
-      if the_spend_mask.to_i < 101
-        self.spend = activity.spend.to_f * the_spend_mask.to_s.delete('%').to_f / 100
+      percent = the_spend_mask.to_s.delete('%').to_f
+      if percent < 0 || percent > 100
+        errors.add(:spend_mask, "must be 0-100")
       else
-        self.spend = the_spend_mask.delete('%')
+        self.spend = activity.spend.to_f * percent / 100
       end
     else
       self.spend = the_spend_mask
@@ -54,16 +56,17 @@ class SubActivity < Activity
     @budget_mask = the_budget_mask
 
     if the_budget_mask.to_s.last == '%'
-      if the_budget_mask.to_i < 101
-        self.budget = activity.budget.to_f * the_budget_mask.to_s.delete('%').to_f / 100
+      percent = the_budget_mask.to_s.delete('%').to_f
+
+      if percent < 0 || percent > 100
+        errors.add(:budget_mask, "must be 0-100")
       else
-        self.budget = the_budget_mask.delete('%')
+        self.budget = activity.budget.to_f * percent / 100
       end
     else
       self.budget = the_budget_mask
     end
   end
-
 
   ### Callbacks
   after_create      :update_counter_cache

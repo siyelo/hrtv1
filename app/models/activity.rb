@@ -100,6 +100,8 @@ class Activity < ActiveRecord::Base
 
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
+  validates_associated :sub_activities
+
   ### Callbacks
   before_save :update_cached_usd_amounts
   before_update :remove_district_codings
@@ -129,7 +131,7 @@ class Activity < ActiveRecord::Base
     :conditions => ["activities.provider_id = data_responses.organization_id
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
-  
+
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}

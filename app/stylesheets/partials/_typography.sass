@@ -1,14 +1,25 @@
+#content
+  h2
+    padding: 10px
+    +border-top-radius
+    background: image_url("bg-blue.jpg")
+    clear: both
+    color: #fff
+    font-size: 0.8em
+    letter-spacing: 0.05em
+    &.welcome_msg
+      background: none
+      color: $light-blue - #111
+      display: block
+      font-size: 15px
+      margin-top: 3px
+      padding: 20px 0 5px
+      +text-shadow(#fff, 0, 1px, 0)
+
 .full-width
   h2
     background: none
     text-transform: none
-    &.welcome_msg
-      padding: 20px 0 5px
-      +text-shadow(#fff, 0, 1px, 0)
-      color: $light-blue - #111
-      display: block
-      font-size: 12px
-      margin-top: 3px
   h3, .like_a_h3
     color: $mid-blue
     font-size: 0.9em

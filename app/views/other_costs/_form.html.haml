@@ -7,7 +7,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :collection => current_user.current_data_response.projects, :as => :select, :hint => "The Project this Other Cost correlates to"
+      = f.input :project_id, :label => "Project", :collection => current_user.current_response.projects, :as => :select, :hint => "The Project this Other Cost correlates to"
       = f.input :name, :required => false, :hint => "The name of this Other Cost."
       = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Other Cost."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false

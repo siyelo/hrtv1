@@ -313,7 +313,7 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "undp_user", organization: the organization, current_data_response: the data_response
+    And a reporter exists with username: "undp_user", organization: the organization, current_response: the data_response
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
   }

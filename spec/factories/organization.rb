@@ -1,5 +1,5 @@
 Factory.define :organization, :class => Organization do |f|
-  f.sequence(:name)                  { "organization_#{(1..1000000).to_a.random_element}" }
+  f.sequence(:name)                  { "organization_#{(1..1000000).to_a.sample}" }
   f.raw_type                         { "" }
   f.currency                         { "RWF" }
   f.fiscal_year_start_date           { Date.parse("2008-09-01") }

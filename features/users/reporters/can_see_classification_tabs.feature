@@ -12,7 +12,7 @@ Feature: Reporter can see classification tabs
         And a data_request exists with title: "Request", budget: true, spend: true
         And an organization exists with name: "Organization2"
         And a data_response exists with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+        And a reporter exists with username: "reporter", organization: the organization, current_response: the data_response
         And a project exists with name: "Project", data_response: the data_response
         And an activity exists with name: "activity1", data_response: the data_response, project: the project, description: "activity1 description"
         And I am signed in as "reporter"
@@ -28,7 +28,7 @@ Feature: Reporter can see classification tabs
         And a data_request exists with title: "Request", budget: true, spend: false
         And an organization exists with name: "Organization2"
         And a data_response exists with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+        And a reporter exists with username: "reporter", organization: the organization, current_response: the data_response
         And a project exists with name: "Project", data_response: the data_response
         And an activity exists with name: "activity1", data_response: the data_response, project: the project, description: "activity1 description"
         And I am signed in as "reporter"
@@ -44,7 +44,7 @@ Feature: Reporter can see classification tabs
         And a data_request exists with title: "Request", budget: false, spend: true
         And an organization exists with name: "Organization2"
         And a data_response exists with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+        And a reporter exists with username: "reporter", organization: the organization, current_response: the data_response
         And a project exists with name: "Project", data_response: the data_response
         And an activity exists with name: "activity1", data_response: the data_response, project: the project, description: "activity1 description"
         And I am signed in as "reporter"

@@ -1,7 +1,7 @@
 class Reports::Countries::ActivitiesController < Reports::BaseController
 
   def index
-    data_request_id    = current_user.current_data_response.data_request.id
+    data_request_id    = current_user.current_response.data_request.id
     @activities        = Reports::ActivityReport.top_by_spent_and_budget({
                          :per_page => 25,
                          :page => params[:page],
@@ -18,7 +18,7 @@ class Reports::Countries::ActivitiesController < Reports::BaseController
     @pie            = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type       = get_code_type_and_initialize(params[:code_type])
     @chart_name     = get_chart_name(params[:code_type])
-    data_request_id = current_user.current_data_response.data_request.id
+    data_request_id = current_user.current_response.data_request.id
 
     if @pie
       if @hssp2_strat_prog || @hssp2_strat_obj

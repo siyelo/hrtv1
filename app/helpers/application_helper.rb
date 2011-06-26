@@ -285,7 +285,7 @@ module ApplicationHelper
   end
 
   def current_response
-    current_user.current_data_response
+    current_user.current_response
   end
 
   def last_response

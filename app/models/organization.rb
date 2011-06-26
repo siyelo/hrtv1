@@ -197,10 +197,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  # returns the last response that was created.
   def latest_response
     self.responses.latest_first.first
   end
-
 
   protected
 

@@ -1,15 +1,15 @@
 #header_app
   .wrapper
     #logo
-    
+
       - if current_user && current_user.organization
         %p
-          = "#{truncate(current_user.organization.name, :length => 35)}"
-          = render :partial => "shared/response_selector"
-              
+          = "#{truncate(current_user.organization.name, :length => 35)}: "
+          = "[#{current_user.current_request_name}]"
+
       - else
         %p= "No organization specified"
-      
+
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'
       %a{:href => '/'}

@@ -8,14 +8,14 @@
   - hacked_review_response_path   = new_response_path
 
 #welcome_box
-  %p Here are few simple steps to help you get started
+  %h2.welcome_msg Here are few simple steps to help you get started
 
   %ul.welcome_steps
     %li.first
       - link_to edit_organization_path(:current) do
         %span.icon= image_tag "icon_welcome1.png", :alt => "Setup Your Organization", :height => "66"
-        %span.title 1. Configure Organization
-        %span.desc Your basic preferences and contact settings
+        %span.title 1. Basic Settings
+        %span.desc Your Organization's preferences and contact settings
 
     %li
       - link_to hacked_response_projects_path do

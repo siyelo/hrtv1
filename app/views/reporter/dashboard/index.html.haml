@@ -17,11 +17,7 @@
 
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
-<<<<<<< HEAD
-  All Data Requests
-=======
   Data Requests
->>>>>>> improve Request section on dashboard. greatly.
 .dashboard_section
 
   %table.modern_table
@@ -41,9 +37,9 @@
     Reports
   .dashboard_section
     %ul.admin_reports
-      - if current_user.current_data_response
+      - if current_user.current_response
         %li
-          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
+          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
             Review My Response
             %span.hint Interactive report of your current data response
       %li

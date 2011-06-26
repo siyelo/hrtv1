@@ -53,7 +53,7 @@ class Reporter::BaseController < ApplicationController
 
     def warn_if_not_current_request
       unless current_user.current_response_is_latest?
-        flash.now[:warning] = not_latest_request_message(current_user.current_response.request)
+        flash.now[:warning] = not_latest_request_message(current_user.current_request)
       end
     end
 

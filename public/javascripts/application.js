@@ -1497,28 +1497,6 @@ var projects_edit = projects_new = {
   }
 }
 
-// Request (response) dropdown in the header
-// Allows user to select which response they are seeing data for
-var request_selector = {
-  init: function () {
-    $('#user_data_response_id_current').live('change', function(e) {
-      $('#change_datarequest').submit();
-    });
-
-    $('.js_request_select').click(function (e) {
-      e.preventDefault();
-      $(this).next().show();
-      $(this).hide();
-    });
-
-    $('.js_request_close').click(function (e) {
-      e.preventDefault();
-      $(this).parents('.request_select').hide();
-      $('.js_request_select').show();
-    });
-  }
-};
-
 
 $(function () {
 
@@ -1535,8 +1513,6 @@ $(function () {
       window[controller_action]['run']();
     }
   }
-
-  request_selector.init();
 
   $("#closeFlash").click(function (e) {
     e.preventDefault();

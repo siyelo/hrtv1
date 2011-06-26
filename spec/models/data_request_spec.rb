@@ -87,39 +87,6 @@ describe DataRequest do
       organizations.should include(org2)
     end
   end
-
-  describe "checks if the current data request is the most recent (the one that should be used)" do
-    it "returns true if the datarequest is the current one" do
-      dr = Factory.build(:data_request,
-                         :start_date => DateTime.new(2010, 01, 01),
-                         :end_date =>   DateTime.new(2012, 01, 01) )
-
-      dr.current?.should be_true
-    end
-    it "returns false if the datarequest is not the current one" do
-      dr = Factory.build(:data_request,
-                         :start_date => DateTime.new(2008, 01, 01),
-                         :end_date =>   DateTime.new(2010, 01, 01) )
-
-      dr.current?.should_not be_true
-    end
-
-    it "returns false if the datarequest in the spend phase" do
-      dr = Factory.build(:data_request,
-                         :start_date => DateTime.new(2011, 01, 01),
-                         :end_date =>   DateTime.new(2013, 01, 01) )
-
-      dr.current?.should_not be_true
-    end
-
-    it "returns true if the datarequest in the budget phase" do
-      dr = Factory.build(:data_request,
-                         :start_date => DateTime.new(2010, 01, 01),
-                         :end_date =>   DateTime.new(2012, 01, 01) )
-
-      dr.current?.should be_true
-    end
-  end
 end
 
 # == Schema Information

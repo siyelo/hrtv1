@@ -225,7 +225,7 @@ Feature: Reporter can manage projects
 
   Scenario: A Reporter can bulk link their projects to those from other organizations
    Then I should see "Project5"
-   Given I follow "Link Projects"
+   Given I follow "Link to Funders"
    Then I should see "Project5"
    Then select "Project6" from "funding_flows_3"
    And I press "Update"
@@ -233,7 +233,7 @@ Feature: Reporter can manage projects
 
   Scenario: A Reporter can bulk unlink their projects to those from other organizations
     Then I should see "Project5"
-    Given I follow "Link Projects"
+    Given I follow "Link to Funders"
     Then I should see "Project5"
     Then select "" from "funding_flows_3"
     And I press "Update"
@@ -241,7 +241,7 @@ Feature: Reporter can manage projects
 
   Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
    Then I should see "Project5"
-   Given I follow "Link Projects"
+   Given I follow "Link to Funders"
    Then I should see "Project5"
    Then select "<Project not listed or unknown>" from "funding_flows_3"
    And I press "Update"

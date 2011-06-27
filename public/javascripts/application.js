@@ -1151,7 +1151,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 var projects_index = {
   run: function () {
-    
       $('.dropdown_menu').hover(function (e){
         e.preventDefault();
         $('ul', this).slideDown(100);
@@ -1161,7 +1160,7 @@ var projects_index = {
         $('ul', this).slideUp(100);
         $('.dropdown_trigger').removeClass('persist');
       });
-    
+
     $('.upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('tbody').find('.upload_box').slideToggle();
@@ -1191,22 +1190,52 @@ var projects_bulk_edit = {
   }
 };
 
+var initDemoText = function (elements) {
+  elements.each(function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+
+    if (demo_text != null) {
+      element.attr('title', demo_text);
+      if (element.val() == '' || element.val() == demo_text) {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+
+var focusDemoText = function (elements) {
+  elements.live('focus', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
+        element.removeClass('input_hint');
+      }
+    }
+  });
+};
+
+
+var blurDemoText = function (elements) {
+  elements.live('blur', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == '') {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+
 var activities_bulk_create = {
   run: function () {
-    var initDemoText = function (elements) {
-      elements.each(function(){
-        var element = $(this);
-        var demo_text = element.attr('data-hint');
-
-        if (demo_text != null) {
-          element.attr('title', demo_text);
-          if (element.val() == '' || element.val() == demo_text) {
-            element.val( demo_text );
-            element.addClass('input_hint');
-          }
-        }
-      });
-    };
 
     initDemoText($('*[data-hint]'));
 
@@ -1220,28 +1249,8 @@ var activities_bulk_create = {
       activity_box.find('.main').toggle();
     });
 
-    $('*[data-hint]').live('focus', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == demo_text) {
-          element.val('');
-          element.removeClass('input_hint');
-        }
-      }
-    });
-
-    $('*[data-hint]').live('blur', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == '') {
-          element.val( demo_text );
-          element.addClass('input_hint');
-        }
-      }
-    });
-
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
@@ -1409,7 +1418,7 @@ var activity_form = function () {
     var activity_id = $(this).attr('activity-id');
     var response_id = $(this).attr('response-id');
     var element = $(this);
-   
+
     element.find(".ajax-loader").show();
     var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
     $.post(url, {approve: true, "_method": "put"}, function (data) {
@@ -1419,6 +1428,10 @@ var activity_form = function () {
       }
     })
   })
+
+  initDemoText($('*[data-hint]'));
+  focusDemoText($('*[data-hint]'));
+  blurDemoText($('*[data-hint]'));
 };
 
 var admin_activities_edit = admin_activities_update = {
@@ -1535,7 +1548,7 @@ var projects_edit = projects_new = {
       element.find(".ajax-loader").hide();
       if (data.status == 'success') {
         element.html('<span>Budget Approved</span>');
-      } 
+      }
      })
    });
 

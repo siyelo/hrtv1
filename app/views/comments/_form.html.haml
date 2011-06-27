@@ -7,8 +7,7 @@
     = f.semantic_errors :state
     - f.inputs do
       - f.inputs "", :id => "basic", :class => "collapsible" do
-        = f.input :title, :label => 'Title'
-        = f.input :comment, :label => 'Comment'
+        = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
       - f.buttons do
         / js event: .submit_btn
         = f.commit_button :label => (comment.new_record? ? "Create Comment" : "Update Comment"), :button_html => { :class => "submit_btn" }

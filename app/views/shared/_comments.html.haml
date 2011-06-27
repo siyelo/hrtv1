@@ -1,10 +1,12 @@
 .full_width
-  %h3 Comments
+  %h3 Add comment
+  = render 'comments/form', :comment => @comment
   %ul
     - comments.each do |comment|
       %li.comment_wrap
-        .title= comment.title
+        .author
+          = image_tag comment.user.gravatar
+          = "#{comment.user.try(:name)}"
+          = "#{time_ago_in_words(comment.created_at)} ago"
         .comment= comment.comment
-        .author= "Posted by #{comment.user.try(:name)} #{time_ago_in_words(comment.created_at)} ago"
-  %h3 Add new comment
-  = render 'comments/form', :comment => @comment
+        .reply= link_to 'Reply', '#'

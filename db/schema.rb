@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# This file is auto-generated from the current state of the database. Instead of editing this file,
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110628115022) do
+ActiveRecord::Schema.define(:version => 20110627145831) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -108,15 +108,13 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.string   "hssp2_stratprog_val"
     t.string   "hssp2_stratobj_val"
     t.string   "official_name"
-    t.integer  "comments_count",      :default => 0
     t.string   "sub_account"
     t.string   "nha_code"
     t.string   "nasa_code"
   end
 
   create_table "comments", :force => true do |t|
-    t.string   "title",            :limit => 50, :default => ""
-    t.text     "comment",                        :default => ""
+    t.text     "comment",          :default => ""
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
@@ -169,7 +167,6 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.boolean  "submitted"
     t.datetime "submitted_at"
     t.integer  "projects_count",                    :default => 0
-    t.integer  "comments_count",                    :default => 0
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
@@ -185,15 +182,6 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.string   "name"
     t.integer  "population"
     t.integer  "old_location_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -219,7 +207,6 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.decimal  "budget_q3"
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",       :default => 0
     t.integer  "project_from_id"
   end
 
@@ -265,15 +252,6 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.integer "project_id"
   end
 
-  create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "comments_count", :default => 0
-  end
-
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.string   "old_type"
@@ -282,7 +260,6 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
-    t.integer  "comments_count",                   :default => 0
     t.string   "currency"
     t.date     "fiscal_year_start_date"
     t.date     "fiscal_year_end_date"

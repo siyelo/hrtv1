@@ -12,8 +12,6 @@ class Organization < ActiveRecord::Base
     :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location
 
-  attr_accessor :current_data_request_id
-
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
   has_and_belongs_to_many :locations
@@ -43,7 +41,6 @@ class Organization < ActiveRecord::Base
     :message => "Start date must come before End date.", :on => :update
   validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
-
   ### Callbacks
   after_save :update_cached_currency_amounts
   after_create :create_data_responses
@@ -51,6 +48,40 @@ class Organization < ActiveRecord::Base
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'name ASC, created_at DESC'
+
+  ### Class Methods
+
+  def self.merge_organizations!(target, duplicate)
+    ActiveRecord::Base.disable_validation!
+    target.activities << duplicate.activities
+    target.data_requests << duplicate.data_requests
+    target.data_responses << duplicate.data_responses
+    target.out_flows << duplicate.out_flows
+    target.in_flows << duplicate.in_flows
+    target.provider_for << duplicate.provider_for
+    target.locations << duplicate.locations
+    target.users << duplicate.users
+    duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
+    ActiveRecord::Base.enable_validation!
+  end
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Organization::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      organization = Organization.new(attributes)
+      organization.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
+  ### Instance Methods
 
   def is_empty?
     if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
@@ -68,21 +99,15 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def self.merge_organizations!(target, duplicate)
-    ActiveRecord::Base.disable_validation!
-    target.activities << duplicate.activities
-    target.data_requests << duplicate.data_requests
-    target.data_responses << duplicate.data_responses
-    target.out_flows << duplicate.out_flows
-    target.in_flows << duplicate.in_flows
-    target.provider_for << duplicate.provider_for
-    target.locations << duplicate.locations
-    target.users << duplicate.users
-    duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
-    ActiveRecord::Base.enable_validation!
+  def unfulfilled_data_requests
+    DataRequest.all - fulfilled_data_requests
   end
 
-  # TODO: write spec
+  # Convenience. Help to deprecate "data_" prefix.
+  def responses
+    self.data_responses
+  end
+
   def to_s
     name
   end
@@ -105,26 +130,9 @@ class Organization < ActiveRecord::Base
     n.first(length)
   end
 
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Organization::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      organization = Organization.new(attributes)
-      organization.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
-  end
-
   def has_provider?(organization)
     projects.map(&:activities).flatten.map(&:provider).include?(organization)
   end
-
 
   def projects_in_request(request)
       r = data_responses.select{|dr| dr.data_request = request}.first
@@ -187,6 +195,11 @@ class Organization < ActiveRecord::Base
     when "q4_prev"
       "#{(fiscal_year_start_date - 3.months).strftime('%b \'%y')} - #{(fiscal_year_start_date - 1.months).strftime('%b \'%y')}"
     end
+  end
+
+  # returns the last response that was created.
+  def latest_response
+    self.responses.latest_first.first
   end
 
   protected

@@ -13,15 +13,19 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
-  # TODO: remove
-  belongs_to :current_data_response, :class_name => "DataResponse",
-              :foreign_key => :data_response_id_current
+  belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
 
   ### Validations
-  validates_presence_of  :username, :email, :organization_id
+  validates_presence_of  :username, :email, :organization_id, :data_response_id_current
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
+
+  ### Delegates
+  delegate :responses, :to => :organization # instead of deprecated data_response
+  delegate :latest_response, :to => :organization # find the last response in the org
+
+  ### Class Methods
 
   # Used by Authlogic's UserSession to find the user by username or by email
   def self.find_by_username_or_email(login)
@@ -46,14 +50,7 @@ class User < ActiveRecord::Base
     return saved, errors
   end
 
-  def change_data_response(response_id)
-    if data_responses.map(&:id).include?(response_id.to_i)
-      self.data_response_id_current = response_id
-      self.save
-    else
-      return false
-    end
-  end
+  ### Instance Methods
 
   def deliver_password_reset_instructions!
     reset_perishable_token!
@@ -90,14 +87,37 @@ class User < ActiveRecord::Base
   # Law of Demeter methods
   def organization_status
     return "No Organization" if organization.nil?
-    current_dr = current_data_response
+    current_dr = current_response
     current_dr ||= organization.data_responses.first
     return "No Data Response" if current_dr.nil?
     current_dr.status
   end
 
+  # name() will give you their email if their (non-mandatory) full name isn't set
   def name
-    full_name.present? ? full_name : username
+    full_name.present? ? full_name : email
+  end
+
+  def current_request
+    @current_request ||= self.current_response.request
+  end
+
+  def current_request_name
+    @current_request_name ||= self.current_request.name
+  end
+
+  # deprecated - use current_response instead
+  def current_data_response
+    self.current_response
+  end
+
+  def current_response_is_latest?
+    self.current_response == self.latest_response
+  end
+
+  def set_current_response_to_latest!
+    self.current_response = self.latest_response
+    self.save!
   end
 
   private
@@ -109,18 +129,13 @@ end
 
 
 
-
-
-
-
-
 # == Schema Information
 #
 # Table name: users
 #
 #  id                       :integer         not null, primary key
 #  username                 :string(255)
-#  email                    :string(255)     indexed
+#  email                    :string(255)
 #  crypted_password         :string(255)
 #  password_salt            :string(255)
 #  persistence_token        :string(255)
@@ -131,7 +146,7 @@ end
 #  data_response_id_current :integer
 #  text_for_organization    :text
 #  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null, indexed
+#  perishable_token         :string(255)     default(""), not null
 #  tips_shown               :boolean         default(TRUE)
 #
 

@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
       if current_user.admin?
         Project.find(project_id)
       else
-        current_user.current_data_response.projects.find(project_id)
+        current_user.current_response.projects.find(project_id)
       end
     end
 

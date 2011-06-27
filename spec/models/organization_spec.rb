@@ -323,28 +323,24 @@ describe Organization do
   end
 
   describe "named_scopes" do
-    describe "without_users" do
-      it "returns empty array when there are no organizations" do
-        Organization.without_users.should be_empty
-      end
-
-      it "returns organizations without users" do
-        org1 = Factory(:organization, :name => 'Org1')
-        Factory(:user, :organization => org1)
-
-        org2 = Factory(:organization, :name => 'Org2')
-
-        Organization.without_users.should == [org2]
-      end
+    it "returns empty array when there are no organizations" do
+      Organization.without_users.should be_empty
     end
 
-    describe "ordered" do
-      it "should order organizations by name" do
-        org1 = Factory(:organization, :name => 'Org2')
-        org2 = Factory(:organization, :name => 'Org1')
+    it "returns organizations without users" do
+      req = Factory :request
+      requestor = req.organization
+      org1 = Factory(:organization, :name => 'Org1')
+      Factory(:user, :organization => org1, :current_response => org1.responses.first)
+      org2 = Factory(:organization, :name => 'Org2')
+      Organization.without_users.should == [requestor, org2]
+    end
 
-        Organization.ordered.should == [org2, org1]
-      end
+    it "should order organizations by name" do
+      org1 = Factory(:organization, :name => 'Org2')
+      org2 = Factory(:organization, :name => 'Org1')
+
+      Organization.ordered.should == [org2, org1]
     end
   end
 
@@ -386,6 +382,22 @@ describe Organization do
     o.quarters_months("q2").should == "Apr '10 - Jun '10"
     o.quarters_months("q3").should == "Jul '10 - Sep '10"
     o.quarters_months("q4").should == "Oct '10 - Dec '10"
+  end
+
+  describe "latest_response" do
+    before :each do
+      @req = Factory :request
+      @org = Factory :organization
+    end
+    it "should return the last data response that was created on this org" do
+      @org.latest_response.request.should == @req
+    end
+
+    it "should return nil if there is no response, though this means the Org is invalid!!" do
+      @org.responses.each {|r| r.destroy}
+      @org.reload
+      @org.latest_response.should == nil
+    end
   end
 end
 

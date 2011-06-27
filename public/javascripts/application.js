@@ -957,21 +957,6 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
 var reports_districts_show = reports_countries_show = {
   run: function () {
-    $('#user_data_response_id_current').live('change', function(e) {
-      $('#change_datarequest').submit();
-    });
-
-  	$('.js_request_select').click(function (e) {
-  		e.preventDefault();
-  		$(this).next().show();
-  		$(this).hide();
-  	});
-
-  	$('.js_request_close').click(function (e) {
-  		e.preventDefault();
-  		$(this).parents('.request_select').hide();
-  		$('.js_request_select').show();
-  	});
 
     drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
     drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
@@ -1137,38 +1122,6 @@ var validateDates = function (startDate, endDate) {
 
   startDate.live('change', checkDates);
   endDate.live('change', checkDates);
-};
-
-var reporter_dashboard_index = {
-  run: function () {
-    $('#user_data_response_id_current').live('change', function(e) {
-      $('#change_datarequest').submit();
-    });
-
-		$('.js_request_select').click(function (e) {
-			e.preventDefault();
-			$(this).next().show();
-			$(this).hide();
-		});
-
-		$('.js_request_close').click(function (e) {
-			e.preventDefault();
-			$(this).parents('.request_select').hide();
-			$('.js_request_select').show();
-		});
-
-		$('.js_welcome_show').click(function (e) {
-			e.preventDefault();
-			$(this).next().slideDown();
-			$(this).hide();
-		});
-
-		$('.js_welcome_hide').click(function (e) {
-			e.preventDefault();
-			$(this).parents('.welcome_box').slideUp();
-			$('.js_welcome_show').show();
-		})
-  }
 };
 
 var projects_new = projects_create = projects_edit = projects_update = {
@@ -1543,6 +1496,7 @@ var projects_edit = projects_new = {
    });
   }
 }
+
 
 $(function () {
 

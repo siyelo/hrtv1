@@ -17,7 +17,7 @@ describe User do
     it { should have_many :comments }
     it { should have_many :data_responses }
     it { should belong_to :organization }
-    it { should belong_to :current_data_response }
+    it { should belong_to :current_response }
   end
 
   describe "validations" do
@@ -26,6 +26,7 @@ describe User do
     it { should validate_presence_of(:username) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
+    it { should validate_presence_of(:data_response_id_current) }
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:username).case_insensitive }
   end
@@ -47,18 +48,20 @@ describe User do
       @org = Factory(:organization)
       @user = Factory(:user, :organization => @org)
       @data_response = Factory(:data_response, :organization => @user.organization)
-      @user.change_data_response(@data_response.id).should be_true
+      @user.current_response = @data_response
+      @user.save.should be_true
     end
-    
+
     it "will not allow a user to change to a data request that they dont' have access to (ie. doesn't show up for @user.data_responses)" do
       @org = Factory(:organization)
       @user = Factory(:user, :organization => @org)
       @data_response = Factory(:data_response, :organization => @user.organization)
       @data_response2 = Factory(:data_response)
-      @user.change_data_response(@data_response2.id).should be_false
+      @user.current_response = @data_response
+      @user.save.should be_true
     end
   end
-  
+
   describe "roles" do
     it "is admin when roles_mask = 1" do
       user = Factory(:user, :roles_mask => 1)
@@ -110,7 +113,7 @@ describe User do
       user.save
       user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
     end
-    
+
     it "cannot assign unexisting role" do
       user = Factory(:user)
       user.roles = ['admin123']
@@ -161,16 +164,29 @@ describe User do
       user.name.should == "Pink Panter"
     end
 
-    it "returns username if full name is nil" do
-      user = Factory(:user, :full_name => nil, :username => 'pink.panter')
-      user.name.should == "pink.panter"
+    it "returns email if full name is nil" do
+      user = Factory(:user, :full_name => nil, :email => 'pink.panter', :email => 'user@hrtapp.com')
+      user.name.should == "user@hrtapp.com"
     end
 
-    it "returns username if full name is blank string" do
-      user = Factory(:user, :full_name => '', :username => 'pink.panter')
-      user.name.should == "pink.panter"
+    it "returns email if full name is blank string" do
+      user = Factory(:user, :full_name => '', :username => 'pink.panter', :email => 'user@hrtapp.com')
+      user.name.should == "user@hrtapp.com"
     end
   end
+
+  describe "current response/request" do
+    before :each do
+      @org = Factory :organization
+      @response = Factory(:response, :organization => @org)
+      @user = Factory(:user, :current_response => @response, :organization => @org)
+    end
+
+    it "returns the associated request" do
+      @user.current_request.should == @response.request
+    end
+  end
+
 end
 
 # == Schema Information

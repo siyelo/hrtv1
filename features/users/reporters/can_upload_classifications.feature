@@ -22,7 +22,7 @@ Feature: Reporter can upload classifications
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
       And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+      And a reporter exists with username: "reporter", organization: the organization, current_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 5000000, spend: 6000000
       And the location is one of the activity's locations

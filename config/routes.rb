@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   # PROFILE
   map.resource :profile, :only => [:edit, :update, :disable_tips],
     :member => {:disable_tips => :put}
-    
+
 
   # STATIC PAGES
   map.about_page 'about', :controller => 'static_page',
@@ -79,7 +79,8 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.change_data_response 'change_data_response', :controller => 'dashboard', :action => :change_data_response
+    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
+    reporter.view_projects 'view_projects/:response_id', :controller => 'responses', :action => :view_projects
     reporter.resources :reports, :only => [:index, :show]
   end
 

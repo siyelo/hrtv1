@@ -1,10 +1,14 @@
 #header_app
   .wrapper
     #logo
+
       - if current_user && current_user.organization
-        = "#{truncate(current_user.organization.name, :length => 35)}"
+        %p
+          = "#{truncate(current_user.organization.name, :length => 35)}: "
+          = "[#{current_user.current_request_name}]"
+
       - else
-        = "No organization specified"
+        %p= "No organization specified"
 
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'
@@ -12,4 +16,3 @@
         = image_tag "#{country}-coat-of-arms-med.png"
 
     = render :partial => '/layouts/login_nav'
-

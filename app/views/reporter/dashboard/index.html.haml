@@ -15,25 +15,18 @@
   %li= link_to "Classify Activities", "#", :class => "create_new"
   %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
 
-= render :partial => "shared/response_selector"
-
-%ul.response-notice
-  - @responses.each do |dr|
-    -if dr.data_request.final_review?
-      %li= "Your response is not yet complete for the Request: '#{dr.data_request.title}'. As this Request is in the Final Review stage, #{link_to "please re-check, then (re)submit", review_response_path(dr) } your response."
-
 %h2
   =image_tag "icon_reporter.png", :class => "heading_icon"
-  All Data Requests
+  Data Requests
 .dashboard_section
 
   %table.modern_table
     %thead
       %tr
-        %td Request
+        %td Name
         %td Requested By
         %td Due
-        %td Valid
+        %td Submitted at
         %td Status
     %tbody
       = render :partial => 'response', :collection => @responses
@@ -44,9 +37,9 @@
     Reports
   .dashboard_section
     %ul.admin_reports
-      - if current_user.current_data_response
+      - if current_user.current_response
         %li
-          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
+          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
             Review My Response
             %span.hint Interactive report of your current data response
       %li

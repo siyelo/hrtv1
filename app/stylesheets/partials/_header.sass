@@ -24,17 +24,17 @@
       float: left
       position: relative
       top: -3px
-        
+
     p
       color: !light-blue
       font-size: 0.6em
       letter-spacing: 0.02em
       padding-left: 55px
       text-transform: uppercase
-      
+
   .right
-    margin-top: 9px
-    
+    margin-top: 15px
+
   #admin
     float: right
     font-family: 'Avenir'
@@ -120,39 +120,54 @@
 
 
 /* APP HEADER STYLES */
-  
+
 #header_app
-  height: 30px
+  height: 40px
 
   .wrapper
     +pie-clearfix
-    
+
   /* app logo styles - overriding the shared logo style */
   #logo
-    color: $light-blue
-    font-size: 14px
-    font-weight: bold
+    height: 25px
     padding: 10px 0
     position: absolute
-    text-transform: uppercase
-    width: 300px
-    +opacity(0.8)
-    +text-shadow(#000, 0, 1px, 1px)
-    &:hover
-      +opacity(1)
+    width: auto
+
+    p
+      color: $light-blue
+      float: left
+      font-size: 14px
+      font-weight: normal
+      margin-top: 2px
+      padding: 0
+      text-transform: none
+      +opacity(0.8)
+      +text-shadow(#000, 0, 1px, 1px)
+      &:hover
+        +opacity(1)
 
   /* app logo styles end */
-  
-/* APP HEADER STYLES end */
 
+  #admin
+    margin-top: 18px
+    p
+      clear: both
+      color: $light-blue - #333
+      float: right
+      font-size: 11px
+      font-weight: normal
+      margin: 5px 11px 0 0
+
+/* APP HEADER STYLES end */
 
 
 /* APP MAIN-NAV STYLES */
 #main-nav
-  background= image_url("bg-blue.jpg")
+  background: image_url("bg-blue.jpg")
 
   a
-    color= !lighter-blue
+    color: $lighter-blue
     font-size: 0.8em
 
   ul
@@ -226,7 +241,7 @@ body.login
       text-decoration: none
       text-transform: none
       +text-shadow(#000, 0, 1px, 0)
-          
+
       img
         margin: -9px 7px 0 0
 
@@ -250,15 +265,3 @@ body.login
         margin-right: 10px
 
 /* LANDING PAGE STYLES end */
-
-/* APP PAGES STYLES */
-
-body.app
-  #header_app #logo
-    font-weight: normal
-    text-transform: none
-    &:hover
-      color: $lightest-blue
-      +text-shadow($dark-blue, 0, 0, 5px)
-      
-/* APP PAGES STYLES */

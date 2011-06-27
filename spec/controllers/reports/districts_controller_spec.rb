@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Reports::DistrictsController do
 
   before :each do
-    @admin = Factory.create(:admin, :current_data_response => Factory(:data_response))
+    @admin = Factory.create(:admin, :current_response => Factory(:data_response))
     login @admin
     @location = Factory.create(:location)
   end

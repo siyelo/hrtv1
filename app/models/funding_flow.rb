@@ -17,6 +17,9 @@ class FundingFlow < ActiveRecord::Base
 
   alias :response :data_response
   alias :response= :data_response=
+  
+  
+  before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
   # validates_presence_of :project # ???
@@ -36,7 +39,7 @@ class FundingFlow < ActiveRecord::Base
     :message => :"organization_id_from.id_below_zero"
 
   validates_numericality_of :budget, :spend, :message => "is not a number (Funding Sources)"
-
+  validate :budget_and_spend_are_greater_than_zero
   delegate :organization, :to => :project
 
   def currency
@@ -45,6 +48,22 @@ class FundingFlow < ActiveRecord::Base
 
   def name
     "From: #{from.name} - To: #{to.name}"
+  end
+
+  def spend_from_quarters
+    if spend.nil?
+      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0) 
+    else
+      spend
+    end
+  end
+  
+  def budget_from_quarters
+    if budget.nil?
+      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0) 
+    else
+      budget
+    end
   end
 
   def updated_at
@@ -96,6 +115,13 @@ class FundingFlow < ActiveRecord::Base
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
+
+  private
+    
+    def budget_and_spend_are_greater_than_zero
+      errors.add(:spend, "must be greater than 0") unless (spend || 0) > 0
+      errors.add(:budget, "must be greater than 0") unless (budget || 0) > 0
+    end
 
 end
 

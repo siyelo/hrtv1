@@ -212,3 +212,58 @@ ul.group
         margin-bottom: -1px
         +border-top-radius
         +linear-gradient(color-stops($lightest-blue + #090909, white))
+
+ul.ordered_nav
+  border-bottom: 4px solid $orange
+  margin-bottom: 5px
+  width: 100%
+  +border-bottom-left-radius(4px)
+  +pie-clearfix
+  
+  li
+    display: inline-block
+    float: left
+    padding: 0
+    a
+      background: $lightest-blue
+      border: 1px solid $lightest-blue
+      color: $mid-blue
+      display: block
+      font-size: 13px
+      padding: 10px 14px 8px
+      position: relative
+      text-decoration: none
+      +text-shadow(#fff, 0, 1px, 0)
+      +linear-gradient(color-stops($filler, $lightest-blue))
+      &:hover
+        color: $dark-blue
+        background: $lightest-blue
+      span
+        background: $lighter-blue
+        color: $dark-blue
+        display: inline-block
+        margin-right: 2px
+        padding: 3px 6px
+        opacity: 0.5
+        position: relative
+        +border-radius(10px)
+        +box-shadow(#fff, 0, 1px, 0)
+
+    &:first-child a
+      +border-top-left-radius(4px)
+    &:last-child a
+      +border-top-right-radius(4px)
+    &.selected a
+      background: $orange
+      border: 1px solid $orange
+      color: #fff
+      font-weight: bold
+      margin-top: -3px
+      padding: 13px 14px 8px
+      +border-top-radius
+      +linear-gradient(color-stops($orange + #222, $orange))
+      +text-shadow($orange - #222, 0, 1px, 0)
+      span
+        background: $orange - #222
+        color: #fff
+        

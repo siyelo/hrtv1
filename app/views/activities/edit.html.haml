@@ -22,7 +22,7 @@
 = render 'activities/tab_nav', :activity => @activity
 
 
-.wrap-70
+.full_width
   = error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
   - semantic_form_for @activity, :url => response_activity_path(@response, @activity), :html => {:class => "basic_form"} do |f|

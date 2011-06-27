@@ -38,6 +38,9 @@ class DataResponse < ActiveRecord::Base
   ### Delegates
   delegate :name, :to => :data_request
   delegate :title, :to => :data_request
+  
+  FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
+                           amount_in_dollars districts functions inputs]
 
   ### Meta Data for Meta Programming
   ## GN TODO: refactor out getting collections of items failing
@@ -389,6 +392,34 @@ class DataResponse < ActiveRecord::Base
 
   def projects_total_budget
     projects.map{|p| p.budget.to_f * currency_rate(p.currency, currency) }.compact.sum
+  end
+  
+  def download_template
+    FasterCSV.generate do |csv|
+      header_row = DataResponse::FILE_UPLOAD_COLUMNS
+      csv << header_row
+      
+      
+      projects.each do |project|
+        project_row = []
+        project_row << project.name
+        project_row << project.description
+        
+        project.activities.each do |activity|
+                    debugger
+          project_row[2] = activity.name
+          project_row[3] = activity.description
+          project_row[4] = n2c(universal_currency_converter(activity.budget, activity.currency, 'USD'))
+          project_row[5] = activity.locations.map{ |l| l.short_display }.join(', ')
+          project_row[6] = activity.codes.map{ |c| c.short_display }.join(', ')
+          project_row[7] = activity.coding_budget_cost_categorization.map{|ca| ca.code.short_display}.join(', ')
+          csv << project_row
+          project_row = []
+        end
+        csv << project_row
+      end
+    end
+      
   end
 
   private

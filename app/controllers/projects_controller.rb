@@ -66,6 +66,11 @@ class ProjectsController < Reporter::BaseController
     template = Project.download_template
     send_csv(template, 'projects_template.csv')
   end
+  
+  def export
+    template = @response.download_template
+    send_csv(template, "eh.csv")
+  end
 
   def create_from_file
     begin

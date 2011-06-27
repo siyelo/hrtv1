@@ -2,6 +2,11 @@
   %td{:colspan => 100}
     %h4
       Activities
+      %ul{:style => 'valign: top; margin-left: 100px'}
+        %li{:style => 'float: left'}
+          - link_to new_response_activity_path(@response, :project_id => project.id), :class => "add_row" do
+            = image_tag "new.png"
+            Add Activity
 - if activities.present?
   - activities.each do |activity|
     = render "activities/activity", :activity => activity

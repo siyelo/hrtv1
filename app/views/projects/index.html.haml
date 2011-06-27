@@ -1,5 +1,6 @@
 - title("Projects")
 
+
 = render :partial => 'projects/sub_nav'
 
 %h1.main_heading
@@ -8,15 +9,23 @@
 
 = render 'getting_started'
 
-%ul.horizontal
+%ul#nav.horizontal
   %li
     - link_to new_response_project_path(@response), :class => "create_new" do
       = image_tag "new_white.png"
       Create Project
-  %li
-    - link_to '#', :id => "import_export", :class => 'create_new' do
+  %li.dropdown_menu
+    - link_to '#', :class => 'create_new' do
       = image_tag "icon_import_export_alt.png"
       Import / Export
+      
+    %ul{:style => 'display: none'}
+      %li
+        = link_to 'Import Workplan', '#', :id => "import_export", :class => 'create_new' 
+      
+      %li
+        = link_to 'Export All', export_response_projects_path(@response), :class => 'create_new'
+        
   %li
     = link_to "Link to Funders", bulk_edit_response_projects_path, :class => 'create_new'
 

@@ -48,7 +48,8 @@ class Reporter::BaseController < ApplicationController
     def load_comment_resources(resource)
       @comment = Comment.new
       @comment.commentable = resource
-      @comments = resource.comments.find(:all, :order => 'created_at DESC')
+      @comments = resource.comments.find(:all, :order => 'created_at DESC',
+                                         :include => {:user => :organization})
     end
 
     def warn_if_not_current_request

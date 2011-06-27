@@ -17,7 +17,6 @@ class Admin::ActivitiesController < Admin::BaseController
                                          UPPER(activities.description) LIKE UPPER(:q) OR
                                          UPPER(organizations.name) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
-    debugger
     @activities = scope.paginate(:page => params[:page], :per_page => 10,
                     :order => "#{sort_column} #{sort_direction}")
   end

@@ -144,13 +144,14 @@ ul.push
 
 .status
   border: 1px solid $lighter-blue
+  margin-bottom: 5px
   padding: 15px 15px 15px 75px
   +border-radius
 
   &.go
-    background: image_url("flag_48_green.png") no-repeat 15px center $lightest-blue
+    background: image_url("flag_48_green.png") no-repeat 15px center $filler
   &.stop
-    background: image_url("flag_48_red.png") no-repeat 15px center $lightest-blue
+    background: image_url("flag_48_red.png") no-repeat 15px center $filler
 
   li
     color: $mid-blue
@@ -193,6 +194,18 @@ ul.group
   li
     display: inline-block
     padding: 0px
+    
+    &.selected a
+      background: white
+      border-top: 1px solid $light-blue
+      border-right: 1px solid $light-blue
+      border-bottom: 1px solid white
+      border-left: 1px solid $light-blue
+      color: $mid-blue
+      font-weight: bold
+      margin-bottom: -1px
+      +border-top-radius
+      +linear-gradient(color-stops($lightest-blue + #090909, white))
 
     a
       border-top: 1px solid #FFF
@@ -215,7 +228,7 @@ ul.group
 
 ul.ordered_nav
   border-bottom: 4px solid $orange
-  margin-bottom: 5px
+  margin-bottom: 10px
   width: 100%
   +border-bottom-left-radius(4px)
   +pie-clearfix

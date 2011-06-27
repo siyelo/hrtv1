@@ -1,6 +1,6 @@
 - other_costs = false unless other_costs
 
-%ul.inline_tab
+%ul.group
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingBudget')}

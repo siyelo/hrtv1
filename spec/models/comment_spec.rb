@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Comment do
   describe "attributes" do
     it { should allow_mass_assignment_of(:comment) }
+    it { should allow_mass_assignment_of(:parent_id) }
     it { should_not allow_mass_assignment_of(:user_id) }
     it { should_not allow_mass_assignment_of(:commentable_id) }
     it { should_not allow_mass_assignment_of(:commentable_type) }

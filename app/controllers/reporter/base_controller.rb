@@ -49,6 +49,7 @@ class Reporter::BaseController < ApplicationController
       @comment = Comment.new
       @comment.commentable = resource
       @comments = resource.comments.find(:all, :order => 'created_at DESC',
+                                         :conditions => 'parent_id is NULL',
                                          :include => {:user => :organization})
     end
 

@@ -1,7 +1,9 @@
 class Comment < ActiveRecord::Base
 
+  acts_as_tree :order => 'created_at'
+
   ### Attributes
-  attr_accessible :comment
+  attr_accessible :comment, :parent_id
 
   ### Validations
   validates_presence_of :comment, :user_id, :commentable_id, :commentable_type

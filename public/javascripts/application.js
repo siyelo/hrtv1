@@ -1432,6 +1432,16 @@ var activity_form = function () {
   initDemoText($('*[data-hint]'));
   focusDemoText($('*[data-hint]'));
   blurDemoText($('*[data-hint]'));
+
+  $('.js_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parent('li').find('.js_reply_box:first').show();
+  })
+
+  $('.js_cancel_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parents('.js_reply_box:first').hide();
+  })
 };
 
 var admin_activities_edit = admin_activities_update = {

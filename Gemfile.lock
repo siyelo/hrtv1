@@ -19,6 +19,7 @@ GEM
     activeresource (2.3.12)
       activesupport (= 2.3.12)
     activesupport (2.3.12)
+    acts_as_tree (0.1.1)
     annotate (2.4.0)
     ar_strip_commas (0.1.0)
     authlogic (2.1.6)
@@ -188,6 +189,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_tree
   annotate
   ar_strip_commas
   authlogic

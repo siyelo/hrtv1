@@ -1,0 +1,27 @@
+%li.comment_wrap
+  .author
+    = image_tag comment.user.gravatar
+    = comment.user.name
+    = comment.user.email
+    = comment.user.organization.name
+    = "#{time_ago_in_words(comment.created_at)} ago"
+  .comment= comment.comment
+  = link_to 'Reply', '#', :class => 'js_reply'
+
+
+  .js_reply_box{:style => 'display: none; !important'}
+    - new_comment = @comment.dup
+    - new_comment.parent = comment
+    - semantic_form_for new_comment, :url => @comment.new_record? ? comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) : comment_path(comment) do |f|
+      %h2 Replying
+      = f.semantic_errors :state
+      = f.input :parent_id, :as => :hidden
+      = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+      - f.buttons do
+        = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
+        %li= link_to "Cancel", "#", :class => 'js_cancel_reply'
+
+
+  - if comment.children.present?
+    %ul
+      = render :partial => 'comments/comment', :collection => comment.children

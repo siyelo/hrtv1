@@ -120,6 +120,10 @@ class Organization < ActiveRecord::Base
     end
     return saved, errors
   end
+  
+  def self.all_by_name
+    self.all.sort_by{|u| u.name.downcase}
+  end
 
   def has_provider?(organization)
     projects.map(&:activities).flatten.map(&:provider).include?(organization)

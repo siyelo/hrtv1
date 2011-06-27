@@ -63,7 +63,6 @@ class Activity < ActiveRecord::Base
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
   belongs_to :project
-  has_one :organization, :through => :data_response
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
@@ -94,6 +93,7 @@ class Activity < ActiveRecord::Base
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
 
   ### Validations
   validate :approved_activity_cannot_be_changed
@@ -127,6 +127,8 @@ class Activity < ActiveRecord::Base
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
+  named_scope :with_organization, { :joins => "INNER JOIN data_responses ON data_responses.id = activities.data_response_id " +
+                                              "INNER JOIN organizations on data_responses.organization_id = organizations.id" }
   named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',

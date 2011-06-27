@@ -82,6 +82,7 @@ class Project < ActiveRecord::Base
                   :budget2, :budget3, :budget4, :budget5
 
   ### Delegates
+  delegate :organization, :to => :data_response
 
   ### Callbacks
   after_save :update_cached_currency_amounts

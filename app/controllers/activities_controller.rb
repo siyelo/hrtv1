@@ -8,16 +8,6 @@ class ActivitiesController < Reporter::BaseController
   before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
-  def index
-    scope = @response.activities.roots.scoped({:include => :project})
-    scope = scope.scoped(:conditions => ["UPPER(projects.name) LIKE UPPER(:q) OR
-                                          UPPER(activities.name) LIKE UPPER(:q) OR
-                                          UPPER(activities.description) LIKE UPPER(:q)",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
-    @activities = scope.paginate(:page => params[:page], :per_page => 10,
-                    :order => "#{sort_column} #{sort_direction}")
-  end
-
   def new
     @activity = Activity.new
     @activity.project = @response.projects.find_by_id(params[:project_id])

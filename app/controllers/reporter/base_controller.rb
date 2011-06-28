@@ -31,7 +31,7 @@ class Reporter::BaseController < ApplicationController
     def not_latest_request_message(request)
       "You are now viewing your data for the Request: \"<span class='bold'>#{request.name}</span>\".
        All changes made will be saved for this Request.
-       Would you like to <a href='#{reporter_set_latest_response_path}'>resume editing the latest Request?</a>"
+       Would you like to <a href='#{set_latest_responses_path}'>resume editing the latest Request?</a>"
     end
 
   private

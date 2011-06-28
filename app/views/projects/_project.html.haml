@@ -14,17 +14,18 @@
   = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs
 
   %tr.filler2
-    %td{:colspan => 2}
+    %td{:colspan => 1}
       %ul.horizontal
         %li
           - link_to "#", :class => "add_row upload_btn" do
             = image_tag "new.png"
             Import / Export Activity
-
+            
 
     %td.total Sub Total
     %td.wrap-10= n2cndrs(project.spend, project.currency)
     %td.wrap-10= n2cndrs(project.budget, project.currency)
+    %td
   %tr.upload_box
     %td{:colspan => 100}
       = render 'activities_import', :project => project, :can_export => project.activities.present?

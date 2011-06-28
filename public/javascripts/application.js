@@ -1487,11 +1487,11 @@ var projects_edit = projects_new = {
      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
    });
 
-   $(".ff_spend").keyup(function () {
+   $(".ff_spend").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
    });
 
-   $(".ff_budget").keyup(function () {
+   $(".ff_budget").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
    });
   }

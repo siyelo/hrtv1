@@ -1,5 +1,6 @@
 %tr{:class => cycle("even", "odd")}
-  %td= activity.project.try(:name)
+  %td= activity.organization.try(:name)
+  %td= activity.project.try(:name) || "(no project)"
   %td= link_to activity.description.presence || 'No Description Entered', admin_activity_path(activity)
   %td= n2cndrs(activity.spend, activity.currency)
   %td= n2cndrs(activity.budget, activity.currency)

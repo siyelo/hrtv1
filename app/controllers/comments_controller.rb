@@ -1,13 +1,7 @@
 class CommentsController < Reporter::BaseController
 
   def index
-    if current_user.admin?
-      @comments = Comment.paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
-    else
-      @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
-    end
-
-    render :layout => 'admin'
+    @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
   end
 
   def new
@@ -98,11 +92,6 @@ class CommentsController < Reporter::BaseController
       format.js { render :nothing => true }
     end
 
-  end
-
-  def delete
-    @comment = find_comment
-    load_data_response(@comment)
   end
 
   protected

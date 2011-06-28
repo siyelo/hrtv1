@@ -17,14 +17,13 @@ ActionController::Routing::Routes.draw do |map|
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
 
-  map.resources :comments, :member => {:delete => :get}
+  map.resources :comments
 
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
     admin.resources :responses,
-      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
-      :member     => {:delete => :get}
+      :collection => {:empty => :get, :in_progress => :get, :submitted => :get}
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
@@ -36,7 +35,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     admin.set_request 'set_request/:id', :controller => 'requests', :action => :set_request
-    admin.resources :comments, :member => {:delete => :get}
+    admin.resources :comments
   end
 
   # POLICY MAKER

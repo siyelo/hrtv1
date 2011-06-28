@@ -35,7 +35,7 @@ class Admin::RequestsController < Admin::BaseController
     current_user.current_response = request.data_responses.last
     current_user.save
     flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.title}</span>\""
-    redirect_to :back
+    redirect_to admin_dashboard_path
   end
   
 end

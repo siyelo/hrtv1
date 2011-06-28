@@ -35,7 +35,7 @@ Feature: Reporter can manage activities
     When I follow "activity1 description"
     Then the "Target" field should contain "Output description value"
 
-    @javascript @run
+    @javascript
     Scenario: Reporter can add sub-activities (normal values)
       When I follow "Add Activities now"
         And I fill in "Name" with "activity1"

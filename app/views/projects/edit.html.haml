@@ -7,6 +7,8 @@
 .main_heading
   = render 'help'
 
+
+
 %ul.response-notice
   - unless @response.projects_without_amounts.select{|p| p == @project}.empty?
     %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Project"
@@ -26,6 +28,23 @@
 
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+%ul.horizontal
+  %li
+    - link_to "#" do
+      %span
+        View Comments
+  - if current_user.admin? || current_user.activity_manager?
+    %li
+      -if @project.am_approved
+        - link_to "#" do
+          %span
+            Budget Approved
+      -else
+        - link_to "#", :class => "js_am_approve", :"project-id" => @project.id, :"response-id" => @response.id do
+          %span
+            Approve this Projects's Budget
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
 
 - semantic_form_for @project, :url => response_project_path(@response, @project), :html => {:class => "basic_form"} do |f|
   = render 'form', :f => f

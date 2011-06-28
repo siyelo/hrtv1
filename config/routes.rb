@@ -87,6 +87,7 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
     reporter.resources :reports, :only => [:index, :show]
   end
 

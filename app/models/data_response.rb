@@ -406,7 +406,6 @@ class DataResponse < ActiveRecord::Base
         project_row << project.description
         
         project.activities.each do |activity|
-                    debugger
           project_row[2] = activity.name
           project_row[3] = activity.description
           project_row[4] = n2c(universal_currency_converter(activity.budget, activity.currency, 'USD'))

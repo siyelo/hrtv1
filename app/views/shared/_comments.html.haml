@@ -1,5 +1,5 @@
 .full_width
-  - unless params[:controller] == 'projects'
+  - unless (params[:controller] == 'projects' && params[:action] == 'index')
     %h3 Add comment
     = render 'comments/form', :comment => @comment
   %ul

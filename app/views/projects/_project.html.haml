@@ -14,7 +14,7 @@
   = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs
 
   %tr.filler2
-    %td{:colspan => 1}
+    %td{:colspan => 2}
       %ul.horizontal
         %li
           - link_to new_response_activity_path(@response, :project_id => project.id), :class => "add_row" do

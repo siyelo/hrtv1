@@ -42,9 +42,11 @@ ActionController::Routing::Routes.draw do |map|
     policy_maker.resources :responses, :only => [:show, :index]
   end
 
+
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
+    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get}, 
+    :collection => {:set_latest => :get} do |response|
       response.resources :projects,
         :collection => {:create_from_file => :post, 
                         :download_template => :get, 
@@ -83,8 +85,6 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
-    reporter.view_projects 'view_projects/:response_id', :controller => 'responses', :action => :view_projects
     reporter.resources :reports, :only => [:index, :show]
   end
 

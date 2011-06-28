@@ -54,7 +54,7 @@ class ResponsesController < Reporter::BaseController
   end
 
   def view_projects
-    load_data_response
+    @response = DataResponse.find(params[:id])
     change_user_current_response(@response)
     redirect_to response_projects_path(@response)
   end

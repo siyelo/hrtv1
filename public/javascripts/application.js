@@ -1188,7 +1188,7 @@ var commentsInit = function () {
 
   $('.js_reply').click('live', function (e) {
     e.preventDefault();
-    $(this).parent('li').find('.js_reply_box:first').show();
+    $(this).parents('li:first').find('.js_reply_box:first').show();
   })
 
   $('.js_cancel_reply').click('live', function (e) {

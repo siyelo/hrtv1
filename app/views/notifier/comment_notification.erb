@@ -1,0 +1,16 @@
+Hello,
+<%= @comment.user.try(:name) %> has made a new comment on the <%= @comment.commentable.name %> <%= @comment.class.to_s.downcase %>:
+
+
+<%= @comment.comment %>
+
+
+To view/respond to it, please visit the url below.
+
+<%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
+
+
+Regards
+
+
+The Health Resource Tracker Support Team

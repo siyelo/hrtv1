@@ -16,9 +16,13 @@ Rails::Initializer.run do |config|
   config.autoload_paths += %W(
                           #{RAILS_ROOT}/app/charts
                           #{RAILS_ROOT}/app/reports
+                          #{RAILS_ROOT}/app/observers
                           #{RAILS_ROOT}/lib/named_scopes
                         )
   config.autoload_paths += Dir["#{RAILS_ROOT}/app/models/**/**"]
+
+  # Observers
+  config.active_record.observers = :comment_observer
 
   # disable spoofing check
   # http://pivotallabs.com/users/jay/blog/articles/1216-standup-4-7-2010-disabling-rails-ip-spoofing-safeguard

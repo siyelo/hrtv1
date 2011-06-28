@@ -1,6 +1,6 @@
 require 'set'
 class ActivitiesController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['projects.name', 'description', 'past expenditure', 'current budget']
+  SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   inherit_resources
   helper_method :sort_column, :sort_direction

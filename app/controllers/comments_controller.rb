@@ -1,7 +1,7 @@
 class CommentsController < Reporter::BaseController
 
   def index
-    dr_ids    = current_user.organization.responses.map(&:id)
+    dr_ids    = current_user.organization.data_responses.map(&:id)
     @comments = Comment.on_all(dr_ids).paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
@@ -45,7 +45,6 @@ class CommentsController < Reporter::BaseController
     load_data_response(@comment)
 
     if @comment.save
-      @comment.email_the_organisation_users(@comment) if current_user.admin?
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."

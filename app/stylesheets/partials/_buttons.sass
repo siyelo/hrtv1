@@ -299,7 +299,12 @@ a.remove_nested
       outline: none
       position: relative
       top: 1px
-
+    &.persist
+      background: $orange - #222
+      border: 1px solid $orange - #222
+      color: #fff
+      +box-shadow(#000, 0, 1px, 3px)
+      
     &:hover, &:active, &:focus
       background: $orange - #222 !important
       border: 1px solid $orange - #222 !important

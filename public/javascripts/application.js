@@ -1154,8 +1154,10 @@ var projects_index = {
     
       $('.dropdown_menu').hover(function (){
         $('ul', this).slideDown(100);
+        $('.dropdown_trigger').addClass('persist');
       }, function() {
         $('ul', this).slideUp(100);
+        $('.dropdown_trigger').removeClass('persist');
       });
     
     $('.upload_btn').click(function (e) {

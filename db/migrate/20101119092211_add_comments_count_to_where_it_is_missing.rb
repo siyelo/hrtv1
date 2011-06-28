@@ -1,3 +1,6 @@
+# re-define removed models in later migrations
+class ModelHelp < ActiveRecord::Base; end
+
 class AddCommentsCountToWhereItIsMissing < ActiveRecord::Migration
   def self.up
     add_column :organizations, :comments_count, :integer, :default => 0

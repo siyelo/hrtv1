@@ -2,6 +2,10 @@
   %td{:colspan => 100}
     %h4
       Other Costs
+      %span  
+        - link_to new_response_other_cost_path(@response, :project_id => project.id), :class => "add_row" do
+          = image_tag "new.png"
+          Add Other Cost
 
 - if other_costs.present?
   - other_costs.each do |other_cost|

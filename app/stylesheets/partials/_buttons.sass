@@ -242,6 +242,74 @@ a.remove_nested
     &:hover
       color: $mid-blue
 
+  &.welcome_hide
+    color: $mid-blue
+    display: block
+    font-size: 11px
+    font-weight: bold
+    margin-top: 20px
+    opacity: 0.3
+    text-align: right
+    text-decoration: none
+    img
+      margin: 0 0 -4px 5px
+    &:hover
+      opacity: 1
+
+  &.welcome_show
+    background: $lightest-blue
+    color: $mid-blue
+    display: none
+    font-size: 11px
+    font-weight: bold
+    margin-top: -50px
+    padding: 5px 10px
+    opacity: 0.4
+    text-decoration: none
+    +border-radius
+    &:hover, &:focus
+      opacity: 1
+      
+  &.dropdown_trigger
+    background: $orange
+    border: 1px solid $orange - #222
+    color: #fff
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px 5px
+    position: relative
+    text-decoration: none
+    z-index: 20
+    +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
+    +linear-gradient(color-stops($orange, $orange - #222))
+    +text-shadow($orange - #444, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $orange - #222
+      border: 1px solid $orange - #222
+      color: #fff
+      +box-shadow(#000, 0, 1px, 3px)
+      +linear-gradient(color-stops(green, green - #222))
+    &:active
+      outline: none
+      position: relative
+      top: 1px
+    &.persist
+      background: $orange - #222
+      border: 1px solid $orange - #222
+      color: #fff
+      +box-shadow(#000, 0, 1px, 3px)
+      
+    &:hover, &:active, &:focus
+      background: $orange - #222 !important
+      border: 1px solid $orange - #222 !important
+      +box-shadow(#000, 0, 1px, 3px)
+
 .next, input[type=submit]
   +border-radius
   border: 1px

@@ -1151,6 +1151,15 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 var projects_index = {
   run: function () {
+    
+      $('.dropdown_menu').hover(function (){
+        $('ul', this).slideDown(100);
+        $('.dropdown_trigger').addClass('persist');
+      }, function() {
+        $('ul', this).slideUp(100);
+        $('.dropdown_trigger').removeClass('persist');
+      });
+    
     $('.upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('tbody').find('.upload_box').slideToggle();

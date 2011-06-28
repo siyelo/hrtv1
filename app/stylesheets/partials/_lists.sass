@@ -1,10 +1,18 @@
-.full_width ul
+.full-width ul
   margin-bottom: 10px
   +border-bottom-radius
   
   &.horizontal
-    +horizontal-list
+    color: red
     margin-bottom: 0
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+      list-style-image: none
+      list-style-type: none
+      margin-right: 4px
+      white-space: nowrap
     
   &.bulleted
     list-style: disc
@@ -277,4 +285,38 @@ ul.ordered_nav
       span
         background: $orange - #222
         color: #fff
-        
+
+// DROPDOWN NAVIGATION //
+.dropdown_menu
+  position: relative
+  z-index: 10
+      
+  ul
+    background: $orange
+    padding: 10px 0 5px
+    position: absolute
+    top: 22px
+    z-index: 15
+    +border-bottom-radius
+    +box-shadow(#444, 0, 1px, 3px)
+    li
+      display: block
+      width: 100%
+      a
+        background: $orange
+        border: 1px solid $orange - #111
+        border-bottom: 0
+        color: #fff
+        display: block
+        font-size: 12px
+        font-weight: bold
+        padding: 6px 10px
+        text-decoration: none
+        +text-shadow($orange - #444, 0, 1px, 0)
+        &:hover
+          background: $orange - #222
+          color: #fff
+      &:first-child a
+        border-top: 0
+      &:last-child a
+        border-bottom: 1px solid $orange - #111

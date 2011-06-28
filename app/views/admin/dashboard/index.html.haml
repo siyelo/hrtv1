@@ -14,13 +14,21 @@
       %li= link_to "Codes", admin_codes_url, :class => 'drill_down target'
 
   %h2
+    =image_tag"icon_reporter.png", :class => "heading_icon"
+    Latest Requests
+  .dashboard_section
+    %ul.admin_dashboard
+      = render :partial => 'request', :collection => @requests
+
+.second-half
+
+  %h2
     = image_tag "icon_reporter.png", :class => "heading_icon"
     Policy Maker Dashboard
   .dashboard_section
     %ul.policy_maker_dashboard
       %li= link_to "Review data responses", policy_maker_responses_path, :class => 'drill_down target'
 
-.second-half
   %h2
     = image_tag "icon_lightning.png", :class => "heading_icon"
     Reports

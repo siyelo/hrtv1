@@ -66,4 +66,5 @@ class ResponsesController < Reporter::BaseController
     redirect_to :back
   end
 
+
 end

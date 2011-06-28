@@ -35,6 +35,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    admin.set_request 'set_request/:id', :controller => 'requests', :action => :set_request
   end
 
   # POLICY MAKER

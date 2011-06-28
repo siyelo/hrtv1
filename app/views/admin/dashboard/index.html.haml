@@ -19,7 +19,8 @@
   .dashboard_section
     %ul.admin_dashboard
       = render :partial => 'request', :collection => @requests
-    =link_to "view all", admin_requests_path
+    .view-all
+      =link_to "view all", admin_requests_path
 
   %h2
     = image_tag "icon_reporter.png", :class => "heading_icon"

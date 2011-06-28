@@ -7,6 +7,10 @@
   %body{:id => get_controller_id(controller), :class => "app"}
     = render "layouts/header_app"
     = render "layouts/reporter/main_nav"
+    
+    #sub-nav
+      .wrapper
+        = yield :sub_nav
 
     #content
       .wrapper

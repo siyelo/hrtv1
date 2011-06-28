@@ -52,30 +52,6 @@ body.app
     a
       padding: 5px 10px !important
 
-  /* sub-nav styles */
-  #sub-nav
-    +box-shadow(#f0f0f0, 0, 2px, 7px)
-    margin: 15px 0 10px
-    ul
-      +horizontal-list
-      padding: 0 15px 15px 15px
-    .active
-      a
-        background: !orange
-        color: white
-
-    a
-      +border-radius
-      background: !lightest-blue
-      color: !mid-blue
-      display: inline-block
-      font-size: 0.8em
-      padding: 7px 10px 6px 10px
-      text-decoration: none
-      &:hover, &:focus
-        background: !mid-blue
-        color: white
-
   #page_tips
     .nav
       display: none
@@ -596,6 +572,35 @@ body#static_page_submit #content .wrapper #main
 
 .add_organization_link
   margin-left: 10px
+  
+  
+.add_organization_link
+  margin-left: 10px
+
+.pointer
+  cursor: pointer
+
+.full-width-container
+  display: block
+  +clearfix
+
+  h1.main_heading
+    padding: 0
+    margin: 0
+
+.welcome_continue
+  color: $mid-blue
+  float: left
+  font-size: 12px
+  margin: 10px 0 20px 15%
+  width: 40%
+
+.centered
+  text-align: center
+
+.attention
+  font: bold 20px/26px Arial,sans-serif
+
 
 // Welcome wrapper
 

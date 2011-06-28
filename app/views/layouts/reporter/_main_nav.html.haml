@@ -12,7 +12,11 @@
 #main-nav
   .wrapper
     %ul
-      %li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
+      // The old home tab for code reference
+      //%li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
+      %li.home_tab.active
+        - link_to "#" do
+          %span Home
       %li= link_to 'Settings', edit_organization_url(:current), :class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)
       %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController].include?(controller.class) ? "active" : nil)
       %li= link_to 'Review', hacked_review_response_url, :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')

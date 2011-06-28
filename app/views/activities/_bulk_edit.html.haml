@@ -110,7 +110,7 @@
 
 
         %ul
-          = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all_by_name, :required => false, :wrapper_html => {:class => 'fourth'}
+          = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.ordered, :required => false, :wrapper_html => {:class => 'fourth'}
           = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Beneficiary details / Other beneficiaries"
           = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :wrapper_html => {:class => 'fourth'}

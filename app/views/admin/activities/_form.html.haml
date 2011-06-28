@@ -80,7 +80,7 @@
 
       - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@activity.text_for_provider}\"" if !@activity.text_for_provider.blank? && @activity.provider.nil?
-      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.all_by_name, :hint => hint, :required => false
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => Organization.ordered, :hint => hint, :required => false
 
     %li.last
       %h3 Implementers
@@ -101,7 +101,7 @@
   %li.last
     %h3 Institutions Assisted
     %ul.dashboard_section
-      = f.input :organizations, :as => :select, :collection => Organization.all_by_name, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
+      = f.input :organizations, :as => :select, :collection => Organization.ordered, :hint =>  "If this activity uses health resources to provide technical or management assistance to health facilities or organizations, but doesn’t directly deliver services with the funds. E.g. if your organization works to improve management of a district hospital, you'd be the Implementer, and the hospital you are working with would be the Institution Assisted.", :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button "Update", :class => "last"

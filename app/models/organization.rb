@@ -50,7 +50,7 @@ class Organization < ActiveRecord::Base
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
-  named_scope :ordered, :order => 'name ASC, created_at DESC'
+  named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
 
   def is_empty?
     if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
@@ -119,10 +119,6 @@ class Organization < ActiveRecord::Base
       organization.save ? (saved += 1) : (errors += 1)
     end
     return saved, errors
-  end
-  
-  def self.all_by_name
-    self.all.sort_by{|u| u.name.downcase}
   end
 
   def has_provider?(organization)

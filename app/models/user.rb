@@ -7,13 +7,14 @@ class User < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :full_name, :email, :username, :organization_id, :organization,
-                  :password, :password_confirmation, :roles, :tips_shown
+                  :password, :password_confirmation, :roles, :tips_shown, :organizations
 
   ### Associations
   has_many :comments
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
+  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
 
   ### Validations
   validates_presence_of  :username, :email, :organization_id, :data_response_id_current

@@ -8,55 +8,7 @@
 
 %h1.main_heading Dashboard
 
-= render 'welcome'
-
-%ul.horizontal.left
-  %li= link_to "Edit Projects", hacked_response_projects_path, :class => "create_new"
-  %li= link_to "Classify Activities", "#", :class => "create_new"
-  %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
-
-%h2
-  =image_tag "icon_reporter.png", :class => "heading_icon"
-  Data Requests
-.dashboard_section
-
-  %table.modern_table
-    %thead
-      %tr
-        %td Name
-        %td Requested By
-        %td Due
-        %td Submitted at
-        %td Status
-    %tbody
-      = render :partial => 'response', :collection => @responses
-
-.first-half
-  %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
-    Reports
-  .dashboard_section
-    %ul.admin_reports
-      - if current_user.current_response
-        %li
-          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
-            Review My Response
-            %span.hint Interactive report of your current data response
-      %li
-        - link_to reports_districts_path, :class => "drill_down target" do
-          Review District Expenditures and Current Budgets
-          %span.hint Interactive reports
-      %li
-        - link_to reports_country_path, :class => "drill_down target" do
-          Review National Expenditures and Current Budgets
-          %span.hint Interactive reports
-      %li
-        - link_to reporter_reports_path, :class => "drill_down target" do
-          All Reports
-          %span.hint Export a report in CSV
-
-.second-half
-  %h2
-    =image_tag"icon_comments.png", :class => "heading_icon"
-    Recent Comments
-  = render 'shared/comments/comment_short_list', :comments => @comments
+- if current_user.activity_manager?
+  = render 'activity_manager'
+- else
+  = render 'reporter'

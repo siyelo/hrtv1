@@ -1,0 +1,36 @@
+- approved_orgs = @organizations.inject(0){|sum, org| org.response_for(@request).activities.manager_approved.count}
+- total_activities = @organizations.inject(0){|sum, org| org.response_for(@request).activities.count}
+
+%h2
+  Organizations I Manage
+%ul
+  %li
+    %h3 Total Organizations
+    %p= @organizations.count
+  %li
+    %h3 Approved
+    %p= approved_orgs
+  %li
+    %h3 Pending
+    %p= total_activities - approved_orgs
+  %li
+    %h3 Recently Submitted for Approval
+    %ul
+      %li= link_to "CNLS", "#"
+      %li= link_to "Catholic Relief Services (CRS)", "#"
+      %li= link_to "FHI", "#"
+
+%table.modern_table
+  %thead
+    %tr
+      %td Organization
+      %td Primary Contact (Phone)
+      %td Secondary Contacts
+      %td Status
+      %td Activities Approved
+  %tbody
+    = render :partial => 'organization', :collection => @organizations
+
+%h2
+  Comments
+%p TODO

@@ -29,7 +29,7 @@ puts "=> added sample data for reporter #{@reporter.name}"
 begin
   puts "creating activity_manager"
   org = Factory(:organization, :name => "internal_activity_manager_org")
-  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com', :organization => org)
+  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com', :organization => org, :organizations => [Factory(:organization), Factory(:organization)])
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_activity_manager_org' or user named 'activity_manager'? "

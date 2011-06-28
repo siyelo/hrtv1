@@ -10,9 +10,10 @@
           %span
             Budget Approved
       -else
-        - link_to "#", :class => "js_am_approve" do
+        - link_to "#", :class => "js_am_approve", :"response-id" => @response.id, :"activity-id" => activity.id do
           %span
             Approve this Activity's Budget
+            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
 
 %ul.ordered_nav
   - if activity.new_record?

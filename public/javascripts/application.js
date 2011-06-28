@@ -1404,7 +1404,18 @@ var activity_form = function () {
 
   $(".js_am_approve").click(function (e) {
     e.preventDefault();
-    console.log("trololo")
+    var activity_id = $(this).attr('activity-id');
+    var response_id = $(this).attr('response-id');
+    var element = $(this);
+   
+    element.find(".ajax-loader").show();
+    var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
+    $.post(url, {approve: true, "_method": "put"}, function (data) {
+      element.find(".ajax-loader").hide();
+      if (data.status == 'success') {
+        element.html('<span>Budget Approved</span>');
+      }
+    })
   })
 };
 
@@ -1508,6 +1519,24 @@ var projects_edit = projects_new = {
    $(".ff_budget").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
    });
+
+   $(".js_am_approve").click(function (e) {
+     e.preventDefault();
+     var response_id = $(this).attr('response-id');
+     var project_id = $(this).attr('project-id');
+     var element = $(this);
+
+     var url = "/responses/" + response_id + "/projects/" + project_id + "/am_approve";
+     element.find(".ajax-loader").show();
+
+     $.post(url, {approve: true, "_method": "put"}, function (data) {
+      element.find(".ajax-loader").hide();
+      if (data.status == 'success') {
+        element.html('<span>Budget Approved</span>');
+      } 
+     })
+   });
+
   }
 }
 

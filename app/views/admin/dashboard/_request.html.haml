@@ -1,0 +1,4 @@
+%li
+  -link_to admin_set_request_path(request), :class => 'drill_down target' do
+    = request.title.capitalize
+    %span.hint= request.organization.name

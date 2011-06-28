@@ -14,6 +14,15 @@
       %li= link_to "Codes", admin_codes_url, :class => 'drill_down target'
 
   %h2
+    =image_tag"icon_reporter.png", :class => "heading_icon"
+    Latest Requests
+  .dashboard_section
+    %ul.admin_dashboard
+      = render :partial => 'request', :collection => @requests
+    .view-all
+      =link_to "view all", admin_requests_path
+
+  %h2
     = image_tag "icon_reporter.png", :class => "heading_icon"
     Policy Maker Dashboard
   .dashboard_section
@@ -21,6 +30,7 @@
       %li= link_to "Review data responses", policy_maker_responses_path, :class => 'drill_down target'
 
 .second-half
+
   %h2
     = image_tag "icon_lightning.png", :class => "heading_icon"
     Reports
@@ -32,11 +42,11 @@
           %span.hint Interactive reports
       %li
         - link_to reports_districts_path, :class => "drill_down target" do
-          Review District Expenditures and Current Budgets
+          = "Review District Expenditures and Current Budgets [#{current_user.current_request.title}]"
           %span.hint Interactive reports
       %li
         - link_to reports_country_path, :class => "drill_down target" do
-          Review National Expenditures and Current Budgets
+          = "Review National Expenditures and Current Budgets [#{current_user.current_request.title}]"
           %span.hint Interactive reports
       %li
         - link_to admin_reports_path, :class => "drill_down target" do

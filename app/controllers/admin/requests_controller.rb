@@ -29,4 +29,13 @@ class Admin::RequestsController < Admin::BaseController
     flash[:notice] = "Request was successfully deleted."
     redirect_to admin_requests_url
   end
+  
+  def set_request
+    request = DataRequest.find(params[:id])
+    current_user.current_response = request.data_responses.last
+    current_user.save
+    flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.title}</span>\""
+    redirect_to admin_dashboard_path
+  end
+  
 end

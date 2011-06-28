@@ -8,8 +8,7 @@
           - # sysadmin has no request/response
           - # TODO: show request name when logged in as admin
           - # but you're viewing a reporter's org/response
-          - unless current_user.admin?
-            = "[#{current_user.current_request_name}]"
+          = "[#{current_user.current_request_name}]"
 
       - else
         %p= "No organization specified"

@@ -1124,6 +1124,38 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
+var reporter_dashboard_index = {
+  run: function () {
+    $('#user_data_response_id_current').live('change', function(e) {
+      $('#change_datarequest').submit();
+    });
+
+    $('.js_request_select').click(function (e) {
+      e.preventDefault();
+      $(this).next().show();
+      $(this).hide();
+    });
+
+    $('.js_request_close').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.request_select').hide();
+      $('.js_request_select').show();
+    });
+
+    $('.js_welcome_show').click(function (e) {
+      e.preventDefault();
+      $(this).next().slideDown();
+      $(this).hide();
+    });
+
+    $('.js_welcome_hide').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.welcome_box').slideUp();
+      $('.js_welcome_show').show();
+    })
+  }
+};
+
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
@@ -1149,6 +1181,28 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 };
 
+var commentsInit = function () {
+  initDemoText($('*[data-hint]'));
+  focusDemoText($('*[data-hint]'));
+  blurDemoText($('*[data-hint]'));
+
+  $('.js_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parent('li').find('.js_reply_box:first').show();
+  })
+
+  $('.js_cancel_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parents('.js_reply_box:first').hide();
+  })
+
+  // remove demo text when submiting comment
+  $('.submit_btn').click(function (e) {
+    $('*[data-hint]').trigger('focus')
+  });
+}
+
+
 var projects_index = {
   run: function () {
       $('.dropdown_menu').hover(function (e){
@@ -1171,7 +1225,7 @@ var projects_index = {
       $('#import_export_box .upload_box').slideToggle();
     });
 
-    comments_reply();
+    commentsInit();
   }
 };
 
@@ -1308,18 +1362,6 @@ var activities_bulk_create = {
   }
 }
 
-var comments_reply = function () {
-  $('.js_reply').click('live', function (e) {
-    e.preventDefault();
-    $(this).parent('li').find('.js_reply_box:first').show();
-  })
-
-  $('.js_cancel_reply').click('live', function (e) {
-    e.preventDefault();
-    $(this).parents('.js_reply_box:first').hide();
-  })
-}
-
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
@@ -1441,11 +1483,7 @@ var activity_form = function () {
     })
   })
 
-  initDemoText($('*[data-hint]'));
-  focusDemoText($('*[data-hint]'));
-  blurDemoText($('*[data-hint]'));
-
-  comments_reply();
+  commentsInit();
 };
 
 var admin_activities_edit = admin_activities_update = {
@@ -1533,13 +1571,13 @@ var projects_edit = projects_new = {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
    });
 
-   $("#project_spend").keyup(function () {
+    $("#project_spend").keyup(function () {
       split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
-   });
+    });
 
-   $("#project_budget").keyup(function () {
-     split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
-   });
+    $("#project_budget").keyup(function () {
+      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
+    });
 
    $(".ff_spend").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
@@ -1566,6 +1604,7 @@ var projects_edit = projects_new = {
      })
    });
 
+    commentsInit();
   }
 }
 

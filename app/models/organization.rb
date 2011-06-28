@@ -47,7 +47,7 @@ class Organization < ActiveRecord::Base
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
-  named_scope :ordered, :order => 'name ASC, created_at DESC'
+  named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
 
   ### Class Methods
 

@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  layout :set_layout
+  layout :set_user_layout
 
   before_filter :require_user, :load_user
 

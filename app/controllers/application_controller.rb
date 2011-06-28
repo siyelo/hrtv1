@@ -29,9 +29,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_layout
-      if current_user
-        current_user.reporter? ? 'reporter' : 'admin'
+    def set_user_layout
+      if current_user.reporter?
+        'reporter'
+      elsif current_user.admin?
+        'admin'
       else
         'application'
       end

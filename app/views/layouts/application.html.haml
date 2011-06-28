@@ -1,10 +1,10 @@
--# default layout is the Promotional site (static pages)
--# an inner page with a compact header
+-# default layout for static pages except homepage
 !!! Strict
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
   = render 'layouts/head'
+
   %body.promo.login
-    = render "layouts/header"
+    = render 'layouts/header'
 
     #content
       .wrapper

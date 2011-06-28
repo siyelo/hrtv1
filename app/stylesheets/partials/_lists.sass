@@ -3,7 +3,6 @@
   +border-bottom-radius
   
   &.horizontal
-    color: red
     margin-bottom: 0
     +pie-clearfix
     li
@@ -322,3 +321,60 @@ ul.ordered_nav
         border-top: 0
       &:last-child a
         border-bottom: 1px solid $orange - #111
+
+// MAIN COMMENTS //
+.comments_input
+  li
+    margin-bottom: 0 !important
+    
+.comments_list
+  .comment_item
+    > ul
+      margin-bottom: 10px
+      padding-left: 30px
+    
+  .author
+    background: $filler
+    border: 1px solid $lightest-blue
+    font-weight: normal
+    margin-bottom: 5px
+    padding: 6px !important
+    text-transform: none
+    +border-radius(3px)
+    +pie-clearfix
+    img
+      float: left
+    span
+      border-left: 1px dotted $light-blue
+      color: $light-blue - #111
+      display: inline-block
+      float: right
+      margin-top: 11px
+      padding: 0 8px
+      strong
+        color: $light-blue - #333
+        font-weight: bold
+      &.name
+        border: none
+        color: $mid-blue
+        display: block
+        float: left
+        font-size: 14px
+        font-weight: bold
+        margin-top: 9px
+      &.time
+        border:none
+        float: left
+        font-weight: bold
+    .add_row
+      padding: 8px
+      img
+        margin: -5px 2px 0 0
+      
+  .comment
+    font-size: 12px
+    line-height: 1.4
+    margin-bottom: 20px
+    padding-left: 7px
+    
+// MAIN COMMENTS end //

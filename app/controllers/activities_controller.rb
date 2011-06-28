@@ -84,6 +84,16 @@ class ActivitiesController < Reporter::BaseController
     end
   end
 
+  def am_approve
+    if current_user.admin? || current_user.activity_manager?
+      @activity = @response.activites.find(params[:id])
+      @activity.update_attributes({:am_approved => params[:checked]})
+      render :nothing => true
+    else
+      raise AccessDenied
+    end
+  end
+
   # TODO refactor
   def classifications
     activity = Activity.find(params[:id])

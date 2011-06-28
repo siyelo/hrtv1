@@ -1392,6 +1392,11 @@ var activity_form = function () {
       $('.js_targets .js_target_field:last').focus()
     }
   });
+
+  $(".js_am_approve").click(function (e) {
+    e.preventDefault();
+    console.log("trololo")
+  })
 };
 
 var admin_activities_edit = admin_activities_update = {
@@ -1471,11 +1476,11 @@ var projects_edit = projects_new = {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 
-   $(".js_funding_expenditures input").keyup(function () {
+   $(".js_funding_expenditures input").live('keyup', function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
    });
 
-   $(".js_funding_budget input").keyup(function () {
+   $(".js_funding_budget input").live('keyup', function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
    });
 

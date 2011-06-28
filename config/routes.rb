@@ -48,7 +48,7 @@ ActionController::Routing::Routes.draw do |map|
       response.resources :projects,
         :collection => {:create_from_file => :post, :download_template => :get, :bulk_edit => :get, :bulk_update => :put}
       response.resources :activities,
-        :member => {:approve => :put, :classifications => :get},
+        :member => {:approve => :put, :am_approve => :put, :classifications => :get},
         :collection => {:bulk_create => :post,
                         :template => :get,
                         :export => :get,

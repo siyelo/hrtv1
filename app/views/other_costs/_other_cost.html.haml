@@ -5,7 +5,7 @@
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
   %td
-    - if other_cost.approved?
+    - if other_cost.am_approved?
       Approved
     - else
       %span.red Not Approved

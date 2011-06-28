@@ -4,3 +4,8 @@
     //= link_to "edit", edit_response_activity_path(@response, other_cost), :class => 'edit_button inline'
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
+  %td
+    - if other_cost.approved?
+      Approved
+    - else
+      %span.red Not Approved

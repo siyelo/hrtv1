@@ -39,6 +39,7 @@
       %th{:colspan => 2} Activity / Other Cost
       %th= sortable "spend", "Past Expenditure"
       %th= sortable "budget", "Current Budget"
+      %th
 
   %tbody
     - unless @projects.empty?
@@ -49,7 +50,7 @@
         %td{:colspan => 100}
           = render 'no_projects_yet'
     %tr.filler
-      %td{:colspan => 2}= link_to "Add Project", new_response_project_path(@response), :class => "add_row"
+      %td{:colspan => 3}= link_to "Add Project", new_response_project_path(@response), :class => "add_row"
       %td.total Total
       %td.wrap-10= n2cndrs(@response.projects_total_spend, @response.currency)
       %td.wrap-10= n2cndrs(@response.projects_total_budget, @response.currency)

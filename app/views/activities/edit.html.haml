@@ -1,6 +1,6 @@
 - title("Edit Activity")
 
-= render :partial => 'projects/sub_nav'
+= render 'projects/sub_nav'
 
 = render 'breadcrumb', :response => @response, :activity => @activity
 
@@ -29,4 +29,4 @@
 
 = render 'sub_activities_import_export', :activity => @activity
 
-= render :partial => 'shared/comments', :comments => @comments
+= render 'shared/comments', :comments => @comments

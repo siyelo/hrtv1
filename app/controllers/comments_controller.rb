@@ -1,7 +1,10 @@
 class CommentsController < Reporter::BaseController
 
   def index
-    @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
+    dr_ids    = current_user.organization.responses.map(&:id)
+    @comments = Comment.on_all(dr_ids).paginate :per_page => 20,
+                                                :page => params[:page],
+                                                :order => 'created_at DESC'
   end
 
   def new
@@ -53,7 +56,7 @@ class CommentsController < Reporter::BaseController
     else
       respond_to do |format|
         format.html { render :action => "new" }
-        format.js { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
+        format.js   { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
       end
     end
   end

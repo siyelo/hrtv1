@@ -1170,6 +1170,8 @@ var projects_index = {
       e.preventDefault();
       $('#import_export_box .upload_box').slideToggle();
     });
+
+    comments_reply();
   }
 };
 
@@ -1303,9 +1305,19 @@ var activities_bulk_create = {
         activityBox.find('.project_sub_form_hint').show();
       }
     });
-
-
   }
+}
+
+var comments_reply = function () {
+  $('.js_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parent('li').find('.js_reply_box:first').show();
+  })
+
+  $('.js_cancel_reply').click('live', function (e) {
+    e.preventDefault();
+    $(this).parents('.js_reply_box:first').hide();
+  })
 }
 
 var activity_form = function () {
@@ -1433,15 +1445,7 @@ var activity_form = function () {
   focusDemoText($('*[data-hint]'));
   blurDemoText($('*[data-hint]'));
 
-  $('.js_reply').click('live', function (e) {
-    e.preventDefault();
-    $(this).parent('li').find('.js_reply_box:first').show();
-  })
-
-  $('.js_cancel_reply').click('live', function (e) {
-    e.preventDefault();
-    $(this).parents('.js_reply_box:first').hide();
-  })
+  comments_reply();
 };
 
 var admin_activities_edit = admin_activities_update = {

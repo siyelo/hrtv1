@@ -1,6 +1,7 @@
 .full_width
-  %h3 Add comment
-  = render 'comments/form', :comment => @comment
+  - unless params[:controller] == 'projects'
+    %h3 Add comment
+    = render 'comments/form', :comment => @comment
   %ul
     - comments.each do |comment|
       = render 'comments/comment', :comment => comment

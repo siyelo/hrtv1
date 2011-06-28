@@ -15,6 +15,10 @@ class ProjectsController < Reporter::BaseController
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => "#{sort_column} #{sort_direction}",
                                :include => :activities)
+
+    @comments = Comment.on_all([@response.id]).paginate :per_page => 20,
+                                                :page => params[:page],
+                                                :order => 'created_at DESC'
   end
 
   def edit

@@ -46,20 +46,20 @@ class Comment < ActiveRecord::Base
       }
     }
 
-  named_scope :on_all, lambda { |organization|
-    {:joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
-                LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
-                LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-     :conditions => ["(comments.commentable_type ='Project'
+  named_scope :on_all, lambda { |dr_ids|
+    { :joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
+                 LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
+                 LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
+      :conditions => ["(comments.commentable_type ='Project'
                         AND p.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND a.type IS NULL
                           AND a.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND oc.type = 'OtherCost'
-                         AND oc.data_response_id IN (:drs))",
-                      {:drs => organization.data_responses.map(&:id)}],
-                        :order => "created_at DESC"}
+                        AND oc.data_response_id IN (:drs))",
+                       {:drs => dr_ids}],
+     :order => "created_at DESC" }
   }
 
   named_scope :limit, lambda { |limit| {:limit => limit} }

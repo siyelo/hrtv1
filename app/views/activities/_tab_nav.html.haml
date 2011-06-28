@@ -1,3 +1,19 @@
+%ul.horizontal.right
+  %li
+    - link_to "#" do
+      %span
+        View Comments
+  - if current_user.admin? || current_user.activity_manager?
+    %li
+      -if activity.am_approved
+        - link_to "#" do
+          %span
+            Budget Approved
+      -else
+        - link_to "#", :class => "js_am_approve" do
+          %span
+            Approve this Activity's Budget
+
 %ul.ordered_nav
   - if activity.new_record?
     - link = activity.class == OtherCost ? new_response_other_cost_path(@response) : new_response_activity_path(@response)
@@ -29,3 +45,4 @@
         - link_to activity_code_assignments_path(activity, :coding_type => 'CodingBudget') do
           %span 3
           Current Budget
+

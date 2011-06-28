@@ -36,6 +36,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     admin.set_request 'set_request/:id', :controller => 'requests', :action => :set_request
+    admin.resources :comments, :member => {:delete => :get}
   end
 
   # POLICY MAKER
@@ -46,13 +47,13 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get}, 
+    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get},
     :collection => {:set_latest => :get} do |response|
       response.resources :projects,
         :member => {:am_approve => :put},
-        :collection => {:create_from_file => :post, 
-                        :download_template => :get, 
-                        :bulk_edit => :get, 
+        :collection => {:create_from_file => :post,
+                        :download_template => :get,
+                        :bulk_edit => :get,
                         :export => :get,
                         :bulk_update => :put}
       response.resources :activities,

@@ -50,11 +50,16 @@ class Comment < ActiveRecord::Base
     {:joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
                 LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
                 LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-     :conditions => ["(comments.commentable_type ='Project' and p.data_response_id IN (:drs)) OR
-                      (comments.commentable_type = 'Activity' and a.type is null AND a.data_response_id IN (:drs)) OR
-                      (comments.commentable_type = 'Activity' and oc.type = 'OtherCost' AND oc.data_response_id IN (:drs))",
-                      {:org_id => organization.id, :drs => organization.data_responses.map(&:id)} ],
-    :order => "created_at DESC"}
+     :conditions => ["(comments.commentable_type ='Project'
+                        AND p.data_response_id IN (:drs))
+                        OR (comments.commentable_type = 'Activity'
+                          AND a.type IS NULL
+                          AND a.data_response_id IN (:drs))
+                        OR (comments.commentable_type = 'Activity'
+                          AND oc.type = 'OtherCost'
+                         AND oc.data_response_id IN (:drs))",
+                      {:drs => organization.data_responses.map(&:id)}],
+                        :order => "created_at DESC"}
   }
 
   named_scope :limit, lambda { |limit| {:limit => limit} }

@@ -7,4 +7,4 @@
         %span= link_to truncate(model_name(model), :length => 40), commentable_path(type, model, current_user)
       %p.main= truncate(comment.comment, :length => 300)
       %p.time= "#{time_ago_in_words(comment.created_at)} ago" if comment.created_at
-  .read_more= link_to "all comments", comments_path
+  .read_more= link_to "all comments", current_user.admin? ? admin_comments_path : comments_path

@@ -68,11 +68,6 @@ class ActivitiesController < Reporter::BaseController
     end
   end
 
-  def show
-    load_comment_resources(resource)
-    show!
-  end
-
   # called only via Ajax
   def approve
     if current_user.admin? || current_user.activity_manager?

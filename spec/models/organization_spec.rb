@@ -81,7 +81,6 @@ describe Organization do
     it { should have_many(:donor_for) }
     it { should have_many(:implementor_for) }
     it { should have_many(:provider_for) }
-    it { should have_many(:comments) }
   end
 
   describe "Callbacks" do
@@ -304,14 +303,6 @@ describe Organization do
   end
 
   describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:organization)
-      end
-
-      it_should_behave_like "comments_cacher"
-    end
-
     it "caches users count" do
       o = Factory.create(:organization)
       o.users_count.should == 0

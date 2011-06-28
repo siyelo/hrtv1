@@ -40,7 +40,7 @@ describe FundingFlow do
     # and this breaks too
     #it { should validate_numericality_of(:organization_id_from) }
     it { should validate_numericality_of(:project_from_id) }
-    
+
   end
 
   describe "more validations" do
@@ -60,33 +60,23 @@ describe FundingFlow do
       @activity.spend.should == 10
       @activity.save.should be_true
     end
-    
+
     it "if budget is nil it should use the amounts int eh quarterlys" do
       @activity = Factory(:funding_flow, :budget => nil, :budget_q1 => 2, :budget_q2 => 3, :budget_q4 => 4, :budget_q3 => 1)
       @activity.budget.should == 10
       @activity.save.should be_true
     end
-    
-    it "if the budget is not nil it will use the budget amount" do 
+
+    it "if the budget is not nil it will use the budget amount" do
       @activity = Factory(:funding_flow, :budget => 99, :budget_q1 => 2, :budget_q2 => 3, :budget_q4 => 4, :budget_q3 => 1)
       @activity.budget.should == 99
       @activity.save.should be_true
     end
-    
-    it "if the spend is not nil it will use the budget amount" do 
+
+    it "if the spend is not nil it will use the budget amount" do
       @activity = Factory(:funding_flow, :spend => 99, :spend_q1 => 2, :spend_q2 => 3, :spend_q4 => 4, :spend_q3 => 1)
       @activity.spend.should == 99
       @activity.save.should be_true
-    end
-  end
-
-  describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:funding_flow)
-      end
-
-      it_should_behave_like "comments_cacher"
     end
   end
 

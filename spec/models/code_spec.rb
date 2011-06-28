@@ -27,7 +27,6 @@ describe Code do
   describe "associations" do
     it { should have_many(:code_assignments) }
     it { should have_many(:activities) }
-    it { should have_many(:comments) }
   end
 
   describe "named scopes" do
@@ -255,16 +254,6 @@ describe Code do
                              :amount => 3, :cached_amount => 3)
 
       @code11.leaf_assignments_for_activities(CodingBudget, [@activity1, @activity2]).should == [a2ca12, a2ca11]
-    end
-  end
-
-  describe "counter cache" do
-    context "comments cache" do
-      before :each do
-        @commentable = Factory.create(:activity)
-      end
-
-      it_should_behave_like "comments_cacher"
     end
   end
 end

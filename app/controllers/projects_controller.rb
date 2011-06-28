@@ -43,15 +43,6 @@ class ProjectsController < Reporter::BaseController
     end
   end
 
-  def show
-    @project = Project.find(params[:id])
-    load_comment_resources(@project)
-    respond_to do |format|
-      format.html {}
-      format.js {render :json => @project.to_json}
-    end
-  end
-
   def bulk_edit
     @projects = @response.projects
   end

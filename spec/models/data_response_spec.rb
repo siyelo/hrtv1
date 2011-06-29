@@ -11,7 +11,7 @@ describe DataResponse do
     it { should have_many(:funding_flows).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
-    it { should have_many(:comments) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   describe "validations" do

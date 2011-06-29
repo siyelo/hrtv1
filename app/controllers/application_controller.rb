@@ -29,9 +29,11 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_layout
-      if current_user
-        current_user.reporter? ? 'reporter' : 'admin'
+    def set_user_layout
+      if current_user.reporter?
+        'reporter'
+      elsif current_user.admin?
+        'admin'
       else
         'application'
       end
@@ -77,8 +79,8 @@ class ApplicationController < ActionController::Base
 
     def require_no_user
       if current_user
-        #flash[:error] = "You must be logged out to access requested page"
-        redirect_to user_dashboard_path(current_user)
+        flash[:error] = "You must be logged out to access requested page"
+        redirect_to root_path
         return false
       end
     end

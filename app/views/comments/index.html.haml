@@ -6,7 +6,6 @@
 %table.standard.rounded
   %thead
     %tr
-      %th Title
       %th Comment
       %th Comment on
       %th Created at
@@ -15,12 +14,11 @@
   %tbody
     - @comments.each do |comment|
       %tr
-        %td= comment.title
         %td= comment.comment
         %td= comment.commentable.try(:name) if comment.commentable.respond_to?(:name)
         %td= comment.created_at
         %td
           = link_to "Edit", edit_comment_path(comment)
-          = link_to "Delete", comment_path(comment), :method => :destroy, :confirm => "Are you sure you want to delete this comment?"
+          = link_to "Delete", comment_path(comment), :method => :delete, :confirm => "Are you sure you want to delete this comment?"
 
 = will_paginate @comments

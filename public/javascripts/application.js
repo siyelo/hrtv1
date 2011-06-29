@@ -232,6 +232,15 @@ var buildUrl = function (url) {
   }
 };
 
+var buildJsonUrl = function (url) {
+  var parts = url.split('?');
+  if (parts.length > 1) {
+    return parts.join('.json?');
+  } else {
+    return parts[0] + '.json';
+  }
+};
+
 var getResources = function (element) {
   return element.parents('.resources');
 }
@@ -1124,6 +1133,38 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
+var reporter_dashboard_index = {
+  run: function () {
+    $('#user_data_response_id_current').live('change', function(e) {
+      $('#change_datarequest').submit();
+    });
+
+    $('.js_request_select').click(function (e) {
+      e.preventDefault();
+      $(this).next().show();
+      $(this).hide();
+    });
+
+    $('.js_request_close').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.request_select').hide();
+      $('.js_request_select').show();
+    });
+
+    $('.js_welcome_show').click(function (e) {
+      e.preventDefault();
+      $(this).next().slideDown();
+      $(this).hide();
+    });
+
+    $('.js_welcome_hide').click(function (e) {
+      e.preventDefault();
+      $(this).parents('.welcome_box').slideUp();
+      $('.js_welcome_show').show();
+    })
+  }
+};
+
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
@@ -1149,9 +1190,65 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 };
 
+var commentsInit = function () {
+  initDemoText($('*[data-hint]'));
+  focusDemoText($('*[data-hint]'));
+  blurDemoText($('*[data-hint]'));
+
+  $('.js_reply').live('click', function (e) {
+    e.preventDefault();
+    $(this).parents('li:first').find('.js_reply_box:first').show();
+  })
+
+  $('.js_cancel_reply').live('click', function (e) {
+    e.preventDefault();
+    $(this).parents('.js_reply_box:first').hide();
+  })
+
+  // remove demo text when submiting comment
+  $('.submit_btn').live('click', function (e) {
+    e.preventDefault();
+    removeDemoText($('*[data-hint]'));
+
+    var element = $(this);
+    var form    = element.parents('form');
+    var block;
+    //var ajaxLoader = element.next('.ajax-loader');
+    //ajaxLoader.show();
+
+    $.post(buildJsonUrl(form.attr('action')), form.serialize(),
+      function (data, status, response) {
+
+      if (response.status === 206) {
+        form.replaceWith(data.html)
+      } else {
+        if (form.find('#comment_parent_id').length) {
+          // comment reply
+          block = element.parents('li.comment_item:first');
+
+          if (block.find('ul').length) {
+            block.find('ul').prepend(data.html);
+          } else {
+            block.append($('<ul/>').prepend(data.html));
+          }
+        } else {
+          // root comment
+          block = $('ul.js_comments_list');
+          block.prepend(data.html)
+        }
+      }
+
+      initDemoText(form.find('*[data-hint]'));
+      form.find('textarea').val(''); // reset comment value to blank
+      form.find('.inline-errors').remove(); // remove inline error if present
+      form.find('.js_cancel_reply').trigger('click'); // close comment block
+    });
+  });
+}
+
+
 var projects_index = {
   run: function () {
-    
       $('.dropdown_menu').hover(function (e){
         e.preventDefault();
         $('ul', this).slideDown(100);
@@ -1161,7 +1258,7 @@ var projects_index = {
         $('ul', this).slideUp(100);
         $('.dropdown_trigger').removeClass('persist');
       });
-    
+
     $('.upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('tbody').find('.upload_box').slideToggle();
@@ -1171,6 +1268,8 @@ var projects_index = {
       e.preventDefault();
       $('#import_export_box .upload_box').slideToggle();
     });
+
+    commentsInit();
   }
 };
 
@@ -1191,22 +1290,64 @@ var projects_bulk_edit = {
   }
 };
 
+var initDemoText = function (elements) {
+  elements.each(function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+
+    if (demo_text != null) {
+      element.attr('title', demo_text);
+      if (element.val() == '' || element.val() == demo_text) {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+
+var focusDemoText = function (elements) {
+  elements.live('focus', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
+        element.removeClass('input_hint');
+      }
+    }
+  });
+};
+
+var removeDemoText = function (elements) {
+  elements.each(function () {
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
+      }
+    }
+  });
+};
+
+
+var blurDemoText = function (elements) {
+  elements.live('blur', function(){
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == '') {
+        element.val( demo_text );
+        element.addClass('input_hint');
+      }
+    }
+  });
+};
+
+
 var activities_bulk_create = {
   run: function () {
-    var initDemoText = function (elements) {
-      elements.each(function(){
-        var element = $(this);
-        var demo_text = element.attr('data-hint');
-
-        if (demo_text != null) {
-          element.attr('title', demo_text);
-          if (element.val() == '' || element.val() == demo_text) {
-            element.val( demo_text );
-            element.addClass('input_hint');
-          }
-        }
-      });
-    };
 
     initDemoText($('*[data-hint]'));
 
@@ -1220,28 +1361,8 @@ var activities_bulk_create = {
       activity_box.find('.main').toggle();
     });
 
-    $('*[data-hint]').live('focus', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == demo_text) {
-          element.val('');
-          element.removeClass('input_hint');
-        }
-      }
-    });
-
-    $('*[data-hint]').live('blur', function(){
-      var element = $(this);
-      var demo_text = element.attr('data-hint');
-      if (demo_text != null) {
-        if (element.val() == '') {
-          element.val( demo_text );
-          element.addClass('input_hint');
-        }
-      }
-    });
-
+    focusDemoText($('*[data-hint]'));
+    blurDemoText($('*[data-hint]'));
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
@@ -1294,8 +1415,6 @@ var activities_bulk_create = {
         activityBox.find('.project_sub_form_hint').show();
       }
     });
-
-
   }
 }
 
@@ -1409,7 +1528,7 @@ var activity_form = function () {
     var activity_id = $(this).attr('activity-id');
     var response_id = $(this).attr('response-id');
     var element = $(this);
-   
+
     element.find(".ajax-loader").show();
     var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
     $.post(url, {approve: true, "_method": "put"}, function (data) {
@@ -1419,6 +1538,8 @@ var activity_form = function () {
       }
     })
   })
+
+  commentsInit();
 };
 
 var admin_activities_edit = admin_activities_update = {
@@ -1506,13 +1627,13 @@ var projects_edit = projects_new = {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
    });
 
-   $("#project_spend").keyup(function () {
+    $("#project_spend").keyup(function () {
       split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
-   });
+    });
 
-   $("#project_budget").keyup(function () {
-     split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
-   });
+    $("#project_budget").keyup(function () {
+      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
+    });
 
    $(".ff_spend").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
@@ -1535,10 +1656,11 @@ var projects_edit = projects_new = {
       element.find(".ajax-loader").hide();
       if (data.status == 'success') {
         element.html('<span>Budget Approved</span>');
-      } 
+      }
      })
    });
 
+    commentsInit();
   }
 }
 

@@ -7,7 +7,7 @@ Feature: Reporter can manage activities
     Given an organization exists with name: "organization1"
     And a data_request exists with title: "data_request1"
     And an organization "my_organization" exists with name: "organization2"
-    And a data_response exists with data_request: the data_request, organization: organization "my_organization"
+    Then data_response should exist with data_request: the data_request, organization: the organization
     And a reporter exists with username: "reporter", organization: organization "my_organization"
     And a project exists with name: "project1", budget: "20000", data_response: the data_response
     And a location exists with short_display: "Location1"
@@ -16,6 +16,8 @@ Feature: Reporter can manage activities
     And the location is one of the project's locations
     And I am signed in as "reporter"
     And I follow "data_request1"
+    Then show me the page
+
     And I follow "Projects"
 
     @javascript
@@ -29,32 +31,31 @@ Feature: Reporter can manage activities
       And I fill in "Budget" with "300"
       And I select "project1" from "Project"
       And I follow "Add Target"
-      And I fill in "Target" with "Output description value" 
+      And I fill in "Target" with "Output description value"
       And I press "Save"
     Then I should see "Activity was successfully created"
     When I follow "activity1 description"
     Then the "Target" field should contain "Output description value"
 
     @javascript
-    Scenario: Reporter can add sub-activities (normal values)
+    Scenario: Reporter can add implementers (normal values)
       When I follow "Add Activities now"
-        And I fill in "Name" with "activity1"
-        And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2010-01-01"
-        And I fill in "End date" with "2010-12-01"
-        And I fill in "Expenditure" with "200"
-        And I fill in "Budget" with "300"
-        And I select "project1" from "Project"
-        And I follow "Add Implementer"
-        Then show me the page
-        And I fill in "Implementer" with "organization1"
-        And I fill in "Implementer Expenditure" with "99"
-        And I fill in "Implementer Current Budget" with "19"
-        And I press "Save & Classify >"
+	And I fill in "Name" with "activity1"
+	And I fill in "Description" with "1ctivity1 description"
+	And I fill in "Start date" with "2010-01-01"
+	And I fill in "End date" with "2010-12-01"
+	And I fill in "Expenditure" with "200"
+	And I fill in "Budget" with "300"
+	And I select "project1" from "Project"
+	And I follow "Add Implementer"
+	And I fill in "Implementer" with "organization1" within ".sub_activities"
+	And I fill in "Implementer Expenditure" with "99" within ".sub_activities"
+	And I fill in "Implementer Current Budget" with "19" within ".sub_activities"
+	And I press "Save & Classify >"
       Then I should see "Activity was successfully created"
       When I follow "activity1"
       Then the "Implementer Expenditure" field should contain "99"
-        And the "Implementer Current Budget" field should contain "19"
+	And the "Implementer Current Budget" field should contain "19"
 
     @javascript
     Scenario: Reporter can add sub-activities (percentage values)
@@ -164,17 +165,6 @@ Feature: Reporter can manage activities
        And the "2013" field should contain "5000"
 
 
-    Scenario: A reporter can create comments for an activity
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-      When I follow "Projects"
-       And I follow "Activity1 description"
-       And I fill in "Title" with "Comment title"
-       And I fill in "Comment" with "Comment body"
-       And I press "Create Comment"
-      Then I should see "Comment title"
-       And I should see "Comment body"
-
-
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Import"
@@ -204,23 +194,16 @@ Feature: Reporter can manage activities
       Then I should see "Activity1"
         And I should see "Activity1 description"
 
-    Scenario: A reporter can create comments for an activity and see comment errors
+
+    Scenario: A reporter can create comments for an activity and see errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
         And I follow "Activity1 description"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_title_input"
-        And I should see "can't be blank" within "#comment_comment_input"
-
-      When I fill in "Title" with "Comment title"
-        And I press "Create Comment"
-      Then I should not see "can't be blank" within "#comment_title_input"
-        And I should see "can't be blank" within "#comment_comment_input"
-
+      Then I should see "can't be blank" within "#comment_comment_input"
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"
-      Then I should see "Comment title"
-        And I should see "Comment body"
+      Then I should see "Comment body"
 
 
     Scenario: Does not email users when a comment is made by a reporter

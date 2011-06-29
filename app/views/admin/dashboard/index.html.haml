@@ -10,7 +10,7 @@
       %li= link_to "Organizations", admin_organizations_path, :class => 'drill_down target'
       %li= link_to "Users", admin_users_path, :class => 'drill_down target'
       %li= link_to "Activities", admin_activities_url, :class => 'drill_down target'
-      %li= link_to "Comments", comments_url, :class => 'drill_down target'
+      %li= link_to "Comments", admin_comments_url, :class => 'drill_down target'
       %li= link_to "Codes", admin_codes_url, :class => 'drill_down target'
 
   %h2
@@ -56,5 +56,4 @@
   %h2
     = image_tag "icon_comments.png", :class => "heading_icon"
     Recent Comments
-  = render 'reporter/dashboard/comment_short_list', :comments => @comments
-
+  = render 'shared/comments/comment_short_list', :comments => @comments

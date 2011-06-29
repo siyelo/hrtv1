@@ -59,5 +59,4 @@
   %h2
     =image_tag"icon_comments.png", :class => "heading_icon"
     Recent Comments
-  = render 'reporter/dashboard/comment_short_list', :comments => @comments
-
+  = render 'shared/comments/comment_short_list', :comments => @comments

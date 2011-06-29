@@ -38,7 +38,7 @@ class DataResponse < ActiveRecord::Base
   ### Delegates
   delegate :name, :to => :data_request
   delegate :title, :to => :data_request
-  
+
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
 
@@ -393,18 +393,18 @@ class DataResponse < ActiveRecord::Base
   def projects_total_budget
     projects.map{|p| p.budget.to_f * currency_rate(p.currency, currency) }.compact.sum
   end
-  
+
   def download_template
     FasterCSV.generate do |csv|
       header_row = DataResponse::FILE_UPLOAD_COLUMNS
       csv << header_row
-      
-      
+
+
       projects.each do |project|
         project_row = []
         project_row << project.name
         project_row << project.description
-        
+
         project.activities.each do |activity|
           project_row[2] = activity.name
           project_row[3] = activity.description
@@ -418,7 +418,7 @@ class DataResponse < ActiveRecord::Base
         csv << project_row
       end
     end
-      
+
   end
 
   private

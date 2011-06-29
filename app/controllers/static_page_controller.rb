@@ -1,8 +1,11 @@
 class StaticPageController < ApplicationController
-  before_filter :require_no_user
 
   def index
-    render :layout => 'promo'
+    if current_user
+      redirect_to user_dashboard_path(current_user)
+    else
+      render :layout => 'homepage'
+    end
   end
 
   def about

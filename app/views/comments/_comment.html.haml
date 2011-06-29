@@ -1,0 +1,31 @@
+%li.comment_item
+  %h4.author.horizontal
+    = image_tag comment.user.gravatar
+    %span.name= comment.user.name
+    %span.time= "#{time_ago_in_words(comment.created_at)} ago"
+    - link_to '#', :class => 'js_reply add_row right' do
+      = image_tag "icon_reply.png"
+      Reply
+    %span
+      commented on:
+      %strong= comment.commentable.name
+
+  %p.comment= comment.comment
+
+  .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
+    - semantic_form_for comment.children.new, :url => comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) do |f|
+      %h2 Replying
+      .dashboard_section
+        .big_gravatar
+          = image_tag comment.user.gravatar(60)
+        = f.semantic_errors :state
+        = f.input :parent_id, :as => :hidden
+        = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+        - f.buttons do
+          = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
+          %li= link_to "Cancel", "#", :class => 'js_cancel_reply delete_btn'
+
+
+  - if comment.children.present?
+    %ul
+      = render :partial => 'comments/comment', :collection => comment.children

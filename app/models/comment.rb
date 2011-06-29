@@ -1,11 +1,12 @@
 class Comment < ActiveRecord::Base
 
+  acts_as_tree :order => 'created_at DESC'
+
   ### Attributes
-  attr_accessible :title, :comment
+  attr_accessible :comment, :parent_id
 
   ### Validations
-  validates_presence_of :title, :comment, :user_id,
-                        :commentable_id, :commentable_type
+  validates_presence_of :comment, :user_id, :commentable_id, :commentable_type
 
   ### Associations
   belongs_to :user
@@ -45,30 +46,26 @@ class Comment < ActiveRecord::Base
       }
     }
 
-  named_scope :on_all, lambda { |organization|
-    {:joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
-                LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
-                LEFT OUTER JOIN funding_flows fs ON fs.id = comments.commentable_id
-                LEFT OUTER JOIN funding_flows i ON i.id = comments.commentable_id
-                LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
-                LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-     :conditions => ["(comments.commentable_type ='Project' and p.data_response_id IN (:drs)) OR
-                      (comments.commentable_type ='DataResponse' and dr.id IN (:drs)) OR
-                      (comments.commentable_type ='FundingFlow' and fs.organization_id_to = :org_id AND fs.data_response_id IN (:drs)) OR
-                      (comments.commentable_type ='FundingFlow' and i.organization_id_from = :org_id AND i.data_response_id IN (:drs)) OR
-                      (comments.commentable_type = 'Activity' and a.type is null AND a.data_response_id IN (:drs)) OR
-                      (comments.commentable_type = 'Activity' and oc.type = 'OtherCost' AND oc.data_response_id IN (:drs))",
-                      {:org_id => organization.id, :drs => organization.data_responses.map(&:id)} ],
-    :order => "created_at DESC"}
+  named_scope :on_all, lambda { |dr_ids|
+    { :joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
+                 LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
+                 LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
+                 LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
+      :conditions => ["((comments.commentable_type = 'DataResponse'
+                          AND dr.id IN (:drs))
+                        OR (comments.commentable_type = 'Project'
+                          AND p.data_response_id IN (:drs))
+                        OR (comments.commentable_type = 'Activity'
+                          AND a.type IS NULL
+                          AND a.data_response_id IN (:drs))
+                        OR (comments.commentable_type = 'Activity'
+                          AND oc.type = 'OtherCost'
+                          AND oc.data_response_id IN (:drs)))",
+                       {:drs => dr_ids}],
+     :order => "created_at DESC" }
   }
 
   named_scope :limit, lambda { |limit| {:limit => limit} }
-
-  def email_the_organisation_users(comment)
-    data_response = comment.commentable.is_a?(DataResponse) ?
-      commentable : commentable.data_response
-    Notifier.deliver_email_organisation_users(comment, data_response)
-  end
 end
 
 
@@ -78,7 +75,6 @@ end
 # Table name: comments
 #
 #  id               :integer         not null, primary key
-#  title            :string(50)      default("")
 #  comment          :text            default("")
 #  commentable_id   :integer         indexed
 #  commentable_type :string(255)     indexed

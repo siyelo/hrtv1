@@ -3,7 +3,6 @@
   +border-bottom-radius
   
   &.horizontal
-    color: red
     margin-bottom: 0
     +pie-clearfix
     li
@@ -322,3 +321,85 @@ ul.ordered_nav
         border-top: 0
       &:last-child a
         border-bottom: 1px solid $orange - #111
+
+// MAIN COMMENTS //
+.comments_input
+  li
+    margin-bottom: 0 !important
+  textarea
+    height: 60px
+    width: 60% !important
+  .inline-errors
+    color: $red
+    font-size: 12px
+    font-weight: bold
+    margin-left: 5px
+    padding: 5px 10px 5px 0
+    width: auto
+    +border-bottom-radius
+  .buttons ol li
+    border: none
+    .delete_btn
+      margin: 2px 0 0 5px
+  &.reply
+    background: image_url("icon_reply.png") no-repeat 10px 10px
+    padding-left: 25px
+    h2
+      background: $light-blue - #222 !important
+      font-size: 12px
+  .big_gravatar
+    float: left
+    margin: 15px 10px 0 0
+    min-height: 100px
+    
+.comments_list
+  .comment_item
+    > ul
+      margin-bottom: 10px
+      padding-left: 30px
+    
+  .author
+    background: $filler
+    border: 1px solid $lightest-blue
+    font-weight: normal
+    margin-bottom: 5px
+    padding: 6px !important
+    text-transform: none
+    +border-radius(3px)
+    +pie-clearfix
+    img
+      float: left
+    span
+      border-left: 1px dotted $light-blue
+      color: $light-blue - #111
+      display: inline-block
+      float: right
+      margin-top: 11px
+      padding: 0 8px
+      strong
+        color: $light-blue - #333
+        font-weight: bold
+      &.name
+        border: none
+        color: $mid-blue
+        display: block
+        float: left
+        font-size: 14px
+        font-weight: bold
+        margin-top: 9px
+      &.time
+        border:none
+        float: left
+        font-weight: bold
+    .add_row
+      padding: 8px
+      img
+        margin: -5px 2px 0 0
+      
+  .comment
+    font-size: 12px
+    line-height: 1.4
+    margin-bottom: 20px
+    padding-left: 7px
+    
+// MAIN COMMENTS end //

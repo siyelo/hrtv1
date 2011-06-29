@@ -1,6 +1,6 @@
 - title("Edit Other Cost")
 
-= render :partial => 'projects/sub_nav'
+= render 'projects/sub_nav'
 
 = render 'breadcrumb', :response => @response, :activity => @other_cost
 
@@ -29,4 +29,4 @@
 - semantic_form_for @other_cost, :url => response_other_cost_path(@response, @other_cost), :html => {:class => "basic_form"} do |f|
   = render 'form', :f => f
 
-= render :partial => 'shared/comments', :comments => @comments
+= render 'shared/comments', :comments => @comments

@@ -1,10 +1,9 @@
 .full_width
-  %h3 Comments
-  %ul
+  %h2 Comments
+  .dashboard_section.comments_input
+    .big_gravatar
+      = image_tag current_user.gravatar(60)
+    = render 'comments/form', :comment => @comment
+  %ul.comments_list.js_comments_list
     - comments.each do |comment|
-      %li.comment_wrap
-        .title= comment.title
-        .comment= comment.comment
-        .author= "Posted by #{comment.user.try(:name)} #{time_ago_in_words(comment.created_at)} ago"
-  %h3 Add new comment
-  = render 'comments/form', :comment => @comment
+      = render 'comments/comment', :comment => comment

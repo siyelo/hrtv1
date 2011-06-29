@@ -4,7 +4,7 @@
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
 
-= render :partial => 'projects/sub_nav'
+= render 'projects/sub_nav'
 
 = render 'activities/tab_nav', :activity => @other_cost
 
@@ -77,4 +77,4 @@
       %li Expenditure by Inputs
       %li= b @other_cost.coding_spend_cc_classified?
 
-= render :partial => 'shared/comments', :comments => @comments
+= render 'shared/comments', :comments => @comments

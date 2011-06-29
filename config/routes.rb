@@ -17,14 +17,13 @@ ActionController::Routing::Routes.draw do |map|
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
 
-  map.resources :comments, :member => {:delete => :get}
+  map.resources :comments
 
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
     admin.resources :responses,
-      :collection => {:empty => :get, :in_progress => :get, :submitted => :get},
-      :member     => {:delete => :get}
+      :collection => {:empty => :get, :in_progress => :get, :submitted => :get}
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
@@ -36,6 +35,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
     admin.set_request 'set_request/:id', :controller => 'requests', :action => :set_request
+    admin.resources :comments
   end
 
   # POLICY MAKER
@@ -46,13 +46,13 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get}, 
+    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get},
     :collection => {:set_latest => :get} do |response|
       response.resources :projects,
         :member => {:am_approve => :put},
-        :collection => {:create_from_file => :post, 
-                        :download_template => :get, 
-                        :bulk_edit => :get, 
+        :collection => {:create_from_file => :post,
+                        :download_template => :get,
+                        :bulk_edit => :get,
                         :export => :get,
                         :bulk_update => :put}
       response.resources :activities,
@@ -87,6 +87,7 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER
   map.namespace :reporter do |reporter|
     reporter.dashboard 'dashboard', :controller => 'dashboard', :action => :index
+    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
     reporter.resources :reports, :only => [:index, :show]
   end
 

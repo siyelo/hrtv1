@@ -40,11 +40,9 @@ Feature: Reporter can manage activities
     Scenario: An admin can create comments for an activity
       When I follow "Activities"
         And I follow "activity1 description"
-        And I fill in "Title" with "Comment title"
         And I fill in "Comment" with "Comment body"
         And I press "Create Comment"
-      Then I should see "Comment title"
-        And I should see "Comment body"
+      Then I should see "Comment body"
         And I should see "activity1 description"
 
 
@@ -52,19 +50,10 @@ Feature: Reporter can manage activities
       When I follow "Activities"
         And I follow "activity1 description"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_title_input"
-        And I should see "can't be blank" within "#comment_comment_input"
+      Then I should see "can't be blank" within "#comment_comment_input"
 
-      When I fill in "Title" with "Comment title"
-        And I press "Create Comment"
-      Then I should not see "can't be blank" within "#comment_title_input"
+      When I press "Create Comment"
         And I should see "can't be blank" within "#comment_comment_input"
-
-      When I fill in "Comment" with "Comment body"
-        And I press "Create Comment"
-      Then I should see "Comment title"
-        And I should see "Comment body"
-        And I should see "activity1 description"
 
 
     Scenario: An admin can filter activities
@@ -75,19 +64,7 @@ Feature: Reporter can manage activities
         And I press "Search"
         And I should see "activity1 description"
         And I should not see "activity2 description"
-      
 
-    Scenario: Sends email to users when a comment is made by an admin
-      Given no emails have been sent
-      When I follow "Activities"
-        And I follow "activity1 description"
-        And I fill in "Title" with "Comment title"
-        And I fill in "Comment" with "Comment body"
-        And I press "Create Comment"
-        And "email@siyelo.com" should receive an email
-        And I open the email
-      Then I should see "Comment body" in the email body
-      
     Scenario Outline: An admin can sort activities
       Given I follow "Activities"
       When I follow "<column_name>"
@@ -99,8 +76,8 @@ Feature: Reporter can manage activities
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-          | column_name   | column | text1                 | text2                 | 
-          | Project       | 1      | project1              | project2              | 
-          | Description   | 2      | activity1 description | activity2 description | 
-          | Total Expenditure  | 3      | 1 RWF               | 2 RWF               | 
-          | Total Budget | 4      | 1 RWF               | 2 RWF               | 
+           | column_name       | column | text1                 | text2                 |
+           | Project           | 1      | project1              | project2              |
+           | Description       | 2      | activity1 description | activity2 description |
+           | Total Expenditure | 3      | 1 RWF                 | 2 RWF                 |
+           | Total Budget      | 4      | 1 RWF                 | 2 RWF                 |

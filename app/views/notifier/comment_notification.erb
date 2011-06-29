@@ -1,0 +1,20 @@
+Hello,
+<%= @comment.user.name %> <<%= @comment.user.email %>> has made a new comment on the <%= @comment.commentable.name %> <%= @comment.commentable.class.to_s.tableize.singularize.humanize.downcase %>:
+
+
+<%= @comment.comment %>
+
+
+To view/respond to it, please visit the url below.
+
+<% if @comment.commentable.is_a?(DataResponse) %>
+  <%= review_response_url(@comment.commentable) %>
+<% else %>
+  <%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
+<% end %>
+
+
+Regards
+
+
+The Health Resource Tracker Support Team

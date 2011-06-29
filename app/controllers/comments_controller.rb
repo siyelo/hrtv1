@@ -1,13 +1,10 @@
 class CommentsController < Reporter::BaseController
 
   def index
-    if current_user.admin?
-      @comments = Comment.paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
-    else
-      @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
-    end
-
-    render :layout => 'admin'
+    dr_ids    = current_user.organization.data_responses.map(&:id)
+    @comments = Comment.on_all(dr_ids).paginate :per_page => 20,
+                                                :page => params[:page],
+                                                :order => 'created_at DESC'
   end
 
   def new
@@ -33,7 +30,7 @@ class CommentsController < Reporter::BaseController
   end
 
   def edit
-    @comment = current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id])
+    @comment = find_comment
     load_data_response(@comment)
 
     respond_to do |format|
@@ -48,18 +45,23 @@ class CommentsController < Reporter::BaseController
     load_data_response(@comment)
 
     if @comment.save
-      @comment.email_the_organisation_users(@comment) if current_user.admin?
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."
           redirect_to commentable_resource(@comment)
         end
         format.js { render :partial => "row", :locals => {:comment => @comment} }
+        format.json { render :json => {:html => render_to_string(
+          {:partial => 'comment.html.haml', :locals => {:comment => @comment}})}}
       end
     else
       respond_to do |format|
         format.html { render :action => "new" }
-        format.js { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
+        format.js   { render :partial => "form", :locals => {:comment => @comment},
+                             :status => :partial_content } # :partial_content => 206
+        format.json { render :json => {:html => render_to_string(
+          {:partial => 'form.html.haml', :locals => {:comment => @comment}})},
+                             :status => :partial_content} # :partial_content => 206
       end
     end
   end
@@ -100,11 +102,6 @@ class CommentsController < Reporter::BaseController
 
   end
 
-  def delete
-    @comment = find_comment
-    load_data_response(@comment)
-  end
-
   protected
     def find_commentable
       klass = params[:commentable_type].constantize
@@ -112,7 +109,12 @@ class CommentsController < Reporter::BaseController
     end
 
     def find_comment
-      current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
+      if current_user.admin?
+        Comment.find(params[:id])
+      else
+        dr_ids  = current_user.organization.data_responses.map(&:id)
+        Comment.on_all(dr_ids).find(params[:id], :readonly => false)
+      end
     end
 
     def commentable_resource(comment)
@@ -131,6 +133,12 @@ class CommentsController < Reporter::BaseController
           response_project_url(comment.commentable.data_response, comment.commentable)
         else
           edit_response_project_url(comment.commentable.data_response, comment.commentable)
+        end
+      elsif comment.commentable_type == "DataResponse"
+        if current_user.admin?
+          review_response_url(comment.commentable)
+        else
+          response_projects_url(comment.commentable)
         end
       else
         comments_url

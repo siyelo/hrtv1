@@ -30,6 +30,9 @@ module NavigationHelpers
     when /the classifications page/
       classifications_path
 
+    when /the admin comments page/
+      admin_comments_path
+
     when /the comments page/
       comments_path
 

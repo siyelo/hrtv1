@@ -17,8 +17,8 @@ class FundingFlow < ActiveRecord::Base
 
   alias :response :data_response
   alias :response= :data_response=
-  
-  
+
+
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
@@ -52,15 +52,15 @@ class FundingFlow < ActiveRecord::Base
 
   def spend_from_quarters
     if spend.nil?
-      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0) 
+      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0)
     else
       spend
     end
   end
-  
+
   def budget_from_quarters
     if budget.nil?
-      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0) 
+      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0)
     else
       budget
     end
@@ -117,7 +117,7 @@ class FundingFlow < ActiveRecord::Base
   end
 
   private
-    
+
     def budget_and_spend_are_greater_than_zero
       errors.add(:spend, "must be greater than 0") unless (spend || 0) > 0
       errors.add(:budget, "must be greater than 0") unless (budget || 0) > 0
@@ -151,7 +151,6 @@ end
 #  budget_q3            :decimal(, )
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
-#  comments_count       :integer         default(0)
 #  project_from_id      :integer
 #
 

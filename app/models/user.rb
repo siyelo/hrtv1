@@ -95,7 +95,11 @@ class User < ActiveRecord::Base
 
   # name() will give you their email if their (non-mandatory) full name isn't set
   def name
-    full_name.present? ? full_name : email
+    full_name.presence || username
+  end
+
+  def gravatar(size = 30)
+    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}"
   end
 
   def current_request

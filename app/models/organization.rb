@@ -26,7 +26,6 @@ class Organization < ActiveRecord::Base
   has_many :implementor_for, :through => :in_flows, :source => :project
   has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
   has_many :projects, :through => :data_responses
-  has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
   validates_presence_of :name
@@ -258,7 +257,6 @@ end
 #  raw_type                         :string(255)
 #  fosaid                           :string(255)
 #  users_count                      :integer         default(0)
-#  comments_count                   :integer         default(0)
 #  currency                         :string(255)
 #  fiscal_year_start_date           :date
 #  fiscal_year_end_date             :date

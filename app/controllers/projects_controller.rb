@@ -15,6 +15,12 @@ class ProjectsController < Reporter::BaseController
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => "#{sort_column} #{sort_direction}",
                                :include => :activities)
+
+    @comment = Comment.new
+    @comment.commentable = @response
+    @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
+                                                :page => params[:page],
+                                                :order => 'created_at DESC'
   end
 
   def edit
@@ -43,15 +49,6 @@ class ProjectsController < Reporter::BaseController
     end
   end
 
-  def show
-    @project = Project.find(params[:id])
-    load_comment_resources(@project)
-    respond_to do |format|
-      format.html {}
-      format.js {render :json => @project.to_json}
-    end
-  end
-
   def bulk_edit
     @projects = @response.projects
   end
@@ -66,7 +63,7 @@ class ProjectsController < Reporter::BaseController
     template = Project.download_template
     send_csv(template, 'projects_template.csv')
   end
-  
+
   def export
     template = @response.download_template
     send_csv(template, "Export_projects_activities.csv")

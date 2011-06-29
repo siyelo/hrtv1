@@ -5,7 +5,7 @@
 
 %h1.main_heading
   = render 'search'
-  Projects
+  Projects & Activities
 
 = render 'getting_started'
 
@@ -18,11 +18,11 @@
     - link_to '#', :class => 'dropdown_trigger' do
       = image_tag "icon_import_export_alt.png"
       Import / Export
-      
+
     %ul{:style => 'display: none'}
-      %li= link_to 'Import Workplan', '#', :id => "import_export"
+      %li= link_to 'Import Activities', '#', :id => "import_export"
       %li= link_to 'Export All', export_response_projects_path(@response)
-        
+
   %li
     = link_to "Link to Funders", bulk_edit_response_projects_path, :class => 'create_new'
 

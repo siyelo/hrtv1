@@ -1492,7 +1492,7 @@ var projects_edit = projects_new = {
       calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find("input#project_spend"));
     });
 
-   $(".amounts input[id^='project_budget']").keyup(function () {
+   $(".js_quarterly_fields input").keyup(function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 

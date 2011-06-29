@@ -10,19 +10,20 @@
       commented on:
       %strong= comment.commentable.name
 
-
   %p.comment= comment.comment
 
-
-  .js_reply_box{:style => 'display: none; !important'}
+  .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
     - semantic_form_for comment.children.new, :url => comments_path(:commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id) do |f|
       %h2 Replying
-      = f.semantic_errors :state
-      = f.input :parent_id, :as => :hidden
-      = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
-      - f.buttons do
-        = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
-        %li= link_to "Cancel", "#", :class => 'js_cancel_reply'
+      .dashboard_section
+        .big_gravatar
+          = image_tag comment.user.gravatar(60)
+        = f.semantic_errors :state
+        = f.input :parent_id, :as => :hidden
+        = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+        - f.buttons do
+          = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
+          %li= link_to "Cancel", "#", :class => 'js_cancel_reply delete_btn'
 
 
   - if comment.children.present?

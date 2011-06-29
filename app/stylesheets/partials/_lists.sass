@@ -327,17 +327,30 @@ ul.ordered_nav
   li
     margin-bottom: 0 !important
   textarea
-    height: 100px
-    width: 98% !important
+    height: 60px
+    width: 60% !important
   .inline-errors
-    background: $lightest-blue
     color: $red
-    float: left
     font-size: 12px
     font-weight: bold
     margin-left: 5px
-    padding: 5px 10px
+    padding: 5px 10px 5px 0
+    width: auto
     +border-bottom-radius
+  .buttons ol li
+    border: none
+    .delete_btn
+      margin: 2px 0 0 5px
+  &.reply
+    background: image_url("icon_reply.png") no-repeat 10px 10px
+    padding-left: 25px
+    h2
+      background: $light-blue - #222 !important
+      font-size: 12px
+  .big_gravatar
+    float: left
+    margin: 15px 10px 0 0
+    min-height: 100px
     
 .comments_list
   .comment_item

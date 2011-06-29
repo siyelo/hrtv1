@@ -98,8 +98,8 @@ class User < ActiveRecord::Base
     full_name.presence || username
   end
 
-  def gravatar
-    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=30"
+  def gravatar (size=30)
+    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}"
   end
 
   def current_request

@@ -7,7 +7,11 @@ Hello,
 
 To view/respond to it, please visit the url below.
 
-<%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
+<% if @comment.commentable.is_a?(DataResponse) %>
+  <%= review_response_url(@comment.commentable) %>
+<% else %>
+  <%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
+<% end %>
 
 
 Regards

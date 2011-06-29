@@ -27,7 +27,7 @@ end
 
 Comment.find(:all,
              :conditions => ["commentable_type IN (?)",
-                             ["FundingFlow", "ModelHelp", "DataResponse"]]).each do |comment|
+                              ["FundingFlow", "ModelHelp"]]).each do |comment|
   comment.destroy
 end
 

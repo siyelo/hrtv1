@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.boolean  "submitted"
     t.datetime "submitted_at"
     t.integer  "projects_count",                    :default => 0
+    t.integer  "comments_count",                    :default => 0
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0

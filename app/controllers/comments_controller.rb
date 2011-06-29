@@ -30,7 +30,7 @@ class CommentsController < Reporter::BaseController
   end
 
   def edit
-    @comment = current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id])
+    @comment = find_comment
     load_data_response(@comment)
 
     respond_to do |format|
@@ -103,7 +103,12 @@ class CommentsController < Reporter::BaseController
     end
 
     def find_comment
-      current_user.admin? ? Comment.find(params[:id]) : Comment.on_all(current_user.organization).find(params[:id], :readonly => false)
+      dr_ids  = current_user.organization.data_responses.map(&:id)
+      if current_user.admin?
+        Comment.find(params[:id])
+      else
+        Comment.on_all(dr_ids).find(params[:id], :readonly => false)
+      end
     end
 
     def commentable_resource(comment)

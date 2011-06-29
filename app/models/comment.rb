@@ -48,16 +48,19 @@ class Comment < ActiveRecord::Base
 
   named_scope :on_all, lambda { |dr_ids|
     { :joins => "LEFT OUTER JOIN projects p ON p.id = comments.commentable_id
+                 LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
                  LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
                  LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-      :conditions => ["(comments.commentable_type ='Project'
-                        AND p.data_response_id IN (:drs))
+      :conditions => ["(comments.commentable_type = 'DataResponse'
+                          AND dr.id IN (:drs))
+                        OR (comments.commentable_type = 'Project'
+                          AND p.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND a.type IS NULL
                           AND a.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND oc.type = 'OtherCost'
-                        AND oc.data_response_id IN (:drs))",
+                          AND oc.data_response_id IN (:drs))",
                        {:drs => dr_ids}],
      :order => "created_at DESC" }
   }

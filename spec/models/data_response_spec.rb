@@ -11,6 +11,7 @@ describe DataResponse do
     it { should have_many(:funding_flows).dependent(:destroy) }
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 
   describe "validations" do
@@ -19,6 +20,14 @@ describe DataResponse do
   end
 
   describe "counter cache" do
+    context "comments cache" do
+      before :each do
+        @commentable = Factory.create(:data_response)
+      end
+
+      it_should_behave_like "comments_cacher"
+    end
+
     it "caches projects count" do
       dr = Factory.create(:data_response)
       dr.projects_count.should == 0

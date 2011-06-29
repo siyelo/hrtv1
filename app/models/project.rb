@@ -79,7 +79,7 @@ class Project < ActiveRecord::Base
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
-                  :budget2, :budget3, :budget4, :budget5, :am_approved
+                  :budget2, :budget3, :budget4, :budget5
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -258,6 +258,14 @@ class Project < ActiveRecord::Base
 
   def spend_matches_funders?
     (self.spend || 0) == self.in_flows_spend_total
+  end
+
+  def subtotal_budget
+    activities.select{|a| !a.am_approved.nil? && a.am_approved}.sum(&:budget)
+  end
+
+  def subtotal_spend
+    activities.select{|a| !a.am_approved.nil? && a.am_approved}.sum(&:spend)
   end
 
   def in_flows_spend_total

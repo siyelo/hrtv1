@@ -8,8 +8,8 @@ Feature: Reporter can manage projects
     And a data_request "data_request1" exists with title: "data_request1"
     And a data_request "data_request2" exists with title: "data_request2"
     And an organization "organization2" exists with name: "organization2"
-    And a data_response "data_response" exists with data_request: data_request "data_request1", organization: organization "organization2"
-    And a data_response "data_response1" exists with data_request: data_request "data_request2", organization: organization "organization3"
+    Then data_response "data_response" should exist with data_request: data_request "data_request1", organization: organization "organization2"
+    And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
     And a reporter exists with username: "reporter", organization: organization "organization2"
     And a location exists with short_display: "Location1"
     And a location exists with short_display: "Location2"
@@ -122,34 +122,28 @@ Feature: Reporter can manage projects
      When I follow "Download template"
      Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
-    Scenario: A reporter can create comments for a project
-     Given a project exists with name: "project1", data_response: data_response "data_response"
+
+     @run
+    Scenario: A reporter can create comments for a workplan (response) and see errors
      When I follow "Projects"
-      And I follow "project1"
-      And I fill in "Title" with "Comment title"
-      And I fill in "Comment" with "Comment body"
-      And I press "Create Comment"
-     Then I should see "Comment title"
-      And I should see "Comment body"
-
-
-    Scenario: A reporter can create comments for an activity and see comment errors
-     Given a project exists with name: "project1", data_response: data_response "data_response"
-     When I follow "Projects"
-      And I follow "project1"
-      And I press "Create Comment"
-     Then I should see "can't be blank" within "#comment_title_input"
-      And I should see "can't be blank" within "#comment_comment_input"
-
-     When I fill in "Title" with "Comment title"
-      And I press "Create Comment"
-     Then I should not see "can't be blank" within "#comment_title_input"
-      And I should see "can't be blank" within "#comment_comment_input"
+       And I press "Create Comment"
+     Then I should see "can't be blank" within "#comment_comment_input"
 
      When I fill in "Comment" with "Comment body"
-      And I press "Create Comment"
-     Then I should see "Comment title"
-      And I should see "Comment body"
+       And I press "Create Comment"
+     Then I should see "Comment body"
+
+
+    Scenario: A reporter can create comments for an activity and see errors
+     Given a project exists with name: "project1", data_response: data_response "data_response"
+     When I follow "Projects"
+       And I follow "project1"
+       And I press "Create Comment"
+     Then I should see "can't be blank" within "#comment_comment_input"
+
+     When I fill in "Comment" with "Comment body"
+       And I press "Create Comment"
+     Then I should see "Comment body"
 
 
     @javascript @wip

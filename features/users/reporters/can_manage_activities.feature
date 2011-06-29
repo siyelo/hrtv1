@@ -37,7 +37,7 @@ Feature: Reporter can manage activities
     When I follow "activity1 description"
     Then the "Target" field should contain "Output description value"
 
-    @javascript @run
+    @javascript
     Scenario: Reporter can add implementers (normal values)
       When I follow "Add Activities now"
 	And I fill in "Name" with "activity1"
@@ -195,34 +195,15 @@ Feature: Reporter can manage activities
         And I should see "Activity1 description"
 
 
-    Scenario: A reporter can create comments for an activity
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-      When I follow "Projects"
-       And I follow "Activity1 description"
-       And I fill in "Title" with "Comment title"
-       And I fill in "Comment" with "Comment body"
-       And I press "Create Comment"
-      Then I should see "Comment title"
-       And I should see "Comment body"
-
-
-    Scenario: A reporter can create comments for an activity and see comment errors
+    Scenario: A reporter can create comments for an activity and see errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
         And I follow "Activity1 description"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_title_input"
-        And I should see "can't be blank" within "#comment_comment_input"
-
-      When I fill in "Title" with "Comment title"
-        And I press "Create Comment"
-      Then I should not see "can't be blank" within "#comment_title_input"
-        And I should see "can't be blank" within "#comment_comment_input"
-
+      Then I should see "can't be blank" within "#comment_comment_input"
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"
-      Then I should see "Comment title"
-        And I should see "Comment body"
+      Then I should see "Comment body"
 
 
     Scenario: Does not email users when a comment is made by a reporter

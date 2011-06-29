@@ -1,7 +1,7 @@
 - title("Projects")
 
-
-= render :partial => 'shared/projects_sub_nav'
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
 
 %h1.main_heading
   = render 'search'

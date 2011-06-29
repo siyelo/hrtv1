@@ -1198,7 +1198,7 @@ var commentsInit = function () {
 
   // remove demo text when submiting comment
   $('.submit_btn').click(function (e) {
-    $('*[data-hint]').trigger('focus')
+    removeDemoText($('*[data-hint]'));
   });
 }
 
@@ -1270,6 +1270,18 @@ var focusDemoText = function (elements) {
       if (element.val() == demo_text) {
         element.val('');
         element.removeClass('input_hint');
+      }
+    }
+  });
+};
+
+var removeDemoText = function (elements) {
+  elements.each(function () {
+    var element = $(this);
+    var demo_text = element.attr('data-hint');
+    if (demo_text != null) {
+      if (element.val() == demo_text) {
+        element.val('');
       }
     }
   });

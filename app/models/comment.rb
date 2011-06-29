@@ -51,7 +51,7 @@ class Comment < ActiveRecord::Base
                  LEFT OUTER JOIN data_responses dr ON dr.id = comments.commentable_id
                  LEFT OUTER JOIN activities a ON a.id = comments.commentable_id
                  LEFT OUTER JOIN activities oc ON oc.id = comments.commentable_id ",
-      :conditions => ["(comments.commentable_type = 'DataResponse'
+      :conditions => ["((comments.commentable_type = 'DataResponse'
                           AND dr.id IN (:drs))
                         OR (comments.commentable_type = 'Project'
                           AND p.data_response_id IN (:drs))
@@ -60,7 +60,8 @@ class Comment < ActiveRecord::Base
                           AND a.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND oc.type = 'OtherCost'
-                          AND oc.data_response_id IN (:drs))",
+                          AND oc.data_response_id IN (:drs)))
+                      AND comments.parent_id IS NULL",
                        {:drs => dr_ids}],
      :order => "created_at DESC" }
   }

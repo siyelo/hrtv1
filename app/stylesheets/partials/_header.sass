@@ -184,13 +184,38 @@
       &:last-child a
         +border-top-right-radius
 
+      &.active
+        a
+          background: $filler
+          border-bottom: 1px solid #FFF
+          border-left: none
+          background: white
+          color: $dark-blue
+          letter-spacing: 0.05em
+          margin: 0
+          padding-top: 15px
+          position: relative
+          top: 1px
+          +border-top-radius(3px)
+          +linear-gradient(color-stops(white, $filler))
+          +text-shadow(#fff, 0, 1px, 1px)
+
+          // dont want hover background on active tab
+          &:hover
+            background: white
+            color: $mid-blue + #222
+            +linear-gradient(color-stops($lightest-blue, white))
+            +text-shadow(#fff, 0, 1px, 1px)
+
+
+
       a
         border: 1px solid $mid-blue
         border-left: 1px solid $light-blue - #222
         border-right: 1px solid $mid-blue + #222
         margin: 3px 0 0
-        background: !light-blue
-        color: !mid-blue
+        background: $light-blue
+        color: $mid-blue
         display: inline
         float: left
         font-size: 12px
@@ -203,29 +228,65 @@
         +text-shadow($light-blue, 0, 1px, 1px)
 
         &:hover
-          background: !lightest-blue
-          color: !mid-blue
+          background: $lightest-blue
+          color: $mid-blue
           +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
           +text-shadow(#fff, 0, 1px, 1px)
 
+      &.home_tab
+        a
+          span
+            background: image_url("home_nav.png") repeat scroll 0 -17px transparent
+            display: block
+            height: 17px
+            line-height: 17px
+            margin-top: -2px
+            text-indent: -5000px
+            width: 18px
         &.active
-          border-bottom: 1px solid #FFF
-          border-left: none
-          background: white
-          color= !dark-blue
-          letter-spacing: 0.05em
-          margin: 0
-          padding-top: 15px
-          +border-top-radius(3px)
-          +linear-gradient(color-stops($lightest-blue, white))
-          +text-shadow(#fff, 0, 1px, 1px)
+          a
+            span
+              background-position: 0 0
+
 
   img
     float: right
     margin-top: -35px
 /* APP MAIN-NAV STYLES end */
 
+/* sub-nav styles */
+#sub-nav
+  background: $filler
+  border-bottom: 1px solid #ddd
+  padding-top: 4px
 
+  ul
+    +horizontal-list
+    padding: 0 8px 6px
+    margin-top: 2px !important
+  a
+    +border-radius
+    display: inline-block
+    font-size: 12px
+    padding: 7px 10px 6px 10px
+    text-decoration: none
+    +text-shadow(#fff, 0, 1px, 0)
+    &:hover, &:focus
+      background: $mid-blue
+      color: white
+      +text-shadow(#000, 0, 1px, 0)
+  &.alt
+    margin: 10px -15px
+
+  .active
+    a
+      background: $mid-blue
+      color: white
+      +text-shadow(#000, 0, 1px, 0)
+  .inactive
+    a
+      color: grey
+/* sub-nav styles end */
 
 /* LANDING & LOGIN PAGES SPECIFIC STYLES */
 

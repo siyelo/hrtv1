@@ -501,9 +501,12 @@ body#static_page_submit #content .wrapper #main
     background-color: #64B23B
 
     h2
-      padding: 5px 5px 5px 10px
-      background-image: none
+      background: none
+      border: none
+      color: #fff
       float: left
+      padding: 5px 5px 5px 10px
+      +text-shadow(#64B23B - #222, 0, 1px, 0)
 
     span.close
       background: image_url("tips_close.png") no-repeat right

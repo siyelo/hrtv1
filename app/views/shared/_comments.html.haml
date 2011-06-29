@@ -4,7 +4,6 @@
     .big_gravatar
       = image_tag current_user.gravatar(60)
     = render 'comments/form', :comment => @comment
-  %ul.comments_list
+  %ul.comments_list.js_comments_list
     - comments.each do |comment|
       = render 'comments/comment', :comment => comment
-

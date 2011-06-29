@@ -50,7 +50,10 @@ class Reporter::BaseController < ApplicationController
       @comment.commentable = resource
       @comments = resource.comments.find(:all, :order => 'created_at DESC',
                                          :conditions => 'parent_id is NULL',
-                                         :include => {:user => :organization})
+                                         :include => :user)
+      # @comments = resource.comments.roots.find(:all)
+      # :include => {:user => :organization} does not work when using roots scope
+      # Comment.send(:preload_associations, @comments, {:user => :organization})
     end
 
     def warn_if_not_current_request

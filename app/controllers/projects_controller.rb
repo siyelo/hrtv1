@@ -18,7 +18,7 @@ class ProjectsController < Reporter::BaseController
 
     @comment = Comment.new
     @comment.commentable = @response
-    @comments = Comment.on_all([@response.id]).paginate :per_page => 20,
+    @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
   end

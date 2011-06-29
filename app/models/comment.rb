@@ -1,6 +1,6 @@
 class Comment < ActiveRecord::Base
 
-  acts_as_tree :order => 'created_at'
+  acts_as_tree :order => 'created_at DESC'
 
   ### Attributes
   attr_accessible :comment, :parent_id
@@ -60,8 +60,7 @@ class Comment < ActiveRecord::Base
                           AND a.data_response_id IN (:drs))
                         OR (comments.commentable_type = 'Activity'
                           AND oc.type = 'OtherCost'
-                          AND oc.data_response_id IN (:drs)))
-                      AND comments.parent_id IS NULL",
+                          AND oc.data_response_id IN (:drs)))",
                        {:drs => dr_ids}],
      :order => "created_at DESC" }
   }

@@ -232,6 +232,15 @@ var buildUrl = function (url) {
   }
 };
 
+var buildJsonUrl = function (url) {
+  var parts = url.split('?');
+  if (parts.length > 1) {
+    return parts.join('.json?');
+  } else {
+    return parts[0] + '.json';
+  }
+};
+
 var getResources = function (element) {
   return element.parents('.resources');
 }
@@ -1186,19 +1195,54 @@ var commentsInit = function () {
   focusDemoText($('*[data-hint]'));
   blurDemoText($('*[data-hint]'));
 
-  $('.js_reply').click('live', function (e) {
+  $('.js_reply').live('click', function (e) {
     e.preventDefault();
     $(this).parents('li:first').find('.js_reply_box:first').show();
   })
 
-  $('.js_cancel_reply').click('live', function (e) {
+  $('.js_cancel_reply').live('click', function (e) {
     e.preventDefault();
     $(this).parents('.js_reply_box:first').hide();
   })
 
   // remove demo text when submiting comment
-  $('.submit_btn').click(function (e) {
+  $('.submit_btn').live('click', function (e) {
+    e.preventDefault();
     removeDemoText($('*[data-hint]'));
+
+    var element = $(this);
+    var form    = element.parents('form');
+    var block;
+    //var ajaxLoader = element.next('.ajax-loader');
+    //ajaxLoader.show();
+
+    $.post(buildJsonUrl(form.attr('action')), form.serialize(),
+      function (data, status, response) {
+
+      if (response.status === 206) {
+        form.replaceWith(data.html)
+      } else {
+        if (form.find('#comment_parent_id').length) {
+          // comment reply
+          block = element.parents('li.comment_item:first');
+
+          if (block.find('ul').length) {
+            block.find('ul').prepend(data.html);
+          } else {
+            block.append($('<ul/>').prepend(data.html));
+          }
+        } else {
+          // root comment
+          block = $('ul.js_comments_list');
+          block.prepend(data.html)
+        }
+      }
+
+      initDemoText(form.find('*[data-hint]'));
+      form.find('textarea').val(''); // reset comment value to blank
+      form.find('.inline-errors').remove(); // remove inline error if present
+      form.find('.js_cancel_reply').trigger('click'); // close comment block
+    });
   });
 }
 

@@ -51,11 +51,17 @@ class CommentsController < Reporter::BaseController
           redirect_to commentable_resource(@comment)
         end
         format.js { render :partial => "row", :locals => {:comment => @comment} }
+        format.json { render :json => {:html => render_to_string(
+          {:partial => 'comment.html.haml', :locals => {:comment => @comment}})}}
       end
     else
       respond_to do |format|
         format.html { render :action => "new" }
-        format.js   { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
+        format.js   { render :partial => "form", :locals => {:comment => @comment},
+                             :status => :partial_content } # :partial_content => 206
+        format.json { render :json => {:html => render_to_string(
+          {:partial => 'form.html.haml', :locals => {:comment => @comment}})},
+                             :status => :partial_content} # :partial_content => 206
       end
     end
   end
@@ -103,10 +109,10 @@ class CommentsController < Reporter::BaseController
     end
 
     def find_comment
-      dr_ids  = current_user.organization.data_responses.map(&:id)
       if current_user.admin?
         Comment.find(params[:id])
       else
+        dr_ids  = current_user.organization.data_responses.map(&:id)
         Comment.on_all(dr_ids).find(params[:id], :readonly => false)
       end
     end

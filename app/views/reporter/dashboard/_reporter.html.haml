@@ -1,3 +1,10 @@
+- if current_or_last_response
+  - hacked_response_projects_path = response_projects_path(current_or_last_response)
+  - hacked_submit_response_path   = submit_response_path(current_or_last_response)
+- else
+  - hacked_response_projects_path = new_response_path
+  - hacked_submit_response_path   = new_response_path
+
 = render 'welcome'
 
 %ul.horizontal.left

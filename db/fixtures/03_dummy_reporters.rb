@@ -29,7 +29,13 @@ puts "=> added sample data for reporter #{@reporter.name}"
 begin
   puts "creating activity_manager"
   org = Factory(:organization, :name => "internal_activity_manager_org")
-  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com', :organization => org, :organizations => [Factory(:organization), Factory(:organization)])
+  am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com',
+    :organization => org)
+  # assign some nice existing orgs
+  orgs = [ 'JSI', 'Tulane University', 'ICAP', 'Access Project', 'TRAC+ - HIV', 'Voxiva']
+  query = orgs.map{ |o| "name like ?"}.join(' OR ')
+  am.organizations = Organization.find(:all, :conditions => [query, *orgs.map{|o| "%#{o}%"}])
+  am.save
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_activity_manager_org' or user named 'activity_manager'? "

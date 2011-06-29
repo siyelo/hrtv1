@@ -6,5 +6,4 @@
     %ul
       - organization.user_emails(2).each do |e|
         %li= mail_to(e)
-  %td= response.status
   %td= "#{response.activities.manager_approved.count}/#{response.activities_count}"

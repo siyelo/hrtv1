@@ -2,4 +2,4 @@
   .wrapper
     %ul
       - %w(dashboard reports organizations users activities requests codes).each do |tab|
-        %li= build_admin_nav_tab(tab)
+        = build_admin_nav_tab(tab)

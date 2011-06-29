@@ -2,24 +2,21 @@
 - hacked_response_path = edit_organization_path(current_user.organization)
 - if current_user.organization.valid? & current_user.current_response
   - hacked_projects_url = response_projects_path(current_user.current_response)
-  - hacked_review_response_url = review_response_path(current_user.current_response)
-  - hacked_submit_response_url = submit_response_path(current_user.current_response)
 - else
   - hacked_projects_url = hacked_response_path
-  - hacked_review_response_url = hacked_response_path
-  - hacked_submit_response_url = hacked_response_path
 
 #main-nav
   .wrapper
     %ul
-      // The old home tab for code reference
-      //%li= link_to "Home", user_dashboard_path(current_user), :class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)
-      %li.home_tab.active
-        - link_to "#" do
+      %li.home_tab{:class =>  (controller.class == Reporter::DashboardController ? 'active' : nil)}
+        %a{:href => user_dashboard_path(current_user)}
           %span Home
-      %li= link_to 'Settings', edit_organization_url(:current), :class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)
-      %li= link_to 'Projects', hacked_projects_url, :class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController].include?(controller.class) ? "active" : nil)
-      %li= link_to 'Review', hacked_review_response_url, :class => (controller.class == ResponsesController && controller.action_name == "review" ? "active" : '')
-      %li= link_to 'Submit', hacked_submit_response_url, :class => (controller.class == ResponsesController && ["submit", "send_data_response"].include?(controller.action_name) ? "active" : '')
-      %li= link_to 'Reports', reporter_reports_path, :class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)
-      %li= link_to "Help", "http://hrtapp.tenderapp.com/", :target => "_blank"
+
+      %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
+        = link_to 'Projects', hacked_projects_url
+
+      %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}
+        = link_to 'Reports', reporter_reports_path
+
+      %li{:class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}
+        = link_to 'Settings', edit_organization_url(:current)

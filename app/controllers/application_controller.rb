@@ -77,8 +77,8 @@ class ApplicationController < ActionController::Base
 
     def require_no_user
       if current_user
-        flash[:error] = "You must be logged out to access requested page"
-        redirect_to root_url
+        #flash[:error] = "You must be logged out to access requested page"
+        redirect_to user_dashboard_path(current_user)
         return false
       end
     end

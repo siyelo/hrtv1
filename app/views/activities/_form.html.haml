@@ -78,26 +78,28 @@
 
   %li.last.sub_activities
     %h3 Implementers
-    %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
+    .dashboard_section
+      %p.hint Optional. Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
 
-    - unless @activity.new_record?
-      - link_to "#", :class => "create_inline upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
-        = image_tag "new.png"
-        Import / Export
+      - unless @activity.new_record?
+        - link_to "#", :class => "add_row upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
+          = image_tag "new.png"
+          Import / Export
 
-    - f.semantic_fields_for :sub_activities do |ca|
-      = render "activities/sub_activity_fields", :f => ca
-    .add
-      = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/"
+      - f.semantic_fields_for :sub_activities do |ca|
+        = render "activities/sub_activity_fields", :f => ca
+      .add
+        = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/"
 
   %li.last.targets.js_targets
     %h3 Activity Targets
-    %p.hint Optional. Describe planned targets for this activity.
+    .dashboard_section
+      %p.hint Optional. Describe planned targets for this activity.
 
-    - f.semantic_fields_for :outputs do |ca|
-      = render "activities/output_fields", :f => ca
-    .add
-      = link_to_add_fields "Add Target", f, :outputs, "activities/"
+      - f.semantic_fields_for :outputs do |ca|
+        = render "activities/output_fields", :f => ca
+      .add
+        = link_to_add_fields "Add Target", f, :outputs, "activities/"
 
   %li.last
     %h3== Other

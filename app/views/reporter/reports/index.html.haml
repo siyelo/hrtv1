@@ -5,17 +5,6 @@
 .first-half
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
-    Data Responses
-  .dashboard_section
-    %ul.admin_reports
-      - if current_user.current_response
-        %li
-          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
-            Review My Response
-            %span.hint Interactive report of your current data response
-
-  %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
     Districts
   .dashboard_section
     %ul.admin_reports
@@ -35,8 +24,7 @@
           Review National Expenditures and Current Budgets
           %span.hint Interactive reports
       %li
-
-.second-half
+  
   %h2
     =image_tag "icon_users.png", :class => "heading_icon"
     Users
@@ -44,6 +32,7 @@
     %ul
       %li= link_to "Users In My Organization", reporter_report_path('users_in_my_organization'), :class => "target"
 
+.second-half
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Codes

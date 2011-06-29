@@ -272,7 +272,7 @@ a.remove_nested
       
   &.dropdown_trigger
     background: $orange
-    border: 1px solid $orange - #222
+    // border: 1px solid $orange - #222
     color: #fff
     display: inline-block
     font-size: 12px
@@ -283,32 +283,20 @@ a.remove_nested
     text-decoration: none
     z-index: 20
     +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
     +linear-gradient(color-stops($orange, $orange - #222))
-    +text-shadow($orange - #444, 0, 1px, 0)
+
     img
       position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $orange - #222
-      border: 1px solid $orange - #222
-      color: #fff
-      +box-shadow(#000, 0, 1px, 3px)
-      +linear-gradient(color-stops(green, green - #222))
-    &:active
-      outline: none
-      position: relative
-      top: 1px
+      padding-bottom: 3px
     &.persist
-      background: $orange - #222
-      border: 1px solid $orange - #222
       color: #fff
-      +box-shadow(#000, 0, 1px, 3px)
-      
-    &:hover, &:active, &:focus
-      background: $orange - #222 !important
-      border: 1px solid $orange - #222 !important
-      +box-shadow(#000, 0, 1px, 3px)
+      background: green - #222 !important
+      border: 1px solid green - #222 !important
+      +linear-gradient(color-stops(green, green - #222))
+    &:hover, &:focus
+      color: #fff
+      background: green - #222 !important
+      border: 1px solid green - #222 !important
 
 .next, input[type=submit]
   +border-radius

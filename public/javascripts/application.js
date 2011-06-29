@@ -1152,10 +1152,12 @@ var projects_new = projects_create = projects_edit = projects_update = {
 var projects_index = {
   run: function () {
     
-      $('.dropdown_menu').hover(function (){
+      $('.dropdown_menu').hover(function (e){
+        e.preventDefault();
         $('ul', this).slideDown(100);
         $('.dropdown_trigger').addClass('persist');
-      }, function() {
+      }, function(e) {
+        e.preventDefault();
         $('ul', this).slideUp(100);
         $('.dropdown_trigger').removeClass('persist');
       });

@@ -1,17 +1,15 @@
 #header_app
   .wrapper
     #logo
-
-      - if current_user && current_user.organization
-        %p
-          = "#{truncate(current_user.organization.name, :length => 35)}: "
-          - # sysadmin has no request/response
-          - # TODO: show request name when logged in as admin
-          - # but you're viewing a reporter's org/response
-          = "[#{current_user.current_request_name}]"
-
-      - else
-        %p= "No organization specified"
+      - org_name = current_user.organization.name
+      - org_name = @response.organization.name if @response
+      %p
+        -
+        = "#{truncate(org_name, :length => 35)}: "
+        - # sysadmin has no request/response
+        - # TODO: show request name when logged in as admin
+        - # but you're viewing a reporter's org/response
+        = "[#{current_request.name}]"
 
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'

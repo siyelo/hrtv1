@@ -1,0 +1,23 @@
+.first-half
+  %h2
+    =image_tag "icon_lightning.png", :class => "heading_icon"
+    Reports
+  .dashboard_section
+    %ul.admin_reports
+      - if current_user.current_response
+        %li
+          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
+            Review My Response
+            %span.hint Interactive report of your current data response
+      %li
+        - link_to reports_districts_path, :class => "drill_down target" do
+          Review District Expenditures and Current Budgets
+          %span.hint Interactive reports
+      %li
+        - link_to reports_country_path, :class => "drill_down target" do
+          Review National Expenditures and Current Budgets
+          %span.hint Interactive reports
+      %li
+        - link_to reporter_reports_path, :class => "drill_down target" do
+          All Reports
+          %span.hint Export a report in CSV

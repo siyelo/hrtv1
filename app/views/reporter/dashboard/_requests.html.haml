@@ -1,0 +1,15 @@
+%h2
+  =image_tag "icon_reporter.png", :class => "heading_icon"
+  Data Requests
+.dashboard_section
+
+  %table.modern_table
+    %thead
+      %tr
+        %td Name
+        %td Requested By
+        %td Due
+        %td Submitted at
+        %td Status
+    %tbody
+      = render :partial => 'response', :collection => @responses

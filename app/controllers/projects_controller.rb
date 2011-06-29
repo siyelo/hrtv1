@@ -97,7 +97,7 @@ class ProjectsController < Reporter::BaseController
   def am_approve
     if current_user.admin? || current_user.activity_manager?
       project = @response.projects.find(params[:id])
-      project.update_attributes({:am_approved => params[:approve]})
+      project.update_attributes({:am_approved => params[:approve]}) 
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}

@@ -88,7 +88,7 @@ class ActivitiesController < Reporter::BaseController
   def am_approve
     if current_user.admin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
-      @activity.update_attributes({:am_approved => params[:approve]})
+      @activity.update_attributes({:am_approved => params[:approve]}) unless @activity.am_approved?
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}

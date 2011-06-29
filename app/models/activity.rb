@@ -740,6 +740,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -788,5 +789,6 @@ end
 #  budget3                               :decimal(, )
 #  budget4                               :decimal(, )
 #  budget5                               :decimal(, )
+#  am_approved                           :boolean
 #
 

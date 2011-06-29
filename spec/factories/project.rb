@@ -5,6 +5,7 @@ Factory.define :project, :class => Project do |f|
   f.spend               { 100.00 }
   f.start_date          { Date.parse("2010-01-01") }
   f.end_date            { Date.parse("2010-12-31") }
+  f.am_approved         { false }
   f.data_response       { Factory(:data_response) }
 end
 

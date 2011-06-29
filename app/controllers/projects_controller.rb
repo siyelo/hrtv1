@@ -16,6 +16,8 @@ class ProjectsController < Reporter::BaseController
                                :order => "#{sort_column} #{sort_direction}",
                                :include => :activities)
 
+    @comment = Comment.new
+    @comment.commentable = @response
     @comments = Comment.on_all([@response.id]).paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
@@ -61,7 +63,7 @@ class ProjectsController < Reporter::BaseController
     template = Project.download_template
     send_csv(template, 'projects_template.csv')
   end
-  
+
   def export
     template = @response.download_template
     send_csv(template, "Export_projects_activities.csv")

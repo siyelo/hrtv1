@@ -7,16 +7,10 @@
       = image_tag "icon_reply.png"
       Reply
     %span
-      e-mail:
-      %strong= comment.user.email
-    %span
-      organization:
-      %strong= comment.user.organization.name
-    %span
       commented on:
       %strong= comment.commentable.name
-    
-    
+
+
   %p.comment= comment.comment
 
 

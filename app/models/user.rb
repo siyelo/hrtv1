@@ -95,7 +95,7 @@ class User < ActiveRecord::Base
 
   # name() will give you their email if their (non-mandatory) full name isn't set
   def name
-    full_name.presence || email
+    full_name.presence || username
   end
 
   def gravatar

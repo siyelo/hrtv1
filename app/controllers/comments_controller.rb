@@ -128,6 +128,12 @@ class CommentsController < Reporter::BaseController
         else
           edit_response_project_url(comment.commentable.data_response, comment.commentable)
         end
+      elsif comment.commentable_type == "DataResponse"
+        if current_user.admin?
+          review_response_url(comment.commentable)
+        else
+          response_projects_url(comment.commentable)
+        end
       else
         comments_url
       end

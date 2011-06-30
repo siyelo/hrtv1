@@ -1,0 +1,13 @@
+- semantic_form_for comment, :url => comments_path(:commentable_type => parent.commentable_type, :commentable_id => parent.commentable_id) do |f|
+  %h2 Replying
+  .dashboard_section
+    .big_gravatar
+      = image_tag current_user.gravatar(60)
+    = f.semantic_errors :state
+    - f.inputs "", :id => "basic", :class => "collapsible" do
+      = f.input :parent_id, :as => :hidden
+      = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+    - f.buttons do
+      = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
+      %li= link_to "Cancel", "#", :class => 'js_cancel_reply delete_btn'
+      = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

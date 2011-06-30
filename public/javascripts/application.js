@@ -1195,14 +1195,21 @@ var commentsInit = function () {
   focusDemoText($('*[data-hint]'));
   blurDemoText($('*[data-hint]'));
 
+  var removeInlineErrors = function (form) {
+    form.find('.inline-errors').remove(); // remove inline error if present
+  }
+
   $('.js_reply').live('click', function (e) {
     e.preventDefault();
-    $(this).parents('li:first').find('.js_reply_box:first').show();
+    var element = $(this);
+    element.parents('li:first').find('.js_reply_box:first').show();
   })
 
   $('.js_cancel_reply').live('click', function (e) {
     e.preventDefault();
-    $(this).parents('.js_reply_box:first').hide();
+    var element = $(this);
+    element.parents('.js_reply_box:first').hide();
+    removeInlineErrors(element.parents('form'));
   })
 
   // remove demo text when submiting comment
@@ -1211,13 +1218,21 @@ var commentsInit = function () {
     removeDemoText($('*[data-hint]'));
 
     var element = $(this);
+    if (element.hasClass('disabled')) {
+      return;
+    }
+
     var form    = element.parents('form');
     var block;
-    //var ajaxLoader = element.next('.ajax-loader');
-    //ajaxLoader.show();
+    var ajaxLoader = element.parent('li').nextAll('.ajax-loader');
+
+    element.addClass('disabled');
+    ajaxLoader.show();
 
     $.post(buildJsonUrl(form.attr('action')), form.serialize(),
       function (data, status, response) {
+      ajaxLoader.hide();
+      element.removeClass('disabled');
 
       if (response.status === 206) {
         form.replaceWith(data.html)
@@ -1239,8 +1254,8 @@ var commentsInit = function () {
       }
 
       initDemoText(form.find('*[data-hint]'));
+      removeInlineErrors(form);
       form.find('textarea').val(''); // reset comment value to blank
-      form.find('.inline-errors').remove(); // remove inline error if present
       form.find('.js_cancel_reply').trigger('click'); // close comment block
     });
   });
@@ -1610,7 +1625,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       var activity_id = $(this).attr('activity-id');
       var response_id = $(this).attr('response-id');
       var element = $(this);
-   
+
       element.find(".ajax-loader").show();
       var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
       $.post(url, {approve: true, "_method": "put"}, function (data) {

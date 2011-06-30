@@ -59,9 +59,18 @@ class CommentsController < Reporter::BaseController
         format.html { render :action => "new" }
         format.js   { render :partial => "form", :locals => {:comment => @comment},
                              :status => :partial_content } # :partial_content => 206
-        format.json { render :json => {:html => render_to_string(
-          {:partial => 'form.html.haml', :locals => {:comment => @comment}})},
-                             :status => :partial_content} # :partial_content => 206
+        format.json do
+          if @comment.parent_id?
+            # nested form
+            html = render_to_string({:partial => 'reply_form.html.haml',
+                                     :locals => {:comment => @comment, :parent => @comment.parent}})
+          else
+            html = render_to_string({:partial => 'form.html.haml',
+                                     :locals => {:comment => @comment}})
+          end
+
+          render :json => {:html => html}, :status => :partial_content # :partial_content => 206
+        end
       end
     end
   end

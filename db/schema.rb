@@ -9,8 +9,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
 ActiveRecord::Schema.define(:version => 20110630080458) do
+
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -302,7 +302,6 @@ ActiveRecord::Schema.define(:version => 20110630080458) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
-    t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
   end

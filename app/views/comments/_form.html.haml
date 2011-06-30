@@ -11,3 +11,4 @@
       - f.buttons do
         / js event: .submit_btn
         = f.commit_button :label => (comment.new_record? ? "Create Comment" : "Update Comment"), :button_html => { :class => "submit_btn" }
+        = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

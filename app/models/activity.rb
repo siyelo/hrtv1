@@ -55,7 +55,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
-    :outputs_attributes
+    :outputs_attributes, :am_approved_date, :user_id
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
@@ -63,6 +63,7 @@ class Activity < ActiveRecord::Base
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
   belongs_to :project
+  belongs_to :user
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity

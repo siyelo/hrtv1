@@ -23,6 +23,7 @@ class Project < ActiveRecord::Base
   ### Associations
   belongs_to :data_response, :counter_cache => true
   has_and_belongs_to_many :locations
+  belongs_to :user
   has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
@@ -79,7 +80,8 @@ class Project < ActiveRecord::Base
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
-                  :budget2, :budget3, :budget4, :budget5, :am_approved
+                  :budget2, :budget3, :budget4, :budget5, :am_approved, :am_approved_date,
+                  :user_id
 
   ### Delegates
   delegate :organization, :to => :data_response

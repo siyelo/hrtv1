@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110628115022) do
+ActiveRecord::Schema.define(:version => 20110630080458) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.decimal  "budget4"
     t.decimal  "budget5"
     t.boolean  "am_approved"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -327,6 +329,9 @@ ActiveRecord::Schema.define(:version => 20110628115022) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.boolean  "am_approved"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

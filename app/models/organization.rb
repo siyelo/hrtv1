@@ -205,7 +205,6 @@ class Organization < ActiveRecord::Base
     response_for(request).status
   end
 
-
   protected
 
     def tidy_name(n)

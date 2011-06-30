@@ -100,7 +100,7 @@ class User < ActiveRecord::Base
   end
 
   def gravatar(size = 30)
-    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}"
+    "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
 
   def current_request

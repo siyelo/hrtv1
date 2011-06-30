@@ -23,4 +23,3 @@ class Reporter::DashboardController < Reporter::BaseController
     end
   end
 end
-

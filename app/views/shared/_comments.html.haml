@@ -1,5 +1,6 @@
-.full_width
-  %h2 Comments
+.full_width{:name => "comments"}
+  %h2
+    %a{:name => "comments"} Comments
   .dashboard_section.comments_input
     .big_gravatar
       = image_tag current_user.gravatar(60)

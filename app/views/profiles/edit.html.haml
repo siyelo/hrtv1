@@ -16,7 +16,7 @@
           .inputs 
             =f.label "Picture"
           = image_tag current_user.gravatar(60), :class => "gravatar"
-          %p.inline-hints= "You can change the picture for #{current_user.email} at <a href=\"http://www.gravatar.com\" target=\"_blank\">gravatar.com</a>"
+          %p.inline-hints= "You can change the picture for #{current_user.email} at #{link_to "gravatar.com", "http://www.gravatar.com", :target => "_blank"}"
         = f.input :tips_shown, :hint => "Show the Getting Started tips at the top of each page?", :label => "Show tips?", :required => false
 
     - f.buttons :class => 'wrap-80 buttons' do

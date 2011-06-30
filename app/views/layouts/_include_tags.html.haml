@@ -1,10 +1,10 @@
-= javascript_include_tag 'jquery-1.5.1.min', 'jquery-ui-1.8.13.custom.min', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 'jquery.effects.core', 'jquery.effects.highlight', 'jquery.rest_in_place', 'jquery.tools', 'jquery.autocomplete.combobox.js', 'application', :cache => true
+= javascript_include_tag 'jquery-1.5.1.min', 'jquery-ui-1.8.14.custom.min', 'ui.multiselect', 'jquery.validateClassificationTree', 'jquery.collapsibleCheckboxTree', 'jquery.tipsy', 'jquery.effects.core', 'jquery.effects.highlight', 'jquery.rest_in_place', 'jquery.tools', 'jquery.autocomplete.combobox.js', 'application', :cache => true
 
 :javascript
   rails_authenticity_token = "#{form_authenticity_token}";
 
 = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
 = stylesheet_link_tag 'compiled/print.css', :media => 'print'
-= stylesheet_link_tag 'custom', 'tipsy', 'ui-lightness/jquery-ui-1.8.13.custom'
+= stylesheet_link_tag 'custom', 'tipsy', 'ui-lightness/jquery-ui-1.8.14.custom', 'ui.multiselect'
 /[if gte IE 7]
   = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'

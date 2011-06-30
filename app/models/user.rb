@@ -7,7 +7,8 @@ class User < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :full_name, :email, :username, :organization_id, :organization,
-                  :password, :password_confirmation, :roles, :tips_shown, :organizations
+                  :password, :password_confirmation, :roles, :tips_shown,
+                  :organizations, :organization_ids
 
   ### Associations
   has_many :comments
@@ -24,6 +25,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
+  before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
 
   ### Delegates
   delegate :responses, :to => :organization # instead of deprecated data_response
@@ -138,6 +140,10 @@ class User < ActiveRecord::Base
       if organization.present? && organization.data_responses.present?
         self.current_response = organization.data_responses.last
       end
+    end
+
+    def unassign_organizations
+      self.organizations = []
     end
 end
 

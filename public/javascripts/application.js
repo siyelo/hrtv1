@@ -1563,6 +1563,29 @@ var admin_activities_edit = admin_activities_update = {
   }
 };
 
+var admin_users_new = admin_users_create = admin_users_edit = admin_users_update = {
+  run: function () {
+    var toggleMultiselect = function (element) {
+      if (element.val() === 'activity_manager') {
+        $(".organizations").show();
+      } else {
+        $(".organizations").hide();
+      }
+    };
+
+    toggleMultiselect($('#user_roles'));
+
+    $('#user_roles').change(function () {
+      toggleMultiselect($(this));
+    });
+
+    // choose either the full version
+    $(".multiselect").multiselect({sortable: false});
+    // or disable some features
+    //$(".multiselect").multiselect({sortable: false, searchable: false});
+  }
+}
+
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
     activity_form();

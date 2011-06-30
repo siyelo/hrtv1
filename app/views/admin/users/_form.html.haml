@@ -15,6 +15,11 @@
       = f.input :password, :hint => "Password of the user"
       = f.input :password_confirmation, :hint => "Confirm the password"
 
+  %li.last.organizations
+    %h3 Organizations to Manage
+    %ul.dashboard_section
+      = f.input :organizations, :label => false, :hint => "Add organizations for Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}
+
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"
 

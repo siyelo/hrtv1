@@ -10,6 +10,7 @@ describe User do
     it { should allow_mass_assignment_of(:password_confirmation) }
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:organization) }
+    it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:roles) }
   end
 
@@ -146,6 +147,17 @@ describe User do
       user.roles = ['admin123']
       user.save
       user.reload.roles.should == []
+    end
+  end
+
+  describe "role change" do
+    it "removed organizations when role is changed from activity_manager to else" do
+      org1 = Factory(:organization)
+      org2 = Factory(:organization)
+      user = Factory(:activity_manager, :organizations => [org1, org2])
+      user.roles = ['reporter']
+      user.save
+      user.organizations.should be_empty
     end
   end
 

@@ -53,6 +53,12 @@ class Organization < ActiveRecord::Base
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
+  # works only on postgres
+  #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
+
+  def self.with_users
+    find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
+  end
 
   ### Class Methods
 

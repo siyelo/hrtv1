@@ -9,8 +9,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629121142) do
 
+ActiveRecord::Schema.define(:version => 20110630080458) do
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20110629121142) do
     t.decimal  "budget4"
     t.decimal  "budget5"
     t.boolean  "am_approved"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -91,7 +93,6 @@ ActiveRecord::Schema.define(:version => 20110629121142) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -301,6 +302,9 @@ ActiveRecord::Schema.define(:version => 20110629121142) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
+    t.boolean  "am_approved"
+    t.integer  "user_id"
+    t.date     "am_approved_date"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
@@ -345,5 +349,8 @@ ActiveRecord::Schema.define(:version => 20110629121142) do
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

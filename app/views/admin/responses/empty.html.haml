@@ -18,7 +18,7 @@
         - @empty_responses.each do |data_response|
           %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
             %td= link_to data_response.organization, admin_response_path(data_response)
-            %td= data_response.organization.user_email_list_limit_3
+            %td= data_response.organization.user_emails(3).join ","
             %td= data_response.contact_phone_number
             %td
               = link_to "Delete", delete_admin_response_path(data_response), :class => "destroy_btn"

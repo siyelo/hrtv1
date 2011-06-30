@@ -247,6 +247,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -296,5 +297,7 @@ end
 #  budget4                               :decimal(, )
 #  budget5                               :decimal(, )
 #  am_approved                           :boolean
+#  user_id                               :integer
+#  am_approved_date                      :date
 #
 

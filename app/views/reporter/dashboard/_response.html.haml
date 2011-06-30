@@ -1,9 +1,9 @@
 %tr
   %td.title
-    = link_to response.data_request.title, view_projects_response_path(response), :class => "title"
+    = link_to response.data_request.title, make_current_response_path(response.id), :class => "title"
     -if response.data_request.final_review?
       %ul.response-notice
-        %li= "This Request is in the Final Review stage. #{link_to "Please re-check, then (re)submit", view_projects_response_path(response) } your response."
+        %li= "This Request is in the Final Review stage. #{link_to "Please re-check, then (re)submit", response_projects_path(@response || current_user.current_response) } your response."
   %td= response.data_request.organization.name
   %td= response.data_request.due_date.strftime('%d %b %y')
   %td= response.ready_to_submit? ? 'Yes' : 'No'

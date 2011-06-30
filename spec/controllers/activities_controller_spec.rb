@@ -198,6 +198,32 @@ describe ActivitiesController do
     end
 
   end
+  
+  describe "Update" do
+    before :each do
+      @data_request = Factory(:data_request, :spend => false, :budget => false)
+      @organization = Factory(:organization)
+      @user = Factory(:reporter, :organization => @organization)
+      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+      @project = Factory(:project, :data_response => @data_response)
+      login @user
+    end
+    
+    it "should allow a reporter to update an activity if it's not am approved" do
+      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => false)
+      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => "9999993", :project_id => @project.id}
+      @activity.reload
+      @activity.budget.should == 9999993
+    end
+    
+    it "should not allow a reporter to update a project once it has been am_approved" do
+      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => true)
+      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
+      @activity.reload
+      @activity.budget.should_not == 9999993
+      flash[:error].should == "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
+    end
+  end
 
   describe "Redirects to budget or spend depending on datarequest" do
     it "redirects back to the projects index if save and next is pressed but there is no budget or spend" do
@@ -302,6 +328,7 @@ describe ActivitiesController do
      it "should approve the project if the am_approved field is not set" do
        put :am_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
        @activity.reload
+       @activity.user.should == @user
        @activity.am_approved.should be_true
      end
    end

@@ -1,6 +1,6 @@
 - f.inputs :class => 'wrap-80 inputs' do
   = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
-  = f.input :raw_type, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
+  = f.input :raw_type, :as => :select, :collection => Organization::ORGANIZATION_TYPES, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
   = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do

@@ -3,3 +3,5 @@ module Admin::OrganizationsHelper
     "#{organization.name} - #{pluralize(organization.users_count, 'user')}"
   end
 end
+
+

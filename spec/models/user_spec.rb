@@ -21,15 +21,41 @@ describe User do
     it { should have_and_belong_to_many :organizations }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:user, :organization => Factory(:organization) ) }
     it { should be_valid }
     it { should validate_presence_of(:username) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
-    it { should validate_presence_of(:data_response_id_current) }
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:username).case_insensitive }
+
+    it "validates presence of data_response_id_current" do
+      organization = Factory(:organization, :data_responses => [])
+      user = Factory.build(:user, :organization => organization, :current_response => nil)
+      user.save
+      user.errors.on(:data_response_id_current).should include("can't be blank")
+    end
+  end
+
+  describe "Callbacks" do
+    before :each do
+      @dr1 = Factory(:data_response)
+      @dr2 = Factory(:data_response)
+      @organization = Factory(:organization, :data_responses => [@dr1, @dr2])
+    end
+
+    it "assigns current_response to last data_response from the organization" do
+      user = Factory.build(:user, :organization => @organization, :current_response => nil)
+      user.save
+      user.current_response.should == @dr2
+    end
+
+    it "does not assign current_response if it already exists" do
+      user = Factory.build(:user, :organization => @organization)
+      user.save
+      user.current_response.should_not == @dr2
+    end
   end
 
   describe "find_by_username_or_email" do

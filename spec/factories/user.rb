@@ -1,10 +1,13 @@
 #:user is kind of lame without any roles
+
 Factory.define :user, :class => User do |f|
   f.sequence(:username)   { "user_#{(1..1000000).to_a.sample}" }
   f.sequence(:email)      { "user_#{(1..1000000).to_a.sample}@example.com" }
   f.password              { 'password' }
   f.password_confirmation { 'password' }
-  f.organization          { Factory(:organization) } #for convenience, though the API assumes you do this first yourself
+  f.organization          { Factory(:organization) }
+  # current_response is set in before validations callback
+  # in user model to last data_response from user's organization
   f.current_response      { Factory(:data_response) }
   # a little hack to make sure the Response.org == User.org
   f.after_create do |u|

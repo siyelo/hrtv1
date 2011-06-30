@@ -19,20 +19,4 @@ describe ProjectsController do
       response.header["Content-Disposition"].should == "attachment; filename=projects_template.csv"
     end
   end
-  
-  describe "activitymanager can approve a project" do
-    before :each do
-      @data_request = Factory(:data_request)
-      @organization = Factory(:organization)
-      @user = Factory(:activity_manager, :organization => @organization)
-      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-      @project = Factory(:project, :data_response => @data_response)
-      login @user
-    end
-    it "should approve the project if the am_approved field is not set" do
-      put :am_approve, :id => @project.id, :response_id => @data_response.id, :approve => true
-      @project.reload
-      @project.am_approved.should be_true
-    end
-  end
 end

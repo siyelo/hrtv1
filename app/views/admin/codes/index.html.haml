@@ -51,6 +51,6 @@
           %ul.manage_bar
             %li= link_to "Show", admin_code_path(code)
             %li= link_to "Edit", edit_admin_code_path(code)
-            %li= link_to "X", admin_code_path(code), :confirm => "Are you sure you want to delete this code?", :method => :delete, :class => "right"
+            %li= link_to "x", admin_code_path(code), :confirm => "Are you sure you want to delete this code?", :method => :delete, :class => "right"
 
 = will_paginate @codes

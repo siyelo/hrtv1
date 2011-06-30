@@ -15,7 +15,6 @@
   .js_reply_box.comments_input.reply{:style => 'display: none; !important'}
     = render 'comments/reply_form.html.haml', :comment => comment.children.new, :parent => comment
 
-
   - if comment.children.present?
     %ul
       = render :partial => 'comments/comment', :collection => comment.children

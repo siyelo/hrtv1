@@ -8,8 +8,6 @@ Feature: Admin can manage users
       And an admin exists with username: "admin"
       And I am signed in as "admin"
 
-
-
     Scenario: Admin can CRUD users
       When I follow "Users"
         And I follow "Create User"
@@ -32,7 +30,7 @@ Feature: Admin can manage users
         And I should see "pink.panter2"
         And I should not see "pink.panter1"
 
-      When I follow "X"
+      When I follow "x"
       Then I should see "User was successfully destroyed"
         And I should not see "pink.panter1"
         And I should not see "pink.panter2"
@@ -53,10 +51,10 @@ Feature: Admin can manage users
         And I should see "<message>"
 
         Examples:
-           | organization  | username | email         | name | roles    | password | password_conf | message                     | 
-           |               | panter   | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank | 
-           | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     | 
-           | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        | 
+           | organization  | username | email         | name | roles    | password | password_conf | message                     |
+           |               | panter   | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank |
+           | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     |
+           | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        |
 
 
     Scenario: Adding malformed CSV file doesn't throw exception
@@ -112,15 +110,15 @@ Feature: Admin can manage users
       And I should not see "<first>"
 
       Examples:
-         | first            | second           | 
-         | user1            | user2            | 
-         | user2            | user1            | 
-         | user1@hrtapp.com | user2@hrtapp.com | 
-         | user2@hrtapp.com | user1@hrtapp.com | 
-         | Full name 1      | Full name 2      | 
-         | Full name 2      | Full name 1      | 
-         | organization1    | organization2    | 
-         | organization2    | organization1    | 
+         | first            | second           |
+         | user1            | user2            |
+         | user2            | user1            |
+         | user1@hrtapp.com | user2@hrtapp.com |
+         | user2@hrtapp.com | user1@hrtapp.com |
+         | Full name 1      | Full name 2      |
+         | Full name 2      | Full name 1      |
+         | organization1    | organization2    |
+         | organization2    | organization1    |
 
 
     Scenario Outline: An admin can sort users
@@ -141,8 +139,8 @@ Feature: Admin can manage users
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-            | column_name  | column | text1            | text2            | 
-            | Username     | 1      | user2            | user1            | 
-            | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com | 
-            | Full Name    | 3      | Full name 1      | Full name 2      | 
-            | Organization | 4      | organization2    | organization3    | 
+            | column_name  | column | text1            | text2            |
+            | Username     | 1      | user2            | user1            |
+            | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com |
+            | Full Name    | 3      | Full name 1      | Full name 2      |
+            | Organization | 4      | organization2    | organization3    |

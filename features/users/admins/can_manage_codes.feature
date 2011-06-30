@@ -8,8 +8,6 @@ Feature: Admin can manage codes
       And an admin exists with username: "admin"
       And I am signed in as "admin"
 
-
-
     Scenario: Admin can CRUD codes
       When I follow "Codes"
         And I follow "Create Code"
@@ -35,7 +33,7 @@ Feature: Admin can manage codes
         And I should see "code2"
         And I should not see "code1"
 
-      When I follow "X"
+      When I follow "x"
       Then I should see "Code was successfully destroyed"
         And I should not see "code1"
         And I should not see "code2"
@@ -92,13 +90,13 @@ Feature: Admin can manage codes
         And I should not see "<first>"
 
         Examples:
-            | first      | second     | 
-            | user1      | user2      | 
-            | user2      | user1      | 
-            | user1 desc | user2 desc | 
-            | user2 desc | user1 desc | 
-            | Nha        | Mtef       | 
-            | Mtef       | Nha        | 
+            | first      | second     |
+            | user1      | user2      |
+            | user2      | user1      |
+            | user1 desc | user2 desc |
+            | user2 desc | user1 desc |
+            | Nha        | Mtef       |
+            | Mtef       | Nha        |
 
 
     Scenario Outline: An admin can sort codes
@@ -114,7 +112,7 @@ Feature: Admin can manage codes
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-           | column_name   | column | text1      | text2      | 
-           | Short Display | 1      | code2      | code1      | 
-           | Type          | 2      | Mtef       | Nha        | 
-           | Description   | 3      | code1 desc | code2 desc | 
+           | column_name   | column | text1      | text2      |
+           | Short Display | 1      | code2      | code1      |
+           | Type          | 2      | Mtef       | Nha        |
+           | Description   | 3      | code1 desc | code2 desc |

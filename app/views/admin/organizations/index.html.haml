@@ -47,7 +47,7 @@
           %ul.manage_bar
             %li= link_to "Show", admin_organization_path(organization)
             %li= link_to "Edit", edit_admin_organization_path(organization)
-            %li= link_to "X", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
+            %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
 
 
 = will_paginate @organizations

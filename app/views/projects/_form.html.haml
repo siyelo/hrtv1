@@ -77,7 +77,7 @@
       = f.input :locations, :as => :check_boxes, :collection => ordered_locations(Location.ordered_by_short_display), :label => "Locations worked in", :hint =>"All the districts/provinces in which this Project was implemented. If a Project is central-level and not focused on particular districts, leave all checkboxes unfilled.", :required => false
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
-  = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"
+  = f.commit_button :button_html => {:class => "last big_button"}
 
 - unless @project.new_record?
   .delete_section

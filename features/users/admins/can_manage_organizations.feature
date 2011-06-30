@@ -12,8 +12,6 @@ Feature: Admin can manage organizations
       And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as "admin"
 
-
-
     Scenario: Admin can CRUD organizations
       When I follow "Organizations"
         And I follow "Create Organization"
@@ -32,7 +30,7 @@ Feature: Admin can manage organizations
       Then I should see "Organization was successfully updated"
         And I should see "My new organization"
 
-      When I follow "X"
+      When I follow "x"
       Then I should see "Organization was successfully deleted"
         And I should not see "Organization name"
 

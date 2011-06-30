@@ -8,6 +8,6 @@
       = f.input :parent_id, :as => :hidden
       = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
     - f.buttons do
-      = f.commit_button :label => 'Save', :button_html => { :class => "submit_btn" }
-      %li= link_to "Cancel", "#", :class => 'js_cancel_reply delete_btn'
+      = f.commit_button :label => 'Save'
+      %li= link_to "Cancel", "#", :class => 'js_cancel_reply delete_button'
       = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

@@ -111,130 +111,6 @@ a.remove_nested
       position: relative
       top: 2px
 
-  &.edit_button
-    background: $light-blue
-    border: 1px solid $light-blue - #222
-    color: $mid-blue
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius(3px)
-    +box-shadow(#bbb, 0, 1px, 2px)
-    +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
-    +text-shadow($lighter-blue + #111, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $orange
-      border: 1px solid $orange - #222
-      color: #fff
-      +linear-gradient(color-stops($orange, $orange - #222))
-      +text-shadow($orange - #444, 0, 1px, 0)
-    &:active
-      outline: none
-      position: relative
-      top: 1px
-    &.inline
-      font-size: 9px
-      line-height: 1
-      margin: 0
-      opacity: 0.5
-      padding: 2px 6px 1px
-      position: relative
-      top: -2px
-      left: -3px
-      +box-shadow(none)
-      &:hover
-        opacity: 1
-
-  &.delete_button
-    background: $lightest-blue
-    border: 1px solid $light-blue - #222
-    color: $mid-blue
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
-    +text-shadow(#fff, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $red
-      border: 1px solid $red - #222
-      color: #fff
-      +linear-gradient(color-stops($red, $red - #222))
-      +text-shadow($red - #444, 0, 1px, 0)
-    &:active
-      outline: none
-      position: relative
-      top: 1px
-
-  &.edit_button
-    background: $light-blue
-    border: 1px solid $light-blue - #222
-    color: $mid-blue
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($lightest-blue, $lightest-blue - #222))
-    +text-shadow($lighter-blue + #111, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $orange
-      border: 1px solid $orange - #222
-      color: #fff
-      +linear-gradient(color-stops($orange, $orange - #222))
-      +text-shadow($orange - #444, 0, 1px, 0)
-    &:active
-      outline: none
-      position: relative
-      top: 1px
-
-  &.delete_button
-    background: $lightest-blue
-    border: 1px solid $light-blue - #222
-    color: $mid-blue
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($lightest-blue + #060606, $lightest-blue - #111))
-    +text-shadow(#fff, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: $red
-      border: 1px solid $red - #222
-      color: #fff
-      +linear-gradient(color-stops($red, $red - #222))
-      +text-shadow($red - #444, 0, 1px, 0)
-    &:active
-      outline: none
-      position: relative
-      top: 1px
-
   &.overlay
     color: $light-blue - #333
     font-size: 11px
@@ -299,10 +175,10 @@ a.remove_nested
       background: green - #222 !important
       border: 1px solid green - #222 !important
 
-.next, input[type=submit]
+.next, .big_button
   +border-radius
   border: 1px
-  background: $orange
+  background: $green
   color: white
   cursor: pointer
   font-size: 14px
@@ -416,30 +292,6 @@ a.remove_nested
   &.disabled
     display: none
 
-a.delete_btn
-  background: #eee
-  border: 1px solid $light-blue
-  display: inline-block
-  font-size: 10px
-  height: auto
-  line-height: 1.4
-  margin-left: 3px
-  padding: 3px 5px 2px
-  text-decoration: none
-  +border-radius(2px)
-  +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
-  +text-shadow(#fff, 0, 0, 1px)
-  &:hover, &:focus
-    background: $red
-    border: 1px solid $red - #111
-    color: #fff
-    +linear-gradient(color-stops($red - #111, $red + #111))
-    +text-shadow(#444, 0, 0, 1px)
-  &:active
-    outline: none
-    position: relative
-    top: 1px
-
 /* sign in pages button fix */
 body.login .buttons li:last-child
   border: none
@@ -484,7 +336,7 @@ a, input[type=text]
       position: relative
       top: 1px
 
-  &.add_row, &.edit_button
+  &.add_row, &.edit_button, &.delete_button
     background: #eee
     border: 1px solid $light-blue
     color: $mid-blue + #222 !important
@@ -493,7 +345,7 @@ a, input[type=text]
     font-weight: bold
     line-height: 1 !important
     margin: 0 0 0 3px
-    padding: 5px 6px
+    padding: 4px 6px 3px
     text-decoration: none
     +border-radius(2px)
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
@@ -517,3 +369,7 @@ a, input[type=text]
       color: $light-grey + #222 !important
       pointer-events: none
       cursor: default
+
+  &.delete_button
+    &:hover, &:focus
+      color: $red !important

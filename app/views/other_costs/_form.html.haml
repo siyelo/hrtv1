@@ -70,7 +70,7 @@
 
 - unless @other_cost.new_record?
   .delete_section
-    = link_to "Delete this Other Cost", response_other_cost_path(@response, @other_cost), :confirm => "Are you sure you want to delete this other Cost?", :method => :delete, :class => "delete_btn", :class => 'delete_action'
+    = link_to "Delete this Other Cost", response_other_cost_path(@response, @other_cost), :confirm => "Are you sure you want to delete this other Cost?", :method => :delete, :class => "delete_button", :class => 'delete_action'
     %p
       %strong Warning:
       Once you delete an Other Cost, you will lose all data associated with it, and there is no undo.

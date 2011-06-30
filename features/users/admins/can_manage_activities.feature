@@ -16,15 +16,13 @@ Feature: Reporter can manage activities
       And an admin exists with username: "admin"
       And I am signed in as "admin"
 
-
-
     Scenario: An admin can review activities
       When I follow "Activities"
         And I follow "activity1 description"
       Then I should see "activity1"
         And I should see "activity1 description"
 
-      When I follow "X"
+      When I follow "x"
       Then I should not see "activity1 description"
 
 

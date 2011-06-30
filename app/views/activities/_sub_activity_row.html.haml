@@ -1,0 +1,13 @@
+%tr.fields
+  %td.implementer
+    = f.input :data_response_id, :as => :hidden, :value => @response.id
+    = f.input :provider_id, :as => :hidden, :value => f.object.provider.try(:id)
+    = f.object.provider.try(:name)
+  %td.amount
+    - if @response.data_request.spend?
+      = f.input :spend, :required => false, :label => false
+  %td.amount
+    - if @response.data_request.budget?
+      = f.input :budget, :required => false, :label => false
+  %td.action
+    = link_to_remove_fields "x", f, :class => 'delete_button'

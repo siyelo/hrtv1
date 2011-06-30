@@ -133,7 +133,7 @@ var close_activity_funding_sources_fields = function (fields) {
 
     manage_block.find('.edit').remove();
     manage_block.prepend(
-      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
     )
   });
 };

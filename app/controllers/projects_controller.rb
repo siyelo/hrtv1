@@ -36,19 +36,19 @@ class ProjectsController < Reporter::BaseController
   end
 
   def update
-    @project = @response.projects.find(params[:id])
-    unless @project.am_approved?
-      success = FundingFlow.create_flows(params)
-      @project.update_attributes(params[:project])
-      success ? flash[:notice] = "Project successfully updated" : flash[:error] = "We were unable to save your funding flows, please check your data and try again"
-      redirect_to response_projects_url(@response)
-    else 
-      flash[:error] = "Project was approved by #{@project.user.try(:username)} (#{@project.user.email}) on #{@project.am_approved_date}"
-      load_comment_resources(resource)
-      render :action => 'edit'
+    success = FundingFlow.create_flows(params)
+    update! do |success, failure|
+      success.html {
+        flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
+        redirect_to response_projects_url(@response)
+      }
+      failure.html do
+        load_comment_resources(resource)
+        render :action => 'edit'
+      end
     end
   end
-
+  
   def bulk_edit
     @projects = @response.projects
   end

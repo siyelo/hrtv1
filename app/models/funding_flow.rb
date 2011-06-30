@@ -18,7 +18,7 @@ class FundingFlow < ActiveRecord::Base
   alias :response :data_response
   alias :response= :data_response=
 
-
+  
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
@@ -28,6 +28,17 @@ class FundingFlow < ActiveRecord::Base
     :message => :"organization_id_from.missing"
   validates_presence_of :organization_id_to,
     :message => :"organization_id_to.missing"
+  
+  validates_numericality_of :budget_q1, :if => Proc.new { |model| model.budget_q1.present? }
+  validates_numericality_of :budget_q2, :if => Proc.new { |model| model.budget_q2.present? }
+  validates_numericality_of :budget_q3, :if => Proc.new { |model| model.budget_q3.present? }
+  validates_numericality_of :budget_q4, :if => Proc.new { |model| model.budget_q4.present? }
+  validates_numericality_of :budget_q4_prev, :if => Proc.new { |model| model.budget_q4_prev.present? }
+  validates_numericality_of :spend_q1, :if => Proc.new { |model| model.spend_q1.present? }
+  validates_numericality_of :spend_q2, :if => Proc.new { |model| model.spend_q2.present? }
+  validates_numericality_of :spend_q3, :if => Proc.new { |model| model.spend_q3.present? }
+  validates_numericality_of :spend_q4, :if => Proc.new { |model| model.spend_q4.present? }
+  validates_numericality_of :spend_q4_prev, :if => Proc.new { |model| model.spend_q4_prev.present? }
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
@@ -122,7 +133,6 @@ class FundingFlow < ActiveRecord::Base
       errors.add(:spend, "must be greater than 0") unless (spend || 0) > 0
       errors.add(:budget, "must be greater than 0") unless (budget || 0) > 0
     end
-
 end
 
 

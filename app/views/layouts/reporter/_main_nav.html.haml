@@ -1,9 +1,3 @@
-- hacked_response_path = edit_organization_path(current_user.organization)
-- if current_user.organization.valid? & current_user.current_response
-  - hacked_projects_url = response_projects_path(current_user.current_response)
-- else
-  - hacked_projects_url = hacked_response_path
-
 #main-nav
   .wrapper
     %ul
@@ -12,7 +6,7 @@
           %span Home
 
       %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
-        = link_to 'Projects', hacked_projects_url
+        = link_to 'Projects', response_projects_path(@response || current_user.current_response)
 
       %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}
         = link_to 'Reports', reporter_reports_path

@@ -7,15 +7,16 @@ class Organization < ActiveRecord::Base
   include ActsAsDateChecker
 
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid, :currency,
-    :fiscal_year_end_date, :fiscal_year_start_date, :contact_name,
-    :contact_name, :contact_position, :contact_phone_number,
+  attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
+    :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
   has_and_belongs_to_many :locations
   has_many :users # people in this organization
+  has_and_belongs_to_many :managers, :join_table => "organizations_managers", :class_name => "User" # activity managers
+
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
@@ -98,11 +99,7 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def unfulfilled_data_requests
-    DataRequest.all - fulfilled_data_requests
-  end
-
-  # Convenience. Help to deprecate "data_" prefix.
+  # Convenience until we deprecate the "data_" prefixes
   def responses
     self.data_responses
   end
@@ -111,9 +108,8 @@ class Organization < ActiveRecord::Base
     name
   end
 
-  # TODO: write spec
-  def user_email_list_limit_3
-    users[0,2].collect{|u| u.email}.join ","
+  def user_emails(limit = 3)
+    self.users.find(:all, :limit => limit).map{|u| u.email}
   end
 
   # TODO: write spec
@@ -200,6 +196,15 @@ class Organization < ActiveRecord::Base
   def latest_response
     self.responses.latest_first.first
   end
+
+  def response_for(request)
+    self.responses.find_by_data_request_id(request)
+  end
+
+  def response_status(request)
+    response_for(request).status
+  end
+
 
   protected
 

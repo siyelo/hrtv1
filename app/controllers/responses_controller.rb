@@ -53,10 +53,10 @@ class ResponsesController < Reporter::BaseController
     redirect_to :back
   end
 
-  def view_projects
-    @response = current_user.data_responses.find(params[:id])
+  def make_current
+    @response = DataResponse.find(params[:id])
     change_user_current_response(@response)
-    redirect_to response_projects_path(@response)
+    redirect_to :back
   end
 
   def set_latest
@@ -65,6 +65,4 @@ class ResponsesController < Reporter::BaseController
     flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
     redirect_to :back
   end
-
-
 end

@@ -12,7 +12,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :profile, :only => [:edit, :update, :disable_tips],
     :member => {:disable_tips => :put}
 
-
   # STATIC PAGES
   map.about_page 'about', :controller => 'static_page',
     :action => 'about'
@@ -43,10 +42,9 @@ ActionController::Routing::Routes.draw do |map|
     policy_maker.resources :responses, :only => [:show, :index]
   end
 
-
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :get, :send_data_response => :put, :view_projects => :get},
+    :member => {:review => :get, :submit => :get, :send_data_response => :put, :make_current => :get},
     :collection => {:set_latest => :get} do |response|
       response.resources :projects,
         :collection => {:create_from_file => :post,

@@ -12,11 +12,9 @@ gem 'ar_strip_commas'
 gem 'rdoc'
 gem 'acts_as_tree'
 
-
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue
 #gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71
-
 gem 'inherited_resources', "=1.0.6"
 gem 'money', "~> 3.5"
 gem "paperclip", "= 2.3.11"
@@ -25,7 +23,6 @@ gem 'rake', '0.8.7' # lock it in since heroku complaining "You have already acti
                     # but your Gemfile requires rake 0.8.7."
 gem 'settingslogic'
 gem 'validates_timeliness', '~> 2.3'
-
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"
 gem 'json_pure'

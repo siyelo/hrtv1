@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery
   filter_parameter_logging :password, :password_confirmation
-  helper_method :current_user_session, :current_user
+  helper_method :current_user_session, :current_user, :current_request
 
   include ApplicationHelper
   include SslRequirement
@@ -57,6 +57,10 @@ class ApplicationController < ActionController::Base
       @current_user ||= current_user_session && current_user_session.record
       session[:username] = @current_user.username if @current_user
       @current_user
+    end
+
+    def current_request
+      current_user.current_request
     end
 
     def require_user

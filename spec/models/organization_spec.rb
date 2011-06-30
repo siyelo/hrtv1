@@ -8,6 +8,22 @@ describe Organization do
     it { should allow_mass_assignment_of(:fosaid) }
   end
 
+  describe "associations" do
+    it { should have_and_belong_to_many(:activities) }
+    it { should have_and_belong_to_many(:locations) }
+    it { should have_many(:users) }
+    it { should have_many(:data_requests) }
+    it { should have_many(:data_responses) }
+    it { should have_many(:projects) }
+    it { should have_many(:dr_activities) }
+    it { should have_many(:out_flows).dependent(:destroy) }
+    it { should have_many(:in_flows).dependent(:destroy) }
+    it { should have_many(:donor_for) }
+    it { should have_many(:implementor_for) }
+    it { should have_many(:provider_for) }
+    it { should have_and_belong_to_many :managers }
+  end
+
   describe "validations" do
     subject { Factory(:organization) }
     it { should be_valid }
@@ -66,21 +82,6 @@ describe Organization do
                          :fiscal_year_end_date =>   DateTime.new(2010, 01, 01) )
       organization.should_not be_valid
     end
-  end
-
-  describe "associations" do
-    it { should have_and_belong_to_many(:activities) }
-    it { should have_and_belong_to_many(:locations) }
-    it { should have_many(:users) }
-    it { should have_many(:data_requests) }
-    it { should have_many(:data_responses) }
-    it { should have_many(:projects) }
-    it { should have_many(:dr_activities) }
-    it { should have_many(:out_flows).dependent(:destroy) }
-    it { should have_many(:in_flows).dependent(:destroy) }
-    it { should have_many(:donor_for) }
-    it { should have_many(:implementor_for) }
-    it { should have_many(:provider_for) }
   end
 
   describe "Callbacks" do
@@ -388,6 +389,16 @@ describe Organization do
       @org.responses.each {|r| r.destroy}
       @org.reload
       @org.latest_response.should == nil
+    end
+  end
+
+  describe "#user_emails" do
+    it "should return email addresses of users in the organization, up to the limit" do
+      @req = Factory :request
+      @org = Factory :organization
+      @reporter = Factory :user, :email => 'reporter@org.com', :organization => @org
+      @reporter2 = Factory :user, :email => 'reporter2@org.com', :organization => @org
+      @org.user_emails(1).should == ['reporter@org.com']
     end
   end
 end

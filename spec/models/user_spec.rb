@@ -18,6 +18,7 @@ describe User do
     it { should have_many :data_responses }
     it { should belong_to :organization }
     it { should belong_to :current_response }
+    it { should have_and_belong_to_many :organizations }
   end
 
   describe "validations" do

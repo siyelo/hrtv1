@@ -5,7 +5,14 @@
       %span
         - link_to new_response_activity_path(@response, :project_id => project.id), :class => "add_row" do
           = image_tag "new.png"
-          Add Activity
+          Add
+      %span
+        - link_to "#", :class => "add_row upload_btn" do
+          = image_tag "new.png"
+          Import
+%tr.upload_box
+  %td{:colspan => 100}
+    = render 'activities_import', :project => project, :can_export =>project.activities.present?
 - if activities.present?
   - activities.each do |activity|
     = render "activities/activity", :activity => activity

@@ -223,7 +223,7 @@ DEPENDENCIES
   money (~> 3.5)
   mongrel
   open_gem
-  paperclip (~> 2.3)
+  paperclip (= 2.3.11)
   pickle (~> 0.4.4)
   rails (= 2.3.12)
   rails-footnotes

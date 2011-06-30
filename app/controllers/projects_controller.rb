@@ -36,16 +36,16 @@ class ProjectsController < Reporter::BaseController
   end
 
   def update
-    success = FundingFlow.create_flows(params)
-    update! do |success, failure|
-      success.html {
-        flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to response_projects_url(@response)
-      }
-      failure.html do
-        load_comment_resources(resource)
-        render :action => 'edit'
-      end
+    @project = @response.projects.find(params[:id])
+    unless @project.am_approved?
+      success = FundingFlow.create_flows(params)
+      @project.update_attributes(params[:project])
+      success ? flash[:notice] = "Project successfully updated" : flash[:error] = "We were unable to save your funding flows, please check your data and try again"
+      redirect_to response_projects_url(@response)
+    else 
+      flash[:error] = "Project was approved by #{@project.user.try(:username)} (#{@project.user.email}) on #{@project.am_approved_date}"
+      load_comment_resources(resource)
+      render :action => 'edit'
     end
   end
 
@@ -89,6 +89,20 @@ class ProjectsController < Reporter::BaseController
       redirect_to response_projects_path(@response)
     end
   end
+
+
+  # called only via Ajax
+  def am_approve
+    if current_user.admin? || current_user.activity_manager?
+      project = @response.projects.find(params[:id])
+      project.update_attributes({:user_id => current_user.id, :am_approved => params[:approve], :am_approved_date => Time.now}) unless project.am_approved?
+      render :json => {:status => 'success'}
+    else
+      render :json => {:status => 'access denied'}
+      raise AccessDenied
+    end
+  end
+
 
   protected
 

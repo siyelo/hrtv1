@@ -4,6 +4,6 @@ class CommentObserver < ActiveRecord::Observer
     users = comment.parent_id? ?
       comment.ancestors.map(&:user) : comment.user.organization.users
     users = users.reject{|u| u == comment.user} # reject commenter
-    Notifier.deliver_comment_notification(comment, users)
+    Notifier.deliver_comment_notification(comment, users) if users.present?
   end
 end

@@ -1,16 +1,9 @@
-- if current_or_last_response
-  - hacked_response_projects_path = response_projects_path(current_or_last_response)
-  - hacked_submit_response_path   = submit_response_path(current_or_last_response)
-- else
-  - hacked_response_projects_path = new_response_path
-  - hacked_submit_response_path   = new_response_path
-
 = render 'welcome'
 
 %ul.horizontal.left
-  %li= link_to "Edit Projects", hacked_response_projects_path, :class => "create_new"
+  %li= link_to "Edit Projects", response_projects_path(current_or_last_response), :class => "create_new"
   %li= link_to "Classify Activities", "#", :class => "create_new"
-  %li= link_to "Review & Respond", hacked_submit_response_path, :class => "create_new"
+  %li= link_to "Review & Respond", submit_response_path(current_or_last_response), :class => "create_new"
 
 = render 'requests'
 

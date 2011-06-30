@@ -1,10 +1,3 @@
-- if current_or_last_response
-  - hacked_response_projects_path = response_projects_path(current_or_last_response)
-  - hacked_submit_response_path   = submit_response_path(current_or_last_response)
-- else
-  - hacked_response_projects_path = new_response_path
-  - hacked_submit_response_path   = new_response_path
-
 %h2
   Organizations I Manage
 .dashboard_section
@@ -46,15 +39,6 @@
 
 = render 'requests'
 
-%h2
-  Comments
-.dashboard_comments
-  - @comments.each do |comment|
-    - model = comment.commentable
-    - type = comment.commentable_type
-    %li
-      %h5.title
-        %span= link_to truncate(model_name(model), :length => 40), commentable_path(type, model, current_user)
-      %p.main= truncate(comment.comment, :length => 300)
-      %p.time= "#{time_ago_in_words(comment.created_at)} ago" if comment.created_at
-  .read_more= link_to "all comments", comments_path
+%h2 Comments
+
+= render 'shared/comments/comment_short_list', :comments => @comments

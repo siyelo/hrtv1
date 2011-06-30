@@ -1,15 +1,5 @@
-- data_response = current_user.organization.data_responses.last
-- if current_user.organization.valid? & current_user.current_response
-  - hacked_projects_url = response_projects_path(current_user.current_response)
-  - hacked_review_response_url = review_response_path(current_user.current_response)
-  - hacked_submit_response_url = submit_response_path(current_user.current_response)
-- else
-  - hacked_projects_url = hacked_response_path
-  - hacked_review_response_url = hacked_response_path
-  - hacked_submit_response_url = hacked_response_path
-
 %ul
   %li{:class => (params[:controller] == 'projects' && params[:action] == 'index' ? 'active' : nil)}
-    = link_to 'Overview', hacked_projects_url
+    = link_to 'Overview', response_projects_path(current_or_last_response)
   %li{:class => (params[:controller] == 'responses' && params[:action] == 'submit' ? 'active' : nil)}
-    = link_to 'Review & Submit', hacked_submit_response_url
+    = link_to 'Review & Submit', submit_response_path(current_or_last_response)

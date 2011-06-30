@@ -18,7 +18,7 @@
 %ul.ordered_nav
   - if activity.new_record?
     - link = activity.class == OtherCost ? new_response_other_cost_path(@response) : new_response_activity_path(@response)
-    %li
+    %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}
       - link_to link do
         %span 1.
         Details

@@ -70,6 +70,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: comments
@@ -81,5 +82,6 @@ end
 #  user_id          :integer         indexed
 #  created_at       :datetime
 #  updated_at       :datetime
+#  parent_id        :integer
 #
 

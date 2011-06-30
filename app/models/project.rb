@@ -451,6 +451,7 @@ class Project < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -482,8 +483,5 @@ end
 #  budget3          :decimal(, )
 #  budget4          :decimal(, )
 #  budget5          :decimal(, )
-#  am_approved      :boolean
-#  user_id          :integer
-#  am_approved_date :date
 #
 

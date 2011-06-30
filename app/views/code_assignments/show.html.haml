@@ -9,6 +9,8 @@
 
 
 %h1.main_heading
+  = nice_name(@activity)
+%h2.main_heading
   = "#{@activity.class.to_s.underscore.humanize.titleize} #{get_activity_type(type)}"
 
 .main_heading

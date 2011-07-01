@@ -17,7 +17,7 @@ class Admin::UsersController < Admin::BaseController
                                           UPPER(full_name) LIKE UPPER(:q) OR
                                           UPPER(organizations.name) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
-    @users = scope.paginate(:page => params[:page], :per_page => 10,
+    @users = scope.paginate(:page => params[:page], :per_page => 100,
                     :order => "#{sort_column} #{sort_direction}")
   end
 

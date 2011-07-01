@@ -6,6 +6,14 @@ describe Organization do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
+    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
   describe "associations" do

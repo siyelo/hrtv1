@@ -29,8 +29,9 @@
         %td= request.budget
         %td= request.spend
         %td.action
-          = link_to "Edit", edit_admin_request_path(request)
-          = link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
+          %ul.manage_bar
+            %li= link_to "Edit", edit_admin_request_path(request)
+            %li= link_to "Delete", admin_request_path(request), :method => :delete, :confirm => "Are you sure?"
 
 
 = will_paginate @requests

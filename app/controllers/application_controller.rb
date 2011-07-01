@@ -29,16 +29,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_user_layout
-      if current_user.reporter?
-        'reporter'
-      elsif current_user.admin?
-        'admin'
-      else
-        'application'
-      end
-    end
-
     def send_csv(text, filename)
       send_data text,
                 :type => 'text/csv; charset=iso-8859-1; header=present',
@@ -100,11 +90,29 @@ class ApplicationController < ActionController::Base
 
     def find_response(response_id)
       if current_user.admin?
-        # work-arround until all admin actions are moved to admin controllers
-        DataResponse.find(response_id)
+        @response = DataResponse.find(response_id)
+      elsif current_user.activity_manager?
+        # scope by the organizations the AM has access to
+        @response = DataResponse.find(response_id,
+          :conditions => ["organization_id in (?)", [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
       else
-        current_user.data_responses.find(response_id)
+        @response = current_user.data_responses.find(response_id)
       end
+      @response
+    end
+
+    def load_response
+      find_response(params[:response_id])
+    end
+
+    # use this if your controller expects :id instead of :response_id
+    def load_response_from_id
+      find_response(params[:id])
+    end
+
+    # deprecated - use load_response
+    def load_data_response
+      load_response
     end
 
     def find_project(project_id)

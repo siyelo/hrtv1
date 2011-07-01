@@ -1,9 +1,0 @@
-#main-nav
-  .wrapper
-
-    %ul
-      %li.home_tab{:class =>  (controller.class == Admin::DashboardController ? 'active' : nil)}
-        %a{:href => user_dashboard_path(current_user)}
-          %span Home
-      - %w(organizations users reports requests codes).each do |tab|
-        = build_admin_nav_tab(tab)

@@ -1,5 +1,6 @@
 class UserSessionsController < ApplicationController
-
+  layout :promo_inner
+  
   before_filter :require_no_user, :only => [:new]
   before_filter :require_user, :only => [:destroy]
   skip_before_filter :load_help

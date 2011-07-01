@@ -1,0 +1,21 @@
+#main-nav
+  .wrapper
+    %ul
+      %li.home_tab{:class => ([Admin::DashboardController, Reporter::DashboardController].include?(controller.class) ? 'active' : nil)}
+        %a{:href => user_dashboard_path(current_user)}
+          %span Home
+
+      - unless namespace(controller.class) == "Admin"
+        %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
+          = link_to 'Projects', response_projects_path(current_or_last_response)
+
+      %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}
+        = link_to 'Reports', current_user.admin? ? admin_reports_path : reporter_reports_path
+
+      - if current_user.admin? && namespace(controller.class) == "Admin"
+        - %w(organizations users requests codes).each do |tab|
+          = build_admin_nav_tab(tab)
+
+      - unless namespace(controller.class) == "Admin"
+        %li{:class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}
+          = link_to 'Settings', edit_organization_url(:current)

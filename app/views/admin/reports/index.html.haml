@@ -5,21 +5,11 @@
 .first-half
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"
-    Data Responses
-  .dashboard_section
-    %ul.admin_reports
-      %li
-        - link_to admin_responses_path, :class => "drill_down target" do
-          Review Data Responses
-          %span.hint Data entry progress and interactive summaries for each organization
-
-  %h2
-    =image_tag "icon_lightning.png", :class => "heading_icon"
     National
   .dashboard_section
     %ul.admin_reports
       %li
-       
+
         - link_to reports_country_path, :class => "drill_down target" do
           = "Review National Expenditures and Current Budgets [#{current_user.current_request.title}]"
           %span.hint Interactive reports summarizing data at national level

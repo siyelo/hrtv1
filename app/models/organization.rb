@@ -6,7 +6,7 @@ class Organization < ActiveRecord::Base
 
   ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District", 
      "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO", 
-     "Local NGO", "MOH", "MOH central", "Military Hospital", "MoH", "MoH unit", "Multilateral", "National Hospital", 
+     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital", 
      "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
 
   include ActsAsDateChecker

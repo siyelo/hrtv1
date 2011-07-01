@@ -336,7 +336,7 @@ var ajaxifyResources = function (resources) {
   var editBtn = block.find(".edit_btn");
   var cancelBtn = block.find(".cancel_btn");
   var searchBtn = block.find(".search_btn");
-  var submitBtn = block.find(".submit_btn");
+  var submitBtn = block.find(".js_submit_btn");
   var destroyBtn = block.find(".destroy_btn");
 
   // new
@@ -856,7 +856,7 @@ var code_assignments_show = {
       $(this).parents('.upload').find('.upload_box').toggle();
     });
 
-    $('.submit_btn').click(function (e) {
+    $('.js_submit_btn').click(function (e) {
       $(this).next('.ajax-loader').show();
     });
   }
@@ -1213,7 +1213,7 @@ var commentsInit = function () {
   })
 
   // remove demo text when submiting comment
-  $('.submit_btn').live('click', function (e) {
+  $('.js_submit_btn').live('click', function (e) {
     e.preventDefault();
     removeDemoText($('*[data-hint]'));
 
@@ -1296,7 +1296,6 @@ var projects_bulk_edit = {
       var element = $(this);
       var tableRow = element.parents('tr');
       url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
-      console.log
       $.get(url, function(data) {
         var data = $.parseJSON(data);
         id = tableRow.find('.funder_project_description').html(data.project.description);
@@ -1566,12 +1565,17 @@ var admin_activities_edit = admin_activities_update = {
 var admin_users_new = admin_users_create = admin_users_edit = admin_users_update = {
   run: function () {
     var toggleMultiselect = function (element) {
-      if (element.val() === 'activity_manager') {
-        $(".organizations").show();
+      if (element.val() && element.val().indexOf('activity_manager') > -1) {
+        $(".organizations").show().css('visibility', 'visible');
       } else {
-        $(".organizations").hide();
+        $(".organizations").hide().css('visibility', 'hidden');
       }
     };
+
+    // choose either the full version
+    $(".multiselect").multiselect({sortable: false});
+    // or disable some features
+    //$(".multiselect").multiselect({sortable: false, searchable: false});
 
     toggleMultiselect($('#user_roles'));
 
@@ -1579,10 +1583,6 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
       toggleMultiselect($(this));
     });
 
-    // choose either the full version
-    $(".multiselect").multiselect({sortable: false});
-    // or disable some features
-    //$(".multiselect").multiselect({sortable: false, searchable: false});
   }
 }
 

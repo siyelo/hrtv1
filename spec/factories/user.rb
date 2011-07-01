@@ -14,6 +14,7 @@ Factory.define :user, :class => User do |f|
     u.current_response.organization = u.organization
     u.current_response.save(false)
   end
+  f.roles { ['reporter'] }
 end
 
 Factory.define :reporter,  :parent => :user do |f|

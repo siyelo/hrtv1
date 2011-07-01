@@ -26,6 +26,10 @@ class Admin::OrganizationsController < Admin::BaseController
     end
   end
 
+  def create
+    create!(:notice => 'Organizatition was successfully created') { admin_organizations_url }
+  end
+
   def update
     @organization = Organization.find(params[:id])
     @organization.attributes = params[:organization]

@@ -316,7 +316,7 @@ h3.form_heading
           margin-bottom: 3px
           font-size: 9px
           font-weight: normal
-          color: $mid-blue + #333
+          color: $blue
 
 
   .edit_block, .preview_block
@@ -570,18 +570,29 @@ h3.form_heading
       input
         width: 70%
 
+.organizations, .roles
+  label
+    display: block !important
+    float: none !important
+
+.organizations
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 200px !important
+
+.roles
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 120px !important
+
 .comment
   .ajax-loader
     margin: 5px 10px
 
-.organizations
-  .multiselect
-    display: inline-block
-    width: 900px !important
-    height: 200px !important
+.ui-widget-header
+  height: 25px
 
-  .ui-widget-header
-    height: 25px
-
-  .search
-    padding: 0 !important
+.search
+  padding: 0 !important

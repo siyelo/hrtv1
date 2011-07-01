@@ -29,16 +29,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def set_user_layout
-      if current_user.reporter?
-        'reporter'
-      elsif current_user.admin?
-        'admin'
-      else
-        'application'
-      end
-    end
-
     def send_csv(text, filename)
       send_data text,
                 :type => 'text/csv; charset=iso-8859-1; header=present',
@@ -100,11 +90,29 @@ class ApplicationController < ActionController::Base
 
     def find_response(response_id)
       if current_user.admin?
-        # work-arround until all admin actions are moved to admin controllers
-        DataResponse.find(response_id)
+        @response = DataResponse.find(response_id)
+      elsif current_user.activity_manager?
+        # scope by the organizations the AM has access to
+        @response = DataResponse.find(response_id,
+          :conditions => ["organization_id in (?)", [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
       else
-        current_user.data_responses.find(response_id)
+        @response = current_user.data_responses.find(response_id)
       end
+      @response
+    end
+
+    def load_response
+      find_response(params[:response_id])
+    end
+
+    # use this if your controller expects :id instead of :response_id
+    def load_response_from_id
+      find_response(params[:id])
+    end
+
+    # deprecated - use load_response
+    def load_data_response
+      load_response
     end
 
     def find_project(project_id)
@@ -128,5 +136,37 @@ class ApplicationController < ActionController::Base
         end
       end
       super
+    end
+
+    def latest_request_message(request)
+      "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
+    end
+
+    def not_latest_request_message(request)
+      "You are now viewing data for the Request: \"<span class='bold'>#{request.name}</span>\".
+       All changes made will be saved for this Request.
+       Would you like to <a href='#{set_latest_request_path}'>resume editing the latest Request?</a>"
+    end
+
+    def warn_if_not_current_request
+      unless current_user.current_response_is_latest?
+        flash.now[:warning] = not_latest_request_message(current_user.current_request)
+      end
+    end
+
+    def change_user_current_response(new_request_id)
+      user = current_user
+      response = user.responses.find_by_data_request_id(new_request_id)
+      if response
+        user.data_response_id_current = response.id
+        if user.save
+          user.reload #otherwise current_response association is stale
+          flash[:notice] = latest_request_message(user.current_response.request) if user.current_response_is_latest?
+        else
+          flash[:error] = "Sorry we could not update your response"
+        end
+      else
+        flash[:error] = "Sorry we could not find that response"
+      end
     end
 end

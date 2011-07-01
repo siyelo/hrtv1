@@ -295,7 +295,7 @@ module ApplicationHelper
   end
 
   def current_or_last_response
-    current_response || last_response
+    @response || current_response || last_response
   end
 
   def month_year(date, i = 0)
@@ -323,5 +323,10 @@ module ApplicationHelper
     else
       type
     end
+  end
+
+  # find namespace of given class
+  def namespace(klass)
+    klass.to_s.split("::").first
   end
 end

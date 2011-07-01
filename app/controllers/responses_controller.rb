@@ -1,13 +1,12 @@
 class ResponsesController < Reporter::BaseController
-  layout 'reporter' #TODO: separate reporter/admin actions
   before_filter :require_user
+  before_filter :load_response_from_id, :except => :new
 
   def new
     @response = DataResponse.new(:data_request_id => params[:data_request_id])
   end
 
   def review
-    @response                     = find_response(params[:id])
     @projects                     = @response.projects.find(:all, :order => "name ASC")
     @activities_without_projects  = @response.activities.roots.without_a_project
     @other_costs_without_projects = @response.other_costs.without_a_project
@@ -19,7 +18,6 @@ class ResponsesController < Reporter::BaseController
 
   # POST /data_responses
   def create
-    @response  = DataResponse.new(params[:data_response])
     @response.organization = current_user.organization
 
     if @response.save
@@ -33,12 +31,10 @@ class ResponsesController < Reporter::BaseController
   end
 
   def submit
-    @response = find_response(params[:id])
     @projects = @response.projects.find(:all, :include => :normal_activities)
   end
 
   def send_data_response
-    @response = find_response(params[:id])
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
@@ -46,23 +42,5 @@ class ResponsesController < Reporter::BaseController
     else
       render :submit
     end
-  end
-
-  def change
-    change_user_current_response(params[:user][:data_response_id_current])
-    redirect_to :back
-  end
-
-  def make_current
-    @response = DataResponse.find(params[:id])
-    change_user_current_response(@response)
-    redirect_to :back
-  end
-
-  def set_latest
-    current_user.set_current_response_to_latest!
-    request = current_user.current_response.request
-    flash[:notice] = "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
-    redirect_to :back
   end
 end

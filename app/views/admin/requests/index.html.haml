@@ -22,7 +22,7 @@
     - @requests.each do |request|
       %tr
         %td= request.organization.try(:name)
-        %td= link_to request.title, admin_set_request_path(request)
+        %td= link_to request.title, set_request_path(request.id)
         %td= request.final_review
         %td= request.start_date
         %td= request.end_date

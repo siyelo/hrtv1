@@ -261,13 +261,9 @@ class Project < ActiveRecord::Base
   def spend_matches_funders?
     (self.spend || 0) == self.in_flows_spend_total
   end
-
-  def subtotal_budget
-    activities.select{|a| !a.am_approved.nil? && a.am_approved}.sum(&:budget)
-  end
-
-  def subtotal_spend
-    activities.select{|a| !a.am_approved.nil? && a.am_approved}.sum(&:spend)
+  
+  def subtotals(type)
+    activities.select{|a| !a.am_approved.nil? && a.am_approved && a.send(type).present?}.sum(&type)
   end
 
   def in_flows_spend_total

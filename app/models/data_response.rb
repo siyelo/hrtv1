@@ -387,11 +387,11 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_total_spend
-    projects.map{|p| p.subtotal_spend.to_f * currency_rate(p.currency, currency) }.compact.sum
+    projects.map{|p| p.subtotals(:spend).to_f * currency_rate(p.currency, currency) }.compact.sum
   end
 
   def projects_total_budget
-    projects.map{|p| p.subtotal_budget.to_f * currency_rate(p.currency, currency) }.compact.sum
+    projects.map{|p| p.subtotals(:budget).to_f * currency_rate(p.currency, currency) }.compact.sum
   end
 
   def download_template
@@ -450,6 +450,8 @@ class DataResponse < ActiveRecord::Base
       end
     end
 end
+
+
 
 
 

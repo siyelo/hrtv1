@@ -1,0 +1,9 @@
+%tr
+  %th Organization
+  %th Primary Contact (Phone)
+  %th Secondary Contacts
+  %th Activities Approved
+  - if current_user.admin?
+    %th= "raw_type"
+    %th= "fosaid"
+    %th

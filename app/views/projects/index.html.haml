@@ -9,6 +9,12 @@
 
 = render 'getting_started'
 
+%ul.horizontal.right.plain
+  %li
+    - link_to "#comments" do
+      %span
+        View Comments
+
 %ul#nav.horizontal
   %li
     - link_to new_response_project_path(@response), :class => "create_new" do

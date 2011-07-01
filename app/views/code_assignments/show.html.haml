@@ -9,7 +9,7 @@
 
 
 %h1.main_heading
-  = nice_name(@activity)
+  = link_to @activity.name || "(no name)", response_activity_path(@response, @activity), :title => @activity.description, :class => 'tooltip'
 %h2.main_heading
   = "#{@activity.class.to_s.underscore.humanize.titleize} #{get_activity_type(type)}"
 

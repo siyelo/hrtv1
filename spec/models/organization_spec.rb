@@ -6,6 +6,14 @@ describe Organization do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:fiscal_year_end_date) }
+    it { should allow_mass_assignment_of(:fiscal_year_start_date) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
   describe "associations" do
@@ -174,7 +182,7 @@ describe Organization do
     end
 
     it "is not empty when it has users" do
-      Factory(:user, :organization => @organization)
+      Factory(:reporter, :organization => @organization)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -289,8 +297,8 @@ describe Organization do
     end
 
     it "copies users from @duplicate to @target" do
-      Factory(:user, :organization => @target)
-      Factory(:user, :organization => @duplicate)
+      Factory(:reporter, :organization => @target)
+      Factory(:reporter, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.users.count.should == 2
     end
@@ -307,9 +315,9 @@ describe Organization do
     it "caches users count" do
       o = Factory.create(:organization)
       o.users_count.should == 0
-      Factory.create(:user, :organization => o)
+      Factory.create(:reporter, :organization => o)
       o.reload.users_count.should == 1
-      Factory.create(:user, :organization => o)
+      Factory.create(:reporter, :organization => o)
       o.reload.users_count.should == 2
     end
   end
@@ -323,7 +331,7 @@ describe Organization do
       req = Factory :request
       requestor = req.organization
       org1 = Factory(:organization, :name => 'Org1')
-      Factory(:user, :organization => org1, :current_response => org1.responses.first)
+      Factory(:reporter, :organization => org1, :current_response => org1.responses.first)
       org2 = Factory(:organization, :name => 'Org2')
       Organization.without_users.should == [requestor, org2]
     end
@@ -396,8 +404,8 @@ describe Organization do
     it "should return email addresses of users in the organization, up to the limit" do
       @req = Factory :request
       @org = Factory :organization
-      @reporter = Factory :user, :email => 'reporter@org.com', :organization => @org
-      @reporter2 = Factory :user, :email => 'reporter2@org.com', :organization => @org
+      @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
+      @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
       @org.user_emails(1).should == ['reporter@org.com']
     end
   end

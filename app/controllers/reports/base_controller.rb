@@ -1,5 +1,4 @@
 class Reports::BaseController < ApplicationController
-  layout :set_user_layout
   before_filter :require_user
 
   private

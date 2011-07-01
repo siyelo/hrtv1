@@ -231,14 +231,21 @@ body.app
     p
       color: $light-blue - #777
       &.main
-        padding: 0 20px 3px 6px
+        padding: 0 20px 3px 10px
       &.time
         color: $light-blue - #333
         font-size: 0.7em
         font-style: italic
         padding: 0 20px 5px 6px
-    .read_more
-      padding-bottom: 10px
+    .author
+      padding: 0 20px 3px 10px
+      color: $light-blue - #333
+      font-size: 0.8em
+      font-style: italic
+      margin: 5px 0 10px
+.read_more
+  padding-bottom: 10px
+  float: right
 
 /* adding styles for the Submit page */
 body#static_page_submit #content .wrapper #main
@@ -288,6 +295,11 @@ body#static_page_submit #content .wrapper #main
   +clearfix
   span
     display: inline
+
+  a
+    font-size: 0.8em
+    text-decoration: none
+    text-transform: uppercase
 
 .sub_heading
   clear: both
@@ -340,7 +352,7 @@ body#static_page_submit #content .wrapper #main
       margin-top: 5px
       +text-shadow(#fff, 0, 1px, 0)
     .light
-      color: $light-blue
+      color: $blue
       font-size: 12px
       +text-shadow(#fff, 0, 1px, 0)
     .none
@@ -610,6 +622,7 @@ body#static_page_submit #content .wrapper #main
   h1.main_heading
     padding: 0
     margin: 0
+
 
 .welcome_continue
   color: $mid-blue

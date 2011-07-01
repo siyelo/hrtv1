@@ -34,31 +34,29 @@ class ActivitiesController < Reporter::BaseController
       end
     end
   end
-
+  
   def update
     @activity = Activity.find(params[:id])
-    unless @activity.am_approved?
-      if @activity.update_attributes(params[:activity])
-        respond_to do |format|
-          format.html do
-            if @activity.check_projects_budget_and_spend?
-              flash[:notice] = 'Activity was successfully updated'
-            else
-              flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
-            end
-            html_redirect
+    if !@activity.am_approved? && @activity.update_attributes(params[:activity])
+      respond_to do |format|
+        format.html do
+          if @activity.check_projects_budget_and_spend?
+            flash[:notice] = 'Activity was successfully updated'
+          else
+            flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
           end
-          format.js   { js_redirect }
+          html_redirect
         end
-      else
-        respond_to do |format|
-          format.html { load_comment_resources(resource); render :action => 'edit'}
-          format.js   { js_redirect }
-        end
+        format.js   { js_redirect }
       end
     else
-      flash[:error] = "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
-      render :action => 'edit'  
+      respond_to do |format|
+        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+                      load_comment_resources(resource) 
+                      render :action => 'edit'
+                    }
+        format.js   { js_redirect }
+      end
     end
   end
 

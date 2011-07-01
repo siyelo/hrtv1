@@ -17,16 +17,16 @@
     %td{:colspan => 1}
 
     %td.total Sub Total
-    %td.wrap-10= n2cndrs(project.subtotal_spend, project.currency)
-    %td.wrap-10= n2cndrs(project.subtotal_budget, project.currency)
+    %td.wrap-10= n2cndrs((project.subtotal_spend || 0), project.currency)
+    %td.wrap-10= n2cndrs((project.subtotal_budget || 0), project.currency)
     %td
   %tr.filler2
     %td{:colspan => 1}
       %ul.horizontal
         %li
     %td.total Project Total
-    %td.wrap-10= n2cndrs(project.spend, project.currency)
-    %td.wrap-10= n2cndrs(project.budget, project.currency)
+    %td.wrap-10= n2cndrs((project.spend || 0), project.currency)
+    %td.wrap-10= n2cndrs((project.budget || 0), project.currency)
     %td
   -if (project.spend || 0) - project.subtotal_spend > 0
     %tr.filler2

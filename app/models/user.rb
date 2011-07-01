@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
+  validate :validate_inclusion_of_roles
 
   ### Callbacks
   before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
@@ -64,12 +65,12 @@ class User < ActiveRecord::Base
   end
 
   def roles=(roles)
-    roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
-    self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
+    @roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
+    self.roles_mask = (@roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
   end
 
   def roles
-    ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
+    @roles || ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
   end
 
   def admin?
@@ -144,6 +145,13 @@ class User < ActiveRecord::Base
 
     def unassign_organizations
       self.organizations = []
+    end
+
+    # TODO: spec
+    def validate_inclusion_of_roles
+      if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
+        errors.add(:roles, "is not included in the list")
+      end
     end
 end
 

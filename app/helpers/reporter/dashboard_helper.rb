@@ -7,6 +7,8 @@ module Reporter::DashboardHelper
       edit_response_activity_path(commentable.data_response, commentable)
     when "OtherCost"
       edit_response_other_cost_path(commentable.data_response, commentable)
+    when "DataResponse"
+      response_projects_path(commentable)
     end
   end
 
@@ -24,7 +26,7 @@ module Reporter::DashboardHelper
 
   def model_name(model)
     if model.respond_to?(:name)
-      model.try(:name) || "(no title)"
+      model.try(:name).presence || "(no title)"
     else
       "(no title)"
     end

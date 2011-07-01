@@ -26,12 +26,12 @@ module ProjectsHelper
   
   def get_project_total_differences(project)  
     errors = []
-    if (project.spend || 0) - project.subtotal_spend > 0 
-      errors << "Past expenditure difference: #{n2cndrs((project.spend || 0) - project.subtotal_spend, project.currency)}"
+    if (project.spend || 0) - project.subtotals(:spend) > 0 
+      errors << "Past expenditure difference: #{n2cndrs((project.spend || 0) - project.subtotals(:spend), project.currency)}"
     end
     
-    if (project.budget || 0) - project.subtotal_budget > 0 
-      errors << "Current budget difference: #{n2cndrs((project.budget || 0) - project.subtotal_budget, project.currency)}"
+    if (project.budget || 0) - project.subtotals(:budget) > 0 
+      errors << "Current budget difference: #{n2cndrs((project.budget || 0) - project.subtotals(:budget), project.currency)}"
     end
     
     errors = errors.collect{|e| "<li>#{e}</li>"}

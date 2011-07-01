@@ -262,12 +262,12 @@ class Project < ActiveRecord::Base
     (self.spend || 0) == self.in_flows_spend_total
   end
   
+  #calculates the activitytotals for budget/spent
   def subtotals(type)
     activities.select{|a| !a.am_approved.nil? && a.am_approved && a.send(type).present?}.sum(&type)
   end
 
   def in_flows_spend_total
-    #(in_flows.reject{|fs| fs.spend.nil?}.sum(&:spend) || 0)
     in_flows_total(:spend)
   end
 

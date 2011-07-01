@@ -18,6 +18,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :comments
 
+  # ALL USERS
+  map.set_request 'set_request/:id', :controller => 'users', :action => :set_request
+  map.set_latest_request 'set_latest_request', :controller => 'users', :action => :set_latest_request
+
   # ADMIN
   map.namespace :admin do |admin|
     admin.resources :requests
@@ -33,7 +37,6 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.dashboard 'dashboard', :controller => 'dashboard', :action => :index
-    admin.set_request 'set_request/:id', :controller => 'requests', :action => :set_request
     admin.resources :comments
   end
 
@@ -44,8 +47,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :member => {:review => :get, :submit => :get, :send_data_response => :put, :make_current => :get},
-    :collection => {:set_latest => :get} do |response|
+    :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
       response.resources :projects,
         :collection => {:create_from_file => :post,
                         :download_template => :get,

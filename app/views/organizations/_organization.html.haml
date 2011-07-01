@@ -1,4 +1,4 @@
-- response = organization.response_for(current_user.current_request)
+- response = organization.response_for(current_request)
 %tr
   %td.title= link_to organization.name, response_projects_path(response)
   %td= "#{organization.contact_name} (#{organization.contact_phone_number})"

@@ -64,9 +64,9 @@
   %li
     %ul.horizontal
       - f.buttons :class => 'buttons' do
-        = f.commit_button "Save", :class => "last"
+        = f.commit_button "Save", :class => "last", :button_html => {:class => "last big_button"}
         - if @response.data_request.spend? || @response.data_request.budget?
-          = f.commit_button "Save & Classify >", :class => "last"
+          = f.commit_button "Save & Classify >", :class => "last", :button_html => {:class => "last big_button"}
 
 - unless @other_cost.new_record?
   .delete_section

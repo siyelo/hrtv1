@@ -4,8 +4,5 @@
   %td= n2cndrs(activity.spend, activity.currency)
   %td= n2cndrs(activity.budget, activity.currency)
   %td
-    - if activity.am_approved?
-      Approved
-    - else
-      %span.red Not Approved
-    
+    - unless activity.am_approved?
+      %span.warm-red.hint Not yet approved

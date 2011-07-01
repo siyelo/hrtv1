@@ -74,7 +74,7 @@ var build_activity_funding_source_row = function (edit_block) {
 
   if (_budget) {
     budget = $('<li/>').append(
-      $('<span/>').text('Budget'),
+      $('<span/>').text('Current Budget'),
       edit_block.find('.ff_budget').val() || 'N/A'
     )
   }

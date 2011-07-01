@@ -12,8 +12,8 @@ class Admin::CodesController < Admin::BaseController
 
   def index
     scope  = Code.scoped({})
-    scope  = scope.scoped(:conditions => ["UPPER(short_display) LIKE UPPER(:q) OR 
-                                          UPPER(type) LIKE UPPER(:q) OR 
+    scope  = scope.scoped(:conditions => ["UPPER(short_display) LIKE UPPER(:q) OR
+                                          UPPER(type) LIKE UPPER(:q) OR
                                           UPPER(description) LIKE UPPER(:q)",
                           {:q => "%#{params[:query]}%"}]) if params[:query]
     @codes = scope.paginate(:page => params[:page], :per_page => 10,
@@ -21,15 +21,15 @@ class Admin::CodesController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Code was successfully created")
+    create!(:notice => "Code was successfully created") { admin_codes_url }
   end
 
   def update
-    update!(:notice => "Code was successfully updated")
+    update!(:notice => "Code was successfully updated") { admin_codes_url }
   end
 
   def destroy
-    destroy!(:notice => "Code was successfully destroyed")
+    destroy!(:notice => "Code was successfully destroyed") { admin_codes_url }
   end
 
   def download_template

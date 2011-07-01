@@ -6,9 +6,14 @@
     - link_to '#', :class => 'js_reply add_row right' do
       = image_tag "icon_reply.png"
       Reply
-    %span
-      commented on:
-      %strong= comment.commentable.name
+
+    - if params[:controller] == 'projects' && params[:action] == 'index'
+      %span
+        commented on:
+        - if comment.commentable.is_a?(DataResponse)
+          %strong= comment.commentable.name
+        - else
+          %strong= link_to comment.commentable.name, commentable_path(comment, current_user)
 
   %p.comment= comment.comment
 

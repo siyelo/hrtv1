@@ -6,7 +6,7 @@
   - comments.each do |comment|
     %li
       %h5.title
-        %span= link_to "#{truncate(model_name(comment.commentable), :length => 40)} (#{comment.commentable.organization.name})", commentable_path(comment.commentable_type, comment.commentable, current_user)
+        %span= link_to "#{truncate(model_name(comment.commentable), :length => 40)} (#{comment.commentable.organization.name})", commentable_path(comment, current_user)
       .author
         from
         %b= "#{comment.user.name} (#{auto_link(comment.user.email)})"

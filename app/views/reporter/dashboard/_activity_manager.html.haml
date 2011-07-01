@@ -29,13 +29,10 @@
 .dashboard_section
   %table.modern_table
     %thead
-      %tr
-        %td Organization
-        %td Primary Contact (Phone)
-        %td Secondary Contacts
-        %td Activities Approved
+      = render :partial => '/organizations/index_header'
+
     %tbody
-      = render :partial => 'organization', :collection => @organizations
+      = render :partial => '/organizations/organization', :collection => @organizations
 
 = render 'requests'
 

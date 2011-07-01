@@ -7,3 +7,10 @@
       - organization.user_emails(2).each do |e|
         %li= mail_to(e)
   %td= "#{response.activities.manager_approved.count}/#{response.activities_count}"
+  - if current_user.admin?
+    %td= organization.raw_type
+    %td= organization.fosaid
+    %td
+      %ul.manage_bar
+        %li= link_to "Edit", edit_admin_organization_path(organization)
+        %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"

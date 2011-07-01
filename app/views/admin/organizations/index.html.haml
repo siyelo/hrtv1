@@ -1,6 +1,6 @@
 - title("Organizations")
 
-%h1.main_heading 
+%h1.main_heading
   #search
     - form_tag admin_organizations_path, :method => :get do
       = render 'shared/search_form'
@@ -30,24 +30,11 @@
 
       = link_to "Download template", download_template_admin_organizations_path, :class => 'target'
 
+
 %table.standard.rounded
   %thead
-    %tr
-      %th= sortable "name"
-      %th= sortable "raw_type"
-      %th= sortable "fosaid"
-      %th
+    = render :partial => '/organizations/index_header'
   %tbody
-    - @organizations.each do |organization|
-      %tr
-        %td= organization.name
-        %td= organization.raw_type
-        %td= organization.fosaid
-        %td
-          %ul.manage_bar
-            %li= link_to "Show", admin_organization_path(organization)
-            %li= link_to "Edit", edit_admin_organization_path(organization)
-            %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure?"
-
+    = render :partial => '/organizations/organization', :collection => @organizations
 
 = will_paginate @organizations

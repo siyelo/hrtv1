@@ -1,11 +1,14 @@
 %h2
   = image_tag "icon_comments.png", :class => "heading_icon"
   Recent Comments
-  .read_more= link_to "all comments", current_user.admin? ? admin_comments_path : comments_path
+  .read_more= link_to "view all", current_user.admin? ? admin_comments_path : comments_path
 %ul.dashboard_comments
   - comments.each do |comment|
     %li
       %h5.title
-        %span= link_to truncate(model_name(comment.commentable), :length => 40), commentable_path(comment.commentable_type, comment.commentable, current_user)
-        %span= "from #{comment.user.name} #{time_ago_in_words(comment.created_at)} ago"
+        %span= link_to "#{truncate(model_name(comment.commentable), :length => 40)} (#{comment.user.organization.name})", commentable_path(comment.commentable_type, comment.commentable, current_user)
+      .author
+        from
+        %b= comment.user.name
+        = "#{time_ago_in_words(comment.created_at)} ago"
       %p.main= truncate(comment.comment, :length => 300)

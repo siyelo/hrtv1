@@ -36,9 +36,9 @@
 %table.standard.rounded
   %thead
     %tr
-      %th= sortable "username"
-      %th= sortable "email"
       %th= sortable "full_name"
+      %th= sortable "email"
+      %th= sortable "username"
       %th= sortable "organizations.name", "Organization"
       %th= "Role"
       %th
@@ -46,14 +46,13 @@
   %tbody
     - @users.each do |user|
       %tr{:class => cycle("even", "odd")}
+        %td= link_to "#{user.full_name}", edit_admin_user_path(user)
+        %td= mail_to user.email
         %td= user.username
-        %td= user.email
-        %td= user.full_name
         %td= user.organization.try(:name)
         %td= user.roles.map{|role| role.humanize}.join(', ')
         %td
           %ul.manage_bar
-            %li= link_to "Show", admin_user_path(user)
             %li= link_to "Edit", edit_admin_user_path(user)
             %li= link_to "x", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right"
 

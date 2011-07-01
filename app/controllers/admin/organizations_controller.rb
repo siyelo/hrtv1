@@ -14,7 +14,7 @@ class Admin::OrganizationsController < Admin::BaseController
                                          UPPER(fosaid) LIKE UPPER(:q)",
                          {:q => "%#{params[:query]}%"}]) if params[:query]
 
-    @organizations = scope.paginate(:page => params[:page], :per_page => 10,
+    @organizations = scope.paginate(:page => params[:page], :per_page => 200,
                     :order => "#{sort_column} #{sort_direction}")
   end
 

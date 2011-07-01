@@ -7,7 +7,7 @@ class Reporter::DashboardController < Reporter::BaseController
       @approved_orgs = Activity.with_organization.count(:all,
         :conditions =>  ["organization_id in (?) AND
                           data_responses.data_request_id = ? AND
-                          am_approved IS ?", organization_ids, current_request, true])
+                          am_approved IS TRUE", organization_ids, current_request])
       @total_activities = Activity.with_organization.count(:all,
         :conditions =>  ["organization_id in (?) AND
                           data_responses.data_request_id = ?", organization_ids, current_request])

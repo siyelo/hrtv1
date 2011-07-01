@@ -1,7 +1,7 @@
 %li.comment_item
   %h4.author.horizontal
     = image_tag comment.user.gravatar
-    %span.name= comment.user.name
+    %span.name= "#{comment.user.name} (#{auto_link(comment.user.email)})"
     %span.time= "#{time_ago_in_words(comment.created_at)} ago"
     - link_to '#', :class => 'js_reply add_row right' do
       = image_tag "icon_reply.png"

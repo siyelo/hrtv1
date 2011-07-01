@@ -339,32 +339,6 @@ Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   }
 end
 
-Given /^a model help for "([^"]*)"$/ do |model_name|
-  Factory(:model_help, :model_name => model_name)
-end
-
-Given /^model help for "([^"]*)" page$/ do |page|
-  model_help_name = case page
-                    when 'projects'
-                      "Project"
-                    when 'funding sources'
-                      "FundingSource"
-                    when 'implementers'
-                      "Provider"
-                    when 'activities'
-                      "Activity"
-                    when 'classifications'
-                      "CodeAssignment"
-                    when 'other costs'
-                      "OtherCost"
-                    when 'review'
-                      "DataResponseReview"
-                    end
-  steps %Q{
-    Given a model help for "#{model_help_name}"
-  }
-end
-
 Given /^location "([^"]*)" for activity "([^"]*)"$/ do |location_name, activity_name|
   activity = Activity.find_by_name(activity_name)
   location = Location.find_by_short_display(location_name)

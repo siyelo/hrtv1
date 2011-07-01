@@ -7,26 +7,6 @@ Feature: Reporter can see help text
     Given a basic org "UNDP" + reporter profile, with data response to "Req1", signed in
 
 
-
-    # this spec is for CMS-style help - to be added back once the UI is stabilised.
-    @wip
-    Scenario Outline: See help sections from the CMS
-      Given model help for "<page>" page
-      When I go to the <page> page
-      Then I should see "Questions on this Page"
-        And I should see "Help"
-        And I should see "Field Definitions"
-
-        Examples:
-          | page             |
-          | projects         |
-          | funding sources  |
-          | implementers     |
-          | activities       |
-          | classifications  |
-          | other costs      |
-
-
     Scenario: See help sidebar on Data Response page
       When I follow "Settings"
       Then I should see "What's a (Data) Response?"

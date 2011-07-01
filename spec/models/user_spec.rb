@@ -37,6 +37,18 @@ describe User do
       user.save
       user.errors.on(:data_response_id_current).should include("can't be blank")
     end
+
+    it "cannot assign blank role" do
+      user = Factory.build(:reporter, :roles => [])
+      user.save
+      user.errors.on(:roles).should include('is not included in the list')
+    end
+
+    it "cannot assign unexisting role" do
+      user = Factory.build(:reporter, :roles => ['admin123'])
+      user.save
+      user.errors.on(:roles).should include('is not included in the list')
+    end
   end
 
   describe "Callbacks" do
@@ -147,12 +159,6 @@ describe User do
       user.roles = ['admin', 'reporter', 'activity_manager']
       user.save
       user.reload.roles.should == ['admin', 'reporter', 'activity_manager']
-    end
-
-    it "cannot assign unexisting role" do
-      user = Factory.build(:reporter, :roles => ['admin123'])
-      user.save
-      user.errors.on(:roles).should include('is not included in the list')
     end
   end
 

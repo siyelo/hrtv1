@@ -22,6 +22,8 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
+    # set roles to epty array if no role is assigned
+    # otherwise, user model is saved, but user not notified for the error
     params[:user][:roles] = [] unless params[:user].has_key?(:roles)
     update!
   end

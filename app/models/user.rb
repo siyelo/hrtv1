@@ -147,7 +147,6 @@ class User < ActiveRecord::Base
       self.organizations = []
     end
 
-    # TODO: spec
     def validate_inclusion_of_roles
       if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
         errors.add(:roles, "is not included in the list")

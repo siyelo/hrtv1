@@ -11,9 +11,9 @@
       %span
         commented on:
         - if comment.commentable.is_a?(DataResponse)
-          %strong= comment.commentable.name
+          %strong= model_name(comment.commentable)
         - else
-          %strong= link_to comment.commentable.name, commentable_path(comment, current_user)
+          %strong= link_to model_name(comment.commentable), commentable_path(comment, current_user)
 
   %p.comment= comment.comment
 

@@ -27,7 +27,7 @@ module Reporter::DashboardHelper
 
   def model_name(model)
     if model.respond_to?(:name)
-      model.try(:name).presence || "(no title)"
+      model.try(:name).presence || "Unnamed #{model.class.to_s.titleize}"
     else
       "(no title)"
     end

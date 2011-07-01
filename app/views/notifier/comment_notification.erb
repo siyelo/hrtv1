@@ -1,5 +1,5 @@
 Hello,
-<%= @comment.user.name %> <<%= @comment.user.email %>> has made a new comment on the <%= @comment.commentable.name %> <%= @comment.commentable.class.to_s.tableize.singularize.humanize.downcase %>:
+<%= @comment.user.name %> <<%= @comment.user.email %>> has made a new comment on the <%= @comment.commentable.name %> <%= @comment.commentable.class.to_s.titleize %>:
 
 
 <%= @comment.comment %>

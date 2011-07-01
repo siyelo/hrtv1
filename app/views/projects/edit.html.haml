@@ -25,11 +25,15 @@
     - if !@project.total_matches_quarters?("budget")
       %li Your quarterly Budget amounts do not match the total Budget amounts
 
-
+%ul.horizontal.right.plain
+  %li
+    - link_to "#comments" do
+      %span
+        View Comments
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-- semantic_form_for @project, :url => response_project_path(@response, @project), :html => {:class => "basic_form"} do |f|
+- semantic_form_for @project, :url => response_project_path(@response, @project), :html => {:class => "basic_form", :style => "clear: right;"} do |f|
   = render 'form', :f => f
 
 = render 'shared/comments', :comments => @comments

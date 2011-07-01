@@ -1,5 +1,6 @@
 %ul.horizontal.right.plain
   %li
+  -if !activity.new_record? && params[:controller] != 'code_assignments'
     - link_to "#comments" do
       %span
         View Comments

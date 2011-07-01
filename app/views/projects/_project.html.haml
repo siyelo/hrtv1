@@ -1,6 +1,6 @@
 %tbody
   %tr
-    %td.name.wrap-20{:rowspan => 7 + project.activities.only_simple.count}
+    %td.name.wrap-20{:rowspan => 100}
       //= link_to "edit", edit_response_project_path(@response, project), :class => 'edit_button inline left push-12'
 
       = link_to "#{h project.name}", edit_response_project_path(@response, project)

@@ -1,5 +1,5 @@
 class StaticPageController < ApplicationController
-  layout :promo_inner
+  layout 'promo_inner'
 
   def index
     if current_user

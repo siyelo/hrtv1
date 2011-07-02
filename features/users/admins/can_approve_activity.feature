@@ -17,7 +17,7 @@ Feature: Admin can approve a code breakdown for each activity
 
     @javascript
     Scenario: See a budget coding breakdown
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I go to the admin review data response page for organization "WHO", request "Req1"
         And wait a few moments
       Then I should see "Mtef code"
@@ -27,7 +27,7 @@ Feature: Admin can approve a code breakdown for each activity
     # NB: this scenario will only work for 1 activity, 1 classification
     @javascript
     Scenario: Approve a budget coding breakdown
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I go to the admin review data response page for organization "WHO", request "Req1"
         And I click element "#project_details"
         And I click element ".project .descr"

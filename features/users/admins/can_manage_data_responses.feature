@@ -6,10 +6,10 @@ Feature: Admin can manage data responses
   Background:
     Given an organization exists with name: "GoR"
       And a data_request exists with title: "Req1", organization: the organization
-      And a reporter exists with username: "undp_user", organization: the organization
+      And a reporter exists with username: "reporter", organization: the organization
       And an organization exists with name: "UNDP", raw_type: "Agencies"
       And a data_response exists with data_request: the data_request, organization: the organization
-      And I am signed in as an admin
+      And I am signed in as a sysadmin
 
     Scenario: Manage data responses
       When I follow "Review Organization Expenditures and Budgets"

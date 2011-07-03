@@ -12,19 +12,18 @@ describe Admin::ResponsesController do
       params_from(:delete, "/admin/responses/1").should == {:controller => "admin/responses", :id => "1", :action => "destroy"}
     end
   end
-  
+
   describe "Requesting Admin::Responses endpoints as an admin" do
     before :each do
-      @admin = Factory.create(:admin)
-      login @admin
+      login_as_admin
       @data_response = Factory.create(:data_response)
     end
-      
+
     it "/index should find the submitted responses" do
       get :index
       response.should be_success
     end
-    
+
     it "/submitted should find the submitted responses" do
       get :submitted
       response.should be_success
@@ -33,13 +32,13 @@ describe Admin::ResponsesController do
     it "/in_progress should find the in_progress responses" do
       get :in_progress
       response.should be_success
-    end 
-    
+    end
+
     it "/empty should find the empty responses" do
       get :empty
       response.should be_success
     end
-  
+
     it "GET/1 should find a response" do
       (@codes = [Factory(:code)])
       Code.stub_chain(:purposes, :roots).and_return(@codes)

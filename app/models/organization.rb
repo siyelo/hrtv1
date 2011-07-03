@@ -4,9 +4,9 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District", 
-     "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO", 
-     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital", 
+  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
+     "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO",
+     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
      "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
 
   include ActsAsDateChecker

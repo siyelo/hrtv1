@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe Admin::OrganizationsController do
-  
+  before :each do
+    login_as_admin
+  end
+
   describe "show organization" do
     before :each do
-      login(Factory.create(:admin))
       @mock_object = mock_model(Organization)
       Organization.stub!(:find).with("1").and_return(@mock_object)
     end
@@ -16,14 +18,10 @@ describe Admin::OrganizationsController do
   end
 
   describe "destroy organization" do
-    before :each do
-      login(Factory.create(:admin))
-    end
-
     context "when organization is empty" do
       before :each do
-        @mock_object = mock_model(Organization, 
-                                  :is_empty? => true, 
+        @mock_object = mock_model(Organization,
+                                  :is_empty? => true,
                                   :to_label => 'org label',
                                   :destroy => true)
         Organization.stub!(:find).with("1").and_return(@mock_object)
@@ -68,8 +66,8 @@ describe Admin::OrganizationsController do
 
     context "when organization is not empty" do
       before :each do
-        @mock_object = mock_model(Organization, 
-                                  :is_empty? => false, 
+        @mock_object = mock_model(Organization,
+                                  :is_empty? => false,
                                   :to_label => 'org label',
                                   :destroy => true)
         Organization.stub!(:find).with("1").and_return(@mock_object)
@@ -119,7 +117,6 @@ describe Admin::OrganizationsController do
 
   describe "duplicate organization" do
     before :each do
-      login(Factory.create(:admin))
       organizations = [mock_model(Organization)]
       Organization.stub_chain(:without_users, :ordered).and_return(organizations)
       Organization.stub!(:ordered).and_return(organizations)
@@ -140,10 +137,6 @@ describe Admin::OrganizationsController do
   end
 
   describe "remove duplicate organization" do
-    before :each do
-      login(Factory.create(:admin))
-    end
-
     context "duplicate_organization_id and target_organization_id are blank" do
       context 'html format' do
         it "redirects to the duplicate_admin_organizations_path" do

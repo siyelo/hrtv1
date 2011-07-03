@@ -5,4 +5,4 @@
 
 - semantic_fields_for activity, :namespace => form_namespace(project) do |f|
   - f.inputs do
-    = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => "Please indicate all the districts in which this activity was implemented. If this activity had a national focus and did not target any districts specifically, select 'National Level' from the list to the left.", :collection => ordered_locations(collection), :required => false
+    = f.input :location_ids, :as => :check_boxes, :label => "Locations worked in", :hint => 'Please indicate all the districts in which this activity was implemented. If this activity had a national focus and did not target any districts specifically, select "National Level" from the list to the left.', :collection => ordered_locations(collection), :required => false

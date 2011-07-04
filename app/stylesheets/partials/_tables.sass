@@ -343,7 +343,7 @@ table.workplan
     textarea
       width: 400px
   .nested
-    width: 100%
+    width: 98%
     td
       background: $filler
 
@@ -387,30 +387,47 @@ tr.activity_subheading
     font-size: 10px
 
 .nested
-  margin: 10px
   font-size: 11px
-  thead tr
-    background: $mid-blue - #111
-    color: white
-    th
-      padding: 5px
-  tr
-    padding: 2px 5px
-    td
-      padding: 2px 0px !important
-      border-bottom: 1px solid $lightest-blue
-      color: $mid-blue
-      padding: 0px 5px
-      li
-        padding: 0px !important
+  margin: 10px 0 0
+  width: 100%
+  +border-radius
+  +box-shadow(#eee, 0, 0, 4px)
+  th
+    background: $filler - #0c0c0c
+    color: $light-blue - #333
+    padding: 7px
+    +text-shadow(#fff, 0, 1px)
+    &:first-child
+      +border-top-left-radius
+    &:last-child
+      +border-top-right-radius
   tbody
-    td
-      &.implementer
-        width: 55%
-      &.amount
-        width: 20%
-      &.action
-        width: 5%
-    font-weight: bold
+    border: 1px solid $lightest-blue
+  td
+    background: #fff
+    border-bottom: 1px solid $lightest-blue
+    color: $mid-blue
+    padding: 5px 7px
+    
+    li
+      padding: 0px !important
+    &.implementer
+      font-weight: bold
+      width: 55%
+    &.amount
+      width: 20%
+    &.action
+      text-align: right
+      width: 5%
+      
+  tr:last-child td
+    &:first-child
+      +border-bottom-left-radius
+    &:last-child
+      +border-bottom-right-radius
+
   input[type="text"]
-    width: 85% !important
+    background: $filler
+    padding: 2px !important
+    text-align: right
+    width: 75% !important

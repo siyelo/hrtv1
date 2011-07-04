@@ -30,6 +30,7 @@ describe User do
     it { should validate_presence_of(:organization_id) }
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:username).case_insensitive }
+    #it { should ensure_length_of(:password).is_at_least(6) } # shoulda barfs here on password confirmation
 
     it "cannot assign blank role" do
       user = Factory.build(:reporter, :roles => [])

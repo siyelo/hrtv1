@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   validates_presence_of  :username, :email, :organization_id
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
-  validates_length_of :password, :within => 8..64, :on => :create
+  validates_length_of :password, :within => 6..64, :on => :create
   validate :validate_inclusion_of_roles
 
   ### Callbacks

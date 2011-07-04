@@ -24,8 +24,6 @@ Feature: Reporter can derive classifications from sub implementers
       And I follow "Projects"
       And I follow "activity_description"
 
-
-
     Scenario: Use budget classifications derived from sub implementers
       When I press "Save & Classify >"
         And I follow "Budget"

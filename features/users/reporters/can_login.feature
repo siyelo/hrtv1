@@ -32,12 +32,11 @@ Feature: Reporter can login
     And a data_response exists with data_request: the data_request, organization: the organization
     And a reporter exists with username: "Frank", organization: the organization
       And I go to the login page
-      And I fill in "Username or Email" with "Frank"
+      And I fill in "Email" with "Frank"
       And I fill in "Password" with "password"
     When I press "Sign in"
     Then I should see the reporters admin nav
       And I should see the main nav tabs
-
 
   Scenario: Login as a reporter with email address
     Given an organization exists with name: "org1"
@@ -49,5 +48,5 @@ Feature: Reporter can login
       And I fill in "Password" with "password"
       And I press "Sign in"
     Then I should see the reporters admin nav
-      And I should see "frank@f.com"
+      And I should see "reporter@hrtapp.com"
       And I should be on the reporter dashboard page

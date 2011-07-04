@@ -238,10 +238,10 @@ end
 
 Then /^I should see the main nav tabs$/ do
   steps %Q{
-    Then I should see "Home" within "div#main-nav"
-    Then I should see "Projects" within "div#main-nav"
-    Then I should see "Reports" within "div#main-nav"
-    Then I should see "Help" within "div#main-nav"
+    Then I should see "Home"
+    Then I should see "Projects"
+    Then I should see "Reports"
+    Then I should see "Help"
   }
 end
 

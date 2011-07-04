@@ -82,7 +82,7 @@ Feature: Reporter can enter a code breakdown for each activity
         Then I should not see "Activity classification was successfully updated."
         Then show me the page
         And I should see "We're sorry, when we added up your Budget by Purposes classifications"
-        And the "activity_updates_1_percentage" field should contain "<amount2>"
+         And the "mtef1" percentage field should contain "<amount2>"
 
         Examples:
           | amount | amount2 |
@@ -169,7 +169,6 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
-      @run
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
       When I press "Save & Classify >"
         And I follow "Budget"

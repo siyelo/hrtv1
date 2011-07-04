@@ -1,8 +1,7 @@
 .fields
-  %ul.dashboard_section.marginless
-    %li
-      %ul.horizontal
-        = f.input :description, :label => "Target", :required => false, :input_html => {:class => 'js_target_field'}, :wrapper_html => {:class => 'wrap-80'}
+  .edit_block
+    %ul
+      = f.input :description, :label => "Target", :required => false, :input_html => {:class => 'js_target_field'}, :wrapper_html => {:class => 'wrap-80'}
 
-        %li.right
-          = link_to_remove_fields "remove", f
+  .manage_block
+    = link_to_remove_fields "x", f, :class => 'delete_button'

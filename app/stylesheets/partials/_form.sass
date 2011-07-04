@@ -145,16 +145,25 @@
     height: 100px
 
 .hint, .inline-hints
-  color: $mid-blue
+  color: $mid-blue + #222
   display: block
   font-size: 11px
+  font-style: italic
   padding: 5px 0 0
   &.padded
-    padding: 0 0 20px
+    padding-bottom: 10px
+
+.heading_hint
+  background: $lightest-blue
+  border-bottom: 1px solid $lighter-blue
+  color: $mid-blue + #222
+  display: block
+  font-size: 11px
+  font-style: italic
+  margin: -10px -10px 10px
+  padding: 9px 10px 5px
 
 .sub_activities
-  .hint
-    margin: 10px 5px
 
   h4
     margin: 15px 0 10px
@@ -551,13 +560,6 @@ h3.form_heading
           color: black
 
 .targets
-  .fields
-    margin-bottom: 0
-    padding: 5px 0
-    border: none
-
-    .dashboard_section
-      padding-bottom: 0
 
   ul.horizontal li
     border: none
@@ -596,3 +598,13 @@ h3.form_heading
 
 .search
   padding: 0 !important
+
+strong
+  font-weight: bold
+  
+.implementer_container
+  border-bottom: 1px solid $lightest-blue
+  margin-bottom: 7px
+  .ui-autocomplete-input
+    border: 1px solid $light-blue
+    padding: 5px

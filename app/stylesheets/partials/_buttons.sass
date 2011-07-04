@@ -146,23 +146,24 @@ a.remove_nested
     display: inline-block
     font-size: 12px
     font-weight: bold
-    height: 14px
     margin-bottom: 10px
     padding: 7px 12px 5px
     position: relative
     text-decoration: none
     z-index: 20
     +border-radius
+    +box-shadow(#999, 0, 1px, 3px)
     +linear-gradient(color-stops($orange, $orange - #222))
-
+    +text-shadow($orange - #444, 0, 1px, 0)
     img
       position: relative
-      //padding-bottom: 3px
+      top: 1px
     &.persist
       color: #fff
       background: green - #222 !important
       border: 1px solid green - #222 !important
       +linear-gradient(color-stops(green, green - #222))
+      +text-shadow(green - #444, 0, 1px, 0)
 
 .next, .big_button
   +border-radius

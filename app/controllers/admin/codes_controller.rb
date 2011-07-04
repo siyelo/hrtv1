@@ -21,11 +21,11 @@ class Admin::CodesController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Code was successfully created") { admin_codes_url }
+    create!(:notice => "Code was successfully created") { edit_admin_code_url(resource) }
   end
 
   def update
-    update!(:notice => "Code was successfully updated") { admin_codes_url }
+    update!(:notice => "Code was successfully updated") { edit_admin_code_url(resource) }
   end
 
   def destroy

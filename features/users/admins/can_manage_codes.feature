@@ -5,7 +5,8 @@ Feature: Admin can manage codes
 
   Background:
     Given an organization exists with name: "organization1"
-      And an admin exists with username: "admin"
+      And a data_request exists with title: "data_request1", organization: the organization
+      And an admin exists with username: "admin", organization: the organization
       And I am signed in as "admin"
 
     Scenario: Admin can CRUD codes
@@ -18,22 +19,25 @@ Feature: Admin can manage codes
         And I fill in "Description" with "code1 description"
         And I press "Create New Code"
       Then I should see "Code was successfully created"
-        And I should see "code1"
-        And I should see "code1 long"
-        And I should see "code1 official name"
-        And I should see "code1 description"
+        And the "Short display" field should contain "code1"
+        And the "Long display" field should contain "code1 long"
+        And the "Official name" field should contain "code1 official name"
+        And the "Description" field should contain "code1 description"
+        And the "Type" field should contain "Mtef"
 
-      When I follow "Edit"
-        And I fill in "Short display" with "code2"
+      When I fill in "Short display" with "code2"
         And I fill in "Long display" with "code2 long"
         And I fill in "Official name" with "code2 official name"
         And I fill in "Description" with "code2 description"
         And I press "Update Code"
       Then I should see "Code was successfully updated"
-        And I should see "code2"
-        And I should not see "code1"
+        And the "Short display" field should contain "code2"
+        And the "Long display" field should contain "code2 long"
+        And the "Official name" field should contain "code2 official name"
+        And the "Description" field should contain "code2 description"
+        And the "Type" field should contain "Mtef"
 
-      When I follow "x"
+      When I follow "Delete this Code"
       Then I should see "Code was successfully destroyed"
         And I should not see "code1"
         And I should not see "code2"

@@ -27,7 +27,12 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def create
-    create!(:notice => 'Organizatition was successfully created') { admin_organizations_url }
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "Organizatition was successfully created"
+        redirect_to admin_organizations_url
+      end
+    end
   end
 
   def update

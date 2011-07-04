@@ -21,11 +21,21 @@ class Admin::CodesController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Code was successfully created") { edit_admin_code_url(resource) }
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "Code was successfully created"
+        redirect_to edit_admin_code_url(resource)
+      end
+    end
   end
 
   def update
-    update!(:notice => "Code was successfully updated") { edit_admin_code_url(resource) }
+    update! do |success, failure|
+      success.html do
+        flash[:notice] = "Code was successfully updated"
+        redirect_to edit_admin_code_url(resource)
+      end
+    end
   end
 
   def destroy

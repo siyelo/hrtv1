@@ -22,14 +22,24 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    create!(:notice => 'User was successfully created') { admin_users_url }
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "User was successfully created"
+        redirect_to edit_admin_user_url(resource)
+      end
+    end
   end
 
   def update
     # set roles to epty array if no role is assigned
     # otherwise, user model is saved, but user not notified for the error
     params[:user][:roles] = [] unless params[:user].has_key?(:roles)
-    update!(:notice => 'User was successfully created') { admin_users_url }
+    update! do |success, failure|
+      success.html do
+        flash[:notice] = "User was successfully updated"
+        redirect_to edit_admin_user_url(resource)
+      end
+    end
   end
 
   def download_template

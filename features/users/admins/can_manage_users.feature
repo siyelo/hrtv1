@@ -5,7 +5,8 @@ Feature: Admin can manage users
 
   Background:
     Given an organization exists with name: "organization1"
-      And an admin exists with username: "admin"
+      And a data_request exists with title: "Req1", organization: the organization
+      And an admin exists with username: "admin", organization: the organization, email: "administrator@hrtapp.com"
       And I am signed in as "admin"
 
     Scenario: Admin can CRUD users
@@ -20,17 +21,19 @@ Feature: Admin can manage users
         And I fill in "Password confirmation" with "password"
         And I press "Create New User"
       Then I should see "User was successfully created"
-        And I should see "pink.panter"
+        And the "Organization" field should contain "organization1"
+        And the "Username" field should contain "pink.panter1"
+        And the "Email" field should contain "pink.panter1@hrtapp.com"
+        And the "Full name" field should contain "Pink Panter"
 
-      When I follow "Edit"
-        And I fill in "Username" with "pink.pangter2"
+      When I fill in "Username" with "pink.panter2"
         And I fill in "Email" with "pink.panter2@hrtapp.com"
         And I press "Update User"
       Then I should see "User was successfully updated"
-        And I should see "pink.panter2"
-        And I should not see "pink.panter1"
+        And the "Username" field should contain "pink.panter2"
+        And the "Email" field should contain "pink.panter2@hrtapp.com"
 
-      When I follow "x"
+      When I follow "Delete this User"
       Then I should see "User was successfully destroyed"
         And I should not see "pink.panter1"
         And I should not see "pink.panter2"
@@ -117,8 +120,8 @@ Feature: Admin can manage users
          | user2@hrtapp.com | user1@hrtapp.com |
          | Full name 1      | Full name 2      |
          | Full name 2      | Full name 1      |
-         | organization1    | organization2    |
-         | organization2    | organization1    |
+         | organization2    | organization3    |
+         | organization3    | organization2    |
 
 
     Scenario Outline: An admin can sort users
@@ -140,7 +143,7 @@ Feature: Admin can manage users
 
         Examples:
             | column_name  | column | text1            | text2            |
-            | Username     | 1      | user2            | user1            |
+            | Full Name    | 1      | Full name 1      | Full name 2      |
             | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com |
-            | Full Name    | 3      | Full name 1      | Full name 2      |
+            | Username     | 3      | user2            | user1            |
             | Organization | 4      | organization2    | organization3    |

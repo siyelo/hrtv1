@@ -40,7 +40,7 @@ describe Admin::OrganizationsController do
       context 'html format' do
         it "sets flash notice" do
           delete :destroy, :id => "1"
-          flash[:notice].should == "Organization was successfully deleted."
+          flash[:notice].should == "Organization was successfully destroyed."
         end
 
         it "redirects to the duplicate_admin_organizations_path" do
@@ -53,7 +53,7 @@ describe Admin::OrganizationsController do
       context 'js format' do
         it "returns proper json" do
           delete :destroy, :id => "1", :format => "js"
-          response.body.should == '{"message":"Organization was successfully deleted."}'
+          response.body.should == '{"message":"Organization was successfully destroyed."}'
         end
 
         it "does not redirect" do

@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+  COMMENT_LIMIT = 5
 
   ### Filters
   before_filter :require_user
@@ -36,9 +37,13 @@ class DashboardController < ApplicationController
     # Comment loading for all types of users
     def load_comments
       if current_user.sysadmin?
-        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => 5)
+        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => COMMENT_LIMIT)
+      elsif current_user.activity_manager?
+        dr_ids = current_user.organizations.map{|o| o.data_responses.map{|dr| dr.id }}.flatten
+        dr_ids += current_user.organization.data_responses.map{|dr| dr.id }
+        @comments  = Comment.on_all(dr_ids).limit(COMMENT_LIMIT)
       else
-        @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).limit(5)
+        @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).limit(COMMENT_LIMIT)
       end
     end
 

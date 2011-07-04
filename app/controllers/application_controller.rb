@@ -1,5 +1,6 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+require "lib/hrt"
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
@@ -150,7 +151,15 @@ class ApplicationController < ActionController::Base
 
     def warn_if_not_current_request
       unless current_user.current_response_is_latest?
-        flash.now[:warning] = not_latest_request_message(current_user.current_request)
+        if current_user.current_request
+          flash.now[:warning] = not_latest_request_message(current_user.current_request)
+        else
+          if current_user.sysadmin?
+            flash.now[:warning] = "You do not have a current Request set. Please create/assign a Request."
+          else
+            raise Hrt::CurrentRequestNotSet
+          end
+        end
       end
     end
 

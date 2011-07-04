@@ -1133,12 +1133,8 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
-var reporter_dashboard_index = {
+var dashboard_index = {
   run: function () {
-    $('#user_data_response_id_current').live('change', function(e) {
-      $('#change_datarequest').submit();
-    });
-
     $('.js_request_select').click(function (e) {
       e.preventDefault();
       $(this).next().show();

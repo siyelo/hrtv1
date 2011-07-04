@@ -13,10 +13,14 @@
         = f.input :password, :hint => "Your password", :label => "New password", :required => false
         = f.input :password_confirmation, :hint => "Type your new password again", :label => "Confirm new password", :required => false
         %li
-          .inputs 
+          .inputs
             =f.label "Picture"
           = image_tag current_user.gravatar(60), :class => "gravatar"
-          %p.inline-hints= "You can change the picture for #{current_user.email} at #{link_to "gravatar.com", "http://www.gravatar.com", :target => "_blank"}"
+          %p.inline-hints
+            You can change your picture at
+            = link_to "gravatar.com", "http://www.gravatar.com", :target => "_blank"
+            =" by registering "
+            = current_user.email
         = f.input :tips_shown, :hint => "Show the Getting Started tips at the top of each page?", :label => "Show tips?", :required => false
 
     - f.buttons :class => 'wrap-80 buttons' do

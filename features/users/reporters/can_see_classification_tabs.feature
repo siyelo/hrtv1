@@ -16,11 +16,10 @@ Feature: Reporter can see classification tabs
         And a project exists with name: "Project", data_response: the data_response
         And an activity exists with name: "activity1", data_response: the data_response, project: the project, description: "activity1 description"
         And I am signed in as "reporter"
-        And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Expenditure" within ".inline_tab"
-        And I should see "Budget" within ".inline_tab"
+      Then I should see "Past Expenditure" within ".ordered_nav"
+        And I should see "Current Budget" within ".ordered_nav"
 
 
     Scenario: See only budget tab when data request is for budget but not spend
@@ -35,8 +34,8 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Budget" within ".inline_tab"
-        And I should not see "Spend" within ".inline_tab"
+      Then I should see "Budget" within ".ordered_nav"
+        And I should not see "Spend" within ".ordered_nav"
 
 
     Scenario: See spend tab when data request is for spend but not budget
@@ -51,5 +50,5 @@ Feature: Reporter can see classification tabs
         And I follow "Request"
         And I follow "Projects"
         And I follow "activity1 description"
-      Then I should see "Expenditure" within ".inline_tab"
-        And I should not see "Budget" within ".inline_tab"
+      Then I should see "Expenditure" within ".ordered_nav"
+        And I should not see "Budget" within ".ordered_nav"

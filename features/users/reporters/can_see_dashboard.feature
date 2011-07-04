@@ -12,22 +12,16 @@ Feature: Reporter can see dashboard
 
     Scenario: "See data requests"
       Given I am signed in as "reporter"
-      When I go to the reporter dashboard page
       Then I should see "Dashboard"
-        And I should see "Data Requests & Responses"
+        And I should see "Data Requests"
 
 
     Scenario: See menu tabs when a Data Req is selected
-      Given a basic org + reporter profile, with data response, signed in
-      When I go to the reporter dashboard page
-        And I follow "Req1"
+      Given I am signed in as "reporter"
       Then I should see "Home" within the main nav
         And I should see "Projects" within the main nav
-        And I should see "Settings" within the main nav
-        And I should see "Review" within the main nav
-        And I should see "Submit" within the main nav
         And I should see "Reports" within the main nav
-        And I should see "Help" within the main nav
+        And I should see "Settings" within the main nav
 
 
     Scenario: See unfulfilled/current Data Requests listed

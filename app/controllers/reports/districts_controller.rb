@@ -30,7 +30,7 @@ class Reports::DistrictsController < Reports::BaseController
       @code_spent_values   = Charts::DistrictTreemaps::treemap(current_or_last_response.data_request_id, @location, code_type, @location.activities, true)
       @code_budget_values  = Charts::DistrictTreemaps::treemap(current_or_last_response.data_request_id, @location, code_type, @location.activities, false)
     end
-    
+
     @top_activities    = Reports::ActivityReport.top_by_spent({
                          :limit => 10, :code_ids => [@location.id], :type => 'district', :data_request_id => current_or_last_response.data_request_id})
     @top_organizations = Reports::OrganizationReport.top_by_spent({

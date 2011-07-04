@@ -117,22 +117,28 @@ end
 
 Given /^I am signed in as a reporter$/ do
   steps %Q{
-    Given a reporter "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    Given a reporter "reporter@hrtapp.com" in organization "Reporter Org"
+    And I am signed in as "reporter@hrtapp.com"
+  }
+end
+
+Given /^I am signed in as a member$/ do
+  steps %Q{
+    Given I am signed in as a reporter
   }
 end
 
 Given /^I am signed in as an activity manager$/ do
   steps %Q{
-    Given an activity manager "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    Given an activity manager "activity_manager@hrtapp.com" in organization "AM Org"
+    Given I am signed in as "activity_manager@hrtapp.com"
   }
 end
 
-Given /^I am signed in as an admin$/ do
+Given /^I am signed in as a sysadmin$/ do
   steps %Q{
-    Given an admin "Frank" in organization "Test Org"
-    Given I am signed in as "Frank"
+    Given a sysadmin "sysadmin@hrtapp.com" in organization "Sysadmin Org"
+    Given I am signed in as "sysadmin@hrtapp.com"
   }
 end
 
@@ -155,7 +161,7 @@ Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:reporter,
                   :username => name,
-                  :email => 'frank@f.com',
+                  :email => 'reporter@hrtapp.com',
                   :password => 'password',
                   :password_confirmation => 'password',
                   :organization => @organization)
@@ -165,18 +171,18 @@ Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:activity_manager,
                   :username              => name,
-                  :email                 => 'frank@f.com',
+                  :email                 => 'activity_manager@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
 
 end
 
-Given /^an admin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:admin,
                   :username              => name,
-                  :email                 => 'frank@f.com',
+                  :email                 => 'sysadmin@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
@@ -303,8 +309,8 @@ Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
     Given a data_request exists with title: "Req1"
     And an organization exists with name: "UNDP"
-    And a reporter exists with username: "undp_user", organization: the organization
-    And I am signed in as "undp_user"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -313,16 +319,16 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "undp_user", organization: the organization, current_response: the data_response
-    And a project exists with name: "TB Treatment Project", data_response: the data_response
-    And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_data_response: the data_response
+    And a project exists with name: "project1", data_response: the data_response
+    And an activity exists with name: "activity1", data_response: the data_response, project: the project
   }
 end
 
 Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
   steps %Q{
     Given a basic org "UNDP" + reporter profile, with data response to "Req1"
-    And I am signed in as "undp_user"
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -335,7 +341,7 @@ end
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   steps %Q{
     Given a basic org + reporter profile, with data response
-    And I am signed in as "undp_user"
+    And I am signed in as "reporter@hrtapp.com"
   }
 end
 
@@ -434,4 +440,24 @@ end
 
 Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, row, text|
   page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
+end
+
+Then /^I drill down to Reports->Districts->"([^"]*)"->"([^"]*)"$/ do |location, activity|
+  steps %Q{
+    And I follow "Reports"
+    And I follow "Review District Expenditures and Current Budgets"
+    And I follow "#{location}"
+    And I follow "View all Activities"
+    And I follow "#{activity}"
+  }
+end
+
+Then /^I should see a District-Location-Activity report for "([^"]*)"$/ do |activity|
+  steps %Q{
+    Then I should see "#{activity}"
+    And I should see "Proportion Expenditure"
+    And I should see "Proportion Current Budget"
+    And I should see "NSP Expenditure"
+    And I should see "NSP Current Budget"
+  }
 end

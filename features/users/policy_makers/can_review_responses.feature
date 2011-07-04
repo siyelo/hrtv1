@@ -7,7 +7,7 @@ Feature: Policy Maker can view review responses
     Given an organization exists with name: "GoR"
     And a data_request exists with title: "Req1", organization: the organization
     And an organization exists with name: "UNDP"
-    And a reporter exists with username: "undp_user", organization: the organization
+    And a reporter exists with username: "reporter", organization: the organization
     And a data_response exists with data_request: the data_request, organization: the organization
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And a comment exists with comment: "comment1", commentable: the project
@@ -20,7 +20,7 @@ Feature: Policy Maker can view review responses
 
 
     Scenario: "See list of all responses via admin dashboard"
-      Given I am signed in as an admin
+      Given I am signed in as a sysadmin
       When I follow "Dashboard"
         And I follow "Review data responses"
       Then I should see "Empty Data Responses" within "h3"

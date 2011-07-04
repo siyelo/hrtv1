@@ -1,5 +1,6 @@
 class Reports::BaseController < ApplicationController
   before_filter :require_user
+  before_filter :warn_if_not_current_request
 
   private
     def get_code_type_and_initialize(code_type)

@@ -38,14 +38,14 @@ Feature: Reporter can login
     Then I should see the reporters admin nav
       And I should see the main nav tabs
 
-      
+
   Scenario: Login as a reporter with email address
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "frank@f.com", organization: the organization
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     When I go to the login page
-      And I fill in "Username or Email" with "frank@f.com"
+      And I fill in "Username or Email" with "reporter@hrtapp.com"
       And I fill in "Password" with "password"
       And I press "Sign in"
     Then I should see the reporters admin nav

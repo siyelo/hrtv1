@@ -5,7 +5,8 @@ begin
   puts "creating org"
   org = Factory(:organization, :name => "internal_reporter_org")
   puts "creating reporter user"
-  @reporter = Factory(:reporter, :email => 'reporter@hrtapp.com', :organization => org)
+  @reporter = Factory(:reporter, :email => 'reporter@hrtapp.com', :organization => org,
+    :password => 'si@yelo', :password_confirmation => 'si@yelo')
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_reporter_org' or user named 'reporter'? "
@@ -24,13 +25,13 @@ puts "creating other costs & coding"
 Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
 puts "=> added sample data for reporter #{@reporter.name}"
 
-
 ##ACTIVITY MANAGER
 begin
   puts "creating activity_manager"
   org = Factory(:organization, :name => "internal_activity_manager_org")
   am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com',
-    :organization => org)
+    :organization => org,
+    :password => 'si@yelo', :password_confirmation => 'si@yelo')
   # assign some nice existing orgs
   orgs = [ 'JSI', 'Tulane University', 'ICAP', 'Access Project', 'TRAC+ - HIV', 'Voxiva']
   query = orgs.map{ |o| "name like ?"}.join(' OR ')

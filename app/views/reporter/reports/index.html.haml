@@ -24,13 +24,22 @@
           Review National Expenditures and Current Budgets
           %span.hint Interactive reports
       %li
-  
+
   %h2
-    =image_tag "icon_users.png", :class => "heading_icon"
-    Users
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Activities
   .dashboard_section
-    %ul
-      %li= link_to "Users In My Organization", reporter_report_path('users_in_my_organization'), :class => "target"
+    %ul.admin_reports
+      %li=  link_to "Grouped by NSP", reporter_report_path('activities_by_nsp_budget', :dr_id => current_response.id), :class => "target"
+      %li= link_to "Grouped by All Codes", reporter_report_path('activities_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
+
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Districts
+  .dashboard_section
+    %ul.admin_reports
+      %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
+      %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
 
 .second-half
   %h2
@@ -51,40 +60,24 @@
           Locations
           %span.hint from current budget and expenditure classifications screen
 
-- @responses.each do |response|
-  %br
-  %br
-  %h1.sub_heading= "Your Data for: #{response.data_request.title}"
+  %h2
+    =image_tag "icon_users.png", :class => "heading_icon"
+    Users
+  .dashboard_section
+    %ul
+      %li= link_to "Users In My Organization", reporter_report_path('users_in_my_organization'), :class => "target"
 
-  .first-half
-    %h2
-      =image_tag "icon_reporter.png", :class => "heading_icon"
-      Activities
-    .dashboard_section
-      %ul.admin_reports
-        %li=  link_to "Grouped by NSP", reporter_report_path('activities_by_nsp_budget', :dr_id => response.id), :class => "target"
-        %li= link_to "Grouped by All Codes", reporter_report_path('activities_by_all_codes_budget', :dr_id => response.id), :class => "target"
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Maps
+  .dashboard_section
+    .first-half
+      %h3 Districts
+      %ul
+        %li=  link_to "Grouped by NSP", reporter_report_path('map_districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
+        %li=  link_to "Grouped by All Codes", reporter_report_path('map_districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
 
-    %h2
-      =image_tag "icon_reporter.png", :class => "heading_icon"
-      Districts
-    .dashboard_section
-      %ul.admin_reports
-        %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp_budget', :dr_id => response.id), :class => "target"
-        %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes_budget', :dr_id => response.id), :class => "target"
-
-  .second-half
-    %h2
-      =image_tag "icon_reporter.png", :class => "heading_icon"
-      Maps
-    .dashboard_section
-      .first-half
-        %h3 Districts
-        %ul
-          %li=  link_to "Grouped by NSP", reporter_report_path('map_districts_by_nsp_budget', :dr_id => response.id), :class => "target"
-          %li=  link_to "Grouped by All Codes", reporter_report_path('map_districts_by_all_codes_budget', :dr_id => response.id), :class => "target"
-
-      .second-half
-        %h3 Facilities
-        %ul
-          %li N/A
+    .second-half
+      %h3 Facilities
+      %ul
+        %li N/A

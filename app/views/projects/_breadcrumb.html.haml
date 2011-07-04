@@ -1,0 +1,8 @@
+%ul.breadcrumb
+  %li= link_to "Projects", response_projects_path(current_or_last_response)
+  - if params[:action] == "edit"
+    %li.last= nice_name(project)
+  - elsif params[:action] == "new"
+    %li.last New
+  - elsif params[:action] == "bulk_edit"
+    %li.last Link to Funders

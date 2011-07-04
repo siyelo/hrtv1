@@ -1,6 +1,8 @@
 - title("Edit Activity")
 
-= render 'projects/sub_nav'
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
+
 
 = render 'breadcrumb', :response => @response, :activity => @activity
 

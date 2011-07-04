@@ -294,36 +294,31 @@ ul.ordered_nav
   z-index: 10
 
   ul
-    background: $orange
-    left: 0
+    background: #eee
+    left: 1px
     padding: 10px 0 5px
     position: absolute
-    right: 0
-    top: 22px
+    right: 1px
+    top: 20px
     z-index: 15
     +border-bottom-radius
-    +box-shadow(#444, 0, 1px, 3px)
+    +box-shadow(#444, 0, 1px, 2px)
     li
       display: block
       width: 100%
       a
-        background: $orange
-        border: 1px solid $orange - #111
-        border-bottom: 0
-        color: #fff
+        border-bottom: 1px solid #ccc
+        color: $mid-blue
         display: block
         font-size: 12px
         font-weight: bold
         padding: 6px 10px
         text-decoration: none
-        +text-shadow($orange - #444, 0, 1px, 0)
+        +text-shadow(#fff, 0, 1px, 0)
         &:hover
           background: $orange - #222
           color: #fff
-      &:first-child a
-        border-top: 0
-      &:last-child a
-        border-bottom: 1px solid $orange - #111
+          +text-shadow($orange - #444, 0, 1px, 0)
 
 // MAIN COMMENTS //
 .comments_input

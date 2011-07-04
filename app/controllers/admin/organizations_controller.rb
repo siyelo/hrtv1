@@ -29,8 +29,8 @@ class Admin::OrganizationsController < Admin::BaseController
   def create
     create! do |success, failure|
       success.html do
-        flash[:notice] = "Organizatition was successfully created"
-        redirect_to admin_organizations_url
+        flash[:notice] = "Organization was successfully created"
+        redirect_to edit_admin_organization_url(resource)
       end
     end
   end
@@ -40,7 +40,7 @@ class Admin::OrganizationsController < Admin::BaseController
     @organization.attributes = params[:organization]
     if @organization.save(false)
       flash[:notice] = 'Organization was successfully updated'
-      redirect_to admin_organizations_url
+      redirect_to edit_admin_organization_url(resource)
     else
       render :edit
     end
@@ -56,7 +56,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
     if @organization.is_empty?
       @organization.destroy
-      render_notice("Organization was successfully deleted.", url)
+      render_notice("Organization was successfully destroyed.", url)
     else
       render_error("You cannot delete an organization that has users or data associated with it.", url)
     end

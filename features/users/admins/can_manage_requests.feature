@@ -58,10 +58,10 @@ Feature: Admin can manage data requests
 
     Scenario: To expedite the review process, an Admin can change a Request to "Final Review" status
       When I follow "Requests"
-       And I follow "Edit"
-       And I check "Final review"
-       And I press "Update request"
-      Then I should see "Request was successfully updated."
+        And I follow "Edit"
+        And I check "Final review"
+        And I press "Update request"
+      Then I should see "Request was successfully updated"
 
     Scenario: An admin needs to be able to change the current request they are viewing so that that they can view reports which are scoped by a request
       Given an organization exists with name: "org2"

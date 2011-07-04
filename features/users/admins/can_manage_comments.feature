@@ -18,7 +18,7 @@ Feature: Admin can see comments
     And a comment exists with comment: "comment2", commentable: the project
 
     Scenario: See latest comments on dashboard
-      Given I am signed in as an admin
+      Given I am signed in as "sysadmin"
       When I follow "Home"
       Then I should see "Recent Comments"
         And I should see "TB Treatment Project" within ".dashboard_comments"
@@ -26,7 +26,7 @@ Feature: Admin can see comments
 
 
     Scenario: Access comments page from dashboard and manage them
-      Given I am signed in as an admin
+      Given I am signed in as "sysadmin"
       When I follow "Home"
         And I follow "view all" within ".comments_read_more"
       Then I should be on the admin comments page

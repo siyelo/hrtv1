@@ -1525,8 +1525,8 @@ var activity_form = function () {
     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
   });
 
-  $(".js_quarterly_inputs input").keyup(function () {
-    calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find('li:first input'));
+  $(".js_quarterly_inputs input:not(:first)").keyup(function () {
+    calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find('li:first input'));
   });
 
   $('.js_target_field').live('keydown', function (e) {
@@ -1665,20 +1665,20 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 var projects_edit = projects_new = {
   run: function () {
 
-    $("input[id^='project_spend_q']").keyup(function () {
-      calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find("input#project_spend"));
+    $("input[id^='project_spend_q']:not(:first)").keyup(function () {
+      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find("input#project_spend"));
     });
 
-   $(".js_quarterly_fields input").keyup(function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".dashboard_section").find("#project_budget"));
+   $(".js_quarterly_fields input:not(:first)").keyup(function () {
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 
    $(".js_funding_expenditures input").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".amounts").prev().find("input"));
    });
 
    $(".js_funding_budget input").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input"), $(this).parents(".amounts").prev().find("input"));
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".amounts").prev().find("input"));
    });
 
     $("#project_spend").keyup(function () {

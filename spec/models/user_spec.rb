@@ -31,13 +31,6 @@ describe User do
     it { should validate_uniqueness_of(:email).case_insensitive }
     it { should validate_uniqueness_of(:username).case_insensitive }
 
-    it "validates presence of data_response_id_current" do
-      organization = Factory(:organization, :data_responses => [])
-      user = Factory.build(:user, :organization => organization, :current_response => nil)
-      user.save
-      user.errors.on(:data_response_id_current).should include("can't be blank")
-    end
-
     it "cannot assign blank role" do
       user = Factory.build(:reporter, :roles => [])
       user.save

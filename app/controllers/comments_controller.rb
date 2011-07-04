@@ -128,27 +128,15 @@ class CommentsController < Reporter::BaseController
 
     def commentable_resource(comment)
       if comment.commentable_type == "Activity"
-        if current_user.admin?
-          admin_activity_url(comment.commentable)
+        if comment.commentable.is_a?(OtherCost)
+          edit_response_other_cost_url(comment.commentable.data_response, comment.commentable)
         else
-          if comment.commentable.is_a?(OtherCost)
-            edit_response_other_cost_url(comment.commentable.data_response, comment.commentable)
-          else
-            edit_response_activity_url(comment.commentable.data_response, comment.commentable)
-          end
+          edit_response_activity_url(comment.commentable.data_response, comment.commentable)
         end
       elsif comment.commentable_type == "Project"
-        if current_user.admin?
-          response_project_url(comment.commentable.data_response, comment.commentable)
-        else
-          edit_response_project_url(comment.commentable.data_response, comment.commentable)
-        end
+        edit_response_project_url(comment.commentable.data_response, comment.commentable)
       elsif comment.commentable_type == "DataResponse"
-        if current_user.admin?
-          review_response_url(comment.commentable)
-        else
-          response_projects_url(comment.commentable)
-        end
+        response_projects_url(comment.commentable)
       else
         comments_url
       end

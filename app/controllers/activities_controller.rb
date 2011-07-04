@@ -34,7 +34,7 @@ class ActivitiesController < Reporter::BaseController
       end
     end
   end
-  
+
   def update
     @activity = Activity.find(params[:id])
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
@@ -52,7 +52,7 @@ class ActivitiesController < Reporter::BaseController
     else
       respond_to do |format|
         format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
-                      load_comment_resources(resource) 
+                      load_comment_resources(resource)
                       render :action => 'edit'
                     }
         format.js   { js_redirect }

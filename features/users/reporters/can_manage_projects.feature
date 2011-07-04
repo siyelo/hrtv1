@@ -240,6 +240,18 @@ Feature: Reporter can manage projects
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
 
+  Scenario: Months quarters groups are grouped to the GoR FY
+    Given an organization "Org A" exists with name: "Org A", fiscal_year_start_date: "01-07-2010", fiscal_year_end_date: "30-06-2011"
+    And a data_request "req a" exists with title: "req a"
+    And a data_response "resp a" exists with data_request: data_request
+    And I follow "Projects"
+    And I follow "Create Project"
+    Then I should see "project_spend_q4_prev_input" is "Apr '10 - Jun '10"
+    And I should see "project_spend_q1_input" is "Jul '10 - Sep '10"
+    And I should see "project_spend_q2_input" is "Oct '10 - Dec '10"
+    And I should see "project_spend_q3_input" is "Jan '11 - Mar '11"
+    And I should see "project_spend_q4_input" is "Apr '11 - Jun '11"
+
   #  Scenario: A Reporter can link their projects to those from other organizations from the edit page
   #   Then I should see "Project5"
   #   Given I follow "Project5"

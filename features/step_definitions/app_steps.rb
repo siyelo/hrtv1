@@ -461,3 +461,7 @@ Then /^I should see a District-Location-Activity report for "([^"]*)"$/ do |acti
     And I should see "NSP Current Budget"
   }
 end
+
+Then /^I should see "([^"]*)" is "([^"]*)"$/ do |label, text|
+  page.find("##{label} label").text.should == text
+end

@@ -13,7 +13,7 @@ Feature: Reporter can see dashboard
     Scenario: "See data requests"
       Given I am signed in as "reporter"
       Then I should see "Dashboard"
-        And I should see "Data Requests"
+      And I should see "Data Requests"
 
 
     Scenario: See menu tabs when a Data Req is selected
@@ -32,6 +32,6 @@ Feature: Reporter can see dashboard
         And a reporter exists with username: "some_user", organization: the organization
         And a data_response exists with data_request: the data_request, organization: the organization
         And I am signed in as "some_user"
-      When I go to the reporter dashboard page
+      When I go to the dashboard
       Then I should see "Req1" within "#content"
         And I should see "Req2" within "#content"

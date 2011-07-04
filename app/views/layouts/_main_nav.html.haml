@@ -1,8 +1,8 @@
 #main-nav
   .wrapper
     %ul
-      %li.home_tab{:class => ([Admin::DashboardController, Reporter::DashboardController].include?(controller.class) ? 'active' : nil)}
-        %a{:href => user_dashboard_path(current_user)}
+      %li.home_tab{:class => ( controller.class == DashboardController ? 'active' : nil)}
+        %a{:href => dashboard_path}
           %span Home
 
       - unless current_user.admin? && namespace(controller.class) == "Admin"

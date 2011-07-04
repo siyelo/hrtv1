@@ -1,0 +1,14 @@
+- title("Dashboard")
+
+%h1.main_heading Dashboard
+
+- if current_user.admin?
+  = render 'sysadmin'
+- elsif current_user.activity_manager?
+  = render 'activity_manager'
+- else
+  = render 'reporter'
+
+= render 'dashboard/requests'
+
+= render 'comments/short_listing', :comments => @comments

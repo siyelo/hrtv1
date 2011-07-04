@@ -40,21 +40,6 @@ module ApplicationHelper
   end
 
   # Generates proper dashboard url link depending on the type of user
-  def user_dashboard_path(current_user)
-    if current_user
-      if current_user.admin?
-        admin_dashboard_path
-      elsif current_user.reporter?
-        reporter_dashboard_path
-      elsif current_user.activity_manager?
-        reporter_dashboard_path
-      else
-        raise 'user role not found'
-      end
-    end
-  end
-
-  # Generates proper dashboard url link depending on the type of user
   def user_report_dashboard_path(current_user)
     if current_user
       if current_user.admin?

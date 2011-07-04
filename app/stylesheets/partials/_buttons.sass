@@ -190,34 +190,7 @@ a.remove_nested
     padding: 13px 20px 10px 20px
     overflow: hidden
     &:hover
-      color: white
-
-  &.small_submit_button
-    background: $orange
-    border: 1px solid $orange - #222
-    color: #fff
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 12px 5px
-    text-decoration: none
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($orange, $orange - #222))
-    +text-shadow($orange - #444, 0, 1px, 0)
-    img
-      position: relative
-      top: 1px
-    &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-    &:active
-      outline: none
-      position: relative
-      top: 1px
 
 .next
   margin-top: -5px
@@ -294,7 +267,7 @@ body.login .buttons li:last-child
 
 /* NEW BUTTON STYLES */
 
-a, input[type=text]
+a, input[type=submit]
 
   &.create_button, &.create_new
     background: $orange
@@ -338,7 +311,6 @@ a, input[type=text]
     text-decoration: none
     +border-radius(2px)
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
-    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +text-shadow(#fff, 0, 0, 1px)
     img
       position: relative
@@ -362,3 +334,32 @@ a, input[type=text]
   &.delete_button
     &:hover, &:focus
       color: $red !important
+  
+  &.small_submit_button
+    background: #eee
+    border: 1px solid $light-blue
+    color: $mid-blue + #222 !important
+    cursor: pointer
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    padding: 7px 12px
+    text-decoration: none
+    +border-radius
+    +box-shadow(#ddd, 0, 1px, 3px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: green
+      border: 1px solid green - #222
+      color: #fff !important
+      +linear-gradient(color-stops(green, green - #222))
+      +text-shadow(green - #333, 0, 1px, 0)
+    &:active
+      outline: none
+      position: relative
+      top: 1px

@@ -10,5 +10,5 @@
         = f.input :comment, :label => 'Add Comment', :input_html => {:"data-hint" => 'Type your comment here'}
       - f.buttons do
         / js event: .submit_btn
-        = f.commit_button :button_html => { :class => "js_submit_btn" }
+        = f.commit_button :button_html => { :class => "js_submit_btn small_submit_button" }
         = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

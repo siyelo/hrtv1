@@ -99,14 +99,14 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def template
-    template = Activity.download_template
+    template = Activity.download_template(@response)
     send_csv(template, 'activities_template.csv')
   end
 
   def export
     activities = params[:project_id].present? ?
       @response.projects.find(params[:project_id]).activities : @response.activities
-    template = Activity.download_template(activities)
+    template = Activity.download_template(@response, activities)
     send_csv(template, 'activities_existing.csv')
   end
 

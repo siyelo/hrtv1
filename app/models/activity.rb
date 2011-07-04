@@ -172,12 +172,22 @@ class Activity < ActiveRecord::Base
                   :beneficiaries, {:data_response => :organization}])
   end
 
-  def self.download_template(activities = [])
+  def self.download_template(response, activities = [])
     FasterCSV.generate do |csv|
       header_row = Activity::FILE_UPLOAD_COLUMNS
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
-
+      
+      header_row[5] = "#{response.quarters_months('q1')} Spend"
+      header_row[6] = "#{response.quarters_months('q2')} Spend"
+      header_row[7] = "#{response.quarters_months('q3')} Spend"
+      header_row[8] = "#{response.quarters_months('q4')} Spend"
+      
+      header_row[10] = "#{response.quarters_months('q1')} Budget"
+      header_row[11] = "#{response.quarters_months('q2')} Budget"
+      header_row[12] = "#{response.quarters_months('q3')} Budget"
+      header_row[13] = "#{response.quarters_months('q4')} Budget"
+      
       csv << header_row
 
       activities.each do |activity|

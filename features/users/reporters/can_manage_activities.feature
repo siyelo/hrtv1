@@ -16,8 +16,6 @@ Feature: Reporter can manage activities
     And the location is one of the project's locations
     And I am signed in as "reporter"
     And I follow "data_request1"
-    Then show me the page
-
     And I follow "Projects"
 
     @javascript

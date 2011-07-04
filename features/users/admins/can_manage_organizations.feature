@@ -96,7 +96,7 @@ Feature: Admin can manage organizations
         And I should see "You cannot delete an organization that has users or data associated with it."
 
 
-    @wip
+    @run
     Scenario Outline: An admin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"

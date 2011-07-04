@@ -33,7 +33,14 @@
 
 %table.standard.rounded
   %thead
-    = render :partial => '/organizations/index_header'
+    %tr
+      %th= sortable "name", "Organization"
+      %th Secondary Contacts
+      %th Activities Approved
+      %th Primary Contact (Phone)
+      %th= sortable "raw_type", "Raw Type"
+      %th= sortable "fosaid", "Fosaid"
+      %th
   %tbody
     = render :partial => '/organizations/organization', :collection => @organizations
 

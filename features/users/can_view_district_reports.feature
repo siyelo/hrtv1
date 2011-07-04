@@ -1,5 +1,3 @@
-@run
-
 Feature: Can view district reports
   In order to reduce admin costs
   As a user

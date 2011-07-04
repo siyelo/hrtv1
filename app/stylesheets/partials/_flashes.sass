@@ -133,7 +133,16 @@ ul.response-notice
     &:last-child
       margin: 0
       +border-bottom-radius
+      
+.inline-response-notice
+  background: image_url("warning_16.png") no-repeat 10px center
+  color: $mid-blue
+  display: inline-block
+  font-size: 11px
+  padding: 7px 0 3px 30px
 
+.final_review td
+  background: #ffece9
 // Landing Page flashes override
 body.landing
   #flashes

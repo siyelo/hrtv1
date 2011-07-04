@@ -9,7 +9,10 @@
         %th Name
         %th Requested By
         %th Due
-        %th Submitted at
-        %th Status
+        - unless current_user.sysadmin?
+          %th Submitted at
+          %th Status
     %tbody
-      = render :partial => 'response', :collection => @responses
+      = render :partial => 'request', :collection => @requests
+
+= will_paginate @requests

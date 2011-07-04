@@ -3,7 +3,7 @@ class StaticPageController < ApplicationController
 
   def index
     if current_user
-      redirect_to user_dashboard_path(current_user)
+      redirect_to dashboard_path
     else
       render :layout => 'promo_landing'
     end

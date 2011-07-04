@@ -7,6 +7,8 @@ class ProjectsController < Reporter::BaseController
   before_filter :load_response
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
+  before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
+
 
   def index
     scope = @response.projects.scoped({})

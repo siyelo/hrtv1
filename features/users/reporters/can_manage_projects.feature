@@ -49,7 +49,7 @@ Feature: Reporter can manage projects
    Then I should see "Project was successfully updated"
    
    When I follow "Project2"
-     And I press "Delete this Project"
+     And I follow "Delete this Project"
 		 And I confirm the popup dialog
    Then I should see "Project was successfully destroyed"
   
@@ -128,10 +128,10 @@ Feature: Reporter can manage projects
     And I press "Create Comment"
    Then I should see "Comment title"
     And I should see "Comment body"
-
+  
   Scenario: A reporter can create comments for an activity and see comment errors
    Given a project exists with name: "project1", data_response: data_response "data_response"
-   When I follow "Workplans"
+   When I follow "Workplan"
     And I follow "project1"
     And I press "Create Comment"
    Then I should see "can't be blank" within "#comment_title_input"

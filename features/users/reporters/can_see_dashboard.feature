@@ -31,6 +31,5 @@ Feature: Reporter can see dashboard
         And a data_response exists with data_request: the data_request, organization: the organization
         And I am signed in as "some_user@hrtapp.com"
       When I go to the reporter dashboard page
-			Then show me the page
       Then I should see "Req1" within "#content"
         And I should see "Req2" within "#content"

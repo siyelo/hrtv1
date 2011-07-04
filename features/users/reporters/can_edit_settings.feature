@@ -10,18 +10,8 @@ Feature: Reporter can manage data response
     And a reporter exists with username: "reporter", organization: the organization
     And I am signed in as "reporter"
 
-    Scenario: User can start a data response
-      When I follow "Dashboard"
-        And I follow "Edit"
-      Then I should see "Settings" within "h1"
 
-
-    Scenario: Browse to data response edit page
-      When I follow "Settings"
-      Then I should see "Settings" within "h1"
-
-
-    Scenario Outline: Edit data response, see feedback messages
+    Scenario Outline: Reporter can edit settings and see feedback messages
       When I follow "Settings"
         And I select "Euro (EUR)" from "Default Currency"
         And I fill in "Start of Fiscal Year" with "<start_date>"

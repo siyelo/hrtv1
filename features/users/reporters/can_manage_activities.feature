@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -36,8 +35,8 @@ Feature: Reporter can manage activities
     When I follow "activity1"
     Then the "Target" field should contain "Output description value"
 
+     #combobox
     @javascript @wip 
-    #combobox
     Scenario: Reporter can add implementers (normal values)
       When I follow "Add Activities now"
 	    And I fill in "Name" with "activity1"
@@ -58,8 +57,8 @@ Feature: Reporter can manage activities
       Then the "Implementer Expenditure" field should contain "99"
 	    And the "Implementer Current Budget" field should contain "19"
 
-    @javascript @wip
     #combobox
+    @javascript @wip
     Scenario: Reporter can add sub-activities (percentage values)
     When I follow "Add Activities now"
         And I fill in "Name" with "activity1"

@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can upload classifications
   In order to increase the quality of information reported
   As a reporter

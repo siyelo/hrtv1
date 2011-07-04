@@ -1,3 +1,4 @@
+@wip
 Feature: Reporter can view review page
   In order to view all my data
   As a reporter
@@ -12,7 +13,7 @@ Feature: Reporter can view review page
       And a project exists with name: "TB Treatment Project", data_response: the data_response
       And an activity exists with name: "TB Drugs procurement", project: the project, data_response: the data_response
       And I am signed in as "who_user"
-    When I follow "Dashboard"
+    When I follow "Home"
       And I follow "Edit"
       And I follow "Review"
 

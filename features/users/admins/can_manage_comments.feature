@@ -18,17 +18,17 @@ Feature: Admin can see comments
     And a comment exists with comment: "comment2", commentable: the project
 
     Scenario: See latest comments on dashboard
-      Given I am signed in as a sysadmin
-      When I follow "Dashboard"
+      Given I am signed in as "sysadmin"
+      When I follow "Home"
       Then I should see "Recent Comments"
         And I should see "TB Treatment Project" within ".dashboard_comments"
         And I should see "Other Project" within ".dashboard_comments"
 
 
     Scenario: Access comments page from dashboard and manage them
-      Given I am signed in as a sysadmin
-      When I follow "Dashboard"
-        And I follow "all comments"
+      Given I am signed in as "sysadmin"
+      When I follow "Home"
+        And I follow "view all" within ".comments_read_more"
       Then I should be on the admin comments page
         And I should see "TB Treatment Project"
         And I should see "comment1"

@@ -16,23 +16,23 @@ Feature: Admin can manage organizations
       When I follow "Organizations"
         And I follow "Create Organization"
         And I fill in "Name" with "Organization name"
-        And I fill in "Raw type" with "My raw_type"
+        And I select "Bilateral" from "Raw type"
         And I fill in "Fosaid" with "123"
         And I press "Create organization"
       Then I should see "Organization was successfully created"
-        And I should see "Organization name"
-        And I should see "My raw_type"
-        And I should see "123"
+        And the "Name" field should contain "Organization name"
+        And the "Fosaid" field should contain "123"
+        And the "Raw type" field should contain "Bilateral"
 
-      When I follow "Edit"
-        And I fill in "Name" with "My new organization"
+      When I fill in "Name" with "My new organization"
         And I press "Update organization"
       Then I should see "Organization was successfully updated"
-        And I should see "My new organization"
+        And the "Name" field should contain "My new organization"
 
-      When I follow "x"
-      Then I should see "Organization was successfully deleted"
+      When I follow "Delete this Organization"
+      Then I should see "Organization was successfully destroyed"
         And I should not see "Organization name"
+        And I should not see "My new organization"
 
 
     Scenario Outline: Merge duplicate organizations
@@ -96,6 +96,7 @@ Feature: Admin can manage organizations
         And I should see "You cannot delete an organization that has users or data associated with it."
 
 
+    @wip
     Scenario Outline: An admin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"
@@ -107,10 +108,10 @@ Feature: Admin can manage organizations
         And column "<column>" row "2" should have text "<text1>"
 
         Examples:
-         | column_name | column | text1 | text2 |
-         | Name        | 1      | org2  | org1  |
-         | Raw Type    | 2      | Donor | Ngo   |
-         | Fosaid      | 3      | 111   | 222   |
+         | column_name  | column | text1 | text2 |
+         | Organization | 1      | org2  | org1  |
+         | Raw Type     | 5      | Donor | Ngo   |
+         | Fosaid       | 6      | 111   | 222   |
 
 
     Scenario: An admin can filter organization

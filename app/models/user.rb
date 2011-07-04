@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
 
   ### Validations
-  validates_presence_of  :username, :email, :organization_id, :data_response_id_current
+  validates_presence_of  :username, :email, :organization_id
   validates_uniqueness_of :email, :username, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
   end
 
   def current_request
-    @current_request ||= self.current_response.request
+    @current_request ||= self.current_response.try(:request)
   end
 
   def current_request_name

@@ -1,4 +1,3 @@
-.form_aside
 - f.inputs :class => 'wrap-80 inputs' do
   %li.last
     %h3 Code details
@@ -18,3 +17,10 @@
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :class => "last"
 
+.wrap-80
+  - unless @code.new_record?
+    .delete_section
+      = link_to "Delete this Code", admin_code_path(@code), :confirm => "Are you sure you want to delete this Code?", :method => :delete, :class => 'delete_action'
+      %p
+        %strong Warning:
+        Once you delete a Code, you will lose all data associated with it, and there is no undo.

@@ -16,11 +16,21 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Request was successfully created.") { admin_requests_url }
+    create! do |success, failure|
+      success.html do
+        flash[:notice] = "Request was successfully created"
+        redirect_to admin_requests_url
+      end
+    end
   end
 
   def update
-    update!(:notice => "Request was successfully updated.") { admin_requests_url }
+    update! do |success, failure|
+      success.html do
+        flash[:notice] = "Request was successfully updated"
+        redirect_to admin_requests_url
+      end
+    end
   end
 
   def destroy

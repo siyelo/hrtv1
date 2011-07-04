@@ -12,19 +12,10 @@ Feature: Admin can manage data responses
       And I am signed in as a sysadmin
 
     Scenario: Manage data responses
-      When I follow "Review Organization Expenditures and Budgets"
+      When I follow "Review Organization Expenditures and Current Budgets"
        And I follow "Empty"
       Then I should see "UNDP"
 
       When I follow "Delete"
-      And I press "Delete"
       Then I should see "Data response was successfully deleted"
       And I should not see "UNDP"
-
-    @javascript
-    Scenario: Manage data responses (with JS)
-      When I follow "Review Organization Expenditures and Budgets"
-       And I follow "Empty"
-       And I confirm the popup dialog
-       And I follow "Delete"
-      Then I should not see "UNDP"

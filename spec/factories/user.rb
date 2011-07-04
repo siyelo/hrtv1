@@ -8,12 +8,12 @@ Factory.define :user, :class => User do |f|
   f.organization          { Factory(:organization) }
   # current_response is set in before validations callback
   # in user model to last data_response from user's organization
-  f.current_response      { Factory(:data_response) }
+  # f.current_response      { Factory(:data_response) }
   # a little hack to make sure the Response.org == User.org
-  f.after_create do |u|
-    u.current_response.organization = u.organization
-    u.current_response.save(false)
-  end
+  #f.after_create do |u|
+    #u.current_response.organization = u.organization
+    #u.current_response.save(false)
+  #end
   f.roles { ['reporter'] }
 end
 

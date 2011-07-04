@@ -9,7 +9,7 @@ Feature: Admin can review country
       And an organization exists with name: "GoR"
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "UNDP"
-      And a reporter exists with username: "reporter, organization: the organization
+      And a reporter exists with username: "reporter", organization: the organization
       And a data_response exists with data_request: the data_request, organization: the organization
       And a project exists with name: "Project A", data_response: the data_response
       And an activity exists with name: "Activity A", data_response: the data_response, project: the project
@@ -27,12 +27,12 @@ Feature: Admin can review country
 
     Scenario: "Log in as admin, go to district activity detail screen"
       Given I am signed in as a sysadmin
-      When I follow "Dashboard"
-        And I follow "Review National Expenditures and Budgets"
+      When I follow "Home"
+        And I follow "Review National Expenditures and Current Budgets"
         And I follow "View all Activities"
       Then I should see "Activities" within "h1"
 
       When I follow "Activity A"
       Then I should see "Activity A" within "h1"
         And I should see "NSP Expenditure"
-        And I should see "NSP Budget"
+        And I should see "NSP Current Budget"

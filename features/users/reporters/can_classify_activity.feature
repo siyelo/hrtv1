@@ -55,7 +55,6 @@ Feature: Reporter can enter a code breakdown for each activity
       And I follow "Activity description"
 
 
-
     Scenario: enter budget for an activity (don't see flash errors)
       When I follow "Budget"
         And I follow "Purposes"
@@ -65,7 +64,6 @@ Feature: Reporter can enter a code breakdown for each activity
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "5,000,000.00"
 
-
     Scenario: enter budget for an activity (see flash errors)
       When I follow "Budget"
         And I follow "Purposes"
@@ -74,7 +72,7 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "1,234,567.00"
-        And I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
+        And I should see "We're sorry, when we added up your Current Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Current Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
 
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
@@ -82,9 +80,9 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" percentage field with "<amount>"
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
+        Then show me the page
         And I should see "We're sorry, when we added up your Budget by Purposes classifications"
-
-        And the "mtef1" percentage field should contain "<amount2>"
+        And the "activity_updates_1_percentage" field should contain "<amount2>"
 
         Examples:
           | amount | amount2 |
@@ -101,7 +99,7 @@ Feature: Reporter can enter a code breakdown for each activity
         Then I should not see "Activity classification was successfully updated."
         And the "mtef1" field should contain "1,234,567.00"
 
-        
+
     Scenario: Use budget by district for expenditure by district
       Given a location exists with short_display: "Location1"
         And the location is one of the activity's locations
@@ -111,8 +109,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I press "Save"
       Then I should not see "Activity classification was successfully updated."
         And the "Location1" field should contain "1,234,567.00"
-
-      When I follow "Click here to copy the Budget splits below to the Expenditure Locations tab"
+      When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Locations"
       Then the "Location1" field should contain "1,481,480.40"
@@ -125,11 +122,11 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And the "cost_category1" field should contain "1,234,567.00"
 
-      When I follow "Click here to copy the Budget splits below to the Expenditure Inputs tab"
+      When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Inputs"
       Then the "cost_category1" field should contain "1,481,480.40"
-
+      
     Scenario: Use budget by service level for expenditure by service level
       When I follow "Budget"
         And I follow "Service Levels"
@@ -138,7 +135,7 @@ Feature: Reporter can enter a code breakdown for each activity
       Then I should not see "Activity classification was successfully updated."
         And I should be on the budget classification page for "Activity"
         And the "service_level1" field should contain "1,234,567.00"
-      When I follow "Click here to copy the Budget splits below to the Expenditure Service Levels tab"
+      When I follow "Copy Current Budget to Past Expenditure"
       Then the "service_level1" field should contain "1,481,480.40"
 
 
@@ -162,7 +159,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "250,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Expenditure Purposes tab"
+      When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Purposes"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
@@ -172,7 +169,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
 
-
+      @run
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
       When I press "Save & Classify >"
         And I follow "Budget"
@@ -187,7 +184,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
-      When I follow "Click here to copy the Budget splits below to the Expenditure Purposes tab"
+        When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Purposes"
       Then the cached field within "ul.activity_tree > li:nth-child(1)" should contain "180,000.00"
@@ -200,7 +197,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Purposes"
         And I fill in "%" with "2" within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
-      Then I should see "We're sorry, when we added up your Budget by Purposes classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Budget by Purposes classifications must be entered and the total must be equal to the Budget amount."
+      Then I should see "We're sorry, when we added up your Current Budget by Purposes classifications, they equaled 200,000.00 but the Budget is 5,000,000.00 (5,000,000.00 - 200,000.00 = 4,800,000.00, which is ~96.00%). The total classified should add up to 5,000,000.00. Your Current Budget by Purposes classifications must be entered and the total must be equal to the Budget amount."
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "200,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "100,000.00"

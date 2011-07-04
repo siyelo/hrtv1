@@ -41,7 +41,6 @@ class CodeAssignment < ActiveRecord::Base
               :include => :code,
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
-              
   named_scope :with_request,
               lambda { |request_id| { 
                 :joins =>

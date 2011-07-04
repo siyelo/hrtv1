@@ -2,12 +2,11 @@ class Reports::DistrictsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
 
   def index
-    @locations        = Location.all_with_counters
-    @total_population = District.sum(:population)
-    @spent_codings    = CodingSpendDistrict.sum(:cached_amount_in_usd,
+    @locations        = Location.all_with_counters(current_or_last_response.data_request_id)
+    @spent_codings    = CodingSpendDistrict.with_request(current_or_last_response.data_request_id).sum(:cached_amount_in_usd,
                           :conditions => ["code_id IN (?)", @locations.map(&:id)],
                           :group => 'code_id')
-    @budget_codings   = CodingBudgetDistrict.sum(:cached_amount_in_usd,
+    @budget_codings   = CodingBudgetDistrict.with_request(current_or_last_response.data_request_id).sum(:cached_amount_in_usd,
                           :conditions => ["code_id IN (?)", @locations.map(&:id)],
                           :group => 'code_id')
   end

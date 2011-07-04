@@ -162,11 +162,6 @@ class Activity < ActiveRecord::Base
       a.uniq
   end
 
-  #def description
-    #d = read_attribute(:description)
-    #d.present? ? d : 'No description'
-  #end
-
   def self.unclassified
     self.find(:all).select {|a| !a.classified?}
   end

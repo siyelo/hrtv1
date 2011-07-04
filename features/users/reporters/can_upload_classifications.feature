@@ -29,7 +29,7 @@ Feature: Reporter can upload classifications
       And I am signed in as "reporter"
       And I follow "data_request1"
       And I follow "Projects"
-      And I follow "Activity description"
+      And I follow "Activity"
 
 
 
@@ -88,8 +88,8 @@ Feature: Reporter can upload classifications
         And I should not see "location1"
 
       Examples:
-      | type   |
-      | Budget |
+      | type         |
+      | Budget       |
       | Expenditure  |
 
 

@@ -156,6 +156,14 @@ describe Activity do
       @activity.has_budget_or_spend?.should be_false
     end
   end
+  
+  describe "download activity template" do
+    it "returns the correct fields in the activity template" do
+      @response = Factory(:data_response)
+      header_row = Activity.download_template(@response)
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Sep '08 - Nov '08 Spend,Dec '08 - Feb '09 Spend,Mar '09 - May '09 Spend,Jun '09 - Aug '09 Spend,Current Budget,Sep '08 - Nov '08 Budget,Dec '08 - Feb '09 Budget,Mar '09 - May '09 Budget,Jun '09 - Aug '09 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+    end
+  end
 
   describe "checking activities budget/spend against projects validations" do
     it "returns false when the activitys spend is greater than that of the projects" do

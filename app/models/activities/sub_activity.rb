@@ -82,9 +82,8 @@ class SubActivity < Activity
       header_row = SubActivity::FILE_UPLOAD_COLUMNS
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
-
       csv << header_row
-
+      
       if activity
         activity.sub_activities.each do |sa|
           row = [sa.provider.try(:name), sa.spend, sa.budget]

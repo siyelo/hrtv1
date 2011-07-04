@@ -105,8 +105,8 @@ Feature: Reporter can upload classifications
 
       Examples:
       | type   |
-      | Budget |
-      | Expenditure  |
+      | Current Budget |
+      | Past Expenditure  |
 
 
     Scenario Outline: Reporter can upload Purposes

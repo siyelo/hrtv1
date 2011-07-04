@@ -61,6 +61,14 @@ describe SubActivity do
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
   end
+  
+  describe "download subactivity template" do
+    it "returns the correct fields in the activity template" do
+      header_row = SubActivity.download_template
+      header_row.should == "Implementer,Past Expenditure,Current Budget,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+    end
+  end
+  
 
   describe "methods" do
     before :each do

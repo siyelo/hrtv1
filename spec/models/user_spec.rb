@@ -59,7 +59,8 @@ describe User do
     end
 
     it "does not assign current_response if it already exists" do
-      user = Factory.build(:user, :organization => @organization)
+      dr   = Factory(:data_response)
+      user = Factory.build(:user, :organization => @organization, :current_response => dr)
       user.save
       user.current_response.should_not == @dr2
     end

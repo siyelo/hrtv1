@@ -9,8 +9,17 @@ class Organization < ActiveRecord::Base
      "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
      "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
 
-  USG_FISCAL_YEAR = {:start => Date.parse("01-01-#{Date.today.strftime('%Y')}"), :end => Date.parse("31-12-#{Date.today.strftime('%Y')}")}
-  GOR_FISCAL_YEAR = {:start => Date.parse("01-07-#{Date.today.strftime('%Y').to_i - 1}"), :end => Date.parse("30-06-#{Date.today.strftime('%Y')}")}
+  def usg_fiscal_year
+    year = Date.today.strftime('%Y').to_i
+    { :start => Date.parse("01-01-#{year}"),
+      :end => Date.parse("31-12-#{year}") }
+  end
+
+  def gor_fiscal_year
+    year = Date.today.strftime('%Y').to_i
+    { :start => Date.parse("01-07-#{year - 1}"),
+      :end => Date.parse("30-06-#{year}") }
+  end
 
   include ActsAsDateChecker
 
@@ -191,19 +200,19 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def quarters_months(quarter) 
+  def quarters_months(quarter)
     #Jun '08 - Aug '08
     case quarter
     when "q1"
-      "#{GOR_FISCAL_YEAR[:start].strftime('%b \'%y')} - #{(GOR_FISCAL_YEAR[:start] + 2.months).strftime('%b \'%y')}"
+      "#{gor_fiscal_year[:start].strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 2.months).strftime('%b \'%y')}"
     when "q2"
-      "#{(GOR_FISCAL_YEAR[:start] + 3.months).strftime('%b \'%y')} - #{(GOR_FISCAL_YEAR[:start] + 5.months).strftime('%b \'%y')}"
+      "#{(gor_fiscal_year[:start] + 3.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 5.months).strftime('%b \'%y')}"
     when "q3"
-      "#{(GOR_FISCAL_YEAR[:start] + 6.months).strftime('%b \'%y')} - #{(GOR_FISCAL_YEAR[:start] + 8.months).strftime('%b \'%y')}"
+      "#{(gor_fiscal_year[:start] + 6.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 8.months).strftime('%b \'%y')}"
     when "q4"
-      "#{(GOR_FISCAL_YEAR[:start] + 9.months).strftime('%b \'%y')} - #{(GOR_FISCAL_YEAR[:start] + 11.months).strftime('%b \'%y')}"
+      "#{(gor_fiscal_year[:start] + 9.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 11.months).strftime('%b \'%y')}"
     when "q4_prev"
-      "#{(GOR_FISCAL_YEAR[:start] - 3.months).strftime('%b \'%y')} - #{(GOR_FISCAL_YEAR[:start] - 1.months).strftime('%b \'%y')}"
+      "#{(gor_fiscal_year[:start] - 3.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] - 1.months).strftime('%b \'%y')}"
     end
   end
 

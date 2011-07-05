@@ -156,12 +156,13 @@ describe Activity do
       @activity.has_budget_or_spend?.should be_false
     end
   end
-  
+
   describe "download activity template" do
     it "returns the correct fields in the activity template" do
       @response = Factory(:data_response)
+      Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Sep '08 - Nov '08 Spend,Dec '08 - Feb '09 Spend,Mar '09 - May '09 Spend,Jun '09 - Aug '09 Spend,Current Budget,Sep '08 - Nov '08 Budget,Dec '08 - Feb '09 Budget,Mar '09 - May '09 Budget,Jun '09 - Aug '09 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Current Budget,Jul '08 - Sep '08 Budget,Oct '08 - Dec '08 Budget,Jan '09 - Mar '09 Budget,Apr '09 - Jun '09 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 

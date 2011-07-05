@@ -16,7 +16,6 @@ describe Admin::ResponsesController do
   describe "Requesting Admin::Responses endpoints as an admin" do
     before :each do
       login_as_admin
-      @data_response = Factory.create(:data_response)
     end
 
     it "/index should find the submitted responses" do
@@ -40,13 +39,8 @@ describe Admin::ResponsesController do
     end
 
     it "GET/1 should find a response" do
-      (@codes = [Factory(:code)])
-      Code.stub_chain(:purposes, :roots).and_return(@codes)
-      DataResponse.should_receive(:find).with('1').and_return(@data_response)
-      Code.should_receive(:purposes)
-      CostCategory.should_receive(:roots)
-      OtherCostCode.should_receive(:roots)
-      get :show, :id => 1
+      reporter = Factory(:reporter)
+      get :show, :id => reporter.current_response.id
       response.should be_success
     end
   end

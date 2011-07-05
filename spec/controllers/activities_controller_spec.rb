@@ -109,9 +109,10 @@ describe ActivitiesController do
     controller_name :activities
 
     before :each do
+      @data_request = Factory(:data_request)
       @user = Factory(:reporter)
       login @user
-      @data_response = Factory(:data_response)
+      @data_response = @user.current_response
       @activity = Factory(:activity, :data_response => @data_response) #TODO add back user!
       @user_activities.stub!(:find).and_return(@activity)
     end
@@ -198,7 +199,7 @@ describe ActivitiesController do
     end
 
   end
-  
+
   describe "Update" do
     before :each do
       @data_request = Factory(:data_request, :spend => false, :budget => false)
@@ -208,14 +209,14 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response)
       login @user
     end
-    
+
     it "should allow a reporter to update an activity if it's not am approved" do
       @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => false)
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => "9999993", :project_id => @project.id}
       @activity.reload
       @activity.budget.should == 9999993
     end
-    
+
     it "should not allow a reporter to update a project once it has been am_approved" do
       @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => true)
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
@@ -314,7 +315,7 @@ describe ActivitiesController do
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
    end
-   
+
    describe "activitymanager can approve an activity project" do
      before :each do
        @data_request = Factory(:data_request)

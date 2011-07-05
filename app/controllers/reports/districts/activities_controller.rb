@@ -2,13 +2,13 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
   before_filter :load_location
 
   def index
-    data_request_id    = current_user.current_data_response.data_request.id  
+    data_request_id    = current_user.current_data_response.data_request.id
     @activities        = Reports::ActivityReport.top_by_spent_and_budget({
                          :data_request_id => data_request_id,
                          :per_page => 25,
-                         :page => params[:page], 
+                         :page => params[:page],
                          :sort => params[:sort],
-                         :code_ids => [@location.id], 
+                         :code_ids => [@location.id],
                          :type => 'district'})
     @spent_pie_values  = Charts::DistrictPies::activities(@location, "CodingSpendDistrict", data_request_id)
     @budget_pie_values = Charts::DistrictPies::activities(@location, "CodingBudgetDistrict", data_request_id)
@@ -22,7 +22,7 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     @pie               = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type          = get_code_type_and_initialize(params[:code_type])
     @chart_name        = get_chart_name(params[:code_type])
-    
+
 
     if @pie
       if @hssp2_strat_prog || @hssp2_strat_obj

@@ -3,10 +3,6 @@
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
 
-:javascript
-  var _budget = #{@response.data_request.budget.to_json};
-  var _spend = #{@response.data_request.spend.to_json};
-
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics

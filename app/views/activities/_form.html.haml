@@ -7,8 +7,6 @@
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
   var _funding_sources = #{get_funding_sources(current_user.organization.projects)}
-  var _budget = #{@response.data_request.budget.to_json};
-  var _spend = #{@response.data_request.spend.to_json};
 
 - f.inputs :class => 'inputs' do
   %li.last
@@ -21,35 +19,32 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => false
 
+  %li.last
+    %h3== Past Activity Expenditure
+    %ul.dashboard_section
+      = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+      %li.amounts.last
+        %label== Quarterly past expenditure
+        %ul
+          = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
+          = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
+          = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
+          = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
+          = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
 
-  - if @response.data_request.spend?
-    %li.last
-      %h3== Past Activity Expenditure
-      %ul.dashboard_section
-        = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+  %li.last
+    %h3 Current Budget
+    %ul.dashboard_section
+      = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
+      - if @response.request.budget_by_quarter?
         %li.amounts.last
-          %label== Quarterly past expenditure
+          %label== Quarterly budget
           %ul
-            = f.input :spend_q4_prev, :label => "Q4 #{spend_fiscal_year_prev}", :required => false
-            = f.input :spend_q1     , :label => "Q1 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q2     , :label => "Q2 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q3     , :label => "Q3 #{spend_fiscal_year}", :required => false
-            = f.input :spend_q4     , :label => "Q4 #{spend_fiscal_year}", :required => false
-
-  - if @response.data_request.budget?
-    %li.last
-      %h3 Current Budget
-      %ul.dashboard_section
-        = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
-        - if @response.request.budget_by_quarter?
-          %li.amounts.last
-            %label== Quarterly budget
-            %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+            = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
 
     - unless @response.request.no_long_term_budgets?
       %li.last
@@ -94,8 +89,7 @@
     %ul.horizontal
       - f.buttons :class => 'buttons' do
         = f.commit_button "Save", :class => "last"
-        - if @response.data_request.spend? || @response.data_request.budget?
-          = f.commit_button "Save & Classify >", :class => "last"
+        = f.commit_button "Save & Classify >", :class => "last"
 
 - unless @activity.new_record?
   .delete_section

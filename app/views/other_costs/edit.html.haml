@@ -8,17 +8,15 @@
   = render 'help'
 
 %ul.response-notice
-  - if @response.data_request.spend?
-    - if !@other_cost.spend?
-      %li= "Enter the Past Expenditure for this activity."
-    - elsif !@other_cost.spend_classified?
-      %li= "Please classify the Past Expenditure for this activity."
+  - if !@other_cost.spend?
+    %li= "Enter the Past Expenditure for this activity."
+  - elsif !@other_cost.spend_classified?
+    %li= "Please classify the Past Expenditure for this activity."
 
-  - if @response.data_request.budget?
-    - if !@other_cost.budget?
-      %li= "Enter the Current budget for this activity."
-    - elsif !@other_cost.budget_classified?
-      %li= "Please classify the Current budget for this activity."
+  - if !@other_cost.budget?
+    %li= "Enter the Current budget for this activity."
+  - elsif !@other_cost.budget_classified?
+    %li= "Please classify the Current budget for this activity."
 
 .wrap-70
   = error_messages_for :other_cost,  :header_message  => nil, :message => "Oops, we couldn't save your changes."

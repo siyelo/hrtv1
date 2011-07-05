@@ -15,7 +15,7 @@ gem 'hoptoad_notifier'
 gem 'i18n', '= 0.4.2'
 gem 'inherited_resources', "=1.0.6"
 gem 'money', "~> 3.5"
-gem "paperclip", "~> 2.3"
+gem "paperclip", "= 2.3.11"
 gem 'rails', '2.3.12'
 gem 'sass'
 gem 'settingslogic'

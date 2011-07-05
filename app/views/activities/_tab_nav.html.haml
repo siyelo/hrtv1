@@ -4,17 +4,30 @@
     - link_to "#comments" do
       %span
         View Comments
-  - if (current_user.admin? || current_user.activity_manager?) && activity.valid?
+  - if (current_user.sysadmin? || current_user.activity_manager?) && activity.valid?
     %li
-      -if activity.am_approved
+      - if activity.approved
+        - link_to "#" do
+          %span
+            Approved by Admin
+      - else
+        - link_to "#", :class => "js_admin_approve", :"response-id" => @response.id, :"activity-id" => activity.id do
+          %span
+            Admin Approve
+            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+
+  - if current_user.sysadmin? || current_user.activity_manager?
+    %li
+      - if activity.am_approved
         - link_to "#" do
           %span
             Budget Approved
-      -else
+      - else
         - link_to "#", :class => "js_am_approve", :"response-id" => @response.id, :"activity-id" => activity.id do
           %span
-            Approve this Activity's Budget
+            Approve Budget
             = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+
 
 %ul.ordered_nav
   - if activity.new_record?
@@ -24,7 +37,7 @@
         %span 1.
         Details
     %li
-      .dummy 
+      .dummy
         %span 2.
         Expenditure
     %li

@@ -23,29 +23,18 @@ class DataRequest < ActiveRecord::Base
     return 'In progress'
   end
 
-  def spend_and_budget?
-    spend? && budget?
-  end
-
-  def only_spend?
-    spend? && !budget?
-  end
-
-  def only_budget?
-    budget? && !spend?
-  end
-
   def no_long_term_budgets?
     !year_2 && !year_3 && !year_4 && !year_5
   end
 
   def requested_amounts
     r = []
-    r << "Past Expenditure" if spend?
-    r << "Current Budget" if budget?
+    r << "Past Expenditure"
+    r << "Current Budget"
     r
   end
 end
+
 
 
 
@@ -61,8 +50,6 @@ end
 #  due_date          :date
 #  start_date        :date
 #  end_date          :date
-#  budget            :boolean         default(TRUE), not null
-#  spend             :boolean         default(TRUE), not null
 #  final_review      :boolean         default(FALSE)
 #  year_2            :boolean         default(TRUE)
 #  year_3            :boolean         default(TRUE)

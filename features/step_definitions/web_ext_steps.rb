@@ -57,3 +57,8 @@ end
 Given /^#{capture_model} is one of #{capture_model}'s (\w+)$/ do |owned, owner, assoc|
   model!(owner).send(assoc) << model!(owned)
 end
+
+Then /^(?:|I )click "([^"]*)" in autocomplete results$/ do |target|
+  page.execute_script("$(.ui-menu-item a:contains(\"#{target}\").trigger('mouseenter').click()")
+end
+

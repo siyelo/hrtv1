@@ -5,16 +5,16 @@ Feature: Reporter can manage activities
 
   Background:
     Given an organization exists with name: "organization1"
-      And an user exists with username: "user1", email: "email@siyelo.com", roles: "admin", organization: the organization
+      And an user exists with email: "email@siyelo.com", roles: "admin", organization: the organization
       And a data_request exists with title: "data_request1"
       And a data_response exists with data_request: the data_request, organization: the organization
       And a project exists with name: "project1", data_response: the data_response
       And an activity exists with name: "activity1", description: "activity1 description", project: the project, data_response: the data_response, spend: 1, budget: 1
-      And a reporter exists with username: "reporter", organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And a project exists with name: "project2", data_response: the data_response
       And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
-      And a sysadmin exists with username: "admin"
-      And I am signed in as "admin"
+      And a sysadmin exists with email: "admin@hrtapp.com"
+      And I am signed in as "admin@hrtapp.com"
 
     Scenario: a sysadmin can review activities
       When I follow "Activities"
@@ -25,8 +25,7 @@ Feature: Reporter can manage activities
       When I follow "X"
       Then I should not see "activity1 description"
 
-
-    Scenario: a sysadmin can edit activity
+      Scenario: a sysadmin can edit activity
       When I follow "Activities"
         And I follow "Edit"
         And I fill in "Description" with "activity2 description"
@@ -101,5 +100,5 @@ Feature: Reporter can manage activities
           | column_name  | column | text1                 | text2                 |
           | Project      | 1      | project1              | project2              |
           | Description  | 2      | activity1 description | activity2 description |
-          | Total Spent  | 3      | 1 RWF               | 2 RWF               |
+          | Total Past Expenditure  | 3      | 1 RWF               | 2 RWF               |
           | Total Budget | 4      | 1 RWF               | 2 RWF               |

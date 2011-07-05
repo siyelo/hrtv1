@@ -26,14 +26,13 @@ Feature: Reporter can manage activities
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
         Then I should see "Workplan was successfully saved"
       When I follow "1ctivity1 description"
         And I fill in "Name" with "activity2"
         And I fill in "Description" with "activity2 description"
-        And I press "Save & Classify >"
+        And I press "Save"
       Then I should see "Activity was successfully updated"
       When I follow "activity2"
         And I confirm the popup dialog
@@ -47,8 +46,7 @@ Feature: Reporter can manage activities
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
       When I follow "1ctivity1 description"
         And I fill in "Name" with "<name>"
@@ -56,7 +54,7 @@ Feature: Reporter can manage activities
         And I fill in "Start date" with "<start_date>"
         And I fill in "End date" with "<end_date>"
         And I select "<project>" from "Project"
-        And I press "Save & Classify >"
+        And I press "Save"
       Then I should see "Oops, we couldn't save your changes."
         And I should see "<message>"
 
@@ -71,8 +69,7 @@ Feature: Reporter can manage activities
       And I fill in "activity_description" with "1ctivity1 description"
       And I press "activity_submit"
       Then wait a few moments
-      And I fill in "activities_1spend" with "44"
-      And I fill in "activities_1budget" with "99"
+      And I fill in the activities budget field with "33" and spend field with "44" for that activity
       And I press "Save"
       And I follow "1ctivity1 description"
       And I select "project1" from "Project"
@@ -102,7 +99,7 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-
+       
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Import" within ".activities_upload_box"
@@ -113,6 +110,7 @@ Feature: Reporter can manage activities
       When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload activities"
 
+
     Scenario: Adding malformed CSV file doesn't throw exception
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Import"
@@ -121,7 +119,7 @@ Feature: Reporter can manage activities
 
     Scenario: Reporter can download Activities CSV template
       When I follow "Get Template" within ".activities_upload_box"
-      Then I should see "Project Name,Activity Name,Activity Description,Provider,Current Expenditure,Q1 Current Expenditure,Q2 Current Expenditure,Q3 Current Expenditure,Q4 Current Expenditure,Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
+      Then I should see "Project Name,Activity Name,Activity Description,Provider,Current Expenditure,Q1 Current Expenditure,Q2 Current Expenditure,Q3 Current Expenditure,Q4 Current Expenditure,Current Budget,Q1 Current Budget,Q2 Current Budget,Q3 Current Budget,Q4 Current Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date"
 
 
     Scenario: Reporter can download Activities
@@ -130,6 +128,7 @@ Feature: Reporter can manage activities
         And I follow "Export" within ".upload_box"
       Then I should see "Activity1"
         And I should see "Activity1 description"
+
 
     Scenario: A reporter can create comments for an activity and see comment errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
@@ -161,15 +160,14 @@ Feature: Reporter can manage activities
         And I press "Create Comment"
       Then "reporter_1@example.com" should not receive an email
 
-      @javascript
+    @javascript
     Scenario: A reporter can select implementer for an activity
       When I follow "Add activity"
         And I fill in "activity_name" with "activity1"
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
         And I follow "1ctivity1 description"
       # check if by default reporter organization is selected
@@ -182,7 +180,7 @@ Feature: Reporter can manage activities
         And I select "project1" from "Project"
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-03-01"
-        And I press "Save & Classify >"
+        And I press "Save"
       Then I should see "Activity was successfully updated"
 
     @wip
@@ -197,7 +195,6 @@ Feature: Reporter can manage activities
         And I press "Search"
       Then I should see "activity1 description"
       And I should not see "activity2 description"
-
 
     @wip
     Scenario Outline: A reporter can sort activities
@@ -220,7 +217,6 @@ Feature: Reporter can manage activities
             | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               |
             | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               |
 
-
     @javascript
     Scenario: A reporter can create funding sources (self funded) for an activity
       Given an organization "funding_organization1" exists with name: "funding_organization1"
@@ -231,8 +227,8 @@ Feature: Reporter can manage activities
         And I fill in "activity_name" with "activity1"
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        Then wait a few moments
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
 
       When I follow "1ctivity1 description"
@@ -242,10 +238,10 @@ Feature: Reporter can manage activities
         And I fill in "Past Expenditure" with "111" within ".fields"
         And I fill in "Current Budget" with "222" within ".fields"
 
-        And I press "Save & Classify >"
+        And I press "Save"
       Then I should see "Activity was successfully updated"
 
-      @wip
+    @wip
     Scenario: If the data_request has not got a budget or a past expenditure then only the save button should appear
       Given I follow "Sign Out"
       And a data_request "data_request10" exists with title: "THE DATA_REQUEST", spend: false, budget: false
@@ -264,13 +260,14 @@ Feature: Reporter can manage activities
       Then I should see "Save" button
       And I should not see "Save & Classify >" button
 
-
+		@wip	
     Scenario: Reporter can download Implementers CSV template
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       When I follow "Projects"
         And I follow "activity1"
         And I follow "Get Template" within "#sub_activities_upload_box"
       Then I should see "Implementer,Current Expenditure,Budget"
+    
 
     Scenario: Reporter can see message when attached malformed CSV file for implementers
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
@@ -288,25 +285,25 @@ Feature: Reporter can manage activities
         And I press "Import" within "#sub_activities_upload_box"
         Then I should see "Please select a file to upload implementers."
 
+		@wip			
+	  Scenario: Reporter can upload and change implementers
+	    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+	    When I follow "Projects"
+	      And I follow "activity1"
+	      And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
+	      And I press "Import" within "#sub_activities_upload_box"
+	    Then I should see "Implementers were successfully uploaded."
+	      And the "Sub-Activity Past Expenditure" field should contain "66"
+	      And the "Sub-Activity Budget" field should contain "77"
 
-  Scenario: Reporter can upload and change implementers
-    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
-    When I follow "Projects"
-      And I follow "activity1"
-      And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
-      And I press "Import" within "#sub_activities_upload_box"
-    Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Past Expenditure" field should contain "66"
-      And the "Sub-Activity Budget" field should contain "77"
-
-
-  Scenario: Reporter can upload and change implementers
-    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
-      And sub_activity exists with budget: 66, spend: 77, data_response: the data_response, activity: the activity, provider: the organization, id: 100
-    When I follow "Projects"
-      And I follow "activity1"
-      And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
-      And I press "Import" within "#sub_activities_upload_box"
-    Then I should see "Implementers were successfully uploaded."
-      And the "Sub-Activity Past Expenditure" field should contain "99"
-      And the "Sub-Activity Budget" field should contain "100"
+	  @wip
+	  Scenario: Reporter can upload and change implementers
+	    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
+	      And sub_activity exists with budget: 66, spend: 77, data_response: the data_response, activity: the activity, provider: the organization, id: 100
+	    When I follow "Projects"
+	      And I follow "activity1"
+	      And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
+	      And I press "Import" within "#sub_activities_upload_box"
+	    Then I should see "Implementers were successfully uploaded."
+	      And the "Sub-Activity Past Expenditure" field should contain "99"
+	      And the "Sub-Activity Budget" field should contain "100"

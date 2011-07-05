@@ -145,6 +145,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -163,5 +164,7 @@ end
 #  full_name                :string(255)
 #  perishable_token         :string(255)     default(""), not null, indexed
 #  tips_shown               :boolean         default(TRUE)
+#  active                   :boolean         default(FALSE)
+#  invite_token             :string(255)
 #
 

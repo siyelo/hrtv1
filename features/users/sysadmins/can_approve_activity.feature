@@ -12,7 +12,7 @@ Feature: SysAdmin can approve a code breakdown for each activity
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
     And a mtef_code exists with short_display: "Mtef code"
     And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
-    And an admin exists with email: "pink.panther@hrt.com"
+    And a sysadmin exists with email: "pink.panther@hrt.com"
     And I am signed in as "pink.panther@hrt.com"
 
 
@@ -25,7 +25,7 @@ Feature: SysAdmin can approve a code breakdown for each activity
 
 
     # NB: this scenario will only work for 1 activity, 1 classification
-    @javascript
+    @javascript 
     Scenario: Approve a budget coding breakdown
      When I go to the admin review data response page for organization "WHO", request "Req1"
       And I click element "#project_details"

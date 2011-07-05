@@ -22,17 +22,17 @@ Feature: Reporter can upload classifications
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
       And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_data_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 5000000, spend: 6000000
       And the location is one of the activity's locations
-      And I am signed in as "reporter"
+      And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And I follow "Projects"
       And I follow "Activity description"
 
 
-
+		@wip
     Scenario Outline: Reporter can download Purposes template
       When I follow "<type>"
         And I follow "Health Functions"
@@ -47,7 +47,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Inputs template
       When I follow "<type>"
         And I follow "Inputs"
@@ -62,7 +62,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Locations template
       When I follow "<type>"
         And I follow "Locations"
@@ -77,7 +77,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can download Service Levels template
       When I follow "<type>"
         And I follow "Service Levels"
@@ -92,7 +92,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Purposes
       When I follow "<type>"
         And I follow "Health Functions"
@@ -107,7 +107,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Inputs
       When I follow "<type>"
         And I follow "Inputs"
@@ -122,7 +122,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Locations
       When I follow "<type>"
         And I follow "Locations"
@@ -137,7 +137,7 @@ Feature: Reporter can upload classifications
       | Current Budget   |
       | Past Expenditure |
 
-
+		@wip
     Scenario Outline: Reporter can upload Service Levels
       When I follow "<type>"
         And I follow "Service Levels"

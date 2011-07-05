@@ -174,10 +174,10 @@ Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_
 
 end
 
-Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
-  @user = Factory(:admin,
-                  :email                 => 'frank@f.com',
+  @user = Factory(:sysadmin,
+                  :email                 => email,
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
@@ -323,7 +323,7 @@ end
 Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)", signed in$/ do |org, request|
   steps %Q{
     Given a basic org "UNDP" + reporter profile, with data response to "Req1"
-    And I am signed in as "undp_user"
+    And I am signed in as "pink.panter@hrtapp.com"
   }
 end
 
@@ -336,7 +336,7 @@ end
 Given /^a basic org \+ reporter profile, with data response, signed in$/ do
   steps %Q{
     Given a basic org + reporter profile, with data response
-    And I am signed in as "undp_user"
+    And I am signed in as "pink.panter@hrtapp.com"
   }
 end
 

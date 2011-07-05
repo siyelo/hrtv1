@@ -19,6 +19,7 @@ Feature: Reporter can enter a code breakdown for each activity
     #               \ code222
 
     # level 1
+
     Given a mtef_code "mtef1" exists with short_display: "mtef1"
       And a mtef_code "mtef2" exists with short_display: "mtef2"
 
@@ -37,7 +38,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And a mtef_code "mtef212" exists with short_display: "mtef212", parent: mtef_code "mtef21"
       And a mtef_code "mtef221" exists with short_display: "mtef221", parent: mtef_code "mtef22"
       And a mtef_code "mtef222" exists with short_display: "mtef222", parent: mtef_code "mtef22"
-
+			
       # level 1
       And a cost_category_code exists with short_display: "cost_category1"
       And a service_level exists with short_display: "service_level1"
@@ -46,16 +47,16 @@ Feature: Reporter can enter a code breakdown for each activity
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
       And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with username: "reporter", organization: the organization, current_data_response: the data_response
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_data_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 5000000, spend: 6000000
-      And I am signed in as "reporter"
+      And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
-      And I follow "Projects"
+      And I follow "Workplan"
       And I follow "Activity description"
 
 
-
+		@wip
     Scenario: enter budget for an activity (don't see flash errors)
       When I follow "Budget"
         And I follow "Health Functions"
@@ -65,7 +66,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "5,000,000.00"
 
-
+		@wip
     Scenario: enter budget for an activity (see flash errors)
       When I follow "Budget"
         And I follow "Health Functions"
@@ -75,7 +76,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I should be on the budget classification page for "Activity"
         And the "mtef1" field should contain "1,234,567.00"
         And I should see "We're sorry, when we added up your Budget by Health Functions classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Budget by Health Functions classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
-
+		@wip
     Scenario Outline: enter percentage for an activity budget classification
       When I follow "Budget"
         And I follow "Health Functions"
@@ -92,7 +93,7 @@ Feature: Reporter can enter a code breakdown for each activity
           | 50.1   | 50.1    |
           | 95.6   | 95.6    |
 
-
+		@wip
     Scenario: enter expenditure for an activity
       When I follow "Past Expenditure"
         And I follow "Health Functions"
@@ -101,7 +102,7 @@ Feature: Reporter can enter a code breakdown for each activity
         Then I should not see "Activity classification was successfully updated."
         And the "mtef1" field should contain "1,234,567.00"
 
-
+		@wip
     Scenario: Use budget by district for expenditure by district
       Given a location exists with short_display: "Location1"
         And the location is one of the activity's locations
@@ -116,7 +117,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Past Expenditure"
         And I follow "Locations"
       Then the "Location1" field should contain "1,481,480.40"
-
+		@wip
     Scenario: Use budget by cost categorization for expenditure by cost categorization
       When I follow "Budget"
         And I follow "Inputs"
@@ -129,7 +130,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I follow "Past Expenditure"
         And I follow "Inputs"
       Then the "cost_category1" field should contain "1,481,480.40"
-
+		@wip
     Scenario: Use budget by service level for expenditure by service level
       When I follow "Budget"
         And I follow "Service Levels"
@@ -141,7 +142,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Click here to copy the Budget splits below to the Past Expenditure Service Levels tab"
       Then the "service_level1" field should contain "1,481,480.40"
 
-
+		@wip
     Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)
       When I follow "Budget"
         And I follow "Health Functions"
@@ -171,7 +172,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(2)" should contain "600,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"
-
+		@wip
     Scenario: Use budget by coding for expenditure by coding (deep coding in same root omitting the parents, using percentages)
       When I press "Save & Classify >"
         And I follow "Budget"

@@ -97,8 +97,7 @@ class OtherCostsController < Reporter::BaseController
       end
 
       if params[:commit] == "Save & Classify >"
-        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
-        redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type)
+        redirect_to activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend')
       else
         redirect_to response_projects_path(@other_cost.project.response)
       end

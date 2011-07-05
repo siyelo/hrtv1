@@ -18,14 +18,14 @@ Feature: Reporter can derive classifications from sub implementers
       And a activity exists with name: "Activity", budget: "100", spend: "100", provider: the ngo, data_response: the data_response, project: the project
       And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, budget: "55", spend: "55"
 
-      And a reporter exists with username: "reporter", organization: the ngo, current_data_response: the data_response
-      And I am signed in as "reporter"
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the ngo, current_data_response: the data_response
+      And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
-      And I follow "Projects"
+      And I follow "Workplan"
       And I follow "activity_description"
 
 
-
+		@wip
     Scenario: Use budget classifications derived from sub implementers
       When I press "Save & Classify >"
         And I follow "Budget"
@@ -34,7 +34,7 @@ Feature: Reporter can derive classifications from sub implementers
         And I follow "Derive classification"
       Then the "Location1" field should contain "55.00"
 
-
+		@wip
     Scenario: Use past expenditure classifications derived from sub implementers
       When I press "Save & Classify >"
         And I follow "Current Expenditure"

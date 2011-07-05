@@ -28,21 +28,19 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false
 
-
-  - if @response.request.budget?
-    - if @response.request.budget_by_quarter?
-      %li.last
-        %h3 Current Budget
-        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
-        %ul.dashboard_section
-          %li.amounts.last
-            %label== Quarterly budget
-            %ul
-              = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
-              = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
-              = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
+  - if @response.request.budget_by_quarter?
+    %li.last
+      %h3 Current Budget
+      %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
+      %ul.dashboard_section
+        %li.amounts.last
+          %label== Quarterly budget
+          %ul
+            = f.input :budget_q4_prev, :label => "Q4 #{budget_fiscal_year_prev}", :required => false
+            = f.input :budget_q1     , :label => "Q1 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q2     , :label => "Q2 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q3     , :label => "Q3 #{budget_fiscal_year}", :required => false
+            = f.input :budget_q4     , :label => "Q4 #{budget_fiscal_year}", :required => false
 
     - unless @response.request.no_long_term_budgets?
       %li.last

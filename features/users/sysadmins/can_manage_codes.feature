@@ -5,8 +5,8 @@ Feature: Admin can manage codes
 
   Background:
     Given an organization exists with name: "organization1"
-      And a sysadmin exists with username: "admin"
-      And I am signed in as "admin"
+      And a sysadmin exists with email: "admin@hrtapp.com"
+      And I am signed in as "admin@hrtapp.com"
 
 
 

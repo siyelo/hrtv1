@@ -3,6 +3,10 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
+  Background:
+    Given an organization exists with name: "admin_org"
+      And a data_request exists with title: "dr1", organization: the organization
+
   Scenario: Login with invalid data - see flash message not AR errors
     Given a reporter exists
     When I go to the login page

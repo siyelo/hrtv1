@@ -234,7 +234,6 @@ end
 Then /^I should see the main nav tabs$/ do
   steps %Q{
     Then I should see "Workplan" within "div#main-nav"
-    Then I should see "Responses" within "div#main-nav"
     Then I should see "Reports" within "div#main-nav"
     Then I should see "Settings" within "div#main-nav"
   }

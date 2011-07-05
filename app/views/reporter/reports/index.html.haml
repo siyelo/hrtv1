@@ -8,9 +8,9 @@
     Data Responses
   .dashboard_section
     %ul.admin_reports
-      - if current_user.current_data_response
+      - if current_user.current_response
         %li
-          - link_to review_response_path(current_user.current_data_response), :class => "drill_down target" do
+          - link_to review_response_path(current_user.current_response), :class => "drill_down target" do
             Review My Response
             %span.hint Interactive report of your current data response
 

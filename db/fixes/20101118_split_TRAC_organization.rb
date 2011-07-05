@@ -15,7 +15,7 @@ def move_users(from_org, to_org, emails, dr)
     user = users.first
     raise "user is not part of source org" unless user.organization == from_org
     user.organization = to_org
-    user.current_data_response = dr
+    user.current_response = dr
     user.save!
     puts "  moved user: #{e}"
   end

@@ -2,7 +2,7 @@ class OrganizationsController < Reporter::BaseController
 
   def edit
     @organization = current_user.organization
-    current_user.current_data_response = @organization.data_responses.first
+    current_user.current_response = @organization.data_responses.first
     current_user.save
   end
 

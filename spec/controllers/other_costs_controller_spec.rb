@@ -6,7 +6,7 @@ describe OtherCostsController do
       @data_request = Factory.create(:data_request)
       @organization = Factory.create(:organization)
       @user = Factory.create(:reporter, :organization => @organization)
-      @data_response = @user.current_data_response
+      @data_response = @user.current_response
       @project = Factory.create(:project, :data_response => @data_response)
       login @user
     end

@@ -25,14 +25,14 @@ Feature: Reporter can manage projects
     And an organization "organization4" exists with name: "organization4"
     And a data_response "data_response3" exists with data_request: data_request "request_no_quarters", organization: organization "organization4"
     And a project "Project9" exists with name: "Project9", data_response: data_response "data_response3"
-    And a reporter exists with email: "reporter2@hrtapp.com", organization: organization "organization4", current_data_response: the data_response  	
+    And a reporter exists with email: "reporter2@hrtapp.com", organization: organization "organization4", current_response: the data_response
     And I follow "Sign Out"
     And I am signed in as "reporter2@hrtapp.com"
     And I follow "Workplan"
     And I follow "Project9"
     Then I should not see "Quarterly budget"
 
-  @javascript 
+  @javascript
   Scenario: Reporter can CRUD projects
     When I follow "Add project"
       And I fill in "Name" with "Project1"
@@ -45,12 +45,12 @@ Feature: Reporter can manage projects
     And I fill in "Description" with "Project2 description"
     And I press "Update Project"
    Then I should see "Project was successfully updated"
-   
+
    When I follow "Project2"
      And I follow "Delete this Project"
 		 And I confirm the popup dialog
    Then I should see "Project was successfully destroyed"
-  
+
   @wip
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Create Project"
@@ -126,7 +126,7 @@ Feature: Reporter can manage projects
     And I press "Create Comment"
    Then I should see "Comment title"
     And I should see "Comment body"
-  
+
   Scenario: A reporter can create comments for an activity and see comment errors
    Given a project exists with name: "project1", data_response: data_response "data_response"
    When I follow "Workplan"
@@ -199,8 +199,8 @@ Feature: Reporter can manage projects
     And I press "Update Project"
     And I follow "Project1"
    Then the "Budget" field within ".fields" should contain "7778"
-  
-  @wip 
+
+  @wip
   Scenario: A Reporter can bulk link their projects to those from other organizations
    Then I should see "Project5"
    Given I follow "Link Projects"
@@ -208,7 +208,7 @@ Feature: Reporter can manage projects
    Then select "Project6" from "funding_flows_3"
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
-  
+
   @wip
   Scenario: A Reporter can bulk unlink their projects to those from other organizations
     Then I should see "Project5"
@@ -217,7 +217,7 @@ Feature: Reporter can manage projects
     Then select "" from "funding_flows_3"
     And I press "Update"
     Then I should see "Your projects have been successfully updated"
-  
+
   @wip
   Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
    Then I should see "Project5"

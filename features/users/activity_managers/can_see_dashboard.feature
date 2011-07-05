@@ -4,15 +4,16 @@ Feature: Activity Manager can see dashboard
   I want to be able to see a dashboard for relevant activities
 
   Background:
-
+    Given an organization exists with name: "admin_org"
+      And a data_request exists with title: "dr1", organization: the organization
 
 
     Scenario: "See data requests"
       Given an organization exists with name: "Test Org"
-        And an activity_manager exists with email: "Frank@hrtapp.com", organization: the organization
-        And I am signed in as "Frank@hrtapp.com"
+        And an activity_manager exists with email: "frank@hrtapp.com", organization: the organization
+        And I am signed in as "frank@hrtapp.com"
       When I go to the reporter dashboard page
-      Then I should see "Data Requests"
+      Then I should see "Dashboard"
 
 
     @wip

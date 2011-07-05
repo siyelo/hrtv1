@@ -81,7 +81,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:template => :get}
   end
 
-  map.resources :organizations
+  map.resources :organizations, :only => [:edit, :update]
 
   # REPORTER USER
   map.namespace :reporter do |reporter|

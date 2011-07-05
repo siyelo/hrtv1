@@ -116,6 +116,24 @@ class ApplicationController < ActionController::Base
       load_response
     end
 
+    def find_organization(org_id)
+      if current_user.admin?
+        @organization = Organization.find(org_id)
+      elsif current_user.activity_manager?
+        # scope by the organizations the AM has access to
+        @organization = Organization.find(org_id,
+          :conditions => ["organization_id in (?)",
+                         [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
+      else # reporter
+        @organization = current_user.organization.find(org_id)
+      end
+      @organization
+    end
+
+    def load_organization_from_id
+      find_organization(params[:id])
+    end
+
     def find_project(project_id)
       if current_user.admin?
         Project.find(project_id)

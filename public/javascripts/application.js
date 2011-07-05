@@ -139,7 +139,7 @@ var close_activity_funding_sources_fields = function (fields) {
     preview_block.append(build_activity_funding_source_row(edit_block))
     preview_block.show();
 
-    manage_block.find('.edit').remove();
+    manage_block.find('.edit_button').remove();
     manage_block.prepend(
       $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
     )
@@ -1502,7 +1502,7 @@ var activity_form = function () {
 
 
 
-  $('.edit').live('click', function (e) {
+  $('.edit_button').live('click', function (e) {
     e.preventDefault();
     var element = $(this).parents('.fields');
     var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));

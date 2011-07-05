@@ -1,4 +1,12 @@
 /* Nested model forms BEGIN */
+function inspect(obj)
+{
+        var str;
+        for(var i in obj)
+        str+=i+";\n"
+	//str+=i+"="+obj[i]+";\n"
+        alert(str);
+}
 
 function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
@@ -1561,7 +1569,8 @@ var admin_activities_edit = admin_activities_update = {
 var admin_users_new = admin_users_create = admin_users_edit = admin_users_update = {
   run: function () {
     var toggleMultiselect = function (element) {
-      if (element.val() && element.val().indexOf('activity_manager') > -1) {
+      var ac_selected = $('#user_roles option[value="activity_manager"]:selected').length > 0;
+      if (element.val() && ac_selected) {
         $(".organizations").show().css('visibility', 'visible');
       } else {
         $(".organizations").hide().css('visibility', 'hidden');

@@ -1,5 +1,5 @@
 %tr
-  %td.title= link_to response.data_request.title, edit_response_path(response), :class => "title"
+  %td.title= link_to response.data_request.title, edit_organization_path(response), :class => "title"
   %td= response.data_request.organization.name
   %td= response.data_request.due_date.strftime('%d %b %y')
   %td= response.ready_to_submit? ? 'Yes' : 'No'

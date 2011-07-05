@@ -25,8 +25,8 @@
       %tr.head
         %th Project
         %th{:colspan => 2} Funder
-        %th.amount Past Expenditure
-        %th.amount Current Budget
+        %th.amount= "Funds Received #{link_to '[?]', '#', :title => "The portion of your expenditure which came from each funder in the past fiscal year", :class => "tooltip"}"
+        %th.amount= "Expected Funding #{link_to '[?]', '#', :title => "The portion of your current budget which will come from each funder in the current fiscal year", :class => "tooltip"}"
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project

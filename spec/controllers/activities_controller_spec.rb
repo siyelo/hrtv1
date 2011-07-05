@@ -192,59 +192,8 @@ describe ActivitiesController do
   end
 
   describe "Redirects to budget or past expenditure depending on datarequest" do
-     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest past expenditure is false and budget is true" do
-       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingBudget")
-     end
-
-     it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest past expenditure is false and budget is true but the activity budget is greater than project budget" do
-       @data_request = Factory.create(:data_request, :spend => false, :budget => true)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id,
-         :budget => 11000
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       flash[:notice].should == "Activity was successfully created"
-       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingBudget")
-     end
-
-     it "redircts to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is false" do
-       @data_request = Factory.create(:data_request, :spend => true, :budget => false)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory.create(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
-     end
-
-     it "redircts to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is true" do
-       @data_request = Factory.create(:data_request, :spend => true, :budget => true)
+     it "redircts to the past expenditure classifications page Save & Go to Classify" do
+       @data_request = Factory.create(:data_request)
        @organization = Factory.create(:organization)
        @user = Factory.create(:reporter, :organization => @organization)
        @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)

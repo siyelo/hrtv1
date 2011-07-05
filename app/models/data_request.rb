@@ -23,18 +23,6 @@ class DataRequest < ActiveRecord::Base
     return 'In progress'
   end
 
-  def spend_and_budget?
-    spend? && budget?
-  end
-
-  def only_spend?
-    spend? && !budget?
-  end
-
-  def only_budget?
-    budget? && !spend?
-  end
-
   def no_long_term_budgets?
     !year_2 && !year_3 && !year_4 && !year_5
   end

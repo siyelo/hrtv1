@@ -370,11 +370,11 @@ class DataResponse < ActiveRecord::Base
   end
   
   def uncoded_budgets
-    self.activities.select{ |a| !a.budget_classified? && self.request.budget? }
+    self.activities.select{ |a| !a.budget_classified? }
   end
   
   def uncoded_spends
-    self.activities.select{ |a| !a.spend_classified? && self.request.spend? }
+    self.activities.select{ |a| !a.spend_classified? }
   end
 
   def coded_activities
@@ -428,9 +428,7 @@ class DataResponse < ActiveRecord::Base
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
     def reject_uncoded(activities)
-      activities.select{ |a|
-        (!a.budget_classified? && self.request.budget?) ||
-        (!a.spend_classified?  && self.request.spend?)}
+      activities.select{ |a| (!a.budget_classified?) || (!a.spend_classified?)}
     end
     
     # Find all complete Activities
@@ -444,9 +442,7 @@ class DataResponse < ActiveRecord::Base
 
     def select_without_amounts(items)
       items.select do |a|
-        (!a.spend_entered? && !a.budget_entered? && request.spend_and_budget?) ||
-        (!a.spend_entered? && request.only_spend?) ||
-        (!a.budget_entered? && request.only_budget?)
+        (!a.spend_entered? && !a.budget_entered?)
       end
     end
 end

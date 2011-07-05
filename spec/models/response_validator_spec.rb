@@ -3,59 +3,10 @@ require File.dirname(__FILE__) + '/../helpers/response_validation_helper'
 
 describe DataResponse do #validations
   before :each do
-    @request  = Factory.create(:data_request, :title => 'Data Request 1',
-      :budget => true, :spend => true)
+    @request  = Factory.create(:data_request, :title => 'Data Request 1')
     @response = Factory.create(:data_response, :data_request => @request)
     @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
     @response.reload
-  end
-
-  describe "Request for only past expenditure" do
-    before :each do
-      @request.budget = false; @request.save
-      @activity   = Factory(:activity_w_spend_coding, :data_response => @response, :project => @project)
-      @other_cost = Factory(:other_cost_w_spend_coding, :data_response => @response, :project => @project)
-    end
-
-    it_should_behave_like "project past expenditure checker"
-
-    it "fails if project past expenditure is not entered and no quarter past expenditures are" do
-      @project.spend = nil; @project.save
-      @response.project_amounts_entered?.should == false
-    end
-
-    it "is ok if project budget is not entered and no quarter budgets are" do
-      @project.budget = nil; @project.save
-      @response.project_amounts_entered?.should == true
-    end
-
-    it_should_behave_like "activity past expenditure checker"
-    it_should_behave_like "coded Activities checker"
-    it_should_behave_like "coded OtherCosts checker"
-  end
-
-  describe "Request for only budget" do
-    before :each do
-      @request.spend = false; @request.save
-      @activity   = Factory(:activity_w_budget_coding, :data_response => @response, :project => @project)
-      @other_cost = Factory(:other_cost_w_budget_coding, :data_response => @response, :project => @project)
-    end
-
-    it_should_behave_like "project budget checker"
-
-    it "fails if project budget is not entered and no quarter budgets are" do
-      @project.budget = nil; @project.save
-      @response.project_amounts_entered?.should == false
-    end
-
-    it "is ok if project past expenditure is not entered and no quarter past expenditures are" do
-      @project.spend = nil; @project.save
-      @response.project_amounts_entered?.should == true
-    end
-
-    it_should_behave_like "activity budget checker"
-    it_should_behave_like "coded Activities checker"
-    it_should_behave_like "coded OtherCosts checker"
   end
 
   describe "Requesting both budget and past expenditure" do

@@ -60,23 +60,28 @@ class ActivitiesController < Reporter::BaseController
     end
   end
 
-  # called only via Ajax
-  def approve
-    if current_user.admin? || current_user.activity_manager?
+  # call only via Ajax
+  def sysadmin_approve
+    if current_user.admin?
       @activity = @response.activities.find(params[:id])
-      @activity.update_attributes({:approved => params[:checked]})
-      render :nothing => true
+      unless @activity.approved?
+        @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
+        @activity.save(false)
+      end
+      render :json => {:status => 'success'}
     else
+      render :json => {:status => 'access denied'}
       raise AccessDenied
     end
   end
 
-  # called only via Ajax
-  def am_approve
+  # call only via Ajax
+  def activity_manager_approve
     if current_user.admin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
       unless @activity.am_approved?
-        @activity.attributes = {:user_id => current_user.id, :am_approved => params[:approve], :am_approved_date => Time.now} 
+        @activity.attributes = {:user_id => current_user.id, :am_approved => params[:approve],
+          :am_approved_date => Time.now}
         @activity.save(false)
       end
       render :json => {:status => 'success'}

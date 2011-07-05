@@ -327,7 +327,7 @@ describe ActivitiesController do
        login @user
      end
      it "should approve the project if the am_approved field is not set" do
-       put :am_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
+       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
        @activity.reload
        @activity.user.should == @user
        @activity.am_approved.should be_true

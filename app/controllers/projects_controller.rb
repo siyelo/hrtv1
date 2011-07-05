@@ -92,20 +92,6 @@ class ProjectsController < Reporter::BaseController
     end
   end
 
-
-  # called only via Ajax
-  def am_approve
-    if current_user.admin? || current_user.activity_manager?
-      project = @response.projects.find(params[:id])
-      project.update_attributes({:user_id => current_user.id, :am_approved => params[:approve], :am_approved_date => Time.now}) unless project.am_approved?
-      render :json => {:status => 'success'}
-    else
-      render :json => {:status => 'access denied'}
-      raise AccessDenied
-    end
-  end
-
-
   protected
 
     def sort_column

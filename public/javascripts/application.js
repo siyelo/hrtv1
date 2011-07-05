@@ -4,7 +4,7 @@ function inspect(obj)
         var str;
         for(var i in obj)
         str+=i+";\n"
-	//str+=i+"="+obj[i]+";\n"
+  //str+=i+"="+obj[i]+";\n"
         alert(str);
 }
 
@@ -827,15 +827,6 @@ var policy_maker_data_responses_show = {
   }
 };
 
-var approve_activity_checkbox = function () {
-  $(".approve_activity").click(function (e) {
-    activity_id = $(this).attr('data-id');
-    response_id = $(this).attr('data-response_id');
-    var url =  '/responses/' + response_id + '/activities/' + activity_id + '/approve'
-    $.post(url, {checked: $(this).is(':checked'), "_method": "put"});
-  })
-};
-
 var code_assignments_show = {
   run: function () {
 
@@ -1436,6 +1427,30 @@ var activities_bulk_create = {
   }
 }
 
+// Post approval for an activity
+//
+// approval types;
+//   'activity_manager_approve'
+//   'sysadmin_approve'
+// success text
+//
+//
+var approveActivity = function (element, approval_type, success_text) {
+   var activity_id = element.attr('activity-id');
+   var response_id = element.attr('response-id');
+
+   element.find(".ajax-loader").show();
+   var url = "/responses/" + response_id + "/activities/" + activity_id + "/" + approval_type
+   $.post(url, {approve: true, "_method": "put"}, function (data) {
+     element.find(".ajax-loader").hide();
+     if (data.status == 'success') {
+       element.html('<span>' + success_text + '</span>');
+     }
+   })
+};
+
+
+
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
@@ -1543,18 +1558,12 @@ var activity_form = function () {
 
   $(".js_am_approve").click(function (e) {
     e.preventDefault();
-    var activity_id = $(this).attr('activity-id');
-    var response_id = $(this).attr('response-id');
-    var element = $(this);
+    approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
+  })
 
-    element.find(".ajax-loader").show();
-    var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
-    $.post(url, {approve: true, "_method": "put"}, function (data) {
-      element.find(".ajax-loader").hide();
-      if (data.status == 'success') {
-        element.html('<span>Budget Approved</span>');
-      }
-    })
+  $(".js_sysadmin_approve").click(function (e) {
+    e.preventDefault();
+    approveActivity($(this), 'sysadmin_approve', 'Approved by Admin');
   })
 
   commentsInit();

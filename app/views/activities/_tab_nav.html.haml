@@ -4,7 +4,7 @@
     - link_to "#comments" do
       %span
         View Comments
-  - if current_user.admin? || current_user.activity_manager?
+  - if (current_user.admin? || current_user.activity_manager?) && activity.valid?
     %li
       -if activity.am_approved
         - link_to "#" do

@@ -17,4 +17,4 @@
           = link_to 'Reports', current_user.admin? ? admin_reports_path : reporter_reports_path
 
         %li{:class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}
-          = link_to 'Settings', edit_organization_url(:current)
+          = link_to 'Settings', edit_organization_url(current_or_last_response.organization)

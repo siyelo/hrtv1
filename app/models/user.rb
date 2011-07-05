@@ -75,8 +75,8 @@ class User < ActiveRecord::Base
 
   def sysadmin?
     role?('admin')
-  end  
-  
+  end
+
   # deprecated - use sysadmin?
   def admin?
     sysadmin?
@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   end
 
   def current_request
-    @current_request ||= self.current_response.try(:request)
+    @current_request ||= self.current_response.request
   end
 
   def current_request_name
@@ -134,6 +134,10 @@ class User < ActiveRecord::Base
   def set_current_response_to_latest!
     self.current_response = self.latest_response
     self.save!
+  end
+
+  def current_organization
+    @current_organization ||= self.current_response.organization
   end
 
   private

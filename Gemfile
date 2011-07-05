@@ -16,10 +16,11 @@ gem 'i18n', '= 0.4.2'
 gem 'inherited_resources', "=1.0.6"
 gem 'money', "~> 3.5"
 gem "paperclip", "~> 2.3"
-gem 'rails', '2.3.8'
+gem 'rails', '2.3.12'
 gem 'sass'
 gem 'settingslogic'
 gem 'validates_timeliness', '~> 2.3'
+gem 'rdoc'
 
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"

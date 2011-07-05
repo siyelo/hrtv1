@@ -1,4 +1,3 @@
-
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -44,7 +43,6 @@ Feature: Reporter can manage projects
    When I follow "Project1"
     And I fill in "Name" with "Project2"
     And I fill in "Description" with "Project2 description"
-    # And I uncheck "Location1"
     And I press "Update Project"
    Then I should see "Project was successfully updated"
    
@@ -201,21 +199,6 @@ Feature: Reporter can manage projects
     And I press "Update Project"
     And I follow "Project1"
    Then the "Budget" field within ".fields" should contain "7778"
-  
-  Scenario: If the data_request past expenditure is not checked, past expenditure should not show up in the project screen
-   Given I follow "Sign Out"
-    And an organization exists with name: "organization5"
-    And a data_request exists with title: "request2", spend: false, budget: true
-    And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
-    And a location exists with short_display: "Location1"
-    And a location exists with short_display: "Location2"
-    And I am signed in as "reporter2@hrtapp.com"
-    And I follow "request2"
-    And I follow "Workplan"
-   Then show me the page
-   Then I should not see "Past Expenditure" within ".workplan"
-    And I should see "Current Budget" within ".workplan"
   
   @wip 
   Scenario: A Reporter can bulk link their projects to those from other organizations

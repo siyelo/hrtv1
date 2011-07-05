@@ -40,11 +40,6 @@ Feature: Reporter can manage other costs
       And I press "Save"
     Then I should see "Othercost was successfully created"
 
-  Scenario: REFACTOR for #13853439: Reporter can create an other costs without dates
-    When I follow "Add other cost"
-      Then I should not see "Start date" 
-      And I should not see "End date" 
-
   Scenario: A reporter can create comments for an other cost
     Given an other_cost exists with project: the project, description: "other_cost1", data_response: the data_response
     When I follow "Projects"

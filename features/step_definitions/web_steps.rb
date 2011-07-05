@@ -41,6 +41,14 @@ When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field
   end
 end
 
+Then /^I fill in the activities budget field with "([^"]*)" and spend field with "([^"]*)" for that activity$/ do |budget, spend|
+  a = Activity.last
+  steps %Q{
+    Then I fill in "activities_#{a.id}budget" with "#{budget}"
+    Then I fill in "activities_#{a.id}spend" with "#{spend}"
+  }
+end
+
 When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
     fill_in(field, :with => value)

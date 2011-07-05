@@ -25,8 +25,7 @@ Feature: Reporter can manage activities
       When I follow "X"
       Then I should not see "activity1 description"
 
-
-    Scenario: a sysadmin can edit activity
+      Scenario: a sysadmin can edit activity
       When I follow "Activities"
         And I follow "Edit"
         And I fill in "Description" with "activity2 description"

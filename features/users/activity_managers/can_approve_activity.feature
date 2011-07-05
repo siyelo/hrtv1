@@ -15,11 +15,9 @@ Feature: Activity Manager can approve a code breakdown for each activity
       And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization, current_data_response: the data_response
       And I am signed in as "activity_manager@hrtapp.com"
       And I follow "data_request1"
-      And I follow "Projects"
+      And I follow "Workplan"
 
-
-
-    @javascript
+    @javascript @wip
     Scenario: Approve an Activity
       Given I follow "a1 description"
         And I follow "Budget"

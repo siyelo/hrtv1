@@ -26,8 +26,7 @@ Feature: Reporter can manage activities
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
         Then I should see "Workplan was successfully saved"
       When I follow "1ctivity1 description"
@@ -47,8 +46,7 @@ Feature: Reporter can manage activities
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
       When I follow "1ctivity1 description"
         And I fill in "Name" with "<name>"
@@ -71,8 +69,7 @@ Feature: Reporter can manage activities
       And I fill in "activity_description" with "1ctivity1 description"
       And I press "activity_submit"
       Then wait a few moments
-      And I fill in "activities_1spend" with "44"
-      And I fill in "activities_1budget" with "99"
+      And I fill in the activities budget field with "33" and spend field with "44" for that activity
       And I press "Save"
       And I follow "1ctivity1 description"
       And I select "project1" from "Project"
@@ -102,7 +99,7 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-
+       
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Import" within ".activities_upload_box"
@@ -170,8 +167,7 @@ Feature: Reporter can manage activities
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
         Then wait a few moments
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
         And I follow "1ctivity1 description"
       # check if by default reporter organization is selected
@@ -231,8 +227,8 @@ Feature: Reporter can manage activities
         And I fill in "activity_name" with "activity1"
         And I fill in "activity_description" with "1ctivity1 description"
         And I press "activity_submit"
-        And I fill in "activities_1spend" with "44"
-        And I fill in "activities_1budget" with "99"
+        Then wait a few moments
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
         And I press "Save"
 
       When I follow "1ctivity1 description"

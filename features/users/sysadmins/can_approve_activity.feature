@@ -25,7 +25,7 @@ Feature: SysAdmin can approve a code breakdown for each activity
 
 
     # NB: this scenario will only work for 1 activity, 1 classification
-    @javascript
+    @javascript 
     Scenario: Approve a budget coding breakdown
      When I go to the admin review data response page for organization "WHO", request "Req1"
       And I click element "#project_details"

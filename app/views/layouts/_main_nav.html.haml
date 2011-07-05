@@ -1,3 +1,4 @@
+- is_admin_controller = (controller.class == DashboardController || namespace(controller.class) == "Admin")
 #main-nav
   .wrapper
     %ul
@@ -5,7 +6,7 @@
         %a{:href => dashboard_path}
           %span Home
 
-      - if current_user.admin? && (namespace(controller.class) == "Admin" || params[:controller] == 'dashboard')
+      - if current_user.admin? && is_admin_controller
         - %w(organizations reports users requests codes).each do |tab|
           = build_admin_nav_tab(tab)
       - else

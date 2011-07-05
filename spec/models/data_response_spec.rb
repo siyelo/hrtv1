@@ -18,25 +18,6 @@ describe DataResponse do
   describe "validations" do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
-    it { should validate_presence_of(:currency) }
-    it { should validate_presence_of(:contact_name) }
-    it { should validate_presence_of(:contact_position) }
-    it { should validate_presence_of(:contact_phone_number) }
-    it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}
-    it { should validate_presence_of(:contact_office_location)}
-
-    it "is not valid when currency is not included in the list" do
-      response = Factory.build(:data_response, :currency => 'INVALID')
-      response.save
-      response.errors.on(:currency).should_not be_blank
-    end
-
-    it "is valid when currency is included in the list" do
-      response = Factory.build(:data_response, :currency => 'USD')
-      response.save
-      response.errors.on(:currency).should be_blank
-    end
   end
 
   describe "custom date validations" do

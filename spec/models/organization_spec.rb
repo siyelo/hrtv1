@@ -2,20 +2,39 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:organization) }
     it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
+    it { should validate_presence_of(:currency) }
+    it { should validate_presence_of(:contact_name) }
+    it { should validate_presence_of(:contact_position) }
+    it { should validate_presence_of(:contact_phone_number) }
+    it { should validate_presence_of(:contact_main_office_phone_number) }
+    it { should validate_presence_of(:contact_office_location)}
+    it { should validate_presence_of(:contact_office_location)}
+
+    it "is not valid when currency is not included in the list" do
+      response = Factory.build(:data_response, :currency => 'INVALID')
+      response.save
+      response.errors.on(:currency).should_not be_blank
+    end
+
+    it "is valid when currency is included in the list" do
+      response = Factory.build(:data_response, :currency => 'USD')
+      response.save
+      response.errors.on(:currency).should be_blank
+    end
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_and_belong_to_many(:activities) }
     it { should have_and_belong_to_many(:locations) }
     it { should have_many(:users) }
@@ -39,6 +58,21 @@ describe Organization do
                      :organization => organization)
 
       organization.fulfilled_data_requests.should == [data_request1]
+    end
+  end
+
+  describe "Callbacks" do
+    # after_create :create_data_responses
+    it "creates data_responsesfor each data_request after organization is created" do
+      org0 = Factory(:organization, :name => "Requester Organization")
+      data_request1 = Factory(:data_request, :organization => org0)
+      data_request2 = Factory(:data_request, :organization => org0)
+
+      organizations = Factory(:organization, :name => "Responder Organization")
+
+      data_requests = organizations.data_responses.map(&:data_request)
+      data_requests.should include(data_request1)
+      data_requests.should include(data_request2)
     end
   end
 
@@ -315,9 +349,9 @@ describe Organization do
       @org1 = Factory.create(:organization)
       @org2 = Factory.create(:organization)
 
-      @response1 = Factory.create(:data_response, :data_request => @request, 
+      @response1 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org1)
-      @response2 = Factory.create(:data_response, :data_request => @request, 
+      @response2 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org2)
 
 

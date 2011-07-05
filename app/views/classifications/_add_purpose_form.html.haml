@@ -5,5 +5,6 @@
       -# this input gets replaced by mcdropdown
       %li.mcdropdown_wrap
         %input{:type => 'text', :class => "purpose_search"}
-      %li= link_to "Add #{coding_name}", "#", :class => 'js_add_entry create_button', :tabindex => 0
-      %li= link_to "Cancel", "#", :class => "cancel_add_purpose row_cancel", :tabindex => 0
+      %li
+        = link_to "Add #{coding_name}", "#", :class => 'js_add_entry create_button', :tabindex => 0
+        = link_to "Cancel", "#", :class => "cancel_add_purpose row_cancel", :tabindex => 0

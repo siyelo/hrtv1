@@ -1797,7 +1797,7 @@ var getTotal = function (amounts) {
 };
 
 var roundAmount = function (amount) {
-  return amount ? Math.round(amount * 1000) / 1000 : 0;
+  return amount ? Math.round(amount * 10) / 10 : 0;
 };
 
 var getInputTotal = function (elements) {

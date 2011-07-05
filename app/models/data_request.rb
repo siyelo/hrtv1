@@ -18,6 +18,9 @@ class DataRequest < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 
+  ### Callbacks
+  after_create :create_data_responses
+
   def status
     return 'Final review' if final_review?
     return 'In progress'

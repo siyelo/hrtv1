@@ -7,7 +7,7 @@ Feature: Reporter can manage activities
     Given an organization exists with name: "organization1"
     And a data_request exists with title: "data_request1"
     And an organization "my_organization" exists with name: "organization2"
-    And a data_response exists with data_request: the data_request, organization: organization "my_organization"
+    And a data_response should exist with data_request: the data_request, organization: organization "my_organization"
     And a reporter exists with email: "pink.panther@hrtapp.com", organization: organization "my_organization"
     And a project exists with name: "project1", budget: "20000", data_response: the data_response
     And a location exists with short_display: "Location1"
@@ -15,8 +15,6 @@ Feature: Reporter can manage activities
     And a location exists with short_display: "Location2"
     And the location is one of the project's locations
     And I am signed in as "pink.panther@hrtapp.com"
-    And I follow "data_request1"
-    And I press "Update Response"
     And I follow "Workplan"
 
     @javascript
@@ -99,7 +97,7 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-       
+
     Scenario: Reporter can upload activities
       When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
         And I press "Import" within ".activities_upload_box"
@@ -260,14 +258,14 @@ Feature: Reporter can manage activities
       Then I should see "Save" button
       And I should not see "Save & Classify >" button
 
-		@wip	
+		@wip
     Scenario: Reporter can download Implementers CSV template
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       When I follow "Projects"
         And I follow "activity1"
         And I follow "Get Template" within "#sub_activities_upload_box"
       Then I should see "Implementer,Current Expenditure,Budget"
-    
+
 
     Scenario: Reporter can see message when attached malformed CSV file for implementers
       Given an activity exists with description: "activity1", project: the project, data_response: the data_response
@@ -285,7 +283,7 @@ Feature: Reporter can manage activities
         And I press "Import" within "#sub_activities_upload_box"
         Then I should see "Please select a file to upload implementers."
 
-		@wip			
+		@wip
 	  Scenario: Reporter can upload and change implementers
 	    Given an activity exists with description: "activity1", project: the project, data_response: the data_response
 	    When I follow "Projects"

@@ -77,7 +77,7 @@ end
 #      k.update_all "data_response_id = #{chosen_data_response}", ["data_response_id = ?", o.data_responses.first]
 #    end
 #    User.update_all "organization_id = #{o.id}", ["organization_id = ?", chosen_org.id]
-#    # TODO: update current_data_response to the new one
+#    # TODO: update current_response to the new one
 #   end
 #end
 

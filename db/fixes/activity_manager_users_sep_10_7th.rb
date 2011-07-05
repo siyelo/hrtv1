@@ -39,7 +39,7 @@ FasterCSV.foreach("db/fixes/activity_manager_users_sep_10_7th.csv", :headers => 
                :organization => org,
                :roles => ['activity_manager'])
    dr                          = org.data_responses.first if org.data_responses
-   user.current_data_response = dr
+   user.current_response = dr
    user.save!
   end
 

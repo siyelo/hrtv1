@@ -23,29 +23,12 @@ class ResponsesController < ApplicationController
     @response.organization = current_user.organization
 
     if @response.save
-      current_user.current_data_response = @response
+      current_user.current_response = @response
       current_user.save
       flash[:notice] = "Your response was successfully created. You can edit your preferences on the Settings tab."
       redirect_to response_workplans_path(@response)
     else
       render :action => :new
-    end
-  end
-
-  def edit
-    @response = find_response(params[:id])
-    current_user.current_data_response = @response
-    current_user.save
-  end
-
-  def update
-    @response = find_response(params[:id])
-    @response.update_attributes(params[:data_response])
-    if @response.save
-      flash[:notice] = "Successfully updated settings."
-      redirect_to reporter_dashboard_url
-    else
-      render :action => :edit
     end
   end
 

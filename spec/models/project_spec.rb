@@ -348,7 +348,9 @@ describe Project do
 
   describe 'Currency override default' do
      before :each do
-       @project       = Factory(:project, :data_response => Factory(:data_response, :currency => "RWF"))
+       organization   = Factory(:organization, :currency => "RWF")
+       @project       = Factory(:project, :data_response => Factory(:data_response,
+                                                                    :organization => organization))
      end
      it "should return the Data Response currency if no currency overridden" do
        @project.currency.should == 'RWF'
@@ -358,7 +360,10 @@ describe Project do
      end
 
     it "should not return blank" do
-      @project1       = Factory.build(:project, :data_response => Factory(:data_response, :currency => "GBP"))
+      data_response   = Factory(:data_response,
+                                :organization => Factory(:organization, :currency => "GBP"))
+      @project1       = Factory.build(:project,
+                                      :data_response => data_response)
       @project1.save
       @project1.currency.should == "GBP"
     end
@@ -370,7 +375,8 @@ describe Project do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
-      @response      = Factory(:data_response, :currency => 'RWF')
+      @response      = Factory(:data_response,
+                               :organization => Factory.create(:organization, :currency => 'RWF'))
       @project       = Factory(:project,
                                 :data_response => @response,
                                 :currency => nil)

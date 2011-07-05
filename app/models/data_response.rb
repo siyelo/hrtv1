@@ -1,18 +1,10 @@
-require 'validators'
-
 class DataResponse < ActiveRecord::Base
-  include ActsAsDateChecker
-  include CurrencyCacheHelpers
   include NumberHelper
 
   ### Attributes
-
-  attr_accessible :fiscal_year_end_date, :fiscal_year_start_date, :currency, :data_request_id,
-                  :contact_name, :contact_name, :contact_position, :contact_phone_number,
-                  :contact_main_office_phone_number, :contact_office_location
+  attr_accessible :data_request_id
 
   ### Associations
-
   belongs_to :organization
   belongs_to :data_request
   has_many :activities, :dependent => :destroy
@@ -31,13 +23,14 @@ class DataResponse < ActiveRecord::Base
   has_many :code_assignments, :through => :activities
 
   ### Validations
-
   validates_presence_of :data_request_id
   validates_presence_of :organization_id
-  validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location, :contact_phone_number,
-                        :contact_main_office_phone_number
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
+
+  ### Delegate
+  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
+    :contact_name, :contact_position, :contact_phone_number,
+    :contact_main_office_phone_number, :contact_office_location,
+    :quarters_months, :to => :organization
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -48,9 +41,6 @@ class DataResponse < ActiveRecord::Base
   ## some validation method and defining those as "magic nicely named" methods
   ## using metaprogramming
   @@validation_methods = []
-
-  ### Callbacks
-  after_save :update_cached_currency_amounts
 
   def self.in_progress
     self.find :all,
@@ -368,11 +358,11 @@ class DataResponse < ActiveRecord::Base
   def uncoded_activities
     reject_uncoded(self.normal_activities)
   end
-  
+
   def uncoded_budgets
     self.activities.select{ |a| !a.budget_classified? }
   end
-  
+
   def uncoded_spends
     self.activities.select{ |a| !a.spend_classified? }
   end
@@ -422,7 +412,7 @@ class DataResponse < ActiveRecord::Base
   def implementers_total_budget(quarters)
     @projects.map{ |p| p.sub_activities_total_by_type('budget', quarters, currency)}.sum
   end
-  
+
 
   private
     # Find all incomplete Activities, ignoring missing codings if the
@@ -430,7 +420,7 @@ class DataResponse < ActiveRecord::Base
     def reject_uncoded(activities)
       activities.select{ |a| (!a.budget_classified?) || (!a.spend_classified?)}
     end
-    
+
     # Find all complete Activities
     def select_coded(activities)
       activities.select{ |a| a.classified? }

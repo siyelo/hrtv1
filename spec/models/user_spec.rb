@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }
     it { should allow_mass_assignment_of(:password) }
@@ -12,20 +12,41 @@ describe User do
     it { should allow_mass_assignment_of(:roles) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_many :comments }
     it { should have_many :data_responses }
     it { should belong_to :organization }
-    it { should belong_to :current_data_response }
+    it { should belong_to :current_response }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:reporter, :organization => Factory(:organization) ) }
     it { should be_valid }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_presence_of(:roles) }
     it { should validate_uniqueness_of(:email).case_insensitive }
+  end
+
+  describe "Callbacks" do
+    before :each do
+      @dr1 = Factory(:data_response)
+      @dr2 = Factory(:data_response)
+      @organization = Factory(:organization, :data_responses => [@dr1, @dr2])
+    end
+
+    it "assigns current_response to last data_response from the organization" do
+      user = Factory.build(:user, :organization => @organization, :current_response => nil)
+      user.save
+      user.current_response.should == @dr2
+    end
+
+    it "does not assign current_response if it already exists" do
+      dr   = Factory(:data_response)
+      user = Factory.build(:user, :organization => @organization, :current_response => dr)
+      user.save
+      user.current_response.should_not == @dr2
+    end
   end
 
   describe "roles= can be assigned" do

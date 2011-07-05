@@ -18,6 +18,9 @@ class DataRequest < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
 
+  ### Callbacks
+  after_create :create_data_responses
+
   def status
     return 'Final review' if final_review?
     return 'In progress'
@@ -33,6 +36,19 @@ class DataRequest < ActiveRecord::Base
     r << "Current Budget"
     r
   end
+
+  private
+    def create_data_responses
+      Organization.all.each do |organization|
+        dr = organization.data_responses.find(:first,
+          :conditions => {:data_request_id => self.id})
+        unless dr
+          dr = organization.data_responses.new
+          dr.data_request = self
+          dr.save!
+        end
+      end
+    end
 end
 
 

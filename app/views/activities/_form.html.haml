@@ -12,7 +12,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_data_response ? current_user.current_data_response.projects : [@activity.try(:project).try(:data_response).try(:projects)].flatten, :hint => "The Project this activity correlates to"
+      = f.input :project_id, :label => "Project", :as => :select, :collection => current_user.current_response ? current_user.current_response.projects : [@activity.try(:project).try(:data_response).try(:projects)].flatten, :hint => "The Project this activity correlates to"
 
       = f.input :name, :required => false, :hint => "The name of this Activity."
       = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Activity."

@@ -2,20 +2,45 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:organization) }
     it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
+    it { should validate_presence_of(:currency) }
+    it { should validate_presence_of(:contact_name) }
+    it { should validate_presence_of(:contact_position) }
+    it { should validate_presence_of(:contact_phone_number) }
+    it { should validate_presence_of(:contact_main_office_phone_number) }
+    it { should validate_presence_of(:contact_office_location)}
+    it { should validate_presence_of(:contact_office_location)}
+
+    it "is not valid when currency is not included in the list" do
+      organization = Factory.build(:organization, :currency => 'INVALID')
+      organization.save
+      organization.errors.on(:currency).should_not be_blank
+    end
+
+    it "is valid when currency is included in the list" do
+      organization = Factory.build(:organization, :currency => 'USD')
+      organization.save
+      organization.errors.on(:currency).should be_blank
+    end
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_and_belong_to_many(:activities) }
     it { should have_and_belong_to_many(:locations) }
     it { should have_many(:users) }
@@ -30,32 +55,20 @@ describe Organization do
     it { should have_many(:implementor_for) }
     it { should have_many(:provider_for) }
     it { should have_many(:comments) }
-
-    it "returns fulfilled_data_requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
-
-      organization.fulfilled_data_requests.should == [data_request1]
-    end
   end
 
-  describe "unfulfilled_data_requests" do
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      organization.unfulfilled_data_requests.should == []
-    end
+  describe "Callbacks" do
+    # after_create :create_data_responses
+    it "creates data_responsesfor each data_request after organization is created" do
+      org0 = Factory(:organization, :name => "Requester Organization")
+      data_request1 = Factory(:data_request, :organization => org0)
+      data_request2 = Factory(:data_request, :organization => org0)
 
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
+      organizations = Factory(:organization, :name => "Responder Organization")
 
-      organization.unfulfilled_data_requests.should == [data_request2]
+      data_requests = organizations.data_responses.map(&:data_request)
+      data_requests.should include(data_request1)
+      data_requests.should include(data_request2)
     end
   end
 
@@ -207,16 +220,17 @@ describe Organization do
 
     it "copies data responses from @duplicate to @target" do
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 2
+      @target.data_responses.count.should == 6
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate,
-                    :fiscal_year_start_date => Date.parse("2010-02-01"),
-                    :fiscal_year_end_date => Date.parse("2010-01-01"))
-      duplicate_data_response.save(false)
+      @duplicate.fiscal_year_start_date = Date.parse("2010-02-01")
+      @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
+      @duplicate.save(false)
+      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
+      duplicate_data_response.save
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 3 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 9 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do
@@ -315,9 +329,9 @@ describe Organization do
       @org1 = Factory.create(:organization)
       @org2 = Factory.create(:organization)
 
-      @response1 = Factory.create(:data_response, :data_request => @request, 
+      @response1 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org1)
-      @response2 = Factory.create(:data_response, :data_request => @request, 
+      @response2 = Factory.create(:data_response, :data_request => @request,
                                  :organization => @org2)
 
 

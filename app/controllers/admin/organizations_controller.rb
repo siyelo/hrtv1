@@ -9,8 +9,8 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def index
     scope = Organization.scoped({})
-    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q) OR 
-                                         UPPER(raw_type) LIKE UPPER(:q) OR 
+    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q) OR
+                                         UPPER(raw_type) LIKE UPPER(:q) OR
                                          UPPER(fosaid) LIKE UPPER(:q)",
                          {:q => "%#{params[:query]}%"}]) if params[:query]
 
@@ -26,12 +26,23 @@ class Admin::OrganizationsController < Admin::BaseController
     end
   end
 
+  def update
+    @organization = Organization.find(params[:id])
+    @organization.attributes = params[:organization]
+    if @organization.save(false)
+      flash[:notice] = 'Organization was successfully updated'
+      redirect_to admin_organizations_url
+    else
+      render :edit
+    end
+  end
+
   def destroy
     @organization = Organization.find(params[:id])
 
     # when on fix duplicate organizations page then redirect to :back
     # otherwise redirect to admin organizatoins index  page
-    url = request.env['HTTP_REFERER'].to_s.match(/duplicate/) ? 
+    url = request.env['HTTP_REFERER'].to_s.match(/duplicate/) ?
       duplicate_admin_organizations_url : admin_organizations_url
 
     if @organization.is_empty?

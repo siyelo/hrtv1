@@ -9,15 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20110705083559) do
-=======
-ActiveRecord::Schema.define(:version => 20110705115759) do
->>>>>>> User does not have to re-enter response settings
-=======
 ActiveRecord::Schema.define(:version => 20110705123733) do
->>>>>>> Added migration for fixing data_responses
 
   create_table "activities", :force => true do |t|
     t.string   "name"

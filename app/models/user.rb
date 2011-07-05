@@ -23,6 +23,9 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :on => :create
   validates_length_of :password, :within => 8..64, :on => :create
 
+  ### Callbacks
+  before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
+
   def self.download_template
     FasterCSV.generate do |csv|
       csv << User::FILE_UPLOAD_COLUMNS
@@ -137,6 +140,12 @@ class User < ActiveRecord::Base
 
     def role?(role)
       roles.include?(role.to_s)
+    end
+
+    def set_current_response
+      if organization.present? && organization.data_responses.present?
+        self.current_data_response = organization.data_responses.last
+      end
     end
 end
 

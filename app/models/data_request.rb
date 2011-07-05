@@ -36,6 +36,19 @@ class DataRequest < ActiveRecord::Base
     r << "Current Budget"
     r
   end
+
+  private
+    def create_data_responses
+      Organization.all.each do |organization|
+        dr = organization.data_responses.find(:first,
+          :conditions => {:data_request_id => self.id})
+        unless dr
+          dr = organization.data_responses.new
+          dr.data_request = self
+          dr.save!
+        end
+      end
+    end
 end
 
 

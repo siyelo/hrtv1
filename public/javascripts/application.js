@@ -1949,10 +1949,10 @@ var workplans_index = {
 
           if (add_btn.hasClass('add_activity')) {
             console.info('adding activity');
-            $('.js_other_costs_subheading').before(data.html);
+            element.parents('tr').prevAll('.js_other_costs_subheading:first').before(data.html);
           } else if (add_btn.hasClass('add_other_cost')) {
             console.info('adding other');
-            $('.js_activity_add_inline').before(data.html);
+            element.parents('tr').before(data.html);
           }
 
           $('.js_activity_add_inline').remove();

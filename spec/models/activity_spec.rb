@@ -1219,7 +1219,8 @@ describe Activity do
   describe "keeping Money amounts in-sync" do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      @dr = Factory(:data_response, :currency => 'USD')
+      @dr = Factory(:data_response,
+                    :organization => Factory(:organization, :currency => 'USD'))
       @a        = Factory(:activity, :data_response => @dr,
                           :project => Factory(:project, :data_response => @dr))
       @a.budget = 123.45
@@ -1281,7 +1282,8 @@ describe Activity do
 
   describe "currency convenience lookups on DR/Project" do
     before :each do
-      @dr = Factory(:data_response, :currency => 'RWF')
+      @dr = Factory(:data_response,
+                    :organization => Factory(:organization, :currency => 'RWF'))
       @a  = Factory(:activity, :data_response => @dr,
                           :project => Factory(:project,:data_response => @dr))
     end
@@ -1317,8 +1319,10 @@ describe Activity do
     context "US Goverment" do
       before :each do
         @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+                                   :organization => Factory(:organization,
+                                     :fiscal_year_start_date => Date.parse("2010-10-01"),
+                                     :fiscal_year_end_date => Date.parse("2011-09-30")))
+
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1345,8 +1349,9 @@ describe Activity do
     context "Goverment of Rwanda" do
       before :each do
         @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+                                   :organization => Factory(:organization,
+                                     :fiscal_year_start_date => Date.parse("2010-01-01"),
+                                     :fiscal_year_end_date => Date.parse("2010-12-31")))
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1388,9 +1393,10 @@ describe Activity do
 
     context "US Goverment" do
       before :each do
-        @response = Factory.create(:data_response,
+        organization = Factory(:organization,
                                    :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+                                   :fiscal_year_end_date => Date.parse("2011-09-30"))
+        @response = Factory(:data_response, :organization => organization)
       end
 
       it "returns proper budget for 1st quarter" do
@@ -1417,8 +1423,9 @@ describe Activity do
     context "Goverment of Rwanda" do
       before :each do
         @response = Factory.create(:data_response,
-                                   :fiscal_year_start_date => Date.parse("2010-01-01"),
-                                   :fiscal_year_end_date => Date.parse("2010-12-31"))
+                                   :organization => Factory(:organization,
+                                     :fiscal_year_start_date => Date.parse("2010-01-01"),
+                                     :fiscal_year_end_date => Date.parse("2010-12-31")))
       end
 
       it "returns proper budget for 1st quarter" do

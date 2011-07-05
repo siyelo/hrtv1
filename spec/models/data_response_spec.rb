@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataResponse do
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
     it { should have_many(:activities).dependent(:destroy) }
@@ -15,18 +15,9 @@ describe DataResponse do
     it { should have_many(:code_assignments) }
   end
 
-  describe "validations" do
+  describe "Validations" do
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
-  end
-
-  describe "custom date validations" do
-    it { should allow_mass_assignment_of(:currency) }
-    it { should allow_mass_assignment_of(:contact_name) }
-    it { should allow_mass_assignment_of(:contact_position) }
-    it { should allow_mass_assignment_of(:contact_phone_number) }
-    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
-    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
   describe "counter cache" do
@@ -84,21 +75,21 @@ describe DataResponse do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
-      @dr        = Factory(:data_response, :currency => 'RWF')
+      @organization = Factory(:organization, :currency => 'RWF')
+      @dr        = Factory(:data_response, :organization => @organization)
       @project   = Factory(:project, :data_response => @dr,
                             :currency => nil)
       @activity  = Factory(:activity, :data_response => @dr,
                             :project => @project,
                             :budget => 1000, :spend => 2000)
-
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
       @activity.budget_in_usd.should == 500
       @activity.spend_in_usd.should == 1000
-      @dr.reload # dr.activities wont be updated otherwise
-      @dr.currency = 'EUR'
-      @dr.save
+      @organization.reload # dr.activities wont be updated otherwise
+      @organization.currency = 'EUR'
+      @organization.save
       @activity.reload
       @activity.budget_in_usd.should == 1500
       @activity.spend_in_usd.should == 3000

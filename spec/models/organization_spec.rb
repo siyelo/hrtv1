@@ -6,6 +6,12 @@ describe Organization do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
+    it { should allow_mass_assignment_of(:currency) }
+    it { should allow_mass_assignment_of(:contact_name) }
+    it { should allow_mass_assignment_of(:contact_position) }
+    it { should allow_mass_assignment_of(:contact_phone_number) }
+    it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
+    it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
   describe "Validations" do
@@ -22,15 +28,15 @@ describe Organization do
     it { should validate_presence_of(:contact_office_location)}
 
     it "is not valid when currency is not included in the list" do
-      response = Factory.build(:data_response, :currency => 'INVALID')
-      response.save
-      response.errors.on(:currency).should_not be_blank
+      organization = Factory.build(:organization, :currency => 'INVALID')
+      organization.save
+      organization.errors.on(:currency).should_not be_blank
     end
 
     it "is valid when currency is included in the list" do
-      response = Factory.build(:data_response, :currency => 'USD')
-      response.save
-      response.errors.on(:currency).should be_blank
+      organization = Factory.build(:organization, :currency => 'USD')
+      organization.save
+      organization.errors.on(:currency).should be_blank
     end
   end
 
@@ -49,16 +55,6 @@ describe Organization do
     it { should have_many(:implementor_for) }
     it { should have_many(:provider_for) }
     it { should have_many(:comments) }
-
-    it "returns fulfilled_data_requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
-
-      organization.fulfilled_data_requests.should == [data_request1]
-    end
   end
 
   describe "Callbacks" do
@@ -73,23 +69,6 @@ describe Organization do
       data_requests = organizations.data_responses.map(&:data_request)
       data_requests.should include(data_request1)
       data_requests.should include(data_request2)
-    end
-  end
-
-  describe "unfulfilled_data_requests" do
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      organization.unfulfilled_data_requests.should == []
-    end
-
-    it "returns empty array when no data requests" do
-      organization = Factory.create(:organization)
-      data_request1 = Factory.create(:data_request)
-      data_request2 = Factory.create(:data_request)
-      Factory.create(:data_response, :data_request => data_request1,
-                     :organization => organization)
-
-      organization.unfulfilled_data_requests.should == [data_request2]
     end
   end
 
@@ -241,16 +220,17 @@ describe Organization do
 
     it "copies data responses from @duplicate to @target" do
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 2
+      @target.data_responses.count.should == 6
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate,
-                    :fiscal_year_start_date => Date.parse("2010-02-01"),
-                    :fiscal_year_end_date => Date.parse("2010-01-01"))
-      duplicate_data_response.save(false)
+      @duplicate.fiscal_year_start_date = Date.parse("2010-02-01")
+      @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
+      @duplicate.save(false)
+      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
+      duplicate_data_response.save
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 3 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 9 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do

@@ -212,7 +212,7 @@ describe Code do
   describe "leaf_assignments_for_activities" do
     before :each do
       Money.default_bank.add_rate(:USD, :USD, 1)
-      data_response = Factory.create(:data_response, :currency => "USD")
+      data_response = Factory.create(:data_response, :organization => Factory(:organization, :currency => "USD"))
       @activity1 = Factory.create(:activity, :data_response => data_response)
       @activity2 = Factory.create(:activity, :data_response => data_response)
       @code1     = Factory.create(:code, :short_display => 'code1')

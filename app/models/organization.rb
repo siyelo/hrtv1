@@ -48,6 +48,7 @@ class Organization < ActiveRecord::Base
   named_scope :ordered, :order => 'name ASC, created_at DESC'
 
   ### Callbacks
+  after_save :update_cached_currency_amounts
   after_create :create_data_responses
 
   def is_empty?
@@ -64,10 +65,6 @@ class Organization < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def unfulfilled_data_requests
-    DataRequest.all - fulfilled_data_requests
   end
 
   def self.merge_organizations!(target, duplicate)
@@ -177,6 +174,15 @@ class Organization < ActiveRecord::Base
   end
 
   private
+
+    def update_cached_currency_amounts
+      if self.currency_changed?
+        self.dr_activities.each do |a|
+          a.code_assignments.each {|c| c.save}
+          a.save
+        end
+      end
+    end
 
     def tidy_name(n)
       n = n.gsub("Health Center", "HC")

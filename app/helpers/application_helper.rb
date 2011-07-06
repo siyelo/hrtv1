@@ -211,47 +211,32 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
-  def budget_fiscal_year_prev(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.pred.to_s.split('')[-2..-1].join
-      year2 = year.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+  def budget_fiscal_year_next(data_response)
+    year = data_response.organization.gor_fiscal_year[:start].year
+    year1 = year.pred.to_s.split('')[-2..-1].join
+    year2 = year.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
   def budget_fiscal_year(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.to_s.split('')[-2..-1].join
-      year2 = year.next.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+    year = data_response.organization.gor_fiscal_year[:start].year
+    year1 = year.to_s.split('')[-2..-1].join
+    year2 = year.next.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
-  def spend_fiscal_year_prev(data_response)
-    if data_response.fiscal_year_start_date.present?
-      year = data_response.fiscal_year_start_date.year
-      year1 = year.pred.pred.to_s.split('')[-2..-1].join
-      year2 = year.pred.to_s.split('')[-2..-1].join
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
+  def spend_fiscal_year_next(data_response)
+    year = data_response.organization.gor_fiscal_year[:end].year + 1
+    year1 = year.pred.pred.to_s.split('')[-2..-1].join
+    year2 = year.pred.to_s.split('')[-2..-1].join
 
     "#{year1}-#{year2}"
   end
 
   def spend_fiscal_year(data_response)
-    budget_fiscal_year_prev(data_response)
+    budget_fiscal_year_next(data_response)
   end
 
   def fiscal_year(data_response)

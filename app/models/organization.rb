@@ -1,6 +1,13 @@
 require 'validation_disabler'
 require 'validators'
 class Organization < ActiveRecord::Base
+  ### Attrribute Aliases
+  alias_attribute :budget_gor_q2, :budget_q1
+  alias_attribute :budget_gor_q3, :budget_q2
+  alias_attribute :budget_gor_q4, :budget_q3
+  alias_attribute :budget_gor_q1_next_fy, :budget_q4
+  alias_attribute :budget_gor_q1, :budget_q4_prev
+
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
@@ -200,8 +207,22 @@ class Organization < ActiveRecord::Base
     end
   end
 
-  def quarters_months(quarter)
-    #Jun '08 - Aug '08
+  def budget_quarters_months(quarter)
+    case quarter
+    when "q1"
+      "#{(gor_fiscal_year[:start] + 12.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 14.months).strftime('%b \'%y')}"
+    when "q2"
+      "#{(gor_fiscal_year[:start] + 15.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 17.months).strftime('%b \'%y')}"
+    when "q3"
+      "#{(gor_fiscal_year[:start] + 18.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 20.months).strftime('%b \'%y')}"
+    when "q4"
+      "#{(gor_fiscal_year[:start] + 21.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 23.months).strftime('%b \'%y')}"
+    when "q1_next_fy"
+      "#{(gor_fiscal_year[:start] + 24.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 26.months).strftime('%b \'%y')}"
+    end
+  end
+
+  def spend_quarters_months(quarter)
     case quarter
     when "q1"
       "#{gor_fiscal_year[:start].strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 2.months).strftime('%b \'%y')}"
@@ -211,8 +232,8 @@ class Organization < ActiveRecord::Base
       "#{(gor_fiscal_year[:start] + 6.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 8.months).strftime('%b \'%y')}"
     when "q4"
       "#{(gor_fiscal_year[:start] + 9.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 11.months).strftime('%b \'%y')}"
-    when "q4_prev"
-      "#{(gor_fiscal_year[:start] - 3.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] - 1.months).strftime('%b \'%y')}"
+    when "q1_next_fy"
+      "#{(gor_fiscal_year[:start] + 12.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 14.months).strftime('%b \'%y')}"
     end
   end
 

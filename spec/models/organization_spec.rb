@@ -373,18 +373,6 @@ describe Organization do
     end
   end
 
-  it "displays the quarters with their correct months" do
-    Date.stub!(:today).and_return(Date.parse("01-01-2011"))
-    o = Factory(:organization,
-                :fiscal_year_start_date => DateTime.new(2010, 01, 01),
-                :fiscal_year_end_date =>   DateTime.new(2010, 12, 31) )
-
-    o.quarters_months("q1").should == "Jul '10 - Sep '10"
-    o.quarters_months("q2").should == "Oct '10 - Dec '10"
-    o.quarters_months("q3").should == "Jan '11 - Mar '11"
-    o.quarters_months("q4").should == "Apr '11 - Jun '11"
-  end
-
   describe "latest_response" do
     before :each do
       @req = Factory :request

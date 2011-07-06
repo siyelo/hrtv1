@@ -1,8 +1,8 @@
-- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
+- budget_fiscal_year_next = budget_fiscal_year_next(@response)
 - budget_fiscal_year = budget_fiscal_year(@response)
-- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
+- spend_fiscal_year_next = spend_fiscal_year_next(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
-- fiscal_year_start_date = @response.fiscal_year_start_date.year
+- fiscal_year_start_date = @response.organization.gor_fiscal_year[:start].try(:year)
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -36,11 +36,11 @@
         %li.amounts.last
           %label== Quarterly Expenditure
           %ul.js_quarterly_inputs
-            = f.input :spend_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
-            = f.input :spend_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
-            = f.input :spend_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false
-            = f.input :spend_q3     , :label => "#{@response.quarters_months('q3')}",      :required => false
-            = f.input :spend_q4     , :label => "#{@response.quarters_months('q4')}",      :required => false
+            = f.input :spend_gor_q1, :label => "#{@response.spend_quarters_months('q1')}", :required => false
+            = f.input :spend_gor_q2     , :label => "#{@response.spend_quarters_months('q2')}",      :required => false
+            = f.input :spend_gor_q3     , :label => "#{@response.spend_quarters_months('q3')}",      :required => false
+            = f.input :spend_gor_q4     , :label => "#{@response.spend_quarters_months('q4')}",      :required => false
+            = f.input :spend_gor_q1_next_fy     , :label => "#{@response.spend_quarters_months('q1_next_fy')}",      :required => false
 
   - if @response.data_request.budget?
     %li.last
@@ -51,11 +51,11 @@
           %li.amounts.last
             %label== Quarterly budget
             %ul.js_quarterly_inputs
-              = f.input :budget_q4_prev, :label => "#{@response.quarters_months('q4_prev')}", :required => false
-              = f.input :budget_q1     , :label => "#{@response.quarters_months('q1')}",      :required => false
-              = f.input :budget_q2     , :label => "#{@response.quarters_months('q2')}",      :required => false
-              = f.input :budget_q3     , :label => "#{@response.quarters_months('q3')}",      :required => false
-              = f.input :budget_q4     , :label => "#{@response.quarters_months('q4')}",      :required => false
+              = f.input :budget_gor_q1, :label => "#{@response.budget_quarters_months('q1')}", :required => false
+              = f.input :budget_gor_q2     , :label => "#{@response.budget_quarters_months('q2')}",      :required => false
+              = f.input :budget_gor_q3     , :label => "#{@response.budget_quarters_months('q3')}",      :required => false
+              = f.input :budget_gor_q4     , :label => "#{@response.budget_quarters_months('q4')}",      :required => false
+              = f.input :budget_gor_q1_next_fy     , :label => "#{@response.budget_quarters_months('q1_next_fy')}",      :required => false
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term

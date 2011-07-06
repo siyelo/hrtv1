@@ -2,6 +2,20 @@ require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
 
+  ### Aliases
+  #budget
+  alias_attribute :budget_gor_q2, :budget_q1
+  alias_attribute :budget_gor_q3, :budget_q2
+  alias_attribute :budget_gor_q4, :budget_q3
+  alias_attribute :budget_gor_q1_next_fy, :budget_q4
+  alias_attribute :budget_gor_q1, :budget_q4_prev
+  #spend
+  alias_attribute :spend_gor_q2, :spend_q1
+  alias_attribute :spend_gor_q3, :spend_q2
+  alias_attribute :spend_gor_q4, :spend_q3
+  alias_attribute :spend_gor_q1_next_fy, :spend_q4
+  alias_attribute :spend_gor_q1, :spend_q4_prev
+
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,

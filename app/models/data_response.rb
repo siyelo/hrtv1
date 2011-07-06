@@ -27,7 +27,7 @@ class DataResponse < ActiveRecord::Base
   delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
     :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
-    :quarters_months, :to => :organization
+    :spend_quarters_months, :budget_quarters_months, :to => :organization
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]

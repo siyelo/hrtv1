@@ -1537,15 +1537,15 @@ var activity_form = function () {
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
-    split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:first)"), $(this).val());
+    split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:last)"), $(this).val());
   });
 
   $(".js_activity_spend_total").keyup(function () {
-    split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
+    split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
   });
 
-  $(".js_quarterly_inputs input:not(:first)").keyup(function () {
-    calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find('li:first input'));
+  $(".js_quarterly_inputs input:not(:last)").keyup(function () {
+    calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find('li:first input'));
   });
 
   $('.js_target_field').live('keydown', function (e) {
@@ -1646,15 +1646,15 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
     });
 
     $('#other_cost_spend').keyup(function () {
-      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:first)'), $(this).val());
+      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
     });
 
-    $('.js_quarterly_inputs input:not(:first)').keyup(function () {
-      calculate_total_from_quarters($(this).parents('ul:first').find('input:not(:first)'), $(this).parents('li.amounts').prev().find('input'));
+    $('.js_quarterly_inputs input:not(:last)').keyup(function () {
+      calculate_total_from_quarters($(this).parents('ul:first').find('input:not(:last)'), $(this).parents('li.amounts').prev().find('input'));
     });
 
     $('#other_cost_budget').keyup(function () {
-      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:first)'), $(this).val());
+      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
     });
 
     $(".js_am_approve").click(function (e) {
@@ -1679,36 +1679,36 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 var projects_edit = projects_new = {
   run: function () {
 
-    $("input[id^='project_spend_q']:not(:first)").keyup(function () {
-      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find("input#project_spend"));
+    $("input[id^='project_spend_gor_q']:not(:last)").keyup(function () {
+      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
     });
 
-   $(".js_quarterly_fields input:not(:first)").keyup(function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".dashboard_section").find("#project_budget"));
+   $(".js_quarterly_fields input:not(:last)").keyup(function () {
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 
-   $(".js_funding_expenditures input").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".amounts").prev().find("input"));
+   $(".js_funding_expenditures input:not(:last)").live('keyup', function () {
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 
    $(".js_funding_budget input").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:first)"), $(this).parents(".amounts").prev().find("input"));
+     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 
     $("#project_spend").keyup(function () {
-      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
+      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
     });
 
     $("#project_budget").keyup(function () {
-      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:first)'), $(this).val());
+      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:last)'), $(this).val());
     });
 
    $(".ff_spend").live('keyup', function () {
-     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
+     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
    });
 
    $(".ff_budget").live('keyup', function () {
-     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:first)"), $(this).val());
+     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
    });
 
     commentsInit();

@@ -16,13 +16,23 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
-    start_year = Date.parse(params[:request][:start_date]).strftime('%Y') 
-    params[:request][:end_date] = Date.parse("30-06-#{start_year.to_i + 1}")
-    create!(:notice => "Request was successfully created.") { admin_requests_url }
+    @request = DataRequest.new(params[:request])    
+    if @request.save
+      flash[:notice] = 'Request was successfully created'
+      redirect_to admin_requests_url
+    else
+      format.html { render :action => 'new' }
+    end
   end
 
   def update
-    update!(:notice => "Request was successfully updated.") { admin_requests_url }
+    @request = DataRequest.find(params[:id])
+    if @request.update_attributes(params[:request]) && @request.errors.empty?
+      flash[:notice] = 'Request was successfully updated'
+      redirect_to admin_requests_url
+    else
+      format.html { render :action => 'edit'}
+    end
   end
 
   def destroy

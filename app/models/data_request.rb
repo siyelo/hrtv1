@@ -5,7 +5,7 @@ class DataRequest < ActiveRecord::Base
   attr_accessible :organization_id, :title, :final_review,
                   :start_date, :end_date, :due_date, :budget, :spend,
                   :year_2, :year_3, :year_4, :year_5, :purposes, :locations,
-                  :inputs, :service_levels, :budget_by_quarter
+                  :inputs, :service_levels, :budget_by_quarter, :start_year
 
   ### Associations
   belongs_to :organization
@@ -24,6 +24,25 @@ class DataRequest < ActiveRecord::Base
   def status
     return 'Final review' if final_review?
     return 'In progress'
+  end
+  
+  def is_valid_year?(date_str)
+    date_str.grep(/^(\d)+$/) {|date_str| (1900..2099).include?(date_str.to_i) }.first
+  end
+  
+  def start_year
+    if self.start_date
+      self.start_date.strftime('%Y')
+    end   
+  end
+  
+  def start_year=(year)
+    if is_valid_year?(year)
+      self.start_date = Date.parse("#{year}-06-30")
+      self.end_date = Date.parse("#{year.to_i+1}-06-30")
+    else
+      errors.add(:start_year,"Invalid year")
+    end
   end
 
   def no_long_term_budgets?

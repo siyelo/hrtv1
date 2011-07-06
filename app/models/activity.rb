@@ -87,11 +87,10 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_presence_of :description, :if => Proc.new { |model| model.class.eql? Activity }
-  validates_presence_of :data_response_id, :project_id, :if => Proc.new { |model| model.class.eql? Activity }
-  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
-  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank? }, :unless => Proc.new { |model| model.activity_id }
-
+  validates_presence_of :name, :description, :if => :is_simple?
+  validates_presence_of :data_response_id, :project_id, :if => :is_simple?
+  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }
+  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank? }
 
   ### Callbacks
   before_save :update_cached_usd_amounts
@@ -626,6 +625,14 @@ class Activity < ActiveRecord::Base
     (self.send("#{type}_q2") || 0) +
     (self.send("#{type}_q3") || 0) +
     (self.send("#{type}_q4") || 0)
+  end
+
+  def is_simple?
+    self.class.eql?(Activity) || self.class.eql?(OtherCost)
+  end
+
+  def friendly_name
+    name.presence || "Unnamed #{self.class.to_s.titleize}"
   end
 
   private

@@ -6,7 +6,7 @@ describe Activity do
     it { should be_valid }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
@@ -27,7 +27,7 @@ describe Activity do
     it { should have_many :coding_spend_district }
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:start_date) }
@@ -61,11 +61,11 @@ describe Activity do
     it { should allow_mass_assignment_of(:csv_beneficiaries) }
   end
 
-  describe "validations" do
-    #it { should validate_presence_of(:name) }
+  describe "Validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:description) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
-    it { should validate_presence_of(:description) }
     #it { should validate_uniqueness_of(:name).scoped_to(:project_id) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }

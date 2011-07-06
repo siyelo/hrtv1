@@ -13,6 +13,7 @@ describe OtherCostsController do
 
     it "redirects to the projects index page when save is clicked" do
        post :create, :other_cost => {
+         :name => 'other_cost_name',
          :description => "some description",
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
@@ -23,6 +24,7 @@ describe OtherCostsController do
 
      it "redirects to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is false" do
        post :create, :other_cost => {
+         :name => 'other_cost_name',
          :description => "some description",
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id

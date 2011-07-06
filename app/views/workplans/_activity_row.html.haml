@@ -1,6 +1,6 @@
 %tr.js_activity_row
   %td.desc{:colspan => 2}
-    = link_to activity.name, edit_response_activity_path(@response, activity), :title => activity.description, :class => 'tooltip'
+    = link_to activity.friendly_name, edit_response_activity_path(@response, activity), :title => activity.description, :class => 'tooltip'
   %td= text_field_tag :"activities[#{activity.id}]spend", activity.spend, :class => 'js_spend_column_amount'
   %td= text_field_tag :"activities[#{activity.id}]budget", activity.budget, :class => 'js_budget_column_amount'
 

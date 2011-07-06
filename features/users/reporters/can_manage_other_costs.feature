@@ -7,8 +7,8 @@ Feature: Reporter can manage other costs
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
-      And a data_response exists with data_request: the data_request, organization: the organization
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "project1", data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
@@ -18,12 +18,13 @@ Feature: Reporter can manage other costs
   Scenario: Reporter can CRUD other costs
     When I follow "Add other cost"
     Then I should see "Create Other Cost"
-    When I fill in "Description" with "other_cost1"
+    When I fill in "Name" with "other_cost1"
+    When I fill in "Description" with "other_cost1 description"
       And I select "project1" from "Project"
       And I press "Save"
     Then I should see "Othercost was successfully created"
     When I follow "other_cost1"
-      And I fill in "Description" with "other_cost2"
+      And I fill in "Name" with "other_cost2"
       And I press "Save"
     Then I should see "Othercost was successfully updated"
       And I should see "other_cost2"
@@ -34,11 +35,6 @@ Feature: Reporter can manage other costs
       And I should not see "other_cost1"
       And I should not see "other_cost2"
 
-  Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
-    When I follow "Add other cost"
-      And I fill in "Description" with "other_cost1"
-      And I press "Save"
-    Then I should see "Othercost was successfully created"
 
   Scenario: A reporter can create comments for an other cost
     Given an other_cost exists with project: the project, description: "other_cost1", data_response: the data_response
@@ -71,7 +67,7 @@ Feature: Reporter can manage other costs
       And I should see "Comment title"
       And I should see "Comment body"
 
-			
+
   #pending decision on 14830063
   @wip
   Scenario: If the data_request budget is not checked the budget should not show up in the other costs screen
@@ -88,7 +84,7 @@ Feature: Reporter can manage other costs
       And I follow "Workplan"
       And I follow "Add other cost"
       Then I should not see "Past Expenditure"
-     
+
   @wip
   Scenario: If the data_request has not got a budget or a spend then only the save button should appear
     Given I follow "Sign Out"

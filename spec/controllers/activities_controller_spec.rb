@@ -153,6 +153,7 @@ describe ActivitiesController do
     it "redircts to the projects index page when save is clicked" do
       @project = Factory.create(:project, :data_response => @data_response)
       post :create, :activity => {
+        :name => "activity_name",
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
@@ -166,6 +167,7 @@ describe ActivitiesController do
     it "redirects to the classify activities page when Save & Go to Classify is clicked" do
       @project = Factory.create(:project, :data_response => @data_response)
       post :create, :activity => {
+        :name => "activity_name",
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
@@ -179,6 +181,7 @@ describe ActivitiesController do
     it "returns true and goes to classify if the activitys budget and past expenditure is less than that of the projects" do
       @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
       post :create, :activity => {
+        :name => "activity_name",
         :description => "some description",
         :start_date => '2011-01-01', :end_date => '2011-03-01',
         :project_id => @project.id,
@@ -196,16 +199,17 @@ describe ActivitiesController do
        @data_request = Factory.create(:data_request)
        @organization = Factory.create(:organization)
        @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
+       @data_response = @user.current_response
        @project = Factory.create(:project, :data_response => @data_response)
        login @user
        post :create, :activity => {
+         :name => "activity_name",
          :description => "some description",
          :start_date => '2011-01-01', :end_date => '2011-03-01',
          :project_id => @project.id
        },
        :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
+       response.should redirect_to(activity_code_assignments_path(@project.reload.activities.last, :coding_type => 'CodingSpend'))
      end
    end
 end

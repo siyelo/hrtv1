@@ -1,4 +1,3 @@
-@run
 Feature: Admin can see review page
   In order to view all my data
   As a sysadmin

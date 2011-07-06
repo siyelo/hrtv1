@@ -18,45 +18,45 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
     t.integer  "provider_id"
     t.text     "description"
     t.string   "type"
-    t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
+    t.integer  "budget",                                :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q1",                              :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q2",                              :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q3",                              :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q4",                              :limit => 10, :precision => 10, :scale => 0
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "spend"
+    t.integer  "spend",                                 :limit => 10, :precision => 10, :scale => 0
     t.text     "text_for_provider"
     t.text     "text_for_targets"
     t.text     "text_for_beneficiaries"
-    t.decimal  "spend_q4_prev"
+    t.integer  "spend_q4_prev",                         :limit => 10, :precision => 10, :scale => 0
     t.integer  "data_response_id"
     t.integer  "activity_id"
-    t.decimal  "budget_percentage"
-    t.decimal  "spend_percentage"
+    t.integer  "budget_percentage",                     :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_percentage",                      :limit => 10, :precision => 10, :scale => 0
     t.boolean  "approved"
-    t.decimal  "CodingBudget_amount",                   :default => 0.0
-    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal  "CodingSpend_amount",                    :default => 0.0
-    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",                        :default => 0
-    t.integer  "sub_activities_count",                  :default => 0
-    t.decimal  "spend_in_usd",                          :default => 0.0
-    t.decimal  "budget_in_usd",                         :default => 0.0
+    t.integer  "CodingBudget_amount",                   :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "CodingBudgetCostCategorization_amount", :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "CodingBudgetDistrict_amount",           :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "CodingSpend_amount",                    :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "CodingSpendCostCategorization_amount",  :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "CodingSpendDistrict_amount",            :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "budget_q1",                             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q2",                             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q3",                             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4",                             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4_prev",                        :limit => 10, :precision => 10, :scale => 0
+    t.integer  "comments_count",                                                                     :default => 0
+    t.integer  "sub_activities_count",                                                               :default => 0
+    t.integer  "spend_in_usd",                          :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "budget_in_usd",                         :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",             :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",              :default => 0.0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
+    t.integer  "ServiceLevelBudget_amount",             :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "ServiceLevelSpend_amount",              :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "budget2",                               :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget3",                               :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget4",                               :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget5",                               :limit => 10, :precision => 10, :scale => 0
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -82,16 +82,17 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
-    t.decimal  "amount"
+    t.integer  "amount",               :limit => 10, :precision => 10, :scale => 0
     t.string   "type"
-    t.decimal  "percentage"
-    t.decimal  "cached_amount",        :default => 0.0
-    t.decimal  "sum_of_children",      :default => 0.0
+    t.integer  "percentage",           :limit => 10, :precision => 10, :scale => 0
+    t.integer  "cached_amount",        :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "sum_of_children",      :limit => 10, :precision => 10, :scale => 0, :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "cached_amount_in_usd", :default => 0.0
+    t.integer  "cached_amount_in_usd", :limit => 10, :precision => 10, :scale => 0, :default => 0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -116,7 +117,7 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
 
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""
-    t.text     "comment",                        :default => ""
+    t.text     "comment"
     t.integer  "commentable_id"
     t.string   "commentable_type"
     t.integer  "user_id"
@@ -192,22 +193,22 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
+    t.integer  "budget",               :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q1",             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q2",             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q3",             :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q4",             :limit => 10, :precision => 10, :scale => 0
     t.text     "organization_text"
-    t.integer  "self_provider_flag",   :default => 0
-    t.decimal  "spend"
-    t.decimal  "spend_q4_prev"
+    t.integer  "self_provider_flag",                                                :default => 0
+    t.integer  "spend",                :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q4_prev",        :limit => 10, :precision => 10, :scale => 0
     t.integer  "data_response_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",       :default => 0
+    t.integer  "budget_q1",            :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q2",            :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q3",            :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4",            :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4_prev",       :limit => 10, :precision => 10, :scale => 0
+    t.integer  "comments_count",                                                    :default => 0
     t.integer  "project_from_id"
   end
 
@@ -218,8 +219,8 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
   create_table "funding_sources", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "funding_flow_id"
-    t.decimal  "spend"
-    t.decimal  "budget"
+    t.integer  "spend",           :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget",          :limit => 10, :precision => 10, :scale => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -230,10 +231,10 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
     t.integer  "organization_fa_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget",              :default => 0.0
-    t.decimal  "spend",               :default => 0.0
-    t.decimal  "budget_in_usd",       :default => 0.0
-    t.decimal  "spend_in_usd",        :default => 0.0
+    t.integer  "budget",              :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "spend",               :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "budget_in_usd",       :limit => 10, :precision => 10, :scale => 0, :default => 0
+    t.integer  "spend_in_usd",        :limit => 10, :precision => 10, :scale => 0, :default => 0
   end
 
   create_table "help_requests", :force => true do |t|
@@ -289,26 +290,26 @@ ActiveRecord::Schema.define(:version => 20110705123733) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget"
-    t.decimal  "spend"
-    t.decimal  "entire_budget"
+    t.integer  "budget",           :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend",            :limit => 10, :precision => 10, :scale => 0
+    t.integer  "entire_budget",    :limit => 10, :precision => 10, :scale => 0
     t.string   "currency"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
-    t.decimal  "spend_q4_prev"
+    t.integer  "spend_q1",         :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q2",         :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q3",         :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q4",         :limit => 10, :precision => 10, :scale => 0
+    t.integer  "spend_q4_prev",    :limit => 10, :precision => 10, :scale => 0
     t.integer  "data_response_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",   :default => 0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
+    t.integer  "budget_q1",        :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q2",        :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q3",        :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4",        :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget_q4_prev",   :limit => 10, :precision => 10, :scale => 0
+    t.integer  "comments_count",                                                :default => 0
+    t.integer  "budget2",          :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget3",          :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget4",          :limit => 10, :precision => 10, :scale => 0
+    t.integer  "budget5",          :limit => 10, :precision => 10, :scale => 0
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

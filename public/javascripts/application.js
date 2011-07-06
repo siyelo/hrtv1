@@ -1516,7 +1516,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 var classifications_edit = implementers_index = {
   run: function () {
-
+    
     var getClassificationTotal = function (amounts, amount) {
       var total = 0;
       for (var i = 0; i < amounts.length; i++) {
@@ -1533,6 +1533,7 @@ var classifications_edit = implementers_index = {
       }
       return total;
     };
+    
 
     //implementers use an autocomplete combobox, not an mcdropdowns
     $(".combobox").combobox();

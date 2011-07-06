@@ -118,9 +118,7 @@ Feature: Reporter can manage projects
    Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
   Scenario: A reporter can create comments for a project
-   Given a project exists with name: "project1", data_response: data_response "data_response"
-   When I follow "Projects"
-    And I follow "project1"
+   Given a project exists with name: "project1", data_response: data_response "data_response"  When I follow "Project1"
     And I fill in "Title" with "Comment title"
     And I fill in "Comment" with "Comment body"
     And I press "Create Comment"
@@ -128,7 +126,7 @@ Feature: Reporter can manage projects
     And I should see "Comment body"
 
   Scenario: A reporter can create comments for an activity and see comment errors
-   Given a project exists with name: "project1", data_response: data_response "data_response"
+
    When I follow "Workplan"
     And I follow "project1"
     And I press "Create Comment"
@@ -155,15 +153,6 @@ Feature: Reporter can manage projects
     And I fill in "End date" with "2011-12-01"
     And I follow "Add funding source"
 
-    #todo, combobox for funding source
-    # Then show me the page
-    #   And I fill in "theCombobox" with "organization3"
-
-
-    # And I select "Add an Organization..." from "From" within ".fields"
-    #       And I fill in "organization_name" with "The Best Org"
-    #       And I follow "Create Organization"
-    #       And I select "The Best Org" from "From" within ".fields"
     And I fill in "Spent" with "11" within ".fields"
     And I fill in "Q4 08-09" with "22" within ".fields .spend"
     And I fill in "Q1 09-10" with "33" within ".fields .spend"
@@ -226,26 +215,3 @@ Feature: Reporter can manage projects
    Then select "<Project not listed or unknown>" from "funding_flows_3"
    And I press "Update"
    Then I should see "Your projects have been successfully updated"
-
-  #  Scenario: A Reporter can link their projects to those from other organizations from the edit page
-  #   Then I should see "Project5"
-  #   Given I follow "Project5"
-  #   And I select "Project6" from "funding_flows_3"
-  #   And I press "Update Project"
-  #   Then I should see "Project was successfully updated"
-  #
-  # Scenario: A Reporter can unlink their projects to those from other organizations from the edit page
-  #  Then I should see "Project5"
-  #  Given I follow "Project5"
-  #  And I select "" from "funding_flows_3"
-  #  And I press "Update Project"
-  #  Then I should see "Project was successfully updated"
-  #
-  #  Scenario: A Reporter select project missing or project unknown for their FS from the edit page
-  #   Then I should see "Project5"
-  #   Given I follow "Project5"
-  #   And I select "Project Missing/Unknown" from "funding_flows_3"
-  #   And I press "Update Project"
-  #   Then I should see "Project was successfully updated"
-
-

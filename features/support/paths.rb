@@ -13,7 +13,7 @@ module NavigationHelpers
 
     when /the data response page for "(.+)"/
       req = DataRequest.find_by_title($1)
-      edit_response_path( DataResponse.find_by_data_request_id req.id)
+      edit_organization_path( DataResponse.find_by_data_request_id req.id)
 
     when /the reporter dashboard page/
       reporter_dashboard_path

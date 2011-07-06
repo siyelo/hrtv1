@@ -6,6 +6,7 @@ class ProjectsController < Reporter::BaseController
   helper_method :sort_column, :sort_direction
   before_filter :load_data_response
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
+  before_filter :check_reporters_response, :only => [:index]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index

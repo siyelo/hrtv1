@@ -7,7 +7,7 @@
   %td{:class => "name wrap-50"}
     %ul
       %li
-        - link_to "#", :class => "add_purpose add_row" do
+        - link_to "#", :class => "js_add_purpose add_row" do
           = image_tag "new.png"
           == Add
   %td.total
@@ -21,5 +21,5 @@
         %span.js_remaining= remaining
         %span.currency= activity.currency
   %td.actions
-    = submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
-    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+    -#= submit_tag "Save", :style => (code_assignments.present? ? nil : 'display: none;'), :class => 'save_btn'
+    -#= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

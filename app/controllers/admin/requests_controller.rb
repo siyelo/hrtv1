@@ -16,6 +16,8 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
+    start_year = Date.parse(params[:request][:start_date]).strftime('%Y') 
+    params[:request][:end_date] = Date.parse("30-06-#{start_year.to_i + 1}")
     create!(:notice => "Request was successfully created.") { admin_requests_url }
   end
 

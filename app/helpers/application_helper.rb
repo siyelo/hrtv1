@@ -284,7 +284,7 @@ module ApplicationHelper
   end
 
   def last_response_path
-    last_response ? edit_response_path(last_response) : new_response_path
+    last_response ? edit_organization_path(last_response) : new_response_path
   end
 
   def current_or_last_response
@@ -300,7 +300,7 @@ module ApplicationHelper
   end
 
   def current_edit_response_url
-    current_response ? edit_response_path(current_response) : last_response_path
+    current_response ? edit_organization_path(current_response) : last_response_path
   end
 
   def current_response_url

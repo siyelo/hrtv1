@@ -18,47 +18,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.integer  "provider_id"
     t.text     "description"
     t.string   "type"
-<<<<<<< HEAD
-    t.integer  "budget",                                :limit => 10
-    t.integer  "spend_q1",                              :limit => 10
-    t.integer  "spend_q2",                              :limit => 10
-    t.integer  "spend_q3",                              :limit => 10
-    t.integer  "spend_q4",                              :limit => 10
-    t.date     "start_date"
-    t.date     "end_date"
-    t.integer  "spend",                                 :limit => 10
-    t.text     "text_for_provider"
-    t.text     "text_for_targets"
-    t.text     "text_for_beneficiaries"
-    t.integer  "spend_q4_prev",                         :limit => 10
-    t.integer  "data_response_id"
-    t.integer  "activity_id"
-    t.integer  "budget_percentage",                     :limit => 10
-    t.integer  "spend_percentage",                      :limit => 10
-    t.boolean  "approved"
-    t.integer  "CodingBudget_amount",                   :limit => 10, :default => 0
-    t.integer  "CodingBudgetCostCategorization_amount", :limit => 10, :default => 0
-    t.integer  "CodingBudgetDistrict_amount",           :limit => 10, :default => 0
-    t.integer  "CodingSpend_amount",                    :limit => 10, :default => 0
-    t.integer  "CodingSpendCostCategorization_amount",  :limit => 10, :default => 0
-    t.integer  "CodingSpendDistrict_amount",            :limit => 10, :default => 0
-    t.integer  "budget_q1",                             :limit => 10
-    t.integer  "budget_q2",                             :limit => 10
-    t.integer  "budget_q3",                             :limit => 10
-    t.integer  "budget_q4",                             :limit => 10
-    t.integer  "budget_q4_prev",                        :limit => 10
-    t.integer  "comments_count",                                      :default => 0
-    t.integer  "sub_activities_count",                                :default => 0
-    t.integer  "spend_in_usd",                          :limit => 10, :default => 0
-    t.integer  "budget_in_usd",                         :limit => 10, :default => 0
-    t.integer  "project_id"
-    t.integer  "ServiceLevelBudget_amount",             :limit => 10, :default => 0
-    t.integer  "ServiceLevelSpend_amount",              :limit => 10, :default => 0
-    t.integer  "budget2",                               :limit => 10
-    t.integer  "budget3",                               :limit => 10
-    t.integer  "budget4",                               :limit => 10
-    t.integer  "budget5",                               :limit => 10
-=======
     t.decimal  "budget"
     t.decimal  "spend_q1"
     t.decimal  "spend_q2"
@@ -98,7 +57,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
->>>>>>> remove select, make start_year a virtual attribute
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -124,16 +82,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
-<<<<<<< HEAD
-    t.integer  "amount",               :limit => 10
-    t.string   "type"
-    t.integer  "percentage",           :limit => 10
-    t.integer  "cached_amount",        :limit => 10, :default => 0
-    t.integer  "sum_of_children",      :limit => 10, :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "cached_amount_in_usd", :limit => 10, :default => 0
-=======
     t.decimal  "amount"
     t.string   "type"
     t.decimal  "percentage"
@@ -142,7 +90,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "cached_amount_in_usd", :default => 0.0
->>>>>>> remove select, make start_year a virtual attribute
   end
 
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
@@ -245,24 +192,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-    t.integer  "budget",               :limit => 10
-    t.integer  "spend_q1",             :limit => 10
-    t.integer  "spend_q2",             :limit => 10
-    t.integer  "spend_q3",             :limit => 10
-    t.integer  "spend_q4",             :limit => 10
-    t.text     "organization_text"
-    t.integer  "self_provider_flag",                 :default => 0
-    t.integer  "spend",                :limit => 10
-    t.integer  "spend_q4_prev",        :limit => 10
-    t.integer  "data_response_id"
-    t.integer  "budget_q1",            :limit => 10
-    t.integer  "budget_q2",            :limit => 10
-    t.integer  "budget_q3",            :limit => 10
-    t.integer  "budget_q4",            :limit => 10
-    t.integer  "budget_q4_prev",       :limit => 10
-    t.integer  "comments_count",                     :default => 0
-=======
     t.decimal  "budget"
     t.decimal  "spend_q1"
     t.decimal  "spend_q2"
@@ -279,7 +208,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
     t.integer  "comments_count",       :default => 0
->>>>>>> remove select, make start_year a virtual attribute
     t.integer  "project_from_id"
   end
 
@@ -290,13 +218,8 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
   create_table "funding_sources", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "funding_flow_id"
-<<<<<<< HEAD
-    t.integer  "spend",           :limit => 10
-    t.integer  "budget",          :limit => 10
-=======
     t.decimal  "spend"
     t.decimal  "budget"
->>>>>>> remove select, make start_year a virtual attribute
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -307,17 +230,10 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.integer  "organization_fa_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-    t.integer  "budget",              :limit => 10, :default => 0
-    t.integer  "spend",               :limit => 10, :default => 0
-    t.integer  "budget_in_usd",       :limit => 10, :default => 0
-    t.integer  "spend_in_usd",        :limit => 10, :default => 0
-=======
     t.decimal  "budget",              :default => 0.0
     t.decimal  "spend",               :default => 0.0
     t.decimal  "budget_in_usd",       :default => 0.0
     t.decimal  "spend_in_usd",        :default => 0.0
->>>>>>> remove select, make start_year a virtual attribute
   end
 
   create_table "help_requests", :force => true do |t|
@@ -371,28 +287,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-<<<<<<< HEAD
-    t.integer  "budget",           :limit => 10
-    t.integer  "spend",            :limit => 10
-    t.integer  "entire_budget",    :limit => 10
-    t.string   "currency"
-    t.integer  "spend_q1",         :limit => 10
-    t.integer  "spend_q2",         :limit => 10
-    t.integer  "spend_q3",         :limit => 10
-    t.integer  "spend_q4",         :limit => 10
-    t.integer  "spend_q4_prev",    :limit => 10
-    t.integer  "data_response_id"
-    t.integer  "budget_q1",        :limit => 10
-    t.integer  "budget_q2",        :limit => 10
-    t.integer  "budget_q3",        :limit => 10
-    t.integer  "budget_q4",        :limit => 10
-    t.integer  "budget_q4_prev",   :limit => 10
-    t.integer  "comments_count",                 :default => 0
-    t.integer  "budget2",          :limit => 10
-    t.integer  "budget3",          :limit => 10
-    t.integer  "budget4",          :limit => 10
-    t.integer  "budget5",          :limit => 10
-=======
     t.decimal  "budget"
     t.decimal  "spend"
     t.decimal  "entire_budget"
@@ -413,7 +307,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.decimal  "budget3"
     t.decimal  "budget4"
     t.decimal  "budget5"
->>>>>>> remove select, make start_year a virtual attribute
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"

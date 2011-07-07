@@ -17,7 +17,7 @@ Feature: Admin can manage data requests
        And I select "org1" from "Organization"
        And I fill in "Title" with "My data response title"
        And I fill in "Due date" with "2010-09-01"
-       And I select "2010-07-01" from "Start date"
+       And I fill in "Start year" with "2010"
        And I press "Create request"
       Then I should see "Request was successfully created"
        And I should see "My data response title"
@@ -39,18 +39,18 @@ Feature: Admin can manage data requests
        And I follow "Create Data Request"
        And I select "<organization>" from "Organization"
        And I fill in "Title" with "<title>"
-       And I select "<start_date>" from "Start date" 
+       And I fill in "Start year" with "<start_year>"  
        And I fill in "Due date" with "<due_date>"
        And I press "Create request"
       Then I should see "<message>"
 
       Examples:
-        | organization | title | due_date   | start_date | message                              | 
-        | org1         | title | 2010-09-01 | 2010-07-01 | Request was successfully created     | 
-        |              | title | 2010-09-01 | 2010-07-01 | Organization can't be blank         | 
-        | org1         |       | 2010-09-01 | 2010-07-01 | Title can't be blank         | 
-        | org1         |       |            | 2010-07-01 | Due date can't be blank         | 
-        | org1         |       | 123        | 2010-07-01 | Due date is not a valid date    | 
+        | organization | title | due_date   | start_year | message                              | 
+        | org1         | title | 2010-09-01 | 2010       | Request was successfully created     | 
+        |              | title | 2010-09-01 | 2010       | Organization can't be blank         | 
+        | org1         |       | 2010-09-01 | 2010       | Title can't be blank         | 
+        | org1         |       |            | 2010       | Due date can't be blank         | 
+        | org1         |       | 123        | 2010       | Due date is not a valid date    | 
         | org1         | title | 2010-09-01 |            | Start date can't be blank         | 
 
     Scenario: To expedite the review process, a sysadmin can change a Request to "Final Review" status

@@ -167,7 +167,7 @@ a.remove_nested
 
 .next, .big_button
   +border-radius
-  border: 1px
+  border: 1px solid $green - #222
   background: $green
   color: white
   cursor: pointer
@@ -175,18 +175,28 @@ a.remove_nested
   font-weight: bold
   padding: 9px 15px 7px 15px
   text-decoration: none
-  +linear-gradient(color-stops($orange, $orange - #333))
-  +box-shadow(#666, 0, 1px, 3px)
-  +text-shadow(#666, 0, 1px, 1px)
-  &:hover
-    background= !mid-blue
+  +linear-gradient(color-stops($green, $green - #222))
+  +box-shadow(#999, 0, 1px, 3px)
+  +text-shadow($green - #444, 0, 1px, 0)
+  &:hover, &:focus
+    background: $mid-blue
+    border: 1px solid $green - #333
     color: white
     text-decoration: none
+    +box-shadow(#999, 0, 0, 5px)
+    +linear-gradient(color-stops($green, $green - #333))
+  &:active
+    background: $green - #444
+    position: relative
+    top: 1px
+    +box-shadow(#999, 0, 0, 3px)
+    +linear-gradient(color-stops($green - #333, $green - #111))
   &.big
     clear: both
     color: white
     display: inline-block
     float: none
+    font-size: 18px
     margin: 10px 0
     padding: 13px 20px 10px 20px
     overflow: hidden

@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   alias_attribute :spend_gor_q4, :spend_q3
   alias_attribute :spend_gor_q1_next_fy, :spend_q4
   alias_attribute :spend_gor_q1, :spend_q4_prev
- 
+
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget
                          budget budget_q4_prev budget_q1 budget_q2 budget_q3
@@ -275,7 +275,7 @@ class Project < ActiveRecord::Base
   def spend_matches_funders?
     (self.spend || 0) == self.in_flows_spend_total
   end
-  
+
   #calculates the activitytotals for budget/spent
   def subtotals(type)
     activities.select{|a| a.send(type).present?}.sum(&type)

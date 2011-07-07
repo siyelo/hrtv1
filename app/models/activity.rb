@@ -119,8 +119,7 @@ class Activity < ActiveRecord::Base
   validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-
-
+  validates_length_of :name, :within => 3..64
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
   #validates_associated :sub_activities
@@ -191,17 +190,15 @@ class Activity < ActiveRecord::Base
       header_row = Activity::FILE_UPLOAD_COLUMNS
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
-      
       header_row[5] = "#{response.spend_quarters_months('q1')} Spend"
       header_row[6] = "#{response.spend_quarters_months('q2')} Spend"
       header_row[7] = "#{response.spend_quarters_months('q3')} Spend"
       header_row[8] = "#{response.spend_quarters_months('q4')} Spend"
-      
+
       header_row[10] = "#{response.budget_quarters_months('q1')} Budget"
       header_row[11] = "#{response.budget_quarters_months('q2')} Budget"
       header_row[12] = "#{response.budget_quarters_months('q3')} Budget"
       header_row[13] = "#{response.budget_quarters_months('q4')} Budget"
-      
       csv << header_row
 
       activities.each do |activity|

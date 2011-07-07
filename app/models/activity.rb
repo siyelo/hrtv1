@@ -751,7 +751,7 @@ class Activity < ActiveRecord::Base
     end
 
     def dates_within_project_date_range
-      if project.present?
+      if project.present? && project.start_date && project.end_date
         errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date
         errors.add(:end_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if end_date > project.end_date
       end

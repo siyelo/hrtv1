@@ -1,12 +1,12 @@
 - unless current_user.sysadmin?
   - response = current_user.responses.find_by_data_request_id(request)
 
-%tr
+%tr{:class => (request.final_review? ? "final_review" : nil)}
   %td.title
     = link_to request.title, set_request_path(request.id), :class => "title"
     - if response && request.final_review?
-      %ul.response-notice
-        %li= "This Request is in the Final Review stage. #{link_to "Please re-check, then (re)submit", response_projects_path(@response || current_user.current_response) } your response."
+      %span.inline-response-notice
+        = "This Request is in the Final Review stage. #{link_to "Please re-check, then (re)submit", response_projects_path(@response || current_user.current_response) } your response."
   %td= request.organization.name
   %td= request.due_date.strftime('%d %b %y')
   - if response

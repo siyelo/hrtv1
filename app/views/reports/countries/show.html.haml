@@ -74,7 +74,7 @@
   .first-half
     %h2 Top Organizations by Expenditure
     = render 'reports/countries/organizations/table_mini', :top_organizations => @top_organizations
-    %p.bordered= link_to "View all Organizations", reports_country_organizations_path, :class => "right"
+    %p= link_to "View all Organizations", reports_country_organizations_path, :class => "right"
 
   .second-half
     %h2 Top Activities by Expenditure

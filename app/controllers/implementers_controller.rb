@@ -43,7 +43,18 @@ class ImplementersController < Reporter::BaseController
   def update
     SubActivity.bulk_update(@response, params[:sub_activities])
     flash[:notice] = 'Implementers were successfully saved'
-    redirect_to response_implementers_url(@response)
+    if params[:commit] == "Save"
+      redirect_to response_implementers_url(@response)
+    else
+      if @response.request.purposes?
+        redirect_to edit_response_classification_path(@response, 'CodingSpend')
+      # elsif @response.request.locations?
+        # Add redirect to locations tab once locations have been re-enabled 
+      else
+        redirect_to response_long_term_budgets_path
+      end
+        
+    end
   end
 
 

@@ -38,10 +38,10 @@
         - project.activities.only_simple.ordered.each do |activity|
           = render 'activity_row', :project => project, :activity => activity
 
-
       %tr
         %td.borderless{:colspan => 100}
-          = submit_tag :Save, :class => 'save_btn right big'
+          = submit_tag "Save & Next >", :class => 'save_btn right'
+          = submit_tag "Save", :class => 'save_btn right'
 
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|

@@ -42,8 +42,11 @@ class FundersController < Reporter::BaseController
   def update
     FundingFlow.bulk_update(@response, params[:funders])
     flash[:notice] = 'Funders were successfully saved'
-    redirect_to response_funders_url(@response)
-  end
+    if params[:commit] == "Save"
+      redirect_to response_funders_url(@response)
+    else
+      redirect_to response_implementers_path(@response)
+    end  end
 
   private
     def load_projects

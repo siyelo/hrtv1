@@ -13,8 +13,3 @@
   %td.actions
     = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
     -#= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
-
-:javascript
-  $("td.tooltip").live('hover', function() {
-    this.setAttribute("title", this.textContent)
-  }).tipsy({gravity: w, live: true, html: true})

@@ -1755,6 +1755,11 @@ var classifications_edit = {
       remaining === 0 ? remaining_box.hide() : remaining_box.show();
       remaining_box.find('span.js_remaining').text(remaining)
     });
+
+
+    $("td.tooltip").live('hover', function() {
+      this.setAttribute("title", this.textContent)
+    }).tipsy({gravity: 'w', live: true, html: true})
   }
 };
 

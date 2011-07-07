@@ -66,15 +66,14 @@ describe Activity do
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should validate_presence_of(:description) }
+    it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }
-
 
     it "will return false if the activity start date is before the project start date" do
       @activity = Factory.build(:activity,
                                 :project => Factory(:project, :start_date => '2011-01-01', :end_date => '2011-04-01'),
                                 :start_date => Date.parse("2010-01-01"), :end_date => Date.parse("2011-03-01"))
-
       @activity.should_not be_valid
     end
 

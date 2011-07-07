@@ -235,8 +235,11 @@
       // run the select callback (some keyboard entry methods will manage this callback manually)
       if( settings.select != null && skipCallback != true ) settings.select.apply(thismenu, [value, name]);
 
-      // update the display value and return the jQuery object
-      return $self[bInput ? "val" : "text"](name);
+      // update display only when hidden field has value
+      if ($hidden.val()) {
+        // update the display value and return the jQuery object
+        return $self[bInput ? "val" : "text"](name);
+      }
     };
 
     // set the default value (but don't run callback)

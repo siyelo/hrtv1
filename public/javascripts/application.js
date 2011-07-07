@@ -1543,12 +1543,15 @@ var classifications_edit = {
       },
 
       initMcDropdown: function (elements) {
-        elements.mcDropdown("#purpose_menu", {
+        clone = $("#purpose_menu").clone();
+        //$(clone).attr('id', 'new_id')
+        elements.mcDropdown(clone, {
           hoverOutDelay: 0,
           hoverOverDelay: 300,
     //      showACOnEmptyFocus: true,
           allowParentSelect: true,
-          delim: ">"
+          delim: ">",
+          select: purposes.select_purpose
         })
       },
 
@@ -1619,8 +1622,11 @@ var classifications_edit = {
         var selected_text   = purposes.get_selected_text(mcdropdown);
         var purpose_label   = purposes.get_purpose_label(selected_text);
         var purpose_context = purposes.get_purpose_context(selected_text);
+        var tr              = mcdropdown.parents('tr:first');
+        var td              = mcdropdown.parents('td:first');
 
-        mcdropdown.replaceWith(
+        mcdropdown.remove();
+        td.html(
           '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
           '    <span class="context">' + purpose_context + '</span>'
         )
@@ -1643,6 +1649,43 @@ var classifications_edit = {
 
           tr.find('.js_ca').val(0).trigger('keyup');
           tr.remove();
+        }
+      },
+
+      //on purpose select
+      select_purpose: function (value, name) {
+        if (!value) {
+          return;
+        }
+
+        var mcdropdown     = $('.mcdropdown');
+        var tr             = mcdropdown.parents('tr:first');
+        var row            = mcdropdown.parents('.js_purpose_row');
+        var activity_id    = tr.parents('.js_purpose_row').attr('activity_id');
+
+        // determine if the purpose was already added
+        addedIds = jQuery.map(row.find('.js_ca').not(':last'), function (e) {
+          //return Number($(e).attr('id').match(/\d+/)[0]);
+          var id = $(e).attr('id');
+          if (id) {
+            return Number(id.match(/classifications_(\d+)_(\d+)/)[2]);
+          }
+        });
+
+        if (addedIds.indexOf(Number(value)) >= 0) {
+          //purposes.resetMcdropdown(mcdropdown);
+          mcdropdown.find('input:hidden').val('');
+          mcdropdown.find('input.purpose_search').val('').focus();
+          alert('"' + name + '" is already added');
+        } else {
+          if (value) {
+            // enable add purpose button
+            $('.js_add_purpose').removeClass('disabled');
+          }
+
+          tr.attr("data-ca_id", value)
+          tr.find('.total input').attr('id', 'classifications_' + activity_id + '_' + value)
+          tr.find('.total input').attr('name', 'classifications[' + activity_id + '][' + value + ']')
         }
       }
     };
@@ -1693,50 +1736,6 @@ var classifications_edit = {
     $(".js_remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
-    });
-
-    // on purpose select
-    $('.mcdropdown_menu li').live('click', function (e) {
-      e.preventDefault();
-
-      var element        = $(this);
-      var code_id        = element.attr('rel');
-      var mcdropdown     = $('.mcdropdown');
-      var tr             = mcdropdown.parents('tr:first');
-      var row            = mcdropdown.parents('.js_purpose_row');
-      var activity_id    = tr.parents('.js_purpose_row').attr('activity_id');
-      var selected_text  = getNodeText(element);
-
-      // determine if the purpose was already added
-      addedIds = jQuery.map(row.find('.js_ca'), function (e) {
-        //return Number($(e).attr('id').match(/\d+/)[0]);
-        var id = $(e).attr('id');
-        if (id) {
-          return Number(id.match(/classifications_(\d+)_(\d+)/)[2]);
-        }
-      });
-
-      if (addedIds.indexOf(Number(code_id)) >= 0) {
-        //purposes.resetMcdropdown(mcdropdown);
-        console.log(mcdropdown.find('input:hidden'))
-        console.log(mcdropdown.find('input.purpose_search'))
-        mcdropdown.find('input:hidden').val('');
-        mcdropdown.find('input.purpose_search').val('').focus();
-        e.preventDefault();
-        e.stopPropagation();
-        alert('"' + selected_text + '" is already added');
-        // TODO: try mcdropdown select callback
-        return false;
-      } else {
-        if (code_id) {
-          // enable add purpose button
-          $('.js_add_purpose').removeClass('disabled');
-        }
-      }
-
-      tr.attr("data-ca_id", code_id)
-      tr.find('.total input').attr('id', 'classifications_' + activity_id + '_' + code_id)
-      tr.find('.total input').attr('name', 'classifications[' + activity_id + '][' + code_id + ']')
     });
 
     $('.js_ca').live('keyup', function (e) {
@@ -1928,10 +1927,8 @@ var workplans_index = {
           add_btn.removeClass('disabled');
 
           if (add_btn.hasClass('add_activity')) {
-            console.info('adding activity');
             element.parents('tr').prevAll('.js_other_costs_subheading:first').before(data.html);
           } else if (add_btn.hasClass('add_other_cost')) {
-            console.info('adding other');
             element.parents('tr').before(data.html);
           }
 

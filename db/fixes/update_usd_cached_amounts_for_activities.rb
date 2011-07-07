@@ -17,3 +17,4 @@ activities.each_with_index do |a, index|
 end
 
 puts "Activities cache update done..."
+puts " => failed activities: #{failed_activities}"

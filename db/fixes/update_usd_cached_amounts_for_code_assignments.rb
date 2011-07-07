@@ -18,6 +18,4 @@ cas.each_with_index do |ca, index|
 end
 
 puts "Code Assignment cache update done..."
-
-puts " => failed activities: #{failed_activities}"
 puts " => failed code assignments: #{failed_cas}"

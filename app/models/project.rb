@@ -278,7 +278,7 @@ class Project < ActiveRecord::Base
   
   #calculates the activitytotals for budget/spent
   def subtotals(type)
-    activities.select{|a| !a.am_approved.nil? && a.am_approved && a.send(type).present?}.sum(&type)
+    activities.select{|a| a.send(type).present?}.sum(&type)
   end
 
   def in_flows_spend_total

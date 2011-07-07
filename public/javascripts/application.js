@@ -1655,24 +1655,17 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
     $('#other_cost_budget').keyup(function () {
       split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
-    });
+    }); 
 
     $(".js_am_approve").click(function (e) {
       e.preventDefault();
-      var activity_id = $(this).attr('activity-id');
-      var response_id = $(this).attr('response-id');
-      var element = $(this);
+      approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
+    })
 
-      element.find(".ajax-loader").show();
-      var url = "/responses/" + response_id + "/activities/" + activity_id + "/am_approve"
-      $.post(url, {approve: true, "_method": "put"}, function (data) {
-        element.find(".ajax-loader").hide();
-        if (data.status == 'success') {
-          element.html('<span>Budget Approved</span>');
-        }
-      })
-    });
-
+    $(".js_sysadmin_approve").click(function (e) {
+      e.preventDefault();
+      approveActivity($(this), 'sysadmin_approve', 'Approved by Admin');
+    })
   }
 };
 

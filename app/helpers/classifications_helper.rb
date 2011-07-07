@@ -23,7 +23,12 @@ module ClassificationsHelper
   end
 
   def cached_amount_total(code_assignments)
-    code_assignments.map{|ca| ca.cached_amount}.sum
+    # !!! CAUTION: this is disabled because
+    # classified amount caches are disabled
+    #
+    # code_assignments.map{|ca| ca.cached_amount}.sum
+
+    code_assignments.map{|ca| ca.amount}.sum
   end
 
   def getting_started_partial(coding_type)

@@ -17,6 +17,25 @@ function add_fields(link, association, content) {
   after_add_fields_callback(association);
 };
 
+function getNodeText($el){
+  var nodeContent;
+  var nContents = $el.contents().filter(function() {
+    // remove empty text nodes and comments
+    return (this.nodeType == 1) || (this.nodeType == 3 && $.trim(this.nodeValue).length>0);
+  });
+  // return either an empty string or the node's value
+  if (nContents[0] && nContents[0].nodeType == 3) {
+    // Text node : take it's value
+    nodeContent = nContents[0].nodeValue;
+  } else if (nContents[0] && nContents[0].nodeType == 1) {
+    // Element node : take the contents
+    nodeContent = $(nContents[0]).text();
+  } else {
+    nodeContent = "";
+  }
+  return $.trim(nodeContent);
+};
+
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
   var value            = edit_block.find('.ff_' + type).val();
   var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
@@ -1514,9 +1533,164 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 //###################################
 //# Classifications
 //###################################
-var classifications_edit = implementers_index = {
+var classifications_edit = {
   run: function () {
-    
+    var purposes = {
+      resetMcdropdown: function (mcdropdown) {
+        // reset and focus search
+        mcdropdown.find('input:hidden').val('');
+        mcdropdown.find('input.purpose_search').val('').focus();
+      },
+
+      initMcDropdown: function (elements) {
+        clone = $("#purpose_menu").clone();
+        //$(clone).attr('id', 'new_id')
+        elements.mcDropdown(clone, {
+          hoverOutDelay: 0,
+          hoverOverDelay: 300,
+    //      showACOnEmptyFocus: true,
+          allowParentSelect: true,
+          delim: ">",
+          select: purposes.select_purpose
+        })
+      },
+
+      add_purpose: function (add_link) {
+        var tr = $('<tr/>').append(
+          $('<td/>').attr({'class': 'desc wrap-60'}).append(
+            $('<input/>').attr({'class': 'purpose_search', 'type': 'text'})
+          ),
+          $('<td/>').attr({'class': 'total'}).append(
+            $('<input/>').attr({'class': 'js_ca', 'type': 'text'})
+          ),
+          $('<td/>').attr({'class': 'actions'}).append(
+            $('<img/>').attr({src: "/images/delete_row.png", class: "js_remove_purpose delete_row pointer"})
+          )
+        )
+
+        add_link.parents('tr:first').before(tr)
+
+        purposes.initMcDropdown(tr.find(".purpose_search"));
+      },
+
+      get_purpose_context: function(selected_text) {
+        var arr = [];
+        var codes = selected_text.split('>');
+        var purpose_context = '';
+
+        if (codes.length > 1) {
+          arr.push(codes[codes.length - 2]);
+          if (codes.length > 2) {
+            arr.unshift(codes[codes.length - 3]);
+            if (codes.length >= 3) {
+              arr.unshift('...');
+            }
+          }
+          purpose_context = '( ' + arr.join(' > ') + ' > )';
+        }
+
+        return purpose_context;
+      },
+
+      get_purpose_label: function(selected_text) {
+        var codes = selected_text.split('>')
+        return codes[codes.length - 1];
+      },
+
+      // find the value from a mcdropdown or a combobox
+      // (classfications are using mcdropdown, implementer orgs are a combobox)
+      get_selected_val: function (mcdropdown){
+        var selected_id   = mcdropdown.find('input:hidden').val();
+        if (!selected_id) {
+          selected_id = mcdropdown.find('.combobox').val();
+        }
+        return selected_id;
+      },
+
+      // find the value from a mcdropdown or a combobox
+      // (classfications are using mcdropdown, implementer orgs are a combobox)
+      get_selected_text: function (mcdropdown){
+        var selected_text   = mcdropdown.find('input:first').val();
+        if (!selected_text) {
+          selected_text = mcdropdown.find(".combobox").find(":selected").text();
+        }
+        return selected_text;
+      },
+
+      close_purpose: function (mcdropdown) {
+        var selected_id     = purposes.get_selected_val(mcdropdown);
+        var selected_text   = purposes.get_selected_text(mcdropdown);
+        var purpose_label   = purposes.get_purpose_label(selected_text);
+        var purpose_context = purposes.get_purpose_context(selected_text);
+        var tr              = mcdropdown.parents('tr:first');
+        var td              = mcdropdown.parents('td:first');
+
+        mcdropdown.remove();
+        td.html(
+          '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
+          '    <span class="context">' + purpose_context + '</span>'
+        )
+
+        if (!selected_id) {
+          tr.remove();
+        }
+      },
+
+      remove_purpose: function (element) {
+        var tr     = element.parents('tr:first');
+        var id     = tr.attr('data-ca_id');
+        var loader = element.next('.ajax-loader');
+
+        if ( confirm('Are you sure?') ) {
+          // check if removing empty mcdropdown
+          if (tr.find('.mcdropdown input:hidden').val() === "") {
+            tr.parents('.js_purpose_row').find('.js_add_purpose').removeClass('disabled');
+          }
+
+          tr.find('.js_ca').val(0).trigger('keyup');
+          tr.remove();
+        }
+      },
+
+      //on purpose select
+      select_purpose: function (value, name) {
+        if (!value) {
+          return;
+        }
+
+        var mcdropdown     = $('.mcdropdown');
+        var tr             = mcdropdown.parents('tr:first');
+        var row            = mcdropdown.parents('.js_purpose_row');
+        var activity_id    = tr.parents('.js_purpose_row').attr('activity_id');
+
+        // determine if the purpose was already added
+        addedIds = jQuery.map(row.find('.js_ca').not(':last'), function (e) {
+          //return Number($(e).attr('id').match(/\d+/)[0]);
+          var id = $(e).attr('id');
+          if (id) {
+            return Number(id.match(/classifications_(\d+)_(\d+)/)[2]);
+          }
+        });
+
+        if (addedIds.indexOf(Number(value)) >= 0) {
+          //purposes.resetMcdropdown(mcdropdown);
+          mcdropdown.find('input:hidden').val('');
+          mcdropdown.find('input.purpose_search').val('').focus();
+          alert('"' + name + '" is already added');
+        } else {
+          if (value) {
+            // enable add purpose button
+            $('.js_add_purpose').removeClass('disabled');
+          }
+
+          tr.attr("data-ca_id", value)
+          tr.find('.total input').attr('id', 'classifications_' + activity_id + '_' + value)
+          tr.find('.total input').attr('name', 'classifications[' + activity_id + '][' + value + ']')
+        }
+      }
+    };
+    //end purposes
+
     var getClassificationTotal = function (amounts, amount) {
       var total = 0;
       for (var i = 0; i < amounts.length; i++) {
@@ -1533,54 +1707,35 @@ var classifications_edit = implementers_index = {
       }
       return total;
     };
-    
 
-    //implementers use an autocomplete combobox, not an mcdropdowns
-    $(".combobox").combobox();
+
+    $(".js_add_purpose").live('click', function (e) {
+      e.preventDefault();
+
+      // prevent adding new purpose if last is active & blank
+      if ($(this).hasClass('disabled')) {
+        return;
+      }
+
+      // close mcdropdowns
+      var active_mcdropdown = $('.mcdropdown');
+      if (active_mcdropdown.length > 0) {
+        purposes.close_purpose(active_mcdropdown);
+      }
+
+      // enable all add purpose butons
+      $('.js_add_purpose').removeClass('disabled');
+
+      // disable this add purpose button
+      $(this).addClass('disabled');
+
+      // add purpose
+      purposes.add_purpose($(this));
+    });
 
     $(".js_remove_purpose").live('click', function (e) {
       e.preventDefault();
       purposes.remove_purpose($(this));
-    });
-
-    $(".add_purpose").live('click', function (e) {
-      e.preventDefault();
-      purposes.add_purpose($(this));
-    });
-
-    $(".js_add_entry").live('click', function (e) {
-      e.preventDefault();
-      purposes.add_entry($(this));
-    });
-
-    $(".cancel_add_purpose").live('click', function (e) {
-      e.preventDefault();
-      purposes.cancel_add_purpose($(this));
-    });
-
-    purposes.initMcDropdown($(".purpose_search"));
-
-    $(".save_btn").live('click', function (e) {
-      e.preventDefault();
-      var element = $(this);
-      var loader  = element.next('.ajax-loader');
-      var form    = element.parents('form');
-
-      if (element.hasClass('disabled')) {
-        return;
-      }
-      element.addClass('disabled');
-
-      loader.show();
-      form.find('.add_purpose').addClass('disabled');
-
-      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
-        element.removeClass('disabled');
-        var tr = $(data.html);
-        element.parents('tr.js_purpose_row').replaceWith(tr);
-        purposes.initMcDropdown(tr.find(".purpose_search"));
-        loader.hide();
-      });
     });
 
     $('.js_ca').live('keyup', function (e) {
@@ -1600,185 +1755,13 @@ var classifications_edit = implementers_index = {
       remaining === 0 ? remaining_box.hide() : remaining_box.show();
       remaining_box.find('span.js_remaining').text(remaining)
     });
+
+
+    $("td.tooltip").live('hover', function() {
+      this.setAttribute("title", this.textContent)
+    }).tipsy({gravity: 'w', live: true, html: true})
   }
 };
-
-var purposes = {
-  // find the purpose 'row' closest relative to given link
-  find_row: function(link) {
-    return link.closest('.js_purpose_row');
-  },
-
-  find_row_id: function(link) {
-    return purposes.find_row(link).attr('id');
-  },
-
-  // finds the add link relative to the cancel link
-  find_add_purpose_link: function (cancel_link) {
-    return purposes.find_row(cancel_link).find(".add_purpose");
-  },
-
-  resetMcdropdown: function (parentElement) {
-    // reset and focus search
-    parentElement.find('.mcdropdown input:hidden').val('');
-    parentElement.find('.mcdropdown input.purpose_search').val('').focus();
-  },
-
-  initMcDropdown: function (elements) {
-    elements.mcDropdown("#purpose_menu", {
-      hoverOutDelay: 0,
-      hoverOverDelay: 300,
-//      showACOnEmptyFocus: true,
-      allowParentSelect: true,
-      delim: ">"
-    })
-  },
-
-  add_purpose: function (add_link) {
-    if (add_link.hasClass('disabled')) {
-      return false;
-    }
-
-    // close all other add purpose forms to mask the mcdropdown duplication
-    // otherwise we need to embed the whole tree data for each dropdown making
-    // a rather large html...
-    $(".add_purpose_form").addClass('hidden');
-    $(".add_purpose").removeClass('disabled'); // other add links should be enabled then
-
-    add_link.parents('tr:first').prev('tr').removeClass('hidden');
-
-    add_link.addClass('disabled');
-
-    purposes.resetMcdropdown(add_link.parents('form'));
-    return true;
-  },
-
-  get_purpose_context: function(selected_text) {
-    var arr = [];
-    var codes = selected_text.split('>');
-    var purpose_context = '';
-
-    if (codes.length > 1) {
-      arr.push(codes[codes.length - 2]);
-      if (codes.length > 2) {
-        arr.unshift(codes[codes.length - 3]);
-        if (codes.length >= 3) {
-          arr.unshift('...');
-        }
-      }
-      purpose_context = '( ' + arr.join(' > ') + ' > )';
-    }
-
-    return purpose_context;
-  },
-
-  get_purpose_label: function(selected_text) {
-      var codes = selected_text.split('>')
-      return codes[codes.length - 1];
-  },
-
-  // find the value from a mcdropdown or a combobox
-  // (classfications are using mcdropdown, implementer orgs are a combobox)
-  get_selected_val: function(form){
-    var selected_id   = form.find('.mcdropdown input:hidden').val();
-    if (!selected_id) {
-      selected_id = form.find('.combobox').val();
-    }
-    return selected_id;
-  },
-
-  // find the value from a mcdropdown or a combobox
-  // (classfications are using mcdropdown, implementer orgs are a combobox)
-  get_selected_text: function(form){
-    var selected_text   = form.find('.mcdropdown input:first').val();
-    if (!selected_text) {
-      selected_text = form.find(".combobox").find(":selected").text();
-    }
-    return selected_text;
-  },
-
-  add_entry: function(link) {
-
-    var form          = link.parents('form');
-    var selected_id   = purposes.get_selected_val(form);
-    var selected_text = purposes.get_selected_text(form);
-
-    if (!selected_id) {
-      return;
-    }
-
-    // determine if the purpose was already added
-    addedIds = jQuery.map(form.find('.js_ca'), function (e) {
-      return Number($(e).attr('id').match(/\d+/)[0]);
-    });
-
-    if (addedIds.indexOf(Number(selected_id)) >= 0) {
-      alert('"' + selected_text + '" is already added');
-      purposes.resetMcdropdown(form);
-      return;
-    }
-
-    var purpose_context = purposes.get_purpose_context(selected_text);
-    var purpose_label = purposes.get_purpose_label(selected_text);
-
-    var tr =  '<tr>' +
-              '  <td class="wrap-60 desc">' +
-              '    <label for="classifications_' + selected_id + '">' + purpose_label + '</label>' +
-              '    <span class="context">' + purpose_context + '</span>' +
-              '  </td>' +
-              '  <td class="total">' +
-              '    <input type="text" value="0.0" name="classifications[' + selected_id + ']" id="classifications_' + selected_id + '" class="js_ca"></td>' +
-              '  <td class="actions">' +
-              '    <img src="/images/delete_row.png" class="js_remove_purpose delete_row pointer" alt="Icon_close_flash">' +
-              '  </td>' +
-              '</tr>';
-
-    // add a row to the actual form that will be submitted
-    link.parents('tr:first').before(tr);
-
-    // hide the add form
-    purposes.cancel_add_purpose(link);
-
-    purposes.btnToggle(form);
-    if (form.find('.js_ca').length > 0) {
-      form.find('.save_btn').show();
-    }
-  },
-
-  // hides the form containing the given link
-  // works for both save & cancel links
-  cancel_add_purpose: function(link) {
-    link.parents('tr:first').addClass('hidden');
-    add_link = purposes.find_add_purpose_link(link);
-    add_link.removeClass('disabled');
-    return true;
-  },
-
-  btnToggle: function (form) {
-    var btn = form.find('.save_btn');
-    form.find('.js_ca').length > 0 ? btn.show() : btn.hide();
-  },
-
-  remove_purpose: function(destroy_link) {
-    var tr = destroy_link.parents('tr:first');
-    var id = tr.attr('data-ca_id');
-    var loader = destroy_link.next('.ajax-loader');
-
-    if (confirm('Are you sure?')) {
-      if (id) {
-        loader.show();
-        $.post('/responses/' + _response_id + '/classifications/' + id, {'_method': 'delete'}, function (data) {
-          if (data.status) {
-            tr.remove();
-          }
-        })
-      } else {
-        tr.remove();
-      }
-    }
-  }
-};
-//end purposes
 
 
 var changeRowspan = function (element, value) {
@@ -1949,10 +1932,8 @@ var workplans_index = {
           add_btn.removeClass('disabled');
 
           if (add_btn.hasClass('add_activity')) {
-            console.info('adding activity');
             element.parents('tr').prevAll('.js_other_costs_subheading:first').before(data.html);
           } else if (add_btn.hasClass('add_other_cost')) {
-            console.info('adding other');
             element.parents('tr').before(data.html);
           }
 

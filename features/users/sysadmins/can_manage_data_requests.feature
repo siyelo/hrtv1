@@ -1,4 +1,3 @@
-@run
 Feature: Admin can manage data requests
   In order to collect data in the system
   As a admin
@@ -51,11 +50,11 @@ Feature: Admin can manage data requests
         | org1         |       | 2010-09-01 | 2010       | Title can't be blank         | 
         | org1         |       |            | 2010       | Due date can't be blank         | 
         | org1         |       | 123        | 2010       | Due date is not a valid date    | 
-        | org1         | title | 2010-09-01 |            | Start date can't be blank         | 
+        | org1         | title | 2010-09-01 |            | Start year is not a valid year         | 
 
     Scenario: To expedite the review process, a sysadmin can change a Request to "Final Review" status
       When I follow "Requests"
        And I follow "Edit"
        And I check "Final review"
        And I press "Update request"
-      Then I should see "Request was successfully updated."
+      Then I should see "Request was successfully updated"

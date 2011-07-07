@@ -1,8 +1,12 @@
 - other_costs = false unless other_costs
 
-%ul.group.small_tabs
+// old tab styles
+//%ul.group.small_tabs
+
+%ul.ordered_sub_nav
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :budget
-    Current Budget:
+    %li
+      %p Current Budget:
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingBudget')}
         = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingBudget')
@@ -19,7 +23,8 @@
         = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :spend
-    Expenditure:
+    %li
+      %p Expenditure:
     - if @response.request.purposes?
       %li{:class => tab_class(activity, coding_type, 'CodingSpend')}
         = link_to "1. Purposes", activity_code_assignments_path(activity, :coding_type => 'CodingSpend')

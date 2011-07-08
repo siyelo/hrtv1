@@ -162,6 +162,18 @@ class CodeAssignment < ActiveRecord::Base
     ).group_by{|ca| ca.activity_id}
   end
 
+  def self.mass_update_classifications(response, classifications, coding_type)
+    response.activities.only_simple.each do |activity|
+      if classifications.present? && classifications[activity.id.to_s].present?
+        activity_classifications = classifications[activity.id.to_s]
+      else
+        activity_classifications = {}
+      end
+
+      self.update_classifications(activity, activity_classifications, coding_type)
+    end
+  end
+
   def self.update_classifications(activity, classifications, coding_type)
     klass            = coding_type.constantize
     non_blank_ids    = []
@@ -201,7 +213,10 @@ class CodeAssignment < ActiveRecord::Base
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", activity.id, coding_type])
     end
 
-    activity.update_classified_amount_cache(klass)
+    # !!! CAUTION: classified amount caches are disabled
+    # because it's too slow with them
+    #
+    # activity.update_classified_amount_cache(klass)
   end
 
   private
@@ -221,20 +236,21 @@ class CodeAssignment < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: code_assignments
 #
 #  id                   :integer         not null, primary key
-#  activity_id          :integer
-#  code_id              :integer         indexed
-#  amount               :decimal(, )
-#  type                 :string(255)
-#  percentage           :decimal(, )
-#  cached_amount        :decimal(, )     default(0.0)
-#  sum_of_children      :decimal(, )     default(0.0)
+#  activity_id          :integer         indexed => [code_id, type]
+#  code_id              :integer         indexed, indexed => [activity_id, type]
+#  amount               :integer(10)
+#  type                 :string(255)     indexed => [activity_id, code_id]
+#  percentage           :integer(10)
+#  cached_amount        :integer(10)     default(0)
+#  sum_of_children      :integer(10)     default(0)
 #  created_at           :datetime
 #  updated_at           :datetime
-#  cached_amount_in_usd :decimal(, )     default(0.0)
+#  cached_amount_in_usd :integer(10)     default(0)
 #
 

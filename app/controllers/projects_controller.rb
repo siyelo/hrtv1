@@ -89,7 +89,7 @@ class ProjectsController < Reporter::BaseController
     send_csv(template, 'projects_template.csv')
   end
 
-  def create_from_file
+  def bulk_create
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})

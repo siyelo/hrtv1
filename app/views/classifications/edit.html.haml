@@ -11,31 +11,37 @@
 
 = render "classifications/getting_started/#{getting_started_partial(params[:id])}"
 
-%table.workplan
-  %thead
-    %tr
-      %th.no-bg
-      %th.no-padding{:colspan => 100}
-        %ul.tabs
-          %li
-            - link_to edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil) do
-              2. Current Budget
-              %span.message
-                = @response.uncoded_budgets.size ||= 0
+- form_tag response_classification_path(@response, params[:id]), :method => :put do
+  %table.workplan
+    %thead
+      %tr
+        %th.no-bg
+        %th.no-padding{:colspan => 100}
+          %ul.tabs
+            %li
+              - link_to edit_response_classification_path(@response, budget_coding_type(params[:id])), :class => (params[:id].match('Budget') ? 'active' : nil) do
+                2. Current Budget
+                %span.message
+                  = @response.uncoded_budgets.size ||= 0
 
-          %li
-            - link_to edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil) do
-              1. Past Expenditure
-              %span.message
-                = @response.uncoded_spends.size ||= 0
+            %li
+              - link_to edit_response_classification_path(@response, spend_coding_type(params[:id])), :class => (params[:id].match('Spend') ? 'active' : nil) do
+                1. Past Expenditure
+                %span.message
+                  = @response.uncoded_spends.size ||= 0
 
-    %tr.head
-      %th.nested_name.fixed Activity
-      %th.name{:colspan => 100}= coding_name
-  %tbody
-    - @projects.each do |project|
-      - project.activities.ordered.each do |activity|
-        = render 'activity_row', :project => project, :activity => activity
+      %tr.head
+        %th.nested_name.fixed Activity
+        %th.name{:colspan => 100}= coding_name
+    %tbody
+      - @projects.each do |project|
+        - project.activities.only_simple.ordered.each do |activity|
+          = render 'activity_row', :project => project, :activity => activity
+
+
+      %tr
+        %td.borderless{:colspan => 100}
+          = submit_tag :Save, :class => 'save_btn right big'
 
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|

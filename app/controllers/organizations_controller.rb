@@ -1,5 +1,5 @@
 class OrganizationsController < Reporter::BaseController
-  before_filter :load_organization_from_id
+  before_filter :load_organization
 
   def edit
     @organization.valid? # trigger validation errors
@@ -14,5 +14,10 @@ class OrganizationsController < Reporter::BaseController
       render :action => :edit
     end
   end
+
+  private
+    def load_organization
+      @organization = current_user.organization
+    end
 end
 

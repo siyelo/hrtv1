@@ -20,6 +20,7 @@ end
 #  spend_in_usd        :decimal(, )     default(0.0)
 #
 
+
 # == Schema Information
 #
 # Table name: funding_streams
@@ -30,9 +31,9 @@ end
 #  organization_fa_id  :integer
 #  created_at          :datetime
 #  updated_at          :datetime
-#  budget              :decimal(, )     default(0.0)
-#  spend               :decimal(, )     default(0.0)
-#  budget_in_usd       :decimal(, )     default(0.0)
-#  spend_in_usd        :decimal(, )     default(0.0)
+#  budget              :integer(10)     default(0)
+#  spend               :integer(10)     default(0)
+#  budget_in_usd       :integer(10)     default(0)
+#  spend_in_usd        :integer(10)     default(0)
 #
 

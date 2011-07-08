@@ -9,6 +9,7 @@ class FundingSource < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: funding_sources
@@ -16,8 +17,8 @@ end
 #  id              :integer         not null, primary key
 #  activity_id     :integer
 #  funding_flow_id :integer
-#  spend           :decimal(, )
-#  budget          :decimal(, )
+#  spend           :integer(10)
+#  budget          :integer(10)
 #  created_at      :datetime
 #  updated_at      :datetime
 #

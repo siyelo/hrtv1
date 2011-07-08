@@ -4,11 +4,11 @@ require 'validators'
 
 class Project < ActiveRecord::Base
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget
-                         budget budget_q4_prev budget_q1 budget_q2 budget_q3
-                         budget_q4 spend spend_q4_prev spend_q1 spend_q2
-                         spend_q3 spend_q4 start_date end_date]
+  FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
+                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 current_budget 
+                           budget_q1 budget_q2 budget_q3 budget_q4 start_date end_date]
 
+  include ActionView::Helpers::TextHelper
   include ActsAsDateChecker
   include CurrencyCacheHelpers
   include BudgetSpendHelpers
@@ -86,12 +86,10 @@ class Project < ActiveRecord::Base
   after_save :update_cached_currency_amounts
   before_save :check_quarterly_vs_total
   ### Public methods
-  #
+
   def implementers
     providers
   end
-
-
 
   def response
     self.data_response
@@ -163,10 +161,36 @@ END
     saved, errors = 0, 0
     doc.each do |row|
       attributes = row.to_hash
-      project = data_response.projects.new(attributes)
+      project = data_response.projects.find_by_name(attributes["project_name"])
+      unless project
+        project = data_response.projects.new(:name => attributes["project_name"], :description => attributes["project_description"])
+        project.save
+      end
+      project.activities << project.add_activity(attributes)
       project.save ? (saved += 1) : (errors += 1)
     end
     return saved, errors
+  end
+
+  def add_activity(attributes)
+    debugger
+    activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
+                           :spend => attributes["spend"],
+                           :spend_q4_prev => attributes["spend_q4_prev"],
+                           :spend_q1 => attributes["spend_q1"],
+                           :spend_q2 => attributes["spend_q2"],
+                           :spend_q3 => attributes["spend_q3"],
+                           :spend_q4 => attributes["spend_q4"],
+                           :budget => attributes["current_budget"],
+                           :budget_q1 => attributes["budget_q1"],
+                           :budget_q2 => attributes["budget_q2"],
+                           :budget_q3 => attributes["budget_q3"],
+                           :budget_q4 => attributes["budget_q4"],
+                           :start_date => attributes["start_date"],
+                           :end_date => attributes["end_date"])
+                           
+    activity.data_response_id = data_response_id
+    activity
   end
 
   def amount_for_provider(provider, field)
@@ -345,7 +369,7 @@ END
     end
     errors
   end
-
+  
   private
 
     ### Validations
@@ -480,6 +504,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -487,29 +512,27 @@ end
 #  id               :integer         not null, primary key
 #  name             :string(255)
 #  description      :text
-#  start_date       :date
-#  end_date         :date
 #  created_at       :datetime
 #  updated_at       :datetime
-#  budget           :decimal(, )
-#  spend            :decimal(, )
-#  entire_budget    :decimal(, )
+#  budget           :integer(10)
+#  spend            :integer(10)
+#  entire_budget    :integer(10)
 #  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
+#  spend_q1         :integer(10)
+#  spend_q2         :integer(10)
+#  spend_q3         :integer(10)
+#  spend_q4         :integer(10)
+#  spend_q4_prev    :integer(10)
 #  data_response_id :integer         indexed
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
+#  budget_q1        :integer(10)
+#  budget_q2        :integer(10)
+#  budget_q3        :integer(10)
+#  budget_q4        :integer(10)
+#  budget_q4_prev   :integer(10)
 #  comments_count   :integer         default(0)
-#  budget2          :decimal(, )
-#  budget3          :decimal(, )
-#  budget4          :decimal(, )
-#  budget5          :decimal(, )
+#  budget2          :integer(10)
+#  budget3          :integer(10)
+#  budget4          :integer(10)
+#  budget5          :integer(10)
 #
 

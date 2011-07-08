@@ -74,13 +74,14 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: comments
 #
 #  id               :integer         not null, primary key
 #  title            :string(50)      default("")
-#  comment          :text            default("")
+#  comment          :text
 #  commentable_id   :integer         indexed
 #  commentable_type :string(255)     indexed
 #  user_id          :integer         indexed

@@ -54,7 +54,7 @@ class Activity < ActiveRecord::Base
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
   belongs_to :data_response
-  belongs_to :project
+  belongs_to :project, :autosave => true
   has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
@@ -88,7 +88,8 @@ class Activity < ActiveRecord::Base
   ### Validations
   validate :approved_activity_cannot_be_changed
   validates_presence_of :name, :description, :if => :is_simple?
-  validates_presence_of :data_response_id, :project_id, :if => :is_simple?
+  validates_presence_of :data_response_id, :if => :is_simple?
+  validates_presence_of :project_id, :if => :is_simple?
   validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }
   validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank? }
 
@@ -754,6 +755,7 @@ class Activity < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -765,44 +767,44 @@ end
 #  provider_id                           :integer         indexed
 #  description                           :text
 #  type                                  :string(255)     indexed
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
+#  budget                                :integer(10)
+#  spend_q1                              :integer(10)
+#  spend_q2                              :integer(10)
+#  spend_q3                              :integer(10)
+#  spend_q4                              :integer(10)
 #  start_date                            :date
 #  end_date                              :date
-#  spend                                 :decimal(, )
+#  spend                                 :integer(10)
 #  text_for_provider                     :text
 #  text_for_targets                      :text
 #  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
+#  spend_q4_prev                         :integer(10)
 #  data_response_id                      :integer         indexed
 #  activity_id                           :integer         indexed
-#  budget_percentage                     :decimal(, )
-#  spend_percentage                      :decimal(, )
+#  budget_percentage                     :integer(10)
+#  spend_percentage                      :integer(10)
 #  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  budget_q1                             :decimal(, )
-#  budget_q2                             :decimal(, )
-#  budget_q3                             :decimal(, )
-#  budget_q4                             :decimal(, )
-#  budget_q4_prev                        :decimal(, )
+#  CodingBudget_amount                   :integer(10)     default(0)
+#  CodingBudgetCostCategorization_amount :integer(10)     default(0)
+#  CodingBudgetDistrict_amount           :integer(10)     default(0)
+#  CodingSpend_amount                    :integer(10)     default(0)
+#  CodingSpendCostCategorization_amount  :integer(10)     default(0)
+#  CodingSpendDistrict_amount            :integer(10)     default(0)
+#  budget_q1                             :integer(10)
+#  budget_q2                             :integer(10)
+#  budget_q3                             :integer(10)
+#  budget_q4                             :integer(10)
+#  budget_q4_prev                        :integer(10)
 #  comments_count                        :integer         default(0)
 #  sub_activities_count                  :integer         default(0)
-#  spend_in_usd                          :decimal(, )     default(0.0)
-#  budget_in_usd                         :decimal(, )     default(0.0)
+#  spend_in_usd                          :integer(10)     default(0)
+#  budget_in_usd                         :integer(10)     default(0)
 #  project_id                            :integer
-#  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
-#  budget2                               :decimal(, )
-#  budget3                               :decimal(, )
-#  budget4                               :decimal(, )
-#  budget5                               :decimal(, )
+#  ServiceLevelBudget_amount             :integer(10)     default(0)
+#  ServiceLevelSpend_amount              :integer(10)     default(0)
+#  budget2                               :integer(10)
+#  budget3                               :integer(10)
+#  budget4                               :integer(10)
+#  budget5                               :integer(10)
 #
 

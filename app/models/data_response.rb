@@ -438,6 +438,7 @@ class DataResponse < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: data_responses
@@ -448,14 +449,6 @@ end
 #  created_at                        :datetime
 #  updated_at                        :datetime
 #  organization_id                   :integer         indexed
-#  currency                          :string(255)
-#  fiscal_year_start_date            :date
-#  fiscal_year_end_date              :date
-#  contact_name                      :string(255)
-#  contact_position                  :string(255)
-#  contact_phone_number              :string(255)
-#  contact_main_office_phone_number  :string(255)
-#  contact_office_location           :string(255)
 #  submitted                         :boolean
 #  submitted_at                      :datetime
 #  projects_count                    :integer         default(0)

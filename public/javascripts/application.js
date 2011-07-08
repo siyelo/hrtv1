@@ -1279,6 +1279,8 @@ var projects_index = {
       $('#import_export_box .upload_box').slideToggle();
     });
 
+    $('.tooltip_projects').tipsy({gravity: 'e', live: true, html: true});
+
     commentsInit();
   }
 };

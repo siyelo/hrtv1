@@ -113,7 +113,8 @@ class Activity < ActiveRecord::Base
   ### Validations
   validate :approved_activity_cannot_be_changed
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_presence_of :data_response_id, :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_presence_of :data_response_id 
+  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
   validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
   validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }

@@ -9,7 +9,11 @@ class WorkplansController < Reporter::BaseController
   def update
     Activity.bulk_update(@response, params[:activities])
     flash[:notice] = 'Workplan was successfully saved'
-    redirect_to response_workplans_url(@response)
+    if params[:commit] == "Save"
+      redirect_to response_workplans_url(@response)
+    else
+      redirect_to response_funders_path(@response)
+    end
   end
 
 

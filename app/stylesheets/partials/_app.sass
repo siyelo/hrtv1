@@ -829,20 +829,28 @@ ul.review li
   cursor: pointer
 
 /* sub-nav styles */
+
+
 #sub-nav
   background: $filler
   border-bottom: 1px solid #ddd
-  padding-top: 4px
+  
+  li
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 18px 5px 10px
 
   ul
     +horizontal-list
-    padding: 0 8px 6px
+    padding: 3px 8px 3px
     margin-top: 2px !important
   a
     +border-radius
     display: inline-block
     font-size: 12px
     padding: 7px 10px 6px 10px
+    margin: 0px 8px 0px 0px
     text-decoration: none
     +text-shadow(#fff, 0, 1px, 0)
     &:hover, &:focus
@@ -860,6 +868,50 @@ ul.review li
   .inactive
     a
       color: grey
+      
+      
+.sub-nav-arrows
+  background: $filler
+  border-bottom: 1px solid #ddd
+  min-height: 5px
+  ul
+    list-style: none
+    margin: 0
+    overflow: hidden
+  
+  li
+    display: inline
+    float: left
+    margin: 5px 0 5px -12px
+    padding: 0 4px 0 0
+    
+    &.active a
+      background: image_url("sub-nav-active2.png") no-repeat center
+      color: #fff !important
+      opacity: 1
+      &:hover, &:focus
+        background: image_url("sub-nav-active.png") no-repeat center
+    
+    &.inactive a
+      color: $light-blue - #222 !important
+      &:hover, &:focus
+        background: image_url("sub-nav.png") no-repeat center
+    
+    a
+      background: image_url("sub-nav.png") no-repeat center
+      color: $mid-blue !important
+      display: block
+      font-size: 11px
+      font-weight: bold
+      height: 18px
+      padding-top: 8px
+      opacity: 0.8
+      text-align: center
+      text-decoration: none
+      width: 120px
+      &:hover, &:focus
+        background: image_url("sub-nav-hover.png") no-repeat center
+        opacity: 1
 
 .full-width-container
   display: block

@@ -57,7 +57,8 @@
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}
-          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right big'
+          = submit_tag "Save & Next >", :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right'
+          = submit_tag :Save, :style => (@projects.detect{|p| p.activities.present? } ? nil : 'display: none;'), :class => 'save_btn right'
 
 
 - if @projects.empty?

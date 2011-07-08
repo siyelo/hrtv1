@@ -264,6 +264,7 @@ a.remove_nested
   font-size: 12px
   font-weight: bold
   padding: 9px 15px 7px 15px
+  margin: 0px 0px 0px 10px
   text-decoration: none
   +linear-gradient(color-stops($orange, $orange - #333))
   +box-shadow(#666, 0, 1px, 3px)
@@ -282,6 +283,18 @@ a.remove_nested
     font-size: 14px
     padding: 13px 20px 10px 20px
     overflow: hidden
+  &.save_next_btn
+    color: white
+    font: -webkit-small-control
+    font-size: 12px
+    font-weight: bold
+    &:hover, &:focus
+      color: white    
+  &.disabled
+    background: #eee
+    color: $light-grey + #222 !important
+    pointer-events: none
+    cursor: default
   &.small_submit_button
     background: $orange
     border: 1px solid $orange - #222
@@ -309,9 +322,9 @@ a.remove_nested
       position: relative
       top: 1px
 
-.next
-  margin-top: -5px
-
+.next a
+  color: white !important
+  
 #buttons
   margin-bottom: 5px !important
   padding: 5px 0px

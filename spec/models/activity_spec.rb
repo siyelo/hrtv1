@@ -161,7 +161,7 @@ describe Activity do
       @response = Factory(:data_response)
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Current Budget,Jul '08 - Sep '08 Budget,Oct '08 - Dec '08 Budget,Jan '09 - Mar '09 Budget,Apr '09 - Jun '09 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 
@@ -172,6 +172,11 @@ describe Activity do
       @activity.check_projects_budget_and_spend?.should be_false
     end
 
+    it "returns true if an other cost has no project" do
+      @other_cost = Factory(:other_cost, :spend => 11000, :budget => 9000, :project => nil)
+      @other_cost.check_projects_budget_and_spend?.should be_true
+    end
+    
     it "returns false when the activitys budget is greater than that of the projects" do
       @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 10000, :budget => 19000)

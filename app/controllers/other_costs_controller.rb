@@ -18,7 +18,7 @@ class OtherCostsController < Reporter::BaseController
 
   def new
     @other_cost = OtherCost.new
-    @other_cost.project = @response.projects.find_by_id(params[:project_id])
+    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
   end
 
   def edit
@@ -32,12 +32,22 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html { html_redirect }
+    @other_cost = @response.activities.new(params[:activity])
+    @other_cost.data_response = @response
+    
+    if @other_cost.save
+      respond_to do |format|
+        format.html { flash[:notice] = 'Other Cost was successfully created'; html_redirect }
+        format.js { js_redirect }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => :new }
+        format.js { js_redirect }
+      end
     end
   end
-
-
+  
   def update
     update! do |success, failure|
       success.html { html_redirect }

@@ -113,7 +113,8 @@ class Activity < ActiveRecord::Base
   ### Validations
   validate :approved_activity_cannot_be_changed
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_presence_of :data_response_id, :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_presence_of :data_response_id 
+  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
   validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
   validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
@@ -567,35 +568,38 @@ class Activity < ActiveRecord::Base
   end
 
   def check_projects_budget_and_spend?
-    return true if self.budget.nil? && self.spend.nil?
-    return true if self.actual_budget <= (self.project.budget || 0) &&
-                   self.actual_spend <= (self.project.spend || 0) &&
-                   self.actual_quarterly_spend_check? &&
-                   self.actual_quarterly_budget_check?
+    return true if budget.nil? && spend.nil?
+    return true if budget.present? && spend.present? && 
+                   type == "OtherCost" && project.nil?
+    return true if actual_budget <= (project.budget || 0) &&
+                   actual_spend <= (project.spend || 0) &&
+                   actual_quarterly_spend_check? &&
+                   actual_quarterly_budget_check?
+    
     return false
   end
 
   def actual_spend
-    (self.spend || 0 )
+    (spend || 0 )
   end
 
   def actual_budget
-    (self.budget || 0 )
+    (budget || 0 )
   end
 
   def actual_quarterly_spend_check?
-    return true if (self.spend_q1 || 0) <= (self.project.spend_q1 || 0) &&
-                   (self.spend_q2 || 0) <= (self.project.spend_q2 || 0) &&
-                   (self.spend_q3 || 0) <= (self.project.spend_q3 || 0) &&
-                   (self.spend_q4 || 0) <= (self.project.spend_q1 || 0)
+    return true if (spend_q1 || 0) <= (project.spend_q1 || 0) &&
+                   (spend_q2 || 0) <= (project.spend_q2 || 0) &&
+                   (spend_q3 || 0) <= (project.spend_q3 || 0) &&
+                   (spend_q4 || 0) <= (project.spend_q1 || 0)
     return false
   end
 
   def actual_quarterly_budget_check?
-    return true if (self.budget_q1 || 0) <= (self.project.budget_q1 || 0) &&
-                   (self.budget_q2 || 0) <= (self.project.budget_q2 || 0) &&
-                   (self.budget_q3 || 0) <= (self.project.budget_q3 || 0) &&
-                   (self.budget_q4 || 0) <= (self.project.budget_q4 || 0)
+    return true if (budget_q1 || 0) <= (project.budget_q1 || 0) &&
+                   (budget_q2 || 0) <= (project.budget_q2 || 0) &&
+                   (budget_q3 || 0) <= (project.budget_q3 || 0) &&
+                   (budget_q4 || 0) <= (project.budget_q4 || 0)
 
     return false
   end

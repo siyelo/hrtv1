@@ -10,7 +10,6 @@ class ClassificationsController < Reporter::BaseController
   def update
     CodeAssignment.mass_update_classifications(@response, params[:classifications], params[:id])
     flash[:notice] = 'Health Functions were successfully saved'
-    debugger
     if params[:commit] == 'save'  
       redirect_to edit_response_classification_url(@response, params[:id])
     else

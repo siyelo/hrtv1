@@ -12,26 +12,13 @@
   var _spend_i_values         = #{js_safe(@spend_i_values)};
   var _code_spent_values      = #{js_safe(@code_spent_values)};
   var _code_budget_values     = #{js_safe(@code_budget_values)};
-  
+
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
   %li{:class => 'last'}= link_to "Districts", reports_districts_path
 
 %h1.main_heading
   = h @location.name
-
-.full
-  .third
-    %h2 Ultimate Funding Source (Current Budget)
-    #budget_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Current Budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Current Budget)
-    #budget_i_pie.bordered
 
 .full
   .third
@@ -46,6 +33,18 @@
     %h2 Implementer (Expenditure)
     #spend_i_pie.bordered
 
+.full
+  .third
+    %h2 Ultimate Funding Source (Current Budget)
+    #budget_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Current Budget)
+    #budget_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Current Budget)
+    #budget_i_pie.bordered
 
 %ul.group
   %li= link_to "NSP", reports_district_path(@location, :code_type => "nsp"), active_if(@nsp)

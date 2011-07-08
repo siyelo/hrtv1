@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
           :conditions => ["organization_id in (?)",
                          [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
       else # reporter
-        @organization = current_user.organization.find(org_id)
+        @organization = current_user.organization
       end
       @organization
     end

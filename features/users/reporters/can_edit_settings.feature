@@ -10,7 +10,6 @@ Feature: Reporter can manage data response
     And a reporter exists with username: "reporter", organization: the organization
     And I am signed in as "reporter"
 
-
     Scenario Outline: Reporter can edit settings and see feedback messages
       When I follow "Settings"
         And I select "Euro (EUR)" from "Default Currency"

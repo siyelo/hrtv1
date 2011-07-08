@@ -104,6 +104,9 @@ class Project < ActiveRecord::Base
   after_save :update_cached_currency_amounts
   before_save :check_quarterly_vs_total
 
+  ### Named Scopes
+  named_scope :sorted,           {:order => "projects.name" }
+
   ### Public methods
   #
   def implementers

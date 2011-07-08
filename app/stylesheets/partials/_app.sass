@@ -868,6 +868,50 @@ ul.review li
   .inactive
     a
       color: grey
+      
+      
+.sub-nav-arrows
+  background: $filler
+  border-bottom: 1px solid #ddd
+  min-height: 5px
+  ul
+    list-style: none
+    margin: 0
+    overflow: hidden
+  
+  li
+    display: inline
+    float: left
+    margin: 5px 0 5px -12px
+    padding: 0 4px 0 0
+    
+    &.active a
+      background: image_url("sub-nav-active.png") no-repeat center
+      color: #fff !important
+      opacity: 1
+      &:hover, &:focus
+        background: image_url("sub-nav-active.png") no-repeat center
+    
+    &.inactive a
+      color: $light-blue - #222 !important
+      &:hover, &:focus
+        background: image_url("sub-nav.png") no-repeat center
+    
+    a
+      background: image_url("sub-nav.png") no-repeat center
+      color: $mid-blue !important
+      display: block
+      font-size: 11px
+      font-weight: bold
+      height: 18px
+      padding-top: 8px
+      opacity: 0.8
+      text-align: center
+      text-decoration: none
+      width: 120px
+      &:hover, &:focus
+        background: image_url("sub-nav-hover.png") no-repeat center
+        opacity: 1
 
 .full-width-container
   display: block

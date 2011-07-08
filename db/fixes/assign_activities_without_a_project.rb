@@ -11,7 +11,7 @@ require File.expand_path(File.dirname(__FILE__) + "../../../config/environment")
 Activity.roots.without_a_project.each do |activity|
   puts "Creating dummy project for Org \"#{activity.organization.name}\", Activity: \"#{activity.name}\" (#{activity.id})"
   puts "=> Response: #{activity.data_response.id}"
-  p = Project.find_or_create_by_name('Miscellaneous Activities - please assign to a project',
+  p = activity.data_response.projects.find_or_create_by_name('Miscellaneous Activities - please assign to a project',
     :data_response => activity.data_response,
     :start_date => activity.start_date || Time.now,
     :end_date => activity.end_date || Time.now + 1.day)

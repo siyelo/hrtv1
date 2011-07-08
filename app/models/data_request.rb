@@ -2,10 +2,9 @@ require 'validators'
 class DataRequest < ActiveRecord::Base
 
   ### Attributes
-  attr_accessible :organization_id, :title, :final_review,
-                  :start_date, :end_date, :due_date, :budget, :spend,
+  attr_accessible :organization_id, :title, :final_review, :due_date, :budget, :spend,
                   :year_2, :year_3, :year_4, :year_5, :purposes, :locations,
-                  :inputs, :service_levels, :budget_by_quarter
+                  :inputs, :service_levels, :budget_by_quarter, :start_year
 
   ### Associations
   belongs_to :organization
@@ -14,16 +13,22 @@ class DataRequest < ActiveRecord::Base
   ### Validations
   validates_presence_of :organization_id, :title
   validates_date :due_date
-  validates_date :start_date
-  validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-
+  validates_inclusion_of :start_year, :in => 1900..2999, :message => 'is not a valid year'
+  
   ### Callbacks
   after_create :create_data_responses
 
   def status
     return 'Final review' if final_review?
     return 'In progress'
+  end
+  
+  def start_date
+    Date.parse("#{self.start_year}-07-01")
+  end
+  
+  def end_date
+    Date.parse("#{self.start_year.to_i+1}-06-30")
   end
 
   def no_long_term_budgets?

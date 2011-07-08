@@ -226,7 +226,7 @@ module ApplicationHelper
   end
 
   def month_year(date, i = 0)
-    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
+    "#{date.strftime('%b')} #{date.strftime('%Y').to_i + i}"
   end
 
   def prev_fy(response)

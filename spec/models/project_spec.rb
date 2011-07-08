@@ -24,8 +24,6 @@ describe Project do
     it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:entire_budget) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
@@ -60,8 +58,6 @@ describe Project do
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value('12,323.32').for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }
-    it { should allow_value('2010-12-01').for(:start_date) }
-    it { should allow_value('2010-12-01').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) }
     it { should_not allow_value('abcd').for(:budget_q1) }
     it { should_not allow_value('abcd').for(:budget_q2) }
@@ -254,17 +250,8 @@ describe Project do
   end
 
   describe "multi-field validations" do
-    it "accepts start date < end date" do
-      p = Factory.build(:project,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02) )
-      p.should be_valid
-    end
-
     it "accepts Total Budget >= Total Budget" do
       p = Factory.build(:project,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02),
                         :entire_budget => 900,
                         :budget =>        800 )
       p.should be_valid
@@ -272,8 +259,6 @@ describe Project do
 
     it "accepts Total Budget = Total Budget" do
       p = Factory.build(:project,
-                      :start_date => DateTime.new(2010, 01, 01),
-                      :end_date =>   DateTime.new(2010, 01, 02),
                         :entire_budget => 900,
                         :budget =>        900 )
       p.should be_valid
@@ -281,8 +266,6 @@ describe Project do
 
     it "does not accept Total Budget < Total Budget" do
       p = Factory.build(:project,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02),
                         :entire_budget => 900,
                         :budget =>        1000 )
       p.should_not be_valid

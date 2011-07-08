@@ -16,11 +16,23 @@ class Admin::RequestsController < Admin::BaseController
   end
 
   def create
-    create!(:notice => "Request was successfully created.") { admin_requests_url }
+    @request = DataRequest.new(params[:request])   
+    if @request.save
+      flash[:notice] = 'Request was successfully created'
+      redirect_to admin_requests_url
+    else
+      render :action => 'new'
+    end
   end
 
   def update
-    update!(:notice => "Request was successfully updated.") { admin_requests_url }
+    @request = DataRequest.find(params[:id])
+    if @request.update_attributes(params[:request])
+      flash[:notice] = 'Request was successfully updated'
+      redirect_to admin_requests_url
+    else
+      render :action => 'edit'
+    end
   end
 
   def destroy

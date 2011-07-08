@@ -2,8 +2,7 @@
   = f.input :title, :label => 'Title', :hint => 'Descriptive name of the data request'
   = f.input :organization, :label => 'Organization', :hint => 'Which organization is requesting data?'
   = f.input :due_date, :as => :string, :label => 'Due date', :input_html => {:class => 'date_picker'}, :hint => 'Due when users have to enter their data?'
-  = f.input :start_date, :as => :string, :label => 'Start date', :input_html => {:class => 'date_picker'}, :hint => 'What is the start date of period for which data is requested?'
-  = f.input :end_date, :as => :string, :label => 'End date', :input_html => {:class => 'date_picker'}, :hint => 'What is the end date of period for which data is requested?'
+  = f.input :start_year, :hint => 'What is the start year of period for which data is requested?  Data is requested for 1 year from 1 July of the start year.', :input_html => {:class => 'year_input'}
   = f.input :purposes, :as => :boolean, :label => "Health Functions", :hint => 'Allow the users to classify Health Functions'
   = f.input :locations, :as => :boolean, :label => "Locations", :hint => 'Allow the users to classify locations'
   = f.input :inputs, :as => :boolean, :label => "Inputs", :hint => 'Allow the users to classify inputs'

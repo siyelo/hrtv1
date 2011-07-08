@@ -12,10 +12,8 @@ Activity.roots.without_a_project.each do |activity|
   puts "Creating dummy project for Org \"#{activity.organization.name}\", Activity: \"#{activity.name}\" (#{activity.id})"
   puts "=> Response: #{activity.data_response.id}"
   p = activity.data_response.projects.find_or_create_by_name('Miscellaneous Activities - please assign to a project',
-    :data_response => activity.data_response,
-    :start_date => activity.start_date || Time.now,
-    :end_date => activity.end_date || Time.now + 1.day)
-  p.save!
+    :data_response => activity.data_response)
+  p.save(false)
   puts "Created/found project #{p.id}"
   activity.project = p
   activity.save(false)

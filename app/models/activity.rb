@@ -156,6 +156,7 @@ class Activity < ActiveRecord::Base
                     OR (provider_dr.id IS NULL OR organizations.users_count = 0)"]
   }
   named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
+  named_scope :sorted,           {:order => "activities.name" }
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}

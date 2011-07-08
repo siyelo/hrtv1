@@ -5,29 +5,10 @@
         %span
           View Comments
   - if current_user.sysadmin? || current_user.activity_manager?
-    %li
-      - if activity.approved
-        - link_to "#" do
-          %span
-            Approved by Admin
-      - else
-        - link_to "#", :class => "js_sysadmin_approve", :"response-id" => @response.id, :"activity-id" => activity.id do
-          %span
-            Approve (Admin)
-            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+    = render 'activities/approve_as_admin', :activity => activity
 
   - if current_user.sysadmin? || current_user.activity_manager?
-    %li
-      - if activity.am_approved
-        - link_to "#" do
-          %span
-            Budget Approved
-      - else
-        - link_to "#", :class => "js_am_approve", :"response-id" => @response.id, :"activity-id" => activity.id do
-          %span
-            Approve Budget
-            = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
-
+    = render 'activities/approve_budget', :activity => activity
 
 %ul.ordered_nav
   - if activity.new_record?

@@ -1259,15 +1259,15 @@ var commentsInit = function () {
 
 var projects_index = {
   run: function () {
-      $('.dropdown_menu').hover(function (e){
-        e.preventDefault();
-        $('ul', this).slideDown(100);
-        $('.dropdown_trigger').addClass('persist');
-      }, function(e) {
-        e.preventDefault();
-        $('ul', this).slideUp(100);
-        $('.dropdown_trigger').removeClass('persist');
-      });
+    $('.dropdown_menu').hover(function (e){
+      e.preventDefault();
+      $('ul', this).slideDown(100);
+      $('.dropdown_trigger').addClass('persist');
+    }, function(e) {
+      e.preventDefault();
+      $('ul', this).slideUp(100);
+      $('.dropdown_trigger').removeClass('persist');
+    });
 
     $('.upload_btn').click(function (e) {
       e.preventDefault();
@@ -1282,6 +1282,8 @@ var projects_index = {
     $('.tooltip_projects').tipsy({gravity: 'e', live: true, html: true});
 
     commentsInit();
+
+    approveBudget();
   }
 };
 
@@ -1437,16 +1439,31 @@ var activities_bulk_create = {
 // success text
 //
 //
+
+var approveBudget = function() {
+  $(".js_am_approve").click(function (e) {
+    e.preventDefault();
+    approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
+  })
+};
+
+var approveAsAdmin = function() {
+  $(".js_sysadmin_approve").click(function (e) {
+    e.preventDefault();
+    approveActivity($(this), 'sysadmin_approve', 'Admin Approved');
+  })
+};
+
 var approveActivity = function (element, approval_type, success_text) {
    var activity_id = element.attr('activity-id');
    var response_id = element.attr('response-id');
 
-   element.find(".ajax-loader").show();
+   element.parent('li').find(".ajax-loader").show();
    var url = "/responses/" + response_id + "/activities/" + activity_id + "/" + approval_type
    $.post(url, {approve: true, "_method": "put"}, function (data) {
-     element.find(".ajax-loader").hide();
+     element.parent('li').find(".ajax-loader").hide();
      if (data.status == 'success') {
-       element.html('<span>' + success_text + '</span>');
+       element.parent('li').html('<span>' + success_text + '</span>');
      }
    })
 };
@@ -1558,15 +1575,9 @@ var activity_form = function () {
     }
   });
 
-  $(".js_am_approve").click(function (e) {
-    e.preventDefault();
-    approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
-  })
+  approveBudget();
 
-  $(".js_sysadmin_approve").click(function (e) {
-    e.preventDefault();
-    approveActivity($(this), 'sysadmin_approve', 'Approved by Admin');
-  })
+  approveAsAdmin();
 
   commentsInit();
 };
@@ -1657,17 +1668,11 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
     $('#other_cost_budget').keyup(function () {
       split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
-    }); 
+    });
 
-    $(".js_am_approve").click(function (e) {
-      e.preventDefault();
-      approveActivity($(this), 'activity_manager_approve', 'Budget Approved');
-    })
+    approveBudget();
 
-    $(".js_sysadmin_approve").click(function (e) {
-      e.preventDefault();
-      approveActivity($(this), 'sysadmin_approve', 'Approved by Admin');
-    })
+    approveAsAdmin();
   }
 };
 

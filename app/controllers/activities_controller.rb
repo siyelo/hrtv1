@@ -76,14 +76,16 @@ class ActivitiesController < Reporter::BaseController
   end
 
   # call only via Ajax
+  # toggles approved status
   def activity_manager_approve
     if current_user.admin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
-      unless @activity.am_approved?
-        @activity.attributes = {:user_id => current_user.id, :am_approved => params[:approve],
-          :am_approved_date => Time.now}
-        @activity.save(false)
-      end
+      toggle_approved = !@activity.am_approved?
+      date = Time.now
+      date = nil if toggle_approved == false
+      @activity.attributes = {:user_id => current_user.id, :am_approved => toggle_approved,
+        :am_approved_date => date}
+      @activity.save(false)
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}

@@ -4,5 +4,5 @@
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
   %td
-    - unless other_cost.am_approved?
-      %span.warm-red.hint Not yet approved
+    %ul
+      = render 'activities/approve_budget', :activity => other_cost

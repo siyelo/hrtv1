@@ -17,21 +17,8 @@
 %ul.breadcrumb
   %li= link_to "Reports", user_report_dashboard_path(current_user)
 
-%h1.main_heading 
+%h1.main_heading
   Review National Expenditures and Current Budgets
-  
-.full
-  .third
-    %h2 Ultimate Funding Source (Current Budget)
-    #budget_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Current Budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Current Budget)
-    #budget_i_pie.bordered
 
 .full
   .third
@@ -45,6 +32,20 @@
   .third
     %h2 Implementer (Expenditure)
     #spend_i_pie.bordered
+
+.full
+  .third
+    %h2 Ultimate Funding Source (Current Budget)
+    #budget_ufs_pie.bordered
+
+  .third
+    %h2 Financing Agent (Current Budget)
+    #budget_fa_pie.bordered
+
+  .third
+    %h2 Implementer (Current Budget)
+    #budget_i_pie.bordered
+
 
 
 

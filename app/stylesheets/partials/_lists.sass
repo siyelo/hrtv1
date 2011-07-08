@@ -233,12 +233,15 @@ ul.group
         
   &.small_tabs li a
     padding: 8px 7px 5px !important
+    
+    
+// ORDERED TAB STYLES //
 
 ul.ordered_nav
   border-bottom: 4px solid $orange
-  margin-bottom: 10px
+  margin-bottom: 0
   width: 100%
-  +border-bottom-left-radius(4px)
+  +border-radius(0)
   +pie-clearfix
 
   li
@@ -288,7 +291,32 @@ ul.ordered_nav
         background: $orange - #222
         color: #fff
 
+.ordered_sub_nav
+  background: $orange
+  border: none
+  margin: 0
+  padding: 5px 0 0 0
+  +linear-gradient(color-stops($orange, $orange - #111))
+  +clearfix
+  li
+    color: $orange + #555
+    display: inline
+    float: left
+    font-size: 11px
+    font-weight: bold
+    padding-bottom: 7px
+    &.selected
+      background: image_url("icon_selected.png") center bottom no-repeat
+    a
+      color: #fff
+      display: block
+      padding: 4px 9px
+      text-decoration: none
+    p
+      padding: 4px 9px 0
+  
 // DROPDOWN NAVIGATION //
+
 .dropdown_menu
   position: relative
   z-index: 10

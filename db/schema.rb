@@ -134,8 +134,6 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "due_date"
-    t.date     "start_date"
-    t.date     "end_date"
     t.boolean  "final_review",      :default => false
     t.boolean  "year_2",            :default => true
     t.boolean  "year_3",            :default => true
@@ -146,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20110707120449) do
     t.boolean  "inputs",            :default => true
     t.boolean  "service_levels",    :default => true
     t.boolean  "budget_by_quarter", :default => false
+    t.integer  "start_year"
   end
 
   create_table "data_responses", :force => true do |t|

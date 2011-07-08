@@ -172,6 +172,11 @@ describe Activity do
       @activity.check_projects_budget_and_spend?.should be_false
     end
 
+    it "returns true if an other cost has no project" do
+      @other_cost = Factory(:other_cost, :spend => 11000, :budget => 9000, :project => nil)
+      @other_cost.check_projects_budget_and_spend?.should be_true
+    end
+    
     it "returns false when the activitys budget is greater than that of the projects" do
       @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 10000, :budget => 19000)

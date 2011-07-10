@@ -18,7 +18,7 @@ describe OtherCostsController do
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
 
-     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do
+     it "redirects to the budget classifications page when Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do
        put :update, :other_cost => { :description => "some description"}, :id => @other_cost.id,
          :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingBudget'))

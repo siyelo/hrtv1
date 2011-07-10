@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   end
 
   def current_request
-    @current_request ||= self.current_response.request
+    @current_request ||= self.current_response? ? self.current_response.request : nil
   end
 
   def current_request_name

@@ -1,0 +1,31 @@
+- editing = controller.action_name == 'edit' ? true : false
+- button_text =  editing ? "Update Response" : "Begin Response"
+
+.form_aside
+  %h3 What currency should I use?
+  %p Use the primary currency of all your projects and activities. If a specific project uses a different currency, you can override the currency in the project settings.
+  %br
+  %h3 How do I enter my fiscal year?
+  %p Use the fiscal year (FY) of your organization. If your Organization FY does not align with the Government of Rwanda's FY, the HRT helps you split your data by quarters.
+
+- f.inputs :class => 'wrap-80 inputs' do
+
+  %li.last
+    %h3 Basics
+    %ul.dashboard_section
+      = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :input_html => {:class => 'combobox'}
+      = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
+      = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The End of the Fiscal Year"
+
+  %li.last
+    %h3 Contact Details
+    %ul.dashboard_section
+      = f.input :contact_name, :as => :string, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process."
+      = f.input :contact_position, :as => :string, :hint => "The position of the contact at your organization."
+      = f.input :contact_phone_number, :as => :string, :label => "Phone number", :hint => "A telephone number that can be used to contact the contact person."
+      = f.input :contact_main_office_phone_number, :as => :string, :label => "Office number", :hint => "The telephone number of the organizations main office."
+      = f.input :contact_office_location, :as => :string, :label => "Office location", :hint => "The geographic location of the office."
+
+- f.buttons :class => 'wrap-80 buttons' do
+  = f.commit_button button_text, :class => "last"
+

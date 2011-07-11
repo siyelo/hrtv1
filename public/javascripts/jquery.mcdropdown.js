@@ -222,6 +222,7 @@
       // if disabled, skip processing
       if( bDisabled ) return false;
       thismenu.openMenu(e);
+
       return false;
     });
 
@@ -822,7 +823,7 @@
         }
 
         // run the select callback
-        if( settings.select != null ) settings.select.apply(thismenu, thismenu.getValue());
+        //if( settings.select != null ) settings.select.apply(thismenu, thismenu.getValue());
 
         // hide matches
         hideMatches();
@@ -894,6 +895,13 @@
 
     // check the user's keypress
     function checkKeypress(e){
+
+      // ignore key pressed event when (SHIFT, TAB):
+      if (e.shiftKey || e.keyCode == 9) {
+        return true;
+      }
+
+
       var key = String.fromCharCode(e.keyCode || e.charCode).toLowerCase();
       var $current = getCurrentListItem();
       var $lis = ($current.length == 0 || $current.hasClass("mc_root")) ? $list.find("> li") : $current.parent().find("> li");
@@ -915,14 +923,19 @@
 
       // if the [ESC] was pressed
       } else if( e.keyCode == 27 ){
-        // clear typedText
-        typedText = "";
-        // clear the value
-        thismenu.setValue("");
-        // show the root level
-        showMatches($list.find("> li"));
 
-        return false;
+        if (value) {
+          // clear typedText
+          typedText = "";
+          // clear the value
+          thismenu.setValue("");
+          // show the root level
+          showMatches($list.find("> li"));
+
+          return false;
+        } else {
+          return true;
+        }
 
       // if user pressed [DEL] or [LEFT ARROW], go remove last typed character
       } else if( e.keyCode == 8 || e.keyCode == 37 ){
@@ -943,8 +956,8 @@
           thismenu.setValue("");
           return false;
         }
-      // if the user pressed [ENTER], [TAB], [RIGHT ARROW] or the delimiter--go to next level
-      } else if( e.keyCode == 9 || e.keyCode == 13 || e.keyCode == 39 || key == settings.delim ){
+      // if the user pressed [RIGHT ARROW] or the delimiter--go to next level
+      } else if(e.keyCode == 39 || key == settings.delim ){
         // get the first child item if there is one
         var $first = $current.find("> ul > li:first");
 
@@ -971,6 +984,13 @@
         }
 
         return false;
+
+      // if the user pressed [ENTER]
+      } else if( e.keyCode == 13 ){
+      $(this).prev('input').focus(); // focus
+        thismenu.setValue($current.attr(settings.valueAttr));
+        return true;
+
       // if all the text is highlighted then we need to delete everything
       } else if( selectedText == value ){
         typedText = "";
@@ -1000,9 +1020,7 @@
           hideMatches();
       }
 
-      // stop default behavior
       e.preventDefault();
-
       return false;
     };
 
@@ -1062,7 +1080,7 @@
       return matches;
     };
 
-    function updateValue($li, keepTypedText){
+    var updateValue = function ($li, keepTypedText){
       // grab all direct children items
       var $siblings = keepTypedText ? matchesCache : ($li.length == 0 || $li.hasClass("mc_root")) ? $list.find("> li") : $li.parent().find("> li");
       var treePath = getTreePath($li);
@@ -1085,6 +1103,7 @@
       // show all the matches
       showMatches($siblings);
     };
+    McDropDownGlobalUpdateValue = updateValue;
 
     // get the text currently selected by the user in a text field
     function getSelection(field){

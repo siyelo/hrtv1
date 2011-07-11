@@ -90,4 +90,8 @@ module NumberHelper
     amount = 0 if amount.blank?
     amount * currency_rate(from, to)
   end
+  
+  def one_hundred_dollar_leeway(currency)
+    universal_currency_converter(100, "USD", currency)
+  end
 end

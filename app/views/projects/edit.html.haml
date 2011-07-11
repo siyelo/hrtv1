@@ -5,10 +5,6 @@
 .main_heading
   = render 'help'
 
-%ul.response-notice
-  - unless @response.projects_without_amounts.select{|p| p == @project}.empty?
-    %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Project"
-
 .wrap-70
   = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

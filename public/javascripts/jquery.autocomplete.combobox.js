@@ -30,34 +30,11 @@
                     option: this
                   };
                 }
-
-                // great "add new" solution from Nazar:
-                // http://stackoverflow.com/questions/4690292/jquery-autocomplete-for-rails-application
-                if (!match && i == select.children("option").size() -1) { //&& self.options.allow_new ) {
-                  // remove any previous selected
-                  select.children( ":selected" ).removeAttr("selected");
-                  return {
-                    label:'&lt;Create new <strong>'+ input.val() +'</strong>&gt;',
-                    value: input.val(),
-                    option: null
-                  };
-                }
               }));
             },
             select: function( event, ui ) {
               if(ui.item.option){
                 ui.item.option.selected = true;
-              }else{ // we clicked Create New
-                var input_val = $(this).val();
-                // set the id of this option to be the string the user entered
-                select.children("option:first").val(input_val);
-                // (then on the server side we detect this string to create the
-                // object with that name.)
-                // TODO: we should probably set this option to be selected
-                // but it seems to pass the correct "selected" attribute without
-                // doing this
-                // select.children("option:first").attr("selected", true);
-
               };
               self._trigger( "selected", event, {
                 item: ui.item.option

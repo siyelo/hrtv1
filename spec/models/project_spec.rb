@@ -49,8 +49,6 @@ describe Project do
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value('12,323.32').for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }
-    it { should allow_value('2010-12-01').for(:start_date) }
-    it { should allow_value('2010-12-01').for(:end_date) }
     it { should_not allow_value('abcd').for(:budget) } 
     it { should_not allow_value('abcd').for(:spend) } 
     it { should_not allow_value('abcd').for(:budget2) }

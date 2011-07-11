@@ -11,7 +11,6 @@ Feature: Reporter can see dashboard
       Then I should see "Dashboard"
         And I should see "Data Requests & Responses"
 
-
     Scenario: See menu tabs when a Data Req is selected
       Given a basic org + reporter profile, with data response, signed in
       When I go to the reporter dashboard page
@@ -19,7 +18,6 @@ Feature: Reporter can see dashboard
       Then I should see "Home" within the main nav
         And I should see "Workplan" within the main nav
         And I should see "Settings" within the main nav
-        And I should see "Responses" within the main nav
         And I should see "Reports" within the main nav
 
 

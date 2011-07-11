@@ -23,7 +23,6 @@ Feature: Reporter can see help text
           | classifications  |
           | other costs      |
 
-
     Scenario: See help sidebar on Data Response page
       When I go to the data response page for "Req1"
       Then I should see "What's a (Data) Response?"

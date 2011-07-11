@@ -61,7 +61,7 @@ class Project < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :description, :spend,
-                  :start_date, :end_date, :currency, :data_response, :activities,
+                  :currency, :data_response, :activities,
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
                   :budget2, :budget3, :budget4, :budget5
 
@@ -159,7 +159,6 @@ END
   end
 
   def add_activity(attributes)
-    debugger
     activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
                            :spend => attributes["spend"],
                            :spend_q4_prev => attributes["spend_q4_prev"],
@@ -231,7 +230,7 @@ END
       return false unless in_flow.organization_id_from
     end
     true
-  end 
+  end
 
   def spend_entered?
     spend.present?

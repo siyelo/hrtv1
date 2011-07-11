@@ -100,7 +100,7 @@ describe Project do
         end
       end
     end
-  end 
+  end
 
   context "Submit page: " do
     before(:each) do

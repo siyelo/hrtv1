@@ -97,10 +97,12 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-
+       
+    @javascript
     Scenario: Reporter can upload activities
-      When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
-        And I press "Import" within ".activities_upload_box"
+      Given I follow "import_export"
+      When I attach the file "spec/fixtures/projects.csv" to "File"
+        And I press "Import" within ".upload_box"
       Then I should see "Activities Bulk Create"
 
 
@@ -108,8 +110,9 @@ Feature: Reporter can manage activities
       When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload activities"
 
-
+      @javascript
     Scenario: Adding malformed CSV file doesn't throw exception
+    Given I follow "import_export"
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Import"
       Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"

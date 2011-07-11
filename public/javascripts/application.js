@@ -120,14 +120,8 @@ var close_project_in_flow_fields = function (fields) {
     edit_block.hide();
     preview_block.html('');
 
-    if (_budget && _spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
-      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
-    } else if (_spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
-    } else if (_budget) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', true))
-    }
+    preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
+    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Current Budget', false))
 
     preview_block.show();
 

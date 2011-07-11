@@ -894,21 +894,23 @@ ul.review li
     
     &.inactive a
       color: $light-blue - #222 !important
+      opacity: 0.8
       &:hover, &:focus
-        background: image_url("sub-nav.png") no-repeat center
+        opacity: 0.7
+        background: image_url("sub-nav-hover.png") no-repeat center
     
     a
-      background: image_url("sub-nav.png") no-repeat center
+      background: image_url("sub-nav-hover.png") no-repeat center
       color: $mid-blue !important
       display: block
       font-size: 11px
       font-weight: bold
       height: 18px
       padding-top: 8px
-      opacity: 0.8
+      opacity: 0.7
       text-align: center
       text-decoration: none
-      width: 120px
+      width: 130px
       &:hover, &:focus
         background: image_url("sub-nav-hover.png") no-repeat center
         opacity: 1

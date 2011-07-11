@@ -2280,8 +2280,6 @@ var funders_index = {
       var id = tr.attr('funding_flow_id');
       var loader = destroy_link.next('.ajax-loader');
       
-      console.log('funders delete button')
-      
       if (confirm('Are you sure?')) {
         if (id) {
           loader.show();

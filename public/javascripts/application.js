@@ -121,7 +121,7 @@ var close_project_in_flow_fields = function (fields) {
     preview_block.html('');
 
     preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
-    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
+    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Current Budget', false))
 
     preview_block.show();
 

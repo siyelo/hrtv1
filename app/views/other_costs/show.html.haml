@@ -30,22 +30,7 @@
     %li
       %ul.row
         %li Past Expenditure
-        %li= c(@other_cost.spend, @other_cost.currency)
-      %ul.row
-        %li= "Past Expenditure Q4 #{spend_fiscal_year_prev}"
-        %li= c(@other_cost.spend_q4_prev, @other_cost.currency)
-      %ul.row
-        %li= "Past Expenditure Q1 #{spend_fiscal_year}"
-        %li= c(@other_cost.spend_q1, @other_cost.currency)
-      %ul.row
-        %li= "Past Expenditure Q2 #{spend_fiscal_year}"
-        %li= c(@other_cost.spend_q2, @other_cost.currency)
-      %ul.row
-        %li= "Past Expenditure Q3 #{spend_fiscal_year}"
-        %li= c(@other_cost.spend_q3, @other_cost.currency)
-      %ul.row
-        %li= "Past Expenditure Q4 #{spend_fiscal_year}"
-        %li= c(@other_cost.spend_q4, @other_cost.currency)
+        %li= c(@other_cost.spend, @other_cost.currency) 
 
   %h3.form_heading Current Budget
   %ul.dashboard_section

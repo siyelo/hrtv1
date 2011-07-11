@@ -5,8 +5,7 @@ class FundingFlow < ActiveRecord::Base
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
-                  :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4
+                  :spend, :budget
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

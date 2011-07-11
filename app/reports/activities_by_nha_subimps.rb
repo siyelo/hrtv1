@@ -31,19 +31,11 @@ class Reports::ActivitiesByNhaSubimps
   # gor_quarters methods returns values for US fiscal year (10th month)
   # otherwise it returns the values for Rwanda fiscal year
   def build_rows(csv, activity)
-    if @is_budget
-      amount_q1             = activity.budget_quarter(1)
-      amount_q2             = activity.budget_quarter(2)
-      amount_q3             = activity.budget_quarter(3)
-      amount_q4             = activity.budget_quarter(4)
+    if @is_budget 
       amount_total          = activity.budget
       amount_total_in_usd   = activity.budget_in_usd
       is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
-    else
-      amount_q1             = activity.spend_quarter(1)
-      amount_q2             = activity.spend_quarter(2)
-      amount_q3             = activity.spend_quarter(3)
-      amount_q4             = activity.spend_quarter(4)
+    else 
       amount_total          = activity.spend
       amount_total_in_usd   = activity.spend_in_usd
       is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
@@ -60,19 +52,11 @@ class Reports::ActivitiesByNhaSubimps
     row << activity.project.try(:name)
     row << activity.project.try(:description)
     row << activity.name
-    row << activity.description
-    row << amount_q1
-    row << amount_q2
-    row << amount_q3
-    row << amount_q4
+    row << activity.description 
     #row << # reimplement currency conversion here later (amount_q1 ? amount_q1 * activity.toUSD : '')
    # row << # reimplement currency conversion here later (amount_q2 ? amount_q2 * activity.toUSD : '')
    # row << # reimplement currency conversion here later (amount_q3 ? amount_q3 * activity.toUSD : '')
-   # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')
-    row << amount_q1
-    row << amount_q2
-    row << amount_q3
-    row << amount_q4
+   # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')  
     row << get_locations(activity)
     row << activity.sub_activities_count
     row << get_hc_sub_activity_count(activity)
@@ -232,15 +216,7 @@ class Reports::ActivitiesByNhaSubimps
       row << "Project Name"
       row << "Project Description"
       row << "Activity Name"
-      row << "Activity Description"
-      row << "Q1"
-      row << "Q2"
-      row << "Q3"
-      row << "Q4"
-      row << "Q1 (USD)"
-      row << "Q2 (USD)"
-      row << "Q3 (USD)"
-      row << "Q4 (USD)"
+      row << "Activity Description" 
       row << "Districts"
       row << "# of sub-activities"
       row << "# of facilities implementing"

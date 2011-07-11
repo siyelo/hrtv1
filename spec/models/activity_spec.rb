@@ -34,17 +34,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:budget_q4_prev) }
-    it { should allow_mass_assignment_of(:budget_q1) }
-    it { should allow_mass_assignment_of(:budget_q2) }
-    it { should allow_mass_assignment_of(:budget_q3) }
-    it { should allow_mass_assignment_of(:budget_q4) }
-    it { should allow_mass_assignment_of(:spend_q4_prev) }
-    it { should allow_mass_assignment_of(:spend_q1) }
-    it { should allow_mass_assignment_of(:spend_q2) }
-    it { should allow_mass_assignment_of(:spend_q3) }
-    it { should allow_mass_assignment_of(:spend_q4) }
+    it { should allow_mass_assignment_of(:spend) } 
     it { should allow_mass_assignment_of(:location_ids) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
@@ -132,13 +122,7 @@ describe Activity do
       @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
                                  :data_request => Factory.create(:data_request, :locations => false)))
       @activity.coding_spend_district_classified?.should be_true
-    end
-
-    it "will return true if the data_request doesn't require purposes and none are entered" do
-      @activity = Factory.create(:activity, :data_response => Factory.create(:data_response,
-                                 :data_request => Factory.create(:data_request, :purposes => false)))
-      @activity.coding_spend_classified?.should be_true
-    end
+    end 
 
 
   end
@@ -173,29 +157,7 @@ describe Activity do
                                  :spend => 1000, :budget => 1000)
 
       @activity.check_projects_budget_and_spend?.should be_true
-    end
-
-    it "returns true when the activitys quarterly spend and budget is less than that of the projects" do
-      @activity = Factory.create(:activity,
-                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
-                                 :spend_q1 => 1300, :spend_q2 => 1400, :spend_q3 => 1500, :spend_q4 => 1233,
-                                 :budget_q1 => 1200,:budget_q2 => 1300,:budget_q3 => 1500,:budget_q4 => 1100),
-
-                                 :spend_q1 => 1100, :spend_q2 => 1200, :spend_q3 => 1300, :spend_q4 => nil,
-                                 :budget_q1 => 1100,:budget_q2 => 1100,:budget_q3 => 1100,:budget_q4 => 1100)
-      @activity.check_projects_budget_and_spend?.should be_true
-    end
-
-    it "returns false when the activitys quarterly spend and budget is less than that of the projects" do
-      @activity = Factory.create(:activity,
-                                 :project => Factory.create(:project, :budget => 10000, :spend => 10000,
-                                 :spend_q1 => 10, :spend_q2 => 10, :spend_q3 => 10, :spend_q4 => 1233,
-                                 :budget_q1 => 1200,:budget_q1 => 1300,:budget_q1 => 1500,:budget_q1 => 1100),
-
-                                 :spend_q1 => 1100, :spend_q2 => 1200, :spend_q3 => 1300, :spend_q4 => nil,
-                                 :budget_q1 => 1100,:budget_q2 => 1100,:budget_q3 => 1100,:budget_q4 => 1100)
-      @activity.check_projects_budget_and_spend?.should be_false
-    end
+    end 
   end
 
   describe "currency" do
@@ -1299,156 +1261,7 @@ describe Activity do
       @a.reload
       @a.currency.should == "CHF"
     end
-  end
-
-  describe "budget_quarter" do
-    context "Invalid quarter" do
-      before :each do
-        activity = Factory.create(:activity)
-      end
-
-      it "raises errors when quarter is invalid - 0" do
-        lambda { activity.budget_quarter(0) }.should raise_error
-      end
-
-      it "raises errors when quarter is invalid - 5" do
-        lambda { activity.budget_quarter(5) }.should raise_error
-      end
-    end
-
-    context "US Goverment" do
-      before :each do
-        @response = Factory.create(:data_response,
-                                   :organization => Factory(:organization,
-                                     :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                     :fiscal_year_end_date => Date.parse("2011-09-30")))
-
-      end
-
-      it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q4_prev => 123, :data_response => @response)
-        activity.budget_quarter(1).should == 123
-      end
-
-      it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
-        activity.budget_quarter(2).should == 123
-      end
-
-      it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
-        activity.budget_quarter(3).should == 123
-      end
-
-      it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
-        activity.budget_quarter(4).should == 123
-      end
-    end
-
-    context "Goverment of Rwanda" do
-      before :each do
-        @response = Factory.create(:data_response,
-                                   :organization => Factory(:organization,
-                                     :fiscal_year_start_date => Date.parse("2010-01-01"),
-                                     :fiscal_year_end_date => Date.parse("2010-12-31")))
-      end
-
-      it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :budget_q1 => 123, :data_response => @response)
-        activity.budget_quarter(1).should == 123
-      end
-
-      it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :budget_q2 => 123, :data_response => @response)
-        activity.budget_quarter(2).should == 123
-      end
-
-      it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :budget_q3 => 123, :data_response => @response)
-        activity.budget_quarter(3).should == 123
-      end
-
-      it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :budget_q4 => 123, :data_response => @response)
-        activity.budget_quarter(4).should == 123
-      end
-    end
-  end
-
-  describe "spend_quarter" do
-    context "Invalid quarter" do
-      before :each do
-        activity = Factory.create(:activity)
-      end
-
-      it "raises errors when quarter is invalid - 0" do
-        lambda { activity.spend_quarter(0) }.should raise_error
-      end
-
-      it "raises errors when quarter is invalid - 5" do
-        lambda { activity.spend_quarter(5) }.should raise_error
-      end
-    end
-
-    context "US Goverment" do
-      before :each do
-        organization = Factory(:organization,
-                                   :fiscal_year_start_date => Date.parse("2010-10-01"),
-                                   :fiscal_year_end_date => Date.parse("2011-09-30"))
-        @response = Factory(:data_response, :organization => organization)
-      end
-
-      it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q4_prev => 123, :data_response => @response)
-        activity.spend_quarter(1).should == 123
-      end
-
-      it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
-        activity.spend_quarter(2).should == 123
-      end
-
-      it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
-        activity.spend_quarter(3).should == 123
-      end
-
-      it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
-        activity.spend_quarter(4).should == 123
-      end
-    end
-
-    context "Goverment of Rwanda" do
-      before :each do
-        @response = Factory.create(:data_response,
-                                   :organization => Factory(:organization,
-                                     :fiscal_year_start_date => Date.parse("2010-01-01"),
-                                     :fiscal_year_end_date => Date.parse("2010-12-31")))
-      end
-
-      it "returns proper budget for 1st quarter" do
-        activity = Factory.create(:activity, :spend_q1 => 123, :data_response => @response)
-        activity.spend_quarter(1).should == 123
-      end
-
-      it "returns proper budget for 2nd quarter" do
-        activity = Factory.create(:activity, :spend_q2 => 123, :data_response => @response)
-        activity.spend_quarter(2).should == 123
-      end
-
-      it "returns proper budget for 3rd quarter" do
-        activity = Factory.create(:activity, :spend_q3 => 123, :data_response => @response)
-        activity.spend_quarter(3).should == 123
-      end
-
-      it "returns proper budget for 4th quarter" do
-        activity = Factory.create(:activity, :spend_q4 => 123, :data_response => @response)
-        activity.spend_quarter(4).should == 123
-      end
-    end
-  end
+  end 
 
   describe "#amount_for_provider" do
     context "normal activity" do

@@ -41,6 +41,9 @@ class DataResponse < ActiveRecord::Base
 
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
+  
+  #Includes                         
+  include NumberHelper
 
   ### Meta Data for Meta Programming
   ## GN TODO: refactor out getting collections of items failing
@@ -352,10 +355,11 @@ class DataResponse < ActiveRecord::Base
 
   def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method
-    p_total = project.send(m) || 0
+    p_total = (project.send(m) || 0)
+    leeway = one_hundred_dollar_leeway(project.currency)
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
-    p_total == a_total + o_total
+    p_total + leeway >= a_total + o_total && p_total - leeway <= a_total + o_total
   end
 
   def projects_with_activities_not_matching_amounts(amount_method)

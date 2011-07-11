@@ -221,6 +221,12 @@ describe Project do
       @project.has_other_costs?.should be_false
     end
   end
+  
+  context "Matching funders budget / spend and the actual budget / spend" do
+    before(:each) do
+      @project
+    end
+  end
 
   context "Funding flows: " do
     before(:each) do
@@ -230,6 +236,16 @@ describe Project do
       @other_org     = Factory(:organization)
       @project       = Factory(:project,
                                :data_response => @response )
+    end
+    
+    describe "Matching funders budget / spend and the actual budget / spend" do
+      before(:each) do
+        flow      = Factory(:funding_flow,
+                            :from          => @other_org,
+                            :to            => @our_org,
+                            :project       => @project,
+                            :data_response => @project.data_response)
+      end
     end
 
     it "assigns and returns a sole funding source" do

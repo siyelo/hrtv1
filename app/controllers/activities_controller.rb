@@ -6,6 +6,7 @@ class ActivitiesController < Reporter::BaseController
   helper_method :sort_column, :sort_direction
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
+  before_filter :require_admin, :only => [:sysadmin_approve]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def new
@@ -69,21 +70,24 @@ class ActivitiesController < Reporter::BaseController
         @activity.save(false)
       end
       render :json => {:status => 'success'}
+      return true
     else
       render :json => {:status => 'access denied'}
-      raise AccessDenied
+      return false
     end
   end
 
   # call only via Ajax
+  # toggles approved status
   def activity_manager_approve
     if current_user.admin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
-      unless @activity.am_approved?
-        @activity.attributes = {:user_id => current_user.id, :am_approved => params[:approve],
-          :am_approved_date => Time.now}
-        @activity.save(false)
-      end
+      toggle_approved = !@activity.am_approved?
+      date = Time.now
+      date = nil if toggle_approved == false
+      @activity.attributes = {:user_id => current_user.id, :am_approved => toggle_approved,
+        :am_approved_date => date}
+      @activity.save(false)
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}
@@ -151,7 +155,6 @@ class ActivitiesController < Reporter::BaseController
 
     def html_redirect
       if params[:commit] == "Save & Classify >"
-        return redirect_to response_projects_path(@response) if @activity.budget.nil? && @activity.spend.nil?
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
         return redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
       else

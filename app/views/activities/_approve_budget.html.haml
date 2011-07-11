@@ -1,0 +1,9 @@
+%li.js
+  - if activity.am_approved
+    %span Budget Approved
+  - elsif current_user.admin? || current_user.activity_manager?
+    - link_to "#", :class => "js_am_approve add_row", :"response-id" => @response.id, :"activity-id" => activity.id do
+      %span Approve Budget
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+  - else
+    %span Awaiting Budget Approval

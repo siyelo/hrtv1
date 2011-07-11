@@ -46,18 +46,16 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:organization_ids) }
   end
-  
 
   describe "classified?" do
     before :each do
-      @request  = Factory.create(:data_request, :title => 'Data Request 1')
-      @response = Factory.create(:data_response, :data_request => @request)
+      @request  = Factory(:data_request, :title => 'Data Request 1')
+      @response = Factory(:data_response, :data_request => @request)
       @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:other_cost)
+      @activity = Factory(:other_cost_fully_coded)
     end
 
     it "is classified? when both budget and spend are classified with factories" do
-      classify_the_other_cost # has side effects- overrides @activity in before :each
       @activity.coding_budget_classified?.should == true
       @activity.coding_budget_cc_classified?.should == true
       @activity.coding_budget_district_classified?.should == true
@@ -83,15 +81,16 @@ describe OtherCost do
 
     describe "currency" do
       it "returns data response currency if other cost without a project" do
-        dr = Factory.create(:data_response, :currency => 'EUR')
-        oc = Factory.create(:other_cost, :project => nil, :data_response => dr)
-        oc.currency.should == 'EUR'
+        o = Factory(:organization, :currency => 'EUR')
+        dr = Factory(:data_response, :organization => o)
+        oc = Factory(:other_cost, :project => nil, :data_response => dr)
+        oc.currency.should.eql? 'EUR'
       end
 
       it "returns project currency if other cost has a project" do
-        pr = Factory.create(:project, :currency => 'USD')
-        oc = Factory.create(:other_cost, :project => pr)
-        oc.currency.should == 'USD'
+        pr = Factory(:project, :currency => 'USD')
+        oc = Factory(:other_cost, :project => pr)
+        oc.currency.should.eql? 'USD'
       end
     end
   end

@@ -9,9 +9,12 @@
       - if project_errors.present?
         = image_tag "warning_12.png", :title => project_errors, :class => 'tooltip'
 
-  = render 'activities', :response => @response, :project => project, :activities => project.normal_activities
+  = render 'activities', :response => @response, :project => project, :activities => project.normal_activities.sorted
 
   = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs
+  
+  = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+
 
   %tr.filler2
     %td{:colspan => 1}
@@ -33,5 +36,5 @@
       %td.wrap-10.red= n2cndrs((project.budget || 0), project.currency)
     -else
       %td.wrap-10= n2cndrs((project.budget || 0), project.currency)
-    -if ((project.spend || 0) - project.subtotals(:spend) > 0) || ((project.budget || 0) - project.subtotals(:budget) > 0) 
+    -if ((project.spend || 0) - project.subtotals(:spend) > 0) || ((project.budget || 0) - project.subtotals(:budget) > 0)
       %td= image_tag "warning_12.png", :title => get_project_total_differences(project), :class => 'tooltip_projects'

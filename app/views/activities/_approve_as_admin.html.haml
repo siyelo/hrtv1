@@ -1,0 +1,9 @@
+%li.js
+  - if activity.approved
+    %span Admin Approved
+  - elsif current_user.admin? || current_user.activity_manager?
+    - link_to "#", :class => "js_sysadmin_approve add_row", :"response-id" => @response.id, :"activity-id" => activity.id do
+      %span Approve (Admin)
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"
+  - else
+    %span Awaiting Admin Approval

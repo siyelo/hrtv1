@@ -38,7 +38,7 @@ describe ActivitiesController do
     end
 
     it "approve_response_activity_path(1,9) to /activities/9/approve" do
-      approve_response_activity_path(1,9).should == '/responses/1/activities/9/approve'
+      sysadmin_approve_response_activity_path(1,9).should == '/responses/1/activities/9/sysadmin_approve'
     end
   end
 
@@ -70,7 +70,7 @@ describe ActivitiesController do
       context "Requesting /activities/1/approve using POST" do
         before do
           @activity = Factory(:activity, :data_response => @data_response)
-          post :approve, :id => @activity.id, :response_id => @data_response.id
+          post :sysadmin_approve, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
       end
@@ -117,87 +117,22 @@ describe ActivitiesController do
       @user_activities.stub!(:find).and_return(@activity)
     end
 
-    it "Requesting /activities/1/approve using POST requres admin to approve an activity" do
+    it "Requesting /activities/1/sysadmin_approve using POST requires admin to approve an activity" do
       data_response = Factory(:data_response, :organization => @user.organization)
       @activity = Factory(:activity, :data_response => data_response)
-      post :approve, :id => @activity.id, :response_id => data_response.id
-      flash[:error].should == "You are not authorized to do that"
+      post :sysadmin_approve, :id => @activity.id, :response_id => data_response.id
+      flash[:error].should == "You must be an administrator to access that page"
     end
 
     it "downloads csv template" do
       data_response = mock_model(DataResponse)
       DataResponse.stub(:find).and_return(data_response)
       Activity.should_receive(:download_template).and_return('csv')
-
       get :template, :response_id => 1
-
       response.should be_success
       response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
       response.header["Content-Disposition"].should == "attachment; filename=activities_template.csv"
     end
-  end
-
-  describe "create" do
-    before :each do
-       @data_request = Factory(:data_request)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       login @user
-     end
-
-    it "redirects to the activities edit page when save is clicked" do
-      @project = Factory(:project, :data_response => @data_response)
-      post :create, :activity => {
-        :description => "some description",
-        :start_date => '2010-01-01', :end_date => '2010-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      },
-      :commit => 'Save', :response_id => @data_response.id
-      response.should redirect_to(edit_response_activity_path(@data_response, @project.activities.first))
-    end
-
-    it "redircts to the projects index page when Save & Go to Classify is clicked" do
-      @project = Factory(:project, :data_response => @data_response)
-      post :create, :activity => {
-        :description => "some description",
-        :start_date => '2010-01-01', :end_date => '2010-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      },
-      :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-    end
-
-    it "returns true if the activitys budget and spend is less than that of the projects" do
-      @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
-      post :create, :activity => {
-        :description => "some description",
-        :start_date => '2010-01-01', :end_date => '2010-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      }, :commit => 'Save & Classify >', :response_id => @data_response.id
-      flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-    end
-
-    it "returns false if the activitys budget and spend is more than that of the projects using save button" do
-      @project = Factory(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
-      post :create, :activity => {
-        :description => "some description",
-        :start_date => '2010-01-01', :end_date => '2010-03-01',
-        :project_id => @project.id,
-        :budget => 19000,
-        :spend => 81000
-      }, :commit => 'Save', :response_id => @data_response.id
-      flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to(edit_response_activity_path(@data_response, @project.activities.first))
-    end
-
   end
 
   describe "Update" do
@@ -227,91 +162,56 @@ describe ActivitiesController do
   end
 
   describe "Redirects to budget or spend depending on datarequest" do
-    it "redirects back to the projects index if save and next is pressed but there is no budget or spend" do
+    before :each do
        @data_request = Factory(:data_request, :spend => false, :budget => false)
        @organization = Factory(:organization)
        @user = Factory(:reporter, :organization => @organization)
        @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
        @project = Factory(:project, :data_response => @data_response)
+       @activity = Factory :activity, :project => @project, :data_response => @data_response
        login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :project_id => @project.id
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(response_projects_path(@data_response))
     end
 
-     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true" do
-       @data_request = Factory(:data_request, :spend => false, :budget => true)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :project_id => @project.id,
-         :budget => 89
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
-     end
+    it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
+      put :update, :activity => { :budget => 0, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+    end
 
-     it "redircts to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
-       @data_request = Factory(:data_request, :spend => false, :budget => true)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response, :budget => 10000)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :project_id => @project.id,
-         :budget => 11000
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       flash[:notice].should == "Activity was successfully created"
+    it "redirects to the budget classifications page when Save & Classify is clicked and the datarequest spend is false and budget is true" do
+      @data_request.spend = false
+      @data_request.budget = true
+      @data_request.save
+      put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+    end
+
+     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
+       @data_request.spend = false
+       @data_request.budget = true
+       @data_request.save
+       @project.budget = 100
+       put :update, :activity => { :budget => 110, :spend => 0}, :id => @activity.id,
+         :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
      end
 
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
-       @data_request = Factory(:data_request, :spend => true, :budget => false)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :project_id => @project.id,
-         :spend => 34
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
+       @data_request.spend = true
+       @data_request.budget = false
+       @data_request.save
+       put :update, :activity => { :budget => 0, :spend => 89}, :id => @activity.id,
+         :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
 
      it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do
-       @data_request = Factory(:data_request, :spend => true, :budget => true)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :description => "some description",
-         :start_date => '2010-01-01', :end_date => '2010-03-01',
-         :project_id => @project.id,
-         :budget => 34,
-         :spend => 88
-
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
+       @data_request.spend = true
+       @data_request.budget = true
+       @data_request.save
+       put :update, :activity => { :budget => 89, :spend => 89}, :id => @activity.id,
+         :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
      end
    end

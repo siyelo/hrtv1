@@ -1646,8 +1646,6 @@ var classifications_edit = {
           if (tr.find('.mcdropdown input:hidden').val() === "") {
             tr.parents('.js_purpose_row').find('.js_add_purpose').removeClass('disabled');
           }
-
-          tr.find('.js_ca').val(0).trigger('keyup');
           tr.remove();
         }
       },
@@ -1950,7 +1948,7 @@ var purposes = {
     var tr = destroy_link.parents('tr:first');
     var id = tr.attr('data-ca_id');
     var loader = destroy_link.next('.ajax-loader');
-
+    
     if (confirm('Are you sure?')) {
       if (id) {
         loader.show();
@@ -2343,6 +2341,30 @@ var implementers_index = {
     $('.js_budget_column_amount').live('keyup', function (e) {
       var element = $(this);
       updateBudgetColumnValues(element);
+    });
+    
+    $(".js_remove_purpose").live('click', function (e) {
+      e.preventDefault();
+      var destroy_link = $(this)
+      var tr = destroy_link.parents('tr:first');
+      var id = tr.attr('data-implementer_id');
+      var loader = destroy_link.next('.ajax-loader');
+
+      console.log(id)
+
+      if (confirm('Are you sure?')) {
+        if (id) {
+          loader.show();
+          $.post('/responses/' + _response_id + '/implementers/' + id, {'_method': 'delete'}, function (data) {
+            if (data.status) {
+              console.log("line 2360")
+              tr.empty();
+            }
+          })
+        } else {
+          tr.remove();
+        }
+      }
     });
   }
 }

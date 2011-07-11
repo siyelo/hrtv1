@@ -56,6 +56,18 @@ class ImplementersController < Reporter::BaseController
         
     end
   end
+  
+  def destroy
+    implementer = current_response.activities.find(params[:id])
+    implementer.destroy
+    
+    respond_to do |format|
+      format.json do
+        render :json => {:status => 'success'}
+      end
+    end
+    
+  end
 
 
 

@@ -173,7 +173,6 @@ END
   end
 
   def add_activity(attributes)
-    debugger
     activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
                            :spend => attributes["spend"],
                            :spend_q4_prev => attributes["spend_q4_prev"],

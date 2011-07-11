@@ -1,4 +1,7 @@
-%tr.js_funder_row
+%tr.js_funder_row{:"funding_flow_id" => funder.try(:id)}
   %td.desc{:colspan => 2}= funder.from.try(:name)
   %td= text_field_tag :"funders[#{funder.id}]spend", funder.spend, :class => 'js_spend_column_amount'
   %td= text_field_tag :"funders[#{funder.id}]budget", funder.budget, :class => 'js_budget_column_amount'
+  %td.actions
+    = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

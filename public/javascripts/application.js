@@ -2272,6 +2272,30 @@ var funders_index = {
       var element = $(this);
       updateBudgetColumnValues(element);
     });
+    
+    $(".js_remove_purpose").live('click', function (e) {
+      e.preventDefault();
+      var destroy_link = $(this)
+      var tr = destroy_link.parents('tr:first');
+      var id = tr.attr('funding_flow_id');
+      var loader = destroy_link.next('.ajax-loader');
+      
+      console.log('funders delete button')
+      
+      if (confirm('Are you sure?')) {
+        if (id) {
+          loader.show();
+          $.post('/responses/' + _response_id + '/funders/' + id, {'_method': 'delete'}, function (data) {
+            if (data.status) {
+              tr.empty();
+            }
+          })
+        } else {
+          tr.remove();
+        }
+      }
+    });
+    
   }
 }
 
@@ -2349,15 +2373,11 @@ var implementers_index = {
       var tr = destroy_link.parents('tr:first');
       var id = tr.attr('data-implementer_id');
       var loader = destroy_link.next('.ajax-loader');
-
-      console.log(id)
-
       if (confirm('Are you sure?')) {
         if (id) {
           loader.show();
           $.post('/responses/' + _response_id + '/implementers/' + id, {'_method': 'delete'}, function (data) {
             if (data.status) {
-              console.log("line 2360")
               tr.empty();
             }
           })

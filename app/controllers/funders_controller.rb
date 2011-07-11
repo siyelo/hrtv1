@@ -40,13 +40,27 @@ class FundersController < Reporter::BaseController
   end
 
   def update
-    FundingFlow.bulk_update(@response, params[:funders])
-    flash[:notice] = 'Funders were successfully saved'
+    if params[:funders]
+      FundingFlow.bulk_update(@response, params[:funders])
+      flash[:notice] = 'Funders were successfully saved'
+    end
+    
     if params[:commit] == "Save"
       redirect_to response_funders_url(@response)
     else
       redirect_to response_implementers_path(@response)
-    end  end
+    end  
+  end
+  
+  def destroy
+    funder = current_response.funding_flows.find(params[:id])
+    funder.destroy
+    respond_to do |format|
+      format.json do
+        render :json => {:status => 'success'}
+      end
+    end
+  end
 
   private
     def load_projects

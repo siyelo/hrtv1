@@ -16,7 +16,6 @@
         %th.no-padding{:colspan => 100}
           %ul.tabs
             %li= link_to 'Yearly', response_funders_path(@response), :class => 'active'
-            %li= link_to 'Quarterly', response_funders_path(@response)
       %tr.head
         %th{:colspan => 3}
         %th.amount= current_fy(@response)

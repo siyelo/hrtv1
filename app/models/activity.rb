@@ -5,7 +5,7 @@ include NumberHelper
 class Activity < ActiveRecord::Base
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Current Expenditure", "Q1 Current Expenditure", "Q2 Current Expenditure", "Q3 Current Expenditure", "Q4 Current Expenditure", "Current Budget", "Q1 Current Budget", "Q2 Current Budget", "Q3 Current Budget", "Q4 Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Current Expenditure", "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -43,8 +43,6 @@ class Activity < ActiveRecord::Base
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :text_for_targets, :name, :description, :start_date, :end_date,
     :approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
@@ -99,7 +97,6 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.eql? SubActivity }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
-  before_save :check_quarterly_vs_total
 
   ### Named scopes
   # TODO: spec
@@ -180,16 +177,8 @@ class Activity < ActiveRecord::Base
         row << activity.name
         row << activity.description
         row << activity.provider.try(:name)
-        row << activity.spend
-        row << activity.spend_q1
-        row << activity.spend_q2
-        row << activity.spend_q3
-        row << activity.spend_q4
-        row << activity.budget
-        row << activity.budget_q1
-        row << activity.budget_q2
-        row << activity.budget_q3
-        row << activity.budget_q4
+        row << activity.spend 
+        row << activity.budget 
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << ''
@@ -226,16 +215,8 @@ class Activity < ActiveRecord::Base
 
       activity.name                    = row['Activity Name']
       activity.description             = row['Activity Description']
-      activity.spend                   = row['Current Expenditure']
-      activity.spend_q1                = row['Q1 Current Expenditure']
-      activity.spend_q2                = row['Q2 Current Expenditure']
-      activity.spend_q3                = row['Q3 Current Expenditure']
-      activity.spend_q4                = row['Q4 Current Expenditure']
-      activity.budget                  = row['Current Budget']
-      activity.budget_q1               = row['Q1 Current Budget']
-      activity.budget_q2               = row['Q2 Current Budget']
-      activity.budget_q3               = row['Q3 Current Budget']
-      activity.budget_q4               = row['Q4 Current Budget']
+      activity.spend                   = row['Current Expenditure'] 
+      activity.budget                  = row['Current Budget'] 
       activity.start_date              = row['Start Date']
       activity.end_date                = row['End Date']
       activity.text_for_beneficiaries  = row['Beneficiaries']
@@ -275,17 +256,8 @@ class Activity < ActiveRecord::Base
     activities.each_pair do |activity_id, attributes|
       activity = response.activities.find(activity_id)
       activity.attributes = attributes
-      if attributes[:budget].nil?
-        activity.budget = [activity.budget_q1, activity.budget_q2, activity.budget_q3, activity.budget_q4].compact.sum
-      else
-        activity.budget = attributes[:budget]
-      end
-      if attributes[:spend].nil?
-        activity.spend  = [activity.spend_q1, activity.spend_q2,
-                     activity.spend_q3, activity.spend_q4].compact.sum
-      else
-        activity.spend = attributes[:spend]
-      end
+      activity.budget = attributes[:budget]
+      activity.spend = attributes[:spend]
       activity.save
     end
   end
@@ -560,9 +532,7 @@ class Activity < ActiveRecord::Base
   def check_projects_budget_and_spend?
     return true if self.budget.nil? && self.spend.nil?
     return true if self.actual_budget <= (self.project.budget || 0) &&
-                   self.actual_spend <= (self.project.spend || 0) &&
-                   self.actual_quarterly_spend_check? &&
-                   self.actual_quarterly_budget_check?
+                   self.actual_spend <= (self.project.spend || 0) 
     return false
   end
 
@@ -572,23 +542,6 @@ class Activity < ActiveRecord::Base
 
   def actual_budget
     (self.budget || 0 )
-  end
-
-  def actual_quarterly_spend_check?
-    return true if (self.spend_q1 || 0) <= (self.project.spend_q1 || 0) &&
-                   (self.spend_q2 || 0) <= (self.project.spend_q2 || 0) &&
-                   (self.spend_q3 || 0) <= (self.project.spend_q3 || 0) &&
-                   (self.spend_q4 || 0) <= (self.project.spend_q1 || 0)
-    return false
-  end
-
-  def actual_quarterly_budget_check?
-    return true if (self.budget_q1 || 0) <= (self.project.budget_q1 || 0) &&
-                   (self.budget_q2 || 0) <= (self.project.budget_q2 || 0) &&
-                   (self.budget_q3 || 0) <= (self.project.budget_q3 || 0) &&
-                   (self.budget_q4 || 0) <= (self.project.budget_q4 || 0)
-
-    return false
   end
 
   def sub_activities_each_have_defined_districts?(coding_type)
@@ -619,14 +572,7 @@ class Activity < ActiveRecord::Base
 
   def sub_activities_total_by_type(amount_type, quarters, other_currency)
     sub_activities.map { |implementer| implementer.total_by_type(amount_type, quarters) }.compact.sum * currency_rate(currency, other_currency)
-  end
-
-  def total_amount_of_quarters(type)
-    (self.send("#{type}_q1") || 0) +
-    (self.send("#{type}_q2") || 0) +
-    (self.send("#{type}_q3") || 0) +
-    (self.send("#{type}_q4") || 0)
-  end
+  end 
 
   def is_simple?
     self.class.eql?(Activity) || self.class.eql?(OtherCost)

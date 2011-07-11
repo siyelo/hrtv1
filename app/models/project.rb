@@ -5,8 +5,7 @@ require 'validators'
 class Project < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
-                           spend spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4 current_budget 
-                           budget_q1 budget_q2 budget_q3 budget_q4 start_date end_date]
+                           spend current_budget start_date end_date]
 
   include ActionView::Helpers::TextHelper
   include ActsAsDateChecker
@@ -48,18 +47,8 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
-  validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
-  validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
-  validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
-  validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
-  validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
-  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-  validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
-  validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
-  validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
-  validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
-  validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
+  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?} 
+  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?} 
   validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
   validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
   validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
@@ -74,8 +63,6 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-                  :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
                   :budget2, :budget3, :budget4, :budget5
 
   # Delegates
@@ -84,7 +71,6 @@ class Project < ActiveRecord::Base
 
   ### Callbacks
   after_save :update_cached_currency_amounts
-  before_save :check_quarterly_vs_total
   ### Public methods
 
   def implementers
@@ -113,7 +99,7 @@ class Project < ActiveRecord::Base
   end
 
   #Methods correctly strip the non-word characters from the following fields
-  CURRENCY_FIELDS = [:budget, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4,  :entire_budget]
+  CURRENCY_FIELDS = [:budget, :spend, :entire_budget]
     Project.class_eval CURRENCY_FIELDS.each.inject("") {|s,field| s += <<END}
       def #{field}=(amount)
         super(strip_non_decimal(amount))
@@ -245,28 +231,14 @@ END
       return false unless in_flow.organization_id_from
     end
     true
-  end
-
-  def total_matches_quarters?(type)
-    return true if (self.send(type) || 0) == total_amount_of_quarters(type)
-    return false
-  end
-
-  def total_amount_of_quarters(type)
-    (self.send("#{type}_q1") || 0) +
-    (self.send("#{type}_q2") || 0) +
-    (self.send("#{type}_q3") || 0) +
-    (self.send("#{type}_q4") || 0)
-  end
+  end 
 
   def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+    spend.present?
   end
 
   def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+    budget.present?
   end
 
   def linked?
@@ -480,16 +452,7 @@ END
         amount += spend * currency_rate(project.currency, 'USD')
       end
       amount
-    end
-
-    # setting the total amount if the quarterlys are set
-    def check_quarterly_vs_total
-      ["budget", "spend"].each do |type|
-        if total_amount_of_quarters(type) > 0
-          self.send(:"#{type}=", total_amount_of_quarters(type))
-        end
-      end
-    end
+    end 
 
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id

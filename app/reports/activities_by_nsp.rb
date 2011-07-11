@@ -26,11 +26,7 @@ class Reports::ActivitiesByNsp
       Nsp.deepest_nesting.times{|i| row << "NSP Code"}
       row << "Current Budget"
       row << "Activity Description"
-      row << "Funding Source"
-      row << "Q1"
-      row << "Q2"
-      row << "Q3"
-      row << "Q4"
+      row << "Funding Source" 
       row << "Districts"
       row << "Data Source" if @show_organization
       row << "Implementer"
@@ -69,11 +65,7 @@ class Reports::ActivitiesByNsp
 
           row << n2c(assignment.cached_amount_in_usd)
           row << activity_description(activity)
-          row << funding_source_name(activity)
-          row << activity.spend_q1 ? 'x' : nil
-          row << activity.spend_q2 ? 'x' : nil
-          row << activity.spend_q3 ? 'x' : nil
-          row << activity.spend_q4 ? 'x' : nil
+          row << funding_source_name(activity) 
           row << activity.locations.join(' | ')
           row << activity.organization.try(:short_name) if @show_organization
           row << get_provider_name(activity) # TODO: use provider_name(assignment.activity)

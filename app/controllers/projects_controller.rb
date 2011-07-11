@@ -140,7 +140,7 @@ class ProjectsController < Reporter::BaseController
       if params[:project].present? && params[:project][:in_flows_attributes].present?
         in_flows = params[:project][:in_flows_attributes]
         in_flows.each_pair do |id, in_flow|
-          [:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4].each do |field|
+          [:spend, :budget].each do |field|
             in_flows[id][field] = convert_number_column_value(in_flows[id][field])
           end
         end

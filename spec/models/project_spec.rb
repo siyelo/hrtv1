@@ -35,16 +35,7 @@ describe Project do
     it { should allow_mass_assignment_of(:budget2) }
     it { should allow_mass_assignment_of(:budget3) }
     it { should allow_mass_assignment_of(:budget4) }
-    it { should allow_mass_assignment_of(:budget5) }
-    it { should allow_mass_assignment_of(:budget_q1) }
-    it { should allow_mass_assignment_of(:budget_q2) }
-    it { should allow_mass_assignment_of(:budget_q3) }
-    it { should allow_mass_assignment_of(:budget_q4) }
-    it { should allow_mass_assignment_of(:spend_q1) }
-    it { should allow_mass_assignment_of(:spend_q2) }
-    it { should allow_mass_assignment_of(:spend_q3) }
-    it { should allow_mass_assignment_of(:spend_q4) }
-    it { should allow_mass_assignment_of(:spend_q4_prev) }
+    it { should allow_mass_assignment_of(:budget5) } 
   end
 
   describe "validations" do
@@ -58,18 +49,10 @@ describe Project do
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value('12,323.32').for(:spend) }
     it { should allow_value(123.45).for(:entire_budget) }
-    it { should_not allow_value('abcd').for(:budget) }
-    it { should_not allow_value('abcd').for(:budget_q1) }
-    it { should_not allow_value('abcd').for(:budget_q2) }
-    it { should_not allow_value('abcd').for(:budget_q3) }
-    it { should_not allow_value('abcd').for(:budget_q4) }
-    it { should_not allow_value('abcd').for(:budget_q4_prev) }
-    it { should_not allow_value('abcd').for(:spend) }
-    it { should_not allow_value('abcd').for(:spend_q1) }
-    it { should_not allow_value('abcd').for(:spend_q2) }
-    it { should_not allow_value('abcd').for(:spend_q3) }
-    it { should_not allow_value('abcd').for(:spend_q4) }
-    it { should_not allow_value('abcd').for(:spend_q4_prev) }
+    it { should allow_value('2010-12-01').for(:start_date) }
+    it { should allow_value('2010-12-01').for(:end_date) }
+    it { should_not allow_value('abcd').for(:budget) } 
+    it { should_not allow_value('abcd').for(:spend) } 
     it { should_not allow_value('abcd').for(:budget2) }
     it { should_not allow_value('abcd').for(:budget3) }
     it { should_not allow_value('abcd').for(:budget4) }
@@ -93,7 +76,7 @@ describe Project do
 
 
   describe "cleans currency formats" do
-    FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
+    FIELDS = [:spend, :budget, :entire_budget]
     TESTS = [
               ["10,783.32",     "10783.32",  "clean commas"],
               ["$10,783.32",    "10783.32",   "ignore currency symbols and commas"],
@@ -117,37 +100,7 @@ describe Project do
         end
       end
     end
-  end
-
-  context "Amount validations" do
-    it "should return true if budget is equal to that of the quarterlys" do
-      @project = Factory(:project, :budget => "140",
-                         :budget_q1 => "20", :budget_q2 => "30",
-                         :budget_q3 => "40", :budget_q4 => "50")
-      @project.total_matches_quarters?(:budget).should be_true
-    end
-
-     it "should return true if budget is equal to that of the quarterlys" do
-       @project = Factory(:project, :spend => "140",
-                          :spend_q1 => "20", :spend_q2 => "30",
-                          :spend_q3 => "40", :spend_q4 => "50")
-       @project.total_matches_quarters?(:spend).should be_true
-     end
-
-      it "should return true if past expenditure is nil and quarterlys are too" do
-        @project = Factory(:project, :spend => nil,
-                            :spend_q1 => nil, :spend_q2 => nil,
-                            :spend_q3 => nil, :spend_q4 => nil)
-        @project.total_matches_quarters?(:spend).should be_true
-      end
-
-      it "should return false if past expenditure is nil and quarterlys are too" do
-        @project = Factory(:project, :spend => nil,
-                            :spend_q1 => nil, :spend_q2 => nil,
-                            :spend_q3 => nil, :spend_q4 => nil)
-        @project.total_matches_quarters?(:spend).should be_true
-      end
-  end
+  end 
 
   context "Submit page: " do
     before(:each) do
@@ -411,20 +364,7 @@ describe Project do
     it "succeeds if past expenditure is entered" do
       @project.spend_entered?.should == true
 
-    end
-
-    it "succeeds if past expenditure not entered but a quarter past expenditure is" do
-      @project.spend = nil
-      @project.spend_q1 = 10
-      @project.save
-      @project.spend_entered?.should == true
-    end
-
-    it "fails if past expenditure is not entered and no quarter past expenditures are" do
-      @project.spend = nil
-      @project.save
-      @project.spend_entered?.should be_false
-    end
+    end 
   end
 
   describe "project budget" do
@@ -434,20 +374,7 @@ describe Project do
 
     it "succeeds if entered" do
       @project.budget_entered?.should == true
-    end
-
-    it "succeeds if not entered but a quarter budget is" do
-      @project.budget = nil
-      @project.budget_q1 = 10
-      @project.save
-      @project.budget_entered?.should == true
-    end
-
-    it "fails if not entered and no quarter budgets are" do
-      @project.budget = nil
-      @project.save
-      @project.budget_entered?.should be_false
-    end
+    end 
   end
 
   describe "linking to funding source project" do

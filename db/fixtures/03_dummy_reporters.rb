@@ -14,16 +14,20 @@ else
   puts "=> reporter #{@reporter.name} created (org: #{@reporter.organization.name})"
 end
 
-@reporter ||= User.find_by_email 'reporter@hrtapp.com'
-puts "creating response"
-@response = Factory(:data_response, :organization => @reporter.organization)
-puts "creating project"
-@project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
-puts "creating activity & coding"
-Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-puts "creating other costs & coding"
-Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
-puts "=> added sample data for reporter #{@reporter.name}"
+begin
+  @reporter ||= User.find_by_email 'reporter@hrtapp.com'
+  puts "creating response"
+  @response = Factory(:data_response, :organization => @reporter.organization)
+  puts "creating project"
+  @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
+  puts "creating activity & coding"
+  Factory(:activity_fully_coded, :data_response => @response, :project => @project)
+  puts "creating other costs & coding"
+  Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
+  puts "=> added sample data for reporter #{@reporter.name}"
+rescue Exception => e
+  puts e.message
+end
 
 ##ACTIVITY MANAGER
 begin

@@ -65,7 +65,7 @@ end
 
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:reporter,
-                :username              => name,
+                :full_name             => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
@@ -73,20 +73,10 @@ end
 
 Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:activity_manager,
-                :username              => name,
+                :full_name             => name,
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
-end
-
-Given /^the following reporters$/ do |table|
-  table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
-    username  = hash.delete("name")
-    Factory(:reporter, { :username => username,
-                         :organization => org
-                       }.merge(hash) )
-  end
 end
 
 Given /^the root codes$/ do |table|
@@ -95,21 +85,10 @@ Given /^the root codes$/ do |table|
   end
 end
 
-Given /^the following activity managers$/ do |table|
-  table.hashes.each do |hash|
-    org  = Organization.find_by_name(hash.delete("organization"))
-    username  = hash.delete("name")
-    Factory(:activity_manager, { :username => username,
-                                 :organization => org
-                               }.merge(hash) )
-  end
-end
-
-
-Given /^I am signed in as "([^"]*)"$/ do |name|
+Given /^I am signed in as "([^"]*)"$/ do |email|
   steps %Q{
     When I go to the login page
-    When I fill in "Username or Email" with "#{name}"
+    When I fill in "Email" with "#{email}"
     And  I fill in "Password" with "password"
     And  I press "Sign in"
   }
@@ -157,32 +136,29 @@ Given /^the following organizations$/ do |table|
   end
 end
 
-Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:reporter,
-                  :username => name,
-                  :email => 'reporter@hrtapp.com',
+                  :email => email || 'reporter@hrtapp.com',
                   :password => 'password',
                   :password_confirmation => 'password',
                   :organization => @organization)
 end
 
-Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^an activity manager "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:activity_manager,
-                  :username              => name,
-                  :email                 => 'activity_manager@hrtapp.com',
+                  :email                 => email || 'activity_manager@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
 
 end
 
-Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |name, org_name|
+Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:admin,
-                  :username              => name,
-                  :email                 => 'sysadmin@hrtapp.com',
+                  :email                 => email || 'sysadmin@hrtapp.com',
                   :password              => 'password',
                   :password_confirmation => 'password',
                   :organization          => @organization)
@@ -208,9 +184,9 @@ Then /^debug$/ do
   debugger
 end
 
-Then /^I should see the "([^"]*)" tab is active$/ do |text|
+Then /^I should see the "([^"]*)" tab is "([^"]*)"/ do |text, class_name|
   steps %Q{
-    Then I should see "#{text}" within "li.selected"
+    Then I should see "#{text}" within "li.#{class_name}"
   }
 end
 

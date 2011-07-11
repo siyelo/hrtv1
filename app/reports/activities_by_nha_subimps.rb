@@ -148,7 +148,7 @@ class Reports::ActivitiesByNhaSubimps
       sub_activities.each do |activity|
         break_out = false
         if activity != parent_activity
-            if @is_budget #to get budget or spend district codings and check this sub_activity has nonzero budget or spend
+            if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
               if activity.budget?
                 district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
                 amount_total = activity.budget
@@ -197,8 +197,8 @@ class Reports::ActivitiesByNhaSubimps
 
               row << activity.possible_duplicate?
               row << activity.id
-              row << activity.provider.try(:name) || "No Implementer Specified" # include implementer here
-              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include implementer here
+              row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
+              row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
               row << funding_source[:ufs].try(:name)
               row << funding_source[:ufs].try(:raw_type)
               row << funding_source[:fa].try(:name)
@@ -221,7 +221,7 @@ class Reports::ActivitiesByNhaSubimps
     end
 
     def build_header
-      amount_type = @is_budget ? 'Current Budget' : 'Spent'
+      amount_type = @is_budget ? 'Current Budget' : 'Past Expenditure'
 
       row = []
       row << "contact name"
@@ -242,9 +242,9 @@ class Reports::ActivitiesByNhaSubimps
       row << "Q3 (USD)"
       row << "Q4 (USD)"
       row << "Districts"
-      row << "# of implementers"
+      row << "# of sub-activities"
       row << "# of facilities implementing"
-      row << "Implementers"
+      row << "Sub-implementers"
       row << "Data Source"
       row << "Beneficiaries"
       row << "ID"
@@ -254,7 +254,7 @@ class Reports::ActivitiesByNhaSubimps
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
       row << "National?"
-      row << "Implementer ID"
+      row << "SubActivity ID"
       row << "Possible Duplicate?"
       row << "Implementer"
       row << "Implementer Type"

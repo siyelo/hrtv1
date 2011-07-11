@@ -43,6 +43,18 @@ describe Organization do
     it { should validate_presence_of(:contact_phone_number) }
     it { should validate_presence_of(:contact_main_office_phone_number) }
     it { should validate_presence_of(:contact_office_location)}
+
+    it "is not valid when currency is not included in the list" do
+      organization = Factory.build(:organization, :currency => 'INVALID')
+      organization.save
+      organization.errors.on(:currency).should_not be_blank
+    end
+
+    it "is valid when currency is included in the list" do
+      organization = Factory.build(:organization, :currency => 'USD')
+      organization.save
+      organization.errors.on(:currency).should be_blank
+    end
   end
 
   describe "custom date validations" do

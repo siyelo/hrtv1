@@ -5,7 +5,6 @@ describe User do
   describe "attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }
-    it { should allow_mass_assignment_of(:username) }
     it { should allow_mass_assignment_of(:password) }
     it { should allow_mass_assignment_of(:password_confirmation) }
     it { should allow_mass_assignment_of(:organization_id) }
@@ -25,12 +24,10 @@ describe User do
   describe "Validations" do
     subject { Factory(:reporter, :organization => Factory(:organization) ) }
     it { should be_valid }
-    it { should validate_presence_of(:username) }
+    it { should validate_presence_of(:full_name) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_uniqueness_of(:email).case_insensitive }
-    it { should validate_uniqueness_of(:username).case_insensitive }
-    #it { should ensure_length_of(:password).is_at_least(6) } # shoulda barfs here on password confirmation
 
     it "cannot assign blank role" do
       user = Factory.build(:reporter, :roles => [])
@@ -66,34 +63,49 @@ describe User do
     end
   end
 
-  describe "find_by_username_or_email" do
-    it "finds user by username" do
-      user = Factory(:reporter, :username => 'pink.panter')
-      User.find_by_username_or_email('pink.panter').should == user
+  describe "passwords" do
+    it "should allow (admin) to create a user w/out a password" do
+      pending #TODO - add 'active'
+      lambda {Factory(:user, :password => nil, :password_confirmation => nil,
+        :active => false)}.should_not raise_error(ActiveRecord::RecordInvalid)
     end
 
-    it "finds user by email" do
-      user = Factory(:reporter, :email => 'pink.panter@gmail.com')
-      User.find_by_username_or_email('pink.panter@gmail.com').should == user
-    end
-  end
-
-  describe "a user can change their current data response" do
-    it "it will allow a data response that they have access to" do
-      @org = Factory(:organization)
-      @user = Factory(:reporter, :organization => @org)
-      @data_response = Factory(:data_response, :organization => @user.organization)
-      @user.current_response = @data_response
-      @user.save.should be_true
+    it "should allow (admin) to update a user before they have registered" do
+      pending #TODO - add 'active'
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.full_name = "bob rob"
+      @user.save.should == true
     end
 
-    it "will not allow a user to change to a data request that they dont' have access to (ie. doesn't show up for @user.data_responses)" do
-      @org = Factory(:organization)
-      @user = Factory(:reporter, :organization => @org)
-      @data_response = Factory(:data_response, :organization => @user.organization)
-      @data_response2 = Factory(:data_response)
-      @user.current_response = @data_response
-      @user.save.should be_true
+    it "should NOT allow (user) to accept invitation (go active) w/out a password" do
+      pending #TODO - add 'active'
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.activate.should == false
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+    end
+
+    it "should NOT allow (user) to accept invitation (go active) with a short password" do
+      pending #seems to be skipping the length validation.
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.password = '123'
+      @user.password_confirmation = '123'
+      @user.activate.should == false
+      @user.errors.on(:password).should == "too short!"
+    end
+
+    it "should allow (user) to accept invitation (go active) with a good password" do
+      pending #TODO - add 'active'
+      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
+      @user.password = '123456'
+      @user.password_confirmation = '123456'
+      @user.activate.should == true
+    end
+
+    it "should allow (user) to update w/out a password" do
+      pending #TODO - add 'active'
+      @user = Factory(:user, :password => 'abcdef', :password_confirmation => 'abcdef', :active => true)
+      @user.full_name = "bob rob"
+      @user.save.should == true
     end
   end
 
@@ -168,59 +180,6 @@ describe User do
     end
   end
 
-  describe "admin?" do
-    it "is admin when roles_mask is 1" do
-      user = Factory(:admin, :roles_mask => 1)
-      user.admin?.should be_true
-    end
-
-    it "is not admin when roles_mask is not 1" do
-      user = Factory(:reporter, :roles_mask => 2)
-      user.admin?.should be_false
-    end
-  end
-
-  describe "reporter?" do
-    it "is reporter when roles_mask is 2" do
-      user = Factory(:reporter, :roles_mask => 2)
-      user.reporter?.should be_true
-    end
-
-    it "is not reporter when roles_mask is not 1" do
-      user = Factory(:admin, :roles_mask => 1)
-      user.reporter?.should be_false
-    end
-  end
-
-  describe "activity_manager?" do
-    it "is activity_manager when roles_mask is 3" do
-      user = Factory(:activity_manager, :roles_mask => 3)
-      user.activity_manager?.should be_true
-    end
-
-    it "is not activity_manager when roles_mask is not 3" do
-      user = Factory(:admin, :roles_mask => 1)
-      user.activity_manager?.should be_false
-    end
-  end
-
-  describe "name" do
-    it "returns full_name if full name is present" do
-      user = Factory(:reporter, :full_name => "Pink Panter")
-      user.name.should == "Pink Panter"
-    end
-
-    it "returns email if full name is nil" do
-      user = Factory(:reporter, :full_name => nil, :username => 'pink.panter', :email => 'user@hrtapp.com')
-      user.name.should == "pink.panter"
-    end
-
-    it "returns email if full name is blank string" do
-      user = Factory(:reporter, :full_name => '', :username => 'pink.panter', :email => 'user@hrtapp.com')
-      user.name.should == "pink.panter"
-    end
-  end
-
   describe "current response/request" do
     before :each do
       @org = Factory :organization
@@ -232,26 +191,4 @@ describe User do
       @user.current_request.should == @response.request
     end
   end
-
 end
-
-# == Schema Information
-#
-# Table name: users
-#
-#  id                       :integer         primary key
-#  username                 :string(255)
-#  email                    :string(255)
-#  crypted_password         :string(255)
-#  password_salt            :string(255)
-#  persistence_token        :string(255)
-#  created_at               :timestamp
-#  updated_at               :timestamp
-#  roles_mask               :integer
-#  organization_id          :integer
-#  data_response_id_current :integer
-#  text_for_organization    :text
-#  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
-#
-

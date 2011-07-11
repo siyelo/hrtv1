@@ -44,10 +44,10 @@ class Reports::ActivitiesByNha
       row << 'Q2 (USD)'
       row << 'Q3 (USD)'
       row << 'Q4 (USD)'
-      row << 'Total Spent'
-      row << 'Converted Total Spent (USD)'
-      row << 'Classified Spent'
-      row << 'Converted Classified Spent (USD)'
+      row << 'Total Past Expenditure'
+      row << 'Converted Total Past Expenditure (USD)'
+      row << 'Classified Past Expenditure'
+      row << 'Converted Classified Past Expenditure (USD)'
       row << "Code type"
       row << "Code sub account"
       row << "Code nha code"

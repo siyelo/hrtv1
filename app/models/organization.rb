@@ -52,7 +52,7 @@ class Organization < ActiveRecord::Base
   validates_presence_of :currency, :contact_name, :contact_position,
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number, :on => :update
-  # TODO: spec
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
   validates_date :fiscal_year_start_date, :on => :update
   validates_date :fiscal_year_end_date, :on => :update
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,

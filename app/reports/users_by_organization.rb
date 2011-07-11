@@ -20,7 +20,6 @@ class Reports::UsersByOrganization
       row = []
 
       row << "user.id"
-      row << "user.username"
       row << "user.email"
       row << "user.full_name"
       row << "organization.name"
@@ -34,7 +33,6 @@ class Reports::UsersByOrganization
       row = []
 
       row << user.id
-      row << user.username
       row << user.email
       row << user.full_name
       row << user.organization.try(:name)

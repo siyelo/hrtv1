@@ -12,7 +12,7 @@ Feature: Can view district reports
       And a data_request exists with title: "Req2", organization: the organization
 
       And an organization exists with name: "Org A"
-      And a reporter exists with username: "reporter", organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And a data_response exists with data_request: the 1st data_request, organization: the organization
       And a project exists with name: "Project 1 A", data_response: the data_response
       And an activity exists with name: "Activity 1 A", data_response: the data_response, project: the project

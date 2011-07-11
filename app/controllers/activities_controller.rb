@@ -52,7 +52,7 @@ class ActivitiesController < Reporter::BaseController
       end
     else
       respond_to do |format|
-        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
                       load_comment_resources(resource)
                       render :action => 'edit'
                     }

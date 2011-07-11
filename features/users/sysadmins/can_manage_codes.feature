@@ -6,8 +6,8 @@ Feature: Admin can manage codes
   Background:
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1", organization: the organization
-      And an admin exists with username: "admin", organization: the organization
-      And I am signed in as "admin"
+      And an admin exists with email: "admin@hrtapp.com", organization: the organization
+      And I am signed in as "admin@hrtapp.com"
 
     Scenario: Admin can CRUD codes
       When I follow "Codes"
@@ -43,7 +43,7 @@ Feature: Admin can manage codes
         And I should not see "code2"
 
 
-    Scenario: Adding malformed CSV file doesn't throw exception
+    Scenario: Adding malformed CSV file doesnt throw exception
       When I follow "Codes"
         And I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Upload and Import"

@@ -1,0 +1,91 @@
+1942, , rh@arc.org.rw, arcrwanda
+2422, , q@a.com, reporter3
+1975, , KRoss@fhi.org, FHI_Rwanda
+1986, , am2940@columbia.edu, Aline
+2423, , rwiraregis@gmail.com, reporter2
+2424, Zara Ahmed, za.zara@gmail.com, za.zara
+2031, , eekochu@s-3.com, LizaEk
+2065, , mwuma@yahoo.fr, MWUMVANEZA MARCELLIN
+2425, joseph ndengeye, joseph.ndengeye@cnls.gov.rw, joseph
+2091, , regis.hitimana@moh.gov.rw, regis.hitimana
+2407, , ruhmaxime@yahoo.com, ruhmaxime@yahoo.com
+2426, joseph ndengeye, josendengeye@yahoo.fr, josephN
+2117, , mmusoni@rw.chfinternational.org, mmusoni
+2122, , tbishagara@jhpiego.net, tbishagara
+2111, , walasamw@yahoo.fr, Dr. Walasa
+2116, , rmutembe@yahoo.fr, bmr
+2140, , jreilly@aabb.org, Jim Reilly
+2138, , rntirandekura@usaid.gov, RNtirandekura
+2145, David McAlister, mcalisterd@rw.cdc.gov, McAlisterD
+2144, Jean Baptiste Koama, koamajb@rw.cdc.gov, koamajb1
+2123, , jn2329@columbia.edu, jndagijimana
+2152, Eugenie Kayirangwa, kayirangwae@rw.cdc.gov, kayirangwae
+2158, Fernando Morales, moralesf@rw.cdc.gov, moralesf
+2165, Virginia Baresch, bareschg@rw.cdc.gov, bareschg
+2154, Felix Ndagije, ndagijef@rw.cdc.gov, ndagijef
+2164, Pratima Raghunathan, raghunathanp@rw.cdc.gov, raghunathanp
+2173, , 1yrajkotia@usaid.gov, 1yrajkotia
+2174, , 1ngodfrey@usaid.gov, 1ngodfrey
+2175, , 1wstinson@usaid.gov, 1wstinson
+2176, , 1pcondo@usaid.gov, 1pcondo
+2177, , 1jkamwesigye@usaid.gov, 1jkamwesigye
+2178, , 2jkamwesigye@usaid.gov, 2jkamwesigye
+2179, , 3jkamwesigye@usaid.gov, 3jkamwesigye
+2180, , 1ctalley@usaid.gov, 1ctalley
+2181, , 2ctalley@usaid.gov, 2ctalley
+2182, , 4jkamwesigye@usaid.gov, 4jkamwesigye
+2183, , 5jkamwesigye@usaid.gov, 5jkamwesigye
+2184, , 1smowafy@usaid.gov, 1smowafy
+2185, , 3wstinson@usaid.gov, 3wstinson
+2186, , 6jkamwesigye@usaid.gov, 6jkamwesigye
+2187, , 1vcoignez@usaid.gov, 1vcoignez
+2188, , 1ankusi@usaid.gov, 1ankusi
+2189, , 2ankusi@usaid.gov, 2ankusi
+2191, , 4ankusi@usaid.gov, 4ankusi
+2192, , 1sjosephdg@usaid.gov, 1sjosephdg
+2193, , 2sjosephdg@usaid.gov, 2sjosephdg
+2197, , nravishankar@gmail.com, nirmala
+2198, , crs@crs.com, crs
+2199, , crs2@crs.com, crs2
+2222, , ange_muk@yahoo.fr, angelique.mukunde
+2239, , gatete@gmail.com, gatete
+2263, , jrtumwine@yahoo.co.uk, Jotham Tumwine
+2264, , luyimagodfrey@yahoo.com, luyimagodfrey
+2268, , ngeyojavan@yahoo.fr, javan
+2269, , joseph.baguma@gmail.com, joseph.baguma
+2273, , clsi@clsi.com, clsi
+2265, , mukakigerie@yahoo.com, emukakigeri
+2300, , Michael_Washington@abtassoc.com, michael_washington@abtassoc.com
+2309, , pdm.peaceplan@rwanda1.com, Rwanda PDM
+2314, , cninodeguzman@edc.org, cninodeguzman
+2303, , olivier.nkomezi@yahoo.fr, olivier.nkomezi
+2324, , kbrownlow@usaid.gov, kbrownlow
+2328, , erik.josephson@gmail.com, ErikJ
+2331, , 2kbrownlow@usaid.gov, 2kbrownlow
+2335, , pih@pih.org, pih
+2321, , lizetboerstra@yahoo.com, Lizet Boerstra
+2361, , jlou.mukunzi+2@gmail.com, jladmin
+2352, , gmengel@peacecorps.gov, gordon mengel
+2353, , abiyingo@unhcr.org, abiyingo
+2354, , mukeshim@unhcr.org, mukeshim
+2359, , jeremy_snider@abtremote.com, jsadmin
+2362, , smicetic@clintonhealthaccess.org, smicetic
+2365, , vstapleton@usaid.gov, vstapleton
+2366, , ngodfrey@usaid.gov, ngodfrey
+2367, , jandavis@usaid.gov, jandavis
+2368, , jkamwesigye@usaid.gov, jkamwesigye
+2360, , sarahbreen.moh@gmail.com, sbadmin
+2371, , EGPAFRwanda@egpaf.org, EGPAFRwanda
+2375, , stephen_musau@abtremote.com, smadmin
+2215, , ittkr@yahoo.fr, itete
+2369, , yrajkotia@usaid.gov, yrajkotia
+2312, , emmanuel.ntakirutimana@rwandaredcross.org, emmanuel.ntakirutimana
+2196, , jlou.mukunzi@gmail.com, m2m
+2333, , fidele.karangwa@gmail.com, fidele
+1441, , iuwimbabazi@rw.caro.crs.org, AIDSRelief
+1935, , jeremy_snider@abtassoc.com, jwsnider
+1934, , glenn.roberts@siyelo.com, glennr
+2394, , danilolenine@yahoo.fr, danilo
+2433, , reporter@hrtapp.com, reporter_353113
+2434, , activity_manager@hrtapp.com, activity_manager_650963
+2432, , sysadmin@hrtapp.com, sysadmin_134800

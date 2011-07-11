@@ -8,13 +8,13 @@ Feature: Reporter can manage activities
     And a data_request exists with title: "data_request1"
     And an organization "my_organization" exists with name: "organization2"
     Then data_response should exist with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "reporter", organization: organization "my_organization"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: organization "my_organization"
     And a project exists with name: "project1", budget: "20000", data_response: the data_response
     And a location exists with short_display: "Location1"
     And the location is one of the project's locations
     And a location exists with short_display: "Location2"
     And the location is one of the project's locations
-    And I am signed in as "reporter"
+    And I am signed in as "reporter@hrtapp.com"
     And I follow "data_request1"
     And I follow "Projects"
 
@@ -36,26 +36,26 @@ Feature: Reporter can manage activities
     Then the "Target" field should contain "Output description value"
 
      #combobox
-    @javascript @wip 
+    @javascript @wip
     Scenario: Reporter can add implementers (normal values)
       When I follow "Add Activities now"
-	    And I fill in "Name" with "activity1"
-    	And I fill in "Description" with "1ctivity1 description"
-    	And I fill in "Start date" with "2010-01-01"
-    	And I fill in "End date" with "2010-12-01"
-    	And I fill in "Expenditure" with "200"
-    	And I fill in "Budget" with "300"
-    	And I select "project1" from "Project"
-    	And I follow "Add Implementer"
-    	And I fill in "Implementer" with "organization2"
-    	And I fill in "Implementer Expenditure" with "99"
-    	And I fill in "Implementer Current Budget" with "19"
-    	And I press "Save & Classify >"
+      And I fill in "Name" with "activity1"
+      And I fill in "Description" with "1ctivity1 description"
+      And I fill in "Start date" with "2010-01-01"
+      And I fill in "End date" with "2010-12-01"
+      And I fill in "Expenditure" with "200"
+      And I fill in "Budget" with "300"
+      And I select "project1" from "Project"
+      And I follow "Add Implementer"
+      And I fill in "Implementer" with "organization2"
+      And I fill in "Implementer Expenditure" with "99"
+      And I fill in "Implementer Current Budget" with "19"
+      And I press "Save & Classify >"
 
       Then I should see "Activity was successfully created"
       When I follow "activity1"
       Then the "Implementer Expenditure" field should contain "99"
-	    And the "Implementer Current Budget" field should contain "19"
+      And the "Implementer Current Budget" field should contain "19"
 
     #combobox
     @javascript @wip
@@ -189,9 +189,9 @@ Feature: Reporter can manage activities
         And I fill in "comment_comment" with "Comment body"
          And I press "Create Comment"
       Then "reporter_1@example.com" should not receive an email
-      
+
       #can't test with combobox
-      @wip 
+      @wip
     Scenario: A reporter can select implementer for an activity
     When I follow "Add Activities now"
       Then I select "organization2" from "Implementer"
@@ -245,7 +245,7 @@ Feature: Reporter can manage activities
             | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               |
             | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               |
 
-            
+
     #combobox
     @javascript @wip
     Scenario: A reporter can create funding sources for an activity
@@ -282,10 +282,10 @@ Feature: Reporter can manage activities
         And an organization exists with name: "organization5"
         And a data_request exists with title: "data_request2", budget: false
         And a data_response exists with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "reporter2", organization: the organization
+        And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
         And a location exists with short_display: "Location1"
         And a location exists with short_display: "Location2"
-        And I am signed in as "reporter2"
+        And I am signed in as "reporter@hrtapp.com"
         And I follow "data_request2"
         And a project exists with name: "project1", data_response: the data_response
         And I follow "Projects"

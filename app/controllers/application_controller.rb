@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
     def current_user
       return @current_user if defined?(@current_user)
       @current_user ||= current_user_session && current_user_session.record
-      session[:username] = @current_user.username if @current_user
+      session[:email] = @current_user.email if @current_user
       @current_user
     end
 
@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
     end
 
     def require_admin
-      unless current_user && current_user.admin?
+      unless current_user && current_user.sysadmin?
         store_location
         flash[:error] = "You must be an administrator to access that page"
         redirect_to login_url

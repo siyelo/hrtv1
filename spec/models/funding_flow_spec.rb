@@ -49,8 +49,6 @@ describe FundingFlow do
     it { should validate_numericality_of(:spend_q2) }
     it { should validate_numericality_of(:spend_q3) }
     it { should validate_numericality_of(:spend_q4) }
-    
-
   end
 
   describe "more validations" do

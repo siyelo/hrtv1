@@ -30,7 +30,7 @@
 
 - if params[:query]
   %p
-    = "Users with username, name, email or organiation name containing #{params[:query]}"
+    = "Users containing #{params[:query]}"
     = link_to "(Back to complete users listing)", admin_users_path
 
 %table.standard.rounded
@@ -38,7 +38,6 @@
     %tr
       %th= sortable "full_name"
       %th= sortable "email"
-      %th= sortable "username"
       %th= sortable "organizations.name", "Organization"
       %th= "Role"
       %th
@@ -48,7 +47,6 @@
       %tr{:class => cycle("even", "odd")}
         %td= link_to "#{user.full_name}", edit_admin_user_path(user)
         %td= mail_to user.email
-        %td= user.username
         %td= user.organization.try(:name)
         %td= user.roles.map{|role| role.humanize}.join(', ')
         %td

@@ -21,7 +21,7 @@ class Code < ActiveRecord::Base
   acts_as_nested_set
 
   ### Associations
-  has_many :code_assignments
+  has_many :code_assignments, :dependent => :destroy
   has_many :activities, :through => :code_assignments
 
   ### Named scope
@@ -30,7 +30,7 @@ class Code < ActiveRecord::Base
   named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
   named_scope :ordered, :order => 'lft'
   named_scope :ordered_by_short_display, :order => 'short_display ASC'
-  
+
 
   def self.deepest_nesting
     @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1

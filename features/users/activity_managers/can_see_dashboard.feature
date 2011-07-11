@@ -7,9 +7,8 @@ Feature: Activity Manager can see dashboard
     Given an organization exists with name: "admin_org"
       And a data_request exists with title: "dr1", organization: the organization
 
-
-    Scenario: See dashboard
-      Given an organization exists with name: "Test Org"
-        And an activity_manager exists with username: "Frank", organization: the organization
-        And I am signed in as "Frank"
-      Then I should see "Organizations I Manage"
+  Scenario: See dashboard
+    Given an organization exists with name: "Test Org"
+      And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization
+      And I am signed in as "activity_manager@hrtapp.com"
+    Then I should see "Organizations I Manage"

@@ -39,7 +39,7 @@
   %thead
     %tr.manage_bar
       %th= sortable "description"
-      %th= sortable "spend", "Expenditure"
+      %th= sortable "spend", "Past Expenditure"
       %th= sortable "budget", "Current Budget"
       %th Classified
       %th
@@ -48,3 +48,5 @@
     = render :partial => "other_cost", :collection => @other_costs
 
 = will_paginate @other_costs
+
+%ul{ :id => 'position_container', :class => 'image_list' }

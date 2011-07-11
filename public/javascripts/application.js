@@ -812,7 +812,7 @@ var responses_review = {
   }
 };
 
-var responses_edit = {
+var organizations_edit = {
   run: function () {
     $( ".combobox" ).combobox(); // for pretty currency select
   }
@@ -846,7 +846,7 @@ var code_assignments_show = {
       e.preventDefault();
     });
 
-    $('.upload_btn').click(function (e) {
+    $('.js_upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('.upload').find('.upload_box').toggle();
     });
@@ -1128,34 +1128,6 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
-var dashboard_index = {
-  run: function () {
-    $('.js_request_select').click(function (e) {
-      e.preventDefault();
-      $(this).next().show();
-      $(this).hide();
-    });
-
-    $('.js_request_close').click(function (e) {
-      e.preventDefault();
-      $(this).parents('.request_select').hide();
-      $('.js_request_select').show();
-    });
-
-    $('.js_welcome_show').click(function (e) {
-      e.preventDefault();
-      $(this).next().slideDown();
-      $(this).hide();
-    });
-
-    $('.js_welcome_hide').click(function (e) {
-      e.preventDefault();
-      $(this).parents('.welcome_box').slideUp();
-      $('.js_welcome_show').show();
-    })
-  }
-};
-
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
@@ -1268,7 +1240,7 @@ var projects_index = {
       $('.dropdown_trigger').removeClass('persist');
     });
 
-    $('.upload_btn').click(function (e) {
+    $('.js_upload_btn').click(function (e) {
       e.preventDefault();
       $(this).parents('tbody').find('.upload_box').slideToggle();
     });

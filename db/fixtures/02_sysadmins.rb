@@ -8,7 +8,7 @@ begin
     :password => 'si@yelo', :password_confirmation => 'si@yelo')
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
-  puts "   Do you already have an org 'System Administration' or user named 'admin'? "
+  puts "   Do you already have an org 'System Administration' or user named 'sysadmin@hrtapp.com'? "
 else
   puts "=> sysadmin user: #{admin.name} created (org: #{admin.organization.name})"
 end

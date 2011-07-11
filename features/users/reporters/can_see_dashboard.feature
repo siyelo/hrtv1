@@ -7,7 +7,7 @@ Feature: Reporter can see dashboard
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "reporter", organization: the organization
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
 
 
     Scenario: "See data requests"
@@ -29,9 +29,9 @@ Feature: Reporter can see dashboard
         And a data_request exists with title: "Req2", organization: the organization
         And a data_request exists with title: "Req1", organization: the organization
         And an organization exists with name: "UNAIDS"
-        And a reporter exists with username: "some_user", organization: the organization
+        And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
         And a data_response exists with data_request: the data_request, organization: the organization
-        And I am signed in as "some_user"
+        And I am signed in as "reporter@hrtapp.com"
       When I go to the dashboard
       Then I should see "Req1" within "#content"
         And I should see "Req2" within "#content"

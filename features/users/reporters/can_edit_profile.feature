@@ -7,8 +7,8 @@ Feature: Reporter can edit profile
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization
     And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with username: "Frank", organization: the organization
-    And I am signed in as "Frank"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+    And I am signed in as "reporter@hrtapp.com"
 
     Scenario: User can change credentials and login again
       And I follow "My Profile"
@@ -22,7 +22,7 @@ Feature: Reporter can edit profile
       Then I should see "Successfully signed out. "
 
       When I follow "Sign in"
-      And I fill in "Username or Email" with "Frank2"
+      And I fill in "Email" with "Frank2"
       And I fill in "Password" with "password2"
       And I press "Sign in"
 
@@ -37,6 +37,6 @@ Feature: Reporter can edit profile
       Then I should see "Successfully signed out. "
 
       When I follow "Sign in"
-      And I fill in "Username or Email" with "frank@example.com"
+      And I fill in "Email" with "frank@example.com"
       And I fill in "Password" with "password"
       And I press "Sign in"

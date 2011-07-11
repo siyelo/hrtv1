@@ -7,7 +7,7 @@ Feature: Admin can see comments
     Given an organization exists with name: "GoR"
     And a data_request exists with title: "Req1", organization: the organization
     And an organization exists with name: "UNDP"
-    And a admin exists with username: "sysadmin", organization: the organization
+    And a admin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And a data_response exists with data_request: the data_request, organization: the organization
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And a comment exists with comment: "comment1", commentable: the project
@@ -18,7 +18,7 @@ Feature: Admin can see comments
     And a comment exists with comment: "comment2", commentable: the project
 
     Scenario: See latest comments on dashboard
-      Given I am signed in as "sysadmin"
+      Given I am signed in as "sysadmin@hrtapp.com"
       When I follow "Home"
       Then I should see "Recent Comments"
         And I should see "TB Treatment Project" within ".dashboard_comments"
@@ -26,7 +26,7 @@ Feature: Admin can see comments
 
 
     Scenario: Access comments page from dashboard and manage them
-      Given I am signed in as "sysadmin"
+      Given I am signed in as "sysadmin@hrtapp.com"
       When I follow "Home"
         And I follow "view all" within ".comments_read_more"
       Then I should be on the admin comments page

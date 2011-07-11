@@ -157,7 +157,7 @@ describe ActivitiesController do
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
       @activity.reload
       @activity.budget.should_not == 9999993
-      flash[:error].should == "Activity was approved by #{@activity.user.try(:username)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
+      flash[:error].should == "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
     end
   end
 

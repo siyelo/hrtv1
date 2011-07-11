@@ -6,10 +6,11 @@
       %p
         -
         = "#{truncate(org_name, :length => 35)}: "
-        - # sysadmin has no request/response
-        - # TODO: show request name when logged in as admin
-        - # but you're viewing a reporter's org/response
-        = "[#{current_request.name}]"
+        - # sysadmin may have no request/response
+        - if current_user.sysadmin? && current_request.nil?
+          = "[No Current Request]"
+        - else
+          = "[#{current_request.name}]"
 
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'

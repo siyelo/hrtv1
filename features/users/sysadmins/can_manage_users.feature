@@ -6,14 +6,13 @@ Feature: Admin can manage users
   Background:
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "Req1", organization: the organization
-      And an admin exists with username: "admin", organization: the organization, email: "administrator@hrtapp.com"
-      And I am signed in as "admin"
+      And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization, email: "administrator@hrtapp.com"
+      And I am signed in as "sysadmin@hrtapp.com"
 
     Scenario: Admin can CRUD users
       When I follow "Users"
         And I follow "Create User"
         And I select "organization1" from "Organization"
-        And I fill in "Username" with "pink.panter1"
         And I fill in "Email" with "pink.panter1@hrtapp.com"
         And I fill in "Full name" with "Pink Panter"
         And I select "Reporter" from "Role"
@@ -22,15 +21,12 @@ Feature: Admin can manage users
         And I press "Create New User"
       Then I should see "User was successfully created"
         And the "Organization" field should contain "organization1"
-        And the "Username" field should contain "pink.panter1"
         And the "Email" field should contain "pink.panter1@hrtapp.com"
         And the "Full name" field should contain "Pink Panter"
 
-      When I fill in "Username" with "pink.panter2"
-        And I fill in "Email" with "pink.panter2@hrtapp.com"
+      When I fill in "Email" with "pink.panter2@hrtapp.com"
         And I press "Update User"
       Then I should see "User was successfully updated"
-        And the "Username" field should contain "pink.panter2"
         And the "Email" field should contain "pink.panter2@hrtapp.com"
 
       When I follow "Delete this User"
@@ -43,7 +39,6 @@ Feature: Admin can manage users
       When I follow "Users"
         And I follow "Create User"
         And I select "<organization>" from "Organization"
-        And I fill in "Username" with "<username>"
         And I fill in "Email" with "<email>"
         And I fill in "Full name" with "<name>"
         And I select "<roles>" from "Role"
@@ -54,10 +49,9 @@ Feature: Admin can manage users
         And I should see "<message>"
 
         Examples:
-           | organization  | username | email         | name | roles    | password | password_conf | message                     |
-           |               | panter   | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank |
-           | organization1 |          | pp@hrtapp.com | P    | Reporter | password | password      | Username can't be blank     |
-           | organization1 | panter   |               | P    | Reporter | password | password      | Email can't be blank        |
+           | organization  | email         | name | roles    | password | password_conf | message                     |
+           |               | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank |
+           | organization1 |               | P    | Reporter | password | password      | Email can't be blank        |
 
 
     Scenario: Adding malformed CSV file doesn't throw exception
@@ -91,24 +85,23 @@ Feature: Admin can manage users
       Then I should see "Wrong fields mapping. Please download the CSV template"
 
       When I follow "Download template"
-      Then I should see "organization_name,username,email,full_name,roles,password,password_confirmation"
-
+      Then I should see "organization_name,email,full_name,roles,password,password_confirmation"
 
     Scenario Outline: An admin can filter users
       Given an organization exists with name: "organization2"
-        And an user exists with username: "user1", email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
+        And an user exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
         And an organization exists with name: "organization3"
-        And an user exists with username: "user2", email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
+        And an user exists with email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
       When I follow "Users"
         And I fill in "query" with "<first>"
         And I press "Search"
-      Then I should see "Users with username, name, email or organiation name containing <first>"
+      Then I should see "Users containing <first>"
       And I should see "<first>"
       And I should not see "<second>"
       And I fill in "query" with "<second>"
 
       When I press "Search"
-      Then I should see "Users with username, name, email or organiation name containing <second>"
+      Then I should see "Users containing <second>"
       And I should see "<second>"
       And I should not see "<first>"
 
@@ -126,9 +119,9 @@ Feature: Admin can manage users
 
     Scenario Outline: An admin can sort users
       Given an organization exists with name: "organization2"
-        And a reporter exists with username: "user1", email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
+        And a reporter exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
         And an organization exists with name: "organization3"
-        And an activity_manager exists with username: "user2", email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
+        And an activity_manager exists with email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
       When I follow "Users"
         # filter out admin user
         And I fill in "query" with "user"
@@ -145,5 +138,4 @@ Feature: Admin can manage users
             | column_name  | column | text1            | text2            |
             | Full Name    | 1      | Full name 1      | Full name 2      |
             | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com |
-            | Username     | 3      | user2            | user1            |
             | Organization | 4      | organization2    | organization3    |

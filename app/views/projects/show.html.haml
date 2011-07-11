@@ -23,12 +23,6 @@
         %li Description
         %li= @project.description
       %ul.row
-        %li Start date
-        %li= @project.start_date
-      %ul.row
-        %li End date
-        %li= @project.end_date
-      %ul.row
         %li Locations
         %li= @project.locations.map(&:short_display).join(', ')
       %ul.row

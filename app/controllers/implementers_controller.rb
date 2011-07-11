@@ -41,8 +41,11 @@ class ImplementersController < Reporter::BaseController
   end
 
   def update
-    SubActivity.bulk_update(@response, params[:sub_activities])
-    flash[:notice] = 'Implementers were successfully saved'
+    if params[:sub_activities]
+      SubActivity.bulk_update(@response, params[:sub_activities])
+      flash[:notice] = 'Implementers were successfully saved'
+    end
+    
     if params[:commit] == "Save"
       redirect_to response_implementers_url(@response)
     else
@@ -52,12 +55,19 @@ class ImplementersController < Reporter::BaseController
         # Add redirect to locations tab once locations have been re-enabled 
       else
         redirect_to response_long_term_budgets_path
-      end
-        
+      end  
     end
   end
-
-
+  
+  def destroy
+    implementer = current_response.activities.find(params[:id])
+    implementer.destroy
+    respond_to do |format|
+      format.json do
+        render :json => {:status => 'success'}
+      end
+    end
+  end
 
   private
 

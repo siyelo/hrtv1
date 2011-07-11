@@ -20,11 +20,14 @@
         %th{:colspan => 3}
         %th.amount= current_fy(@response)
         %th.amount= next_fy(@response)
+        %th
+
       %tr.head
         %th Project
         %th{:colspan => 2} Funder
         %th.amount= "Funds Received #{link_to '[?]', '#', :title => "The portion of your expenditure which came from each funder in the past fiscal year", :class => "tooltip"}"
         %th.amount= "Expected Funding #{link_to '[?]', '#', :title => "The portion of your current budget which will come from each funder in the current fiscal year", :class => "tooltip"}"
+        %th
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project
@@ -38,6 +41,7 @@
         %td.total_amount
           %span.js_projects_total_budget_amount= @response.funders_total_budget(false)
           %span.currency= @response.currency
+        %td
       %tr
         %td.borderless{:colspan => 8}
           = submit_tag "Save & Next >", :style => (@projects.detect{|p| p.response.funding_flows.present? } ? nil : 'display: none;'), :class => 'save_btn right'

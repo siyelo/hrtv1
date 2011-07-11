@@ -246,11 +246,6 @@ END
     true
   end
 
-  def total_matches_quarters?(type)
-    return true if (self.send(type) || 0) == total_amount_of_quarters(type)
-    return false
-  end
-
   def total_amount_of_quarters(type)
     (self.send("#{type}_q1") || 0) +
     (self.send("#{type}_q2") || 0) +

@@ -1255,6 +1255,9 @@ var commentsInit = function () {
 
 var projects_index = {
   run: function () {
+    // stop moving to top
+    $('.dropdown_trigger').click(function (e) {e.preventDefault()});
+
     $('.dropdown_menu').hover(function (e){
       e.preventDefault();
       $('ul', this).slideDown(100);

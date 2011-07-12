@@ -213,7 +213,7 @@ class Project < ActiveRecord::Base
   end
 
   def total_matches_quarters?(type)
-    self.send(type) == total_amount_of_quarters(type)
+    (self.send(type) || 0) == total_amount_of_quarters(type)
   end
 
   def spend_entered?

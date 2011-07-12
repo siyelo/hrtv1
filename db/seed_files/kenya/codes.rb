@@ -3,7 +3,7 @@
 # Expected Columns
 
 puts "Loading codes.csv..."
-# Code.delete_all
+Code.delete_all
 # if we do lookups by col id, not name, then FasterCSV
 # is more forgiving with (non)/quoted csv's
 $parent_id_col     = 0
@@ -32,11 +32,11 @@ def set_attributes_for_code(c, row)
     c.parent = nil
   end
 
-  c.code_level   = row[$code_level]
+  c.code_level   = row[$code_level_col]
   c.short_display= row[$short_display_col]
   c.description  = row[$description_col]
   c.sub_account  = row[$sub_account_col]
-  c.child_health = row[$child_health_col]
+  c.child_health = row[$child_health_col] == nil ? false : row[$child_health_col]
   c.nha_code     = row[$nha_code]
 
   c.save!

@@ -1,7 +1,7 @@
 class AddNewFieldsToCode < ActiveRecord::Migration
   def self.up
     add_column :codes, :code_level, :string
-    add_column :codes, :child_health, :string
+    add_column :codes, :child_health, :boolean
   end
 
   def self.down

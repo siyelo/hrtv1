@@ -12,60 +12,60 @@ PARENT,CODE,Code Level,Full name,Description,NHA Subaccount,CH?,NHA Code
 11,111,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
 1,12,Sub-Programme Area,Management of Childhood Illnesses
 12,121,Component Area,IMNCI (integrated services)
-121,1211,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,CH,HC.1.1.1
-121,1212,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,CH,HC.1.3.1
-121,1213,NHA Activity 1,Preventive Programs,,,CH,HC.6.1.2
-1213,12131,NHA Activity 2,Breastfeeding promotion,,,CH,HC.6.1.2.1
-1213,12132,NHA Activity 2,Immunizations,,,CH,HC.6.1.2.2
-1213,12133,NHA Activity 2,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,,CH,HC.6.1.2.3
-121,1214,NHA Activity 1,Capital Expenditures on Equipment,,,CH,HCR.1
+121,1211,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,TRUE,HC.1.1.1
+121,1212,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,TRUE,HC.1.3.1
+121,1213,NHA Activity 1,Preventive Programs,,,TRUE,HC.6.1.2
+1213,12131,NHA Activity 2,Breastfeeding promotion,,,TRUE,HC.6.1.2.1
+1213,12132,NHA Activity 2,Immunizations,,,TRUE,HC.6.1.2.2
+1213,12133,NHA Activity 2,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,,TRUE,HC.6.1.2.3
+121,1214,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
 12,122,Component Area,Management of diarrhoea
-122,1221,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,CH,HC.1.1.2
-122,1222,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,CH,HC.1.3.2
-122,1223,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,CH,HC.6.1.2.3
-122,1224,NHA Activity 1,Capital Expenditures on Equipment,,,CH,HCR.1
+122,1221,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+122,1222,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+122,1223,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,TRUE,HC.6.1.2.3
+122,1224,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
 12,123,Component Area,ARI / pneumonia
-123,1231,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,CH,HC.1.1.2
-123,1232,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,CH,HC.1.3.2
-123,1233,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,CH,HC.6.1.2.3
-123,1234,NHA Activity 1,Capital Expenditures on Equipment,,,CH,HCR.1
+123,1231,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+123,1232,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+123,1233,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,TRUE,HC.6.1.2.3
+123,1234,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
 12,124,Component Area,Malaria
-124,1241,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,CH,HC.1.1.2
-124,1242,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,CH,HC.1.3.2
-124,1243,NHA Activity 1,Preventive Programs,Prevention of communicable disease,,CH,HC.6.3
-124,1244,NHA Activity 1,Capital Expenditures on Equipment,,,CH,HCR.1
+124,1241,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+124,1242,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+124,1243,NHA Activity 1,Preventive Programs,Prevention of communicable disease,,TRUE,HC.6.3
+124,1244,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
 12,125,Component Area,PMTCT
-125,1251,NHA Activity 1,PMTCT Programs,,HIV,CH,HC.6.1.1.4
-125,1252,NHA Activity 1,Capital Expenditures on Equipment,,HIV,CH,HCR.1
+125,1251,NHA Activity 1,PMTCT Programs,,HIV,TRUE,HC.6.1.1.4
+125,1252,NHA Activity 1,Capital Expenditures on Equipment,,HIV,TRUE,HCR.1
 12,126,Component Area,Paediatric HIV/AIDS
-126,1261,NHA Activity 1,Inpatient curative care,Management of HIV/AIDS exposed children,HIV,CH,HC.1.1.3
-126,1262,NHA Activity 1,Outpatient curative care,Management of HIV/AIDS exposed children,HIV,CH,HC.1.3.3
+126,1261,NHA Activity 1,Inpatient curative care,Management of HIV/AIDS exposed children,HIV,TRUE,HC.1.1.3
+126,1262,NHA Activity 1,Outpatient curative care,Management of HIV/AIDS exposed children,HIV,TRUE,HC.1.3.3
 12,127,Component Area,Immunisation (KEPI)
-127,1271,NHA Activity 1,Programs,Immunizations,,CH,HC.6.1.2.2
-127,1272,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,CH,HCR.1
+127,1271,NHA Activity 1,Programs,Immunizations,,TRUE,HC.6.1.2.2
+127,1272,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,TRUE,HCR.1
 1,13,Sub-Programme Area,Nutrition
 13,131,Component Area,Micronutrients
-131,1311,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,CH,HC.1.1.2
-131,1312,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,CH,HC.1.3.2
-131,1313,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,CH,HCR.1
+131,1311,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+131,1312,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+131,1313,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,TRUE,HCR.1
 13,132,Component Area,Baby Friendly Hospitals
-132,1321,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,CH,HC.1.1.1
-132,1322,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,CH,HC.1.3.1
-13,133,Component Area,Breastfeeding,Breastfeeding promotion,,CH,HC.6.1.2.1
+132,1321,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,TRUE,HC.1.1.1
+132,1322,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,TRUE,HC.1.3.1
+13,133,Component Area,Breastfeeding,Breastfeeding promotion,,TRUE,HC.6.1.2.1
 13,134,Component Area,Infant/child feeding support
-134,1341,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,CH,HC.1.1.2
-134,1342,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,CH,HC.1.3.2
-134,1343,NHA Activity 1,Preventive Programs,Targeted food supplementation to identified malnourished children: Nutrition programme,,CH,HC.6.1.1.3
-134,1344,NHA Activity 1,Capital Expenditures on Equipment,,,CH,HCR.1
+134,1341,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+134,1342,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+134,1343,NHA Activity 1,Preventive Programs,Targeted food supplementation to identified malnourished children: Nutrition programme,,TRUE,HC.6.1.1.3
+134,1344,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
 1,14,Sub-Programme Area,School Health
-14,141,Component Area,School health education,"Promotion of child health (IEC, social mobilization) Programs",,CH,HC.6.1.2
-14,142,Component Area,Deworming,,,CH,HC.6.1.1.5
+14,141,Component Area,School health education,"Promotion of child health (IEC, social mobilization) Programs",,TRUE,HC.6.1.2
+14,142,Component Area,Deworming,,,TRUE,HC.6.1.1.5
 14,143,Component Area,Safe water
-143,1431,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,CH,HC.6.3.1
-143,1432,NHA Activity 1,Capital formation of health care provider institutions,,,CH,HCR.1
+143,1431,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,TRUE,HC.6.3.1
+143,1432,NHA Activity 1,Capital formation of health care provider institutions,,,TRUE,HCR.1
 14,144,Component Area,Sanitation & hygiene
-144,1441,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,CH,HC.6.3.1
-144,1442,NHA Activity 1,Capital formation of health care provider institutions,,,CH,HCR.1
+144,1441,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,TRUE,HC.6.3.1
+144,1442,NHA Activity 1,Capital formation of health care provider institutions,,,TRUE,HCR.1
 1,15,Sub-Programme Area,Community services
 15,151,Component Area,Home support,,,,HC.1.4
 15,152,Component Area,Public Health Programs,,,,HC.6.3
@@ -162,7 +162,7 @@ PARENT,CODE,Code Level,Full name,Description,NHA Subaccount,CH?,NHA Code
 71,712,Component Area,IRS,Indoor residual spraying campaigns,Malaria,,HC.6.3.2.3
 71,713,Component Area,IEC/BCC,IEC (malaria awareness),Malaria,,HC.6.3.2.5
 71,714,Component Area,IPT
-714,7141,NHA Activity 2,Infants,IPT in pregnant women and infants ,Malaria,CH,HC.6.3.2.1
+714,7141,NHA Activity 2,Infants,IPT in pregnant women and infants ,Malaria,TRUE,HC.6.3.2.1
 7141,71412,NHA Activity 2,Pregnant Women,,Malaria,,HC.6.3.2.1
 7,72,Sub-Programme Area,Care & treatment
 72,721,NHA Activity 1,Inpatient curative care,Inpatient curative care (incl. for severe malaria),Malaria,,HC.1.1

@@ -4,7 +4,9 @@
     %h3 Code details
     %ul.dashboard_section
       = f.input :type_string, :collection => ['ActivityCostCategory', 'Beneficiary', 'Code', 'CostCategory', 'Location', 'Mtef', 'Nasa', 'Nha', 'Nsp', 'OtherCostCode', 'OtherCostType'], :as => :select, :label => 'Type', :required => false, :hint => "Type of code"
-      = f.input :parent, :collection => Code.all, :as => :select, :required => false, :hint => "The code this one falls underneath"
+      = f.input :parent, :collection => Code.all.collect{|c| ["#{c.to_s} #{c.context}", c.id]}.sort_by{ |a,b| a.to_s.downcase }, :as => :select, :required => false, :hint => "The code this one falls underneath"
+      = f.input :code_level, :collection => Code.all.map(&:code_level).uniq, :as => :select, :required => false, :hint => "The code level corresponding to the NHA code"
+      = f.input :child_health, :required => false, :label => "Child health?", :hint => "Is this code related to Child Health?"
       = f.input :short_display, :required => false, :hint => "Short text detailing the code"
       = f.input :long_display, :required => false, :hint => "Text detailing the code"
       = f.input :description, :required => false, :hint => "Text detailing the specifics of this code"

@@ -45,18 +45,31 @@ body.login
       width: auto
 
     input[type=submit]
-      background: $mid-blue
-      border: none
-      color: $lightest-blue
+      +border-radius
+      border: 1px solid $green - #222
+      background: $green
+      color: white
       cursor: pointer
-      font-size: 0.9em
+      font-size: 14px
       font-weight: bold
-      margin-top: 10px
-      padding: 10px 20px
-      width: auto
-      &:hover
-        background: orange
+      padding: 9px 15px 7px 15px
+      text-decoration: none
+      +linear-gradient(color-stops($green, $green - #222))
+      +box-shadow(#999, 0, 1px, 3px)
+      +text-shadow($green - #444, 0, 1px, 0)
+      &:hover, &:focus
+        background: $mid-blue
+        border: 1px solid $green - #333
         color: white
+        text-decoration: none
+        +box-shadow(#999, 0, 0, 5px)
+        +linear-gradient(color-stops($green, $green - #333))
+      &:active
+        background: $green - #444
+        position: relative
+        top: 1px
+        +box-shadow(#999, 0, 0, 3px)
+        +linear-gradient(color-stops($green - #333, $green - #111))
 
     label
       color: #7A7A7A

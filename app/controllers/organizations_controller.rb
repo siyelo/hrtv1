@@ -1,21 +1,21 @@
 class OrganizationsController < Reporter::BaseController
 
+  before_filter :load_organization
+
   def edit
-    @organization = current_user.organization
-    current_user.current_response = @organization.data_responses.first
-    current_user.save
   end
 
   def update
-    @organization = current_user.organization
-    @organization.update_attributes(params[:organization])
-    if @organization.save
-      flash[:notice] = "Successfully updated."
-      redirect_to edit_organization_url(@organization)
+    if @organization.update_attributes(params[:organization])
+      flash[:notice] = "Settings were successfully updated."
+      redirect_to user_dashboard_path(current_user)
     else
       render :action => :edit
     end
   end
 
+  private
+    def load_organization
+      @organization = current_user.organization
+    end
 end
-

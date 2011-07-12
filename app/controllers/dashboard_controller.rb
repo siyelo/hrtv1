@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  COMMENT_LIMIT = 5
+  COMMENT_LIMIT = 25
 
   ### Filters
   before_filter :require_user

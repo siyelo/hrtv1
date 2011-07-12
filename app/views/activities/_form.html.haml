@@ -20,7 +20,7 @@
       #project_sub_form
         #project_sub_form_fields
           - if @activity.project
-            = render 'project_sub_form', {:activity => @activity, :project => @activity.project}
+            = render 'project_sub_form', {:activity => @activity}
 
       = f.input :name, :required => false, :hint => "The name of this Activity."
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A description of this Activity."

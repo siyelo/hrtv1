@@ -287,13 +287,12 @@ class Activity < ActiveRecord::Base
       else
         project = project_id.present? ? Project.find_by_id(project_id) : nil
       end
-      if project
-        activity.project           = project
-        activity.locations         = activity.csv_districts.to_s.split(',').
-                                      map{|l| Location.find_by_short_display(l.strip)}.compact
-      end
+
+      activity.project             = project if project
       provider                     = Organization.find_by_name(activity.csv_provider)
       activity.provider            = provider if provider
+      activity.locations           = activity.csv_districts.to_s.split(',').
+                                      map{|l| Location.find_by_short_display(l.strip)}.compact
       activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
 

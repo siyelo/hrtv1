@@ -20,7 +20,7 @@
           -
           = activity.end_date.strftime("%d.%m.%Y")
       %li
-        %span Expenditure:
+        %span Past Expenditure:
         = "#{activity.spend} #{activity.currency}"
       %li
         %span Current Budget:
@@ -53,8 +53,7 @@
 
           %li.project_sub_form
             .project_sub_form_fields
-              - if activity.project
-                = render 'project_sub_form', {:activity => activity, :project => activity.project}
+              = render 'project_sub_form', {:activity => activity}
 
       %li
         %ul

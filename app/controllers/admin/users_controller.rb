@@ -2,7 +2,7 @@ class Admin::UsersController < UsersController
   def create
     if current_user.sysadmin?
       check_for_new_organization(params[:user], :organization_id)
-      @user = User.new(params[:user])
+      @user = User.new(params[:member])
       create_and_respond
             #
             # respond_to do |format|

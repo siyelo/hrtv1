@@ -135,7 +135,7 @@ Feature: Admin can manage users
       And column "<column>" row "2" should have text "<text1>"
 
       Examples:
-          | column_name  | column | text1            | text2            |
-          | Full Name    | 1      | Full name 1      | Full name 2      |
-          | Email        | 2      | user1@hrtapp.com | user2@hrtapp.com |
-          | Organization | 4      | organization2    | organization3    |
+        | column_name  | column | text1            | text2            |
+        | Full Name    | 1      | Full name 1      | Full name 2      |
+        | Email        | 2      | user2@hrtapp.com | user1@hrtapp.com |
+        | Organization | 3      | organization2    | organization3    |

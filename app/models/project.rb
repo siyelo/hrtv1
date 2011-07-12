@@ -152,29 +152,16 @@ END
     return saved, errors
   end
 
-<<<<<<< HEAD
   def add_activity(attributes)
     activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
                            :spend => attributes["spend"],
-                           :spend_q4_prev => attributes["spend_q4_prev"],
-                           :spend_q1 => attributes["spend_q1"],
-                           :spend_q2 => attributes["spend_q2"],
-                           :spend_q3 => attributes["spend_q3"],
-                           :spend_q4 => attributes["spend_q4"],
                            :budget => attributes["current_budget"],
-                           :budget_q1 => attributes["budget_q1"],
-                           :budget_q2 => attributes["budget_q2"],
-                           :budget_q3 => attributes["budget_q3"],
-                           :budget_q4 => attributes["budget_q4"],
                            :start_date => attributes["start_date"],
                            :end_date => attributes["end_date"])
-
     activity.data_response_id = data_response_id
     activity
   end
 
-=======
->>>>>>> merge half the rwanda fixes
   def amount_for_provider(provider, field)
     activities.inject(0) do |sum, a|
       amt = a.amount_for_provider(provider, field)

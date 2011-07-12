@@ -3,7 +3,6 @@
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
 
-
 = render 'breadcrumb', :response => @response, :activity => @activity
 
 %h1.main_heading
@@ -21,7 +20,6 @@
     %li= "Please classify the Current Budget for this activity."
 
 = render 'activities/tab_nav', :activity => @activity
-
 
 = error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

@@ -44,10 +44,15 @@
 
     h3
       background: image_url("bg-blue.jpg")
+      border: 1px solid $mid-blue + #333
       color: #fff !important
+      font-family: Avenir
+      font-weight: normal
       margin-top: 5px
       padding: 10px 10px 7px !important
       +border-top-radius(3px)
+      +linear-gradient(color-stops($mid-blue + #555, $mid-blue + #333))
+      +text-shadow($mid-blue, 0, 1px, 0)
     label
       float: left
       margin-top: 9px

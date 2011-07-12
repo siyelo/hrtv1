@@ -19,11 +19,11 @@
 
       = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false
 
-  - if @response.data_request.budget?
-    %li.last
-      %h3 Current Budget
-      %ul.dashboard_section
-        = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year", :required => false   
+
+  %li.last
+    %h3 Current Budget
+    %ul.dashboard_section
+      = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year", :required => false   
 
   %li.last
     %h3== Implementers

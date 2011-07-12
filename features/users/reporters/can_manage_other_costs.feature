@@ -7,7 +7,7 @@ Feature: Reporter can manage other costs
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a reporter exists with username: "reporter", organization: the organization
       And a project exists with name: "project1", data_response: the data_response
       And I am signed in as "reporter"
@@ -18,16 +18,17 @@ Feature: Reporter can manage other costs
     Scenario: Reporter can CRUD other costs
       When I follow "Add Other Costs now"
       Then I should see "Create Other Cost"
-      When I fill in "Description" with "other_cost1"
+      When I fill in "Name" with "other_cost1"
+        And I fill in "Description" with "other_cost2 description"
         And I select "project1" from "Project"
         And I fill in "Start date" with "2010-01-01"
         And I fill in "End date" with "2010-03-01"
         And I press "Save & Classify >"
-      Then I should see "Othercost was successfully created"
+      Then I should see "Other Cost was successfully created"
       When I follow "other_cost1"
-        And I fill in "Description" with "other_cost2"
+        And I fill in "Name" with "other_cost2"
         And I press "Save & Classify >"
-      Then I should see "Othercost was successfully updated"
+      Then I should see "Other Cost was successfully updated"
         And I should see "other_cost2"
         And I should not see "other_cost1"
       When I follow "other_cost2"
@@ -40,10 +41,11 @@ Feature: Reporter can manage other costs
     Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
       When I follow "Add Other Costs now"
         And I fill in "Description" with "other_cost1"
+        And I fill in "Description" with "other_cost1"
         And I fill in "Start date" with "2010-01-01"
         And I fill in "End date" with "2010-03-01"
         And I press "Save & Classify >"
-      Then I should see "Othercost was successfully created"
+      Then I should see "Other Cost was successfully created"
 
 
     Scenario: A reporter can create comments for an other cost and see comment errors
@@ -63,7 +65,7 @@ Feature: Reporter can manage other costs
       Given I follow "Sign Out"
         And an organization exists with name: "organization5"
         And a data_request exists with title: "data_request2", budget: false
-        And a data_response exists with data_request: the data_request, organization: the organization
+        And a data_response should exist with data_request: the data_request, organization: the organization
         And a reporter exists with username: "reporter2", organization: the organization
         And a location exists with short_display: "Location1"
         And a location exists with short_display: "Location2"

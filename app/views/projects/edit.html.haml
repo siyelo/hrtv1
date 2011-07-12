@@ -22,9 +22,8 @@
   - if !@project.total_matches_quarters?("spend")
     %li Your quarterly Current Expenditure amounts do not match the total Current Expenditure amounts
 
-  - if @response.request.budget_by_quarter?
-    - if !@project.total_matches_quarters?("budget")
-      %li Your quarterly Budget amounts do not match the total Budget amounts
+  - if !@project.total_matches_quarters?("budget")
+    %li Your quarterly Budget amounts do not match the total Budget amounts
 
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."

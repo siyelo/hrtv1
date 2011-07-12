@@ -1,3 +1,213 @@
+// SIMPLE DEFAULT TABLE STYLE
+
+.modern_table
+  font-size: 12px
+  margin-top: 10px
+  width: 100%
+  td
+    &:first-child
+      padding-left: 7px
+    &:last-child
+      padding-right: 5px
+
+  thead th
+    border-bottom: 1px solid $light-blue
+    color: $mid-blue + #333
+    font-weight: bold
+    padding-bottom: 5px
+    +linear-gradient(color-stops($filler, $lightest-blue))
+  tbody td
+    border-bottom: 1px solid $lightest-blue
+    color: $mid-blue
+    padding: 5px 0
+    &.title
+      color: $mid-blue
+      font-weight: bold
+
+  a
+    background: none
+    display: inline-block
+    font-size: 11px
+    padding: 0
+    text-decoration: none
+    +border-radius
+    &.title
+      color: $orange
+      font-size: 12px
+      font-weight: bold
+    &.respond
+      background: green
+      color: #fff
+      float: right
+      font-size: 9px
+      font-weight: bold
+      padding: 7px 10px 4px
+      text-transform: uppercase
+      &:hover, &:focus
+        background: orange
+
+
+// SIMPLE TABLE LAYOUT
+
+.simple_table
+  +pie-clearfix
+  /* a hack, but the padding interferes with .third
+  &.push
+    margin: 0 0 15px 40px
+  &.review
+    td.first
+      font-weight: bold
+    td.activity
+      padding-left: 40px
+      font-size: 12px
+
+  hr
+    background: none
+    border: none
+    border-top: 1px dashed $light-blue
+    margin-top: 20px
+  // 2-col summary tables in each Response/Project/Activity
+  .summary
+    font-size: 12px
+    tr td:first-child
+      font-weight: bold
+      text-align: right
+      width: 45%
+  .activities .summary td
+    font-size: 12px
+    thead tr th
+      font-size: 11px
+  h3
+    color: $mid-blue
+    font-size: 0.9em
+    padding: 20px 10px 10px 0
+    text-transform: none
+  table
+    background: $very-light-grey
+    color: $mid-blue
+    width: 100%
+    a
+      display: inline-block
+      font-size: 1em
+    .third
+      width: 31%
+    th, td
+      border-right: 1px solid white
+      padding: 7px
+    tbody
+      font-size: 12px
+      th, td
+        border-bottom: 1px solid white
+      tr:hover
+        background: #f9f9f9
+    thead
+      background: $mid-blue
+      color: white
+      font-size: 11px
+      &:hover
+        background: $mid-blue
+      th
+        border-bottom: 1px solid white
+      tr:hover
+        background: $mid-blue
+  .name
+    font-weight: bold
+  .implementer
+    font-style: italic
+    font-size: 0.9em
+  .descr, .descr_full
+    padding-right: 40px
+  .comment_indicator
+    right: 10px
+    margin-top: -5px
+    padding: 0
+    position: absolute
+    top: 50%
+    +opacity(0.7)
+    &:hover
+      +opacity(1)
+  .funders
+    font-size: 10px
+    font-style: italic
+  #activity_classification
+    padding: 0
+    h4
+      margin-bottom: 5px
+    ul
+      padding-left: 20px
+  #sub-activity
+    margin-top: 5px
+    li
+      border: 1px solid $light-blue
+      margin: -1px 0 0
+      padding: 7px 5px 5px
+  li
+    padding-top: 5px
+  .active
+    background: $light-blue
+    color: $dark-blue
+    &:hover
+      background: $light-blue
+  // activity description
+  .activity
+    &.entry_header
+      .descr_full
+        display: none
+      .descr
+        display: block
+      &.active
+        .descr_full
+          display: block
+        .descr
+          display: none
+  .s_border
+    background: white
+    border: 3px solid $lighter-blue
+    padding: 10px
+    &:hover
+      background: white
+    > td
+      border: 3px solid $light-blue
+      padding: 20px 10px
+  .t_right
+    float: right
+    margin-right: 0
+    text-align: right
+  .orange
+    color: #cc873c
+    font-size: 18px
+  .activities, .dashboard_comments
+    tbody
+      font-size: 1.2em
+  .dashboard_comments
+    border: none !important
+    padding: 0 !important
+  .dashboard_districts
+    margin-bottom: 20px
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+      margin: 0
+      width: 80px
+  .activities .actions
+    ul
+      +horizontal-list
+      background: $lightest-blue
+      margin-bottom: 5px
+      +pie-clearfix
+      li:last-child
+        float: right
+        margin-right: 5px
+      li
+        margin-bottom: 0
+      label
+        display: inline
+      a
+        display: inline-block
+        padding: 4px
+
+
 // Pretty Table (with clickable rows)
 // IMPORTANT: if thead doesn't contain links then add class "static"$$$
 

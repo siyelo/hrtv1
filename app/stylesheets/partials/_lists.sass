@@ -1,100 +1,440 @@
-body.app #content h2.regular
-  background: none
-  padding: 0
+.full-width ul
+  margin-bottom: 10px
+  +border-bottom-radius
 
-ul.integrated_tabs
-  border-bottom: 5px solid $filler
-  margin-left: 40%
+  &.horizontal
+    margin-bottom: 0
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+      list-style-image: none
+      list-style-type: none
+      margin-right: 4px
+      white-space: nowrap
+
+  &.bulleted
+    list-style: disc
+    margin: 5px 0 0
+    padding-left: 20px
+    li
+      margin-bottom: 4px
+
+  &.marginless
+    margin: 0
+
+  &.admin_reports
+    margin-bottom: 0
+    > li
+      &:hover > a
+        background: image_url("icon_link_hover.png") no-repeat #fff 10px center
+        +box-shadow($light-blue, 0, 0, 5px)
+    li:last-child a
+      margin-bottom: 0
+
+ul.manage_bar
+  margin: 0
   +pie-clearfix
-  
+  &.inline
+    display: inline-block
+    position: relative
+    top: 5px
   li
     display: inline
     float: left
-    
-  a
-    color: $dark-blue
-    display: inline-block
-    font-size: 12px
-    padding: 8px 10px 6px
-    text-decoration: none
-    &.active
-      background: $filler
-      +border-top-radius
-      +linear-gradient(color-stops($filler - #222, $filler))
-      
-ul.purposes_list
+    a
+      background: #eee
+      border: 1px solid $light-blue
+      color: $dark-grey
+      display: inline-block
+      font-size: 10px
+      height: auto
+      line-height: 1.4
+      margin-left: 3px
+      padding: 3px 5px 2px
+      text-decoration: none
+      +border-radius(2px)
+      +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+      +text-shadow(#fff, 0, 0, 1px)
+      &:hover, &:focus
+        background: $orange
+        border: 1px solid $orange - #111
+        color: #fff
+        +linear-gradient(color-stops($orange - #111, $orange + #111))
+        +text-shadow(#444, 0, 0, 1px)
+      &:active
+        outline: none
+        position: relative
+        top: 1px
+
+.welcome_steps
+  clear: both
+  margin-bottom: 10px
+  width: 100%
+  +pie-clearfix
+
   li
-    +pie-clearfix
-  > li
-    border-bottom: 1px solid $lighter-blue
-  
-  hgroup
-    display: block
+    display: inline
     float: left
-    width: 40%
-    
-  form
-    background: $filler
-    float: right
-    padding: 10px 1%
-    width: 58%
-    +pie-clearfix
-    
-ul.welcome_box
-  float: left
-  margin-left: 15%
-  width: 40%
-  li
-    clear: left
+    margin: 0.5%
+    width: 24.25%
+    &.first
+      margin-left: 0
+    &.last
+      margin-right: 0
+    &.welcome_info
+      display: block
+      width: 99%
+      li
+        height: auto
+        width: auto
 
   a
-    border: 1px solid #fff
-    border-bottom: 1px solid $filler
+    background: $lightest-blue
+    border: 1px solid $filler
+    border-bottom: 3px solid $lighter-blue
     display: block
-    height: 77px
-    padding: 5px 0 0 7px
+    line-height: 1.3
+    min-height: 80px
+    padding: 10px 0 0 9px
     text-decoration: none
+    +border-radius(10px)
+    +pie-clearfix
     &:hover
-      background: $filler
+      background: #fff
       border: 1px solid $lightest-blue
-      +border-radius
+      border-bottom: 3px solid $lightest-blue
       .title
         color: $mid-blue
         +text-shadow(#fff, 0, 1px, 0)
-      
+
   .icon
     display: inline-block
     float: left
-    width: 90px
-    
+    width: 80px
+
   .title
     color: $orange
     display: inline-block
-    font-size: 18px
-    font-weight: bold
-    margin-top: 20px
-    text-decoration: none
-  .desc
-    color: $light-blue - #333
-    font-size: 12px
-    
-.welcome_info
-  border-left: 5px solid $filler
-  float: right
-  font-size: 12px
-  line-height: 1.4
-  margin: 15px 15% 0 0
-  padding-left: 10px
-  width: 20%
-  li
-    margin-bottom: 10px
-    &:last-child
-      margin: 0
-  span
-    display: block
-    
-  p
-    color: $mid-blue
+    float: left
     font-size: 16px
     font-weight: bold
-    margin: 10px 0 10px
+    letter-spacing: -0.05em
+    margin-top: 10px
+    text-decoration: none
+    width: 63%
+    +text-shadow(#fff, 0, 1px, 0)
+
+  .desc
+    color: $light-blue - #333
+    display: block
+    float: left
+    font-size: 12px
+    margin: 3px 0 10px
+    width: 63%
+
+ul.status
+  padding-bottom: 15px
+  li
+    font-size: 14px
+    span
+      font-size: 12px
+      color: $dark-grey
+      padding-right: 5px
+
+ul.push
+  font-size: 12px
+  margin: 0 0 15px 65px
+  list-style: disc
+
+.status
+  border: 1px solid $lighter-blue
+  margin-bottom: 5px
+  padding: 15px 15px 15px 75px
+  +border-radius
+
+  &.go
+    background: image_url("flag_48_green.png") no-repeat 15px center $filler
+  &.stop
+    background: image_url("flag_48_red.png") no-repeat 15px center $filler
+
+  li
+    color: $mid-blue
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 4px
+    &:last-child
+      margin-bottom: 0
+
+    span
+      color: $light-blue - #333
+      display: inline-block
+      font-weight: normal
+      padding-top: 4px
+      text-transform: lowercase
+      min-width: 90px
+
+ul.review li
+  padding-left: 32px
+  &.alt
+    padding: 0
+
+  &.dashboard_section
+    padding-top: 20px
+
+  .simple_table td
+    background: #fff
+    border-bottom: 1px solid $lightest-blue !important
+
+
+// GROUPING TAB STYLES //
+
+ul.group
+  border-bottom: 1px solid $light-blue
+  margin-top: 10px
+  margin-bottom: 20px
+  font-size: 11px
+  +linear-gradient(color-stops(white, $lightest-blue + #090909))
+
+  li
+    display: inline-block
+    padding: 0px
+
+    &.selected a
+      background: white
+      border-top: 1px solid $light-blue
+      border-right: 1px solid $light-blue
+      border-bottom: 1px solid white
+      border-left: 1px solid $light-blue
+      color: $mid-blue
+      font-weight: bold
+      margin-bottom: -1px
+      +border-top-radius
+      +linear-gradient(color-stops($lightest-blue + #090909, white))
+
+    a
+      border-top: 1px solid #FFF
+      display: inline-block
+      line-height: 1.6em
+      padding: 8px 15px 5px
+      text-decoration: none
+
+      &.active
+        background: white
+        border-top: 1px solid $light-blue
+        border-right: 1px solid $light-blue
+        border-bottom: 1px solid white
+        border-left: 1px solid $light-blue
+        color: $mid-blue
+        font-weight: bold
+        margin-bottom: -1px
+        +border-top-radius
+        +linear-gradient(color-stops($lightest-blue + #090909, white))
+
+  &.small_tabs li a
+    padding: 8px 7px 5px !important
+
+
+// ORDERED TAB STYLES //
+
+ul.ordered_nav
+  border-bottom: 4px solid $orange
+  margin-bottom: 0
+  width: 100%
+  +border-radius(0)
+  +pie-clearfix
+
+  li
+    display: inline-block
+    float: left
+    padding: 0
+    a, .dummy
+      background: $lightest-blue
+      border: 1px solid $lightest-blue
+      color: $mid-blue
+      display: block
+      font-size: 13px
+      padding: 10px 14px 8px
+      position: relative
+      text-decoration: none
+      +text-shadow(#fff, 0, 1px, 0)
+      +linear-gradient(color-stops($filler, $lightest-blue))
+      &:hover
+        color: $dark-blue
+        background: $lightest-blue
+      span
+        background: $lighter-blue
+        color: $dark-blue
+        display: inline-block
+        margin-right: 2px
+        padding: 3px 6px
+        opacity: 0.5
+        position: relative
+        +border-radius(10px)
+        +box-shadow(#fff, 0, 1px, 0)
+
+    &:first-child a
+      +border-top-left-radius(4px)
+    &:last-child a
+      +border-top-right-radius(4px)
+    &.selected a
+      background: $orange
+      border: 1px solid $orange
+      color: #fff
+      font-weight: bold
+      margin-top: -3px
+      padding: 13px 14px 8px
+      +border-top-radius
+      +linear-gradient(color-stops($orange + #222, $orange))
+      +text-shadow($orange - #222, 0, 1px, 0)
+      span
+        background: $orange - #222
+        color: #fff
+
+.ordered_sub_nav
+  background: $orange
+  border: none
+  margin: 0
+  padding: 5px 0 0 0
+  +linear-gradient(color-stops($orange, $orange - #111))
+  +clearfix
+  li
+    color: $orange + #555
+    display: inline
+    float: left
+    font-size: 11px
+    font-weight: bold
+    padding-bottom: 7px
+    &.selected
+      background: image_url("icon_selected.png") center bottom no-repeat
+    a
+      color: #fff
+      display: block
+      padding: 4px 9px
+      text-decoration: none
+    p
+      padding: 4px 9px 0
+
+// DROPDOWN NAVIGATION //
+
+.dropdown_menu
+  position: relative
+  z-index: 10
+
+  ul
+    background: #eee
+    left: 1px
+    padding: 10px 0 5px
+    position: absolute
+    right: 1px
+    top: 20px
+    z-index: 15
+    +border-bottom-radius
+    +box-shadow(#444, 0, 1px, 2px)
+    li
+      display: block
+      width: 100%
+      a
+        border-bottom: 1px solid #ccc
+        color: $mid-blue
+        display: block
+        font-size: 12px
+        font-weight: bold
+        padding: 6px 10px
+        text-decoration: none
+        +text-shadow(#fff, 0, 1px, 0)
+        &:hover
+          background: $orange - #222
+          color: #fff
+          +text-shadow($orange - #444, 0, 1px, 0)
+
+// MAIN COMMENTS //
+.comments_input
+  li
+    margin-bottom: 0 !important
+  textarea
+    height: 60px
+    width: 60% !important
+  .inline-errors
+    color: $red
+    font-size: 12px
+    font-weight: bold
+    margin-left: 5px
+    padding: 5px 10px 5px 0
+    width: auto
+    +border-bottom-radius
+  .buttons ol li
+    border: none
+    .delete_btn
+      margin: 2px 0 0 5px
+  &.reply
+    background: image_url("icon_reply.png") no-repeat 10px 10px
+    padding-left: 25px
+    h2
+      background: $light-blue - #222 !important
+      font-size: 12px
+  .big_gravatar
+    float: left
+    margin: 15px 10px 0 0
+    min-height: 110px
+
+.comments_list
+  .comment_item
+    > ul
+      margin-bottom: 10px
+      padding-left: 30px
+
+  .author
+    background: $filler
+    border: 1px solid $lightest-blue
+    font-weight: normal
+    margin-bottom: 5px
+    padding: 6px !important
+    text-transform: none
+    +border-radius(3px)
+    +pie-clearfix
+    img
+      float: left
+    span
+      border-left: 1px dotted $light-blue
+      color: $light-blue - #111
+      display: inline-block
+      float: right
+      margin-top: 11px
+      padding: 0 8px
+      strong
+        color: $light-blue - #333
+        font-weight: bold
+      &.name
+        border: none
+        color: $mid-blue
+        display: block
+        float: left
+        font-size: 14px
+        font-weight: bold
+        margin-top: 9px
+      &.time
+        border:none
+        float: left
+        font-weight: bold
+    .add_row
+      padding: 8px
+      img
+        margin: -5px 2px 0 0
+
+  .comment
+    font-size: 12px
+    line-height: 1.4
+    margin-bottom: 20px
+    padding-left: 7px
+
+// MAIN COMMENTS end //
+.plain
+  margin-top: 10px
+  padding-left: 15px
+
+  a
+    font-size: 12px
+
+  span
+    font-size: 11px

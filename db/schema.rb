@@ -116,6 +116,8 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.string   "sub_account"
     t.string   "nha_code"
     t.string   "nasa_code"
+    t.string   "code_level"
+    t.boolean  "child_health"
   end
 
   create_table "comments", :force => true do |t|

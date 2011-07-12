@@ -11,11 +11,12 @@ Feature: Admin can manage data responses
       And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as a sysadmin
 
+      @wip
     Scenario: Manage data responses
       When I follow "Review Organization Expenditures and Current Budgets"
-       And I follow "Empty"
+        And I follow "Empty"
       Then I should see "UNDP"
 
       When I follow "Delete"
       Then I should see "Data response was successfully deleted"
-      And I should not see "UNDP"
+        And I should not see "UNDP"

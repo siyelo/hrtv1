@@ -45,14 +45,14 @@ Feature: Reporter can enter a code breakdown for each activity
       And an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"
       And an organization exists with name: "organization2"
-      And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
+      And a data_response should exist with data_request: the data_request, organization: the organization
+      And a reporter exists with username: "reporter", organization: the organization, current_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
-      And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 5000000, spend: 6000000
-      And I am signed in as "reporter@hrtapp.com"
+      And an activity exists with name: "Activity", data_response: the data_response, project: the project, name: "activity1", budget: 5000000, spend: 6000000
+      And I am signed in as "reporter"
       And I follow "data_request1"
       And I follow "Projects"
-      And I follow "Activity description"
+      And I follow "activity1"
 
 
     Scenario: enter budget for an activity (don't see flash errors)
@@ -61,7 +61,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" with "5000000.00"
         And I press "Save"
       Then I should see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "Activity"
+        And I should be on the budget classification page for "activity1"
         And the "mtef1" field should contain "5,000,000.00"
 
     Scenario: enter budget for an activity (see flash errors)

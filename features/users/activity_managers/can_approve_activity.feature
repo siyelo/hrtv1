@@ -24,10 +24,10 @@ Feature: Activity Manager can approve a code breakdown for each activity
     And wait a few moments
     Then I should see "Budget Approved"
 
-  @javascript
-  Scenario: Approve an Activity from listing
-    Given I follow "reporter_org"
-    And I follow "activity1"
-    When I follow "Approve Budget"
-    And wait a few moments
-    Then I should see "Budget Approved"
+    @javascript
+    Scenario: Approve an Activity
+      Given I follow "reporter_org"
+        And I follow "activity1"
+      When I follow "Approve Budget"
+        And wait a few moments
+      Then I should see "Budget Approved"

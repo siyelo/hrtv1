@@ -24,7 +24,7 @@ Feature: Admin can approve a code breakdown for each activity
 
 
     # NB: this scenario will only work for 1 activity, 1 classification
-    @javascript
+    @javascript @wip
     Scenario: Approve a budget coding breakdown
       Given I am signed in as a sysadmin
       When I go to the admin review data response page for organization "WHO", request "Req1"
@@ -37,4 +37,8 @@ Feature: Admin can approve a code breakdown for each activity
       When I check "approve_activity"
         And wait a few moments
         And I go to the admin review data response page for organization "WHO", request "Req1"
+        And I click element "#project_details"
+        And I click element ".project .descr"
+        And I click element "#projects .activity_details"
+        And I click element "#projects .activity .descr"
       Then the "approve_activity" checkbox should be checked

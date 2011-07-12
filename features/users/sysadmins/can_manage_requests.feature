@@ -67,6 +67,6 @@ Feature: Admin can manage data requests
       Given an organization exists with name: "org2"
         And a data_request exists with title: "data request 2", organization: the organization
       When I follow "Home"
-        And I follow "Data request 2"
+        And I follow "data request 2"
       Then I should see "[data request 2]" within "div#header_app"
         And I should see "data request 2" within "div#flashes"

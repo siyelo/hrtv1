@@ -16,8 +16,9 @@ include ScriptHelper
 WORKSPACE=ENV['WORKSPACE']
 
 def bundle_install
-  result = run "bundle check"
-  run_or_die "bundle install" unless result == true
+  #result = run "bundle check"
+  #run_or_die "bundle install" unless result == true
+  run_or_die "bundle install"
 end
 
 def setup_sqlite

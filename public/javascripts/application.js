@@ -1676,24 +1676,19 @@ var projects_edit = projects_new = {
   run: function () {
 
     $("input[id^='project_spend_gor_q']:not(:last)").keyup(function () {
-      console.info(1)
       calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
     });
 
    $(".js_quarterly_fields input:not(:last)").keyup(function () {
-     console.info(2)
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 
-   console.log(1)
 
    $(".js_funding_exp_q").live('keyup', function () {
-     console.info(3)
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 
    $(".js_funding_bud_q").live('keyup', function () {
-     console.info(4)
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 

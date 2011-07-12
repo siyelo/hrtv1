@@ -2,6 +2,7 @@ require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Activity < ActiveRecord::Base
+  include NumberHelper
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
@@ -55,7 +56,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
-    :outputs_attributes, :am_approved_date, :user_id
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
@@ -149,6 +150,23 @@ class Activity < ActiveRecord::Base
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
+  end
+
+  def provider_mask
+    @provider_mask || provider_id
+  end
+
+  def provider_mask=(the_provider_mask)
+    self.provider_id_will_change! # trigger saving of this model
+
+    if is_number?(the_provider_mask)
+      self.provider_id = the_provider_mask
+    else
+      organization = Organization.find_or_create_by_name(the_provider_mask)
+      self.provider_id = organization.id if organization.id.present?
+    end
+
+    @provider_mask   = self.provider_id
   end
 
   def self.canonical

@@ -163,8 +163,10 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def js_redirect
-      render :partial => 'bulk_edit', :layout => false,
-        :locals => {:activity => @activity, :response => @response}
+      render :json => {:html => render_to_string(:partial => 'bulk_edit',
+                                       :layout => false,
+                                       :locals => {:activity => @activity,
+                                                   :response => @response})}
     end
 
     def confirm_activity_type

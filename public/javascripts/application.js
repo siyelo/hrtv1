@@ -1672,38 +1672,45 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
   }
 };
 
-var projects_edit = projects_new = {
+var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
 
-    $("input[id^='project_spend_gor_q']:not(:last)").keyup(function () {
+    // when project spend quarter is edited, update the spend total
+    $("input[id^='project_spend_q']:not(:last)").keyup(function () {
       calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
     });
 
-   $(".js_quarterly_fields input:not(:last)").keyup(function () {
+    // when project budget quarter is edited, update the budget total
+   $("input[id^='project_budget_q']:not(:last)").keyup(function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("#project_budget"));
    });
 
-
+    // when fs spend quarter is edited, update the spend total
    $(".js_funding_exp_q").live('keyup', function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 
+    // when fs budget quarter is edited, update the budget total
    $(".js_funding_bud_q").live('keyup', function () {
      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
    });
 
+    // when project spend is edited, update the quarters
     $("#project_spend").keyup(function () {
       split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
     });
 
+    // when project budget is edited, update the quarters
     $("#project_budget").keyup(function () {
       split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:last)'), $(this).val());
     });
 
+    // when fs spend is edited, update the quarters
    $(".ff_spend").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
    });
 
+    // when fs budget is edited, update the quarters
    $(".ff_budget").live('keyup', function () {
      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
    });

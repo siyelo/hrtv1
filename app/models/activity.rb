@@ -38,20 +38,6 @@ class Activity < ActiveRecord::Base
     :sub_activities => "Implementers"
   }
 
-  ### Aliases
-  #budget
-  alias_attribute :budget_gor_q2, :budget_q1
-  alias_attribute :budget_gor_q3, :budget_q2
-  alias_attribute :budget_gor_q4, :budget_q3
-  alias_attribute :budget_gor_q1_next_fy, :budget_q4
-  alias_attribute :budget_gor_q1, :budget_q4_prev
-  #spend
-  alias_attribute :spend_gor_q2, :spend_q1
-  alias_attribute :spend_gor_q3, :spend_q2
-  alias_attribute :spend_gor_q4, :spend_q3
-  alias_attribute :spend_gor_q1_next_fy, :spend_q4
-  alias_attribute :spend_gor_q1, :spend_q4_prev
-
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
@@ -133,7 +119,7 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
-  before_save :check_quarterly_vs_total
+  before_save :set_total_amounts
 
   ### Named scopes
   # TODO: spec
@@ -628,13 +614,6 @@ class Activity < ActiveRecord::Base
     0
   end
 
-  def total_amount_of_quarters(type)
-    (self.send("#{type}_q1") || 0) +
-    (self.send("#{type}_q2") || 0) +
-    (self.send("#{type}_q3") || 0) +
-    (self.send("#{type}_q4") || 0)
-  end
-
   private
 
 
@@ -740,11 +719,10 @@ class Activity < ActiveRecord::Base
     end
 
     # setting the total amount if the quarterlys are set
-    def check_quarterly_vs_total
+    def set_total_amounts
       ["budget", "spend"].each do |type|
-        if total_amount_of_quarters(type) > 0
-          self.send(:"#{type}=", total_amount_of_quarters(type))
-        end
+        amount = total_amount_of_quarters(type)
+        self.send(:"#{type}=", amount) if amount > 0
       end
     end
 

@@ -1,12 +1,6 @@
 require 'validation_disabler'
 require 'validators'
 class Organization < ActiveRecord::Base
-  ### Attrribute Aliases
-  alias_attribute :budget_gor_q2, :budget_q1
-  alias_attribute :budget_gor_q3, :budget_q2
-  alias_attribute :budget_gor_q4, :budget_q3
-  alias_attribute :budget_gor_q1_next_fy, :budget_q4
-  alias_attribute :budget_gor_q1, :budget_q4_prev
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]

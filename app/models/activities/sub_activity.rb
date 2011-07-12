@@ -81,7 +81,7 @@ class SubActivity < Activity
   def self.create_sa(activity, doc)
     all_ok = true
     sub_activities = {}
-    counter = 0
+    counter = 1
     doc.each do |row|
       provider_id = Organization.find_by_name(row['Implementer']).try(:id)
       if provider_id
@@ -90,11 +90,13 @@ class SubActivity < Activity
                       :spend => row['Past Expenditure'],
                       :provider_id => provider_id,
                       :data_response_id => activity.data_response.id}
-
+        
         if sa
           sa.update_attributes(attributes)
+          attributes = {}
         else
           activity.sub_activities.create(attributes)
+          attributes = {}
         end
       else
         attributes = {counter.to_s => {:budget => row['Current Budget'],

@@ -1,0 +1,22 @@
+%h1 Sub-Implementers Upload
+
+%p Sorry we couldn't match up all your sub implementers. The following were outstanding
+%br
+%table.nested
+  %thead
+    %th Row
+    %th You Said
+    %th Search + Select
+  %tbody
+    - form_for(:sub_activities, :url => bulk_create_activity_sub_activities_path(@activity)) do |f|
+      - @sa.each_key do |k|
+        - fields_for "#{k}" do |e|
+          = e.hidden_field :data_response_id, :as => :hidden, :value => @sa[k][:data_response_id], :required => false
+          = e.hidden_field :spend, :as => :hidden, :value => @sa[k][:spend], :required => false
+          = e.hidden_field :budget, :as => :hidden, :value => @sa[k][:budget], :required => false
+          %tr
+            %td= @sa[k][:row_id]
+            %td= @sa[k][:provider_name]
+            %td= e.select(:provider_mask, funding_organizations_select, { :include_blank => true }, :class => 'combobox')
+      %tr
+        %td= f.submit "Save"

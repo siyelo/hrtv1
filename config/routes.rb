@@ -79,7 +79,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:bulk_create => :put, :download_template => :get}
     activity.resources :sub_activities,
       :only => [:index, :create],
-      :collection => {:template => :get, :bulk_update => :post}
+      :collection => {:template => :get, :bulk_create => :post}
   end
 
   map.resources :organizations, :only => [:edit, :update]

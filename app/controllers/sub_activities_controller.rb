@@ -16,7 +16,8 @@ class SubActivitiesController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         all_ok, @sa = SubActivity.create_sa(@activity, doc)
-        flash[:notice] = 'Implementers were successfully uploaded.'
+        message = @sa.empty? ? "Implementers were successfully uploaded." : "Not all Implementers could be resolved."
+        flash[:notice] = message
         redirect_to edit_response_activity_path(@activity.data_response, @activity) if all_ok
       else
         flash[:error] = 'Please select a file to upload implementers.'
@@ -28,7 +29,18 @@ class SubActivitiesController < Reporter::BaseController
   end
   
   def bulk_create
-    
+    params.each_key do |key|
+      if key.to_i > 0
+        @sa = SubActivity.new(params[key]) if key.to_i > 0
+        @activity.sub_activities << @sa
+      end
+    end
+    if @activity.save
+      redirect_to edit_response_activity_path(@activity.data_response, @activity)
+    else
+      flash[:error] = "Please ensure all Implementers have providers"
+      redirect_to :back
+    end
   end
 
   private

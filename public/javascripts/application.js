@@ -1590,6 +1590,12 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
   }
 }
 
+var sub_activities_create = {
+  run: function () {
+    $( ".combobox" ).combobox();
+  }
+};
+
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
     activity_form();

@@ -10,10 +10,10 @@ Feature: Reporter can manage projects
       And an organization "organization2" exists with name: "organization2"
     Then data_response "data_response" should exist with data_request: data_request "data_request1", organization: organization "organization2"
       And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
-      And a reporter exists with username: "reporter", organization: organization "organization2"
+      And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
       And a location exists with short_display: "Location1"
       And a location exists with short_display: "Location2"
-      And I am signed in as "reporter"
+      And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
       And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
@@ -25,9 +25,9 @@ Feature: Reporter can manage projects
         And an organization "organization4" exists with name: "organization4"
         And a data_response "data_response3" should exist with data_request: data_request "data_request_no_quarters", organization: organization "organization4"
         And a project "Project9" exists with name: "Project9", data_response: data_response "data_response3"
-        And a reporter exists with username: "reporter2", organization: organization "organization4", current_response: data_response "data_response3"
+        And a reporter exists with email: "reporter2@hrtapp.com", organization: organization "organization4", current_response: data_response "data_response3"
         And I follow "Sign Out"
-        And I am signed in as "reporter2"
+        And I am signed in as "reporter@hrtapp.com"
         And I follow "Projects"
         And I follow "Project9"
       Then I should not see "Quarterly budget"
@@ -172,10 +172,10 @@ Feature: Reporter can manage projects
         And an organization exists with name: "organization5"
         And a data_request exists with title: "data_request2", spend: false
         And a data_response exists with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "reporter2", organization: the organization
+        And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
         And a location exists with short_display: "Location1"
         And a location exists with short_display: "Location2"
-        And I am signed in as "reporter2"
+        And I am signed in as "reporter2@hrtapp.com"
         And I follow "data_request2"
         And I follow "Projects"
 

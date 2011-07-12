@@ -2,7 +2,7 @@ require 'set'
 class Admin::UsersController < Admin::BaseController
 
   ### Constants
-  SORTABLE_COLUMNS = ['username', 'email', 'full_name', 'organizations.name']
+  SORTABLE_COLUMNS = ['email', 'full_name', 'organizations.name']
 
   ### Inherited Resources
   inherit_resources
@@ -12,8 +12,7 @@ class Admin::UsersController < Admin::BaseController
 
   def index
     scope  = User.scoped({:joins => :organization, :include => :organization})
-    scope  = scope.scoped(:conditions => ["UPPER(username) LIKE UPPER(:q) OR
-                                          UPPER(email) LIKE UPPER(:q) OR
+    scope  = scope.scoped(:conditions => ["UPPER(email) LIKE UPPER(:q) OR
                                           UPPER(full_name) LIKE UPPER(:q) OR
                                           UPPER(organizations.name) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]
@@ -72,7 +71,7 @@ class Admin::UsersController < Admin::BaseController
   private
 
     def sort_column
-      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "username"
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "email"
     end
 
     def sort_direction

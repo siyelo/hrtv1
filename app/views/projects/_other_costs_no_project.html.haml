@@ -1,18 +1,20 @@
-%tr.filler2.sub-head
-  %td{:colspan => 100}
-    %h4
-      Other Costs without Project
-      %span
-        - link_to new_response_other_cost_path(@response), :class => "add_row" do
-          = image_tag "new.png"
-          Add
-
-- if other_costs.present?
-  - other_costs.each do |other_cost|
-    - if other_cost.project.nil?
-      = render "other_costs/other_cost", :other_cost => other_cost
-- else
-  %tr.none
+%tbody
+  %tr
+    %td.name.wrap-20{:rowspan => 100}
     %td{:colspan => 100}
-      No other costs found.
-      = link_to "Add Other Costs now.", new_response_other_cost_path(response)
+      %h4
+        Other Costs (Non-Project)
+        %span
+          - link_to new_response_other_cost_path(@response), :class => "add_row" do
+            = image_tag "new.png"
+            Add
+
+  - if other_costs.present?
+    - other_costs.each do |other_cost|
+      - if other_cost.project.nil?
+        = render "other_costs/other_cost", :other_cost => other_cost
+  - else
+    %tr.none
+      %td{:colspan => 100}
+        No project-wide other costs found.
+        = link_to "Add Other Costs now.", new_response_other_cost_path(response)

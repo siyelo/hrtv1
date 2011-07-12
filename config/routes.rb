@@ -47,21 +47,22 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
+    :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know. 
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
-      response.resources :projects,
-        :collection => {:create_from_file => :post,
-                        :download_template => :get,
-                        :bulk_edit => :get,
-                        :export => :get,
-                        :bulk_update => :put}
-      response.resources :activities,
-        :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
-        :collection => {:bulk_create => :post,
-                        :template => :get,
-                        :export => :get,
-                        :project_sub_form => :get}
-      response.resources :other_costs,
-        :collection => {:create_from_file => :post, :download_template => :get}
+    response.resources :projects,
+      :collection => {:create_from_file => :post,
+                      :download_template => :get,
+                      :bulk_edit => :get,
+                      :export => :get,
+                      :bulk_update => :put}
+    response.resources :activities,
+      :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
+      :collection => {:bulk_create => :post,
+                      :template => :get,
+                      :export => :get,
+                      :project_sub_form => :get}
+    response.resources :other_costs,
+      :collection => {:create_from_file => :post, :download_template => :get}
     response.resources :districts, :only => [:index, :show] do |district|
       district.resources :activities, :only => [:index, :show],
         :controller => "districts/activities"

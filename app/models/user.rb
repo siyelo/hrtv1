@@ -1,12 +1,20 @@
 class User < ActiveRecord::Base
-  acts_as_authentic
+
+  acts_as_authentic do |c|
+    c.validates_length_of_password_field_options = {:minimum => 6,
+      :if => :require_password? }
+    c.validates_confirmation_of_password_field_options = {:minimum => 6,
+      :if => (password_salt_field ? "#{password_salt_field}_changed?".to_sym : nil)}
+    c.validates_length_of_password_confirmation_field_options = {:minimum => 6,
+      :if => :require_password? }
+  end
 
   ### Constants
   ROLES = %w[admin reporter activity_manager]
-  FILE_UPLOAD_COLUMNS = %w[organization_name username email full_name roles password password_confirmation]
+  FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
 
   ### Attributes
-  attr_accessible :full_name, :email, :username, :organization_id, :organization,
+  attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown,
                   :organizations, :organization_ids
 
@@ -18,10 +26,9 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
 
   ### Validations
-  validates_presence_of  :username, :email, :organization_id
-  validates_uniqueness_of :email, :username, :case_sensitive => false
+  validates_presence_of :full_name, :email, :organization_id
+  validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
-  validates_length_of :password, :within => 6..64, :on => :create
   validate :validate_inclusion_of_roles
 
   ### Callbacks
@@ -33,11 +40,6 @@ class User < ActiveRecord::Base
   delegate :latest_response, :to => :organization # find the last response in the org
 
   ### Class Methods
-
-  # Used by Authlogic's UserSession to find the user by username or by email
-  def self.find_by_username_or_email(login)
-    self.find(:first, :conditions => ["username = :login OR email = :login", {:login => login}])
-  end
 
   def self.download_template
     FasterCSV.generate do |csv|
@@ -65,16 +67,12 @@ class User < ActiveRecord::Base
   end
 
   def roles=(roles)
-    @roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
-    self.roles_mask = (@roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
+    new_roles = roles.collect {|r| r.to_s} # allows symbols to be passed in
+    self.roles_mask = (new_roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
   end
 
   def roles
     @roles || ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
-  end
-
-  def sysadmin?
-    role?('admin')
   end
 
   # deprecated - use sysadmin?
@@ -82,17 +80,21 @@ class User < ActiveRecord::Base
     sysadmin?
   end
 
+  def sysadmin?
+    role?('admin')
+  end
+
   def reporter?
-    role?('reporter')
+    role?('reporter') || sysadmin?
   end
 
   def activity_manager?
-    role?('activity_manager')
+    role?('activity_manager') || sysadmin?
   end
 
   # TODO: spec or remove
   def to_s
-    username
+    name_or_email
   end
 
   # TODO: spec or remove
@@ -105,9 +107,13 @@ class User < ActiveRecord::Base
     current_dr.status
   end
 
-  # name() will give you their email if their (non-mandatory) full name isn't set
+  # name() will give you their email if their full name isn't set
   def name
-    full_name.presence || username
+    full_name.present? ? full_name : email
+  end
+
+  def name_or_email
+    name || email
   end
 
   def gravatar(size = 30)
@@ -161,7 +167,13 @@ class User < ActiveRecord::Base
         errors.add(:roles, "is not included in the list")
       end
     end
+
+    def require_password?
+      self.crypted_password.blank?
+      #TODO: self.active? && self.crypted_password.blank?
+    end
 end
+
 
 
 
@@ -172,8 +184,7 @@ end
 # Table name: users
 #
 #  id                       :integer         not null, primary key
-#  username                 :string(255)
-#  email                    :string(255)
+#  email                    :string(255)     indexed
 #  crypted_password         :string(255)
 #  password_salt            :string(255)
 #  persistence_token        :string(255)
@@ -184,7 +195,7 @@ end
 #  data_response_id_current :integer
 #  text_for_organization    :text
 #  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
+#  perishable_token         :string(255)     default(""), not null, indexed
 #  tips_shown               :boolean         default(TRUE)
 #
 

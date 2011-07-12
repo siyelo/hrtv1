@@ -6,7 +6,9 @@
   - comments.each do |comment|
     %li
       %h5.title
-        %span= link_to "#{truncate(model_name(comment.commentable), :length => 40)} (#{comment.commentable.organization.name})", commentable_path(comment, current_user)
+        - comment_title = truncate(model_name(comment.commentable), :length => 40)
+        - comment_title += " (#{comment.commentable.organization.name})" unless comment.commentable.organization == current_user.organization
+        %span= link_to comment_title, commentable_path(comment, current_user)
       .author
         from
         = image_tag comment.user.gravatar(20)

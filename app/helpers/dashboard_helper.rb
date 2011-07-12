@@ -1,4 +1,4 @@
-module Reporter::DashboardHelper
+module DashboardHelper
   def commentable_path(comment, user)
     commentable = comment.commentable
     case comment.commentable_type

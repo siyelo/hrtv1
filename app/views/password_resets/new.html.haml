@@ -4,6 +4,7 @@
   %h3
     Forgot Password
     = link_to "(Sign In)", login_path
+  %p Enter your registered email address and we'll send you a link to reset your password.
 
   - semantic_form_for 'user', :url => password_resets_path do |f|
     - f.inputs do

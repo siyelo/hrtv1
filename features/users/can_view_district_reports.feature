@@ -12,7 +12,7 @@ Feature: Can view district reports
       And a data_request exists with title: "Req2", organization: the organization
 
       And an organization exists with name: "Org A"
-      And a reporter exists with username: "reporter", organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And a data_response exists with data_request: the 1st data_request, organization: the organization
       And a project exists with name: "Project 1 A", data_response: the data_response
       And an activity exists with name: "Activity 1 A", data_response: the data_response, project: the project
@@ -55,8 +55,9 @@ Feature: Can view district reports
 
 #' damn Cucumber TM syntax highlighting
 
+
   Scenario: reporter views district reports
-    Given I am signed in as "reporter"
+    Given I am signed in as "reporter@hrtapp.com"
     And I follow "Req1"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
     Then I should see a District-Location-Activity report for "Activity 1 A"
@@ -81,7 +82,7 @@ Feature: Can view district reports
     Then I should see a District-Location-Activity report for "Activity 1 B"
 
   Scenario: user only sees district reports for current request
-    Given I am signed in as "reporter"
+    Given I am signed in as "reporter@hrtapp.com"
     And I follow "Req1"
     And I follow "Reports"
     And I follow "Review District Expenditures and Current Budgets"

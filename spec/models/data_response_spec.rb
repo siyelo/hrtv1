@@ -15,8 +15,10 @@ describe DataResponse do
   end
 
   describe "validations" do
+    subject{Factory(:response)}
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
+    #TODO: put back it { should validate_uniqueness_of(:data_request_id).scoped_to(:organization_id) }
   end
 
   describe "counter cache" do

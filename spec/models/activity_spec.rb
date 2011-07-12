@@ -63,7 +63,7 @@ describe Activity do
   end
 
   describe "validations" do
-    it { should validate_presence_of(:name) }
+    subject { Factory(:activity) }
     it { should validate_presence_of(:description) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }

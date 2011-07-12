@@ -6,8 +6,8 @@ Feature: Admin can manage data requests
   Background:
     Given an organization exists with name: "org1"
     And a data_request exists with organization: the organization
-    And an admin exists with username: "admin", organization: the organization
-    And I am signed in as "admin"
+    And an admin exists with email: "admin@hrtapp.com", organization: the organization
+    And I am signed in as "admin@hrtapp.com"
 
     Scenario: Admin can CRUD data requests
       When I follow "Requests"

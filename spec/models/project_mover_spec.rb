@@ -43,8 +43,7 @@ describe ProjectMover do
 
   context "invalid relations" do
     before :each do
-      @project.start_date  = DateTime.new(2010, 01, 01)
-      @project.end_date    = DateTime.new(2009, 01, 01)
+      @project.name  = nil
       @project.save(false)
       @mover = ProjectMover.new(@dr1, @dr2, @project)
     end
@@ -54,6 +53,7 @@ describe ProjectMover do
     end
 
     it "should allow you to forcibly save invalid AR objects" do
+      pending
       lambda { @clone_project = @mover.move_without_validations! }.should_not raise_error
     end
   end

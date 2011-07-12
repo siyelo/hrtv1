@@ -7,8 +7,6 @@ Feature: Reporter can see comments
     Given a basic org + reporter profile, with data response, signed in
       And a comment exists with comment: "comment1", commentable: the project
 
-
-
     Scenario: See latest comments on dashboard
       When I follow "Home"
       Then I should see "Recent Comments"
@@ -34,7 +32,7 @@ Feature: Reporter can see comments
     Scenario: Reporter can see only comments from his organization
       Given a organization exists with name: "USAID"
         And a data_response should exist with data_request: the data_request, organization: the organization
-        And a reporter exists with username: "other_user", organization: the organization, current_response: the data_response
+        And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization, current_response: the data_response
         And a project exists with name: "Other Project", data_response: the data_response
         And a comment exists with comment: "comment2", commentable: the project, user: the reporter
       When I go to the comments page

@@ -6,14 +6,14 @@ Feature: Reporter can manage activities
   Background:
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1", organization: the organization
-      And an admin exists with username: "admin", organization: the organization
+      And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
 
       And an organization exists with name: "organization2"
-      And a reporter exists with username: "reporter", organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "project2", data_response: the data_response
       And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
-      And I am signed in as "admin"
+      And I am signed in as "sysadmin@hrtapp.com"
 
     Scenario: An admin can review activities
       When I follow "Organizations"

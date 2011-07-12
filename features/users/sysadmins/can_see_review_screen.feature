@@ -7,7 +7,7 @@ Feature: Admin can see review page
     Given an organization exists with name: "GoR"
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "UNDP"
-      And a reporter exists with username: "reporter", organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And a data_response exists with data_request: the data_request, organization: the organization
       And a project exists with name: "TB Treatment Project", data_response: the data_response
       And a comment exists with comment: "comment1", commentable: the project

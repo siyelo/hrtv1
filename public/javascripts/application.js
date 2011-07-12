@@ -1403,31 +1403,35 @@ var activities_bulk_create = {
     });
 
 
-    $('.activity_project_id').live('change', function () {
-      var element = $(this);
-      var _project_id = element.val();
-      var form = element.parents('form');
-      var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
-      var activityBox = element.parents('.activity_box');
-      _response_id = matches[1];
-      _activity_id = matches[2];
+    // NOTE: project sub form is disabled because in CSV files
+    // project was not selected, but only locations, and when
+    // changing the project it was removing these locations
 
-      if (_project_id) {
-        var url = '/responses/' + _response_id +
-        '/activities/project_sub_form?' + 'project_id=' + _project_id;
-        if (_activity_id) {
-          url += '&activity_id=' + _activity_id;
-        }
-        $.get(url, function (data) {
-          activityBox.find('.project_sub_form_fields').html(data)
-          activityBox.find('.project_sub_form_fields').show();
-          activityBox.find('.project_sub_form_hint').hide();
-        });
-      } else {
-        activityBox.find('.project_sub_form_fields').hide();
-        activityBox.find('.project_sub_form_hint').show();
-      }
-    });
+    //$('.activity_project_id').live('change', function () {
+      //var element = $(this);
+      //var _project_id = element.val();
+      //var form = element.parents('form');
+      //var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
+      //var activityBox = element.parents('.activity_box');
+      //_response_id = matches[1];
+      //_activity_id = matches[2];
+
+      //if (_project_id) {
+        //var url = '/responses/' + _response_id +
+        //'/activities/project_sub_form?' + 'project_id=' + _project_id;
+        //if (_activity_id) {
+          //url += '&activity_id=' + _activity_id;
+        //}
+        //$.get(url, function (data) {
+          //activityBox.find('.project_sub_form_fields').html(data)
+          //activityBox.find('.project_sub_form_fields').show();
+          //activityBox.find('.project_sub_form_hint').hide();
+        //});
+      //} else {
+        //activityBox.find('.project_sub_form_fields').hide();
+        //activityBox.find('.project_sub_form_hint').show();
+      //}
+    //});
 
     $(".combobox").combobox(); // for pretty currency select
   }

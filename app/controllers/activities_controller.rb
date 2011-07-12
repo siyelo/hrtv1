@@ -107,7 +107,7 @@ class ActivitiesController < Reporter::BaseController
     @activity = @response.activities.find_by_id(params[:activity_id])
     @project  = @response.projects.find(params[:project_id])
     render :partial => "project_sub_form",
-           :locals => {:activity => (@activity || :activity), :project => @project}
+           :locals => {:activity => (@activity || :activity)}
   end
 
   def template

@@ -91,7 +91,6 @@ class ActivitiesController < Reporter::BaseController
       render :json => {:status => 'success'}
     else
       render :json => {:status => 'access denied'}
-      raise AccessDenied
     end
   end
 

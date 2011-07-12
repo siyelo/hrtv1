@@ -16,6 +16,7 @@ gem 'json_pure'
 gem 'money', "~> 3.5"
 gem 'paperclip', "= 2.3.11"
 gem 'rails', '2.3.12'
+gem 'rdoc'
 gem 'sass', '=3.1.4'
 gem 'settingslogic'
 gem 'validates_timeliness', '~> 2.3'

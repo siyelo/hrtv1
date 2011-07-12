@@ -46,4 +46,4 @@ Feature: Reporter can login
     And I press "Sign in"
     Then I should see the reporters admin nav
     And I should see "reporter@hrtapp.com"
-    And I should be on the reporter dashboard page
+    And I should be on the dashboard

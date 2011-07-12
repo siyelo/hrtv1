@@ -34,7 +34,6 @@ Feature: Admin can manage users
         And I should not see "pink.panter1"
         And I should not see "pink.panter2"
 
-
     Scenario Outline: Admin can CRUD users and see errors
       When I follow "Users"
         And I follow "Create User"

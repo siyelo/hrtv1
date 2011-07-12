@@ -1224,7 +1224,6 @@ var commentsInit = function () {
   });
 }
 
-
 var projects_index = {
   run: function () {
     // stop moving to top

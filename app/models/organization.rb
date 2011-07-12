@@ -255,7 +255,6 @@ class Organization < ActiveRecord::Base
     end
 
   private
-
     def update_cached_currency_amounts
       if self.currency_changed?
         self.dr_activities.each do |a|

@@ -58,10 +58,6 @@ end
 #   feel free to delete them.
 #
 
-
-
-
-
 def login( user = Factory.build(:reporter) )
   activate_authlogic
   UserSession.create user

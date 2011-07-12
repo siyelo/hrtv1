@@ -118,9 +118,7 @@ describe ActivitiesController do
     end
 
     it "Requesting /activities/1/sysadmin_approve using POST requires admin to approve an activity" do
-      data_response = Factory(:data_response, :organization => @user.organization)
-      @activity = Factory(:activity, :data_response => data_response)
-      post :sysadmin_approve, :id => @activity.id, :response_id => data_response.id
+      post :sysadmin_approve, :id => @activity.id, :response_id => @data_response.id
       flash[:error].should == "You must be an administrator to access that page"
     end
 
@@ -140,36 +138,26 @@ describe ActivitiesController do
       @data_request = Factory(:data_request, :spend => false, :budget => false)
       @organization = Factory(:organization)
       @user = Factory(:reporter, :organization => @organization)
-      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
+      @data_response = @organization.responses.find_by_data_request_id(@data_request.id)
       @project = Factory(:project, :data_response => @data_response)
+      @activity = Factory(:activity, :project => @project, :data_response => @data_response,
+        :am_approved => false)
       login @user
     end
 
     it "should allow a reporter to update an activity if it's not am approved" do
-      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => false)
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => "9999993", :project_id => @project.id}
       @activity.reload
       @activity.budget.should == 9999993
     end
 
     it "should not allow a reporter to update a project once it has been am_approved" do
-      @activity = Factory(:activity, :project => @project, :data_response => @data_response, :am_approved => true)
+      @activity.am_approved = true
+      @activity.save
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
       @activity.reload
       @activity.budget.should_not == 9999993
       flash[:error].should == "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
-    end
-  end
-
-  describe "Redirects to budget or spend depending on datarequest" do
-    before :each do
-       @data_request = Factory(:data_request, :spend => false, :budget => false)
-       @organization = Factory(:organization)
-       @user = Factory(:reporter, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       @activity = Factory :activity, :project => @project, :data_response => @data_response
-       login @user
     end
 
     it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
@@ -187,50 +175,47 @@ describe ActivitiesController do
       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
     end
 
-     it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
-       @data_request.spend = false
-       @data_request.budget = true
-       @data_request.save
-       @project.budget = 100
-       put :update, :activity => { :budget => 110, :spend => 0}, :id => @activity.id,
-         :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
-     end
+    it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
+      @data_request.spend = false
+      @data_request.budget = true
+      @data_request.save
+      @project.budget = 100
+      put :update, :activity => { :budget => 110, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+    end
 
-     it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
-       @data_request.spend = true
-       @data_request.budget = false
-       @data_request.save
-       put :update, :activity => { :budget => 0, :spend => 89}, :id => @activity.id,
-         :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-     end
+    it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
+      @data_request.spend = true
+      @data_request.budget = false
+      @data_request.save
+      put :update, :activity => { :budget => 0, :spend => 89}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+    end
 
-     it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do
-       @data_request.spend = true
-       @data_request.budget = true
-       @data_request.save
-       put :update, :activity => { :budget => 89, :spend => 89}, :id => @activity.id,
-         :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-     end
-   end
+    it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do
+      @data_request.spend = true
+      @data_request.budget = true
+      @data_request.save
+      put :update, :activity => { :budget => 89, :spend => 89}, :id => @activity.id,
+        :commit => 'Save & Classify >', :response_id => @data_response.id
+      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+    end
 
-   describe "activitymanager can approve an activity project" do
-     before :each do
-       @data_request = Factory(:data_request)
-       @organization = Factory(:organization)
-       @user = Factory(:activity_manager, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       @activity = Factory(:activity, :project => @project, :data_response => @data_response)
-       login @user
-     end
-     it "should approve the project if the am_approved field is not set" do
-       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
-       @activity.reload
-       @activity.user.should == @user
-       @activity.am_approved.should be_true
-     end
-   end
+    it "should NOT approve the project as a reporter" do
+      put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
+      @activity.reload
+      @activity.am_approved.should be_false
+    end
+
+    it "should approve the project as an activity manager" do
+      manager = Factory :activity_manager, :organization => @organization
+      login manager
+      put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
+      @activity.reload
+      @activity.am_approved.should be_true
+      @activity.user.should == manager
+    end
+  end
 end

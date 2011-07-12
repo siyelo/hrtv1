@@ -10,7 +10,7 @@ Feature: Reporter can see dashboard
 
     Scenario: Prompted to review incomplete data
       When I am signed in as "reporter@hrtapp.com"
-        And I go to the reporter dashboard page
+        And I go to the dashboard
       # Req1
       Then I should see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(1)"
 
@@ -18,7 +18,7 @@ Feature: Reporter can see dashboard
       When a data_request exists with title: "Req2", final_review: true, organization: the organization
         And a data_response should exist with data_request: the data_request, organization: the organization
         And I am signed in as "reporter@hrtapp.com"
-        And I go to the reporter dashboard page
+        And I go to the dashboard
       # Req2
       Then I should see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(1)"
       # Req1
@@ -28,7 +28,7 @@ Feature: Reporter can see dashboard
       When a data_request exists with title: "Req2", final_review: false, organization: the organization
         And a data_response should exist with data_request: the data_request, organization: the organization
         And I am signed in as "reporter@hrtapp.com"
-        And I go to the reporter dashboard page
+        And I go to the dashboard
       # Req2
       Then I should not see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(1)"
       # Req1

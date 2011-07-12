@@ -23,11 +23,8 @@ class DataResponse < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :data_request_id
+  # TODO - put back asap! validates_uniqueness_of :data_request_id, :scope => :organization_id
   validates_presence_of :organization_id
-  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
-    :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location,
-    :spend_quarters_months, :budget_quarters_months, :to => :organization
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -38,11 +35,15 @@ class DataResponse < ActiveRecord::Base
   ### Delegates
   delegate :name, :to => :data_request
   delegate :title, :to => :data_request
+  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
+    :contact_name, :contact_position, :contact_phone_number,
+    :contact_main_office_phone_number, :contact_office_location,
+    :spend_quarters_months, :budget_quarters_months, :to => :organization
 
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
-  
-  #Includes                         
+
+  #Includes
   include NumberHelper
 
   ### Meta Data for Meta Programming

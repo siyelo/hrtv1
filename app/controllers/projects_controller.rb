@@ -92,7 +92,6 @@ class ProjectsController < Reporter::BaseController
   def bulk_create
     begin
       if params[:file].present?
-        debugger
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
           saved, errors = Project.create_from_file(doc, @response)

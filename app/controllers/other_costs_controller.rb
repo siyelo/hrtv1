@@ -19,6 +19,7 @@ class OtherCostsController < Reporter::BaseController
   def new
     @other_cost = OtherCost.new
     @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
+    @other_cost.data_response = @response
   end
 
   def edit

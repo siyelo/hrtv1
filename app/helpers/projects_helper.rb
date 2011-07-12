@@ -26,12 +26,18 @@ module ProjectsHelper
   
   def get_project_total_differences(project)  
     errors = []
-    if (project.spend || 0) - project.subtotals(:spend) > 0 
-      errors << "Past expenditure difference: #{n2cndrs((project.spend || 0) - project.subtotals(:spend), project.currency)}"
+    if (project.spend || 0) - project.subtotals(:spend) != 0 
+      errors << "The Project's past expenditure (#{n2cndrs((project.spend || 0), project.currency)}) should match
+                the total past expenditure for Activities plus Other Costs (#{n2cndrs(project.subtotals(:spend), project.currency)}).  
+                Currently there is a difference of #{n2cndrs((project.spend || 0) - project.subtotals(:spend), project.currency)} - 
+                please update the past expenditure of activities/other costs for this project accordingly."
     end
     
-    if (project.budget || 0) - project.subtotals(:budget) > 0 
-      errors << "Current budget difference: #{n2cndrs((project.budget || 0) - project.subtotals(:budget), project.currency)}"
+    if (project.budget || 0) - project.subtotals(:budget) != 0 
+      errors << "The Project's Current Budget (#{n2cndrs((project.budget || 0), project.currency)}) should match
+                the total current budget for Activities plus Other Costs (#{n2cndrs(project.subtotals(:budget), project.currency)}).  
+                Currently there is a difference of #{n2cndrs((project.budget || 0) - project.subtotals(:budget), project.currency)} - 
+                please update the current budget of activities/other costs for this project accordingly."
     end
     
     errors = errors.collect{|e| "<li>#{e}</li>"}

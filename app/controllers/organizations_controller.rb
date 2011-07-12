@@ -6,10 +6,9 @@ class OrganizationsController < Reporter::BaseController
   end
 
   def update
-    @organization.update_attributes(params[:organization])
-    if @organization.save
-      flash[:notice] = "Successfully updated."
-      redirect_to edit_organization_url(@organization)
+    if @organization.update_attributes(params[:organization])
+      flash[:notice] = "Settings were successfully updated."
+      redirect_to dashboard_url
     else
       render :action => :edit
     end

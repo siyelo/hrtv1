@@ -24,7 +24,7 @@ end
 Factory.define :sysadmin,  :parent => :user do |f|
   f.sequence(:full_name)   { "Some Sysadmin" }
   f.sequence(:email)      { "sysadmin_#{(1..1000000).to_a.sample}@example.com" }
-  f.roles { ['admin'] } #todo - change role names
+  f.roles { ['admin'] } #TODO: - change role names
 end
 
 # deprecated - use :sysadmin from now on

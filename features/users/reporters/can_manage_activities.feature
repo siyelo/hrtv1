@@ -281,10 +281,10 @@ Feature: Reporter can manage activities
       And an organization exists with name: "organization5"
       And a data_request exists with title: "data_request2", budget: false
       And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
       And a location exists with short_display: "Location1"
       And a location exists with short_display: "Location2"
-      And I am signed in as "reporter@hrtapp.com"
+      And I am signed in as "reporter2@hrtapp.com"
       And I follow "data_request2"
       And a project exists with name: "project1", data_response: the data_response
       And I follow "Projects"

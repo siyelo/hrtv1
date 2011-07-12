@@ -21,6 +21,7 @@ class SubActivitiesController < Reporter::BaseController
         redirect_to edit_response_activity_path(@activity.data_response, @activity) if all_ok
       else
         flash[:error] = 'Please select a file to upload implementers.'
+        redirect_to edit_response_activity_path(@activity.data_response, @activity)
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = 'Your CSV file does not seem to be properly formatted.'

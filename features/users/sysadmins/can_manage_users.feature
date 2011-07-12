@@ -1,5 +1,3 @@
-@run
-
 Feature: Admin can manage users
   In order to track information
   As an admin

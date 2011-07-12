@@ -2,20 +2,6 @@ require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
 
-  ### Aliases
-  #budget
-  alias_attribute :budget_gor_q2, :budget_q1
-  alias_attribute :budget_gor_q3, :budget_q2
-  alias_attribute :budget_gor_q4, :budget_q3
-  alias_attribute :budget_gor_q1_next_fy, :budget_q4
-  alias_attribute :budget_gor_q1, :budget_q4_prev
-  #spend
-  alias_attribute :spend_gor_q2, :spend_q1
-  alias_attribute :spend_gor_q3, :spend_q2
-  alias_attribute :spend_gor_q4, :spend_q3
-  alias_attribute :spend_gor_q1_next_fy, :spend_q4
-  alias_attribute :spend_gor_q1, :spend_q4_prev
-
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
@@ -32,7 +18,7 @@ class FundingFlow < ActiveRecord::Base
   alias :response :data_response
   alias :response= :data_response=
 
-  
+
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
@@ -42,7 +28,7 @@ class FundingFlow < ActiveRecord::Base
     :message => :"organization_id_from.missing"
   validates_presence_of :organization_id_to,
     :message => :"organization_id_to.missing"
-  
+
   validates_numericality_of :budget_q1, :if => Proc.new { |model| model.budget_q1.present? }
   validates_numericality_of :budget_q2, :if => Proc.new { |model| model.budget_q2.present? }
   validates_numericality_of :budget_q3, :if => Proc.new { |model| model.budget_q3.present? }

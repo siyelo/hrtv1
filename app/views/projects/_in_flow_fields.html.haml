@@ -18,22 +18,22 @@
       %li.amounts.spend
         %label Quarterly Expenditure
         %ul
-          = f.input :spend_gor_q1, :label => "#{@response.spend_quarters_months('q1')}", :required => false, :input_html => {:class => 'ff_spend_q4_prev js_funding_exp_q'}
-          = f.input :spend_gor_q2     , :label => "#{@response.spend_quarters_months('q2')}", :required => false, :input_html => {:class => 'ff_spend_q1 js_funding_exp_q'}
-          = f.input :spend_gor_q3     , :label => "#{@response.spend_quarters_months('q3')}", :required => false, :input_html => {:class => 'ff_spend_q2 js_funding_exp_q'}
-          = f.input :spend_gor_q4     , :label => "#{@response.spend_quarters_months('q4')}", :required => false, :input_html => {:class => 'ff_spend_q3 js_funding_exp_q'}
-          = f.input :spend_gor_q1_next_fy     , :label => "#{@response.spend_quarters_months('q1_next_fy')}", :required => false, :input_html => {:class => 'ff_spend_q4'}
+          = f.input :spend_q4_prev, :label => "#{@response.spend_quarters_months('q1')}", :required => false, :input_html => {:class => 'ff_spend_q4_prev js_funding_exp_q'}
+          = f.input :spend_q1     , :label => "#{@response.spend_quarters_months('q2')}", :required => false, :input_html => {:class => 'ff_spend_q1 js_funding_exp_q'}
+          = f.input :spend_q2     , :label => "#{@response.spend_quarters_months('q3')}", :required => false, :input_html => {:class => 'ff_spend_q2 js_funding_exp_q'}
+          = f.input :spend_q3     , :label => "#{@response.spend_quarters_months('q4')}", :required => false, :input_html => {:class => 'ff_spend_q3 js_funding_exp_q'}
+          = f.input :spend_q4     , :label => "#{@response.spend_quarters_months('q1_next_fy')}", :required => false, :input_html => {:class => 'ff_spend_q4'}
 
     - if @response.data_request.budget?
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'ff_budget'}
       %li.amounts.budget
         %label Quarterly Budget
         %ul
-          = f.input :budget_gor_q1, :label => "#{@response.budget_quarters_months('q1')}", :required => false, :input_html => {:class => 'ff_budget_q4_prev js_funding_bud_q'}
-          = f.input :budget_gor_q2     , :label => "#{@response.budget_quarters_months('q2')}", :required => false, :input_html => {:class => 'ff_budget_q1 js_funding_bud_q'}
-          = f.input :budget_gor_q3     , :label => "#{@response.budget_quarters_months('q3')}", :required => false, :input_html => {:class => 'ff_budget_q2 js_funding_bud_q'}
-          = f.input :budget_gor_q4     , :label => "#{@response.budget_quarters_months('q4')}", :required => false, :input_html => {:class => 'ff_budget_q3 js_funding_bud_q'}
-          = f.input :budget_gor_q1_next_fy     , :label => "#{@response.budget_quarters_months('q1_next_fy')}", :required => false, :input_html => {:class => 'ff_budget_q4'}
+          = f.input :budget_q4_prev, :label => "#{@response.budget_quarters_months('q1')}", :required => false, :input_html => {:class => 'ff_budget_q4_prev js_funding_bud_q'}
+          = f.input :budget_q1     , :label => "#{@response.budget_quarters_months('q2')}", :required => false, :input_html => {:class => 'ff_budget_q1 js_funding_bud_q'}
+          = f.input :budget_q2     , :label => "#{@response.budget_quarters_months('q3')}", :required => false, :input_html => {:class => 'ff_budget_q2 js_funding_bud_q'}
+          = f.input :budget_q3     , :label => "#{@response.budget_quarters_months('q4')}", :required => false, :input_html => {:class => 'ff_budget_q3 js_funding_bud_q'}
+          = f.input :budget_q4     , :label => "#{@response.budget_quarters_months('q1_next_fy')}", :required => false, :input_html => {:class => 'ff_budget_q4'}
 
 
   .preview_block{:style => "display: none;"}

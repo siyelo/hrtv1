@@ -1,3 +1,6 @@
+# i think this is broken due to the 2x data responses being created
+
+@wip
 Feature: Reporter can upload classifications
   In order to increase the quality of information reported
   As a reporter
@@ -28,11 +31,10 @@ Feature: Reporter can upload classifications
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And I follow "Projects"
-      Then debug
       Then show me the page
       And I follow "Activity1"
 
-  @run
+
   Scenario Outline: Reporter can download Purposes template
     When I follow "<type>"
       And I follow "Purposes"

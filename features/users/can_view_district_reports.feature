@@ -55,8 +55,9 @@ Feature: Can view district reports
 
 #' damn Cucumber TM syntax highlighting
 
+
   Scenario: reporter views district reports
-    Given I am signed in as "reporter"
+    Given I am signed in as "reporter@hrtapp.com"
     And I follow "Req1"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
     Then I should see a District-Location-Activity report for "Activity 1 A"
@@ -81,7 +82,7 @@ Feature: Can view district reports
     Then I should see a District-Location-Activity report for "Activity 1 B"
 
   Scenario: user only sees district reports for current request
-    Given I am signed in as "reporter"
+    Given I am signed in as "reporter@hrtapp.com"
     And I follow "Req1"
     And I follow "Reports"
     And I follow "Review District Expenditures and Current Budgets"

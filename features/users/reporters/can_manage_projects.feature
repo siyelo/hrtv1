@@ -13,7 +13,7 @@ Feature: Reporter can manage projects
       And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
       And a location exists with short_display: "Location1"
       And a location exists with short_display: "Location2"
-      And I am signed in as "reporter"
+      And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
       And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"

@@ -15,7 +15,7 @@ Feature: Reporter can see classification tabs
         And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
         And a project exists with name: "Project", data_response: the data_response
         And an activity exists with name: "activity1", data_response: the data_response, project: the project, description: "activity1 description"
-        And I am signed in as "reporter"
+        And I am signed in as "reporter@hrtapp.com"
         And I follow "Projects"
         And I follow "activity1 description"
       Then I should see "Past Expenditure" within ".ordered_nav"

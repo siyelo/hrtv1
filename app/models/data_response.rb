@@ -399,6 +399,19 @@ class DataResponse < ActiveRecord::Base
     projects.map{|p| p.subtotals(:budget).to_f * currency_rate(p.currency, currency) }.compact.sum
   end
 
+  def other_costs_subtotal(type = :spend)
+    (other_costs.without_a_project.select{ |a|
+      a.send(type).present?}.sum(&type)).to_f * currency_rate(currency, :USD)
+  end
+
+  def total_spend
+    projects_total_spend + other_costs_subtotal(:spend)
+  end
+
+  def total_budget
+    projects_total_budget + other_costs_subtotal(:budget)
+  end
+
   def download_template
     FasterCSV.generate do |csv|
       header_row = DataResponse::FILE_UPLOAD_COLUMNS

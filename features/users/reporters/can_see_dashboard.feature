@@ -9,15 +9,14 @@ Feature: Reporter can see dashboard
     And a data_response exists with data_request: the data_request, organization: the organization
     And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
 
-
     Scenario: "See data requests"
-      Given I am signed in as "reporter"
+      Given I am signed in as "reporter@hrtapp.com"
       Then I should see "Dashboard"
       And I should see "Data Requests"
 
 
     Scenario: See menu tabs when a Data Req is selected
-      Given I am signed in as "reporter"
+      Given I am signed in as "reporter@hrtapp.com"
       Then I should see "Home" within the main nav
         And I should see "Projects" within the main nav
         And I should see "Reports" within the main nav

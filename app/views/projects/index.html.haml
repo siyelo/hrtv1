@@ -57,6 +57,8 @@
     - unless @projects.empty?
       - @projects.each do |project|
         = render "project", :project => project
+      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+
     - else
       %tr
         %td{:colspan => 100}
@@ -64,8 +66,8 @@
     %tr.filler
       %td{:colspan => 2}
       %td.total TOTAL
-      %td.wrap-10= n2cndrs(@response.projects_total_spend, @response.currency)
-      %td.wrap-10= n2cndrs(@response.projects_total_budget, @response.currency)
+      %td.wrap-10= n2cndrs(@response.total_spend, @response.currency)
+      %td.wrap-10= n2cndrs(@response.total_budget, @response.currency)
       %td
 
 

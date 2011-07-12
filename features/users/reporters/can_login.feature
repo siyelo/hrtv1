@@ -3,6 +3,12 @@ Feature: Reporter can login
   As a reporter
   I want to be able to login
 
+  Background:
+    Given an organization exists with name: "MoH"
+    And a data_request exists with organization: the organization
+    Given an organization exists with name: "Some Donor"
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+
   Scenario: Login via home page
     When I go to the home page
     And I follow "Sign in"
@@ -15,31 +21,22 @@ Feature: Reporter can login
     And I should see the common footer
 
   Scenario: Login with invalid data - see flash message not AR errors
-    Given an organization exists with name: "org1"
-    And a data_request exists with organization: the organization
-    And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     When I go to the login page
     And I fill in "Email" with "not a real user"
     And I fill in "Password" with ""
     And I press "Sign in"
-    Then I should see "Wrong email and password combination"
+    Then I should see "Wrong Email and Password combination"
     And I should not see "There were problems with the following fields:"
 
   Scenario: Login as a reporter with email address
-    Given a reporter exists with email: "member@hrtapp.com"
     And I go to the login page
-    And I fill in "Email" with "member@hrtapp.com"
+    And I fill in "Email" with "reporter@hrtapp.com"
     And I fill in "Password" with "password"
     When I press "Sign in"
     Then I should see the reporters admin nav
     And I should see the main nav tabs
 
   Scenario: Login as a reporter with email address
-    Given an organization exists with name: "org1"
-    And a data_request exists with organization: the organization
-    And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     When I go to the login page
     And I fill in "Email" with "reporter@hrtapp.com"
     And I fill in "Password" with "password"

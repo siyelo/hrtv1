@@ -15,16 +15,20 @@ class SubActivitiesController < Reporter::BaseController
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        SubActivity.create_from_file(@activity, doc)
+        all_ok, @sa = SubActivity.create_sa(@activity, doc)
         flash[:notice] = 'Implementers were successfully uploaded.'
+        redirect_to edit_response_activity_path(@activity.data_response, @activity) if all_ok
       else
         flash[:error] = 'Please select a file to upload implementers.'
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = 'Your CSV file does not seem to be properly formatted.'
     end
-
-    redirect_to edit_response_activity_path(@activity.data_response, @activity)
+    # 
+  end
+  
+  def bulk_create
+    
   end
 
   private

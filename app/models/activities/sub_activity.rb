@@ -78,19 +78,36 @@ class SubActivity < Activity
     end
   end
 
-  def self.create_from_file(activity, doc)
+  def self.create_sa(activity, doc)
+    all_ok = true
+    sub_activities = {}
+    counter = 0
     doc.each do |row|
-      attributes = {:budget => row['Current Budget'],
-                    :spend => row['Past Expenditure'],
-                    :provider_id => Organization.find_by_name(row['Implementer']).try(:id),
-                    :data_response_id => activity.data_response.id}
-      sa = activity.sub_activities.find_by_id(row['Id'])
-      if sa
-        sa.update_attributes(attributes)
+      provider_id = Organization.find_by_name(row['Implementer']).try(:id)
+      if provider_id
+        sa = activity.sub_activities.find_by_id(row['Id'])
+        attributes = {:budget => row['Current Budget'],
+                      :spend => row['Past Expenditure'],
+                      :provider_id => provider_id,
+                      :data_response_id => activity.data_response.id}
+
+        if sa
+          sa.update_attributes(attributes)
+        else
+          activity.sub_activities.create(attributes)
+        end
       else
-        activity.sub_activities.create(attributes)
+        attributes = {counter.to_s => {:budget => row['Current Budget'],
+                      :spend => row['Past Expenditure'],
+                      :provider_name => row['Implementer'],
+                      :row_id => counter,
+                      :data_response_id => activity.data_response.id}}
+        all_ok = false
       end
+      sub_activities.merge! attributes
+      counter += 1
     end
+    return all_ok, sub_activities
   end
 
   ### Instance Methods

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe OtherCost do
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
@@ -19,7 +19,7 @@ describe OtherCost do
     it { should have_many :coding_spend_district }
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:start_date) }
@@ -46,6 +46,11 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:organization_ids) }
   end
+
+  describe "Validations" do
+    it { should_not validate_presence_of(:name) }
+  end
+
 
   describe "classified?" do
     before :each do

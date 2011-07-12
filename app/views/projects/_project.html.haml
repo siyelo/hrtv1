@@ -12,7 +12,7 @@
   = render 'activities', :response => @response, :project => project, :activities => project.normal_activities.sorted
 
   = render 'other_costs', :response => @response, :project => project, :other_costs => project.other_costs
-  
+
   = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
 
 

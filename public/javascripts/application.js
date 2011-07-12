@@ -785,8 +785,6 @@ var build_data_response_review_screen = function () {
     //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
   });
 
-  approve_activity_checkbox();
-
   // Ajax load of classifications for activities
   $.each($('.activity_classifications'), function (i, element) {
     element = $(element);
@@ -842,8 +840,6 @@ var code_assignments_show = {
 
     //collapsible checkboxes for tab1
     addCollabsibleButtons('tab1');
-
-    approve_activity_checkbox();
 
     // prevent going to top on click on tool
     $('.tooltip').live('click', function (e) {

@@ -1,6 +1,5 @@
 class SubActivity < Activity
   extend ActiveSupport::Memoizable
-  include NumberHelper
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Implementer", "Past Expenditure", "Current Budget"]
@@ -10,7 +9,7 @@ class SubActivity < Activity
 
   ### Attributes
   attr_accessible :activity_id, :data_response_id,
-                  :provider_mask, :spend_mask, :budget_mask
+                  :spend_mask, :budget_mask
 
   ### Callbacks
   after_create    :update_counter_cache
@@ -41,23 +40,6 @@ class SubActivity < Activity
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
 
-  def provider_mask
-    @provider_mask || provider_id
-  end
-
-  def provider_mask=(the_provider_mask)
-    self.provider_id_will_change! # trigger saving of this model
-
-    if is_number?(the_provider_mask)
-      self.provider_id = the_provider_mask
-    else
-      organization = Organization.find_or_create_by_name(the_provider_mask)
-      self.provider_id = organization.id if organization.id.present?
-    end
-
-    @provider_mask   = self.provider_id
-  end
-
   def spend_mask
     @spend_mask || spend
   end
@@ -83,7 +65,7 @@ class SubActivity < Activity
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
       csv << header_row
-      
+
       if activity
         activity.sub_activities.each do |sa|
           row = [sa.provider.try(:name), sa.spend, sa.budget]

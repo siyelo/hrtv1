@@ -1393,8 +1393,9 @@ var activities_bulk_create = {
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
-        activityBox.html(data);
+        activityBox.html(data.html);
         initDemoText(activityBox.find('*[data-hint]'));
+        activityBox.find(".combobox").combobox();
       });
     });
 
@@ -1424,6 +1425,8 @@ var activities_bulk_create = {
         activityBox.find('.project_sub_form_hint').show();
       }
     });
+
+    $(".combobox").combobox(); // for pretty currency select
   }
 }
 

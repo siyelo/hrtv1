@@ -98,7 +98,10 @@
 
       destroy: function() {
         this.input.remove();
-        this.button.remove();
+        // NOTE: original file change here with this condition
+        if (typeof(this.button) !== 'undefined') {
+          this.button.remove();
+        }
         this.element.show();
         $.Widget.prototype.destroy.call( this );
       }

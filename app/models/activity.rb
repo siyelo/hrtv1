@@ -726,7 +726,7 @@ class Activity < ActiveRecord::Base
     end
 
     def approved_activity_cannot_be_changed
-      errors.add(:approved, "approved activity cannot be changed") if changed? and approved and changed != ["approved"]
+      errors.add(:base, "Activity was approved by SysAdmin and cannot be changed") if changed? and approved and changed != ["approved"]
     end
 
     #currency is still derived from the parent project or DR

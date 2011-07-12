@@ -159,7 +159,6 @@ END
                            :start_date => attributes["start_date"],
                            :end_date => attributes["end_date"])
     activity.data_response_id = data_response_id
-    debugger
     activity
   end
 

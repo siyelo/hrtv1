@@ -5,10 +5,9 @@
 
 = render 'breadcrumb', :response => @response, :project => @project
 
-%h1.main_heading New Project
-
-.main_heading
-  = render 'help'
+%h1.main_heading
+  New Project
+  %span= render 'help'
 
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."

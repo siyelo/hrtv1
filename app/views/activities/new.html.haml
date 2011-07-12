@@ -6,10 +6,9 @@
 
 = render 'breadcrumb', :response => @response, :activity => @activity
 
-%h1.main_heading New Activity
-
-.main_heading
-  = render 'help'
+%h1.main_heading
+  New Activity
+  %span= render 'help'
 
 = render 'activities/tab_nav', :activity => @activity
 

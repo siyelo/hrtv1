@@ -4,10 +4,9 @@
 
 = render 'breadcrumb', :response => @response, :activity => @other_cost
 
-%h1.main_heading Edit Other Cost
-
-.main_heading
-  = render 'help'
+%h1.main_heading
+  Edit Other Cost
+  %span= render 'help'
 
 %ul.response-notice
   - if @response.data_request.spend?

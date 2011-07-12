@@ -4,4 +4,4 @@
     %li= link_to nice_name(activity.project), edit_response_project_path(response, activity.project)
   %li== #{activity.class.to_s.underscore.humanize.pluralize.titleize}
   %li= link_to nice_name(activity), link
-  %li.last== #{type}
+  %li.last== #{type == 'Budget' ? "Current Budget" : "Past Expenditure"}

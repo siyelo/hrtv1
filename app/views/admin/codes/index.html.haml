@@ -37,16 +37,22 @@
   %thead
     %tr
       %th= sortable "short_display"
+      %th= sortable "code_level"
       %th= sortable "type"
       %th= sortable "description"
+      %th= sortable "child_health"
+      %th.dummy= "CONTEXT"
       %th
 
   %tbody
     - @codes.each do |code|
       %tr{:class => cycle("even", "odd")}
         %td= code.short_display
+        %td= code.code_level
         %td= code.type
         %td= code.description
+        %td= code.child_health
+        %td= code.context
         %td
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_code_path(code)

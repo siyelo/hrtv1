@@ -6,9 +6,9 @@ class Code < ActiveRecord::Base
 
   ### Attributes
   attr_writer   :type_string
-  attr_accessible :short_display, :long_display, :description, :official_name,
+  attr_accessible :short_display, :long_display, :description, :official_name, :child_health, :code_level,
                   :hssp2_stratprog_val, :hssp2_stratobj_val, :sub_account,
-                  :nasa_code, :nha_code, :type_string, :parent_id, :type
+                  :nasa_code, :nha_code, :type_string, :parent_id, :type, :full_name
 
   def type_string
     @type_string || self[:type]

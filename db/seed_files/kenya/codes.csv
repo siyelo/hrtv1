@@ -1,743 +1,232 @@
-"delete","a through E","cols","after","numbering","Classifications",,"id","parent_id","class","stratprog","stratobj","stratobj2","type","short_display","char count","long_display","description","subaccount","NHA_code","NASA_Code"
-"KEPH Services",,,,,"KEPH Services",,1,,"KEPH Services",,,,"Mtef","KEPH Services",,,,,,
-,"Child Health",,,,"Child Health",102,102,1,"Child Health",,,,"Mtef","Child Health",,,,,,
-,,"Maternal & Newborn Health",,,"Maternal & Newborn Health",10202,10202,102,"Maternal & Newborn Health",,,,"Mtef","Maternal & Newborn Health",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10202,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10202,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10202,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10202,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10202,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",103,,10202,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Management of Childhood Illnesses",,,"Management of Childhood Illnesses",10302,10203,102,"Management of Childhood Illnesses",,,,"Mtef","Management of Childhood Illnesses",,,,,,
-,,,"IMNCI (integrated services)",,"IMNCI (integrated services)",,1020301,10203,"IMNCI (integrated services)",,,,"Mtef","IMNCI (integrated services)",,,,,,
-,,,,,"Training TOTs and service providers",,,1020301,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,,"Procurement of commodities & supplies",,,1020301,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,,"Procurement of equipment",,,1020301,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,,"Procuring/providing treatment guideline materials",,,1020301,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,,"Operational support for service delivery",,,1020301,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,,"Procuring/providing IEC/BCC materials",,,1020301,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,,"Operational support for IEC/BCC activities",,,1020301,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Management of diarrhoea",,"Management of diarrhoea",,1020302,10203,"Management of diarrhoea",,,,"Mtef","Management of diarrhoea",,,,,,
-,,,,,"Training TOTs and service providers",,,1020302,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,,"Procurement of commodities & supplies",,,1020302,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,,"Procurement of equipment",,,1020302,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,,"Procuring/providing treatment guideline materials",,,1020302,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,,"Operational support for service delivery",105,,1020302,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,,"Procuring/providing IEC/BCC materials",,,1020302,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,,"Operational support for IEC/BCC activities",,,1020302,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"ARI / pneumonia",,"ARI / pneumonia",,1020303,10203,"ARI / pneumonia",,,,"Mtef","ARI / pneumonia",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1020303,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1020303,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1020303,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",,,1020303,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1020303,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1020303,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020303,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Malaria",,"Malaria",,1020304,10203,"Malaria",,,,"Mtef","Malaria",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1020304,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies - IPT","Procurement of commodities & supplies - IPT",10502,,1020304,"Procurement of commodities & supplies - IPT",,,,"Mtef","Procurement of commodities & supplies - IPT",,,,,,
-,,,,"Procurement of commodities & supplies - ACTs","Procurement of commodities & supplies - ACTs",106,,1020304,"Procurement of commodities & supplies - ACTs",,,,"Mtef","Procurement of commodities & supplies - ACTs",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",2,,1020304,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",201,,1020304,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",20101,,1020304,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",20102,,1020304,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020304,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"PMTCT",,"PMTCT",,1020305,10203,"PMTCT",,,,"Mtef","PMTCT",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",202,,1020305,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",20201,,1020305,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",20202,,1020305,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",203,,1020305,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",20301,,1020305,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",20302,,1020305,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020305,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Paediatric HIV/AIDS",,"Paediatric HIV/AIDS",204,1020306,10203,"Paediatric HIV/AIDS",,,,"Mtef","Paediatric HIV/AIDS",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",20401,,1020306,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",20402,,1020306,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",205,,1020306,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",20501,,1020306,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",20502,,1020306,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",206,,1020306,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020306,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Immunisation (KEPI)",,"Immunisation (KEPI)",207,1020307,10203,"Immunisation (KEPI)",,,,"Mtef","Immunisation (KEPI)",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",208,,1020307,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of vaccines","Procurement of vaccines",3,,1020307,"Procurement of vaccines",,,,"Mtef","Procurement of vaccines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",301,,1020307,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of cold chain equipment","Procurement of cold chain equipment",30101,,1020307,"Procurement of cold chain equipment",,,,"Mtef","Procurement of cold chain equipment",,,,,,
-,,,,"Procurement of other equipment","Procurement of other equipment",30102,,1020307,"Procurement of other equipment",,,,"Mtef","Procurement of other equipment",,,,,,
-,,,,"Procuring/providing KEPI guideline materials","Procuring/providing KEPI guideline materials",302,,1020307,"Procuring/providing KEPI guideline materials",,,,"Mtef","Procuring/providing KEPI guideline materials",,,,,,
-,,,,"Operational support for cold chain management","Operational support for cold chain management",30201,,1020307,"Operational support for cold chain management",,,,"Mtef","Operational support for cold chain management",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",30202,,1020307,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",303,,1020307,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020307,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Nutrition",,,"Nutrition",90201010601,10204,102,"Nutrition",,,,"Mtef","Nutrition",,,,,,
-,,,"Micronutrients",,"Micronutrients",902010107,1020401,10204,"Micronutrients",,,,"Mtef","Micronutrients",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",90201010701,,1020401,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of micronutrient commodities","Procurement of micronutrient commodities",9020101070101,,1020401,"Procurement of micronutrient commodities",,,,"Mtef","Procurement of micronutrient commodities",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",9020101070102,,1020401,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",9020101070103,,1020401,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",9020102,,1020401,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",9020103,,1020401,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",902010301,,1020401,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020401,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Baby Friendly Hospitals",,"Baby Friendly Hospitals",90201030101,1020402,10204,"Baby Friendly Hospitals",,,,"Mtef","Baby Friendly Hospitals",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",9020104,,1020402,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",902010401,,1020402,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",90201040101,,1020402,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",902010402,,1020402,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",90201040201,,1020402,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020402,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Breastfeeding",,"Breastfeeding",90207,1020403,10204,"Breastfeeding",,,,"Mtef","Breastfeeding",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",9020701,,1020403,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",902070101,,1020403,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020403,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Infant/child feeding support",,"Infant/child feeding support",90207010101,1020404,10204,"Infant/child feeding support",,,,"Mtef","Infant/child feeding support",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",902070102,,1020404,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of food commodities ","Procurement of food commodities ",90207010201,,1020404,"Procurement of food commodities ",,,,"Mtef","Procurement of food commodities ",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",9020702,,1020404,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",902070201,,1020404,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing treatment guidelines","Procuring/providing treatment guidelines",90208,,1020404,"Procuring/providing treatment guidelines",,,,"Mtef","Procuring/providing treatment guidelines",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",9020801,,1020404,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1020404,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",902080101,,1020404,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"School Health",,,"School Health",,10205,102,"School Health",,,,"Mtef","School Health",,,,,,
-,,,"School health education",,"School health education",902080102,1020501,10205,"School health education",,,,"Mtef","School health education",,,,,,
-,,,,"Training TOTs and teachers","Training TOTs and teachers",90203,,1020501,"Training TOTs and teachers",,,,"Mtef","Training TOTs and teachers",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",9020802,,1020501,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020501,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Deworming",,"Deworming",902080201,1020502,10205,"Deworming",,,,"Mtef","Deworming",,,,,,
-,,,,"Training TOTs and service providers & teachers","Training TOTs and service providers & teachers",9020803,,1020502,"Training TOTs and service providers & teachers",,,,"Mtef","Training TOTs and service providers & teachers",,,,,,
-,,,,"Procuring/providing treatment guidelines","Procuring/providing treatment guidelines",903,,1020502,"Procuring/providing treatment guidelines",,,,"Mtef","Procuring/providing treatment guidelines",,,,,,
-,,,,"Procurement of deworming drugs & supplies","Procurement of deworming drugs & supplies",904,,1020502,"Procurement of deworming drugs & supplies",,,,"Mtef","Procurement of deworming drugs & supplies",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",905,,1020502,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",90501,,1020502,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020502,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Safe water",,"Safe water",90502,1020503,10205,"Safe water",,,,"Mtef","Safe water",,,,,,
-,,,,"Training TOTs and teachers","Training TOTs and teachers",90503,,1020503,"Training TOTs and teachers",,,,"Mtef","Training TOTs and teachers",,,,,,
-,,,,"Infrastructure improvement for safe water","Infrastructure improvement for safe water",90504,,1020503,"Infrastructure improvement for safe water",,,,"Mtef","Infrastructure improvement for safe water",,,,,,
-,,,,"Procurement of safe water equipment","Procurement of safe water equipment",90505,,1020503,"Procurement of safe water equipment",,,,"Mtef","Procurement of safe water equipment",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",906,,1020503,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",90601,,1020503,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020503,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Sanitation & hygiene",,"Sanitation & hygiene",90602,1020504,10205,"Sanitation & hygiene",,,,"Mtef","Sanitation & hygiene",,,,,,
-,,,,"Training TOTs and teachers","Training TOTs and teachers",907,,1020504,"Training TOTs and teachers",,,,"Mtef","Training TOTs and teachers",,,,,,
-,,,,"Infrastructure improvement for latrines","Infrastructure improvement for latrines",908,,1020504,"Infrastructure improvement for latrines",,,,"Mtef","Infrastructure improvement for latrines",,,,,,
-,,,,"Procurement of equipment for hand-washing","Procurement of equipment for hand-washing",,,1020504,"Procurement of equipment for hand-washing",,,,"Mtef","Procurement of equipment for hand-washing",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",,,1020504,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1020504,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1020504,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Community services",,,"Community services",,10206,102,"Community services",,,,"Mtef","Community services",,,,,,
-,,,"Community service delivery",,"Community service delivery",,1020601,10206,"Community service delivery",,,,"Mtef","Community service delivery",,,,,,
-,,,,"Training TOTs and community service providers","Training TOTs and community service providers",,,1020601,"Training TOTs and community service providers",,,,"Mtef","Training TOTs and community service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1020601,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1020601,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1020601,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for community service delivery","Operational support for community service delivery",,,1020601,"Operational support for community service delivery",,,,"Mtef","Operational support for community service delivery",,,,,,
-,,,"HRH for child health/MNH services",,"HRH for child health/MNH services",,1020602,10206,"HRH for child health/MNH services",,,,"Mtef","HRH for child health/MNH services",,,,,,
-,,,,"Contracting service providers for child health/MNH services","Contracting service providers for child health/MNH services",,,1020602,"Contracting service providers for child health/MNH services",,,,"Mtef","Contracting service providers for child health/MNH services",,,,,,
-,,,,"Support for community-based service providers (salaries or equivalent allowances)","Support for community-based service providers (salaries or equivalent allowances)",,,1020602,"Support for community-based service providers (salaries or equivalent allowances)",,,,"Mtef","Support for community-based service providers (salaries or equivalent allowances)",,,,,,
-,"Community Services",,,,"Community Services",,103,1,"Community Services",,,,"Mtef","Community Services",,,,,,
-,,,"Community service delivery",,"Community service delivery",,10301,103,"Community service delivery",,,,"Mtef","Community service delivery",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10301,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10301,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10301,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10301,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10301,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10301,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10301,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"HRH for community services",,"HRH for community services",,10302,103,"HRH for community services",,,,"Mtef","HRH for community services",,,,,,
-,,,,"Support for community-based service providers (salaries or equivalent allowances)","Support for community-based service providers (salaries or equivalent allowances)",,,10302,"Support for community-based service providers (salaries or equivalent allowances)",,,,"Mtef","Support for community-based service providers (salaries or equivalent allowances)",,,,,,
-,"Emergency Response",,,,"Emergency Response",,104,1,"Emergency Response",,,,"Mtef","Emergency Response",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,104,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,104,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of food commodities and supplies","Procurement of food commodities and supplies",,,104,"Procurement of food commodities and supplies",,,,"Mtef","Procurement of food commodities and supplies",,,,,,
-,,,,"Procurement of medical commodities and supplies","Procurement of medical commodities and supplies",,,104,"Procurement of medical commodities and supplies",,,,"Mtef","Procurement of medical commodities and supplies",,,,,,
-,,,,"Procurement of sanitation supplies and equipment","Procurement of sanitation supplies and equipment",,,104,"Procurement of sanitation supplies and equipment",,,,"Mtef","Procurement of sanitation supplies and equipment",,,,,,
-,,,,"Procurement of safe water supplies and equipment","Procurement of safe water supplies and equipment",,,104,"Procurement of safe water supplies and equipment",,,,"Mtef","Procurement of safe water supplies and equipment",,,,,,
-,,,,"Procurement of shelter materials and supplies","Procurement of shelter materials and supplies",,,104,"Procurement of shelter materials and supplies",,,,"Mtef","Procurement of shelter materials and supplies",,,,,,
-,,,,"Procurement of other commodities and supplies","Procurement of other commodities and supplies",,,104,"Procurement of other commodities and supplies",,,,"Mtef","Procurement of other commodities and supplies",,,,,,
-,,,,"Procurement of other equipment","Procurement of other equipment",,,104,"Procurement of other equipment",,,,"Mtef","Procurement of other equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,104,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,104,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,104,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Environmental Health & Sanitation",,,,"Environmental Health & Sanitation",,105,1,"Environmental Health & Sanitation",,,,"Mtef","Environmental Health & Sanitation",,,,,,
-,,,"Water safety",,"Water safety",,10501,105,"Water safety",,,,"Mtef","Water safety",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10501,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10501,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Infrastructure improvement for safe water","Infrastructure improvement for safe water",,,10501,"Infrastructure improvement for safe water",,,,"Mtef","Infrastructure improvement for safe water",,,,,,
-,,,,"Procurement of safe water equipment","Procurement of safe water equipment",,,10501,"Procurement of safe water equipment",,,,"Mtef","Procurement of safe water equipment",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",,,10501,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10501,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10501,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10501,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Sanitation & hygiene",,"Sanitation & hygiene",,10502,105,"Sanitation & hygiene",,,,"Mtef","Sanitation & hygiene",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10502,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10502,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Infrastructure improvement for latrines","Infrastructure improvement for latrines",,,10502,"Infrastructure improvement for latrines",,,,"Mtef","Infrastructure improvement for latrines",,,,,,
-,,,,"Procurement of equipment for hand-washing","Procurement of equipment for hand-washing",,,10502,"Procurement of equipment for hand-washing",,,,"Mtef","Procurement of equipment for hand-washing",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",,,10502,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10502,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10502,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10502,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Medical waste management",,"Medical waste management",,10503,105,"Medical waste management",,,,"Mtef","Medical waste management",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10503,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10503,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Infrastructure improvement for waste disposal","Infrastructure improvement for waste disposal",,,10503,"Infrastructure improvement for waste disposal",,,,"Mtef","Infrastructure improvement for waste disposal",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10503,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10503,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10503,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10503,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10503,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Food safety",,"Food safety",,10504,105,"Food safety",,,,"Mtef","Food safety",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10504,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10504,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10504,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10504,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10504,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10504,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10504,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Port Health",,"Port Health",,10505,105,"Port Health",,,,"Mtef","Port Health",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10505,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10505,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10505,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10505,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10505,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10505,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10505,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Vector & Vermin Control",,"Vector & Vermin Control",,10506,105,"Vector & Vermin Control",,,,"Mtef","Vector & Vermin Control",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10506,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10506,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10506,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10506,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10506,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10506,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10506,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Pollution Control & Housing",,"Pollution Control & Housing",,10507,105,"Pollution Control & Housing",,,,"Mtef","Pollution Control & Housing",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10507,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10507,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10507,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10507,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10507,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10507,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10507,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Occupational Health",,"Occupational Health",,10508,105,"Occupational Health",,,,"Mtef","Occupational Health",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10508,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10508,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,10508,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10508,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10508,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10508,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10508,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Gender-based Violence",,,,"Gender-based Violence",,106,1,"Gender-based Violence",,,,"Mtef","Gender-based Violence",,,,,,
-,,,"Gender-based Violence services",,"Gender-based Violence services",,10601,106,"Gender-based Violence services",,,,"Mtef","Gender-based Violence services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10601,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10601,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,10601,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10601,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10601,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,10601,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10601,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10601,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Health Promotion",,,"Health Promotion","Health Promotion",,107,1,"Health Promotion",,,,"Mtef","Health Promotion",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,107,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,107,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,107,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"HIV/AIDS",,,"HIV/AIDS","HIV/AIDS",,108,1,"HIV/AIDS",,,,"Mtef","HIV/AIDS",,,,,,
-,,"Prevention",,"Prevention","Prevention",,10801,108,"Prevention",,,,"Mtef","Prevention",,,,,,
-,,,"VCT services","VCT services","VCT services",,1080101,10801,"VCT services",,,,"Mtef","VCT services",,,,,,
-,,,,"Training TOTs and VCT service providers","Training TOTs and VCT service providers",,,1080101,"Training TOTs and VCT service providers",,,,"Mtef","Training TOTs and VCT service providers",,,,,,
-,,,,"Procurement of test kits & diagnostic supplies","Procurement of test kits & diagnostic supplies",,,1080101,"Procurement of test kits & diagnostic supplies",,,,"Mtef","Procurement of test kits & diagnostic supplies",,,,,,
-,,,,"Procurement of diagnostic equipment","Procurement of diagnostic equipment",,,1080101,"Procurement of diagnostic equipment",,,,"Mtef","Procurement of diagnostic equipment",,,,,,
-,,,,"Operational support VCT service delivery","Operational support VCT service delivery",,,1080101,"Operational support VCT service delivery",,,,"Mtef","Operational support VCT service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080101,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080101,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"PMTCT","PMTCT","PMTCT",,1080102,10801,"PMTCT",,,,"Mtef","PMTCT",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080102,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080102,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080102,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for PMTCT service delivery","Operational support for PMTCT service delivery",,,1080102,"Operational support for PMTCT service delivery",,,,"Mtef","Operational support for PMTCT service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080102,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080102,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Condoms","Condoms","Condoms",,1080103,10801,"Condoms",,,,"Mtef","Condoms",,,,,,
-,,,,"Procurement of condoms","Procurement of condoms",,,1080103,"Procurement of condoms",,,,"Mtef","Procurement of condoms",,,,,,
-,,,"Male circumcision","Male circumcision","Male circumcision",,1080104,10801,"Male circumcision",,,,"Mtef","Male circumcision",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080104,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080104,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080104,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080104,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080104,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080104,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"IEC/BCC (general)","IEC/BCC (general)","IEC/BCC (general)",,1080105,10801,"IEC/BCC (general)",,,,"Mtef","IEC/BCC (general)",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080105,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080105,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080105,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Safe medical injections","Safe medical injections","Safe medical injections",,1080106,10801,"Safe medical injections",,,,"Mtef","Safe medical injections",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080106,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080106,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,"Post-exposure prophylaxis (PEP)",,"Post-exposure prophylaxis (PEP)",,1080107,10801,"Post-exposure prophylaxis (PEP)",,,,"Mtef","Post-exposure prophylaxis (PEP)",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080107,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of PEP drugs & supplies","Procurement of PEP drugs & supplies",,,1080107,"Procurement of PEP drugs & supplies",,,,"Mtef","Procurement of PEP drugs & supplies",,,,,,
-,,,,"Operational support for PEP service delivery","Operational support for PEP service delivery",,,1080107,"Operational support for PEP service delivery",,,,"Mtef","Operational support for PEP service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080107,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080107,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Blood safety",,"Blood safety",,1080108,10801,"Blood safety",,,,"Mtef","Blood safety",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080108,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080108,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080108,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080108,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,"Care & treatment",,,"Care & treatment",,10802,108,"Care & treatment",,,,"Mtef","Care & treatment",,,,,,
-,,,"ARV treatment",,"ARV treatment",,1080201,10802,"ARV treatment",,,,"Mtef","ARV treatment",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080201,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",,,1080201,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Procurement of drugs (ARVs) - adult","Procurement of drugs (ARVs) - adult",,,1080201,"Procurement of drugs (ARVs) - adult",,,,"Mtef","Procurement of drugs (ARVs) - adult",,,,,,
-,,,,"Procurement of drugs (ARVs) - paediatric","Procurement of drugs (ARVs) - paediatric",,,1080201,"Procurement of drugs (ARVs) - paediatric",,,,"Mtef","Procurement of drugs (ARVs) - paediatric",,,,,,
-,,,,"Operational support for HIV/AIDS service delivery","Operational support for HIV/AIDS service delivery",,,1080201,"Operational support for HIV/AIDS service delivery",,,,"Mtef","Operational support for HIV/AIDS service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080201,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080201,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Nutritional support",,"Nutritional support",,1080202,10802,"Nutritional support",,,,"Mtef","Nutritional support",,,,,,
-,,,,"Procurement of food commodities","Procurement of food commodities",,,1080202,"Procurement of food commodities",,,,"Mtef","Procurement of food commodities",,,,,,
-,,,,"Operational support for nutrition services","Operational support for nutrition services",,,1080202,"Operational support for nutrition services",,,,"Mtef","Operational support for nutrition services",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080202,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080202,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Opportunistic Infections (OI)",,"Opportunistic Infections (OI)",,1080203,10802,"Opportunistic Infections (OI)",,,,"Mtef","Opportunistic Infections (OI)",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080203,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",,,1080203,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Procurement of OI drugs and supplies","Procurement of OI drugs and supplies",,,1080203,"Procurement of OI drugs and supplies",,,,"Mtef","Procurement of OI drugs and supplies",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080203,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080203,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080203,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Laboratory services HIV/AIDS",,"Laboratory services HIV/AIDS",,1080204,10802,"Laboratory services HIV/AIDS",,,,"Mtef","Laboratory services HIV/AIDS",,,,,,
-,,,,"Training laboratory techs","Training laboratory techs",,,1080204,"Training laboratory techs",,,,"Mtef","Training laboratory techs",,,,,,
-,,,,"Procurement of test kits & diagnostic supplies","Procurement of test kits & diagnostic supplies",,,1080204,"Procurement of test kits & diagnostic supplies",,,,"Mtef","Procurement of test kits & diagnostic supplies",,,,,,
-,,,,"Procurement of diagnostic equipment","Procurement of diagnostic equipment",,,1080204,"Procurement of diagnostic equipment",,,,"Mtef","Procurement of diagnostic equipment",,,,,,
-,,,,"Procuring/providing technical guideline materials","Procuring/providing technical guideline materials",,,1080204,"Procuring/providing technical guideline materials",,,,"Mtef","Procuring/providing technical guideline materials",,,,,,
-,,,,"Operational support for lab services","Operational support for lab services",,,1080204,"Operational support for lab services",,,,"Mtef","Operational support for lab services",,,,,,
-,,,"Home-based care",,"Home-based care",,1080205,10802,"Home-based care",,,,"Mtef","Home-based care",,,,,,
-,,,,"Training TOTs and home-based care providers","Training TOTs and home-based care providers",,,1080205,"Training TOTs and home-based care providers",,,,"Mtef","Training TOTs and home-based care providers",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080205,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Operational support for home-based care services","Operational support for home-based care services",,,1080205,"Operational support for home-based care services",,,,"Mtef","Operational support for home-based care services",,,,,,
-,,,"HRH for HIV/AIDS",,"HRH for HIV/AIDS",,1080206,10802,"HRH for HIV/AIDS",,,,"Mtef","HRH for HIV/AIDS",,,,,,
-,,,,"Contracting service providers for HIV/AIDS","Contracting service providers for HIV/AIDS",,,1080206,"Contracting service providers for HIV/AIDS",,,,"Mtef","Contracting service providers for HIV/AIDS",,,,,,
-,,,,"Support for community-based service providers (salaries or equivalent allowances)","Support for community-based service providers (salaries or equivalent allowances)",,,1080206,"Support for community-based service providers (salaries or equivalent allowances)",,,,"Mtef","Support for community-based service providers (salaries or equivalent allowances)",,,,,,
-,,,"Psychological treatment & support",,"Psychological treatment & support",,1080207,10802,"Psychological treatment & support",,,,"Mtef","Psychological treatment & support",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080207,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080207,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,"OVCs",,,"OVCs",,10803,108,"OVCs",,,,"Mtef","OVCs",,,,,,
-,,,"Educational support",,"Educational support",,1080208,10803,"Educational support",,,,"Mtef","Educational support",,,,,,
-,,,,"Education grants for OVC","Education grants for OVC",,,1080208,"Education grants for OVC",,,,"Mtef","Education grants for OVC",,,,,,
-,,,"Family support",,"Family support",,1080209,10803,"Family support",,,,"Mtef","Family support",,,,,,
-,,,,"Family grants/cash transfers for OVC support","Family grants/cash transfers for OVC support",,,1080209,"Family grants/cash transfers for OVC support",,,,"Mtef","Family grants/cash transfers for OVC support",,,,,,
-,,,"Home support",,"Home support",,1080210,10803,"Home support",,,,"Mtef","Home support",,,,,,
-,,,,"Support for income-generation activities","Support for income-generation activities",,,1080210,"Support for income-generation activities",,,,"Mtef","Support for income-generation activities",,,,,,
-,,,,"OTHER??","OTHER??",,,1080210,"OTHER??",,,,"Mtef","OTHER??",,,,,,
-,"Malaria",,,,"Malaria",,109,1,"Malaria",,,,"Mtef","Malaria",,,,,,
-,,"Prevention",,,"Prevention",,10804,109,"Prevention",,,,"Mtef","Prevention",,,,,,
-,,,"LLITNs",,"LLITNs",,1080211,10804,"LLITNs",,,,"Mtef","LLITNs",,,,,,
-,,,,"Procurement of LLITNs","Procurement of LLITNs",,,1080211,"Procurement of LLITNs",,,,"Mtef","Procurement of LLITNs",,,,,,
-,,,,"Distribution of LLITNs","Distribution of LLITNs",,,1080211,"Distribution of LLITNs",,,,"Mtef","Distribution of LLITNs",,,,,,
-,,,"IRS",,"IRS",,1080212,10804,"IRS",,,,"Mtef","IRS",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080212,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of IRS commodities & equipment","Procurement of IRS commodities & equipment",,,1080212,"Procurement of IRS commodities & equipment",,,,"Mtef","Procurement of IRS commodities & equipment",,,,,,
-,,,,"Operational support for IRS services","Operational support for IRS services",,,1080212,"Operational support for IRS services",,,,"Mtef","Operational support for IRS services",,,,,,
-,,,"IEC/BCC",,"IEC/BCC",,1080213,10804,"IEC/BCC",,,,"Mtef","IEC/BCC",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080213,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080213,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080213,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"IPT",,"IPT",,1080214,10804,"IPT",,,,"Mtef","IPT",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080214,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of drugs for IPT","Procurement of drugs for IPT",,,1080214,"Procurement of drugs for IPT",,,,"Mtef","Procurement of drugs for IPT",,,,,,
-,,,,"Operational support for IPT service delivery","Operational support for IPT service delivery",,,1080214,"Operational support for IPT service delivery",,,,"Mtef","Operational support for IPT service delivery",,,,,,
-,,"Care & treatment",,,"Care & treatment",,10805,108,"Care & treatment",,,,"Mtef","Care & treatment",,,,,,
-,,,"Diagnotics & treatment",,"Diagnotics & treatment",,1080215,10805,"Diagnotics & treatment",,,,"Mtef","Diagnotics & treatment",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080215,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing treatment guideline materials","Procuring/providing treatment guideline materials",,,1080215,"Procuring/providing treatment guideline materials",,,,"Mtef","Procuring/providing treatment guideline materials",,,,,,
-,,,,"Procurement of drugs (ACTs)","Procurement of drugs (ACTs)",,,1080215,"Procurement of drugs (ACTs)",,,,"Mtef","Procurement of drugs (ACTs)",,,,,,
-,,,,"Procurement of test kits & diagnostics","Procurement of test kits & diagnostics",,,1080215,"Procurement of test kits & diagnostics",,,,"Mtef","Procurement of test kits & diagnostics",,,,,,
-,,,,"Operational support for malaria service delivery","Operational support for malaria service delivery",,,1080215,"Operational support for malaria service delivery",,,,"Mtef","Operational support for malaria service delivery",,,,,,
-,"Non-Communicable Diseases (NCD)",,,,"Non-Communicable Diseases (NCD)",,110,1,"Non-Communicable Diseases (NCD)",,,,"Mtef","Non-Communicable Diseases (NCD)",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,110,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,110,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,110,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,110,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,110,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,110,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,110,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Nutrition",,,,"Nutrition",,111,1,"Nutrition",,,,"Mtef","Nutrition",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,111,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procurement of food commodities ","Procurement of food commodities ",,,111,"Procurement of food commodities ",,,,"Mtef","Procurement of food commodities ",,,,,,
-,,,,"Procurement of micronutrient commodities ","Procurement of micronutrient commodities ",,,111,"Procurement of micronutrient commodities ",,,,"Mtef","Procurement of micronutrient commodities ",,,,,,
-,,,,"Procurement of other commodities & supplies","Procurement of other commodities & supplies",,,111,"Procurement of other commodities & supplies",,,,"Mtef","Procurement of other commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,111,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,111,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,111,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,111,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,111,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Reproductive & Maternal Health",,,,"Reproductive & Maternal Health",,112,1,"Reproductive & Maternal Health",,,,"Mtef","Reproductive & Maternal Health",,,,,,
-,,"ANC services",,,"ANC services",,10806,112,"ANC services",,,,"Mtef","ANC services",,,,,,
-,,,"ANC services",,"ANC services",,1080216,10806,"ANC services",,,,"Mtef","ANC services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080216,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080216,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities & supplies","Procurement of commodities & supplies",,,1080216,"Procurement of commodities & supplies",,,,"Mtef","Procurement of commodities & supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080216,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for ANC service delivery","Operational support for ANC service delivery",,,1080216,"Operational support for ANC service delivery",,,,"Mtef","Operational support for ANC service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080216,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080216,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"PMTCT for HIV/AIDS",,"PMTCT for HIV/AIDS",,1080217,10806,"PMTCT for HIV/AIDS",,,,"Mtef","PMTCT for HIV/AIDS",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080217,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080217,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of PMTCT drugs and supplies","Procurement of PMTCT drugs and supplies",,,1080217,"Procurement of PMTCT drugs and supplies",,,,"Mtef","Procurement of PMTCT drugs and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080217,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for PMTCT service delivery","Operational support for PMTCT service delivery",,,1080217,"Operational support for PMTCT service delivery",,,,"Mtef","Operational support for PMTCT service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080217,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080217,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"IPT for malaria",,"IPT for malaria",,1080218,10806,"IPT for malaria",,,,"Mtef","IPT for malaria",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080218,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080218,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of IPT drugs and supplies","Procurement of IPT drugs and supplies",,,1080218,"Procurement of IPT drugs and supplies",,,,"Mtef","Procurement of IPT drugs and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080218,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for IPT service delivery","Operational support for IPT service delivery",,,1080218,"Operational support for IPT service delivery",,,,"Mtef","Operational support for IPT service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080218,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080218,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Safe Delivery services",,,"Safe Delivery services",,10807,112,"Safe Delivery services",,,,"Mtef","Safe Delivery services",,,,,,
-,,,"Normal delivery services",,"Normal delivery services",,1080219,10807,"Normal delivery services",,,,"Mtef","Normal delivery services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080219,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080219,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,1080219,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080219,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080219,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,1080219,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080219,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080219,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Targeted post-partum care",,"Targeted post-partum care",,1080220,10807,"Targeted post-partum care",,,,"Mtef","Targeted post-partum care",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080220,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080220,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,1080220,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080220,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,1080220,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,1080220,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080220,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080220,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"Post-abortion care",,"Post-abortion care",,1080221,10807,"Post-abortion care",,,,"Mtef","Post-abortion care",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080221,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080221,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,1080221,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080221,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for PAC service delivery","Operational support for PAC service delivery",,,1080221,"Operational support for PAC service delivery",,,,"Mtef","Operational support for PAC service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,1080221,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080221,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080221,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"BEOC services",,"BEOC services",,1080222,10807,"BEOC services",,,,"Mtef","BEOC services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080222,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080222,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,1080222,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080222,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procurement of ambulances","Procurement of ambulances",,,1080222,"Procurement of ambulances",,,,"Mtef","Procurement of ambulances",,,,,,
-,,,,"Operational support for BEOC service delivery","Operational support for BEOC service delivery",,,1080222,"Operational support for BEOC service delivery",,,,"Mtef","Operational support for BEOC service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,1080222,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080222,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080222,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,,"CEOC services",,"CEOC services",,1080223,10807,"CEOC services",,,,"Mtef","CEOC services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,1080223,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,1080223,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,1080223,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,1080223,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Procurement of ambulances","Procurement of ambulances",,,1080223,"Procurement of ambulances",,,,"Mtef","Procurement of ambulances",,,,,,
-,,,,"Operational support for CEOC service delivery","Operational support for CEOC service delivery",,,1080223,"Operational support for CEOC service delivery",,,,"Mtef","Operational support for CEOC service delivery",,,,,,
-,,,,"OBA voucher scheme support","OBA voucher scheme support",,,1080223,"OBA voucher scheme support",,,,"Mtef","OBA voucher scheme support",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,1080223,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,1080223,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Family Planning",,,"Family Planning",,10808,112,"Family Planning",,,,"Mtef","Family Planning",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10808,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10808,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of FP commodities & supplies","Procurement of FP commodities & supplies",,,10808,"Procurement of FP commodities & supplies",,,,"Mtef","Procurement of FP commodities & supplies",,,,,,
-,,,,"Procurement of condoms","Procurement of condoms",,,10808,"Procurement of condoms",,,,"Mtef","Procurement of condoms",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10808,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for FP  service delivery","Operational support for FP  service delivery",,,10808,"Operational support for FP  service delivery",,,,"Mtef","Operational support for FP  service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10808,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10808,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,,"Adolescent RH services",,,"Adolescent RH services",,10809,112,"Adolescent RH services",,,,"Mtef","Adolescent RH services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,10809,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,10809,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,10809,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,10809,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,10809,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,10809,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,10809,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Tuberculosis",,,,"Tuberculosis",,113,1,"Tuberculosis",,,,"Mtef","Tuberculosis",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,113,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,113,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,113,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,113,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,113,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,113,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,113,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Other vector-borne & neglected diseases",,,,"Other vector-borne & neglected diseases",,114,1,"Other vector-borne & neglected diseases",,,,"Mtef","Other vector-borne & neglected diseases",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,114,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,114,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,114,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,114,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,114,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,114,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,114,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Laboratory & diagnostic services",,,,"Laboratory & diagnostic services",,115,1,"Laboratory & diagnostic services",,,,"Mtef","Laboratory & diagnostic services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,115,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,115,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies","Procurement of commodities and supplies",,,115,"Procurement of commodities and supplies",,,,"Mtef","Procurement of commodities and supplies",,,,,,
-,,,,"Procurement of equipment","Procurement of equipment",,,115,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,,,"Infrastructure development for lab services","Infrastructure development for lab services",,,115,"Infrastructure development for lab services",,,,"Mtef","Infrastructure development for lab services",,,,,,
-,,,,"Operational support for service delivery","Operational support for service delivery",,,115,"Operational support for service delivery",,,,"Mtef","Operational support for service delivery",,,,,,
-,"Integrated KEPH services",,,,"Integrated KEPH services",,116,1,"Integrated KEPH services",,,,"Mtef","Integrated KEPH services",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,116,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Procuring/providing service delivery guidelines","Procuring/providing service delivery guidelines",,,116,"Procuring/providing service delivery guidelines",,,,"Mtef","Procuring/providing service delivery guidelines",,,,,,
-,,,,"Procurement of commodities and supplies (e.g. EMMS)","Procurement of commodities and supplies (e.g. EMMS)",,,116,"Procurement of commodities and supplies (e.g. EMMS)",,,,"Mtef","Procurement of commodities and supplies (e.g. EMMS)",,,,,,
-,,,,"Procurement of clinical equipment","Procurement of clinical equipment",,,116,"Procurement of clinical equipment",,,,"Mtef","Procurement of clinical equipment",,,,,,
-,,,,"Procurement of other (non-clinical) equipment","Procurement of other (non-clinical) equipment",,,116,"Procurement of other (non-clinical) equipment",,,,"Mtef","Procurement of other (non-clinical) equipment",,,,,,
-,,,,"Procurement of vehicles","Procurement of vehicles",,,116,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,,,"Operational support for PHC services L2-3 (e.g. HSSF)","Operational support for PHC services L2-3 (e.g. HSSF)",,,116,"Operational support for PHC services L2-3 (e.g. HSSF)",,,,"Mtef","Operational support for PHC services L2-3 (e.g. HSSF)",,,,,,
-,,,,"Operational support for hospital services (e.g. HMSF)","Operational support for hospital services (e.g. HMSF)",,,116,"Operational support for hospital services (e.g. HMSF)",,,,"Mtef","Operational support for hospital services (e.g. HMSF)",,,,,,
-,,,,"Procuring/providing IEC/BCC materials","Procuring/providing IEC/BCC materials",,,116,"Procuring/providing IEC/BCC materials",,,,"Mtef","Procuring/providing IEC/BCC materials",,,,,,
-,,,,"Operational support for IEC/BCC activities","Operational support for IEC/BCC activities",,,116,"Operational support for IEC/BCC activities",,,,"Mtef","Operational support for IEC/BCC activities",,,,,,
-,"Infrastructure development",,,,"Infrastructure development",,117,1,"Infrastructure development",,,,"Mtef","Infrastructure development",,,,,,
-,,,,"Training TOTs and service providers","Training TOTs and service providers",,,117,"Training TOTs and service providers",,,,"Mtef","Training TOTs and service providers",,,,,,
-,,,,"Infrastructure development L2-3 health facilities","Infrastructure development L2-3 health facilities",,,117,"Infrastructure development L2-3 health facilities",,,,"Mtef","Infrastructure development L2-3 health facilities",,,,,,
-,,,,"Infrastructure development L4-5 hospitals","Infrastructure development L4-5 hospitals",,,117,"Infrastructure development L4-5 hospitals",,,,"Mtef","Infrastructure development L4-5 hospitals",,,,,,
-,,,,"Operational support for infrastructure maintenance","Operational support for infrastructure maintenance",,,117,"Operational support for infrastructure maintenance",,,,"Mtef","Operational support for infrastructure maintenance",,,,,,
-"Health Systems",,,,,"Health Systems",,2,,"Health Systems",,,,"Mtef","Health Systems",,,,,,
-,"Disease Surveillance & Response",,,,"Disease Surveillance & Response",,118,2,"Disease Surveillance & Response",,,,"Mtef","Disease Surveillance & Response",,,,,,
-,,"TA",,,"TA",,,118,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,118,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,118,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,118,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,118,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,118,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for disease surveillance",,,"Systems development for disease surveillance",,,118,"Systems development for disease surveillance",,,,"Mtef","Systems development for disease surveillance",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,118,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,118,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,118,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,118,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,118,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Emergency Preparedness & Response",,,,"Emergency Preparedness & Response",,119,2,"Emergency Preparedness & Response",,,,"Mtef","Emergency Preparedness & Response",,,,,,
-,,"TA",,,"TA",,,119,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,119,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,119,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,119,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,119,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,119,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for monitoring",,,"Systems development for monitoring",,,119,"Systems development for monitoring",,,,"Mtef","Systems development for monitoring",,,,,,
-,,"Procurement of drugs & supplies",,,"Procurement of drugs & supplies",,,119,"Procurement of drugs & supplies",,,,"Mtef","Procurement of drugs & supplies",,,,,,
-,,"Procurement of equipment",,,"Procurement of equipment",,,119,"Procurement of equipment",,,,"Mtef","Procurement of equipment",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,119,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,119,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,119,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,119,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,119,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Financial management & accounting",,,,"Financial management & accounting",,120,2,"Financial management & accounting",,,,"Mtef","Financial management & accounting",,,,,,
-,,"TA",,,"TA",,,120,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,120,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,120,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Operations research",,,"Operations research",,,120,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for PFM",,,"Systems development for PFM",,,120,"Systems development for PFM",,,,"Mtef","Systems development for PFM",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,120,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,120,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,120,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,120,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,120,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,120,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Governance, policy & sector coordination",,,,"Governance, policy & sector coordination",,121,2,"Governance, policy & sector coordination",,,,"Mtef","Governance, policy & sector coordination",,,,,,
-,,"TA",,,"TA",,,121,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,121,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,121,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Operations research",,,"Operations research",,,121,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,121,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,121,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,121,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,121,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,121,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support (workshops, meetings, other)",,,"Operational support (workshops, meetings, other)",,,121,"Operational support (workshops, meetings, other)",,,,"Mtef","Operational support (workshops, meetings, other)",,,,,,
-,"Healthcare financing",,,,"Healthcare financing",,122,2,"Healthcare financing",,,,"Mtef","Healthcare financing",,,,,,
-,,"TA",,,"TA",,,122,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,122,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,122,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Operations research",,,"Operations research",,,122,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,122,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,122,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,122,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,122,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,122,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support (workshops, meetings, etc)",,,"Operational support (workshops, meetings, etc)",,,122,"Operational support (workshops, meetings, etc)",,,,"Mtef","Operational support (workshops, meetings, etc)",,,,,,
-,"HMIS / IDSR",,,,"HMIS / IDSR",,123,2,"HMIS / IDSR",,,,"Mtef","HMIS / IDSR",,,,,,
-,,"TA",,,"TA",,,123,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,123,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,123,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,123,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,123,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,123,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,123,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,123,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,123,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,123,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,123,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,123,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"HRH development / training",,,,"HRH development / training",,124,2,"HRH development / training",,,,"Mtef","HRH development / training",,,,,,
-,,"TA",,,"TA",,,124,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,124,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,124,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,124,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,124,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,124,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for HRH development",,,"Systems development for HRH development",,,124,"Systems development for HRH development",,,,"Mtef","Systems development for HRH development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,124,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,124,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,124,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,124,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,124,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"HRH management",,,,"HRH management",,125,2,"HRH management",,,,"Mtef","HRH management",,,,,,
-,,"TA",,,"TA",,,125,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,125,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,125,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,125,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,125,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for HRH management",,,"Systems development for HRH management",,,125,"Systems development for HRH management",,,,"Mtef","Systems development for HRH management",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,125,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,125,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,125,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,125,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,125,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"ICT",,,,"ICT",,126,2,"ICT",,,,"Mtef","ICT",,,,,,
-,,"TA",,,"TA",,,126,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,126,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,126,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,126,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,126,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,126,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,126,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,126,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,126,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,126,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,126,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,126,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Infrastructure planning & monitoring",,,,"Infrastructure planning & monitoring",,127,2,"Infrastructure planning & monitoring",,,,"Mtef","Infrastructure planning & monitoring",,,,,,
-,,"TA",,,"TA",,,127,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,127,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,127,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,127,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,127,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,127,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development for infrastructure tracking",,,"Systems development for infrastructure tracking",,,127,"Systems development for infrastructure tracking",,,,"Mtef","Systems development for infrastructure tracking",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,127,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,127,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,127,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,127,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,127,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Infrastructure development",,,,"Infrastructure development",,128,2,"Infrastructure development",,,,"Mtef","Infrastructure development",,,,,,
-,,"TA",,,"TA",,,128,"TA",,,,"Mtef","TA",,,,,,
-,,"Construction/renovation - L2-3 health facilities",,,"Construction/renovation - L2-3 health facilities",,,128,"Construction/renovation - L2-3 health facilities",,,,"Mtef","Construction/renovation - L2-3 health facilities",,,,,,
-,,"Construction/renovation - L4-5 hospitals",,,"Construction/renovation - L4-5 hospitals",,,128,"Construction/renovation - L4-5 hospitals",,,,"Mtef","Construction/renovation - L4-5 hospitals",,,,,,
-,,"Construction/renovation provincial/district offices",,,"Construction/renovation provincial/district offices",,,128,"Construction/renovation provincial/district offices",,,,"Mtef","Construction/renovation provincial/district offices",,,,,,
-,,"Construction/renovation provincial/district stores",,,"Construction/renovation provincial/district stores",,,128,"Construction/renovation provincial/district stores",,,,"Mtef","Construction/renovation provincial/district stores",,,,,,
-,,"Construction/renovation MOH offices",,,"Construction/renovation MOH offices",,,128,"Construction/renovation MOH offices",,,,"Mtef","Construction/renovation MOH offices",,,,,,
-,,"Construction/renovation central medical stores",,,"Construction/renovation central medical stores",,,128,"Construction/renovation central medical stores",,,,"Mtef","Construction/renovation central medical stores",,,,,,
-,,"Construction/renovation reference laboratory facilities",,,"Construction/renovation reference laboratory facilities",,,128,"Construction/renovation reference laboratory facilities",,,,"Mtef","Construction/renovation reference laboratory facilities",,,,,,
-,,"Procurement of clinical equipment",,,"Procurement of clinical equipment",,,128,"Procurement of clinical equipment",,,,"Mtef","Procurement of clinical equipment",,,,,,
-,,"Procurement of laboratory & diagnostic equipment",,,"Procurement of laboratory & diagnostic equipment",,,128,"Procurement of laboratory & diagnostic equipment",,,,"Mtef","Procurement of laboratory & diagnostic equipment",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,128,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of other equipment",,,"Procurement of other equipment",,,128,"Procurement of other equipment",,,,"Mtef","Procurement of other equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,128,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,"Procurement planning",,,,"Procurement planning",,129,2,"Procurement planning",,,,"Mtef","Procurement planning",,,,,,
-,,"TA",,,"TA",,,129,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,129,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,129,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,129,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,129,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,129,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,129,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,129,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,129,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,129,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,129,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Procurement execution",,,,"Procurement execution",,130,2,"Procurement execution",,,,"Mtef","Procurement execution",,,,,,
-,,"TA",,,"TA",,,130,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,130,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,130,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,130,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,130,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,130,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,130,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,130,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,130,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,130,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,130,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Supply Chain Management",,,,"Supply Chain Management",,131,2,"Supply Chain Management",,,,"Mtef","Supply Chain Management",,,,,,
-,,"TA",,,"TA",,,131,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,131,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,131,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,131,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,131,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,131,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,131,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,131,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,131,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,131,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,131,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,131,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Sector/Technical Planning & Monitoring",,,,"Sector/Technical Planning & Monitoring",,132,2,"Sector/Technical Planning & Monitoring",,,,"Mtef","Sector/Technical Planning & Monitoring",,,,,,
-,,"TA",,,"TA",,,132,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,132,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,132,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Operations research",,,"Operations research",,,132,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,132,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,132,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,132,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,132,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,132,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,132,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Public-private partnerships (PPP)",,,,"Public-private partnerships (PPP)",,133,2,"Public-private partnerships (PPP)",,,,"Mtef","Public-private partnerships (PPP)",,,,,,
-,,"TA",,,"TA",,,133,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,133,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,133,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,133,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,133,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,133,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,133,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,133,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,133,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,133,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support to umbrella organisations",,,"Operational support to umbrella organisations",,,133,"Operational support to umbrella organisations",,,,"Mtef","Operational support to umbrella organisations",,,,,,
-,,"Operational support (workshops, meetings, other)",,,"Operational support (workshops, meetings, other)",,,133,"Operational support (workshops, meetings, other)",,,,"Mtef","Operational support (workshops, meetings, other)",,,,,,
-,"Referral systems",,,,"Referral systems",,134,2,"Referral systems",,,,"Mtef","Referral systems",,,,,,
-,,"TA",,,"TA",,,134,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,134,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,134,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,134,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,134,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,134,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,134,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,134,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,134,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement of ambulances",,,"Procurement of ambulances",,,134,"Procurement of ambulances",,,,"Mtef","Procurement of ambulances",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,134,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,134,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,134,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Research",,,,"Research",,135,2,"Research",,,,"Mtef","Research",,,,,,
-,,"TA",,,"TA",,,135,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,135,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,135,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Operations research",,,"Operations research",,,135,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,135,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,135,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,135,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,135,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,135,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,135,"Operational support ",,,,"Mtef","Operational support ",,,,,,
-,"Standards, Regulations, Quality Assurance",,,,"Standards, Regulations, Quality Assurance",,136,2,"Standards, Regulations, Quality Assurance",,,,"Mtef","Standards, Regulations, Quality Assurance",,,,,,
-,,"TA",,,"TA",,,136,"TA",,,,"Mtef","TA",,,,,,
-,,"Policy, strategic planning, M&E",,,"Policy, strategic planning, M&E",,,136,"Policy, strategic planning, M&E",,,,"Mtef","Policy, strategic planning, M&E",,,,,,
-,,"Capacity building (training, institutional strengthening)",,,"Capacity building (training, institutional strengthening)",,,136,"Capacity building (training, institutional strengthening)",,,,"Mtef","Capacity building (training, institutional strengthening)",,,,,,
-,,"Curriculum development",,,"Curriculum development",,,136,"Curriculum development",,,,"Mtef","Curriculum development",,,,,,
-,,"Standards & guidelines development",,,"Standards & guidelines development",,,136,"Standards & guidelines development",,,,"Mtef","Standards & guidelines development",,,,,,
-,,"Operations research",,,"Operations research",,,136,"Operations research",,,,"Mtef","Operations research",,,,,,
-,,"Systems development",,,"Systems development",,,136,"Systems development",,,,"Mtef","Systems development",,,,,,
-,,"Procurement of office & ICT equipment",,,"Procurement of office & ICT equipment",,,136,"Procurement of office & ICT equipment",,,,"Mtef","Procurement of office & ICT equipment",,,,,,
-,,"Procurement of vehicles",,,"Procurement of vehicles",,,136,"Procurement of vehicles",,,,"Mtef","Procurement of vehicles",,,,,,
-,,"Procurement (other - specify)",,,"Procurement (other - specify)",,,136,"Procurement (other - specify)",,,,"Mtef","Procurement (other - specify)",,,,,,
-,,"Printing of materials",,,"Printing of materials",,,136,"Printing of materials",,,,"Mtef","Printing of materials",,,,,,
-,,"Operational support ",,,"Operational support ",,,136,"Operational support ",,,,"Mtef","Operational support ",,,,,,
+PARENT,CODE,Code Level,Full name,Description,NHA Subaccount,CH?,NHA Code
+,1,Programme Area,Child Health
+1,11,Sub-Programme Area,Maternal & Newborn Health
+11,111,NHA Activity 1,Inpatient curative care,,RH,,HC.1.1
+111,1111,NHA Activity 2,Deliveries ,,RH,,HC.1.1.1
+1111,11112,NHA Activity 2,"Family planning services (incl. sterilizations, deliveries) (IP)",,RH,,HC.1.1.2
+1111,11113,NHA Activity 2,Other RH services (IP),,RH,,HC.1.1.3
+111,1112,NHA Activity 1,Outpatient curative care ,,RH,,HC.1.3
+1112,11121,NHA Activity 2,Antenatal Care,,RH,,HC.1.3.1.1
+1112,11122,NHA Activity 2,Postnatal Care,,RH,,HC.1.3.1.2
+11,111,NHA Activity 1,Preventive Programs,,RH,,HC.6.1.1
+11,111,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+1,12,Sub-Programme Area,Management of Childhood Illnesses
+12,121,Component Area,IMNCI (integrated services)
+121,1211,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,TRUE,HC.1.1.1
+121,1212,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,TRUE,HC.1.3.1
+121,1213,NHA Activity 1,Preventive Programs,,,TRUE,HC.6.1.2
+1213,12131,NHA Activity 2,Breastfeeding promotion,,,TRUE,HC.6.1.2.1
+1213,12132,NHA Activity 2,Immunizations,,,TRUE,HC.6.1.2.2
+1213,12133,NHA Activity 2,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,,TRUE,HC.6.1.2.3
+121,1214,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
+12,122,Component Area,Management of diarrhoea
+122,1221,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+122,1222,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+122,1223,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,TRUE,HC.6.1.2.3
+122,1224,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
+12,123,Component Area,ARI / pneumonia
+123,1231,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+123,1232,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+123,1233,NHA Activity 1,Preventive Programs,"Other preventive health services provided to children from 0 to less than 5 years, including prevention of injuries and violence",,TRUE,HC.6.1.2.3
+123,1234,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
+12,124,Component Area,Malaria
+124,1241,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+124,1242,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+124,1243,NHA Activity 1,Preventive Programs,Prevention of communicable disease,,TRUE,HC.6.3
+124,1244,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
+12,125,Component Area,PMTCT
+125,1251,NHA Activity 1,PMTCT Programs,,HIV,TRUE,HC.6.1.1.4
+125,1252,NHA Activity 1,Capital Expenditures on Equipment,,HIV,TRUE,HCR.1
+12,126,Component Area,Paediatric HIV/AIDS
+126,1261,NHA Activity 1,Inpatient curative care,Management of HIV/AIDS exposed children,HIV,TRUE,HC.1.1.3
+126,1262,NHA Activity 1,Outpatient curative care,Management of HIV/AIDS exposed children,HIV,TRUE,HC.1.3.3
+12,127,Component Area,Immunisation (KEPI)
+127,1271,NHA Activity 1,Programs,Immunizations,,TRUE,HC.6.1.2.2
+127,1272,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,TRUE,HCR.1
+1,13,Sub-Programme Area,Nutrition
+13,131,Component Area,Micronutrients
+131,1311,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+131,1312,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+131,1313,NHA Activity 1,Capital Expenditures on Equipment,Capital formation of health care provider institutions,,TRUE,HCR.1
+13,132,Component Area,Baby Friendly Hospitals
+132,1321,NHA Activity 1,Inpatient curative care,"Care of the newborn – clean cord care, newborn resuscitation, temperature management, case management of neonatal pneumonia and sepsis",,TRUE,HC.1.1.1
+132,1322,NHA Activity 1,Outpatient curative care,Care of the newborn OP,,TRUE,HC.1.3.1
+13,133,Component Area,Breastfeeding,Breastfeeding promotion,,TRUE,HC.6.1.2.1
+13,134,Component Area,Infant/child feeding support
+134,1341,NHA Activity 1,Inpatient curative care,"Management and care of childhood illness – for children aged 29 days - 59 months. (e.g. IV for dehydrated children, management of neonatal infections, severe malnutrition, and severe pneumonia)",,TRUE,HC.1.1.2
+134,1342,NHA Activity 1,Outpatient curative care,"Management of childhood illness – for children aged 29 days - 59 months. (e.g. treatment of malaria, management of neonatal infections, malnutrition, pneumonia and diarrhea)",,TRUE,HC.1.3.2
+134,1343,NHA Activity 1,Preventive Programs,Targeted food supplementation to identified malnourished children: Nutrition programme,,TRUE,HC.6.1.1.3
+134,1344,NHA Activity 1,Capital Expenditures on Equipment,,,TRUE,HCR.1
+1,14,Sub-Programme Area,School Health
+14,141,Component Area,School health education,"Promotion of child health (IEC, social mobilization) Programs",,TRUE,HC.6.1.2
+14,142,Component Area,Deworming,,,TRUE,HC.6.1.1.5
+14,143,Component Area,Safe water
+143,1431,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,TRUE,HC.6.3.1
+143,1432,NHA Activity 1,Capital formation of health care provider institutions,,,TRUE,HCR.1
+14,144,Component Area,Sanitation & hygiene
+144,1441,NHA Activity 1,Water and sanitation activities targeted at eliminating water borne disease when delivered as part of a child survival program,,,TRUE,HC.6.3.1
+144,1442,NHA Activity 1,Capital formation of health care provider institutions,,,TRUE,HCR.1
+1,15,Sub-Programme Area,Community services
+15,151,Component Area,Home support,,,,HC.1.4
+15,152,Component Area,Public Health Programs,,,,HC.6.3
+,2,Programme Area,Emergency Response
+2,21,NHA Activity 1,Patient Transport/Emergency Rescue,,,,HC.4.3
+21,212,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,3,Programme Area,Environmental Health & Sanitation
+3,31,Component Area,Water safety
+31,311,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+311,3112,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,312,Component Area,Sanitation & hygiene
+312,3121,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+312,3122,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,313,Component Area,Medical waste management
+313,3131,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+313,3132,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,314,Component Area,Food safety
+314,3141,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+314,3142,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,315,Component Area,Port Health
+315,3151,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+315,3152,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,316,Component Area,Vector & Vermin Control
+316,3161,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+316,3162,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,317,Component Area,Pollution Control & Housing
+317,3171,NHA Activity 1,Environmental health (General Water and sanitation activities related to health),,,,HCR.5
+317,3172,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+31,318,Component Area,Occupational Health
+318,3181,NHA Activity 1,Occupational Health care,,,,HC.6.5 Occupational Health care
+318,3182,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,4,Programme Area,Gender-based Violence
+4,41,Component Area,Gender-based Violence services
+41,411,NHA Activity 1,Programs designed to eradicate gender based violence ,,RH,,AD.2
+411,4112,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+,5,Programme Area,Health Promotion
+5,51,NHA Activity 1,Maternal and child health; family planning and counselling,,RH,,HC.6.1
+51,512,NHA Activity 1,School health services,,,,HC.6.2
+512,5123,NHA Activity 1,"Prevention of communicable diseases (e.g. HIV/AIDS, malaria)",,,,HC.6.3
+512,5124,NHA Activity 1,Prevention of non-communicable diseases,,,,HC.6.4
+512,5125,NHA Activity 1,Occupational Health care,,,,HC.6.5
+,6,Programme Area,HIV/AIDS
+6,61,Sub-Programme Area,Prevention
+61,611,Component Area,VCT services
+611,6111,NHA Activity 1,VCT as part of OP care,,HIV,,HC.1.3.4
+611,6112,NHA Activity 1,VCT as part of prevention campaign,,HIV,,HC.6.3.1
+611,6113,NHA Activity 1,Procurement of diagnostic equipment,,HIV,,HCR.1
+61,612,Component Area,PMTCT
+61,612,NHA Activity 1,PMTCT as part of clinical care,,HIV,,HC.1.3.5
+61,612,NHA Activity 1,PMTCT as part of prevention campaign,,HIV,,HC.6.1.1
+61,612,NHA Activity 1,Procurement of equipment,,HIV,,HCR.1
+61,613,Component Area,Condoms,Condom Distribution programs ,HIV,,HC.6.3.7
+61,614,Component Area,Male circumcision,,HIV,,HC.6.3.8
+61,615,Component Area,IEC/BCC (general),Info. Educ. Communic. Prog. ,HIV,,HC.6.3.4
+61,616,Component Area,Safe medical injections,,HIV,,HC.6.3.8
+61,617,Component Area,Post-exposure prophylaxis (PEP),,HIV,,HC.6.3.3
+61,618,Component Area,Blood safety,,HIV,,HC.6.3.2
+61,619,Component Area,Needle Exchange,,HIV,,HC.6.3.6
+611,6110,Component Area,Occupational Health
+611,6111,NHA Activity 1,General,,HIV,,HC.6.5
+611,6112,NHA Activity 1,VCT,,HIV,,HC.6.5.1
+611,6113,NHA Activity 1,Condoms,,HIV,,HC.6.5.2
+611,6114,NHA Activity 1,STI,,HIV,,HC.6.5.3
+611,6115,NHA Activity 1,BCC,,HIV,,HC.6.5.4
+611,6116,NHA Activity 1,Other,,HIV,,HC.6.5.9
+6,62,Sub-Programme Area,Care & treatment
+62,621,Component Area,ARV treatment,,HIV,,HC.1.3.3
+62,622,Component Area,Nutritional support,,HIV,,HC.6.3.10
+62,623,Component Area,Opportunistic Infections (OI)
+623,6231,NHA Activity 1,Inpatient curative care,,HIV,,HC.1.1
+623,6232,NHA Activity 1,Outpatient curative care,,HIV,,HC.1.3.2
+623,6233,NHA Activity 1,Preventive Programs,,HIV,,HC.6.3.8
+623,6234,NHA Activity 1,Capital Expenditures on Equipment,,HIV,,HCR.1
+62,624,Component Area,Laboratory services HIV/AIDS
+624,6241,NHA Activity 1,Clinical Laboratory,,HIV,,HC.4.1
+624,6242,NHA Activity 1,Diagnostic Imaging,,HIV,,HC.4.2
+624,6243,NHA Activity 1,Procurement of diagnostic equipment,,HIV,,HCR.1
+62,625,Component Area,Home-based care
+625,6251,NHA Activity 1,Curative home care,,HIV,,HC.1.4
+625,6252,NHA Activity 1,Palliative home care,,HIV,,HC.3.3
+62,626,Component Area,HRH for HIV/AIDS,,HIV
+62,627,Component Area,Psychological treatment & support,,HIV,,AD.1.1.3
+627,6271,NHA Activity 1,Psychosocial support to orphans and vulnerable chidren,,HIV,,AD.1.2.2
+627,6272,NHA Activity 1,Psychosocial support to patients,,HIV,,HC.2
+6,63,Sub-Programme Area,OVCs
+63,634,Component Area,Educational support,School fees (AIDS orphans) ,HIV,,AD.1.2.1
+63,635,Component Area,Family support,Grants to families taking care of orphans & vulnerable children,HIV,,AD.1.2.3
+63,636,Component Area,Home support
+636,6361,NHA Activity 1,Social support services  (NACC/M of Home affairs/NGOs),,HIV,,AD.1.1
+636,6362,NHA Activity 1,Non-health services to orphans and vulnerable children,,HIV,,AD.1.2
+,7,Programme Area,Malaria
+7,71,Sub-Programme Area,Prevention
+71,711,Component Area,LLITNs,Programs for insecticide treated materials (e.g. distribution programs),Malaria,,HC.6.3.2.2
+71,712,Component Area,IRS,Indoor residual spraying campaigns,Malaria,,HC.6.3.2.3
+71,713,Component Area,IEC/BCC,IEC (malaria awareness),Malaria,,HC.6.3.2.5
+71,714,Component Area,IPT
+714,7141,NHA Activity 2,Infants,IPT in pregnant women and infants ,Malaria,TRUE,HC.6.3.2.1
+7141,71412,NHA Activity 2,Pregnant Women,,Malaria,,HC.6.3.2.1
+7,72,Sub-Programme Area,Care & treatment
+72,721,NHA Activity 1,Inpatient curative care,Inpatient curative care (incl. for severe malaria),Malaria,,HC.1.1
+721,7212,NHA Activity 1,Outpatient curative care,Outpatient curative care (incl. consultation and prescription of drugs),Malaria,,HC.1.3
+721,7213,NHA Activity 1,Capital Expenditures on Equipment,,Malaria,,HCR.1
+,8,Programme Area,Non-Communicable Diseases (NCD)
+8,81,NHA Activity 1,Prevention of non-communicable diseases,,,,HC.6.4
+81,812,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,9,Programme Area,Nutrition,Targeted food supplementation to identified malnourished children: Nutrition programme,,,HC.6.1.1.3
+,a,Programme Area,Reproductive & Maternal Health
+a,a1,Sub-Programme Area,ANC services
+a1,a11,Component Area,ANC services
+a11,a111,NHA Activity 1,Antenatal care (OP),,RH,,HC.1.3.1.1
+a11,a112,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+a1,a12,Component Area,PMTCT for HIV/AIDS
+a12,a121,NHA Activity 1,PMTCT (service itself),,HIV,,HC.1.3.5
+a12,a122,NHA Activity 1,Capital Expenditures on Equipment,,HIV,,HCR.1
+a1,a13,Component Area,IPT for malaria
+a13,a131,NHA Activity 1,IPT in pregnant women and infants ,,Malaria,,HC.6.3.2.1
+a13,a132,NHA Activity 1,Capital Expenditures on Equipment,,Malaria,,HCR.1
+a,a2,Sub-Programme Area,Safe Delivery services
+a2,a21,Component Area,Normal delivery services
+a21,a211,NHA Activity 1,Deliveries ,,RH,,HC.1.1.1
+a21,a212,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+a2,a22,Component Area,Targeted post-partum care
+a22,a221,NHA Activity 1,Postnatal care (OP),,RH,,HC.1.3.1.2
+a22,a222,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+a2,a23,Component Area,Post-abortion care,,RH,,HC.1.1.2
+a2,a24,Component Area,BEOC services
+a24,a241,NHA Activity 1,Antenatal care (OP),,RH,,HC.1.3.1.1
+a24,a242,NHA Activity 1,Deliveries ,,RH,,HC.1.1.1
+a24,a243,NHA Activity 1,Postnatal care (OP),,RH,,HC.1.3.1.2
+a24,a244,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+a2,a25,Component Area,CEOC services
+a25,a251,NHA Activity 1,Antenatal care (OP),,RH,,HC.1.3.1.1
+a25,a252,NHA Activity 1,Deliveries ,,RH,,HC.1.1.1
+a25,a253,NHA Activity 1,Postnatal care (OP),,RH,,HC.1.3.1.2
+a25,a254,NHA Activity 1,Capital Expenditures on Equipment,,RH,,HCR.1
+a,a3,Sub-Programme Area,Family Planning
+a3,a31,NHA Activity 1,Outpatient Family planning services,,RH,,HC.1.3.2
+a31,a311,NHA Activity 2,Family planning counseling,,RH,,HC.1.3.2.1
+a311,a3112,NHA Activity 2,Infertility treatment,,RH,,HC.1.3.2.2
+a31,a311,NHA Activity 1,"Inpatient Family planning services (incl. sterilizations, deliveries) (IP)",,RH,,HC.1.1.2
+a,a4,Sub-Programme Area,Adolescent RH services
+a4,a41,NHA Activity 1,School Health Services,,RH,,HC.6.2
+,b,Programme Area,Tuberculosis
+b,b1,NHA Activity 1,Inpatient curative care,,TB,,HC.1.1
+b1,b12,NHA Activity 1,Outpatient curative care
+b12,b121,NHA Activity 2,Medical Care,,TB,,HC.1.3
+b121,b1212,NHA Activity 2,TB Medicines,,TB,,HC.1.3.1
+b12,b121,NHA Activity 1,Programs,,,,HC.6
+b12,b122,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,c,Programme Area,Other vector-borne & neglected diseases
+c,c1,NHA Activity 1,Inpatient curative care,,,,HC.1.1
+c1,c12,NHA Activity 1,Outpatient curative care,,,,HC.1.3
+c12,c123,NHA Activity 1,Preventive Programs,,,,HC.6.3
+c12,c124,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,d,Programme Area,Laboratory & diagnostic services
+d,d1,NHA Activity 1,Clinical Laboratory,,,,HC4.1
+d1,d12,NHA Activity 1,Diagnostic imaging,,,,HC4.2
+d12,d123,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,e,Programme Area,Integrated KEPH services
+e,e1,NHA Activity 1,Inpatient curative care,,,,HC.1.1
+e1,e12,NHA Activity 1,Outpatient curative care,,,,HC.1.3
+e12,e123,NHA Activity 1,Programs,,,,HC.6.3
+e12,e124,NHA Activity 1,Capital Expenditures on Equipment,,,,HCR.1
+,f,Programme Area,Infrastructure development,Capital formation for health care provider institutions,,,HCR.1

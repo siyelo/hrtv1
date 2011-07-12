@@ -63,9 +63,10 @@ describe Activity do
   end
 
   describe "validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:description) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
-    it { should validate_presence_of(:description) }
     it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }
@@ -176,7 +177,7 @@ describe Activity do
       @other_cost = Factory(:other_cost, :spend => 11000, :budget => 9000, :project => nil)
       @other_cost.check_projects_budget_and_spend?.should be_true
     end
-    
+
     it "returns false when the activitys budget is greater than that of the projects" do
       @activity = Factory(:activity, :project => Factory(:project, :budget => 10000, :spend => 10000),
                                  :spend => 10000, :budget => 19000)

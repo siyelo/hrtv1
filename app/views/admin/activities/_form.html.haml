@@ -28,19 +28,18 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false 
 
-  - if @response.request.budget? 
-    - unless @response.request.no_long_term_budgets?
-      %li.last
-        %h3 Future Budget
-        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
-        %ul.dashboard_section
-          %li.amounts
-            %label Yearly budget
-            %ul
-              = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
+  - unless @response.request.no_long_term_budgets?
+    %li.last
+      %h3 Future Budget
+      %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
+      %ul.dashboard_section
+        %li.amounts
+          %label Yearly budget
+          %ul
+            = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
+            = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
+            = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
+            = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
 
 
   %li.last

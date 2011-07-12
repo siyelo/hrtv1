@@ -1732,7 +1732,7 @@ $(function () {
   $("#closeFlash").click(function (e) {
     e.preventDefault();
     $("#flash_holder").fadeOut("slow", function() {
-      $(this).show().css({visibility: "hidden"});
+      $(this).show().css({display: "none"});
     });
   });
 

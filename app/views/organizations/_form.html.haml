@@ -27,5 +27,4 @@
       = f.input :contact_office_location, :as => :string, :label => "Office location", :hint => "The geographic location of the office."
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button button_text, :class => "last"
-
+  = f.commit_button button_text, :class => "last", :button_html => { :class => "next" }

@@ -4,7 +4,7 @@
   = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :class => 'last')
+  = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :class => 'last next')
 
 .wrap-80
   - unless @organization.new_record?

@@ -1,6 +1,6 @@
 /* STYLES SHARED BETWEEN ALL PAGES */
 body
-  background= image_url("bg-white.jpg")
+  background: image_url("bg-white.jpg")
   font-family: sans-serif
 
   /* shared heading styles */
@@ -35,17 +35,17 @@ body
 
   /* bordered paragraph style */
   p.borderful
-    border: 1px solid !lightest-blue
-    color: !mid-blue
+    border: 1px solid $lightest-blue
+    color: $mid-blue
     margin-bottom: 20px
   /* end */
-  
+
   .borderless
     border: none !important
 
   /* shared footer styles */
   #footer
-    color: !mid-blue
+    color: $mid-blue
     font-size: 11px
     margin-bottom: 15px
     text-align: center
@@ -59,13 +59,13 @@ body
         text-transform: none
 
     h2.logo
-      color: !dark-blue
+      color: $dark-blue
       font-size: 13px
     h2.left
       left: 2px
       position: relative
       top: 3px
-      
+
     .version
       background: $mid-blue
       color: #FFF
@@ -81,7 +81,7 @@ body
         margin-bottom: -5px
 
     a
-      color: !mid-blue
+      color: $mid-blue
       padding-right: 10px
       text-decoration: none
       &:hover, &:focus
@@ -96,13 +96,13 @@ body
 
   .like_a_h2
     font-size: 12px
-  
+
 .wrap-80
   float: left
   margin-right: 1%
   width: 78%
   +pie-clearfix
-  
+
 .wrap-70
   float: left
   margin-right: 2%
@@ -113,26 +113,26 @@ body
   float: left
   width: 25%
   +pie-clearfix
-  
+
 .wrap-10
   width: 8%
-  
+
 h3.title_bar
   background: image_url("bg-blue.jpg")
   color: #fff !important
   margin-top: 5px
   padding: 10px 10px 7px !important
   +border-top-radius(3px)
-  
+
 hr
   border: none
   border-top: 3px solid $lightest-blue
-  
+
 .clearfix
   +pie-clearfix
-  
+
 .marginless
   margin: 0 !important
-  
+
 .push-12
   margin-top: 12px !important

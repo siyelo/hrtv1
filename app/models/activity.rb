@@ -112,16 +112,17 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   validate :approved_activity_cannot_be_changed
-  validates_presence_of :name, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+
+  validates_presence_of :name, :if => :is_activity?
+  validates_presence_of :description, :if => :is_activity?
+  validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
   validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
   validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
-  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_length_of :name, :within => 3..64, :if => Proc.new { |model| model.class.to_s == 'Activity' }, :allow_blank => true
+  validates_date :start_date, :unless => :is_sub_activity?
+  validates_date :end_date, :unless => :is_sub_activity?
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?
+  validates_length_of :name, :within => 3..64, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
   #validates_associated :sub_activities
@@ -758,6 +759,18 @@ class Activity < ActiveRecord::Base
         errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date
         errors.add(:end_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if end_date > project.end_date
       end
+    end
+
+    def is_simple?
+      self.class.eql?(Activity) || self.class.eql?(OtherCost)
+    end
+
+    def is_activity?
+      self.class.eql?(Activity)
+    end
+
+    def is_sub_activity?
+      self.class.eql?(SubActivity)
     end
 end
 

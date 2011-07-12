@@ -83,7 +83,7 @@ GEM
     guard-spork (0.2.1)
       guard (>= 0.2.2)
       spork (>= 0.8.4)
-    haml (3.0.24)
+    haml (3.1.2)
     has_scope (0.5.0)
     heroku (2.3.6)
       launchy (>= 0.3.2)
@@ -153,6 +153,7 @@ GEM
       linecache (>= 0.3)
     ruby-pg (0.7.9.2008.01.28)
     rubyzip (0.9.4)
+    sass (3.1.4)
     selenium-webdriver (2.0.1)
       childprocess (>= 0.1.9)
       ffi (>= 1.0.7)
@@ -212,7 +213,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   guard-spork
-  haml (= 3.0.24)
+  haml (= 3.1.2)
   heroku (>= 2.1.2)
   hirb
   hoptoad_notifier
@@ -234,6 +235,7 @@ DEPENDENCIES
   rspec-rails (= 1.3.3)
   ruby-debug
   ruby-pg
+  sass (= 3.1.4)
   settingslogic
   shoulda
   sketches

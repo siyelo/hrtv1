@@ -78,14 +78,14 @@ table.standard
     min-width: 100px
 
   td
-    border-bottom: 1px dashed !light_blue
+    border-bottom: 1px dashed $light_blue
     padding: 9px 7px 9px
     vertical-align: middle
     &.alt
       border: none
     &.padding
       padding-top: 0
-      
+
   .wrap_30
     min-width: 30%
 
@@ -100,7 +100,7 @@ table.clickable
       +linear-gradient(color-stops($lightest-blue + #090909, $lightest-blue))
       color: $dark-blue
       td
-        border-bottom: 1px solid !light_blue
+        border-bottom: 1px solid $light_blue
 
   td:hover
     cursor: pointer
@@ -411,7 +411,7 @@ tr.activity_subheading
     border-bottom: 1px solid $lightest-blue
     color: $mid-blue
     padding: 5px 7px
-    
+
     li
       padding: 0px !important
     &.implementer
@@ -422,7 +422,7 @@ tr.activity_subheading
     &.action
       text-align: right
       width: 5%
-      
+
   tr:last-child td
     &:first-child
       +border-bottom-left-radius

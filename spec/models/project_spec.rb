@@ -401,6 +401,11 @@ describe Project do
       @project1.save
       @project1.currency.should == "GBP"
     end
+    
+    it "user should not be able to select an invalid currency" do 
+      @project.currency = "rwandan francs"
+      @project.save.should be_false
+    end
 
   end
 

@@ -118,9 +118,8 @@ body.app
 
 .tooltip
   &.info
-    -moz-border-radius: 5px 5px 5px 5px
-    background: none repeat scroll 0 0 #dddddd
-    color: orange
+    background: $light-blue
+    color: #fff
     display: inline-block
     font-size: 14px
     font-weight: bold
@@ -128,6 +127,10 @@ body.app
     padding: 4px 5px 1px 5px
     text-decoration: none
     text-shadow: none
+    +border-radius(20px)
+    &:hover
+      background: $mid-blue
+      color: #fff
     &.help_tip
       font-size: 11px
       font-weight: normal

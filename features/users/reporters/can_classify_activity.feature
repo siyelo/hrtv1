@@ -48,7 +48,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And a data_response should exist with data_request: the data_request, organization: the organization
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
       And a project exists with name: "Project", data_response: the data_response
-      And an activity exists with name: "Activity", data_response: the data_response, project: the project, name: "activity1", budget: 5000000, spend: 6000000
+      And an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And I follow "Projects"
@@ -70,7 +70,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "Activity"
+        And I should be on the budget classification page for "activity1"
         And the "mtef1" field should contain "1,234,567.00"
         And I should see "We're sorry, when we added up your Current Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Current Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
 
@@ -133,7 +133,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "service_level1" with "1234567.00"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "Activity"
+        And I should be on the budget classification page for "activity1"
         And the "service_level1" field should contain "1,234,567.00"
       When I follow "Copy Current Budget to Past Expenditure"
       Then the "service_level1" field should contain "1,481,480.40"
@@ -151,7 +151,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "Activity"
+        And I should be on the budget classification page for "activity1"
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "500,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "250,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "50,000.00"
@@ -203,7 +203,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(2)" should contain "100,000.00"
 
       ### change budget and spend for activity
-      When I follow "Activity"
+      When I follow "activity1"
         And I fill in "Budget" with "1000"
         And I fill in "Expenditure" with "2000"
         And I press "Save & Classify >"

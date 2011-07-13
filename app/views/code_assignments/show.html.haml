@@ -11,14 +11,11 @@
 %h1.main_heading
   
   = link_to @activity.name || "(no name)", response_activity_path(@response, @activity), :title => @activity.description, :class => 'tooltip'
-  %span
   %span.sub
     = "#{@activity.class.to_s.underscore.humanize.titleize} #{get_activity_type(type)}"
     = render 'help'
 
-.main_heading
-  = render 'getting_started'
-
+= render 'getting_started'
 = render 'activities/tab_nav', :activity => @activity
 = render 'tab_nav', :activity => @activity, :coding_type => @coding_type
 #classification

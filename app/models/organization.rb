@@ -244,6 +244,18 @@ class Organization < ActiveRecord::Base
     response_for(request).status
   end
 
+  def create_data_responses
+    DataRequest.all.each do |data_request|
+      dr = self.data_responses.find(:first,
+                :conditions => {:data_request_id => data_request.id})
+      unless dr
+        dr = self.data_responses.new
+        dr.data_request = data_request
+        dr.save!
+      end
+    end
+  end
+
   protected
 
     def tidy_name(n)
@@ -268,17 +280,7 @@ class Organization < ActiveRecord::Base
       errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
     end
 
-    def create_data_responses
-      DataRequest.all.each do |data_request|
-        dr = self.data_responses.find(:first,
-                  :conditions => {:data_request_id => data_request.id})
-        unless dr
-          dr = self.data_responses.new
-          dr.data_request = data_request
-          dr.save!
-        end
-      end
-    end
+
 end
 
 

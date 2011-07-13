@@ -535,8 +535,8 @@ body#static_page_submit #content .wrapper #main
 
 
 #gs_container
-  margin-bottom: 20px
   width: 100%
+  +box-shadow(#ddd, 1px, 1px, 3px)
   #getting_started_title
     overflow: hidden
     +border-top-radius
@@ -574,16 +574,15 @@ body#static_page_submit #content .wrapper #main
         visibility: visible
 
   .getting_started
-    +clearfix
-    background-color: #F9FEF6
+    background: #F9FEF6
     border-color: #C1C1C1
     border-right: 1px solid #C1C1C1
     border-style: solid
     border-width: 0 1px 1px
-    +border-bottom-radius
-    -moz-box-shadow: 1px 1px 3px #DDDDDD
-    margin-bottom: 15px
+    margin-bottom: 5px
     padding: 10px
+    +border-bottom-radius
+    +pie-clearfix
     .message
       color: #555555
       padding: 0

@@ -539,7 +539,7 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
-    %w[code_assignments].each do |assoc|
+    %w[code_assignments sub_activities funding_sources outputs].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone

@@ -146,6 +146,11 @@ class User < ActiveRecord::Base
     @current_organization ||= self.current_response.organization
   end
 
+  def self.find_by_login_or_email(login)
+     #find_by_login(login) || find_by_email(login)
+     find_by_email(login)
+  end
+
   private
 
     def role?(role)

@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
                   :organizations, :organization_ids
 
   ### Associations
-  has_many :comments
+  has_many :comments, :dependent => :destroy
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current

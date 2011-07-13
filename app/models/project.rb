@@ -89,8 +89,8 @@ class Project < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Callbacks
-  # after_save :update_cached_currency_amounts
-  #   before_save :set_total_amounts
+  after_save :update_cached_currency_amounts
+  before_save :set_total_amounts
 
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }

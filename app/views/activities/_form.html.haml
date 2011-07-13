@@ -119,7 +119,7 @@
       = f.input :text_for_targets, :input_html => { :rows => 2 }, :label => "Targets", :as => :text, :required => false, :hint => "The goals of this Activity. Example: 25,000 people on ART treatment"
 
   %li
-    %ul.horizontal
+    %ul.horizontal.borderless
       - f.buttons :class => 'buttons1' do
         = f.commit_button "Save", :button_html => {:class => "last big_button"}
         - if @response.data_request.spend? || @response.data_request.budget?

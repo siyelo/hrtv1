@@ -92,8 +92,9 @@ end
 
 def zero_out_assignment(ca)
   ca.amount                 =
-   ca.percentage            =
    nil
+
+  # dont zero out percentage. might prove useful
 
   ca.cached_amount          =
     ca.sum_of_children      =
@@ -145,8 +146,9 @@ end
 
   puts 'Copying all data to new request!'
 
-  Organization.all.each do |org|
+  #Organization.all.each do |org|
   #Organization.find_all_by_name("CAMERWA - Central d\'achat des medicaments du Rwanda / Central Drug Purchasing Agency for Rwanda").each do |org|
+  Organization.find_all_by_name("CCHIPs").each do |org|
     puts "Org: #{org.name}"
 
     old_response = org.responses.find_by_data_request_id(old_request.id)
@@ -159,7 +161,6 @@ end
       unless new_response.projects.empty?
         puts "  SKIPPING: projects already exist for this org in the new response!"
       else
-        ###TODO - OC's without project
 
         #### projects & activities
         old_response.projects.each do |project|
@@ -182,8 +183,16 @@ end
             zeroed_project.other_costs.each do |a|
               save_cloned_activity(a, zeroed_project, new_response)
             end
-
           #end #debug
+        end
+
+        ###OC's without project
+        new_response.other_costs = old_response.other_costs.without_a_project.collect { |obj| obj.deep_clone }
+
+        new_response.other_costs.each do |oc|
+          oc = zero_out_activity(oc)
+          oc.data_response = new_response
+          oc.save(false)
         end
       end
     else

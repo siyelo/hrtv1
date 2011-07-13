@@ -1,6 +1,7 @@
 - title 'Reports'
 
-%h1.main_heading Reports
+%h1.main_heading 
+  Reports
 
 .first-half
   %h2
@@ -40,6 +41,15 @@
     %ul.admin_reports
       %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
       %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
+      
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Organizations
+  .dashboard_section
+    %ul
+      %li= link_to "All Organizations", export_organizations_path, :class => "target"
+      %li= link_to "Donor and NGO Organizations", export_organizations_path(:type => 'NGO'), :class => "target"
+      %li= link_to "District Hospitals and Health Centers", export_organizations_path(:type => 'centers'), :class => "target"
 
 .second-half
   %h2
@@ -81,3 +91,5 @@
       %h3 Facilities
       %ul
         %li N/A
+        
+  

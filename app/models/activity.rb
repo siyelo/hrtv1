@@ -5,8 +5,6 @@ class Activity < ActiveRecord::Base
   include NumberHelper
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
-
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
@@ -195,18 +193,9 @@ class Activity < ActiveRecord::Base
 
   def self.download_template(response, activities = [])
     FasterCSV.generate do |csv|
-      header_row = Activity::FILE_UPLOAD_COLUMNS
+      header_row = file_upload_columns(response)
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
-      header_row[5] = "#{response.spend_quarters_months('q1')} Spend"
-      header_row[6] = "#{response.spend_quarters_months('q2')} Spend"
-      header_row[7] = "#{response.spend_quarters_months('q3')} Spend"
-      header_row[8] = "#{response.spend_quarters_months('q4')} Spend"
-
-      header_row[10] = "#{response.budget_quarters_months('q1')} Budget"
-      header_row[11] = "#{response.budget_quarters_months('q2')} Budget"
-      header_row[12] = "#{response.budget_quarters_months('q3')} Budget"
-      header_row[13] = "#{response.budget_quarters_months('q4')} Budget"
       csv << header_row
 
       activities.each do |activity|
@@ -216,15 +205,15 @@ class Activity < ActiveRecord::Base
         row << activity.description
         row << activity.provider.try(:name)
         row << activity.spend
+        row << activity.spend_q4_prev
         row << activity.spend_q1
         row << activity.spend_q2
         row << activity.spend_q3
-        row << activity.spend_q4
         row << activity.budget
+        row << activity.budget_q4_prev
         row << activity.budget_q1
         row << activity.budget_q2
         row << activity.budget_q3
-        row << activity.budget_q4
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << ''
@@ -258,33 +247,33 @@ class Activity < ActiveRecord::Base
         activity = response.activities.new
       end
 
-      activity.name                    = row['Activity Name'].try(:strip)
-      activity.description             = row['Activity Description'].try(:strip)
-      activity.spend                   = row['Past Expenditure'].try(:strip)
-      activity.spend_q1                = row['Q1 Spend'].try(:strip)
-      activity.spend_q2                = row['Q2 Spend'].try(:strip)
-      activity.spend_q3                = row['Q3 Spend'].try(:strip)
-      activity.spend_q4                = row['Q4 Spend'].try(:strip)
-      activity.budget                  = row['Current Budget'].try(:strip)
-      activity.budget_q1               = row['Q1 Budget'].try(:strip)
-      activity.budget_q2               = row['Q2 Budget'].try(:strip)
-      activity.budget_q3               = row['Q3 Budget'].try(:strip)
-      activity.budget_q4               = row['Q4 Budget'].try(:strip)
-      activity.start_date              = row['Start Date'].try(:strip)
-      activity.end_date                = row['End Date'].try(:strip)
-      activity.text_for_beneficiaries  = row['Beneficiaries'].try(:strip)
-
-      # virtual attributes
-      activity.csv_project_name    = row['Project Name'].try(:strip)
-      activity.csv_provider        = row['Provider'].try(:strip)
-      activity.csv_districts       = row['Districts'].try(:strip)
-      activity.csv_beneficiaries   = row['Beneficiaries'].try(:strip)
-      activity.text_for_targets    = row['Outputs / Targets'].try(:strip)
+      activity.csv_project_name        = row[0].try(:strip)
+      activity.name                    = row[1].try(:strip)
+      activity.description             = row[2].try(:strip)
+      activity.csv_provider            = row[3].try(:strip)
+      activity.spend                   = row[4].try(:strip)
+      activity.spend_q4_prev           = row[5].try(:strip)
+      activity.spend_q1                = row[6].try(:strip)
+      activity.spend_q2                = row[7].try(:strip)
+      activity.spend_q3                = row[8].try(:strip)
+      activity.budget                  = row[9].try(:strip)
+      activity.budget_q4_prev          = row[10].try(:strip)
+      activity.budget_q1               = row[11].try(:strip)
+      activity.budget_q2               = row[12].try(:strip)
+      activity.budget_q3               = row[13].try(:strip)
+      activity.csv_districts           = row[14].try(:strip)
+      activity.csv_beneficiaries       = row[14].try(:strip)
+      activity.text_for_beneficiaries  = row[15].try(:strip)
+      activity.text_for_targets        = row[16].try(:strip)
+      activity.start_date              = row[17].try(:strip)
+      activity.end_date                = row[18].try(:strip)
 
       # associations
       if activity.csv_project_name.present?
-        project = Project.find_by_name(activity.csv_project_name)
+        # find project by name
+        project = response.projects.find_by_name(activity.csv_project_name)
       else
+        # find project by project id if present (when uploading activities for project)
         project = project_id.present? ? Project.find_by_id(project_id) : nil
       end
 
@@ -633,6 +622,20 @@ class Activity < ActiveRecord::Base
 
   private
 
+    def self.file_upload_columns(response)
+      ["Project Name", "Activity Name", "Activity Description",
+       "Provider", "Past Expenditure",
+       "#{response.spend_quarters_months('q1')} Spend",
+       "#{response.spend_quarters_months('q2')} Spend",
+       "#{response.spend_quarters_months('q3')} Spend",
+       "#{response.spend_quarters_months('q4')} Spend",
+       "Current Budget",
+        "#{response.budget_quarters_months('q1')} Budget",
+        "#{response.budget_quarters_months('q2')} Budget",
+        "#{response.budget_quarters_months('q3')} Budget",
+        "#{response.budget_quarters_months('q4')} Budget",
+       "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+    end
 
     def delete_existing_code_assignments_by_type(coding_type)
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])

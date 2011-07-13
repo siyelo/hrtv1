@@ -25,6 +25,7 @@ describe Project do
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:entire_budget) }
     it { should allow_mass_assignment_of(:start_date) }
+    it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:data_response) }

@@ -82,7 +82,8 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:template => :get, :bulk_create => :post}
   end
 
-  map.resources :organizations, :only => [:edit, :update]
+  map.resources :organizations, :only => [:edit, :update],
+    :collection => { :export => :get }
 
   # REPORTER USER
   map.namespace :reporter do |reporter|

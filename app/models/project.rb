@@ -89,8 +89,8 @@ class Project < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Callbacks
-  after_save :update_cached_currency_amounts
-  before_save :set_total_amounts
+  # after_save :update_cached_currency_amounts
+  #   before_save :set_total_amounts
 
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }
@@ -127,17 +127,17 @@ class Project < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations].each do |assoc|
+    %w[locations user].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
 
     # has_many's with deep associations
-    %w[activities].each do |assoc|
+    %w[normal_activities other_costs].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.deep_clone })
     end
 
     # shallow has_many's
-    %w[funding_flows].each do |assoc|
+    %w[funding_flows funding_streams].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone

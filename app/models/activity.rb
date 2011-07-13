@@ -115,12 +115,12 @@ class Activity < ActiveRecord::Base
   #validates_associated :sub_activities
 
   ### Callbacks
-  before_save :update_cached_usd_amounts
-  before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  after_save  :update_counter_cache
-  after_destroy :update_counter_cache
-  before_save :set_total_amounts
+  # before_save :update_cached_usd_amounts
+  #   before_update :remove_district_codings
+  #   before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  #   after_save  :update_counter_cache
+  #   after_destroy :update_counter_cache
+  #   before_save :set_total_amounts
 
   ### Named scopes
   # TODO: spec
@@ -539,7 +539,7 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
-    %w[code_assignments].each do |assoc|
+    %w[code_assignments sub_activities funding_sources outputs].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone

@@ -55,7 +55,7 @@ class CodeAssignment < ActiveRecord::Base
 
   
   ### Callbacks
-  before_save :update_cached_amount_in_usd
+  # before_save :update_cached_amount_in_usd
 
   ### Delegates
   delegate :data_response, :to => :activity

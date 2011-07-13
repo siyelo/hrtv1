@@ -205,15 +205,15 @@ class Activity < ActiveRecord::Base
         row << activity.description
         row << activity.provider.try(:name)
         row << activity.spend
+        row << activity.spend_q4_prev
         row << activity.spend_q1
         row << activity.spend_q2
         row << activity.spend_q3
-        row << activity.spend_q4
         row << activity.budget
+        row << activity.budget_q4_prev
         row << activity.budget_q1
         row << activity.budget_q2
         row << activity.budget_q3
-        row << activity.budget_q4
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << ''
@@ -247,28 +247,26 @@ class Activity < ActiveRecord::Base
         activity = response.activities.new
       end
 
-      activity.name                    = row['Activity Name'].try(:strip)
-      activity.description             = row['Activity Description'].try(:strip)
-      activity.spend                   = row['Past Expenditure'].try(:strip)
-      activity.spend_q1                = row['Q1 Spend'].try(:strip)
-      activity.spend_q2                = row['Q2 Spend'].try(:strip)
-      activity.spend_q3                = row['Q3 Spend'].try(:strip)
-      activity.spend_q4                = row['Q4 Spend'].try(:strip)
-      activity.budget                  = row['Current Budget'].try(:strip)
-      activity.budget_q1               = row['Q1 Budget'].try(:strip)
-      activity.budget_q2               = row['Q2 Budget'].try(:strip)
-      activity.budget_q3               = row['Q3 Budget'].try(:strip)
-      activity.budget_q4               = row['Q4 Budget'].try(:strip)
-      activity.start_date              = row['Start Date'].try(:strip)
-      activity.end_date                = row['End Date'].try(:strip)
-      activity.text_for_beneficiaries  = row['Beneficiaries'].try(:strip)
-
-      # virtual attributes
-      activity.csv_project_name    = row['Project Name'].try(:strip)
-      activity.csv_provider        = row['Provider'].try(:strip)
-      activity.csv_districts       = row['Districts'].try(:strip)
-      activity.csv_beneficiaries   = row['Beneficiaries'].try(:strip)
-      activity.text_for_targets    = row['Outputs / Targets'].try(:strip)
+      activity.csv_project_name        = row[0].try(:strip)
+      activity.name                    = row[1].try(:strip)
+      activity.description             = row[2].try(:strip)
+      activity.csv_provider            = row[3].try(:strip)
+      activity.spend                   = row[4].try(:strip)
+      activity.spend_q4_prev           = row[5].try(:strip)
+      activity.spend_q1                = row[6].try(:strip)
+      activity.spend_q2                = row[7].try(:strip)
+      activity.spend_q3                = row[8].try(:strip)
+      activity.budget                  = row[9].try(:strip)
+      activity.budget_q4_prev          = row[10].try(:strip)
+      activity.budget_q1               = row[11].try(:strip)
+      activity.budget_q2               = row[12].try(:strip)
+      activity.budget_q3               = row[13].try(:strip)
+      activity.csv_districts           = row[14].try(:strip)
+      activity.csv_beneficiaries       = row[14].try(:strip)
+      activity.text_for_beneficiaries  = row[15].try(:strip)
+      activity.text_for_targets        = row[16].try(:strip)
+      activity.start_date              = row[17].try(:strip)
+      activity.end_date                = row[18].try(:strip)
 
       # associations
       if activity.csv_project_name.present?
@@ -288,7 +286,6 @@ class Activity < ActiveRecord::Base
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
 
       activity.save
-
 
       activities << activity
     end

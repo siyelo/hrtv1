@@ -185,6 +185,10 @@ class CodeAssignment < ActiveRecord::Base
       self.update_classifications(activity, activity_classifications, coding_type)
     end
   end
+  
+  def cached_amount
+    self[:cached_amount] || 0
+  end
 
   def self.update_classifications(activity, classifications, coding_type)
     klass            = coding_type.constantize

@@ -8,7 +8,8 @@ begin
   @response = Factory(:data_response, :organization => org)
   puts "creating reporter user"
   @reporter = Factory(:reporter, :email => 'reporter@hrtapp.com', :organization => org,
-    :password => 'si@yelo', :password_confirmation => 'si@yelo')
+    :password => ENV['HRT_REPORTER_PASSWORD'] || 'si@yelo',
+    :password_confirmation => ENV['HRT_REPORTER_PASSWORD'] || 'si@yelo')
 rescue ActiveRecord::RecordInvalid => e
   puts e.message
   puts "   Do you already have an org 'internal_reporter_org' or user named 'reporter'? "
@@ -36,7 +37,8 @@ begin
   @response = Factory(:data_response, :organization => org)
   am = Factory(:activity_manager, :email => 'activity_manager@hrtapp.com',
     :organization => org,
-    :password => 'si@yelo', :password_confirmation => 'si@yelo')
+      :password => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo',
+      :password_confirmation => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo')
   # assign some nice existing orgs
   orgs = [ 'JSI', 'Tulane University', 'ICAP', 'Access Project', 'TRAC+ - HIV', 'Voxiva']
   query = orgs.map{ |o| "name like ?"}.join(' OR ')

@@ -41,6 +41,12 @@ class User < ActiveRecord::Base
 
   ### Class Methods
 
+  #authlogic authentication
+  def self.find_by_login_or_email(login)
+     #find_by_login(login) || find_by_email(login)
+     find_by_email(login)
+  end
+
   def self.download_template
     FasterCSV.generate do |csv|
       csv << User::FILE_UPLOAD_COLUMNS
@@ -146,10 +152,6 @@ class User < ActiveRecord::Base
     @current_organization ||= self.current_response.organization
   end
 
-  def self.find_by_login_or_email(login)
-     #find_by_login(login) || find_by_email(login)
-     find_by_email(login)
-  end
 
   private
 

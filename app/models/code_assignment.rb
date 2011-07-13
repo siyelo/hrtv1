@@ -62,7 +62,6 @@ class CodeAssignment < ActiveRecord::Base
   delegate :currency, :to => :activity, :allow_nil => true
 
   ### Class Methods
-  #
 
   # assumes a format like "17,798,123.00"
   # TODO: spec
@@ -124,33 +123,6 @@ class CodeAssignment < ActiveRecord::Base
     code.children.each{|code| add_rows(csv, code, max_level, current_level + 1)}
   end
 
-  def aggregate_amount
-    cached_amount
-  end
-
-  def amount_not_in_children
-    sum_of_children.nil? ? cached_amount : cached_amount - sum_of_children
-  end
-
-  def has_amount_not_in_children?
-    cached_amount - sum_of_children > 0 ? true : false
-  end
-
-  # TODO: spec
-  def proportion_of_activity
-    activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
-
-    unless activity_amount == 0 or cached_amount.nil? or cached_amount == 0
-      cached_amount / activity_amount
-    else
-      if !percentage.nil?
-        percentage / 100
-      else
-        0
-      end
-    end
-  end
-
   # TODO: spec
   def self.sums_by_code_id(code_ids, coding_type, activities)
     CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,
@@ -193,6 +165,35 @@ class CodeAssignment < ActiveRecord::Base
       #
       activity.update_classified_amount_cache(self)
       activity.update_classified_amount_cache(self)
+    end
+  end
+
+  ### Instance Methods
+
+  def aggregate_amount
+    cached_amount
+  end
+
+  def amount_not_in_children
+    sum_of_children.nil? ? cached_amount : cached_amount - sum_of_children
+  end
+
+  def has_amount_not_in_children?
+    cached_amount - sum_of_children > 0 ? true : false
+  end
+
+  # TODO: spec
+  def proportion_of_activity
+    activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
+
+    unless activity_amount == 0 or cached_amount.nil? or cached_amount == 0
+      cached_amount / activity_amount
+    else
+      if !percentage.nil?
+        percentage / 100
+      else
+        0
+      end
     end
   end
 

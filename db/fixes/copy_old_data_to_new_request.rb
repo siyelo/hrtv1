@@ -76,6 +76,7 @@ def zero_out_activity(activity)
     0
 
   activity.code_assignments.each do |ca|
+    save_assignment_ratio(ca)
     zero_out_assignment(ca)
   end
 
@@ -88,6 +89,10 @@ def zero_out_activity(activity)
   end
 
   activity
+end
+
+def save_assignment_ratio(ca)
+  ca.percentage = ca.proportion_of_activity * 100
 end
 
 def zero_out_assignment(ca)
@@ -132,7 +137,24 @@ def save_cloned_activity(a, zeroed_project, new_response)
   a.save(false)
 end
 
-#time = Benchmark.measure do
+
+## disable callbacks for performance
+Activity.before_save.clear
+Activity.before_update.clear
+Activity.after_save.clear
+Activity.after_destroy.clear
+
+Project.before_save.clear
+Project.before_update.clear
+Project.after_save.clear
+Project.after_destroy.clear
+
+CodeAssignment.before_save.clear
+CodeAssignment.before_update.clear
+CodeAssignment.after_save.clear
+CodeAssignment.after_destroy.clear
+
+#time = Benchmark.measure do # debug
   old_request = DataRequest.find_by_title 'FY2010 Workplan and FY2009 Expenditures'
   new_request = DataRequest.find_by_title '2010 Expenditures and 2011 Budget'
 
@@ -164,26 +186,24 @@ end
 
         #### projects & activities
         old_response.projects.each do |project|
-           count += 1
-          #if project == old_response.projects.first  #debug
-            puts "  => Project #{count} of #{total}: (#{project.id}), #{project.name}"
-            cloned_project = project.deep_clone
-            zeroed_project = zero_out_everything(cloned_project)
-            zeroed_project.data_response = new_response
-            zeroed_project.save(false)
+          count += 1
+          puts "  => Project #{count} of #{total}: (#{project.id}), #{project.name}"
+          cloned_project = project.deep_clone
+          zeroed_project = zero_out_everything(cloned_project)
+          zeroed_project.data_response = new_response
+          zeroed_project.save(false)
 
-            zeroed_project.funding_flows.each do |f|
-              f.save(false)
-            end
+          zeroed_project.funding_flows.each do |f|
+            f.save(false)
+          end
 
-            zeroed_project.normal_activities.each do |a|
-              save_cloned_activity(a, zeroed_project, new_response)
-            end
+          zeroed_project.normal_activities.each do |a|
+            save_cloned_activity(a, zeroed_project, new_response)
+          end
 
-            zeroed_project.other_costs.each do |a|
-              save_cloned_activity(a, zeroed_project, new_response)
-            end
-          #end #debug
+          zeroed_project.other_costs.each do |a|
+            save_cloned_activity(a, zeroed_project, new_response)
+          end
         end
 
         ###OC's without project
@@ -199,7 +219,7 @@ end
       puts "=> WARN!: new response doesn't already exist. Something is wrong."
     end
   end
-#end
-#puts "\n=> Done! (#{time.to_s})"
+#end # debug
+#puts "\n=> Done! (#{time.to_s})" #debug
 puts "\n=> Done!"
 

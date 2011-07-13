@@ -167,6 +167,10 @@ class CodeAssignment < ActiveRecord::Base
       activity.update_classified_amount_cache(self)
     end
   end
+  
+  def cached_amount
+    self[:cached_amount] || 0
+  end
 
   ### Instance Methods
 

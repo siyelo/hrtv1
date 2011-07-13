@@ -1,3 +1,4 @@
+require 'iconv'
 class Report < ActiveRecord::Base
   include ScriptHelper
 
@@ -113,8 +114,10 @@ class Report < ActiveRecord::Base
     end
 
     def create_tmp_csv
+      bom = "\377\376"
       self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{get_date()}.csv"
-      File.open(self.temp_file_name, 'w')  {|f| f.write(self.raw_csv) }
+      content = bom + Iconv.conv("utf-16le", "utf-8", self.raw_csv)
+      File.open(self.temp_file_name, 'w')  {|f| f.write(content)}
     end
 
     def zip_file

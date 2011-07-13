@@ -140,15 +140,15 @@ end
   count = 0
 
   unless new_request
-    puts "ERROR: Cant find new request!! '2010 Expenditures and 2011 Budget'"
-    exit false
+    puts "WARNING: Cant find new request!! '2010 Expenditures and 2011 Budget'"
+    exit true
   end
 
   puts 'Copying all data to new request!'
 
-  #Organization.all.each do |org|
+  Organization.all.each do |org|
   #Organization.find_all_by_name("CAMERWA - Central d\'achat des medicaments du Rwanda / Central Drug Purchasing Agency for Rwanda").each do |org|
-  Organization.find_all_by_name("CCHIPs").each do |org|
+  #Organization.find_all_by_name("CCHIPs").each do |org|
     puts "Org: #{org.name}"
 
     old_response = org.responses.find_by_data_request_id(old_request.id)

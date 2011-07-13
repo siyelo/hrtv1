@@ -60,7 +60,6 @@ describe Organization do
   describe "custom date validations" do
     it { should allow_mass_assignment_of(:fiscal_year_start_date) }
     it { should allow_mass_assignment_of(:fiscal_year_end_date) }
-    it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:contact_name) }
     it { should allow_mass_assignment_of(:contact_position) }
     it { should allow_mass_assignment_of(:contact_phone_number) }
@@ -231,6 +230,24 @@ describe Organization do
     it "is not empty when it has activities" do
       @organization.activities << Factory.create(:activity)
       @organization.is_empty?.should_not be_true
+    end
+  end
+  
+  
+  describe "CSV" do
+    before :each do
+      @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
+    end
+    
+    it "will return just the headers if no organizations are passed" do 
+      org_headers = Organization.download_template
+      org_headers.should == "name,raw_type,fosaid\n"
+    end
+    
+    it "will return a list of organizations if there are present" do
+      organizations = Organization.all
+      orgs = Organization.download_template(organizations)
+      orgs.should == "name,raw_type,fosaid\nblarorg,NGO,13\n"
     end
   end
 

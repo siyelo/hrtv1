@@ -66,6 +66,7 @@ class Organization < ActiveRecord::Base
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
+  named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
   # works only on postgres
   #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
 
@@ -89,12 +90,19 @@ class Organization < ActiveRecord::Base
     ActiveRecord::Base.enable_validation!
   end
 
-  def self.download_template
+  def self.download_template(organizations = [])
     FasterCSV.generate do |csv|
       csv << Organization::FILE_UPLOAD_COLUMNS
+      
+      if organizations
+        organizations.each do |org|
+          row = [org.name, org.raw_type, org.fosaid]
+          csv << row
+        end
+      end
     end
   end
-
+  
   def self.create_from_file(doc)
     saved, errors = 0, 0
     doc.each do |row|

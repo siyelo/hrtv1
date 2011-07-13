@@ -1590,6 +1590,22 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
   }
 }
 
+var dashboard_index = {
+  run: function () {
+    $('.dropdown_trigger').click(function (e) {e.preventDefault()});
+
+    $('.dropdown_menu').hover(function (e){
+      e.preventDefault();
+      $('ul', this).slideDown(100);
+      $('.dropdown_trigger').addClass('persist');
+    }, function(e) {
+      e.preventDefault();
+      $('ul', this).slideUp(100);
+      $('.dropdown_trigger').removeClass('persist');
+    });
+  }
+};
+
 var sub_activities_create = {
   run: function () {
     $( ".combobox" ).combobox();

@@ -146,7 +146,8 @@ end
 
   puts 'Copying all data to new request!'
 
-  Organization.all.each do |org|
+  #Organization.all.each do |org|
+  Organization.find(3680, 3929, 3913, 3046, 3045, 3693, 3663, 3981, 3682, 3710).each do |org|
   #Organization.find_all_by_name("CAMERWA - Central d\'achat des medicaments du Rwanda / Central Drug Purchasing Agency for Rwanda").each do |org|
   #Organization.find_all_by_name("CCHIPs").each do |org|
     puts "Org: #{org.name}"

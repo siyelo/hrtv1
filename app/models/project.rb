@@ -68,6 +68,7 @@ class Project < ActiveRecord::Base
   validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
   validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :allow_nil => true
 
   validates_date :start_date
   validates_date :end_date

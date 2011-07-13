@@ -5,8 +5,6 @@ class Activity < ActiveRecord::Base
   include NumberHelper
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
-
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
     "Commodities, Supply and Logistics" => ["5"],
@@ -195,18 +193,9 @@ class Activity < ActiveRecord::Base
 
   def self.download_template(response, activities = [])
     FasterCSV.generate do |csv|
-      header_row = Activity::FILE_UPLOAD_COLUMNS
+      header_row = file_upload_columns(response)
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
-      header_row[5] = "#{response.spend_quarters_months('q1')} Spend"
-      header_row[6] = "#{response.spend_quarters_months('q2')} Spend"
-      header_row[7] = "#{response.spend_quarters_months('q3')} Spend"
-      header_row[8] = "#{response.spend_quarters_months('q4')} Spend"
-
-      header_row[10] = "#{response.budget_quarters_months('q1')} Budget"
-      header_row[11] = "#{response.budget_quarters_months('q2')} Budget"
-      header_row[12] = "#{response.budget_quarters_months('q3')} Budget"
-      header_row[13] = "#{response.budget_quarters_months('q4')} Budget"
       csv << header_row
 
       activities.each do |activity|
@@ -283,8 +272,10 @@ class Activity < ActiveRecord::Base
 
       # associations
       if activity.csv_project_name.present?
-        project = Project.find_by_name(activity.csv_project_name)
+        # find project by name
+        project = response.projects.find_by_name(activity.csv_project_name)
       else
+        # find project by project id if present (when uploading activities for project)
         project = project_id.present? ? Project.find_by_id(project_id) : nil
       end
 
@@ -297,6 +288,7 @@ class Activity < ActiveRecord::Base
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
 
       activity.save
+
 
       activities << activity
     end
@@ -633,6 +625,20 @@ class Activity < ActiveRecord::Base
 
   private
 
+    def self.file_upload_columns(response)
+      ["Project Name", "Activity Name", "Activity Description",
+       "Provider", "Past Expenditure",
+       "#{response.spend_quarters_months('q1')} Spend",
+       "#{response.spend_quarters_months('q2')} Spend",
+       "#{response.spend_quarters_months('q3')} Spend",
+       "#{response.spend_quarters_months('q4')} Spend",
+       "Current Budget",
+        "#{response.budget_quarters_months('q1')} Budget",
+        "#{response.budget_quarters_months('q2')} Budget",
+        "#{response.budget_quarters_months('q3')} Budget",
+        "#{response.budget_quarters_months('q4')} Budget",
+       "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+    end
 
     def delete_existing_code_assignments_by_type(coding_type)
       CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])

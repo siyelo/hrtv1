@@ -118,7 +118,7 @@ class ActivitiesController < Reporter::BaseController
     activities = params[:project_id].present? ?
       @response.projects.find(params[:project_id]).activities : @response.activities
     template = Activity.download_template(@response, activities)
-    send_csv(template, 'activities_existing.csv')
+    send_csv(template, 'activities.csv')
   end
 
   def bulk_create

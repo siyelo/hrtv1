@@ -773,8 +773,8 @@ class Activity < ActiveRecord::Base
     end
     
     def strip_leading_spaces
-      self.name = self.name.strip if self.name 
-      self.description = self.description.strip if self.description
+      name = name.strip if name 
+      description = description.strip if description
     end
 end
 

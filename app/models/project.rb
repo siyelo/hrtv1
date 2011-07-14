@@ -434,9 +434,9 @@ class Project < ActiveRecord::Base
         self.send(:"#{type}=", amount) if amount > 0
       end
     end
-    
+
     def strip_leading_spaces
-      name = name.strip if name 
+      name = name.strip if name
       description = description.strip if description
     end
 

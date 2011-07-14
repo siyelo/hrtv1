@@ -50,7 +50,7 @@ class FundingFlow < ActiveRecord::Base
     :message => :"organization_id_from.id_below_zero"
 
   validates_numericality_of :budget, :spend, :message => "is not a number (Funding Sources)"
-  validate :budget_and_spend_are_greater_than_zero
+  validate :spend_is_greater_than_zero
   delegate :organization, :to => :project
 
   def currency
@@ -129,9 +129,8 @@ class FundingFlow < ActiveRecord::Base
 
   private
 
-    def budget_and_spend_are_greater_than_zero
-      errors.add(:spend, "must be greater than 0") unless (spend || 0) > 0
-      errors.add(:budget, "must be greater than 0") unless (budget || 0) > 0
+    def spend_is_greater_than_zero
+      errors.add(:spend, "for funding must be greater than 0") unless (spend || 0) > 0
     end
 end
 

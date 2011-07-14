@@ -103,7 +103,7 @@ class Project < ActiveRecord::Base
   end
 
   def response
-    self.data_response
+    data_response
   end
 
   # view helper ??!
@@ -207,8 +207,7 @@ class Project < ActiveRecord::Base
   end
 
   def funding_sources_have_organizations?
-    return false if self.in_flows.empty?
-    self.in_flows.each do |in_flow|
+    in_flows.each do |in_flow|
       return false unless in_flow.organization_id_from
     end
     true
@@ -227,46 +226,32 @@ class Project < ActiveRecord::Base
     budget.present? || budget_q1.present? || budget_q2.present? ||
       budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
-
+  
   def linked?
-    return false if self.in_flows.empty?
-    self.in_flows.each do |in_flow|
-      return false unless in_flow.project_from_id
-    end
-    true
-  end
+     return false if self.in_flows.empty?
+     self.in_flows.each do |in_flow|
+       return false unless in_flow.project_from_id
+     end
+     true
+   end
 
   def has_activities?
-    !self.normal_activities.empty?
+    !normal_activities.empty?
   end
 
   def has_other_costs?
-    !self.activities.with_type("OtherCost").empty?
+    !activities.with_type("OtherCost").empty?
   end
 
-  def matches_funders?
-    budget_matches_funders? && spend_matches_funders?
+  #checks if the project amount == the inflows amount
+  def amounts_matches_funders?(amount_method)
+    (self.send(amount_method) || 0) == in_flows_total(amount_method)
   end
 
-  def budget_matches_funders?
-    (self.budget || 0) == self.in_flows_budget_total
-  end
-
-  def in_flows_budget_total
-    in_flows_total(:budget)
-  end
-
-  def spend_matches_funders?
-    (self.spend || 0) == self.in_flows_spend_total
-  end
 
   #calculates the activitytotals for budget/spent
   def subtotals(type)
     activities.select{|a| a.send(type).present?}.sum(&type)
-  end
-
-  def in_flows_spend_total
-    in_flows_total(:spend)
   end
 
   def in_flows_total(amount_method)

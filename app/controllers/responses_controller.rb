@@ -3,7 +3,7 @@ class ResponsesController < Reporter::BaseController
   before_filter :load_response_from_id, :except => :new
 
   def review
-    @projects                     = @response.projects.find(:all, :order => "name ASC")
+    @projects                     = @response.projects.find(:all, :order => "name ASC", :select => 'projects.name, projects.description')
     @activities_without_projects  = @response.activities.roots.without_a_project
     @other_costs_without_projects = @response.other_costs.without_a_project
     @code_roots                   = Code.purposes.roots
@@ -13,7 +13,13 @@ class ResponsesController < Reporter::BaseController
   end
 
   def submit
-    @projects = @response.projects.find(:all, :include => :normal_activities)
+    # NOTE: old code
+    #@projects = @response.projects.find(:all, :include => :normal_activities)
+
+    # NOTE: optimization
+    DataResponse.send(:preload_associations, @response,
+                  [{:projects => :normal_activities}])
+    @projects = @response.projects
   end
 
   def send_data_response

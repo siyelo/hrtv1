@@ -90,7 +90,7 @@ class SubActivity < Activity
                       :spend => row['Past Expenditure'],
                       :provider_id => provider_id,
                       :data_response_id => activity.data_response.id}
-        
+
         if sa
           sa.update_attributes(attributes)
           attributes = {}
@@ -215,16 +215,24 @@ class SubActivity < Activity
       end
     end
 
+    # validate only if it was supplied - the implementer might not have a budget for the
+    # coming period
     def numericality_of_budget_mask
-      budget_mask_number = budget_mask.to_s.last == '%' ?
-        budget_mask.to_s.delete('%') : budget_mask
-      errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
+      unless budget_mask.blank?
+        budget_mask_number = budget_mask.to_s.last == '%' ?
+          budget_mask.to_s.delete('%') : budget_mask
+        errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
+      end
     end
 
+    # validate only if it was supplied - the implementer might not only have a budget for the
+    # coming period (no expenditure)
     def numericality_of_spend_mask
-      spend_mask_number = spend_mask.to_s.last == '%' ?
-        spend_mask.to_s.delete('%') : spend_mask
-      errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
+      unless spend_mask.blank?
+        spend_mask_number = spend_mask.to_s.last == '%' ?
+          spend_mask.to_s.delete('%') : spend_mask
+        errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
+      end
     end
 
     def set_spend_amount
@@ -250,56 +258,59 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
-#  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer         indexed
-#  description                           :text
-#  type                                  :string(255)     indexed
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
-#  start_date                            :date
-#  end_date                              :date
-#  spend                                 :decimal(, )
-#  text_for_provider                     :text
-#  text_for_targets                      :text
-#  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer         indexed
-#  activity_id                           :integer         indexed
-#  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  budget_q1                             :decimal(, )
-#  budget_q2                             :decimal(, )
-#  budget_q3                             :decimal(, )
-#  budget_q4                             :decimal(, )
-#  budget_q4_prev                        :decimal(, )
-#  comments_count                        :integer         default(0)
-#  sub_activities_count                  :integer         default(0)
-#  spend_in_usd                          :decimal(, )     default(0.0)
-#  budget_in_usd                         :decimal(, )     default(0.0)
-#  project_id                            :integer
-#  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
-#  budget2                               :decimal(, )
-#  budget3                               :decimal(, )
-#  budget4                               :decimal(, )
-#  budget5                               :decimal(, )
-#  am_approved                           :boolean
-#  user_id                               :integer
-#  am_approved_date                      :date
+#  id                           :integer         not null, primary key
+#  name                         :string(255)
+#  created_at                   :datetime
+#  updated_at                   :datetime
+#  provider_id                  :integer         indexed
+#  description                  :text
+#  type                         :string(255)     indexed
+#  budget                       :decimal(, )
+#  spend_q1                     :decimal(, )
+#  spend_q2                     :decimal(, )
+#  spend_q3                     :decimal(, )
+#  spend_q4                     :decimal(, )
+#  start_date                   :date
+#  end_date                     :date
+#  spend                        :decimal(, )
+#  text_for_provider            :text
+#  text_for_targets             :text
+#  text_for_beneficiaries       :text
+#  spend_q4_prev                :decimal(, )
+#  data_response_id             :integer         indexed
+#  activity_id                  :integer         indexed
+#  approved                     :boolean
+#  budget_q1                    :decimal(, )
+#  budget_q2                    :decimal(, )
+#  budget_q3                    :decimal(, )
+#  budget_q4                    :decimal(, )
+#  budget_q4_prev               :decimal(, )
+#  comments_count               :integer         default(0)
+#  sub_activities_count         :integer         default(0)
+#  spend_in_usd                 :decimal(, )     default(0.0)
+#  budget_in_usd                :decimal(, )     default(0.0)
+#  project_id                   :integer
+#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
+#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
+#  budget2                      :decimal(, )
+#  budget3                      :decimal(, )
+#  budget4                      :decimal(, )
+#  budget5                      :decimal(, )
+#  am_approved                  :boolean
+#  user_id                      :integer
+#  am_approved_date             :date
+#  coding_budget_valid          :boolean         default(FALSE)
+#  coding_budget_cc_valid       :boolean         default(FALSE)
+#  coding_budget_district_valid :boolean         default(FALSE)
+#  service_level_budget_valid   :boolean         default(FALSE)
+#  coding_spend_valid           :boolean         default(FALSE)
+#  coding_spend_cc_valid        :boolean         default(FALSE)
+#  service_level_spend_valid    :boolean         default(FALSE)
+#  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

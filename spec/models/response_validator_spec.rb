@@ -95,6 +95,8 @@ describe DataResponse do #validations
     end
 
     it "fails if no projects exist to link" do
+      @response.projects.delete_all
+      @response.reload
       @response.projects_linked?.should == false
     end
 
@@ -185,7 +187,7 @@ describe DataResponse do #validations
 
     it "fails if an activity is missing a coding split" do
       cs = @activity.coding_spend.first
-      cs.cached_amount = 0; cs.amount = 0; cs.save! ; @activity.reload
+      @activity.coding_budget_valid = false; @activity.save; @activity.reload
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
@@ -193,7 +195,7 @@ describe DataResponse do #validations
 
     it "fails if there are uncoded other costs" do
       cs = @other_cost.coding_spend.first
-      cs.cached_amount = 0; cs.amount = 0; cs.save!; @other_cost.reload
+      @other_cost.coding_budget_valid = false; @other_cost.save; @other_cost.reload
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end
@@ -277,25 +279,25 @@ describe DataResponse do #validations
       @response.projects_and_activities_have_matching_budgets?.should == true
       @response.projects_with_activities_not_matching_amounts(:budget).should == []
     end
-    
+
     it "is true when activity budget is $100 less than project budget" do
       @activity = Factory.create(:activity, :project => @project, :budget => 9900)
       @response.projects_and_activities_have_matching_budgets?.should == true
       @response.projects_with_activities_not_matching_amounts(:budget).should == []
     end
-    
+
     it "is true when activity budget is $100 more than project budget" do
       @activity = Factory.create(:activity, :project => @project, :budget => 10100)
       @response.projects_and_activities_have_matching_budgets?.should == true
       @response.projects_with_activities_not_matching_amounts(:budget).should == []
     end
-    
+
     it "is false when activity budget is $110 less than project budget" do
       @activity = Factory.create(:activity, :project => @project, :budget => 9890)
       @response.projects_and_activities_have_matching_budgets?.should == false
       @response.projects_with_activities_not_matching_amounts(:budget).should_not be_nil
     end
-    
+
     it "is false when activity budget is $110 more than project budget" do
       @activity = Factory.create(:activity, :project => @project, :budget => 10110)
       @response.projects_and_activities_have_matching_budgets?.should == false

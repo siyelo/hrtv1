@@ -45,6 +45,7 @@ class SubActivity < Activity
   end
 
   def spend_mask=(the_spend_mask)
+    attribute_will_change!(:spend_mask)
     @spend_mask = the_spend_mask
   end
 
@@ -53,6 +54,7 @@ class SubActivity < Activity
   end
 
   def budget_mask=(the_budget_mask)
+    attribute_will_change!(:budget_mask)
     @budget_mask = the_budget_mask
   end
 

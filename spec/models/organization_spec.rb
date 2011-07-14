@@ -24,11 +24,11 @@ describe Organization do
     it { should have_many(:data_responses) }
     it { should have_many(:projects) }
     it { should have_many(:dr_activities) }
-    it { should have_many(:out_flows).dependent(:destroy) }
-    it { should have_many(:in_flows).dependent(:destroy) }
+    it { should have_many(:out_flows).dependent(:nullify) }
+    it { should have_many(:in_flows).dependent(:nullify) }
     it { should have_many(:donor_for) }
     it { should have_many(:implementor_for) }
-    it { should have_many(:provider_for) }
+    it { should have_many(:provider_for).dependent(:nullify) }
     it { should have_and_belong_to_many :managers }
   end
 
@@ -232,18 +232,18 @@ describe Organization do
       @organization.is_empty?.should_not be_true
     end
   end
-  
-  
+
+
   describe "CSV" do
     before :each do
       @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
     end
-    
-    it "will return just the headers if no organizations are passed" do 
+
+    it "will return just the headers if no organizations are passed" do
       org_headers = Organization.download_template
       org_headers.should == "name,raw_type,fosaid\n"
     end
-    
+
     it "will return a list of organizations if there are present" do
       organizations = Organization.all
       orgs = Organization.download_template(organizations)

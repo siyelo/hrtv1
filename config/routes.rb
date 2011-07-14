@@ -55,7 +55,7 @@ ActionController::Routing::Routes.draw do |map|
                       :bulk_edit => :get,
                       :export => :get,
                       :bulk_update => :put}
-    response.resources :activities,
+    response.resources :activities, :except => [:index],
       :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
       :collection => {:bulk_create => :post,
                       :template => :get,

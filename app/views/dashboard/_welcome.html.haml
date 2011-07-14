@@ -1,17 +1,7 @@
 #welcome_box
-  %h2.welcome_msg 
+  %h2.welcome_msg
     Here are few simple steps to help you get started
-    
-    %ul#nav.horizontal.right
-      %li.dropdown_menu
-        - link_to '#', :class => 'dropdown_trigger' do
-          = image_tag "icon_import_export_alt.png"
-          Download Organizations
 
-        %ul{:style => 'display: none'}
-          %li= link_to 'NGO + Donors', export_organizations_path(:type => 'NGO')
-          %li= link_to 'Hospitals + Health Centers', export_organizations_path(:type => 'centers')
-          %li= link_to 'All Organizations', export_organizations_path
   %ul.welcome_steps
     %li.first
       - link_to edit_organization_path(:current) do

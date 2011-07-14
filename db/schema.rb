@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110713093633) do
+ActiveRecord::Schema.define(:version => 20110714081836) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -180,6 +180,15 @@ ActiveRecord::Schema.define(:version => 20110713093633) do
     t.datetime "updated_at"
   end
 
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
@@ -244,6 +253,15 @@ ActiveRecord::Schema.define(:version => 20110713093633) do
   create_table "locations_projects", :id => false, :force => true do |t|
     t.integer "location_id"
     t.integer "project_id"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|

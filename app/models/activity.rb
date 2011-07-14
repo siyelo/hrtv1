@@ -121,6 +121,15 @@ class Activity < ActiveRecord::Base
   after_destroy :update_counter_cache
   before_save :set_total_amounts
 
+  HUMANIZED_ATTRIBUTES = {
+    :budget => "Current Budget",
+    :spend => "Past Expenditure"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
+
   ### Named scopes
   # TODO: spec
   named_scope :roots,             {:conditions => "activities.type IS NULL" }

@@ -73,7 +73,7 @@
         - f.semantic_fields_for :funding_sources do |fs|
           = render "activities/funding_source_fields", :f => fs
         .add
-          = link_to_add_fields "Add funding source", f, :funding_sources, "activities/", :class => "create_new marginless"
+          = link_to_add_fields "Add funding source", f, :funding_sources, "activities/", :class => "create_alt marginless"
 
   %li.last.sub_activities
     %h3 Implementers
@@ -82,11 +82,11 @@
         %strong Optional.
         Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
       %span.add
-        = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_new marginless"
+        = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"
       %span
         - unless @activity.new_record?
-          - link_to "#", :id => "import_implementers", :class => "create_new js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
-            = image_tag "icon_import_export_alt.png"
+          - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
+            = image_tag "icon_import_export.png"
             Import / Export
       %br
       %table.nested
@@ -109,7 +109,7 @@
       - f.semantic_fields_for :outputs do |ca|
         = render "activities/output_fields", :f => ca
       .add
-        = link_to_add_fields "Add Target", f, :outputs, "activities/", :class => "create_new marginless"
+        = link_to_add_fields "Add Target", f, :outputs, "activities/", :class => "create_alt marginless"
 
   %li.last
     %h3== Other

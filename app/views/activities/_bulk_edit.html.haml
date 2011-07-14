@@ -49,7 +49,7 @@
 
 
         %ul.clearfix
-          = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => current_user.current_response ? current_user.current_response.projects : [activity.try(:project).try(:data_response).try(:projects)].flatten
+          = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => @response.projects
 
           %li.project_sub_form
             .project_sub_form_fields

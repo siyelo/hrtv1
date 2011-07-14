@@ -212,14 +212,17 @@ class Activity < ActiveRecord::Base
         row << activity.spend_q1
         row << activity.spend_q2
         row << activity.spend_q3
+        row << activity.spend_q4
         row << activity.budget
         row << activity.budget_q4_prev
         row << activity.budget_q1
         row << activity.budget_q2
         row << activity.budget_q3
+        row << activity.budget_q4
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << ''
+        row << activity.text_for_beneficiaries
+        row << activity.text_for_targets
         row << activity.start_date
         row << activity.end_date
 
@@ -249,7 +252,6 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
-
       activity.csv_project_name        = row[0].try(:strip)
       activity.name                    = row[1].try(:strip)
       activity.description             = row[2].try(:strip)
@@ -259,17 +261,19 @@ class Activity < ActiveRecord::Base
       activity.spend_q1                = row[6].try(:strip)
       activity.spend_q2                = row[7].try(:strip)
       activity.spend_q3                = row[8].try(:strip)
-      activity.budget                  = row[9].try(:strip)
-      activity.budget_q4_prev          = row[10].try(:strip)
-      activity.budget_q1               = row[11].try(:strip)
-      activity.budget_q2               = row[12].try(:strip)
-      activity.budget_q3               = row[13].try(:strip)
-      activity.csv_districts           = row[14].try(:strip)
-      activity.csv_beneficiaries       = row[14].try(:strip)
-      activity.text_for_beneficiaries  = row[15].try(:strip)
-      activity.text_for_targets        = row[16].try(:strip)
-      activity.start_date              = flexible_date_parse(row[17].try(:strip))
-      activity.end_date                = flexible_date_parse(row[18].try(:strip))
+      activity.spend_q4                = row[9].try(:strip)
+      activity.budget                  = row[10].try(:strip)
+      activity.budget_q4_prev          = row[11].try(:strip)
+      activity.budget_q1               = row[12].try(:strip)
+      activity.budget_q2               = row[13].try(:strip)
+      activity.budget_q3               = row[14].try(:strip)
+      activity.budget_q4               = row[15].try(:strip)
+      activity.csv_districts           = row[16].try(:strip)
+      activity.csv_beneficiaries       = row[17].try(:strip)
+      activity.text_for_beneficiaries  = row[18].try(:strip)
+      activity.text_for_targets        = row[19].try(:strip)
+      activity.start_date              = flexible_date_parse(row[20].try(:strip))
+      activity.end_date                = flexible_date_parse(row[21].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -617,12 +621,14 @@ class Activity < ActiveRecord::Base
        "#{response.spend_quarters_months('q2')} Spend",
        "#{response.spend_quarters_months('q3')} Spend",
        "#{response.spend_quarters_months('q4')} Spend",
+       "#{response.spend_quarters_months('q1_next_fy')} Spend",
        "Current Budget",
         "#{response.budget_quarters_months('q1')} Budget",
         "#{response.budget_quarters_months('q2')} Budget",
         "#{response.budget_quarters_months('q3')} Budget",
         "#{response.budget_quarters_months('q4')} Budget",
-       "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+        "#{response.budget_quarters_months('q1_next_fy')} Budget",
+       "Districts", "Beneficiaries", "Beneficiary details / Other beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
     end
 
     def delete_existing_code_assignments_by_type(coding_type)

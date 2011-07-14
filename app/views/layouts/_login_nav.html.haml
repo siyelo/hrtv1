@@ -16,6 +16,9 @@
           Sign Out
     %p
       = "#{current_user.email}"
+      // Alternative option to display the user
+      //= "#{current_user.name} (#{current_user.email})"
+
 
   - else
     %ul

@@ -90,7 +90,7 @@ class SubActivity < Activity
                       :spend => row['Past Expenditure'],
                       :provider_id => provider_id,
                       :data_response_id => activity.data_response.id}
-        
+
         if sa
           sa.update_attributes(attributes)
           attributes = {}
@@ -215,16 +215,24 @@ class SubActivity < Activity
       end
     end
 
+    # validate only if it was supplied - the implementer might not have a budget for the
+    # coming period
     def numericality_of_budget_mask
-      budget_mask_number = budget_mask.to_s.last == '%' ?
-        budget_mask.to_s.delete('%') : budget_mask
-      errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
+      unless budget_mask.blank?
+        budget_mask_number = budget_mask.to_s.last == '%' ?
+          budget_mask.to_s.delete('%') : budget_mask
+        errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
+      end
     end
 
+    # validate only if it was supplied - the implementer might not only have a budget for the
+    # coming period (no expenditure)
     def numericality_of_spend_mask
-      spend_mask_number = spend_mask.to_s.last == '%' ?
-        spend_mask.to_s.delete('%') : spend_mask
-      errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
+      unless spend_mask.blank?
+        spend_mask_number = spend_mask.to_s.last == '%' ?
+          spend_mask.to_s.delete('%') : spend_mask
+        errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
+      end
     end
 
     def set_spend_amount

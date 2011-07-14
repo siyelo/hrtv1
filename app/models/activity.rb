@@ -173,7 +173,8 @@ class Activity < ActiveRecord::Base
       self.provider_id = the_provider_mask
     else
       organization = Organization.find_or_create_by_name(the_provider_mask)
-      self.provider_id = organization.id if organization.id.present?
+      organization.save(false) # ignore any errors e.g. on currency or contact details
+      self.provider_id = organization.id
     end
 
     @provider_mask   = self.provider_id

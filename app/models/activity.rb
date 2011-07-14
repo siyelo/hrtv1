@@ -350,48 +350,49 @@ class Activity < ActiveRecord::Base
     organization.name
   end
 
-
   def coding_budget_classified? #purposes
-    !data_response.request.purposes? || CodingTree.new(self, CodingBudget).valid?
+    !data_response.request.purposes? || budget.blank? || coding_budget_valid?
   end
 
   def coding_budget_cc_classified? #inputs
-    !data_response.request.inputs? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
+    !data_response.request.inputs? || budget.blank? || coding_budget_cc_valid?
   end
 
   def coding_budget_district_classified? #locations
-    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
+    !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
   end
 
   def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelBudget).valid?
+    !data_response.request.service_levels? || budget.blank? || service_level_budget_valid?
   end
 
   def coding_spend_classified?
-    !data_response.request.purposes? || CodingTree.new(self, CodingSpend).valid?
+    !data_response.request.purposes? || spend.blank? || coding_spend_valid?
   end
 
   def coding_spend_cc_classified?
-    !data_response.request.inputs? || CodingTree.new(self, CodingSpendCostCategorization).valid?
+    !data_response.request.inputs? || spend.blank? || coding_spend_cc_valid?
   end
 
   def coding_spend_district_classified?
-    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
+    !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
   end
 
   def service_level_spend_classified?
-    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelSpend).valid?
+    !data_response.request.service_levels? || spend.blank? || service_level_spend_valid?
   end
 
   def budget_classified?
-    budget.blank? || (coding_budget_classified? &&
+    budget.blank? ||
+    (coding_budget_classified? &&
     coding_budget_district_classified? &&
     coding_budget_cc_classified? &&
     service_level_budget_classified?)
   end
 
   def spend_classified?
-    spend.blank? || (coding_spend_classified? &&
+    spend.blank? ||
+    (coding_spend_classified? &&
     coding_spend_district_classified? &&
     coding_spend_cc_classified? &&
     service_level_spend_classified?)
@@ -670,7 +671,7 @@ class Activity < ActiveRecord::Base
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
-      self.send("#{type}_amount=", coding_tree.total)
+      self.send(:"#{get_valid_attribute_name(type)}=", coding_tree.valid?)
     end
 
     def district_coding_adjusted(klass, assignments, amount)
@@ -787,7 +788,23 @@ class Activity < ActiveRecord::Base
       name = name.strip if name
       description = description.strip if description
     end
+
+    def get_valid_attribute_name(type)
+      case type.to_s
+      when 'CodingBudget' then :coding_budget_valid
+      when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
+      when 'CodingBudgetDistrict' then :coding_budget_district_valid
+      when 'ServiceLevelBudget' then :service_level_budget_valid
+      when 'CodingSpend' then :coding_spend_valid
+      when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
+      when 'ServiceLevelSpend' then :service_level_spend_valid
+      when 'CodingSpendDistrict' then :coding_spend_district_valid
+      else
+        raise "Unknown type #{type}".to_yaml
+      end
+    end
 end
+
 
 
 
@@ -799,52 +816,54 @@ end
 #
 # Table name: activities
 #
-#  id                                    :integer         not null, primary key
-#  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer         indexed
-#  description                           :text
-#  type                                  :string(255)     indexed
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
-#  start_date                            :date
-#  end_date                              :date
-#  spend                                 :decimal(, )
-#  text_for_provider                     :text
-#  text_for_targets                      :text
-#  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer         indexed
-#  activity_id                           :integer         indexed
-#  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  budget_q1                             :decimal(, )
-#  budget_q2                             :decimal(, )
-#  budget_q3                             :decimal(, )
-#  budget_q4                             :decimal(, )
-#  budget_q4_prev                        :decimal(, )
-#  comments_count                        :integer         default(0)
-#  sub_activities_count                  :integer         default(0)
-#  spend_in_usd                          :decimal(, )     default(0.0)
-#  budget_in_usd                         :decimal(, )     default(0.0)
-#  project_id                            :integer
-#  ServiceLevelBudget_amount             :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount              :decimal(, )     default(0.0)
-#  budget2                               :decimal(, )
-#  budget3                               :decimal(, )
-#  budget4                               :decimal(, )
-#  budget5                               :decimal(, )
-#  am_approved                           :boolean
-#  user_id                               :integer
-#  am_approved_date                      :date
+#  id                           :integer         not null, primary key
+#  name                         :string(255)
+#  created_at                   :datetime
+#  updated_at                   :datetime
+#  provider_id                  :integer         indexed
+#  description                  :text
+#  type                         :string(255)     indexed
+#  budget                       :decimal(, )
+#  spend_q1                     :decimal(, )
+#  spend_q2                     :decimal(, )
+#  spend_q3                     :decimal(, )
+#  spend_q4                     :decimal(, )
+#  start_date                   :date
+#  end_date                     :date
+#  spend                        :decimal(, )
+#  text_for_provider            :text
+#  text_for_targets             :text
+#  text_for_beneficiaries       :text
+#  spend_q4_prev                :decimal(, )
+#  data_response_id             :integer         indexed
+#  activity_id                  :integer         indexed
+#  approved                     :boolean
+#  budget_q1                    :decimal(, )
+#  budget_q2                    :decimal(, )
+#  budget_q3                    :decimal(, )
+#  budget_q4                    :decimal(, )
+#  budget_q4_prev               :decimal(, )
+#  comments_count               :integer         default(0)
+#  sub_activities_count         :integer         default(0)
+#  spend_in_usd                 :decimal(, )     default(0.0)
+#  budget_in_usd                :decimal(, )     default(0.0)
+#  project_id                   :integer
+#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
+#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
+#  budget2                      :decimal(, )
+#  budget3                      :decimal(, )
+#  budget4                      :decimal(, )
+#  budget5                      :decimal(, )
+#  am_approved                  :boolean
+#  user_id                      :integer
+#  am_approved_date             :date
+#  coding_budget_valid          :boolean         default(FALSE)
+#  coding_budget_cc_valid       :boolean         default(FALSE)
+#  coding_budget_district_valid :boolean         default(FALSE)
+#  service_level_budget_valid   :boolean         default(FALSE)
+#  coding_spend_valid           :boolean         default(FALSE)
+#  coding_spend_cc_valid        :boolean         default(FALSE)
+#  service_level_spend_valid    :boolean         default(FALSE)
+#  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

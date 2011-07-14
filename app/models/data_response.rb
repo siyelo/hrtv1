@@ -445,8 +445,8 @@ class DataResponse < ActiveRecord::Base
 
     def reject_uncoded(activities)
       activities.select{ |a|
-        (!a.budget_classified? && request.budget?) ||
-        (!a.spend_classified?  && request.spend?)}
+        (request.budget? && !a.budget_classified?) ||
+        (request.spend? && !a.spend_classified?)}
     end
 
     # Find all complete Activities

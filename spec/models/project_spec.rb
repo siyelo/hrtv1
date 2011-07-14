@@ -222,7 +222,7 @@ describe Project do
       @project.has_other_costs?.should be_false
     end
   end
-  
+
   context "Funding flows: " do
     before(:each) do
       @our_org       = Factory(:organization)
@@ -231,10 +231,10 @@ describe Project do
       @other_org     = Factory(:organization)
       @project       = Factory(:project,
                                :data_response => @response )
-                               
+
     end
-    
-    it "matches the funding flow spend" do 
+
+    it "matches the funding flow spend" do
       flow      = Factory(:funding_flow,
                          :from          => @other_org,
                          :to            => @our_org,
@@ -242,8 +242,8 @@ describe Project do
                          :data_response => @project.data_response)
       @project.amounts_matches_funders?(:spend).should be_true
     end
-    
-    it "matches the budgets flow spend" do 
+
+    it "matches the budgets flow spend" do
       flow      = Factory(:funding_flow,
                          :from          => @other_org,
                          :to            => @our_org,
@@ -404,8 +404,8 @@ describe Project do
       @project1.save
       @project1.currency.should == "GBP"
     end
-    
-    it "user should not be able to select an invalid currency" do 
+
+    it "user should not be able to select an invalid currency" do
       @project.currency = "rwandan francs"
       @project.save.should be_false
     end
@@ -517,7 +517,7 @@ describe Project do
       @response      = Factory(:data_response, :data_request => @data_request,
                                :organization => @organization)
       @response1 = Factory(:data_response, :data_request => @data_request1,
-                                :organization => @organization1)
+                                :organization => @organization)
       @project = Factory(:project, :data_response => @response)
     end
 
@@ -526,14 +526,14 @@ describe Project do
     end
 
     it "returns true if a project is linked to a parent project" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project,
+      @funding_flow = Factory(:funding_flow, :from => @organization, :to => @organization, :project => @project,
                               :data_response => @response, :project_from_id => @project.id)
       @project.reload
       @project.linked?.should == true
     end
 
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization,
+      @funding_flow = Factory(:funding_flow, :from => @organization, :to => @organization,
         :project => @project, :data_response => @response, :project_from_id => 0)
       @project.reload
       @project.linked?.should == true

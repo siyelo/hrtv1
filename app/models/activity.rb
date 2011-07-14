@@ -4,6 +4,8 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include NumberHelper
 
+  MAX_NAME_LENGTH = 64
+
   ### Constants
   STRAT_PROG_TO_CODES_FOR_TOTALING = {
     "Quality Assurance" => ["6","7","8","9","11"],
@@ -96,6 +98,7 @@ class Activity < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Validations
+  before_validation :strip_leading_spaces
   validate :approved_activity_cannot_be_changed
 
   validates_presence_of :name, :if => :is_activity?
@@ -107,7 +110,7 @@ class Activity < ActiveRecord::Base
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?
-  validates_length_of :name, :within => 3..64, :if => :is_activity?, :allow_blank => true
+  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
   #validates_associated :sub_activities
@@ -119,6 +122,15 @@ class Activity < ActiveRecord::Base
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
   before_save :set_total_amounts
+
+  HUMANIZED_ATTRIBUTES = {
+    :budget => "Current Budget",
+    :spend => "Past Expenditure"
+  }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   ### Named scopes
   # TODO: spec
@@ -278,6 +290,7 @@ class Activity < ActiveRecord::Base
       end
 
       activity.project             = project if project
+      activity.name                = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
       provider                     = Organization.find_by_name(activity.csv_provider)
       activity.provider            = provider if provider
       activity.locations           = activity.csv_districts.to_s.split(',').
@@ -769,6 +782,11 @@ class Activity < ActiveRecord::Base
 
     def is_sub_activity?
       self.class.eql?(SubActivity)
+    end
+
+    def strip_leading_spaces
+      name = name.strip if name
+      description = description.strip if description
     end
 end
 

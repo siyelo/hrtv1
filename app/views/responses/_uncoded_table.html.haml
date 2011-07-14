@@ -39,7 +39,7 @@
     %tbody
       - activities.each do |activity|
         %tr
-          %td= nice_name(activity)
+          %td= nice_name(activity, 64)
           - if @data_request.purposes?
             %td= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
           - if @data_request.locations?

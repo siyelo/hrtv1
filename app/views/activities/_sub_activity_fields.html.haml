@@ -4,7 +4,7 @@
       = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
       .implementer_container
         .ui_widget
-          = f.input :provider_mask, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this activity", :required => false, :input_html => {:class => 'implementer_select combobox'}
+          = f.input :provider_mask, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this activity", :required => false, :input_html => {:class => 'js_implementer_select js_combobox'}
 
       - if @response.data_request.spend?
         = f.input :spend_mask, :required => false, :hint => "Amount or Percentage allocated to this Implementer from the main Activity's Expenditure.", :label => "Implementer Expenditure"

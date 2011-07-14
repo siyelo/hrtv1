@@ -238,10 +238,12 @@ class DataResponse < ActiveRecord::Base
   def projects_entered?
     !projects.empty?
   end
+  memoize :projects_entered?
 
   def project_amounts_entered?
     projects_entered? && projects_without_amounts.empty?
   end
+  memoize :project_amounts_entered?
 
   def projects_without_amounts
     select_without_amounts(self.projects)
@@ -279,6 +281,7 @@ class DataResponse < ActiveRecord::Base
   def activities_entered?
     !normal_activities.empty?
   end
+  memoize :activities_entered?
 
   def activities_have_implementers?
     return false unless activities_entered?
@@ -291,6 +294,7 @@ class DataResponse < ActiveRecord::Base
   def activity_amounts_entered?
     activities_without_amounts.empty?
   end
+  memoize :activity_amounts_entered?
 
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
@@ -310,10 +314,12 @@ class DataResponse < ActiveRecord::Base
                     :conditions => {:type => nil, :project_id => projects}
                    ).total.to_i == projects.length
   end
+  memoize :projects_have_activities?
 
   def other_costs_entered?
     !self.other_costs.empty?
   end
+  memoize :other_costs_entered?
 
   def projects_have_other_costs?
     # NOTE: old code
@@ -328,6 +334,7 @@ class DataResponse < ActiveRecord::Base
                     :conditions => {:type => 'OtherCost', :project_id => projects}
                    ).total.to_i == projects.length
   end
+  memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_matching_budgets?
     projects.each do |project|
@@ -335,6 +342,7 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
+  memoize :projects_and_funding_sources_have_matching_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
     projects.each do |project|
@@ -342,11 +350,13 @@ class DataResponse < ActiveRecord::Base
     end
     true
   end
+  memoize :projects_and_funding_sources_have_correct_spends?
 
   def projects_funding_sources_ok?
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends?
   end
+  memoize :projects_funding_sources_ok?
 
   def projects_and_activities_have_matching_budgets?
     projects_and_activities_matching_amounts?(:budget)
@@ -360,6 +370,7 @@ class DataResponse < ActiveRecord::Base
     projects_and_activities_have_matching_budgets? &&
     projects_and_activities_have_matching_spends?
   end
+  memoize :projects_activities_ok?
 
   def projects_and_activities_matching_amounts?(amount_method)
     projects.each do |project|
@@ -400,10 +411,12 @@ class DataResponse < ActiveRecord::Base
   def activities_coded?
     activities_entered? && uncoded_activities.empty?
   end
+  memoize :activities_coded?
 
   def other_costs_coded?
     other_costs_entered? && uncoded_other_costs.empty?
   end
+  memoize :other_costs_coded?
 
   def projects_total_spend
     projects.map{|p| p.subtotals(:spend).to_f * currency_rate(p.currency, currency) }.compact.sum

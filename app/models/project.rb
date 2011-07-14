@@ -207,7 +207,6 @@ class Project < ActiveRecord::Base
   end
 
   def funding_sources_have_organizations?
-    return false if self.in_flows.empty?
     in_flows.each do |in_flow|
       return false unless in_flow.organization_id_from
     end
@@ -229,7 +228,6 @@ class Project < ActiveRecord::Base
   end
 
   def linked?
-    return false if in_flows.empty?
     in_flows.each do |in_flow|
       return false unless in_flow.project_from_id
     end
@@ -249,7 +247,7 @@ class Project < ActiveRecord::Base
   end
 
   def budget_matches_funders?
-    (budget || 0) == self.in_flows_budget_total
+    (budget || 0) == in_flows_budget_total
   end
 
   def in_flows_budget_total

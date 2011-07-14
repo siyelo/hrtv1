@@ -95,6 +95,8 @@ describe DataResponse do #validations
     end
 
     it "fails if no projects exist to link" do
+      @response.projects.delete_all
+      @response.reload
       @response.projects_linked?.should == false
     end
 

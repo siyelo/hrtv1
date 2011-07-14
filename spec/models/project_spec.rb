@@ -514,7 +514,6 @@ describe Project do
       @data_request = Factory(:data_request)
       @data_request1 = Factory(:data_request)
       @organization = Factory(:organization)
-      @organization1 = Factory(:organization)
       @response      = Factory(:data_response, :data_request => @data_request,
                                :organization => @organization)
       @response1 = Factory(:data_response, :data_request => @data_request1,

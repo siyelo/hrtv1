@@ -226,13 +226,14 @@ class Project < ActiveRecord::Base
     budget.present? || budget_q1.present? || budget_q2.present? ||
       budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
   end
-
+  
   def linked?
-    in_flows.each do |in_flow|
-      return false unless in_flow.project_from_id
-    end
-    true
-  end
+     return false if self.in_flows.empty?
+     self.in_flows.each do |in_flow|
+       return false unless in_flow.project_from_id
+     end
+     true
+   end
 
   def has_activities?
     !normal_activities.empty?

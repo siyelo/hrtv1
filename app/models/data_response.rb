@@ -268,12 +268,14 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_linked?
-    projects.each do |project|
+    return false unless projects_entered?
+    self.projects.each do |project|
       #return false if project.in_flows.present? && !project.linked?
       return false unless project.linked?
     end
     true
   end
+  memoize :projects_linked?
 
   def activities_entered?
     !normal_activities.empty?

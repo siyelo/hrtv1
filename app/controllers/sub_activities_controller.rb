@@ -26,7 +26,6 @@ class SubActivitiesController < Reporter::BaseController
     rescue FasterCSV::MalformedCSVError
       flash[:error] = 'Your CSV file does not seem to be properly formatted.'
     end
-    # 
   end
   
   def bulk_create

@@ -223,12 +223,6 @@ describe Project do
     end
   end
   
-  context "Matching funders budget / spend and the actual budget / spend" do
-    before(:each) do
-      @project
-    end
-  end
-
   context "Funding flows: " do
     before(:each) do
       @our_org       = Factory(:organization)
@@ -237,24 +231,33 @@ describe Project do
       @other_org     = Factory(:organization)
       @project       = Factory(:project,
                                :data_response => @response )
+                               
     end
     
-    describe "Matching funders budget / spend and the actual budget / spend" do
-      before(:each) do
-        flow      = Factory(:funding_flow,
-                            :from          => @other_org,
-                            :to            => @our_org,
-                            :project       => @project,
-                            :data_response => @project.data_response)
-      end
+    it "matches the funding flow spend" do 
+      flow      = Factory(:funding_flow,
+                         :from          => @other_org,
+                         :to            => @our_org,
+                         :project       => @project,
+                         :data_response => @project.data_response)
+      @project.amounts_matches_funders?(:spend).should be_true
+    end
+    
+    it "matches the budgets flow spend" do 
+      flow      = Factory(:funding_flow,
+                         :from          => @other_org,
+                         :to            => @our_org,
+                         :project       => @project,
+                         :data_response => @project.data_response)
+      @project.amounts_matches_funders?(:budget).should be_true
     end
 
     it "assigns and returns a sole funding source" do
       flow      = Factory(:funding_flow,
-                          :from          => @other_org,
-                          :to            => @our_org,
-                          :project       => @project,
-                          :data_response => @project.data_response)
+                         :from          => @other_org,
+                         :to            => @our_org,
+                         :project       => @project,
+                         :data_response => @project.data_response)
       @project.reload
       @project.in_flows.first.should == flow
       @project.funding_sources.first.should == @other_org
@@ -266,7 +269,6 @@ describe Project do
                             :to            => @other_org,
                             :project       => @project,
                             :data_response => @project.data_response)
-
       @project.reload
       @project.out_flows.first.should == flow
       @project.implementers.first.should == @other_org

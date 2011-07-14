@@ -15,9 +15,9 @@
   - unless @response.projects_without_amounts.select{|p| p == @project}.empty?
     %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Project"
 
-  - if @response.data_request.spend? && !@project.spend_matches_funders?
+  - if @response.data_request.spend? && !@project.amounts_matches_funders?(:spend)
     %li= "Project expenditure does not match the total expenditure stated in funding sources below. Please add funding sources or adjust your amounts."
-  - if @response.data_request.budget? && !@project.budget_matches_funders?
+  - if @response.data_request.budget? && !@project.amounts_matches_funders?(:budget)
     %li= "Project current budget does not match the total of budgets stated in funding sources below. Please add funding sources or adjust your amounts."
 
   - if !@project.total_matches_quarters?("spend")

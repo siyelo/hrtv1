@@ -242,29 +242,15 @@ class Project < ActiveRecord::Base
     !activities.with_type("OtherCost").empty?
   end
 
-  def matches_funders?
-    budget_matches_funders? && spend_matches_funders?
+  #checks if the project amount == the inflows amount
+  def amounts_matches_funders?(amount_method)
+    (self.send(amount_method) || 0) == in_flows_total(amount_method)
   end
 
-  def budget_matches_funders?
-    (budget || 0) == in_flows_budget_total
-  end
-
-  def in_flows_budget_total
-    in_flows_total(:budget)
-  end
-
-  def spend_matches_funders?
-    (spend || 0) == in_flows_spend_total
-  end
 
   #calculates the activitytotals for budget/spent
   def subtotals(type)
     activities.select{|a| a.send(type).present?}.sum(&type)
-  end
-
-  def in_flows_spend_total
-    in_flows_total(:spend)
   end
 
   def in_flows_total(amount_method)

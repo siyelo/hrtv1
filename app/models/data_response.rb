@@ -334,7 +334,7 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_funding_sources_have_matching_budgets?
     projects.each do |project|
-      return false unless project.budget_matches_funders?
+      return false unless project.amounts_matches_funders?(:budget)
     end
     true
   end
@@ -342,7 +342,7 @@ class DataResponse < ActiveRecord::Base
 
   def projects_and_funding_sources_have_correct_spends?
     projects.each do |project|
-      return false unless project.spend_matches_funders?
+      return false unless project.amounts_matches_funders?(:spend)
     end
     true
   end

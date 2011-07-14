@@ -33,7 +33,6 @@ Factory.define :_budget_coded, :class => Activity, :parent => :activity  do |f|
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
-  f.after_create { |a| Factory(:service_level_budget, :cached_amount => 50, :activity => a) }
 end
 
 Factory.define :_spend_coded, :class => Activity, :parent => :activity  do |f|
@@ -47,7 +46,6 @@ Factory.define :_spend_coded, :class => Activity, :parent => :activity  do |f|
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_spend_district, :cached_amount => 40, :activity => a) }
   f.after_create { |a| Factory(:coding_spend_cost_categorization, :cached_amount => 40, :activity => a) }
-  f.after_create { |a| Factory(:service_level_spend, :cached_amount => 40, :activity => a) }
 end
 # end partials
 
@@ -85,7 +83,6 @@ Factory.define :activity_fully_coded, :class => Activity, :parent => :activity_w
   f.after_create { |a| Factory(:coding_budget, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
-  f.after_create { |a| Factory(:service_level_budget, :cached_amount => 50, :activity => a) }
 end
 
 Factory.define :other_cost_w_spend_coding, :class => OtherCost, :parent => :_spend_coded  do |f|
@@ -109,7 +106,6 @@ Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_c
   f.after_create { |a| Factory(:coding_budget_other_cost, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
-  f.after_create { |a| Factory(:service_level_budget, :cached_amount => 50, :activity => a) }
 end
 
 

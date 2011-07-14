@@ -205,7 +205,7 @@ describe Activity do
       @activity.stub(:coding_budget_district_classified?) { true }
       @activity.stub(:coding_budget_cc_classified?) { false }
       @activity.budget_classified?.should be_false
-    end 
+    end
   end
 
   describe "spend_classified?" do
@@ -239,7 +239,7 @@ describe Activity do
       @activity.stub(:coding_spend_district_classified?) { true }
       @activity.stub(:coding_spend_cc_classified?) { false }
       @activity.spend_classified?.should be_false
-    end
+    end 
   end
 
   describe "classified? (with factories)" do

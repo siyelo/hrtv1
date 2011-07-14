@@ -26,17 +26,18 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget']
+  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
 
   CLASSIFICATION_MAPPINGS = {
     'CodingBudget' => 'CodingSpend',
     'CodingBudgetDistrict' => 'CodingSpendDistrict',
-    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization',
-    'ServiceLevelBudget' => 'ServiceLevelSpend'
+    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization'
   }
 
   HUMANIZED_ATTRIBUTES = {
-    :sub_activities => "Implementers"
+    :sub_activities => "Implementers",
+    :budget => "Current Budget",
+    :spend => "Past Expenditure"
   }
 
   def self.human_attribute_name(attr)
@@ -79,11 +80,9 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget, :dependent => :destroy
   has_many :coding_budget_cost_categorization, :dependent => :destroy
   has_many :coding_budget_district, :dependent => :destroy
-  has_many :service_level_budget, :dependent => :destroy
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
-  has_many :service_level_spend, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
 
   ### Nested attributes
@@ -121,16 +120,7 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
-  before_save :set_total_amounts
-
-  HUMANIZED_ATTRIBUTES = {
-    :budget => "Current Budget",
-    :spend => "Past Expenditure"
-  }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
+  before_save :set_total_amounts 
 
   ### Named scopes
   # TODO: spec
@@ -362,10 +352,6 @@ class Activity < ActiveRecord::Base
     !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
   end
 
-  def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || budget.blank? || service_level_budget_valid?
-  end
-
   def coding_spend_classified?
     !data_response.request.purposes? || spend.blank? || coding_spend_valid?
   end
@@ -376,26 +362,21 @@ class Activity < ActiveRecord::Base
 
   def coding_spend_district_classified?
     !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
-  end
+  end 
 
-  def service_level_spend_classified?
-    !data_response.request.service_levels? || spend.blank? || service_level_spend_valid?
-  end
 
   def budget_classified?
     budget.blank? ||
-    (coding_budget_classified? &&
+    coding_budget_classified? &&
     coding_budget_district_classified? &&
-    coding_budget_cc_classified? &&
-    service_level_budget_classified?)
+    coding_budget_cc_classified? 
   end
 
   def spend_classified?
     spend.blank? ||
-    (coding_spend_classified? &&
+    coding_spend_classified? &&
     coding_spend_district_classified? &&
-    coding_spend_cc_classified? &&
-    service_level_spend_classified?)
+    coding_spend_cc_classified?
   end
 
   # An activity can be considered classified if at least one of these are populated.
@@ -411,17 +392,13 @@ class Activity < ActiveRecord::Base
     when 'CodingBudgetDistrict'
       coding_budget_district_classified?
     when 'CodingBudgetCostCategorization'
-      coding_budget_cc_classified?
-    when 'ServiceLevelBudget'
-      service_level_budget_classified?
+      coding_budget_cc_classified? 
     when 'CodingSpend'
       coding_spend_classified?
     when 'CodingSpendDistrict'
       coding_spend_district_classified?
     when 'CodingSpendCostCategorization'
-      coding_spend_cc_classified?
-    when 'ServiceLevelSpend'
-      service_level_spend_classified?
+      coding_spend_cc_classified? 
     else
       raise "Unknown type #{coding_type}".to_yaml
     end
@@ -436,13 +413,13 @@ class Activity < ActiveRecord::Base
   def update_all_classified_amount_caches
     if budget_changed?
       [CodingBudget, CodingBudgetDistrict,
-         CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
+         CodingBudgetCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
       [CodingSpend, CodingSpendDistrict,
-         CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
+         CodingSpendCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
@@ -526,11 +503,9 @@ class Activity < ActiveRecord::Base
     coded += 1 if coding_budget_classified?
     coded += 1 if coding_budget_district_classified?
     coded += 1 if coding_budget_cc_classified?
-    coded += 1 if service_level_budget_classified?
     coded += 1 if coding_spend_classified?
     coded += 1 if coding_spend_district_classified?
     coded += 1 if coding_spend_cc_classified?
-    coded += 1 if service_level_spend_classified?
     progress = ((coded.to_f / 8) * 100).to_i # dont need decimal places
   end
 
@@ -549,9 +524,9 @@ class Activity < ActiveRecord::Base
 
   def classification_amount(classification_type)
     case classification_type.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization' 
       budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization' 
       spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml

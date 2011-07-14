@@ -1,3 +1,6 @@
+class ServiceLevel < Code
+end
+
 puts "\n  Loading service_levels.csv..."
 
 FasterCSV.foreach("db/seed_files/service_levels.csv", :headers => true) do |row|

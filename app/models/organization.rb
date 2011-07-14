@@ -39,11 +39,11 @@ class Organization < ActiveRecord::Base
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
   # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :destroy
-  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :destroy
+  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :nullify
+  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
-  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
+  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id, :dependent => :nullify
   has_many :projects, :through => :data_responses
 
   ### Validations
@@ -93,7 +93,7 @@ class Organization < ActiveRecord::Base
   def self.download_template(organizations = [])
     FasterCSV.generate do |csv|
       csv << Organization::FILE_UPLOAD_COLUMNS
-      
+
       if organizations
         organizations.each do |org|
           row = [org.name, org.raw_type, org.fosaid]
@@ -102,7 +102,7 @@ class Organization < ActiveRecord::Base
       end
     end
   end
-  
+
   def self.create_from_file(doc)
     saved, errors = 0, 0
     doc.each do |row|

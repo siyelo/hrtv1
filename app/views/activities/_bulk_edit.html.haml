@@ -8,10 +8,11 @@
     = image_tag "tick_12.png"
     = nice_name(activity, 50)
   - else
-    = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
-    = activity.name
+    .left
+      = image_tag "warning_12.png", :title => "This activity has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip'
+      = nice_name(activity, 50)
 
-    %span.project= activity.project.try(:name)
+      %span.project= activity.project.try(:name)
     %ul.right
       - if activity.start_date.present? && activity.end_date.present?
         %li
@@ -120,5 +121,5 @@
       %li.borderless.marginless
         %br
         - f.buttons :class => 'buttons' do
-          = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}
+          = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}, :button_html => {:class => "next"}
           = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

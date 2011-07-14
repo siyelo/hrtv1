@@ -40,10 +40,6 @@ class Activity < ActiveRecord::Base
     :spend => "Past Expenditure"
   }
 
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
   ### Includes
   include BudgetSpendHelpers
   strip_commas_from_all_numbers
@@ -97,7 +93,7 @@ class Activity < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Validations
-  before_validation :strip_leading_spaces
+  before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
   validates_presence_of :name, :if => :is_activity?
@@ -147,6 +143,10 @@ class Activity < ActiveRecord::Base
   }
   named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,           {:order => "activities.name" }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
@@ -764,9 +764,10 @@ class Activity < ActiveRecord::Base
       self.class.eql?(SubActivity)
     end
 
-    def strip_leading_spaces
+    def strip_input_fields
       name = name.strip if name
       description = description.strip if description
+      provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
     end
 
     def get_valid_attribute_name(type)
@@ -781,10 +782,10 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
-  
+
     def self.flexible_date_parse(datestr)
-      begin 
-        Date.parse(datestr.gsub('/', '-')) 
+      begin
+        Date.parse(datestr.gsub('/', '-'))
       rescue
         Date.strptime(datestr.gsub('/', '-'), '%d-%m-%Y') rescue datestr
       end

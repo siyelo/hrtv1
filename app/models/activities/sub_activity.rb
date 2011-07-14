@@ -3,19 +3,24 @@ class SubActivity < Activity
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Implementer", "Past Expenditure", "Current Budget"]
+  IMPLEMENTER_HUMANIZED_ATTRIBUTES = {
+    :budget_mask => "Implementer Current Budget",
+    :spend_mask => "Implementer Past Expenditure",
+    :provider_mask => "Implementer"
+  }
 
   ### Associations
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id,
-                  :spend_mask, :budget_mask
+  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask
 
   ### Callbacks
   after_create    :update_counter_cache
   after_destroy   :update_counter_cache
   before_save     :set_budget_amount
   before_save     :set_spend_amount
+  before_validation :strip_amount_mask_fields
 
   ### Validations
   validates_presence_of :provider_mask
@@ -23,6 +28,7 @@ class SubActivity < Activity
   validate :spend_mask_percentage
   validate :numericality_of_budget_mask
   validate :numericality_of_spend_mask
+  validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
 
   ### Delegates
   [:projects, :name, :description, :start_date, :end_date, :approved,
@@ -30,34 +36,11 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
-  HUMANIZED_ATTRIBUTES = {
-    :budget_mask => "Implementer Current Budget",
-    :spend_mask => "Implementer Past Expenditure",
-    :provider_mask => "Implementer"
-  }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
-  def spend_mask
-    @spend_mask || spend
-  end
-
-  def spend_mask=(the_spend_mask)
-    @spend_mask = the_spend_mask
-  end
-
-  def budget_mask
-    @budget_mask || budget
-  end
-
-  def budget_mask=(the_budget_mask)
-    @budget_mask = the_budget_mask
-  end
-
   ### Class Methods
 
+  def self.human_attribute_name(attr)
+    IMPLEMENTER_HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def self.download_template(activity = nil)
     FasterCSV.generate do |csv|
@@ -114,6 +97,24 @@ class SubActivity < Activity
 
   ### Instance Methods
 
+  def spend_mask
+    @spend_mask || spend
+  end
+
+  def spend_mask=(the_spend_mask)
+    attribute_will_change!(:spend_mask)
+    @spend_mask = the_spend_mask
+  end
+
+  def budget_mask
+    @budget_mask || budget
+  end
+
+  def budget_mask=(the_budget_mask)
+    attribute_will_change!(:budget_mask)
+    @budget_mask = the_budget_mask
+  end
+
   def locations
     if provider && provider.locations.present?
       provider.locations
@@ -160,7 +161,6 @@ class SubActivity < Activity
   memoize :coding_spend_cost_categorization
 
   private
-
     def update_counter_cache
       self.data_response.sub_activities_count = data_response.sub_activities.count
       self.data_response.save(false)
@@ -236,20 +236,31 @@ class SubActivity < Activity
     end
 
     def set_spend_amount
-      if spend_mask.to_s.last == '%'
-        self.spend = activity.spend.to_f * spend_mask.to_s.delete('%').to_f / 100
-      else
-        self.spend = spend_mask
+      unless spend_mask.nil?
+        if spend_mask.to_s.last == '%'
+          self.spend = activity.spend.to_f * spend_mask.to_s.delete('%').to_f / 100
+        else
+          self.spend = spend_mask
+        end
       end
     end
 
     def set_budget_amount
-      if budget_mask.to_s.last == '%'
-        self.budget = activity.budget.to_f * budget_mask.to_s.delete('%').to_f / 100
-      else
-        self.budget = budget_mask
+      unless budget_mask.nil?
+        if budget_mask.to_s.last == '%'
+          self.budget = activity.budget.to_f * budget_mask.to_s.delete('%').to_f / 100
+        else
+          self.budget = budget_mask
+        end
       end
     end
+
+    # remove any leading/trailing spaces from the percentage/amount input
+    def strip_amount_mask_fields
+      budget_mask = budget_mask.strip if budget_mask && !is_number?(budget_mask)
+      spend_mask = spend_mask.strip if spend_mask && !is_number?(spend_mask)
+    end
+
 end
 
 

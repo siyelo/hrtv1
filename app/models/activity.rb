@@ -268,8 +268,8 @@ class Activity < ActiveRecord::Base
       activity.csv_beneficiaries       = row[14].try(:strip)
       activity.text_for_beneficiaries  = row[15].try(:strip)
       activity.text_for_targets        = row[16].try(:strip)
-      activity.start_date              = row[17].try(:strip)
-      activity.end_date                = row[18].try(:strip)
+      activity.start_date              = flexible_date_parse(row[17].try(:strip))
+      activity.end_date                = flexible_date_parse(row[18].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -776,6 +776,14 @@ class Activity < ActiveRecord::Base
       when 'CodingSpendDistrict' then :coding_spend_district_valid
       else
         raise "Unknown type #{type}".to_yaml
+      end
+    end
+  
+    def self.flexible_date_parse(datestr)
+      begin 
+        Date.parse(datestr.gsub('/', '-')) 
+      rescue
+        Date.strptime(datestr.gsub('/', '-'), '%d-%m-%Y') rescue datestr
       end
     end
 end

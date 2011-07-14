@@ -317,7 +317,7 @@ class DataResponse < ActiveRecord::Base
   memoize :projects_have_activities?
 
   def other_costs_entered?
-    !self.other_costs.empty?
+    !other_costs.empty?
   end
   memoize :other_costs_entered?
 
@@ -453,7 +453,6 @@ class DataResponse < ActiveRecord::Base
 
     # Find all complete Activities
     def select_coded(activities)
-      debugger
       activities.select{ |a| a.classified? }
     end
 

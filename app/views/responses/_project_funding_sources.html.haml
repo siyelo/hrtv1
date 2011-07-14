@@ -13,7 +13,7 @@
 %tr
   %th{:colspan => 5}
     Expenditure
-- @response.projects.each do |project|
+- @projects.each do |project|
   - if (project.in_flows_spend_total || 0) != (project.spend || 0)
     %tr
       %td= project.name

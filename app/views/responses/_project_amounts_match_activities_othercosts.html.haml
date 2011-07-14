@@ -15,7 +15,7 @@
         %tr{:class => "#{dom_id(project)}_budget"}
           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
           %td.activity
-          %td.activity= n2crs(universal_currency_converter(activity.budget, activity.currency, project.currency), project.currency)
+          %td.activity= n2crs(activity.budget, project.currency)
 
 %tr
   %th{:colspan => 5}
@@ -30,8 +30,8 @@
       %td.first= n2crs(project.spend, project.currency)
       %td.first= n2crs(project.activities_spend_total + project.other_costs_spend_total, project.currency)
       %td.first= n2crs((project.spend || 0) - (project.activities_spend_total + project.other_costs_spend_total), project.currency)
-      - project.activities.roots.each do |activity|
+      - project.normal_activities.each do |activity|
         %tr{:class => "#{dom_id(project)}_spend"}
           %td.activity= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity)
           %td.activity
-          %td.activity= n2crs(activity.spend, activity.currency)
+          %td.activity= n2crs(activity.spend, project.currency)

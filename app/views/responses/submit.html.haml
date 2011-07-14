@@ -149,7 +149,7 @@
           - unless @response.activities_have_implementers?
             %span.info The activities below are missing their provider(s).
             - @response.normal_activities.each do |activity|
-              - if activity.implementer.nil?
+              - if activity.provider_id.nil?
                 %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity)
 
       %li

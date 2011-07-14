@@ -282,7 +282,7 @@ class DataResponse < ActiveRecord::Base
   def activities_have_implementers?
     return false unless activities_entered?
     self.normal_activities.each do |activity|
-      return false if activity.implementer.nil?
+      return false if activity.provider_id.nil?
     end
     true
   end
@@ -296,11 +296,18 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_have_activities?
-    return false unless activities_entered?
-    self.projects.each do |project|
-      return false unless project.has_activities?
-    end
-    true
+    # NOTE: old code
+    #return false unless activities_entered?
+    #self.projects.each do |project|
+      #return false unless project.has_activities?
+    #end
+    #true
+
+    # NOTE: optimization
+    activities.find(:first,
+                    :select => 'COUNT(DISTINCT(activities.project_id)) as total',
+                    :conditions => {:type => nil, :project_id => projects}
+                   ).total.to_i == projects.length
   end
 
   def other_costs_entered?
@@ -308,11 +315,18 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_have_other_costs?
-    return false unless other_costs_entered?
-    self.projects.each do |project|
-      return false unless project.has_other_costs?
-    end
-    true
+    # NOTE: old code
+    #return false unless other_costs_entered?
+    #self.projects.each do |project|
+      #return false unless project.has_other_costs?
+    #end
+    #true
+
+    # NOTE: optimization
+    activities.find(:first,
+                    :select => 'COUNT(DISTINCT(activities.project_id)) as total',
+                    :conditions => {:type => 'OtherCost', :project_id => projects}
+                   ).total.to_i == projects.length
   end
 
   def projects_and_funding_sources_have_matching_budgets?

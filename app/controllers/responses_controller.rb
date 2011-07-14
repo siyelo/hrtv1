@@ -13,7 +13,13 @@ class ResponsesController < Reporter::BaseController
   end
 
   def submit
-    @projects = @response.projects.find(:all, :include => :normal_activities)
+    # NOTE: old code
+    #@projects = @response.projects.find(:all, :include => :normal_activities)
+
+    # NOTE: optimization
+    DataResponse.send(:preload_associations, @response,
+                  [{:projects => :normal_activities}])
+    @projects = @response.projects
   end
 
   def send_data_response

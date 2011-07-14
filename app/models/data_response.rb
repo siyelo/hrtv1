@@ -250,7 +250,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activities_have_budget_or_spend?
-    return false unless activities_entered?
     activities.each do |activity|
       return false if !activity.has_budget_or_spend? && !activity.type == "SubActivity" ## change me later
     end
@@ -262,7 +261,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   def check_projects_funding_sources_have_organizations?
-    return false unless projects_entered?
     projects.each do |project|
       return false unless project.funding_sources_have_organizations?
     end
@@ -270,7 +268,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_linked?
-    return false unless projects_entered?
     projects.each do |project|
       #return false if project.in_flows.present? && !project.linked?
       return false unless project.linked?
@@ -284,7 +281,6 @@ class DataResponse < ActiveRecord::Base
   memoize :activities_entered?
 
   def activities_have_implementers?
-    return false unless activities_entered?
     self.normal_activities.each do |activity|
       return false if activity.provider_id.nil?
     end
@@ -468,11 +464,6 @@ class DataResponse < ActiveRecord::Base
       end
     end
 end
-
-
-
-
-
 
 
 # == Schema Information

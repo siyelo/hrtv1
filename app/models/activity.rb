@@ -96,6 +96,7 @@ class Activity < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Validations
+  before_validation :strip_leading_spaces
   validate :approved_activity_cannot_be_changed
 
   validates_presence_of :name, :if => :is_activity?
@@ -769,6 +770,11 @@ class Activity < ActiveRecord::Base
 
     def is_sub_activity?
       self.class.eql?(SubActivity)
+    end
+    
+    def strip_leading_spaces
+      self.name = self.name.strip if self.name 
+      self.description = self.description.strip if self.description
     end
 end
 

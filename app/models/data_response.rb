@@ -1,5 +1,6 @@
 class DataResponse < ActiveRecord::Base
   include NumberHelper
+  extend ActiveSupport::Memoizable
 
   ### Attributes
   attr_accessible :data_request_id
@@ -170,23 +171,23 @@ class DataResponse < ActiveRecord::Base
         self.submitted_for_final    = true
         self.submitted_for_final_at = Time.now
       else # first time submission, or resubmission for initial review
-        self.submitted = true
-        self.submitted_at = Time.now
+        submitted = true
+        submitted_at = Time.now
       end
       return self.save
     else
-      self.errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      self.errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
-      self.errors.add_to_base("Projects are not yet linked.") unless projects_linked?
-      self.errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      self.errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
-      self.errors.add_to_base("Activites are not yet coded.") unless activities_coded?
-      self.errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
-      self.errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-      self.errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
-      self.errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      self.errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
-      self.errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
+      errors.add_to_base("Projects are not yet entered.") unless projects_entered?
+      errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
+      errors.add_to_base("Projects are not yet linked.") unless projects_linked?
+      errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
+      errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
+      errors.add_to_base("Activites are not yet coded.") unless activities_coded?
+      errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
+      errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
+      errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
+      errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
+      errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
+      errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
   end
@@ -237,10 +238,12 @@ class DataResponse < ActiveRecord::Base
   def projects_entered?
     !projects.empty?
   end
+  memoize :projects_entered?
 
   def project_amounts_entered?
     projects_entered? && projects_without_amounts.empty?
   end
+  memoize :project_amounts_entered?
 
   def projects_without_amounts
     select_without_amounts(self.projects)
@@ -248,19 +251,19 @@ class DataResponse < ActiveRecord::Base
 
   def activities_have_budget_or_spend?
     return false unless activities_entered?
-    self.activities.each do |activity|
+    activities.each do |activity|
       return false if !activity.has_budget_or_spend? && !activity.type == "SubActivity" ## change me later
     end
     true
   end
 
   def projects_without_budget
-    self.projects.select{ |p| !p.budget_entered? }
+    projects.select{ |p| !p.budget_entered? }
   end
 
   def check_projects_funding_sources_have_organizations?
     return false unless projects_entered?
-    self.projects.each do |project|
+    projects.each do |project|
       return false unless project.funding_sources_have_organizations?
     end
     true
@@ -268,7 +271,7 @@ class DataResponse < ActiveRecord::Base
 
   def projects_linked?
     return false unless projects_entered?
-    self.projects.each do |project|
+    projects.each do |project|
       #return false if project.in_flows.present? && !project.linked?
       return false unless project.linked?
     end
@@ -276,8 +279,9 @@ class DataResponse < ActiveRecord::Base
   end
 
   def activities_entered?
-    !self.normal_activities.empty?
+    !normal_activities.empty?
   end
+  memoize :activities_entered?
 
   def activities_have_implementers?
     return false unless activities_entered?
@@ -290,6 +294,7 @@ class DataResponse < ActiveRecord::Base
   def activity_amounts_entered?
     activities_without_amounts.empty?
   end
+  memoize :activity_amounts_entered?
 
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
@@ -309,10 +314,12 @@ class DataResponse < ActiveRecord::Base
                     :conditions => {:type => nil, :project_id => projects}
                    ).total.to_i == projects.length
   end
+  memoize :projects_have_activities?
 
   def other_costs_entered?
     !self.other_costs.empty?
   end
+  memoize :other_costs_entered?
 
   def projects_have_other_costs?
     # NOTE: old code
@@ -321,32 +328,37 @@ class DataResponse < ActiveRecord::Base
       #return false unless project.has_other_costs?
     #end
     #true
-
     # NOTE: optimization
     activities.find(:first,
                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                     :conditions => {:type => 'OtherCost', :project_id => projects}
                    ).total.to_i == projects.length
   end
+  memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_matching_budgets?
-    self.projects.each do |project|
+    return false unless projects_entered?
+    projects.each do |project|
       return false unless project.budget_matches_funders?
     end
     true
   end
+  memoize :projects_and_funding_sources_have_matching_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
-    self.projects.each do |project|
+    return false unless projects_entered?
+    projects.each do |project|
       return false unless project.spend_matches_funders?
     end
     true
   end
+  memoize :projects_and_funding_sources_have_correct_spends?
 
   def projects_funding_sources_ok?
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends?
   end
+  memoize :projects_funding_sources_ok?
 
   def projects_and_activities_have_matching_budgets?
     projects_and_activities_matching_amounts?(:budget)
@@ -360,6 +372,7 @@ class DataResponse < ActiveRecord::Base
     projects_and_activities_have_matching_budgets? &&
     projects_and_activities_have_matching_spends?
   end
+  memoize :projects_activities_ok?
 
   def projects_and_activities_matching_amounts?(amount_method)
     projects.each do |project|
@@ -382,19 +395,19 @@ class DataResponse < ActiveRecord::Base
   end
 
   def uncoded_activities
-    reject_uncoded(self.normal_activities)
+    reject_uncoded(normal_activities)
   end
 
   def coded_activities
-    select_coded(self.normal_activities)
+    select_coded(normal_activities)
   end
 
   def uncoded_other_costs
-    reject_uncoded(self.other_costs)
+    reject_uncoded(other_costs)
   end
 
   def coded_other_costs
-    select_coded(self.other_costs)
+    select_coded(other_costs)
   end
 
   def activities_coded?
@@ -434,12 +447,13 @@ class DataResponse < ActiveRecord::Base
 
     def reject_uncoded(activities)
       activities.select{ |a|
-        (!a.budget_classified? && self.request.budget?) ||
-        (!a.spend_classified?  && self.request.spend?)}
+        (!a.budget_classified? && request.budget?) ||
+        (!a.spend_classified?  && request.spend?)}
     end
 
     # Find all complete Activities
     def select_coded(activities)
+      debugger
       activities.select{ |a| a.classified? }
     end
 

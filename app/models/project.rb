@@ -103,7 +103,7 @@ class Project < ActiveRecord::Base
   end
 
   def response
-    self.data_response
+    data_response
   end
 
   # view helper ??!
@@ -208,7 +208,7 @@ class Project < ActiveRecord::Base
 
   def funding_sources_have_organizations?
     return false if self.in_flows.empty?
-    self.in_flows.each do |in_flow|
+    in_flows.each do |in_flow|
       return false unless in_flow.organization_id_from
     end
     true
@@ -229,19 +229,19 @@ class Project < ActiveRecord::Base
   end
 
   def linked?
-    return false if self.in_flows.empty?
-    self.in_flows.each do |in_flow|
+    return false if in_flows.empty?
+    in_flows.each do |in_flow|
       return false unless in_flow.project_from_id
     end
     true
   end
 
   def has_activities?
-    !self.normal_activities.empty?
+    !normal_activities.empty?
   end
 
   def has_other_costs?
-    !self.activities.with_type("OtherCost").empty?
+    !activities.with_type("OtherCost").empty?
   end
 
   def matches_funders?
@@ -249,7 +249,7 @@ class Project < ActiveRecord::Base
   end
 
   def budget_matches_funders?
-    (self.budget || 0) == self.in_flows_budget_total
+    (budget || 0) == self.in_flows_budget_total
   end
 
   def in_flows_budget_total
@@ -257,7 +257,7 @@ class Project < ActiveRecord::Base
   end
 
   def spend_matches_funders?
-    (self.spend || 0) == self.in_flows_spend_total
+    (spend || 0) == in_flows_spend_total
   end
 
   #calculates the activitytotals for budget/spent

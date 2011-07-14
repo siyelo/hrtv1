@@ -384,19 +384,17 @@ class Activity < ActiveRecord::Base
   end
 
   def budget_classified?
-    return true if self.budget.blank?
-    coding_budget_classified? &&
+    budget.blank? || (coding_budget_classified? &&
     coding_budget_district_classified? &&
     coding_budget_cc_classified? &&
-    service_level_budget_classified?
+    service_level_budget_classified?)
   end
 
   def spend_classified?
-    return true if self.spend.blank?
-    coding_spend_classified? &&
+    spend.blank? || (coding_spend_classified? &&
     coding_spend_district_classified? &&
     coding_spend_cc_classified? &&
-    service_level_spend_classified?
+    service_level_spend_classified?)
   end
 
   # An activity can be considered classified if at least one of these are populated.

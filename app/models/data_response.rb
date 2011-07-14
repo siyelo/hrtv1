@@ -171,8 +171,8 @@ class DataResponse < ActiveRecord::Base
         self.submitted_for_final    = true
         self.submitted_for_final_at = Time.now
       else # first time submission, or resubmission for initial review
-        submitted = true
-        submitted_at = Time.now
+        self.submitted = true
+        self.submitted_at = Time.now
       end
       return self.save
     else
@@ -238,12 +238,10 @@ class DataResponse < ActiveRecord::Base
   def projects_entered?
     !projects.empty?
   end
-  memoize :projects_entered?
 
   def project_amounts_entered?
     projects_entered? && projects_without_amounts.empty?
   end
-  memoize :project_amounts_entered?
 
   def projects_without_amounts
     select_without_amounts(self.projects)
@@ -281,7 +279,6 @@ class DataResponse < ActiveRecord::Base
   def activities_entered?
     !normal_activities.empty?
   end
-  memoize :activities_entered?
 
   def activities_have_implementers?
     return false unless activities_entered?
@@ -294,7 +291,6 @@ class DataResponse < ActiveRecord::Base
   def activity_amounts_entered?
     activities_without_amounts.empty?
   end
-  memoize :activity_amounts_entered?
 
   def activities_without_amounts
     select_without_amounts(self.normal_activities)
@@ -314,12 +310,10 @@ class DataResponse < ActiveRecord::Base
                     :conditions => {:type => nil, :project_id => projects}
                    ).total.to_i == projects.length
   end
-  memoize :projects_have_activities?
 
   def other_costs_entered?
     !self.other_costs.empty?
   end
-  memoize :other_costs_entered?
 
   def projects_have_other_costs?
     # NOTE: old code
@@ -334,31 +328,25 @@ class DataResponse < ActiveRecord::Base
                     :conditions => {:type => 'OtherCost', :project_id => projects}
                    ).total.to_i == projects.length
   end
-  memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_matching_budgets?
-    return false unless projects_entered?
     projects.each do |project|
       return false unless project.budget_matches_funders?
     end
     true
   end
-  memoize :projects_and_funding_sources_have_matching_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
-    return false unless projects_entered?
     projects.each do |project|
       return false unless project.spend_matches_funders?
     end
     true
   end
-  memoize :projects_and_funding_sources_have_correct_spends?
 
   def projects_funding_sources_ok?
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends?
   end
-  memoize :projects_funding_sources_ok?
 
   def projects_and_activities_have_matching_budgets?
     projects_and_activities_matching_amounts?(:budget)
@@ -372,7 +360,6 @@ class DataResponse < ActiveRecord::Base
     projects_and_activities_have_matching_budgets? &&
     projects_and_activities_have_matching_spends?
   end
-  memoize :projects_activities_ok?
 
   def projects_and_activities_matching_amounts?(amount_method)
     projects.each do |project|

@@ -30,7 +30,7 @@ class DataResponse < ActiveRecord::Base
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
   named_scope :submitted,   :conditions => ["submitted = ?", true]
   named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
-  named_scope :latest_first, {:order => "data_responses.id DESC" }
+  named_scope :latest_first, {:order => "data_request_id DESC" }
 
   ### Delegates
   delegate :name, :to => :data_request

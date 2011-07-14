@@ -9,8 +9,8 @@
           .insertAfter( select )
           .val( value )
           .autocomplete({
-            delay: 200, //otherwise when you type a long string, it crawls
-            minLength: 2, // for performance
+            delay: 300, //otherwise when you type a long string, it crawls
+            minLength: 3, // for performance
             source: function( request, response ) {
               var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
               var match = false;

@@ -16,6 +16,6 @@
           %tr
             %td= @sa[k][:row_id]
             %td= @sa[k][:provider_name]
-            %td= e.select(:provider_mask, funding_organizations_select, { :include_blank => true }, :class => 'combobox')
+            %td= e.select(:provider_mask, funding_organizations_select, { :include_blank => true }, :class => 'js_combobox')
       %tr
         %td= f.submit "Save"

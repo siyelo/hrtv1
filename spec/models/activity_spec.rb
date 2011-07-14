@@ -289,8 +289,7 @@ describe Activity do
     end
   end
 
-<<<<<<< HEAD
-=======
+
   describe "coding_budget_classified?" do
     it "is classified when activity budget is nil" do
       activity = Factory(:activity, :budget => nil)
@@ -554,7 +553,6 @@ describe Activity do
     end
   end
 
->>>>>>> Removed all references to service levels
   describe "budget_district_coding_adjusted" do
     before :each do
       @activity = Factory(:activity, :name => 'Activity 1', :budget => 100)

@@ -158,7 +158,7 @@ var before_add_fields_callback = function (association) {
 var after_add_fields_callback = function (association) {
   // show the jquery autocomplete combobox instead of
   // standard dropdowns
-  $( ".combobox" ).combobox();
+  $( ".js_combobox" ).combobox();
 };
 
 /* Nested model forms END */
@@ -814,7 +814,7 @@ var responses_review = {
 
 var organizations_edit = {
   run: function () {
-    $( ".combobox" ).combobox(); // for pretty currency select
+    $( ".js_combobox" ).combobox(); // for pretty currency select
   }
 };
 
@@ -1128,30 +1128,6 @@ var validateDates = function (startDate, endDate) {
   endDate.live('change', checkDates);
 };
 
-var projects_new = projects_create = projects_edit = projects_update = {
-  run: function () {
-
-    // show the jquery autocomplete combobox instead of standard dropdown
-    $( ".combobox" ).combobox(); // for currency dropdown
-                                // the nested funding source init should be
-                                // handled by the "add row" js callback
-    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
-
-    $('.edit').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
-    // ?
-    validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
-  }
-};
 
 var commentsInit = function () {
   initDemoText($('*[data-hint]'));
@@ -1369,7 +1345,7 @@ var activities_bulk_create = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         activityBox.html(data.html);
         initDemoText(activityBox.find('*[data-hint]'));
-        activityBox.find(".combobox").combobox();
+        activityBox.find(".js_combobox").combobox();
       });
     });
 
@@ -1404,7 +1380,7 @@ var activities_bulk_create = {
       //}
     //});
 
-    $(".combobox").combobox(); // for pretty currency select
+    $(".js_combobox").combobox(); // for pretty currency select
   }
 }
 
@@ -1473,10 +1449,10 @@ var activity_form = function () {
   // show the jquery autocomplete combobox instead of
   // standard dropdown
   // setting the id for cucumber tests
-  $( ".combobox" ).combobox();
+  $( ".js_combobox" ).combobox();
   $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
 
-  $('.implementer_select').live('change', function(e) {
+  $('.js_implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
     if(element.val() == "-1"){
@@ -1490,7 +1466,7 @@ var activity_form = function () {
     $('.organization_name').attr('value', '');
     $('.add_organization').hide();
     $('.implementer_container').show();
-    $('.implementer_select').val(null);
+    $('.js_implementer_select').val(null);
   });
 
   $('.add_organization_link').live('click', function(e) {
@@ -1501,10 +1477,10 @@ var activity_form = function () {
       $('.implementer_container').show();
       $('.add_organization').hide();
       if(isNaN(data.organization.id)){
-        $('.implementer_select').val(null);
+        $('.js_implementer_select').val(null);
       }else{
-        $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-        $('.implementer_select').val(data.organization.id);
+        $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+        $('.js_implementer_select').val(data.organization.id);
       }
     });
     $('.organization_name').attr('value', '');
@@ -1608,21 +1584,16 @@ var dashboard_index = {
 
 var sub_activities_create = {
   run: function () {
-    $( ".combobox" ).combobox();
+    $( ".js_combobox" ).combobox();
   }
 };
 
-var activities_new = activities_create = activities_edit = activities_update = {
-  run: function () {
-    activity_form();
-  }
-};
 
 var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
 
-    $('.implementer_select').live('change', function(e) {
+    $('.js_implementer_select').live('change', function(e) {
       e.preventDefault();
       var element = $(this);
       if(element.val() == "-1"){
@@ -1636,7 +1607,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.organization_name').attr('value', '');
       $('.add_organization').hide();
       $('.implementer_container').show();
-      $('.implementer_select').val(null);
+      $('.js_implementer_select').val(null);
     });
 
     $('.add_organization_link').live('click', function(e) {
@@ -1647,10 +1618,10 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
         $('.implementer_container').show();
         $('.add_organization').hide();
         if(isNaN(data.organization.id)){
-          $('.implementer_select').val(null);
+          $('.js_implementer_select').val(null);
         }else{
-          $('.implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-          $('.implementer_select').val(data.organization.id);
+          $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
+          $('.js_implementer_select').val(data.organization.id);
         }
       });
       $('.organization_name').attr('value', '');
@@ -1677,6 +1648,29 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
+    
+    
+    // show the jquery autocomplete combobox instead of standard dropdown
+    $( ".js_combobox" ).combobox(); // for currency dropdown
+                                // the nested funding source init should be
+                                // handled by the "add row" js callback
+    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
+
+    $('.edit').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this).parents('.fields');
+      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+      element.find('.edit_block').show();
+      element.find('.preview_block').hide();
+      close_project_in_flow_fields(fields);
+    });
+
+    // ?
+    validateDates($('#project_start_date'), $('#project_end_date'));
+    close_project_in_flow_fields($('.funding_flows .fields'));
+    
+    
 
     // when project spend quarter is edited, update the spend total
     $("input[id^='project_spend_q']:not(:last)").keyup(function () {

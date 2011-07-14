@@ -51,7 +51,7 @@
       - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@other_cost.text_for_provider}\"" if !@other_cost.text_for_provider.blank? && @activity.provider.nil?
       .implementer_container
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
+        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'js_implementer_select'}
       / not sure what this partial was doing, the routes don't even work
       =# render :partial => 'shared/add_organizations'
 

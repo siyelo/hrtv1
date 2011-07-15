@@ -11,14 +11,12 @@ Feature: Reporter can upload classifications
     #
     # mtef1
     # cost_category1
-    # service_level1
     # location1
     #
 
     # level 1
     Given a mtef_code "mtef1" exists with short_display: "mtef1", id: "1"
       And a cost_category_code exists with short_display: "cost_category1", id: "2"
-      And a service_level exists with short_display: "service_level1", id: "3"
       And a location exists with short_display: "location1", id: "4"
       And an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"
@@ -41,7 +39,6 @@ Feature: Reporter can upload classifications
       And I follow "Download template"
     Then I should see "mtef1"
       And I should not see "cost_category1"
-      And I should not see "service_level1"
       And I should not see "location1"
 
     Examples:
@@ -56,7 +53,6 @@ Feature: Reporter can upload classifications
       And I follow "Download template"
     Then I should see "cost_category1"
       And I should not see "mtef1"
-      And I should not see "service_level1"
       And I should not see "location1"
 
     Examples:
@@ -72,7 +68,6 @@ Feature: Reporter can upload classifications
     Then I should see "location1"
       And I should not see "mtef1"
       And I should not see "cost_category1"
-      And I should not see "service_level1"
 
     Examples:
     | type   |
@@ -84,8 +79,7 @@ Feature: Reporter can upload classifications
     When I follow "<type>"
       And I follow "Service Levels"
       And I follow "Download template"
-    Then I should see "service_level1"
-      And I should not see "mtef1"
+    Then I should not see "mtef1"
       And I should not see "cost_category1"
       And I should not see "location1"
 
@@ -136,22 +130,6 @@ Feature: Reporter can upload classifications
       And I should be on the budget classification page for "Activity1"
       And the "location1" field should contain "20"
       And the "location1" percentage field should contain "10"
-
-    Examples:
-    | type   |
-    | Budget |
-    | Expenditure  |
-
-
-  Scenario Outline: Reporter can upload Service Levels
-    When I follow "<type>"
-      And I follow "Service Levels"
-      And I attach the file "spec/fixtures/classifications_service_levels.csv" to "File" within ".upload_box"
-      And I press "Upload"
-    Then I should see "Activity classification was successfully uploaded."
-      And I should be on the budget classification page for "Activity1"
-      And the "service_level1" field should contain "20"
-      And the "service_level1" percentage field should contain "10"
 
     Examples:
     | type   |

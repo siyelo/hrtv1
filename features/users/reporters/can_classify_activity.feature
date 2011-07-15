@@ -40,7 +40,6 @@ Feature: Reporter can enter a code breakdown for each activity
 
       # level 1
       And a cost_category_code exists with short_display: "cost_category1"
-      And a service_level exists with short_display: "service_level1"
 
       And an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1"
@@ -125,18 +124,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Inputs"
-      Then the "cost_category1" field should contain "1,481,480.40"
-
-    Scenario: Use budget by service level for expenditure by service level
-      When I follow "Budget"
-        And I follow "Service Levels"
-        And I fill in "service_level1" with "1234567.00"
-        And I press "Save"
-      Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "activity1"
-        And the "service_level1" field should contain "1,234,567.00"
-      When I follow "Copy Current Budget to Past Expenditure"
-      Then the "service_level1" field should contain "1,481,480.40"
+      Then the "cost_category1" field should contain "1,481,480.40" 
 
 
     Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)

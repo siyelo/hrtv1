@@ -843,7 +843,9 @@ var code_assignments_show = {
 
     // prevent going to top on click on tool
     $('.tooltip').live('click', function (e) {
-      e.preventDefault();
+      if ($(this).attr('href') === '#') {
+        e.preventDefault();
+      }
     });
 
     $('.js_upload_btn').click(function (e) {
@@ -1421,7 +1423,11 @@ var approveActivity = function (element, approval_type, success_text) {
    })
 };
 
-
+var activities_new = activities_create = activities_edit = activities_update = {
+  run: function () {
+    activity_form();
+  }
+};
 
 var activity_form = function () {
   $('#activity_project_id').change(function () {
@@ -1509,10 +1515,12 @@ var activity_form = function () {
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
+    console.info('2222')
     split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:last)"), $(this).val());
   });
 
   $(".js_activity_spend_total").keyup(function () {
+    console.info('1111')
     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
   });
 
@@ -1535,7 +1543,7 @@ var activity_form = function () {
   commentsInit();
 };
 
-var admin_activities_edit = admin_activities_update = {
+var admin_activities_new = admin_activities_create = admin_activities_edit = admin_activities_update = {
   run: function () {
     activity_form();
   }
@@ -1583,6 +1591,12 @@ var dashboard_index = {
 };
 
 var sub_activities_create = {
+  run: function () {
+    $( ".js_combobox" ).combobox();
+  }
+};
+
+var admin_organizations_create = admin_organizations_edit = {
   run: function () {
     $( ".js_combobox" ).combobox();
   }
@@ -1648,8 +1662,8 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    
-    
+
+
     // show the jquery autocomplete combobox instead of standard dropdown
     $( ".js_combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
@@ -1669,8 +1683,8 @@ var projects_new = projects_create = projects_edit = projects_update = {
     // ?
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
-    
-    
+
+
 
     // when project spend quarter is edited, update the spend total
     $("input[id^='project_spend_q']:not(:last)").keyup(function () {

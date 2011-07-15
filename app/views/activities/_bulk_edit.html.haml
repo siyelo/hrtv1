@@ -114,7 +114,6 @@
 
           = f.input :provider_mask, :label => "Implementer", :as => :select, :collection => Organization.ordered, :required => false, :input_html => {:class => 'js_implementer_select js_combobox'}, :wrapper_html => {:class => 'fourth'}
 
-          = f.input :text_for_targets, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => 'Targets'
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Beneficiary details / Other beneficiaries"
           = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :wrapper_html => {:class => 'fourth'}
 

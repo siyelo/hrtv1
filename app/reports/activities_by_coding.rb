@@ -32,7 +32,7 @@ class Reports::ActivitiesByCoding
       row << "activity.description"
       @beneficiaries.each{|beneficiary| row << "#{beneficiary}"}
       row << "activity.text_for_beneficiaries"
-      row << "activity.text_for_targets"
+      row << "activity.targets"
       row << "activity.budget"
       row << "activity.spend"
       row << "currency"
@@ -62,7 +62,7 @@ class Reports::ActivitiesByCoding
       row << "#{h activity.description}"
       @beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.text_for_targets}"
+      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"

@@ -241,13 +241,13 @@ describe Organization do
 
     it "will return just the headers if no organizations are passed" do
       org_headers = Organization.download_template
-      org_headers.should == "name,raw_type,fosaid\n"
+      org_headers.should == "name,raw_type,fosaid,currency\n"
     end
 
     it "will return a list of organizations if there are present" do
       organizations = Organization.all
       orgs = Organization.download_template(organizations)
-      orgs.should == "name,raw_type,fosaid\nblarorg,NGO,13\n"
+      orgs.should == "name,raw_type,fosaid,currency\nblarorg,NGO,13,USD\n"
     end
   end
 

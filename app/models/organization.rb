@@ -3,7 +3,7 @@ require 'validators'
 class Organization < ActiveRecord::Base
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
+  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
 
   ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
      "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO",
@@ -96,7 +96,7 @@ class Organization < ActiveRecord::Base
 
       if organizations
         organizations.each do |org|
-          row = [org.name, org.raw_type, org.fosaid]
+          row = [org.name, org.raw_type, org.fosaid, org.currency]
           csv << row
         end
       end
@@ -153,7 +153,7 @@ class Organization < ActiveRecord::Base
   end
 
   def display_name(length = 100)
-    n = self.name || "<no name>"
+    n = self.name || "Unnamed organization"
     n.first(length)
   end
 

@@ -34,7 +34,6 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :activities
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :comments
@@ -47,7 +46,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
-    :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know. 
+    :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
     response.resources :projects,
       :collection => {:create_from_file => :post,
@@ -55,7 +54,7 @@ ActionController::Routing::Routes.draw do |map|
                       :bulk_edit => :get,
                       :export => :get,
                       :bulk_update => :put}
-    response.resources :activities, :except => [:index],
+    response.resources :activities, :except => [:index, :show],
       :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
       :collection => {:bulk_create => :post,
                       :template => :get,

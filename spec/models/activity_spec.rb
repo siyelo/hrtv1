@@ -51,7 +51,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
-    it { should allow_mass_assignment_of(:text_for_targets) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
@@ -94,12 +93,6 @@ describe Activity do
   end
 
   describe "codings required is decided by data_request" do
-    it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory(:activity, :data_response => Factory(:data_response,
-                                 :data_request => Factory(:data_request, :service_levels => false)))
-      @activity.service_level_budget_classified?.should be_true
-    end
-
     it "will return true if the data_request doesn't require inputs and none are entered" do
       @activity = Factory(:activity, :data_response => Factory(:data_response,
                                  :data_request => Factory(:data_request, :inputs => false)))
@@ -116,12 +109,6 @@ describe Activity do
       @activity = Factory(:activity, :data_response => Factory(:data_response,
                                  :data_request => Factory(:data_request, :purposes => false)))
       @activity.coding_budget_classified?.should be_true
-    end
-
-    it "will return true if the data_request doesn't require service levels and none are entered" do
-      @activity = Factory(:activity, :data_response => Factory(:data_response,
-                                 :data_request => Factory(:data_request, :service_levels => false)))
-      @activity.service_level_spend_classified?.should be_true
     end
 
     it "will return true if the data_request doesn't require inputs and none are entered" do
@@ -162,7 +149,7 @@ describe Activity do
       @response = Factory(:data_response)
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 
@@ -664,12 +651,6 @@ describe Activity do
       copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
     end
 
-    it "copies budget for spent codings for ServiceLevelBudget" do
-      activity = Factory(:activity)
-      Factory(:service_level_budget, :activity => activity)
-      copy_budget_to_expenditure_check(activity, 'ServiceLevelBudget', 'ServiceLevelSpend')
-    end
-
     it "does not copy budget to spent when spent is nil" do
       activity = Factory(:activity, :spend => nil)
       Factory(:coding_budget, :activity => activity)
@@ -899,6 +880,18 @@ describe Activity do
     end
 
     it_should_behave_like "location cloner"
+  end
+
+  describe "CSV dates" do
+    it "changes the date format from 12/12/2012 to 12-12-2012" do
+      new_date = Activity.flexible_date_parse('12/12/2012')
+      new_date.should.eql? Date.parse('12-12-2012')
+    end
+
+    it "changes the date format from 2012/03/30 to 30-03-2012" do
+      new_date = Activity.flexible_date_parse('2012/03/30')
+      new_date.should.eql? Date.parse('30-03-2012')
+    end
   end
 
   describe "keeping Money amounts in-sync" do

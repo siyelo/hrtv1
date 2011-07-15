@@ -296,23 +296,7 @@ describe CodingTree do
       activity = Factory.create(:activity)
       ct       = CodingTree.new(activity, HsspBudget)
       ct.root_codes.should == @fake_codes.concat(@fake_codes)
-    end
-
-    it "returns codes for simple activity and 'ServiceLevelBudget' type" do
-      ServiceLevel.stub(:roots).and_return(@fake_codes)
-
-      activity = Factory.create(:activity)
-      ct       = CodingTree.new(activity, ServiceLevelBudget)
-      ct.root_codes.should == @fake_codes
-    end
-
-    it "returns codes for other cost activity and 'ServiceLevelSpend' type" do
-      ServiceLevel.stub(:roots).and_return(@fake_codes)
-
-      activity = Factory.create(:other_cost)
-      ct       = CodingTree.new(activity, ServiceLevelSpend)
-      ct.root_codes.should == @fake_codes
-    end
+    end 
 
     it "returns codes for simple activity and 'CodingSpend' type" do
       Code.stub_chain(:purposes, :roots).and_return(@fake_codes)

@@ -26,22 +26,19 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget']
+  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
 
   CLASSIFICATION_MAPPINGS = {
     'CodingBudget' => 'CodingSpend',
     'CodingBudgetDistrict' => 'CodingSpendDistrict',
-    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization',
-    'ServiceLevelBudget' => 'ServiceLevelSpend'
+    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization'
   }
 
   HUMANIZED_ATTRIBUTES = {
-    :sub_activities => "Implementers"
+    :sub_activities => "Implementers",
+    :budget => "Current Budget",
+    :spend => "Past Expenditure"
   }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
 
   ### Includes
   include BudgetSpendHelpers
@@ -49,16 +46,16 @@ class Activity < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :text_for_targets, :name, :description, :start_date, :end_date,
+    :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
     :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -79,11 +76,9 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget, :dependent => :destroy
   has_many :coding_budget_cost_categorization, :dependent => :destroy
   has_many :coding_budget_district, :dependent => :destroy
-  has_many :service_level_budget, :dependent => :destroy
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
-  has_many :service_level_spend, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
 
   ### Nested attributes
@@ -98,7 +93,7 @@ class Activity < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Validations
-  before_validation :strip_leading_spaces
+  before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
   validates_presence_of :name, :if => :is_activity?
@@ -122,15 +117,6 @@ class Activity < ActiveRecord::Base
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
   before_save :set_total_amounts
-
-  HUMANIZED_ATTRIBUTES = {
-    :budget => "Current Budget",
-    :spend => "Past Expenditure"
-  }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
 
   ### Named scopes
   # TODO: spec
@@ -157,6 +143,10 @@ class Activity < ActiveRecord::Base
   }
   named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,           {:order => "activities.name" }
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
+  end
 
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
@@ -222,14 +212,17 @@ class Activity < ActiveRecord::Base
         row << activity.spend_q1
         row << activity.spend_q2
         row << activity.spend_q3
+        row << activity.spend_q4
         row << activity.budget
         row << activity.budget_q4_prev
         row << activity.budget_q1
         row << activity.budget_q2
         row << activity.budget_q3
+        row << activity.budget_q4
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << ''
+        row << activity.text_for_beneficiaries
+        row << activity.outputs.map{|o| o.description}.join(",")
         row << activity.start_date
         row << activity.end_date
 
@@ -259,7 +252,6 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
-
       activity.csv_project_name        = row[0].try(:strip)
       activity.name                    = row[1].try(:strip)
       activity.description             = row[2].try(:strip)
@@ -269,17 +261,19 @@ class Activity < ActiveRecord::Base
       activity.spend_q1                = row[6].try(:strip)
       activity.spend_q2                = row[7].try(:strip)
       activity.spend_q3                = row[8].try(:strip)
-      activity.budget                  = row[9].try(:strip)
-      activity.budget_q4_prev          = row[10].try(:strip)
-      activity.budget_q1               = row[11].try(:strip)
-      activity.budget_q2               = row[12].try(:strip)
-      activity.budget_q3               = row[13].try(:strip)
-      activity.csv_districts           = row[14].try(:strip)
-      activity.csv_beneficiaries       = row[14].try(:strip)
-      activity.text_for_beneficiaries  = row[15].try(:strip)
-      activity.text_for_targets        = row[16].try(:strip)
-      activity.start_date              = row[17].try(:strip)
-      activity.end_date                = row[18].try(:strip)
+      activity.spend_q4                = row[9].try(:strip)
+      activity.budget                  = row[10].try(:strip)
+      activity.budget_q4_prev          = row[11].try(:strip)
+      activity.budget_q1               = row[12].try(:strip)
+      activity.budget_q2               = row[13].try(:strip)
+      activity.budget_q3               = row[14].try(:strip)
+      activity.budget_q4               = row[15].try(:strip)
+      activity.csv_districts           = row[16].try(:strip)
+      activity.csv_beneficiaries       = row[17].try(:strip)
+      activity.text_for_beneficiaries  = row[18].try(:strip)
+      activity.csv_targets             = row[19].try(:strip)
+      activity.start_date              = flexible_date_parse(row[20].try(:strip))
+      activity.end_date                = flexible_date_parse(row[21].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -298,6 +292,8 @@ class Activity < ActiveRecord::Base
                                       map{|l| Location.find_by_short_display(l.strip)}.compact
       activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+      activity.outputs             = activity.csv_targets.to_s.split(';').
+                                      map{|o| Output.find_or_create_by_description(o.strip)}.compact
 
       activity.save
 
@@ -362,10 +358,6 @@ class Activity < ActiveRecord::Base
     !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
   end
 
-  def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || budget.blank? || service_level_budget_valid?
-  end
-
   def coding_spend_classified?
     !data_response.request.purposes? || spend.blank? || coding_spend_valid?
   end
@@ -378,24 +370,18 @@ class Activity < ActiveRecord::Base
     !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
   end
 
-  def service_level_spend_classified?
-    !data_response.request.service_levels? || spend.blank? || service_level_spend_valid?
-  end
-
   def budget_classified?
     budget.blank? ||
-    (coding_budget_classified? &&
+    coding_budget_classified? &&
     coding_budget_district_classified? &&
-    coding_budget_cc_classified? &&
-    service_level_budget_classified?)
+    coding_budget_cc_classified?
   end
 
   def spend_classified?
     spend.blank? ||
-    (coding_spend_classified? &&
+    coding_spend_classified? &&
     coding_spend_district_classified? &&
-    coding_spend_cc_classified? &&
-    service_level_spend_classified?)
+    coding_spend_cc_classified?
   end
 
   # An activity can be considered classified if at least one of these are populated.
@@ -412,16 +398,12 @@ class Activity < ActiveRecord::Base
       coding_budget_district_classified?
     when 'CodingBudgetCostCategorization'
       coding_budget_cc_classified?
-    when 'ServiceLevelBudget'
-      service_level_budget_classified?
     when 'CodingSpend'
       coding_spend_classified?
     when 'CodingSpendDistrict'
       coding_spend_district_classified?
     when 'CodingSpendCostCategorization'
       coding_spend_cc_classified?
-    when 'ServiceLevelSpend'
-      service_level_spend_classified?
     else
       raise "Unknown type #{coding_type}".to_yaml
     end
@@ -436,13 +418,13 @@ class Activity < ActiveRecord::Base
   def update_all_classified_amount_caches
     if budget_changed?
       [CodingBudget, CodingBudgetDistrict,
-         CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
+         CodingBudgetCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
       [CodingSpend, CodingSpendDistrict,
-         CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
+         CodingSpendCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
@@ -526,11 +508,9 @@ class Activity < ActiveRecord::Base
     coded += 1 if coding_budget_classified?
     coded += 1 if coding_budget_district_classified?
     coded += 1 if coding_budget_cc_classified?
-    coded += 1 if service_level_budget_classified?
     coded += 1 if coding_spend_classified?
     coded += 1 if coding_spend_district_classified?
     coded += 1 if coding_spend_cc_classified?
-    coded += 1 if service_level_spend_classified?
     progress = ((coded.to_f / 8) * 100).to_i # dont need decimal places
   end
 
@@ -549,9 +529,9 @@ class Activity < ActiveRecord::Base
 
   def classification_amount(classification_type)
     case classification_type.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
       budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
       spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
@@ -642,12 +622,14 @@ class Activity < ActiveRecord::Base
        "#{response.spend_quarters_months('q2')} Spend",
        "#{response.spend_quarters_months('q3')} Spend",
        "#{response.spend_quarters_months('q4')} Spend",
+       "#{response.spend_quarters_months('q1_next_fy')} Spend",
        "Current Budget",
         "#{response.budget_quarters_months('q1')} Budget",
         "#{response.budget_quarters_months('q2')} Budget",
         "#{response.budget_quarters_months('q3')} Budget",
         "#{response.budget_quarters_months('q4')} Budget",
-       "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+        "#{response.budget_quarters_months('q1_next_fy')} Budget",
+       "Districts", "Beneficiaries", "Beneficiary details / Other beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
     end
 
     def delete_existing_code_assignments_by_type(coding_type)
@@ -784,9 +766,10 @@ class Activity < ActiveRecord::Base
       self.class.eql?(SubActivity)
     end
 
-    def strip_leading_spaces
+    def strip_input_fields
       name = name.strip if name
       description = description.strip if description
+      provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
     end
 
     def get_valid_attribute_name(type)
@@ -794,16 +777,24 @@ class Activity < ActiveRecord::Base
       when 'CodingBudget' then :coding_budget_valid
       when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
       when 'CodingBudgetDistrict' then :coding_budget_district_valid
-      when 'ServiceLevelBudget' then :service_level_budget_valid
       when 'CodingSpend' then :coding_spend_valid
       when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
-      when 'ServiceLevelSpend' then :service_level_spend_valid
       when 'CodingSpendDistrict' then :coding_spend_district_valid
       else
         raise "Unknown type #{type}".to_yaml
       end
     end
+
+    def self.flexible_date_parse(datestr)
+      begin
+        Date.parse(datestr.gsub('/', '-'))
+      rescue
+        Date.strptime(datestr.gsub('/', '-'), '%d-%m-%Y') rescue datestr
+      end
+    end
 end
+
+
 
 
 
@@ -832,7 +823,6 @@ end
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
-#  text_for_targets             :text
 #  text_for_beneficiaries       :text
 #  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
@@ -860,10 +850,8 @@ end
 #  coding_budget_valid          :boolean         default(FALSE)
 #  coding_budget_cc_valid       :boolean         default(FALSE)
 #  coding_budget_district_valid :boolean         default(FALSE)
-#  service_level_budget_valid   :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
-#  service_level_spend_valid    :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

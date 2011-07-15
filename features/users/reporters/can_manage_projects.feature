@@ -41,7 +41,9 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I check "Location1"
         And I check "Location2"
+        And I fill in "theCombobox" with "EUR"
         And I press "Create Project"
+        
       Then I should see "Project was successfully created"
         And I should see "Project1"
 
@@ -67,12 +69,11 @@ Feature: Reporter can manage projects
 
         Examples:
           | start_date | end_date   | message                              | specific_message                      |
-          | 2010-01-01 | 2010-01-02 | Project was successfully created     | Project was successfully created      |
           |            | 2010-01-02 | Oops, we couldn't save your changes. | Start date can't be blank            |
           | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Start date is not a valid date        |
           | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
 
-
+    @wip
     Scenario Outline: Edit project dates, see feedback messages for Total budget and Total budget
       When I follow "Create Project"
         And I fill in "Name" with "Some Project"
@@ -85,9 +86,9 @@ Feature: Reporter can manage projects
         And I should see "<specific_message>"
 
         Examples:
-          | start_date | end_date   | entire_budget | budget_gor | message                              | specific_message                                                     |
-          | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created                                     |
-          | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
+          | start_date | end_date   | entire_budget | budget_gor | message                              | specific_message                  |
+          | 2010-01-01 | 2010-01-02 | 900           | 800        | Project was successfully created     | Project was successfully created  |
+          | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created  |
 
 
 

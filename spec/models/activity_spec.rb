@@ -150,7 +150,7 @@ describe Activity do
       @response = Factory(:data_response)
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 
@@ -881,6 +881,18 @@ describe Activity do
     end
 
     it_should_behave_like "location cloner"
+  end
+  
+  describe "CSV dates" do 
+    it "changes the date format from 12/12/2012 to 12-12-2012" do
+      new_date = Activity.flexible_date_parse('12/12/2012')
+      new_date.should.eql? Date.parse('12-12-2012')
+    end
+    
+    it "changes the date format from 2012/03/30 to 30-03-2012" do
+      new_date = Activity.flexible_date_parse('2012/03/30')
+      new_date.should.eql? Date.parse('30-03-2012')
+    end
   end
 
   describe "keeping Money amounts in-sync" do

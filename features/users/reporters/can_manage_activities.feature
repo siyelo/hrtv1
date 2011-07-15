@@ -151,6 +151,11 @@ Feature: Reporter can manage activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
       And I press "Import"
     Then I should see "Activities Bulk Create"
+
+ Scenario: Reporter can upload activities
+	  When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
+	    And I press "Import"
+	  Then I should not see "is not a valid date"
     
   @javascript @wip
   Scenario: Reporter can upload Implementers

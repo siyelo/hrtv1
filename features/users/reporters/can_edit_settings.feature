@@ -10,21 +10,20 @@ Feature: Reporter can manage data response
     And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     And I am signed in as "reporter@hrtapp.com"
 
-    @run
-    Scenario Outline: Reporter can edit settings and see feedback messages
-      When I follow "Settings"
-        And I select "Euro (EUR)" from "Default Currency"
-        And I fill in "Start of Fiscal Year" with "<start_date>"
-        And I fill in "End of Fiscal Year" with "<end_date>"
-        And I press "Update Settings"
-      Then I should see "<message>"
-        And I should see "<specific_message>"
+  Scenario Outline: Reporter can edit settings and see feedback messages
+    When I follow "Settings"
+      And I select "Euro (EUR)" from "Default Currency"
+      And I fill in "Start of Fiscal Year" with "<start_date>"
+      And I fill in "End of Fiscal Year" with "<end_date>"
+      And I press "Update Settings"
+    Then I should see "<message>"
+      And I should see "<specific_message>"
 
-        Examples:
-           | start_date | end_date   | message                              | specific_message                           |
-           | 2010-01-01 | 2010-12-31 | Settings were successfully updated.  | Settings were successfully updated.        |
-           |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date can't be blank      |
-           | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is not a valid date |
-           | 2010-01-02 |            | Oops, we couldn't save your changes. | Fiscal year end date can't be blank        |
-           | 2010-01-02 | 123        | Oops, we couldn't save your changes. | Fiscal year end date is not a valid date   |
-           | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.      |
+      Examples:
+         | start_date | end_date   | message                              | specific_message                           |
+         | 2010-01-01 | 2010-12-31 | Settings were successfully updated.  | Settings were successfully updated.        |
+         |            | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date can't be blank      |
+         | 123        | 2010-01-02 | Oops, we couldn't save your changes. | Fiscal year start date is not a valid date |
+         | 2010-01-02 |            | Oops, we couldn't save your changes. | Fiscal year end date can't be blank        |
+         | 2010-01-02 | 123        | Oops, we couldn't save your changes. | Fiscal year end date is not a valid date   |
+         | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date.      |

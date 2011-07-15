@@ -127,19 +127,19 @@ Feature: Reporter can manage activities
      And I fill in "End date" with "2010-12-01"
      And I select "project1" from "Project"
      And I fill in "Budget" with "10000"
-     And I fill in "2010" with "2000"
-     And I fill in "2011" with "3000"
-     And I fill in "2012" with "4000"
-     And I fill in "2013" with "5000"
+     And I fill in "2012" with "2000"
+     And I fill in "2013" with "3000"
+     And I fill in "2014" with "4000"
+     And I fill in "2015" with "5000"
      And I press "Save & Classify >"
    Then I should see "Activity was successfully created"
 
    When I follow "Activity1"
    Then the "Budget" field should contain "1000"
-     And the "2010" field should contain "2000"
-     And the "2011" field should contain "3000"
-     And the "2012" field should contain "4000"
-     And the "2013" field should contain "5000"
+     And the "2012" field should contain "2000"
+     And the "2013" field should contain "3000"
+     And the "2014" field should contain "4000"
+     And the "2015" field should contain "5000"
 
 
   Scenario: Reporter can upload activities
@@ -287,8 +287,7 @@ Feature: Reporter can manage activities
       And I press "Save & Classify >"
     Then I should see "Activity was successfully updated"
 
-
-  Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
+    Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
       Given I follow "Sign Out"
       And an organization exists with name: "organization5"
       And a data_request exists with title: "data_request2", budget: false
@@ -300,6 +299,7 @@ Feature: Reporter can manage activities
       And I follow "data_request2"
       And a project exists with name: "project1", data_response: the data_response
       And I follow "Projects"
+      Then show me the page
       When I follow "Add Activities now"
       Then I should not see "Budget (planned expenditure)"
       And  I should see "Past Activity Expenditure"

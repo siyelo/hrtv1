@@ -12,6 +12,7 @@ Feature: Admin can manage organizations
       And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as "admin@hrtapp.com"
 
+      @run
   Scenario: Admin can CRUD organizations
     When I follow "Organizations"
       And I follow "Create Organization"
@@ -19,6 +20,7 @@ Feature: Admin can manage organizations
       And I select "Bilateral" from "Raw type"
       And I fill in "Fosaid" with "123"
       And I press "Create organization"
+      Then show me the page
     Then I should see "Organization was successfully created"
       And the "Name" field should contain "Organization name"
       And the "Fosaid" field should contain "123"

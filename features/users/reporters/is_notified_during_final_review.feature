@@ -30,6 +30,6 @@ Feature: Reporter can see dashboard
         And I am signed in as "reporter@hrtapp.com"
         And I go to the dashboard
       # Req2
-      Then I should not see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(1)"
+      Then I should see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(1)"
       # Req1
-      And I should see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(2)"
+      And I should not see "This Request is in the Final Review stage." within ".modern_table tbody tr:nth-child(2)"

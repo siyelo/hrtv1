@@ -74,6 +74,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -96,7 +97,6 @@ end
 #  purposes          :boolean         default(TRUE)
 #  locations         :boolean         default(TRUE)
 #  inputs            :boolean         default(TRUE)
-#  service_levels    :boolean         default(TRUE)
 #  budget_by_quarter :boolean         default(FALSE)
 #
 

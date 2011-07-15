@@ -26,10 +26,8 @@ Factory.define :_budget_coded, :class => Activity, :parent => :activity  do |f|
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }
-  f.service_level_budget_valid    { true }
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
-  f.service_level_spend_valid     { true }
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
@@ -39,10 +37,8 @@ Factory.define :_spend_coded, :class => Activity, :parent => :activity  do |f|
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }
-  f.service_level_budget_valid    { true }
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
-  f.service_level_spend_valid     { true }
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_spend_district, :cached_amount => 40, :activity => a) }
   f.after_create { |a| Factory(:coding_spend_cost_categorization, :cached_amount => 40, :activity => a) }
@@ -56,10 +52,8 @@ Factory.define :activity_w_spend_coding, :class => Activity, :parent => :_spend_
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }
-  f.service_level_budget_valid    { true }
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
-  f.service_level_spend_valid     { true }
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_spend, :cached_amount => 40, :activity => a) }
 end
@@ -89,10 +83,8 @@ Factory.define :other_cost_w_spend_coding, :class => OtherCost, :parent => :_spe
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }
-  f.service_level_budget_valid    { true }
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
-  f.service_level_spend_valid     { true }
   f.coding_spend_district_valid   { true }
   f.after_create { |a| Factory(:coding_spend_other_cost, :cached_amount => 40, :activity => a) }
 end

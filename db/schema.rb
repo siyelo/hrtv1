@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110714132635) do
+ActiveRecord::Schema.define(:version => 20110715081224) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -52,14 +52,11 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
-    t.boolean  "coding_spend_cc_classified",   :default => false
     t.boolean  "coding_budget_valid",          :default => false
     t.boolean  "coding_budget_cc_valid",       :default => false
     t.boolean  "coding_budget_district_valid", :default => false
-    t.boolean  "service_level_budget_valid",   :default => false
     t.boolean  "coding_spend_valid",           :default => false
     t.boolean  "coding_spend_cc_valid",        :default => false
-    t.boolean  "service_level_spend_valid",    :default => false
     t.boolean  "coding_spend_district_valid",  :default => false
   end
 
@@ -96,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -149,7 +147,6 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
     t.boolean  "purposes",          :default => true
     t.boolean  "locations",         :default => true
     t.boolean  "inputs",            :default => true
-    t.boolean  "service_levels",    :default => true
     t.boolean  "budget_by_quarter", :default => false
   end
 
@@ -178,6 +175,15 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
     t.string   "name"
     t.integer  "population"
     t.integer  "old_location_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -246,6 +252,15 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
   create_table "locations_projects", :id => false, :force => true do |t|
     t.integer "location_id"
     t.integer "project_id"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|
@@ -348,8 +363,5 @@ ActiveRecord::Schema.define(:version => 20110714132635) do
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

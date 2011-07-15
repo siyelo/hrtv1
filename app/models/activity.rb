@@ -120,7 +120,7 @@ class Activity < ActiveRecord::Base
   before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
   after_save  :update_counter_cache
   after_destroy :update_counter_cache
-  before_save :set_total_amounts 
+  before_save :set_total_amounts
 
   ### Named scopes
   # TODO: spec
@@ -366,14 +366,13 @@ class Activity < ActiveRecord::Base
 
   def coding_spend_district_classified?
     !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
-  end 
-
+  end
 
   def budget_classified?
     budget.blank? ||
     coding_budget_classified? &&
     coding_budget_district_classified? &&
-    coding_budget_cc_classified? 
+    coding_budget_cc_classified?
   end
 
   def spend_classified?
@@ -396,13 +395,13 @@ class Activity < ActiveRecord::Base
     when 'CodingBudgetDistrict'
       coding_budget_district_classified?
     when 'CodingBudgetCostCategorization'
-      coding_budget_cc_classified? 
+      coding_budget_cc_classified?
     when 'CodingSpend'
       coding_spend_classified?
     when 'CodingSpendDistrict'
       coding_spend_district_classified?
     when 'CodingSpendCostCategorization'
-      coding_spend_cc_classified? 
+      coding_spend_cc_classified?
     else
       raise "Unknown type #{coding_type}".to_yaml
     end
@@ -528,9 +527,9 @@ class Activity < ActiveRecord::Base
 
   def classification_amount(classification_type)
     case classification_type.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization' 
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
       budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization' 
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
       spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
@@ -775,10 +774,8 @@ class Activity < ActiveRecord::Base
       when 'CodingBudget' then :coding_budget_valid
       when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
       when 'CodingBudgetDistrict' then :coding_budget_district_valid
-      when 'ServiceLevelBudget' then :service_level_budget_valid
       when 'CodingSpend' then :coding_spend_valid
       when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
-      when 'ServiceLevelSpend' then :service_level_spend_valid
       when 'CodingSpendDistrict' then :coding_spend_district_valid
       else
         raise "Unknown type #{type}".to_yaml
@@ -793,6 +790,7 @@ class Activity < ActiveRecord::Base
       end
     end
 end
+
 
 
 
@@ -849,10 +847,8 @@ end
 #  coding_budget_valid          :boolean         default(FALSE)
 #  coding_budget_cc_valid       :boolean         default(FALSE)
 #  coding_budget_district_valid :boolean         default(FALSE)
-#  service_level_budget_valid   :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
 #  service_level_spend_valid    :boolean         default(FALSE)
-#  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

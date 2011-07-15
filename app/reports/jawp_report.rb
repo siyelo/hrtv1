@@ -45,9 +45,9 @@ class Reports::JawpReport
 
       row = []
       row << activity.project.try(:name)
-      row << activity.project.try(:description)
+      row << activity.project.try(:description).try(:gsub, /[\n\r-]+/, " ")
       row << activity.name
-      row << activity.description
+      row << activity.description.try(:gsub, /[\n\r-]+/, " ")
       row << amount_q1
       row << amount_q2
       row << amount_q3

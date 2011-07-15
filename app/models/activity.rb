@@ -46,16 +46,16 @@ class Activity < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :text_for_targets, :name, :description, :start_date, :end_date,
+    :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
     :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
+    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -222,7 +222,7 @@ class Activity < ActiveRecord::Base
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << activity.text_for_beneficiaries
-        row << activity.text_for_targets
+        row << activity.outputs.map{|o| o.description}.join(",")
         row << activity.start_date
         row << activity.end_date
 
@@ -271,7 +271,7 @@ class Activity < ActiveRecord::Base
       activity.csv_districts           = row[16].try(:strip)
       activity.csv_beneficiaries       = row[17].try(:strip)
       activity.text_for_beneficiaries  = row[18].try(:strip)
-      activity.text_for_targets        = row[19].try(:strip)
+      activity.csv_targets             = row[19].try(:strip)
       activity.start_date              = flexible_date_parse(row[20].try(:strip))
       activity.end_date                = flexible_date_parse(row[21].try(:strip))
 
@@ -292,6 +292,8 @@ class Activity < ActiveRecord::Base
                                       map{|l| Location.find_by_short_display(l.strip)}.compact
       activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+      activity.outputs             = activity.csv_targets.to_s.split(';').
+                                      map{|o| Output.find_or_create_by_description(o.strip)}.compact
 
       activity.save
 
@@ -800,6 +802,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -820,7 +823,6 @@ end
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
-#  text_for_targets             :text
 #  text_for_beneficiaries       :text
 #  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
@@ -850,6 +852,6 @@ end
 #  coding_budget_district_valid :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
-#  service_level_spend_valid    :boolean         default(FALSE)
+#  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

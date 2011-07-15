@@ -45,7 +45,7 @@ class Reports::ActivitiesOneRowPerDistrict
      row << "activity.provider"
      row << "activity.provider.FOSAID"
      row << "activity.text_for_beneficiaries"
-     row << "activity.text_for_targets"
+     row << "activity.targets"
      row << "Is Implementer?"
      row << "parent_activity.total_budget"
      row << "parent_activity.total_spend"
@@ -74,7 +74,7 @@ class Reports::ActivitiesOneRowPerDistrict
       row << provider_name(activity)
       row << provider_fosaid(activity)
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.text_for_targets}"
+      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
       row << is_activity(activity)
       row << parent_activity_budget(activity)
       row << parent_activity_spend(activity)

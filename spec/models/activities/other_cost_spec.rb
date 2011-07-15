@@ -42,7 +42,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
-    it { should allow_mass_assignment_of(:text_for_targets) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:organization_ids) }
   end

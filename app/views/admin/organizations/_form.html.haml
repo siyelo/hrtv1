@@ -2,7 +2,7 @@
   = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
   = f.input :raw_type, :as => :select, :collection => Organization::ORGANIZATION_TYPES, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
   = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false
-
+  = f.input :currency, :label => "Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "Select The default currency for your organization", :required => false, :input_html => { :class => "js_combobox" }
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :class => 'last next')
 

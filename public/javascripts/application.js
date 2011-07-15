@@ -1596,6 +1596,12 @@ var sub_activities_create = {
   }
 };
 
+var admin_organizations_create = admin_organizations_edit = {
+  run: function () {
+    $( ".js_combobox" ).combobox();
+  }
+};
+
 
 var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
   run: function () {

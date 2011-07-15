@@ -8,7 +8,6 @@ describe SubActivity do
     it { should validate_numericality_of(:spend_mask) }
     it { should validate_numericality_of(:budget_mask) }
 
-
     it "does not allow > 100 percentage for spend_mask" do
       activity    = Factory(:activity, :spend => 10, :budget => 10)
       implementer = Factory.build(:sub_activity, :activity => activity, :spend_mask => '101%')
@@ -21,6 +20,7 @@ describe SubActivity do
       implementer = Factory.build(:sub_activity, :activity => activity, :spend_mask => '70%')
       implementer.save
       implementer.errors.on(:spend_mask).should be_blank
+      implementer.spend.should == 7
     end
 
     it "does not allow < 0 percentage for budget_mask" do
@@ -49,6 +49,7 @@ describe SubActivity do
       implementer = Factory.build(:sub_activity, :activity => activity, :budget_mask => '70%')
       implementer.save
       implementer.errors.on(:budget_mask).should be_blank
+      implementer.budget.should == 7
     end
   end
 
@@ -61,14 +62,14 @@ describe SubActivity do
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
   end
-  
+
   describe "download subactivity template" do
     it "returns the correct fields in the activity template" do
       header_row = SubActivity.download_template
       header_row.should == "Implementer,Past Expenditure,Current Budget,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
-  
+
 
   describe "methods" do
     before :each do
@@ -433,48 +434,3 @@ describe SubActivity do
     end
   end
 end
-
-
-# == Schema Information
-#
-# Table name: activities
-#
-#  id                                    :integer         not null, primary key
-#  name                                  :string(255)
-#  created_at                            :datetime
-#  updated_at                            :datetime
-#  provider_id                           :integer
-#  description                           :text
-#  type                                  :string(255)
-#  budget                                :decimal(, )
-#  spend_q1                              :decimal(, )
-#  spend_q2                              :decimal(, )
-#  spend_q3                              :decimal(, )
-#  spend_q4                              :decimal(, )
-#  start_date                            :date
-#  end_date                              :date
-#  spend                                 :decimal(, )
-#  text_for_provider                     :text
-#  text_for_targets                      :text
-#  text_for_beneficiaries                :text
-#  spend_q4_prev                         :decimal(, )
-#  data_response_id                      :integer
-#  activity_id                           :integer
-#  approved                              :boolean
-#  CodingBudget_amount                   :decimal(, )     default(0.0)
-#  CodingBudgetCostCategorization_amount :decimal(, )     default(0.0)
-#  CodingBudgetDistrict_amount           :decimal(, )     default(0.0)
-#  CodingSpend_amount                    :decimal(, )     default(0.0)
-#  CodingSpendCostCategorization_amount  :decimal(, )     default(0.0)
-#  CodingSpendDistrict_amount            :decimal(, )     default(0.0)
-#  budget_q1                             :decimal(, )
-#  budget_q2                             :decimal(, )
-#  budget_q3                             :decimal(, )
-#  budget_q4                             :decimal(, )
-#  budget_q4_prev                        :decimal(, )
-#  comments_count                        :integer         default(0)
-#  sub_activities_count                  :integer         default(0)
-#  spend_in_usd                          :decimal(, )     default(0.0)
-#  budget_in_usd                         :decimal(, )     default(0.0)
-#
-

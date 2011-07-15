@@ -17,8 +17,6 @@ Feature: Reporter can manage activities
     And I am signed in as "reporter@hrtapp.com"
     And I follow "data_request1"
     And I follow "Projects"
-    
-  
 
   @javascript
   Scenario: Reporter can add outputs
@@ -38,7 +36,7 @@ Feature: Reporter can manage activities
     Then the "Target" field should contain "Output description value"
 
    #combobox
-  @javascript @wip
+  @javascript
   Scenario: Reporter can add implementers (normal values)
     When I follow "Add Activities now"
     And I fill in "Name" with "activity1"
@@ -52,33 +50,30 @@ Feature: Reporter can manage activities
     And I fill in "Implementer" with "organization2"
     And I fill in "Implementer Expenditure" with "99"
     And I fill in "Implementer Current Budget" with "19"
-    And I press "Save & Classify >"
-
+    And I press "Save"
     Then I should see "Activity was successfully created"
-    When I follow "activity1"
-    Then the "Implementer Expenditure" field should contain "99"
-    And the "Implementer Current Budget" field should contain "19"
+    And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "99"
+    And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "19"
 
   #combobox
-  @javascript @wip
+  @javascript
   Scenario: Reporter can add sub-activities (percentage values)
-  When I follow "Add Activities now"
-      And I fill in "Name" with "activity1"
-      And I fill in "Description" with "1ctivity1 description"
-      And I fill in "Start date" with "2010-01-01"
-      And I fill in "End date" with "2010-12-01"
-      And I fill in "Expenditure" with "200"
-      And I fill in "Budget" with "300"
-      And I select "project1" from "Project"
-      And I follow "Add Implementer"
-      And I fill in "Implementer" with "organization1"
-      And I fill in "Implementer Expenditure" with "10%"
-      And I fill in "Implementer Current Budget" with "10%"
-      And I press "Save & Classify >"
+    When I follow "Add Activities now"
+    And I fill in "Name" with "activity1"
+    And I fill in "Description" with "1ctivity1 description"
+    And I fill in "Start date" with "2010-01-01"
+    And I fill in "End date" with "2010-12-01"
+    And I fill in "Expenditure" with "200"
+    And I fill in "Budget" with "300"
+    And I select "project1" from "Project"
+    And I follow "Add Implementer"
+    And I fill in "Implementer" with "organization1"
+    And I fill in "Implementer Expenditure" with "10%"
+    And I fill in "Implementer Current Budget" with "10%"
+    And I press "Save"
     Then I should see "Activity was successfully created"
-    When I follow "activity1"
-      Then the "Sub-Implementer Expenditure" field should contain "20"
-      And the "Implementer Current Budget" field should contain "30"
+    And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "20"
+    And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "30"
 
   @javascript
   Scenario: Reporter can CRUD activities
@@ -146,17 +141,17 @@ Feature: Reporter can manage activities
      And the "2012" field should contain "4000"
      And the "2013" field should contain "5000"
 
-     
+
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
       And I press "Import"
     Then I should see "Activities Bulk Create"
 
  Scenario: Reporter can upload activities
-	  When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
-	    And I press "Import"
-	  Then I should not see "is not a valid date"
-    
+    When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
+      And I press "Import"
+    Then I should not see "is not a valid date"
+
   @javascript @wip
   Scenario: Reporter can upload Implementers
     Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project

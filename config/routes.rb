@@ -34,7 +34,6 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
-    admin.resources :activities
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :comments

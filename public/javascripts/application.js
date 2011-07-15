@@ -1423,7 +1423,11 @@ var approveActivity = function (element, approval_type, success_text) {
    })
 };
 
-
+var activities_new = activities_create = activities_edit = activities_update = {
+  run: function () {
+    activity_form();
+  }
+};
 
 var activity_form = function () {
   $('#activity_project_id').change(function () {
@@ -1511,10 +1515,12 @@ var activity_form = function () {
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
+    console.info('2222')
     split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:last)"), $(this).val());
   });
 
   $(".js_activity_spend_total").keyup(function () {
+    console.info('1111')
     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
   });
 
@@ -1537,7 +1543,7 @@ var activity_form = function () {
   commentsInit();
 };
 
-var admin_activities_edit = admin_activities_update = {
+var admin_activities_new = admin_activities_create = admin_activities_edit = admin_activities_update = {
   run: function () {
     activity_form();
   }

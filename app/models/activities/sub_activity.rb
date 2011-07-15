@@ -32,7 +32,7 @@ class SubActivity < Activity
 
   ### Delegates
   [:projects, :name, :description, :start_date, :end_date, :approved,
-   :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
+   :text_for_beneficiaries, :beneficiaries, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
 
@@ -271,6 +271,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -291,7 +292,6 @@ end
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
-#  text_for_targets             :text
 #  text_for_beneficiaries       :text
 #  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
@@ -321,6 +321,6 @@ end
 #  coding_budget_district_valid :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
-#  service_level_spend_valid    :boolean         default(FALSE)
+#  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

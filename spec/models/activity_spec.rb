@@ -51,7 +51,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
-    it { should allow_mass_assignment_of(:text_for_targets) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
@@ -93,7 +92,7 @@ describe Activity do
     end
   end
 
-  describe "codings required is decided by data_request" do 
+  describe "codings required is decided by data_request" do
     it "will return true if the data_request doesn't require inputs and none are entered" do
       @activity = Factory(:activity, :data_response => Factory(:data_response,
                                  :data_request => Factory(:data_request, :inputs => false)))
@@ -110,7 +109,7 @@ describe Activity do
       @activity = Factory(:activity, :data_response => Factory(:data_response,
                                  :data_request => Factory(:data_request, :purposes => false)))
       @activity.coding_budget_classified?.should be_true
-    end 
+    end
 
     it "will return true if the data_request doesn't require inputs and none are entered" do
       @activity = Factory(:activity, :data_response => Factory(:data_response,
@@ -650,7 +649,7 @@ describe Activity do
       activity = Factory(:activity)
       Factory(:coding_budget_cost_categorization, :activity => activity)
       copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
-    end 
+    end
 
     it "does not copy budget to spent when spent is nil" do
       activity = Factory(:activity, :spend => nil)
@@ -882,13 +881,13 @@ describe Activity do
 
     it_should_behave_like "location cloner"
   end
-  
-  describe "CSV dates" do 
+
+  describe "CSV dates" do
     it "changes the date format from 12/12/2012 to 12-12-2012" do
       new_date = Activity.flexible_date_parse('12/12/2012')
       new_date.should.eql? Date.parse('12-12-2012')
     end
-    
+
     it "changes the date format from 2012/03/30 to 30-03-2012" do
       new_date = Activity.flexible_date_parse('2012/03/30')
       new_date.should.eql? Date.parse('30-03-2012')

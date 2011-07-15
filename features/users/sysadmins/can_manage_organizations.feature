@@ -129,7 +129,7 @@ Feature: Admin can manage organizations
       And I press "Upload and Import"
     Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
-    @run
+    
   Scenario: Admin can upload organizations
     When I follow "Organizations"
       And I attach the file "spec/fixtures/organizations.csv" to "File"

@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20110715092613) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -344,8 +345,5 @@ ActiveRecord::Schema.define(:version => 20110715092613) do
     t.string   "perishable_token",         :default => "",   :null => false
     t.boolean  "tips_shown",               :default => true
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

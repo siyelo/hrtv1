@@ -287,23 +287,6 @@ Feature: Reporter can manage activities
       And I press "Save & Classify >"
     Then I should see "Activity was successfully updated"
 
-    Scenario: If the data_request budget is not checked the budget should not show up in the activities screen
-      Given I follow "Sign Out"
-      And an organization exists with name: "organization5"
-      And a data_request exists with title: "data_request2", budget: false
-      And a data_response exists with data_request: the data_request, organization: the organization
-      And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
-      And a location exists with short_display: "Location1"
-      And a location exists with short_display: "Location2"
-      And I am signed in as "reporter2@hrtapp.com"
-      And I follow "data_request2"
-      And a project exists with name: "project1", data_response: the data_response
-      And I follow "Projects"
-      Then show me the page
-      When I follow "Add Activities now"
-      Then I should not see "Budget (planned expenditure)"
-      And  I should see "Past Activity Expenditure"
-
   Scenario: Reporter can export Implementers
     Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       And an organization exists with name: "implementer"

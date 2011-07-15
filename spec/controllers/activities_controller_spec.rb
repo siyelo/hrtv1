@@ -17,14 +17,6 @@ describe ActivitiesController do
       response_activities_path(1).should == '/responses/1/activities'
     end
 
-    it "response_activity_path(1,2) to /activities/2" do
-      response_activity_path(1,2).should == '/responses/1/activities/2'
-    end
-
-    it "response_activity_path(1,9) to /responses/1/activities/9" do
-      response_activity_path(1,9).should == '/responses/1/activities/9'
-    end
-
     it "edit_response_activity_path to /responses/1/activities/1/edit" do
       edit_response_activity_path(1,1).should == '/responses/1/activities/1/edit'
     end

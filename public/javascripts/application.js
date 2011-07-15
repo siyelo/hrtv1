@@ -843,7 +843,9 @@ var code_assignments_show = {
 
     // prevent going to top on click on tool
     $('.tooltip').live('click', function (e) {
-      e.preventDefault();
+      if ($(this).attr('href') === '#') {
+        e.preventDefault();
+      }
     });
 
     $('.js_upload_btn').click(function (e) {
@@ -1648,8 +1650,8 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    
-    
+
+
     // show the jquery autocomplete combobox instead of standard dropdown
     $( ".js_combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
@@ -1669,8 +1671,8 @@ var projects_new = projects_create = projects_edit = projects_update = {
     // ?
     validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
-    
-    
+
+
 
     // when project spend quarter is edited, update the spend total
     $("input[id^='project_spend_q']:not(:last)").keyup(function () {

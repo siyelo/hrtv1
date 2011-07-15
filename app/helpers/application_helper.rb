@@ -189,11 +189,9 @@ module ApplicationHelper
   # given a project or activity, render a nice name from either
   # the name() or description()
   def nice_name(object, length=16)
-    descr = '(no name)'
-    unless object.nil?
-      descr = object.description unless object.description.blank?
-      descr = object.name unless object.name.blank?
-    end
+    descr = object.description.presence ||
+            object.name.presence ||
+            "Unnamed #{object.class.to_s.titleize}"
     truncate(descr, :length => length)
   end
 

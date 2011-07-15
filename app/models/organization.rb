@@ -153,7 +153,7 @@ class Organization < ActiveRecord::Base
   end
 
   def display_name(length = 100)
-    n = self.name || "<no name>"
+    n = self.name || "Unnamed organization"
     n.first(length)
   end
 

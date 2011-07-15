@@ -10,7 +10,7 @@
 
 %h1.main_heading
 
-  = link_to @activity.name.presence || "Unnamed #{@activity.to_s.humanize}", edit_response_activity_path(@response, @activity), :title => @activity.description, :class => 'tooltip'
+  = link_to @activity.name.presence || "Unnamed #{@activity.class.to_s.titleize}", edit_response_activity_path(@response, @activity), :title => @activity.description, :class => 'tooltip'
   %span.sub
     = "#{@activity.class.to_s.underscore.humanize.titleize} #{get_activity_type(type)}"
     = render 'help'

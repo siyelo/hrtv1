@@ -73,8 +73,6 @@ shared_examples_for "comments_cacher" do
     @commentable.comments_count.should == 0
     Factory.create(:comment, :commentable => @commentable)
     @commentable.reload.comments_count.should == 1
-    Factory.create(:comment, :commentable => @commentable)
-    @commentable.reload.comments_count.should == 2
   end
 end
 
@@ -174,10 +172,36 @@ def login_as_admin
   login @admin
 end
 
-def basic_setup
+def basic_setup_request
   @organization = Factory(:organization)
-  @data_request = Factory(:data_request, :organization => @organization)
-  @data_response = Factory(:data_response, :organization => @organization)
-  @project = Factory(:project, :data_response => @data_response)
-  @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+  @request      = Factory(:data_request, :organization => @organization)
+end
+
+def basic_setup_response
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+end
+
+def basic_setup_project
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+end
+
+def basic_setup_activity
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @activity     = Factory(:activity, :data_response => @response, :project => @project)
+end
+
+def debug_model_objects
+  p "organizations: #{Organization.count}"
+  p "requests: #{DataRequest.count}"
+  p "responses: #{DataResponse.count}"
+  p "projects: #{Project.count}"
+  p "activities: #{Activity.count}"
 end

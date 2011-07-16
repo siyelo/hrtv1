@@ -23,9 +23,8 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :data_request_id
-  # TODO - put back asap! validates_uniqueness_of :data_request_id, :scope => :organization_id
-  validates_presence_of :organization_id
+  validates_presence_of :data_request_id, :organization_id
+  validates_uniqueness_of :data_request_id, :scope => :organization_id
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]

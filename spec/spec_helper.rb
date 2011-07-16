@@ -173,3 +173,11 @@ def login_as_admin
   @admin = Factory(:admin, :organization => organization)
   login @admin
 end
+
+def basic_setup
+  @organization = Factory(:organization)
+  @data_request = Factory(:data_request, :organization => @organization)
+  @data_response = Factory(:data_response, :organization => @organization)
+  @project = Factory(:project, :data_response => @data_response)
+  @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+end

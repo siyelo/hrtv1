@@ -49,14 +49,11 @@ describe DataResponse do
     end
 
     it "caches sub activities count" do
-      dr = Factory.create(:data_response)
-      dr.sub_activities_count.should == 0
-      activity1 = Factory.build(:sub_activity, :data_response => dr)
-      activity1.save(false) # TODO: remove test when all db tests valid
-      dr.reload.sub_activities_count.should == 1
-      activity2 = Factory.build(:sub_activity, :data_response => dr)
-      activity2.save(false) # TODO: remove test when all db tests valid
-      dr.reload.sub_activities_count.should == 2
+      basic_setup
+      @data_response.sub_activities_count.should == 0
+      @sub_activity = Factory(:sub_activity, :data_response => @data_response,
+                              :activity => @activity, :provider => @organization)
+      @data_response.reload.sub_activities_count.should == 1
     end
   end
 

@@ -73,8 +73,6 @@ shared_examples_for "comments_cacher" do
     @commentable.comments_count.should == 0
     Factory.create(:comment, :commentable => @commentable)
     @commentable.reload.comments_count.should == 1
-    Factory.create(:comment, :commentable => @commentable)
-    @commentable.reload.comments_count.should == 2
   end
 end
 
@@ -90,7 +88,8 @@ end
 def save_and_deep_clone
   @original.save!
   @clone = @original.deep_clone
-  @clone.data_response = Factory.create(:data_response)
+  @request2 = Factory(:data_request)
+  @clone.data_response = @original.data_response.organization.latest_response
   @clone.save!
   @clone.reload #otherwise seems to cache the old has_many associations
 end
@@ -119,9 +118,6 @@ def ufs_test_setup
   @org_with_empty_data_response = Factory(:organization,
                                           :name => 'org_with_empty_data_response')
   request = Factory(:data_request)
-
-  Factory(:data_response, :organization => @org_with_empty_data_response,
-          :data_request => request)
 
   @response0 = @org0.data_responses[0]
   @response1 = @org1.data_responses[0]
@@ -172,4 +168,67 @@ def login_as_admin
   @data_request = Factory(:data_request, :organization => organization) # we need a request in the system first
   @admin = Factory(:admin, :organization => organization)
   login @admin
+end
+
+def basic_setup_request
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+end
+
+def basic_setup_response
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+end
+
+def basic_setup_project
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+end
+
+def basic_setup_activity
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @activity     = Factory(:activity, :data_response => @response, :project => @project)
+end
+
+def basic_setup_other_cost
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @other_cost   = Factory(:other_cost, :data_response => @response, :project => @project)
+end
+
+def basic_setup_sub_activity
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @activity     = Factory(:activity, :data_response => @response, :project => @project)
+  @sub_activity = Factory(:sub_activity, :data_response => @response,
+                          :activity => @activity, :provider => @organization)
+end
+
+def basic_setup_funding_flow
+  @organization = Factory(:organization)
+  @ngo          = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @funding_flow = Factory(:funding_flow, :data_response => @response, :project => @project,
+                          :from => @organization, :to => @ngo)
+end
+
+def debug_model_objects
+  p "organizations: #{Organization.count}"
+  p "requests: #{DataRequest.count}"
+  p "responses: #{DataResponse.count}"
+  p "projects: #{Project.count}"
+  p "activities: #{Activity.count}"
+  p "sub_activities: #{SubActivity.count}"
 end

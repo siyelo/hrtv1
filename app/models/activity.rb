@@ -687,7 +687,6 @@ class Activity < ActiveRecord::Base
       when 'CodingSpendDistrict'
         cas = sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
       end
-      puts id if cas == nil
       return [] if cas.include?([])
       cas.flatten
     end
@@ -737,7 +736,7 @@ class Activity < ActiveRecord::Base
     def set_total_amounts
       ["budget", "spend"].each do |type|
         amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount > 0
+        self.send(:"#{type}=", amount) if amount && amount > 0
       end
     end
 

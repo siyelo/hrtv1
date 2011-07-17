@@ -3,14 +3,15 @@ require 'spec_helper'
 describe Reports::Districts::ActivitiesController do
 
   before :each do
-    @data_request = Factory(:data_request)
-    @data_response = Factory(:data_response, :data_request => @data_request)
-    @admin = Factory.create(:admin)
-    @admin.data_response_id_current = @data_response.id
-    @admin.save
+    @organization  = Factory(:organization)
+    @data_request  = Factory(:data_request, :organization => @organization)
+    @data_response = @organization.latest_response
+    @project       = Factory(:project, :data_response => @data_response)
+    @admin         = Factory(:admin, :organization => @organization)
     login @admin
-    @location = Factory.create(:location)
-    @activity = Factory.create(:activity, :data_response => @data_response, :locations => [@location])
+    @location = Factory(:location)
+    @activity = Factory(:activity, :data_response => @data_response,
+                        :project => @project, :locations => [@location])
   end
 
   describe "GET 'index'" do

@@ -4,6 +4,8 @@ module BudgetSpendHelpers
   GOR_QUARTERS = [:q1, :q2, :q3, :q4]
   USG_START_MONTH = 10 # 7 is July
 
+  class InvalidQuarter < StandardError; end
+
   def spend?
     !spend.nil? and spend > 0
   end
@@ -13,40 +15,15 @@ module BudgetSpendHelpers
   end
 
   # add spend_gor_qX methods here
-  def spend
-    if total_quarterly_spending_w_shift
-      total_quarterly_spending_w_shift
-    else
-      read_attribute(:spend)
-    end
-  end
+  #def spend
+    #amount = total_quarterly_w_shift(:spend)
+    #amount ? amount : read_attribute(:spend)
+  #end
 
-  def total_quarterly_spending_w_shift
-    if check_data_response()
-      if data_response.fiscal_year_start_date &&
-         data_response.fiscal_year_start_date.month == USG_START_MONTH
-        total = 0
-        [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
-          total += self.send(s) if self.send(s)
-        end
-
-        return total if total != 0
-        nil
-      else
-        nil #"Fiscal Year shift not yet defined for this data responses' start date"
-      end
-    else
-      nil
-    end
-  end
-
-  def budget
-    if total_quarterly_budget_w_shift
-      total_quarterly_budget_w_shift
-    else
-      read_attribute(:budget)
-    end
-  end
+  #def budget
+    #amount = total_quarterly_w_shift(:budget)
+    #amount ? amount : read_attribute(:budget)
+  #end
 
   def budget_quarter(quarter)
     get_quarter(:budget, quarter)
@@ -56,33 +33,22 @@ module BudgetSpendHelpers
     get_quarter(:spend, quarter)
   end
 
-  def total_quarterly_budget_w_shift
-    if check_data_response()
-      if data_response.fiscal_year_start_date &&
-         data_response.fiscal_year_start_date.month == USG_START_MONTH
-        total = 0
-        [:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3].each do |s|
-          total += self.send(s) if self.respond_to?(s) and self.send(s)
-        end
-
-        return total if total != 0
-        nil
-      else
-        nil #"Fiscal Year shift not yet defined for this data responses' start date"
-      end
+  def total_quarterly_w_shift(amount_type)
+    total = 0
+    if data_response.fiscal_year_start_date &&
+       data_response.fiscal_year_start_date.month == USG_START_MONTH
+      quarted_lookup = USG_QUARTERS
     else
-      nil
+      quarted_lookup = GOR_QUARTERS
     end
-  end
 
-  def spend_RWF
-    return 0 if spend.nil?
-    spend * Money.default_bank.get_rate(currency, :RWF)
-  end
+    quarted_lookup.each do |quarter|
+      amount = self.send(:"#{amount_type}_#{quarter}")
+      total += amount if amount
+    end
 
-  def budget_RWF
-    return 0 if budget.nil?
-    budget * Money.default_bank.get_rate(currency, :RWF)
+    return total if total != 0
+    nil
   end
 
   # GN TODO: refactor for spend in quarters to total up
@@ -103,37 +69,24 @@ module BudgetSpendHelpers
   end
 
   def total_amount_of_quarters(type)
-    (self.send("#{type}_q4_prev") || 0) +
-    (self.send("#{type}_q1") || 0) +
-    (self.send("#{type}_q2") || 0) +
-    (self.send("#{type}_q3") || 0)
+    total_quarterly_w_shift(type)
+    #(self.send("#{type}_q4_prev") || 0) +
+    #(self.send("#{type}_q1") || 0) +
+    #(self.send("#{type}_q2") || 0) +
+    #(self.send("#{type}_q3") || 0)
   end
 
   protected
-
-    # some older, unmigrated objects are going to break here...
-    def check_data_response
-      begin
-        data_ok = self.data_response
-      rescue RuntimeError => e
-        # if the funding flow doesnt have a project, for example
-        # then we cant do much!
-        data_ok = nil
-      end
-      data_ok
-    end
-
     def get_quarter(method, quarter)
-      if check_data_response()
-        if data_response.fiscal_year_start_date &&
-            data_response.fiscal_year_start_date.month == USG_START_MONTH
-          quarted_lookup = USG_QUARTERS
-        else
-          quarted_lookup = GOR_QUARTERS
-        end
+      raise InvalidQuarter unless [1, 2, 3, 4].include?(quarter)
 
-        self.send(:"#{method}_#{quarted_lookup[quarter-1]}")
+      if data_response.fiscal_year_start_date &&
+          data_response.fiscal_year_start_date.month == USG_START_MONTH
+        quarted_lookup = USG_QUARTERS
+      else
+        quarted_lookup = GOR_QUARTERS
       end
-    end
 
+      self.send(:"#{method}_#{quarted_lookup[quarter-1]}")
+    end
 end

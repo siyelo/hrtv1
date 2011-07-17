@@ -23,9 +23,8 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :data_request_id
-  # TODO - put back asap! validates_uniqueness_of :data_request_id, :scope => :organization_id
-  validates_presence_of :organization_id
+  validates_presence_of :data_request_id, :organization_id
+  validates_uniqueness_of :data_request_id, :scope => :organization_id
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -131,16 +130,6 @@ class DataResponse < ActiveRecord::Base
   # TODO: spec
   def total_project_spend
     projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + universal_currency_converter(p.spend, p.currency, currency)}
-  end
-
-  # TODO: spec
-  def total_project_budget_RWF
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget_RWF}
-  end
-
-  # TODO: spec
-  def total_project_spend_RWF
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
   end
 
   # TODO: spec

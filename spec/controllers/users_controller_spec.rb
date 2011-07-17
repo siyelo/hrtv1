@@ -3,14 +3,17 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe UsersController do
   [:sysadmin, :reporter, :activity_manager].each do |user|
     it "can set the #{user.to_s.humanize}'s request" do
-      @user = Factory(user)
+      @organization  = Factory(:organization)
+      @data_request  = Factory(:data_request, :organization => @organization)
+      @data_response = @organization.latest_response
+      @user = Factory(user, :organization => @organization)
       login @user
-      @response2 = Factory(:data_response)
+      @data_response = @organization.latest_response
       @request.env['HTTP_REFERER'] = 'http://test.com/dashboard'
-      put :set_request, :id => @response2.data_request.id
+      put :set_request, :id => @data_request.id
       response.should redirect_to('http://test.com/dashboard')
       @user.reload
-      @user.current_request.should == @response2.data_request
+      @user.current_request.should == @data_request
     end
   end
 
@@ -31,6 +34,4 @@ describe UsersController do
     @user.reload
     @user.current_response.should == newest_data_response
   end
-
-
 end

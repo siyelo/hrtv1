@@ -214,19 +214,9 @@ class Project < ActiveRecord::Base
   end
 
   def total_matches_quarters?(type)
-    (self.send(type) || 0) == total_amount_of_quarters(type)
+    (self.send(type) || 0) == (total_amount_of_quarters(type) || 0)
   end
 
-  def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
-  end
-
-  def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
-  end
-  
   def linked?
      return false if self.in_flows.empty?
      self.in_flows.each do |in_flow|
@@ -416,7 +406,7 @@ class Project < ActiveRecord::Base
     def set_total_amounts
       ["budget", "spend"].each do |type|
         amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount > 0
+        self.send(:"#{type}=", amount) if amount && amount > 0
       end
     end
 

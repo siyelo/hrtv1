@@ -15,60 +15,54 @@ describe DataResponse do
   end
 
   describe "validations" do
-    subject{Factory(:response)}
+    subject { basic_setup_response; @response }
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
-    #TODO: put back it { should validate_uniqueness_of(:data_request_id).scoped_to(:organization_id) }
+    it { should validate_uniqueness_of(:data_request_id).scoped_to(:organization_id) }
   end
 
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory.create(:data_response)
+        basic_setup_response
+        @commentable = @response
       end
 
       it_should_behave_like "comments_cacher"
     end
 
     it "caches projects count" do
-      dr = Factory.create(:data_response)
-      dr.projects_count.should == 0
-      Factory.create(:project, :data_response => dr)
-      dr.reload.projects_count.should == 1
-      Factory.create(:project, :data_response => dr)
-      dr.reload.projects_count.should == 2
+      basic_setup_response
+      @response.projects_count.should == 0
+      Factory.create(:project, :data_response => @response)
+      @response.reload.projects_count.should == 1
     end
 
     it "caches activities count" do
-      dr = Factory.create(:data_response)
-      dr.activities_count.should == 0
-      Factory.create(:activity, :data_response => dr)
-      dr.reload.activities_count.should == 1
-      Factory.create(:activity, :data_response => dr)
-      dr.reload.activities_count.should == 2
+      basic_setup_project
+      @response.activities_count.should == 0
+      Factory.create(:activity, :data_response => @response, :project => @project)
+      @response.reload.activities_count.should == 1
     end
 
     it "caches sub activities count" do
-      dr = Factory.create(:data_response)
-      dr.sub_activities_count.should == 0
-      activity1 = Factory.build(:sub_activity, :data_response => dr)
-      activity1.save(false) # TODO: remove test when all db tests valid
-      dr.reload.sub_activities_count.should == 1
-      activity2 = Factory.build(:sub_activity, :data_response => dr)
-      activity2.save(false) # TODO: remove test when all db tests valid
-      dr.reload.sub_activities_count.should == 2
+      basic_setup_activity
+      @response.sub_activities_count.should == 0
+      @sub_activity = Factory(:sub_activity, :data_response => @response,
+                              :activity => @activity, :provider => @organization)
+      @response.reload.sub_activities_count.should == 1
     end
   end
 
   describe "searching for in-progress data responses" do
     it "should not be in progress on creation" do
-      @dr = Factory.create(:data_response)
-      DataResponse.in_progress.should_not include(@dr)
+      basic_setup_response
+      DataResponse.in_progress.should_not include(@response)
     end
+
     it "should be in progress if it has a project" do
-      @dr   = Factory(:data_response)
-      @proj = Factory(:project, :data_response => @dr)
-      DataResponse.in_progress.should include(@dr)
+      basic_setup_project
+      DataResponse.in_progress.should include(@response)
     end
   end
 
@@ -77,13 +71,13 @@ describe DataResponse do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
       @organization = Factory(:organization, :currency => 'RWF')
-      @dr        = Factory(:data_response, :organization => @organization)
-      @project   = Factory(:project, :data_response => @dr,
-                            :currency => nil)
-      @activity  = Factory(:activity, :data_response => @dr,
-                            :project => @project,
-                            :budget => 1000, :spend => 2000)
-
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response,
+                              :currency => nil)
+      @activity     = Factory(:activity, :data_response => @response,
+                              :project => @project,
+                              :budget => 1000, :spend => 2000)
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -100,9 +94,12 @@ describe DataResponse do
 
   describe "#name" do
     it "returns data_response name" do
-      data_request  = Factory.create(:data_request, :title => 'Data Request 1')
-      data_response = Factory.create(:data_response, :data_request => data_request)
-      data_response.name.should == 'Data Request 1'
+      organization = Factory(:organization)
+      request      = Factory(:data_request, :organization => organization,
+                             :title => 'Data Request 1')
+      response     = organization.latest_response
+
+      response.name.should == 'Data Request 1'
     end
   end
 end

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FundingFlow do
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:organization_text) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:data_response_id) }
@@ -23,15 +23,15 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:budget_q4) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
     it { should belong_to :data_response }
   end
 
-  describe "validations" do
-    subject { Factory(:funding_flow) }
+  describe "Validations" do
+    subject { basic_setup_funding_flow; @funding_flow }
     it { should be_valid }
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
@@ -52,55 +52,45 @@ describe FundingFlow do
   end
 
   describe "more validations" do
+    before :each do
+      basic_setup_project
+    end
+
     it "should validate the spend fields" do
-      @activity = Factory.build(:funding_flow, :spend => 'abcd')
-      @activity.save.should be_false
+      @funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project, :spend => 'abcd',
+                                    :from => @organization, :to => @organization)
+      @funding_flow.save.should be_false
     end
+
     it "should validate the budget fields" do
-      @activity = Factory.build(:funding_flow, :budget => 'abcd')
-      @activity.save.should be_false
-    end
-  end
-
-  describe "takes amounts from quarterlys if no budget/spend present" do
-    it "if spend is nil it should use the amounts int eh quarterlys" do
-      @activity = Factory(:funding_flow, :spend => nil, :spend_q1 => 2, :spend_q2 => 3, :spend_q4 => 4, :spend_q3 => 1)
-      @activity.spend.should == 10
-      @activity.save.should be_true
-    end
-
-    it "if budget is nil it should use the amounts int eh quarterlys" do
-      @activity = Factory(:funding_flow, :budget => nil, :budget_q1 => 2, :budget_q2 => 3, :budget_q4 => 4, :budget_q3 => 1)
-      @activity.budget.should == 10
-      @activity.save.should be_true
-    end
-
-    it "if the budget is not nil it will use the budget amount" do
-      @activity = Factory(:funding_flow, :budget => 99, :budget_q1 => 2, :budget_q2 => 3, :budget_q4 => 4, :budget_q3 => 1)
-      @activity.budget.should == 99
-      @activity.save.should be_true
-    end
-
-    it "if the spend is not nil it will use the budget amount" do
-      @activity = Factory(:funding_flow, :spend => 99, :spend_q1 => 2, :spend_q2 => 3, :spend_q4 => 4, :spend_q3 => 1)
-      @activity.spend.should == 99
-      @activity.save.should be_true
+      @funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project, :budget => 'abcd',
+                                    :from => @organization, :to => @organization)
+      @funding_flow.save.should be_false
     end
   end
 
   describe "currency" do
     it "returns project currency" do
-      project = Factory.create(:project, :currency => "RWF")
-      funding_flow = Factory.create(:funding_flow, :project => project)
+      basic_setup_response
+      @project     = Factory.create(:project, :data_response => @response, :currency => "RWF")
+      funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project,
+                                    :from => @organization, :to => @organization)
       funding_flow.currency.should == "RWF"
     end
   end
 
   describe "#name" do
     it "returns from and to organizations in the name" do
+      basic_setup_project
       from = Factory.create(:organization, :name => 'Organization 1')
       to   = Factory.create(:organization, :name => 'Organization 2')
-      funding_flow = Factory.create(:funding_flow, :from => from, :to => to)
+      funding_flow = Factory.create(:funding_flow, :data_response => @response,
+                                    :project => @project,
+                                    :from => from, :to => to)
+
       funding_flow.name.should == "From: #{from} - To: #{to}"
     end
   end

@@ -15,36 +15,15 @@ module BudgetSpendHelpers
   end
 
   # add spend_gor_qX methods here
-  def spend
-    if total_quarterly_spending_w_shift
-      total_quarterly_spending_w_shift
-    else
-      read_attribute(:spend)
-    end
-  end
+  #def spend
+    #amount = total_quarterly_w_shift(:spend)
+    #amount ? amount : read_attribute(:spend)
+  #end
 
-  def total_quarterly_spending_w_shift
-    if data_response.fiscal_year_start_date &&
-       data_response.fiscal_year_start_date.month == USG_START_MONTH
-      total = 0
-      [:spend_q4_prev, :spend_q1, :spend_q2, :spend_q3].each do |s|
-        total += self.send(s) if self.send(s)
-      end
-
-      return total if total != 0
-      nil
-    else
-      nil #"Fiscal Year shift not yet defined for this data responses' start date"
-    end
-  end
-
-  def budget
-    if total_quarterly_budget_w_shift
-      total_quarterly_budget_w_shift
-    else
-      read_attribute(:budget)
-    end
-  end
+  #def budget
+    #amount = total_quarterly_w_shift(:budget)
+    #amount ? amount : read_attribute(:budget)
+  #end
 
   def budget_quarter(quarter)
     get_quarter(:budget, quarter)
@@ -54,19 +33,22 @@ module BudgetSpendHelpers
     get_quarter(:spend, quarter)
   end
 
-  def total_quarterly_budget_w_shift
+  def total_quarterly_w_shift(amount_type)
+    total = 0
     if data_response.fiscal_year_start_date &&
        data_response.fiscal_year_start_date.month == USG_START_MONTH
-      total = 0
-      [:budget_q4_prev, :budget_q1, :budget_q2, :budget_q3].each do |s|
-        total += self.send(s) if self.respond_to?(s) and self.send(s)
-      end
-
-      return total if total != 0
-      nil
+      quarted_lookup = USG_QUARTERS
     else
-      nil #"Fiscal Year shift not yet defined for this data responses' start date"
+      quarted_lookup = GOR_QUARTERS
     end
+
+    quarted_lookup.each do |quarter|
+      amount = self.send(:"#{amount_type}_#{quarter}")
+      total += amount if amount
+    end
+
+    return total if total != 0
+    nil
   end
 
   # GN TODO: refactor for spend in quarters to total up
@@ -87,10 +69,11 @@ module BudgetSpendHelpers
   end
 
   def total_amount_of_quarters(type)
-    (self.send("#{type}_q4_prev") || 0) +
-    (self.send("#{type}_q1") || 0) +
-    (self.send("#{type}_q2") || 0) +
-    (self.send("#{type}_q3") || 0)
+    total_quarterly_w_shift(type)
+    #(self.send("#{type}_q4_prev") || 0) +
+    #(self.send("#{type}_q1") || 0) +
+    #(self.send("#{type}_q2") || 0) +
+    #(self.send("#{type}_q3") || 0)
   end
 
   protected

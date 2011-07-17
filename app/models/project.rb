@@ -214,7 +214,7 @@ class Project < ActiveRecord::Base
   end
 
   def total_matches_quarters?(type)
-    (self.send(type) || 0) == total_amount_of_quarters(type)
+    (self.send(type) || 0) == (total_amount_of_quarters(type) || 0)
   end
 
   def linked?
@@ -406,7 +406,7 @@ class Project < ActiveRecord::Base
     def set_total_amounts
       ["budget", "spend"].each do |type|
         amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount > 0
+        self.send(:"#{type}=", amount) if amount && amount > 0
       end
     end
 

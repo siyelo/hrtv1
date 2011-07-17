@@ -119,9 +119,6 @@ def ufs_test_setup
                                           :name => 'org_with_empty_data_response')
   request = Factory(:data_request)
 
-  Factory(:data_response, :organization => @org_with_empty_data_response,
-          :data_request => request)
-
   @response0 = @org0.data_responses[0]
   @response1 = @org1.data_responses[0]
   @response2 = @org2.data_responses[0]
@@ -215,6 +212,16 @@ def basic_setup_sub_activity
   @activity     = Factory(:activity, :data_response => @response, :project => @project)
   @sub_activity = Factory(:sub_activity, :data_response => @response,
                           :activity => @activity, :provider => @organization)
+end
+
+def basic_setup_funding_flow
+  @organization = Factory(:organization)
+  @ngo          = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @funding_flow = Factory(:funding_flow, :data_response => @response, :project => @project,
+                          :from => @organization, :to => @ngo)
 end
 
 def debug_model_objects

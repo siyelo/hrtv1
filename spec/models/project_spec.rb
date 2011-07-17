@@ -99,7 +99,6 @@ describe Project do
     end
   end
 
-
   describe "cleans currency formats" do
     FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
     TESTS = [

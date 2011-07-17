@@ -133,16 +133,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   # TODO: spec
-  def total_project_budget_RWF
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget_RWF}
-  end
-
-  # TODO: spec
-  def total_project_spend_RWF
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
-  end
-
-  # TODO: spec
   def total_activity_spend
     total_activity_method("spend")
   end

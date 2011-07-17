@@ -347,7 +347,8 @@ describe Project do
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory(:project)
+        basic_setup_project
+        @commentable = @project
       end
 
       it_should_behave_like "comments_cacher"

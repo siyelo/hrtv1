@@ -217,16 +217,6 @@ class Project < ActiveRecord::Base
     (self.send(type) || 0) == total_amount_of_quarters(type)
   end
 
-  def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
-  end
-
-  def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
-  end
-  
   def linked?
      return false if self.in_flows.empty?
      self.in_flows.each do |in_flow|

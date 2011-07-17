@@ -2,65 +2,75 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe SubActivity do
 
-  describe "validations" do
-    subject { Factory(:sub_activity) }
+  describe "Associations" do
+    it { should belong_to :activity }
+  end
+
+  describe "Attributes" do
+    it { should allow_mass_assignment_of(:activity_id) }
+    it { should allow_mass_assignment_of(:budget) }
+    it { should allow_mass_assignment_of(:spend) }
+  end
+
+  describe "Validations" do
+    subject { basic_setup_sub_activity; @sub_activity }
     it { should be_valid }
     it { should validate_numericality_of(:spend_mask) }
     it { should validate_numericality_of(:budget_mask) }
 
-    it "does not allow > 100 percentage for spend_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :spend_mask => '101%')
-      implementer.save
-      implementer.errors.on(:spend_mask).should include("must be between 0% - 100%")
+    context "spend_mask" do
+      before :each do
+        basic_setup_project
+        @activity = Factory(:activity, :data_response => @response, :project => @project,
+                            :spend => 10, :budget => 10)
+      end
+
+      it "does not allow > 100 percentage for spend_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :spend_mask => '101%')
+        implementer.save
+        implementer.errors.on(:spend_mask).should include("must be between 0% - 100%")
+      end
+
+      it "allows > 0 && < 100 percentage for spend_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :spend_mask => '70%')
+        implementer.save
+        implementer.errors.on(:spend_mask).should be_blank
+        implementer.spend.should == 7
+      end
+
+      it "does not allow < 0 percentage for spend_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :spend_mask => '-10%')
+        implementer.save
+        implementer.errors.on(:spend_mask).should include("must be between 0% - 100%")
+      end
     end
 
-    it "allows > 0 && < 100 percentage for spend_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :spend_mask => '70%')
-      implementer.save
-      implementer.errors.on(:spend_mask).should be_blank
-      implementer.spend.should == 7
+    context "budget_mask" do
+      before :each do
+        basic_setup_project
+        @activity = Factory(:activity, :data_response => @response, :project => @project,
+                            :spend => 10, :budget => 10)
+      end
+
+      it "does not allow < 0 percentage for budget_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :budget_mask => '-10%')
+        implementer.save
+        implementer.errors.on(:budget_mask).should include("must be between 0% - 100%")
+      end
+
+      it "does not allow > 0 percentage for budget_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :budget_mask => '101%')
+        implementer.save
+        implementer.errors.on(:budget_mask).should include("must be between 0% - 100%")
+      end
+
+      it "allows > 0 && < 100 percentage for budget_mask" do
+        implementer = Factory.build(:sub_activity, :activity => @activity, :budget_mask => '70%')
+        implementer.save
+        implementer.errors.on(:budget_mask).should be_blank
+        implementer.budget.should == 7
+      end
     end
-
-    it "does not allow < 0 percentage for budget_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :budget_mask => '-10%')
-      implementer.save
-      implementer.errors.on(:budget_mask).should include("must be between 0% - 100%")
-    end
-
-    it "does not allow < 0 percentage for spend_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :spend_mask => '-10%')
-      implementer.save
-      implementer.errors.on(:spend_mask).should include("must be between 0% - 100%")
-    end
-
-    it "does not allow > 0 percentage for budget_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :budget_mask => '101%')
-      implementer.save
-      implementer.errors.on(:budget_mask).should include("must be between 0% - 100%")
-    end
-
-    it "allows > 0 && < 100 percentage for budget_mask" do
-      activity    = Factory(:activity, :spend => 10, :budget => 10)
-      implementer = Factory.build(:sub_activity, :activity => activity, :budget_mask => '70%')
-      implementer.save
-      implementer.errors.on(:budget_mask).should be_blank
-      implementer.budget.should == 7
-    end
-  end
-
-  describe "associations" do
-    it { should belong_to :activity }
-  end
-
-  describe "attributes" do
-    it { should allow_mass_assignment_of(:activity_id) }
-    it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:spend) }
   end
 
   describe "download subactivity template" do

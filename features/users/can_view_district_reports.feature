@@ -7,13 +7,11 @@ Feature: Can view district reports
     Given a code exists with short_display: "Code X"
       And a code exists with short_display: "Code Y"
       And an organization exists with name: "GoR"
-
       And a data_request exists with title: "Req1", organization: the organization
-      And a data_request exists with title: "Req2", organization: the organization
 
       And an organization exists with name: "Org A"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the 1st data_request, organization: the organization
+      And a data_response should exist with data_request: the 1st data_request, organization: the organization
       And a project exists with name: "Project 1 A", data_response: the data_response
       And an activity exists with name: "Activity 1 A", data_response: the data_response, project: the project
       And a location exists with short_display: "Location X"
@@ -30,7 +28,7 @@ Feature: Can view district reports
       And a coding_spend_district exists with activity: the activity, code: the first location
 
       And an organization exists with name: "Org B"
-      And a data_response exists with data_request: the 1st data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "Project 1 B", data_response: the data_response
       And an activity exists with name: "Activity 1 B", data_response: the data_response, project: the project
       And the location is one of the activity's locations
@@ -41,8 +39,9 @@ Feature: Can view district reports
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
 
+      And a data_request exists with title: "Req2", organization: the organization
       And an organization exists with name: "Org C"
-      And a data_response exists with data_request: the 2nd data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "Project 2 A", data_response: the data_response
       And an activity exists with name: "Activity 2 A", data_response: the data_response, project: the project
       And the location is one of the activity's locations
@@ -52,8 +51,6 @@ Feature: Can view district reports
       And a coding_spend exists with activity: the activity, code: the 2nd code
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
-
-#' damn Cucumber TM syntax highlighting
 
 
   Scenario: reporter views district reports
@@ -89,4 +86,3 @@ Feature: Can view district reports
     And I follow "Location X"
     And I follow "View all Activities"
     Then I should not see "Activity 2 A"
-

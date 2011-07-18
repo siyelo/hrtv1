@@ -19,7 +19,7 @@ Feature: Reporter can manage activities
     And I follow "Projects"
 
   @javascript
-  Scenario: Reporter can add outputs
+  Scenario: Reporter can add targets
     When I follow "Add Activities now"
       And I fill in "Name" with "activity1"
       And I fill in "Description" with "activity1 description"
@@ -29,11 +29,11 @@ Feature: Reporter can manage activities
       And I fill in "Budget" with "300"
       And I select "project1" from "Project"
       And I follow "Add Target"
-      And I fill in "Target" with "Output description value"
+      And I fill in "Target" with "Target description value"
       And I press "Save"
     Then I should see "Activity was successfully created"
     When I follow "activity1"
-    Then the "Target" field should contain "Output description value"
+    Then the "Target" field should contain "Target description value"
 
    #combobox
   @javascript
@@ -63,8 +63,8 @@ Feature: Reporter can manage activities
     And I fill in "Description" with "1ctivity1 description"
     And I fill in "Start date" with "2010-01-01"
     And I fill in "End date" with "2010-12-01"
-    And I fill in "Expenditure" with "200"
-    And I fill in "Budget" with "300"
+    And I fill in "Past Expenditure" with "200"
+    And I fill in "Current Budget" with "300"
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization1"
@@ -290,7 +290,7 @@ Feature: Reporter can manage activities
   Scenario: Reporter can export Implementers
     Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       And an organization exists with name: "implementer"
-      And a sub_activity exists with activity: the activity, provider: the organization, spend: 111, budget: 222
+      And a sub_activity exists with activity: the activity, provider: the organization, spend: 111, budget: 222, data_response: the data_response
     When I follow "Projects"
       And I follow "activity1"
       And I follow "Export" within "#sub_activities_upload_box"

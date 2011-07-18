@@ -62,7 +62,7 @@ class Reports::ActivitiesByDistricts
       row << "#{h activity.description}"
       @beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
+      row << "#{h activity.targets.map{|o| o.description}.join('; ')}"
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"

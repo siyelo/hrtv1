@@ -7,9 +7,9 @@ Feature: Admin can manage organizations
     Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "111"
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And an admin exists with email: "admin@hrtapp.com", organization: the organization
       And a reporter exists with email: "org2_user@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
       And I am signed in as "admin@hrtapp.com"
 
   Scenario: Admin can CRUD organizations
@@ -129,7 +129,7 @@ Feature: Admin can manage organizations
       And I press "Upload and Import"
     Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
-    
+
   Scenario: Admin can upload organizations
     When I follow "Organizations"
       And I attach the file "spec/fixtures/organizations.csv" to "File"

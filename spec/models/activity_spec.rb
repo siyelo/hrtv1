@@ -57,8 +57,6 @@ describe Activity do
   end
 
   describe "Validations" do
-    subject { basic_setup_activity; @activity }
-    it { should be_valid }
     it { should validate_presence_of(:description) }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }

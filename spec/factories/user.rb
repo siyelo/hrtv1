@@ -2,7 +2,7 @@
 
 Factory.define :user, :class => User do |f|
   f.sequence(:full_name)  { "Some User" }
-  f.sequence(:email)      { "user_#{(1..1000000).to_a.sample}@example.com" }
+  f.sequence(:email)      { |i| "user_email_#{i}@example.com" }
   f.password              { 'password' }
   f.password_confirmation { 'password' }
   f.organization          { Factory(:organization) }
@@ -10,21 +10,21 @@ Factory.define :user, :class => User do |f|
 end
 
 Factory.define :reporter,  :parent => :user do |f|
-  f.sequence(:full_name)   { "Some Reporter" }
-  f.sequence(:email)      { "reporter_#{(1..1000000).to_a.sample}@example.com" }
-  f.roles { ['reporter'] }
+  f.sequence(:full_name)  { "Some Reporter" }
+  f.sequence(:email)      { |i| "reporter_email_#{i}@example.com" }
+  f.roles                 { ['reporter'] }
 end
 
 Factory.define :activity_manager,  :parent => :user do |f|
-  f.sequence(:full_name)   { "Some Activity Manager" }
-  f.sequence(:email)      { "activity_manager_#{(1..1000000).to_a.sample}@example.com" }
-  f.roles { ['activity_manager'] }
+  f.sequence(:full_name)  { "Some Activity Manager" }
+  f.sequence(:email)      { |i| "activity_manager_#{i}@example.com" }
+  f.roles                 { ['activity_manager'] }
 end
 
 Factory.define :sysadmin,  :parent => :user do |f|
-  f.sequence(:full_name)   { "Some Sysadmin" }
-  f.sequence(:email)      { "sysadmin_#{(1..1000000).to_a.sample}@example.com" }
-  f.roles { ['admin'] } #TODO: - change role names
+  f.sequence(:full_name)  { "Some Sysadmin" }
+  f.sequence(:email)      { |i| "sysadmin_#{i}@example.com" }
+  f.roles                 { ['admin'] }
 end
 
 # deprecated - use :sysadmin from now on

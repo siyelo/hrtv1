@@ -22,12 +22,14 @@ describe User do
   end
 
   describe "Validations" do
-    subject { Factory(:reporter, :organization => Factory(:organization) ) }
-    it { should be_valid }
     it { should validate_presence_of(:full_name) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
-    it { should validate_uniqueness_of(:email).case_insensitive }
+
+    context "existing record in db" do
+      subject { Factory(:reporter, :organization => Factory(:organization) ) }
+      it { should validate_uniqueness_of(:email).case_insensitive }
+    end
 
     it "cannot assign blank role" do
       user = Factory.build(:reporter, :roles => [])

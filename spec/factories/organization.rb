@@ -1,5 +1,7 @@
+Factory.sequence(:organization_name) { |n| "organization_#{n}_name" }
+
 Factory.define :organization, :class => Organization do |f|
-  f.sequence(:name)                  { "organization_#{(1..1000000).to_a.sample}" }
+  f.name                             { Factory.next(:organization_name) }
   f.raw_type                         { "" }
   f.currency                         { "USD" }
   f.fiscal_year_start_date           { Date.parse("2008-09-01") }

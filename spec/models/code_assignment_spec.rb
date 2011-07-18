@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CodeAssignment do
   describe "Validations" do
-    subject { basic_setup_activity; Factory(:code_assignment, :activity => @activity) }
-    it { should be_valid }
     it { should validate_presence_of :activity_id }
     it { should validate_presence_of :code_id }
   end

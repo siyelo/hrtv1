@@ -3,8 +3,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Code do
 
   describe "Validations" do
-    subject { Factory(:code) }
-    it { should be_valid }
   end
 
   describe "Attributes" do

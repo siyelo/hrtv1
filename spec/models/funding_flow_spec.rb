@@ -31,8 +31,6 @@ describe FundingFlow do
   end
 
   describe "Validations" do
-    subject { basic_setup_funding_flow; @funding_flow }
-    it { should be_valid }
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }

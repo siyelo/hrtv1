@@ -25,8 +25,6 @@ describe DataRequest do
   end
 
   describe "Validations" do
-    subject { Factory(:data_request) }
-    it { should be_valid }
     it { should validate_presence_of :organization_id }
     it { should validate_presence_of :title }
     it { should allow_value('2010-12-01').for(:due_date) }

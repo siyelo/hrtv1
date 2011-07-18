@@ -34,15 +34,26 @@ describe Organization do
 
   describe "Validations" do
     subject { Factory(:organization) }
-    it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
-    it { should validate_presence_of(:currency) }
-    it { should validate_presence_of(:contact_name) }
-    it { should validate_presence_of(:contact_position) }
-    it { should validate_presence_of(:contact_phone_number) }
-    it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}
+
+    it "validates presence of contact information only on update" do
+      attributes = {:contact_name => nil,
+      :contact_position => nil,
+      :contact_phone_number => nil,
+      :contact_main_office_phone_number => nil,
+      :contact_office_location => nil}
+
+      organization = Factory(:organization, attributes) # create valid org
+
+      # try updating with invalid attributes
+      organization.update_attributes(attributes).should be_false
+      organization.errors.on(:contact_name).should_not be_blank
+      organization.errors.on(:contact_position).should_not be_blank
+      organization.errors.on(:contact_phone_number).should_not be_blank
+      organization.errors.on(:contact_main_office_phone_number).should_not be_blank
+      organization.errors.on(:contact_office_location).should_not be_blank
+    end
 
     it "is not valid when currency is not included in the list" do
       organization = Factory.build(:organization, :currency => 'INVALID')

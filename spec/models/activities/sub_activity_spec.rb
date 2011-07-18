@@ -13,8 +13,6 @@ describe SubActivity do
   end
 
   describe "Validations" do
-    subject { basic_setup_sub_activity; @sub_activity }
-    it { should be_valid }
     it { should validate_numericality_of(:spend_mask) }
     it { should validate_numericality_of(:budget_mask) }
 

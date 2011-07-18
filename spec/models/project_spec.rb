@@ -51,11 +51,8 @@ describe Project do
   end
 
   describe "Validations" do
-    subject { basic_setup_project; @project }
-    it { should be_valid }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
@@ -86,16 +83,21 @@ describe Project do
     it { should_not allow_value('abcd').for(:budget4) }
     it { should_not allow_value('abcd').for(:budget5) }
 
-    it "should have a valid data_response " do
-      subject.data_response.should_not be_nil
-    end
+    context "subject" do
+      subject { basic_setup_project; @project }
+      it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
 
-    it "should return the owning organization " do
-      lambda {subject.organization}.should_not raise_error
-    end
+      it "should have a valid data_response " do
+        subject.data_response.should_not be_nil
+      end
 
-    it " should NOT create workflow records after save" do
-      subject.funding_flows.should have(0).items
+      it "should return the owning organization " do
+        lambda {subject.organization}.should_not raise_error
+      end
+
+      it " should NOT create workflow records after save" do
+        subject.funding_flows.should have(0).items
+      end
     end
   end
 

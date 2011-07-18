@@ -37,7 +37,8 @@ class DashboardController < ApplicationController
     # Comment loading for all types of users
     def load_comments
       if current_user.sysadmin?
-        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => COMMENT_LIMIT)
+        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => COMMENT_LIMIT,
+                                 :include => [:user, :commentable])
       elsif current_user.activity_manager?
         dr_ids = current_user.organizations.map{|o| o.data_responses.map{|dr| dr.id }}.flatten
         dr_ids += current_user.organization.data_responses.map{|dr| dr.id }

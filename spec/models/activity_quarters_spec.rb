@@ -2,10 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
   describe "US Goverment" do
-    before :all do
+    before :each do
       @organization = Factory(:organization,
-                              :fiscal_year_start_date => Date.parse("2010-10-01"),
-                              :fiscal_year_end_date => Date.parse("2011-09-30"))
+                              :fiscal_year_start_date => "2010-10-01",
+                              :fiscal_year_end_date => "2011-09-30")
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
@@ -37,10 +37,10 @@ describe Activity do
   end
 
   describe "US Goverment" do
-    before :all do
+    before :each do
       @organization = Factory(:organization,
-                              :fiscal_year_start_date => Date.parse("2010-01-01"),
-                              :fiscal_year_end_date => Date.parse("2010-12-31"))
+                              :fiscal_year_start_date => "2010-01-01",
+                              :fiscal_year_end_date => "2010-12-31")
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)

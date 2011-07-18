@@ -289,13 +289,12 @@ describe Organization do
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      @duplicate.fiscal_year_start_date = Date.parse("2010-02-01")
-      @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
+      @duplicate.fiscal_year_start_date = "2010-02-01"
+      @duplicate.fiscal_year_end_date = "2010-01-01"
       @duplicate.save(false)
-      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
-      duplicate_data_response.save
+      duplicate_data_response = @duplicate.latest_response
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 6 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 4 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do

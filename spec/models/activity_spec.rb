@@ -69,7 +69,7 @@ describe Activity do
       @project  = Factory(:project, :data_response => @response,
                          :start_date => '2011-01-01', :end_date => '2011-04-01')
       @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => Date.parse("2010-01-01"), :end_date => Date.parse("2011-03-01"))
+                         :start_date => "2010-01-01", :end_date => "2011-03-01")
       @activity.should_not be_valid
     end
 
@@ -78,7 +78,7 @@ describe Activity do
       @project  = Factory(:project, :data_response => @response,
                          :start_date => '2011-01-01', :end_date => '2011-04-01')
       @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => Date.parse("2001-03-01"), :end_date => Date.parse("2011-08-01"))
+                         :start_date => "2001-03-01", :end_date => "2011-08-01")
 
       @activity.should_not be_valid
     end
@@ -88,7 +88,7 @@ describe Activity do
       @project  = Factory(:project, :data_response => @response,
                          :start_date => '2011-01-01', :end_date => '2011-04-01')
       @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => Date.parse("2011-02-01"), :end_date => Date.parse("2011-03-01"))
+                         :start_date => "2011-02-01", :end_date => "2011-03-01")
 
       @activity.should be_valid
     end

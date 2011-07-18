@@ -1,7 +1,7 @@
 Factory.define :code, :class => Code do |f|
-  f.sequence(:short_display)   { |i| "code_#{i}" }
-  f.sequence(:description)     { |i| "description_#{i}" }
-  f.sequence(:long_display)    { |i| "long_display_#{i}" }
+  f.sequence(:short_display)   { |i| "code_#{i}_#{rand(100_000_000)}" }
+  f.sequence(:description)     { |i| "description_#{i}_#{rand(100_000_000)}" }
+  f.sequence(:long_display)    { |i| "long_display_#{i}_#{rand(100_000_000)}" }
   f.parent
 end
 

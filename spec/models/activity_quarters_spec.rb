@@ -17,14 +17,14 @@ describe Activity do
     end
 
     it "returns proper budget and spend for all quarters" do
-      @activity.budget_quarter(1).should == 11
-      @activity.budget_quarter(2).should == 22
-      @activity.budget_quarter(3).should == 33
-      @activity.budget_quarter(4).should == 44
-      @activity.spend_quarter(1).should == 111
-      @activity.spend_quarter(2).should == 222
-      @activity.spend_quarter(3).should == 333
-      @activity.spend_quarter(4).should == 444
+      @activity.budget_quarter(1).should == 22
+      @activity.budget_quarter(2).should == 33
+      @activity.budget_quarter(3).should == 44
+      @activity.budget_quarter(4).should == 55
+      @activity.spend_quarter(1).should == 222
+      @activity.spend_quarter(2).should == 333
+      @activity.spend_quarter(3).should == 444
+      @activity.spend_quarter(4).should == 555
       lambda { @activity.budget_quarter(0)
                }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
       lambda { @activity.budget_quarter(5)
@@ -52,14 +52,14 @@ describe Activity do
     end
 
     it "returns proper budget and spend for all quarters" do
-      @activity.budget_quarter(1).should == 22
-      @activity.budget_quarter(2).should == 33
-      @activity.budget_quarter(3).should == 44
-      @activity.budget_quarter(4).should == 55
-      @activity.spend_quarter(1).should == 222
-      @activity.spend_quarter(2).should == 333
-      @activity.spend_quarter(3).should == 444
-      @activity.spend_quarter(4).should == 555
+      @activity.budget_quarter(1).should == 11
+      @activity.budget_quarter(2).should == 22
+      @activity.budget_quarter(3).should == 33
+      @activity.budget_quarter(4).should == 44
+      @activity.spend_quarter(1).should == 111
+      @activity.spend_quarter(2).should == 222
+      @activity.spend_quarter(3).should == 333
+      @activity.spend_quarter(4).should == 444
       lambda { @activity.budget_quarter(0)
                }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
       lambda { @activity.budget_quarter(5)

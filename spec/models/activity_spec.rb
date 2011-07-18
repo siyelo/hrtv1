@@ -20,7 +20,7 @@ describe Activity do
     it { should have_many :coding_spend }
     it { should have_many :coding_spend_cost_categorization }
     it { should have_many :coding_spend_district }
-    it { should have_many :outputs }
+    it { should have_many :targets }
   end
 
   describe "Attributes" do
@@ -54,6 +54,8 @@ describe Activity do
     it { should allow_mass_assignment_of(:csv_provider) }
     it { should allow_mass_assignment_of(:csv_districts) }
     it { should allow_mass_assignment_of(:csv_beneficiaries) }
+    it { should allow_mass_assignment_of(:targets_attributes) }
+    it { should allow_mass_assignment_of(:am_approved_date) }
   end
 
   describe "Validations" do
@@ -99,7 +101,7 @@ describe Activity do
       basic_setup_response
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 

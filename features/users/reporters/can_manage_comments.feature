@@ -4,8 +4,14 @@ Feature: Reporter can see comments
   I want to be able to see comments that reviewers have made
 
   Background:
-    Given a basic org + reporter profile, with data response, signed in
+    Given an organization exists with name: "Org1"
+      And a data_request exists with title: "Req1"
+      And a data_response should exist with data_request: the data_request, organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And a project exists with name: "project1", data_response: the data_response
       And a comment exists with comment: "comment1", commentable: the project
+      And I am signed in as "reporter@hrtapp.com"
+
 
     Scenario: See latest comments on dashboard
       When I follow "Home"

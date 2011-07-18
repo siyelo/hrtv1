@@ -4,7 +4,7 @@ Feature: Admin can see reports
   I want to be able to see reports
 
   Scenario: Navigate to reports page
-    Given a data_request exists with title: "Req1",
+    Given a data_request exists with title: "Req1"
     And an organization exists with name: "SysAdmin Org"
     And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And I am signed in as "sysadmin@hrtapp.com"

@@ -1,4 +1,4 @@
-class Output < ActiveRecord::Base
+class Target < ActiveRecord::Base
 
   ### Associations
   belongs_to :activity

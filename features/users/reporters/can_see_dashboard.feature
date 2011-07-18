@@ -9,7 +9,7 @@ Feature: Reporter can see dashboard
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "UNAIDS"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And I am signed in as "reporter@hrtapp.com"
 
     Scenario: "See data requests"

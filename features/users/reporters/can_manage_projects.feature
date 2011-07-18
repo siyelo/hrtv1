@@ -16,7 +16,7 @@ Feature: Reporter can manage projects
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
-      And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
+      And a funding_flow exists with data_response: the data_response, from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
       And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
       And I follow "Projects"
 
@@ -41,9 +41,9 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I check "Location1"
         And I check "Location2"
-        And I fill in "theCombobox" with "EUR"
+        And I fill in "Currency override" with "EUR"
         And I press "Create Project"
-        
+
       Then I should see "Project was successfully created"
         And I should see "Project1"
 
@@ -172,7 +172,7 @@ Feature: Reporter can manage projects
       Given I follow "Sign Out"
         And an organization exists with name: "organization5"
         And a data_request exists with title: "data_request2", spend: false
-        And a data_response exists with data_request: the data_request, organization: the organization
+        And a data_response should exist with data_request: the data_request, organization: the organization
         And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
         And a location exists with short_display: "Location1"
         And a location exists with short_display: "Location2"
@@ -209,10 +209,11 @@ Feature: Reporter can manage projects
         And I press "Update"
       Then I should see "Your projects have been successfully updated"
 
+      @run
     Scenario: Months quarters groups are grouped to the GoR FY
       Given an organization "Org A" exists with name: "Org A", fiscal_year_start_date: "01-07-2010", fiscal_year_end_date: "30-06-2011"
         And a data_request "req a" exists with title: "req a"
-        And a data_response "resp a" exists with data_request: data_request
+        And a data_response "resp a" should exist with data_request: data_request
         And I follow "Projects"
         And I follow "Create Project"
       Then I should see "project_spend_q4_prev_input" is "Jul '10 - Sep '10"

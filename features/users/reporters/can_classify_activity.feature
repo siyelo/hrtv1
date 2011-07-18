@@ -80,7 +80,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
         Then show me the page
-        And I should see "We're sorry, when we added up your Budget by Purposes classifications"
+        And I should see "We're sorry, when we added up your Current Budget by Purposes classifications"
          And the "mtef1" percentage field should contain "<amount2>"
 
         Examples:
@@ -124,7 +124,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I follow "Copy Current Budget to Past Expenditure"
         And I follow "Expenditure"
         And I follow "Inputs"
-      Then the "cost_category1" field should contain "1,481,480.40" 
+      Then the "cost_category1" field should contain "1,481,480.40"
 
 
     Scenario: Use budget by coding for expenditure by coding (deep coding in different roots, using percentages)

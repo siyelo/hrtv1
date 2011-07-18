@@ -106,10 +106,10 @@
         %strong Optional.
         Describe planned targets for this activity.
 
-      - f.semantic_fields_for :outputs do |ca|
-        = render "activities/output_fields", :f => ca
+      - f.semantic_fields_for :targets do |ca|
+        = render "activities/target_fields", :f => ca
       .add
-        = link_to_add_fields "Add Target", f, :outputs, "activities/", :class => "create_alt marginless"
+        = link_to_add_fields "Add Target", f, :targets, "activities/", :class => "create_alt marginless"
 
   %li.last
     %h3== Other

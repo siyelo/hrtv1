@@ -1,7 +1,7 @@
 module BudgetSpendHelpers
 
-  USG_QUARTERS = [:q4_prev, :q1, :q2, :q3]
-  GOR_QUARTERS = [:q1, :q2, :q3, :q4]
+  GOR_QUARTERS = [:q4_prev, :q1, :q2, :q3]
+  USG_QUARTERS = [:q1, :q2, :q3, :q4]
   USG_START_MONTH = 10 # 7 is July
 
   class InvalidQuarter < StandardError; end
@@ -13,17 +13,6 @@ module BudgetSpendHelpers
   def budget?
     !budget.nil? and budget > 0
   end
-
-  # add spend_gor_qX methods here
-  #def spend
-    #amount = total_quarterly_w_shift(:spend)
-    #amount ? amount : read_attribute(:spend)
-  #end
-
-  #def budget
-    #amount = total_quarterly_w_shift(:budget)
-    #amount ? amount : read_attribute(:budget)
-  #end
 
   def budget_quarter(quarter)
     get_quarter(:budget, quarter)

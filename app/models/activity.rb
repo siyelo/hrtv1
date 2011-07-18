@@ -53,7 +53,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
-    :outputs_attributes, :am_approved_date, :user_id, :provider_mask
+    :targets_attributes, :am_approved_date, :user_id, :provider_mask
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets
 
@@ -79,13 +79,13 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
-  has_many :outputs, :dependent => :destroy
+  has_many :targets, :dependent => :destroy
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
   accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
-  accepts_nested_attributes_for :outputs, :allow_destroy => true
+  accepts_nested_attributes_for :targets, :allow_destroy => true
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -222,7 +222,7 @@ class Activity < ActiveRecord::Base
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << activity.text_for_beneficiaries
-        row << activity.outputs.map{|o| o.description}.join(",")
+        row << activity.targets.map{|o| o.description}.join(",")
         row << activity.start_date
         row << activity.end_date
 
@@ -292,8 +292,8 @@ class Activity < ActiveRecord::Base
                                       map{|l| Location.find_by_short_display(l.strip)}.compact
       activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
-      activity.outputs             = activity.csv_targets.to_s.split(';').
-                                      map{|o| Output.find_or_create_by_description(o.strip)}.compact
+      activity.targets             = activity.csv_targets.to_s.split(';').
+                                      map{|o| Target.find_or_create_by_description(o.strip)}.compact
 
       activity.save
 
@@ -521,7 +521,7 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
-    %w[code_assignments sub_activities funding_sources outputs].each do |assoc|
+    %w[code_assignments sub_activities funding_sources targets].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
@@ -629,7 +629,7 @@ class Activity < ActiveRecord::Base
         "#{response.budget_quarters_months('q3')} Budget",
         "#{response.budget_quarters_months('q4')} Budget",
         "#{response.budget_quarters_months('q1_next_fy')} Budget",
-       "Districts", "Beneficiaries", "Beneficiary details / Other beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+       "Districts", "Beneficiaries", "Beneficiary details / Other beneficiaries", "Targets", "Start Date", "End Date"]
     end
 
     def delete_existing_code_assignments_by_type(coding_type)

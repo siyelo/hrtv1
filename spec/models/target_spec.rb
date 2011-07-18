@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Output do
+describe Target do
   describe "Validations" do
     it { should validate_presence_of :description }
   end

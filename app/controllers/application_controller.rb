@@ -16,9 +16,9 @@ class ApplicationController < ActionController::Base
     flash[:error] = "You are not authorized to do that"
     redirect_to login_url
   end
-  
+
   rescue_from ActionController::MethodNotAllowed, :with => :invalid_method
-  
+
   protected
 
     # Require SSL for all actions in all controllers
@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     end
 
   private
-  
+
     def invalid_method
       flash[:error] = "I'm sorry, that page is not available"
       redirect_to root_url

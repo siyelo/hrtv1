@@ -3,8 +3,6 @@ Factory.define :activity, :class => Activity do |f|
   f.description     { 'activity_description' }
   f.budget          { 50.00 }
   f.spend           { 40.00 }
-  f.project         { Factory.create(:project) }
-  f.data_response   { Factory.create(:data_response) }
   f.start_date      { "2010-01-01" }
   f.end_date        { "2010-12-31" }
 end
@@ -16,7 +14,6 @@ end
 Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
   f.sequence(:name) { |i| "sub_activity_name_#{i}" }
   f.description     { 'sub_activity_description' }
-  f.activity        { Factory.create(:activity) }
   f.provider        { Factory.create(:provider) }
   f.project         { nil }
 end

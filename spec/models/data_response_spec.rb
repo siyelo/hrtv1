@@ -131,4 +131,3 @@ end
 #  sub_activities_count              :integer         default(0)
 #  activities_without_projects_count :integer         default(0)
 #
-

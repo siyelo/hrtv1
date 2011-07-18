@@ -1,21 +1,31 @@
 require 'set'
 class Admin::OrganizationsController < Admin::BaseController
   SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
-
+  AVAILABLE_FILTERS = ["Not Started", "Submitted", "Submitted for Final Review", "Complete", "In Progress"]
   ### Inherited Resources
   inherit_resources
 
   helper_method :sort_column, :sort_direction
 
   def index
+    filter = params[:filter]
     scope = Organization.scoped({})
-    scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q) OR
-                                         UPPER(raw_type) LIKE UPPER(:q) OR
-                                         UPPER(fosaid) LIKE UPPER(:q)",
-                         {:q => "%#{params[:query]}%"}]) if params[:query]
-
+                         
+    if AVAILABLE_FILTERS.include?(filter)
+      scope = Organization.with_submitted_responses_for(current_request) if filter == "Submitted"
+      scope = Organization.with_submitted_for_final_responses_for(current_request) if filter == "Submitted for Final Review" 
+      scope = Organization.with_complete_responses_for(current_request)  if filter == "Complete"
+      scope = Organization.with_empty_responses_for(current_request) if filter == "Not Started" 
+      scope = Organization.with_in_progress_responses_for(current_request) if filter == "In Progress"
+    end
+    
+    scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
+                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR
+                                           UPPER(organizations.fosaid) LIKE UPPER(:q)",
+                                           {:q => "%#{params[:query]}%"}]) if params[:query]
+    
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
-                    :order => "#{sort_column} #{sort_direction}")
+                    :order => "UPPER(organizations.#{sort_column}) #{sort_direction}")
   end
 
   def show
@@ -110,7 +120,7 @@ class Admin::OrganizationsController < Admin::BaseController
       redirect_to admin_organizations_url
     end
   end
-
+  
   private
 
     def render_error(message, path)

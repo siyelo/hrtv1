@@ -18,7 +18,7 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-  @javascript @run
+  @javascript
   Scenario: Reporter can add targets & outputs
     When I follow "Add Activities now"
       And I fill in "Name" with "activity1"
@@ -283,7 +283,6 @@ Feature: Reporter can manage activities
 
     When I follow "Activity1 description"
       And I follow "Edit" within ".fields"
-        Then show me the page
       And I select "funding_organization2" from "Organization" within ".fields"
       And I fill in "Expenditure" with "333" within ".fields"
       And I fill in "Budget" with "444" within ".fields"
@@ -326,7 +325,6 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-    Then show me the page
       And the "Implementer Past Expenditure" field should contain "66"
       And the "Implementer Current Budget" field should contain "77"
 

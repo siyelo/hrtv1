@@ -29,7 +29,6 @@ Feature: Reporter can upload classifications
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And I follow "Projects"
-      Then show me the page
       And I follow "Activity1"
 
 

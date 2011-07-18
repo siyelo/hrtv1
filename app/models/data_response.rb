@@ -114,11 +114,11 @@ class DataResponse < ActiveRecord::Base
 
   # TODO: spec
   def status
-    return "Empty / Not Started" if empty?
-    return "Ready to Submit" if ready_to_submit?
-    return "Submitted" if submitted
-    return "Submitted for Final Review" if submitted_for_final
     return "Complete" if complete
+    return "Submitted for Final Review" if submitted_for_final
+    return "Submitted" if submitted
+    return "Ready to Submit" if ready_to_submit?
+    return "Empty / Not Started" if empty?
     return "In Progress"
   end
 

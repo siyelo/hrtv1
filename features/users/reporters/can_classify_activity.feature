@@ -79,9 +79,8 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" percentage field with "<amount>"
         And I press "Save"
         Then I should not see "Activity classification was successfully updated."
-        Then show me the page
         And I should see "We're sorry, when we added up your Current Budget by Purposes classifications"
-         And the "mtef1" percentage field should contain "<amount2>"
+        And the "mtef1" percentage field should contain "<amount2>"
 
         Examples:
           | amount | amount2 |

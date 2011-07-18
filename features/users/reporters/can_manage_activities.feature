@@ -48,7 +48,7 @@ Feature: Reporter can manage activities
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization2"
-    And I fill in "Implementer Expenditure" with "99"
+    And I fill in "Implementer Past Expenditure" with "99"
     And I fill in "Implementer Current Budget" with "19"
     And I press "Save"
     Then I should see "Activity was successfully created"
@@ -68,7 +68,7 @@ Feature: Reporter can manage activities
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization1"
-    And I fill in "Implementer Expenditure" with "10%"
+    And I fill in "Implementer Past Expenditure" with "10%"
     And I fill in "Implementer Current Budget" with "10%"
     And I press "Save"
     Then I should see "Activity was successfully created"
@@ -324,7 +324,7 @@ Feature: Reporter can manage activities
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
     Then show me the page
-      And the "Implementer Expenditure" field should contain "66"
+      And the "Implementer Past Expenditure" field should contain "66"
       And the "Implementer Current Budget" field should contain "77"
 
       @wip
@@ -336,5 +336,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Implementer Expenditure" field should contain "99"
+      And the "Implementer Past Expenditure" field should contain "99"
       And the "Implementer Current Budget" field should contain "100"

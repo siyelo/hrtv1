@@ -34,18 +34,6 @@ class FundingFlow < ActiveRecord::Base
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
 
-  validates_numericality_of :budget_q1, :if => Proc.new { |model| model.budget_q1.present? }
-  validates_numericality_of :budget_q2, :if => Proc.new { |model| model.budget_q2.present? }
-  validates_numericality_of :budget_q3, :if => Proc.new { |model| model.budget_q3.present? }
-  validates_numericality_of :budget_q4, :if => Proc.new { |model| model.budget_q4.present? }
-  validates_numericality_of :budget_q4_prev, :if => Proc.new { |model| model.budget_q4_prev.present? }
-  validates_numericality_of :spend_q1, :if => Proc.new { |model| model.spend_q1.present? }
-  validates_numericality_of :spend_q2, :if => Proc.new { |model| model.spend_q2.present? }
-  validates_numericality_of :spend_q3, :if => Proc.new { |model| model.spend_q3.present? }
-  validates_numericality_of :spend_q4, :if => Proc.new { |model| model.spend_q4.present? }
-  validates_numericality_of :spend_q4_prev, :if => Proc.new { |model| model.spend_q4_prev.present? }
-  validates_numericality_of :budget, :spend
-
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project

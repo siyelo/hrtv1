@@ -48,14 +48,6 @@ Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$
   code_assignments.merge(:code => Code.find_by_short_display(code_name))
 end
 
-Given /^the following projects$/ do |table|
-  table.hashes.each do |hash|
-    Factory(:project, { :data_response => get_data_response(hash.delete("request"),
-                                                            hash.delete("organization"))
-                      }.merge(hash) )
-  end
-end
-
 Given /^the following comments$/ do |table|
   table.hashes.each do |hash|
     commentable = Project.find_by_name(hash.delete("project"))

@@ -33,6 +33,7 @@ group :development do
   gem 'google_currency', "=1.2.0" # for currency cacher
   gem 'heroku', '>= 2.1.2'
   gem 'hirb'
+  gem 'hitch'
   gem 'interactive_editor'
   gem 'mongrel'
   gem 'open_gem'

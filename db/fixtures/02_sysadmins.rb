@@ -7,7 +7,6 @@ req = Factory :request, :organization => org
 begin
   puts "creating sysadmin"
   org = Factory(:organization, :name => 'System Administration')
-  @response = Factory(:data_response, :organization => org) #workaround for current_request.name issue
   admin = Factory(:sysadmin, :email => 'sysadmin@hrtapp.com', :organization => org,
     :password => ENV['HRT_ADMIN_PASSWORD'] || 'si@yelo',
     :password_confirmation => ENV['HRT_ADMIN_PASSWORD'] || 'si@yelo')

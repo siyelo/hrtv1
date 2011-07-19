@@ -102,8 +102,6 @@ class Activity < ActiveRecord::Base
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
-  validates_numericality_of :spend, :if => Proc.new { |model| !model.spend.blank? }, :unless => Proc.new { |model| model.activity_id }
-  validates_numericality_of :budget, :if => Proc.new { |model| !model.budget.blank?}, :unless => Proc.new {|model| model.activity_id }
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?

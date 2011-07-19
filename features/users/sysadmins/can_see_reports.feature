@@ -3,7 +3,6 @@ Feature: Admin can see reports
   As a sysadmin
   I want to be able to see reports
 
-  @run
   Scenario: Navigate to reports page
     Given an organization exists with name: "SysAdmin Org"
     And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization

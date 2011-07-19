@@ -41,7 +41,9 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I check "Location1"
         And I check "Location2"
-        And I fill in "Currency override" with "EUR"
+        Then show me the page
+        #And I fill in "the_combobox" with "EUR"
+        And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
 
       Then I should see "Project was successfully created"

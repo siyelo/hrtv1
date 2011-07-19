@@ -25,7 +25,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    clean_out_sa_params(params)
     @activity = params[:activity][:activity_type] == 'other_cost' ? @response.other_costs.new(params[:activity]) : @response.activities.new(params[:activity])
 
     if @activity.save
@@ -45,8 +44,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def update
-    clean_out_sa_params(params)
-    check_for_new_provider(params)
     @activity = Activity.find(params[:id])
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
@@ -170,11 +167,8 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def html_redirect
-      if params[:commit] == "Save & Classify >"
-        redirect_to activity_code_assignments_path(@activity, :coding_type => 'CodingSpend')
-      else
-        redirect_to response_projects_path(@activity.project.response)
-      end
+      path = params[:commit] == "Save & Classify >" ? activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') : response_projects_path(@activity.project.response)
+      redirect_to path
     end
 
     def js_redirect

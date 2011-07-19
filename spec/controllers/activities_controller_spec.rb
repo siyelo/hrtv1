@@ -137,7 +137,7 @@ describe ActivitiesController do
 
   describe "Update" do
     before :each do
-      @data_request = Factory(:data_request, :spend => false, :budget => false)
+      @data_request = Factory(:data_request)
       @organization = Factory(:organization)
       @user = Factory(:reporter, :organization => @organization)
       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
@@ -169,12 +169,6 @@ describe ActivitiesController do
        @data_response = Factory.create(:data_response, :data_request => @data_request, :organization => @organization)
        login @user
      end
-
-    it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
-      put :update, :activity => { :budget => 0, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
-    end
 
     it "redirects to the classify activities page when Save & Go to Classify is clicked" do
       @project = Factory.create(:project, :data_response => @data_response)

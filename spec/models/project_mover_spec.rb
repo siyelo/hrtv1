@@ -43,8 +43,6 @@ describe ProjectMover do
 
   context "invalid relations" do
     before :each do
-      @project.start_date  = DateTime.new(2010, 01, 01)
-      @project.end_date    = DateTime.new(2009, 01, 01)
       @project.save(false)
       @mover = ProjectMover.new(@dr1, @dr2, @project)
     end

@@ -543,9 +543,7 @@ class Activity < ActiveRecord::Base
     return true if budget.present? && spend.present? &&
                    type == "OtherCost" && project.nil?
     return true if actual_budget <= (project.budget || 0) &&
-                   actual_spend <= (project.spend || 0) &&
-                   actual_quarterly_spend_check? &&
-                   actual_quarterly_budget_check?
+                   actual_spend <= (project.spend || 0)
     return false
   end
 

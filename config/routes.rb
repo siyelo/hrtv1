@@ -73,7 +73,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :activities do |activity|
     activity.resource :code_assignments,
       :only => [:show, :update],
-      :member => {:copy_budget_to_spend => :put,
+      :member => {:copy_spend_to_budget => :put,
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
     activity.resources :sub_activities,

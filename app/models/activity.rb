@@ -26,12 +26,12 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
+  BUDGET_CODING_CLASSES = ['CodingSpend', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
 
   CLASSIFICATION_MAPPINGS = {
-    'CodingBudget' => 'CodingSpend',
-    'CodingBudgetDistrict' => 'CodingSpendDistrict',
-    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization'
+    'CodingSpend' => 'CodingBudget',
+    'CodingSpendDistrict' => 'CodingBudgetDistrict',
+    'CodingSpendCostCategorization' => 'CodingBudgetCostCategorization'
   }
 
   HUMANIZED_ATTRIBUTES = {
@@ -459,21 +459,21 @@ class Activity < ActiveRecord::Base
     assignments
   end
 
-  # This method copies budget code assignments to spend when user has chosen
-  # to use budget codings for expenditure: All spend mappings are copied.
-  def copy_budget_codings_to_spend(coding_types = BUDGET_CODING_CLASSES)
-    coding_types.each do |budget_coding_type|
-      spend_coding_type = CLASSIFICATION_MAPPINGS[budget_coding_type]
-      klass             = spend_coding_type.constantize
+  # This method copies spend code assignments to budget when user has chosen
+  # to use expenditure codings for budget: All budget mappings are copied.
+  def copy_spend_codings_to_budget(coding_types = BUDGET_CODING_CLASSES)
+    coding_types.each do |spend_coding_type|
+      budget_coding_type = CLASSIFICATION_MAPPINGS[spend_coding_type]
+      klass             = budget_coding_type.constantize
 
-      delete_existing_code_assignments_by_type(spend_coding_type)
+      delete_existing_code_assignments_by_type(budget_coding_type)
 
       # copy across the ratio, not just the amount
-      code_assignments.with_type(budget_coding_type).each do |ca|
+      code_assignments.with_type(spend_coding_type).each do |ca|
         if spend && spend > 0
-          amount = (ca.amount && budget && budget > 0) ?  spend * ca.amount / budget : nil
-          spend_ca = fake_ca(klass, ca.code, amount, ca.percentage)
-          spend_ca.save!
+          amount = (ca.amount && spend && spend > 0) ?  budget * ca.amount / spend : nil
+          budget_ca = fake_ca(klass, ca.code, amount, ca.percentage)
+          budget_ca.save!
         end
       end
 

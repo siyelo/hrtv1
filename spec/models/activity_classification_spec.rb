@@ -611,113 +611,113 @@ describe Activity do
     end
   end
 
-  describe "use budget for spent codings" do
-    def copy_budget_to_expenditure_check(activity, actual_type, expected_type)
-      activity.copy_budget_codings_to_spend([actual_type])
+  describe "use spent for budget codings" do
+    def copy_expenditure_to_budget_check(activity, actual_type, expected_type)
+      activity.copy_spend_codings_to_budget([actual_type])
       code_assignments = activity.code_assignments
       code_assignments.length.should == 2
       code_assignments[0].class.to_s.should == actual_type
       code_assignments[1].class.to_s.should == expected_type
     end
 
-    def dont_copy_budget_to_expenditure_check(activity, actual_type, expected_type)
-      activity.copy_budget_codings_to_spend([actual_type])
+    def dont_copy_expenditure_to_budget_check(activity, actual_type, expected_type)
+      activity.copy_spend_codings_to_budget([actual_type])
       code_assignments = activity.code_assignments
       code_assignments.length.should == 1
       code_assignments[0].class.to_s.should == actual_type
     end
 
-    def copy_budget_to_expenditure_check_cached_amount(activity, type, expected_cached_amount)
+    def copy_expenditure_to_spend_check_cached_amount(activity, type, expected_cached_amount)
       activity.copy_budget_codings_to_spend([type])
       code_assignments = activity.code_assignments
       code_assignments[1].cached_amount.should == expected_cached_amount
     end
 
-    it "copies budget for spent codings for CodingBudget" do
+    it "copies spent for budget codings for CodingBudget" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget, :activity => activity)
-      copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+      Factory(:coding_spend, :activity => activity)
+      copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
     end
 
-    it "copies budget for spent codings for CodingBudgetDistrict" do
+    it "copies spent for budget codings for CodingBudgetDistrict" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget_district, :activity => activity)
-      copy_budget_to_expenditure_check(activity, 'CodingBudgetDistrict', 'CodingSpendDistrict')
+      Factory(:coding_spend_district, :activity => activity)
+      copy_expenditure_to_budget_check(activity, 'CodingSpendDistrict', 'CodingBudgetDistrict')
     end
 
-    it "copies budget for spent codings for CodingBudgetCostCategorization" do
+    it "copies spent for budget codings for CodingBudgetCostCategorization" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget_cost_categorization, :activity => activity)
-      copy_budget_to_expenditure_check(activity, 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization')
+      Factory(:coding_spend_cost_categorization, :activity => activity)
+      copy_expenditure_to_budget_check(activity, 'CodingSpendCostCategorization', 'CodingBudgetCostCategorization')
     end
 
-    it "does not copy budget to spent when spent is nil" do
+    it "does not copy spent to budget when spent is nil" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project,
                         :spend => nil)
-      Factory(:coding_budget, :activity => activity)
-      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+      Factory(:coding_spend, :activity => activity)
+      dont_copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
     end
 
-    it "does not copy budget to spent when spent is 0" do
+    it "does not copy spent to budget when spent is 0" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project,
                         :spend => 0)
-      Factory(:coding_budget, :activity => activity)
-      dont_copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+      Factory(:coding_spend, :activity => activity)
+      dont_copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
     end
 
-    it "deletes existing Spend codings before copying the budget ones" do
+    it "deletes existing budget codings before copying the spend ones" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget, :activity => activity)
       Factory(:coding_spend, :activity => activity)
-      copy_budget_to_expenditure_check(activity, 'CodingBudget', 'CodingSpend')
+      Factory(:coding_budget, :activity => activity)
+      copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
     end
 
-    it "calculates spend amount when there is amount for budget" do
+    it "calculates budget amount when there is amount for spend" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => 100, :spend => 50)
-      Factory(:coding_budget, :activity => activity, :amount => 100, :cached_amount => 100)
-      activity.copy_budget_codings_to_spend(['CodingBudget'])
+                         :budget => 50, :spend => 100)
+      Factory(:coding_spend, :activity => activity, :amount => 50, :cached_amount => 50)
+      activity.copy_spend_codings_to_budget(['CodingSpend'])
       code_assignments = activity.code_assignments
-      code_assignments[1].amount.should == 50
+      code_assignments[1].amount.should == 25
     end
 
-    it "sets spend amount to nil when there is amount for budget and code_assignment amount is nil" do
+    it "sets budget amount to nil when there is amount for spend and code_assignment amount is nil" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => 100, :spend => 50)
-      Factory(:coding_budget, :activity => activity, :amount => nil, :cached_amount => 100)
-      activity.copy_budget_codings_to_spend(['CodingBudget'])
+                         :budget => 50, :spend => 100)
+      Factory(:coding_spend, :activity => activity, :amount => nil, :cached_amount => 50)
+      activity.copy_spend_codings_to_budget(['CodingSpend'])
       code_assignments = activity.code_assignments
       code_assignments[1].amount.should == nil
     end
 
-    def check_percentage_copying(budget)
+    def check_percentage_copying(spend)
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => budget, :spend => 50)
+                         :budget => 50, :spend => spend)
 
-      Factory(:coding_budget, :activity => activity, :percentage => 50)
-      activity.copy_budget_codings_to_spend(['CodingBudget'])
-      code_assignments = activity.code_assignments
-      code_assignments[1].percentage.should == 50
+      Factory(:coding_spend, :activity => activity, :percentage => 50)
+      activity.copy_spend_codings_to_budget(['CodingSpend'])
+      code_assignments = activity.code_assignments.with_type('CodingSpend')
+      code_assignments[0].percentage.should == 50
     end
 
-    it "copies percentage from budget to spend code assignment when budget is 100" do
+    it "copies percentage from spend to budget code assignment when spend is 100" do
       check_percentage_copying(100)
     end
 
-    it "copies percentage from budget to spend code assignment when budget is nil" do
+    it "copies percentage from spend to budget code assignment when spend is nil" do
       check_percentage_copying(nil)
     end
 
-    it "copies percentage from budget to spend code assignment when budget is 0" do
+    it "copies percentage from spend to budget code assignment when spend is 0" do
       check_percentage_copying(0)
     end
 

@@ -66,8 +66,8 @@
     %tr.filler
       %td{:colspan => 2}
       %td.total ACTIVITY & OTHER COSTS TOTAL
-      %td.wrap-10= n2cndrs(@response.total_spend, @response.currency)
-      %td.wrap-10= n2cndrs(@response.total_budget, @response.currency)
+      %td.wrap-10= n2crs(@response.total_spend, @response.currency)
+      %td.wrap-10= n2crs(@response.total_budget, @response.currency)
       %td
 
 

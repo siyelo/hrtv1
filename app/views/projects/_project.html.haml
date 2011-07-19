@@ -17,8 +17,8 @@
     %td{:colspan => 1}
 
     %td.total Activity & Other Costs Subtotal
-    %td.wrap-10= n2cndrs((project.subtotals(:spend) || 0), project.currency)
-    %td.wrap-10= n2cndrs((project.subtotals(:budget) || 0), project.currency)
+    %td.wrap-10= n2crs((project.subtotals(:spend) || 0), project.currency)
+    %td.wrap-10= n2crs((project.subtotals(:budget) || 0), project.currency)
     %td
   %tr.filler2
     %td{:colspan => 1}
@@ -26,19 +26,19 @@
         %li
     %td.total Project Total
     -if @response.project_and_activities_matching_amounts?(project, :spend)
-      %td.wrap-10= n2cndrs((project.spend || 0), project.currency)
+      %td.wrap-10= n2crs((project.spend || 0), project.currency)
     -else
       %td.wrap-10.red= n2cndrs((project.spend || 0), project.currency)
     -if @response.project_and_activities_matching_amounts?(project, :budget)
-      %td.wrap-10= n2cndrs((project.budget || 0), project.currency)
+      %td.wrap-10= n2crs((project.budget || 0), project.currency)
     -else
-      %td.wrap-10.red= n2cndrs((project.budget || 0), project.currency)
+      %td.wrap-10.red= n2crs((project.budget || 0), project.currency)
     %td
   -if (!@response.project_and_activities_matching_amounts?(project, :spend) || !@response.project_and_activities_matching_amounts?(project, :budget))    
     %tr.filler_warning
       %td{:colspan => 1}
 
       %td.total Differences between Project Total and Activities + Other Costs Subtotal:
-      %td.wrap-10= n2cndrs((project.spend || 0) - project.subtotals(:spend), project.currency)
-      %td.wrap-10= n2cndrs((project.budget || 0) - project.subtotals(:budget), project.currency)
+      %td.wrap-10= n2crs((project.spend || 0) - project.subtotals(:spend), project.currency)
+      %td.wrap-10= n2crs((project.budget || 0) - project.subtotals(:budget), project.currency)
       %td= image_tag "warning_12.png", :title => get_project_total_differences(project), :class => 'tooltip_projects'

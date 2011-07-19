@@ -1,4 +1,4 @@
-class Target < ActiveRecord::Base
+class Output < ActiveRecord::Base
 
   ### Associations
   belongs_to :activity
@@ -7,10 +7,9 @@ class Target < ActiveRecord::Base
   validates_presence_of :description
 end
 
-
 # == Schema Information
 #
-# Table name: targets
+# Table name: outputs
 #
 #  id          :integer         not null, primary key
 #  activity_id :integer

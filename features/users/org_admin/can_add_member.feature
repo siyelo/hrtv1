@@ -10,7 +10,6 @@ Feature: Can add member
       And a data_response exists with organization: the ngo, data_request: the data_request
       And a reporter exists with email: "member@hrtapp.com", organization: the ngo
 
-  @run
   Scenario: Add a member
     And I am signed in as "member@hrtapp.com"
     Then show me the page

@@ -345,22 +345,11 @@ describe Project do
       basic_setup_project
       @original = @project #for shared examples
       @a1       = Factory(:activity, :data_response => @response, :project => @project)
-      @a2       = Factory(:activity, :data_response => @response, :project => @project)
       save_and_deep_clone
     end
 
     it "should clone associated activities" do
-      @clone.activities.count.should == 2
-      @clone.activities[0].project.should_not be_nil
-      @clone.activities[1].project.should_not be_nil
-    end
-
-    it "should have the correct number of activities after the original project is destroyed" do
-      @project.destroy
-      @clone.reload
-      @clone.activities.count.should == 2
-      @clone.activities[0].project.should_not be_nil
-      @clone.activities[1].project.should_not be_nil
+      @clone.activities.count.should == 1
     end
 
     it_should_behave_like "location cloner"

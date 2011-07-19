@@ -18,8 +18,8 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-  @javascript
-  Scenario: Reporter can add targets
+  @javascript @run
+  Scenario: Reporter can add targets & outputs
     When I follow "Add Activities now"
       And I fill in "Name" with "activity1"
       And I fill in "Description" with "activity1 description"
@@ -29,11 +29,14 @@ Feature: Reporter can manage activities
       And I fill in "Budget" with "300"
       And I select "project1" from "Project"
       And I follow "Add Target"
-      And I fill in "Target" with "Target description value"
+      And I fill in "Target" with "Target description"
+      And I follow "Add Output"
+      And I fill in "Output" with "Output description"
       And I press "Save"
     Then I should see "Activity was successfully created"
     When I follow "activity1"
-    Then the "Target" field should contain "Target description value"
+    Then the "Target" field should contain "Target description"
+      And the "Output" field should contain "Output description"
 
    #combobox
   @javascript

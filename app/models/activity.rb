@@ -53,7 +53,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
-    :targets_attributes, :am_approved_date, :user_id, :provider_mask
+    :targets_attributes, :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
   attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets
 
@@ -68,7 +68,7 @@ class Activity < ActiveRecord::Base
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider, :dependent => :destroy
+  has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
@@ -80,12 +80,14 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
   has_many :targets, :dependent => :destroy
+  has_many :outputs, :dependent => :destroy
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
   accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true

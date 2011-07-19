@@ -8,19 +8,20 @@ describe Activity do
     it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
-    it { should have_many :sub_activities }
-    it { should have_many :sub_implementers }
-    it { should have_many :funding_sources }
-    it { should have_many :codes }
-    it { should have_many :code_assignments }
-    it { should have_many :comments }
-    it { should have_many :coding_budget }
-    it { should have_many :coding_budget_cost_categorization }
-    it { should have_many :coding_budget_district }
-    it { should have_many :coding_spend }
-    it { should have_many :coding_spend_cost_categorization }
-    it { should have_many :coding_spend_district }
-    it { should have_many :targets }
+    it { should have_many(:sub_activities).dependent(:destroy) }
+    it { should have_many(:sub_implementers) }
+    it { should have_many(:funding_sources).dependent(:destroy) }
+    it { should have_many(:codes) }
+    it { should have_many(:code_assignments).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
+    it { should have_many(:coding_budget).dependent(:destroy) }
+    it { should have_many(:coding_budget_cost_categorization).dependent(:destroy) }
+    it { should have_many(:coding_budget_district).dependent(:destroy) }
+    it { should have_many(:coding_spend).dependent(:destroy) }
+    it { should have_many(:coding_spend_cost_categorization).dependent(:destroy) }
+    it { should have_many(:coding_spend_district).dependent(:destroy) }
+    it { should have_many(:targets).dependent(:destroy) }
+    it { should have_many(:outputs).dependent(:destroy) }
   end
 
   describe "Attributes" do
@@ -55,6 +56,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:csv_districts) }
     it { should allow_mass_assignment_of(:csv_beneficiaries) }
     it { should allow_mass_assignment_of(:targets_attributes) }
+    it { should allow_mass_assignment_of(:outputs_attributes) }
     it { should allow_mass_assignment_of(:am_approved_date) }
   end
 

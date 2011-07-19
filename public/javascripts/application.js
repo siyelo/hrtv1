@@ -1529,10 +1529,12 @@ var activity_form = function () {
   });
 
   $('.js_target_field').live('keydown', function (e) {
+    var block = $(this).parents('.js_targets');
+
     if (e.keyCode === 13) {
       e.preventDefault();
-      $('.js_targets .add_nested').trigger('click');
-      $('.js_targets .js_target_field:last').focus()
+      block.find('.js_add_nested').trigger('click');
+      block.find('.js_target_field:last').focus()
     }
   });
 

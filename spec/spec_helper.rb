@@ -35,9 +35,6 @@ Spork.prefork do
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
   end
-
-  # http://stackoverflow.com/questions/5913255/spork-and-cache-classes-problem-with-rspec-factory-girl-and-datamapper
-  ActiveSupport::Dependencies.clear
 end
 
 Spork.each_run do
@@ -58,7 +55,6 @@ Spork.each_run do
   require 'factory_girl'
   Dir[File.expand_path(File.join(File.dirname(__FILE__),'factories','**','*.rb'))].each {|f| require f}
   # Dir[File.expand_path(File.join(File.dirname(__FILE__),'spec','factories','**','*.rb'))].each {|f| require f} # from irb
-
 
   def login( user = Factory.build(:reporter) )
     activate_authlogic

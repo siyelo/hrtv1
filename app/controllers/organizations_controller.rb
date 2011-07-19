@@ -28,7 +28,7 @@ class OrganizationsController < Reporter::BaseController
 
   private
     def load_organization
-      @organization = current_user.organization
+      @organization = current_user.sysadmin? ? Organization.find(params[:id]) : current_user.organization
     end
 end
 

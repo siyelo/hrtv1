@@ -87,7 +87,7 @@ class Activity < ActiveRecord::Base
   accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
     :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
-  #accepts_nested_attributes_for :outputs, :allow_destroy => true
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true

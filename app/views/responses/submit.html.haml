@@ -193,8 +193,9 @@
 
 
 //%hr.divider
-%p
-  = link_to "Submit", send_data_response_response_path(current_user.current_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+- if current_user.manager?
+  %p
+    = link_to "Submit", send_data_response_response_path(current_user.current_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
 
 
 

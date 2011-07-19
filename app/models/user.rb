@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
   end
 
   def activity_manager?
-    role?('activity_manager')  || sysadmin?
+    role?('activity_manager') || sysadmin?
   end
 
   # deprecated

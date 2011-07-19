@@ -1,5 +1,6 @@
 class ResponsesController < Reporter::BaseController
   before_filter :require_user
+  before_filter :require_manager, :only => [:send_data_request]
   before_filter :load_response_from_id, :except => :new
 
   def review

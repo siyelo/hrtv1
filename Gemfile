@@ -30,6 +30,7 @@ gem 'will_paginate', "~> 2.3.11"
 group :development do
   gem 'annotate'
   gem 'awesome_print', :require => "ap"
+  gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
   gem 'google_currency', "=1.2.0" # for currency cacher
   gem 'heroku', '>= 2.1.2'
   gem 'hirb'
@@ -59,12 +60,11 @@ group :test do
   gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'
   gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git', :branch => '0.6-rails2-compat'
-  gem 'factory_girl', '1.2.4' # some specs fail with 1.3.3
   gem 'gherkin', '2.3.7'
   gem 'growl'
   gem 'guard'
   gem 'guard-bundler'
-  gem 'guard-cucumber'
+  #gem 'guard-cucumber'
   gem 'guard-rspec'
   gem 'guard-spork'
   gem 'launchy'               # So you can do 'Then show me the page'
@@ -72,6 +72,6 @@ group :test do
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
   gem 'ruby-pg'
   gem 'shoulda'
-  gem 'spork', '~> 0.8'
+  gem 'spork', '~> 0.8' # need to upgrade to 0.9+ (and thus Rails 3) to get auto-reloading of models!
 
 end

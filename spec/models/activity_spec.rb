@@ -1,11 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-  describe "creating an activity record" do
-    subject { Factory(:activity) }
-    it { should be_valid }
-  end
-
   describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
@@ -185,9 +180,13 @@ describe Activity do
 
   describe "organization_name" do
     it "returns organization nane" do
-      data_response = Factory(:data_response, :organization => Factory(:organization, :name => "Organization1"))
-      activity = Factory(:activity, :data_response => data_response)
-      activity.organization_name.should == "Organization1"
+      @organization = Factory(:organization, :name => "Organization1")
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project)
+
+      @activity.organization_name.should == "Organization1"
     end
   end
 
@@ -259,53 +258,6 @@ describe Activity do
     end
   end
 
-  describe "coding_budget_classified?" do
-    it "is classified when activity budget is nil" do
-      activity = Factory(:activity, :budget => nil)
-      activity.coding_budget_classified?.should be_true
-    end
-
-    it "is classified when activity budget is equal to coded budget" do
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100)
-      Factory(:coding_budget, :activity => activity,
-                     :code => code, :cached_amount => 100)
-
-      activity.coding_budget_classified?.should be_true
-    end
-
-    it "is not classified when activity budget is not equal to coded budget" do
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100)
-      Factory(:coding_budget, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_budget_classified?.should be_false
-    end
-  end
-
-  describe "coding_budget_cc_classified?" do
-    it "is classified when activity budget is nil" do
-      activity = Factory(:activity, :budget => nil)
-      activity.coding_budget_cc_classified?.should be_true
-    end
-
-    it "is classified when activity budget is equal to coded cost category budget" do
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100)
-      Factory(:coding_budget_cost_categorization, :activity => activity,
-                     :code => code, :cached_amount => 100)
-      activity.coding_budget_cc_classified?.should be_true
-    end
-
-    it "is not classified when activity budget is not equal to coded cost category budget" do
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100)
-      Factory(:coding_budget_cost_categorization, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_budget_cc_classified?.should be_false
-    end
-  end
-
   describe "service_level_budget_classified?" do
     it "is classified when activity budget is nil" do
       activity = Factory(:activity, :budget => nil)
@@ -329,81 +281,6 @@ describe Activity do
     end
   end
 
-  describe "coding_budget_district_classified?" do
-    it "is classified when activity budget is nil" do
-      @activity = Factory(:activity, :budget => nil)
-      @activity.coding_budget_district_classified?.should be_true
-    end
-
-
-    it "is classified when activity locations are empty" do
-      @activity = Factory(:activity, :budget => 100, :locations => [])
-      @activity.coding_budget_district_classified?.should be_true
-    end
-
-    it "is classified when activity budget is equal to coded location budget" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100, :locations => [code])
-      Factory(:coding_budget_district, :activity => activity,
-                     :code => code, :cached_amount => 100)
-      activity.coding_budget_district_classified?.should be_true
-    end
-
-    it "is not classified when activity budget is not equal to coded location budget" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :budget => 100, :locations => [code])
-      Factory(:coding_budget_district, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_budget_district_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_classified?" do
-    it "is classified when activity spend is nil" do
-      activity = Factory(:activity, :spend => nil)
-      activity.coding_spend_classified?.should be_true
-    end
-
-    it "is classified when activity spend is equal to coded spend" do
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100)
-      Factory(:coding_spend, :activity => activity,
-                     :code => code, :cached_amount => 100)
-      activity.coding_spend_classified?.should be_true
-    end
-
-    it "is not classified when activity spend is not equal to coded spend" do
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100)
-      Factory(:coding_spend, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_spend_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_cc_classified?" do
-    it "is classified when activity spend is nil" do
-      activity = Factory(:activity, :spend => nil)
-      activity.coding_spend_cc_classified?.should be_true
-    end
-
-    it "is classified when activity spend is equal to coded cost category spend" do
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100)
-      Factory(:coding_spend_cost_categorization, :activity => activity,
-                     :code => code, :cached_amount => 100)
-      activity.coding_spend_cc_classified?.should be_true
-    end
-
-    it "is not classified when activity spend is not equal to coded cost category spend" do
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100)
-      Factory(:coding_spend_cost_categorization, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_spend_cc_classified?.should be_false
-    end
-  end
-
   describe "service_level_spend_classified?" do
     it "is classified when activity spend is nil" do
       activity = Factory(:activity, :spend => nil)
@@ -424,169 +301,6 @@ describe Activity do
       Factory(:service_level_spend, :activity => activity,
                      :code => code, :cached_amount => 101)
       activity.service_level_spend_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_district_classified?" do
-    it "is classified when activity spend is nil" do
-      activity = Factory(:activity, :spend => nil)
-      activity.coding_spend_district_classified?.should be_true
-    end
-
-    it "is classified when activity has no locations" do
-      @activity = Factory(:activity, :spend => 100, :locations => [])
-      @activity.coding_spend_district_classified?.should be_true
-    end
-
-    it "is classified when activity spend is equal to coded location spend" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100, :locations => [code])
-      Factory(:coding_spend_district, :activity => activity,
-                     :code => code, :cached_amount => 100)
-      activity.coding_spend_district_classified?.should be_true
-    end
-
-    it "is classified when activity spend is not equal to coded activity spend" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :spend => 100, :locations => [code])
-      Factory(:coding_spend_district, :activity => activity,
-                     :code => code, :cached_amount => 101)
-      activity.coding_spend_district_classified?.should be_false
-    end
-  end
-
-  describe "budget_classified?" do
-    before :each do
-      @activity = Factory(:activity)
-    end
-
-    it "is budget_classified? when all budgets are classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
-      @activity.stub(:service_level_budget_classified?) { true }
-      @activity.budget_classified?.should be_true
-    end
-
-    it "is not budget_classified? when budget is not classified" do
-      @activity.stub(:coding_budget_classified?) { false }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
-      @activity.stub(:service_level_budget_classified?) { true }
-      @activity.budget_classified?.should be_false
-    end
-
-    it "is not budget_classified? when districts are not classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { false }
-      @activity.stub(:coding_budget_cc_classified?) { true }
-      @activity.stub(:service_level_budget_classified?) { true }
-      @activity.budget_classified?.should be_false
-    end
-
-    it "is not budget_classified? when cost categories are not classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { false }
-      @activity.stub(:service_level_budget_classified?) { true }
-      @activity.budget_classified?.should be_false
-    end
-
-    it "is not budget_classified? when service levels are not classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
-      @activity.stub(:service_level_budget_classified?) { false }
-      @activity.budget_classified?.should be_false
-    end
-  end
-
-  describe "spend_classified?" do
-    before :each do
-      @activity = Factory(:activity)
-    end
-
-    it "is spend_classified? when all spends are classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { true }
-      @activity.stub(:service_level_spend_classified?) { true }
-      @activity.spend_classified?.should be_true
-    end
-
-    it "is not spend_classified? when spend is not classified" do
-      @activity.stub(:coding_spend_classified?) { false }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { true }
-      @activity.stub(:service_level_spend_classified?) { true }
-      @activity.spend_classified?.should be_false
-    end
-
-    it "is not spend_classified? when districts are not classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { false }
-      @activity.stub(:coding_spend_cc_classified?) { true }
-      @activity.stub(:service_level_spend_classified?) { true }
-      @activity.spend_classified?.should be_false
-    end
-
-    it "is not spend_classified? when cost categories are not classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { false }
-      @activity.stub(:service_level_spend_classified?) { true }
-      @activity.spend_classified?.should be_false
-    end
-
-    it "is not spend_classified? when service levels are not classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { false }
-      @activity.stub(:service_level_spend_classified?) { true }
-      @activity.spend_classified?.should be_false
-    end
-  end
-
-  describe "classified? (with factories)" do
-    before :each do
-      @request  = Factory(:data_request, :title => 'Data Request 1')
-      @response = Factory(:data_response, :data_request => @request)
-      @project = Factory(:project, :data_response => @response)
-    end
-
-    it "is classified? when both budget and spend are classified" do
-      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-      @activity.classified?.should be_true
-    end
-  end
-
-  describe "classified?" do
-    before :each do
-      @activity = Factory(:activity)
-    end
-
-    it "is classified? when both budget and spend are classified" do
-      @activity.stub(:budget_classified?) { true }
-      @activity.stub(:spend_classified?) { true }
-      @activity.classified?.should be_true
-    end
-
-    it "is not classified? when budget is not classified" do
-      @activity.stub(:budget_classified?) { false }
-      @activity.stub(:spend_classified?) { true }
-      @activity.classified?.should be_true
-    end
-
-    it "is not classified? when spend is not classified" do
-      @activity.stub(:budget_classified?) { true }
-      @activity.stub(:spend_classified?) { false }
-      @activity.classified?.should be_true
-    end
-
-    it "is not classified? when both are not classified" do
-      @activity.stub(:budget_classified?) { false }
-      @activity.stub(:spend_classified?) { false }
-      @activity.classified?.should be_false
     end
   end
 
@@ -1188,91 +902,6 @@ describe Activity do
     end
 
     it_should_behave_like "location cloner"
-  end
-
-  describe "keeping Money amounts in-sync" do
-    before :each do
-      Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      organization = Factory(:organization, :currency => 'USD')
-      @dr = Factory(:data_response, :organization => organization)
-      @a        = Factory(:activity, :data_response => @dr,
-                          :project => Factory(:project, :data_response => @dr))
-      @a.budget = 123.45
-      @a.spend  = 123.45
-      @a.save
-      @a.reload
-    end
-
-    it "should update spend in USD on creation" do
-      @a.spend_in_usd.should == 123.45
-    end
-
-    it "should update spend in USD on update" do
-      @a.spend = 456.78
-      @a.save
-      @a.spend_in_usd.should == 456.78
-    end
-
-    it "should update spend_in_USD after currency change" do
-      @p = @a.project
-      @p.currency = 'RWF'
-      @p.save
-      @a.reload
-      @a.spend = 789.10
-      @a.save
-      @a.spend_in_usd.should == 1.5782
-    end
-
-    it "should update spend_in_USD after currency change with a big number" do
-      @p = @a.project
-      @p.currency = 'RWF'
-      @p.save
-      @a.reload
-      @a.spend = 7893.10
-      @a.save
-      @a.spend_in_usd.should == 15.7862
-    end
-
-    it "should update new_budget on creation" do
-      @a.budget_in_usd.should == 123.45
-    end
-
-    it "should update budget_in_usd on update" do
-      @a.budget = 456.79
-      @a.save
-      @a.budget_in_usd.should == 456.79
-    end
-
-    it "should update budget_in_usd after currency change" do
-      @p = @a.project
-      @p.currency = 'RWF'
-      @p.save
-      @a.reload
-      @a.budget = 789.10
-      @a.save
-      @a.budget_in_usd.should ==  789.10 * 0.002
-    end
-  end
-
-  describe "currency convenience lookups on DR/Project" do
-    before :each do
-      organization = Factory(:organization, :currency => 'RWF')
-      @dr = Factory(:data_response, :organization => organization)
-      @a  = Factory(:activity, :data_response => @dr,
-                          :project => Factory(:project,:data_response => @dr))
-    end
-
-    it "should return the data response's currency" do
-      @a.currency.should == "RWF"
-    end
-
-    it "should return the data response's currency, unless the project overrides it" do
-      p = @a.project
-      p.currency = 'CHF'
-      p.save
-      @a.reload
-      @a.currency.should == "CHF"
-    end
   end
 
   describe "#amount_for_provider" do

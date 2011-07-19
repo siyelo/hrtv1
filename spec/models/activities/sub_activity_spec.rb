@@ -2,16 +2,11 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe SubActivity do
 
-  describe "creating a record" do
-    subject { Factory(:sub_activity) }
-    it { should be_valid }
-  end
-
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :activity }
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:activity_id) }
     it { should allow_mass_assignment_of(:spend_percentage) }
     it { should allow_mass_assignment_of(:budget_percentage) }
@@ -19,7 +14,7 @@ describe SubActivity do
     it { should allow_mass_assignment_of(:spend) }
   end
 
-  describe "methods" do
+  describe "Methods" do
     before :each do
 
       # organizations
@@ -27,19 +22,21 @@ describe SubActivity do
       ngo            = Factory.create(:ngo,   :name => 'Ngo')
       @implementer   = Factory.create(:ngo,   :name => 'Implementer')
 
+
       # requests, responses
-      @data_request   = Factory.create(:data_request, :organization => donor)
-      @response  = Factory.create(:data_response, :organization => ngo,
-                                      :data_request => @data_request)
+      @data_request  = Factory(:data_request, :organization => donor)
+      @response      = ngo.latest_response
 
       # project
-      project        = Factory.create(:project, :data_response => @response)
+      project        = Factory(:project, :data_response => @response)
 
       # funding flows
-      in_flow        = Factory.create(:funding_flow, :data_response => @response,
+      in_flow        = Factory(:funding_flow, :data_response => @response,
+                               :project => project,
                                :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory.create(:funding_flow, :data_response => @response,
+      out_flow       = Factory(:funding_flow, :data_response => @response,
+                               :project => project,
                                :from => ngo, :to => @implementer,
                                :budget => 7, :spend => 7)
 
@@ -364,7 +361,7 @@ describe SubActivity do
         end
       end
     end
-    
+
     describe "counter cache" do
       it "caches sub activities count" do
         @activity.sub_activities_count.should == 0

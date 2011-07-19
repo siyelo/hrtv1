@@ -10,6 +10,7 @@ class FundingSource < ActiveRecord::Base
 end
 
 
+
 # == Schema Information
 #
 # Table name: funding_sources

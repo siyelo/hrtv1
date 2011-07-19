@@ -1,7 +1,6 @@
 class CodingSpend < CodeAssignment
 end
 
-
 # == Schema Information
 #
 # Table name: code_assignments

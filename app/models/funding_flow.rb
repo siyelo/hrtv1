@@ -160,9 +160,6 @@ class FundingFlow < ActiveRecord::Base
 end
 
 
-
-
-
 # == Schema Information
 #
 # Table name: funding_flows

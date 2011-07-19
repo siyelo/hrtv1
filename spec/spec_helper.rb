@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'spork'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -176,4 +175,62 @@ def login_as_admin
   @data_request = Factory(:data_request, :organization => organization) # we need a request in the system first
   @admin = Factory(:admin, :organization => organization)
   login @admin
+end
+
+def basic_setup_response
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+end
+
+def basic_setup_project
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+end
+
+def basic_setup_activity
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @activity     = Factory(:activity, :data_response => @response, :project => @project)
+end
+
+def basic_setup_other_cost
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @other_cost   = Factory(:other_cost, :data_response => @response, :project => @project)
+end
+
+def basic_setup_sub_activity
+  @organization = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @activity     = Factory(:activity, :data_response => @response, :project => @project)
+  @sub_activity = Factory(:sub_activity, :data_response => @response,
+                          :activity => @activity, :provider => @organization)
+end
+
+def basic_setup_funding_flow
+  @organization = Factory(:organization)
+  @ngo          = Factory(:organization)
+  @request      = Factory(:data_request, :organization => @organization)
+  @response     = @organization.latest_response
+  @project      = Factory(:project, :data_response => @response)
+  @funding_flow = Factory(:funding_flow, :data_response => @response, :project => @project,
+                          :from => @organization, :to => @ngo)
+end
+
+def debug_model_objects
+  p "organizations: #{Organization.count}"
+  p "requests: #{DataRequest.count}"
+  p "responses: #{DataResponse.count}"
+  p "projects: #{Project.count}"
+  p "activities: #{Activity.count}"
+  p "sub_activities: #{SubActivity.count}"
 end

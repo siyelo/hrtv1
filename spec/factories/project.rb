@@ -3,7 +3,6 @@ Factory.define :project, :class => Project do |f|
   f.description         { 'project_description' }
   f.budget              { 90.00 }
   f.spend               { 100.00 }
-  f.data_response       { Factory(:data_response) }
 end
 
 Factory.define :complete_project, :parent => :project do |f|

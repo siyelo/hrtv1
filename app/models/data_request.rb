@@ -14,7 +14,7 @@ class DataRequest < ActiveRecord::Base
   validates_presence_of :organization_id, :title
   validates_date :due_date
   validates_inclusion_of :start_year, :in => 1900..2999, :message => 'is not a valid year'
-  
+
   ### Callbacks
   after_create :create_data_responses
 
@@ -28,11 +28,11 @@ class DataRequest < ActiveRecord::Base
     return 'Final review' if final_review?
     return 'In progress'
   end
-  
+
   def start_date
     Date.parse("#{self.start_year}-07-01")
   end
-  
+
   def end_date
     Date.parse("#{self.start_year.to_i+1}-06-30")
   end
@@ -61,10 +61,6 @@ class DataRequest < ActiveRecord::Base
       end
     end
 end
-
-
-
-
 
 # == Schema Information
 #

@@ -340,9 +340,10 @@ describe Organization do
 
   describe "latest_response" do
     before :each do
-      @req = Factory :request
-      @org = Factory :organization
+      @org = Factory(:organization)
+      @req = Factory(:request, :organization => @org)
     end
+
     it "should return the last data response that was created on this org" do
       @org.latest_response.request.should == @req
     end

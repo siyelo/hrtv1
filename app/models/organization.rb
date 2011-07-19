@@ -234,6 +234,7 @@ class Organization < ActiveRecord::Base
       n
     end
 
+
   private
 
     def update_cached_currency_amounts
@@ -261,6 +262,8 @@ class Organization < ActiveRecord::Base
       end
     end
 end
+
+
 
 
 

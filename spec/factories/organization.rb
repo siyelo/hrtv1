@@ -2,8 +2,8 @@ Factory.define :organization, :class => Organization do |f|
   f.sequence(:name)                  { "organization_#{(1..1000000).to_a.sample}" }
   f.raw_type                         { "" }
   f.currency                         { "RWF" }
-  f.fiscal_year_start_date           { Date.parse("2008-09-01") }
-  f.fiscal_year_end_date             { Date.parse("2009-08-31") }
+  f.fiscal_year_start_date           { "2008-09-01" }
+  f.fiscal_year_end_date             { "2009-08-31" }
   f.contact_name                     { "Bob" }
   f.contact_position                 { "Manager" }
   f.contact_phone_number             { "123123123" }

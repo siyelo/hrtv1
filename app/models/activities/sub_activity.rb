@@ -180,7 +180,6 @@ end
 
 
 
-
 # == Schema Information
 #
 # Table name: activities

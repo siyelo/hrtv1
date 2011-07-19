@@ -10,7 +10,7 @@ class CodeAssignment < ActiveRecord::Base
   ### Associations
   belongs_to :activity
   belongs_to :code
-  
+
   ### Validations
   validates_presence_of :activity_id, :code_id
 
@@ -45,18 +45,18 @@ class CodeAssignment < ActiveRecord::Base
               :group => 'code_assignments.code_id',
               :order => 'value DESC'
   named_scope :with_request,
-              lambda { |request_id| { 
+              lambda { |request_id| {
                 :joins =>
                   "INNER JOIN activities ON
                     activities.id = code_assignments.activity_id
                   INNER JOIN data_responses
                     ON activities.data_response_id = data_responses.id
                   INNER JOIN data_requests
-                    ON data_responses.data_request_id = data_requests.id AND 
+                    ON data_responses.data_request_id = data_requests.id AND
                     data_responses.data_request_id = #{request_id}",
               }}
 
-  
+
   ### Callbacks
   before_save :update_cached_amount_in_usd
 

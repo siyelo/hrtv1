@@ -26,7 +26,7 @@ class Activity < ActiveRecord::Base
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingSpend', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
+  SPEND_CODING_CLASSES = ['CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization']
 
   CLASSIFICATION_MAPPINGS = {
     'CodingSpend' => 'CodingBudget',
@@ -461,7 +461,7 @@ class Activity < ActiveRecord::Base
 
   # This method copies spend code assignments to budget when user has chosen
   # to use expenditure codings for budget: All budget mappings are copied.
-  def copy_spend_codings_to_budget(coding_types = BUDGET_CODING_CLASSES)
+  def copy_spend_codings_to_budget(coding_types = SPEND_CODING_CLASSES)
     coding_types.each do |spend_coding_type|
       budget_coding_type = CLASSIFICATION_MAPPINGS[spend_coding_type]
       klass             = budget_coding_type.constantize

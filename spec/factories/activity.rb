@@ -15,7 +15,6 @@ Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
   f.sequence(:name) { |i| "sub_activity_name_#{i}" }
   f.description     { 'sub_activity_description' }
   f.provider        { Factory.create(:provider) }
-  f.project         { nil }
 end
 
 

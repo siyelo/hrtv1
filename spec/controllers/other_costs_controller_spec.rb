@@ -3,14 +3,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe OtherCostsController do
   describe "Redirects to budget or spend depending on datarequest" do
     before :each do
-       @data_request  = Factory(:data_request, :spend => false, :budget => true)
-       @organization  = Factory(:organization)
-       @user          = Factory(:reporter, :organization => @organization)
-       @data_response = @organization.latest_response
-       @project       = Factory(:project, :data_response => @data_response)
-       @other_cost    = Factory(:other_cost, :project => @project,
+      @data_request  = Factory(:data_request, :spend => false, :budget => true)
+      @organization  = Factory(:organization)
+      @user          = Factory(:reporter, :organization => @organization)
+      @data_response = @organization.latest_response
+      @project       = Factory(:project, :data_response => @data_response)
+      @other_cost    = Factory(:other_cost, :project => @project,
                                 :data_response => @data_response)
-       login @user
+      login @user
     end
 
     it "redirects to the edit other cost page when Save is clicked" do

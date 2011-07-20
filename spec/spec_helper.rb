@@ -168,11 +168,6 @@ Spork.each_run do
     login @admin
   end
 
-  def basic_setup_request
-    @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
-  end
-
   def basic_setup_response
     @organization = Factory(:organization)
     @request      = Factory(:data_request, :organization => @organization)

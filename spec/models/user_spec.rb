@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }
     it { should allow_mass_assignment_of(:password) }
@@ -13,7 +13,7 @@ describe User do
     it { should allow_mass_assignment_of(:roles) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_many :comments }
     it { should have_many :data_responses }
     it { should belong_to :organization }

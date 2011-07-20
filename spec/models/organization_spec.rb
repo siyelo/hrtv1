@@ -154,7 +154,7 @@ describe Organization do
 
   describe "Callbacks" do
     # after_create :create_data_responses
-    it "creates data_responsesfor each data_request after organization is created" do
+    it "creates data_responses for each data_request after organization is created" do
       org0 = Factory(:organization, :name => "Requester Organization")
       data_request1 = Factory(:data_request, :organization => org0)
       data_request2 = Factory(:data_request, :organization => org0)

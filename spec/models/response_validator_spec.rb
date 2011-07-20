@@ -136,7 +136,7 @@ describe DataResponse do #validations
 
     it "fails if an activity is missing a coding split" do
       cs = @activity.coding_spend.first
-      cs.cached_amount = 0; cs.amount = 0; cs.save! ; @activity.reload
+      @activity.coding_budget_valid = false; @activity.save; @activity.reload
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
@@ -144,7 +144,7 @@ describe DataResponse do #validations
 
     it "fails if there are uncoded other costs" do
       cs = @other_cost.coding_spend.first
-      cs.cached_amount = 0; cs.amount = 0; cs.save!; @other_cost.reload
+      @other_cost.coding_budget_valid = false; @other_cost.save; @other_cost.reload
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end

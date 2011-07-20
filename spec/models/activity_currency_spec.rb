@@ -14,59 +14,6 @@ describe Activity do
     end
   end
 
-  describe "Classified sums in usd" do
-    before :each do
-      Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      basic_setup_response
-      @project = Factory(:project, :data_response => @response, :currency => "RWF")
-      @code1 = Factory(:code)
-      @code2 = Factory(:code)
-      Mtef.stub(:roots) { [@code1, @code2]}
-    end
-
-    it "returns coding_budget_sum_in_usd" do
-      @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_budget, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
-
-      @activity.coding_budget_sum_in_usd.should == 48
-    end
-
-    it "returns coding_spend_sum_in_usd" do
-      @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_spend, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
-
-      @activity.coding_spend_sum_in_usd.should == 48
-    end
-
-    it "returns coding_budget_district_sum_in_usd" do
-      @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget_district, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_budget_district, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
-
-      @activity.coding_budget_district_sum_in_usd(@code1).should == 12
-      @activity.coding_budget_district_sum_in_usd(@code2).should == 36
-    end
-
-    it "returns coding_spend_district_sum_in_usd" do
-      @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend_district, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_spend_district, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
-
-      @activity.coding_spend_district_sum_in_usd(@code1).should == 12
-      @activity.coding_spend_district_sum_in_usd(@code2).should == 36
-    end
-  end
-
   describe "keeping Money amounts in-sync" do
     before :each do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)

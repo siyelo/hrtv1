@@ -14,13 +14,14 @@ class CodeAssignmentsController < Reporter::BaseController
 
     # set default to 'my' view if there are code assignments present
     if params[:view].blank?
-      params[:view] = @current_assignments.present? ? 'my' : 'all'
+      params[:view] = @coding_tree.roots.present? ? 'my' : 'all'
     end
   end
 
   def update
     @coding_type   = params[:coding_type] || 'CodingBudget'
     @coding_class  = @coding_type.constantize
+    @coding_tree   = CodingTree.new(@activity, @coding_class)
     CodeAssignment.update_classifications(@activity, params[:classifications], @coding_type)
     message = "Activity classification was successfully updated. Please check that you have completed all the other tabs if you have not already done so."
     @error_message = add_code_assignments_error(@coding_class, @activity)
@@ -83,14 +84,18 @@ class CodeAssignmentsController < Reporter::BaseController
     end
 
     def add_code_assignments_error(coding_class, activity)
-      if !activity_classified?(activity, coding_class)
+      if activity_classified?(activity, coding_class)
+        @classified        = true
+        error = nil
+      else
+        @classified        = false
         coding_type        = get_coding_type(coding_class)
         amount_name        = coding_type.to_s.capitalize == 'Spend' ? 'Past Expenditure' : coding_type.to_s.capitalize
         coding_type_amount = activity.send(coding_type) || 0
-        coding_amount      = activity.send("#{coding_class}_amount")
+        coding_amount      = @coding_tree.total
         coding_amount      = 0 if coding_amount.nil?
         difference         = coding_type_amount - coding_amount
-        percent_diff       = difference/coding_type_amount * 100
+        percent_diff       = coding_type_amount > 0 ? difference/coding_type_amount * 100 : 0
         coding_type_amount = n2c(coding_type_amount)
         coding_amount      = n2c(coding_amount)
         difference         = n2c(difference)
@@ -98,14 +103,15 @@ class CodeAssignmentsController < Reporter::BaseController
         classification_name = get_coding_name(coding_class)
 
         if coding_amount != coding_type_amount
-          return "We're sorry, when we added up your #{classification_name}
+          error = "We're sorry, when we added up your #{classification_name}
            classifications, they equaled #{coding_amount} but the #{amount_name}
            is #{coding_type_amount} (#{coding_type_amount} - #{coding_amount}
            = #{difference}, which is ~#{percent_diff}%). The total classified
            should add up to #{coding_type_amount}. Your #{classification_name} classifications must be entered and the total must be equal to the #{amount_name} amount."
-
         end
       end
+
+      return error
     end
 
     def get_coding_name(klass)

@@ -315,51 +315,51 @@ class Activity < ActiveRecord::Base
 
 
   def coding_budget_classified? #purposes
-    !data_response.request.purposes? || CodingTree.new(self, CodingBudget).valid?
+    !data_response.request.purposes? || budget.blank? || coding_budget_valid?
   end
 
   def coding_budget_cc_classified? #inputs
-    !data_response.request.inputs? || CodingTree.new(self, CodingBudgetCostCategorization).valid?
+    !data_response.request.inputs? || budget.blank? || coding_budget_cc_valid?
   end
 
   def coding_budget_district_classified? #locations
-    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingBudgetDistrict).valid?
+    !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
   end
 
   def service_level_budget_classified? #service levels
-    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelBudget).valid?
+    !data_response.request.service_levels? || service_level_budget_valid?
   end
 
   def coding_spend_classified?
-    !data_response.request.purposes? || CodingTree.new(self, CodingSpend).valid?
+    !data_response.request.purposes? || spend.blank? || coding_spend_valid?
   end
 
   def coding_spend_cc_classified?
-    !data_response.request.inputs? || CodingTree.new(self, CodingSpendCostCategorization).valid?
+    !data_response.request.inputs? || spend.blank? || coding_spend_cc_valid?
   end
 
   def coding_spend_district_classified?
-    !data_response.request.locations? || locations.empty? || CodingTree.new(self, CodingSpendDistrict).valid?
+    !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
   end
 
   def service_level_spend_classified?
-    !data_response.request.service_levels? || CodingTree.new(self, ServiceLevelSpend).valid?
+    !data_response.request.service_levels? || service_level_spend_valid?
   end
 
   def budget_classified?
-    return true if self.budget.blank?
-    coding_budget_classified? &&
+    budget.blank? ||
+    (coding_budget_classified? &&
     coding_budget_district_classified? &&
     coding_budget_cc_classified? &&
-    service_level_budget_classified?
+    service_level_budget_classified?)
   end
 
   def spend_classified?
-    return true if self.spend.blank?
-    coding_spend_classified? &&
+    spend.blank? ||
+    (coding_spend_classified? &&
     coding_spend_district_classified? &&
     coding_spend_cc_classified? &&
-    service_level_spend_classified?
+    service_level_spend_classified?)
   end
 
   # An activity can be considered classified if at least one of these are populated.
@@ -633,7 +633,7 @@ class Activity < ActiveRecord::Base
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
-      self.send("#{type}_amount=", coding_tree.total)
+      self.send(:"#{get_valid_attribute_name(type)}=", coding_tree.valid?)
     end
 
     def district_coding_adjusted(klass, assignments, amount)
@@ -726,6 +726,19 @@ class Activity < ActiveRecord::Base
       klass.new(:activity => self, :code => code,
                 :amount => amount, :percentage => percentage,
                 :cached_amount => amount)
+    end
+
+    def get_valid_attribute_name(type)
+      case type.to_s
+      when 'CodingBudget' then :coding_budget_valid
+      when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
+      when 'CodingBudgetDistrict' then :coding_budget_district_valid
+      when 'CodingSpend' then :coding_spend_valid
+      when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
+      when 'CodingSpendDistrict' then :coding_spend_district_valid
+      else
+        raise "Unknown type #{type}".to_yaml
+      end
     end
 end
 

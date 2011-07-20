@@ -160,8 +160,8 @@ class User < ActiveRecord::Base
     end
 
     def set_current_response
-      if organization.present? && organization.data_responses.present?
-        self.current_response = organization.data_responses.last
+      if organization.present? && organization.data_responses.present?  
+        self.current_response = organization.latest_response
       end
     end
 

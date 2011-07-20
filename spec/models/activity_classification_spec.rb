@@ -614,7 +614,7 @@ describe Activity do
   describe "use spent for budget codings" do
     def copy_expenditure_to_budget_check(activity, actual_type, expected_type)
       activity.copy_spend_codings_to_budget([actual_type])
-      code_assignments = activity.code_assignments
+      code_assignments = activity.code_assignments.find(:all, :order => "id ASC")
       code_assignments.length.should == 2
       code_assignments[0].class.to_s.should == actual_type
       code_assignments[1].class.to_s.should == expected_type
@@ -685,7 +685,7 @@ describe Activity do
       Factory(:coding_spend, :activity => activity, :amount => 50, :cached_amount => 50)
       activity.copy_spend_codings_to_budget(['CodingSpend'])
       code_assignments = activity.code_assignments
-      code_assignments[1].amount.should == 25
+      code_assignments[0].amount.should == 25
     end
 
     it "sets budget amount to nil when there is amount for spend and code_assignment amount is nil" do

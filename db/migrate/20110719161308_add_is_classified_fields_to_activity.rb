@@ -1,7 +1,8 @@
 # redefine removed classes to prevent AR from crying
 class ServiceLevelBudget < CodeAssignment; end
 class ServiceLevelSpend < CodeAssignment; end
-class ServiceLevel < Code; end class AddIsClassifiedFieldsToActivity < ActiveRecord::Migration
+class ServiceLevel < Code; end
+class AddIsClassifiedFieldsToActivity < ActiveRecord::Migration
   def self.up
     add_column :activities, :coding_budget_valid, :boolean, :default => false
     add_column :activities, :coding_budget_cc_valid, :boolean, :default => false

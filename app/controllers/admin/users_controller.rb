@@ -32,7 +32,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    # set roles to epty array if no role is assigned
+    # set roles to empty array if no role is assigned
     # otherwise, user model is saved, but user not notified for the error
     params[:user][:roles] = [] unless params[:user].has_key?(:roles)
     update! do |success, failure|
@@ -72,10 +72,8 @@ class Admin::UsersController < Admin::BaseController
       redirect_to admin_users_url
     end
   end
-
-
+  
   private
-
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "email"
     end

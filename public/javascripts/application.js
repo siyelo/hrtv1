@@ -996,6 +996,31 @@ var reports_districts_activities_show = {
   }
 };
 
+var admin_currencies_index = {
+  run: function () {
+    $(".currency_label").live("click", function () {
+      var element = $(this);
+      var id = element.attr('id');
+      element.hide();
+      element.parent('td').append($("<input id=\'" + id + "\' class=\'currency\' />"));
+    });
+
+    $(".currency").live('focusout', function () {
+      element = $(this);
+      var input_rate = element.val();
+      var url = "/admin/currencies/" + element.attr('id');
+      alert(url);
+      $.post(url, { "rate" : input_rate, "_method" : "_put" }, function(data){
+        var data = $.parseJSON(data);
+        console.log(data);
+        element.parent('td').children('span').show();
+        element.parent('td').children('span').text(data.currencies.rate);
+        element.hide();
+      });
+    });
+  }
+}
+
 var reports_districts_activities_index = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values, 450, 300);

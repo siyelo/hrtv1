@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FundingFlow do
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:organization_text) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:data_response_id) }
@@ -11,18 +11,26 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:organization_id_from) }
     it { should allow_mass_assignment_of(:organization_id_to) }
     it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:spend_q4_prev) }
+    it { should allow_mass_assignment_of(:spend_q1) }
+    it { should allow_mass_assignment_of(:spend_q2) }
+    it { should allow_mass_assignment_of(:spend_q3) }
+    it { should allow_mass_assignment_of(:spend_q4) }
+    it { should allow_mass_assignment_of(:budget_q4_prev) }
+    it { should allow_mass_assignment_of(:budget_q1) }
+    it { should allow_mass_assignment_of(:budget_q2) }
+    it { should allow_mass_assignment_of(:budget_q3) }
+    it { should allow_mass_assignment_of(:budget_q4) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
     it { should belong_to :data_response }
   end
 
-  describe "validations" do
-    subject { Factory(:funding_flow) }
-    it { should be_valid }
+  describe "Validations" do
     it { should validate_presence_of(:data_response_id) }
     ### these break with  shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }
@@ -45,29 +53,45 @@ describe FundingFlow do
   end
 
   describe "more validations" do
-    it "should validate the spend fields" do
-      @activity = Factory.build(:funding_flow, :spend => 'abcd')
-      @activity.save.should be_false
+    before :each do
+      basic_setup_project
     end
+
+    it "should validate the spend fields" do
+      @funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project, :spend => 'abcd',
+                                    :from => @organization, :to => @organization)
+      @funding_flow.save.should be_false
+    end
+
     it "should validate the budget fields" do
-      @activity = Factory.build(:funding_flow, :budget => 'abcd')
-      @activity.save.should be_false
+      @funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project, :budget => 'abcd',
+                                    :from => @organization, :to => @organization)
+      @funding_flow.save.should be_false
     end
   end
 
   describe "currency" do
     it "returns project currency" do
-      project = Factory.create(:project, :currency => "RWF")
-      funding_flow = Factory.create(:funding_flow, :project => project)
+      basic_setup_response
+      @project     = Factory.create(:project, :data_response => @response, :currency => "RWF")
+      funding_flow = Factory.build(:funding_flow, :data_response => @response,
+                                    :project => @project,
+                                    :from => @organization, :to => @organization)
       funding_flow.currency.should == "RWF"
     end
   end
 
   describe "#name" do
     it "returns from and to organizations in the name" do
+      basic_setup_project
       from = Factory.create(:organization, :name => 'Organization 1')
       to   = Factory.create(:organization, :name => 'Organization 2')
-      funding_flow = Factory.create(:funding_flow, :from => from, :to => to)
+      funding_flow = Factory.create(:funding_flow, :data_response => @response,
+                                    :project => @project,
+                                    :from => from, :to => to)
+
       funding_flow.name.should == "From: #{from} - To: #{to}"
     end
   end

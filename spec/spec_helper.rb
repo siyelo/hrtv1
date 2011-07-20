@@ -95,6 +95,7 @@ def save_and_deep_clone
   @original.save!
   @clone = @original.deep_clone
   @request2 = Factory(:data_request)
+  @clone.data_response = @original.data_response.organization.latest_response
   @clone.save!
   @clone.reload #otherwise seems to cache the old has_many associations
 end
@@ -123,9 +124,6 @@ def ufs_test_setup
   @org_with_empty_data_response = Factory(:organization,
                                           :name => 'org_with_empty_data_response')
   request = Factory(:data_request)
-
-  Factory(:data_response, :organization => @org_with_empty_data_response,
-          :data_request => request)
 
   @response0 = @org0.data_responses[0]
   @response1 = @org1.data_responses[0]

@@ -44,11 +44,11 @@ class Organization < ActiveRecord::Base
   has_many :fulfilled_data_requests, :through => :data_responses, :source => :data_request
   has_many :dr_activities, :through => :data_responses, :source => :activities
   # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :destroy
-  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :destroy
+  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :destroy, :dependent => :nullify
+  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :destroy, :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :implementor_for, :through => :in_flows, :source => :project
-  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id
+  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id, :dependent => :nullify
   has_many :projects, :through => :data_responses
   has_many :comments, :as => :commentable, :dependent => :destroy
 
@@ -58,7 +58,7 @@ class Organization < ActiveRecord::Base
   validates_presence_of :currency, :contact_name, :contact_position,
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number, :on => :update
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :on => :update
   validates_date :fiscal_year_start_date, :on => :update
   validates_date :fiscal_year_end_date, :on => :update
   validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,

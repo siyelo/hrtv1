@@ -39,11 +39,8 @@ describe Project do
   end
 
   describe "Validations" do
-    subject { Factory(:project) }
-    it { should be_valid }
     it { should have_and_belong_to_many :locations }
     it { should validate_presence_of(:name) }
-    it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
@@ -63,22 +60,23 @@ describe Project do
     it { should validate_numericality_of(:budget5) }
     it { should validate_numericality_of(:entire_budget) }
 
-    it "should have a valid data_response " do
-      project = Factory(:project)
-      project.data_response.should_not be_nil
-    end
+    context "subject" do
+      subject { basic_setup_project; @project }
+      it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }
 
-    it "should return the owning organization " do
-      project = Factory(:project)
-      lambda {project.organization}.should_not raise_error
-    end
+      it "should have a valid data_response " do
+        subject.data_response.should_not be_nil
+      end
 
-    it " should NOT create workflow records after save" do
-      proj  = Factory(:project)
-      proj.funding_flows.should have(0).items
+      it "should return the owning organization " do
+        lambda {subject.organization}.should_not raise_error
+      end
+
+      it " should NOT create workflow records after save" do
+        subject.funding_flows.should have(0).items
+      end
     end
   end
-
 
   describe "cleans currency formats" do
     FIELDS = [:spend, :budget, :entire_budget]
@@ -93,7 +91,7 @@ describe Project do
     FIELDS.each do |field|
       context "for field: #{field}" do
         before :each do
-          @project = Factory(:project)
+          basic_setup_project
         end
 
         TESTS.each do |test|
@@ -110,11 +108,10 @@ describe Project do
   context "Submit page: " do
     before(:each) do
       @our_org       = Factory(:organization)
-      @response      = Factory(:data_response,
-                               :organization => @our_org)
+      @request       = Factory(:data_request, :organization => @our_org)
+      @response      = @our_org.latest_response
       @other_org     = Factory(:organization)
-      @project       = Factory(:project,
-                               :data_response => @response )
+      @project       = Factory(:project, :data_response => @response )
     end
 
     it "returns true if a project funders has an organization" do
@@ -122,7 +119,7 @@ describe Project do
                           :from          => @other_org,
                           :to            => @our_org,
                           :project       => @project,
-                          :data_response => @project.data_response)
+                          :data_response => @response)
       @project.reload
       @project.funding_sources_have_organizations?.should be_true
     end
@@ -133,7 +130,7 @@ describe Project do
                           :from          => @other_org,
                           :to            => @our_org,
                           :project       => @project,
-                          :data_response => @project.data_response)
+                          :data_response => @response)
       @project.reload
       @project.in_flows.each do |in_flow|
         in_flow.organization_id_from = nil
@@ -144,7 +141,7 @@ describe Project do
     end
 
     it "checks whether a project has an activity" do
-      @activity = Factory(:activity, :project => @project)
+      @activity = Factory(:activity, :data_response => @response, :project => @project)
       @project.has_activities?.should == true
     end
 
@@ -153,7 +150,7 @@ describe Project do
     end
 
     it "checks whether a project has an other cost" do
-      @activity = Factory(:other_cost, :project => @project)
+      @activity = Factory(:other_cost, :data_response => @response, :project => @project)
       @project.has_other_costs?.should == true
     end
 
@@ -162,12 +159,12 @@ describe Project do
     end
 
     it "checks whether a project has an activity when an other cost is present" do
-      @activity = Factory(:other_cost, :project => @project)
+      @activity = Factory(:other_cost, :data_response => @response, :project => @project)
       @project.has_activities?.should be_false
     end
 
     it "checks whether a project has an other cost when an activity is present" do
-      @activity = Factory(:activity, :project => @project)
+      @activity = Factory(:activity, :data_response => @response, :project => @project)
       @project.has_other_costs?.should be_false
     end
   end
@@ -175,11 +172,10 @@ describe Project do
   context "Funding flows: " do
     before(:each) do
       @our_org       = Factory(:organization)
-      @response      = Factory(:data_response,
-                               :organization => @our_org)
+      @request       = Factory(:data_request, :organization => @our_org)
+      @response      = @our_org.latest_response
       @other_org     = Factory(:organization)
-      @project       = Factory(:project,
-                               :data_response => @response )
+      @project       = Factory(:project, :data_response => @response )
     end
 
     it "assigns and returns a sole funding source" do
@@ -187,7 +183,7 @@ describe Project do
                           :from          => @other_org,
                           :to            => @our_org,
                           :project       => @project,
-                          :data_response => @project.data_response)
+                          :data_response => @response)
       @project.reload
       @project.in_flows.first.should == flow
       @project.funding_sources.first.should == @other_org
@@ -198,7 +194,7 @@ describe Project do
                             :from          => @our_org,
                             :to            => @other_org,
                             :project       => @project,
-                            :data_response => @project.data_response)
+                            :data_response => @response)
 
       @project.reload
       @project.out_flows.first.should == flow
@@ -208,22 +204,26 @@ describe Project do
   end
 
   describe "multi-field validations" do
+    before :each do
+      basic_setup_response
+    end
+
     it "accepts Total Budget >= Total Budget" do
-      p = Factory.build(:project,
+      p = Factory.build(:project, :data_response => @response,
                         :entire_budget => 900,
                         :budget =>        800 )
       p.should be_valid
     end
 
     it "accepts Total Budget = Total Budget" do
-      p = Factory.build(:project,
+      p = Factory.build(:project, :data_response => @response,
                         :entire_budget => 900,
                         :budget =>        900 )
       p.should be_valid
     end
 
     it "does not accept Total Budget < Total Budget" do
-      p = Factory.build(:project,
+      p = Factory.build(:project, :data_response => @response,
                         :entire_budget => 900,
                         :budget =>        1000 )
       p.should_not be_valid
@@ -232,7 +232,8 @@ describe Project do
 
   context "on delete" do
     it "should destroy funding flows on delete" do
-      project = Factory(:project)
+      basic_setup_response
+      project = Factory(:project, :data_response => @response)
       Factory(:funding_flow,
               :organization_id_from => project.organization,
               :organization_id_to => project.organization,
@@ -251,7 +252,8 @@ describe Project do
   describe "counter cache" do
     context "comments cache" do
       before :each do
-        @commentable = Factory(:project)
+        basic_setup_project
+        @commentable = @project
       end
 
       it_should_behave_like "comments_cacher"
@@ -260,27 +262,14 @@ describe Project do
 
   describe "deep cloning" do
     before :each do
-      @project = Factory(:project)
+      basic_setup_project
       @original = @project #for shared examples
-      @a1 = Factory(:activity, :project => @project,
-                     :data_response => @project.data_response)
-      @a2 = Factory(:activity, :project => @project,
-                     :data_response => @project.data_response)
+      @a1       = Factory(:activity, :data_response => @response, :project => @project)
       save_and_deep_clone
     end
 
     it "should clone associated activities" do
-      @clone.activities.count.should == 2
-      @clone.activities[0].project.should_not be_nil
-      @clone.activities[1].project.should_not be_nil
-    end
-
-    it "should have the correct number of activities after the original project is destroyed" do
-      @project.destroy
-      @clone.reload
-      @clone.activities.count.should == 2
-      @clone.activities[0].project.should_not be_nil
-      @clone.activities[1].project.should_not be_nil
+      @clone.activities.count.should == 1
     end
 
     it_should_behave_like "location cloner"
@@ -288,27 +277,24 @@ describe Project do
 
 
   describe 'Currency override default' do
-     before :each do
-       organization  = Factory.create(:organization, :currency => "RWF")
-       data_response = Factory(:data_response, :organization => organization)
-       @project      = Factory(:project, :data_response => data_response)
-     end
-     it "should return the Data Response currency if no currency overridden" do
-       @project.currency.should == 'RWF'
-       @project.currency = 'EUR'
-       @project.save
-       @project.currency.should == 'EUR'
-     end
-
-    it "should not return blank" do
-      organization   = Factory.create(:organization, :currency => "GBP")
-      data_response  = Factory(:data_response, :organization => organization)
-
-      @project1      = Factory.build(:project, :data_response => data_response)
-      @project1.save
-      @project1.currency.should == "GBP"
+    before :each do
+      @organization = Factory.create(:organization, :currency => "RWF")
+      @request     = Factory(:data_request, :organization => @organization)
+      @response    = @organization.latest_response
+      @project     = Factory(:project, :data_response => @response)
     end
 
+    it "should return the Data Response currency if no currency overridden" do
+      @project.currency.should == 'RWF'
+      @project.currency = 'EUR'
+      @project.save
+      @project.currency.should == 'EUR'
+    end
+
+    it "user should not be able to select an invalid currency" do
+      @project.currency = "rwandan francs"
+      @project.save.should be_false
+    end
   end
 
   describe 'Currency cache update' do
@@ -316,13 +302,12 @@ describe Project do
       Money.default_bank.add_rate(:RWF, :USD, 0.5)
       Money.default_bank.add_rate(:EUR, :USD, 1.5)
 
-      organization   = Factory.create(:organization, :currency => 'RWF')
-      @response      = Factory(:data_response, :organization => organization)
-      @project       = Factory(:project,
-                                :data_response => @response,
-                                :currency => nil)
-      @activity      = Factory(:activity, :project => @project,
-                                :budget => 1000, :spend => 2000)
+      @organization = Factory.create(:organization, :currency => 'RWF')
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response, :currency => nil)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project,
+                              :budget => 1000, :spend => 2000)
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -341,25 +326,27 @@ describe Project do
       ONE_HUNDRED_BILLION_DOLLARS = 100000000000.00
       Money.default_bank.add_rate(:USD, :RWF, 500)
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
-      activity = Factory.build(:activity)
-      project  = activity.project
-      project.currency = 'USD'
-      project.save
-      activity.spend = ONE_HUNDRED_BILLION_DOLLARS
-      activity.save
-      activity.reload
-      activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
-      project.currency = 'RWF'
-      project.save
-      activity.reload
-      activity.save
-      activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
+      basic_setup_activity
+
+      @project  = @activity.project
+      @project.currency = 'USD'
+      @project.save
+      @activity.spend = ONE_HUNDRED_BILLION_DOLLARS
+      @activity.save
+      @activity.reload
+      @activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS
+      @project.currency = 'RWF'
+      @project.save
+      @activity.reload
+      @activity.save
+      @activity.spend_in_usd.should == ONE_HUNDRED_BILLION_DOLLARS / 500
     end
   end
 
   describe "project spend check" do
     before :each do
-      @project = Factory(:complete_project, :spend => 20)
+      basic_setup_response
+      @project = Factory(:complete_project, :data_response => @response, :spend => 20)
       funder = @project.in_flows.first
       funder.spend = 20
       funder.save
@@ -373,7 +360,8 @@ describe Project do
 
   describe "project budget" do
     before :each do
-      @project = Factory(:project, :budget => 20)
+      basic_setup_response
+      @project = Factory(:project, :data_response => @response, :budget => 20)
     end
 
     it "succeeds if entered" do
@@ -383,15 +371,7 @@ describe Project do
 
   describe "linking to funding source project" do
     before :each do
-      @data_request = Factory(:data_request)
-      @data_request1 = Factory(:data_request)
-      @organization = Factory(:organization)
-      @organization1 = Factory(:organization)
-      @response      = Factory(:data_response, :data_request => @data_request,
-                               :organization => @organization)
-      @response1 = Factory(:data_response, :data_request => @data_request1,
-                                :organization => @organization1)
-      @project = Factory(:project, :data_response => @response)
+      basic_setup_project
     end
 
     it "returns false if a project is not linked to a parent project" do
@@ -399,15 +379,17 @@ describe Project do
     end
 
     it "returns true if a project is linked to a parent project" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization, :project => @project,
-                              :data_response => @response, :project_from_id => @project.id)
+      @funding_flow = Factory(:funding_flow, :from => @organization, :to => @organization,
+                              :project => @project, :data_response => @response,
+                              :project_from_id => @project.id)
       @project.reload
       @project.linked?.should == true
     end
 
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
-      @funding_flow = Factory(:funding_flow, :from => @organization1, :to => @organization,
-        :project => @project, :data_response => @response, :project_from_id => 0)
+      @funding_flow = Factory(:funding_flow, :from => @organization, :to => @organization,
+                              :project => @project, :data_response => @response,
+                              :project_from_id => 0)
       @project.reload
       @project.linked?.should == true
     end

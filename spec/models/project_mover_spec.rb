@@ -2,19 +2,15 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ProjectMover do
   before :each do
-    @org1 = Factory(:organization)
-    @dr1  = Factory(:data_response,
-                    :organization => @org1)
-    @org2 = Factory(:organization)
-    @user = Factory(:user, :organization => @org2)
-    @dr2  = Factory(:data_response,
-                    :organization => @org2)
-
+    @org1    = Factory(:organization)
+    @org2    = Factory(:organization)
+    @request = Factory(:data_request, :organization => @org1)
+    @dr1     = @org1.latest_response
+    @dr2     = @org2.latest_response
+    @user    = Factory(:user, :organization => @org2)
     @project = Factory(:project, :data_response => @dr1)
-    @a1 = Factory(:activity, :project => @project,
-                  :data_response => @project.data_response)
-    @a2 = Factory(:activity, :project => @project,
-                  :data_response => @project.data_response)
+    @a1 = Factory(:activity, :project => @project, :data_response => @dr1)
+    @a2 = Factory(:activity, :project => @project, :data_response => @dr1)
 
     @dr2.reload #refreshes org.user relation
     @mover = ProjectMover.new(@dr1, @dr2, @project)
@@ -43,6 +39,7 @@ describe ProjectMover do
 
   context "invalid relations" do
     before :each do
+      @project.name  = nil
       @project.save(false)
       @mover = ProjectMover.new(@dr1, @dr2, @project)
     end
@@ -52,8 +49,8 @@ describe ProjectMover do
     end
 
     it "should allow you to forcibly save invalid AR objects" do
+      pending
       lambda { @clone_project = @mover.move_without_validations! }.should_not raise_error
     end
   end
-
 end

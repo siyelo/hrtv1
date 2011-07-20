@@ -23,8 +23,8 @@ class DataResponse < ActiveRecord::Base
   has_many :code_assignments, :through => :activities
 
   ### Validations
-  validates_presence_of :data_request_id
-  validates_presence_of :organization_id
+  validates_presence_of :data_request_id, :organization_id
+  validates_uniqueness_of :data_request_id, :scope => :organization_id
 
   ### Delegate
   delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,

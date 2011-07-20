@@ -4,7 +4,7 @@ class Comment < ActiveRecord::Base
   attr_accessible :title, :comment
 
   ### Validations
-  validates_presence_of :comment, :user_id, :commentable_id, :commentable_type
+  validates_presence_of :title, :comment, :user_id, :commentable_id, :commentable_type
 
   ### Associations
   belongs_to :user

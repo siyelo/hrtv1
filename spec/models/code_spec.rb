@@ -2,12 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Code do
 
-  describe "creating a record" do
-    subject { Factory(:code) }
-    it { should be_valid }
+  describe "Validations" do
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:short_display) }
     it { should allow_mass_assignment_of(:long_display) }
     it { should allow_mass_assignment_of(:description) }
@@ -24,10 +22,9 @@ describe Code do
     it { should allow_mass_assignment_of(:official_name) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_many(:code_assignments).dependent(:destroy) }
     it { should have_many(:activities) }
-    it { should have_many(:comments) }
   end
 
   describe "named scopes" do
@@ -183,11 +180,10 @@ describe Code do
   describe "sum_of_assignments_for_activities" do
     before :each do
       Money.default_bank.add_rate(:USD, :USD, 1)
-      data_response = Factory.create(:data_response)
-      @activity1 = Factory.create(:activity, :data_response => data_response,
-                                  :project => Factory.create(:project, :currency => "USD"))
-      @activity2 = Factory.create(:activity, :data_response => data_response,
-                                  :project => Factory.create(:project, :currency => "USD"))
+      basic_setup_response
+      @project   = Factory(:project, :data_response => @response, :currency => "USD")
+      @activity1 = Factory.create(:activity, :data_response => @response, :project => @project)
+      @activity2 = Factory.create(:activity, :data_response => @response, :project => @project)
       @code      = Factory.create(:code, :short_display => 'Code')
 
       Factory.create(:coding_budget, :activity => @activity1, :code => @code,
@@ -212,13 +208,15 @@ describe Code do
   describe "leaf_assignments_for_activities" do
     before :each do
       Money.default_bank.add_rate(:USD, :USD, 1)
-      organization  = Factory.create(:organization, :currency => "USD")
-      data_response = Factory.create(:data_response, :organization => organization)
-      @activity1 = Factory.create(:activity, :data_response => data_response)
-      @activity2 = Factory.create(:activity, :data_response => data_response)
-      @code1     = Factory.create(:code, :short_display => 'code1')
-      @code11    = Factory.create(:code, :short_display => 'code11', :parent => @code1)
-      @code12    = Factory.create(:code, :short_display => 'code12', :parent => @code1)
+      @organization = Factory(:organization, :currency => "USD")
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity1    = Factory(:activity, :data_response => @response, :project => @project)
+      @activity2    = Factory(:activity, :data_response => @response, :project => @project)
+      @code1        = Factory(:code, :short_display => 'code1')
+      @code11       = Factory(:code, :short_display => 'code11', :parent => @code1)
+      @code12       = Factory(:code, :short_display => 'code12', :parent => @code1)
     end
 
     it "returns empty array when no activities" do

@@ -19,14 +19,12 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:final_review) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :organization }
     it { should have_many :data_responses }
   end
 
-  describe "validations" do
-    subject { Factory(:data_request) }
-    it { should be_valid }
+  describe "Validations" do
     it { should validate_presence_of :organization_id }
     it { should validate_presence_of :title }
     it { should allow_value('2010-12-01').for(:due_date) }
@@ -34,20 +32,17 @@ describe DataRequest do
     it { should_not allow_value('year').for(:start_year) }
     it { should_not allow_value('9999').for(:start_year) }
     it { should_not allow_value('').for(:start_year) }
-
   end
 
   describe "Callbacks" do
     # after_create :create_data_responses
     it "creates data_responses for each organization after data_request is created" do
-      org0 = Factory(:organization, :name => "Requester Organization")
       org1 = Factory(:organization, :name => "Responder Organization 1")
       org2 = Factory(:organization, :name => "Responder Organization 2")
-      data_request = Factory.create(:data_request, :organization => org0)
-      data_request.data_responses.count.should == 3
+      data_request = Factory.create(:data_request, :organization => org1)
+      data_request.data_responses.count.should == 2
       organizations = data_request.data_responses.map(&:organization)
 
-      organizations.should include(org0)
       organizations.should include(org1)
       organizations.should include(org2)
     end

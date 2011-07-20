@@ -32,9 +32,9 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
-    @other_cost = @response.activities.new(params[:activity])
+    @other_cost = @response.other_costs.new(params[:other_cost])
     @other_cost.data_response = @response
-    
+
     if @other_cost.save
       respond_to do |format|
         format.html { flash[:notice] = 'Other Cost was successfully created'; html_redirect }
@@ -47,7 +47,7 @@ class OtherCostsController < Reporter::BaseController
       end
     end
   end
-  
+
   def update
     update! do |success, failure|
       success.html { html_redirect }

@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
       unless current_user && current_user.sysadmin?
         store_location
         flash[:error] = "You must be an administrator to access that page"
-        redirect_to :back
+        redirect_to root_url
         return false
       end
     end

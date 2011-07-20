@@ -191,7 +191,7 @@ describe Project do
                           :from          => @other_org,
                           :to            => @our_org,
                           :project       => @project,
-                          :data_response => @project.data_response)
+                          :data_response => @response)
       @project.reload
       @project.funding_sources_have_organizations?.should be_true
     end
@@ -202,7 +202,7 @@ describe Project do
                           :from          => @other_org,
                           :to            => @our_org,
                           :project       => @project,
-                          :data_response => @project.data_response)
+                          :data_response => @response)
       @project.reload
       @project.in_flows.each do |in_flow|
         in_flow.organization_id_from = nil
@@ -255,7 +255,7 @@ describe Project do
                          :from          => @other_org,
                          :to            => @our_org,
                          :project       => @project,
-                         :data_response => @project.data_response)
+                         :data_response => @response)
       @project.amounts_matches_funders?(:spend).should be_true
     end
 
@@ -264,7 +264,7 @@ describe Project do
                          :from          => @other_org,
                          :to            => @our_org,
                          :project       => @project,
-                         :data_response => @project.data_response)
+                         :data_response => @response)
       @project.amounts_matches_funders?(:budget).should be_true
     end
 
@@ -273,7 +273,7 @@ describe Project do
                          :from          => @other_org,
                          :to            => @our_org,
                          :project       => @project,
-                         :data_response => @project.data_response)
+                         :data_response => @response)
       @project.reload
       @project.in_flows.first.should == flow
       @project.funding_sources.first.should == @other_org
@@ -284,7 +284,7 @@ describe Project do
                             :from          => @our_org,
                             :to            => @other_org,
                             :project       => @project,
-                            :data_response => @project.data_response)
+                            :data_response => @response)
       @project.reload
       @project.out_flows.first.should == flow
       @project.implementers.first.should == @other_org

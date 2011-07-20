@@ -72,14 +72,12 @@ describe DataRequest do
   describe "Callbacks" do
     # after_create :create_data_responses
     it "creates data_responses for each organization after data_request is created" do
-      org0 = Factory(:organization, :name => "Requester Organization")
       org1 = Factory(:organization, :name => "Responder Organization 1")
       org2 = Factory(:organization, :name => "Responder Organization 2")
-      data_request = Factory.create(:data_request, :organization => org0)
-      data_request.data_responses.count.should == 3
+      data_request = Factory.create(:data_request, :organization => org1)
+      data_request.data_responses.count.should == 2
       organizations = data_request.data_responses.map(&:organization)
 
-      organizations.should include(org0)
       organizations.should include(org1)
       organizations.should include(org2)
     end

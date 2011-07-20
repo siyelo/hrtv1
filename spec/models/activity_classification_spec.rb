@@ -684,8 +684,8 @@ describe Activity do
                          :budget => 50, :spend => 100)
       Factory(:coding_spend, :activity => activity, :amount => 50, :cached_amount => 50)
       activity.copy_spend_codings_to_budget(['CodingSpend'])
-      code_assignments = activity.code_assignments
-      code_assignments[0].amount.should == 25
+      code_assignments = activity.code_assignments.find(:all, :order => 'id ASC')
+      code_assignments[1].amount.should == 25
     end
 
     it "sets budget amount to nil when there is amount for spend and code_assignment amount is nil" do
@@ -694,8 +694,8 @@ describe Activity do
                          :budget => 50, :spend => 100)
       Factory(:coding_spend, :activity => activity, :amount => nil, :cached_amount => 50)
       activity.copy_spend_codings_to_budget(['CodingSpend'])
-      code_assignments = activity.code_assignments
-      code_assignments[1].amount.should == nil
+      code_assignments = activity.code_assignments.with_type('CodingSpend')
+      code_assignments[0].amount.should == nil
     end
 
     def check_percentage_copying(spend)

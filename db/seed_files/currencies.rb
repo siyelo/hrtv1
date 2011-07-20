@@ -1,5 +1,5 @@
 require 'yaml'
-file = YAML.load_file "#{RAILS_ROOT}/config/currencies.yml"
+file = YAML.load_file "#{RAILS_ROOT}/db/seed_files/currencies.yml"
 puts "Importing currencies to the database\n"
 file.each { |currency| 
             Currency.create!(:conversion => currency[0], 

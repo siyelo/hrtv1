@@ -1,8 +1,14 @@
 - title("Currencies")
 
 %h1.main_heading
-  Users
+  Currencies
   
+%ul.horizontal
+  %li
+    - link_to new_admin_currency_path, :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Currency
+
 %table.standard.rounded
   %thead
     %tr

@@ -1,6 +1,14 @@
 Money.default_bank  = Money::Bank::VariableExchange.new
-currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
-Money.default_bank.import_rates(:yaml, currency_config)
+
+begin
+  @cur = Currency.all
+  currency_config     = Currency.special_yaml(@cur)
+  Money.default_bank.import_rates(:yaml, currency_config)
+rescue
+  print "currency table not found, please seed your database"
+end
+# currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
+
 
 case ENV['HRT_COUNTRY']
 when 'kenya'

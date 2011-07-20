@@ -1009,13 +1009,14 @@ var admin_currencies_index = {
       element = $(this);
       var input_rate = element.val();
       var url = "/admin/currencies/" + element.attr('id');
-      alert(url);
-      $.post(url, { "rate" : input_rate, "_method" : "_put" }, function(data){
+      $.post(url, { "rate" : input_rate, "_method" : "put" }, function(data){
         var data = $.parseJSON(data);
         console.log(data);
-        element.parent('td').children('span').show();
-        element.parent('td').children('span').text(data.currencies.rate);
-        element.hide();
+        if (data.status == 'success'){
+          element.parent('td').children('span').show();
+          element.parent('td').children('span').text(data.new_rate);
+          element.hide();
+        }
       });
     });
   }

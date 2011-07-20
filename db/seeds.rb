@@ -20,5 +20,7 @@ require 'fastercsv'
   load 'db/seed_files/organizations.rb'
 
   #load 'db/seed_files/service_levels.rb' #no longer needed since the service levels were removed
+  
+  load 'db/seed_files/currencies.rb'
 
   puts "...seeding DONE\n\n"

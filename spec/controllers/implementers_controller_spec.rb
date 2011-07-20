@@ -18,9 +18,7 @@ describe ImplementersController do
       login @reporter
       ## Note: @response (and @request?) reserved by rspec
       @data_request = Factory(:data_request)
-      @data_response = Factory.create(:data_response,
-                                      :data_request => @data_request,
-                                      :organization => @organization)
+      @data_response = @organization.latest_response
     end
 
     it "GET/1/implementers should find all activities" do

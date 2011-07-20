@@ -428,7 +428,7 @@ class DataResponse < ActiveRecord::Base
     # Find all incomplete Activities, ignoring missing codings if the
     # Request doesnt ask for that info.
     def reject_uncoded(activities)
-      activities.select{ |a| (!a.budget_classified?) || (!a.spend_classified?)}
+      activities.select{ |a| !a.budget_classified? || !a.spend_classified?}
     end
 
     # Find all complete Activities

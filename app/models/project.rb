@@ -456,7 +456,6 @@ end
 
 
 
-
 # == Schema Information
 #
 # Table name: projects
@@ -481,6 +480,7 @@ end
 #  budget_q3        :decimal(, )
 #  budget_q4        :decimal(, )
 #  budget_q4_prev   :decimal(, )
+#  data_response_id :integer         indexed
 #  comments_count   :integer         default(0)
 #  budget2          :decimal(, )
 #  budget3          :decimal(, )

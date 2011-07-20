@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110711154419) do
+ActiveRecord::Schema.define(:version => 20110719161308) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -35,24 +35,18 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.decimal  "budget_percentage"
     t.decimal  "spend_percentage"
     t.boolean  "approved"
-    t.decimal  "CodingBudget_amount",                   :default => 0.0
-    t.decimal  "CodingBudgetCostCategorization_amount", :default => 0.0
-    t.decimal  "CodingBudgetDistrict_amount",           :default => 0.0
-    t.decimal  "CodingSpend_amount",                    :default => 0.0
-    t.decimal  "CodingSpendCostCategorization_amount",  :default => 0.0
-    t.decimal  "CodingSpendDistrict_amount",            :default => 0.0
     t.decimal  "budget_q1"
     t.decimal  "budget_q2"
     t.decimal  "budget_q3"
     t.decimal  "budget_q4"
     t.decimal  "budget_q4_prev"
-    t.integer  "comments_count",                        :default => 0
-    t.integer  "sub_activities_count",                  :default => 0
-    t.decimal  "spend_in_usd",                          :default => 0.0
-    t.decimal  "budget_in_usd",                         :default => 0.0
+    t.integer  "comments_count",               :default => 0
+    t.integer  "sub_activities_count",         :default => 0
+    t.decimal  "spend_in_usd",                 :default => 0.0
+    t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",             :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",              :default => 0.0
+    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
+    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.decimal  "budget2"
     t.decimal  "budget3"
     t.decimal  "budget4"
@@ -60,6 +54,14 @@ ActiveRecord::Schema.define(:version => 20110711154419) do
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
+    t.boolean  "coding_budget_valid",          :default => false
+    t.boolean  "coding_budget_cc_valid",       :default => false
+    t.boolean  "coding_budget_district_valid", :default => false
+    t.boolean  "service_level_budget_valid",   :default => false
+    t.boolean  "coding_spend_valid",           :default => false
+    t.boolean  "coding_spend_cc_valid",        :default => false
+    t.boolean  "service_level_spend_valid",    :default => false
+    t.boolean  "coding_spend_district_valid",  :default => false
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"

@@ -13,9 +13,10 @@ describe Admin::ResponsesController do
     end
   end
 
-  describe "Requesting Admin::Responses endpoints as an admin" do
+  describe "Requesting Admin::Responses endpoints as a sysadmin" do
     before :each do
-      login_as_admin
+      @admin = Factory.create(:sysadmin)
+      login @admin
     end
 
     it "/index should find the submitted responses" do
@@ -39,7 +40,9 @@ describe Admin::ResponsesController do
     end
 
     it "GET/1 should find a response" do
-      reporter = Factory(:reporter)
+      organization = Factory(:organization)
+      data_request = Factory(:data_request)
+      reporter = Factory(:reporter, :organization => organization)
       get :show, :id => reporter.current_response.id
       response.should be_success
     end

@@ -49,12 +49,6 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
-  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-  validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
-  validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
-  validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
-  validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :allow_nil => true
 
@@ -456,6 +450,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -469,17 +464,6 @@ end
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
 #  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
-#  data_response_id :integer         indexed
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
 #  data_response_id :integer         indexed
 #  comments_count   :integer         default(0)
 #  budget2          :decimal(, )

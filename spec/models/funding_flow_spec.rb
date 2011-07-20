@@ -10,7 +10,7 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:self_provider_flag) }
     it { should allow_mass_assignment_of(:organization_id_from) }
     it { should allow_mass_assignment_of(:organization_id_to) }
-    it { should allow_mass_assignment_of(:spend) } 
+    it { should allow_mass_assignment_of(:spend) }
   end
 
   describe "associations" do
@@ -30,17 +30,18 @@ describe FundingFlow do
     # and this breaks too
     #it { should validate_numericality_of(:organization_id_from) }
     it { should validate_numericality_of(:project_from_id) }
+    it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:budget_q1) }
     it { should validate_numericality_of(:budget_q2) }
     it { should validate_numericality_of(:budget_q3) }
     it { should validate_numericality_of(:budget_q4) }
     it { should validate_numericality_of(:budget_q4_prev) }
+    it { should validate_numericality_of(:spend) }
     it { should validate_numericality_of(:spend_q1) }
     it { should validate_numericality_of(:spend_q2) }
     it { should validate_numericality_of(:spend_q3) }
     it { should validate_numericality_of(:spend_q4) }
-
-
+    it { should validate_numericality_of(:spend_q4_prev) }
   end
 
   describe "more validations" do

@@ -3,7 +3,7 @@ require 'set'
 
 describe Project do
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to(:data_response) }
     it { should have_and_belong_to_many(:locations) }
     it { should have_many(:activities).dependent(:destroy) }
@@ -18,7 +18,7 @@ describe Project do
     it { should have_many(:comments) }
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:spend) }
@@ -38,7 +38,7 @@ describe Project do
     it { should allow_mass_assignment_of(:budget5) }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:project) }
     it { should be_valid }
     it { should have_and_belong_to_many :locations }
@@ -55,6 +55,13 @@ describe Project do
     it { should_not allow_value('abcd').for(:budget3) }
     it { should_not allow_value('abcd').for(:budget4) }
     it { should_not allow_value('abcd').for(:budget5) }
+    it { should validate_numericality_of(:budget) }
+    it { should validate_numericality_of(:spend) }
+    it { should validate_numericality_of(:budget2) }
+    it { should validate_numericality_of(:budget3) }
+    it { should validate_numericality_of(:budget4) }
+    it { should validate_numericality_of(:budget5) }
+    it { should validate_numericality_of(:entire_budget) }
 
     it "should have a valid data_response " do
       project = Factory(:project)

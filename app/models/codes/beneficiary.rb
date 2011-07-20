@@ -11,6 +11,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: codes
@@ -33,5 +34,7 @@ end
 #  sub_account         :string(255)
 #  nha_code            :string(255)
 #  nasa_code           :string(255)
+#  code_level          :string(255)
+#  child_health        :boolean
 #
 

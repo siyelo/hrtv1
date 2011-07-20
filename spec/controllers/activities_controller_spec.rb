@@ -74,10 +74,18 @@ describe ActivitiesController do
         it_should_behave_like "a protected endpoint"
       end
 
-      context "Requesting /activities/1/approve using POST" do
+      context "Requesting /activities/1/activity_manager_approve using POST" do
         before do
           @activity = Factory(:activity, :data_response => @data_response, :project => @project)
-          post :approve, :id => @activity.id, :response_id => @data_response.id
+          post :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id
+        end
+        it_should_behave_like "a protected endpoint"
+      end
+
+      context "Requesting /activities/1/sysadmin_approve using POST" do
+        before do
+          @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+          post :sysadmin_approve, :id => @activity.id, :response_id => @data_response.id
         end
         it_should_behave_like "a protected endpoint"
       end
@@ -119,17 +127,16 @@ describe ActivitiesController do
       @organization  = Factory(:organization)
       @data_request  = Factory(:data_request, :organization => @organization)
       @data_response = @organization.latest_response
-      @project = Factory(:project, :data_response => @data_response)
-      @user = Factory(:reporter, :organization => @organization)
-      login @user
+      @project       = Factory(:project, :data_response => @data_response)
+      @reporter      = Factory(:reporter, :organization => @organization)
+      login @reporter
       @activity = Factory(:activity, :data_response => @data_response, :project => @project)
-      @user_activities.stub!(:find).and_return(@activity)
     end
 
-    context "Requesting /activities/1/approve using POST" do
+    context "Requesting /activities/1/sysadmin_approve using POST" do
       it "requres admin to approve an activity" do
-        post :approve, :id => @activity.id, :response_id => @data_response.id
-        flash[:error].should == "You are not authorized to do that"
+        post :sysadmin_approve, :id => @activity.id, :response_id => @data_response.id
+        flash[:error].should == "You must be an administrator to access that page"
       end
     end
 
@@ -146,12 +153,12 @@ describe ActivitiesController do
 
   describe "Update" do
     before :each do
-      @data_request = Factory(:data_request)
-      @organization = Factory(:organization)
-      @user = Factory(:reporter, :organization => @organization)
-      @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-      @project = Factory(:project, :data_response => @data_response)
-      login @user
+      @organization  = Factory(:organization)
+      @data_request  = Factory(:data_request, :organization => @organization)
+      @data_response = @organization.latest_response
+      @project       = Factory(:project, :data_response => @data_response)
+      @reporter      = Factory(:reporter, :organization => @organization)
+      login @reporter
     end
 
     it "should allow a reporter to update an activity if it's not am approved" do
@@ -173,7 +180,7 @@ describe ActivitiesController do
   describe "Redirects to budget or spend depending on datarequest" do
     before :each do
       @organization = Factory(:organization)
-      @data_request = Factory(:data_request)
+      @data_request = Factory(:data_request, :organization => @organization)
       @user = Factory(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
       login @user
@@ -230,18 +237,19 @@ describe ActivitiesController do
 
    describe "activitymanager can approve an activity project" do
      before :each do
-       @data_request = Factory(:data_request)
-       @organization = Factory(:organization)
-       @user = Factory(:activity_manager, :organization => @organization)
-       @data_response = Factory(:data_response, :data_request => @data_request, :organization => @organization)
-       @project = Factory(:project, :data_response => @data_response)
-       @activity = Factory(:activity, :project => @project, :data_response => @data_response)
-       login @user
+       @organization     = Factory(:organization)
+       @data_request     = Factory(:data_request, :organization => @organization)
+       @data_response    = @organization.latest_response
+       @project          = Factory(:project, :data_response => @data_response)
+       @activity         = Factory(:activity, :project => @project,
+                                   :data_response => @data_response)
+       @activity_manager = Factory(:activity_manager, :organization => @organization)
+       login @activity_manager
      end
      it "should approve the project if the am_approved field is not set" do
        put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
        @activity.reload
-       @activity.user.should == @user
+       @activity.user.should == @activity_manager
        @activity.am_approved.should be_true
      end
    end

@@ -14,11 +14,11 @@ describe ImplementersController do
   describe "Requesting Implementers endpoints as a reporter" do
     before :each do
       @organization = Factory.create(:organization)
-      @reporter = Factory.create(:reporter, :organization => @organization)
-      login @reporter
-      ## Note: @response (and @request?) reserved by rspec
       @data_request = Factory(:data_request)
       @data_response = @organization.latest_response
+
+      @reporter = Factory.create(:reporter, :organization => @organization)
+      login @reporter
     end
 
     it "GET/1/implementers should find all activities" do

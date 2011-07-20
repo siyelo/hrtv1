@@ -733,9 +733,11 @@ class Activity < ActiveRecord::Base
       when 'CodingBudget' then :coding_budget_valid
       when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
       when 'CodingBudgetDistrict' then :coding_budget_district_valid
+      when 'ServiceLevelBudget' then :service_level_budget_valid
       when 'CodingSpend' then :coding_spend_valid
       when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
       when 'CodingSpendDistrict' then :coding_spend_district_valid
+      when 'ServiceLevelSpend' then :service_level_spend_valid
       else
         raise "Unknown type #{type}".to_yaml
       end

@@ -22,11 +22,10 @@ describe Admin::UsersController do
 
   describe "Requesting Users endpoints as a member" do
     before :each do
-      @reporter = Factory(:reporter)
-      login @reporter
-      ## Note: @response (and @request?) reserved by rspec
-      @data_request = Factory(:data_request)
-      @data_response = Factory(:data_response, :data_request => @data_request)
+      @organization = Factory(:organization)
+      @data_request = Factory(:data_request, :organization => @organization)
+      @sysadmin = Factory(:sysadmin, :organization => @organization)
+      login @sysadmin
     end
 
     it "GET /organizations/users should find all users in the org" do
@@ -38,16 +37,8 @@ describe Admin::UsersController do
 
     it "POST /organizations/users should create a user in the org" do
       params = {:full_name => 'bob rob', :email =>  'bob@siyelo.com', :role => ['reporter']}
-      @user = User.new()
-      @user.stub!(:save).and_return(true)
       post :create, :user => params
       response.should be_success
     end
-  end
-
-  describe "Requesting Users endpoints as a org admin" do
-  end
-
-  describe "Requesting Users endpoints as a visitor" do
   end
 end

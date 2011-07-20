@@ -19,7 +19,6 @@ Feature: Activity Manager can approve a code breakdown for each activity
   @javascript
   Scenario: Approve an Activity from listing
     Given I follow "reporter_org"
-    Then show me the page
     When I follow "Approve Budget"
     And wait a few moments
     Then I should see "Budget Approved"

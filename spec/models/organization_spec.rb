@@ -111,6 +111,46 @@ describe Organization do
       organization.should_not be_valid
     end
   end
+  
+  describe "Named Scopes" do
+    before :each do
+      @request1 = Factory(:data_request)
+      @request2 = Factory(:data_request)
+      @org = Factory(:organization, :name => "Responder Organization")
+      @response = @org.responses.find_by_data_request_id(@request1.id)
+    end
+    
+    it "should find submitted responses" do 
+      @response.submitted = true
+      @response.save(false)
+      Organization.with_submitted_responses_for(@request1).should == [@org]
+      Organization.with_submitted_for_final_responses_for(@request1).should_not == [@org]
+      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    end
+    
+    it "should find submitted for final review responses" do
+      @response.submitted_for_final = true
+      @response.save(false)
+      Organization.with_submitted_for_final_responses_for(@request1).should == [@org]
+      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    end
+    
+    it "should find completed responses" do
+      @response.complete = true
+      @response.save(false)
+      Organization.with_complete_responses_for(@request1).should == [@org]
+    end
+    
+    it "should find empty responses" do
+      Organization.with_empty_responses_for(@request1).should have(3).items
+    end
+    
+    it "should find in progress responses (i.e. at least one activity) " do
+      @project = Factory(:project, :data_response => @response)
+      @activity = Factory(:activity, :project => @project, :data_response => @response)
+      Organization.with_in_progress_responses_for(@request1).should == [@org]
+    end
+  end
 
   describe "Callbacks" do
     # after_create :create_data_responses

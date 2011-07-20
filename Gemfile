@@ -72,6 +72,5 @@ group :test do
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
   gem 'ruby-pg'
   gem 'shoulda'
-  gem 'spork', '~> 0.8' # need to upgrade to 0.9+ (and thus Rails 3) to get auto-reloading of models!
-
+  gem 'spork', '~> 0.8'
 end

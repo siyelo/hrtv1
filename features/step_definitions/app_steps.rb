@@ -433,3 +433,11 @@ end
 Then /^I should see "([^"]*)" is "([^"]*)"$/ do |label, text|
   page.find("##{label} label").text.should == text
 end
+
+Given /^the latest response for "([^"]*)" is submitted$/ do |org_name|
+  @organization = Organization.find_by_name(org_name)
+  @response = @organization.latest_response
+  @response.submitted = true
+  @response.save(false)
+end
+

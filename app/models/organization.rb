@@ -69,6 +69,50 @@ class Organization < ActiveRecord::Base
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
   # works only on postgres
   #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
+  
+  named_scope :with_submitted_responses_for, lambda { |request|    
+                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
+                 :conditions => ["data_responses.data_request_id = ? AND 
+                                 data_responses.submitted = ? AND 
+                                 (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND 
+                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
+                                  request.id, true, false, false]} }
+
+  named_scope :with_submitted_for_final_responses_for, lambda { |request|    
+                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
+                 :conditions => ["data_responses.data_request_id = ? AND 
+                                 data_responses.submitted_for_final = ? AND  
+                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
+                                  request.id, true, false]} }         
+                                  
+  named_scope :with_complete_responses_for, lambda { |request|    
+                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
+                 :conditions => ["data_responses.data_request_id = ? AND 
+                                 data_responses.complete = ?",
+                                  request.id, true]} }      
+                                  
+  named_scope :with_empty_responses_for, lambda { |request| 
+                {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
+                             LEFT JOIN activities ON data_responses.id = activities.data_response_id
+                             LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
+                             LEFT JOIN projects ON data_responses.id = projects.data_response_id"],
+                 :conditions => ["activities.data_response_id IS NULL AND
+                                  funding_flows.data_response_id IS NULL AND
+                                  projects.data_response_id IS NULL AND 
+                                  data_responses.data_request_id = ?", request.id],
+                 :from => ["organizations"]}}           
+  
+  named_scope :with_in_progress_responses_for, lambda { |request| 
+                 {:conditions => ["organizations.id in (
+                     SELECT organizations.id 
+                       FROM organizations
+                  LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
+                  INNER JOIN projects ON data_responses.id = projects.data_response_id
+                  INNER JOIN activities ON data_responses.id = activities.data_response_id
+                      WHERE data_responses.data_request_id = ? AND
+                            (data_responses.submitted IS NULL OR 
+                            data_responses.submitted = ?))", request.id, false]}}
+
 
   def self.with_users
     find(:all, :joins => :users, :order => 'organizations.name ASC').uniq

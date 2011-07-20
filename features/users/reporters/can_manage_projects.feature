@@ -41,8 +41,6 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I check "Location1"
         And I check "Location2"
-        Then show me the page
-        #And I fill in "the_combobox" with "EUR"
         And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
 
@@ -124,16 +122,6 @@ Feature: Reporter can manage projects
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
         And I follow "Add funding source"
-
-        #todo, combobox for funding source
-        # Then show me the page
-        #   And I fill in "theCombobox" with "organization3"
-
-
-        # And I select "Add an Organization..." from "From" within ".fields"
-        #       And I fill in "organization_name" with "The Best Org"
-        #       And I follow "Create Organization"
-        #       And I select "The Best Org" from "From" within ".fields"
         And I fill in "Spent" with "11" within ".fields"
         And I fill in "Q4 08-09" with "22" within ".fields .spend"
         And I fill in "Q1 09-10" with "33" within ".fields .spend"
@@ -211,7 +199,6 @@ Feature: Reporter can manage projects
         And I press "Update"
       Then I should see "Your projects have been successfully updated"
 
-      @run
     Scenario: Months quarters groups are grouped to the GoR FY
       Given an organization "Org A" exists with name: "Org A", fiscal_year_start_date: "01-07-2010", fiscal_year_end_date: "30-06-2011"
         And a data_request "req a" exists with title: "req a"

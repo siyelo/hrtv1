@@ -8,10 +8,7 @@ describe CodingBudgetDistrict do
       loc2 = Factory.create(:location, :short_display => 'Kicukiro')
       @activity.locations << [loc1, loc2]
 
-      params = {
-        loc1.id.to_s => {"amount" => "", "percentage" => "50"},
-        loc2.id.to_s => {"amount" => "", "percentage" => "50"}
-      }
+      params = { loc1.id.to_s => "50%", loc2.id.to_s => "50%" }
 
       CodingBudgetDistrict.count.should == 0
 
@@ -34,10 +31,7 @@ describe CodingBudgetDistrict do
       loc2 = Factory.create(:location, :short_display => 'Kicukiro')
       @activity.locations << [loc1, loc2]
 
-      params = {
-        loc1.id.to_s => {"amount" => "", "percentage" => "50"},
-        loc2.id.to_s => {"amount" => "", "percentage" => "50"}
-      }
+      params = { loc1.id.to_s => "50%", loc2.id.to_s => "50%" }
 
       CodeAssignment.update_classifications(activity, params, 'CodingBudgetDistrict')
       @activity.coding_budget_district_classified?.should == true

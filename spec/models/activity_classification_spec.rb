@@ -18,7 +18,7 @@ describe Activity do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingBudget')
       activity.coding_budget_classified?.should be_true
     end
@@ -29,7 +29,7 @@ describe Activity do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingBudget')
       activity.coding_budget_classified?.should be_false
     end
@@ -52,7 +52,7 @@ describe Activity do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingBudgetCostCategorization')
       activity.coding_budget_cc_classified?.should be_true
     end
@@ -63,7 +63,7 @@ describe Activity do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingBudgetCostCategorization')
       activity.coding_budget_cc_classified?.should be_false
     end
@@ -92,7 +92,7 @@ describe Activity do
                          :project => @project, :budget => 100, :locations => [code])
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingBudgetDistrict')
       activity.coding_budget_district_classified?.should be_true
     end
@@ -103,7 +103,7 @@ describe Activity do
                          :project => @project, :budget => 100, :locations => [code])
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingBudgetDistrict')
       activity.coding_budget_district_classified?.should be_false
     end
@@ -126,7 +126,7 @@ describe Activity do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingSpend')
       activity.coding_spend_classified?.should be_true
     end
@@ -137,7 +137,7 @@ describe Activity do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingSpend')
       activity.coding_spend_classified?.should be_false
     end
@@ -161,7 +161,7 @@ describe Activity do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingSpendCostCategorization')
       activity.coding_spend_cc_classified?.should be_true
     end
@@ -172,7 +172,7 @@ describe Activity do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingSpendCostCategorization')
       activity.coding_spend_cc_classified?.should be_false
     end
@@ -203,7 +203,7 @@ describe Activity do
                          :project => @project, :spend => 100, :locations => [code])
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
+      params = {code.id.to_s => 100}
       CodeAssignment.update_classifications(activity, params, 'CodingSpendDistrict')
       activity.coding_spend_district_classified?.should be_true
     end
@@ -214,7 +214,7 @@ describe Activity do
                          :project => @project, :spend => 100, :locations => [code])
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
+      params = {code.id.to_s => 101}
       CodeAssignment.update_classifications(activity, params, 'CodingSpendDistrict')
       activity.coding_spend_district_classified?.should be_false
     end

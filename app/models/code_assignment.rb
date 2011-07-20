@@ -228,7 +228,7 @@ class CodeAssignment < ActiveRecord::Base
     # !!! CAUTION: classified amount caches are disabled
     # because it's too slow with them
     #
-    # activity.update_classified_amount_cache(klass)
+    activity.update_classified_amount_cache(klass)
   end
 
   private

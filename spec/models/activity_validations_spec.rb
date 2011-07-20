@@ -65,11 +65,7 @@ describe Activity do
 
     it "returns true when the activitys quarterly spend and budget is less than that of the projects" do
       @project  = Factory(:project, :data_response => @response,
-                          :budget => 10000, :spend => 10000,
-                          :spend_q1 => 1300, :spend_q2 => 1400,
-                          :spend_q3 => 1500, :spend_q4 => 1233,
-                          :budget_q1 => 1200,:budget_q2 => 1300,
-                          :budget_q3 => 1500,:budget_q4 => 1100)
+                          :budget => 10000, :spend => 10000)
       @activity = Factory(:activity, :data_response => @response, :project => @project,
                           :spend_q1 => 1100, :spend_q2 => 1200,
                           :spend_q3 => 1300, :spend_q4 => nil,
@@ -80,11 +76,7 @@ describe Activity do
 
     it "returns false when the activitys quarterly spend and budget is greater than that of the projects" do
       @project  = Factory(:project, :data_response => @response,
-                          :budget => 10000, :spend => 10000,
-                          :spend_q1 => 10, :spend_q2 => 10,
-                          :spend_q3 => 10, :spend_q4 => 1233,
-                          :budget_q1 => 1200,:budget_q1 => 1300,
-                          :budget_q1 => 1500,:budget_q1 => 1100)
+                          :budget => 10, :spend => 10)
       @activity = Factory(:activity, :data_response => @response, :project => @project,
                           :spend_q1 => 1100, :spend_q2 => 1200,
                           :spend_q3 => 1300, :spend_q4 => nil,

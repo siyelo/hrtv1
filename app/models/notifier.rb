@@ -17,4 +17,17 @@ class Notifier < ActionMailer::Base
     sent_on       Time.now
     body          :comment => comment
   end
+  
+  def send_user_invitation(user, inviter)
+    subject       "[Health Resource Tracker] You have been invited to HRT"
+    from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
+    recipients    user.email
+    sent_on       Time.now
+    body          :full_name => user.full_name,
+                  :org => user.organization,
+                  :invite_token => user.invite_token,
+                  :follow_me => "#{edit_registration_url}?invite_token=#{user.invite_token}",
+                  :sys_admin_org => inviter.organization ? "(#{inviter.organization.try(:name)})" : '',
+                  :inviter_name => inviter.full_name ||= inviter.email
+  end
 end

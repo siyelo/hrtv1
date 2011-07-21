@@ -9,12 +9,6 @@
       = f.input :roles, :label => 'Roles', :hint => "Assign roles to this user", :required => true, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :size => 3, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
 
   %li.last
-    %h3 Password
-    %ul.dashboard_section
-      = f.input :password, :hint => "Password of the user"
-      = f.input :password_confirmation, :hint => "Confirm the password"
-
-  %li.last
     %h3 Organizations to Manage
     %ul.dashboard_section
       = f.input :organizations, :label => 'Organizations', :hint => "Assign organizations to this Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}

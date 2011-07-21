@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
   end
 
   def district_manager?
-    role?('district_manager') || sysadmin?
+    role?('district_manager')
   end
 
   def activity_manager?

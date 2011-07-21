@@ -80,9 +80,17 @@ class User < ActiveRecord::Base
 
   #deprecated in favour of invite()
   def save_and_invite(inviter)
-    self.invite_token = generate_token
-    self.save(false)
-    send_user_invitation(inviter)
+    self.valid? ## We need to call self.valid?
+    if only_password_errors?
+      self.invite_token = generate_token
+      self.save(false) 
+      send_user_invitation(inviter)
+    end
+  end
+
+  def only_password_errors?
+    errors.length == errors.on(:password).to_a.length +
+      errors.on(:password_confirmation).to_a.length
   end
 
   def activate
@@ -195,12 +203,6 @@ class User < ActiveRecord::Base
 
   def current_organization
     @current_organization ||= self.current_response.organization
-  end
-
-
-  def only_password_errors?
-    errors.length == errors.on(:password).to_a.length +
-      errors.on(:password_confirmation).to_a.length
   end
 
   private

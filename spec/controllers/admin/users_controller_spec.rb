@@ -14,7 +14,7 @@ describe Admin::UsersController do
       params_from(:get, '/admin/users/1/edit').should == {:controller => "admin/users",
         :id => "1", :action => "edit"}
     end
-    it "DELETE with /organization/users/1" do
+    it "DELETE with /admin/users/1" do
       params_from(:delete, "/admin/users/1").should == {:controller => "admin/users",
         :id => "1", :action => "destroy"}
     end
@@ -28,14 +28,14 @@ describe Admin::UsersController do
       login @sysadmin
     end
 
-    it "GET /organizations/users should find all users in the org" do
+    it "GET /admin/users should find all users in the org" do
       #activate_authlogic
       @request.env['HTTP_REFERER'] = 'http://localhost:3000/admin/users'
       get :index
       response.should be_success
     end
 
-    it "POST /organizations/users should create a user in the org" do
+    it "POST /admin/users should create a user in the org" do
       params = {:full_name => 'bob rob', :email =>  'bob@siyelo.com', :role => ['reporter']}
       post :create, :user => params
       response.should be_success

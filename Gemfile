@@ -11,6 +11,8 @@ gem 'formtastic', "= 1.2.3"
 gem 'haml'
 gem 'hoptoad_notifier'
 
+gem 'hitch'
+
 # grr - money 3.5 depends on i18n 0.4+
 # but 0.3.3 seems to solve the {{errors}} issue
 #gem 'i18n', "= 0.3.3" #see https://github.com/svenfuchs/i18n/issues/71

@@ -44,6 +44,23 @@ describe User do
       user.errors.on(:roles).should include('is not included in the list')
     end
   end
+  
+  describe "save and invite" do
+    before :each do
+      @sysadmin = Factory(:sysadmin)
+    end
+    it "does not send an invite if the user is not valid" do
+      @user = Factory.build(:reporter, :email => nil, :full_name => nil, :organization => nil)
+      @user.save_and_invite(@sysadmin).should be_nil
+      User.count.should == 1
+    end
+    
+    it "sends an invite if hte user is valid" do 
+      @user = Factory.build(:reporter)
+      @user.save_and_invite(@sysadmin).should be_true
+      User.count.should == 2
+    end
+  end
 
   describe "Callbacks" do
     before :each do

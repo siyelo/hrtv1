@@ -111,7 +111,7 @@ describe Organization do
       organization.should_not be_valid
     end
   end
-  
+
   describe "Named Scopes" do
     before :each do
       @request1 = Factory(:data_request)
@@ -119,32 +119,32 @@ describe Organization do
       @org = Factory(:organization, :name => "Responder Organization")
       @response = @org.responses.find_by_data_request_id(@request1.id)
     end
-    
-    it "should find submitted responses" do 
+
+    it "should find submitted responses" do
       @response.submitted = true
       @response.save(false)
       Organization.with_submitted_responses_for(@request1).should == [@org]
       Organization.with_submitted_for_final_responses_for(@request1).should_not == [@org]
       Organization.with_complete_responses_for(@request1).should_not == [@org]
     end
-    
+
     it "should find submitted for final review responses" do
       @response.submitted_for_final = true
       @response.save(false)
       Organization.with_submitted_for_final_responses_for(@request1).should == [@org]
       Organization.with_complete_responses_for(@request1).should_not == [@org]
     end
-    
+
     it "should find completed responses" do
       @response.complete = true
       @response.save(false)
       Organization.with_complete_responses_for(@request1).should == [@org]
     end
-    
+
     it "should find empty responses" do
       Organization.with_empty_responses_for(@request1).should have(3).items
     end
-    
+
     it "should find in progress responses (i.e. at least one activity) " do
       @project = Factory(:project, :data_response => @response)
       @activity = Factory(:activity, :project => @project, :data_response => @response)
@@ -153,17 +153,47 @@ describe Organization do
   end
 
   describe "Callbacks" do
-    # after_create :create_data_responses
-    it "creates data_responses for each data_request after organization is created" do
-      org0 = Factory(:organization, :name => "Requester Organization")
-      data_request1 = Factory(:data_request, :organization => org0)
-      data_request2 = Factory(:data_request, :organization => org0)
+    context "when there is a data_request in the system" do
+      # after_create :create_data_responses
+      it "creates data_responses for each data_request after organization is created" do
+        org_requester = Factory(:organization)
+        data_request1 = Factory(:data_request, :organization => org_requester)
+        data_request2 = Factory(:data_request, :organization => org_requester)
 
-      organizations = Factory(:organization, :name => "Responder Organization")
+        organization = Factory(:organization)
 
-      data_requests = organizations.data_responses.map(&:data_request)
-      data_requests.should include(data_request1)
-      data_requests.should include(data_request2)
+        data_requests = organization.data_responses.map(&:data_request)
+        data_requests.should include(data_request1)
+        data_requests.should include(data_request2)
+      end
+
+      it "does not create data_responses for Non-Reporting organizations" do
+        org_requester = Factory(:organization)
+        Factory(:data_request, :organization => org_requester)
+
+        organization = Factory(:organization, :raw_type => 'Non-Reporting')
+        organization.data_responses.should be_empty
+      end
+    end
+
+    context "when there is no a data_request in the system" do
+      # after_create :create_data_responses
+      it "creates data_responses for each data_request after organization is created" do
+        org_requester = Factory(:organization)
+        data_request1 = Factory(:data_request, :organization => org_requester)
+        data_request2 = Factory(:data_request, :organization => org_requester)
+
+        data_requests = org_requester.data_responses.map(&:data_request)
+        data_requests.should include(data_request1)
+        data_requests.should include(data_request2)
+      end
+
+      it "does not create data_responses for Non-Reporting organizations" do
+        org_requester = Factory(:organization, :raw_type => 'Non-Reporting')
+        Factory(:data_request, :organization => org_requester)
+
+        org_requester.data_responses.should be_empty
+      end
     end
   end
 
@@ -412,11 +442,26 @@ describe Organization do
       Organization.without_users.should == [requestor, org2]
     end
 
-    it "should order organizations by name" do
+    it "order organizations by name" do
       org1 = Factory(:organization, :name => 'Org2')
       org2 = Factory(:organization, :name => 'Org1')
 
       Organization.ordered.should == [org2, org1]
+    end
+
+    context "reporting & nonreporting" do
+      before :each do
+        @org1 = Factory(:organization, :raw_type => 'Bilateral')
+        @org2 = Factory(:organization, :raw_type => 'Non-Reporting')
+      end
+
+      it "returns reporting organizations" do
+        Organization.reporting.should == [@org1]
+      end
+
+      it "returns reporting organizations" do
+        Organization.nonreporting.should == [@org2]
+      end
     end
   end
 
@@ -468,6 +513,12 @@ describe Organization do
       @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
       @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
       @org.user_emails(1).should == ['reporter@org.com']
+    end
+  end
+
+  describe "organization types" do
+    it "includes 'Non-Reporting' type" do
+      Organization::ORGANIZATION_TYPES.should include('Non-Reporting')
     end
   end
 end

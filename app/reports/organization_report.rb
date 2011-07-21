@@ -21,7 +21,7 @@ class Reports::OrganizationReport
     ca2_type = (type == 'district') ? 'CodingBudgetDistrict' : 'CodingBudget'
     code_ids = code_ids.join(',')
 
-    scope = ::Organization.scoped({
+    scope = ::Organization.reporting.scoped({
       :select => "organizations.id,
                   organizations.name,
                   COALESCE(SUM(ca_spent_sum),0) AS spent_sum_raw,
@@ -53,7 +53,7 @@ class Reports::OrganizationReport
 
 
     if type == 'district'
-      organizations = Organization.find(:all,
+      organizations = Organization.reporting.find(:all,
                         :select => 'DISTINCT(organizations.id)',
                         :joins => {:data_responses => {:activities => :code_assignments}},
                         :conditions => ['code_assignments.code_id = ?', options[:code_ids].first])
@@ -83,7 +83,7 @@ class Reports::OrganizationReport
     ca_type = (type == 'district') ? 'CodingSpendDistrict' : 'CodingSpend'
     code_ids = code_ids.join(',')
 
-    scope = ::Organization.scoped({
+    scope = ::Organization.reporting.scoped({
       :select => "organizations.id,
                   organizations.name,
                   SUM(ca1.cached_amount_in_usd) AS spent_sum_raw",

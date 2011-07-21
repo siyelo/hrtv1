@@ -7,7 +7,7 @@ class Reports::MapFacilitiesByPartner
     @is_budget = is_budget?(type)
 
     #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
-    @organizations   = Organization.all(:conditions => ["fosaid is not null"])
+    @organizations   = Organization.reporting.all(:conditions => ["fosaid is not null"])
     prepare_districts_hash
   end
 

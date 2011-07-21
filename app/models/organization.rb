@@ -5,10 +5,13 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
-     "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO",
-     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
-     "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
+  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue",
+    "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
+    "District Hospital", "Government", "Govt Insurance", "Health Center",
+    "Health Post", "International NGO", "Local NGO", "MOH central",
+    "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
+    "Non-Reporting", "Other ministries", "Parastatal", "Prison Clinic",
+    "RBC institutions"]
 
   def usg_fiscal_year
     year = Date.today.strftime('%Y').to_i
@@ -69,50 +72,51 @@ class Organization < ActiveRecord::Base
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
   # works only on postgres
   #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
-  
-  named_scope :with_submitted_responses_for, lambda { |request|    
+
+  named_scope :with_submitted_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND 
-                                 data_responses.submitted = ? AND 
-                                 (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND 
+                 :conditions => ["data_responses.data_request_id = ? AND
+                                 data_responses.submitted = ? AND
+                                 (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND
                                  (data_responses.complete IS NULL OR data_responses.complete = ?)",
                                   request.id, true, false, false]} }
 
-  named_scope :with_submitted_for_final_responses_for, lambda { |request|    
+  named_scope :with_submitted_for_final_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND 
-                                 data_responses.submitted_for_final = ? AND  
+                 :conditions => ["data_responses.data_request_id = ? AND
+                                 data_responses.submitted_for_final = ? AND
                                  (data_responses.complete IS NULL OR data_responses.complete = ?)",
-                                  request.id, true, false]} }         
-                                  
-  named_scope :with_complete_responses_for, lambda { |request|    
+                                  request.id, true, false]} }
+
+  named_scope :with_complete_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND 
+                 :conditions => ["data_responses.data_request_id = ? AND
                                  data_responses.complete = ?",
-                                  request.id, true]} }      
-                                  
-  named_scope :with_empty_responses_for, lambda { |request| 
+                                  request.id, true]} }
+
+  named_scope :with_empty_responses_for, lambda { |request|
                 {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
                              LEFT JOIN activities ON data_responses.id = activities.data_response_id
                              LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
                              LEFT JOIN projects ON data_responses.id = projects.data_response_id"],
                  :conditions => ["activities.data_response_id IS NULL AND
                                   funding_flows.data_response_id IS NULL AND
-                                  projects.data_response_id IS NULL AND 
+                                  projects.data_response_id IS NULL AND
                                   data_responses.data_request_id = ?", request.id],
-                 :from => ["organizations"]}}           
-  
-  named_scope :with_in_progress_responses_for, lambda { |request| 
+                 :from => ["organizations"]}}
+
+  named_scope :with_in_progress_responses_for, lambda { |request|
                  {:conditions => ["organizations.id in (
-                     SELECT organizations.id 
+                     SELECT organizations.id
                        FROM organizations
                   LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
                   INNER JOIN projects ON data_responses.id = projects.data_response_id
                   INNER JOIN activities ON data_responses.id = activities.data_response_id
                       WHERE data_responses.data_request_id = ? AND
-                            (data_responses.submitted IS NULL OR 
+                            (data_responses.submitted IS NULL OR
                             data_responses.submitted = ?))", request.id, false]}}
-
+  named_scope :reporting, :conditions => "raw_type != 'Non-Reporting'"
+  named_scope :nonreporting, :conditions => "raw_type = 'Non-Reporting'"
 
   def self.with_users
     find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
@@ -296,18 +300,6 @@ class Organization < ActiveRecord::Base
     response_for(request).status
   end
 
-  def create_data_responses
-    DataRequest.all.each do |data_request|
-      dr = self.data_responses.find(:first,
-                :conditions => {:data_request_id => data_request.id})
-      unless dr
-        dr = self.data_responses.new
-        dr.data_request = data_request
-        dr.save!
-      end
-    end
-  end
-
   protected
 
     def tidy_name(n)
@@ -332,17 +324,20 @@ class Organization < ActiveRecord::Base
       errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
     end
 
-
+    def create_data_responses
+      if raw_type != 'Non-Reporting'
+        DataRequest.all.each do |data_request|
+          dr = self.data_responses.find(:first,
+                    :conditions => {:data_request_id => data_request.id})
+          unless dr
+            dr = self.data_responses.new
+            dr.data_request = data_request
+            dr.save!
+          end
+        end
+      end
+    end
 end
-
-
-
-
-
-
-
-
-
 
 # == Schema Information
 #

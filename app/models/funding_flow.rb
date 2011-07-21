@@ -25,7 +25,6 @@ class FundingFlow < ActiveRecord::Base
   alias :response :data_response
   alias :response= :data_response=
 
-
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations

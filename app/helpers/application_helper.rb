@@ -250,7 +250,7 @@ module ApplicationHelper
   end
 
   def funding_organizations_select
-    orgs = Organization.find(:all, :order => 'old_type, lower(name)')
+    orgs = Organization.find(:all, :order => 'lower(name)')
     orgs.map{|o| [o.display_name(100), o.id]}
   end
 

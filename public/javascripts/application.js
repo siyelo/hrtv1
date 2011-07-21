@@ -1560,6 +1560,13 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
       } else {
         $(".organizations").hide().css('visibility', 'hidden');
       }
+   
+      var dm_selected = $('#user_roles option[value="district_manager"]:selected').length > 0;
+      if (element.val() && dm_selected) {
+        $(".locations").show().css('visibility', 'visible');
+      } else {
+        $(".locations").hide().css('visibility', 'hidden');
+      }
     };
 
     // choose either the full version

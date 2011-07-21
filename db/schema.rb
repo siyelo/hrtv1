@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721120922) do
+ActiveRecord::Schema.define(:version => 20110721151712) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -128,9 +128,12 @@ ActiveRecord::Schema.define(:version => 20110721120922) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
-  create_table "currencies", :force => true do |t|
-    t.string   "conversion"
-    t.float    "rate"
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -181,15 +184,6 @@ ActiveRecord::Schema.define(:version => 20110721120922) do
     t.string   "name"
     t.integer  "population"
     t.integer  "old_location_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -260,13 +254,9 @@ ActiveRecord::Schema.define(:version => 20110721120922) do
     t.integer "project_id"
   end
 
-  create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "comments_count", :default => 0
+  create_table "locations_users", :id => false, :force => true do |t|
+    t.integer "location_id"
+    t.integer "user_id"
   end
 
   create_table "organizations", :force => true do |t|

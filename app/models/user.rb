@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
-  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
+  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers 
+  has_and_belongs_to_many :locations
 
   ### Validations
   validates_presence_of :full_name, :email, :organization_id

@@ -18,6 +18,11 @@
     %ul.dashboard_section
       = f.input :organizations, :label => 'Organizations', :hint => "Assign organizations to this Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
 
+  %li.last
+    %h3 Locations to Manage
+    %ul.dashboard_section
+      = f.input :locations, :as => :check_boxes, :label => "Locations worked in", :hint => 'Please indicate all the districts in which this activity was implemented. If this activity had a national focus and did not target any districts specifically, select "National Level" from the list to the left.', :collection => Location.all, :required => false
+
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"
 

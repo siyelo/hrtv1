@@ -32,3 +32,4 @@ end
 
 require 'array_extensions'
 require 'version'
+load 'currencies_load_script.rb'

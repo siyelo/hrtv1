@@ -50,13 +50,6 @@ module CurrencyHelper
       return prios + all_currencies
     end
     
-    def reload_currencies
-      @cur = Currency.conversion_and_rate
-      currency_config     = Currency.special_yaml(@cur)
-      # currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
-      Money.default_bank.import_rates(:yaml, currency_config)
-    end
-
     protected
 
       def load_currencies_in_order

@@ -1,0 +1,6 @@
+- f.inputs :class => 'wrap-80 inputs' do
+  = f.input :from, :label => 'From', :hint => 'From currency'
+  = f.input :to, :label => 'To', :hint => 'To currency'
+  = f.input :rate, :label => 'Rate', :hint => 'What is the conversion rate'
+  
+= f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}, :button_html => {:class => "next"}

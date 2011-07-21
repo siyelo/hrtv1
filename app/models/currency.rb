@@ -1,18 +1,25 @@
 class Currency < ActiveRecord::Base
   
-  include CurrencyHelper
   after_save :reload_currencies
   attr_accessor :to, :from
-  
-  validates_numericality_of :rate
+  validates_uniqueness_of :conversion
   
   def self.special_yaml(currencies)
-    yaml = "---\n"
+    yaml = "--- \n"
     currencies.each do |c|
       yaml += "#{c.conversion}: #{c.rate}\n"
     end
     yaml
   end
+  
+  private
+  
+    def reload_currencies
+      @cur = Currency.all
+      currency_config     = Currency.special_yaml(@cur)
+      # currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
+      Money.default_bank.import_rates(:yaml, currency_config)
+    end
   
 end
 

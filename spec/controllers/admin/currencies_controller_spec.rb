@@ -15,9 +15,9 @@ describe Admin::CurrenciesController do
   
   describe "Updating the currency" do
     it "updates the default bank when the currency is updated" do
-      Money.default_bank.get_rate("MEH", "BLEH").should raise_error(Money::Currency::UnknownCurrency)
-      post :create, :from => "MEH", :to => "BLEH", :rate => 99
-      Money.default_bank.get_rate("MEH", "BLEH").should == 99.0
+      pending
+      post :create, :currency => {:from => "UZS", :to => "VEF", :rate => 99}
+      Money.default_bank.get_rate("UZS", "VEF").should == 99.0
     end
   end
 end

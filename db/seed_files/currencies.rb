@@ -1,4 +1,5 @@
 require 'yaml'
+require 'currency_helper'
 file = YAML.load_file "#{RAILS_ROOT}/db/seed_files/currencies.yml"
 puts "Importing currencies to the database\n"
 file.each { |currency| 

@@ -9,8 +9,9 @@ describe User do
     it { should allow_mass_assignment_of(:password_confirmation) }
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:organization) }
-    it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:roles) }
+    it { should allow_mass_assignment_of(:organization_ids) }
+    it { should allow_mass_assignment_of(:location_ids) }
   end
 
   describe "Associations" do
@@ -19,6 +20,7 @@ describe User do
     it { should belong_to :organization }
     it { should belong_to :current_response }
     it { should have_and_belong_to_many :organizations }
+    it { should have_and_belong_to_many :locations }
   end
 
   describe "Validations" do
@@ -36,7 +38,7 @@ describe User do
       user.save
       user.errors.on(:roles).should include('is not included in the list')
     end
-    
+
     it "cannot assign unexisting role" do
       user = Factory.build(:reporter, :roles => ['admin123'])
       user.save
@@ -47,21 +49,20 @@ describe User do
   describe "save and invite" do
     before :each do
       @sysadmin = Factory(:sysadmin)
-      
+
     end
     it "does not send an invite if the user is not valid" do
       @user = Factory.build(:reporter, :email => nil, :full_name => nil, :organization => nil)
       @user.save_and_invite(@sysadmin).should be_nil
       User.all.count.should == 1
     end
-    
-    it "sends an invite if hte user is valid" do 
+
+    it "sends an invite if hte user is valid" do
       @user = Factory.build(:reporter)
       @user.save_and_invite(@sysadmin).should be_true
       User.count.should == 2
     end
   end
-
 
   describe "Callbacks" do
     before :each do

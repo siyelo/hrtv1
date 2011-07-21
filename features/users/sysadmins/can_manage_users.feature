@@ -39,7 +39,6 @@ Feature: Admin can manage users
       And I should not see "pink.panter1"
       And I should not see "pink.panter2"
 
-      @run
   Scenario Outline: Admin can CRUD users and see errors
     When I follow "Users"
       And I follow "Create User"
@@ -48,7 +47,6 @@ Feature: Admin can manage users
       And I fill in "Full name" with "<name>"
       And I select "<roles>" from "Role"
       And I press "Create New User"
-      Then show me the page
       Then I should see "Oops, we couldn't save your changes."
       And I should see "<message>"
 
@@ -145,7 +143,7 @@ Feature: Admin can manage users
         | Organization | 3      | organization2    | organization3    |
 
 
-  Scenario: An admin can create Activity Manager and set organizations for managing
+  Scenario: An admin can create Activity Manager and assign organizations for managing
     Given an organization exists with name: "organization2"
       And an user exists with organization: the organization
       And an organization exists with name: "organization3"
@@ -163,3 +161,21 @@ Feature: Admin can manage users
     When I follow "Pink Panter"
     Then the "Organizations" combobox should contain "organization2"
       And the "Organizations" combobox should contain "organization3"
+
+
+  Scenario: An admin can create District Manager and assign districts for managing
+    Given a location exists with short_display: "district1"
+      And a location exists with short_display: "district2"
+    When I follow "Users"
+      And I follow "Create User"
+      And I select "organization1" from "Organization"
+      And I fill in "Email" with "pink.panter1@hrtapp.com"
+      And I fill in "Full name" with "Pink Panter"
+      And I select "Activity manager" from "Role"
+      And I select "district1" from "Districts"
+      And I select "district2" from "Districts"
+      And I press "Create New User"
+    Then I should see "User was successfully created"
+    When I follow "Pink Panter"
+    Then the "Districts" combobox should contain "district1"
+      And the "Districts" combobox should contain "district2"

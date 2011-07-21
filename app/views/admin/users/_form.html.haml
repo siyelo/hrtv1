@@ -18,6 +18,11 @@
     %ul.dashboard_section
       = f.input :organizations, :label => 'Organizations', :hint => "Assign organizations to this Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
 
+  %li.last
+    %h3 Districts to Manage
+    %ul.dashboard_section
+      = f.input :locations, :label => "Districts", :hint => 'Assign districts to this district manager to manage', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC'), :required => false, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
+
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"
 

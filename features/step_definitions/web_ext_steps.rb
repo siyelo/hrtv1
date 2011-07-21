@@ -64,3 +64,7 @@ Then /^"([^"]*)" should( not)? be an option for "([^"]*)"(?: within "([^\"]*)")?
     field_labeled(field).find(:xpath, ".//option[text() = '#{value}']").send(expectation, be_present)
   end
 end
+
+Then /^the "([^"]*)" combobox should contain "([^"]*)"$/ do |label, value|
+  find_field(label).value.should include(value)
+end

@@ -10,7 +10,7 @@ Feature: Admin can manage users
     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And I am signed in as "sysadmin@hrtapp.com"
 
-    
+
   Scenario: Admin can CRUD users
     When I follow "Users"
       And I follow "Create User"
@@ -24,7 +24,7 @@ Feature: Admin can manage users
       And I should see "organization1"
       And I should see "pink.panter1@hrtapp.com"
       And I should see "Pink Panter"
-    
+
     When I follow "Pink Panter"
 
       And I fill in "Email" with "pink.panter2@hrtapp.com"
@@ -52,11 +52,11 @@ Feature: Admin can manage users
       Then I should see "Oops, we couldn't save your changes."
       And I should see "<message>"
 
-      Examples:                                                                            
-         | organization  | email         | name | roles    |message                     |  
-         |               | pp@hrtapp.com | P    | Reporter |Organization can't be blank |  
-         | organization1 |               | P    | Reporter |Email can't be blank        |  
-                                                            
+      Examples:
+         | organization  | email         | name | roles    |message                     |
+         |               | pp@hrtapp.com | P    | Reporter |Organization can't be blank |
+         | organization1 |               | P    | Reporter |Email can't be blank        |
+
 
   Scenario: Adding malformed CSV file doesn't throw exception
     When I follow "Users"
@@ -143,3 +143,23 @@ Feature: Admin can manage users
         | Full Name    | 1      | Full name 1      | Full name 2      |
         | Email        | 2      | user2@hrtapp.com | user1@hrtapp.com |
         | Organization | 3      | organization2    | organization3    |
+
+
+  Scenario: An admin can create Activity Manager and set organizations for managing
+    Given an organization exists with name: "organization2"
+      And an user exists with organization: the organization
+      And an organization exists with name: "organization3"
+      And an user exists with organization: the organization
+    When I follow "Users"
+      And I follow "Create User"
+      And I select "organization1" from "Organization"
+      And I fill in "Email" with "pink.panter1@hrtapp.com"
+      And I fill in "Full name" with "Pink Panter"
+      And I select "Activity manager" from "Role"
+      And I select "organization2" from "Organizations"
+      And I select "organization3" from "Organizations"
+      And I press "Create New User"
+    Then I should see "User was successfully created"
+    When I follow "Pink Panter"
+    Then the "Organizations" combobox should contain "organization2"
+      And the "Organizations" combobox should contain "organization3"

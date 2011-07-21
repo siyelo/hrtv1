@@ -3,15 +3,18 @@ class DashboardController < ApplicationController
 
   ### Filters
   before_filter :require_user
-  before_filter :warn_if_not_current_request
   before_filter :load_comments
-  before_filter :load_requests
 
   ### Public Methods
 
   # Load the dashboard with any special conditions detected by user type
   def index
     load_activity_manager if current_user.activity_manager?
+
+    unless current_user.district_manager?
+      warn_if_not_current_request
+      load_requests
+    end
   end
 
   protected
@@ -43,6 +46,8 @@ class DashboardController < ApplicationController
         dr_ids = current_user.organizations.map{|o| o.data_responses.map{|dr| dr.id }}.flatten
         dr_ids += current_user.organization.data_responses.map{|dr| dr.id }
         @comments  = Comment.on_all(dr_ids).limit(COMMENT_LIMIT)
+      elsif current_user.district_manager?
+        @comments = [] # TODO: change this for DM comments
       else
         @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).limit(COMMENT_LIMIT)
       end

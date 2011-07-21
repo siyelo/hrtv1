@@ -6,9 +6,11 @@
         %a{:href => dashboard_path}
           %span Home
 
-      - if current_user.admin? && is_admin_controller
+      - if current_user.sysadmin? && is_admin_controller
         - %w(organizations reports users requests codes).each do |tab|
           = build_admin_nav_tab(tab)
+      - elsif current_user.district_manager?
+        // TODO: add menu for DM
       - else
         %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
           = link_to 'Projects', response_projects_path(current_or_last_response)

@@ -6,10 +6,10 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
     data_request_id    = current_user.current_data_response.data_request.id
     @organizations     = Reports::OrganizationReport.top_by_spent_and_budget({
                          :data_request_id => data_request_id,
-                         :per_page => 25, 
-                         :page => params[:page], 
+                         :per_page => 25,
+                         :page => params[:page],
                          :sort => params[:sort],
-                         :code_ids => [@location.id], 
+                         :code_ids => [@location.id],
                          :type => 'district'})
     @spent_pie_values  = Charts::DistrictPies::organizations(@location, "CodingSpendDistrict", data_request_id)
     @budget_pie_values = Charts::DistrictPies::organizations(@location, "CodingBudgetDistrict", data_request_id)
@@ -17,7 +17,7 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
 
   def show
     data_request_id    = current_user.current_data_response.data_request.id
-    @organization = Organization.find(params[:id])
+    @organization = Organization.reporting.find(params[:id])
     @treemap      = params[:chart_type] == "treemap"
     @pie          = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type     = get_code_type_and_initialize(params[:code_type])

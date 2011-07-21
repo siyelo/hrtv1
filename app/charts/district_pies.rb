@@ -6,7 +6,7 @@ module Charts::DistrictPies
 
     ### admin/district/:id/organizations
     def organizations(location, code_type, request_id)
-      records = Organization.find :all,
+      records = Organization.reporting.find :all,
         :select => "organizations.id,
           organizations.name,
           SUM(ca1.cached_amount_in_usd) as value",
@@ -30,10 +30,10 @@ module Charts::DistrictPies
         :select => "organizations.id,
           organizations.name,
           SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON 
+        :joins => "INNER JOIN organizations ON
                     funding_streams.organization_ufs_id = organizations.id
                    INNER JOIN projects ON projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON 
+                   INNER JOIN data_responses ON
                     data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
                    INNER JOIN activities ON activities.project_id = projects.id
                    INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
@@ -50,10 +50,10 @@ module Charts::DistrictPies
         :select => "organizations.id,
           organizations.name,
           SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON 
+        :joins => "INNER JOIN organizations ON
                     funding_streams.organization_fa_id = organizations.id
                    INNER JOIN projects ON projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON 
+                   INNER JOIN data_responses ON
                     data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
                    INNER JOIN activities ON activities.project_id = projects.id
                    INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
@@ -71,7 +71,7 @@ module Charts::DistrictPies
           organizations.name,
           SUM(funding_streams.#{amount_type}_in_usd) as value",
         :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON 
+                   INNER JOIN data_responses ON
                     data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
                    INNER JOIN activities ON activities.project_id = projects.id
                    INNER JOIN organizations ON activities.provider_id = organizations.id
@@ -105,7 +105,7 @@ module Charts::DistrictPies
                    activities.name,
                    code_assignments.id',
         :order => 'value DESC')
-        
+
       prepare_activities_pie_values(spent_codings)
     end
 
@@ -121,10 +121,10 @@ module Charts::DistrictPies
       column_name = get_hssp2_column_name(code_type)
       coding_type = get_hssp2_coding_type(is_spent)
       district_klass = is_spent ? CodingSpendDistrict : CodingBudgetDistrict
-      
+
       if activities == nil
         # district all activities
-        activity_ids = location.code_assignments.find(:all, 
+        activity_ids = location.code_assignments.find(:all,
                          :select => 'DISTINCT("activity_id")').map(&:activity_id)
       else
         # district selected activities
@@ -138,7 +138,7 @@ module Charts::DistrictPies
                     codes.#{column_name} AS name,
                     SUM(code_assignments.cached_amount) AS value",
         :conditions => ["code_assignments.type = ?
-                        AND activities.id IN (?)", 
+                        AND activities.id IN (?)",
                         coding_type, activity_ids],
         :joins => "INNER JOIN codes ON
                             codes.id = code_assignments.code_id
@@ -151,7 +151,7 @@ module Charts::DistrictPies
                           INNER JOIN data_requests ON
                            data_requests.id = data_responses.data_request_id AND
                            data_requests.id = #{data_request_id}",
-                           
+
         :group => "codes.short_display, codes.id, codes.parent_id, codes.#{column_name}",
         :order => 'value DESC')
 
@@ -285,7 +285,7 @@ module Charts::DistrictPies
           :names => {:column1 => 'Activity', :column2 => 'Amount'}
         }.to_json
       end
-      
+
       def load_pie(request_id, codes, district_klass, coding_type, location)
         code_assignments = CodeAssignment.with_type(coding_type).with_code_ids(codes).with_request(request_id).select_for_pies
         district_ratio   = calculate_district_ratio(district_klass, location)

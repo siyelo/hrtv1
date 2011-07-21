@@ -93,6 +93,10 @@ class User < ActiveRecord::Base
   def reporter?
     role?('reporter') || sysadmin?
   end
+  
+  def district_manager?
+    role?('district_manager') || sysadmin?
+  end
 
   def activity_manager?
     role?('activity_manager') || sysadmin?

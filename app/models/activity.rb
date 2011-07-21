@@ -580,9 +580,9 @@ class Activity < ActiveRecord::Base
     end
 
     def strip_input_fields
-      name = name.strip if name
-      description = description.strip if description
-      provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
+      self.name = self.name.strip if self.name
+      self.description = self.description.strip if self.description
+      self.provider_mask = self.provider_mask.strip if self.provider_mask && !is_number?(self.provider_mask)
     end
 
     def get_valid_attribute_name(type)

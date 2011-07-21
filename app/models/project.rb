@@ -395,8 +395,8 @@ class Project < ActiveRecord::Base
     end
 
     def strip_leading_spaces
-      name = name.strip if name
-      description = description.strip if description
+      self.name = self.name.strip if self.name
+      self.description = self.description.strip if self.description
     end
 
     # work arround for validates_presence_of :project issue

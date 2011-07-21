@@ -15,14 +15,15 @@ class User < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
-                  :password, :password_confirmation, :roles, :tips_shown
+                  :password, :password_confirmation, :roles, :tips_shown,
+                  :organization_ids, :location_ids
 
   ### Associations
   has_many :comments, :dependent => :destroy
   has_many :data_responses, :through => :organization
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
-  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers 
+  has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
   has_and_belongs_to_many :locations
 
   ### Validations
@@ -93,7 +94,7 @@ class User < ActiveRecord::Base
   def reporter?
     role?('reporter') || sysadmin?
   end
-  
+
   def district_manager?
     role?('district_manager') || sysadmin?
   end
@@ -145,7 +146,7 @@ class User < ActiveRecord::Base
     self.valid? ## We need to call self.valid?
     if only_password_errors?
       self.invite_token = generate_token
-      self.save(false) 
+      self.save(false)
       send_user_invitation(inviter)
     end
   end

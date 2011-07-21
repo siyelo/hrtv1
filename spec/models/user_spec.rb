@@ -10,6 +10,8 @@ describe User do
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:organization) }
     it { should allow_mass_assignment_of(:roles) }
+    it { should allow_mass_assignment_of(:organization_ids) }
+    it { should allow_mass_assignment_of(:location_ids) }
   end
 
   describe "Associations" do

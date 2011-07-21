@@ -39,7 +39,6 @@ Feature: Admin can manage users
       And I should not see "pink.panter1"
       And I should not see "pink.panter2"
 
-      @run
   Scenario Outline: Admin can CRUD users and see errors
     When I follow "Users"
       And I follow "Create User"
@@ -165,7 +164,6 @@ Feature: Admin can manage users
       And the "Organizations" combobox should contain "organization3"
 
 
-      @run
   Scenario: An admin can create District Manager and assign districts for managing
     Given a location exists with short_display: "district1"
       And a location exists with short_display: "district2"

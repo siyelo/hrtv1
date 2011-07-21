@@ -21,12 +21,9 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html do
-        flash[:notice] = "User was successfully created"
-        redirect_to edit_admin_user_url(resource)
-      end
-    end
+    @user = User.new(params[:user])
+    @user.save_and_invite(current_user)
+    redirect_to admin_users_path
   end
 
   def update

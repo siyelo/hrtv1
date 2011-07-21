@@ -40,6 +40,7 @@
       %th= sortable "email"
       %th= sortable "organizations.name", "Organization"
       %th= "Role"
+      %th= "Invitation"
       %th
 
   %tbody
@@ -49,6 +50,7 @@
         %td= mail_to user.email
         %td= user.organization.try(:name)
         %td= user.roles.map{|role| role.humanize}.join(', ')
+        %td= user.invite_token.nil? ? "No pending invitation" : "1 pending"
         %td
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_user_path(user)

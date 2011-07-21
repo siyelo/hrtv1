@@ -142,9 +142,12 @@ class User < ActiveRecord::Base
   end
 
   def save_and_invite(inviter)
-    self.invite_token = generate_token
-    self.save(false)
-    send_user_invitation(inviter)
+    self.valid? ## We need to call self.valid?
+    if only_password_errors?
+      self.invite_token = generate_token
+      self.save(false) 
+      send_user_invitation(inviter)
+    end
   end
 
   def send_user_invitation(inviter)

@@ -22,8 +22,13 @@ class Admin::UsersController < Admin::BaseController
 
   def create
     @user = User.new(params[:user])
-    @user.save_and_invite(current_user)
-    redirect_to admin_users_path
+    if @user.save_and_invite(current_user)
+      flash[:notice] = "User was successfully created"
+      redirect_to admin_users_path
+    else
+      flash.now[:error] = "Sorry, we were unable to save that user"
+      render :action => 'new'
+    end
   end
 
   def update
@@ -34,6 +39,10 @@ class Admin::UsersController < Admin::BaseController
       success.html do
         flash[:notice] = "User was successfully updated"
         redirect_to edit_admin_user_url(resource)
+      end
+      failure.html do
+        flash[:error] = "Oops, we couldn't save your changes"
+        render :action => 'edit'
       end
     end
   end

@@ -10,6 +10,7 @@ Feature: Admin can manage users
     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And I am signed in as "sysadmin@hrtapp.com"
 
+    
   Scenario: Admin can CRUD users
     When I follow "Users"
       And I follow "Create User"
@@ -17,15 +18,18 @@ Feature: Admin can manage users
       And I fill in "Email" with "pink.panter1@hrtapp.com"
       And I fill in "Full name" with "Pink Panter"
       And I select "Reporter" from "Role"
-      And I fill in "Password" with "password"
-      And I fill in "Password confirmation" with "password"
       And I press "Create New User"
     Then I should see "User was successfully created"
-      And the "Organization" field should contain "organization1"
-      And the "Email" field should contain "pink.panter1@hrtapp.com"
-      And the "Full name" field should contain "Pink Panter"
+      And "pink.panter1@hrtapp.com" should receive an email
+      And I should see "organization1"
+      And I should see "pink.panter1@hrtapp.com"
+      And I should see "Pink Panter"
+    
+    When I follow "Pink Panter"
 
-    When I fill in "Email" with "pink.panter2@hrtapp.com"
+      And I fill in "Email" with "pink.panter2@hrtapp.com"
+      And I fill in "Password" with "icecream"
+      And I fill in "Password Confirmation" with "icecream"
       And I press "Update User"
     Then I should see "User was successfully updated"
       And the "Email" field should contain "pink.panter2@hrtapp.com"
@@ -35,6 +39,7 @@ Feature: Admin can manage users
       And I should not see "pink.panter1"
       And I should not see "pink.panter2"
 
+      @run
   Scenario Outline: Admin can CRUD users and see errors
     When I follow "Users"
       And I follow "Create User"
@@ -42,17 +47,16 @@ Feature: Admin can manage users
       And I fill in "Email" with "<email>"
       And I fill in "Full name" with "<name>"
       And I select "<roles>" from "Role"
-      And I fill in "Password" with "<password>"
-      And I fill in "Password confirmation" with "<password_conf>"
       And I press "Create New User"
-    Then I should see "Oops, we couldn't save your changes."
+      Then show me the page
+      Then I should see "Oops, we couldn't save your changes."
       And I should see "<message>"
 
-      Examples:
-         | organization  | email         | name | roles    | password | password_conf | message                     |
-         |               | pp@hrtapp.com | P    | Reporter | password | password      | Organization can't be blank |
-         | organization1 |               | P    | Reporter | password | password      | Email can't be blank        |
-
+      Examples:                                                                            
+         | organization  | email         | name | roles    |message                     |  
+         |               | pp@hrtapp.com | P    | Reporter |Organization can't be blank |  
+         | organization1 |               | P    | Reporter |Email can't be blank        |  
+                                                            
 
   Scenario: Adding malformed CSV file doesn't throw exception
     When I follow "Users"

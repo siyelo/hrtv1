@@ -47,7 +47,6 @@ Feature: Admin can manage users
       And I fill in "Full name" with "<name>"
       And I select "<roles>" from "Role"
       And I press "Create New User"
-      Then show me the page
       Then I should see "Oops, we couldn't save your changes."
       And I should see "<message>"
 

@@ -92,8 +92,7 @@ describe DataResponse do #validations
       funder = Factory(:funding_source, :to => @project.organization,
         :project => @project,
         :from => @funder_response.organization,
-        :project_from_id => @funder_project.id,
-        :data_response => @response )
+        :project_from_id => @funder_project.id)
       @response.projects_linked?.should == true
     end
 
@@ -106,8 +105,7 @@ describe DataResponse do #validations
     it "fails if projects not linked" do
       funder = Factory(:funding_source, :to => @project.organization,
         :project => @project,
-        :from => @funder_response.organization,
-        :data_response => @response )
+        :from => @funder_response.organization)
       @response.projects_linked?.should == false
     end
   end
@@ -127,7 +125,6 @@ describe DataResponse do #validations
         :project => @project,
         :from => @funder_org,
         :project_from_id => @funder_project.id,
-        :data_response => @response,
         :budget => 100, :spend => 80)
     end
 
@@ -223,7 +220,7 @@ describe DataResponse do #validations
 
     it "is true when budget in flow equals to project budget" do
       Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @impl_response, :project => @project, :budget => 10000)
+                     :project => @project, :budget => 10000)
       @impl_response.projects_and_funding_sources_have_matching_budgets?.should == true
     end
 
@@ -255,7 +252,7 @@ describe DataResponse do #validations
 
     it "is true when spend in flow equals to project spend" do
       Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :data_response => @impl_response, :project => @project, :spend => 10000)
+                     :project => @project, :spend => 10000)
       @impl_response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 

@@ -83,11 +83,9 @@ class DataResponse < ActiveRecord::Base
     self.find :all,
       :select => 'data_responses.*, organizations.raw_type',
       :joins => "LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                 LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
                  LEFT JOIN projects ON data_responses.id = projects.data_response_id
                  LEFT OUTER JOIN organizations ON organizations.id = data_responses.organization_id",
       :conditions => ["activities.data_response_id IS NULL AND
-                      funding_flows.data_response_id IS NULL AND
                       projects.data_response_id IS NULL AND
                       organizations.raw_type IN (?)",
                       ["Agencies", "Govt Agency", "Donors", "Donor",

@@ -97,10 +97,8 @@ class Organization < ActiveRecord::Base
   named_scope :with_empty_responses_for, lambda { |request|
                 {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
                              LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                             LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
                              LEFT JOIN projects ON data_responses.id = projects.data_response_id"],
                  :conditions => ["activities.data_response_id IS NULL AND
-                                  funding_flows.data_response_id IS NULL AND
                                   projects.data_response_id IS NULL AND
                                   data_responses.data_request_id = ?", request.id],
                  :from => ["organizations"]}}

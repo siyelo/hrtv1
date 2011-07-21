@@ -6,9 +6,12 @@
   = render 'sysadmin'
 - elsif current_user.activity_manager?
   = render 'activity_manager'
+- elsif current_user.district_manager?
+  = render 'district_manager'
 - else
   = render 'reporter'
 
-= render 'dashboard/requests'
+- unless current_user.district_manager?
+  = render 'dashboard/requests'
 
 = render 'comments/short_listing', :comments => @comments

@@ -115,6 +115,26 @@ describe User do
   end
 
   describe "roles" do
+    it "is sysadmin when has admin role" do
+      user = Factory(:user, :roles => ['admin'])
+      user.sysadmin?.should be_true
+    end
+
+    it "is reporter when has reporter role" do
+      user = Factory(:user, :roles => ['reporter'])
+      user.reporter?.should be_true
+    end
+
+    it "is activity_manager when has activity_manager role" do
+      user = Factory(:user, :roles => ['activity_manager'])
+      user.activity_manager?.should be_true
+    end
+
+    it "is district_manager when has district_manager role" do
+      user = Factory(:user, :roles => ['district_manager'])
+      user.district_manager?.should be_true
+    end
+
     it "is admin when roles_mask = 1" do
       user = Factory(:user, :roles => ['admin'])
       user.roles.should == ['admin']
@@ -155,6 +175,54 @@ describe User do
       user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager'])
       user.roles.should == ['admin', 'reporter', 'activity_manager']
       user.roles_mask.should == 7
+    end
+
+    it "is district_manager when roles_mask = 8" do
+      user = Factory(:user, :roles => ['district_manager'])
+      user.roles.should == ['district_manager']
+      user.roles_mask.should == 8
+    end
+
+    it "is admin & district_manager when roles_mask = 9" do
+      user = Factory(:user, :roles => ['admin', 'district_manager'])
+      user.roles.should == ['admin', 'district_manager']
+      user.roles_mask.should == 9
+    end
+
+    it "is reporter & district_manager when roles_mask = 10" do
+      user = Factory(:user, :roles => ['reporter', 'district_manager'])
+      user.roles.should == ['reporter', 'district_manager']
+      user.roles_mask.should == 10
+    end
+
+    it "is admin, reporter & district_manager when roles_mask = 11" do
+      user = Factory(:user, :roles => ['admin', 'reporter', 'district_manager'])
+      user.roles.should == ['admin', 'reporter', 'district_manager']
+      user.roles_mask.should == 11
+    end
+
+    it "is admin, reporter & district_manager when roles_mask = 12" do
+      user = Factory(:user, :roles => ['activity_manager', 'district_manager'])
+      user.roles.should == ['activity_manager', 'district_manager']
+      user.roles_mask.should == 12
+    end
+
+    it "is admin, activity_manager & district_manager when roles_mask = 13" do
+      user = Factory(:user, :roles => ['admin', 'activity_manager', 'district_manager'])
+      user.roles.should == ['admin', 'activity_manager', 'district_manager']
+      user.roles_mask.should == 13
+    end
+
+    it "is reporter, activity_manager & district_manager when roles_mask = 14" do
+      user = Factory(:user, :roles => ['reporter', 'activity_manager', 'district_manager'])
+      user.roles.should == ['reporter', 'activity_manager', 'district_manager']
+      user.roles_mask.should == 14
+    end
+
+    it "is admin, reporter, activity_manager & district_manager when roles_mask = 15" do
+      user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager', 'district_manager'])
+      user.roles.should == ['admin', 'reporter', 'activity_manager', 'district_manager']
+      user.roles_mask.should == 15
     end
   end
 

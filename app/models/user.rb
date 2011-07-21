@@ -93,6 +93,10 @@ class User < ActiveRecord::Base
   def reporter?
     role?('reporter') || sysadmin?
   end
+  
+  def district_manager?
+    role?('district_manager') || sysadmin?
+  end
 
   def activity_manager?
     role?('activity_manager') || sysadmin?
@@ -121,28 +125,28 @@ class User < ActiveRecord::Base
   def name_or_email
     name || email
   end
-  
+
   def generate_token
     Digest::SHA1.hexdigest("#{self.email}#{Time.now}")[24..38]
   end
-  
+
   def activate
     self.active = true
     self.invite_token = nil
-    return self.save
+    self.save
   end
 
   def only_password_errors?
     errors.length == errors.on(:password).to_a.length +
       errors.on(:password_confirmation).to_a.length
   end
-  
+
   def save_and_invite(inviter)
     self.invite_token = generate_token
     self.save(false)
     send_user_invitation(inviter)
   end
-  
+
   def send_user_invitation(inviter)
     Notifier.deliver_send_user_invitation(self, inviter)
   end
@@ -185,7 +189,7 @@ class User < ActiveRecord::Base
     end
 
     def set_current_response
-      if organization.present? && organization.data_responses.present?  
+      if organization.present? && organization.data_responses.present?
         self.current_response = organization.latest_response
       end
     end

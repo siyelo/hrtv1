@@ -15,7 +15,6 @@ class DataResponse < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
-  has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
@@ -109,7 +108,7 @@ class DataResponse < ActiveRecord::Base
 
   # TODO: spec
   def empty?
-    activities.empty? && projects.empty? && funding_flows.empty?
+    activities.empty? && projects.empty?
   end
 
   # TODO: spec

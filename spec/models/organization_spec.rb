@@ -204,7 +204,7 @@ describe Organization do
 
     it "can have many in_flows" do
       @organization.in_flows.should have(0).items
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :project => @project, :to => @organization)
       @organization.reload
       @organization.in_flows.should have(1).item
@@ -212,7 +212,7 @@ describe Organization do
 
     it "can have many out_flows" do
       @organization.out_flows.should have(0).items
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :project => @project, :from => @organization)
       @organization.reload
       @organization.out_flows.should have(1).item
@@ -220,7 +220,7 @@ describe Organization do
 
     it "can donate to a project" do
       @organization.donor_for.should have(0).items
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :project => @project, :from => @organization)
       @organization.reload
       @organization.donor_for.should have(1).item
@@ -228,7 +228,7 @@ describe Organization do
 
     it "can implement a project" do
       @organization.implementor_for.should have(0).items
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :project => @project, :to => @organization)
       @organization.reload
       @organization.implementor_for.should have(1).item
@@ -261,7 +261,7 @@ describe Organization do
 
     it "is not empty when it has in flows" do
       project = Factory(:project, :data_response => @response)
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :to => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
@@ -269,7 +269,7 @@ describe Organization do
 
     it "is not empty when it has out flows" do
       project = Factory(:project, :data_response => @response)
-      Factory(:funding_flow, :data_response => @response,
+      Factory(:funding_flow,
               :from => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
@@ -368,9 +368,9 @@ describe Organization do
     it "copies out flows from duplicate to @target" do
       project_from = Factory(:project, :data_response => @target_dr)
       project_to   = Factory(:project, :data_response => @duplicate_dr)
-      Factory(:funding_flow, :data_response => @target_dr,
+      Factory(:funding_flow,
               :from => @target, :project => project_from)
-      Factory(:funding_flow, :data_response => @duplicate_dr,
+      Factory(:funding_flow,
               :from => @duplicate, :project => project_to)
 
       @target.out_flows.count.should == 1
@@ -381,9 +381,9 @@ describe Organization do
     it "copies in flows from duplicate to @target" do
       project_from = Factory(:project, :data_response => @target_dr)
       project_to   = Factory(:project, :data_response => @duplicate_dr)
-      Factory(:funding_flow, :data_response => @target_dr,
+      Factory(:funding_flow,
               :to => @target, :project => project_from)
-      Factory(:funding_flow, :data_response => @duplicate_dr,
+      Factory(:funding_flow,
               :to => @duplicate, :project => project_to)
 
       @target.in_flows.count.should == 1

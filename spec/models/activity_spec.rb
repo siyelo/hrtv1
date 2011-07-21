@@ -140,7 +140,7 @@ describe Activity do
         basic_setup_project
         our_org   = Factory(:organization)
         other_org = Factory(:organization)
-        flow      = Factory(:funding_flow, :data_response => @response,
+        flow      = Factory(:funding_flow,
                             :from => our_org, :to => other_org, :project => @project)
         activity  = Factory(:activity, :data_response => @response,
                             :project => @project, :provider => other_org )

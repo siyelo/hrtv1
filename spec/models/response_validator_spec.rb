@@ -418,7 +418,7 @@ end
 # quick setup a spend/budget(field) with amounts (funder1, funder2)
 def setup_funders(field, amounts)
   Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-   :data_response => @response, :project => @project, field => amounts[0])
+   :project => @project, field => amounts[0])
   Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-   :data_response => @response, :project => @project, field => amounts[1])
+   :project => @project, field => amounts[1])
 end

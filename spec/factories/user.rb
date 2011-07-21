@@ -6,7 +6,8 @@ Factory.define :user, :class => User do |f|
   f.password              { 'password' }
   f.password_confirmation { 'password' }
   f.organization          { Factory(:organization) }
-  f.roles { ['reporter'] }
+  f.active                { true }
+  f.roles                 { ['reporter'] }
 end
 
 Factory.define :reporter,  :parent => :user do |f|

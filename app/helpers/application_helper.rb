@@ -45,7 +45,7 @@ module ApplicationHelper
       if current_user.admin?
         admin_reports_path
       elsif current_user.district_manager?
-        district_manager_reports_path
+        reports_district_path(current_user.location)
       elsif current_user.reporter?
         reporter_reports_path
       else

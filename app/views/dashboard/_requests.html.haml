@@ -1,5 +1,5 @@
 %h2
-  =image_tag "icon_reporter.png", :class => "heading_icon"
+  = image_tag "icon_reporter.png", :class => "heading_icon"
   Data Requests
 .dashboard_section
 
@@ -9,7 +9,7 @@
         %th Name
         %th Requested By
         %th Due
-        - unless current_user.sysadmin?
+        - if current_user.reporter?
           %th Submitted at
           %th Status
     %tbody

@@ -187,4 +187,21 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+
+    def set_current_request
+      if session[:request_id].present?
+        @current_request = DataRequest.find(session[:request_id])
+      else
+        @current_request = DataRequest.find(:first, :order => 'id DESC')
+        session[:request_id] ||= @current_request.id
+      end
+    end
+
+    def load_request
+      if current_user.district_manager?
+        set_current_request # sets @current_request
+      else
+        @current_request = current_or_last_response.data_request
+      end
+    end
 end

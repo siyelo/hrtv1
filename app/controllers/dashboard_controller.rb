@@ -10,12 +10,12 @@ class DashboardController < ApplicationController
   # Load the dashboard with any special conditions detected by user type
   def index
     load_activity_manager if current_user.activity_manager?
+    load_requests
 
     if current_user.district_manager?
       set_current_request
     else
       warn_if_not_current_request
-      load_requests
     end
   end
 
@@ -58,14 +58,5 @@ class DashboardController < ApplicationController
     # Request loading for all types of users
     def load_requests
       @requests = DataRequest.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 5
-    end
-
-    def set_current_request
-      if session[:request_id].present?
-        @current_request = DataRequest.find(session[:request_id])
-      else
-        @current_request = DataRequest.find(:first, :order => 'id DESC')
-        session[:request_id] ||= @current_request.id
-      end
     end
 end

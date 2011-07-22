@@ -20,7 +20,7 @@ describe User do
     it { should belong_to :organization }
     it { should belong_to :current_response }
     it { should have_and_belong_to_many :organizations }
-    it { should belong_to :location } 
+    it { should belong_to :location }
   end
 
   describe "Validations" do

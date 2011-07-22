@@ -3,6 +3,8 @@
 
 :javascript
   var _pie = #{@pie.to_json};
+  var _overview = #{(params[:tab] == 'overview').to_json};
+  var _funders_agents = #{(params[:tab] == 'funders_agents').to_json};
   google.load("visualization", "1", {packages: ["corechart", "treemap"]});
   var _budget_ufs_values      = #{js_safe(@budget_ufs_values)};
   var _budget_fa_values       = #{js_safe(@budget_fa_values)};
@@ -21,53 +23,58 @@
 %h1.main_heading
   = h @location.name
 
-.full
-  .third
-    %h2 Ultimate Funding Source (Expenditure)
-    #spend_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Expenditure)
-    #spend_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Expenditure)
-    #spend_i_pie.bordered
-
-.full
-  .third
-    %h2 Ultimate Funding Source (Current Budget)
-    #budget_ufs_pie.bordered
-
-  .third
-    %h2 Financing Agent (Current Budget)
-    #budget_fa_pie.bordered
-
-  .third
-    %h2 Implementer (Current Budget)
-    #budget_i_pie.bordered
 
 %ul.group
+  %li= link_to "Overview", reports_district_path(@location, :tab => "overview"), active_if(params[:tab] == 'overview')
+  %li= link_to "Funders & Agents", reports_district_path(@location, :tab => "funders_agents"), active_if(params[:tab] == 'funders_agents')
   %li= link_to "NSP", reports_district_path(@location, :code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", reports_district_path(@location, :code_type => "mtef"), active_if(@mtef)
   %li= link_to "Inputs", reports_district_path(@location, :code_type => "cost_category"), active_if(@cost_category)
-  %li= link_to "HSSP2 Strat Prog", reports_district_path(@location, :code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
-  %li= link_to "HSSP2 Strat Obj", reports_district_path(@location, :code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
+  %li= link_to "HSSP2 Strat Programme", reports_district_path(@location, :code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
+  %li= link_to "HSSP2 Strat Objective", reports_district_path(@location, :code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
 
-%ul.group
-  %li= link_to "Pie", reports_district_path(@location, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
-  - if !@hssp2_strat_prog && !@hssp2_strat_obj
-    %li= link_to "Treemap", reports_district_path(@location, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
+- if params[:tab].blank?
+  %ul.group
+    %li= link_to "Pie", reports_district_path(@location, :chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
+    - if !@hssp2_strat_prog && !@hssp2_strat_obj
+      %li= link_to "Treemap", reports_district_path(@location, :chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)
 
 
-.full
-  .first-half
-    %h2= "#{@chart_name} Expenditure"
-    #code_spent.bordered
+- if params[:tab] == 'overview'
+  .full
+    .first-half
+      %h2 Implementer (Expenditure)
+      #spend_i_pie.bordered
+    .second-half
+      %h2 Implementer (Current Budget)
+      #budget_i_pie.bordered
 
-  .second-half
-    %h2= "#{@chart_name} Current Budget"
-    #code_budget.bordered
+- elsif params[:tab] == 'funders_agents'
+  .full
+    .first-half
+      %h2 Ultimate Funding Source (Expenditure)
+      #spend_ufs_pie.bordered
+    .second-half
+      %h2 Ultimate Funding Source (Current Budget)
+      #budget_ufs_pie.bordered
+
+  .full
+    .first-half
+      %h2 Financing Agent (Expenditure)
+      #spend_fa_pie.bordered
+    .second-half
+      %h2 Financing Agent (Current Budget)
+      #budget_fa_pie.bordered
+
+- else
+  .full
+    .first-half
+      %h2= "#{@chart_name} Expenditure"
+      #code_spent.bordered
+
+    .second-half
+      %h2= "#{@chart_name} Current Budget"
+      #code_budget.bordered
 
 
 .full

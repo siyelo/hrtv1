@@ -45,7 +45,11 @@ class DashboardController < ApplicationController
         dr_ids += current_user.organization.data_responses.map{|dr| dr.id }
         @comments  = Comment.on_all(dr_ids).limit(COMMENT_LIMIT)
       elsif current_user.district_manager?
-        @comments = [] # TODO: change this for DM comments
+        activity_ids = current_user.location.code_assignments.find(:all,
+          :select => "DISTINCT(code_assignments.activity_id)").map{|a| a.activity_id}
+        @comments = Comment.limit(COMMENT_LIMIT).find(:all,
+                       :conditions => ["comments.commentable_type = 'Activity'
+                                       AND comments.commentable_id IN (?)", activity_ids])
       else
         @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).limit(COMMENT_LIMIT)
       end

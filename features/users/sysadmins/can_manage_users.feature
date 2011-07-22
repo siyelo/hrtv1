@@ -162,20 +162,17 @@ Feature: Admin can manage users
     Then the "Organizations" combobox should contain "organization2"
       And the "Organizations" combobox should contain "organization3"
 
-
+      @run
   Scenario: An admin can create District Manager and assign districts for managing
     Given a location exists with short_display: "district1"
-      And a location exists with short_display: "district2"
     When I follow "Users"
       And I follow "Create User"
       And I select "organization1" from "Organization"
       And I fill in "Email" with "pink.panter1@hrtapp.com"
       And I fill in "Full name" with "Pink Panter"
       And I select "Activity manager" from "Role"
-      And I select "district1" from "Districts"
-      And I select "district2" from "Districts"
+      And I select "district1" from "District"
       And I press "Create New User"
     Then I should see "User was successfully created"
     When I follow "Pink Panter"
-    Then the "Districts" combobox should contain "district1"
-      And the "Districts" combobox should contain "district2"
+    Then the "District" combobox should contain "district1"

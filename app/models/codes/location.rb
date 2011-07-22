@@ -32,7 +32,7 @@ class Location < Code
                 :order => "short_display ASC",
                 :include => :district,
                 :group => "codes.id, codes.short_display, codes.type"
-                
+
               }}
 
 end

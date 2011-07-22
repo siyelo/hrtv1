@@ -11,7 +11,7 @@ describe User do
     it { should allow_mass_assignment_of(:organization) }
     it { should allow_mass_assignment_of(:roles) }
     it { should allow_mass_assignment_of(:organization_ids) }
-    it { should allow_mass_assignment_of(:location_ids) }
+    it { should allow_mass_assignment_of(:location_id) }
   end
 
   describe "Associations" do
@@ -20,7 +20,7 @@ describe User do
     it { should belong_to :organization }
     it { should belong_to :current_response }
     it { should have_and_belong_to_many :organizations }
-    it { should have_and_belong_to_many :locations }
+    it { should belong_to :location } 
   end
 
   describe "Validations" do

@@ -20,7 +20,7 @@ describe User do
     it { should belong_to :organization }
     it { should belong_to :current_response }
     it { should have_and_belong_to_many :organizations }
-    it { should belong_to :location } 
+    it { should belong_to :location }
   end
 
   describe "Validations" do
@@ -173,7 +173,7 @@ describe User do
     end
 
     it "is district_manager when has district_manager role" do
-      org  = Factory(:nonreporting)
+      org  = Factory(:nonreporting_organization)
       user = Factory(:user, :roles => ['district_manager'], :organization => org)
       user.district_manager?.should be_true
     end
@@ -221,7 +221,7 @@ describe User do
     end
 
     it "is district_manager when roles_mask = 8" do
-      org  = Factory(:nonreporting)
+      org  = Factory(:nonreporting_organization)
       user = Factory(:user, :roles => ['district_manager'], :organization => org)
       user.roles.should == ['district_manager']
       user.roles_mask.should == 8
@@ -307,6 +307,35 @@ describe User do
 
     it "returns the associated request" do
       @user.current_request.should == @response.request
+    end
+  end
+
+  describe "#change_current_response!" do
+    before :each do
+      organization    = Factory(:organization)
+      @data_request1  = Factory(:data_request, :organization => organization)
+      @user           = Factory(:reporter, :organization => organization)
+      @data_request2  = Factory(:data_request, :organization => organization)
+      @data_response1 = organization.responses.find(:first,
+                          :conditions => ["data_request_id = ?", @data_request1.id])
+      @data_response2 = organization.responses.find(:first,
+                          :conditions => ["data_request_id = ?", @data_request2.id])
+
+      @user.current_response.should == @data_response1
+    end
+
+    context "when data request id exists" do
+      it "changes current_response" do
+        @user.change_current_response!(@data_request2.id)
+        @user.current_response.should == @data_response2
+      end
+    end
+
+    context "when data request id does not exists" do
+      it "does not change current_response" do
+        @user.change_current_response!('a')
+        @user.current_response.should == @data_response1
+      end
     end
   end
 end

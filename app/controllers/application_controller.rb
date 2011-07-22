@@ -58,7 +58,11 @@ class ApplicationController < ActionController::Base
     end
 
     def current_request
-      current_user.current_request
+      if current_user.district_manager?
+        district_manager_current_request
+      else
+        current_user.current_request
+      end
     end
 
     def require_user
@@ -188,19 +192,33 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def change_user_current_response(new_request_id)
-      user = current_user
-      response = user.responses.find_by_data_request_id(new_request_id)
-      if response
-        user.data_response_id_current = response.id
-        if user.save
-          user.reload #otherwise current_response association is stale
-          flash[:notice] = latest_request_message(user.current_response.request) if user.current_response_is_latest?
-        else
-          flash[:error] = "Sorry we could not update your response"
-        end
+    def restrict_district_manager_access
+      if current_user.district_manager?
+        store_location
+        flash[:error] = "District Manager cannot access that page"
+        redirect_to root_url
+        return false
+      end
+    end
+
+    def load_comment_resources(resource)
+      @comment = Comment.new
+      @comment.commentable = resource
+      @comments = resource.comments.find(:all, :order => 'created_at DESC',
+                                         :conditions => 'parent_id is NULL',
+                                         :include => :user)
+      # @comments = resource.comments.roots.find(:all)
+      # :include => {:user => :organization} does not work when using roots scope
+      # Comment.send(:preload_associations, @comments, {:user => :organization})
+    end
+
+    def district_manager_current_request
+      if session[:request_id].present?
+        DataRequest.find(session[:request_id])
       else
-        flash[:error] = "Sorry we could not find that response"
+        current_request = DataRequest.find(:first, :order => 'id DESC')
+        session[:request_id] ||= current_request.id
+        current_request
       end
     end
 end

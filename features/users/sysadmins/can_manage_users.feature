@@ -162,7 +162,7 @@ Feature: Admin can manage users
     Then the "Organizations" combobox should contain "organization2"
       And the "Organizations" combobox should contain "organization3"
 
-      @run
+
   Scenario: An admin can create District Manager and assign districts for managing
     Given a location exists with short_display: "district1"
     When I follow "Users"

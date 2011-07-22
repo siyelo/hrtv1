@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   validate :validate_organization
 
   ### Callbacks
-  before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
+  before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
   before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
 
   ### Delegates
@@ -178,25 +178,32 @@ class User < ActiveRecord::Base
   end
 
   def set_current_response_to_latest!
-    self.current_response = self.latest_response
-    self.save!
+    assign_current_response_to_latest
+    self.save(false)
   end
 
   def current_organization
     @current_organization ||= self.current_response.organization
   end
 
+  def change_current_response!(new_request_id)
+    response = responses.find_by_data_request_id(new_request_id)
+    if response
+      self.current_response = response
+      self.save(false)
+    end
+  end
 
   private
 
-    def role?(role)
-      roles.include?(role.to_s)
-    end
-
-    def set_current_response
+    def assign_current_response_to_latest
       if organization.present? && organization.data_responses.present?
         self.current_response = organization.latest_response
       end
+    end
+
+    def role?(role)
+      roles.include?(role.to_s)
     end
 
     def unassign_organizations

@@ -1,2 +1,19 @@
-%h2
-  District Manager Dashboard
+- if current_user.tips_shown
+  .main_heading
+    #gs_container
+      #getting_started_title
+        %h2 Getting started as a District Manager
+        = render :partial => 'shared/tips_hide'
+      .getting_started
+        .message
+          %p View data about your district
+          %ul.bulleted
+            %li Organizations working in your district
+            %li Activities implemented in your district
+            %li Activity classifications across several dimensions: Input(s) (Cost Categories) and Purpose(s)
+          %p
+            Don't forget to check out our
+            = link_to "online help", help_link, :target => "_blank"
+            and you can
+            = link_to "contact the Support Team", contact_link, :target => "_blank"
+            anytime to start a discussion.

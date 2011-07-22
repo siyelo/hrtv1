@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721151712) do
+ActiveRecord::Schema.define(:version => 20110722085220) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -243,11 +243,6 @@ ActiveRecord::Schema.define(:version => 20110721151712) do
     t.integer "project_id"
   end
 
-  create_table "locations_users", :id => false, :force => true do |t|
-    t.integer "location_id"
-    t.integer "user_id"
-  end
-
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -355,6 +350,7 @@ ActiveRecord::Schema.define(:version => 20110721151712) do
     t.boolean  "tips_shown",               :default => true
     t.string   "invite_token"
     t.boolean  "active",                   :default => false
+    t.integer  "location_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

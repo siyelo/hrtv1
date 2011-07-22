@@ -184,12 +184,12 @@ Feature: Reporter can manage activities
       And I should see "Activity1 description"
 
 
-  Scenario: A reporter can create comments for an activity and see errors
+  Scenario: A reporter can create comments for a Activity
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
     When I follow "Projects"
       And I follow "Activity1 description"
       And I press "Create Comment"
-    Then I should see "can't be blank" within "#comment_comment_input"
+    Then I should see "You cannot create blank comment."
     When I fill in "Comment" with "Comment body"
       And I press "Create Comment"
     Then I should see "Comment body"

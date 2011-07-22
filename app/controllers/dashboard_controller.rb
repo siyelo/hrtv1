@@ -10,11 +10,9 @@ class DashboardController < ApplicationController
   # Load the dashboard with any special conditions detected by user type
   def index
     load_activity_manager if current_user.activity_manager?
+    load_requests
 
-    unless current_user.district_manager?
-      warn_if_not_current_request
-      load_requests
-    end
+    warn_if_not_current_request unless current_user.district_manager?
   end
 
   protected

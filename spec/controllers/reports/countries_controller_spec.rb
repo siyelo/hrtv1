@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Reports::CountriesController do
-
   before :each do
     @organization  = Factory(:organization)
     @data_request  = Factory(:data_request, :organization => @organization)

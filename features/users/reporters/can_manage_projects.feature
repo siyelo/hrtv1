@@ -95,19 +95,19 @@ Feature: Reporter can manage projects
     Scenario: A reporter can create comments for a workplan (response) and see errors
       When I follow "Projects"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_comment_input"
+      Then I should see "You cannot create blank comment."
 
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"
       Then I should see "Comment body"
 
 
-    Scenario: A reporter can create comments for an activity and see errors
+    Scenario: A reporter can create comments for a project
       Given a project exists with name: "project1", data_response: data_response "data_response"
       When I follow "Projects"
         And I follow "project1"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_comment_input"
+      Then I should see "You cannot create blank comment."
 
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"

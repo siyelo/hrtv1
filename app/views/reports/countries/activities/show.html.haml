@@ -8,7 +8,7 @@
   var _code_budget_values = #{js_safe(@code_budget_values)};
 
 %ul.breadcrumb
-  %li= link_to 'Reports', user_report_dashboard_path(current_user)
+  %li= link_to 'Reports', user_report_dashboard_path
   %li= link_to 'National', reports_country_path
   %li= link_to 'Activities', reports_country_activities_path
 

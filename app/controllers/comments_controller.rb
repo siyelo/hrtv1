@@ -48,7 +48,8 @@ class CommentsController < Reporter::BaseController
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."
-          redirect_to commentable_resource(@comment)
+          #redirect_to commentable_resource(@comment)
+          redirect_to :back
         end
         format.js { render :partial => "row", :locals => {:comment => @comment} }
         format.json { render :json => {:html => render_to_string(
@@ -56,7 +57,11 @@ class CommentsController < Reporter::BaseController
       end
     else
       respond_to do |format|
-        format.html { render :action => "new" }
+        format.html do
+          flash[:error] = "You cannot create blank comment."
+          #redirect_to commentable_resource(@comment)
+          redirect_to :back
+        end
         format.js   { render :partial => "form", :locals => {:comment => @comment},
                              :status => :partial_content } # :partial_content => 206
         format.json do

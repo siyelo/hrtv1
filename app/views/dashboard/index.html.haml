@@ -1,6 +1,9 @@
 - title("Dashboard")
 
-%h1.main_heading Dashboard
+- if current_user.district_manager?
+  %h1.main_heading= current_user.location.short_display
+- else
+  %h1.main_heading Dashboard
 
 - if current_user.admin?
   = render 'sysadmin'
@@ -11,7 +14,7 @@
 - else
   = render 'reporter'
 
-- unless current_user.district_manager?
-  = render 'dashboard/requests'
+-#- unless current_user.district_manager?
+= render 'dashboard/requests'
 
 = render 'comments/short_listing', :comments => @comments

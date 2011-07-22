@@ -521,6 +521,20 @@ describe Organization do
       Organization::ORGANIZATION_TYPES.should include('Non-Reporting')
     end
   end
+
+  describe "#reporting?" do
+    it "is reporting when raw_type is not 'Non-Reporting'" do
+      organization = Factory.build(:organization, :raw_type => 'Bilateral')
+      organization.reporting?.should be_true
+    end
+  end
+
+  describe "#nonreporting?" do
+    it "is nonreporting when raw_type is 'Non-Reporting'" do
+      organization = Factory.build(:organization, :raw_type => 'Non-Reporting')
+      organization.nonreporting?.should be_true
+    end
+  end
 end
 
 # == Schema Information

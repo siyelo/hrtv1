@@ -11,6 +11,14 @@ Factory.define :organization, :class => Organization do |f|
   f.contact_office_location          { "Cape Town" }
 end
 
+Factory.define :nonreporting, :class => Organization, :parent => :organization do |f|
+  f.raw_type                         { "Non-Reporting" }
+end
+
+Factory.define :reporting, :class => Organization, :parent => :organization do |f|
+  f.raw_type                         { "Bilateral" }
+end
+
 Factory.define :provider, :class => Organization, :parent => :organization do |f|
 end
 

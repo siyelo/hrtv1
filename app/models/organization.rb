@@ -300,6 +300,14 @@ class Organization < ActiveRecord::Base
     response_for(request).status
   end
 
+  def reporting?
+    raw_type != 'Non-Reporting'
+  end
+
+  def nonreporting?
+    raw_type == 'Non-Reporting'
+  end
+
   protected
 
     def tidy_name(n)

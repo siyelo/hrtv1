@@ -21,7 +21,7 @@
   %li.last
     %h3 Districts to Manage
     %ul.dashboard_section
-      = f.input :locations, :label => "Districts", :hint => 'Assign districts to this district manager to manage', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC'), :required => false, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
+      = f.input :location, :label => "District", :hint => 'Assign districts to this district manager to manage', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC', :select => 'short_display, id'), :required => false, :input_html => {:class => 'js_combobox'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"

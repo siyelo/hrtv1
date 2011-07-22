@@ -63,7 +63,6 @@ Feature: Admin can manage data requests
         And I press "Update request"
       Then I should see "Request was successfully updated"
 
-      @run
     Scenario: An admin needs to be able to change the current request they are viewing so that that they can view reports which are scoped by a request
       Given an organization exists with name: "org2"
         And a data_request exists with title: "data request 2", organization: the organization

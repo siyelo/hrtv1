@@ -1579,6 +1579,8 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
     $('#user_roles').change(function () {
       toggleMultiselect($(this));
     });
+    
+    $( ".js_combobox" ).combobox();
 
   }
 }

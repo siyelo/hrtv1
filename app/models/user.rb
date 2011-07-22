@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown,
-                  :organization_ids, :location_ids
+                  :organization_ids, :location_id
 
   ### Associations
   has_many :comments, :dependent => :destroy
@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
   has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
-  has_and_belongs_to_many :locations
+  belongs_to :location
 
   ### Validations
   validates_presence_of :full_name, :email, :organization_id

@@ -10,7 +10,7 @@
         - if current_user.sysadmin? && current_request.nil?
           = "[No Current Request]"
         - elsif current_user.district_manager?
-          TODO: districts managed
+          = @current_request.title
         - else
           = "[#{current_request.name}]"
 

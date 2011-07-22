@@ -14,7 +14,7 @@
   var _code_budget_values     = #{js_safe(@code_budget_values)};
 
 %ul.breadcrumb
-  %li= link_to "Reports", user_report_dashboard_path(current_user)
+  %li= link_to "Reports", user_report_dashboard_path
   %li{:class => 'last'}= link_to "Districts", reports_districts_path
 
 %h1.main_heading

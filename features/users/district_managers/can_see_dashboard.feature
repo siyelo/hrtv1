@@ -13,8 +13,6 @@ Feature: District Manager can see dashboard
     Then I should see "Bugesera"
       And I should see "Getting started as a District Manager"
       And I should see "Reports"
-      And I should not see "Projects"
-      And I should not see "Settings"
 
   Scenario: Can Switch between requests
     Given an organization exists

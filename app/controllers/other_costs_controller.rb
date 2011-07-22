@@ -8,7 +8,7 @@ class OtherCostsController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
-    scope = @response.other_costs.scoped()
+    scope = @response.other_costs.scoped({})
     scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR
                                          UPPER(activities.description) LIKE UPPER(:q)",
               {:q => "%#{params[:query]}%"}]) if params[:query]

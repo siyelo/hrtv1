@@ -12,11 +12,7 @@ class DashboardController < ApplicationController
     load_activity_manager if current_user.activity_manager?
     load_requests
 
-    if current_user.district_manager?
-      set_current_request
-    else
-      warn_if_not_current_request
-    end
+    warn_if_not_current_request unless current_user.district_manager?
   end
 
   protected

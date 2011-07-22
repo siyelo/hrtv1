@@ -39,4 +39,13 @@ class Reports::BaseController < ApplicationController
         raise "Invalid code type #{code_type}"
       end
     end
+
+    def check_district_manager_access_for_location(location_id)
+      if current_user.district_manager? && current_user.location_id.to_s != location_id
+        store_location
+        flash[:error] = "District Manager cannot access that page"
+        redirect_to root_url
+        return false
+      end
+    end
 end

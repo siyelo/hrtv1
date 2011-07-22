@@ -39,3 +39,18 @@ Feature: District Manager can see district reports
     When I follow "Reports"
       And I follow "Activity1"
     Then I should see "Activity: Activity1"
+
+  Scenario: Comment single activity report
+    Given I follow "Reports"
+      And I follow "Activity1"
+      And I fill in "Add Comment" with "Activity report comment"
+    When I press "Create Comment"
+    Then I should see "Activity: Activity1"
+      And I should see "Activity report comment"
+
+    @run
+  Scenario: Cannot create blank comment
+    Given I follow "Reports"
+      And I follow "Activity1"
+    When I press "Create Comment"
+    Then I should see "You cannot create blank comment."

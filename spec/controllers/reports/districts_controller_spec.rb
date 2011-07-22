@@ -29,4 +29,30 @@ describe Reports::DistrictsController do
       response.should be_success
     end
   end
+
+  describe "access" do
+    context "district_manager" do
+      before :each do
+        @location1 = Factory(:location)
+        @district_manager = Factory(:district_manager, :location => @location1)
+        login @district_manager
+      end
+
+      it "is not able to access districts index page" do
+        get :index
+        response.should redirect_to(root_path)
+      end
+
+      it "is not able to access district show page for other district" do
+        @location2 = Factory(:location)
+        get :show, :id => @location2.id
+        response.should redirect_to(root_path)
+      end
+
+      it "is be able to access district show page for the managed district" do
+        get :show, :id => @location1.id
+        response.should render_template(:show)
+      end
+    end
+  end
 end

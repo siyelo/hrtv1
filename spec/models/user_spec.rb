@@ -44,6 +44,28 @@ describe User do
       user.save
       user.errors.on(:roles).should include('is not included in the list')
     end
+
+    it "allows creating District Manager in Non-Reporting organization" do
+      organization = Factory(:organization, :raw_type => 'Non-Reporting')
+      user         = Factory.build(:user, :organization => organization,
+                                   :roles => ['district_manager'])
+      user.errors.should be_blank
+    end
+
+    it "allows creating District Manager in Reporting organization when there he is not only District Manager" do
+      organization = Factory(:organization, :raw_type => 'Non-Reporting')
+      user         = Factory.build(:user, :organization => organization,
+                                   :roles => ['district_manager', 'reporter'])
+      user.errors.should be_blank
+    end
+
+    it "prevents creating user in Reporting organization when role is District Manager" do
+      organization = Factory(:organization, :raw_type => 'Bilateral')
+      user         = Factory.build(:user, :organization => organization,
+                                   :roles => ['district_manager'])
+      user.save
+      user.errors.on(:organization_id).should == 'cannot assign a "reporting" organization to District Manager. Please select organization with raw type "Non-Reporting"'
+    end
   end
 
   describe "save and invite" do
@@ -151,7 +173,8 @@ describe User do
     end
 
     it "is district_manager when has district_manager role" do
-      user = Factory(:user, :roles => ['district_manager'])
+      org  = Factory(:nonreporting)
+      user = Factory(:user, :roles => ['district_manager'], :organization => org)
       user.district_manager?.should be_true
     end
 
@@ -198,7 +221,8 @@ describe User do
     end
 
     it "is district_manager when roles_mask = 8" do
-      user = Factory(:user, :roles => ['district_manager'])
+      org  = Factory(:nonreporting)
+      user = Factory(:user, :roles => ['district_manager'], :organization => org)
       user.roles.should == ['district_manager']
       user.roles_mask.should == 8
     end

@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validate :validate_inclusion_of_roles
+  validate :validate_organization
 
   ### Callbacks
   before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
@@ -205,6 +206,12 @@ class User < ActiveRecord::Base
     def validate_inclusion_of_roles
       if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
         errors.add(:roles, "is not included in the list")
+      end
+    end
+
+    def validate_organization
+      if district_manager? && roles.length == 1 && organization.reporting?
+        errors.add(:organization_id, 'cannot assign a "reporting" organization to District Manager. Please select organization with raw type "Non-Reporting"')
       end
     end
 

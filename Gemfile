@@ -67,7 +67,7 @@ group :test do
   #gem 'guard-cucumber'
   gem 'guard-rspec'
   gem 'guard-spork'
-  # gem 'libnotify'
+  gem 'libnotify'
   # gem 'rb-inotify'
   gem 'launchy'               # So you can do 'Then show me the page'
   gem 'pickle', '~> 0.4.4'

@@ -26,5 +26,28 @@ describe Admin::UsersController do
     it "POST /admin/users should create a user in the org" do
       pending
     end
+    
+    it "should not allow you to create a DM without a location" do
+      @dm = Factory.build(:district_manager, :location_id => nil)
+      @dm.save.should be_false
+    end
+    
+    it "should allow you to create a DM with a location" do
+      @location = Factory(:location)
+      @dm = Factory.build(:district_manager, :location => @location)
+      @dm.save.should be_true
+    end
+    
+    it "should not allow you to create a DM with a reporting organization" do
+      @org = Factory(:reporting_organization)
+      @dm = Factory.build(:district_manager, :organization => @org)
+      @dm.save.should be_false
+    end
+    
+    it "should allow you to create a DM with a non-reporting organization" do
+      @org = Factory(:nonreporting_organization)
+      @dm = Factory.build(:district_manager, :organization => @org)
+      @dm.save.should be_true
+    end
   end
 end

@@ -27,6 +27,7 @@ Factory.define :district_manager,  :parent => :user do |f|
   f.sequence(:email)      { |i| "district_manager_#{i}_#{rand(100_000_000)}@example.com" }
   f.roles                 { ['district_manager'] }
   f.organization          { Factory(:nonreporting_organization) }
+  f.location              { Factory(:location) }
 end
 
 Factory.define :sysadmin,  :parent => :user do |f|

@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :full_name, :email, :organization_id
+  validates_presence_of :location_id, :message => "can't be blank", :if => Proc.new{ |model| model.roles.include?('district_manager') }
   validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validate :validate_inclusion_of_roles

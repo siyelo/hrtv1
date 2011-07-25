@@ -17,7 +17,6 @@ class Currency < ActiveRecord::Base
     def reload_currencies
       @cur = Currency.all
       currency_config     = Currency.special_yaml(@cur)
-      # currency_config     = IO.read("#{RAILS_ROOT}/config/currencies.yml")
       Money.default_bank.import_rates(:yaml, currency_config)
     end
   

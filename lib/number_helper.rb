@@ -85,10 +85,7 @@ module NumberHelper
        to_usd && from_usd ? to_usd * from_usd : 1
      end
    end
-  
-  def get_rate(from, to)
-    rate = Currency.find_by_conversion("#{from.upcase}_TO_#{to.upcase}") ? Currency.find_by_name("#{from.upcase}_TO_#{to.upcase}").rate? : Money.default_bank.get_rate(from, to)
-  end
+
 
   def universal_currency_converter(amount, from, to)
     amount = 0 if amount.blank?

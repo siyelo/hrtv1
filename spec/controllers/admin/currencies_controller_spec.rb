@@ -14,10 +14,16 @@ describe Admin::CurrenciesController do
   end
   
   describe "Updating the currency" do
+    after :all do
+      @currency = Currency.find_by_conversion('USD_TO_USD')
+      @currency.rate = 1; @currency.save ## because the currency rates are persisted in the database
+    end
+
     it "updates the default bank when the currency is updated" do
-      pending
-      post :create, :currency => {:from => "UZS", :to => "VEF", :rate => 99}
-      Money.default_bank.get_rate("UZS", "VEF").should == 99.0
+      @currency = Currency.find_by_conversion('USD_TO_USD')
+      put :update, :id => @currency.id, :rate => 98
+      @currency.reload
+      Money.default_bank.get_rate("USD", "USD").should == 98.0
     end
   end
 end

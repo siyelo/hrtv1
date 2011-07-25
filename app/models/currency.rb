@@ -3,6 +3,7 @@ class Currency < ActiveRecord::Base
   after_save :reload_currencies
   attr_accessor :to, :from
   validates_uniqueness_of :conversion
+  validates_numericality_of :rate
   
   def self.special_yaml(currencies)
     yaml = "--- \n"

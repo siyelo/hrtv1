@@ -1,6 +1,9 @@
 - title("Currencies")
 
 %h1.main_heading
+  #search
+    - form_tag admin_currencies_path, :method => :get do
+      = render 'shared/search_form'
   Currencies
   
 %ul.horizontal

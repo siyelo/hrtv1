@@ -18,7 +18,7 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-  @javascript @run
+  @javascript
   Scenario: Reporter can add targets & outputs
     When I follow "Add Activities now"
       And I fill in "Name" with "activity1"

@@ -962,25 +962,31 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
 var reports_districts_show = reports_countries_show = {
   run: function () {
-    if (_overview) {
-      drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
-      drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
-    } else if (_funders_agents) {
-      drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
-      drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-      drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
-      drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-    } else {
-      if (_pie) {
-        drawPieChart('code_spent', _code_spent_values, 450, 300);
-        drawPieChart('code_budget', _code_budget_values, 450, 300);
-      } else {
-        drawTreemapChart('code_spent', _code_spent_values, 'w');
-        drawTreemapChart('code_budget', _code_budget_values, 'e');
-      }
-    }
+    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
+    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
   }
 };
+
+var reports_districts_funders = reports_countries_funders = {
+  run: function () {
+    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
+    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
+    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
+    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
+  }
+}
+
+var reports_districts_classifications = reports_countries_classifications = {
+  run: function () {
+    if (_pie) {
+      drawPieChart('code_spent', _code_spent_values, 450, 300);
+      drawPieChart('code_budget', _code_budget_values, 450, 300);
+    } else {
+      drawTreemapChart('code_spent', _code_spent_values, 'w');
+      drawTreemapChart('code_budget', _code_budget_values, 'e');
+    }
+  }
+}
 
 var reports_districts_activities_show = {
   run: function () {
@@ -1047,25 +1053,6 @@ var reports_districts_organizations_show = {
     }
   }
 };
-
-var reports_countries_show = {
-  run: function () {
-    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
-    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
-    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
-    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
-
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
-  }
-}
 
 var reports_countries_organizations_index = {
   run: function () {

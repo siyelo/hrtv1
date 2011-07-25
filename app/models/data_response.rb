@@ -421,7 +421,7 @@ class DataResponse < ActiveRecord::Base
   def total_spend
     projects_total_spend + other_costs_subtotal(:spend)
   end
-
+  
   def total_budget
     projects_total_budget + other_costs_subtotal(:budget)
   end

@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
+  
   describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }

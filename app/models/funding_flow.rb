@@ -52,7 +52,7 @@ class FundingFlow < ActiveRecord::Base
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?},
     :message => :"organization_id_from.id_below_zero"
-  validate :budget_and_spend_are_greater_than_zero
+  validate_on_update :budget_and_spend_are_greater_than_zero
 
   ### Named scopes
   named_scope :ordered_by_id, { :order => 'id ASC' }

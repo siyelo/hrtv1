@@ -18,11 +18,10 @@ class FundersController < Reporter::BaseController
 
   def create
     @funder = @response.funding_flows.new(params[:funding_flow])
-
     if @funder.save
       respond_to do |format|
         format.json do
-          render :json => {:status => @funder.valid?,
+          render :json => {:status => true,
                            :html => render_to_string({:partial => 'funder_row.html.haml',
                                                 :locals => {:funder => @funder,
                                                             :type => params[:type]}})}

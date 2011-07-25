@@ -1967,7 +1967,6 @@ var workplans_index = {
 
       removeDemoText(form.find('*[data-hint]'));
       ajaxLoader.show();
-
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');

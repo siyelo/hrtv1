@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
 
   ### Includes
   include BudgetSpendHelpers
+  include NumberHelper
   include Activity::Classification
 
 
@@ -109,9 +110,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_presence_of :data_response_id
   validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }, :on => :update
   validates_length_of :name, :within => 3..64
 
 

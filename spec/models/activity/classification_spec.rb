@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Activity do
+describe Activity, "Classification" do
   describe "coding_budget_classified?" do
     before :each do
       basic_setup_project
@@ -626,8 +626,8 @@ describe Activity do
     context "strat prog coding" do
       before :each do
         @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
-        Activity.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
-        Activity.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
+        Activity::Classification.send(:remove_const, :STRAT_PROG_TO_CODES_FOR_TOTALING)
+        Activity::Classification.const_set(:STRAT_PROG_TO_CODES_FOR_TOTALING, @code_ids_maping)
       end
 
       context "budget_stratprog_coding" do
@@ -668,8 +668,8 @@ describe Activity do
     context "strat obj coding" do
       before :each do
         @code_ids_maping = {"code1" => ["1", "2"], "code2" => ["3"]}
-        Activity.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
-        Activity.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
+        Activity::Classification.send(:remove_const, :STRAT_OBJ_TO_CODES_FOR_TOTALING)
+        Activity::Classification.const_set(:STRAT_OBJ_TO_CODES_FOR_TOTALING, @code_ids_maping)
       end
 
       context "budget_stratobj_coding" do

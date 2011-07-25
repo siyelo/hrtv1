@@ -3,42 +3,16 @@ require 'validators'
 
 class Activity < ActiveRecord::Base
 
+  ### Includes
+  include BudgetSpendHelpers
+  include Activity::Classification
+
+
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
-  STRAT_PROG_TO_CODES_FOR_TOTALING = {
-    "Quality Assurance" => ["6","7","8","9","11"],
-    "Commodities, Supply and Logistics" => ["5"],
-    "Infrastructure and Equipment" => ["4"],
-    "Health Financing" => ["3"],
-    "Human Resources for Health" => ["2"],
-    "Governance" => ["101","103"],
-    "Planning and M&E" => ["102","104","105","106"]
-  }
 
-  STRAT_OBJ_TO_CODES_FOR_TOTALING = {
-    "Across all 3 objectives" => ["1","201","202","203","204","206","207",
-                                  "208","3","4","5","7","11"],
-    "b. Prevention and control of diseases" => ['205','9'],
-    "c. Treatment of diseases" => ["601","602","603","604","607","608","6011",
-                                   "6012","6013","6014","6015","6016"],
-    "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
-  }
-
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget']
-
-  CLASSIFICATION_MAPPINGS = {
-    'CodingBudget' => 'CodingSpend',
-    'CodingBudgetDistrict' => 'CodingSpendDistrict',
-    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization',
-    'ServiceLevelBudget' => 'ServiceLevelSpend'
-  }
-
-  ### Includes
-  include BudgetSpendHelpers
-  strip_commas_from_all_numbers
-
-  ### Attributes
+  ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :text_for_targets, :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
@@ -49,7 +23,6 @@ class Activity < ActiveRecord::Base
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
     :am_approved_date, :user_id
 
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
@@ -60,9 +33,9 @@ class Activity < ActiveRecord::Base
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",
-                            :foreign_key => :activity_id,
-                            :dependent => :destroy
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider, :dependent => :destroy
+             :foreign_key => :activity_id, :dependent => :destroy
+  has_many :sub_implementers, :through => :sub_activities,
+             :source => :provider, :dependent => :destroy
   has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :code_assignments, :dependent => :destroy
@@ -76,50 +49,30 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend_district, :dependent => :destroy
   has_many :service_level_spend, :dependent => :destroy
 
-  ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
-  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
-    :reject_if => lambda { |fs| fs["funding_flow_id"].blank? }
+  ### Class-Level Method Invocations
+  strip_commas_from_all_numbers
 
-  ### Delegates
-  delegate :currency, :to => :project, :allow_nil => true
-  delegate :data_request, :to => :data_response
-  delegate :organization, :to => :data_response
 
-  ### Validations
-  validate :approved_activity_cannot_be_changed
-  validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_presence_of :data_response_id
-  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
-  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_length_of :name, :within => 3..64
-
-  #validates_associated :sub_activities
-
-  ### Callbacks
-  before_save :update_cached_usd_amounts
-  before_update :remove_district_codings
-  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  after_save  :update_counter_cache
-  after_destroy :update_counter_cache
-
-  ### Named scopes
+  ### Scopes
   # TODO: spec
   named_scope :roots,             {:conditions => "activities.type IS NULL" }
   named_scope :greatest_first,    {:order => "activities.budget DESC" }
-  named_scope :with_type,         lambda { |type| {:conditions => ["activities.type = ?", type]} }
+  named_scope :with_type,         lambda { |type| {:conditions =>
+                                                   ["activities.type = ?", type]} }
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
-  named_scope :with_organization, { :joins => "INNER JOIN data_responses ON data_responses.id = activities.data_response_id " +
-                                              "INNER JOIN organizations on data_responses.organization_id = organizations.id" }
+  named_scope :with_organization, { :joins => "INNER JOIN data_responses
+                                    ON data_responses.id = activities.data_response_id
+                                    INNER JOIN organizations
+                                    ON data_responses.organization_id = organizations.id" }
   named_scope :ordered,           { :order => 'description ASC' }
   named_scope :ordered_by_id,     { :order => 'id ASC' }
 
-  named_scope :implemented_by_health_centers, { :joins => [:provider], :conditions => ["organizations.raw_type = ?", "Health Center"]}
+  named_scope :implemented_by_health_centers, { :joins => [:provider],
+                                    :conditions => ["organizations.raw_type = ?",
+                                                    "Health Center"]}
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
     :joins =>
@@ -134,6 +87,43 @@ class Activity < ActiveRecord::Base
   named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,           {:order => "activities.name" }
 
+
+  ### Attribute Accessor
+  attr_accessor :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries
+
+
+  ### Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
+  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
+    :reject_if => lambda { |fs| fs["funding_flow_id"].blank? }
+
+
+  ### Delegates
+  delegate :currency, :to => :project, :allow_nil => true
+  delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
+
+
+  ### Validations
+  validate :approved_activity_cannot_be_changed
+  validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_presence_of :data_response_id
+  validates_presence_of :project_id, :if => Proc.new { |model| model.class.to_s == 'Activity' }
+  validates_date :start_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_date :end_date, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  validates_length_of :name, :within => 3..64
+
+
+  ### Callbacks
+  before_save :update_cached_usd_amounts
+  before_update :remove_district_codings
+  before_update :update_all_classified_amount_caches, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
+  after_save  :update_counter_cache
+  after_destroy :update_counter_cache
+
+
+  ### Class methods
   def self.only_simple_activities(activities)
     activities.select{|s| s.type.nil? or s.type == "OtherCost"}
   end
@@ -160,14 +150,6 @@ class Activity < ActiveRecord::Base
     Activity.only_simple.find(:all,
       :include => [:locations, :provider, :organizations,
                   :beneficiaries, {:data_response => :organization}])
-  end
-
-  def convert_to_project_currency(type)
-    return 0 if self.send(type).nil?
-    amount_type = type
-    rate = currency_rate(self.currency, self.project.currency)
-    converted_amount = self.send(type) * rate
-    return converted_amount
   end
 
   def self.download_template(activities = [])
@@ -267,6 +249,14 @@ class Activity < ActiveRecord::Base
       activity.spend = attributes[:spend]
       activity.save
     end
+  end
+
+  def convert_to_project_currency(type)
+    return 0 if self.send(type).nil?
+    amount_type = type
+    rate = currency_rate(self.currency, self.project.currency)
+    converted_amount = self.send(type) * rate
+    return converted_amount
   end
 
   def has_budget_or_spend?

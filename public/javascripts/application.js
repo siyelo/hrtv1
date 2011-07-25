@@ -98,7 +98,6 @@ var build_activity_funding_source_row = function (edit_block) {
 };
 
 
-
 var close_project_in_flow_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
@@ -120,9 +119,9 @@ var close_project_in_flow_fields = function (fields) {
 
     preview_block.show();
 
-    manage_block.find('.edit').remove();
+    manage_block.find('.edit_button').remove();
     manage_block.prepend(
-      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
     )
   });
 };
@@ -1495,18 +1494,6 @@ var activity_form = function () {
     $('.add_organization').slideToggle();
   });
 
-
-
-  $('.edit_button').live('click', function (e) {
-    e.preventDefault();
-    var element = $(this).parents('.fields');
-    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-    element.find('.edit_block').show();
-    element.find('.preview_block').hide();
-    close_activity_funding_sources_fields(fields);
-  });
-
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
@@ -1514,7 +1501,6 @@ var activity_form = function () {
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
-  close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
     console.info('2222')
@@ -1545,6 +1531,18 @@ var activity_form = function () {
   approveAsAdmin();
 
   commentsInit();
+
+
+  $('.edit_button').live('click', function (e) {
+    e.preventDefault();
+    var element = $(this).parents('.fields');
+    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+    element.find('.edit_block').show();
+    element.find('.preview_block').hide();
+    close_activity_funding_sources_fields(fields);
+  });
+  close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
 var admin_activities_new = admin_activities_create = admin_activities_edit = admin_activities_update = {
@@ -1683,22 +1681,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
                                 // handled by the "add row" js callback
     $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
-    $('.edit').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
-    // ?
-    validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
-
-
-
     // when project spend quarter is edited, update the spend total
     $("input[id^='project_spend_q']:not(:last)").keyup(function () {
       calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
@@ -1740,6 +1722,19 @@ var projects_new = projects_create = projects_edit = projects_update = {
    });
 
     commentsInit();
+    validateDates($('#project_start_date'), $('#project_end_date'));
+
+
+    $('.edit_button').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this).parents('.fields');
+      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+      element.find('.edit_block').show();
+      element.find('.preview_block').hide();
+      close_project_in_flow_fields(fields);
+    });
+    close_project_in_flow_fields($('.funding_flows .fields'));
   }
 }
 

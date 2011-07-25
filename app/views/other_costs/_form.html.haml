@@ -32,8 +32,7 @@
       - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
       - hint = hint + "<br>NOTE: You uploaded \"#{@other_cost.text_for_provider}\"" if !@other_cost.text_for_provider.blank? && @activity.provider.nil?
       .implementer_container
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select'}
-      = render :partial => 'shared/add_organizations'
+        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'implementer_select combobox'}
 
   %li.last
     %h3== Other

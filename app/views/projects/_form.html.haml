@@ -21,7 +21,7 @@
         - f.semantic_fields_for :in_flows do |ff|
           = render "projects/in_flow_fields", :f => ff
         .add
-          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'row_cancel'
+          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'add_nested'
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button @project.new_record? ? "Create Project" : "Update Project", :class => "last"

@@ -12,13 +12,13 @@
         .ui_widget
           = f.input :from, :as => :select, :collection => funding_organizations_select, :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}
 
-    = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year", :required => false, :input_html => {:class => 'ff_spend'} 
+    = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have past expenditure in the past fiscal year", :required => false, :input_html => {:class => 'ff_spend'}
 
     = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year", :required => false, :input_html => {:class => 'ff_budget'}
 
   .preview_block{:style => "display: none;"}
 
   .manage_block
-    = link_to_remove_fields "X", f, :class => 'delete'
+    = link_to_remove_fields "X", f, :class => 'delete_button'
 
 

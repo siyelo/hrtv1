@@ -44,50 +44,7 @@ function getNodeText($el){
   return $.trim(nodeContent);
 };
 
-var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
-  var value            = edit_block.find('.ff_' + type).val();
-  var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
-  var value_q1         = edit_block.find('.ff_' + type + '_q1').val();
-  var value_q2         = edit_block.find('.ff_' + type + '_q2').val();
-  var value_q3         = edit_block.find('.ff_' + type + '_q3').val();
-  var value_q4         = edit_block.find('.ff_' + type + '_q4').val();
-  var values = [value_q4_prev, value_q1, value_q2, value_q3, value_q4];
-
-  if (display_funder) {
-    var organization = edit_block.find('.ff_from option:selected').text();
-    var funder = $('<li/>').append(
-      $('<span/>').text('Funder'),
-      organization || 'N/A'
-    );
-  } else {
-    var funder = $('<li/>');
-  }
-
-  var labels = jQuery.map(edit_block.find('.' + type + ' ul label'), function (e) {
-    return $(e).text();
-  });
-
-  var ul = $('<ul/>');
-  for (var i = 0; i < values.length; i++) {
-    ul.append(
-      $('<li/>').append(
-        $('<span/>').text(labels[i]),
-        values[i] || 'N/A'
-      )
-    )
-  }
-
-  return $('<ul/>').append(
-    funder,
-    $('<li/>').append(
-      $('<span/>').text(type_name),
-      value || 'N/A'
-    ),
-    $('<li/>').append(ul)
-  )
-};
-
-var build_activity_funding_source_row = function (edit_block) {
+var build_funding_source_row = function (edit_block) {
   var organization = edit_block.find('.ff_organization option:selected').text();
   var spend = '';
   var budget = '';
@@ -113,8 +70,7 @@ var build_activity_funding_source_row = function (edit_block) {
 };
 
 
-
-var close_project_in_flow_fields = function (fields) {
+var close_funding_flow_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
     var edit_block = element.find('.edit_block');
@@ -124,28 +80,8 @@ var close_project_in_flow_fields = function (fields) {
     edit_block.hide();
     preview_block.html('');
 
-    preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Past Expenditure', true))
-    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Current Budget', false))
+    preview_block.append(build_funding_source_row(edit_block))
 
-    preview_block.show();
-
-    manage_block.find('.edit').remove();
-    manage_block.prepend(
-      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
-    )
-  });
-};
-
-var close_activity_funding_sources_fields = function (fields) {
-  $.each(fields, function () {
-    var element = $(this);
-    var edit_block = element.find('.edit_block');
-    var preview_block = element.find('.preview_block');
-    var manage_block = element.find('.manage_block');
-
-    edit_block.hide();
-    preview_block.html('');
-    preview_block.append(build_activity_funding_source_row(edit_block))
     preview_block.show();
 
     manage_block.find('.edit_button').remove();
@@ -155,12 +91,25 @@ var close_activity_funding_sources_fields = function (fields) {
   });
 };
 
+
+var register_funding_flow_edit_event = function () {
+  $('.edit_button').live('click', function (e) {
+    e.preventDefault();
+    var element = $(this).parents('.fields');
+    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+    element.find('.edit_block').show();
+    element.find('.preview_block').hide();
+    close_funding_flow_fields(fields);
+  });
+};
+
 var before_add_fields_callback = function (association) {
   if (association === 'in_flows') {
-    close_project_in_flow_fields($('.funding_flows .fields'));
+    close_funding_flow_fields($('.funding_flows .fields'));
   }
   if (association === 'funding_sources') {
-    close_activity_funding_sources_fields($('.funding_sources .fields'));
+    close_funding_flow_fields($('.funding_sources .fields'));
   }
 };
 
@@ -1178,16 +1127,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
                                 // handled by the "add row" js callback
     $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
-    $('.edit').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
     $('.show_organizations_add').live('click', function(e) {
       e.preventDefault();
       var element = $(this);
@@ -1210,7 +1149,9 @@ var projects_new = projects_create = projects_edit = projects_update = {
     });
 
     validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
+
+    register_funding_flow_edit_event();
+    close_funding_flow_fields($('.funding_flows .fields'));
   }
 };
 
@@ -1485,18 +1426,6 @@ var activity_form = function () {
     $('.add_organization').slideToggle();
   });
 
-
-
-  $('.edit_button').live('click', function (e) {
-    e.preventDefault();
-    var element = $(this).parents('.fields');
-    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-    element.find('.edit_block').show();
-    element.find('.preview_block').hide();
-    close_activity_funding_sources_fields(fields);
-  });
-
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
@@ -1504,7 +1433,9 @@ var activity_form = function () {
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
-  close_activity_funding_sources_fields($('.funding_sources .fields'));
+
+  register_funding_flow_edit_event();
+  close_funding_flow_fields($('.funding_sources .fields'));
 };
 
 

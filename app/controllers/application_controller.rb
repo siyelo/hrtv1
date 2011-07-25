@@ -192,15 +192,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def restrict_district_manager_access
-      if current_user.district_manager?
-        store_location
-        flash[:error] = "District Manager cannot access that page"
-        redirect_to root_url
-        return false
-      end
-    end
-
     def load_comment_resources(resource)
       @comment = Comment.new
       @comment.commentable = resource

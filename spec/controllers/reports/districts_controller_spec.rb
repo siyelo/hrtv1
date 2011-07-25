@@ -40,13 +40,13 @@ describe Reports::DistrictsController do
 
       it "is not able to access districts index page" do
         get :index
-        response.should redirect_to(root_path)
+        response.should redirect_to(login_path)
       end
 
       it "is not able to access district show page for other district" do
         @location2 = Factory(:location)
         get :show, :id => @location2.id
-        response.should redirect_to(root_path)
+        response.should redirect_to(login_path)
       end
 
       it "is be able to access district show page for the managed district" do

@@ -1,4 +1,5 @@
 class Reports::CountriesController < Reports::BaseController
+  before_filter :require_country_reports_permission
 
   def show
     @responses      = current_user.data_responses

@@ -9,10 +9,11 @@
   = render 'sysadmin'
 - elsif current_user.activity_manager?
   = render 'activity_manager'
-- elsif current_user.district_manager?
-  = render 'district_manager'
-- else
+- elsif current_user.reporter?
   = render 'reporter'
+- else
+  //current_user.district_manager?
+  = render 'district_manager'
 
 -#- unless current_user.district_manager?
 = render 'dashboard/requests'

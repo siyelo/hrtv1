@@ -92,19 +92,15 @@ var build_activity_funding_source_row = function (edit_block) {
   var spend = '';
   var budget = '';
 
-  if (_spend) {
-    spend = $('<li/>').append(
-      $('<span/>').text('Past Expenditure'),
-      edit_block.find('.ff_spend').val() || 'N/A'
-    )
-  }
+  spend = $('<li/>').append(
+    $('<span/>').text('Past Expenditure'),
+    edit_block.find('.ff_spend').val() || 'N/A'
+  )
 
-  if (_budget) {
-    budget = $('<li/>').append(
-      $('<span/>').text('Current Budget'),
-      edit_block.find('.ff_budget').val() || 'N/A'
-    )
-  }
+  budget = $('<li/>').append(
+    $('<span/>').text('Current Budget'),
+    edit_block.find('.ff_budget').val() || 'N/A'
+  )
 
   return $('<ul/>').append(
     $('<li/>').append(

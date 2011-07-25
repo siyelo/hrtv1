@@ -58,8 +58,13 @@ class CommentsController < Reporter::BaseController
       end
     else
       respond_to do |format|
-        format.html { render :action => "new" }
-        format.js { render :partial => "form", :locals => {:comment => @comment}, :status => :partial_content } # :partial_content => 206
+        format.html do
+          flash[:error] = "You cannot create blank comment."
+          redirect_to commentable_resource(@comment)
+        end
+        format.js  { render :partial => "form",
+                     :locals => {:comment => @comment},
+                     :status => :partial_content } # :partial_content => 206
       end
     end
   end

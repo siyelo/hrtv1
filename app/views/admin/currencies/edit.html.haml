@@ -1,8 +1,0 @@
-%h1.main_heading= "Edit Currency (#{@currency.conversion})"
-
-= error_messages_for :organization, :header_message  => nil, :message => "Oops, we couldn't save your changes."
-
-%h2 Currency information
-.dashboard_section
-  - semantic_form_for :currency, @currency, :url => admin_currencies_path, :html => {:class => 'basic_form'} do |f|
-    = render 'form', :f => f

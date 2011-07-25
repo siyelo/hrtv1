@@ -17,7 +17,7 @@ end
 begin
   @reporter ||= User.find_by_email 'manager@hrtapp.com'
   puts "creating response"
-  @response = Factory(:data_response, :organization => @reporter.organization)
+  @response = @reporter.organization.latest_response
   puts "creating project"
   @project = Factory(:project, :data_response => @response, :budget => 100, :spend => 80)
   puts "creating activity & coding"

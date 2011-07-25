@@ -2,9 +2,10 @@
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 :javascript
-  google.load("visualization", "1", {packages: ["corechart"]});
-  var _budget_i_values        = #{js_safe(@budget_i_values)};
-  var _spend_i_values         = #{js_safe(@spend_i_values)};
+  var _pie = #{@pie.to_json};
+  google.load("visualization", "1", {packages: ["corechart", "treemap"]});
+  var _code_spent_values      = #{js_safe(@code_spent_values)};
+  var _code_budget_values     = #{js_safe(@code_budget_values)};
 
 - unless current_user.district_manager?
   %ul.breadcrumb
@@ -19,10 +20,11 @@
 
 .full
   .first-half
-    %h2 Implementer (Expenditure)
-    #spend_i_pie.bordered
+    %h2= "#{@chart_name} Expenditure"
+    #code_spent.bordered
+
   .second-half
-    %h2 Implementer (Current Budget)
-    #budget_i_pie.bordered
+    %h2= "#{@chart_name} Current Budget"
+    #code_budget.bordered
 
 = render :partial => 'top_organizations_and_activities'

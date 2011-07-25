@@ -96,13 +96,15 @@ ActionController::Routing::Routes.draw do |map|
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   map.namespace :reports do |reports|
-    reports.resources :districts, :only => [:index, :show] do |districts|
+    reports.resources :districts, :only => [:index, :show],
+      :member => {:funders => :get, :classifications => :get} do |districts|
       districts.resources :activities, :only => [:index, :show],
         :controller => "districts/activities"
       districts.resources :organizations, :only => [:index, :show],
         :controller => "districts/organizations"
     end
-    reports.resource :country do |country|
+    reports.resource :country,
+      :member => {:funders => :get, :classifications => :get} do |country|
       country.resources :activities, :only => [:index, :show],
         :controller => "countries/activities"
       country.resources :organizations, :only => [:index, :show],

@@ -14,8 +14,6 @@
     %h3 Basics
     %ul.dashboard_section
       = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :input_html => {:class => 'combobox'}
-      = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
-      = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The End of the Fiscal Year"
 
   %li.last
     %h3 Contact Details

@@ -116,8 +116,6 @@ end
 #  updated_at                        :timestamp
 #  organization_id                   :integer
 #  currency                          :string(255)
-#  fiscal_year_start_date            :date
-#  fiscal_year_end_date              :date
 #  contact_name                      :string(255)
 #  contact_position                  :string(255)
 #  contact_phone_number              :string(255)

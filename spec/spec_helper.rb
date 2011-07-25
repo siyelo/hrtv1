@@ -28,7 +28,7 @@ Spork.prefork do
     config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
     config.before :each do
-      DatabaseCleaner.strategy = :truncation
+      DatabaseCleaner.strategy = :truncation, {:except => %w[currencies]}
       DatabaseCleaner.clean
     end
 

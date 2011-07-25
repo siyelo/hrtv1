@@ -1573,7 +1573,6 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
       } else {
         $(".organizations").hide().css('visibility', 'hidden');
       }
-
       
       if (element.val()) {
         $(".locations").show().css('visibility', 'visible');

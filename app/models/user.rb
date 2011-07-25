@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
   ### Callbacks
   before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
   before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
+  before_save :unassign_location, :if => Proc.new{ |m| m.roles.exclude?('district_manager') }
 
   ### Delegates
   delegate :responses, :to => :organization # instead of deprecated data_response
@@ -208,7 +209,12 @@ class User < ActiveRecord::Base
     end
 
     def unassign_organizations
+      # self.organization_id = nil
       self.organizations = []
+    end
+    
+    def unassign_location
+      self.location_id = nil
     end
 
     def validate_inclusion_of_roles
@@ -235,12 +241,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
 #  id                       :integer         not null, primary key
-#  email                    :string(255)
+#  email                    :string(255)     indexed
 #  crypted_password         :string(255)
 #  password_salt            :string(255)
 #  persistence_token        :string(255)
@@ -251,7 +258,10 @@ end
 #  data_response_id_current :integer
 #  text_for_organization    :text
 #  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
+#  perishable_token         :string(255)     default(""), not null, indexed
 #  tips_shown               :boolean         default(TRUE)
+#  invite_token             :string(255)
+#  active                   :boolean         default(FALSE)
+#  location_id              :integer
 #
 

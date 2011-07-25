@@ -27,6 +27,16 @@ describe User do
     it { should validate_presence_of(:full_name) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
+    
+    context "should not validate the presence of a location id if the user is not an activity manager" do
+      subject { Factory(:reporter) }
+      it { should_not validate_presence_of(:location_id)}
+    end
+    
+    context "validate the presence of a location id if the user is not an activity manager" do
+      subject { Factory(:district_manager) }
+      it { should validate_presence_of(:location_id)}
+    end
 
     context "existing record in db" do
       subject { Factory(:reporter, :organization => Factory(:organization) ) }
@@ -174,7 +184,8 @@ describe User do
 
     it "is district_manager when has district_manager role" do
       org  = Factory(:nonreporting_organization)
-      user = Factory(:user, :roles => ['district_manager'], :organization => org)
+      loc = Factory(:location)
+      user = Factory(:user, :roles => ['district_manager'], :organization => org, :location => loc)
       user.district_manager?.should be_true
     end
 
@@ -222,49 +233,49 @@ describe User do
 
     it "is district_manager when roles_mask = 8" do
       org  = Factory(:nonreporting_organization)
-      user = Factory(:user, :roles => ['district_manager'], :organization => org)
+      user = Factory.build(:user, :roles => ['district_manager'], :organization => org)
       user.roles.should == ['district_manager']
       user.roles_mask.should == 8
     end
 
     it "is admin & district_manager when roles_mask = 9" do
-      user = Factory(:user, :roles => ['admin', 'district_manager'])
+      user = Factory.build(:user, :roles => ['admin', 'district_manager'])
       user.roles.should == ['admin', 'district_manager']
       user.roles_mask.should == 9
     end
 
     it "is reporter & district_manager when roles_mask = 10" do
-      user = Factory(:user, :roles => ['reporter', 'district_manager'])
+      user = Factory.build(:user, :roles => ['reporter', 'district_manager'])
       user.roles.should == ['reporter', 'district_manager']
       user.roles_mask.should == 10
     end
 
     it "is admin, reporter & district_manager when roles_mask = 11" do
-      user = Factory(:user, :roles => ['admin', 'reporter', 'district_manager'])
+      user = Factory.build(:user, :roles => ['admin', 'reporter', 'district_manager'])
       user.roles.should == ['admin', 'reporter', 'district_manager']
       user.roles_mask.should == 11
     end
 
     it "is admin, reporter & district_manager when roles_mask = 12" do
-      user = Factory(:user, :roles => ['activity_manager', 'district_manager'])
+      user = Factory.build(:user, :roles => ['activity_manager', 'district_manager'])
       user.roles.should == ['activity_manager', 'district_manager']
       user.roles_mask.should == 12
     end
 
     it "is admin, activity_manager & district_manager when roles_mask = 13" do
-      user = Factory(:user, :roles => ['admin', 'activity_manager', 'district_manager'])
+      user = Factory.build(:user, :roles => ['admin', 'activity_manager', 'district_manager'])
       user.roles.should == ['admin', 'activity_manager', 'district_manager']
       user.roles_mask.should == 13
     end
 
     it "is reporter, activity_manager & district_manager when roles_mask = 14" do
-      user = Factory(:user, :roles => ['reporter', 'activity_manager', 'district_manager'])
+      user = Factory.build(:user, :roles => ['reporter', 'activity_manager', 'district_manager'])
       user.roles.should == ['reporter', 'activity_manager', 'district_manager']
       user.roles_mask.should == 14
     end
 
     it "is admin, reporter, activity_manager & district_manager when roles_mask = 15" do
-      user = Factory(:user, :roles => ['admin', 'reporter', 'activity_manager', 'district_manager'])
+      user = Factory.build(:user, :roles => ['admin', 'reporter', 'activity_manager', 'district_manager'])
       user.roles.should == ['admin', 'reporter', 'activity_manager', 'district_manager']
       user.roles_mask.should == 15
     end

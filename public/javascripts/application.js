@@ -1965,7 +1965,7 @@ var workplans_index = {
       var form = element.parents('.new_activity_form');
       var ajaxLoader = element.parents('ol').find('.ajax-loader');
 
-      resetDemoText(form.find('*[data-hint]'));
+      removeDemoText(form.find('*[data-hint]'));
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
@@ -2027,7 +2027,7 @@ var workplans_index = {
       var form = element.parents('.new_project_form');
       var ajaxLoader = element.parents('ol').find('.ajax-loader');
 
-      resetDemoText(form.find('*[data-hint]'));
+      removeDemoText(form.find('*[data-hint]'));
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {

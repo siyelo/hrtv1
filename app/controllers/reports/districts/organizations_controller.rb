@@ -1,7 +1,7 @@
 class Reports::Districts::OrganizationsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
   before_filter :load_location
-  before_filter :check_district_manager_access
+  before_filter :require_district_reports_permission
 
   def index
     @organizations     = Reports::OrganizationReport.top_by_spent_and_budget({
@@ -43,7 +43,7 @@ class Reports::Districts::OrganizationsController < Reports::BaseController
       @location = Location.find(params[:district_id])
     end
 
-    def check_district_manager_access
-      check_district_manager_access_for_location(params[:district_id])
+    def require_district_reports_permission
+      check_district_reports_access_for_location(params[:district_id])
     end
 end

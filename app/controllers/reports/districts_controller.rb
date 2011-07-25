@@ -1,7 +1,7 @@
 class Reports::DistrictsController < Reports::BaseController
   MTEF_CODE_LEVEL = 1 # all level 1 MTEF codes
   before_filter :restrict_district_manager_access, :only => [:index]
-  before_filter :check_district_manager_access, :only => [:show]
+  before_filter :require_district_reports_permission, :only => [:show]
 
   def index
     @locations        = Location.all_with_counters(current_request.id)
@@ -51,7 +51,7 @@ class Reports::DistrictsController < Reports::BaseController
   end
 
   private
-    def check_district_manager_access
-      check_district_manager_access_for_location(params[:id])
+    def require_district_reports_permission
+      check_district_reports_access_for_location(params[:id])
     end
 end

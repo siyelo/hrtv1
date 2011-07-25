@@ -1,6 +1,6 @@
 class Reports::Districts::ActivitiesController < Reports::BaseController
   before_filter :load_location
-  before_filter :check_district_manager_access
+  before_filter :require_district_reports_permission
 
   def index
     @activities        = Reports::ActivityReport.top_by_spent_and_budget({
@@ -55,7 +55,7 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
       @location = Location.find(params[:district_id])
     end
 
-    def check_district_manager_access
-      check_district_manager_access_for_location(params[:district_id])
+    def require_district_reports_permission
+      check_district_reports_access_for_location(params[:district_id])
     end
 end

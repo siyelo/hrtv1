@@ -1547,7 +1547,6 @@ var classifications_edit = {
         var id          = tr.attr('data-ca_id');
         var loader      = element.next('.ajax-loader');
         var purpose_row = element.parents('.js_purpose_row:first');
-
         tr.find('.js_ca').val(0).trigger('keyup');
         tr.remove();
 
@@ -1607,7 +1606,7 @@ var classifications_edit = {
     var getClassificationTotal = function (amounts, amount) {
       var total = 0;
       for (var i = 0; i < amounts.length; i++) {
-        var value = String.trim(amounts[i]) ;
+        var value = jQuery.trim(amounts[i]) ;
         if (value.charAt(value.length - 1) === '%') {
           var percent = Number(value.substring(0, value.length - 1));
           value = percent * amount / 100;
@@ -1648,7 +1647,6 @@ var classifications_edit = {
 
     $(".js_remove_purpose").live('click', function (e) {
       e.preventDefault();
-
       if ( confirm('Are you sure?') ) {
         purposes.remove_purpose($(this));
       }
@@ -1658,7 +1656,6 @@ var classifications_edit = {
       var element = $(this);
       var tr = element.parents('tr.js_purpose_row');
       var amount = Number(tr.attr('data-amount'));
-
       // activity total
       var elements = tr.find('.js_ca');
       var amounts  = jQuery.map(elements, function (e) { return $(e).val();});

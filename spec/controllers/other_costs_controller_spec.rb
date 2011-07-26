@@ -12,7 +12,7 @@ describe OtherCostsController do
         login @user
       end
 
-      it "redirects to the projects index page when save is clicked" do
+      it "redirects to the projects index page when save is clicked (with project)" do
         post :create, :other_cost => {
           :name => 'other_cost_name',
           :description => "some description",
@@ -21,6 +21,21 @@ describe OtherCostsController do
         },
         :commit => 'Save', :response_id => @data_response.id
         response.should redirect_to(edit_response_other_cost_path(@data_response.id, @project.reload.other_costs.first.id))
+      end
+      
+      it "no othercosts without a data_response" do
+        @oc = Factory.build(:other_cost, :project_id => @project)
+        @oc.save.should be_false
+      end
+      
+      it "no othercosts without a project" do
+        @oc = Factory.build(:other_cost, :data_response_id => @data_response.id)
+        @oc.save.should be_false
+      end
+      
+      it "can create other costs" do
+        @oc = Factory.build(:other_cost, :data_response_id => @data_response.id, :project_id => @project)
+        @oc.save.should be_true
       end
 
       it "redirects to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is false" do

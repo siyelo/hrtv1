@@ -399,8 +399,8 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
-  def sub_activities_total_by_type(amount_type, quarters, other_currency)
-    sub_activities.map { |implementer| implementer.total_by_type(amount_type, quarters) }.compact.sum * currency_rate(currency, other_currency)
+  def sub_activities_total_by_type(amount_type, other_currency)
+    sub_activities.map { |implementer| implementer.total_by_type(amount_type) }.compact.sum * currency_rate(currency, other_currency)
   end
 
   def is_simple?
@@ -486,19 +486,10 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      if self.currency
-        if (rate = Money.default_bank.get_rate(self.currency, :USD))
+      if currency
+        if (rate = Money.default_bank.get_rate(currency, :USD))
           self.budget_in_usd = (budget || 0) * rate
           self.spend_in_usd  = (spend || 0)  * rate
-        end
-      end
-    end
-
-    # setting the total amount if the quarterlys are set
-    def check_quarterly_vs_total
-      ["budget", "spend"].each do |type|
-        if total_amount_of_quarters(type) > 0
-          self.send(:"#{type}=", total_amount_of_quarters(type))
         end
       end
     end
@@ -523,11 +514,6 @@ class Activity < ActiveRecord::Base
 end
 
 
-
-
-
-
-
 # == Schema Information
 #
 # Table name: activities
@@ -540,10 +526,6 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
@@ -556,11 +538,6 @@ end
 #  budget_percentage            :decimal(, )
 #  spend_percentage             :decimal(, )
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)

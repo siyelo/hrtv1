@@ -43,10 +43,10 @@
         %td{:colspan => 3}
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_spend_amount= @response.funders_total_spend(false)
+          %span.js_projects_total_spend_amount= @response.funders_total_spend
           %span.currency= @response.currency
         %td.total_amount
-          %span.js_projects_total_budget_amount= @response.funders_total_budget(false)
+          %span.js_projects_total_budget_amount= @response.funders_total_budget
           %span.currency= @response.currency
         %td
       %tr

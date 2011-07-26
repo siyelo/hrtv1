@@ -9,14 +9,6 @@ module BudgetSpendHelpers
     !budget.nil? and budget > 0
   end
 
-  def budget_quarter(quarter)
-    get_quarter(:budget, quarter)
-  end
-
-  def spend_quarter(quarter)
-    get_quarter(:spend, quarter)
-  end
-
   def spend_RWF
     return 0 if spend.nil?
     spend * Money.default_bank.get_rate(currency, :RWF)
@@ -35,24 +27,13 @@ module BudgetSpendHelpers
   end
 
   def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+    budget.present?
   end
 
-  def total_by_type(amount_type, quarters)
-    if quarters
-      amounts = [
-        self.send("#{amount_type}_q4_prev"),
-        self.send("#{amount_type}_q1"),
-        self.send("#{amount_type}_q2"),
-        self.send("#{amount_type}_q3"),
-        self.send("#{amount_type}_q4")
-      ].compact.sum
-    else
-      amounts = [
-        self.send("#{amount_type}")
-      ].compact.sum
-    end
+  def total_by_type(amount_type)
+    amounts = [
+      self.send("#{amount_type}")
+    ].compact.sum
   end
 
   def smart_sum(collection, method)
@@ -99,11 +80,5 @@ module BudgetSpendHelpers
         data_ok = nil
       end
       data_ok
-    end
-
-    def get_quarter(method, quarter)
-      if check_data_response()
-        self.send(:"#{method}_#{GOR_QUARTERS[quarter-1]}")
-      end
     end
 end

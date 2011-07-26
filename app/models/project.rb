@@ -285,20 +285,20 @@ END
     activities.map { |a| a.total_by_type(amount_type) }.compact.sum
   end
 
-  def converted_activities_total_by_type(amount_type, quarters, currency)
-    normal_activities.map { |a| a.total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
+  def converted_activities_total_by_type(amount_type, currency)
+    normal_activities.map { |a| a.total_by_type(amount_type) * currency_rate(a.currency, currency) }.compact.sum
+  end
+  
+  def converted_other_costs_total_by_type(amount_type, currency)
+    other_costs.map { |a| a.total_by_type(amount_type) * currency_rate(a.currency, currency) }.compact.sum
   end
 
-  def converted_other_costs_total_by_type(amount_type, quarters, currency)
-    other_costs.map { |a| a.total_by_type(amount_type, quarters) * currency_rate(a.currency, currency) }.compact.sum
+  def converted_funders_total_by_type(amount_type, currency)
+    in_flows.map { |flow| flow.total_by_type(amount_type) * currency_rate(flow.currency, currency) }.compact.sum
   end
 
-  def converted_funders_total_by_type(amount_type, quarters, currency)
-    in_flows.map { |flow| flow.total_by_type(amount_type, quarters) * currency_rate(flow.currency, currency) }.compact.sum
-  end
-
-  def sub_activities_total_by_type(amount_type, quarters, currency)
-    activities.map { |a| a.sub_activities_total_by_type(amount_type, quarters, currency) }.compact.sum
+  def sub_activities_total_by_type(amount_type, currency)
+    activities.map { |a| a.sub_activities_total_by_type(amount_type, currency) }.compact.sum
   end
 
   def direct_activities_total(amount_type)

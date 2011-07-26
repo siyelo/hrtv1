@@ -209,10 +209,9 @@ class User < ActiveRecord::Base
     end
 
     def unassign_organizations
-      # self.organization_id = nil
       self.organizations = []
     end
-    
+
     def unassign_location
       self.location_id = nil
     end

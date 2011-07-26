@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20110725084156) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -199,7 +200,6 @@ ActiveRecord::Schema.define(:version => 20110725084156) do
     t.integer  "self_provider_flag",   :default => 0
     t.decimal  "spend"
     t.decimal  "spend_q4_prev"
-    t.integer  "data_response_id"
     t.decimal  "budget_q1"
     t.decimal  "budget_q2"
     t.decimal  "budget_q3"
@@ -208,7 +208,6 @@ ActiveRecord::Schema.define(:version => 20110725084156) do
     t.integer  "project_from_id"
   end
 
-  add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
@@ -359,8 +358,5 @@ ActiveRecord::Schema.define(:version => 20110725084156) do
     t.boolean  "active",                   :default => false
     t.integer  "location_id"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

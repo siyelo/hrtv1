@@ -511,7 +511,7 @@ class Activity < ActiveRecord::Base
     coded += 1 if coding_spend_classified?
     coded += 1 if coding_spend_district_classified?
     coded += 1 if coding_spend_cc_classified?
-    progress = ((coded.to_f / 8) * 100).to_i # dont need decimal places
+    progress = ((coded.to_f / 6) * 100).to_i # dont need decimal places
   end
 
   def deep_clone

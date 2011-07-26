@@ -45,9 +45,9 @@ class Reports::JawpReport
 
       row = []
       row << activity.project.try(:name)
-      row << activity.project.try(:description)
+      row << activity.project.try(:description).try(:gsub, /[\n\r-]+/, " ")
       row << activity.name
-      row << activity.description
+      row << activity.description.try(:gsub, /[\n\r-]+/, " ")
       row << amount_q1
       row << amount_q2
       row << amount_q3
@@ -211,8 +211,14 @@ class Reports::JawpReport
               row << amount
               row << ratio
               row << amount_total_in_usd * ratio
-              obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val); obj = "Too Vague" if obj.nil? or obj.blank?
-              prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val); prog = "Too Vague" if prog.nil? or prog.blank?
+              obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+              if obj.blank?
+                obj = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
+              end
+              prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val)
+              if prog.blank?
+                prog = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
+              end
               row << obj
               row << prog
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)

@@ -172,22 +172,17 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def js_redirect
-      if request.referrer.match('workplan')
-        if @activity.valid?
-          render :json => {:status => @activity.valid?,
-                           :html => render_to_string({:partial => 'workplans/activity_row',
-                                                :locals => {:activity => @activity,
-                                                            :type => params[:type]}})}
-        else
-          render :json => {:status => @activity.valid?,
-                           :html => render_to_string({:partial => 'new_inline',
-                                                :locals => {:activity => @activity,
-                                                            :type => params[:type]}})}
-        end
+      if @activity.valid?
+        render :json => {:status => @activity.valid?,
+                         :html => render_to_string({:partial => 'workplans/activity_row',
+                                              :locals => {:activity => @activity,
+                                                          :type => params[:type]}})}
       else
-        render :partial => 'bulk_edit', :layout => false,
-          :locals => {:activity => @activity, :response => @response}
-      end
+        render :json => {:status => @activity.valid?,
+                         :html => render_to_string({:partial => 'new_inline',
+                                              :locals => {:activity => @activity,
+                                                          :type => params[:type]}})}
+      end 
     end
 
     def confirm_activity_type

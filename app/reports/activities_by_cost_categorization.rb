@@ -14,7 +14,7 @@ class Reports::ActivitiesByCostCategorization
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      root_activities.each{|activity| csv << build_row(activity)}
+      root_activities(@request).each{|activity| csv << build_row(activity)}
     end
   end
 

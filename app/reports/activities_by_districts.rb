@@ -3,18 +3,19 @@ require 'fastercsv'
 class Reports::ActivitiesByDistricts
   include Reports::Helpers
 
-  def initialize(type)
+  def initialize(type, request)
     @is_budget     = is_budget?(type)
     @coding_class  = @is_budget ? CodingBudgetDistrict : CodingSpendDistrict
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries
+    @request       = request
   end
 
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      root_activities.each{|activity| csv << build_row(activity)}
+      root_activities(@request).each{|activity| csv << build_row(activity)}
     end
   end
 

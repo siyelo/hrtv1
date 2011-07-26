@@ -3,7 +3,8 @@ require 'fastercsv'
 class Reports::ActivitiesSummary
   include Reports::Helpers
 
-  def initialize
+  def initialize(request)
+    @request = request
   end
 
   def csv
@@ -18,7 +19,7 @@ class Reports::ActivitiesSummary
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
       Activity.find(:all, :include => :provider).each do |activity|
         if ((activity.class == Activity && activity.sub_activities.empty?) ||
-            activity.class == SubActivity)
+            activity.class == SubActivity) && activity.data_request == @request
           csv << build_row(activity)
         end
       end

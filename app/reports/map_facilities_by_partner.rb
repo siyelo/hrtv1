@@ -3,10 +3,9 @@ require 'fastercsv'
 class Reports::MapFacilitiesByPartner
   include Reports::Helpers
 
-  def initialize(type)
+  def initialize(type, request)
     @is_budget = is_budget?(type)
-
-    #organizations   = [Organization.find_by_name("Muhima HD District Hospital | Nyarugenge"), Organization.find_by_name("CHK/CHUK National Hospital | Nyarugenge")] # FOR DEBUG
+    @request = request
     @organizations   = Organization.reporting.all(:conditions => ["fosaid is not null"])
     prepare_districts_hash
   end
@@ -26,7 +25,7 @@ class Reports::MapFacilitiesByPartner
         @districts_hash[organization] = {}
         @districts_hash[organization][:total] = 0
         @districts_hash[organization][:partners] = {} # partner => amount
-        dr = organization.data_responses.last
+        dr = organization.data_responses.find_by_data_request_id(@request.id)
 
         # if have my own DR, pull lots of info from there
         # otherwise get who gives me money by activities
@@ -41,7 +40,9 @@ class Reports::MapFacilitiesByPartner
           activities = organization.provider_for.canonical
           #preload_district_associations(activities, @is_budget) # eager-load
           activities.each do |activity|
-            set_amounts(organization, activity.organization, activity_amount(activity))
+            if activity.data_request == @request
+              set_amounts(organization, activity.organization, activity_amount(activity))
+            end
           end
         end
       end

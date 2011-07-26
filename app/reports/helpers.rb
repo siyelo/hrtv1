@@ -199,8 +199,8 @@ module Reports::Helpers
   end
 
   # if [Activity].include?(activity.class) -> type IS NULL
-  def root_activities
-    Activity.find(:all, :conditions => "type IS NULL AND activity_id IS NULL")
+  def root_activities(request)
+    Activity.with_request(request).find(:all, :conditions => "type IS NULL AND activity_id IS NULL")
   end
 
   def number_of_health_centers(activity)

@@ -3,8 +3,9 @@ require 'fastercsv'
 class Reports::ActivitiesByDistrict
   include Reports::Helpers
 
-  def initialize
+  def initialize(request)
     @locations = Location.roots.collect{|code| code.self_and_descendants}.flatten
+    @request   = request
   end
 
   def csv
@@ -17,7 +18,7 @@ class Reports::ActivitiesByDistrict
       #
       #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |activity| # DEBUG ONLY
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
-      Activity.find(:all, :include => :provider).each do |activity|
+      Activity.with_request(@request).each do |activity|
         if ((activity.class == Activity && activity.sub_activities.empty?) ||
             activity.class == SubActivity)
           csv << build_row(activity)
